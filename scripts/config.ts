@@ -8,11 +8,11 @@ import { CustomPlugin } from './myplugin';
 import { EuiCompilerPlugin } from './plugins/eui-compiler-plugin';
 import { WebpackDevServerPlugin, WebpackBundlePlugin } from './plugins/webpack-plugin';
 
+const USE_OLD_COMPILER = false;
+
 const config: ResourceManagerConfig = {
 
-
     buildConfig: (params) => {
-
         const { target, command, projectName, version } = params;
 
         if (command == 'build') {
@@ -28,15 +28,18 @@ const config: ResourceManagerConfig = {
                     // }),
                     new ExmlPlugin('debug'), // 非 EUI 项目关闭此设置
                     // new EuiCompilerPlugin(),//新的 eui 编译器
-                    // new IncrementCompilePlugin(),
-                    new WebpackBundlePlugin({ //新的 Webpack 编译器
-                        libraryType: "debug",
-                        defines: { DEBUG: true, RELEASE: false },
-                        typescript: { mode: 'legacy' },
-                        html: {
-                            templateFilePath: "template/web/index.html"
-                        }
-                    }),
+
+                    USE_OLD_COMPILER
+                        ? new IncrementCompilePlugin()
+                        : new WebpackBundlePlugin({ //新的 Webpack 编译器
+                            libraryType: "debug",
+                            defines: { DEBUG: true, RELEASE: false },
+                            typescript: { mode: 'legacy' },
+                            html: {
+                                templateFilePath: "template/web/index.html"
+                            }
+                        }),
+
                     new ManifestPlugin({ output: "manifest.json" })
                 ]
             };
@@ -47,15 +50,18 @@ const config: ResourceManagerConfig = {
                 outputDir,
                 commands: [
                     new CustomPlugin(),
-                    // new CompilePlugin({ libraryType: "release", defines: { DEBUG: false, RELEASE: true } }),
-                    new WebpackBundlePlugin({ //新的 Webpack 编译器
-                        libraryType: "release",
-                        defines: { DEBUG: false, RELEASE: true },
-                        typescript: { mode: 'legacy' },
-                        html: {
-                            templateFilePath: "template/web/index.html"
-                        },
-                    }),
+
+                    USE_OLD_COMPILER
+                        ? new CompilePlugin({ libraryType: "release", defines: { DEBUG: false, RELEASE: true } })
+                        : new WebpackBundlePlugin({ //新的 Webpack 编译器
+                            libraryType: "release",
+                            defines: { DEBUG: false, RELEASE: true },
+                            typescript: { mode: 'legacy' },
+                            html: {
+                                templateFilePath: "template/web/index.html"
+                            },
+                        }),
+
                     new ExmlPlugin('commonjs2'), // 非 EUI 项目关闭此设置
                     // new EuiCompilerPlugin(),//新的 eui 编译器
                     new UglifyPlugin([{
@@ -84,16 +90,18 @@ const config: ResourceManagerConfig = {
                     // }),
                     new ExmlPlugin('debug'), // 非 EUI 项目关闭此设置
                     // new EuiCompilerPlugin(),//新的 eui 编译器
-                    // new IncrementCompilePlugin(),
-                    new WebpackDevServerPlugin({ //新的 Webpack 编译器
-                        libraryType: "debug",
-                        defines: { DEBUG: true, RELEASE: false },
-                        typescript: { mode: 'legacy' },
-                        html: {
-                            templateFilePath: "template/web/index.html"
-                        },
-                        open: true
-                    }),
+
+                    USE_OLD_COMPILER
+                        ? new IncrementCompilePlugin()
+                        : new WebpackDevServerPlugin({ //新的 Webpack 编译器
+                            libraryType: "debug",
+                            defines: { DEBUG: true, RELEASE: false },
+                            typescript: { mode: 'legacy' },
+                            html: {
+                                templateFilePath: "template/web/index.html"
+                            },
+                            open: true
+                        }),
                 ]
             };
         }

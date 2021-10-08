@@ -8,14 +8,22 @@ namespace TwnsUiLabel {
         public constructor() {
             super();
 
-            this.addEventListener(egret.Event.RESIZE, this._onResize, this);
+            this.addEventListener(egret.Event.ENTER_FRAME, this._onRender, this);
         }
 
         public setRichText(str: string): void {
             this.textFlow = (new egret.HtmlTextParser()).parser(str);
         }
 
-        private _onResize(): void {
+        private _onRender(): void {
+            this._autoResize();
+        }
+
+        private _autoResize(): void {
+            if ((!this.visible) || (!this.stage)) {
+                return;
+            }
+
             const maxWidth = this.maxTextWidth;
             if (maxWidth > 0) {
                 const currWidth = this.textWidth;

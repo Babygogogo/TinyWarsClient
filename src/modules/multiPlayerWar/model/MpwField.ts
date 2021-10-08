@@ -6,27 +6,22 @@ import TwnsMpwActionPlanner from "./MpwActionPlanner";
 import TwnsMpwFogMap        from "./MpwFogMap";
 
 namespace TwnsMpwField {
-    import BwField          = TwnsBwField.BwField;
-    import MpwActionPlanner = TwnsMpwActionPlanner.MpwActionPlanner;
-    import MpwFogMap        = TwnsMpwFogMap.MpwFogMap;
-    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
-
-    export class MpwField extends BwField {
-        private readonly _fogMap        = new MpwFogMap();
+    export class MpwField extends TwnsBwField.BwField {
+        private readonly _fogMap        = new TwnsMpwFogMap.MpwFogMap();
         private readonly _tileMap       = new TwnsBwTileMap.BwTileMap();
-        private readonly _unitMap       = new BwUnitMap();
-        private readonly _actionPlanner = new MpwActionPlanner();
+        private readonly _unitMap       = new TwnsBwUnitMap.BwUnitMap();
+        private readonly _actionPlanner = new TwnsMpwActionPlanner.MpwActionPlanner();
 
-        public getFogMap(): MpwFogMap {
+        public getFogMap(): TwnsMpwFogMap.MpwFogMap {
             return this._fogMap;
         }
         public getTileMap(): TwnsBwTileMap.BwTileMap {
             return this._tileMap;
         }
-        public getUnitMap(): BwUnitMap {
+        public getUnitMap(): TwnsBwUnitMap.BwUnitMap {
             return this._unitMap;
         }
-        public getActionPlanner(): MpwActionPlanner {
+        public getActionPlanner(): TwnsMpwActionPlanner.MpwActionPlanner {
             return this._actionPlanner;
         }
     }

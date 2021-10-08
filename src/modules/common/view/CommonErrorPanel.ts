@@ -1,10 +1,10 @@
 
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import Types            from "../../tools/helpers/Types";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonErrorPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -19,9 +19,9 @@ namespace TwnsCommonErrorPanel {
 
         private static _instance: CommonErrorPanel;
 
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _labelContent   : TwnsUiLabel.UiLabel;
-        private _btnClose       : TwnsUiButton.UiButton;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelContent! : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!CommonErrorPanel._instance) {
@@ -53,7 +53,7 @@ namespace TwnsCommonErrorPanel {
             this._labelContent.setRichText(this._getOpenData().content);
         }
 
-        private _onTouchedBtnClose(e: egret.TouchEvent): void {
+        private _onTouchedBtnClose(): void {
             const openData = this._getOpenData();
             (openData.callback) && (openData.callback());
 

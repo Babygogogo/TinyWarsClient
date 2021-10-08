@@ -10,10 +10,6 @@ namespace TwnsMeActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {
-            // nothing to do
-        }
-
         protected _setStateRequestingUnitAttackUnit(gridIndex: GridIndex): void {
             // nothing to do
         }
@@ -43,6 +39,18 @@ namespace TwnsMeActionPlanner {
         }
 
         public setStateRequestingPlayerUseCoSkill(): void {
+            // nothing to do
+        }
+
+        public setStateRequestingPlayerDeleteUnit(): void {
+            // nothing to do
+        }
+
+        public setStateRequestingPlayerSurrender(): void {
+            // nothing to do
+        }
+
+        public setStateRequestingPlayerVoteForDraw(): void {
             // nothing to do
         }
 

@@ -1,14 +1,15 @@
 
-import WarCommonHelpers     from "./WarCommonHelpers";
 import TwnsBwUnit           from "../../baseWar/model/BwUnit";
+import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
 import TwnsBwWar            from "../../baseWar/model/BwWar";
 import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
 import CommonConstants      from "../helpers/CommonConstants";
 import ConfigManager        from "../helpers/ConfigManager";
 import GridIndexHelpers     from "../helpers/GridIndexHelpers";
+import Helpers              from "../helpers/Helpers";
 import Types                from "../helpers/Types";
 import ProtoTypes           from "../proto/ProtoTypes";
-import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+import WarCommonHelpers     from "./WarCommonHelpers";
 import WarVisibilityHelpers from "./WarVisibilityHelpers";
 
 namespace WarActionReviser {
@@ -22,36 +23,22 @@ namespace WarActionReviser {
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
     import BwWar                = TwnsBwWar.BwWar;
 
-    type ErrorCodeAndAction = {
-        errorCode   : ClientErrorCode;
-        action?     : IWarActionContainer;
-    };
-
-    export function revise(war: BwWar, rawAction: IWarActionContainer): ErrorCodeAndAction {
+    export function revise(war: BwWar, rawAction: IWarActionContainer): IWarActionContainer {
         if (Object.keys(rawAction).length !== 2) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_Revise_00 };
+            throw Helpers.newError(`Invalid rawAction.keys.`, ClientErrorCode.WarActionReviser_Revise_00);
         }
 
         const actionId = rawAction.actionId;
         if ((actionId == null) || (actionId !== war.getExecutedActionManager().getExecutedActionsCount())) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_Revise_01 };
+            throw Helpers.newError(`Invalid actionId: ${actionId}`, ClientErrorCode.WarActionReviser_Revise_01);
         }
 
-        const { errorCode, action } = doRevise(war, rawAction);
-        if (errorCode) {
-            return { errorCode };
-        } else if (action == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_Revise_01 };
-        }
-
+        const action = doRevise(war, rawAction);
         action.actionId = actionId;
-        return {
-            errorCode   : ClientErrorCode.NoError,
-            action,
-        };
+        return action;
     }
 
-    function doRevise(war: BwWar, rawAction: IWarActionContainer): ErrorCodeAndAction {
+    function doRevise(war: BwWar, rawAction: IWarActionContainer): IWarActionContainer {
         if      (rawAction.WarActionPlayerDeleteUnit)           { return revisePlayerDeleteUnit(war, rawAction.WarActionPlayerDeleteUnit); }
         else if (rawAction.WarActionPlayerEndTurn)              { return revisePlayerEndTurn(war, rawAction.WarActionPlayerEndTurn); }
         else if (rawAction.WarActionPlayerProduceUnit)          { return revisePlayerProduceUnit(war, rawAction.WarActionPlayerProduceUnit); }
@@ -83,24 +70,16 @@ namespace WarActionReviser {
         else                                                    { return reviseUnknownAction(); }
     }
 
-    function revisePlayerDeleteUnit(war: BwWar, rawAction: WarAction.IWarActionPlayerDeleteUnit): ErrorCodeAndAction {
+    function revisePlayerDeleteUnit(war: BwWar, rawAction: WarAction.IWarActionPlayerDeleteUnit): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerDeleteUnit_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_RevisePlayerDeleteUnit_00);
         }
 
-        const gridIndex = GridIndexHelpers.convertGridIndex(rawAction.gridIndex);
-        if (gridIndex == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerDeleteUnit_01 };
-        }
-
+        const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(rawAction.gridIndex), ClientErrorCode.WarActionReviser_RevisePlayerDeleteUnit_01);
         const playerIndexInTurn = war.getPlayerIndexInTurn();
-        if (playerIndexInTurn == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerDeleteUnit_02 };
-        }
-
-        const playerInTurn = war.getPlayerInTurn();
+        const playerInTurn      = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerDeleteUnit_03 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerDeleteUnit_02);
         }
 
         const unitMap   = war.getUnitMap();
@@ -110,67 +89,57 @@ namespace WarActionReviser {
             (focusUnit.getPlayerIndex() !== playerIndexInTurn)          ||
             (unitMap.countUnitsOnMapForPlayer(playerIndexInTurn) <= 1)
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerDeleteUnit_04 };
+            throw Helpers.newError(`Invalid focusUnit.`, ClientErrorCode.WarActionReviser_RevisePlayerDeleteUnit_03);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionPlayerDeleteUnit   : {
-                    gridIndex,
-                },
-            }
+            WarActionPlayerDeleteUnit   : {
+                gridIndex,
+            },
         };
     }
 
-    function revisePlayerEndTurn(war: BwWar, rawAction: WarAction.IWarActionPlayerEndTurn): ErrorCodeAndAction {
+    function revisePlayerEndTurn(war: BwWar, rawAction: WarAction.IWarActionPlayerEndTurn): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerEndTurn_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_RevisePlayerEndTurn_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerEndTurn_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerEndTurn_01);
         }
 
         if ((war.getDrawVoteManager().getRemainingVotes() != null)  &&
             (!playerInTurn.getHasVotedForDraw())                    &&
             (!playerInTurn.checkIsNeutral())
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerEndTurn_02 };
+            throw Helpers.newError(`The player hasn't voted for draw.`, ClientErrorCode.WarActionReviser_RevisePlayerEndTurn_02);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionPlayerEndTurn  : {},
-            },
+            WarActionPlayerEndTurn  : {},
         };
     }
 
-    function revisePlayerProduceUnit(war: BwWar, rawAction: WarAction.IWarActionPlayerProduceUnit): ErrorCodeAndAction {
+    function revisePlayerProduceUnit(war: BwWar, rawAction: WarAction.IWarActionPlayerProduceUnit): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_00);
         }
 
         const unitHp = rawAction.unitHp;
         if ((unitHp == null) || (unitHp <= 0) || (unitHp > CommonConstants.UnitMaxHp)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_01 };
+            throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_01);
         }
 
         const unitMap   = war.getUnitMap();
         const mapSize   = unitMap.getMapSize();
-        if (mapSize == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_02 };
-        }
-
         const gridIndex = GridIndexHelpers.convertGridIndex(rawAction.gridIndex);
         if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_03 };
+            throw Helpers.newError(`Invalid gridIndex.`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_02);
         }
 
         if (unitMap.getUnitOnMap(gridIndex)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_04 };
+            throw Helpers.newError(`Grid occupied.`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_03);
         }
 
         const playerInTurn      = war.getPlayerInTurn();
@@ -180,29 +149,13 @@ namespace WarActionReviser {
             (playerIndexInTurn == null)                                 ||
             (playerIndexInTurn === CommonConstants.WarNeutralPlayerIndex)
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_05 };
+            throw Helpers.newError(`Invalid playerIndexInTurn: ${playerIndexInTurn}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_04);
         }
 
-        const tile = war.getTileMap().getTile(gridIndex);
-        if (tile == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_06 };
-        }
-
-        const unitType = rawAction.unitType;
-        if (unitType == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_07 };
-        }
-
-        const configVersion = war.getConfigVersion();
-        if (configVersion == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_08 };
-        }
-
-        const fund = playerInTurn.getFund();
-        if (fund == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_09 };
-        }
-
+        const tile                  = war.getTileMap().getTile(gridIndex);
+        const unitType              = Helpers.getExisted(rawAction.unitType, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_05);
+        const configVersion         = war.getConfigVersion();
+        const fund                  = playerInTurn.getFund();
         const skillCfg              = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndexInTurn);
         const produceUnitCategory   = skillCfg
             ? skillCfg[1]
@@ -210,30 +163,21 @@ namespace WarActionReviser {
         if ((produceUnitCategory == null)                                                           ||
             (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, produceUnitCategory))
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_10 };
+            throw Helpers.newError(`Invalid produceUnitCategory: ${produceUnitCategory}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_06);
         }
 
         if ((skillCfg)                                      &&
             ((unitHp > skillCfg[4]) || (unitHp < skillCfg[3]))
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_11 };
+            throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_07);
         }
         if ((!skillCfg) && (unitHp !== CommonConstants.UnitMaxHp)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_12 };
+            throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_08);
         }
 
-        const unitTemplateCfg   = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
-        const cfgCost           = unitTemplateCfg ? unitTemplateCfg.productionCost : null;
-        if (cfgCost == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_13 };
-        }
-
-        const modifier = playerInTurn.getUnitCostModifier(gridIndex, false, unitType);
-        if (modifier == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_14 };
-        }
-
-        const cost = Math.floor(
+        const cfgCost   = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
+        const modifier  = playerInTurn.getUnitCostModifier(gridIndex, false, unitType);
+        const cost      = Math.floor(
             cfgCost
             * (skillCfg ? skillCfg[5] : 100)
             * WarCommonHelpers.getNormalizedHp(unitHp)
@@ -242,24 +186,21 @@ namespace WarActionReviser {
             / CommonConstants.UnitHpNormalizer
         );
         if (cost > fund) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_15 };
+            throw Helpers.newError(`Invalid cost: ${cost}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_09);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionPlayerProduceUnit: {
-                    gridIndex,
-                    unitHp,
-                    unitType,
-                },
+            WarActionPlayerProduceUnit: {
+                gridIndex,
+                unitHp,
+                unitType,
             },
         };
     }
 
-    function revisePlayerSurrender(war: BwWar, rawAction: WarAction.IWarActionPlayerSurrender): ErrorCodeAndAction {
+    function revisePlayerSurrender(war: BwWar, rawAction: WarAction.IWarActionPlayerSurrender): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerSurrender_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_RevisePlayerSurrender_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
@@ -267,54 +208,48 @@ namespace WarActionReviser {
             (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerSurrender_01 };
+            throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerSurrender_01);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionPlayerSurrender: {
-                },
+            WarActionPlayerSurrender: {
             },
         };
     }
 
-    function revisePlayerVoteForDraw(war: BwWar, rawAction: WarAction.IWarActionPlayerVoteForDraw): ErrorCodeAndAction {
+    function revisePlayerVoteForDraw(war: BwWar, rawAction: WarAction.IWarActionPlayerVoteForDraw): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerVoteForDraw_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerVoteForDraw_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_01);
         }
 
         if ((playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex) ||
             (playerInTurn.getHasVotedForDraw())
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerVoteForDraw_02 };
+            throw Helpers.newError(`Voted for draw.`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_02);
         }
 
         const isAgree = rawAction.isAgree;
         if ((isAgree == null)                                                   ||
             ((war.getDrawVoteManager().getRemainingVotes() == null) && (!isAgree))
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerVoteForDraw_03 };
+            throw Helpers.newError(`Invalid isAgree: ${isAgree}`, ClientErrorCode.WarActionReviser_RevisePlayerVoteForDraw_03);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionPlayerVoteForDraw: {
-                    isAgree,
-                },
+            WarActionPlayerVoteForDraw: {
+                isAgree,
             },
         };
     }
 
-    function revisePlayerUseCoSkill(war: BwWar, rawAction: WarAction.IWarActionPlayerUseCoSkill): ErrorCodeAndAction {
+    function revisePlayerUseCoSkill(war: BwWar, rawAction: WarAction.IWarActionPlayerUseCoSkill): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerUseCoSkill_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_RevisePlayerUseCoSkill_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
@@ -322,276 +257,205 @@ namespace WarActionReviser {
             (playerInTurn.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex)   ||
             (playerInTurn.getAliveState() !== PlayerAliveState.Alive)
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerUseCoSkill_01 };
+            throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_RevisePlayerUseCoSkill_01);
         }
 
         const skillType = rawAction.skillType;
-        if (!playerInTurn.checkCanUseCoSkill(skillType)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerUseCoSkill_02 };
+        if ((skillType == null) || (!playerInTurn.checkCanUseCoSkill(skillType))) {
+            throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.WarActionReviser_RevisePlayerUseCoSkill_02);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionPlayerUseCoSkill: {
-                    skillType,
-                },
+            WarActionPlayerUseCoSkill: {
+                skillType,
             },
         };
     }
 
-    function reviseSystemBeginTurn(war: BwWar, rawAction: WarAction.IWarActionSystemBeginTurn): ErrorCodeAndAction {
+    function reviseSystemBeginTurn(war: BwWar, rawAction: WarAction.IWarActionSystemBeginTurn): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.WaitBeginTurn) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemBeginTurn_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemBeginTurn_00);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionSystemBeginTurn: {
-                },
+            WarActionSystemBeginTurn: {
             },
         };
     }
 
-    function reviseSystemCallWarEvent(war: BwWar, rawAction: WarAction.IWarActionSystemCallWarEvent): ErrorCodeAndAction {
-        const warEventId = rawAction.warEventId;
-        if (warEventId == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemCallWarEvent_00 };
-        }
-
+    function reviseSystemCallWarEvent(war: BwWar, rawAction: WarAction.IWarActionSystemCallWarEvent): IWarActionContainer {
+        const warEventId = Helpers.getExisted(rawAction.warEventId, ClientErrorCode.WarActionReviser_ReviseSystemCallWarEvent_00);
         if (warEventId !== war.getWarEventManager().getCallableWarEventId()) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemCallWarEvent_01 };
+            throw Helpers.newError(`Invalid warEventId: ${warEventId}`, ClientErrorCode.WarActionReviser_ReviseSystemCallWarEvent_01);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionSystemCallWarEvent: {
-                    warEventId,
-                },
+            WarActionSystemCallWarEvent: {
+                warEventId,
             },
         };
     }
 
-    function reviseSystemDestroyPlayerForce(war: BwWar, rawAction: WarAction.IWarActionSystemDestroyPlayerForce): ErrorCodeAndAction {
+    function reviseSystemDestroyPlayerForce(war: BwWar, rawAction: WarAction.IWarActionSystemDestroyPlayerForce): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemDestroyPlayerForce_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemDestroyPlayerForce_00);
         }
 
         const targetPlayerIndex = rawAction.targetPlayerIndex;
         if ((targetPlayerIndex == null) || (targetPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemDestroyPlayerForce_01 };
+            throw Helpers.newError(`Invalid targetPlayerIndex: ${targetPlayerIndex}`, ClientErrorCode.WarActionReviser_ReviseSystemDestroyPlayerForce_01);
         }
 
         const player = war.getPlayer(targetPlayerIndex);
         if ((player == null) || (player.getAliveState() !== PlayerAliveState.Dying)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemDestroyPlayerForce_02 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemDestroyPlayerForce_02);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionSystemDestroyPlayerForce: {
-                    targetPlayerIndex,
-                },
+            WarActionSystemDestroyPlayerForce: {
+                targetPlayerIndex,
             },
         };
     }
 
-    function reviseSystemEndWar(war: BwWar, rawAction: WarAction.IWarActionSystemEndWar): ErrorCodeAndAction {
+    function reviseSystemEndWar(war: BwWar, rawAction: WarAction.IWarActionSystemEndWar): IWarActionContainer {
         if (!war.checkCanEnd()) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemEndWar_00 };
+            throw Helpers.newError(`Can not end.`, ClientErrorCode.WarActionReviser_ReviseSystemEndWar_00);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionSystemEndWar: {
-                },
+            WarActionSystemEndWar: {
             },
         };
     }
 
-    function reviseSystemEndTurn(war: BwWar, rawAction: WarAction.IWarActionSystemEndTurn): ErrorCodeAndAction {
+    function reviseSystemEndTurn(war: BwWar, rawAction: WarAction.IWarActionSystemEndTurn): IWarActionContainer {
         const playerInTurn = war.getPlayerInTurn();
-        if (playerInTurn == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemEndTurn_00 };
-        }
-
         if (war.getTurnPhaseCode() !== Types.TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemEndTurn_01 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_00);
         }
 
         if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
             (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemEndTurn_02 };
+            throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemEndTurn_01);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionSystemEndTurn: {
-                },
+            WarActionSystemEndTurn: {
             },
         };
     }
 
-    function reviseSystemHandleBootPlayer(war: BwWar, rawAction: WarAction.IWarActionSystemHandleBootPlayer): ErrorCodeAndAction {
+    function reviseSystemHandleBootPlayer(war: BwWar, rawAction: WarAction.IWarActionSystemHandleBootPlayer): IWarActionContainer {
         if (!war.checkIsBoot()) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemHandleBootPlayer_00 };
+            throw Helpers.newError(`Is not boot.`, ClientErrorCode.WarActionReviser_ReviseSystemHandleBootPlayer_00);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionSystemHandleBootPlayer: {
-                },
+            WarActionSystemHandleBootPlayer: {
             },
         };
     }
 
-    function reviseUnitAttackTile(war: BwWar, rawAction: WarAction.IWarActionUnitAttackTile): ErrorCodeAndAction {
+    function reviseUnitAttackTile(war: BwWar, rawAction: WarAction.IWarActionUnitAttackTile): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_01);
         }
 
-        const tileMap = war.getTileMap();
-        const mapSize = tileMap.getMapSize();
-        if (mapSize == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_02 };
-        }
-
-        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const tileMap           = war.getTileMap();
+        const mapSize           = tileMap.getMapSize();
+        const targetGridIndex   = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_03 };
+            throw Helpers.newError(`Invalid targetGridIndex.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_02);
         }
 
         const unitMap = war.getUnitMap();
         if (unitMap.getUnitOnMap(targetGridIndex)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_04 };
+            throw Helpers.newError(`Occupied tile.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_03);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_05 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_06 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_04);
         }
 
-        const attackerUnit = unitMap.getUnit(revisedPath.nodes[0], launchUnitId);
-        if (attackerUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_07 };
-        }
+        const attackerUnit = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_05);
         if (!attackerUnit.checkCanAttackTargetAfterMovePath(rawPathNodes, targetGridIndex)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_08 };
+            throw Helpers.newError(`Can not attack.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackTile_06);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitAttackTile : {
-                    path    : revisedPath,
-                    launchUnitId,
-                    targetGridIndex,
-                },
+            WarActionUnitAttackTile : {
+                path    : revisedPath,
+                launchUnitId,
+                targetGridIndex,
             },
         };
     }
 
-    function reviseUnitAttackUnit(war: BwWar, rawAction: WarAction.IWarActionUnitAttackUnit): ErrorCodeAndAction {
+    function reviseUnitAttackUnit(war: BwWar, rawAction: WarAction.IWarActionUnitAttackUnit): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackUnit_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackUnit_01);
         }
 
-        const unitMap = war.getUnitMap();
-        const mapSize = unitMap.getMapSize();
-        if (mapSize == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_02 };
-        }
-
-        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const unitMap           = war.getUnitMap();
+        const mapSize           = unitMap.getMapSize();
+        const targetGridIndex   = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_03 };
+            throw Helpers.newError(`Invalid targetGridIndex.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackUnit_02);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_04 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_05 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackUnit_03);
         }
 
-        const attackerUnit = unitMap.getUnit(revisedPath.nodes[0], launchUnitId);
-        if (attackerUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_06 };
-        }
+        const attackerUnit = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitAttackUnit_04);
         if (!attackerUnit.checkCanAttackTargetAfterMovePath(rawPathNodes, targetGridIndex)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_07 };
+            throw Helpers.newError(`Can not attack.`, ClientErrorCode.WarActionReviser_ReviseUnitAttackUnit_05);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitAttackUnit : {
-                    path            : revisedPath,
-                    launchUnitId,
-                    targetGridIndex,
-                },
+            WarActionUnitAttackUnit : {
+                path            : revisedPath,
+                launchUnitId,
+                targetGridIndex,
             },
         };
     }
 
-    function reviseUnitBeLoaded(war: BwWar, rawAction: WarAction.IWarActionUnitBeLoaded): ErrorCodeAndAction {
+    function reviseUnitBeLoaded(war: BwWar, rawAction: WarAction.IWarActionUnitBeLoaded): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBeLoaded_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitBeLoaded_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBeLoaded_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitBeLoaded_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBeLoaded_02 };
-        }
-
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBeLoaded_03 };
-        }
-
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitBeLoaded_02);
         const rawPathNodes  = rawPath ? rawPath.nodes || [] : [];
         const destination   = rawPathNodes[rawPathNodes.length - 1] as GridIndex;
         const loaderUnit    = unitMap.getUnitOnMap(destination);
@@ -599,448 +463,310 @@ namespace WarActionReviser {
             (!loaderUnit)                           ||
             (!loaderUnit.checkCanLoadUnit(focusUnit))
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBeLoaded_04 };
+            throw Helpers.newError(`Invalid loaderUnit.`, ClientErrorCode.WarActionReviser_ReviseUnitBeLoaded_03);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitBeLoaded: {
-                    path        : revisedPath,
-                    launchUnitId,
-                },
+            WarActionUnitBeLoaded: {
+                path        : revisedPath,
+                launchUnitId,
             },
         };
     }
 
-    function reviseUnitBuildTile(war: BwWar, rawAction: WarAction.IWarActionUnitBuildTile): ErrorCodeAndAction {
+    function reviseUnitBuildTile(war: BwWar, rawAction: WarAction.IWarActionUnitBuildTile): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBuildTile_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitBuildTile_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBuildTile_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitBuildTile_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBuildTile_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBuildTile_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitBuildTile_02);
         }
 
-        const tile = war.getTileMap().getTile(rawPathNodes[rawPathNodes.length - 1]);
-        if (tile == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBuildTile_04 };
-        }
-
+        const tile      = war.getTileMap().getTile(rawPathNodes[rawPathNodes.length - 1]);
         const focusUnit = war.getUnitMap().getUnit(rawPathNodes[0], launchUnitId);
         if ((focusUnit == null) || (!focusUnit.checkCanBuildOnTile(tile))) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitBuildTile_05 };
+            throw Helpers.newError(`Invalid focusUnit.`, ClientErrorCode.WarActionReviser_ReviseUnitBuildTile_03);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitBuildTile  : {
-                    path        : revisedPath,
-                    launchUnitId,
-                },
+            WarActionUnitBuildTile  : {
+                path        : revisedPath,
+                launchUnitId,
             },
         };
     }
 
-    function reviseUnitCaptureTile(war: BwWar, rawAction: WarAction.IWarActionUnitCaptureTile): ErrorCodeAndAction {
+    function reviseUnitCaptureTile(war: BwWar, rawAction: WarAction.IWarActionUnitCaptureTile): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitCaptureTile_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitCaptureTile_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitCaptureTile_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitCaptureTile_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitCaptureTile_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitCaptureTile_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitCaptureTile_02);
         }
 
-        const focusUnit = war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitCaptureTile_04 };
-        }
-
-        const tile = war.getTileMap().getTile(rawPathNodes[rawPathNodes.length - 1]);
-        if (tile == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitCaptureTile_05 };
-        }
-
+        const focusUnit = Helpers.getExisted(war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitCaptureTile_03);
+        const tile      = war.getTileMap().getTile(rawPathNodes[rawPathNodes.length - 1]);
         if (!focusUnit.checkCanCaptureTile(tile)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitCaptureTile_06 };
+            throw Helpers.newError(`Can not capture.`, ClientErrorCode.WarActionReviser_ReviseUnitCaptureTile_04);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitCaptureTile: {
-                    path        : revisedPath,
-                    launchUnitId,
-                },
+            WarActionUnitCaptureTile: {
+                path        : revisedPath,
+                launchUnitId,
             },
         };
     }
 
-    function reviseUnitDive(war: BwWar, rawAction: WarAction.IWarActionUnitDive): ErrorCodeAndAction {
+    function reviseUnitDive(war: BwWar, rawAction: WarAction.IWarActionUnitDive): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDive_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitDive_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDive_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitDive_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDive_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDive_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitDive_02);
         }
 
-        const focusUnit = war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDive_04 };
-        }
-
+        const focusUnit = Helpers.getExisted(war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitDive_03);
         if (!focusUnit.checkCanDive()) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDive_05 };
+            throw Helpers.newError(`Can not dive.`, ClientErrorCode.WarActionReviser_ReviseUnitDive_04);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitDive   : {
-                    path        : revisedPath,
-                    launchUnitId,
-                },
+            WarActionUnitDive   : {
+                path        : revisedPath,
+                launchUnitId,
             },
         };
     }
 
-    function reviseUnitDropUnit(war: BwWar, rawAction: WarAction.IWarActionUnitDropUnit): ErrorCodeAndAction {
+    function reviseUnitDropUnit(war: BwWar, rawAction: WarAction.IWarActionUnitDropUnit): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDropUnit_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitDropUnit_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDropUnit_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitDropUnit_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDropUnit_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDropUnit_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitDropUnit_02);
         }
 
-        const focusUnit = war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDropUnit_04 };
-        }
-
-        const dropDestinations = rawAction.dropDestinations;
+        const dropDestinations  = rawAction.dropDestinations;
         if ((!dropDestinations) || (!checkIsDropDestinationsValid(war, rawAction))) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitDropUnit_05 };
+            throw Helpers.newError(`Invalid dropDestinations.`, ClientErrorCode.WarActionReviser_ReviseUnitDropUnit_03);
         }
 
         const revisedDropDestinations   = getRevisedDropDestinations(war, rawAction, revisedPath);
         const isDropBlocked             =  (!revisedPath.isBlocked) && (revisedDropDestinations.length < dropDestinations.length);
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitDropUnit   : {
-                    path            : revisedPath,
-                    launchUnitId,
-                    dropDestinations: revisedDropDestinations,
-                    isDropBlocked,
-                },
+            WarActionUnitDropUnit   : {
+                path            : revisedPath,
+                launchUnitId,
+                dropDestinations: revisedDropDestinations,
+                isDropBlocked,
             },
         };
     }
 
-    function reviseUnitJoinUnit(war: BwWar, rawAction: WarAction.IWarActionUnitJoinUnit): ErrorCodeAndAction {
+    function reviseUnitJoinUnit(war: BwWar, rawAction: WarAction.IWarActionUnitJoinUnit): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitJoinUnit_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitJoinUnit_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitJoinUnit_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitJoinUnit_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitJoinUnit_02 };
-        }
-
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitJoinUnit_03 };
-        }
-
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitJoinUnit_02);
         const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         const existingUnit  = unitMap.getUnitOnMap(rawPathNodes[rawPathNodes.length - 1]);
         if ((!existingUnit) || (!focusUnit.checkCanJoinUnit(existingUnit))) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitJoinUnit_04 };
+            throw Helpers.newError(`Invalid existingUnit.`, ClientErrorCode.WarActionReviser_ReviseUnitJoinUnit_03);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitJoinUnit   : {
-                    path        : revisedPath,
-                    launchUnitId,
-                },
+            WarActionUnitJoinUnit   : {
+                path        : revisedPath,
+                launchUnitId,
             },
         };
     }
 
-    function reviseUnitLaunchFlare(war: BwWar, rawAction: WarAction.IWarActionUnitLaunchFlare): ErrorCodeAndAction {
+    function reviseUnitLaunchFlare(war: BwWar, rawAction: WarAction.IWarActionUnitLaunchFlare): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_02);
         }
 
-        const unitMap   = war.getUnitMap();
-        const focusUnit = unitMap.getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_04 };
-        }
-
-        const mapSize = unitMap.getMapSize();
-        if (mapSize == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_05 };
-        }
-
-        const flareMaxRange = focusUnit.getFlareMaxRange();
-        if (flareMaxRange == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_06 };
-        }
-
-        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
-        if (targetGridIndex == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_07 };
-        }
-
+        const unitMap           = war.getUnitMap();
+        const focusUnit         = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_03);
+        const mapSize           = unitMap.getMapSize();
+        const flareMaxRange     = Helpers.getExisted(focusUnit.getFlareMaxRange(), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_04);
+        const targetGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex), ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_05);
         if ((rawPathNodes.length !== 1)                                                     ||
             (!focusUnit.getFlareCurrentAmmo())                                              ||
             (!war.getFogMap().checkHasFogCurrently())                                       ||
             (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))                  ||
             (GridIndexHelpers.getDistance(targetGridIndex, revisedPath.nodes[0]) > flareMaxRange)
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_08 };
+            throw Helpers.newError(`Can not launch.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchFlare_06);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitLaunchFlare: {
-                    path            : revisedPath,
-                    launchUnitId,
-                    targetGridIndex,
-                },
+            WarActionUnitLaunchFlare: {
+                path            : revisedPath,
+                launchUnitId,
+                targetGridIndex,
             },
         };
     }
 
-    function reviseUnitLaunchSilo(war: BwWar, rawAction: WarAction.IWarActionUnitLaunchSilo): ErrorCodeAndAction {
+    function reviseUnitLaunchSilo(war: BwWar, rawAction: WarAction.IWarActionUnitLaunchSilo): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_02);
         }
 
         const unitMap   = war.getUnitMap();
-        const focusUnit = unitMap.getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_04 };
-        }
-
-        const mapSize = unitMap.getMapSize();
-        if (mapSize == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_05 };
-        }
-
-        const tile = war.getTileMap().getTile(rawPathNodes[rawPathNodes.length - 1]);
+        const focusUnit = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_03);
+        const mapSize   = unitMap.getMapSize();
+        const tile      = war.getTileMap().getTile(rawPathNodes[rawPathNodes.length - 1]);
         if ((tile == null) || (!focusUnit.checkCanLaunchSiloOnTile(tile))) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_06 };
+            throw Helpers.newError(`Can not launch silo.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_04);
         }
 
         const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null)                                       ||
             (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_07 };
+            throw Helpers.newError(`Invalid targetGridIndex.`, ClientErrorCode.WarActionReviser_ReviseUnitLaunchSilo_05);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitLaunchSilo : {
-                    path            : revisedPath,
-                    launchUnitId,
-                    targetGridIndex,
-                },
+            WarActionUnitLaunchSilo : {
+                path            : revisedPath,
+                launchUnitId,
+                targetGridIndex,
             },
         };
     }
 
-    function reviseUnitLoadCo(war: BwWar, rawAction: WarAction.IWarActionUnitLoadCo): ErrorCodeAndAction {
+    function reviseUnitLoadCo(war: BwWar, rawAction: WarAction.IWarActionUnitLoadCo): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLoadCo_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitLoadCo_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLoadCo_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitLoadCo_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLoadCo_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLoadCo_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitLoadCo_02);
         }
 
         const focusUnit = war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId);
         if ((focusUnit == null) || (!focusUnit.checkCanLoadCoAfterMovePath(rawPathNodes))) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLoadCo_04 };
+            throw Helpers.newError(`Can not load co.`, ClientErrorCode.WarActionReviser_ReviseUnitLoadCo_03);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitLoadCo : {
-                    path        : revisedPath,
-                    launchUnitId,
-                },
+            WarActionUnitLoadCo : {
+                path        : revisedPath,
+                launchUnitId,
             },
         };
     }
 
-    function reviseUnitProduceUnit(war: BwWar, rawAction: WarAction.IWarActionUnitProduceUnit): ErrorCodeAndAction {
+    function reviseUnitProduceUnit(war: BwWar, rawAction: WarAction.IWarActionUnitProduceUnit): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitProduceUnit_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitProduceUnit_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitProduceUnit_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitProduceUnit_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_02);
         }
 
-        const focusUnit = war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitProduceUnit_04 };
-        }
-
-        const fund = playerInTurn.getFund();
-        if (fund == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitProduceUnit_05 };
-        }
-
+        const focusUnit     = Helpers.getExisted(war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_03);
+        const fund          = playerInTurn.getFund();
         const cost          = focusUnit.getProduceUnitCost();
         const maxLoadCount  = focusUnit.getMaxLoadUnitsCount();
         if ((launchUnitId != null)                          ||
@@ -1051,205 +777,151 @@ namespace WarActionReviser {
             (maxLoadCount == null)                          ||
             (focusUnit.getLoadedUnitsCount() >= maxLoadCount)
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitProduceUnit_06 };
+            throw Helpers.newError(`Invalid focusUnit.`, ClientErrorCode.WarActionReviser_ReviseUnitProduceUnit_04);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitProduceUnit    : {
-                    path        : revisedPath,
-                    launchUnitId,
-                },
+            WarActionUnitProduceUnit    : {
+                path        : revisedPath,
+                launchUnitId,
             },
         };
     }
 
-    function reviseUnitSupplyUnit(war: BwWar, rawAction: WarAction.IWarActionUnitSupplyUnit): ErrorCodeAndAction {
+    function reviseUnitSupplyUnit(war: BwWar, rawAction: WarAction.IWarActionUnitSupplyUnit): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSupplyUnit_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitSupplyUnit_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSupplyUnit_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitSupplyUnit_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSupplyUnit_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSupplyUnit_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitSupplyUnit_02);
         }
 
         const unitMap   = war.getUnitMap();
-        const focusUnit = unitMap.getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSupplyUnit_04 };
-        }
-
+        const focusUnit = Helpers.getExisted(unitMap.getUnit(revisedPath.nodes[0], launchUnitId),ClientErrorCode.WarActionReviser_ReviseUnitSupplyUnit_03);
         if (!checkCanDoSupply(unitMap, focusUnit, rawPathNodes[rawPathNodes.length - 1])) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSupplyUnit_05 };
+            throw Helpers.newError(`Can not supply.`, ClientErrorCode.WarActionReviser_ReviseUnitSupplyUnit_04);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitSupplyUnit : {
-                    path        : revisedPath,
-                    launchUnitId,
-                },
+            WarActionUnitSupplyUnit : {
+                path        : revisedPath,
+                launchUnitId,
             },
         };
     }
 
-    function reviseUnitSurface(war: BwWar, rawAction: WarAction.IWarActionUnitSurface): ErrorCodeAndAction {
+    function reviseUnitSurface(war: BwWar, rawAction: WarAction.IWarActionUnitSurface): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSurface_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitSurface_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSurface_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitSurface_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSurface_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSurface_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitSurface_02);
         }
 
-        const focusUnit = war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSurface_04 };
-        }
-
+        const focusUnit = Helpers.getExisted(war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitSurface_03);
         if (!focusUnit.checkCanSurface()) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitSurface_05 };
+            throw Helpers.newError(`Can not surface.`, ClientErrorCode.WarActionReviser_ReviseUnitSurface_04);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitSurface: {
-                    path        : revisedPath,
-                    launchUnitId,
-                },
+            WarActionUnitSurface: {
+                path        : revisedPath,
+                launchUnitId,
             },
         };
     }
 
-    function reviseUnitUseCoSkill(war: BwWar, rawAction: WarAction.IWarActionUnitUseCoSkill): ErrorCodeAndAction {
+    function reviseUnitUseCoSkill(war: BwWar, rawAction: WarAction.IWarActionUnitUseCoSkill): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitUseCoSkill_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitUseCoSkill_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitUseCoSkill_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitUseCoSkill_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitUseCoSkill_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitUseCoSkill_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitUseCoSkill_02);
         }
 
-        const focusUnit = war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitUseCoSkill_04 };
-        }
-
+        const focusUnit = Helpers.getExisted(war.getUnitMap().getUnit(revisedPath.nodes[0], launchUnitId), ClientErrorCode.WarActionReviser_ReviseUnitUseCoSkill_03);
         const skillType = rawAction.skillType as Types.CoSkillType;
         if ((skillType !== Types.CoSkillType.Power)     &&
             (skillType !== Types.CoSkillType.SuperPower)
         ) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitUseCoSkill_05 };
+            throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.WarActionReviser_ReviseUnitUseCoSkill_04);
         }
 
         if (!focusUnit.checkCanUseCoSkill(skillType)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitUseCoSkill_06 };
+            throw Helpers.newError(`Can not use skill.`, ClientErrorCode.WarActionReviser_ReviseUnitUseCoSkill_05);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitUseCoSkill : {
-                    path        : revisedPath,
-                    launchUnitId,
-                    skillType,
-                },
+            WarActionUnitUseCoSkill : {
+                path        : revisedPath,
+                launchUnitId,
+                skillType,
             },
         };
     }
 
-    function reviseUnitWait(war: BwWar, rawAction: WarAction.IWarActionUnitWait): ErrorCodeAndAction {
+    function reviseUnitWait(war: BwWar, rawAction: WarAction.IWarActionUnitWait): IWarActionContainer {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitWait_00 };
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseUnitWait_00);
         }
 
         const playerInTurn = war.getPlayerInTurn();
         if ((playerInTurn == null) || (playerInTurn.getAliveState() !== PlayerAliveState.Alive)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitWait_01 };
+            throw Helpers.newError(`Invalid aliveState.`, ClientErrorCode.WarActionReviser_ReviseUnitWait_01);
         }
 
-        const rawPath                                               = rawAction.path;
-        const launchUnitId                                          = rawAction.launchUnitId;
-        const { errorCode: errorCodeForRevisedPath, revisedPath }   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
-        if (errorCodeForRevisedPath) {
-            return { errorCode: errorCodeForRevisedPath };
-        } else if (revisedPath == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitWait_02 };
-        }
-
-        const rawPathNodes = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
+        const rawPath       = rawAction.path;
+        const launchUnitId  = rawAction.launchUnitId;
+        const revisedPath   = WarCommonHelpers.getRevisedPath({ war, rawPath, launchUnitId });
+        const rawPathNodes  = (rawPath ? rawPath.nodes || [] : []) as GridIndex[];
         if (WarCommonHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit(war, rawPathNodes)) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitWait_03 };
+            throw Helpers.newError(`Destination occupied.`, ClientErrorCode.WarActionReviser_ReviseUnitWait_02);
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
-            action      : {
-                WarActionUnitWait   : {
-                    path        : revisedPath,
-                    launchUnitId,
-                },
+            WarActionUnitWait   : {
+                path        : revisedPath,
+                launchUnitId,
             },
         };
     }
 
-    function reviseUnknownAction(): ErrorCodeAndAction {
-        return {
-            errorCode   : ClientErrorCode.BwWarActionReviser_ReviseUnknownAction_00,
-            action      : undefined,
-        };
+    function reviseUnknownAction(): IWarActionContainer {
+        throw Helpers.newError(`Invalid action.`, ClientErrorCode.WarActionReviser_ReviseUnknownAction_00);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function checkIsDropDestinationsValid(war: BwWar, action: WarAction.IWarActionUnitDropUnit): boolean | undefined {
+    function checkIsDropDestinationsValid(war: BwWar, action: WarAction.IWarActionUnitDropUnit): boolean {
         const destinations = action.dropDestinations;
         if (destinations == null) {
             return false;

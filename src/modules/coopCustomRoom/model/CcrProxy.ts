@@ -1,10 +1,10 @@
 
+import CcrModel             from "../../coopCustomRoom/model/CcrModel";
+import NetManager           from "../../tools/network/NetManager";
 import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import NetManager           from "../../tools/network/NetManager";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import CcrModel             from "../../coopCustomRoom/model/CcrModel";
 
 namespace CcrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -26,7 +26,7 @@ namespace CcrProxy {
             { msgCode: NetMessageCodes.MsgCcrGetJoinableRoomInfoList,    callback: _onMsgCcrGetJoinableRoomInfoList },
             { msgCode: NetMessageCodes.MsgCcrGetJoinedRoomInfoList,      callback: _onMsgCcrGetJoinedRoomInfoList },
             { msgCode: NetMessageCodes.MsgCcrStartWar,                   callback: _onMsgCcrStartWar },
-        ], undefined);
+        ], null);
     }
 
     export function reqCreateRoom(param: NetMessage.MsgCcrCreateRoom.IC): void {
@@ -170,7 +170,7 @@ namespace CcrProxy {
     function _onMsgCcrGetJoinableRoomInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrGetJoinableRoomInfoList.IS;
         if (!data.errorCode) {
-            CcrModel.setJoinableRoomInfoList(data.roomInfoList);
+            CcrModel.setJoinableRoomInfoList(data.roomInfoList || []);
             Notify.dispatch(NotifyType.MsgCcrGetJoinableRoomInfoList, data);
         }
     }
@@ -184,7 +184,7 @@ namespace CcrProxy {
     function _onMsgCcrGetJoinedRoomInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrGetJoinedRoomInfoList.IS;
         if (!data.errorCode) {
-            CcrModel.setJoinedRoomInfoList(data.roomInfoList);
+            CcrModel.setJoinedRoomInfoList(data.roomInfoList || []);
             Notify.dispatch(NotifyType.MsgCcrGetJoinedRoomInfoList, data);
         }
     }

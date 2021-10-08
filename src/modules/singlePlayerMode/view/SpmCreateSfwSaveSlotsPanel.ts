@@ -22,7 +22,6 @@ import WarMapModel              from "../../warMap/model/WarMapModel";
 namespace TwnsSpmCreateSfwSaveSlotsPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
-    import CommonInputPanel     = TwnsCommonInputPanel.CommonInputPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
@@ -35,14 +34,12 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
 
         private static _instance: SpmCreateSfwSaveSlotsPanel;
 
-        private _group          : eui.Group;
-        private _labelPanelTitle: TwnsUiLabel.UiLabel;
-        private _srlSaveSlot    : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
-        private _listSaveSlot   : eui.List;
-        private _btnHelp        : TwnsUiButton.UiButton;
-        private _btnCancel      : TwnsUiButton.UiButton;
-
-        private _dataForList: DataForSlotRenderer[];
+        private readonly _group!            : eui.Group;
+        private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
+        private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
+        private readonly _listSaveSlot!     : eui.List;
+        private readonly _btnHelp!          : TwnsUiButton.UiButton;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForSpmCreateSfwSaveSlotsPanel): void {
             if (!SpmCreateSfwSaveSlotsPanel._instance) {
@@ -77,25 +74,22 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
 
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            this._dataForList = null;
-        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private _onTouchedBtnHelp(e: egret.TouchEvent): void {
+        private _onTouchedBtnHelp(): void {
             CommonHelpPanel.show({
                 title   : Lang.getText(LangTextType.B0325),
                 content : Lang.getText(LangTextType.R0006),
             });
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -105,8 +99,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            this._dataForList = this._createDataForList();
-            this._srlSaveSlot.bindData(this._dataForList);
+            this._srlSaveSlot.bindData(this._createDataForList());
             this._listSaveSlot.selectedIndex = SpmModel.getAvailableIndex();
         }
 
@@ -123,7 +116,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
-                    slotInfo    : slotDict.get(slotIndex),
+                    slotInfo    : slotDict.get(slotIndex) ?? null,
                     warData,
                 });
             }
@@ -138,12 +131,12 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
         warData     : ISerialWar;
     };
     class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
-        private _group          : eui.Group;
-        private _imgBg          : TwnsUiImage.UiImage;
-        private _labelSlotIndex : TwnsUiLabel.UiLabel;
-        private _labelType      : TwnsUiLabel.UiLabel;
-        private _labelMapName   : TwnsUiLabel.UiLabel;
-        private _labelChoose    : TwnsUiLabel.UiLabel;
+        private readonly _group!            : eui.Group;
+        private readonly _imgBg!            : TwnsUiImage.UiImage;
+        private readonly _labelSlotIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _labelType!        : TwnsUiLabel.UiLabel;
+        private readonly _labelMapName!     : TwnsUiLabel.UiLabel;
+        private readonly _labelChoose!      : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -158,10 +151,10 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
             this._updateView();
         }
 
-        private _onTouchedImgBg(e: egret.TouchEvent): void {
-            const data      = this.data;
+        private _onTouchedImgBg(): void {
+            const data      = this._getData();
             const callback  = () => {
-                CommonInputPanel.show({
+                TwnsCommonInputPanel.CommonInputPanel.show({
                     title       : Lang.getText(LangTextType.B0088),
                     maxChars    : CommonConstants.SpmSaveSlotCommentMaxLength,
                     currentValue: ``,
@@ -191,7 +184,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private async _updateView(): Promise<void> {
-            const data                  = this.data;
+            const data                  = this._getData();
             this._labelSlotIndex.text   = "" + data.slotIndex;
 
             const slotInfo      = data.slotInfo;
@@ -202,7 +195,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
                 labelMapName.text   = `----`;
             } else {
                 const warData   = slotInfo.warData;
-                labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData));
+                labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData)) || CommonConstants.ErrorTextForUndefined;
 
                 const slotComment = slotInfo.extraData.slotComment;
                 if (slotComment) {
@@ -211,7 +204,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
                     const mapId         = WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : await WarMapModel.getMapNameInCurrentLanguage(mapId);
+                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

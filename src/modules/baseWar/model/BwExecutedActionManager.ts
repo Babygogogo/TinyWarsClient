@@ -1,82 +1,53 @@
 
-import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import Helpers                      from "../../tools/helpers/Helpers";
-import Logger                       from "../../tools/helpers/Logger";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 
 namespace TwnsBwExecutedActionManager {
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwExecutedActionManager {
         private _isNeedReplay?      : boolean;
         private _executedActions?   : IWarActionContainer[];
 
-        public init(isNeedExecutedAction: boolean, executedActions: IWarActionContainer[]): ClientErrorCode {
+        public init(isNeedExecutedAction: boolean, executedActions: IWarActionContainer[]): void {
             this._setIsNeedReplay(isNeedExecutedAction);
             if (isNeedExecutedAction) {
                 this._setAllExecutedActions(executedActions);
             } else {
                 this._setAllExecutedActions(new Array(executedActions.length).fill({}));
             }
-
-            return ClientErrorCode.NoError;
         }
 
         private _setIsNeedReplay(isNeedReplay: boolean): void {
             this._isNeedReplay = isNeedReplay;
         }
-        private _getIsNeedReplay(): boolean | undefined {
-            return this._isNeedReplay;
+        private _getIsNeedReplay(): boolean {
+            return Helpers.getExisted(this._isNeedReplay);
         }
 
-        public getExecutedActionsCount(): number | undefined {
-            const actions = this.getAllExecutedActions();
-            return actions ? actions.length : undefined;
+        public getExecutedActionsCount(): number {
+            return this.getAllExecutedActions().length;
         }
 
         private _setAllExecutedActions(actions: IWarActionContainer[]): void {
             this._executedActions = actions;
         }
-        public getAllExecutedActions(): IWarActionContainer[] | undefined {
-            return this._executedActions;
+        public getAllExecutedActions(): IWarActionContainer[] {
+            return Helpers.getExisted(this._executedActions);
         }
 
-        public generateEmptyExecutedActions(): IWarActionContainer[] | undefined {
-            const count = this.getExecutedActionsCount();
-            if (count == null) {
-                Logger.error(`BwExecutedActionManager._generateEmptyExecutedActions() empty count.`);
-                return undefined;
-            }
-
-            return (new Array<IWarActionContainer>(count)).fill({});
+        public generateEmptyExecutedActions(): IWarActionContainer[] {
+            return (new Array<IWarActionContainer>(this.getExecutedActionsCount())).fill({});
         }
-        public getExecutedAction(actionId: number): IWarActionContainer | undefined {
-            const executedActions = this.getAllExecutedActions();
-            if (executedActions == null) {
-                Logger.error(`BwExecutedActionManager.getExecutedAction() empty executedActions.`);
-                return undefined;
-            }
-
-            return executedActions[actionId];
+        public getExecutedAction(actionId: number): IWarActionContainer {
+            return this.getAllExecutedActions()[actionId];
         }
         public addExecutedAction(rawAction: IWarActionContainer): void {
+            if (rawAction.actionId !== this.getExecutedActionsCount()) {
+                throw Helpers.newError(`Invalid actionId: ${rawAction.actionId}`);
+            }
+
             const executedActions = this.getAllExecutedActions();
-            if (executedActions == null) {
-                Logger.error(`BwExecutedActionManager.addExecutedAction() empty executedActions.`);
-                return undefined;
-            }
-
-            const executedActionsCount = this.getExecutedActionsCount();
-            if (executedActionsCount == null) {
-                Logger.error(`BwExecutedActionManager.addExecutedAction() empty executedActionsCount.`);
-                return undefined;
-            }
-            if (rawAction.actionId !== executedActionsCount) {
-                Logger.error(`BwExecutedActionManager.addExecutedAction() invalid rawAction.actionId.`);
-                return undefined;
-            }
-
             if (this._getIsNeedReplay()) {
                 executedActions.push(Helpers.deepClone(rawAction));
             } else {

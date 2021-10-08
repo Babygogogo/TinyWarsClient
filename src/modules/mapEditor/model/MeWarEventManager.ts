@@ -1,25 +1,22 @@
 
 import TwnsBwWarEventManager    from "../../baseWar/model/BwWarEventManager";
-import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
 import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
 import ProtoTypes               from "../../tools/proto/ProtoTypes";
 
 namespace TwnsMeWarEventManager {
     import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
     import ISerialWarEventManager   = ProtoTypes.WarSerialization.ISerialWarEventManager;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
     export class MeWarEventManager extends BwWarEventManager {
-        public init(data: ISerialWarEventManager): ClientErrorCode {
+        public init(data: ISerialWarEventManager): void {
             this._setWarEventFullData(getRevisedWarEventFullData(data.warEventFullData));
             this._setCalledCountList(null);
-
-            return ClientErrorCode.NoError;
         }
     }
 
-    function getRevisedWarEventFullData(rawData: IWarEventFullData): IWarEventFullData {
+    function getRevisedWarEventFullData(rawData: Types.Undefinable<IWarEventFullData>): IWarEventFullData {
         const data = rawData
             ? Helpers.deepClone(rawData)
             : {

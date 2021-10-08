@@ -3,7 +3,6 @@ import TwnsChatPanel            from "../../chat/view/ChatPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -30,24 +29,24 @@ namespace TwnsCommonWarPlayerInfoPage {
         playerIndex         : number;
         teamIndex           : number;
         isAi                : boolean;
-        userId              : number | undefined;
-        coId                : number | undefined;
-        unitAndTileSkinId   : number | undefined;
-        isReady             : boolean | undefined;
-        isInTurn            : boolean | undefined;
-        isDefeat            : boolean | undefined;
+        userId              : number | null;
+        coId                : number | null;
+        unitAndTileSkinId   : number | null;
+        isReady             : boolean | null;
+        isInTurn            : boolean | null;
+        isDefeat            : boolean | null;
     };
     export type OpenDataForCommonWarPlayerInfoPage = {
         configVersion           : string;
         playersCountUnneutral   : number;
-        roomOwnerPlayerIndex    : number | undefined;
-        callbackOnExitRoom      : (() => void) | undefined;
-        callbackOnDeletePlayer  : ((playerIndex: number) => void) | undefined;
+        roomOwnerPlayerIndex    : number | null;
+        callbackOnExitRoom      : (() => void) | null;
+        callbackOnDeletePlayer  : ((playerIndex: number) => void) | null;
         playerInfoArray         : PlayerInfo[];
-    };
+    } | null;
     export class CommonWarPlayerInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonWarPlayerInfoPage> {
-        private readonly _groupInfo     : eui.Group;
-        private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _groupInfo!    : eui.Group;
+        private readonly _listPlayer!   : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -87,8 +86,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 const playerInfo = playerInfoArray.find(v => v.playerIndex === playerIndex);
                 if (playerInfo == null) {
-                    Logger.error(`CommonWarPlayerInfoPage._updateListPlayer() empty playerInfo.`);
-                    continue;
+                    throw Helpers.newError(`CommonWarPlayerInfoPage._updateListPlayer() empty playerInfo.`);
                 }
 
                 dataArray.push({
@@ -107,30 +105,30 @@ namespace TwnsCommonWarPlayerInfoPage {
     type DataForPlayerRenderer = {
         configVersion           : string;
         isRoomOwnedBySelf       : boolean;
-        callbackOnExitRoom      : (() => void) | undefined;
-        callbackOnDeletePlayer  : ((playerIndex: number) => void) | undefined;
+        callbackOnExitRoom      : (() => void) | null;
+        callbackOnDeletePlayer  : ((playerIndex: number) => void) | null;
         playerInfo              : PlayerInfo;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private readonly _groupCo           : eui.Group;
-        private readonly _imgSkin           : TwnsUiImage.UiImage;
-        private readonly _imgCoHead         : TwnsUiImage.UiImage;
-        private readonly _imgCoInfo         : TwnsUiImage.UiImage;
-        private readonly _labelNickname     : TwnsUiLabel.UiLabel;
-        private readonly _labelCo           : TwnsUiLabel.UiLabel;
-        private readonly _labelStatus       : TwnsUiLabel.UiLabel;
+        private readonly _groupCo!              : eui.Group;
+        private readonly _imgSkin!              : TwnsUiImage.UiImage;
+        private readonly _imgCoHead!            : TwnsUiImage.UiImage;
+        private readonly _imgCoInfo!            : TwnsUiImage.UiImage;
+        private readonly _labelNickname!        : TwnsUiLabel.UiLabel;
+        private readonly _labelCo!              : TwnsUiLabel.UiLabel;
+        private readonly _labelStatus!          : TwnsUiLabel.UiLabel;
 
-        private readonly _labelPlayerIndex  : TwnsUiLabel.UiLabel;
-        private readonly _labelTeamIndex    : TwnsUiLabel.UiLabel;
-        private readonly _labelRankStdTitle : TwnsUiLabel.UiLabel;
-        private readonly _labelRankStd      : TwnsUiLabel.UiLabel;
-        private readonly _labelRankFogTitle : TwnsUiLabel.UiLabel;
-        private readonly _labelRankFog      : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerIndex!     : TwnsUiLabel.UiLabel;
+        private readonly _labelTeamIndex!       : TwnsUiLabel.UiLabel;
+        private readonly _labelRankStdTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelRankStd!         : TwnsUiLabel.UiLabel;
+        private readonly _labelRankFogTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelRankFog!         : TwnsUiLabel.UiLabel;
 
-        private readonly _groupButton       : eui.Group;
-        private readonly _btnChat           : TwnsUiButton.UiButton;
-        private readonly _btnInfo           : TwnsUiButton.UiButton;
-        private readonly _btnDelete         : TwnsUiButton.UiButton;
+        private readonly _groupButton!          : eui.Group;
+        private readonly _btnChat!              : TwnsUiButton.UiButton;
+        private readonly _btnInfo!              : TwnsUiButton.UiButton;
+        private readonly _btnDelete!            : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -147,7 +145,7 @@ namespace TwnsCommonWarPlayerInfoPage {
         }
 
         private _onTouchedGroupCo(): void {
-            const data  = this.data;
+            const data  = this._getData();
             const coId  = data.playerInfo.coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 CommonCoInfoPanel.show({
@@ -158,21 +156,21 @@ namespace TwnsCommonWarPlayerInfoPage {
         }
 
         private _onTouchedBtnChat(): void {
-            const userId = this.data.playerInfo.userId;
+            const userId = this._getData().playerInfo.userId;
             if (userId != null) {
                 TwnsChatPanel.ChatPanel.show({ toUserId: userId });
             }
         }
 
         private _onTouchedBtnInfo(): void {
-            const userId = this.data.playerInfo.userId;
+            const userId = this._getData().playerInfo.userId;
             if (userId != null) {
                 UserPanel.show({ userId });
             }
         }
 
         private async _onTouchedBtnDelete(): Promise<void> {
-            const data          = this.data;
+            const data          = this._getData();
             const playerInfo    = data.playerInfo;
             const userId        = playerInfo.userId;
             if (userId == null) {
@@ -218,18 +216,27 @@ namespace TwnsCommonWarPlayerInfoPage {
             this._updateLabelStatus();
             this._updateComponentsForRankInfo();
 
-            const data                  = this.data;
+            const data                  = this._getData();
             const playerInfo            = data.playerInfo;
             const playerIndex           = playerInfo.playerIndex;
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerInfo.teamIndex);
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerInfo.teamIndex) || CommonConstants.ErrorTextForUndefined;
             this._imgSkin.source        = getSourceForImgSkin(playerInfo.unitAndTileSkinId);
 
-            const coId                  = playerInfo.coId;
-            const coCfg                 = ConfigManager.getCoBasicCfg(data.configVersion, coId);
-            this._labelCo.text          = coCfg ? coCfg.name : `??`;
-            this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
-            this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
+            const coId              = playerInfo.coId;
+            const labelCo           = this._labelCo;
+            const imgCoHead         = this._imgCoHead;
+            const imgCoInfo         = this._imgCoInfo;
+            if (coId == null) {
+                labelCo.text        = `??`;
+                imgCoHead.source    = ``;
+                imgCoInfo.visible   = false;
+            } else {
+                const coCfg         = ConfigManager.getCoBasicCfg(data.configVersion, coId);
+                labelCo.text        = coCfg.name;
+                imgCoHead.source    = ConfigManager.getCoHeadImageSource(coId);
+                imgCoInfo.visible   = (coId !== CommonConstants.CoEmptyId);
+            }
 
             const userId        = playerInfo.userId;
             const userInfo      = userId == null ? null : await UserModel.getUserPublicInfo(userId);
@@ -259,7 +266,7 @@ namespace TwnsCommonWarPlayerInfoPage {
         }
 
         private _updateLabelStatus(): void {
-            const playerInfo    = this.data.playerInfo;
+            const playerInfo    = this._getData().playerInfo;
             const label         = this._labelStatus;
             if (playerInfo.isReady) {
                 label.text = Lang.getText(LangTextType.B0402);
@@ -274,7 +281,7 @@ namespace TwnsCommonWarPlayerInfoPage {
         }
 
         private async _updateComponentsForRankInfo(): Promise<void> {
-            const userId                = this.data.playerInfo.userId;
+            const userId                = this._getData().playerInfo.userId;
             const userInfo              = userId == null ? null : await UserModel.getUserPublicInfo(userId);
             const rankScoreArray        = userInfo?.userMrwRankInfoArray;
             const stdRankInfo           = rankScoreArray?.find(v => v.warType === Types.WarType.MrwStd);
@@ -292,13 +299,13 @@ namespace TwnsCommonWarPlayerInfoPage {
         }
     }
 
-    function getSourceForImgSkin(skinId: number): string {
+    function getSourceForImgSkin(skinId: Types.Undefinable<number>): string {
         switch (skinId) {
-            case 1  : return `commonRectangle0002`;
-            case 2  : return `commonRectangle0003`;
-            case 3  : return `commonRectangle0004`;
-            case 4  : return `commonRectangle0005`;
-            default : return `commonRectangle0006`;
+            case 1  : return `uncompressedRectangle0002`;
+            case 2  : return `uncompressedRectangle0003`;
+            case 3  : return `uncompressedRectangle0004`;
+            case 4  : return `uncompressedRectangle0005`;
+            default : return `uncompressedRectangle0006`;
         }
     }
 }

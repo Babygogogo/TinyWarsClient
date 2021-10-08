@@ -4,6 +4,7 @@ import TwnsCommonInputPanel     from "../../common/view/CommonInputPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import FloatText                from "../../tools/helpers/FloatText";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
@@ -16,18 +17,17 @@ import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
 import MeMfwModel               from "../model/MeMfwModel";
 
 namespace TwnsMeMfwAdvancedSettingsPage {
-    import CommonInputPanel     = TwnsCommonInputPanel.CommonInputPanel;
     import CommonChooseCoPanel  = TwnsCommonChooseCoPanel.CommonChooseCoPanel;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export class MeMfwAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<void> {
-        private _labelMapNameTitle      : TwnsUiLabel.UiLabel;
-        private _labelMapName           : TwnsUiLabel.UiLabel;
-        private _labelPlayersCountTitle : TwnsUiLabel.UiLabel;
-        private _labelPlayersCount      : TwnsUiLabel.UiLabel;
-        private _labelPlayerList        : TwnsUiLabel.UiLabel;
-        private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _labelMapNameTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelMapName!             : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayersCountTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayersCount!        : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerList!          : TwnsUiLabel.UiLabel;
+        private readonly _listPlayer!               : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -64,7 +64,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getLanguageText({ textArray: MeMfwModel.getMapRawData().mapNameArray });
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MeMfwModel.getMapRawData().mapNameArray }) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelPlayersCount(): void {
@@ -72,7 +72,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = MeMfwModel.getMapRawData().playersCountUnneutral;
+            const playersCount  = Helpers.getExisted(MeMfwModel.getMapRawData().playersCountUnneutral);
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -85,7 +85,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         playerIndex : number;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private _listInfo   : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _listInfo! : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -101,7 +101,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data;
+            const data          = this._getData();
             const playerIndex   = data.playerIndex;
             return [
                 this._createDataController(playerIndex),
@@ -137,7 +137,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0019),
-                infoText                : Lang.getPlayerTeamName(MeMfwModel.getTeamIndex(playerIndex)),
+                infoText                : Lang.getPlayerTeamName(MeMfwModel.getTeamIndex(playerIndex)) || CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
@@ -149,7 +149,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         }
         private _createDataCo(playerIndex: number): DataForInfoRenderer {
             const coId          = MeMfwModel.getCoId(playerIndex);
-            const configVersion = MeMfwModel.getWarData().settingsForCommon.configVersion;
+            const configVersion = Helpers.getExisted(MeMfwModel.getWarData().settingsForCommon?.configVersion);
             return {
                 titleText               : Lang.getText(LangTextType.B0425),
                 infoText                : ConfigManager.getCoNameAndTierText(configVersion, coId),
@@ -158,7 +158,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                     CommonChooseCoPanel.show({
                         currentCoId         : coId,
                         availableCoIdArray  : MeMfwModel.getIsControlledByHuman(playerIndex)
-                            ? WarRuleHelpers.getAvailableCoIdArrayForPlayer(MeMfwModel.getWarRule(), playerIndex, configVersion)
+                            ? WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule: MeMfwModel.getWarRule(), playerIndex, configVersion })
                             : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                         callbackOnConfirm   : newCoId => {
                             if (newCoId !== coId) {
@@ -173,7 +173,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         private _createDataSkinId(playerIndex: number): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0397),
-                infoText                : Lang.getUnitAndTileSkinName(MeMfwModel.getUnitAndTileSkinId(playerIndex)),
+                infoText                : Lang.getUnitAndTileSkinName(MeMfwModel.getUnitAndTileSkinId(playerIndex)) || CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     MeMfwModel.tickUnitAndTileSkinId(playerIndex);
@@ -191,7 +191,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                     this._confirmUseCustomRule(() => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0178),
                             currentValue    : "" + currValue,
                             maxChars        : 7,
@@ -222,7 +222,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0179),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -253,7 +253,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0180),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -284,7 +284,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0181),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -315,7 +315,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0182),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -346,7 +346,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0183),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -377,7 +377,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0184),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -408,7 +408,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0189),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -445,7 +445,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0190),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -496,8 +496,8 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         callbackOnTouchedTitle  : (() => void) | null;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : TwnsUiButton.UiButton;
-        private _labelValue : TwnsUiLabel.UiLabel;
+        private readonly _btnTitle!     : TwnsUiButton.UiButton;
+        private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -506,7 +506,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
         }
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;

@@ -3,6 +3,7 @@ import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPan
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
+import Helpers                          from "../../tools/helpers/Helpers";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -32,16 +33,16 @@ namespace TwnsMeSimSettingsPanel {
 
         private static _instance: MeSimSettingsPanel;
 
-        private _tabSettings    : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
-        private _labelMenuTitle : TwnsUiLabel.UiLabel;
-        private _btnBack        : TwnsUiButton.UiButton;
-        private _btnConfirm     : TwnsUiButton.UiButton;
+        private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
+        private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnBack!          : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!       : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MeSimSettingsPanel._instance) {
                 MeSimSettingsPanel._instance = new MeSimSettingsPanel();
             }
-            MeSimSettingsPanel._instance.open(undefined);
+            MeSimSettingsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeSimSettingsPanel._instance) {
@@ -68,12 +69,14 @@ namespace TwnsMeSimSettingsPanel {
 
             this._tabSettings.bindData([
                 {
-                    tabItemData: { name: Lang.getText(LangTextType.B0002) },
-                    pageClass  : MeSimBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : MeSimBasicSettingsPage,
+                    pageData    : void 0,
                 },
                 {
-                    tabItemData: { name: Lang.getText(LangTextType.B0003) },
-                    pageClass  : MeSimAdvancedSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
+                    pageClass   : MeSimAdvancedSettingsPage,
+                    pageData    : void 0,
                 },
             ]);
 
@@ -100,9 +103,9 @@ namespace TwnsMeSimSettingsPanel {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : data.slotIndex,
-                        slotExtraData   : data.extraData,
-                        warData         : data.warData,
+                        slotIndex       : Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Helpers.getExisted(data.extraData),
+                        warData         : Helpers.getExisted(data.warData),
                     });
                 },
             });
@@ -124,10 +127,10 @@ namespace TwnsMeSimSettingsPanel {
     };
 
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 }

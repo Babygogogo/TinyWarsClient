@@ -15,7 +15,7 @@ import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
 import UserModel                from "../../user/model/UserModel";
 import UserProxy                from "../../user/model/UserProxy";
 
-export namespace TwnsUserChangeDiscordIdPanel {
+namespace TwnsUserChangeDiscordIdPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -24,24 +24,15 @@ export namespace TwnsUserChangeDiscordIdPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
-        // @ts-ignore
-        private readonly _imgMask           : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _group             : eui.Group;
-        // @ts-ignore
-        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelDiscordId    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelNote         : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _inputDiscordId    : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
-        private readonly _labelUrl          : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _btnConfirm        : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnClose          : TwnsUiButton.UiButton;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
+        private readonly _group!            : eui.Group;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelDiscordId!   : TwnsUiLabel.UiLabel;
+        private readonly _labelNote!        : TwnsUiLabel.UiLabel;
+        private readonly _inputDiscordId!   : TwnsUiTextInput.UiTextInput;
+        private readonly _labelUrl!         : TwnsUiLabel.UiLabel;
+        private readonly _btnConfirm!       : TwnsUiButton.UiButton;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
 
         private _isRequesting   = false;
 
@@ -51,7 +42,7 @@ export namespace TwnsUserChangeDiscordIdPanel {
             if (!UserChangeDiscordIdPanel._instance) {
                 UserChangeDiscordIdPanel._instance = new UserChangeDiscordIdPanel();
             }
-            UserChangeDiscordIdPanel._instance.open(undefined);
+            UserChangeDiscordIdPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -81,7 +72,7 @@ export namespace TwnsUserChangeDiscordIdPanel {
             ]);
 
             this._isRequesting          = false;
-            this._inputDiscordId.text   = UserModel.getSelfDiscordId();
+            this._inputDiscordId.text   = UserModel.getSelfDiscordId() ?? ``;
 
             const labelUrl          = this._labelUrl;
             labelUrl.touchEnabled   = true;

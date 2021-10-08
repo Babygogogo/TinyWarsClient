@@ -1,7 +1,6 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -24,20 +23,20 @@ namespace TwnsCommonChangeVersionPanel {
 
         private static _instance: CommonChangeVersionPanel;
 
-        private readonly _group         : eui.Group;
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        private readonly _btnBack       : TwnsUiButton.UiButton;
-        private readonly _btnConfirm    : TwnsUiButton.UiButton;
-        private readonly _listVersion   : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
-        private readonly _labelTips     : TwnsUiLabel.UiLabel;
+        private readonly _group!        : eui.Group;
+        private readonly _imgMask!      : TwnsUiImage.UiImage;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnBack!      : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
+        private readonly _listVersion!  : TwnsUiScrollList.UiScrollList<DataForVersionRenderer>;
+        private readonly _labelTips!    : TwnsUiLabel.UiLabel;
 
         public static show(): void {
             if (!CommonChangeVersionPanel._instance) {
                 CommonChangeVersionPanel._instance = new CommonChangeVersionPanel();
             }
 
-            CommonChangeVersionPanel._instance.open(undefined);
+            CommonChangeVersionPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (CommonChangeVersionPanel._instance) {
@@ -64,9 +63,7 @@ namespace TwnsCommonChangeVersionPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
-            this._listVersion.setItemRenderer(MapNameRenderer);
-            this._btnBack.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
-            this._btnConfirm.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
+            this._listVersion.setItemRenderer(VersionRenderer);
 
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
@@ -76,9 +73,9 @@ namespace TwnsCommonChangeVersionPanel {
             await this._showCloseAnimation();
         }
 
-        public _getSelectedGameVersion(): GameVersion | undefined {
+        private _getSelectedGameVersion(): GameVersion | null {
             const selectedData = this._listVersion.getSelectedData();
-            return selectedData ? selectedData.gameVersion : undefined;
+            return selectedData ? selectedData.gameVersion : null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -97,13 +94,9 @@ namespace TwnsCommonChangeVersionPanel {
 
             const url = getUrlForGameVersion(selectedVersion);
             if (url == null) {
-                Logger.error(`CommonChangeVersionPanel._onTouchedBtnConfirm() empty url.`);
+                throw Helpers.newError(`CommonChangeVersionPanel._onTouchedBtnConfirm() empty url.`);
             } else {
-                try {
-                    window.open(url);
-                } catch (e) {
-                    Logger.error(`CommonChangeVersionPanel._onTouchedBtnConfirm() window.open() error: `, e);
-                }
+                window.open(url);
             }
             this.close();
         }
@@ -129,7 +122,7 @@ namespace TwnsCommonChangeVersionPanel {
             listVersion.setSelectedIndex(dataArray.findIndex(v => v.gameVersion === CommonConstants.GameVersion));
         }
 
-        private _createDataForListVersion(): DataForMapNameRenderer[] {
+        private _createDataForListVersion(): DataForVersionRenderer[] {
             return [
                 {
                     gameVersion : GameVersion.Legacy,
@@ -172,13 +165,13 @@ namespace TwnsCommonChangeVersionPanel {
         }
     }
 
-    type DataForMapNameRenderer = {
+    type DataForVersionRenderer = {
         gameVersion : GameVersion;
     };
-    class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelDesc      : TwnsUiLabel.UiLabel;
-        private _labelCurrent   : TwnsUiLabel.UiLabel;
+    class VersionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForVersionRenderer> {
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelDesc!    : TwnsUiLabel.UiLabel;
+        private readonly _labelCurrent! : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -199,7 +192,11 @@ namespace TwnsCommonChangeVersionPanel {
                 return;
             }
 
-            const data              = this.data;
+            const data = this.data;
+            if (data == null) {
+                throw Helpers.newError(`CommonChangeVersionPanel.VersionRenderer._updateView() empty data.`);
+            }
+
             const gameVersion       = data.gameVersion;
             this._labelName.text    = Lang.getGameVersionName(gameVersion) || CommonConstants.ErrorTextForUndefined;
             this._labelDesc.text    = Lang.getGameVersionDesc(gameVersion) || CommonConstants.ErrorTextForUndefined;
@@ -210,12 +207,12 @@ namespace TwnsCommonChangeVersionPanel {
         }
     }
 
-    function getUrlForGameVersion(version: GameVersion): string | undefined {
+    function getUrlForGameVersion(version: GameVersion): string | null {
         switch (version) {
             case GameVersion.Legacy : return `https://www.tinywars.online`;
             case GameVersion.Test   : return `https://www.tinywars.online/test`;
             case GameVersion.Awbw   : return `https://awbw.amarriner.com/`;
-            default                 : return undefined;
+            default                 : return null;
         }
     }
 }

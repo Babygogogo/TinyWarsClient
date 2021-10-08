@@ -28,17 +28,17 @@ namespace TwnsCommonCoListPanel {
 
         private static _instance: CommonCoListPanel;
 
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        private readonly _group         : eui.Group;
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        private readonly _btnHelp       : TwnsUiButton.UiButton;
-        private readonly _groupCoNames  : eui.Group;
-        private readonly _btnClose      : TwnsUiButton.UiButton;
-        private readonly _uiCoInfo      : TwnsUiCoInfo.UiCoInfo;
+        private readonly _imgMask!      : TwnsUiImage.UiImage;
+        private readonly _group!        : eui.Group;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnHelp!      : TwnsUiButton.UiButton;
+        private readonly _groupCoNames! : eui.Group;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
+        private readonly _uiCoInfo!     : TwnsUiCoInfo.UiCoInfo;
 
         private _renderersForCoNames    : RendererForCoName[] = [];
 
-        private _previewingPlayerIndex  : number;
+        private _previewingPlayerIndex  : number | null = null;
 
         public static show(openData: OpenDataForCommonBanCoPanel): void {
             if (!CommonCoListPanel._instance) {
@@ -85,16 +85,16 @@ namespace TwnsCommonCoListPanel {
             await this._showCloseAnimation();
 
             this._clearGroupCoNames();
-            this._setPreviewingPlayerIndex(undefined);
+            this._setPreviewingPlayerIndex(null);
         }
 
-        private _setPreviewingPlayerIndex(playerIndex: number): void {
+        private _setPreviewingPlayerIndex(playerIndex: number | null): void {
             if (this._getPreviewingPlayerIndex() !== playerIndex) {
                 this._previewingPlayerIndex = playerIndex;
                 this._updateComponentsForPreviewCoId();
             }
         }
-        private _getPreviewingPlayerIndex(): number {
+        private _getPreviewingPlayerIndex(): number | null {
             return this._previewingPlayerIndex;
         }
 
@@ -170,7 +170,7 @@ namespace TwnsCommonCoListPanel {
                     renderer.setIsSelected(true);
                     this._uiCoInfo.setCoData({
                         configVersion   : this._getOpenData().war.getConfigVersion(),
-                        coId            : renderer.getCoId(),
+                        coId            : Helpers.getExisted(renderer.getCoId()),
                     });
                 }
             }
@@ -207,15 +207,15 @@ namespace TwnsCommonCoListPanel {
     }
 
     class RendererForCoName extends TwnsUiComponent.UiComponent {
-        private readonly _imgUnselected : TwnsUiImage.UiImage;
-        private readonly _imgSelected   : TwnsUiImage.UiImage;
-        private readonly _labelName     : TwnsUiLabel.UiLabel;
+        private readonly _imgUnselected!    : TwnsUiImage.UiImage;
+        private readonly _imgSelected!      : TwnsUiImage.UiImage;
+        private readonly _labelName!        : TwnsUiLabel.UiLabel;
 
-        private _configVersion  : string;
-        private _coId           : number;
-        private _energy         : number;
-        private _playerIndex    : number;
-        private _isSelected     : boolean;
+        private _configVersion  : string | null = null;
+        private _coId           : number | null = null;
+        private _energy         : number | null = null;
+        private _playerIndex    : number | null = null;
+        private _isSelected     : boolean | null = null;
 
         public constructor() {
             super();
@@ -239,10 +239,10 @@ namespace TwnsCommonCoListPanel {
             this._playerIndex   = playerIndex;
             this._updateView();
         }
-        public getCoId(): number {
+        public getCoId(): number | null {
             return this._coId;
         }
-        public getPlayerIndex(): number {
+        public getPlayerIndex(): number | null {
             return this._playerIndex;
         }
 
@@ -256,10 +256,10 @@ namespace TwnsCommonCoListPanel {
                 return;
             }
 
-            const isSelected            = this._isSelected;
+            const isSelected            = !!this._isSelected;
             this._imgSelected.visible   = isSelected;
             this._imgUnselected.visible = !isSelected;
-            this._labelName.text        = `${ConfigManager.getCoBasicCfg(this._configVersion, this._coId)?.name || CommonConstants.ErrorTextForUndefined}(${this._energy})`;
+            this._labelName.text        = `${ConfigManager.getCoBasicCfg(Helpers.getExisted(this._configVersion), Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined}(${this._energy})`;
         }
     }
 }

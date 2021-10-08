@@ -17,21 +17,12 @@ import TwnsNotifyType               from "../../tools/notify/NotifyType";
 import TwnsUiButton                 from "../../tools/ui/UiButton";
 import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 import WwModel                      from "../../watchWar/model/WwModel";
+import TwnsWwMainMenuPanel          from "../../watchWar/view/WwMainMenuPanel";
 import TwnsMcrCreateMapListPanel    from "./McrCreateMapListPanel";
 import TwnsMcrJoinRoomListPanel     from "./McrJoinRoomListPanel";
 import TwnsMcrMyRoomListPanel       from "./McrMyRoomListPanel";
-import TwnsWwMainMenuPanel    from "../../watchWar/view/WwMainMenuPanel";
 
 namespace TwnsMcrMainMenuPanel {
-    import MfrMainMenuPanel         = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
-    import MrrMainMenuPanel         = TwnsMrrMainMenuPanel.MrrMainMenuPanel;
-    import RwReplayListPanel        = TwnsRwReplayListPanel.RwReplayListPanel;
-    import SpmMainMenuPanel         = TwnsSpmMainMenuPanel.SpmMainMenuPanel;
-    import McrWatchMainMenuPanel    = TwnsWwMainMenuPanel.WwMainMenuPanel;
-    import McrCreateMapListPanel    = TwnsMcrCreateMapListPanel.McrCreateMapListPanel;
-    import McrJoinRoomListPanel     = TwnsMcrJoinRoomListPanel.McrJoinRoomListPanel;
-    import McrMyRoomListPanel       = TwnsMcrMyRoomListPanel.McrMyRoomListPanel;
-    import CcrMainMenuPanel         = TwnsCcrMainMenuPanel.CcrMainMenuPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import Tween                    = egret.Tween;
 
@@ -41,26 +32,26 @@ namespace TwnsMcrMainMenuPanel {
 
         private static _instance: McrMainMenuPanel;
 
-        private readonly _group             : eui.Group;
-        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
-        private readonly _btnRanking        : TwnsUiButton.UiButton;
-        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
+        private readonly _group!            : eui.Group;
+        private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
+        private readonly _btnRanking!       : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer!  : TwnsUiButton.UiButton;
 
-        private readonly _groupLeft         : eui.Group;
-        private readonly _btnCreateRoom     : TwnsUiButton.UiButton;
-        private readonly _btnJoinRoom       : TwnsUiButton.UiButton;
-        private readonly _btnMyRoom         : TwnsUiButton.UiButton;
-        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
-        private readonly _btnWatchWar       : TwnsUiButton.UiButton;
-        private readonly _btnReplayWar      : TwnsUiButton.UiButton;
-        private readonly _btnCoopMode       : TwnsUiButton.UiButton;
-        private readonly _btnFreeMode       : TwnsUiButton.UiButton;
+        private readonly _groupLeft!        : eui.Group;
+        private readonly _btnCreateRoom!    : TwnsUiButton.UiButton;
+        private readonly _btnJoinRoom!      : TwnsUiButton.UiButton;
+        private readonly _btnMyRoom!        : TwnsUiButton.UiButton;
+        private readonly _btnContinueWar!   : TwnsUiButton.UiButton;
+        private readonly _btnWatchWar!      : TwnsUiButton.UiButton;
+        private readonly _btnReplayWar!     : TwnsUiButton.UiButton;
+        private readonly _btnCoopMode!      : TwnsUiButton.UiButton;
+        private readonly _btnFreeMode!      : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!McrMainMenuPanel._instance) {
                 McrMainMenuPanel._instance = new McrMainMenuPanel();
             }
-            McrMainMenuPanel._instance.open(undefined);
+            McrMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -106,29 +97,29 @@ namespace TwnsMcrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnRanking(): void {
             this.close();
-            MrrMainMenuPanel.show();
+            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            SpmMainMenuPanel.show();
+            TwnsSpmMainMenuPanel.SpmMainMenuPanel.show();
         }
         private _onTouchedBtnCreateRoom(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrCreateMapListPanel.show({});
+            TwnsMcrCreateMapListPanel.McrCreateMapListPanel.show({});
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrJoinRoomListPanel.show();
+            TwnsMcrJoinRoomListPanel.McrJoinRoomListPanel.show();
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrMyRoomListPanel.show();
+            TwnsMcrMyRoomListPanel.McrMyRoomListPanel.show();
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
@@ -138,21 +129,21 @@ namespace TwnsMcrMainMenuPanel {
         }
         private _onTouchedBtnWatchWar(): void {
             this.close();
-            McrWatchMainMenuPanel.show();
+            TwnsWwMainMenuPanel.WwMainMenuPanel.show();
         }
         private _onTouchedBtnReplayWar(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            RwReplayListPanel.show();
+            TwnsRwReplayListPanel.RwReplayListPanel.show();
         }
         private _onTouchedBtnCoopMode(): void {
             this.close();
-            CcrMainMenuPanel.show();
+            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
         }
         private _onTouchedBtnFreeMode(): void {
             this.close();
-            MfrMainMenuPanel.show();
+            TwnsMfrMainMenuPanel.MfrMainMenuPanel.show();
         }
 
         private _onMsgUserLogout(): void {

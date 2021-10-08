@@ -3,6 +3,7 @@ import TwnsBwUnit               from "../../baseWar/model/BwUnit";
 import TwnsBwUnitView           from "../../baseWar/view/BwUnitView";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -29,10 +30,10 @@ namespace TwnsMeChooseUnitPanel {
 
         private static _instance: MeChooseUnitPanel;
 
-        private _labelRecentTitle   : TwnsUiLabel.UiLabel;
-        private _listRecent         : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
-        private _listCategory       : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
-        private _btnCancel          : TwnsUiButton.UiButton;
+        private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
+        private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
         private _dataListForRecent   : DataForUnitRenderer[] = [];
 
@@ -40,7 +41,7 @@ namespace TwnsMeChooseUnitPanel {
             if (!MeChooseUnitPanel._instance) {
                 MeChooseUnitPanel._instance = new MeChooseUnitPanel();
             }
-            MeChooseUnitPanel._instance.open(undefined);
+            MeChooseUnitPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeChooseUnitPanel._instance) {
@@ -97,7 +98,7 @@ namespace TwnsMeChooseUnitPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -111,13 +112,13 @@ namespace TwnsMeChooseUnitPanel {
 
         private _createDataForListUnit(): DataForCategoryRenderer[] {
             const mapping = new Map<number, DataForDrawUnit[]>();
-            for (const unitType of ConfigManager.getUnitTypesByCategory(ConfigManager.getLatestFormalVersion(), Types.UnitCategory.All)) {
+            for (const unitType of ConfigManager.getUnitTypesByCategory(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Types.UnitCategory.All)) {
                 for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);
                     }
 
-                    mapping.get(playerIndex).push({
+                    Helpers.getExisted(mapping.get(playerIndex)).push({
                         playerIndex,
                         unitType,
                     });
@@ -152,7 +153,7 @@ namespace TwnsMeChooseUnitPanel {
         panel               : MeChooseUnitPanel;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
-        private _listUnit: TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
+        private readonly _listUnit! : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
 
         protected _onOpened(): void {
             this._listUnit.setItemRenderer(UnitRenderer);
@@ -160,7 +161,7 @@ namespace TwnsMeChooseUnitPanel {
         }
 
         protected _onDataChanged(): void {
-            const data              = this.data;
+            const data              = this._getData();
             const unitViewIdList    = data.dataListForDrawUnit;
             const dataListForUnit   : DataForUnitRenderer[] = [];
             const panel             = data.panel;
@@ -179,15 +180,16 @@ namespace TwnsMeChooseUnitPanel {
         panel           : MeChooseUnitPanel;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
-        private _group          : eui.Group;
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _conUnitView    : eui.Group;
+        private readonly _group!        : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _conUnitView!  : eui.Group;
 
         private _unitView   = new BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
 
             this._conUnitView.addChild(this._unitView);
@@ -195,16 +197,19 @@ namespace TwnsMeChooseUnitPanel {
 
         private _onNotifyUnitAnimationTick(): void {
             const unitView = this._unitView;
-            unitView.tickStateAnimationFrame();
             unitView.tickUnitAnimationFrame();
         }
 
+        private _onNotifyUnitStateIndicatorTick(): void {
+            this._unitView.tickStateAnimationFrame();
+        }
+
         protected _onDataChanged(): void {
-            const data              = this.data;
+            const data              = this._getData();
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;
-            const war               = MeModel.getWar();
-            this._labelName.text    = Lang.getUnitName(unitType);
+            const war               = Helpers.getExisted(MeModel.getWar());
+            this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
 
             const unitView  = this._unitView;
             const unit      = new TwnsBwUnit.BwUnit();
@@ -220,12 +225,12 @@ namespace TwnsMeChooseUnitPanel {
         }
 
         public onItemTapEvent(): void {
-            const data              = this.data;
+            const data              = this._getData();
             const panel             = data.panel;
             const dataForDrawUnit   = data.dataForDrawUnit;
             panel.updateOnChooseUnit(dataForDrawUnit);
             panel.close();
-            MeModel.getWar().getDrawer().setModeDrawUnit(dataForDrawUnit);
+            Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawUnit(dataForDrawUnit);
         }
     }
 }

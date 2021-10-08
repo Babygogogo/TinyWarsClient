@@ -1,146 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_group" top="40" bottom="0" width="160" left="0">
-        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <TwnsUiLabel:UiLabel id="_labelMenuTitle" text="菜单" y="10" bold="true" size="20" textColor="0xffffff"
-                        horizontalCenter="0" />
-        <TwnsUiLabel:UiLabel id="_labelNoCommand" text="(暂无可用选项)" bold="true" size="20" textColor="0xFFFFFF"
-                        horizontalCenter="0" verticalCenter="0" />
-        <TwnsUiScrollList:UiScrollList id="_listCommand" left="0" right="0" bottom="50" top="35">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin width="160" height="50" currentState="up" states="down,up">
-                        <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                            <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
-                                            anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
-                                            visible.up="false" />
-                            <TwnsUiLabel:UiLabel id="_labelName" text="选项名六个字" size="22" textColor="0xffffff"
-                                            horizontalCenter="0" verticalCenter="0" maxTextWidth="150" />
-                        </e:Group>
-                    </e:Skin>
-                </e:itemRendererSkinName>
-            </e:List>
-        </TwnsUiScrollList:UiScrollList>
-        <TwnsUiButton:UiButton id="_btnBack" label="" skinName="Skins.Component.Button.ButtonClose002" bottom="0" left="0" width="50"
-                         height="40"></TwnsUiButton:UiButton>
-        <TwnsUiButton:UiButton id="_btnHome" label="" bottom="0" skinName="Skins.Component.Button.ButtonHome001" right="0"
-                         width="50" height="40" />
-    </e:Group>
-    <e:Group id="_groupInfo" top="40" bottom="0" width="800" right="0">
-        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <e:Scroller left="0" right="0" top="8" bottom="8">
-            <e:Group>
-                <e:Group y="4" x="0" width="800">
-                    <TwnsUiLabel:UiLabel id="_labelWarInfoTitle" text="战场信息" y="4" bold="true" size="20" textColor="0xFFFFFF"
-                                    horizontalCenter="0" locked="true" />
-                    <e:Group y="26" left="0" right="0" locked="true">
-                        <e:Group x="0" y="0" locked="true">
-                            <TwnsUiButton:UiButton id="_btnMapNameTitle" label="地图名称" y="0" right="0"
-                                             skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" />
-                            <TwnsUiLabel:UiLabel id="_labelMapName" text="(Empty)" size="16" textColor="0xFFFFFF" x="98"
-                                            y="26" width="660" />
-                            <e:layout>
-                                <e:HorizontalLayout verticalAlign="middle" gap="10" />
-                            </e:layout>
-                        </e:Group>
-                        <TwnsUiScrollList:UiScrollList id="_listWarInfo" x="95" y="62">
-                            <e:List>
-                                <e:itemRendererSkinName>
-                                    <e:Skin width="380">
-                                        <e:Group left="0" right="0">
-                                            <TwnsUiButton:UiButton id="_btnTitle" label="初始资金" y="0" right="0"
-                                                             skinName="Skins.Component.Button.ButtonSelfAdaption001"
-                                                             x="56" width="120" />
-                                            <TwnsUiLabel:UiLabel id="_labelValue" text="(Empty)" size="16"
-                                                            textColor="0xFFFFFF" x="98" y="26" width="250" />
-                                            <e:layout>
-                                                <e:HorizontalLayout verticalAlign="middle" gap="10" />
-                                            </e:layout>
-                                        </e:Group>
-                                    </e:Skin>
-                                </e:itemRendererSkinName>
-                                <e:layout>
-                                    <e:TileLayout orientation="rows" requestedColumnCount="2" verticalGap="0" />
-                                </e:layout>
-                            </e:List>
-                        </TwnsUiScrollList:UiScrollList>
-                        <e:layout>
-                            <e:VerticalLayout horizontalAlign="center" />
-                        </e:layout>
-                    </e:Group>
-                </e:Group>
-                <e:Group y="204" width="800" x="0">
-                    <TwnsUiLabel:UiLabel id="_labelPlayerInfoTitle" text="玩家信息" y="0" bold="true" size="20"
-                                    textColor="0xFFFFFF" horizontalCenter="0" />
-                    <TwnsUiButton:UiButton id="_btnBuildings" label="建筑信息" y="0" right="0">
-                        <TwnsUiButton:skinName>
-                            <e:Skin states="up,down,disabled">
-                                <e:Group y="0" x="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
-                                             left="0" right="0" top="0" bottom="0" />
-                                    <e:Group>
-                                        <TwnsUiLabel:UiLabel id="labelDisplay" size="12" verticalCenter="0"
-                                                        horizontalCenter="0" x="98" y="97" text=""
-                                                        textColor="0x00ff00" />
-                                        <e:layout>
-                                            <e:HorizontalLayout paddingTop="8" paddingBottom="8" paddingLeft="10"
-                                                                paddingRight="10" />
-                                        </e:layout>
-                                    </e:Group>
-                                </e:Group>
-                            </e:Skin>
-                        </TwnsUiButton:skinName>
-                    </TwnsUiButton:UiButton>
-                    <TwnsUiScrollList:UiScrollList id="_listPlayer" y="24" horizontalCenter="0">
-                        <e:List>
-                            <e:itemRendererSkinName>
-                                <e:Skin width="190" currentState="up" states="down,up">
-                                    <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                                        <TwnsUiLabel:UiLabel id="_labelName" text="玩家名居然会有十个字" size="16" textColor="0xffffff"
-                                                        horizontalCenter="0" y="5" maxTextWidth="190" />
-                                        <TwnsUiLabel:UiLabel id="_labelForce" text="红方 A队" size="16" textColor="0xFFFFFF"
-                                                        y="25" horizontalCenter="0" />
-                                        <TwnsUiLabel:UiLabel id="_labelLost" text="已战败" size="18" textColor="0xFFFFFF"
-                                                        horizontalCenter="0" y="60" />
-                                        <TwnsUiScrollList:UiScrollList id="_listInfo" y="42" horizontalCenter="0">
-                                            <e:List>
-                                                <e:itemRendererSkinName>
-                                                    <e:Skin width="190">
-                                                        <e:Group left="0" right="0" top="0"
-                                                                 bottom="0">
-                                                            <TwnsUiButton:UiButton id="_btnTitle" label="Buildings" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0"
-                                                                             width="120"></TwnsUiButton:UiButton>
-                                                            <TwnsUiLabel:UiLabel id="_labelValue" text="(Empty)" size="14"
-                                                                            textColor="0xFFFFFF" x="120"
-                                                                            verticalCenter="0" maxTextWidth="100"
-                                                                            width="70" />
-                                                            <e:layout>
-                                                                <e:HorizontalLayout verticalAlign="middle" gap="0" />
-                                                            </e:layout>
-                                                        </e:Group>
-                                                    </e:Skin>
-                                                </e:itemRendererSkinName>
-                                                <e:layout>
-                                                    <e:VerticalLayout gap="0" />
-                                                </e:layout>
-                                            </e:List>
-                                        </TwnsUiScrollList:UiScrollList>
-                                    </e:Group>
-                                </e:Skin>
-                            </e:itemRendererSkinName>
-                            <e:layout>
-                                <e:HorizontalLayout/>
-                            </e:layout>
-                        </e:List>
-                    </TwnsUiScrollList:UiScrollList>
-                </e:Group>
-                <e:layout>
-                    <e:VerticalLayout/>
-                </e:layout>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="370" horizontalCenter="0" height="280" verticalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
+                                       verticalCenter="0" right="30" />
             </e:Group>
-        </e:Scroller>
+        </e:Group>
+        <e:Group y="60" horizontalCenter="0">
+            <TwnsUiButton:UiButton label="Button" x="10" y="10" skinName="Skins.Component.Button.ButtonBlack002"
+                                   width="140" height="30" id="_btnUnitList" />
+            <TwnsUiButton:UiButton label="Button" x="20" y="20" skinName="Skins.Component.Button.ButtonBlack002"
+                                   width="140" height="30" id="_btnDeleteUnit" />
+            <TwnsUiButton:UiButton label="Button" x="40" y="40" skinName="Skins.Component.Button.ButtonBlack002"
+                                   width="140" height="30" id="_btnSimulation" />
+            <TwnsUiButton:UiButton label="Button" x="30" y="30" skinName="Skins.Component.Button.ButtonBlack002"
+                                   width="140" height="30" id="_btnFreeMode" />
+            <TwnsUiButton:UiButton label="Button" x="50" y="50" skinName="Skins.Component.Button.ButtonBlack002"
+                                   width="140" height="30" id="_btnSetPath" />
+            <TwnsUiButton:UiButton label="Button" x="0" y="0" skinName="Skins.Component.Button.ButtonBlack002"
+                                   width="140" height="30" id="_btnSync" />
+            <TwnsUiButton:UiButton label="Button" x="50" y="50" width="140" height="30" id="_btnSetDraw"
+                                   skinName="Skins.Component.Button.ButtonBlue002" />
+            <TwnsUiButton:UiButton label="Button" x="60" y="60" width="140" height="30" id="_btnSurrender"
+                                   skinName="Skins.Component.Button.ButtonRed001" />
+            <TwnsUiButton:UiButton label="Button" x="80" y="80" width="140" height="30" id="_btnGotoWarList"
+                                   skinName="Skins.Component.Button.ButtonYellow003" />
+            <TwnsUiButton:UiButton label="Button" x="70" y="70" width="140" height="30" id="_btnGotoLobby"
+                                   skinName="Skins.Component.Button.ButtonYellow003" />
+            <e:layout>
+                <e:TileLayout orientation="rows" verticalGap="12" horizontalGap="30" requestedColumnCount="2" />
+            </e:layout>
+        </e:Group>
     </e:Group>
 </e:Skin>

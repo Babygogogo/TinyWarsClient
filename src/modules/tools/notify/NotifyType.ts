@@ -8,9 +8,11 @@ namespace TwnsNotifyType {
         TimeTick,
         TileAnimationTick,
         UnitAnimationTick,
+        UnitStateIndicatorTick,
         GridAnimationTick,
         UnitAndTileTextureVersionChanged,
-        IsShowGridBorderChanged,
+        UserSettingsIsShowGridBorderChanged,
+        UserSettingsUnitOpacityChanged,
 
         MouseWheel,
         GlobalTouchBegin,
@@ -64,7 +66,6 @@ namespace TwnsNotifyType {
         ScrCreateWarSaveSlotChanged,
         ScrCreatePlayerInfoChanged,
 
-        MrrPreviewingMapIdChanged,
         McwPreviewingWarIdChanged,
         MrwPreviewingWarIdChanged,
         MfwPreviewingWarIdChanged,
@@ -93,7 +94,9 @@ namespace TwnsNotifyType {
         BwFieldZoomed,
         BwFieldDragged,
 
+        BwActionPlannerStateSet,
         BwActionPlannerStateChanged,
+        BwActionPlannerMovePathChanged,
 
         BwWarMenuPanelOpened,
         BwWarMenuPanelClosed,
@@ -109,6 +112,7 @@ namespace TwnsNotifyType {
 
         BwTileBeDestroyed,
         BwTileBeAttacked,
+        BwTileBeCaptured,
 
         BwSiloExploded,
 

@@ -1,8 +1,9 @@
 
-import TwnsUiComponent          from "./UiComponent";
 import TwnsWarMapView           from "../../warMap/view/WarMapView";
-import TwnsUiZoomableComponent  from "./UiZoomableComponent";
+import Types                    from "../helpers/Types";
 import ProtoTypes               from "../proto/ProtoTypes";
+import TwnsUiComponent          from "./UiComponent";
+import TwnsUiZoomableComponent  from "./UiZoomableComponent";
 
 namespace TwnsUiZoomableMap {
     export class UiZoomableMap extends TwnsUiComponent.UiComponent {
@@ -45,7 +46,7 @@ namespace TwnsUiZoomableMap {
             zoom.setContentHeight(mapView.height);
             zoom.setContentScale(0, true);
         }
-        public showMapByWarData(data: ProtoTypes.WarSerialization.ISerialWar, players?: ProtoTypes.WarSerialization.ISerialPlayer[]): void {
+        public showMapByWarData(data: ProtoTypes.WarSerialization.ISerialWar, players: Types.Undefinable<ProtoTypes.WarSerialization.ISerialPlayer[]>): void {
             const mapView = this._mapView;
             mapView.showMapByWarData(data, players);
 

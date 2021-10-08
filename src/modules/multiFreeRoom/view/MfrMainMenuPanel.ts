@@ -35,37 +35,25 @@ namespace TwnsMfrMainMenuPanel {
 
         private static _instance: MfrMainMenuPanel;
 
-        // @ts-ignore
-        private readonly _group             : eui.Group;
-        // @ts-ignore
-        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnRanking        : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
+        private readonly _group!            : eui.Group;
+        private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
+        private readonly _btnRanking!       : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer!  : TwnsUiButton.UiButton;
 
-        // @ts-ignore
-        private readonly _groupLeft         : eui.Group;
-        // @ts-ignore
-        private readonly _btnCreateRoom     : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnJoinRoom       : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnMyRoom         : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnHelp           : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnNormalMode     : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnCoopMode       : TwnsUiButton.UiButton;
+        private readonly _groupLeft!        : eui.Group;
+        private readonly _btnCreateRoom!    : TwnsUiButton.UiButton;
+        private readonly _btnJoinRoom!      : TwnsUiButton.UiButton;
+        private readonly _btnMyRoom!        : TwnsUiButton.UiButton;
+        private readonly _btnContinueWar!   : TwnsUiButton.UiButton;
+        private readonly _btnHelp!          : TwnsUiButton.UiButton;
+        private readonly _btnNormalMode!    : TwnsUiButton.UiButton;
+        private readonly _btnCoopMode!      : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MfrMainMenuPanel._instance) {
                 MfrMainMenuPanel._instance = new MfrMainMenuPanel();
             }
-            MfrMainMenuPanel._instance.open(undefined);
+            MfrMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

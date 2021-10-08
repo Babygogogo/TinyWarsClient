@@ -2,6 +2,7 @@
 import TwnsBwWar                from "../../baseWar/model/BwWar";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -28,7 +29,7 @@ namespace MpwProxy {
             { msgCode: NetMessageCodes.MsgMpwCommonSyncWar,                   callback: _onMsgMpwCommonSyncWar },
 
             { msgCode: NetMessageCodes.MsgMpwExecuteWarAction,                callback: _onMsgMpwExecuteWarAction },
-        ], undefined);
+        ], null);
     }
 
     function _onMsgMpwCommonBroadcastGameStart(e: egret.Event): void {
@@ -38,7 +39,7 @@ namespace MpwProxy {
                 title   : Lang.getText(LangTextType.B0392),
                 content : desc,
                 callback: () => {
-                    reqMpwCommonContinueWar(data.warId);
+                    reqMpwCommonContinueWar(Helpers.getExisted(data.warId));
                 },
             });
         });
@@ -67,7 +68,7 @@ namespace MpwProxy {
     }
     function _onMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-        MpwModel.setAllMyWarInfoList(data.infos);
+        MpwModel.setAllMyWarInfoList(data.infos || []);
         Notify.dispatch(NotifyType.MsgMpwCommonGetMyWarInfoList, data);
     }
 
@@ -113,7 +114,7 @@ namespace MpwProxy {
     function _onMsgMpwExecuteWarAction(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwExecuteWarAction.IS;
         if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
+            MpwModel.updateByActionContainer(Helpers.getExisted(data.actionContainer), Helpers.getExisted(data.warId));
             Notify.dispatch(NotifyType.MsgMpwExecuteWarAction, data);
         }
     }

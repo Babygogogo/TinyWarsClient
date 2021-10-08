@@ -1,20 +1,19 @@
 
-import TwnsUiImage                  from "../../tools/ui/UiImage";
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import TwnsUiTextInput              from "../../tools/ui/UiTextInput";
-import FloatText                    from "../../tools/helpers/FloatText";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import LocalStorage                 from "../../tools/helpers/LocalStorage";
-import Logger                       from "../../tools/helpers/Logger";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import Types                        from "../../tools/helpers/Types";
-import UserModel                    from "../model/UserModel";
-import UserProxy                    from "../model/UserProxy";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import LocalStorage         from "../../tools/helpers/LocalStorage";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+import UserModel            from "../model/UserModel";
+import UserProxy            from "../model/UserProxy";
 
 namespace TwnsUserRegisterPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -24,18 +23,18 @@ namespace TwnsUserRegisterPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private _imgMask            : TwnsUiImage.UiImage;
-        private _group              : eui.Group;
-        private _labelTitle         : TwnsUiLabel.UiLabel;
-        private _labelAccount       : TwnsUiLabel.UiLabel;
-        private _inputAccount       : TwnsUiTextInput.UiTextInput;
-        private _labelPassword      : TwnsUiLabel.UiLabel;
-        private _inputPassword      : TwnsUiTextInput.UiTextInput;
-        private _labelNickname      : TwnsUiLabel.UiLabel;
-        private _inputNickname      : TwnsUiTextInput.UiTextInput;
-        private _btnRegister        : TwnsUiButton.UiButton;
-        private _btnClose           : TwnsUiButton.UiButton;
-        private _labelTips          : TwnsUiLabel.UiLabel;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
+        private readonly _group!            : eui.Group;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelAccount!     : TwnsUiLabel.UiLabel;
+        private readonly _inputAccount!     : TwnsUiTextInput.UiTextInput;
+        private readonly _labelPassword!    : TwnsUiLabel.UiLabel;
+        private readonly _inputPassword!    : TwnsUiTextInput.UiTextInput;
+        private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
+        private readonly _inputNickname!    : TwnsUiTextInput.UiTextInput;
+        private readonly _btnRegister!      : TwnsUiButton.UiButton;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
+        private readonly _labelTips!        : TwnsUiLabel.UiLabel;
 
         private static _instance: UserRegisterPanel;
 
@@ -43,7 +42,7 @@ namespace TwnsUserRegisterPanel {
             if (!UserRegisterPanel._instance) {
                 UserRegisterPanel._instance = new UserRegisterPanel();
             }
-            UserRegisterPanel._instance.open(undefined);
+            UserRegisterPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -86,8 +85,7 @@ namespace TwnsUserRegisterPanel {
 
             const account = data.account;
             if (account == null) {
-                Logger.error(`RegisterPanel._onMsgUserRegister() empty account!`);
-                return;
+                throw Helpers.newError(`RegisterPanel._onMsgUserRegister() empty account!`);
             }
 
             const password  = this._inputPassword.text;

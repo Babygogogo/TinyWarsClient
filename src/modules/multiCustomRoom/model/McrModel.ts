@@ -5,7 +5,6 @@ import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPla
 import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import Helpers                              from "../../tools/helpers/Helpers";
-import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Notify                               from "../../tools/notify/Notify";
 import TwnsNotifyType                       from "../../tools/notify/NotifyType";
@@ -26,8 +25,8 @@ namespace McrModel {
     export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMcrCreateRoom.IC;
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
 
-    const _roomInfoDict         = new Map<number, IMcrRoomInfo | undefined>();
-    const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgMcrGetRoomInfo.IS | undefined | null) => void)[]>();
+    const _roomInfoDict         = new Map<number, IMcrRoomInfo | null>();
+    const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgMcrGetRoomInfo.IS) => void)[]>();
 
     const _unjoinedRoomIdSet    = new Set<number>();
     const _joinedRoomIdSet      = new Set<number>();
@@ -35,17 +34,17 @@ namespace McrModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for rooms.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getRoomInfo(roomId: number): Promise<IMcrRoomInfo | undefined | null> {
-        if (roomId == null) {
-            return new Promise((resolve) => resolve(null));
-        }
-        if (_roomInfoDict.has(roomId)) {
-            return new Promise(resolve => resolve(_roomInfoDict.get(roomId)));
+    export function getRoomInfo(roomId: number): Promise<IMcrRoomInfo | null> {
+        {
+            const cachedInfo = _roomInfoDict.get(roomId);
+            if (cachedInfo !== undefined) {
+                return new Promise(resolve => resolve(cachedInfo));
+            }
         }
 
         if (_roomInfoRequests.has(roomId)) {
             return new Promise((resolve) => {
-                _roomInfoRequests.get(roomId).push(info => resolve(info.roomInfo));
+                Helpers.getExisted(_roomInfoRequests.get(roomId)).push(info => resolve(info.roomInfo ?? null));
             });
         }
 
@@ -56,7 +55,7 @@ namespace McrModel {
                     Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfo,         callbackOnSucceed);
                     Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfoFailed,   callbackOnFailed);
 
-                    for (const cb of _roomInfoRequests.get(roomId)) {
+                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
                         cb(data);
                     }
                     _roomInfoRequests.delete(roomId);
@@ -70,7 +69,7 @@ namespace McrModel {
                     Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfo,         callbackOnSucceed);
                     Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfoFailed,   callbackOnFailed);
 
-                    for (const cb of _roomInfoRequests.get(roomId)) {
+                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
                         cb(data);
                     }
                     _roomInfoRequests.delete(roomId);
@@ -86,17 +85,17 @@ namespace McrModel {
         });
 
         return new Promise((resolve) => {
-            _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo)]);
+            _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo ?? null)]);
         });
     }
-    function setRoomInfo(roomId: number, info: IMcrRoomInfo | undefined): void {
+    function setRoomInfo(roomId: number, info: IMcrRoomInfo | null): void {
         _roomInfoDict.set(roomId, info);
     }
 
     export function setJoinableRoomInfoList(infoList: IMcrRoomInfo[]): void {
         _unjoinedRoomIdSet.clear();
         for (const roomInfo of infoList || []) {
-            const roomId = roomInfo.roomId;
+            const roomId = Helpers.getExisted(roomInfo.roomId);
             _unjoinedRoomIdSet.add(roomId);
             setRoomInfo(roomId, roomInfo);
         }
@@ -108,7 +107,7 @@ namespace McrModel {
     export function setJoinedRoomInfoList(infoList: IMcrRoomInfo[]): void {
         _joinedRoomIdSet.clear();
         for (const roomInfo of infoList || []) {
-            const roomId = roomInfo.roomId;
+            const roomId = Helpers.getExisted(roomInfo.roomId);
             _joinedRoomIdSet.add(roomId);
             setRoomInfo(roomId, roomInfo);
         }
@@ -119,8 +118,8 @@ namespace McrModel {
 
     export function updateOnMsgMcrGetRoomInfo(data: ProtoTypes.NetMessage.MsgMcrGetRoomInfo.IS): void {
         const roomInfo  = data.roomInfo;
-        const roomId    = data.roomId;
-        setRoomInfo(roomId, roomInfo);
+        const roomId    = Helpers.getExisted(data.roomId);
+        setRoomInfo(roomId, roomInfo ?? null);
 
         if (roomInfo == null) {
             _unjoinedRoomIdSet.delete(roomId);
@@ -128,10 +127,10 @@ namespace McrModel {
         }
     }
     export async function updateOnMsgMcrDeletePlayer(data: ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS): Promise<void> {
-        const roomId    = data.roomId;
+        const roomId    = Helpers.getExisted(data.roomId);
         const roomInfo  = await getRoomInfo(roomId);
         if (roomInfo) {
-            const playerDataList    = roomInfo.playerDataList;
+            const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const playerData        = playerDataList.find(v => v.playerIndex === data.targetPlayerIndex);
             Helpers.deleteElementFromArray(playerDataList, playerData);
 
@@ -142,18 +141,17 @@ namespace McrModel {
         }
     }
     export async function updateOnMsgMcrSetReady(data: ProtoTypes.NetMessage.MsgMcrSetReady.IS): Promise<void> {
-        const roomInfo      = await getRoomInfo(data.roomId);
-        const playerData    = roomInfo ? roomInfo.playerDataList.find(v => v.playerIndex === data.playerIndex) : null;
-        if (playerData) {
-            playerData.isReady = data.isReady;
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
+        if (roomInfo) {
+            Helpers.getExisted(roomInfo.playerDataList?.find(v => v.playerIndex === data.playerIndex)).isReady = data.isReady;
         }
     }
     export async function updateOnMsgMcrSetSelfSettings(data: ProtoTypes.NetMessage.MsgMcrSetSelfSettings.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(data.roomId);
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             const oldPlayerIndex            = data.oldPlayerIndex;
             const newPlayerIndex            = data.newPlayerIndex;
-            const playerData                = roomInfo.playerDataList.find(v => v.playerIndex === oldPlayerIndex);
+            const playerData                = Helpers.getExisted(roomInfo.playerDataList?.find(v => v.playerIndex === oldPlayerIndex));
             playerData.coId                 = data.coId;
             playerData.unitAndTileSkinId    = data.unitAndTileSkinId;
             playerData.playerIndex          = newPlayerIndex;
@@ -163,13 +161,13 @@ namespace McrModel {
         }
     }
     export async function updateOnMsgMcrGetOwnerPlayerIndex(data: ProtoTypes.NetMessage.MsgMcrGetOwnerPlayerIndex.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(data.roomId);
+        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (roomInfo) {
             roomInfo.ownerPlayerIndex = data.ownerPlayerIndex;
         }
     }
     export async function updateOnMsgMcrJoinRoom(data: ProtoTypes.NetMessage.MsgMcrJoinRoom.IS): Promise<void> {
-        const roomInfo      = await getRoomInfo(data.roomId);
+        const roomInfo      = Helpers.getExisted(await getRoomInfo(Helpers.getExisted(data.roomId)));
         const playerIndex   = data.playerIndex;
         if (!roomInfo.playerDataList) {
             roomInfo.playerDataList = [{
@@ -192,10 +190,10 @@ namespace McrModel {
         }
     }
     export async function updateOnMsgMcrExitRoom(data: ProtoTypes.NetMessage.MsgMcrExitRoom.IS): Promise<void> {
-        const roomId    = data.roomId;
+        const roomId    = Helpers.getExisted(data.roomId);
         const roomInfo  = await getRoomInfo(roomId);
         if (roomInfo) {
-            const playerDataList    = roomInfo.playerDataList;
+            const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
             const playerData        = playerDataList.find(v => v.playerIndex === data.playerIndex);
             Helpers.deleteElementFromArray(playerDataList, playerData);
 
@@ -206,8 +204,8 @@ namespace McrModel {
         }
     }
     export function updateOnMsgMcrDeleteRoomByServer(data: ProtoTypes.NetMessage.MsgMcrDeleteRoomByServer.IS): void {
-        const roomId = data.roomId;
-        setRoomInfo(roomId, undefined);
+        const roomId = Helpers.getExisted(data.roomId);
+        setRoomInfo(roomId, null);
         _unjoinedRoomIdSet.delete(roomId);
         _joinedRoomIdSet.delete(roomId);
     }
@@ -230,9 +228,9 @@ namespace McrModel {
                 return true;
             }
 
-            if ((playerDataList.length === WarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))    &&
-                (playerDataList.every(v => (v.isReady) && (v.userId != null)))                                      &&
-                (selfPlayerData)                                                                                    &&
+            if ((playerDataList.length === WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomInfo.settingsForCommon?.warRule)))    &&
+                (playerDataList.every(v => (v.isReady) && (v.userId != null)))                                                                  &&
+                (selfPlayerData)                                                                                                                &&
                 (roomInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
             ) {
                 return true;
@@ -251,20 +249,24 @@ namespace McrModel {
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
             && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
-            && (playerDataList.length == WarRuleHelpers.getPlayersCount(roomInfo.settingsForCommon.warRule))
+            && (playerDataList.length == WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomInfo.settingsForCommon?.warRule)))
             && (playerDataList.every(v => (v.isReady) && (v.userId != null)));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function createDataForCommonWarPlayerInfoPage(roomId: number): Promise<OpenDataForCommonWarPlayerInfoPage | undefined> {
-        const roomInfo = await getRoomInfo(roomId);
-        if (roomInfo == null) {
-            return undefined;
+    export async function createDataForCommonWarPlayerInfoPage(roomId: number | null): Promise<OpenDataForCommonWarPlayerInfoPage> {
+        if (roomId == null) {
+            return null;
         }
 
-        const settingsForCommon     = roomInfo.settingsForCommon;
-        const warRule               = settingsForCommon.warRule;
-        const playersCountUnneutral = WarRuleHelpers.getPlayersCount(warRule);
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return null;
+        }
+
+        const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForCommon);
+        const warRule               = Helpers.getExisted(settingsForCommon.warRule);
+        const playersCountUnneutral = Helpers.getExisted(WarRuleHelpers.getPlayersCountUnneutral(warRule));
         const playerDataList        = roomInfo.playerDataList || [];
         const playerInfoArray       : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
@@ -273,79 +275,83 @@ namespace McrModel {
                 playerIndex,
                 teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
                 isAi                : false,
-                userId              : playerData?.userId,
-                coId                : playerData?.coId,
-                unitAndTileSkinId   : playerData?.unitAndTileSkinId,
-                isReady             : playerData?.isReady,
-                isInTurn            : undefined,
-                isDefeat            : undefined,
+                userId              : playerData?.userId ?? null,
+                coId                : playerData?.coId ?? null,
+                unitAndTileSkinId   : playerData?.unitAndTileSkinId ?? null,
+                isReady             : playerData?.isReady ?? null,
+                isInTurn            : null,
+                isDefeat            : null,
             });
         }
 
         return {
-            configVersion           : settingsForCommon.configVersion,
+            configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
             playersCountUnneutral,
-            roomOwnerPlayerIndex    : roomInfo.ownerPlayerIndex,
+            roomOwnerPlayerIndex    : Helpers.getExisted(roomInfo.ownerPlayerIndex),
             callbackOnExitRoom      : () => McrProxy.reqMcrExitRoom(roomId),
             callbackOnDeletePlayer  : (playerIndex) => McrProxy.reqMcrDeletePlayer(roomId, playerIndex),
             playerInfoArray,
         };
     }
 
-    export async function createDataForCommonWarBasicSettingsPage(roomId: number, showPassword: boolean): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    export async function createDataForCommonWarBasicSettingsPage(roomId: number | null, showPassword: boolean): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        if (roomId == null) {
+            return null;
+        }
+
         const roomInfo = await getRoomInfo(roomId);
         if (roomInfo == null) {
             return { dataArrayForListSettings: [] };
         }
 
-        const warRule           = roomInfo.settingsForCommon.warRule;
-        const settingsForMcw    = roomInfo.settingsForMcw;
-        const bootTimerParams   = settingsForMcw.bootTimerParams;
+        const warRule           = Helpers.getExisted(roomInfo.settingsForCommon?.warRule);
+        const settingsForMcw    = Helpers.getExisted(roomInfo.settingsForMcw);
+        const bootTimerParams   = Helpers.getExisted(settingsForMcw.bootTimerParams);
         const warPassword       = settingsForMcw.warPassword;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForMcw.mapId),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)),
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarName,
-                    currentValue    : settingsForMcw.warName,
+                    currentValue    : settingsForMcw.warName ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
-                    currentValue    : warPassword == null ? undefined : (showPassword ? warPassword : `****`),
+                    currentValue    : warPassword == null ? null : (showPassword ? warPassword : `****`),
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
-                    currentValue    : settingsForMcw.warComment,
+                    currentValue    : settingsForMcw.warComment ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             ],
         };
@@ -354,7 +360,7 @@ namespace McrModel {
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
                 warRule,
-                callbackOnModify: undefined,
+                callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
@@ -362,34 +368,38 @@ namespace McrModel {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             );
         } else {
-            Logger.error(`McrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            throw Helpers.newError(`McrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
         }
 
         return openData;
     }
 
-    export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
-        const roomInfo = await getRoomInfo(roomId);
-        if (roomInfo == null) {
-            return undefined;
+    export async function createDataForCommonWarAdvancedSettingsPage(roomId: number | null): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+        if (roomId == null) {
+            return null;
         }
 
-        const settingsForCommon = roomInfo.settingsForCommon;
-        const warRule           = settingsForCommon.warRule;
+        const roomInfo = await getRoomInfo(roomId);
+        if (roomInfo == null) {
+            return null;
+        }
+
+        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
+        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         return {
-            configVersion   : settingsForCommon.configVersion,
+            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
             warRule,
-            warType         : warRule.ruleForGlobalParams.hasFogByDefault ? Types.WarType.McwFog : Types.WarType.McwStd,
+            warType         : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.McwFog : Types.WarType.McwStd,
         };
     }
 }

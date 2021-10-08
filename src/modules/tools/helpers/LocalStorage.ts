@@ -87,7 +87,8 @@ namespace LocalStorage {
         storage.setItem(KEY_SOUND_BGM_VOLUME, `${volume}`);
     }
     export function getSoundBgmVolume(): number {
-        return parseFloat(storage.getItem(KEY_SOUND_BGM_VOLUME)) || 1;
+        const volume = parseFloat(storage.getItem(KEY_SOUND_BGM_VOLUME));
+        return (volume >= 0) && (volume <= 1) ? volume : 1;
     }
 
     export function setIsSoundEffectMute(isMute: boolean): void {
@@ -101,7 +102,8 @@ namespace LocalStorage {
         storage.setItem(KEY_SOUND_EFFECT_VOLUME, `${volume}`);
     }
     export function getSoundEffectVolume(): number {
-        return parseFloat(storage.getItem(KEY_SOUND_EFFECT_VOLUME)) || 1;
+        const volume = parseFloat(storage.getItem(KEY_SOUND_EFFECT_VOLUME));
+        return (volume >= 0) && (volume <= 1) ? volume : 1;
     }
 
     export function setStageScale(scale: number): void {

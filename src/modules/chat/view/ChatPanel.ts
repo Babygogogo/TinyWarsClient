@@ -7,7 +7,6 @@ import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import FloatText                from "../../tools/helpers/FloatText";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Timer                    from "../../tools/helpers/Timer";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -36,7 +35,7 @@ namespace TwnsChatPanel {
     import NetMessage           = ProtoTypes.NetMessage;
 
     type OpenDataForChatPanel = {
-        toUserId?       : number;
+        toUserId?       : number | null;
         toMcrRoomId?    : number;
         toMfrRoomId?    : number;
         toCcrRoomId?    : number;
@@ -47,21 +46,21 @@ namespace TwnsChatPanel {
 
         private static _instance: ChatPanel;
 
-        private readonly _imgMask           : TwnsUiImage.UiImage;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
 
-        private readonly _groupChannel      : eui.Group;
-        private readonly _listChat          : TwnsUiScrollList.UiScrollList<DataForChatPageRenderer>;
-        private readonly _btnClose          : TwnsUiButton.UiButton;
-        private readonly _btnRefresh        : TwnsUiButton.UiButton;
-        private readonly _groupMessage      : eui.Group;
-        private readonly _labelNoMessage    : TwnsUiLabel.UiLabel;
-        private readonly _listMessage       : TwnsUiScrollList.UiScrollList<DataForMessageRenderer>;
-        private readonly _groupInput        : eui.Group;
-        private readonly _inputMessage      : TwnsUiTextInput.UiTextInput;
-        private readonly _btnSend           : TwnsUiButton.UiButton;
+        private readonly _groupChannel!     : eui.Group;
+        private readonly _listChat!         : TwnsUiScrollList.UiScrollList<DataForChatPageRenderer>;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
+        private readonly _btnRefresh!       : TwnsUiButton.UiButton;
+        private readonly _groupMessage!     : eui.Group;
+        private readonly _labelNoMessage!   : TwnsUiLabel.UiLabel;
+        private readonly _listMessage!      : TwnsUiScrollList.UiScrollList<DataForMessageRenderer>;
+        private readonly _groupInput!       : eui.Group;
+        private readonly _inputMessage!     : TwnsUiTextInput.UiTextInput;
+        private readonly _btnSend!          : TwnsUiButton.UiButton;
 
         private _dataForListChat: DataForChatPageRenderer[] = [];
-        private _selectedIndex  : number;
+        private _selectedIndex  : number | null = null;
 
         public static show(openData: OpenDataForChatPanel): void {
             if (!ChatPanel._instance) {
@@ -83,6 +82,7 @@ namespace TwnsChatPanel {
             super();
 
             this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/chat/ChatPanel.exml";
         }
 
@@ -99,6 +99,7 @@ namespace TwnsChatPanel {
             ]);
             this._listChat.setItemRenderer(ChatPageRenderer);
             this._listMessage.setItemRenderer(MessageRenderer);
+            this._inputMessage.maxChars = CommonConstants.ChatMessageMaxLength;
 
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
@@ -112,20 +113,20 @@ namespace TwnsChatPanel {
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
 
-            this._dataForListChat   = null;
-            this._selectedIndex     = null;
+            this._dataForListChat.length    = 0;
+            this._selectedIndex             = null;
 
             Notify.dispatch(NotifyType.ChatPanelClosed);
         }
 
         public setSelectedIndex(newIndex: number): void {
             const dataList  = this._dataForListChat;
-            const oldIndex  = this._selectedIndex;
+            const oldIndex  = this.getSelectedIndex();
             if (!dataList[newIndex]) {
                 newIndex = 0;
             }
             this._selectedIndex = newIndex;
-            if (dataList[oldIndex]) {
+            if ((oldIndex != null) && (dataList[oldIndex])) {
                 this._listChat.updateSingleData(oldIndex, dataList[oldIndex]);
             }
             if (oldIndex !== newIndex) {
@@ -144,7 +145,7 @@ namespace TwnsChatPanel {
                 }
             }
         }
-        public getSelectedIndex(): number {
+        public getSelectedIndex(): number | null {
             return this._selectedIndex;
         }
 
@@ -156,13 +157,13 @@ namespace TwnsChatPanel {
         }
 
         private async _onMsgChatAddMessage(e: egret.Event): Promise<void> {
-            const message       = (e.data as NetMessage.MsgChatAddMessage.IS).message;
+            const message       = Helpers.getExisted((e.data as NetMessage.MsgChatAddMessage.IS).message);
             const fromUserId    = message.fromUserId;
             if (fromUserId === UserModel.getSelfUserId()) {
                 this._inputMessage.text = "";
             }
 
-            const pageData          = this._dataForListChat[this.getSelectedIndex()];
+            const pageData          = this._dataForListChat[Helpers.getExisted(this.getSelectedIndex())];
             const pageToCategory    = pageData.toCategory;
             if (message.toCategory === pageData.toCategory) {
                 const pageToTarget = pageData.toTarget;
@@ -208,12 +209,13 @@ namespace TwnsChatPanel {
         }
 
         private _onTouchedBtnSend(): void {
-            const content = this._inputMessage.text;
+            const content = (this._inputMessage.text ?? ``).trim();
             if (content) {
-                if (content.length > CommonConstants.ChatContentMaxLength) {
+                if (content.length > CommonConstants.ChatMessageMaxLength) {
                     FloatText.show(Lang.getText(LangTextType.B0375));
                 } else {
-                    const data = this._dataForListChat[this.getSelectedIndex()];
+                    const selectedIndex = this.getSelectedIndex();
+                    const data          = selectedIndex != null ? this._dataForListChat[selectedIndex] : null;
                     if (data) {
                         ChatProxy.reqChatAddMessage(content, data.toCategory, data.toTarget);
                     }
@@ -280,7 +282,7 @@ namespace TwnsChatPanel {
         }
 
         private _updateComponentsForMessage(): void {
-            const chatData  = this._dataForListChat[this.getSelectedIndex()];
+            const chatData  = this._dataForListChat[Helpers.getExisted(this.getSelectedIndex())];
             const dataArray : DataForMessageRenderer[] = [];
             for (const message of ChatModel.getMessagesForCategory(chatData.toCategory).get(chatData.toTarget) || []) {
                 dataArray.push({ message });
@@ -362,31 +364,32 @@ namespace TwnsChatPanel {
                 ++indexForSort;
             }
 
-            const war           = MpwModel.getWar();
-            const playerManager = war ? war.getPlayerManager() : null;
-            const player        = playerManager ? playerManager.getPlayerByUserId(UserModel.getSelfUserId()) : null;
-            if ((player) && (player.getAliveState() === Types.PlayerAliveState.Alive)) {
-                const toWarAndTeam1 = war.getWarId() * CommonConstants.ChatTeamDivider;
-                if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam1 })) {
-                    dataDict.set(indexForSort, {
-                        index       : indexForSort,
-                        panel       : this,
-                        toCategory  : ChatCategory.WarAndTeam,
-                        toTarget    : toWarAndTeam1,
-                    });
-                    timestampList.push(getLatestTimestamp(indexForSort, null));
-                    ++indexForSort;
-                }
-                const toWarAndTeam2 = toWarAndTeam1 + player.getTeamIndex();
-                if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam2 })) {
-                    dataDict.set(indexForSort, {
-                        index       : indexForSort,
-                        panel       : this,
-                        toCategory  : ChatCategory.WarAndTeam,
-                        toTarget    : toWarAndTeam2,
-                    });
-                    timestampList.push(getLatestTimestamp(indexForSort, null));
-                    ++indexForSort;
+            const war = MpwModel.getWar();
+            if (war) {
+                const player = war.getPlayerManager().getPlayerByUserId(Helpers.getExisted(UserModel.getSelfUserId()));
+                if ((player) && (player.getAliveState() === Types.PlayerAliveState.Alive)) {
+                    const toWarAndTeam1 = Helpers.getExisted(war.getWarId()) * CommonConstants.ChatTeamDivider;
+                    if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam1 })) {
+                        dataDict.set(indexForSort, {
+                            index       : indexForSort,
+                            panel       : this,
+                            toCategory  : ChatCategory.WarAndTeam,
+                            toTarget    : toWarAndTeam1,
+                        });
+                        timestampList.push(getLatestTimestamp(indexForSort, null));
+                        ++indexForSort;
+                    }
+                    const toWarAndTeam2 = toWarAndTeam1 + player.getTeamIndex();
+                    if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam2 })) {
+                        dataDict.set(indexForSort, {
+                            index       : indexForSort,
+                            panel       : this,
+                            toCategory  : ChatCategory.WarAndTeam,
+                            toTarget    : toWarAndTeam2,
+                        });
+                        timestampList.push(getLatestTimestamp(indexForSort, null));
+                        ++indexForSort;
+                    }
                 }
             }
 
@@ -450,7 +453,7 @@ namespace TwnsChatPanel {
             const dataList  : DataForChatPageRenderer[] = [];
             let index       = 0;
             for (const v of timestampList) {
-                const data = dataDict.get(v.index);
+                const data = Helpers.getExisted(dataDict.get(v.index));
                 data.index = index;
                 dataList.push(data);
                 ++index;
@@ -529,7 +532,7 @@ namespace TwnsChatPanel {
     function getLatestTimestamp(index: number, msgList: ProtoTypes.Chat.IChatMessage[] | null): { index: number, timestamp: number } {
         let timestamp = 0;
         for (const msg of msgList || []) {
-            timestamp = Math.max(timestamp, msg.timestamp);
+            timestamp = Math.max(timestamp, Helpers.getExisted(msg.timestamp));
         }
         return {
             index,
@@ -556,9 +559,9 @@ namespace TwnsChatPanel {
         toTarget    : number;
     };
     class ChatPageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForChatPageRenderer> {
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelType      : TwnsUiLabel.UiLabel;
-        private _imgRed         : TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelType!    : TwnsUiLabel.UiLabel;
+        private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -570,7 +573,7 @@ namespace TwnsChatPanel {
         }
 
         public onItemTapEvent(): void {
-            const data = this.data;
+            const data = this._getData();
             data.panel.setSelectedIndex(data.index);
         }
 
@@ -588,14 +591,14 @@ namespace TwnsChatPanel {
         }
 
         protected _onDataChanged(): void {
-            const data          = this.data;
+            const data          = this._getData();
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._updateLabels();
             this._updateImgRed();
         }
 
         private _updateLabels(): void {
-            const data          = this.data;
+            const data          = this._getData();
             const toCategory    = data.toCategory;
             const toTarget      = data.toTarget;
             const labelType     = this._labelType;
@@ -603,7 +606,7 @@ namespace TwnsChatPanel {
 
             if (toCategory === ChatCategory.PublicChannel) {
                 labelType.text  = Lang.getText(LangTextType.B0376);
-                labelName.text  = Lang.getChatChannelName(toTarget);
+                labelName.text  = Lang.getChatChannelName(toTarget) ?? CommonConstants.ErrorTextForUndefined;
 
             } else if (toCategory === ChatCategory.WarAndTeam) {
                 const divider       = CommonConstants.ChatTeamDivider;
@@ -613,47 +616,61 @@ namespace TwnsChatPanel {
 
             } else if (toCategory === ChatCategory.Private) {
                 labelType.text = Lang.getText(LangTextType.B0378);
-                labelName.text = null;
-                UserModel.getUserNickname(toTarget).then(name => labelName.text = name);
+                labelName.text = ``;
+                UserModel.getUserNickname(toTarget).then(name => labelName.text = name ?? CommonConstants.ErrorTextForUndefined);
 
             } else if (toCategory === ChatCategory.McrRoom) {
                 labelType.text = `${Lang.getText(LangTextType.B0443)} #${toTarget}`;
-                labelName.text = null;
+                labelName.text = ``;
                 McrModel.getRoomInfo(toTarget).then(async (v) => {
-                    const warName = v ? v.settingsForMcw.warName : null;
-                    if (warName) {
-                        labelName.text = warName;
+                    if (v == null) {
+                        labelName.text = ``;
                     } else {
-                        labelName.text = await WarMapModel.getMapNameInCurrentLanguage(v.settingsForMcw.mapId);
+                        const settingsForMcw    = Helpers.getExisted(v.settingsForMcw);
+                        const warName           = settingsForMcw.warName;
+                        if (warName) {
+                            labelName.text = warName;
+                        } else {
+                            labelName.text = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                        }
                     }
                 });
 
             } else if (toCategory === ChatCategory.CcrRoom) {
                 labelType.text = `${Lang.getText(LangTextType.B0643)} #${toTarget}`;
-                labelName.text = null;
+                labelName.text = ``;
                 CcrModel.getRoomInfo(toTarget).then(async (v) => {
-                    const warName = v ? v.settingsForCcw.warName : null;
-                    if (warName) {
-                        labelName.text = warName;
+                    if (v == null) {
+                        labelName.text = ``;
                     } else {
-                        labelName.text = await WarMapModel.getMapNameInCurrentLanguage(v.settingsForCcw.mapId);
+                        const settingsForCcw    = Helpers.getExisted(v.settingsForCcw);
+                        const warName           = settingsForCcw.warName;
+                        if (warName) {
+                            labelName.text = warName;
+                        } else {
+                            labelName.text = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                        }
                     }
                 });
 
             } else if (toCategory === ChatCategory.MfrRoom) {
                 labelType.text = `${Lang.getText(LangTextType.B0556)} #${toTarget}`;
-                labelName.text = null;
+                labelName.text = ``;
                 MfrModel.getRoomInfo(toTarget).then(async (v) => {
-                    labelName.text = v.settingsForMfw.warName || Lang.getText(LangTextType.B0555);
+                    if (v == null) {
+                        labelName.text = ``;
+                    } else {
+                        labelName.text = v.settingsForMfw?.warName ?? Lang.getText(LangTextType.B0555);
+                    }
                 });
 
             } else {
-                Logger.error(`ChatPanel.ChatPageRenderer._updateLabels() invalid data!`);
+                throw Helpers.newError(`Invalid data.`);
             }
         }
 
         private _updateImgRed(): void {
-            const data              = this.data;
+            const data              = this._getData();
             this._imgRed.visible    = ChatModel.checkHasUnreadMessageForTarget(data.toCategory, data.toTarget);
         }
     }
@@ -662,27 +679,27 @@ namespace TwnsChatPanel {
         message: ProtoTypes.Chat.IChatMessage;
     };
     class MessageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMessageRenderer> {
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelContent   : TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelContent! : TwnsUiLabel.UiLabel;
 
-        protected _onDataChanged(): void {
-            const message               = this.data.message;
-            const fromUserId            = message.fromUserId;
-            this._labelContent.text     = message.content;
+        protected async _onDataChanged(): Promise<void> {
+            const data                  = this._getData();
+            const message               = data.message;
+            const fromUserId            = Helpers.getExisted(message.fromUserId);
+            this._labelContent.text     = message.content ?? CommonConstants.ErrorTextForUndefined;
             this._labelName.textColor   = fromUserId === UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
-            this._labelName.text        = `    (${Helpers.getTimestampShortText(message.timestamp)})`;
-            UserModel.getUserPublicInfo(fromUserId).then(info => {
-                const d = this.data;
-                if ((d) && (info.userId === d.message.fromUserId)) {
-                    this._labelName.text = `${info.nickname || `???`}    (${Helpers.getTimestampShortText(message.timestamp)})`;
-                }
-            });
+            this._labelName.text        = `    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;
+
+            const userInfo = Helpers.getExisted(await UserModel.getUserPublicInfo(fromUserId));
+            if ((this._getIsOpening()) && (data === this._getData())) {
+                this._labelName.text = `${userInfo.nickname || `???`}    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;
+            }
         }
 
         public async onItemTapEvent(): Promise<void> {
-            const message = this.data.message;
+            const message = this._getData().message;
             if (message.toCategory !== ChatCategory.Private) {
-                const userId = message.fromUserId;
+                const userId = Helpers.getExisted(message.fromUserId);
                 if (userId !== UserModel.getSelfUserId()) {
                     const info = await UserModel.getUserPublicInfo(userId);
                     if (info) {

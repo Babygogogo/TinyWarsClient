@@ -1,5 +1,6 @@
 
-import ProtoTypes  from "../proto/ProtoTypes";
+import ProtoTypes           from "../proto/ProtoTypes";
+import TwnsClientErrorCode  from "./ClientErrorCode";
 
 namespace Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +126,7 @@ namespace Types {
     export type TouchPoints = Map<number, Point>;
 
     export type MoveCosts = {
-        [moveType: number]: number | undefined;
+        [moveType: number]: number | null;
     };
 
     export type MovePath = {
@@ -147,8 +148,8 @@ namespace Types {
 
     export type DamageInfo = {
         attackerUnitId      : number;
-        targetUnitId        : number | null | undefined;
-        targetTileGridIndex : GridIndex | null | undefined;
+        targetUnitId        : number | null;
+        targetTileGridIndex : GridIndex | null;
         damage              : number;
     };
 
@@ -176,11 +177,11 @@ namespace Types {
     }
 
     export interface WarMapTileViewData extends ProtoTypes.WarSerialization.ISerialTile {
-        skinId? : number;
+        skinId  : number | null;
     }
 
     export type MovableArea = {
-        prevGridIndex   : GridIndex | undefined;
+        prevGridIndex   : GridIndex | null;
         totalMoveCost   : number;
     }[][];
 
@@ -193,6 +194,13 @@ namespace Types {
         extraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
         warData     : ProtoTypes.WarSerialization.ISerialWar;
     };
+
+    export type Undefinable<T> = T | null | undefined;
+
+    export interface CustomError extends Error {
+        isShown?    : boolean;
+        errorCode?  : TwnsClientErrorCode.ClientErrorCode;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
@@ -263,6 +271,7 @@ namespace Types {
         ButtonNeutral01,
         ButtonConfirm01,
         ButtonCancel01,
+        ButtonForbidden01,
         CursorConfirm01,
         CursorMove01,
     }
@@ -432,6 +441,8 @@ namespace Types {
 
     // eslint-disable-next-line no-shadow
     export enum ActionPlannerState {
+        Undefined,
+
         Idle,
         ExecutingAction,
         MakingMovePath,

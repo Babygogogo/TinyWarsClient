@@ -1,4 +1,5 @@
 
+import Helpers      from "../../tools/helpers/Helpers";
 import ProtoTypes   from "../../tools/proto/ProtoTypes";
 
 namespace SpmSrwRankModel {
@@ -8,12 +9,17 @@ namespace SpmSrwRankModel {
 
     const _rankInfoDict = new Map<number, SrwRankInfo[]>();
 
-    export function getRankInfo(mapId: number): SrwRankInfo[] | undefined | null {
-        return _rankInfoDict.get(mapId);
+    export function getRankInfo(mapId: number): SrwRankInfo[] | null {
+        return _rankInfoDict.get(mapId) ?? null;
     }
 
     export function updateOnMsgSpmGetSrwRankInfo(data: ProtoTypes.NetMessage.MsgSpmGetSrwRankInfo.IS): void {
-        _rankInfoDict.set(data.mapId, data.infoArray || []);
+        const mapId = data.mapId;
+        if (mapId == null) {
+            throw Helpers.newError(`Empty mapId.`);
+        }
+
+        _rankInfoDict.set(mapId, data.infoArray || []);
     }
 }
 

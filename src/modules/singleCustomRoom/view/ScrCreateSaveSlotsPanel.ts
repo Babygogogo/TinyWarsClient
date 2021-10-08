@@ -25,19 +25,17 @@ namespace TwnsScrCreateSaveSlotsPanel {
 
         private static _instance: ScrCreateSaveSlotsPanel;
 
-        private _group          : eui.Group;
-        private _labelPanelTitle: TwnsUiLabel.UiLabel;
-        private _srlSaveSlot    : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
-        private _listSaveSlot   : eui.List;
-        private _btnCancel      : TwnsUiButton.UiButton;
-
-        private _dataForList: DataForSlotRenderer[];
+        private readonly _group!            : eui.Group;
+        private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
+        private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
+        private readonly _listSaveSlot!     : eui.List;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!ScrCreateSaveSlotsPanel._instance) {
                 ScrCreateSaveSlotsPanel._instance = new ScrCreateSaveSlotsPanel();
             }
-            ScrCreateSaveSlotsPanel._instance.open(undefined);
+            ScrCreateSaveSlotsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (ScrCreateSaveSlotsPanel._instance) {
@@ -64,18 +62,15 @@ namespace TwnsScrCreateSaveSlotsPanel {
 
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            this._dataForList = null;
-        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -85,8 +80,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            this._dataForList = this._createDataForList();
-            this._srlSaveSlot.bindData(this._dataForList);
+            this._srlSaveSlot.bindData(this._createDataForList());
             this._listSaveSlot.selectedIndex = ScrCreateModel.getSaveSlotIndex();
         }
 
@@ -101,7 +95,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
-                    slotInfo    : slotDict.get(slotIndex),
+                    slotInfo    : slotDict.get(slotIndex) ?? null,
                 });
             }
 
@@ -114,12 +108,12 @@ namespace TwnsScrCreateSaveSlotsPanel {
         slotInfo    : Types.SpmWarSaveSlotData | null;
     };
     class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
-        private _group          : eui.Group;
-        private _imgBg          : TwnsUiImage.UiImage;
-        private _labelSlotIndex : TwnsUiLabel.UiLabel;
-        private _labelType      : TwnsUiLabel.UiLabel;
-        private _labelMapName   : TwnsUiLabel.UiLabel;
-        private _labelChoose    : TwnsUiLabel.UiLabel;
+        private readonly _group!            : eui.Group;
+        private readonly _imgBg!            : TwnsUiImage.UiImage;
+        private readonly _labelSlotIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _labelType!        : TwnsUiLabel.UiLabel;
+        private readonly _labelMapName!     : TwnsUiLabel.UiLabel;
+        private readonly _labelChoose!      : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -134,8 +128,8 @@ namespace TwnsScrCreateSaveSlotsPanel {
             this._updateView();
         }
 
-        private _onTouchedImgBg(e: egret.TouchEvent): void {
-            ScrCreateModel.setSaveSlotIndex(this.data.slotIndex);
+        private _onTouchedImgBg(): void {
+            ScrCreateModel.setSaveSlotIndex(this._getData().slotIndex);
             ScrCreateSaveSlotsPanel.hide();
         }
 
@@ -143,7 +137,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private async _updateView(): Promise<void> {
-            const data                  = this.data;
+            const data                  = this._getData();
             this._labelSlotIndex.text   = "" + data.slotIndex;
 
             const slotInfo      = data.slotInfo;
@@ -154,7 +148,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
                 labelMapName.text   = `----`;
             } else {
                 const warData   = slotInfo.warData;
-                labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData));
+                labelType.text  = Lang.getWarTypeName(WarCommonHelpers.getWarType(warData)) || CommonConstants.ErrorTextForUndefined;
 
                 const slotComment = slotInfo.extraData.slotComment;
                 if (slotComment) {
@@ -163,7 +157,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
                     const mapId         = WarCommonHelpers.getMapId(warData);
                     labelMapName.text   = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : await WarMapModel.getMapNameInCurrentLanguage(mapId);
+                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }

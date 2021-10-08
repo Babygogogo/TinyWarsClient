@@ -75,41 +75,45 @@ namespace TwnsLangErrorText {
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
-        [ServerErrorCode.MsgMcrCreateRoom0007]: [
+        [ServerErrorCode.ExeMcrCreateRoom_DoExecute_0007]: [
             "您已加入了许多未开战的房间，请退出部分后重试",
             "You have joined too many rooms.",
         ],
-        [ServerErrorCode.MsgMcrCreateRoom0008]: [
+        [ServerErrorCode.ExeMcrCreateRoom_DoExecute_0008]: [
             "您已创建了许多未开始的房间，请退出部分后重试",
             "You have created too many rooms simultaneously.",
         ],
-        [ServerErrorCode.MsgMcrExitRoom0002]: [
+        [ServerErrorCode.ExeMcrExitRoom_DoExecute_0001]: [
             "房间不存在",
             "The room doesn't exist.",
         ],
-        [ServerErrorCode.MsgMcrExitRoom0004]: [
+        [ServerErrorCode.ExeMcrExitRoom_DoExecute_0003]: [
             "您并未参加该战局",
             "You haven't joined the game.",
         ],
-        [ServerErrorCode.MsgMcrJoinRoom0004]: [
+        [ServerErrorCode.ExeMcrJoinRoom_DoExecute_0003]: [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
         ],
-        [ServerErrorCode.MsgMcrJoinRoom0006]: [
+        [ServerErrorCode.ExeMcrJoinRoom_DoExecute_0005]: [
             "房间不存在",
             "The room doesn't exist.",
         ],
-        [ServerErrorCode.MsgMcrJoinRoom0013]: [
+        [ServerErrorCode.ExeMcrJoinRoom_DoExecute_0011]: [
             "您已加入了该房间。",
             "You have already joined the room.",
         ],
-        [ServerErrorCode.MsgMcrStartWar0008]: [
+        [ServerErrorCode.ExeMcrStartWar_DoExecute_0006]: [
             `房间未满员`,
             `There not enough players in the room.`,
         ],
-        [ServerErrorCode.MsgMcrStartWar0009]: [
+        [ServerErrorCode.ExeMcrStartWar_DoExecute_0007]: [
             `还有玩家未准备就绪`,
             `Some players are not ready yet.`,
+        ],
+        [ServerErrorCode.ExeChatAddMessage_ExeWithSocket_0005]: [
+            `您说话太频繁了，请稍后再试`,
+            `You talk too often. Please retry later.`,
         ],
         [ServerErrorCode.MsgMapGetRawData0001]: [
             "地图不存在，获取raw data失败。",
@@ -167,7 +171,7 @@ namespace TwnsLangErrorText {
             `您已创建了许多未开始的房间，请删除部分后重试`,
             `You have created too many rooms simultaneously.`,
         ],
-        [ServerErrorCode.MsgMfrStartWar0006]: [
+        [ServerErrorCode.ExeMfrStartWar_DoExecute_0005]: [
             `玩家数量不足，请等待更多玩家进入房间。`,
             `There not enough players in the room. Please wait until more players join.`,
         ],
@@ -196,11 +200,23 @@ namespace TwnsLangErrorText {
             `尚未设置预设规则的可用性`,
             `The availability of the preset rule has not been set.`,
         ],
-        [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_22]: [
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_02]: [
+            `势力的队伍设置不合法`,
+            `The team settings is invalid.`,
+        ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_12]: [
+            `不能禁用“无CO”`,
+            `You can't ban "No CO".`,
+        ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_13]: [
+            `您禁用了不存在的CO`,
+            `You can't ban a non-existing CO.`,
+        ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_22]: [
             `合作模式下，至少要有一个势力由AI控制`,
             `There must be at least 1 A.I. player in the Coop Mode.`,
         ],
-        [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_23]: [
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_23]: [
             `合作模式下，至少要有两个势力由真人玩家控制`,
             `There must be at least 2 human players in the Coop Mode.`,
         ],

@@ -1,14 +1,15 @@
 
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import MeModel          from "../model/MeModel";
-import MeUtility        from "../model/MeUtility";
-import TwnsMeWar        from "../model/MeWar";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import MeModel              from "../model/MeModel";
+import MeUtility            from "../model/MeUtility";
+import TwnsMeWar            from "../model/MeWar";
 
 namespace TwnsMeSymmetryPanel {
     import MeWar        = TwnsMeWar.MeWar;
@@ -22,49 +23,48 @@ namespace TwnsMeSymmetryPanel {
 
         private static _instance: MeSymmetryPanel;
 
-        private _groupLeftRight             : eui.Group;
-        private _labelLeftRightTitle        : TwnsUiLabel.UiLabel;
-        private _labelLeftRightRate         : TwnsUiLabel.UiLabel;
-        private _groupLeftRightBox          : eui.Group;
-        private _imgLeftRight               : TwnsUiImage.UiImage;
-        private _labelLeftRightAuto         : TwnsUiLabel.UiLabel;
+        private readonly _groupLeftRight!               : eui.Group;
+        private readonly _labelLeftRightTitle!          : TwnsUiLabel.UiLabel;
+        private readonly _labelLeftRightRate!           : TwnsUiLabel.UiLabel;
+        private readonly _groupLeftRightBox!            : eui.Group;
+        private readonly _imgLeftRight!                 : TwnsUiImage.UiImage;
+        private readonly _labelLeftRightAuto!           : TwnsUiLabel.UiLabel;
 
-        private _groupUpDown                : eui.Group;
-        private _labelUpDownTitle           : TwnsUiLabel.UiLabel;
-        private _labelUpDownRate            : TwnsUiLabel.UiLabel;
-        private _groupUpDownBox             : eui.Group;
-        private _imgUpDown                  : TwnsUiImage.UiImage;
-        private _labelUpDownAuto            : TwnsUiLabel.UiLabel;
+        private readonly _groupUpDown!                  : eui.Group;
+        private readonly _labelUpDownTitle!             : TwnsUiLabel.UiLabel;
+        private readonly _labelUpDownRate!              : TwnsUiLabel.UiLabel;
+        private readonly _groupUpDownBox!               : eui.Group;
+        private readonly _imgUpDown!                    : TwnsUiImage.UiImage;
+        private readonly _labelUpDownAuto!              : TwnsUiLabel.UiLabel;
 
-        private _groupRotational            : eui.Group;
-        private _labelRotationalTitle       : TwnsUiLabel.UiLabel;
-        private _labelRotationalRate        : TwnsUiLabel.UiLabel;
-        private _groupRotationalBox         : eui.Group;
-        private _imgRotational              : TwnsUiImage.UiImage;
-        private _labelRotationalAuto        : TwnsUiLabel.UiLabel;
+        private readonly _groupRotational!              : eui.Group;
+        private readonly _labelRotationalTitle!         : TwnsUiLabel.UiLabel;
+        private readonly _labelRotationalRate!          : TwnsUiLabel.UiLabel;
+        private readonly _groupRotationalBox!           : eui.Group;
+        private readonly _imgRotational!                : TwnsUiImage.UiImage;
+        private readonly _labelRotationalAuto!          : TwnsUiLabel.UiLabel;
 
-        private _groupUpLeftDownRight       : eui.Group;
-        private _labelUpLeftDownRightTitle  : TwnsUiLabel.UiLabel;
-        private _labelUpLeftDownRightRate   : TwnsUiLabel.UiLabel;
-        private _groupUpLeftDownRightBox    : eui.Group;
-        private _imgUpLeftDownRight         : TwnsUiImage.UiImage;
-        private _labelUpLeftDownRightAuto   : TwnsUiLabel.UiLabel;
+        private readonly _groupUpLeftDownRight!         : eui.Group;
+        private readonly _labelUpLeftDownRightTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelUpLeftDownRightRate!     : TwnsUiLabel.UiLabel;
+        private readonly _groupUpLeftDownRightBox!      : eui.Group;
+        private readonly _imgUpLeftDownRight!           : TwnsUiImage.UiImage;
+        private readonly _labelUpLeftDownRightAuto!     : TwnsUiLabel.UiLabel;
 
-        private _groupUpRightDownLeft       : eui.Group;
-        private _labelUpRightDownLeftTitle  : TwnsUiLabel.UiLabel;
-        private _labelUpRightDownLeftRate   : TwnsUiLabel.UiLabel;
-        private _groupUpRightDownLeftBox    : eui.Group;
-        private _imgUpRightDownLeft         : TwnsUiImage.UiImage;
-        private _labelUpRightDownLeftAuto   : TwnsUiLabel.UiLabel;
+        private readonly _groupUpRightDownLeft!         : eui.Group;
+        private readonly _labelUpRightDownLeftTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelUpRightDownLeftRate!     : TwnsUiLabel.UiLabel;
+        private readonly _groupUpRightDownLeftBox!      : eui.Group;
+        private readonly _imgUpRightDownLeft!           : TwnsUiImage.UiImage;
+        private readonly _labelUpRightDownLeftAuto!     : TwnsUiLabel.UiLabel;
 
-        private _war                    : MeWar;
-        private _asymmetricalCounters   : MeUtility.AsymmetricalCounters;
+        private _asymmetricalCounters   : MeUtility.AsymmetricalCounters | null = null;
 
         public static show(): void {
             if (!MeSymmetryPanel._instance) {
                 MeSymmetryPanel._instance = new MeSymmetryPanel();
             }
-            MeSymmetryPanel._instance.open(undefined);
+            MeSymmetryPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -78,7 +78,7 @@ namespace TwnsMeSymmetryPanel {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName               = "resource/skins/mapEditor/MeSymmetryPanel.exml";
+            this.skinName = "resource/skins/mapEditor/MeSymmetryPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -95,8 +95,7 @@ namespace TwnsMeSymmetryPanel {
 
             this._updateComponentsForLanguage();
 
-            this._war                   = MeModel.getWar();
-            this._asymmetricalCounters  = MeUtility.getAsymmetricalCounters(this._war);
+            this._asymmetricalCounters  = MeUtility.getAsymmetricalCounters(this._getWar());
 
             this._updateGroupLeftRight();
             this._updateGroupUpDown();
@@ -105,8 +104,12 @@ namespace TwnsMeSymmetryPanel {
             this._updateGroupUpRightDownLeft();
         }
 
-        private _onTouchedGroupLeftRightBox(e: egret.TouchEvent): void {
-            const drawer = this._war.getDrawer();
+        private _getWar(): MeWar {
+            return Helpers.getExisted(MeModel.getWar());
+        }
+
+        private _onTouchedGroupLeftRightBox(): void {
+            const drawer = this._getWar().getDrawer();
             if (drawer.getSymmetricalDrawType() !== SymmetryType.LeftToRight) {
                 drawer.setSymmetricalDrawType(SymmetryType.LeftToRight);
             } else {
@@ -114,8 +117,8 @@ namespace TwnsMeSymmetryPanel {
             }
             this._updateGroupBoxes();
         }
-        private _onTouchedGroupUpDownBox(e: egret.TouchEvent): void {
-            const drawer = this._war.getDrawer();
+        private _onTouchedGroupUpDownBox(): void {
+            const drawer = this._getWar().getDrawer();
             if (drawer.getSymmetricalDrawType() !== SymmetryType.UpToDown) {
                 drawer.setSymmetricalDrawType(SymmetryType.UpToDown);
             } else {
@@ -123,8 +126,8 @@ namespace TwnsMeSymmetryPanel {
             }
             this._updateGroupBoxes();
         }
-        private _onTouchedGroupRotationalBox(e: egret.TouchEvent): void {
-            const drawer = this._war.getDrawer();
+        private _onTouchedGroupRotationalBox(): void {
+            const drawer = this._getWar().getDrawer();
             if (drawer.getSymmetricalDrawType() !== SymmetryType.Rotation) {
                 drawer.setSymmetricalDrawType(SymmetryType.Rotation);
             } else {
@@ -132,8 +135,8 @@ namespace TwnsMeSymmetryPanel {
             }
             this._updateGroupBoxes();
         }
-        private _onTouchedGroupUpLeftDownRightBox(e: egret.TouchEvent): void {
-            const drawer = this._war.getDrawer();
+        private _onTouchedGroupUpLeftDownRightBox(): void {
+            const drawer = this._getWar().getDrawer();
             if (drawer.getSymmetricalDrawType() !== SymmetryType.UpLeftToDownRight) {
                 drawer.setSymmetricalDrawType(SymmetryType.UpLeftToDownRight);
             } else {
@@ -141,8 +144,8 @@ namespace TwnsMeSymmetryPanel {
             }
             this._updateGroupBoxes();
         }
-        private _onTouchedGroupUpRightDownLeftBox(e: egret.TouchEvent): void {
-            const drawer = this._war.getDrawer();
+        private _onTouchedGroupUpRightDownLeftBox(): void {
+            const drawer = this._getWar().getDrawer();
             if (drawer.getSymmetricalDrawType() !== SymmetryType.UpRightToDownLeft) {
                 drawer.setSymmetricalDrawType(SymmetryType.UpRightToDownLeft);
             } else {
@@ -151,7 +154,7 @@ namespace TwnsMeSymmetryPanel {
             this._updateGroupBoxes();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -177,7 +180,7 @@ namespace TwnsMeSymmetryPanel {
         }
 
         private _updateGroupLeftRight(): void {
-            const count = this._asymmetricalCounters.LeftToRight;
+            const count = this._asymmetricalCounters?.LeftToRight;
             const label = this._labelLeftRightRate;
             if (count == null) {
                 label.text      = "----";
@@ -189,11 +192,11 @@ namespace TwnsMeSymmetryPanel {
             this._updateGroupLeftRightBox();
         }
         private _updateGroupLeftRightBox(): void {
-            this._imgLeftRight.visible = this._war.getDrawer().getSymmetricalDrawType() === SymmetryType.LeftToRight;
+            this._imgLeftRight.visible = this._getWar().getDrawer().getSymmetricalDrawType() === SymmetryType.LeftToRight;
         }
 
         private _updateGroupUpDown(): void {
-            const count = this._asymmetricalCounters.UpToDown;
+            const count = this._asymmetricalCounters?.UpToDown;
             const label = this._labelUpDownRate;
             if (count == null) {
                 label.text      = "----";
@@ -205,11 +208,11 @@ namespace TwnsMeSymmetryPanel {
             this._updateGroupUpDownBox();
         }
         private _updateGroupUpDownBox(): void {
-            this._imgUpDown.visible = this._war.getDrawer().getSymmetricalDrawType() === SymmetryType.UpToDown;
+            this._imgUpDown.visible = this._getWar().getDrawer().getSymmetricalDrawType() === SymmetryType.UpToDown;
         }
 
         private _updateGroupRotational(): void {
-            const count = this._asymmetricalCounters.Rotation;
+            const count = this._asymmetricalCounters?.Rotation;
             const label = this._labelRotationalRate;
             if (count == null) {
                 label.text      = "----";
@@ -221,11 +224,11 @@ namespace TwnsMeSymmetryPanel {
             this._updateGroupRotationalBox();
         }
         private _updateGroupRotationalBox(): void {
-            this._imgRotational.visible = this._war.getDrawer().getSymmetricalDrawType() === SymmetryType.Rotation;
+            this._imgRotational.visible = this._getWar().getDrawer().getSymmetricalDrawType() === SymmetryType.Rotation;
         }
 
         private _updateGroupUpLeftDownRight(): void {
-            const count = this._asymmetricalCounters.UpLeftToDownRight;
+            const count = this._asymmetricalCounters?.UpLeftToDownRight;
             const label = this._labelUpLeftDownRightRate;
             if (count == null) {
                 label.text      = "----";
@@ -237,7 +240,7 @@ namespace TwnsMeSymmetryPanel {
             this._updateGroupUpLeftDownRightBox();
         }
         private _updateGroupUpLeftDownRightBox(): void {
-            const war       = this._war;
+            const war       = this._getWar();
             const mapSize   = war.getTileMap().getMapSize();
             if (mapSize.width !== mapSize.height) {
                 this._groupUpLeftDownRightBox.visible = false;
@@ -248,7 +251,7 @@ namespace TwnsMeSymmetryPanel {
         }
 
         private _updateGroupUpRightDownLeft(): void {
-            const count = this._asymmetricalCounters.UpRightToDownLeft;
+            const count = this._asymmetricalCounters?.UpRightToDownLeft;
             const label = this._labelUpRightDownLeftRate;
             if (count == null) {
                 label.text      = "----";
@@ -260,7 +263,7 @@ namespace TwnsMeSymmetryPanel {
             this._updateGroupUpRightDownLeftBox();
         }
         private _updateGroupUpRightDownLeftBox(): void {
-            const war       = this._war;
+            const war       = this._getWar();
             const mapSize   = war.getTileMap().getMapSize();
             if (mapSize.width !== mapSize.height) {
                 this._groupUpRightDownLeftBox.visible = false;

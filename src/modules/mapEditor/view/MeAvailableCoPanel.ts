@@ -32,11 +32,11 @@ namespace TwnsMeAvailableCoPanel {
 
         private static _instance: MeAvailableCoPanel;
 
-        private _labelAvailableCoTitle  : TwnsUiLabel.UiLabel;
-        private _groupCoTiers           : eui.Group;
-        private _groupCoNames           : eui.Group;
-        private _btnCancel              : TwnsUiButton.UiButton;
-        private _btnConfirm             : TwnsUiButton.UiButton;
+        private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _groupCoTiers!             : eui.Group;
+        private readonly _groupCoNames!             : eui.Group;
+        private readonly _btnCancel!                : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!               : TwnsUiButton.UiButton;
 
         private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
@@ -97,11 +97,11 @@ namespace TwnsMeAvailableCoPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
                 TwnsCommonAlertPanel.CommonAlertPanel.show({
@@ -110,7 +110,7 @@ namespace TwnsMeAvailableCoPanel {
                 });
             } else {
                 const openData = this._getOpenData();
-                WarRuleHelpers.setBannedCoIdArray(openData.warRule, openData.playerRule.playerIndex, bannedCoIdSet);
+                WarRuleHelpers.setBannedCoIdArray(openData.warRule, Helpers.getExisted(openData.playerRule.playerIndex), bannedCoIdSet);
                 Notify.dispatch(NotifyType.MeBannedCoIdArrayChanged);
                 this.close();
             }
@@ -120,9 +120,10 @@ namespace TwnsMeAvailableCoPanel {
             if (!this._getOpenData().isReviewing) {
                 const renderer      = e.currentTarget as RendererForCoTier;
                 const bannedCoIdSet = this._bannedCoIdSet;
+                const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
                 const coIdList      = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getEnabledCustomCoIdList(ConfigManager.getLatestFormalVersion())
-                    : ConfigManager.getEnabledCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
+                    ? ConfigManager.getEnabledCustomCoIdList(configVersion)
+                    : ConfigManager.getEnabledCoIdListInTier(configVersion, Helpers.getExisted(renderer.getCoTier()));
 
                 if (renderer.getState() === CoTierState.Unavailable) {
                     for (const coId of coIdList) {
@@ -144,7 +145,7 @@ namespace TwnsMeAvailableCoPanel {
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
             if (!this._getOpenData().isReviewing) {
                 const renderer      = e.currentTarget as RendererForCoName;
-                const coId          = renderer.getCoId();
+                const coId          = Helpers.getExisted(renderer.getCoId());
                 const bannedCoIdSet = this._bannedCoIdSet;
 
                 if (!renderer.getIsSelected()) {
@@ -170,7 +171,7 @@ namespace TwnsMeAvailableCoPanel {
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
+            for (const tier of ConfigManager.getCoTiers(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -196,11 +197,11 @@ namespace TwnsMeAvailableCoPanel {
 
         private _updateGroupCoTiers(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
-            const configVersion = ConfigManager.getLatestFormalVersion();
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? ConfigManager.getEnabledCustomCoIdList(configVersion)
-                    : ConfigManager.getEnabledCoIdListInTier(configVersion, renderer.getCoTier());
+                    : ConfigManager.getEnabledCoIdListInTier(configVersion, Helpers.getExisted(renderer.getCoTier()));
 
                 if (includedCoIdList.every(coId => bannedCoIdSet.has(coId))) {
                     renderer.setState(CoTierState.Unavailable);
@@ -213,7 +214,7 @@ namespace TwnsMeAvailableCoPanel {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getEnabledCoArray(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -234,7 +235,7 @@ namespace TwnsMeAvailableCoPanel {
         private _updateGroupCoNames(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             for (const renderer of this._renderersForCoNames) {
-                renderer.setIsSelected(!bannedCoIdSet.has(renderer.getCoId()));
+                renderer.setIsSelected(!bannedCoIdSet.has(Helpers.getExisted(renderer.getCoId())));
             }
         }
     }
@@ -247,12 +248,12 @@ namespace TwnsMeAvailableCoPanel {
     }
 
     class RendererForCoTier extends TwnsUiComponent.UiComponent {
-        private _imgSelected: TwnsUiImage.UiImage;
-        private _labelName  : TwnsUiLabel.UiLabel;
+        private readonly _imgSelected!  : TwnsUiImage.UiImage;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
-        private _tier           : number;
+        private _tier           : number | null = null;
         private _isCustomSwitch = false;
-        private _state          : CoTierState;
+        private _state          : CoTierState | null = null;
 
         public constructor() {
             super();
@@ -264,7 +265,7 @@ namespace TwnsMeAvailableCoPanel {
             this._tier              = tier;
             this._labelName.text    = `Tier ${tier}`;
         }
-        public getCoTier(): number {
+        public getCoTier(): number | null {
             return this._tier;
         }
 
@@ -287,17 +288,17 @@ namespace TwnsMeAvailableCoPanel {
             }
             Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
-        public getState(): CoTierState {
+        public getState(): CoTierState | null {
             return this._state;
         }
     }
 
     class RendererForCoName extends TwnsUiComponent.UiComponent {
-        private _imgSelected: TwnsUiImage.UiImage;
-        private _labelName  : TwnsUiLabel.UiLabel;
+        private readonly _imgSelected!  : TwnsUiImage.UiImage;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
-        private _coId           : number;
-        private _isSelected     : boolean;
+        private _coId           : number | null = null;
+        private _isSelected     : boolean | null = null;
 
         public constructor() {
             super();
@@ -308,10 +309,10 @@ namespace TwnsMeAvailableCoPanel {
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
+            const cfg               = ConfigManager.getCoBasicCfg(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId);
             this._labelName.text    = `${cfg.name} (T${cfg.tier})`;
         }
-        public getCoId(): number {
+        public getCoId(): number | null {
             return this._coId;
         }
 
@@ -320,7 +321,7 @@ namespace TwnsMeAvailableCoPanel {
             this._labelName.textColor   = isSelected ? 0x00ff00 : 0xff0000;
             Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
-        public getIsSelected(): boolean {
+        public getIsSelected(): boolean | null {
             return this._isSelected;
         }
     }

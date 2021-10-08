@@ -2,26 +2,26 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
     <e:Group id="_group" width="460" height="280" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2"
                                  left="0" right="0" top="38" bottom="0" />
             <e:Group y="0" left="0" right="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
-                                     source="commonColorGrey0001" y="0" left="0" right="0" />
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
                 <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
             </e:Group>
         </e:Group>
         <e:Group y="60" horizontalCenter="0">
             <TwnsUiLabel:UiLabel id="_labelStdTitle" text="倍率" x="0" y="0" size="18" textColor="0xffffff" width="50" />
             <e:Group id="_groupStd" x="128" y="0" width="250">
-                <TwnsUiImage:UiImage scale9Grid="5,5,2,2" source="commonPbar0000" verticalCenter="0" x="0" width="250" />
-                <TwnsUiImage:UiImage id="_imgStdBar" verticalCenter="0" width="250" x="0" source="commonPbar0001"
+                <TwnsUiImage:UiImage scale9Grid="5,5,2,2" source="uncompressedPbar0000" verticalCenter="0" x="0" width="250" />
+                <TwnsUiImage:UiImage id="_imgStdBar" verticalCenter="0" width="250" x="0" source="uncompressedPbar0001"
                                      scale9Grid="5,5,2,2" />
                 <TwnsUiImage:UiImage id="_imgStdPoint" y="0" x="250" anchorOffsetX="11" touchEnabled="false"
-                                     source="commonCircle0008" />
+                                     source="uncompressedCircle0008" />
             </e:Group>
             <e:Group x="381" y="7" width="50">
                 <TwnsUiLabel:UiLabel id="_labelStdCount" text="5" size="18" textColor="0xffffff" />
@@ -37,11 +37,11 @@
         <e:Group y="110" horizontalCenter="0">
             <TwnsUiLabel:UiLabel id="_labelFogTitle" text="倍率" x="0" y="0" size="18" textColor="0xffffff" width="50" />
             <e:Group id="_groupFog" x="128" y="0" width="250">
-                <TwnsUiImage:UiImage scale9Grid="5,5,2,2" source="commonPbar0000" verticalCenter="0" x="0" width="250" />
-                <TwnsUiImage:UiImage id="_imgFogBar" verticalCenter="0" width="250" x="0" source="commonPbar0001"
+                <TwnsUiImage:UiImage scale9Grid="5,5,2,2" source="uncompressedPbar0000" verticalCenter="0" x="0" width="250" />
+                <TwnsUiImage:UiImage id="_imgFogBar" verticalCenter="0" width="250" x="0" source="uncompressedPbar0001"
                                      scale9Grid="5,5,2,2" />
                 <TwnsUiImage:UiImage id="_imgFogPoint" y="0" x="250" anchorOffsetX="11" touchEnabled="false"
-                                     source="commonCircle0008" />
+                                     source="uncompressedCircle0008" />
             </e:Group>
             <e:Group x="381" y="7" width="50">
                 <TwnsUiLabel:UiLabel id="_labelFogCount" text="5" size="18" textColor="0xffffff" />

@@ -1,24 +1,17 @@
 
 import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
-import WarDamageCalculator  from "../../tools/warHelpers/WarDamageCalculator";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
-import Lang                 from "../../tools/lang/Lang";
 import NotifyData           from "../../tools/notify/NotifyData";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import Logger               from "../../tools/helpers/Logger";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import Types                from "../../tools/helpers/Types";
-import TwnsBwActionPlanner  from "../model/BwActionPlanner";
 import TwnsBwCursor         from "../model/BwCursor";
 
 namespace TwnsBwCursorView {
     import GridIndex            = Types.GridIndex;
     import ActionPlannerState   = Types.ActionPlannerState;
-    import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import BwCursor             = TwnsBwCursor.BwCursor;
 
@@ -53,33 +46,26 @@ namespace TwnsBwCursorView {
     const _LOWER_RIGHT_CORNER_INNER_X   = _GRID_WIDTH  - 4;
     const _LOWER_RIGHT_CORNER_INNER_Y   = _GRID_HEIGHT - 4;
 
-    const _DAMAGE_CON_WIDTH     = 140;
-    const _DAMAGE_CON_HEIGHT    = 60;
-
     export class BwCursorView extends eui.Group {
-        private _cursor                 : BwCursor;
-        private _mapSize                : Types.MapSize;
-        private _actionPlanner          : TwnsBwActionPlanner.BwActionPlanner;
+        private _cursor?                : BwCursor;
         private _frameIndexForImgTarget = 0;
 
         private _currGlobalTouchPoints      = new Map<number, Types.Point>();
         private _prevGlobalTouchPoints      = new Map<number, Types.Point>();
-        private _touchIdForTouchingCursor   : number;
-        private _initialGlobalTouchPoint    : Types.Point;
-        private _isTouchMovedOrMultiple     : boolean;
+        private _touchIdForTouchingCursor   : number | null = null;
+        private _initialGlobalTouchPoint?   : Types.Point;
+        private _isTouchMovedOrMultiple?    : boolean;
 
         private _conForAll              = new egret.DisplayObjectContainer();
         private _conForNormal           = new egret.DisplayObjectContainer();
         private _conForTarget           = new egret.DisplayObjectContainer();
         private _conForSiloArea         = new egret.DisplayObjectContainer();
-        private _conForDamage           = new egret.DisplayObjectContainer();
         private _imgUpperLeftCorner     = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgUpperRightCorner    = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgLowerLeftCorner     = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgLowerRightCorner    = new TwnsUiImage.UiImage(_IMG_SOURCE_FOR_NORMAL_CORNER);
         private _imgTarget              = new TwnsUiImage.UiImage(_IMG_SOURCES_FOR_TARGET[this._frameIndexForImgTarget]);
         private _imgSiloArea            = new TwnsUiImage.UiImage(`c04_t03_s03_f01`);
-        private _labelDamage            = new TwnsUiLabel.UiLabel();
 
         public constructor() {
             super();
@@ -88,25 +74,20 @@ namespace TwnsBwCursorView {
             this._initConForNormal();
             this._initConForTarget();
             this._initConForSiloArea();
-            this._initConForDamage();
         }
 
         public init(cursor: BwCursor): void {
-            if (!this._cursor) {
-                this._cursor    = cursor;
-                this._mapSize   = cursor.getMapSize();
-                this.width      = this._mapSize.width * _GRID_WIDTH;
-                this.height     = this._mapSize.height * _GRID_HEIGHT;
-            }
+            this._cursor    = cursor;
+
+            const mapSize   = cursor.getMapSize();
+            this.width      = mapSize.width * _GRID_WIDTH;
+            this.height     = mapSize.height * _GRID_HEIGHT;
         }
         public fastInit(cursor: BwCursor): void {
             this._cursor = cursor;
         }
 
         public startRunningView(): void {
-            const field         = this._cursor.getWar().getField();
-            this._actionPlanner = field.getActionPlanner();
-
             Notify.addEventListener(NotifyType.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,             this._onTouchBegin,             this);
             this.addEventListener(egret.TouchEvent.TOUCH_CANCEL,            this._onTouchCancel,            this);
@@ -130,10 +111,9 @@ namespace TwnsBwCursorView {
             this.removeEventListener(egret.TouchEvent.TOUCH_MOVE,               this._onTouchMove,              this);
             this._currGlobalTouchPoints.clear();
             this._prevGlobalTouchPoints.clear();
-            this._initialGlobalTouchPoint   = null;
-            this._isTouchMovedOrMultiple    = null;
-            this._touchIdForTouchingCursor  = null;
-            this._cursor                    = null;
+            this._touchIdForTouchingCursor = null;
+            delete this._initialGlobalTouchPoint;
+            delete this._isTouchMovedOrMultiple;
         }
 
         public updateView(): void {
@@ -141,7 +121,6 @@ namespace TwnsBwCursorView {
             this._updateConForNormal();
             this._updateConForTarget();
             this._updateConForSiloArea();
-            this._updateConForDamage();
         }
 
         public setVisibleForConForNormal(visible: boolean): void {
@@ -154,6 +133,10 @@ namespace TwnsBwCursorView {
             this._conForSiloArea.visible = visible;
         }
 
+        private _getCursor(): BwCursor {
+            return Helpers.getExisted(this._cursor);
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +145,7 @@ namespace TwnsBwCursorView {
             if ((this._touchIdForTouchingCursor != null) && (touchPoints.size === 1)) {
                 const point         = touchPoints.values().next().value as Types.Point;
                 const gridIndex     = this._getGridIndexByGlobalXY(point.x, point.y);
-                const currGridIndex = this._cursor.getGridIndex();
+                const currGridIndex = this._getCursor().getGridIndex();
                 if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                     this._isTouchMovedOrMultiple = true;
                     Notify.dispatch(NotifyType.BwCursorDragged, {
@@ -179,9 +162,9 @@ namespace TwnsBwCursorView {
                 this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
                 this._initialGlobalTouchPoint   = { x: e.stageX, y: e.stageY };
                 this._isTouchMovedOrMultiple    = false;
-                this._touchIdForTouchingCursor  = GridIndexHelpers.checkIsEqual(this._cursor.getGridIndex(), this._getGridIndexByLocalXY(e.localX, e.localY))
+                this._touchIdForTouchingCursor  = GridIndexHelpers.checkIsEqual(this._getCursor().getGridIndex(), this._getGridIndexByLocalXY(e.localX, e.localY))
                     ? touchId
-                    : undefined;
+                    : null;
             }
 
             if (this._currGlobalTouchPoints.size <= 1) {
@@ -205,8 +188,9 @@ namespace TwnsBwCursorView {
             const touchId               = e.touchPointID;
             const currGlobalTouchPoints = this._currGlobalTouchPoints;
             if (currGlobalTouchPoints.has(touchId)) {
-                this._isTouchMovedOrMultiple = (this._isTouchMovedOrMultiple)
-                    || (Helpers.getSquaredPointDistance(e.stageX, e.stageY, this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y) > _DRAG_FIELD_SQUARED_TRIGGER_DISTANCE);
+                const initialGlobalTouchPoint   = Helpers.getExisted(this._initialGlobalTouchPoint);
+                this._isTouchMovedOrMultiple    = (this._isTouchMovedOrMultiple)
+                    || (Helpers.getSquaredPointDistance(e.stageX, e.stageY, initialGlobalTouchPoint.x, initialGlobalTouchPoint.y) > _DRAG_FIELD_SQUARED_TRIGGER_DISTANCE);
                 currGlobalTouchPoints.set(touchId, { x: e.stageX, y: e.stageY });
 
                 if (currGlobalTouchPoints.size > 1) {
@@ -217,7 +201,7 @@ namespace TwnsBwCursorView {
                 } else {
                     if (this._touchIdForTouchingCursor != null) {
                         const gridIndex     = this._getGridIndexByLocalXY(e.localX, e.localY);
-                        const currGridIndex = this._cursor.getGridIndex();
+                        const currGridIndex = this._getCursor().getGridIndex();
                         if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
                             this._isTouchMovedOrMultiple = true;
                             Notify.dispatch(NotifyType.BwCursorDragged, {
@@ -245,23 +229,24 @@ namespace TwnsBwCursorView {
             if (currGlobalTouchPoints.has(touchId)) {
                 currGlobalTouchPoints.delete(touchId);
 
-                const hasTouchedCursor = this._touchIdForTouchingCursor != null;
-                if (!currGlobalTouchPoints.has(this._touchIdForTouchingCursor)) {
+                const touchIdForTouchingCursor = this._touchIdForTouchingCursor;
+                if ((touchIdForTouchingCursor != null) && (!currGlobalTouchPoints.has(touchIdForTouchingCursor))) {
                     this._touchIdForTouchingCursor = null;
                 }
                 if (!currGlobalTouchPoints.size) {
                     this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
                     if (!this._isTouchMovedOrMultiple) {
+                        const initialGlobalTouchPoint = Helpers.getExisted(this._initialGlobalTouchPoint);
                         Notify.dispatch(NotifyType.BwCursorTapped, {
-                            current : this._cursor.getGridIndex(),
-                            tappedOn: this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y),
+                            current : this._getCursor().getGridIndex(),
+                            tappedOn: this._getGridIndexByGlobalXY(initialGlobalTouchPoint.x, initialGlobalTouchPoint.y),
                         } as NotifyData.BwCursorTapped);
                     } else {
-                        if (hasTouchedCursor) {
+                        if (touchIdForTouchingCursor != null) {
                             Notify.dispatch(NotifyType.BwCursorDragEnded);
                         }
                     }
-                    this._initialGlobalTouchPoint = null;
+                    delete this._initialGlobalTouchPoint;
                 }
             }
         }
@@ -270,259 +255,139 @@ namespace TwnsBwCursorView {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updatePos(): void {
-            const cursor = this._cursor;
-            if (cursor) {
-                this._conForAll.x = cursor.getGridX() * _GRID_WIDTH;
-                this._conForAll.y = cursor.getGridY() * _GRID_HEIGHT;
-            }
+            const cursor        = this._getCursor();
+            this._conForAll.x   = cursor.getGridX() * _GRID_WIDTH;
+            this._conForAll.y   = cursor.getGridY() * _GRID_HEIGHT;
         }
 
         private _updateConForNormal(): void {
-            const actionPlanner = this._actionPlanner;
-            const cursor        = this._cursor;
-            if ((actionPlanner) && (cursor)) {
-                const gridIndex = cursor.getGridIndex();
-                const state     = actionPlanner.getState();
-                const con       = this._conForNormal;
+            const cursor        = this._getCursor();
+            const actionPlanner = cursor.getWar().getActionPlanner();
+            const gridIndex     = cursor.getGridIndex();
+            const state         = actionPlanner.getState();
+            const con           = this._conForNormal;
 
-                if (state === ActionPlannerState.Idle) {
-                    con.visible = true;
+            if (state === ActionPlannerState.Idle) {
+                con.visible = true;
 
-                } else if (state === ActionPlannerState.ExecutingAction) {
-                    con.visible = true;
+            } else if (state === ActionPlannerState.ExecutingAction) {
+                con.visible = true;
 
-                } else if (state === ActionPlannerState.MakingMovePath) {
-                    con.visible = !actionPlanner.getFocusUnit().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+            } else if (state === ActionPlannerState.MakingMovePath) {
+                con.visible = !actionPlanner.getFocusUnit()?.checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
 
-                } else if (state === ActionPlannerState.ChoosingAction) {
-                    con.visible = true;
+            } else if (state === ActionPlannerState.ChoosingAction) {
+                con.visible = true;
 
-                } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                    con.visible = !actionPlanner.checkHasAttackableGridAfterMove(gridIndex);
+            } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                con.visible = !actionPlanner.checkHasAttackableGridAfterMove(gridIndex);
 
-                } else if (state === ActionPlannerState.ChoosingDropDestination) {
-                    con.visible = true;
+            } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                con.visible = true;
 
-                } else if (state === ActionPlannerState.ChoosingFlareDestination) {
-                    con.visible = false;
+            } else if (state === ActionPlannerState.ChoosingFlareDestination) {
+                con.visible = false;
 
-                } else if (state === ActionPlannerState.ChoosingSiloDestination) {
-                    con.visible = false;
+            } else if (state === ActionPlannerState.ChoosingSiloDestination) {
+                con.visible = false;
 
-                } else if (state === ActionPlannerState.ChoosingProductionTarget) {
-                    con.visible = true;
+            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                con.visible = true;
 
-                } else if (state === ActionPlannerState.PreviewingAttackableArea) {
-                    con.visible = true;
+            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                con.visible = true;
 
-                } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                    con.visible = true;
+            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                con.visible = true;
 
-                } else {
-                    // TODO
-                }
+            } else {
+                // TODO
             }
         }
         private _updateConForTarget(): void {
-            const actionPlanner = this._actionPlanner;
-            const cursor        = this._cursor;
-            if ((actionPlanner) && (cursor)) {
-                const con       = this._conForTarget;
-                const gridIndex = cursor.getGridIndex();
-                const state     = actionPlanner.getState();
+            const cursor        = this._getCursor();
+            const actionPlanner = cursor.getWar().getActionPlanner();
+            const con           = this._conForTarget;
+            const gridIndex     = cursor.getGridIndex();
+            const state         = actionPlanner.getState();
 
-                if (state === ActionPlannerState.Idle) {
-                    con.visible = false;
+            if (state === ActionPlannerState.Idle) {
+                con.visible = false;
 
-                } else if (state === ActionPlannerState.ExecutingAction) {
-                    con.visible = false;
+            } else if (state === ActionPlannerState.ExecutingAction) {
+                con.visible = false;
 
-                } else if (state === ActionPlannerState.MakingMovePath) {
-                    con.visible = actionPlanner.getFocusUnit().checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
+            } else if (state === ActionPlannerState.MakingMovePath) {
+                con.visible = !!actionPlanner.getFocusUnit()?.checkCanAttackTargetAfterMovePath(actionPlanner.getMovePath(), gridIndex);
 
-                } else if (state === ActionPlannerState.ChoosingAction) {
-                    con.visible = false;
+            } else if (state === ActionPlannerState.ChoosingAction) {
+                con.visible = false;
 
-                } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                    con.visible = actionPlanner.checkHasAttackableGridAfterMove(gridIndex);
+            } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                con.visible = actionPlanner.checkHasAttackableGridAfterMove(gridIndex);
 
-                } else if (state === ActionPlannerState.ChoosingDropDestination) {
-                    con.visible = false;
+            } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                con.visible = false;
 
-                } else if (state === ActionPlannerState.ChoosingFlareDestination) {
-                    con.visible = true;
+            } else if (state === ActionPlannerState.ChoosingFlareDestination) {
+                con.visible = true;
 
-                } else if (state === ActionPlannerState.ChoosingSiloDestination) {
-                    con.visible = true;
+            } else if (state === ActionPlannerState.ChoosingSiloDestination) {
+                con.visible = true;
 
-                } else if (state === ActionPlannerState.ChoosingProductionTarget) {
-                    con.visible = false;
+            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                con.visible = false;
 
-                } else if (state === ActionPlannerState.PreviewingAttackableArea) {
-                    con.visible = false;
+            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                con.visible = false;
 
-                } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                    con.visible = false;
+            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                con.visible = false;
 
-                } else {
-                    // TODO
-                }
+            } else {
+                // TODO
             }
         }
         private _updateConForSiloArea(): void {
-            const actionPlanner = this._actionPlanner;
-            if (actionPlanner) {
-                const con       = this._conForSiloArea;
-                const state     = actionPlanner.getState();
+            const actionPlanner = this._getCursor().getWar().getActionPlanner();
+            const con           = this._conForSiloArea;
+            const state         = actionPlanner.getState();
 
-                if (state === ActionPlannerState.Idle) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ExecutingAction) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.MakingMovePath) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ChoosingAction) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ChoosingDropDestination) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ChoosingFlareDestination) {
-                    con.visible = true;
-
-                } else if (state === ActionPlannerState.ChoosingSiloDestination) {
-                    con.visible = true;
-
-                } else if (state === ActionPlannerState.ChoosingProductionTarget) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.PreviewingAttackableArea) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                    con.visible = false;
-
-                } else {
-                    // TODO
-                }
-            }
-        }
-        private _updateConForDamage(): void {
-            const actionPlanner = this._getActionPlanner();
-            const cursor        = this._cursor;
-            const con           = this._getConForDamage();
-            if ((!actionPlanner) || (!cursor)) {
+            if (state === ActionPlannerState.Idle) {
                 con.visible = false;
+
+            } else if (state === ActionPlannerState.ExecutingAction) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.MakingMovePath) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.ChoosingAction) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.ChoosingFlareDestination) {
+                con.visible = true;
+
+            } else if (state === ActionPlannerState.ChoosingSiloDestination) {
+                con.visible = true;
+
+            } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                con.visible = false;
+
             } else {
-                const gridIndex     = cursor.getGridIndex();
-                const labelDamage   = this._getLabelDamage();
-                const state         = actionPlanner.getState();
-
-                if (state === ActionPlannerState.MakingMovePath) {
-                    const war           = cursor.getWar();
-                    const unitMap       = war.getUnitMap();
-                    const attackerUnit  = actionPlanner.getFocusUnit();
-                    const movePath      = actionPlanner.getMovePath();
-                    if (!attackerUnit.checkCanAttackTargetAfterMovePath(movePath, gridIndex)) {
-                        con.visible = false;
-                    } else {
-                        const attackerUnitId                        = attackerUnit.getUnitId();
-                        const { errorCode, battleDamageInfoArray }  = WarDamageCalculator.getEstimatedBattleDamage({
-                            war,
-                            attackerMovePath: movePath,
-                            launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
-                            targetGridIndex : gridIndex,
-                        });
-                        if (errorCode) {
-                            Logger.error(`BwCursorView._updateConForDamage() errorCode: ${errorCode}.`);
-                            con.visible = false;
-                        } else if (battleDamageInfoArray == null) {
-                            Logger.error(`BwCursorView._updateConForDamage() empty battleDamageInfoArray.`);
-                            con.visible = false;
-                        } else {
-                            con.visible = true;
-
-                            const { errorCode: errorCodeForDamages, damages } = WarDamageCalculator.getAttackAndCounterDamage({
-                                battleDamageInfoArray,
-                                attackerUnitId,
-                                targetGridIndex     : gridIndex,
-                                unitMap,
-                            });
-                            if (errorCodeForDamages) {
-                                Logger.error(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
-                                con.visible = false;
-                                return;
-                            } else if (damages == null) {
-                                Logger.error(`BwCursorView._updateConForDamage() empty damages.`);
-                                con.visible = false;
-                                return;
-                            }
-
-                            const { attackDamage, counterDamage } = damages;
-                            const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
-                            labelDamage.text    = `${Lang.getText(LangTextType.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
-                                + `${Lang.getText(LangTextType.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
-                            this._updatePositionForConForDamage();
-                        }
-                    }
-
-                } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                    const war           = cursor.getWar();
-                    const unitMap       = war.getUnitMap();
-                    const attackerUnit  = actionPlanner.getFocusUnit();
-                    const movePath      = actionPlanner.getMovePath();
-                    if (!attackerUnit.checkCanAttackTargetAfterMovePath(movePath, gridIndex)) {
-                        con.visible = false;
-                    } else {
-                        const attackerUnitId                        = attackerUnit.getUnitId();
-                        const { errorCode, battleDamageInfoArray }  = WarDamageCalculator.getEstimatedBattleDamage({
-                            war,
-                            attackerMovePath: movePath,
-                            launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
-                            targetGridIndex : gridIndex,
-                        });
-                        if (errorCode) {
-                            Logger.error(`BwCursorView._updateConForDamage() errorCode: ${errorCode}.`);
-                            con.visible = false;
-                        } else if (battleDamageInfoArray == null) {
-                            Logger.error(`BwCursorView._updateConForDamage() empty battleDamageInfoArray.`);
-                            con.visible = false;
-                        } else {
-                            con.visible = true;
-
-                            const { errorCode: errorCodeForDamages, damages } = WarDamageCalculator.getAttackAndCounterDamage({
-                                battleDamageInfoArray,
-                                attackerUnitId,
-                                targetGridIndex     : gridIndex,
-                                unitMap,
-                            });
-                            if (errorCodeForDamages) {
-                                Logger.error(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
-                                con.visible = false;
-                                return;
-                            } else if (damages == null) {
-                                Logger.error(`BwCursorView._updateConForDamage() empty damages.`);
-                                con.visible = false;
-                                return;
-                            }
-
-                            const { attackDamage, counterDamage } = damages;
-                            const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
-                            labelDamage.text    = `${Lang.getText(LangTextType.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
-                                + `${Lang.getText(LangTextType.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
-                            this._updatePositionForConForDamage();
-                        }
-                    }
-
-                } else {
-                    con.visible = false;
-                }
+                // TODO
             }
         }
 
@@ -561,26 +426,6 @@ namespace TwnsBwCursorView {
             this._conForSiloArea.addChild(this._imgSiloArea);
 
             this._conForAll.addChild(this._conForSiloArea);
-        }
-        private _initConForDamage(): void {
-            const imgBg         = new TwnsUiImage.UiImage("c04_t01_s02_f01");
-            imgBg.scale9Grid    = new egret.Rectangle(9, 9, 2, 2);
-            imgBg.width         = _DAMAGE_CON_WIDTH;
-            imgBg.height        = _DAMAGE_CON_HEIGHT;
-            imgBg.alpha         = 0.9;
-            this._conForDamage.addChild(imgBg);
-
-            const labelDamage           = this._labelDamage;
-            labelDamage.size            = 18;
-            labelDamage.width           = _DAMAGE_CON_WIDTH;
-            labelDamage.height          = _DAMAGE_CON_HEIGHT;
-            labelDamage.textAlign       = egret.HorizontalAlign.CENTER;
-            labelDamage.verticalAlign   = egret.VerticalAlign.MIDDLE;
-            this._conForDamage.addChild(labelDamage);
-
-            this._conForDamage.x = (_GRID_WIDTH - _DAMAGE_CON_WIDTH) / 2;
-            this._conForDamage.y = -_DAMAGE_CON_HEIGHT;
-            this._conForAll.addChild(this._conForDamage);
         }
 
         private _startNormalAnimation(): void {
@@ -640,13 +485,13 @@ namespace TwnsBwCursorView {
         private _getGridXByLocalX(localX: number): number {
             let gridX = Math.floor(localX / _GRID_WIDTH);
             gridX = Math.max(gridX, 0);
-            gridX = Math.min(gridX, this._mapSize.width - 1);
+            gridX = Math.min(gridX, this._getCursor().getMapSize().width - 1);
             return gridX;
         }
         private _getGridYByLocalY(localY: number): number {
             let gridY = Math.floor(localY / _GRID_HEIGHT);
             gridY = Math.max(gridY, 0);
-            gridY = Math.min(gridY, this._mapSize.height - 1);
+            gridY = Math.min(gridY, this._getCursor().getMapSize().height - 1);
             return gridY;
         }
         private _getGridIndexByLocalXY(localX: number, localY: number): GridIndex {
@@ -655,25 +500,6 @@ namespace TwnsBwCursorView {
         private _getGridIndexByGlobalXY(globalX: number, globalY: number): GridIndex {
             const point = this.globalToLocal(globalX, globalY);
             return this._getGridIndexByLocalXY(point.x, point.y);
-        }
-
-        protected _getCursor(): BwCursor {
-            return this._cursor;
-        }
-        protected _getConForDamage(): egret.DisplayObjectContainer {
-            return this._conForDamage;
-        }
-        protected _getLabelDamage(): TwnsUiLabel.UiLabel {
-            return this._labelDamage;
-        }
-        protected _getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
-            return this._actionPlanner;
-        }
-
-        protected _updatePositionForConForDamage(): void {
-            this._getConForDamage().y = (this._getCursor().getGridY() <= 0)
-                ? _GRID_HEIGHT
-                : -_DAMAGE_CON_HEIGHT;
         }
     }
 }

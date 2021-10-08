@@ -5,6 +5,7 @@ import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMap
 import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import FlowManager                          from "../../tools/helpers/FlowManager";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";
@@ -39,21 +40,21 @@ namespace TwnsSpmWarListPanel {
 
         private static _instance: SpmWarListPanel;
 
-        private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _groupTab!             : eui.Group;
+        private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        private readonly _groupNavigator        : eui.Group;
-        private readonly _labelSinglePlayer     : TwnsUiLabel.UiLabel;
-        private readonly _labelContinue         : TwnsUiLabel.UiLabel;
-        private readonly _labelChooseWar        : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!       : eui.Group;
+        private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
+        private readonly _labelContinue!        : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseWar!       : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
-        private readonly _btnNextStep           : TwnsUiButton.UiButton;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnNextStep!          : TwnsUiButton.UiButton;
 
-        private readonly _groupWarList          : eui.Group;
-        private readonly _listWar               : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
-        private readonly _labelNoWar            : TwnsUiLabel.UiLabel;
-        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
+        private readonly _groupWarList!         : eui.Group;
+        private readonly _listWar!              : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
+        private readonly _labelNoWar!           : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
         private _isTabInitialized = false;
 
@@ -61,7 +62,7 @@ namespace TwnsSpmWarListPanel {
             if (!SpmWarListPanel._instance) {
                 SpmWarListPanel._instance = new SpmWarListPanel();
             }
-            SpmWarListPanel._instance.open(undefined);
+            SpmWarListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (SpmWarListPanel._instance) {
@@ -185,14 +186,11 @@ namespace TwnsSpmWarListPanel {
 
             } else {
                 const dataArray         = this._createDataForListWar();
+                const slotIndex         = SpmModel.getPreviewingSlotIndex();
                 labelLoading.visible    = false;
                 labelNoWar.visible      = !dataArray.length;
                 listWar.bindData(dataArray);
-
-                const slotIndex = SpmModel.getPreviewingSlotIndex();
-                if (dataArray.every(v => v.slotIndex != slotIndex)) {
-                    SpmModel.setPreviewingSlotIndex(dataArray.length ? dataArray[0].slotIndex : null);
-                }
+                listWar.setSelectedIndex(dataArray.findIndex(v => v.slotIndex === slotIndex));
             }
         }
 
@@ -265,7 +263,7 @@ namespace TwnsSpmWarListPanel {
             if (initialWarData) {
                 return { warInfo: {
                     warData : initialWarData,
-                    players : warData.playerManager.players,
+                    players : warData.playerManager?.players,
                 } };
             } else {
                 return {};
@@ -277,33 +275,34 @@ namespace TwnsSpmWarListPanel {
             const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
-                return undefined;
+                return null;
             }
 
-            const settingsForCommon = warData.settingsForCommon;
-            const warRule           = settingsForCommon.warRule;
+            const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
+            const warRule           = Helpers.getExisted(settingsForCommon.warRule);
             const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
-            for (const playerInfo of warData.playerManager.players) {
-                const { playerIndex, userId } = playerInfo;
+            for (const playerInfo of Helpers.getExisted(warData.playerManager?.players)) {
+                const playerIndex   = Helpers.getExisted(playerInfo.playerIndex);
+                const userId        = playerInfo.userId ?? null;
                 playerInfoArray.push({
                     playerIndex,
                     teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
                     isAi                : userId == null,
                     userId,
-                    coId                : playerInfo.coId,
-                    unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
-                    isReady             : undefined,
-                    isInTurn            : undefined,
+                    coId                : Helpers.getExisted(playerInfo.coId),
+                    unitAndTileSkinId   : Helpers.getExisted(playerInfo.unitAndTileSkinId),
+                    isReady             : null,
+                    isInTurn            : null,
                     isDefeat            : playerInfo.aliveState === Types.PlayerAliveState.Dead,
                 });
             }
 
             return {
-                configVersion           : settingsForCommon.configVersion,
-                playersCountUnneutral   : WarRuleHelpers.getPlayersCount(warRule),
-                roomOwnerPlayerIndex    : undefined,
-                callbackOnDeletePlayer  : undefined,
-                callbackOnExitRoom      : undefined,
+                configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
+                playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
+                roomOwnerPlayerIndex    : null,
+                callbackOnDeletePlayer  : null,
+                callbackOnExitRoom      : null,
                 playerInfoArray,
             };
         }
@@ -316,54 +315,54 @@ namespace TwnsSpmWarListPanel {
                 return { dataArrayForListSettings: [] };
             }
 
-            const warRule   = warData.settingsForCommon.warRule;
+            const warRule   = Helpers.getExisted(warData.settingsForCommon?.warRule);
             const mapId     = WarCommonHelpers.getMapId(warData);
             return { dataArrayForListSettings: [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
                     warRule,
                     currentValue    : mapId == null ? Lang.getText(LangTextType.B0321) : await WarMapModel.getMapNameInCurrentLanguage(mapId),
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
                     warRule,
                     currentValue    : slotIndex,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.SpmSaveSlotComment,
                     warRule,
-                    currentValue    : slotData.extraData?.slotComment,
-                    callbackOnModify: undefined,
+                    currentValue    : slotData?.extraData?.slotComment ?? null,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
                     warRule,
-                    currentValue    : undefined,
-                    callbackOnModify: undefined,
+                    currentValue    : null,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
                     warRule,
-                    currentValue    : undefined,
-                    callbackOnModify: undefined,
+                    currentValue    : null,
+                    callbackOnModify: null,
                 },
             ] };
         }
 
-        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
             const slotIndex = SpmModel.getPreviewingSlotIndex();
             const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
-                return undefined;
+                return null;
             }
 
-            const settingsForCommon = warData.settingsForCommon;
+            const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
             return {
-                configVersion   : settingsForCommon.configVersion,
-                warRule         : settingsForCommon.warRule,
+                configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                warRule         : Helpers.getExisted(settingsForCommon.warRule),
                 warType         : WarCommonHelpers.getWarType(warData),
             };
         }
@@ -431,10 +430,10 @@ namespace TwnsSpmWarListPanel {
         name: string;
     };
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 
@@ -442,31 +441,27 @@ namespace TwnsSpmWarListPanel {
         slotIndex: number;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
-        private readonly _btnChoose     : TwnsUiButton.UiButton;
-        private readonly _btnNext       : TwnsUiButton.UiButton;
-        private readonly _labelType     : TwnsUiLabel.UiLabel;
-        private readonly _labelName     : TwnsUiLabel.UiLabel;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _btnNext!      : TwnsUiButton.UiButton;
+        private readonly _labelType!    : TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
-            this._setNotifyListenerArray([
-                { type: NotifyType.SpmPreviewingWarSaveSlotChanged,  callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
-            ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {
-            this._updateState();
-
-            const slotIndex = this.data.slotIndex;
+            const slotIndex = this._getData().slotIndex;
             const slotData  = SpmModel.getSlotDict().get(slotIndex);
             const labelType = this._labelType;
             const labelName = this._labelName;
             if (!slotData) {
-                labelType.text  = null;
-                labelName.text  = null;
+                labelType.text  = ``;
+                labelName.text  = ``;
             } else {
                 const warData   = slotData.warData;
                 labelType.text  = `${slotIndex}. ${Lang.getWarTypeName(WarCommonHelpers.getWarType(warData))}`;
@@ -478,21 +473,17 @@ namespace TwnsSpmWarListPanel {
                     const mapId     = WarCommonHelpers.getMapId(warData);
                     labelName.text  = mapId == null
                         ? `(${Lang.getText(LangTextType.B0321)})`
-                        : await WarMapModel.getMapNameInCurrentLanguage(mapId);
+                        : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
                 }
             }
         }
 
-        private _onNotifySpmPreviewingWarSaveSlotChanged(): void {
-            this._updateState();
-        }
-
         private _onTouchTapBtnChoose(): void {
-            SpmModel.setPreviewingSlotIndex(this.data.slotIndex);
+            SpmModel.setPreviewingSlotIndex(this._getData().slotIndex);
         }
 
         private _onTouchTapBtnNext(): void {
-            const slotIndex = this.data.slotIndex;
+            const slotIndex = this._getData().slotIndex;
             const slotData  = SpmModel.getSlotDict().get(slotIndex);
             if (slotData != null) {
                 FlowManager.gotoSinglePlayerWar({
@@ -501,10 +492,6 @@ namespace TwnsSpmWarListPanel {
                     slotExtraData   : slotData.extraData,
                 });
             }
-        }
-
-        private _updateState(): void {
-            this.currentState = this.data.slotIndex === SpmModel.getPreviewingSlotIndex() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }

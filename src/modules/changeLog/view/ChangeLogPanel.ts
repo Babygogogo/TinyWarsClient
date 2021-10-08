@@ -29,27 +29,20 @@ namespace TwnsChangeLogPanel {
 
         private static _instance: ChangeLogPanel;
 
-        // @ts-ignore
-        private _imgMask        : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private _group          : eui.Group;
-        // @ts-ignore
-        private _btnClose       : TwnsUiButton.UiButton;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
+        private readonly _group!            : eui.Group;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
 
-        // @ts-ignore
-        private _listMessage    : TwnsUiScrollList.UiScrollList<DataForMessageRenderer>;
-        // @ts-ignore
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelNoMessage : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _btnAddMessage  : TwnsUiButton.UiButton;
+        private readonly _listMessage!      : TwnsUiScrollList.UiScrollList<DataForMessageRenderer>;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelNoMessage!   : TwnsUiLabel.UiLabel;
+        private readonly _btnAddMessage!    : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!ChangeLogPanel._instance) {
                 ChangeLogPanel._instance = new ChangeLogPanel();
             }
-            ChangeLogPanel._instance.open(undefined);
+            ChangeLogPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -129,7 +122,7 @@ namespace TwnsChangeLogPanel {
         private async _updateBtnAddMessage(): Promise<void> {
             const btn   = this._btnAddMessage;
             btn.visible = false;
-            btn.visible = await UserModel.checkCanSelfEditChangeLog();
+            btn.visible = UserModel.checkCanSelfEditChangeLog();
         }
 
         private _showOpenAnimation(): void {
@@ -163,21 +156,19 @@ namespace TwnsChangeLogPanel {
 
     type DataForMessageRenderer = ProtoTypes.ChangeLog.IChangeLogMessage;
     class MessageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMessageRenderer> {
-        // @ts-ignore
-        private _labelIndex     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelContent   : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _btnModify      : TwnsUiButton.UiButton;
+        private readonly _labelIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _labelContent! : TwnsUiLabel.UiLabel;
+        private readonly _btnModify!    : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const data              = this.data;
+            const data              = this._getData();
             const messageId         = data.messageId;
             const createTimestamp   = data.createTimestamp;
             this._labelIndex.text   = `#${messageId == null ? CommonConstants.ErrorTextForUndefined : Helpers.getNumText(messageId, 3)} (${createTimestamp == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimestampShortText(createTimestamp)})`;
@@ -194,7 +185,7 @@ namespace TwnsChangeLogPanel {
         }
 
         private _onTouchedBtnModify(): void {
-            const messageId = this.data.messageId;
+            const messageId = this._getData().messageId;
             (messageId != null) && (TwnsChangeLogModifyPanel.ChangeLogModifyPanel.show({ messageId }));
         }
     }

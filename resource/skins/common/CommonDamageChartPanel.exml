@@ -1,134 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
-    <e:Group bottom="0" top="40" horizontalCenter="0" width="960">
-        <e:Group id="_groupList" width="160" top="0" bottom="0" left="0">
-            <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                            alpha="0.9" left="0" right="0" top="0" bottom="0" locked="true" />
-            <TwnsUiLabel:UiLabel id="_labelTitle" text="部队信息" y="10" bold="true" size="20" textColor="0xffffff"
-                            horizontalCenter="0" />
-            <TwnsUiScrollList:UiScrollList id="_listUnit" left="0" right="0" bottom="35" top="35">
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group horizontalCenter="0" width="820" height="460" verticalCenter="0">
+        <e:Group id="_groupList" width="180" top="0" bottom="0" left="0">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="0" bottom="0"
+                                 source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
+            <TwnsUiScrollList:UiScrollList id="_listUnit" left="20" right="20" bottom="70" top="20">
                 <e:List requireSelection="true">
                     <e:itemRendererSkinName>
-                        <e:Skin width="160" height="40" currentState="up" states="up,down">
-                            <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="22" verticalCenter="0"
-                                            textColor.down="0x00ff00" horizontalCenter="0" maxTextWidth="150" />
-                            <e:Image id="_imgChoose" source="commonColorTransparent0000" left="0" right="0" top="0" bottom="0" />
+                        <e:Skin width="140" height="36" currentState="up" states="up,down">
+                            <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="20" verticalCenter="0"
+                                                 textColor="0x667A85" textColor.down="0xFFFFFF" maxTextWidth="140"
+                                                 left="0" bold.down="true" />
+                            <e:Image id="_imgChoose" source="uncompressedColorTransparent0000" left="0" right="0"
+                                     top="0" bottom="0" />
                         </e:Skin>
                     </e:itemRendererSkinName>
                 </e:List>
             </TwnsUiScrollList:UiScrollList>
-            <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" left="0"
-                             right="0" bottom="0" />
+            <TwnsUiButton:UiButton id="_btnBack" label="返回" left="20" right="20" bottom="20"
+                                   skinName="Skins.Component.Button.ButtonYellow003" height="30" />
         </e:Group>
-        <e:Group id="_groupInfo" width="800" top="0" bottom="0" right="0">
-            <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                            alpha="0.9" left="0" right="0" top="0" bottom="0" locked="true" />
-            <e:Scroller left="0" right="0" top="8" bottom="8">
-                <e:Group>
-                    <e:Group y="8" horizontalCenter="-270" height="40" locked="true">
-                        <e:Group id="_conUnitView" touchChildren="false" touchEnabled="false" scaleX="0.5" scaleY="0.5"
-                                 y="10" />
-                        <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="20" textColor="0xffffff" x="50"
-                                        verticalCenter="10" />
+        <e:Group id="_groupInfo" width="620" height="460" verticalCenter="0" right="0">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="0" bottom="0"
+                                 source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
+            <e:Group x="20" y="20" width="300">
+                <e:Group y="0" height="40" left="0">
+                    <e:Group id="_conUnitView" touchChildren="false" touchEnabled="false" scaleX="0.5" scaleY="0.5"
+                             top="0" />
+                    <e:Group x="110" y="0">
+                        <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="20" textColor="0xffffff" x="0"
+                                             bold="true" y="0" />
+                        <TwnsUiLabel:UiLabel id="_labelName1" text="Infantry" size="14" textColor="0xFFFFFF" x="0" y="0" />
+                        <e:layout>
+                            <e:VerticalLayout gap="2" />
+                        </e:layout>
                     </e:Group>
-                    <TwnsUiScrollList:UiScrollList id="_listInfo" y="215" left="0" right="0">
+                </e:Group>
+                <TwnsUiScrollList:UiScrollList id="_listInfo" y="50" height="370" left="0" width="300">
+                    <e:List>
+                        <e:itemRendererSkinName>
+                            <e:Skin width="300" height="24">
+                                <e:Group left="0" right="0" top="0" bottom="0">
+                                    <TwnsUiImage:UiImage id="_imgBg" right="0" source="uncompressedColorBlack0002"
+                                                         scale9Grid="1,1,2,2" left="0" top="0" bottom="0" alpha="0.9" />
+                                    <TwnsUiLabel:UiLabel id="_labelTitle" text="(Empty)" size="15" textColor="0xFFFFFF"
+                                                         x="4" verticalCenter="1" y="16" maxTextWidth="96" />
+                                    <TwnsUiLabel:UiLabel id="_labelValue" text="(Empty)" size="15" textColor="0xFFFFFF"
+                                                         x="110" verticalCenter="1" />
+                                    <e:Group id="_groupExtra" x="200" verticalCenter="0" width="60" height="20">
+                                        <TwnsUiImage:UiImage source="uncompressedRectangle0006" scale9Grid="2,2,1,1"
+                                                             left="0" right="0" top="0" bottom="0" />
+                                        <TwnsUiLabel:UiLabel id="_labelExtraInfo" text="可移动后攻击" size="12"
+                                                             textColor="0xFFFFFF" horizontalCenter="0"
+                                                             verticalCenter="1" maxTextWidth="56" />
+                                    </e:Group>
+                                </e:Group>
+                            </e:Skin>
+                        </e:itemRendererSkinName>
+                        <e:layout>
+                            <e:VerticalLayout gap="0" />
+                        </e:layout>
+                    </e:List>
+                </TwnsUiScrollList:UiScrollList>
+            </e:Group>
+            <e:Group right="20" top="20" bottom="20">
+                <TwnsUiLabel:UiLabel id="_labelDamageChart" text="基础伤害表" size="20" textColor="0xFFFFFF" y="0" left="0"
+                                     bold="true" />
+                <e:Group x="0" top="30" bottom="0">
+                    <e:Group width="260" left="0" top="0">
+                        <TwnsUiLabel:UiLabel id="_labelOffense" text="攻击(主)" size="18" textColor="0xFFFFFF" y="0" x="60" />
+                        <TwnsUiLabel:UiLabel id="_labelDefense" text="受击(主)" size="18" textColor="0xFFFFFF" y="0"
+                                             x="160" />
+                    </e:Group>
+                    <e:Group x="0" y="20" width="260" height="24">
+                        <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0002"
+                                             alpha="0.9" scale9Grid="1,1,2,2" />
+                        <TwnsUiLabel:UiLabel id="_labelMain1" text="Main" size="12" textColor="0xFFFFFF" x="60"
+                                             verticalCenter="1" />
+                        <TwnsUiLabel:UiLabel id="_labelSub1" text="Sub" size="12" textColor="0xFFFFFF" x="110"
+                                             verticalCenter="1" />
+                        <TwnsUiLabel:UiLabel id="_labelMain2" text="Main" size="12" textColor="0xFFFFFF" x="160"
+                                             verticalCenter="1" y="16" />
+                        <TwnsUiLabel:UiLabel id="_labelSub2" text="Sub" size="12" textColor="0xFFFFFF" x="210"
+                                             verticalCenter="1" y="26" />
+                    </e:Group>
+                    <TwnsUiScrollList:UiScrollList id="_listDamageChart" width="260" x="0" top="44" bottom="0">
                         <e:List>
                             <e:itemRendererSkinName>
-                                <e:Skin width="310" height="28">
-                                    <e:Group x="0" y="0" width="160">
-                                        <TwnsUiButton:UiButton id="_btnTitle" label="造价" y="0" right="0">
-                                            <TwnsUiButton:skinName>
-                                                <e:Skin states="up,down,disabled">
-                                                    <e:Group y="0" x="0">
-                                                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
-                                                                 left="0" right="0" top="0"
-                                                                 bottom="0" />
-                                                        <e:Group>
-                                                            <TwnsUiLabel:UiLabel id="labelDisplay" size="12"
-                                                                            verticalCenter="0" horizontalCenter="0"
-                                                                            textColor="0xffffff" x="98" y="97"
-                                                                            text="" />
-                                                            <e:layout>
-                                                                <e:HorizontalLayout paddingTop="8" paddingBottom="8"
-                                                                                    paddingLeft="10" paddingRight="10" />
-                                                            </e:layout>
-                                                        </e:Group>
-                                                    </e:Group>
-                                                </e:Skin>
-                                            </TwnsUiButton:skinName>
-                                        </TwnsUiButton:UiButton>
+                                <e:Skin width="260" height="24">
+                                    <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                                        <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0002" left="0"
+                                                             right="0" top="0" bottom="0" scale9Grid="1,1,2,2"
+                                                             alpha="0.9" locked="true" />
+                                        <e:Group id="_conView" y="3" scaleX="0.27" scaleY="0.27" x="20"
+                                                 touchChildren="false" touchEnabled="false">
+                                            <TwnsUiImage:UiImage id="_tileView" y="-72" />
+                                        </e:Group>
+                                        <TwnsUiImage:UiImage bottom="0" scale9Grid="1,1,2,2" x="54"
+                                                             source="uncompressedColorWhite0000" width="1" top="0" />
+                                        <TwnsUiLabel:UiLabel id="_labelPrimaryAttack" text="999" size="15"
+                                                             textColor="0xffffff" verticalCenter="1" x="60" />
+                                        <TwnsUiLabel:UiLabel id="_labelSecondaryAttack" text="999" size="15"
+                                                             textColor="0xFFFFFF" verticalCenter="1" x="110" />
+                                        <TwnsUiImage:UiImage source="uncompressedColorWhite0000" bottom="0"
+                                                             scale9Grid="1,1,2,2" x="154" width="1" top="0" y="10" />
+                                        <TwnsUiLabel:UiLabel id="_labelPrimaryDefend" text="999" size="15"
+                                                             textColor="0xFFFFFF" verticalCenter="1" x="160" />
+                                        <TwnsUiLabel:UiLabel id="_labelSecondaryDefend" text="999" size="15"
+                                                             textColor="0xFFFFFF" verticalCenter="1" x="210" />
                                     </e:Group>
-                                    <TwnsUiLabel:UiLabel id="_labelValue" text="(Empty)" size="16" textColor="0xFFFFFF"
-                                                    x="160" width="150" y="6" />
                                 </e:Skin>
                             </e:itemRendererSkinName>
                             <e:layout>
-                                <e:TileLayout orientation="rows" horizontalGap="0" verticalGap="0"
-                                              requestedColumnCount="2" />
+                                <e:VerticalLayout gap="0" />
                             </e:layout>
                         </e:List>
                     </TwnsUiScrollList:UiScrollList>
-                    <e:Group left="0" right="0" y="110" locked="true">
-                        <TwnsUiLabel:UiLabel id="_labelDamageChart" text="基础伤害表" size="20" textColor="0xFFFFFF" y="0"
-                                        horizontalCenter="0" />
-                        <e:Group x="0" y="25" width="320">
-                            <TwnsUiLabel:UiLabel id="_labelOffenseMain1" text="攻击(主)" size="12" textColor="0xFFFFFF" y="0"
-                                            horizontalCenter="-85" />
-                            <TwnsUiLabel:UiLabel id="_labelOffenseSub1" text="攻击(副)" size="12" textColor="0xFFFFFF" y="0"
-                                            horizontalCenter="-25" />
-                            <TwnsUiLabel:UiLabel id="_labelDefenseMain1" text="受击(主)" size="12" textColor="0xFFFFFF" y="0"
-                                            horizontalCenter="35" />
-                            <TwnsUiLabel:UiLabel id="_labelDefenseSub1" text="受击(副)" size="12" textColor="0xFFFFFF" y="0"
-                                            horizontalCenter="95" />
-                        </e:Group>
-                        <e:Group x="320" y="25" width="320">
-                            <TwnsUiLabel:UiLabel id="_labelOffenseMain2" text="攻击(主)" size="12" textColor="0xFFFFFF" y="0"
-                                            horizontalCenter="-85" />
-                            <TwnsUiLabel:UiLabel id="_labelOffenseSub2" text="攻击(副)" size="12" textColor="0xFFFFFF" y="0"
-                                            horizontalCenter="-25" />
-                            <TwnsUiLabel:UiLabel id="_labelDefenseMain2" text="受击(主)" size="12" textColor="0xFFFFFF" y="0"
-                                            horizontalCenter="35" />
-                            <TwnsUiLabel:UiLabel id="_labelDefenseSub2" text="受击(副)" size="12" textColor="0xFFFFFF" y="0"
-                                            horizontalCenter="95" />
-                        </e:Group>
-                        <TwnsUiScrollList:UiScrollList id="_listDamageChart" left="0" right="0" top="40"
-                                             bottom="0">
-                            <e:List>
-                                <e:itemRendererSkinName>
-                                    <e:Skin width="320" height="40">
-                                        <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                                            <e:Group id="_conView" y="10" scaleX="0.3" scaleY="0.3" x="20"
-                                                     touchChildren="false" touchEnabled="false">
-                                                <TwnsUiImage:UiImage id="_tileView" y="-72" />
-                                            </e:Group>
-                                            <TwnsUiLabel:UiLabel id="_labelPrimaryAttack" text="999" size="18"
-                                                            textColor="0xffffff" verticalCenter="0"
-                                                            horizontalCenter="-85" />
-                                            <TwnsUiLabel:UiLabel id="_labelSecondaryAttack" text="999" size="18"
-                                                            textColor="0xFFFFFF" verticalCenter="0"
-                                                            horizontalCenter="-25" />
-                                            <TwnsUiLabel:UiLabel id="_labelPrimaryDefend" text="999" size="18"
-                                                            textColor="0xFFFFFF" verticalCenter="0"
-                                                            horizontalCenter="35" />
-                                            <TwnsUiLabel:UiLabel id="_labelSecondaryDefend" text="999" size="18"
-                                                            textColor="0xFFFFFF" verticalCenter="0"
-                                                            horizontalCenter="95" />
-                                        </e:Group>
-                                    </e:Skin>
-                                </e:itemRendererSkinName>
-                                <e:layout>
-                                    <e:TileLayout orientation="rows" horizontalGap="0" requestedColumnCount="2"
-                                                  verticalGap="0" />
-                                </e:layout>
-                            </e:List>
-                        </TwnsUiScrollList:UiScrollList>
-                    </e:Group>
-                    <e:layout>
-                        <e:VerticalLayout horizontalAlign="center" />
-                    </e:layout>
                 </e:Group>
-            </e:Scroller>
+            </e:Group>
         </e:Group>
     </e:Group>
 </e:Skin>

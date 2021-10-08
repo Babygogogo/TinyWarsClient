@@ -1,13 +1,15 @@
 
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+import TwnsCommonBlockPanel                 from "../../common/view/CommonBlockPanel";
 import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
 import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
 import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
 import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
 import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
 import MpwModel                             from "../../multiPlayerWar/model/MpwModel";
 import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
 import TwnsMrrMainMenuPanel                 from "../../multiRankRoom/view/MrrMainMenuPanel";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import Helpers                              from "../../tools/helpers/Helpers";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
@@ -36,21 +38,21 @@ namespace TwnsMrwMyWarListPanel {
 
         private static _instance: MrwMyWarListPanel;
 
-        private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage>;
+        private readonly _groupTab!         : eui.Group;
+        private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage>;
 
-        private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
-        private readonly _labelMyWar            : TwnsUiLabel.UiLabel;
-        private readonly _labelChooseWar        : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!   : eui.Group;
+        private readonly _labelMultiPlayer! : TwnsUiLabel.UiLabel;
+        private readonly _labelMyWar!       : TwnsUiLabel.UiLabel;
+        private readonly _labelChooseWar!   : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
-        private readonly _btnNextStep           : TwnsUiButton.UiButton;
+        private readonly _btnBack!          : TwnsUiButton.UiButton;
+        private readonly _btnNextStep!      : TwnsUiButton.UiButton;
 
-        private readonly _groupWarList          : eui.Group;
-        private readonly _listWar               : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
-        private readonly _labelNoWar            : TwnsUiLabel.UiLabel;
-        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
+        private readonly _groupWarList!     : eui.Group;
+        private readonly _listWar!          : TwnsUiScrollList.UiScrollList<DataForWarRenderer>;
+        private readonly _labelNoWar!       : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading!     : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
         private _isTabInitialized   = false;
@@ -59,7 +61,7 @@ namespace TwnsMrwMyWarListPanel {
             if (!MrwMyWarListPanel._instance) {
                 MrwMyWarListPanel._instance = new MrwMyWarListPanel();
             }
-            MrwMyWarListPanel._instance.open(undefined);
+            MrwMyWarListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MrwMyWarListPanel._instance) {
@@ -129,6 +131,10 @@ namespace TwnsMrwMyWarListPanel {
         private _onTouchedBtnNextStep(): void {
             const warId = MpwModel.getMrwPreviewingWarId();
             if (warId != null) {
+                TwnsCommonBlockPanel.CommonBlockPanel.show({
+                    title   : Lang.getText(LangTextType.B0088),
+                    content : Lang.getText(LangTextType.A0040),
+                });
                 MpwProxy.reqMpwCommonContinueWar(warId);
             }
         }
@@ -241,7 +247,7 @@ namespace TwnsMrwMyWarListPanel {
             const dataArray: DataForWarRenderer[] = [];
             for (const warInfo of MpwModel.getMyMrwWarInfoArray()) {
                 dataArray.push({
-                    warId: warInfo.warId,
+                    warId: Helpers.getExisted(warInfo.warId),
                 });
             }
 
@@ -249,9 +255,10 @@ namespace TwnsMrwMyWarListPanel {
         }
 
         private _createDataForCommonWarMapInfoPage(): OpenDataForCommonWarMapInfoPage {
-            const mapId = MpwModel.getMyWarInfo(MpwModel.getMrwPreviewingWarId())?.settingsForMrw?.mapId;
+            const warId = MpwModel.getMrwPreviewingWarId();
+            const mapId = warId == null ? null : MpwModel.getMyWarInfo(warId)?.settingsForMrw?.mapId;
             return mapId == null
-                ? {}
+                ? null
                 : { mapInfo: { mapId } };
         }
 
@@ -330,10 +337,10 @@ namespace TwnsMrwMyWarListPanel {
         name: string;
     };
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 
@@ -341,10 +348,10 @@ namespace TwnsMrwMyWarListPanel {
         warId: number;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
-        private readonly _btnChoose     : TwnsUiButton.UiButton;
-        private readonly _btnNext       : TwnsUiButton.UiButton;
-        private readonly _labelName     : TwnsUiLabel.UiLabel;
-        private readonly _imgRed        : TwnsUiLabel.UiLabel;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _btnNext!      : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -359,17 +366,16 @@ namespace TwnsMrwMyWarListPanel {
         protected async _onDataChanged(): Promise<void> {
             this._updateState();
 
-            const warId     = this.data.warId;
+            const warId     = this._getData().warId;
             const warInfo   = MpwModel.getMyWarInfo(warId);
             const imgRed    = this._imgRed;
             const labelName = this._labelName;
             if (!warInfo) {
                 imgRed.visible  = false;
-                labelName.text  = null;
+                labelName.text  = ``;
             } else {
-                const settingsForMrw    = warInfo.settingsForMrw;
-                imgRed.visible          = MpwModel.checkIsRedForMyWar(warInfo);
-                labelName.text          = await WarMapModel.getMapNameInCurrentLanguage(settingsForMrw.mapId);
+                imgRed.visible  = MpwModel.checkIsRedForMyWar(warInfo);
+                labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(warInfo.settingsForMrw?.mapId)) || CommonConstants.ErrorTextForUndefined;
             }
         }
 
@@ -378,15 +384,19 @@ namespace TwnsMrwMyWarListPanel {
         }
 
         private _onTouchTapBtnChoose(): void {
-            MpwModel.setMrwPreviewingWarId(this.data.warId);
+            MpwModel.setMrwPreviewingWarId(this._getData().warId);
         }
 
         private _onTouchTapBtnNext(): void {
-            MpwProxy.reqMpwCommonContinueWar(this.data.warId);
+            TwnsCommonBlockPanel.CommonBlockPanel.show({
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0040),
+            });
+            MpwProxy.reqMpwCommonContinueWar(this._getData().warId);
         }
 
         private _updateState(): void {
-            this.currentState = this.data.warId === MpwModel.getMrwPreviewingWarId() ? Types.UiState.Down : Types.UiState.Up;
+            this.currentState = this._getData().warId === MpwModel.getMrwPreviewingWarId() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }

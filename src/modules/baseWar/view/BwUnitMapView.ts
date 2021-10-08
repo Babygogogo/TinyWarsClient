@@ -1,11 +1,13 @@
 
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsBwUnitMap        from "../model/BwUnitMap";
 import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+import UserModel            from "../../user/model/UserModel";
+import TwnsBwUnitMap        from "../model/BwUnitMap";
 import TwnsBwUnitView       from "./BwUnitView";
 
 namespace TwnsBwUnitMapView {
@@ -13,7 +15,6 @@ namespace TwnsBwUnitMapView {
     import BwUnitView           = TwnsBwUnitView.BwUnitView;
     import UnitCategory         = Types.UnitCategory;
     import ActionPlannerState   = Types.ActionPlannerState;
-    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -22,11 +23,13 @@ namespace TwnsBwUnitMapView {
         private readonly _layerForGround    = new egret.DisplayObjectContainer();
         private readonly _layerForAir       = new egret.DisplayObjectContainer();
         private readonly _notifyListeners   = [
-            { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.UnitAnimationTick,               callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitStateIndicatorTick,          callback: this._onNotifyUnitStateIndicatorTick },
+            { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.UserSettingsUnitOpacityChanged,  callback: this._onNotifyUserSettingsUnitOpacityChanged },
         ];
 
-        private _unitMap                    : BwUnitMap;
+        private _unitMap    : TwnsBwUnitMap.BwUnitMap | null = null;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers.
@@ -37,9 +40,10 @@ namespace TwnsBwUnitMapView {
             this.addChild(this._layerForNaval);
             this.addChild(this._layerForGround);
             this.addChild(this._layerForAir);
+            this._updateOpacityForAllLayers();
         }
 
-        public init(unitMap: BwUnitMap): void {
+        public init(unitMap: TwnsBwUnitMap.BwUnitMap): void {
             this._setUnitMap(unitMap);
 
             this._clearAllUnits();
@@ -58,10 +62,10 @@ namespace TwnsBwUnitMapView {
             Notify.removeEventListeners(this._notifyListeners, this);
         }
 
-        protected _getUnitMap(): BwUnitMap {
-            return this._unitMap;
+        private _getUnitMap(): TwnsBwUnitMap.BwUnitMap {
+            return Helpers.getExisted(this._unitMap);
         }
-        private _setUnitMap(unitMap: BwUnitMap): void {
+        private _setUnitMap(unitMap: TwnsBwUnitMap.BwUnitMap): void {
             this._unitMap = unitMap;
         }
 
@@ -69,7 +73,7 @@ namespace TwnsBwUnitMapView {
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public addUnit(view: BwUnitView, needResetZOrder: boolean): void {
-            const model = view.getUnit();
+            const model = Helpers.getExisted(view.getUnit());
 
             view.x = _GRID_WIDTH * model.getGridX();
             view.y = _GRID_HEIGHT * model.getGridY();
@@ -97,6 +101,12 @@ namespace TwnsBwUnitMapView {
             this._updateAnimationsOnTick(this._layerForNaval);
         }
 
+        private _onNotifyUnitStateIndicatorTick(): void {
+            this._updateIndicatorOnTick(this._layerForAir);
+            this._updateIndicatorOnTick(this._layerForGround);
+            this._updateIndicatorOnTick(this._layerForNaval);
+        }
+
         private _onNotifyBwActionPlannerStateChanged(): void {
             const actionPlanner = this._getUnitMap().getWar().getActionPlanner();
             const state         = actionPlanner.getState();
@@ -109,37 +119,37 @@ namespace TwnsBwUnitMapView {
 
             } else if (state === ActionPlannerState.MakingMovePath) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingAction) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingAttackTarget) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingDropDestination) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingFlareDestination) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
             } else if (state === ActionPlannerState.ChoosingSiloDestination) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getFocusUnitOnMap().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getFocusUnitOnMap()).setViewVisible(false);
                 const focusUnitLoaded = actionPlanner.getFocusUnitLoaded();
                 (focusUnitLoaded) && (focusUnitLoaded.setViewVisible(false));
 
@@ -154,11 +164,15 @@ namespace TwnsBwUnitMapView {
 
             } else if (state === ActionPlannerState.PreviewingMovableArea) {
                 this._resetVisibleForAllUnitsOnMap();
-                actionPlanner.getUnitForPreviewingMovableArea().setViewVisible(false);
+                Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea()).setViewVisible(false);
 
             } else {
                 // Nothing to do.
             }
+        }
+
+        private _onNotifyUserSettingsUnitOpacityChanged(): void {
+            this._updateOpacityForAllLayers();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +190,7 @@ namespace TwnsBwUnitMapView {
             for (let i = 0; i < viewsCount; ++i) {
                 views[i] = layer.getChildAt(i) as any;
             }
-            views.sort((v1, v2) => v1.getUnit().getGridY() - v2.getUnit().getGridY());
+            views.sort((v1, v2) => Helpers.getExisted(v1.getUnit()).getGridY() - Helpers.getExisted(v2.getUnit()).getGridY());
             for (let i = 0; i < viewsCount; ++i) {
                 layer.setChildIndex(views[i], i);
             }
@@ -191,12 +205,19 @@ namespace TwnsBwUnitMapView {
             const viewsCount = layer.numChildren;
             for (let i = 0; i < viewsCount; ++i) {
                 const view = layer.getChildAt(i) as BwUnitView;
-                view.tickStateAnimationFrame();
                 view.tickUnitAnimationFrame();
             }
         }
 
-        private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer | undefined {
+        private _updateIndicatorOnTick(layer: egret.DisplayObjectContainer): void {
+            const viewsCount = layer.numChildren;
+            for (let i = 0; i < viewsCount; ++i) {
+                const view = layer.getChildAt(i) as BwUnitView;
+                view.tickStateAnimationFrame();
+            }
+        }
+
+        private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer {
             const version = this._getUnitMap().getWar().getConfigVersion();
             if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
                 return this._layerForAir;
@@ -205,7 +226,7 @@ namespace TwnsBwUnitMapView {
             } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Naval)) {
                 return this._layerForNaval;
             } else {
-                return undefined;
+                throw Helpers.newError(`Invalid unitType: ${unitType}`);
             }
         }
 
@@ -216,6 +237,13 @@ namespace TwnsBwUnitMapView {
             for (const unit of unitMap.getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
             }
+        }
+
+        private _updateOpacityForAllLayers(): void {
+            const opacity               = UserModel.getSelfSettingsUnitOpacity() / 100;
+            this._layerForAir.alpha     = opacity;
+            this._layerForGround.alpha  = opacity;
+            this._layerForNaval.alpha   = opacity;
         }
     }
 }

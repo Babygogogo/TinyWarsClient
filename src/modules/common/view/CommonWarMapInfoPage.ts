@@ -1,4 +1,5 @@
 
+import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
@@ -19,13 +20,13 @@ namespace TwnsCommonWarMapInfoPage {
         };
         warInfo?    : {
             warData     : ProtoTypes.WarSerialization.ISerialWar;
-            players?    : ProtoTypes.WarSerialization.ISerialPlayer[];
+            players     : Types.Undefinable<ProtoTypes.WarSerialization.ISerialPlayer[]>;
         };
-    };
+    } | null;
     export class CommonWarMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonMapInfoPage> {
-        private readonly _zoomMap       : TwnsUiZoomableMap.UiZoomableMap;
-        private readonly _uiMapInfo     : TwnsUiMapInfo.UiMapInfo;
-        private readonly _labelLoading  : TwnsUiLabel.UiLabel;
+        private readonly _zoomMap!      : TwnsUiZoomableMap.UiZoomableMap;
+        private readonly _uiMapInfo!    : TwnsUiMapInfo.UiMapInfo;
+        private readonly _labelLoading! : TwnsUiLabel.UiLabel;
 
         public constructor() {
             super();
@@ -55,34 +56,43 @@ namespace TwnsCommonWarMapInfoPage {
             this._labelLoading.text = Lang.getText(LangTextType.A0150);
         }
         private async _updateComponentsForRoomInfo(): Promise<void> {
-            const zoomMap               = this._zoomMap;
-            const uiMapInfo             = this._uiMapInfo;
-            const { mapInfo, warInfo }  = this._getOpenData();
-            if (mapInfo) {
-                const mapId = mapInfo.mapId;
-                uiMapInfo.setData({
-                    mapInfo: {
-                        mapId,
-                    },
-                });
+            const zoomMap   = this._zoomMap;
+            const uiMapInfo = this._uiMapInfo;
+            const openData  = this._getOpenData();
+            if (openData == null) {
+                uiMapInfo.visible   = false;
+                zoomMap.visible     = false;
+            } else {
+                uiMapInfo.visible   = true;
+                zoomMap.visible     = true;
 
-                const mapRawData = await WarMapModel.getRawData(mapId);
-                if (mapRawData) {
-                    zoomMap.showMapByMapData(mapRawData);
+                const { mapInfo, warInfo }  = openData;
+                if (mapInfo) {
+                    const mapId = mapInfo.mapId;
+                    uiMapInfo.setData({
+                        mapInfo: {
+                            mapId,
+                        },
+                    });
+
+                    const mapRawData = await WarMapModel.getRawData(mapId);
+                    if (mapRawData) {
+                        zoomMap.showMapByMapData(mapRawData);
+                    } else {
+                        zoomMap.clearMap();
+                    }
+
+                } else if (warInfo) {
+                    const warData = warInfo.warData;
+                    uiMapInfo.setData({
+                        warData,
+                    });
+                    zoomMap.showMapByWarData(warData, warInfo.players);
+
                 } else {
+                    uiMapInfo.setData(null);
                     zoomMap.clearMap();
                 }
-
-            } else if (warInfo) {
-                const warData = warInfo.warData;
-                uiMapInfo.setData({
-                    warData,
-                });
-                zoomMap.showMapByWarData(warData, warInfo.players);
-
-            } else {
-                uiMapInfo.setData(undefined);
-                zoomMap.clearMap();
             }
         }
     }

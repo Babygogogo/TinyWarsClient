@@ -11,14 +11,12 @@ import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsBwTileView       from "./BwTileView";
 
 namespace TwnsBwTileMapView {
-    import BwTileView   = TwnsBwTileView.BwTileView;
     import NotifyType   = TwnsNotifyType.NotifyType;
-    import BwTileMap    = TwnsBwTileMap.BwTileMap;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
     export class BwTileMapView extends egret.DisplayObjectContainer {
-        private readonly _tileViewArray     : BwTileView[] = [];
+        private readonly _tileViewArray     : TwnsBwTileView.BwTileView[] = [];
         private readonly _baseLayer         = new egret.DisplayObjectContainer();
         private readonly _decoratorLayer    = new egret.DisplayObjectContainer();
         private readonly _gridBorderLayer   = new egret.DisplayObjectContainer();
@@ -27,11 +25,11 @@ namespace TwnsBwTileMapView {
         private readonly _coZoneImageDict   = new Map<number, TwnsUiImage.UiImage[][]>();
 
         private readonly _notifyListeners   = [
-            { type: NotifyType.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
-            { type: NotifyType.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
+            { type: NotifyType.TileAnimationTick,                   callback: this._onNotifyTileAnimationTick },
+            { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyIsShowGridBorderChanged },
         ];
 
-        private _tileMap: BwTileMap;
+        private _tileMap?: TwnsBwTileMap.BwTileMap;
 
         public constructor() {
             super();
@@ -44,7 +42,7 @@ namespace TwnsBwTileMapView {
             this._gridBorderLayer.alpha = 0.3;
         }
 
-        public init(tileMap: BwTileMap): void {
+        public init(tileMap: TwnsBwTileMap.BwTileMap): void {
             this._tileMap = tileMap;
 
             const tileViewArray     = this._tileViewArray;
@@ -84,14 +82,14 @@ namespace TwnsBwTileMapView {
             const gridBorderLayer                           = this._gridBorderLayer;
             gridBorderLayer.removeChildren();
             for (let x = 0; x <= mapWidth; ++x) {
-                const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
+                const img   = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                 img.width   = 2;
                 img.height  = borderHeight;
                 img.x       = (x * GRID_WIDTH) - 1;
                 gridBorderLayer.addChild(img);
             }
             for (let y = 0; y <= mapHeight; ++y) {
-                const img   = new TwnsUiImage.UiImage(`commonColorBlack0000`);
+                const img   = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                 img.width   = borderWidth;
                 img.height  = 2;
                 img.y       = (y * GRID_HEIGHT) - 1;
@@ -99,7 +97,7 @@ namespace TwnsBwTileMapView {
             }
             this._updateGridBorderLayerVisible();
         }
-        public fastInit(tileMap: BwTileMap): void {
+        public fastInit(tileMap: TwnsBwTileMap.BwTileMap): void {
             this._tileMap = tileMap;
         }
 
@@ -141,7 +139,7 @@ namespace TwnsBwTileMapView {
         private _initCoZoneContainer(): void {
             const container                                 = this._coZoneContainer;
             const imageDict                                 = this._coZoneImageDict;
-            const tileMap                                   = this._tileMap;
+            const tileMap                                   = Helpers.getExisted(this._tileMap);
             const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
             const playerManager                             = tileMap.getWar().getPlayerManager();
             const playersCount                              = playerManager.getTotalPlayersCount(false);
@@ -152,7 +150,7 @@ namespace TwnsBwTileMapView {
                 }
 
                 const imgSource = `c08_t03_s${Helpers.getNumText(playerManager.getPlayer(playerIndex).getUnitAndTileSkinId())}_f01`;
-                const matrix    = imageDict.get(playerIndex);
+                const matrix    = Helpers.getExisted(imageDict.get(playerIndex));
                 for (let x = 0; x < mapWidth; ++x) {
                     if (matrix[x] == null) {
                         matrix[x] = [];
@@ -195,7 +193,7 @@ namespace TwnsBwTileMapView {
             }
         }
         public updateCoZone(): void {
-            const tileMap                                   = this._tileMap;
+            const tileMap                                   = Helpers.getExisted(this._tileMap);
             const war                                       = tileMap.getWar();
             const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
             const playerManager                             = war.getPlayerManager();
@@ -221,7 +219,7 @@ namespace TwnsBwTileMapView {
                             }));
                     });
 
-                const matrix = this._coZoneImageDict.get(playerIndex);
+                const matrix = Helpers.getExisted(this._coZoneImageDict.get(playerIndex));
                 for (let x = 0; x < mapWidth; ++x) {
                     for (let y = 0; y < mapHeight; ++y) {
                         matrix[x][y].visible = (gridIndexList.length > 0) && (radius >= GridIndexHelpers.getMinDistance({ x, y }, gridIndexList));

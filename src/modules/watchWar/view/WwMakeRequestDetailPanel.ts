@@ -1,6 +1,7 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -35,7 +36,7 @@ namespace TwnsWwMakeRequestDetailPanel {
         private readonly _btnConfirm!       : TwnsUiButton.UiButton;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
-        private _dataForListPlayer  : DataForPlayerRenderer[] | undefined;
+        private _dataForListPlayer  : DataForPlayerRenderer[] | null = null;
 
         public static show(openData: OpenDataForMcrWatchMakeRequestDetailPanel): void {
             if (!WwMakeRequestDetailPanel._instance) {
@@ -72,7 +73,7 @@ namespace TwnsWwMakeRequestDetailPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._dataForListPlayer = undefined;
+            this._dataForListPlayer = null;
         }
 
         public setPlayerSelected(playerIndex: number, selected: boolean): void {
@@ -178,7 +179,7 @@ namespace TwnsWwMakeRequestDetailPanel {
         private readonly _imgDecline!   : TwnsUiImage.UiImage;
 
         protected async _onDataChanged(): Promise<void> {
-            const data              = this.data;
+            const data              = this._getData();
             const playerInfo        = data.playerInfo;
             const playerIndex       = playerInfo.playerIndex;
             const teamIndex         = playerInfo.teamIndex;
@@ -219,7 +220,7 @@ namespace TwnsWwMakeRequestDetailPanel {
 
             const userId    = playerInfo.userId;
             const labelName = this._labelName;
-            const coName    = ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+            const coName    = ConfigManager.getCoNameAndTierText(data.configVersion, Helpers.getExisted(playerInfo.coId));
             if (userId == null) {
                 labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
             } else {
@@ -229,7 +230,7 @@ namespace TwnsWwMakeRequestDetailPanel {
 
         public onItemTapEvent(): void {
             if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
-                const data          = this.data;
+                const data          = this._getData();
                 const playerIndex   = data.playerInfo.playerIndex;
                 (playerIndex != null) && (data.panel.setPlayerSelected(playerIndex, !data.isRequesting));
             }

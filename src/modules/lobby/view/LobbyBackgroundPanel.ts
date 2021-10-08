@@ -1,25 +1,27 @@
 
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import Types            from "../../tools/helpers/Types";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import Types                from "../../tools/helpers/Types";
 
 namespace TwnsLobbyBackgroundPanel {
     export class LobbyBackgroundPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Bottom;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: LobbyBackgroundPanel;
+        private static _instance: LobbyBackgroundPanel | null = null;
 
         public static show(): void {
             if (!LobbyBackgroundPanel._instance) {
                 LobbyBackgroundPanel._instance = new LobbyBackgroundPanel();
             }
-            LobbyBackgroundPanel._instance.open(undefined);
+            LobbyBackgroundPanel._instance.open();
         }
-
         public static async hide(): Promise<void> {
             if (LobbyBackgroundPanel._instance) {
                 await LobbyBackgroundPanel._instance.close();
             }
+        }
+        public static getInstance(): LobbyBackgroundPanel | null {
+            return LobbyBackgroundPanel._instance;
         }
 
         private constructor() {

@@ -15,54 +15,52 @@ import TwnsUiButton             from "../../tools/ui/UiButton";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
 import TwnsUserPanel            from "../../user/view/UserPanel";
-import RwModel                  from "../model/RwModel";
 import TwnsRwWar                from "../model/RwWar";
 import TwnsRwWarMenuPanel       from "./RwWarMenuPanel";
 
 namespace TwnsRwTopPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import ChatPanel            = TwnsChatPanel.ChatPanel;
     import UserPanel            = TwnsUserPanel.UserPanel;
     import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
-    import RwWar                = TwnsRwWar.RwWar;
     import RwWarMenuPanel       = TwnsRwWarMenuPanel.RwWarMenuPanel;
 
+    type OpenData = {
+        war : TwnsRwWar.RwWar;
+    };
     // eslint-disable-next-line no-shadow
-    export class RwTopPanel extends TwnsUiPanel.UiPanel<void> {
+    export class RwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: RwTopPanel;
 
-        private _groupPlayer        : eui.Group;
-        private _labelPlayer        : TwnsUiLabel.UiLabel;
-        private _labelFund          : TwnsUiLabel.UiLabel;
-        private _labelTurnTitle     : TwnsUiLabel.UiLabel;
-        private _labelTurn          : TwnsUiLabel.UiLabel;
-        private _labelActionTitle   : TwnsUiLabel.UiLabel;
-        private _labelAction        : TwnsUiLabel.UiLabel;
-        private _groupCo            : eui.Group;
-        private _labelCo            : TwnsUiLabel.UiLabel;
-        private _labelCurrEnergy    : TwnsUiLabel.UiLabel;
-        private _labelPowerEnergy   : TwnsUiLabel.UiLabel;
-        private _labelZoneEnergy    : TwnsUiLabel.UiLabel;
-        private _btnChat            : TwnsUiButton.UiButton;
-        private _btnFastRewind      : TwnsUiButton.UiButton;
-        private _btnFastForward     : TwnsUiButton.UiButton;
-        private _btnPlay            : TwnsUiButton.UiButton;
-        private _btnPause           : TwnsUiButton.UiButton;
-        private _btnUnitList        : TwnsUiButton.UiButton;
-        private _btnMenu            : TwnsUiButton.UiButton;
+        private readonly _groupPlayer!      : eui.Group;
+        private readonly _labelPlayer!      : TwnsUiLabel.UiLabel;
+        private readonly _labelFund!        : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelTurn!        : TwnsUiLabel.UiLabel;
+        private readonly _labelActionTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelAction!      : TwnsUiLabel.UiLabel;
+        private readonly _groupCo!          : eui.Group;
+        private readonly _labelCo!          : TwnsUiLabel.UiLabel;
+        private readonly _labelCurrEnergy!  : TwnsUiLabel.UiLabel;
+        private readonly _labelPowerEnergy! : TwnsUiLabel.UiLabel;
+        private readonly _labelZoneEnergy!  : TwnsUiLabel.UiLabel;
+        private readonly _btnChat!          : TwnsUiButton.UiButton;
+        private readonly _btnFastRewind!    : TwnsUiButton.UiButton;
+        private readonly _btnFastForward!   : TwnsUiButton.UiButton;
+        private readonly _btnPlay!          : TwnsUiButton.UiButton;
+        private readonly _btnPause!         : TwnsUiButton.UiButton;
+        private readonly _btnUnitList!      : TwnsUiButton.UiButton;
+        private readonly _btnMenu!          : TwnsUiButton.UiButton;
 
-        private _war    : RwWar;
-
-        public static show(): void {
+        public static show(openData: OpenData): void {
             if (!RwTopPanel._instance) {
                 RwTopPanel._instance = new RwTopPanel();
             }
-            RwTopPanel._instance.open(undefined);
+            RwTopPanel._instance.open(openData);
         }
 
         public static async hide(): Promise<void> {
@@ -103,68 +101,67 @@ namespace TwnsRwTopPanel {
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
 
-            this._war = RwModel.getWar();
             this._updateView();
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._war = null;
+        private _getWar(): TwnsRwWar.RwWar {
+            return this._getOpenData().war;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
+        private _onNotifyBwPlayerFundChanged(): void {
             this._updateLabelFund();
         }
-        private _onNotifyBwPlayerIndexInTurnChanged(e: egret.Event): void {
+        private _onNotifyBwPlayerIndexInTurnChanged(): void {
             this._updateView();
-            SoundManager.playCoBgmWithWar(this._war, false);
+            SoundManager.playCoBgmWithWar(this._getWar(), false);
         }
-        private _onNotifyBwNextActionIdChanged(e: egret.Event): void {
+        private _onNotifyBwNextActionIdChanged(): void {
             this._updateLabelAction();
         }
-        private _onNotifyBwCoEnergyChanged(e: egret.Event): void {
+        private _onNotifyBwCoEnergyChanged(): void {
             this._updateLabelCo();
         }
-        private _onNotifyBwCoUsingSkillChanged(e: egret.Event): void {
+        private _onNotifyBwCoUsingSkillChanged(): void {
             this._updateLabelCo();
-            SoundManager.playCoBgmWithWar(this._war, false);
+            SoundManager.playCoBgmWithWar(this._getWar(), false);
         }
-        private _onNotifyReplayAutoReplayChanged(e: egret.Event): void {
+        private _onNotifyReplayAutoReplayChanged(): void {
             this._updateView();
         }
-        private _onMsgChatUpdateReadProgressList(e: egret.Event): void {
+        private _onMsgChatUpdateReadProgressList(): void {
             this._updateBtnChat();
         }
-        private _onMsgChatUpdateReadProgress(e: egret.Event): void {
+        private _onMsgChatUpdateReadProgress(): void {
             this._updateBtnChat();
         }
-        private _onMsgChatGetAllMessages(e: egret.Event): void {
+        private _onMsgChatGetAllMessages(): void {
             this._updateBtnChat();
         }
-        private _onMsgChatAddMessage(e: egret.Event): void {
+        private _onMsgChatAddMessage(): void {
             this._updateBtnChat();
         }
 
-        private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
-            const userId = this._war.getPlayerInTurn().getUserId();
+        private _onTouchedGroupPlayer(): void {
+            const userId = this._getWar().getPlayerInTurn().getUserId();
             (userId) && (UserPanel.show({ userId }));
         }
-        private _onTouchedGroupCo(e: egret.TouchEvent): void {
-            const war = this._war;
+        private _onTouchedGroupCo(): void {
+            const war = this._getWar();
             CommonCoListPanel.show({ war });
             RwWarMenuPanel.hide();
         }
-        private _onTouchedBtnChat(e: egret.TouchEvent): void {
+        private _onTouchedBtnChat(): void {
             RwWarMenuPanel.hide();
-            ChatPanel.show({});
+            TwnsChatPanel.ChatPanel.show({});
         }
-        private async _onTouchedBtnFastRewind(e: egret.TouchEvent): Promise<void> {
-            const war = this._war;
+        private async _onTouchedBtnFastRewind(): Promise<void> {
+            const war = this._getWar();
             war.setIsAutoReplay(false);
 
             if (!war.getIsRunning()) {
@@ -180,8 +177,8 @@ namespace TwnsRwTopPanel {
                 this._updateView();
             }
         }
-        private async _onTouchedBtnFastForward(e: egret.TouchEvent): Promise<void> {
-            const war = this._war;
+        private async _onTouchedBtnFastForward(): Promise<void> {
+            const war = this._getWar();
             war.setIsAutoReplay(false);
 
             if (!war.getIsRunning()) {
@@ -197,24 +194,24 @@ namespace TwnsRwTopPanel {
                 this._updateView();
             }
         }
-        private _onTouchedBtnPlay(e: egret.TouchEvent): void {
-            const war = this._war;
+        private _onTouchedBtnPlay(): void {
+            const war = this._getWar();
             if (war.checkIsInEnd()) {
                 FloatText.show(Lang.getText(LangTextType.A0041));
             } else {
-                this._war.setIsAutoReplay(true);
+                war.setIsAutoReplay(true);
             }
         }
-        private _onTouchedBtnPause(e: egret.TouchEvent): void {
-            this._war.setIsAutoReplay(false);
+        private _onTouchedBtnPause(): void {
+            this._getWar().setIsAutoReplay(false);
         }
-        private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
-            const war = this._war;
+        private _onTouchedBtnUnitList(): void {
+            const war = this._getWar();
             war.getField().getActionPlanner().setStateIdle();
             BwUnitListPanel.show({ war });
         }
-        private _onTouchedBtnMenu(e: egret.TouchEvent): void {
-            const actionPlanner = this._war.getActionPlanner();
+        private _onTouchedBtnMenu(): void {
+            const actionPlanner = this._getWar().getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
@@ -242,17 +239,17 @@ namespace TwnsRwTopPanel {
         }
 
         private _updateLabelTurn(): void {
-            const war               = this._war;
+            const war               = this._getWar();
             this._labelTurn.text    = `${war.getTurnManager().getTurnIndex()}`;
         }
 
         private _updateLabelAction(): void {
-            const war               = this._war;
+            const war               = this._getWar();
             this._labelAction.text  = `${war.getNextActionId()}`;
         }
 
         private async _updateLabelPlayer(): Promise<void> {
-            const war               = this._war;
+            const war               = this._getWar();
             const player            = war.getPlayerInTurn();
             this._labelPlayer.text  = player
                 ? `${await player.getNickname()} (${Lang.getPlayerForceName(player.getPlayerIndex())}, ${Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId())})`
@@ -260,7 +257,7 @@ namespace TwnsRwTopPanel {
         }
 
         private _updateLabelFund(): void {
-            const war     = this._war;
+            const war     = this._getWar();
             const player  = war.getPlayerInTurn();
             this._labelFund.text = player
                 ? `${player.getFund()}`
@@ -268,7 +265,7 @@ namespace TwnsRwTopPanel {
         }
 
         private _updateLabelCo(): void {
-            const war = this._war;
+            const war = this._getWar();
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
@@ -294,11 +291,11 @@ namespace TwnsRwTopPanel {
         }
 
         private _updateBtnPlay(): void {
-            this._btnPlay.visible = !this._war.getIsAutoReplay();
+            this._btnPlay.visible = !this._getWar().getIsAutoReplay();
         }
 
         private _updateBtnPause(): void {
-            this._btnPause.visible = this._war.getIsAutoReplay();
+            this._btnPause.visible = this._getWar().getIsAutoReplay();
         }
 
         private _updateBtnChat(): void {

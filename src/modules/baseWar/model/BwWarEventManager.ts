@@ -4,7 +4,6 @@ import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
 import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
-import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
@@ -26,42 +25,38 @@ namespace TwnsBwWarEventManager {
 
     export class BwWarEventManager {
         private _war?               : BwWar;
-        private _warEventFullData?  : IWarEventFullData | null | undefined;
-        private _calledCountList?   : IDataForWarEventCalledCount[] | null | undefined;
+        private _warEventFullData?  : IWarEventFullData | null;
+        private _calledCountList?   : IDataForWarEventCalledCount[] | null;
 
-        public init(data: ISerialWarEventManager | null | undefined): ClientErrorCode {
+        public init(data: Types.Undefinable<ISerialWarEventManager>): void {
             if (!data) {
                 this._setWarEventFullData(null);
                 this._setCalledCountList(null);
             } else {
                 // TODO: validate the data.
-                const warEventFullData = data.warEventFullData;
+                const warEventFullData = data.warEventFullData ?? null;
 
-
-
-                this._setWarEventFullData(data.warEventFullData);
-                this._setCalledCountList(data.calledCountList);
+                this._setWarEventFullData(warEventFullData);
+                this._setCalledCountList(data.calledCountList ?? null);
             }
-
-            return ClientErrorCode.NoError;
         }
-        public fastInit(data: ISerialWarEventManager): ClientErrorCode {
-            return this.init(data);
+        public fastInit(data: ISerialWarEventManager): void {
+            this.init(data);
         }
 
-        public serialize(): ISerialWarEventManager | undefined {
+        public serialize(): ISerialWarEventManager {
             return {
                 warEventFullData    : this.getWarEventFullData(),
                 calledCountList     : this._getCalledCountList(),
             };
         }
-        public serializeForCreateSfw(): ISerialWarEventManager | undefined {
+        public serializeForCreateSfw(): ISerialWarEventManager {
             return Helpers.deepClone({
                 warEventFullData    : this.getWarEventFullData(),
                 calledCountList     : this._getCalledCountList(),
             });
         }
-        public serializeForCreateMfr(): ISerialWarEventManager | undefined {
+        public serializeForCreateMfr(): ISerialWarEventManager {
             return this.serializeForCreateSfw();
         }
 
@@ -72,29 +67,28 @@ namespace TwnsBwWarEventManager {
         private _setWar(war: BwWar): void {
             this._war = war;
         }
-        private _getWar(): BwWar | undefined {
-            return this._war;
+        private _getWar(): BwWar {
+            return Helpers.getExisted(this._war);
         }
 
-        protected _setWarEventFullData(data: IWarEventFullData): void {
+        protected _setWarEventFullData(data: IWarEventFullData | null): void {
             this._warEventFullData = data;
         }
-        public getWarEventFullData(): IWarEventFullData | undefined | null {
-            return this._warEventFullData;
+        public getWarEventFullData(): IWarEventFullData | null {
+            return Helpers.getDefined(this._warEventFullData, ClientErrorCode.BwWarEventManager_GetWarEventFullData_00);
         }
 
-        protected _setCalledCountList(list: IDataForWarEventCalledCount[] | null | undefined): void {
+        protected _setCalledCountList(list: IDataForWarEventCalledCount[] | null): void {
             this._calledCountList = list;
         }
-        private _getCalledCountList(): IDataForWarEventCalledCount[] | null | undefined {
-            return this._calledCountList;
+        private _getCalledCountList(): IDataForWarEventCalledCount[] | null {
+            return Helpers.getDefined(this._calledCountList, ClientErrorCode.BwWarEventManager_GetCalledCountList_00);
         }
 
-        public async callWarEvent(warEventId: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent[] | undefined> { // DONE
+        public async callWarEvent(warEventId: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent[]> { // DONE
             const event = this.getWarEvent(warEventId);
             if (event == null) {
-                Logger.error(`BwWarEventManager.callWarEvent() empty event.`);
-                return undefined;
+                throw Helpers.newError(`Empty event.`);
             }
 
             const extraDataList : IExtraDataForSystemCallWarEvent[] = [];
@@ -108,133 +102,56 @@ namespace TwnsBwWarEventManager {
 
             return extraDataList;
         }
-        private async _callWarAction(warEventActionId: number, indexForActionIdList: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
+        private async _callWarAction(warEventActionId: number, indexForActionIdList: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | null> {
             const action = this.getWarEventAction(warEventActionId);
-            if (action == null) {
-                Logger.error(`BwWarEventManager._callWarAction() empty action.`);
-                return undefined;
-            }
-
             if (action.WeaAddUnit) {
                 return await this._callActionAddUnit(indexForActionIdList, action.WeaAddUnit, isFastExecute);
             } else if (action.WeaSetPlayerAliveState) {
                 return await this._callActionSetPlayerAliveState(action.WeaSetPlayerAliveState);
             } else if (action.WeaDialogue) {
                 return await this._callActionDialogue(action.WeaDialogue, isFastExecute);
+            } else {
+                throw Helpers.newError(`Invalid action.`);
             }
 
             // TODO add more actions.
         }
-        private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
+        private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | null> {
             const unitArray = action.unitArray;
-            if (unitArray == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty unitArray.`);
-                return undefined;
+            if ((unitArray == null) || (!unitArray.length)) {
+                throw Helpers.newError(`Empty unitArray.`);
             }
 
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty war.`);
-                return undefined;
-            }
-
-            const unitMap = war.getUnitMap();
-            if (unitMap == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty unitMap.`);
-                return undefined;
-            }
-
-            const tileMap = war.getTileMap();
-            if (tileMap == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty tileMap.`);
-                return undefined;
-            }
-
-            const playerManager = war.getPlayerManager();
-            if (playerManager == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty playerManager.`);
-                return undefined;
-            }
-
-            const configVersion = war.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty configVersion.`);
-                return undefined;
-            }
-
-            const mapSize = unitMap.getMapSize();
-            if (mapSize == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty mapSize.`);
-                return undefined;
-            }
-
-            const resultingUnitList: ProtoTypes.WarSerialization.ISerialUnit[] = [];
+            const war               = this._getWar();
+            const unitMap           = war.getUnitMap();
+            const tileMap           = war.getTileMap();
+            const playerManager     = war.getPlayerManager();
+            const configVersion     = war.getConfigVersion();
+            const mapSize           = unitMap.getMapSize();
+            const resultingUnitList : ProtoTypes.WarSerialization.ISerialUnit[] = [];
             for (const data of unitArray) {
-                const { canBeBlockedByUnit, needMovableTile, unitData } = data;
-                if (canBeBlockedByUnit == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty canBeBlockedByUnit.`);
-                    continue;
-                }
-                if (needMovableTile == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty needMovableTile.`);
-                    continue;
-                }
-                if (unitData == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty unitData.`);
-                    continue;
-                }
-
+                const unitData = Helpers.getExisted(data.unitData);
                 if (unitData.loaderUnitId != null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() invalid unitData.loaderUnitId.`);
-                    continue;
+                    throw Helpers.newError(`unitData.loaderUnitId != null: ${unitData.loaderUnitId}`);
                 }
 
-                const unitId = unitMap.getNextUnitId();
-                if (unitId == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty unitId.`);
-                    continue;
-                }
-
-                const unitType = unitData.unitType;
-                if (unitType == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty unitType.`);
-                    continue;
-                }
-
-                const unitCfg = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
-                if (unitCfg == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty unitCfg.`);
-                    continue;
-                }
-
-                const moveType = unitCfg.moveType;
-                if (moveType == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty moveType.`);
-                    continue;
-                }
-
-                const rawGridIndex = GridIndexHelpers.convertGridIndex(unitData.gridIndex);
-                if (rawGridIndex == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty rawGridIndex.`);
-                    continue;
-                }
-
-                const playerIndex = unitData.playerIndex;
-                if (playerIndex == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty playerIndex.`);
-                    continue;
-                }
-
+                const canBeBlockedByUnit    = Helpers.getExisted(data.canBeBlockedByUnit);
+                const needMovableTile       = Helpers.getExisted(data.needMovableTile);
+                const unitId                = unitMap.getNextUnitId();
+                const unitType              = Helpers.getExisted(unitData.unitType);
+                const unitCfg               = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+                const moveType              = unitCfg.moveType;
+                const rawGridIndex          = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
                 if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     configVersion,
                     playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                 })) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() invalid unitData.`);
-                    continue;
+                    throw Helpers.newError(`Invalid unitData: ${JSON.stringify(unitData)}`);
                 }
 
+                const playerIndex = Helpers.getExisted(unitData.playerIndex);
                 const player = playerManager.getPlayer(playerIndex);
                 if (player == null) {
                     continue;
@@ -259,12 +176,8 @@ namespace TwnsBwWarEventManager {
                 revisedUnitData.gridIndex   = gridIndex;
                 revisedUnitData.unitId      = unitId;
 
-                const unit      = new TwnsBwUnit.BwUnit();
-                const unitError = unit.init(revisedUnitData, configVersion);
-                if (unitError) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() unitError: ${unitError}`);
-                    continue;
-                }
+                const unit = new TwnsBwUnit.BwUnit();
+                unit.init(revisedUnitData, configVersion);
 
                 resultingUnitList.push(revisedUnitData);
                 unit.startRunning(war);
@@ -278,31 +191,19 @@ namespace TwnsBwWarEventManager {
                 },
             };
         }
-        private async _callActionSetPlayerAliveState(action: WarEvent.IWeaSetPlayerAliveState): Promise<undefined> {
+        private async _callActionSetPlayerAliveState(action: WarEvent.IWeaSetPlayerAliveState): Promise<null> {
             const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() empty war.`);
-                return undefined;
-            }
-
             const playerIndex = action.playerIndex;
             if ((playerIndex == null) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
-                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() invalid playerIndex.`);
-                return undefined;
+                throw Helpers.newError(`Invalid playerIndex: ${playerIndex}`);
             }
 
-            const playerAliveState: Types.PlayerAliveState | null | undefined = action.playerAliveState;
-            if (playerAliveState == null) {
-                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() empty playerAliveState.`);
-                return undefined;
-            }
-
+            const playerAliveState = Helpers.getExisted(action.playerAliveState);
             if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
                 (playerAliveState !== Types.PlayerAliveState.Dead)  &&
                 (playerAliveState !== Types.PlayerAliveState.Dying)
             ) {
-                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() invalid playerAliveState.`);
-                return undefined;
+                throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
             }
 
             const player = war.getPlayer(playerIndex);
@@ -310,17 +211,17 @@ namespace TwnsBwWarEventManager {
                 player.setAliveState(playerAliveState);
             }
 
-            return undefined;
+            return null;
         }
-        private async _callActionDialogue(action: WarEvent.IWeaDialogue, isFast: boolean): Promise<undefined> {
+        private async _callActionDialogue(action: WarEvent.IWeaDialogue, isFast: boolean): Promise<null> {
             if (isFast) {
-                return undefined;
+                return null;
             }
 
-            return new Promise<undefined>(resolve => {
+            return new Promise<null>(resolve => {
                 TwnsBwDialoguePanel.BwDialoguePanel.show({
                     actionData      : action,
-                    callbackOnClose : () => resolve(undefined),
+                    callbackOnClose : () => resolve(null),
                 });
             });
         }
@@ -337,12 +238,10 @@ namespace TwnsBwWarEventManager {
                 const data = calledCountList.find(v => v.eventId === eventId);
                 if (data) {
                     if (data.calledCountInPlayerTurn == null) {
-                        Logger.error(`BwWarEventManager.updateWarEventCalledCountOnCall() empty data.calledCountInPlayerTurn.`);
-                        return undefined;
+                        throw Helpers.newError(`Empty data.calledCountInPlayerTurn.`);
                     }
                     if (data.calledCountTotal == null) {
-                        Logger.error(`BwWarEventManager.updateWarEventCalledCountOnCall() empty data.calledCountTotal.`);
-                        return undefined;
+                        throw Helpers.newError(`Empty data.calledCountTotal`);
                     }
                     ++data.calledCountInPlayerTurn;
                     ++data.calledCountTotal;
@@ -374,83 +273,39 @@ namespace TwnsBwWarEventManager {
             return data ? data.calledCountInPlayerTurn || 0 : 0;
         }
 
-        public getCallableWarEventId(): number | undefined {                                // DONE
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager.getCallableWarEventId() empty war.`);
-                return undefined;
-            }
-
-            const warRule = war.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWarEventManager.getCallableWarEventId() empty warRule.`);
-                return undefined;
-            }
-
-            for (const warEventId of warRule.warEventIdArray || []) {
+        public getCallableWarEventId(): number | null {                                // DONE
+            for (const warEventId of this._getWar().getCommonSettingManager().getWarRule().warEventIdArray || []) {
                 if (this._checkCanCallWarEvent(warEventId)) {
                     return warEventId;
                 }
             }
-            return undefined;
+
+            return null;
         }
 
-        private _checkCanCallWarEvent(warEventId: number): boolean | undefined {            // DONE
+        private _checkCanCallWarEvent(warEventId: number): boolean {            // DONE
             const warEvent = this.getWarEvent(warEventId);
-            if (warEvent == null) {
-                Logger.error(`BwWarEventManager._checkCanCallWarEvent() empty warEvent.`);
-                return undefined;
-            }
-
-            const nodeId = warEvent.conditionNodeId;
-            if (nodeId == null) {
-                Logger.error(`BwWarEventManager._checkCanCallWarEvent() empty nodeId.`);
-                return undefined;
-            }
-
-            const maxCallCountInPlayerTurn = warEvent.maxCallCountInPlayerTurn;
-            if (maxCallCountInPlayerTurn == null) {
-                Logger.error(`BwWarEventManager._checkCanCallWarEvent() empty maxCallCountInPlayerTurn.`);
-                return undefined;
-            }
-
-            const maxCallCountTotal = warEvent.maxCallCountTotal;
-            if (maxCallCountTotal == null) {
-                Logger.error(`BwWarEventManager._checkCanCallWarEvent() empty maxCallCountTotal.`);
-                return undefined;
-            }
-
-            if ((this.getWarEventCalledCountInPlayerTurn(warEventId) >= maxCallCountInPlayerTurn) ||
-                (this.getWarEventCalledCountTotal(warEventId) >= maxCallCountTotal)
+            if ((this.getWarEventCalledCountInPlayerTurn(warEventId) >= Helpers.getExisted(warEvent.maxCallCountInPlayerTurn)) ||
+                (this.getWarEventCalledCountTotal(warEventId) >= Helpers.getExisted(warEvent.maxCallCountTotal))
             ) {
                 return false;
             }
 
-            return this._checkIsMeetConditionNode(nodeId);
+            return this._checkIsMeetConditionNode(Helpers.getExisted(warEvent.conditionNodeId));
         }
 
-        private _checkIsMeetConditionNode(nodeId: number): boolean | undefined {            // DONE
-            const node = this._getConditionNode(nodeId);
-            if (node == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConditionNode() empty node.`);
-                return undefined;
+        private _checkIsMeetConditionNode(nodeId: number): boolean {            // DONE
+            const node              = this._getConditionNode(nodeId);
+            const isAnd             = Helpers.getExisted(node.isAnd);
+            const conditionIdArray  = node.conditionIdArray;
+            const subNodeIdArray    = node.subNodeIdArray;
+            if ((!conditionIdArray?.length) && (!subNodeIdArray?.length)) {
+                throw Helpers.newError(`Empty conditionIdArray and subNodeIdArray.`);
             }
 
-            const isAnd = node.isAnd;
-            if (isAnd == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConditionNode() empty isAnd.`);
-                return undefined;
-            }
-
-            const conditionIdArray = node.conditionIdArray;
             if (conditionIdArray) {
                 for (const conditionId of conditionIdArray) {
                     const isConditionMet = this._checkIsMeetCondition(conditionId);
-                    if (isConditionMet == null) {
-                        Logger.error(`BwWarEventManager._checkIsMeetConditionNode() empty isConditionMet.`);
-                        return undefined;
-                    }
-
                     if ((isAnd) && (!isConditionMet)) {
                         return false;
                     }
@@ -460,15 +315,9 @@ namespace TwnsBwWarEventManager {
                 }
             }
 
-            const subNodeIdArray = node.subNodeIdArray;
             if (subNodeIdArray) {
                 for (const subNodeId of subNodeIdArray) {
                     const isSubNodeMet = this._checkIsMeetConditionNode(subNodeId);
-                    if (isSubNodeMet == null) {
-                        Logger.error(`BwWarEventManager._checkIsMeetConditionNode() empty isSubNodeMet.`);
-                        return undefined;
-                    }
-
                     if ((isAnd) && (!isSubNodeMet)) {
                         return false;
                     }
@@ -478,439 +327,212 @@ namespace TwnsBwWarEventManager {
                 }
             }
 
-            if ((!(conditionIdArray || []).length) && (!(subNodeIdArray || []).length)) {
-                Logger.error(`BwWarEventManager._checkIsMeetConditionNode() empty conditionIdList and subNodeIdList.`);
-                return undefined;
-            }
-
             return true;
         }
-        private _checkIsMeetCondition(conditionId: number): boolean | undefined {
+        private _checkIsMeetCondition(conditionId: number): boolean {
             const condition = this._getCondition(conditionId);
-            if (condition == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetCondition() empty condition.`);
-                return undefined;
+
+            {
+                const conEventCalledCountTotalEqualTo = condition.WecEventCalledCountTotalEqualTo;
+                if (conEventCalledCountTotalEqualTo) {
+                    return this._checkIsMeetConEventCalledCountTotalEqualTo(conEventCalledCountTotalEqualTo);
+                }
             }
 
-            const wecCommonData = condition.WecCommonData;
-            if (wecCommonData == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetCondition() empty wecCommonData.`);
-                return undefined;
+            {
+                const conEventCalledCountTotalGreaterThan = condition.WecEventCalledCountTotalGreaterThan;
+                if (conEventCalledCountTotalGreaterThan) {
+                    return this._checkIsMeetConEventCalledCountTotalGreaterThan(conEventCalledCountTotalGreaterThan);
+                }
             }
 
-            const conEventCalledCountTotalEqualTo = condition.WecEventCalledCountTotalEqualTo;
-            if (conEventCalledCountTotalEqualTo) {
-                return this._checkIsMeetConEventCalledCountTotalEqualTo(conEventCalledCountTotalEqualTo);
+            {
+                const conEventCalledCountTotalLessThan = condition.WecEventCalledCountTotalLessThan;
+                if (conEventCalledCountTotalLessThan) {
+                    return this._checkIsMeetConEventCalledCountTotalLessThan(conEventCalledCountTotalLessThan);
+                }
             }
 
-            const conEventCalledCountTotalGreaterThan = condition.WecEventCalledCountTotalGreaterThan;
-            if (conEventCalledCountTotalGreaterThan) {
-                return this._checkIsMeetConEventCalledCountTotalGreaterThan(conEventCalledCountTotalGreaterThan);
+            {
+                const conPlayerAliveStateEqualTo = condition.WecPlayerAliveStateEqualTo;
+                if (conPlayerAliveStateEqualTo) {
+                    return this._checkIsMeetPlayerAliveStateEqualTo(conPlayerAliveStateEqualTo);
+                }
             }
 
-            const conEventCalledCountTotalLessThan = condition.WecEventCalledCountTotalLessThan;
-            if (conEventCalledCountTotalLessThan) {
-                return this._checkIsMeetConEventCalledCountTotalLessThan(conEventCalledCountTotalLessThan);
+            {
+                const conPlayerIndexInTurnEqualTo = condition.WecPlayerIndexInTurnEqualTo;
+                if (conPlayerIndexInTurnEqualTo) {
+                    return this._checkIsMeetConPlayerIndexInTurnEqualTo(conPlayerIndexInTurnEqualTo);
+                }
             }
 
-            const conPlayerAliveStateEqualTo = condition.WecPlayerAliveStateEqualTo;
-            if (conPlayerAliveStateEqualTo) {
-                return this._checkIsMeetPlayerAliveStateEqualTo(conPlayerAliveStateEqualTo);
+            {
+                const conPlayerIndexInTurnGreaterThan = condition.WecPlayerIndexInTurnGreaterThan;
+                if (conPlayerIndexInTurnGreaterThan) {
+                    return this._checkIsMeetConPlayerIndexInTurnGreaterThan(conPlayerIndexInTurnGreaterThan);
+                }
             }
 
-            const conPlayerIndexInTurnEqualTo = condition.WecPlayerIndexInTurnEqualTo;
-            if (conPlayerIndexInTurnEqualTo) {
-                return this._checkIsMeetConPlayerIndexInTurnEqualTo(conPlayerIndexInTurnEqualTo);
+            {
+                const conPlayerIndexInTurnLessThan = condition.WecPlayerIndexInTurnLessThan;
+                if (conPlayerIndexInTurnLessThan) {
+                    return this._checkIsMeetConPlayerIndexInTurnLessThan(conPlayerIndexInTurnLessThan);
+                }
             }
 
-            const conPlayerIndexInTurnGreaterThan = condition.WecPlayerIndexInTurnGreaterThan;
-            if (conPlayerIndexInTurnGreaterThan) {
-                return this._checkIsMeetConPlayerIndexInTurnGreaterThan(conPlayerIndexInTurnGreaterThan);
+            {
+                const conTurnIndexEqualTo = condition.WecTurnIndexEqualTo;
+                if (conTurnIndexEqualTo) {
+                    return this._checkIsMeetConTurnIndexEqualTo(conTurnIndexEqualTo);
+                }
             }
 
-            const conPlayerIndexInTurnLessThan = condition.WecPlayerIndexInTurnLessThan;
-            if (conPlayerIndexInTurnLessThan) {
-                return this._checkIsMeetConPlayerIndexInTurnLessThan(conPlayerIndexInTurnLessThan);
+            {
+                const conTurnIndexGreaterThan = condition.WecTurnIndexGreaterThan;
+                if (conTurnIndexGreaterThan) {
+                    return this._checkIsMeetConTurnIndexGreaterThan(conTurnIndexGreaterThan);
+                }
             }
 
-            const conTurnIndexEqualTo = condition.WecTurnIndexEqualTo;
-            if (conTurnIndexEqualTo) {
-                return this._checkIsMeetConTurnIndexEqualTo(conTurnIndexEqualTo);
+            {
+                const conTurnIndexLessThan = condition.WecTurnIndexLessThan;
+                if (conTurnIndexLessThan) {
+                    return this._checkIsMeetConTurnIndexLessThan(conTurnIndexLessThan);
+                }
             }
 
-            const conTurnIndexGreaterThan = condition.WecTurnIndexGreaterThan;
-            if (conTurnIndexGreaterThan) {
-                return this._checkIsMeetConTurnIndexGreaterThan(conTurnIndexGreaterThan);
+            {
+                const conTurnIndexRemainderEqualTo = condition.WecTurnIndexRemainderEqualTo;
+                if (conTurnIndexRemainderEqualTo) {
+                    return this._checkIsMeetConTurnIndexRemainderEqualTo(conTurnIndexRemainderEqualTo);
+                }
             }
 
-            const conTurnIndexLessThan = condition.WecTurnIndexLessThan;
-            if (conTurnIndexLessThan) {
-                return this._checkIsMeetConTurnIndexLessThan(conTurnIndexLessThan);
+            {
+                const conTurnPhase = condition.WecTurnPhaseEqualTo;
+                if (conTurnPhase) {
+                    return this._checkIsMeetConTurnPhaseEqualTo(conTurnPhase);
+                }
             }
 
-            const conTurnIndexRemainderEqualTo = condition.WecTurnIndexRemainderEqualTo;
-            if (conTurnIndexRemainderEqualTo) {
-                return this._checkIsMeetConTurnIndexRemainderEqualTo(conTurnIndexRemainderEqualTo);
-            }
-
-            const conTurnPhase = condition.WecTurnPhaseEqualTo;
-            if (conTurnPhase) {
-                return this._checkIsMeetConTurnPhaseEqualTo(conTurnPhase);
-            }
-
-            Logger.error(`BwWarEventManager._checkIsMeetCondition() invalid condition!`);
-            return undefined;
+            throw Helpers.newError(`Invalid condition!`);
         }
 
-        private _checkIsMeetConEventCalledCountTotalEqualTo(condition: WarEvent.IWecEventCalledCountTotalEqualTo): boolean | undefined {
-            const { eventIdEqualTo, countEqualTo, isNot } = condition;
-            if (eventIdEqualTo == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConEventCalledCountTotalEqualTo() empty eventIdEqualTo.`);
-                return undefined;
-            }
-
-            if (countEqualTo == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConEventCalledCountTotalEqualTo() empty countEqualTo.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConEventCalledCountTotalEqualTo(condition: WarEvent.IWecEventCalledCountTotalEqualTo): boolean {
+            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
+            const countEqualTo      = Helpers.getExisted(condition.countEqualTo);
+            const isNot             = Helpers.getExisted(condition.isNot);
             return (this.getWarEventCalledCountTotal(eventIdEqualTo) === countEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
-        private _checkIsMeetConEventCalledCountTotalGreaterThan(condition: WarEvent.IWecEventCalledCountTotalGreaterThan): boolean | undefined {
-            const { eventIdEqualTo, countGreaterThan, isNot } = condition;
-            if (eventIdEqualTo == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConEventCalledCountTotalGreaterThan() empty eventIdEqualTo.`);
-                return undefined;
-            }
-
-            if (countGreaterThan == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConEventCalledCountTotalGreaterThan() empty countGreaterThan.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConEventCalledCountTotalGreaterThan(condition: WarEvent.IWecEventCalledCountTotalGreaterThan): boolean {
+            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
+            const countGreaterThan  = Helpers.getExisted(condition.countGreaterThan);
+            const isNot             = Helpers.getExisted(condition.isNot);
             return (this.getWarEventCalledCountTotal(eventIdEqualTo) > countGreaterThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
-        private _checkIsMeetConEventCalledCountTotalLessThan(condition: WarEvent.IWecEventCalledCountTotalLessThan): boolean | undefined {
-            const { eventIdEqualTo, countLessThan, isNot } = condition;
-            if (eventIdEqualTo == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConEventCalledCountTotalLessThan() empty eventIdEqualTo.`);
-                return undefined;
-            }
-
-            if (countLessThan == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConEventCalledCountTotalLessThan() invalid condition.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConEventCalledCountTotalLessThan(condition: WarEvent.IWecEventCalledCountTotalLessThan): boolean {
+            const eventIdEqualTo    = Helpers.getExisted(condition.eventIdEqualTo);
+            const countLessThan     = Helpers.getExisted(condition.countLessThan);
+            const isNot             = Helpers.getExisted(condition.isNot);
             return (this.getWarEventCalledCountTotal(eventIdEqualTo) < countLessThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
 
-        private _checkIsMeetPlayerAliveStateEqualTo(condition: WarEvent.IWecPlayerAliveStateEqualTo): boolean | undefined {
-            const { playerIndexEqualTo, aliveStateEqualTo, isNot } = condition;
-            if (aliveStateEqualTo == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetPlayerAliveStateEqualTo() empty aliveStateEqualTo.`);
-                return undefined;
-            }
-
-            if (playerIndexEqualTo == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetPlayerAliveStateEqualTo() empty playerIndexEqualTo.`);
-                return undefined;
-            }
-
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetPlayerAliveStateEqualTo() empty war.`);
-                return undefined;
-            }
-
-            const player = war.getPlayer(playerIndexEqualTo);
-            return ((player ? player.getAliveState() : undefined) === aliveStateEqualTo)
+        private _checkIsMeetPlayerAliveStateEqualTo(condition: WarEvent.IWecPlayerAliveStateEqualTo): boolean {
+            const playerIndexEqualTo    = Helpers.getExisted(condition.playerIndexEqualTo);
+            const aliveStateEqualTo     = Helpers.getExisted(condition.aliveStateEqualTo);
+            const isNot                 = Helpers.getExisted(condition.isNot);
+            const player                = this._getWar().getPlayer(playerIndexEqualTo);
+            return (player.getAliveState() === aliveStateEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
 
-        private _checkIsMeetConPlayerIndexInTurnEqualTo(condition: WarEvent.IWecPlayerIndexInTurnEqualTo): boolean | undefined {
-            const { valueEqualTo, isNot } = condition;
-            if (valueEqualTo == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnEqualTo() invalid condition.`);
-                return undefined;
-            }
-
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnEqualTo() empty war.`);
-                return undefined;
-            }
-
-            const playerIndex = war.getPlayerIndexInTurn();
-            if (playerIndex == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnEqualTo() empty playerIndex.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConPlayerIndexInTurnEqualTo(condition: WarEvent.IWecPlayerIndexInTurnEqualTo): boolean {
+            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
+            const isNot         = Helpers.getExisted(condition.isNot);
+            const playerIndex   = this._getWar().getPlayerIndexInTurn();
             return (playerIndex === valueEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
-        private _checkIsMeetConPlayerIndexInTurnGreaterThan(condition: WarEvent.IWecPlayerIndexInTurnGreaterThan): boolean | undefined {
-            const { valueGreaterThan, isNot } = condition;
-            if (valueGreaterThan == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnGreaterThan() invalid condition.`);
-                return undefined;
-            }
-
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnGreaterThan() empty war.`);
-                return undefined;
-            }
-
-            const playerIndex = war.getPlayerIndexInTurn();
-            if (playerIndex == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnGreaterThan() empty playerIndex.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConPlayerIndexInTurnGreaterThan(condition: WarEvent.IWecPlayerIndexInTurnGreaterThan): boolean {
+            const valueGreaterThan  = Helpers.getExisted(condition.valueGreaterThan);
+            const isNot             = Helpers.getExisted(condition.isNot);
+            const playerIndex       = this._getWar().getPlayerIndexInTurn();
             return (playerIndex > valueGreaterThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
-        private _checkIsMeetConPlayerIndexInTurnLessThan(condition: WarEvent.IWecPlayerIndexInTurnLessThan): boolean | undefined {
-            const { valueLessThan, isNot } = condition;
-            if (valueLessThan == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnLessThan() invalid condition.`);
-                return undefined;
-            }
-
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnLessThan() empty war.`);
-                return undefined;
-            }
-
-            const playerIndex = war.getPlayerIndexInTurn();
-            if (playerIndex == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnLessThan() empty playerIndex.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConPlayerIndexInTurnLessThan(condition: WarEvent.IWecPlayerIndexInTurnLessThan): boolean {
+            const valueLessThan = Helpers.getExisted(condition.valueLessThan);
+            const isNot         = Helpers.getExisted(condition.isNot);
+            const playerIndex   = this._getWar().getPlayerIndexInTurn();
             return (playerIndex < valueLessThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
 
-        private _checkIsMeetConTurnIndexEqualTo(condition: WarEvent.IWecTurnIndexEqualTo): boolean | undefined {
-            const { valueEqualTo, isNot } = condition;
-            if (valueEqualTo == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty value.`);
-                return undefined;
-            }
-
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty war.`);
-                return undefined;
-            }
-
-            const turnManager = war.getTurnManager();
-            if (turnManager == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty turnManager.`);
-                return undefined;
-            }
-
-            const turnIndex = turnManager.getTurnIndex();
-            if (turnIndex == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty turnIndex.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConTurnIndexEqualTo(condition: WarEvent.IWecTurnIndexEqualTo): boolean {
+            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
+            const isNot         = Helpers.getExisted(condition.isNot);
+            const turnIndex     = this._getWar().getTurnManager().getTurnIndex();
             return (turnIndex === valueEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
-        private _checkIsMeetConTurnIndexGreaterThan(condition: WarEvent.IWecTurnIndexGreaterThan): boolean | undefined {
-            const { valueGreaterThan, isNot } = condition;
-            if (valueGreaterThan == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexGreaterThan() empty value.`);
-                return undefined;
-            }
-
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexGreaterThan() empty war.`);
-                return undefined;
-            }
-
-            const turnManager = war.getTurnManager();
-            if (turnManager == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexGreaterThan() empty turnManager.`);
-                return undefined;
-            }
-
-            const turnIndex = turnManager.getTurnIndex();
-            if (turnIndex == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexGreaterThan() empty turnIndex.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConTurnIndexGreaterThan(condition: WarEvent.IWecTurnIndexGreaterThan): boolean {
+            const valueGreaterThan  = Helpers.getExisted(condition.valueGreaterThan);
+            const isNot             = Helpers.getExisted(condition.isNot);
+            const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
             return (turnIndex > valueGreaterThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
-        private _checkIsMeetConTurnIndexLessThan(condition: WarEvent.IWecTurnIndexLessThan): boolean | undefined {
-            const { valueLessThan, isNot } = condition;
-            if (valueLessThan == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexLessThan() invalid condition.`);
-                return undefined;
-            }
-
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty war.`);
-                return undefined;
-            }
-
-            const turnManager = war.getTurnManager();
-            if (turnManager == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty turnManager.`);
-                return undefined;
-            }
-
-            const turnIndex = turnManager.getTurnIndex();
-            if (turnIndex == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty turnIndex.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConTurnIndexLessThan(condition: WarEvent.IWecTurnIndexLessThan): boolean {
+            const valueLessThan     = Helpers.getExisted(condition.valueLessThan);
+            const isNot             = Helpers.getExisted(condition.isNot);
+            const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
             return (turnIndex < valueLessThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
-        private _checkIsMeetConTurnIndexRemainderEqualTo(condition: WarEvent.IWecTurnIndexRemainderEqualTo): boolean | undefined {
-            const { divider, remainderEqualTo, isNot } = condition;
-            if ((!divider) || (remainderEqualTo == null)) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexRemainderEqualTo() invalid condition.`);
-                return undefined;
-            }
-
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty war.`);
-                return undefined;
-            }
-
-            const turnManager = war.getTurnManager();
-            if (turnManager == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty turnManager.`);
-                return undefined;
-            }
-
-            const turnIndex = turnManager.getTurnIndex();
-            if (turnIndex == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty turnIndex.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConTurnIndexRemainderEqualTo(condition: WarEvent.IWecTurnIndexRemainderEqualTo): boolean {
+            const divider           = Helpers.getExisted(condition.divider);
+            const remainderEqualTo  = Helpers.getExisted(condition.remainderEqualTo);
+            const isNot             = Helpers.getExisted(condition.isNot);
+            const turnIndex         = this._getWar().getTurnManager().getTurnIndex();
             return (turnIndex % divider === remainderEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
 
-        private _checkIsMeetConTurnPhaseEqualTo(condition: WarEvent.IWecTurnPhaseEqualTo): boolean | undefined {
-            const { valueEqualTo, isNot } = condition;
-            if (valueEqualTo == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnPhaseEqualTo() invalid condition.`);
-                return undefined;
-            }
-
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnPhaseEqualTo() empty war.`);
-                return undefined;
-            }
-
-            const turnManager = war.getTurnManager();
-            if (turnManager == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnPhaseEqualTo() empty turnManager.`);
-                return undefined;
-            }
-
-            const phaseCode = turnManager.getPhaseCode();
-            if (phaseCode == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetConTurnPhaseEqualTo() empty phaseCode.`);
-                return undefined;
-            }
-
+        private _checkIsMeetConTurnPhaseEqualTo(condition: WarEvent.IWecTurnPhaseEqualTo): boolean {
+            const valueEqualTo  = Helpers.getExisted(condition.valueEqualTo);
+            const isNot         = Helpers.getExisted(condition.isNot);
+            const phaseCode     = this._getWar().getTurnManager().getPhaseCode();
             return (phaseCode === valueEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }
 
-        public getWarEvent(warEventId: number): WarEvent.IWarEvent | undefined {                    // DONE
-            const warEventData = this.getWarEventFullData();
-            if (warEventData == null) {
-                Logger.error(`BwWarEventManager._getWarEvent() empty warEventData.`);
-                return undefined;
-            }
-
-            const eventArray = warEventData.eventArray;
-            if (eventArray == null) {
-                Logger.error(`BwWarEventManager._getWarEvent() empty eventArray.`);
-                return undefined;
-            }
-
-            return eventArray.find(v => v.eventId === warEventId);
+        public getWarEvent(warEventId: number): WarEvent.IWarEvent {                    // DONE
+            return Helpers.getExisted(this.getWarEventFullData()?.eventArray?.find(v => v.eventId === warEventId));
         }
-        private _getConditionNode(nodeId: number): WarEvent.IWarEventConditionNode | undefined {    // DONE
-            const warEventData = this.getWarEventFullData();
-            if (warEventData == null) {
-                Logger.error(`BwWarEventManager._getConditionNode() empty warEventData.`);
-                return undefined;
-            }
-
-            const arr = warEventData.conditionNodeArray;
-            if (arr == null) {
-                Logger.error(`BwWarEventManager._getConditionNode() empty arr.`);
-                return undefined;
-            }
-
-            return arr.find(v => v.nodeId === nodeId);
+        private _getConditionNode(nodeId: number): WarEvent.IWarEventConditionNode {    // DONE
+            return Helpers.getExisted(this.getWarEventFullData()?.conditionNodeArray?.find(v => v.nodeId === nodeId));
         }
-        private _getCondition(conditionId: number): WarEvent.IWarEventCondition | undefined {       // DONE
-            const warEventData = this.getWarEventFullData();
-            if (warEventData == null) {
-                Logger.error(`BwWarEventManager._getCondition() empty warEventData.`);
-                return undefined;
-            }
-
-            const arr = warEventData.conditionArray;
-            if (arr == null) {
-                Logger.error(`BwWarEventManager._getCondition() empty arr.`);
-                return undefined;
-            }
-
-            return arr.find(v => v.WecCommonData.conditionId === conditionId);
+        private _getCondition(conditionId: number): WarEvent.IWarEventCondition {       // DONE
+            return Helpers.getExisted(this.getWarEventFullData()?.conditionArray?.find(v => v.WecCommonData?.conditionId === conditionId));
         }
-        public getWarEventAction(actionId: number): WarEvent.IWarEventAction | undefined {          // DONE
-            const warEventData = this.getWarEventFullData();
-            if (warEventData == null) {
-                Logger.error(`BwWarEventManager._getAction() empty warEventData.`);
-                return undefined;
-            }
-
-            const arr = warEventData.actionArray;
-            if (arr == null) {
-                Logger.error(`BwWarEventManager._getAction() empty arr.`);
-                return undefined;
-            }
-
-            return arr.find(v => v.WeaCommonData.actionId === actionId);
+        public getWarEventAction(actionId: number): WarEvent.IWarEventAction {          // DONE
+            return Helpers.getExisted(this.getWarEventFullData()?.actionArray?.find(v => v.WeaCommonData?.actionId === actionId));
         }
     }
 
@@ -921,15 +543,10 @@ namespace TwnsBwWarEventManager {
         moveType            : Types.MoveType;
         needMovableTile     : boolean;
         canBeBlockedByUnit  : boolean;
-    }): Types.GridIndex | undefined {
+    }): Types.GridIndex | null {
         const mapSize = tileMap.getMapSize();
-        if (mapSize == null) {
-            Logger.error(`BwWarEventManager.getGridIndexForAddUnit() empty mapSize.`);
-            return undefined;
-        }
-
         if ((canBeBlockedByUnit) && (unitMap.getUnitOnMap(origin))) {
-            return undefined;
+            return null;
         }
 
         const maxDistance = Math.max(
@@ -951,11 +568,6 @@ namespace TwnsBwWarEventManager {
                     }
 
                     const tile = tileMap.getTile(g);
-                    if (tile == null) {
-                        Logger.error(`BwWarEventManager.getGridIndexForAddUnit() empty tile.`);
-                        return false;
-                    }
-
                     if (tile.getMaxHp() != null) {
                         return false;
                     }
@@ -972,8 +584,9 @@ namespace TwnsBwWarEventManager {
             }
         }
 
-        return undefined;
+        return null;
     }
+
 }
 
 export default TwnsBwWarEventManager;

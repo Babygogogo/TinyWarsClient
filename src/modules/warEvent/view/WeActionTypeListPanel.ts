@@ -1,5 +1,6 @@
 
 import TwnsBwWar                from "../../baseWar/model/BwWar";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -19,10 +20,9 @@ namespace TwnsWeActionTypeListPanel {
     import IWarEventAction      = ProtoTypes.WarEvent.IWarEventAction;
     import ActionType           = Types.WarEventActionType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import BwWar                = TwnsBwWar.BwWar;
 
     type OpenDataForWeActionTypeListPanel = {
-        war         : BwWar;
+        war         : TwnsBwWar.BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
@@ -32,9 +32,9 @@ namespace TwnsWeActionTypeListPanel {
 
         private static _instance: WeActionTypeListPanel;
 
-        private _labelTitle : TwnsUiLabel.UiLabel;
-        private _btnClose   : TwnsUiButton.UiButton;
-        private _listType   : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
+        private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
 
         public static show(openData: OpenDataForWeActionTypeListPanel): void {
             if (!WeActionTypeListPanel._instance) {
@@ -69,7 +69,7 @@ namespace TwnsWeActionTypeListPanel {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -103,15 +103,15 @@ namespace TwnsWeActionTypeListPanel {
     }
 
     type DataForTypeRenderer = {
-        war             : BwWar;
+        war             : TwnsBwWar.BwWar;
         fullData        : ProtoTypes.Map.IWarEventFullData;
         newActionType   : ActionType;
         action          : IWarEventAction;
     };
     class TypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTypeRenderer> {
-        private _labelType  : TwnsUiLabel.UiLabel;
-        private _labelUsing : TwnsUiLabel.UiLabel;
-        private _labelSwitch: TwnsUiLabel.UiLabel;
+        private readonly _labelType!    : TwnsUiLabel.UiLabel;
+        private readonly _labelUsing!   : TwnsUiLabel.UiLabel;
+        private readonly _labelSwitch!  : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -129,7 +129,7 @@ namespace TwnsWeActionTypeListPanel {
             this._updateLabelUsingAndSwitch();
         }
 
-        private _onTouchedSelf(e: egret.TouchEvent): void {
+        private _onTouchedSelf(): void {
             const data = this.data;
             if (data == null) {
                 return;
@@ -145,7 +145,7 @@ namespace TwnsWeActionTypeListPanel {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE
+        private _onNotifyLanguageChanged(): void {        // DONE
             this._updateComponentsForLanguage();
         }
 
@@ -160,9 +160,9 @@ namespace TwnsWeActionTypeListPanel {
             const data  = this.data;
             const label = this._labelType;
             if (data == null) {
-                label.text = undefined;
+                label.text = ``;
             } else {
-                label.text = Lang.getWarEventActionTypeName(data.newActionType);
+                label.text = Lang.getWarEventActionTypeName(data.newActionType) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateLabelUsingAndSwitch(): void {

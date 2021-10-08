@@ -12,7 +12,7 @@ import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
 import UserModel                from "../../user/model/UserModel";
 import MfrCreateModel           from "../model/MfrCreateModel";
 
@@ -22,10 +22,8 @@ namespace TwnsMfrCreatePlayerInfoPage {
     import NotifyType           = TwnsNotifyType.NotifyType;
 
     export class MfrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
-        // @ts-ignore
-        private readonly _groupInfo     : eui.Group;
-        // @ts-ignore
-        private readonly _listPlayer    : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _groupInfo!    : eui.Group;
+        private readonly _listPlayer!   : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -58,7 +56,7 @@ namespace TwnsMfrCreatePlayerInfoPage {
         }
         private _updateComponentsForRoomInfo(): void {
             const dataArray         : DataForPlayerRenderer[] = [];
-            const maxPlayerIndex    = MfrCreateModel.getInitialWarData().playerManager.players.length - 1;
+            const maxPlayerIndex    = Helpers.getExisted(MfrCreateModel.getInitialWarData().playerManager?.players).length - 1;
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= maxPlayerIndex; ++playerIndex) {
                 dataArray.push({
                     playerIndex,
@@ -72,31 +70,19 @@ namespace TwnsMfrCreatePlayerInfoPage {
         playerIndex     : number;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        // @ts-ignore
-        private readonly _groupCo           : eui.Group;
-        // @ts-ignore
-        private readonly _imgSkin           : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _imgCoHead         : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _imgCoInfo         : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _labelNickname     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelCo           : TwnsUiLabel.UiLabel;
+        private readonly _groupCo!              : eui.Group;
+        private readonly _imgSkin!              : TwnsUiImage.UiImage;
+        private readonly _imgCoHead!            : TwnsUiImage.UiImage;
+        private readonly _imgCoInfo!            : TwnsUiImage.UiImage;
+        private readonly _labelNickname!        : TwnsUiLabel.UiLabel;
+        private readonly _labelCo!              : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
-        private readonly _labelPlayerIndex  : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelTeamIndex    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelRankStdTitle : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelRankStd      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelRankFogTitle : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelRankFog      : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerIndex!     : TwnsUiLabel.UiLabel;
+        private readonly _labelTeamIndex!       : TwnsUiLabel.UiLabel;
+        private readonly _labelRankStdTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelRankStd!         : TwnsUiLabel.UiLabel;
+        private readonly _labelRankFogTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelRankFog!         : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -111,12 +97,12 @@ namespace TwnsMfrCreatePlayerInfoPage {
         }
 
         private async _onTouchedGroupCo(): Promise<void> {
-            const playerIndex       = this.data.playerIndex;
+            const playerIndex       = this._getData().playerIndex;
             const initialWarData    = MfrCreateModel.getInitialWarData();
-            const coId              = initialWarData.playerManager.players.find(v => v.playerIndex === playerIndex).coId;
+            const coId              = initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex)?.coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 CommonCoInfoPanel.show({
-                    configVersion   : initialWarData.settingsForCommon.configVersion,
+                    configVersion   : Helpers.getExisted(initialWarData.settingsForCommon?.configVersion),
                     coId,
                 });
             }
@@ -139,22 +125,22 @@ namespace TwnsMfrCreatePlayerInfoPage {
         }
 
         private async _updateComponentsForSettings(): Promise<void> {
-            const playerIndex           = this.data.playerIndex;
+            const playerIndex           = this._getData().playerIndex;
             const initialWarData        = MfrCreateModel.getInitialWarData();
-            const settingsForCommon     = initialWarData.settingsForCommon;
+            const settingsForCommon     = Helpers.getExisted(initialWarData.settingsForCommon);
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarCommonHelpers.getTeamIndexByRuleForPlayers(settingsForCommon.warRule.ruleForPlayers, playerIndex));
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.warRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
 
-            const playerData            = initialWarData.playerManager.players.find(v => v.playerIndex === playerIndex);
+            const playerData            = Helpers.getExisted(initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex));
             this._imgSkin.source        = getSourceForImgSkin(playerData.unitAndTileSkinId);
 
-            const coId                  = playerData.coId;
-            const coCfg                 = ConfigManager.getCoBasicCfg(settingsForCommon.configVersion, coId);
+            const coId                  = Helpers.getExisted(playerData.coId);
+            const coCfg                 = ConfigManager.getCoBasicCfg(Helpers.getExisted(settingsForCommon.configVersion), coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
-            const userInfo              = MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(UserModel.getSelfUserId()) : null;
+            const userInfo              = MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(Helpers.getExisted(UserModel.getSelfUserId())) : null;
             const labelNickname         = this._labelNickname;
             if (userInfo) {
                 labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
@@ -162,7 +148,7 @@ namespace TwnsMfrCreatePlayerInfoPage {
                 labelNickname.text = playerData.userId == null ? Lang.getText(LangTextType.B0607) : `??`;
             }
 
-            const rankScoreArray        = userInfo ? userInfo.userMrwRankInfoArray : undefined;
+            const rankScoreArray        = userInfo?.userMrwRankInfoArray;
             const stdRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwStd) : null;
             const fogRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwFog) : null;
             const stdScore              = stdRankInfo ? stdRankInfo.currentScore : null;
@@ -178,13 +164,13 @@ namespace TwnsMfrCreatePlayerInfoPage {
         }
     }
 
-    function getSourceForImgSkin(skinId: number): string {
+    function getSourceForImgSkin(skinId: Types.Undefinable<number>): string {
         switch (skinId) {
-            case 1  : return `commonRectangle0002`;
-            case 2  : return `commonRectangle0003`;
-            case 3  : return `commonRectangle0004`;
-            case 4  : return `commonRectangle0005`;
-            default : return `commonRectangle0006`;
+            case 1  : return `uncompressedRectangle0002`;
+            case 2  : return `uncompressedRectangle0003`;
+            case 3  : return `uncompressedRectangle0004`;
+            case 4  : return `uncompressedRectangle0005`;
+            default : return `uncompressedRectangle0006`;
         }
     }
 }

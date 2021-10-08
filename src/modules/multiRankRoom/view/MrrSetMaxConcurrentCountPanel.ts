@@ -1,16 +1,16 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import MrrModel         from "../model/MrrModel";
-import MrrProxy         from "../model/MrrProxy";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import MrrModel             from "../model/MrrModel";
+import MrrProxy             from "../model/MrrProxy";
 
 namespace TwnsMrrSetMaxConcurrentCountPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -24,35 +24,35 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
 
         private static _instance: MrrSetMaxConcurrentCountPanel;
 
-        private readonly _imgMask           : TwnsUiImage.UiImage;
-        private readonly _group             : eui.Group;
-        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
-        private readonly _labelTips         : TwnsUiLabel.UiLabel;
-        private readonly _btnCancel         : TwnsUiButton.UiButton;
-        private readonly _btnConfirm        : TwnsUiButton.UiButton;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
+        private readonly _group!            : eui.Group;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTips!        : TwnsUiLabel.UiLabel;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!       : TwnsUiButton.UiButton;
 
-        private readonly _labelStdTitle     : TwnsUiLabel.UiLabel;
-        private readonly _groupStd          : eui.Group;
-        private readonly _imgStdBar         : TwnsUiImage.UiImage;
-        private readonly _imgStdPoint       : TwnsUiImage.UiImage;
-        private readonly _labelStdCount     : TwnsUiLabel.UiLabel;
-        private readonly _labelStdMaxCount  : TwnsUiLabel.UiLabel;
+        private readonly _labelStdTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _groupStd!         : eui.Group;
+        private readonly _imgStdBar!        : TwnsUiImage.UiImage;
+        private readonly _imgStdPoint!      : TwnsUiImage.UiImage;
+        private readonly _labelStdCount!    : TwnsUiLabel.UiLabel;
+        private readonly _labelStdMaxCount! : TwnsUiLabel.UiLabel;
 
-        private readonly _labelFogTitle     : TwnsUiLabel.UiLabel;
-        private readonly _groupFog          : eui.Group;
-        private readonly _imgFogBar         : TwnsUiImage.UiImage;
-        private readonly _imgFogPoint       : TwnsUiImage.UiImage;
-        private readonly _labelFogCount     : TwnsUiLabel.UiLabel;
-        private readonly _labelFogMaxCount  : TwnsUiLabel.UiLabel;
+        private readonly _labelFogTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _groupFog!         : eui.Group;
+        private readonly _imgFogBar!        : TwnsUiImage.UiImage;
+        private readonly _imgFogPoint!      : TwnsUiImage.UiImage;
+        private readonly _labelFogCount!    : TwnsUiLabel.UiLabel;
+        private readonly _labelFogMaxCount! : TwnsUiLabel.UiLabel;
 
-        private _selectedCountForStd        : number;
-        private _selectedCountForFog        : number;
+        private _selectedCountForStd?       : number;
+        private _selectedCountForFog?       : number;
 
         public static show(): void {
             if (!MrrSetMaxConcurrentCountPanel._instance) {
                 MrrSetMaxConcurrentCountPanel._instance = new MrrSetMaxConcurrentCountPanel();
             }
-            MrrSetMaxConcurrentCountPanel._instance.open(undefined);
+            MrrSetMaxConcurrentCountPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -105,55 +105,71 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onMsgMrrGetMaxConcurrentCount(e: egret.Event): void {
+        private _onMsgMrrGetMaxConcurrentCount(): void {
             this._loadMaxCountAndUpdateView();
         }
-        private _onMsgMrrSetMaxConcurrentCount(e: egret.Event): void {
+        private _onMsgMrrSetMaxConcurrentCount(): void {
             this._loadMaxCountAndUpdateView();
         }
 
-        private _onTouchedGroupStd(e: egret.TouchEvent): void {
+        private _onTouchedGroupStd(e: egret.Event): void {
             const width                 = this._groupStd.width;
-            this._selectedCountForStd   = Math.round(Math.max(0, Math.min(e.localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            const countForStd           = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            this._selectedCountForStd   = countForStd;
             this._updateGroupStd();
+
+            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, CommonConstants.RankMaxConcurrentCount - countForStd);
+            this._updateGroupFog();
         }
-        private _onTouchMoveGroupStd(e: egret.TouchEvent): void {
+        private _onTouchMoveGroupStd(e: egret.Event): void {
             const width                 = this._groupStd.width;
-            this._selectedCountForStd   = Math.round(Math.max(0, Math.min(e.localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            const countForStd           = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            this._selectedCountForStd   = countForStd;
             this._updateGroupStd();
+
+            this._selectedCountForFog   = Math.min(this._selectedCountForFog ?? 0, CommonConstants.RankMaxConcurrentCount - countForStd);
+            this._updateGroupFog();
         }
-        private _onTouchEndGroupStd(e: egret.TouchEvent): void {
+        private _onTouchEndGroupStd(): void {
             // nothing to do
         }
-        private _onTouchReleaseOutsideGroupStd(e: egret.TouchEvent): void {
+        private _onTouchReleaseOutsideGroupStd(): void {
             // nothing to do
         }
 
-        private _onTouchedGroupFog(e: egret.TouchEvent): void {
+        private _onTouchedGroupFog(e: egret.Event): void {
             const width                 = this._groupFog.width;
-            this._selectedCountForFog   = Math.round(Math.max(0, Math.min(e.localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            const countForFog           = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            this._selectedCountForFog   = countForFog;
             this._updateGroupFog();
+
+            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, CommonConstants.RankMaxConcurrentCount - countForFog);
+            this._updateGroupStd();
         }
-        private _onTouchMoveGroupFog(e: egret.TouchEvent): void {
+        private _onTouchMoveGroupFog(e: egret.Event): void {
             const width                 = this._groupFog.width;
-            this._selectedCountForFog   = Math.round(Math.max(0, Math.min(e.localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            const countForFog           = Math.round(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (MaxCount - MinCount)) + MinCount;
+            this._selectedCountForFog   = countForFog;
             this._updateGroupFog();
+
+            this._selectedCountForStd   = Math.min(this._selectedCountForStd ?? 0, CommonConstants.RankMaxConcurrentCount - countForFog);
+            this._updateGroupStd();
         }
-        private _onTouchEndGroupFog(e: egret.TouchEvent): void {
+        private _onTouchEndGroupFog(): void {
             // nothing to do
         }
-        private _onTouchReleaseOutsideGroupFog(e: egret.TouchEvent): void {
+        private _onTouchReleaseOutsideGroupFog(): void {
             // nothing to do
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            MrrProxy.reqMrrSetMaxConcurrentCount(this._selectedCountForStd, this._selectedCountForFog);
+        private _onTouchedBtnConfirm(): void {
+            MrrProxy.reqMrrSetMaxConcurrentCount(Helpers.getExisted(this._selectedCountForStd), Helpers.getExisted(this._selectedCountForFog));
 
             this.close();
         }
@@ -178,14 +194,14 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
         }
 
         private _updateGroupStd(): void {
-            const count                 = this._selectedCountForStd;
+            const count                 = Helpers.getExisted(this._selectedCountForStd);
             const pos                   = this._groupStd.width * (count - MinCount) / (MaxCount - MinCount);
             this._imgStdPoint.x         = pos;
             this._imgStdBar.width       = pos;
             this._labelStdCount.text    = `${count}`;
         }
         private _updateGroupFog(): void {
-            const count                 = this._selectedCountForFog;
+            const count                 = Helpers.getExisted(this._selectedCountForFog);
             const pos                   = this._groupFog.width * (count - MinCount) / (MaxCount - MinCount);
             this._imgFogPoint.x         = pos;
             this._imgFogBar.width       = pos;

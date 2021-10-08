@@ -1,11 +1,12 @@
 
-import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Notify               from "../../tools/notify/Notify";
-import UserModel            from "../../user/model/UserModel";
-import NetManager           from "../../tools/network/NetManager";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import Helpers              from "../../tools/helpers/Helpers";
 import Sha1Generator        from "../../tools/helpers/Sha1Generator";
+import NetManager           from "../../tools/network/NetManager";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import UserModel            from "../../user/model/UserModel";
 
 namespace UserProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -35,6 +36,15 @@ namespace UserProxy {
                 account,
                 password    : Sha1Generator.b64_sha1(rawPassword),
                 isAutoRelogin,
+            } },
+        });
+    }
+    export function reqRawLogin(account: string, password: string): void {
+        NetManager.send({
+            MsgUserLogin: { c: {
+                account,
+                password,
+                isAutoRelogin   : false,
             } },
         });
     }
@@ -87,7 +97,7 @@ namespace UserProxy {
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgUserGetPublicInfoFailed, data);
         } else {
-            UserModel.setUserPublicInfo(data.userPublicInfo);
+            UserModel.setUserPublicInfo(Helpers.getExisted(data.userPublicInfo));
             Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
         }
     }
@@ -119,7 +129,7 @@ namespace UserProxy {
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgUserSetNicknameFailed, data);
         } else {
-            await UserModel.updateOnMsgUserSetNickname(data);
+            UserModel.updateOnMsgUserSetNickname(data);
             Notify.dispatch(NotifyType.MsgUserSetNickname, data);
         }
     }
@@ -136,7 +146,7 @@ namespace UserProxy {
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgUserSetDiscordIdFailed, data);
         } else {
-            await UserModel.updateOnMsgUserSetDiscordId(data);
+            UserModel.updateOnMsgUserSetDiscordId(data);
             Notify.dispatch(NotifyType.MsgUserSetDiscordId, data);
         }
     }
@@ -162,7 +172,7 @@ namespace UserProxy {
     async function _onMsgUserSetPrivilege(e: egret.Event): Promise<void> {
         const data = e.data as ProtoTypes.NetMessage.MsgUserSetPrivilege.IS;
         if (!data.errorCode) {
-            await UserModel.updateOnMsgUserSetPrivilege(data);
+            UserModel.updateOnMsgUserSetPrivilege(data);
             Notify.dispatch(NotifyType.MsgUserSetPrivilege, data);
         }
     }

@@ -13,7 +13,7 @@ namespace TwnsUiZoomableComponent {
     import TouchPoints              = Types.TouchPoints;
 
     export class UiZoomableComponent extends TwnsUiComponent.UiComponent {
-        private _maskForContents                : TwnsUiImage.UiImage;
+        private _maskForContents                : TwnsUiImage.UiImage | null = null;
 
         private _contents                       = new egret.DisplayObjectContainer();
         private _contentWidth                   = 0;
@@ -48,7 +48,7 @@ namespace TwnsUiZoomableComponent {
         public setMaskEnabled(enabled: boolean): void {
             if (enabled) {
                 if (!this._maskForContents) {
-                    const mask  = new TwnsUiImage.UiImage("c08_t06_s01_f01");
+                    const mask  = new TwnsUiImage.UiImage("uncompressedColorPink0000");
                     mask.left   = 0;
                     mask.right  = 0;
                     mask.top    = 0;
@@ -60,7 +60,7 @@ namespace TwnsUiZoomableComponent {
                 }
             } else {
                 if (this._maskForContents) {
-                    this._contents.mask = undefined;
+                    (this._contents.mask as any) = null;
                     this.removeChild(this._maskForContents);
                     this._maskForContents = null;
                 }
@@ -192,8 +192,10 @@ namespace TwnsUiZoomableComponent {
         }
 
         public setZoomByScroll(stageX: number, stageY: number, scrollValue: number): void {
-            const point = (stageX != null) && (stageY != null) ? this._contents.globalToLocal(stageX, stageY) : undefined;
-            if (this._checkIsInsideContents(point)) {
+            const point = ((stageX != null) && (stageY != null))
+                ? this._contents.globalToLocal(stageX, stageY)
+                : null;
+            if ((point != null) && (this._checkIsInsideContents(point))) {
                 this._setZoom(point, this._getScaleModifierByScrollValue(scrollValue));
             }
         }
@@ -218,7 +220,7 @@ namespace TwnsUiZoomableComponent {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onResize(e: egret.Event): void {
+        private _onResize(): void {
             this._reviseContentScaleAndPosition();
         }
 
@@ -257,7 +259,7 @@ namespace TwnsUiZoomableComponent {
                 this.setZoomByTouches(currGlobalTouchPoints, prevGlobalTouchPoints);
             } else {
                 if (prevGlobalTouchPoints.has(touchId)) {
-                    this.setDragByTouches(currGlobalTouchPoints.get(touchId), prevGlobalTouchPoints.get(touchId));
+                    this.setDragByTouches(Helpers.getExisted(currGlobalTouchPoints.get(touchId)), Helpers.getExisted(prevGlobalTouchPoints.get(touchId)));
                 }
             }
 
@@ -280,12 +282,12 @@ namespace TwnsUiZoomableComponent {
         }
         private _getScaleModifierByTouches(currPoints: TouchPoints, prevPoints: TouchPoints): number {
             const newPoints: Point[] = [];
-            for (const [id, point] of currPoints) {
+            for (const [, point] of currPoints) {
                 newPoints.push(this._contents.globalToLocal(point.x, point.y));
             }
 
             const oldPoints: Point[] = [];
-            for (const [id, point] of prevPoints) {
+            for (const [, point] of prevPoints) {
                 oldPoints.push(this._contents.globalToLocal(point.x, point.y));
             }
 
@@ -315,8 +317,7 @@ namespace TwnsUiZoomableComponent {
         }
 
         private _checkIsInsideContents(point: Point): boolean {
-            return (point != null)
-                && (point.x >= 0)
+            return (point.x >= 0)
                 && (point.y >= 0)
                 && (point.x <= this.getContentWidth())
                 && (point.y <= this.getContentHeight());

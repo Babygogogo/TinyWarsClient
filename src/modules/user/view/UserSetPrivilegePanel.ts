@@ -1,16 +1,18 @@
 
-import FloatText        from "../../tools/helpers/FloatText";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
-import UserProxy        from "../../user/model/UserProxy";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+import UserProxy            from "../../user/model/UserProxy";
 
 namespace TwnsUserSetPrivilegePanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -25,26 +27,26 @@ namespace TwnsUserSetPrivilegePanel {
 
         private static _instance: UserSetPrivilegePanel;
 
-        private _btnGetInfo             : TwnsUiButton.UiButton;
-        private _inputUserId            : TwnsUiTextInput.UiTextInput;
-        private _labelUserName          : TwnsUiLabel.UiLabel;
-        private _groupIsAdmin           : eui.Group;
-        private _imgIsAdmin             : TwnsUiImage.UiImage;
-        private _labelIsAdmin           : TwnsUiLabel.UiLabel;
-        private _groupCanLogin          : eui.Group;
-        private _imgCanLogin            : TwnsUiImage.UiImage;
-        private _labelCanLogin          : TwnsUiLabel.UiLabel;
-        private _groupIsMapCommittee    : eui.Group;
-        private _imgIsMapCommittee      : TwnsUiImage.UiImage;
-        private _labelIsMapCommittee    : TwnsUiLabel.UiLabel;
-        private _groupIsChangeLogEditor : eui.Group;
-        private _imgIsChangeLogEditor   : TwnsUiImage.UiImage;
-        private _labelIsChangeLogEditor : TwnsUiLabel.UiLabel;
-        private _groupCanChat           : eui.Group;
-        private _imgCanChat             : TwnsUiImage.UiImage;
-        private _labelCanChat           : TwnsUiLabel.UiLabel;
-        private _btnCancel              : TwnsUiButton.UiButton;
-        private _btnConfirm             : TwnsUiButton.UiButton;
+        private readonly _btnGetInfo!               : TwnsUiButton.UiButton;
+        private readonly _inputUserId!              : TwnsUiTextInput.UiTextInput;
+        private readonly _labelUserName!            : TwnsUiLabel.UiLabel;
+        private readonly _groupIsAdmin!             : eui.Group;
+        private readonly _imgIsAdmin!               : TwnsUiImage.UiImage;
+        private readonly _labelIsAdmin!             : TwnsUiLabel.UiLabel;
+        private readonly _groupCanLogin!            : eui.Group;
+        private readonly _imgCanLogin!              : TwnsUiImage.UiImage;
+        private readonly _labelCanLogin!            : TwnsUiLabel.UiLabel;
+        private readonly _groupIsMapCommittee!      : eui.Group;
+        private readonly _imgIsMapCommittee!        : TwnsUiImage.UiImage;
+        private readonly _labelIsMapCommittee!      : TwnsUiLabel.UiLabel;
+        private readonly _groupIsChangeLogEditor!   : eui.Group;
+        private readonly _imgIsChangeLogEditor!     : TwnsUiImage.UiImage;
+        private readonly _labelIsChangeLogEditor!   : TwnsUiLabel.UiLabel;
+        private readonly _groupCanChat!             : eui.Group;
+        private readonly _imgCanChat!               : TwnsUiImage.UiImage;
+        private readonly _labelCanChat!             : TwnsUiLabel.UiLabel;
+        private readonly _btnCancel!                : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!               : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForUserSetPrivilegePanel): void {
             if (!UserSetPrivilegePanel._instance) {
@@ -91,9 +93,9 @@ namespace TwnsUserSetPrivilegePanel {
         private _onNotifyMsgUserGetPublicInfo(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgUserGetPublicInfo.IS;
             if (data.userId === this._getUserId()) {
-                const userPublicInfo                = data.userPublicInfo;
-                const userPrivilege                 = data.userPublicInfo.userPrivilege;
-                this._labelUserName.text            = userPublicInfo.nickname;
+                const userPublicInfo                = Helpers.getExisted(data.userPublicInfo);
+                const userPrivilege                 = Helpers.getExisted(userPublicInfo.userPrivilege);
+                this._labelUserName.text            = userPublicInfo.nickname || CommonConstants.ErrorTextForUndefined;
                 this._imgCanChat.visible            = !!userPrivilege.canChat;
                 this._imgCanLogin.visible           = !!userPrivilege.canLogin;
                 this._imgIsAdmin.visible            = !!userPrivilege.isAdmin;
@@ -102,17 +104,17 @@ namespace TwnsUserSetPrivilegePanel {
             }
         }
 
-        private _onNotifyMsgUserSetPrivilege(e: egret.Event): void {
+        private _onNotifyMsgUserSetPrivilege(): void {
             FloatText.show(Lang.getText(LangTextType.A0157));
             this.close();
         }
 
-        private _onTouchedBtnGetInfo(e: egret.TouchEvent): void {
+        private _onTouchedBtnGetInfo(): void {
             const userId = this._getUserId();
             (userId) && (UserProxy.reqUserGetPublicInfo(userId));
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             const userId = this._getUserId();
             if (userId) {
                 UserProxy.reqUserSetPrivilege(userId, {
@@ -125,23 +127,23 @@ namespace TwnsUserSetPrivilegePanel {
             }
         }
 
-        private _onTouchedGroupCanChat(e: egret.TouchEvent): void {
+        private _onTouchedGroupCanChat(): void {
             const img   = this._imgCanChat;
             img.visible = !img.visible;
         }
-        private _onTouchedGroupCanLogin(e: egret.TouchEvent): void {
+        private _onTouchedGroupCanLogin(): void {
             const img   = this._imgCanLogin;
             img.visible = !img.visible;
         }
-        private _onTouchedGroupIsAdmin(e: egret.TouchEvent): void {
+        private _onTouchedGroupIsAdmin(): void {
             const img   = this._imgIsAdmin;
             img.visible = !img.visible;
         }
-        private _onTouchedGroupIsChangeLogEditor(e: egret.TouchEvent): void {
+        private _onTouchedGroupIsChangeLogEditor(): void {
             const img   = this._imgIsChangeLogEditor;
             img.visible = !img.visible;
         }
-        private _onTouchedGroupIsMapCommittee(e: egret.TouchEvent): void {
+        private _onTouchedGroupIsMapCommittee(): void {
             const img   = this._imgIsMapCommittee;
             img.visible = !img.visible;
         }

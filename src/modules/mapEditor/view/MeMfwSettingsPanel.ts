@@ -1,13 +1,9 @@
 
-import TwnsBroadcastPanel               from "../../broadcast/view/BroadcastPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import TwnsLobbyBackgroundPanel         from "../../lobby/view/LobbyBackgroundPanel";
-import MfrCreateModel                   from "../../multiFreeRoom/model/MfrCreateModel";
-import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
-import StageManager                     from "../../tools/helpers/StageManager";
+import Helpers                          from "../../tools/helpers/Helpers";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -19,7 +15,6 @@ import TwnsUiPanel                      from "../../tools/ui/UiPanel";
 import TwnsUiTab                        from "../../tools/ui/UiTab";
 import TwnsUiTabItemRenderer            from "../../tools/ui/UiTabItemRenderer";
 import MeMfwModel                       from "../model/MeMfwModel";
-import MeModel                          from "../model/MeModel";
 import TwnsMeMfwAdvancedSettingsPage    from "./MeMfwAdvancedSettingsPage";
 import TwnsMeMfwBasicSettingsPage       from "./MeMfwBasicSettingsPage";
 import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
@@ -28,7 +23,6 @@ namespace TwnsMeMfwSettingsPanel {
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeMfwAdvancedSettingsPage    = TwnsMeMfwAdvancedSettingsPage.MeMfwAdvancedSettingsPage;
     import MeMfwBasicSettingsPage       = TwnsMeMfwBasicSettingsPage.MeMfwBasicSettingsPage;
-    import TwWar                        = TwnsTwWar.TwWar;
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import LangTextType                 = TwnsLangTextType.LangTextType;
 
@@ -38,16 +32,16 @@ namespace TwnsMeMfwSettingsPanel {
 
         private static _instance: MeMfwSettingsPanel;
 
-        private _tabSettings    : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
-        private _labelMenuTitle : TwnsUiLabel.UiLabel;
-        private _btnBack        : TwnsUiButton.UiButton;
-        private _btnConfirm     : TwnsUiButton.UiButton;
+        private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
+        private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnBack!          : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!       : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MeMfwSettingsPanel._instance) {
                 MeMfwSettingsPanel._instance = new MeMfwSettingsPanel();
             }
-            MeMfwSettingsPanel._instance.open(undefined);
+            MeMfwSettingsPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeMfwSettingsPanel._instance) {
@@ -74,12 +68,14 @@ namespace TwnsMeMfwSettingsPanel {
 
             this._tabSettings.bindData([
                 {
-                    tabItemData: { name: Lang.getText(LangTextType.B0002) },
-                    pageClass  : MeMfwBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0002) },
+                    pageClass   : MeMfwBasicSettingsPage,
+                    pageData    : void 0,
                 },
                 {
-                    tabItemData: { name: Lang.getText(LangTextType.B0003) },
-                    pageClass  : MeMfwAdvancedSettingsPage,
+                    tabItemData : { name: Lang.getText(LangTextType.B0003) },
+                    pageClass   : MeMfwAdvancedSettingsPage,
+                    pageData    : void 0,
                 },
             ]);
 
@@ -94,19 +90,14 @@ namespace TwnsMeMfwSettingsPanel {
         private async _onTouchedBtnConfirm(): Promise<void> {
             MeMfwModel.reviseWarRuleForAi();
             const warData   = MeMfwModel.getWarData();
-            const errorCode = await (new TwWar().init(warData));
+            const errorCode = await (new TwnsTwWar.TwWar().getErrorCodeForInit(warData));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {
                 CommonConfirmPanel.show({
                     content : Lang.getText(LangTextType.A0201),
                     callback: () => {
-                        MfrCreateModel.resetDataByInitialWarData(warData);
-                        MeModel.unloadWar();
-                        StageManager.closeAllPanels();
-                        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-                        TwnsBroadcastPanel.BroadcastPanel.show();
-                        TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
+                        FlowManager.gotoMfrCreateSettingsPanel(warData);
                     },
                 });
             }
@@ -118,9 +109,9 @@ namespace TwnsMeMfwSettingsPanel {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : data.slotIndex,
-                        slotExtraData   : data.extraData,
-                        warData         : data.warData,
+                        slotIndex       : Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Helpers.getExisted(data.extraData),
+                        warData         : Helpers.getExisted(data.warData),
                     });
                 },
             });
@@ -142,10 +133,10 @@ namespace TwnsMeMfwSettingsPanel {
     };
 
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 }

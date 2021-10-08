@@ -24,6 +24,7 @@ import WarMapModel                          from "../../warMap/model/WarMapModel
 import McrJoinModel                         from "../model/McrJoinModel";
 import TwnsMcrMainMenuPanel                 from "./McrMainMenuPanel";
 import TwnsMcrRoomInfoPanel                 from "./McrRoomInfoPanel";
+import CommonConstants                      from "../../tools/helpers/CommonConstants";
 
 namespace TwnsMcrMyRoomListPanel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
@@ -39,20 +40,20 @@ namespace TwnsMcrMyRoomListPanel {
 
         private static _instance: McrMyRoomListPanel;
 
-        private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
+        private readonly _groupTab!             : eui.Group;
+        private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
-        private readonly _groupNavigator        : eui.Group;
-        private readonly _labelMultiPlayer      : TwnsUiLabel.UiLabel;
-        private readonly _labelMyRoom           : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!       : eui.Group;
+        private readonly _labelMultiPlayer!     : TwnsUiLabel.UiLabel;
+        private readonly _labelMyRoom!          : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
-        private readonly _btnNextStep           : TwnsUiButton.UiButton;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnNextStep!          : TwnsUiButton.UiButton;
 
-        private readonly _groupRoomList         : eui.Group;
-        private readonly _listRoom              : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
-        private readonly _labelNoRoom           : TwnsUiLabel.UiLabel;
-        private readonly _labelLoading          : TwnsUiLabel.UiLabel;
+        private readonly _groupRoomList!        : eui.Group;
+        private readonly _listRoom!             : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
+        private readonly _labelNoRoom!          : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
         private _isTabInitialized   = false;
@@ -61,7 +62,7 @@ namespace TwnsMcrMyRoomListPanel {
             if (!McrMyRoomListPanel._instance) {
                 McrMyRoomListPanel._instance = new McrMyRoomListPanel();
             }
-            McrMyRoomListPanel._instance.open(undefined);
+            McrMyRoomListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (McrMyRoomListPanel._instance) {
@@ -315,9 +316,10 @@ namespace TwnsMcrMyRoomListPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const mapId = (await McrModel.getRoomInfo(McrJoinModel.getJoinedPreviewingRoomId()))?.settingsForMcw?.mapId;
+            const roomId = McrJoinModel.getJoinedPreviewingRoomId();
+            const mapId = roomId == null ? null : (await McrModel.getRoomInfo(roomId))?.settingsForMcw?.mapId;
             return mapId == null
-                ? {}
+                ? null
                 : { mapInfo : { mapId, }, };
         }
 
@@ -407,10 +409,10 @@ namespace TwnsMcrMyRoomListPanel {
         name: string;
     };
     class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            this._labelName.text = this.data.name;
+            this._labelName.text = this._getData().name;
         }
     }
 
@@ -418,10 +420,10 @@ namespace TwnsMcrMyRoomListPanel {
         roomId: number;
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
-        private readonly _btnChoose     : TwnsUiButton.UiButton;
-        private readonly _btnNext       : TwnsUiButton.UiButton;
-        private readonly _labelName     : TwnsUiLabel.UiLabel;
-        private readonly _imgRed        : TwnsUiLabel.UiLabel;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _btnNext!      : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -436,15 +438,15 @@ namespace TwnsMcrMyRoomListPanel {
         protected async _onDataChanged(): Promise<void> {
             this._updateState();
 
-            const roomId            = this.data.roomId;
+            const roomId            = this._getData().roomId;
             this._imgRed.visible    = await McrModel.checkIsRedForRoom(roomId);
 
-            const roomInfo  = await McrModel.getRoomInfo(roomId);
-            const warName   = roomInfo.settingsForMcw.warName;
+            const settingsForMcw    = Helpers.getExisted((await McrModel.getRoomInfo(roomId))?.settingsForMcw);
+            const warName           = settingsForMcw.warName;
             if (warName) {
                 this._labelName.text = warName;
             } else {
-                WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMcw.mapId).then(v => this._labelName.text = v);
+                WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
             }
         }
 
@@ -453,18 +455,18 @@ namespace TwnsMcrMyRoomListPanel {
         }
 
         private _onTouchTapBtnChoose(): void {
-            McrJoinModel.setJoinedPreviewingRoomId(this.data.roomId);
+            McrJoinModel.setJoinedPreviewingRoomId(this._getData().roomId);
         }
 
         private _onTouchTapBtnNext(): void {
             McrMyRoomListPanel.hide();
             TwnsMcrRoomInfoPanel.McrRoomInfoPanel.show({
-                roomId  : this.data.roomId,
+                roomId  : this._getData().roomId,
             });
         }
 
         private _updateState(): void {
-            this.currentState = this.data.roomId === McrJoinModel.getJoinedPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
+            this.currentState = this._getData().roomId === McrJoinModel.getJoinedPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }

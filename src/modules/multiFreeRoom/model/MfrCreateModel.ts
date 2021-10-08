@@ -1,10 +1,11 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Types                from "../../tools/helpers/Types";
-import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+import CommonConstants  from "../../tools/helpers/CommonConstants";
+import Helpers          from "../../tools/helpers/Helpers";
+import Types            from "../../tools/helpers/Types";
+import Notify           from "../../tools/notify/Notify";
+import TwnsNotifyType   from "../../tools/notify/NotifyType";
+import ProtoTypes       from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
 
 namespace MfrCreateModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -28,7 +29,7 @@ namespace MfrCreateModel {
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForMfw          : {},
 
-        selfPlayerIndex         : null,
+        selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
     };
 
     export async function resetDataByInitialWarData(warData: ISerialWar): Promise<void> {
@@ -37,48 +38,48 @@ namespace MfrCreateModel {
         setWarPassword("");
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
-        setSelfPlayerIndex(warData.playerManager.players.find(v => {
+        setSelfPlayerIndex(Helpers.getExisted(warData.playerManager?.players?.find(v => {
             return (v.aliveState !== Types.PlayerAliveState.Dead)
                 && (v.playerIndex !== CommonConstants.WarNeutralPlayerIndex)
                 && (v.userId != null);
-        }).playerIndex);
+        })?.playerIndex));
     }
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
     }
-    export function getWarRule(): ProtoTypes.WarRule.IWarRule | null | undefined {
-        return getSettingsForMfw().initialWarData.settingsForCommon.warRule;
+    export function getWarRule(): ProtoTypes.WarRule.IWarRule {
+        return Helpers.getExisted(getInitialWarData().settingsForCommon?.warRule);
     }
     function getSettingsForMfw(): ProtoTypes.WarSettings.ISettingsForMfw {
         return getData().settingsForMfw;
     }
 
     export function getInitialWarData(): ISerialWar {
-        return getSettingsForMfw().initialWarData;
+        return Helpers.getExisted(getSettingsForMfw().initialWarData);
     }
     function setInitialWarData(warData: ISerialWar): void {
         getSettingsForMfw().initialWarData = warData;
     }
 
-    export function setWarName(name: string): void {
+    export function setWarName(name: string | null): void {
         getSettingsForMfw().warName = name;
     }
-    export function getWarName(): string {
-        return getSettingsForMfw().warName;
+    export function getWarName(): string | null {
+        return getSettingsForMfw().warName ?? null;
     }
 
-    export function setWarPassword(password: string): void {
+    export function setWarPassword(password: string | null): void {
         getSettingsForMfw().warPassword = password;
     }
-    export function getWarPassword(): string {
-        return getSettingsForMfw().warPassword;
+    export function getWarPassword(): string | null {
+        return getSettingsForMfw().warPassword ?? null;
     }
 
-    export function setWarComment(comment: string): void {
+    export function setWarComment(comment: string | null): void {
         getSettingsForMfw().warComment = comment;
     }
-    export function getWarComment(): string {
-        return getSettingsForMfw().warComment;
+    export function getWarComment(): string | null {
+        return getSettingsForMfw().warComment ?? null;
     }
 
     export function setSelfPlayerIndex(playerIndex: number): void {
@@ -88,28 +89,28 @@ namespace MfrCreateModel {
         }
     }
     export function tickSelfPlayerIndex(): void {
-        setSelfPlayerIndex(getSelfPlayerIndex() % WarRuleHelpers.getPlayersCount(getWarRule()) + 1);
+        setSelfPlayerIndex(getSelfPlayerIndex() % WarRuleHelpers.getPlayersCountUnneutral(getWarRule()) + 1);
     }
     export function getSelfPlayerIndex(): number {
-        return getData().selfPlayerIndex;
+        return Helpers.getExisted(getData().selfPlayerIndex);
     }
     export function getSelfPlayerData(): ProtoTypes.WarSerialization.ISerialPlayer {
         const playerIndex = getSelfPlayerIndex();
-        return getInitialWarData().playerManager.players.find(v => v.playerIndex === playerIndex);
+        return Helpers.getExisted(getInitialWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex));
     }
 
     export function setHasFog(hasFog: boolean): void {
-        getWarRule().ruleForGlobalParams.hasFogByDefault = hasFog;
+        Helpers.getExisted(getWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function getHasFog(): boolean {
-        return getWarRule().ruleForGlobalParams.hasFogByDefault;
+        return Helpers.getExisted(getWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
     export function setBootTimerParams(params: number[]): void {
         getSettingsForMfw().bootTimerParams = params;
     }
     export function getBootTimerParams(): number[] {
-        return getSettingsForMfw().bootTimerParams;
+        return Helpers.getExisted(getSettingsForMfw().bootTimerParams);
     }
     export function tickBootTimerType(): void {
         const params = getBootTimerParams();

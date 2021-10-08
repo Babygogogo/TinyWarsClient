@@ -1,4 +1,5 @@
 
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -29,9 +30,9 @@ namespace TwnsWeConditionTypeListPanel {
 
         private static _instance: WeConditionTypeListPanel;
 
-        private _labelTitle : TwnsUiLabel.UiLabel;
-        private _btnClose   : TwnsUiButton.UiButton;
-        private _listType   : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
+        private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
 
         public static show(openData: OpenDataForWeConditionTypeListPanel): void {
             if (!WeConditionTypeListPanel._instance) {
@@ -66,7 +67,7 @@ namespace TwnsWeConditionTypeListPanel {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -103,9 +104,9 @@ namespace TwnsWeConditionTypeListPanel {
         condition       : IWarEventCondition;
     };
     class TypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTypeRenderer> {
-        private _labelType  : TwnsUiLabel.UiLabel;
-        private _labelUsing : TwnsUiLabel.UiLabel;
-        private _labelSwitch: TwnsUiLabel.UiLabel;
+        private readonly _labelType!    : TwnsUiLabel.UiLabel;
+        private readonly _labelUsing!   : TwnsUiLabel.UiLabel;
+        private readonly _labelSwitch!  : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -123,12 +124,8 @@ namespace TwnsWeConditionTypeListPanel {
             this._updateLabelUsingAndSwitch();
         }
 
-        private _onTouchedSelf(e: egret.TouchEvent): void {
-            const data = this.data;
-            if (data == null) {
-                return;
-            }
-
+        private _onTouchedSelf(): void {
+            const data          = this._getData();
             const conditionType = data.newConditionType;
             const condition     = data.condition;
             if (conditionType !== WarEventHelper.getConditionType(condition)) {
@@ -139,7 +136,7 @@ namespace TwnsWeConditionTypeListPanel {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE
+        private _onNotifyLanguageChanged(): void {        // DONE
             this._updateComponentsForLanguage();
         }
 
@@ -154,9 +151,9 @@ namespace TwnsWeConditionTypeListPanel {
             const data  = this.data;
             const label = this._labelType;
             if (data == null) {
-                label.text = undefined;
+                label.text = ``;
             } else {
-                label.text = Lang.getWarEventConditionTypeName(data.newConditionType);
+                label.text = Lang.getWarEventConditionTypeName(data.newConditionType) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateLabelUsingAndSwitch(): void {

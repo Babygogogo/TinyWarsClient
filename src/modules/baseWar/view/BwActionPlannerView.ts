@@ -18,7 +18,7 @@ namespace TwnsBwActionPlannerView {
     import Direction    = Types.Direction;
     import BwUnitView   = TwnsBwUnitView.BwUnitView;
 
-    const _PATH_GRID_SOURCE_EMPTY               = undefined;
+    const _PATH_GRID_SOURCE_EMPTY               = ``;
     const _PATH_GRID_SOURCE_LINE_VERTICAL       = `c08_t01_s01_f01`;
     const _PATH_GRID_SOURCE_LINE_HORIZONTAL     = `c08_t01_s02_f01`;
     const _PATH_GRID_SOURCE_ARROW_UP            = `c08_t01_s03_f01`;
@@ -85,24 +85,24 @@ namespace TwnsBwActionPlannerView {
     const ALPHA_FOR_ATTACKABLE_GRIDS_SILO   = 0.15;
 
     export class BwActionPlannerView extends egret.DisplayObjectContainer {
-        private _actionPlanner  : TwnsBwActionPlanner.BwActionPlanner;
-        private _mapSize        : Types.MapSize;
+        private _actionPlanner?             : TwnsBwActionPlanner.BwActionPlanner;
 
-        private _conForGrids            = new egret.DisplayObjectContainer();
-        private _conForMovableGrids     = new egret.DisplayObjectContainer();
-        private _conForMoveDestination  = new egret.DisplayObjectContainer();
-        private _conForAttackableGrids  = new egret.DisplayObjectContainer();
-        private _conForMovePath         = new egret.DisplayObjectContainer();
-        private _imgsForMovableGrids    : TwnsUiImage.UiImage[][];
-        private _imgsForAttackableGrids : TwnsUiImage.UiImage[][];
-        private _imgForMoveDestination  : TwnsUiImage.UiImage;
+        private _conForGrids                = new egret.DisplayObjectContainer();
+        private _conForMovableGrids         = new egret.DisplayObjectContainer();
+        private _conForMoveDestination      = new egret.DisplayObjectContainer();
+        private _conForAttackableGrids      = new egret.DisplayObjectContainer();
+        private _conForMovePath             = new egret.DisplayObjectContainer();
+        private _imgsForMovableGrids?       : TwnsUiImage.UiImage[][];
+        private _imgsForAttackableGrids?    : TwnsUiImage.UiImage[][];
+        private _imgForMoveDestination?     : TwnsUiImage.UiImage;
 
         private _conForUnits            = new egret.DisplayObjectContainer();
         private _focusUnitViews         = new Map<number, BwUnitView>();
 
         private _notifyEvents: Notify.Listener[] = [
-            { type: NotifyType.GridAnimationTick, callback: this._onNotifyGridAnimationTick },
-            { type: NotifyType.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.GridAnimationTick,       callback: this._onNotifyGridAnimationTick },
+            { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
         ];
 
         public constructor() {
@@ -120,7 +120,6 @@ namespace TwnsBwActionPlannerView {
 
         public init(actionPlanner: TwnsBwActionPlanner.BwActionPlanner): void {
             this._actionPlanner = actionPlanner;
-            this._mapSize       = actionPlanner.getMapSize();
             this._initConForMovableGrids();
             this._initConForMoveDestination();
             this._initConForAttackableGrids();
@@ -139,6 +138,10 @@ namespace TwnsBwActionPlannerView {
             Notify.removeEventListeners(this._notifyEvents, this);
         }
 
+        private _getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
+            return Helpers.getExisted(this._actionPlanner);
+        }
+
         public getContainerForGrids(): egret.DisplayObjectContainer {
             return this._conForGrids;
         }
@@ -146,11 +149,21 @@ namespace TwnsBwActionPlannerView {
             return this._conForUnits;
         }
 
+        private _getImgsForMovableGrids(): TwnsUiImage.UiImage[][] {
+            return Helpers.getExisted(this._imgsForMovableGrids);
+        }
+        private _getImgsForAttackableGrids(): TwnsUiImage.UiImage[][] {
+            return Helpers.getExisted(this._imgsForAttackableGrids);
+        }
+        private _getImgForMoveDestination(): TwnsUiImage.UiImage {
+            return Helpers.getExisted(this._imgForMoveDestination);
+        }
+
         private _initConForMovableGrids(): void {
             this._conForMovableGrids.removeChildren();
             this._conForMovableGrids.alpha = ALPHA_FOR_MOVABLE_GRIDS;
 
-            const { width, height } = this._mapSize;
+            const { width, height } = this._getActionPlanner().getMapSize();
             const images            = Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
@@ -175,7 +188,7 @@ namespace TwnsBwActionPlannerView {
             this._conForAttackableGrids.removeChildren();
             this._conForAttackableGrids.alpha = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
-            const { width, height } = this._mapSize;
+            const { width, height } = this._getActionPlanner().getMapSize();
             const images            = Helpers.createEmptyMap<TwnsUiImage.UiImage>(width, height);
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
@@ -196,24 +209,29 @@ namespace TwnsBwActionPlannerView {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyGridAnimationTick(e: egret.Event): void {
+        private _onNotifyGridAnimationTick(): void {
             const sourceForMovable      = _MOVABLE_GRID_FRAMES[Timer.getGridAnimationTickCount() % _MOVABLE_GRID_FRAMES.length];
             const sourceForAttackable   = _ATTACKABLE_GRID_FRAMES[Timer.getGridAnimationTickCount() % _ATTACKABLE_GRID_FRAMES.length];
-            const imgsForMovable        = this._imgsForMovableGrids;
-            const imgsForAttackable     = this._imgsForAttackableGrids;
-            const { width, height }     = this._mapSize;
+            const imgsForMovable        = this._getImgsForMovableGrids();
+            const imgsForAttackable     = this._getImgsForAttackableGrids();
+            const { width, height }     = this._getActionPlanner().getMapSize();
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
                     imgsForMovable[x][y].source     = sourceForMovable;
                     imgsForAttackable[x][y].source  = sourceForAttackable;
                 }
             }
-            this._imgForMoveDestination.source = sourceForMovable;
+            this._getImgForMoveDestination().source = sourceForMovable;
         }
 
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
+        private _onNotifyUnitAnimationTick(): void {
             for (const [, view] of this._focusUnitViews) {
                 view.tickUnitAnimationFrame();
+            }
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            for (const [, view] of this._focusUnitViews) {
                 view.tickStateAnimationFrame();
             }
         }
@@ -231,7 +249,7 @@ namespace TwnsBwActionPlannerView {
 
         private _resetConForAttackableGrids(): void {
             const con           = this._conForAttackableGrids;
-            const actionPlanner = this._actionPlanner;
+            const actionPlanner = this._getActionPlanner();
             const state         = actionPlanner.getState();
 
             if (state === State.Idle) {
@@ -244,13 +262,14 @@ namespace TwnsBwActionPlannerView {
                 con.visible = true;
                 con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
-                const movableArea       = actionPlanner.getMovableArea();
-                const attackableArea    = actionPlanner.getAttackableArea();
-                const { width, height } = this._mapSize;
+                const movableArea               = Helpers.getExisted(actionPlanner.getMovableArea());
+                const attackableArea            = Helpers.getExisted(actionPlanner.getAttackableArea());
+                const { width, height }         = actionPlanner.getMapSize();
+                const imgsForAttackableGrids    = this._getImgsForAttackableGrids();
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
                         const isMovable = (!!movableArea[x]) && (!!movableArea[x][y]);
-                        this._imgsForAttackableGrids[x][y].visible = (!isMovable) && (!!attackableArea[x]) && (!!attackableArea[x][y]);
+                        imgsForAttackableGrids[x][y].visible = (!isMovable) && (!!attackableArea[x]) && (!!attackableArea[x][y]);
                     }
                 }
 
@@ -258,13 +277,14 @@ namespace TwnsBwActionPlannerView {
                 con.visible = true;
                 con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
-                const movableArea       = actionPlanner.getMovableArea();
-                const attackableArea    = actionPlanner.getAttackableArea();
-                const { width, height } = this._mapSize;
+                const movableArea               = Helpers.getExisted(actionPlanner.getMovableArea());
+                const attackableArea            = Helpers.getExisted(actionPlanner.getAttackableArea());
+                const { width, height }         = actionPlanner.getMapSize();
+                const imgsForAttackableGrids    = this._getImgsForAttackableGrids();
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
                         const isMovable = (!!movableArea[x]) && (!!movableArea[x][y]);
-                        this._imgsForAttackableGrids[x][y].visible = (!isMovable) && (!!attackableArea[x]) && (!!attackableArea[x][y]);
+                        imgsForAttackableGrids[x][y].visible = (!isMovable) && (!!attackableArea[x]) && (!!attackableArea[x][y]);
                     }
                 }
 
@@ -272,14 +292,15 @@ namespace TwnsBwActionPlannerView {
                 con.visible = true;
                 con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
-                const { width, height } = this._mapSize;
+                const { width, height }         = actionPlanner.getMapSize();
+                const imgsForAttackableGrids    = this._getImgsForAttackableGrids();
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
-                        this._imgsForAttackableGrids[x][y].visible = false;
+                        imgsForAttackableGrids[x][y].visible = false;
                     }
                 }
-                for (const grid of actionPlanner.getAttackableGridsAfterMove()) {
-                    this._imgsForAttackableGrids[grid.x][grid.y].visible = true;
+                for (const grid of Helpers.getExisted(actionPlanner.getAttackableGridsAfterMove())) {
+                    imgsForAttackableGrids[grid.x][grid.y].visible = true;
                 }
 
             } else if (state === State.ChoosingDropDestination) {
@@ -289,10 +310,10 @@ namespace TwnsBwActionPlannerView {
                 con.visible = true;
                 con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
-                const { width, height } = this._mapSize;
-                const imgs              = this._imgsForAttackableGrids;
+                const { width, height } = actionPlanner.getMapSize();
+                const imgs              = this._getImgsForAttackableGrids();
                 const destination       = actionPlanner.getMovePathDestination();
-                const range             = actionPlanner.getFocusUnit().getFlareMaxRange();
+                const range             = Helpers.getExisted(actionPlanner.getFocusUnit()?.getFlareMaxRange());
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
                         imgs[x][y].visible = GridIndexHelpers.getDistance(destination, { x, y }) <= range;
@@ -303,8 +324,8 @@ namespace TwnsBwActionPlannerView {
                 con.visible = true;
                 con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_SILO;
 
-                const { width, height } = this._mapSize;
-                const imgs              = this._imgsForAttackableGrids;
+                const { width, height } = actionPlanner.getMapSize();
+                const imgs              = this._getImgsForAttackableGrids();
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
                         imgs[x][y].visible = true;
@@ -319,10 +340,11 @@ namespace TwnsBwActionPlannerView {
                 con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
                 const area              = actionPlanner.getAreaForPreviewingAttack();
-                const { width, height } = this._mapSize;
+                const { width, height } = actionPlanner.getMapSize();
+                const imgs              = this._getImgsForAttackableGrids();
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
-                        this._imgsForAttackableGrids[x][y].visible = (!!area[x]) && (!!area[x][y]);
+                        imgs[x][y].visible = (!!area[x]) && (!!area[x][y]);
                     }
                 }
 
@@ -336,7 +358,7 @@ namespace TwnsBwActionPlannerView {
 
         private _resetConForMovableGrids(): void {
             const con           = this._conForMovableGrids;
-            const actionPlanner = this._actionPlanner;
+            const actionPlanner = this._getActionPlanner();
             const state         = actionPlanner.getState();
 
             if (state === State.Idle) {
@@ -348,22 +370,24 @@ namespace TwnsBwActionPlannerView {
             } else if (state === State.MakingMovePath) {
                 con.visible = true;
 
-                const movableArea       = actionPlanner.getMovableArea();
-                const { width, height } = this._mapSize;
+                const movableArea       = Helpers.getExisted(actionPlanner.getMovableArea());
+                const { width, height } = actionPlanner.getMapSize();
+                const imgs              = this._getImgsForMovableGrids();
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
-                        this._imgsForMovableGrids[x][y].visible = (!!movableArea[x]) && (!!movableArea[x][y]);
+                        imgs[x][y].visible = (!!movableArea[x]) && (!!movableArea[x][y]);
                     }
                 }
 
             } else if (state === State.ChoosingAction) {
                 con.visible = true;
 
-                const movableArea       = actionPlanner.getMovableArea();
-                const { width, height } = this._mapSize;
+                const movableArea       = Helpers.getExisted(actionPlanner.getMovableArea());
+                const { width, height } = actionPlanner.getMapSize();
+                const imgs              = this._getImgsForMovableGrids();
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
-                        this._imgsForMovableGrids[x][y].visible = (!!movableArea[x]) && (!!movableArea[x][y]);
+                        imgs[x][y].visible = (!!movableArea[x]) && (!!movableArea[x][y]);
                     }
                 }
 
@@ -373,14 +397,15 @@ namespace TwnsBwActionPlannerView {
             } else if (state === State.ChoosingDropDestination) {
                 con.visible = true;
 
-                const { width, height } = this._mapSize;
+                const { width, height } = actionPlanner.getMapSize();
+                const imgs              = this._getImgsForMovableGrids();
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
-                        this._imgsForMovableGrids[x][y].visible = false;
+                        imgs[x][y].visible = false;
                     }
                 }
-                for (const grid of actionPlanner.getAvailableDropDestinations()) {
-                    this._imgsForMovableGrids[grid.x][grid.y].visible = true;
+                for (const grid of Helpers.getExisted(actionPlanner.getAvailableDropDestinations())) {
+                    imgs[grid.x][grid.y].visible = true;
                 }
 
             } else if (state === State.ChoosingFlareDestination) {
@@ -398,11 +423,12 @@ namespace TwnsBwActionPlannerView {
             } else if (state === State.PreviewingMovableArea) {
                 con.visible = true;
 
-                const area              = actionPlanner.getAreaForPreviewingMove();
-                const { width, height } = this._mapSize;
+                const area              = Helpers.getExisted(actionPlanner.getAreaForPreviewingMove());
+                const { width, height } = actionPlanner.getMapSize();
+                const imgs              = this._getImgsForMovableGrids();
                 for (let x = 0; x < width; ++x) {
                     for (let y = 0; y < height; ++y) {
-                        this._imgsForMovableGrids[x][y].visible = (!!area[x]) && (!!area[x][y]);
+                        imgs[x][y].visible = (!!area[x]) && (!!area[x][y]);
                     }
                 }
 
@@ -413,7 +439,7 @@ namespace TwnsBwActionPlannerView {
 
         private _resetConForMoveDestination(): void {
             const con           = this._conForMoveDestination;
-            const actionPlanner = this._actionPlanner;
+            const actionPlanner = this._getActionPlanner();
             const state         = actionPlanner.getState();
             // TODO
             con.visible = false;
@@ -421,7 +447,7 @@ namespace TwnsBwActionPlannerView {
 
         private _resetConForMovePath(): void {
             const con           = this._conForMovePath;
-            const actionPlanner = this._actionPlanner;
+            const actionPlanner = this._getActionPlanner();
             const state         = actionPlanner.getState();
 
             if (state == State.Idle) {
@@ -488,7 +514,7 @@ namespace TwnsBwActionPlannerView {
         private _resetConForUnits(): void {
             const con           = this._conForUnits;
             const views         = this._focusUnitViews;
-            const actionPlanner = this._actionPlanner;
+            const actionPlanner = this._getActionPlanner();
             const state         = actionPlanner.getState();
 
             if (state === State.Idle) {
@@ -506,7 +532,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap     = actionPlanner.getFocusUnitOnMap();
+                const unitOnMap     = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const unitLoaded    = actionPlanner.getFocusUnitLoaded();
                 const movePath      = actionPlanner.getMovePath();
                 if (!unitLoaded) {
@@ -521,7 +547,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap     = actionPlanner.getFocusUnitOnMap();
+                const unitOnMap     = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const unitLoaded    = actionPlanner.getFocusUnitLoaded();
                 const movePath      = actionPlanner.getMovePath();
                 if (!unitLoaded) {
@@ -540,7 +566,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap     = actionPlanner.getFocusUnitOnMap();
+                const unitOnMap     = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const unitLoaded    = actionPlanner.getFocusUnitLoaded();
                 const movePath      = actionPlanner.getMovePath();
                 if (!unitLoaded) {
@@ -555,8 +581,8 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
+                const focusUnitOnMap    = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const focusUnitLoaded   = actionPlanner.getFocusUnitLoaded();
-                const focusUnitOnMap    = actionPlanner.getFocusUnitOnMap();
                 const movePath          = actionPlanner.getMovePath();
                 if (!focusUnitLoaded) {
                     this._addUnitView(focusUnitOnMap, movePath[movePath.length - 1]);
@@ -569,9 +595,9 @@ namespace TwnsBwActionPlannerView {
                     this._addUnitView(data.unit, data.destination);
                 }
 
-                const cursorGridIndex = this._actionPlanner.getCursor().getGridIndex();
-                if (actionPlanner.getAvailableDropDestinations()!.some(grid => GridIndexHelpers.checkIsEqual(grid, cursorGridIndex))) {
-                    this._addUnitView(actionPlanner.getChoosingUnitForDrop(), cursorGridIndex);
+                const cursorGridIndex = actionPlanner.getCursor().getGridIndex();
+                if (actionPlanner.getAvailableDropDestinations()?.some(grid => GridIndexHelpers.checkIsEqual(grid, cursorGridIndex))) {
+                    this._addUnitView(Helpers.getExisted(actionPlanner.getChoosingUnitForDrop()), cursorGridIndex);
                 }
 
             } else if (state === State.ChoosingFlareDestination) {
@@ -579,7 +605,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap     = actionPlanner.getFocusUnitOnMap();
+                const unitOnMap     = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const unitLoaded    = actionPlanner.getFocusUnitLoaded();
                 const movePath      = actionPlanner.getMovePath();
                 if (!unitLoaded) {
@@ -594,7 +620,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unitOnMap     = actionPlanner.getFocusUnitOnMap();
+                const unitOnMap     = Helpers.getExisted(actionPlanner.getFocusUnitOnMap());
                 const unitLoaded    = actionPlanner.getFocusUnitLoaded();
                 const movePath      = actionPlanner.getMovePath();
                 if (!unitLoaded) {
@@ -623,7 +649,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = true;
 
-                const unit = actionPlanner.getUnitForPreviewingMovableArea();
+                const unit = Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea());
                 this._addUnitView(unit, unit.getGridIndex());
 
             } else {
@@ -645,7 +671,7 @@ namespace TwnsBwActionPlannerView {
 
         private _addMovePathView(): void {
             const con   = this._conForMovePath;
-            const path  = this._actionPlanner.getMovePath();
+            const path  = this._getActionPlanner().getMovePath();
             for (let i = 0; i < path.length; ++i) {
                 const img = _createImgForMovePathGrid(path[i - 1], path[i], path[i + 1]);
                 img && con.addChild(img);
@@ -653,10 +679,10 @@ namespace TwnsBwActionPlannerView {
         }
     }
 
-    function _createImgForMovePathGrid(prev: GridIndex, curr: GridIndex, next: GridIndex): TwnsUiImage.UiImage {
-        const source = _PATH_GRID_SOURCES.get(GridIndexHelpers.getAdjacentDirection(prev, curr)).get(GridIndexHelpers.getAdjacentDirection(next, curr));
+    function _createImgForMovePathGrid(prev: GridIndex, curr: GridIndex, next: GridIndex): TwnsUiImage.UiImage | null {
+        const source = Helpers.getExisted(_PATH_GRID_SOURCES.get(GridIndexHelpers.getAdjacentDirection(prev, curr))).get(GridIndexHelpers.getAdjacentDirection(next, curr));
         if (!source) {
-            return undefined;
+            return null;
         } else {
             const image = new TwnsUiImage.UiImage(source);
             image.x = curr.x * _GRID_WIDTH;

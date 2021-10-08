@@ -1,8 +1,8 @@
 
-import Logger           from "../helpers/Logger";
-import ResAutoRelease   from "./ResAutoRelease";
-import FloatText        from "../helpers/FloatText";
-import StageManager     from "../helpers/StageManager";
+import FloatText            from "../helpers/FloatText";
+import Logger               from "../helpers/Logger";
+import StageManager         from "../helpers/StageManager";
+import ResAutoRelease       from "./ResAutoRelease";
 
 namespace ResManager {
     let _isLoadedMainResource = false;
@@ -41,7 +41,7 @@ namespace ResManager {
     function _initTheme(): Promise<void> {
         return new Promise<void>((resolve): void => {
             new eui.Theme("resource/default.thm.json", StageManager.getStage())
-                .once(eui.UIEvent.COMPLETE, resolve, undefined);
+                .once(eui.UIEvent.COMPLETE, resolve, null);
         });
     }
 

@@ -1,10 +1,11 @@
 
-import WarMapModel          from "./WarMapModel";
+import Helpers              from "../../tools/helpers/Helpers";
+import NetManager           from "../../tools/network/NetManager";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import NetManager           from "../../tools/network/NetManager";
+import WarMapModel          from "./WarMapModel";
 
 namespace WarMapProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -22,13 +23,13 @@ namespace WarMapProxy {
             { msgCode: NetMessageCodes.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
             { msgCode: NetMessageCodes.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
             { msgCode: NetMessageCodes.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
-        ], undefined);
+        ], null);
     }
 
     function _onMsgMapGetEnabledBriefDataList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetEnabledBriefDataList.IS;
         if (!data.errorCode) {
-            WarMapModel.resetBriefDataDict(data.dataList);
+            WarMapModel.resetBriefDataDict(data.dataList || []);
             Notify.dispatch(NotifyType.MsgMapGetEnabledBriefDataList, data);
         }
     }
@@ -36,7 +37,7 @@ namespace WarMapProxy {
     function _onMsgMapGetEnabledRawDataList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetEnabledRawDataList.IS;
         if (!data.errorCode) {
-            WarMapModel.updateRawDataDict(data.dataList);
+            WarMapModel.updateRawDataDict(data.dataList || []);
             Notify.dispatch(NotifyType.MsgMapGetEnabledRawDataList, data);
         }
     }
@@ -53,7 +54,7 @@ namespace WarMapProxy {
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgMapGetBriefDataFailed, data);
         } else {
-            WarMapModel.setBriefData(data.mapBriefData);
+            WarMapModel.setBriefData(Helpers.getExisted(data.mapBriefData));
             Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
         }
     }
@@ -70,7 +71,7 @@ namespace WarMapProxy {
         if (data.errorCode) {
             Notify.dispatch(NotifyType.MsgMapGetRawDataFailed, data);
         } else {
-            WarMapModel.setRawData(data.mapId, data.mapRawData);
+            WarMapModel.setRawData(Helpers.getExisted(data.mapId), Helpers.getExisted(data.mapRawData));
             Notify.dispatch(NotifyType.MsgMapGetRawData, data);
         }
     }
@@ -114,7 +115,7 @@ namespace WarMapProxy {
     function _onMsgMmGetReviewingMaps(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmGetReviewingMaps.IS;
         if (!data.errorCode) {
-            WarMapModel.setMmReviewingMaps(data.maps);
+            WarMapModel.setMmReviewingMaps(data.maps || []);
             Notify.dispatch(NotifyType.MsgMmGetReviewingMaps, data);
         }
     }
@@ -147,7 +148,7 @@ namespace WarMapProxy {
         }
     }
 
-    export function reqMmSetMapTag(mapId: number, mapTag: ProtoTypes.Map.IDataForMapTag | null | undefined): void {
+    export function reqMmSetMapTag(mapId: number, mapTag: ProtoTypes.Map.IDataForMapTag | null): void {
         NetManager.send({ MsgMmSetMapTag: { c: {
             mapId,
             mapTag,

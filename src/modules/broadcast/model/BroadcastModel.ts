@@ -1,10 +1,11 @@
 
 
-import ProtoTypes   from "../../tools/proto/ProtoTypes";
+import Helpers      from "../../tools/helpers/Helpers";
 import Timer        from "../../tools/helpers/Timer";
+import ProtoTypes   from "../../tools/proto/ProtoTypes";
 
 namespace BroadcastModel {
-    import IBroadcastMessage        = ProtoTypes.Broadcast.IBroadcastMessage;
+    import IBroadcastMessage    = ProtoTypes.Broadcast.IBroadcastMessage;
 
     let _messageList    : IBroadcastMessage[] = [];
 
@@ -17,8 +18,8 @@ namespace BroadcastModel {
     export function getOngoingMessageList(): IBroadcastMessage[] {
         const currTime = Timer.getServerTimestamp();
         return _messageList.filter(v => {
-            return (v.startTime <= currTime)
-                && (v.endTime >= currTime);
+            return (Helpers.getExisted(v.startTime) <= currTime)
+                && (Helpers.getExisted(v.endTime) >= currTime);
         });
     }
 }

@@ -3,7 +3,7 @@ import TwnsBwPlayer                 from "../../baseWar/model/BwPlayer";
 import TwnsBwTile                   from "../../baseWar/model/BwTile";
 import TwnsBwUnit                   from "../../baseWar/model/BwUnit";
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
-import TwnsBwBeginTurnPanel from "../../baseWar/view/BwBeginTurnPanel";
+import TwnsBwBeginTurnPanel         from "../../baseWar/view/BwBeginTurnPanel";
 import TwnsBwCaptureProgressPanel   from "../../baseWar/view/BwCaptureProgressPanel";
 import UserModel                    from "../../user/model/UserModel";
 import TwnsClientErrorCode          from "../helpers/ClientErrorCode";
@@ -11,8 +11,10 @@ import CommonConstants              from "../helpers/CommonConstants";
 import ConfigManager                from "../helpers/ConfigManager";
 import FloatText                    from "../helpers/FloatText";
 import GridIndexHelpers             from "../helpers/GridIndexHelpers";
-import Logger                       from "../helpers/Logger";
+import Helpers                      from "../helpers/Helpers";
 import Types                        from "../helpers/Types";
+import Notify                       from "../notify/Notify";
+import TwnsNotifyType               from "../notify/NotifyType";
 import ProtoTypes                   from "../proto/ProtoTypes";
 import WarCommonHelpers             from "./WarCommonHelpers";
 import WarCoSkillHelpers            from "./WarCoSkillHelpers";
@@ -61,85 +63,81 @@ namespace WarActionExecutor {
     import BwUnit                               = TwnsBwUnit.BwUnit;
     import BwTile                               = TwnsBwTile.BwTile;
     import BwWar                                = TwnsBwWar.BwWar;
+    import NotifyType                           = TwnsNotifyType.NotifyType;
 
     type ResultForHandleDestructionForTile = {
-        errorCode           : ClientErrorCode;
         damagedTileSet?     : Set<BwTile>;
         destroyedTileSet?   : Set<BwTile>;
     };
 
-    export async function checkAndExecute(war: BwWar, action: IWarActionContainer, isFast: boolean): Promise<ClientErrorCode> {
+    export async function checkAndExecute(war: BwWar, action: IWarActionContainer, isFast: boolean): Promise<void> {
         if (!war.getIsRunning()) {
-            return ClientErrorCode.BwWarActionExecutor_CheckAndExecute_00;
+            throw Helpers.newError(`!war.getIsRunning().`, ClientErrorCode.BwWarActionExecutor_CheckAndExecute_00);
         }
         if (war.getIsExecutingAction()) {
-            return ClientErrorCode.BwWarActionExecutor_CheckAndExecute_01;
+            throw Helpers.newError(`war.getIsExecutingAction().`, ClientErrorCode.BwWarActionExecutor_CheckAndExecute_01);
         }
         if (war.getIsEnded()) {
-            return ClientErrorCode.BwWarActionExecutor_CheckAndExecute_02;
+            throw Helpers.newError(`war.getIsEnded().`, ClientErrorCode.BwWarActionExecutor_CheckAndExecute_02);
         }
 
         const actionPlanner = war.getActionPlanner();
         war.setIsExecutingAction(true);
         actionPlanner.setStateExecutingAction();
 
-        const errorCode = await doExecuteAction(war, action, isFast);
+        await doExecuteAction(war, action, isFast);
 
         actionPlanner.setStateIdle();
         war.setIsExecutingAction(false);
-
-        return errorCode;
     }
 
-    async function doExecuteAction(war: BwWar, action: IWarActionContainer, isFast: boolean): Promise<ClientErrorCode> {
-        if      (action.WarActionPlayerDeleteUnit)          { return await exePlayerDeleteUnit(war, action.WarActionPlayerDeleteUnit, isFast); }
-        else if (action.WarActionPlayerEndTurn)             { return await exePlayerEndTurn(war, action.WarActionPlayerEndTurn, isFast); }
-        else if (action.WarActionPlayerProduceUnit)         { return await exePlayerProduceUnit(war, action.WarActionPlayerProduceUnit, isFast); }
-        else if (action.WarActionPlayerSurrender)           { return await exePlayerSurrender(war, action.WarActionPlayerSurrender, isFast); }
-        else if (action.WarActionPlayerVoteForDraw)         { return await exePlayerVoteForDraw(war, action.WarActionPlayerVoteForDraw, isFast); }
-        else if (action.WarActionPlayerUseCoSkill)          { return await exePlayerUseCoSkill(war, action.WarActionPlayerUseCoSkill, isFast); }
-        else if (action.WarActionSystemBeginTurn)           { return await exeSystemBeginTurn(war, action.WarActionSystemBeginTurn, isFast); }
-        else if (action.WarActionSystemCallWarEvent)        { return await exeSystemCallWarEvent(war, action.WarActionSystemCallWarEvent, isFast); }
-        else if (action.WarActionSystemDestroyPlayerForce)  { return await exeSystemDestroyPlayerForce(war, action.WarActionSystemDestroyPlayerForce, isFast); }
-        else if (action.WarActionSystemEndWar)              { return await exeSystemEndWar(war, action.WarActionSystemEndWar, isFast); }
-        else if (action.WarActionSystemEndTurn)             { return await exeSystemEndTurn(war, action.WarActionSystemEndTurn, isFast); }
-        else if (action.WarActionSystemHandleBootPlayer)    { return await exeSystemHandleBootPlayer(war, action.WarActionSystemHandleBootPlayer, isFast); }
-        else if (action.WarActionUnitAttackTile)            { return await exeUnitAttackTile(war, action.WarActionUnitAttackTile, isFast); }
-        else if (action.WarActionUnitAttackUnit)            { return await exeUnitAttackUnit(war, action.WarActionUnitAttackUnit, isFast); }
-        else if (action.WarActionUnitBeLoaded)              { return await exeUnitBeLoaded(war, action.WarActionUnitBeLoaded, isFast); }
-        else if (action.WarActionUnitBuildTile)             { return await exeUnitBuildTile(war, action.WarActionUnitBuildTile, isFast); }
-        else if (action.WarActionUnitCaptureTile)           { return await exeUnitCaptureTile(war, action.WarActionUnitCaptureTile, isFast); }
-        else if (action.WarActionUnitDive)                  { return await exeUnitDive(war, action.WarActionUnitDive, isFast); }
-        else if (action.WarActionUnitDropUnit)              { return await exeUnitDropUnit(war, action.WarActionUnitDropUnit, isFast); }
-        else if (action.WarActionUnitJoinUnit)              { return await exeUnitJoinUnit(war, action.WarActionUnitJoinUnit, isFast); }
-        else if (action.WarActionUnitLaunchFlare)           { return await exeUnitLaunchFlare(war, action.WarActionUnitLaunchFlare, isFast); }
-        else if (action.WarActionUnitLaunchSilo)            { return await exeUnitLaunchSilo(war, action.WarActionUnitLaunchSilo, isFast); }
-        else if (action.WarActionUnitLoadCo)                { return await exeUnitLoadCo(war, action.WarActionUnitLoadCo, isFast); }
-        else if (action.WarActionUnitProduceUnit)           { return await exeUnitProduceUnit(war, action.WarActionUnitProduceUnit, isFast); }
-        else if (action.WarActionUnitSupplyUnit)            { return await exeUnitSupplyUnit(war, action.WarActionUnitSupplyUnit, isFast); }
-        else if (action.WarActionUnitSurface)               { return await exeUnitSurface(war, action.WarActionUnitSurface, isFast); }
-        else if (action.WarActionUnitUseCoSkill)            { return await exeUnitUseCoSkill(war, action.WarActionUnitUseCoSkill, isFast); }
-        else if (action.WarActionUnitWait)                  { return await exeUnitWait(war, action.WarActionUnitWait, isFast); }
-        else                                                { return await exeUnknownAction(); }
+    async function doExecuteAction(war: BwWar, action: IWarActionContainer, isFast: boolean): Promise<void> {
+        if      (action.WarActionPlayerDeleteUnit)          { await exePlayerDeleteUnit(war, action.WarActionPlayerDeleteUnit, isFast); }
+        else if (action.WarActionPlayerEndTurn)             { await exePlayerEndTurn(war, action.WarActionPlayerEndTurn, isFast); }
+        else if (action.WarActionPlayerProduceUnit)         { await exePlayerProduceUnit(war, action.WarActionPlayerProduceUnit, isFast); }
+        else if (action.WarActionPlayerSurrender)           { await exePlayerSurrender(war, action.WarActionPlayerSurrender, isFast); }
+        else if (action.WarActionPlayerVoteForDraw)         { await exePlayerVoteForDraw(war, action.WarActionPlayerVoteForDraw, isFast); }
+        else if (action.WarActionPlayerUseCoSkill)          { await exePlayerUseCoSkill(war, action.WarActionPlayerUseCoSkill, isFast); }
+        else if (action.WarActionSystemBeginTurn)           { await exeSystemBeginTurn(war, action.WarActionSystemBeginTurn, isFast); }
+        else if (action.WarActionSystemCallWarEvent)        { await exeSystemCallWarEvent(war, action.WarActionSystemCallWarEvent, isFast); }
+        else if (action.WarActionSystemDestroyPlayerForce)  { await exeSystemDestroyPlayerForce(war, action.WarActionSystemDestroyPlayerForce, isFast); }
+        else if (action.WarActionSystemEndWar)              { await exeSystemEndWar(war, action.WarActionSystemEndWar, isFast); }
+        else if (action.WarActionSystemEndTurn)             { await exeSystemEndTurn(war, action.WarActionSystemEndTurn, isFast); }
+        else if (action.WarActionSystemHandleBootPlayer)    { await exeSystemHandleBootPlayer(war, action.WarActionSystemHandleBootPlayer, isFast); }
+        else if (action.WarActionUnitAttackTile)            { await exeUnitAttackTile(war, action.WarActionUnitAttackTile, isFast); }
+        else if (action.WarActionUnitAttackUnit)            { await exeUnitAttackUnit(war, action.WarActionUnitAttackUnit, isFast); }
+        else if (action.WarActionUnitBeLoaded)              { await exeUnitBeLoaded(war, action.WarActionUnitBeLoaded, isFast); }
+        else if (action.WarActionUnitBuildTile)             { await exeUnitBuildTile(war, action.WarActionUnitBuildTile, isFast); }
+        else if (action.WarActionUnitCaptureTile)           { await exeUnitCaptureTile(war, action.WarActionUnitCaptureTile, isFast); }
+        else if (action.WarActionUnitDive)                  { await exeUnitDive(war, action.WarActionUnitDive, isFast); }
+        else if (action.WarActionUnitDropUnit)              { await exeUnitDropUnit(war, action.WarActionUnitDropUnit, isFast); }
+        else if (action.WarActionUnitJoinUnit)              { await exeUnitJoinUnit(war, action.WarActionUnitJoinUnit, isFast); }
+        else if (action.WarActionUnitLaunchFlare)           { await exeUnitLaunchFlare(war, action.WarActionUnitLaunchFlare, isFast); }
+        else if (action.WarActionUnitLaunchSilo)            { await exeUnitLaunchSilo(war, action.WarActionUnitLaunchSilo, isFast); }
+        else if (action.WarActionUnitLoadCo)                { await exeUnitLoadCo(war, action.WarActionUnitLoadCo, isFast); }
+        else if (action.WarActionUnitProduceUnit)           { await exeUnitProduceUnit(war, action.WarActionUnitProduceUnit, isFast); }
+        else if (action.WarActionUnitSupplyUnit)            { await exeUnitSupplyUnit(war, action.WarActionUnitSupplyUnit, isFast); }
+        else if (action.WarActionUnitSurface)               { await exeUnitSurface(war, action.WarActionUnitSurface, isFast); }
+        else if (action.WarActionUnitUseCoSkill)            { await exeUnitUseCoSkill(war, action.WarActionUnitUseCoSkill, isFast); }
+        else if (action.WarActionUnitWait)                  { await exeUnitWait(war, action.WarActionUnitWait, isFast); }
+        else                                                { await exeUnknownAction(); }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
-            ? fastExePlayerDeleteUnit(war, action)
-            : normalExePlayerDeleteUnit(war, action);
+    async function exePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit, isFast: boolean): Promise<void> {
+        isFast
+            ? await fastExePlayerDeleteUnit(war, action)
+            : await normalExePlayerDeleteUnit(war, action);
     }
-    async function fastExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<ClientErrorCode> {
+    async function fastExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
         const gridIndex = action.gridIndex as GridIndex;
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit) {
             war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
             WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<ClientErrorCode> {
+    async function normalExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
         const desc = await war.getDescForExePlayerDeleteUnit(action);
         (desc) && (FloatText.show(desc));
 
@@ -151,60 +149,43 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExePlayerEndTurn(war, action)
             : await normalExePlayerEndTurn(war, action);
     }
-    async function fastExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<ClientErrorCode> {
-        return war.getTurnManager().endPhaseMain(action);
+    async function fastExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
+        war.getTurnManager().endPhaseMain(action);
     }
-    async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<ClientErrorCode> {
+    async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
         // const desc = await war.getDescForExePlayerEndTurn(action);
         // (desc) && (FloatText.show(desc));
 
-        return war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExePlayerProduceUnit(war, action)
             : await normalExePlayerProduceUnit(war, action);
     }
-    async function fastExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<ClientErrorCode> {
-        const unitType  = action.unitType as Types.UnitType;
-        const gridIndex = action.gridIndex as GridIndex;
-        const unitHp    = action.unitHp;
-        if (unitHp == null) {
-            return ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_00;
-        }
-
+    async function fastExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
+        const unitType      = action.unitType as Types.UnitType;
+        const gridIndex     = action.gridIndex as GridIndex;
+        const unitHp        = Helpers.getExisted(action.unitHp, ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_00);
         const configVersion = war.getConfigVersion();
-        if (configVersion == null) {
-            return ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_01;
-        }
-
         const unitMap       = war.getUnitMap();
         const unitId        = unitMap.getNextUnitId();
         const playerInTurn  = war.getPlayerInTurn();
-        if (playerInTurn == null) {
-            return ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_02;
-        }
-
         const playerIndex   = playerInTurn.getPlayerIndex();
         const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
         const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
         const costModifier  = playerInTurn.getUnitCostModifier(gridIndex, false, unitType);
-        if (costModifier == null) {
-            return ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_03;
-        }
-
-        const cost = Math.floor(
+        const cost          = Math.floor(
             cfgCost
             * (skillCfg ? skillCfg[5] : 100)
             * WarCommonHelpers.getNormalizedHp(unitHp)
@@ -226,10 +207,8 @@ namespace WarActionExecutor {
         unitMap.setUnitOnMap(unit);
         unitMap.setNextUnitId(unitId + 1);
         playerInTurn.setFund(playerInTurn.getFund() - cost);
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<ClientErrorCode> {
+    async function normalExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
         const desc = await war.getDescForExePlayerProduceUnit(action);
         (desc) && (FloatText.show(desc));
 
@@ -240,23 +219,19 @@ namespace WarActionExecutor {
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
             const playerInTurn  = war.getPlayerInTurn();
-            const unitData      = extraData.unitData;
-            if (unitData == null) {
-                return ClientErrorCode.BwWarActionExecutor_NormalExePlayerProduceUnit_00;
-            }
-
-            const unit = new BwUnit();
+            const unitData      = Helpers.getExisted(extraData.unitData, ClientErrorCode.BwWarActionExecutor_NormalExePlayerProduceUnit_00);
+            const unit          = new BwUnit();
             unit.init(unitData, war.getConfigVersion());
             unit.startRunning(war);
             unit.startRunningView();
             unitMap.setUnitOnMap(unit);
             unitMap.setNextUnitId(unitId + 1);
-            playerInTurn.setFund(playerInTurn.getFund() - extraData.cost);
+            playerInTurn.setFund(playerInTurn.getFund() - Helpers.getExisted(extraData.cost));
 
         } else {
             const gridIndex     = action.gridIndex as GridIndex;
-            const unitType      = action.unitType;
-            const unitHp        = action.unitHp;
+            const unitType      = Helpers.getExisted(action.unitType);
+            const unitHp        = Helpers.getExisted(action.unitHp);
             const configVersion = war.getConfigVersion();
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
@@ -279,7 +254,7 @@ namespace WarActionExecutor {
                 unitType,
                 unitId,
                 actionState : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
-                currentHp   : unitHp != null ? unitHp : CommonConstants.UnitMaxHp,
+                currentHp   : unitHp,
             }, configVersion);
             unit.startRunning(war);
             unit.startRunningView();
@@ -289,49 +264,42 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExePlayerSurrender(war)
             : await normalExePlayerSurrender(war, action);
     }
-    async function fastExePlayerSurrender(war: BwWar): Promise<ClientErrorCode> {
+    async function fastExePlayerSurrender(war: BwWar): Promise<void> {
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender): Promise<ClientErrorCode> {
+    async function normalExePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender): Promise<void> {
         const desc = await war.getDescForExePlayerSurrender(action);
         (desc) && (FloatText.show(desc));
 
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
-
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExePlayerVoteForDraw(war, action)
             : await normalExePlayerVoteForDraw(war, action);
     }
-    async function fastExePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw): Promise<ClientErrorCode> {
+    async function fastExePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw): Promise<void> {
         const playerInTurn = war.getPlayerInTurn();
         playerInTurn.setHasVotedForDraw(true);
 
         const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
-            drawVoteManager.setRemainingVotes(undefined);
+            drawVoteManager.setRemainingVotes(null);
         } else {
             drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw): Promise<ClientErrorCode> {
+    async function normalExePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw): Promise<void> {
         const desc = await war.getDescForExePlayerVoteForDraw(action);
         (desc) && (FloatText.show(desc));
 
@@ -340,70 +308,40 @@ namespace WarActionExecutor {
 
         const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
-            drawVoteManager.setRemainingVotes(undefined);
+            drawVoteManager.setRemainingVotes(null);
         } else {
             drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
-
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExePlayerUseCoSkill(war, action)
             : await normalExePlayerUseCoSkill(war, action);
     }
-    async function fastExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<ClientErrorCode> {
-        const skillType = action.skillType;
-        if (skillType == null) {
-            return ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_00;
-        }
-
-        const playerInTurn = war.getPlayerInTurn();
-        if (playerInTurn == null) {
-            return ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_01;
-        }
-
-        const teamIndexInTurn = playerInTurn.getTeamIndex();
-        if (teamIndexInTurn == null) {
-            return ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_02;
-        }
-
-        const currentEnergy = playerInTurn.getCoCurrentEnergy();
-        if (currentEnergy == null) {
-            return ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_03;
-        }
-
+    async function fastExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<void> {
+        const skillType         = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_00);
+        const playerInTurn      = war.getPlayerInTurn();
+        const currentEnergy     = playerInTurn.getCoCurrentEnergy();
         playerInTurn.setCoUsingSkillType(skillType);
 
         if (skillType === Types.CoSkillType.Power) {
-            const powerEnergy = playerInTurn.getCoPowerEnergy();
-            if (powerEnergy == null) {
-                return ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_04;
-            }
+            const powerEnergy = Helpers.getExisted(playerInTurn.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_01);
             playerInTurn.setCoCurrentEnergy(currentEnergy - powerEnergy);
 
         } else if (skillType === Types.CoSkillType.SuperPower) {
-            const superPowerEnergy = playerInTurn.getCoSuperPowerEnergy();
-            if (superPowerEnergy == null) {
-                return ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_05;
-            }
-
+            const superPowerEnergy = Helpers.getExisted(playerInTurn.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_02);
             playerInTurn.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
         } else {
-            return ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_06;
+            throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_03);
         }
 
         const skillDataList : IDataForUseCoSkill[] = [];
         const skillIdList   = playerInTurn.getCoCurrentSkills() || [];
         for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-            const dataForUseCoSkill = WarCoSkillHelpers.getDataForUseCoSkill(war, playerInTurn, skillIndex);
-            if (dataForUseCoSkill == null) {
-                return ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_07;
-            }
-
+            const dataForUseCoSkill = Helpers.getExisted(WarCoSkillHelpers.getDataForUseCoSkill(war, playerInTurn, skillIndex), ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_04);
             WarCoSkillHelpers.exeInstantSkill({
                 war,
                 player      : playerInTurn,
@@ -412,16 +350,10 @@ namespace WarActionExecutor {
             });
             skillDataList.push(dataForUseCoSkill);
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<ClientErrorCode> {
+    async function normalExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<void> {
         const unitMap   = war.getUnitMap();
-        const skillType = action.skillType;
-        if (skillType == null) {
-            return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_00;
-        }
-
+        const skillType = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_00);
         const extraData = action.extraData;
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
@@ -431,32 +363,21 @@ namespace WarActionExecutor {
             player.setCoUsingSkillType(skillType);
 
             if (skillType === Types.CoSkillType.Power) {
-                const powerEnergy = player.getCoPowerEnergy();
-                if (powerEnergy == null) {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_01;
-                }
+                const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_01);
                 player.setCoCurrentEnergy(currentEnergy - powerEnergy);
 
             } else if (skillType === Types.CoSkillType.SuperPower) {
-                const superPowerEnergy = player.getCoSuperPowerEnergy();
-                if (superPowerEnergy == null) {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_02;
-                }
-
+                const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_02);
                 player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
             } else {
-                return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_03;
+                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_03);
             }
 
-            const skillDataArray    = extraData.skillDataArray;
+            const skillDataArray    = Helpers.getExisted(extraData.skillDataArray);
             const skillIdList       = player.getCoCurrentSkills() || [];
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                const dataForUseCoSkill = skillDataArray.find(v => v.skillIndex === skillIndex);
-                if (dataForUseCoSkill == null) {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_04;
-                }
-
+                const dataForUseCoSkill = Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_04);
                 WarCoSkillHelpers.exeInstantSkill({
                     war,
                     player,
@@ -481,7 +402,7 @@ namespace WarActionExecutor {
                 const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
                 if (indiscriminateCfg) {
                     for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(
-                        skillDataArray.find(v => v.skillIndex === i).indiscriminateAreaDamageCenter as GridIndex,
+                        skillDataArray.find(v => v.skillIndex === i)?.indiscriminateAreaDamageCenter as GridIndex,
                         0,
                         indiscriminateCfg[1],
                         mapSize)
@@ -495,50 +416,27 @@ namespace WarActionExecutor {
             }
 
         } else {
-            const player = war.getPlayerInTurn();
-            if (player == null) {
-                return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_05;
-            }
-
-            const teamIndexInTurn = player.getTeamIndex();
-            if (teamIndexInTurn == null) {
-                return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_06;
-            }
-
-            const currentEnergy = player.getCoCurrentEnergy();
-            if (currentEnergy == null) {
-                return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_07;
-            }
-
+            const player            = war.getPlayerInTurn();
+            const teamIndexInTurn   = player.getTeamIndex();
+            const currentEnergy     = player.getCoCurrentEnergy();
             player.setCoUsingSkillType(skillType);
 
             if (skillType === Types.CoSkillType.Power) {
-                const powerEnergy = player.getCoPowerEnergy();
-                if (powerEnergy == null) {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_08;
-                }
+                const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_05);
                 player.setCoCurrentEnergy(currentEnergy - powerEnergy);
 
             } else if (skillType === Types.CoSkillType.SuperPower) {
-                const superPowerEnergy = player.getCoSuperPowerEnergy();
-                if (superPowerEnergy == null) {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_09;
-                }
-
+                const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_06);
                 player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
             } else {
-                return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_10;
+                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_07);
             }
 
             const skillDataList : IDataForUseCoSkill[] = [];
             const skillIdList   = player.getCoCurrentSkills() || [];
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                const dataForUseCoSkill = WarCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex);
-                if (dataForUseCoSkill == null) {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_11;
-                }
-
+                const dataForUseCoSkill = Helpers.getExisted(WarCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_08);
                 WarCoSkillHelpers.exeInstantSkill({
                     war,
                     player,
@@ -574,30 +472,25 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeSystemBeginTurn(war, action)
             : await normalExeSystemBeginTurn(war, action);
     }
-    async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<ClientErrorCode> {
-        return war.getTurnManager().endPhaseWaitBeginTurn(action);
+    async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
+        war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
-    async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<ClientErrorCode> {
+    async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemBeginTurn(action);
         // (desc) && (FloatText.show(desc));
 
         // return war.getTurnManager().endPhaseWaitBeginTurn(action);
 
-        const playerInTurn = war.getPlayerInTurn();
-        if (playerInTurn == null) {
-            throw new Error(`WarActionExecutor.normalExeSystemBeginTurn() empty playerInTurn.`);
-        }
-
-        const playerIndex = playerInTurn.getPlayerIndex();
+        const playerInTurn  = war.getPlayerInTurn();
+        const playerIndex   = playerInTurn.getPlayerIndex();
         if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
             const nickname = await playerInTurn.getNickname();
             await new Promise<void>(resolve => {
@@ -610,29 +503,27 @@ namespace WarActionExecutor {
             });
         }
 
-        return war.getTurnManager().endPhaseWaitBeginTurn(action);
+        war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeSystemCallWarEvent(war, action)
             : await normalExeSystemCallWarEvent(war, action);
     }
-    async function fastExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<ClientErrorCode> {
+    async function fastExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
         const warEventManager   = war.getWarEventManager();
-        const warEventId        = action.warEventId;
+        const warEventId        = Helpers.getExisted(action.warEventId);
         warEventManager.updateWarEventCalledCountOnCall(warEventId);
         await warEventManager.callWarEvent(warEventId, true);
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<ClientErrorCode> {
+    async function normalExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
         const desc = await war.getDescForExeSystemCallWarEvent(action);
         (desc) && (FloatText.show(desc));
 
         const warEventManager   = war.getWarEventManager();
-        const warEventId        = action.warEventId;
+        const warEventId        = Helpers.getExisted(action.warEventId);
         warEventManager.updateWarEventCalledCountOnCall(warEventId);
 
         const extraDataList = action.extraDataList;
@@ -641,24 +532,24 @@ namespace WarActionExecutor {
         } else {
             const unitMap       = war.getUnitMap();
             const configVersion = war.getConfigVersion();
-            const actionIdArray = warEventManager.getWarEvent(warEventId).actionIdArray;
+            const actionIdArray = Helpers.getExisted(warEventManager.getWarEvent(warEventId).actionIdArray);
             for (let index = 0; index < actionIdArray.length; ++index) {
                 const warEventAction = warEventManager.getWarEventAction(actionIdArray[index]);
                 if (warEventAction.WeaAddUnit) {
-                    for (const unitData of extraDataList.find(v => v.indexForActionIdList === index).ExtraDataForWeaAddUnit.unitList || []) {
+                    for (const unitData of extraDataList.find(v => v.indexForActionIdList === index)?.ExtraDataForWeaAddUnit?.unitList || []) {
                         const unit = new BwUnit();
                         unit.init(unitData, configVersion);
                         unit.startRunning(war);
                         unit.startRunningView();
                         unitMap.setUnitOnMap(unit);
-                        unitMap.setNextUnitId(Math.max(unitData.unitId + 1, unitMap.getNextUnitId()));
+                        unitMap.setNextUnitId(Math.max(Helpers.getExisted(unitData.unitId) + 1, unitMap.getNextUnitId()));
                     }
 
                 } else if (warEventAction.WeaSetPlayerAliveState) {
                     const actionData    = warEventAction.WeaSetPlayerAliveState;
-                    const player        = war.getPlayer(actionData.playerIndex);
+                    const player        = war.getPlayer(Helpers.getExisted(actionData.playerIndex));
                     if (player != null) {
-                        player.setAliveState(actionData.playerAliveState);
+                        player.setAliveState(Helpers.getExisted(actionData.playerAliveState));
                     }
 
                 } else {
@@ -668,92 +559,81 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
-            ? fastExeSystemDestroyPlayerForce(war, action)
-            : normalExeSystemDestroyPlayerForce(war, action);
+    async function exeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce, isFast: boolean): Promise<void> {
+        isFast
+            ? await fastExeSystemDestroyPlayerForce(war, action)
+            : await normalExeSystemDestroyPlayerForce(war, action);
     }
-    async function fastExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<ClientErrorCode> {
-        WarDestructionHelpers.destroyPlayerForce(war, action.targetPlayerIndex, false);
-
-        return ClientErrorCode.NoError;
+    async function fastExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
+        WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), false);
     }
-    async function normalExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<ClientErrorCode> {
+    async function normalExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
         const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
         (desc) && (FloatText.show(desc));
 
-        WarDestructionHelpers.destroyPlayerForce(war, action.targetPlayerIndex, true);
+        WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), true);
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeSystemEndWar(war: BwWar, action: IWarActionSystemEndWar, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
-            ? fastExeSystemEndWar(war)
-            : normalExeSystemEndWar(war, action);
+    async function exeSystemEndWar(war: BwWar, action: IWarActionSystemEndWar, isFast: boolean): Promise<void> {
+        isFast
+            ? await fastExeSystemEndWar(war)
+            : await normalExeSystemEndWar(war, action);
     }
-    async function fastExeSystemEndWar(war: BwWar): Promise<ClientErrorCode> {
+    async function fastExeSystemEndWar(war: BwWar): Promise<void> {
         war.setIsEnded(true);
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeSystemEndWar(war: BwWar, action: IWarActionSystemEndWar): Promise<ClientErrorCode> {
+    async function normalExeSystemEndWar(war: BwWar, action: IWarActionSystemEndWar): Promise<void> {
         const desc = await war.getDescForExeSystemEndWar(action);
         (desc) && (FloatText.show(desc));
 
         war.setIsEnded(true);
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
-            ? fastExeSystemEndTurn(war, action)
-            : normalExeSystemEndTurn(war, action);
+    async function exeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn, isFast: boolean): Promise<void> {
+        isFast
+            ? await fastExeSystemEndTurn(war, action)
+            : await normalExeSystemEndTurn(war, action);
     }
-    async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
-        return war.getTurnManager().endPhaseMain(action);
+    async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
+        war.getTurnManager().endPhaseMain(action);
     }
-    async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
+    async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemEndTurn(action);
         // (desc) && (FloatText.show(desc));
 
-        return war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
-            ? fastExeSystemHandleBootPlayer(war)
-            : normalExeSystemHandleBootPlayer(war, action);
+    async function exeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer, isFast: boolean): Promise<void> {
+        isFast
+            ? await fastExeSystemHandleBootPlayer(war)
+            : await normalExeSystemHandleBootPlayer(war, action);
     }
-    async function fastExeSystemHandleBootPlayer(war: BwWar): Promise<ClientErrorCode> {
+    async function fastExeSystemHandleBootPlayer(war: BwWar): Promise<void> {
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<ClientErrorCode> {
+    async function normalExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<void> {
         const desc = await war.getDescForExeSystemHandleBootPlayer(action);
         (desc) && (FloatText.show(desc));
 
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
-
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
-            ? fastExeUnitAttackTile(war, action)
-            : normalExeUnitAttackTile(war, action);
+    async function exeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile, isFast: boolean): Promise<void> {
+        isFast
+            ? await fastExeUnitAttackTile(war, action)
+            : await normalExeUnitAttackTile(war, action);
     }
-    async function fastExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<ClientErrorCode> {
+    async function fastExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<void> {
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -763,7 +643,7 @@ namespace WarActionExecutor {
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -781,38 +661,26 @@ namespace WarActionExecutor {
                 for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
                     const targetUnitId = battleDamageInfo.targetUnitId;
                     if (targetUnitId != null) {
-                        damagedUnitSet.add(unitMap.getUnitById(targetUnitId));
+                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
                         continue;
                     }
 
-                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
-                    if (targetTileGridIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_00;
-                    }
+                    const targetTileGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_00);
+                    const tile                  = tileMap.getTile(targetTileGridIndex);
+                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
 
-                    const tile = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, tile.getCurrentHp() - battleDamageInfo.damage));
-
-                    const {
-                        errorCode       : errorCodeForTileDestruction,
-                        damagedTileSet  : damagedTiles,
-                        destroyedTileSet: destroyedTiles,
-                    } = handleDestructionForTile(war, tile);
-                    if (errorCodeForTileDestruction) {
-                        return errorCodeForTileDestruction;
-                    }
-
-                    for (const t of damagedTiles) {
+                    const result = handleDestructionForTile(war, tile);
+                    for (const t of Helpers.getExisted(result.damagedTileSet)) {
                         damagedTileSet.add(t);
                     }
-                    for (const t of destroyedTiles) {
+                    for (const t of Helpers.getExisted(result.destroyedTileSet)) {
                         destroyedTileSet.add(t);
                     }
                 }
 
                 const configVersion = war.getConfigVersion();
                 for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = unitMap.getUnitById(affectedUnitData.unitId);
+                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
@@ -821,31 +689,25 @@ namespace WarActionExecutor {
                 }
 
                 for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(affectedPlayerData.playerIndex).init(affectedPlayerData, configVersion);
+                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
                 }
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
             } else {
-                const targetGridIndex                                           = action.targetGridIndex as GridIndex;
-                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = WarDamageCalculator.getFinalBattleDamage({
+                const targetGridIndex       = action.targetGridIndex as GridIndex;
+                const battleDamageInfoArray = WarDamageCalculator.getFinalBattleDamage({
                     war,
                     attackerMovePath: pathNodes,
                     launchUnitId,
                     targetGridIndex,
                 });
-                if (errorCodeForDamage) {
-                    return errorCodeForDamage;
-                } else if (battleDamageInfoArray == null) {
-                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_01;
-                }
-
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
@@ -858,113 +720,45 @@ namespace WarActionExecutor {
                 const damagedTileSet    = new Set<BwTile>();
 
                 for (const battleDamageInfo of battleDamageInfoArray) {
-                    const unitId1 = battleDamageInfo.attackerUnitId;
-                    if (unitId1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_02;
-                    }
-
-                    const unit1 = unitMap.getUnitById(unitId1);
-                    if (unit1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_03;
-                    }
-
-                    const player1 = unit1.getPlayer();
-                    if (player1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_04;
-                    }
-
-                    const damage = battleDamageInfo.damage;
-                    if (damage == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_05;
-                    }
-
+                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_01);
+                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_02);
+                    const player1   = unit1.getPlayer();
+                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_03);
                     affectedPlayerSet.add(player1);
                     affectedUnitSet.add(unit1);
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
-                        const unit2 = unitMap.getUnitById(unitId2);
-                        if (unit2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_06;
-                        }
-
-                        const unitGridIndex1 = unit1.getGridIndex();
-                        if (unitGridIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_07;
-                        }
-
-                        const unitGridIndex2 = unit2.getGridIndex();
-                        if (unitGridIndex2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_08;
-                        }
-
-                        const playerIndex1 = unit1.getPlayerIndex();
-                        if (playerIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_09;
-                        }
-
-                        const playerIndex2 = unit2.getPlayerIndex();
-                        if (playerIndex2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_10;
-                        }
-
-                        const coGridIndexArray1 = unitMap.getCoGridIndexListOnMap(playerIndex1);
-                        if (coGridIndexArray1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_11;
-                        }
-
-                        const coGridIndexArray2 = unitMap.getCoGridIndexListOnMap(playerIndex2);
-                        if (coGridIndexArray2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_12;
-                        }
-
-                        const unitOldHp2 = unit2.getCurrentHp();
-                        if (unitOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_13;
-                        }
-
-                        const player2 = unit2.getPlayer();
-                        if (player2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_14;
-                        }
-
+                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_04);
+                        const unitGridIndex1        = unit1.getGridIndex();
+                        const unitGridIndex2        = unit2.getGridIndex();
+                        const playerIndex1          = unit1.getPlayerIndex();
+                        const playerIndex2          = unit2.getPlayerIndex();
+                        const coGridIndexArray1     = unitMap.getCoGridIndexListOnMap(playerIndex1);
+                        const coGridIndexArray2     = unitMap.getCoGridIndexListOnMap(playerIndex2);
+                        const unitOldHp2            = unit2.getCurrentHp();
+                        const player2               = unit2.getPlayer();
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
                         const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
                         const isInCoZone1           = (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1));
 
-                        const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
-                        if (errorCodeForPrimaryAmmo) {
-                            return errorCodeForPrimaryAmmo;
-                        }
-
-                        const errorCodeForHp = handleHpForUnit(unit2, unitNewHp2);
-                        if (errorCodeForHp) {
-                            return errorCodeForHp;
-                        }
-
-                        const errorCodeForPromotion = handlePromotionForUnitAttackUnit({
+                        handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
+                        handleHpForUnit(unit2, unitNewHp2);
+                        handlePromotionForUnitAttackUnit({
                             attackerPlayer              : player1,
                             attackerUnit                : unit1,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             attackerCoGridIndexListOnMap: coGridIndexArray1,
                             isTargetDestroyed           : unitNewHp2 <= 0,
                         });
-                        if (errorCodeForPromotion) {
-                            return errorCodeForPromotion;
-                        }
-
-                        const errorCodeForFund = handleFundForUnitAttackUnit({
+                        handleFundForUnitAttackUnit({
                             attackerPlayer              : player1,
                             attackerUnit                : unit1,
                             targetUnit                  : unit2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             isAttackerInAttackerCoZone  : isInCoZone1,
                         });
-                        if (errorCodeForFund) {
-                            return errorCodeForFund;
-                        }
-
-                        const errorCodeForEnergy = handleEnergyForUnitAttackUnit({
+                        handleEnergyForUnitAttackUnit({
                             war,
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
@@ -972,17 +766,10 @@ namespace WarActionExecutor {
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
-                        if (errorCodeForEnergy) {
-                            return errorCodeForEnergy;
-                        }
-
-                        const errorCodeForUnitDestruction = handleDestructionForUnit({
+                        handleDestructionForUnit({
                             war,
                             unit    : unit2,
                         });
-                        if (errorCodeForUnitDestruction) {
-                            return errorCodeForUnitDestruction;
-                        }
 
                         affectedPlayerSet.add(player2);
                         affectedUnitSet.add(unit2);
@@ -993,54 +780,27 @@ namespace WarActionExecutor {
 
                     const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
-                        const tile2 = tileMap.getTile(gridIndex2);
-                        if (tile2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_15;
-                        }
+                        const tile2         = tileMap.getTile(gridIndex2);
+                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_05);
+                        handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
+                        handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
 
-                        const tileOldHp2 = tile2.getCurrentHp();
-                        if (tileOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_16;
-                        }
-
-                        const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
-                        if (errorCodeForPrimaryAmmo) {
-                            return errorCodeForPrimaryAmmo;
-                        }
-
-                        const errorCodeForHp = handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
-                        if (errorCodeForHp) {
-                            return errorCodeForHp;
-                        }
-
-                        const {
-                            errorCode       : errorCodeForTileDestruction,
-                            damagedTileSet  : damagedTiles,
-                            destroyedTileSet: destroyedTiles,
-                        } = handleDestructionForTile(war, tile2);
-                        if (errorCodeForTileDestruction) {
-                            return errorCodeForTileDestruction;
-                        }
-
-                        for (const tile of damagedTiles) {
+                        const result = handleDestructionForTile(war, tile2);
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of destroyedTiles) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
                         continue;
                     }
 
-                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_17;
+                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_06);
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
-                    if (affectedPlayerIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_18;
-                    }
-
                     if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
                         (affectedPlayer.getAliveState() !== Types.PlayerAliveState.Dead)
                     ) {
@@ -1049,10 +809,8 @@ namespace WarActionExecutor {
                 }
             }
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<ClientErrorCode> {
+    async function normalExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<void> {
         const desc = await war.getDescForExeUnitAttackTile(action);
         (desc) && (FloatText.show(desc));
 
@@ -1065,7 +823,7 @@ namespace WarActionExecutor {
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1103,31 +861,19 @@ namespace WarActionExecutor {
                 for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
                     const targetUnitId = battleDamageInfo.targetUnitId;
                     if (targetUnitId != null) {
-                        damagedUnitSet.add(unitMap.getUnitById(targetUnitId));
+                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
                         continue;
                     }
 
-                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
-                    if (targetTileGridIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_00;
-                    }
+                    const targetTileGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_00);
+                    const tile                  = tileMap.getTile(targetTileGridIndex);
+                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
 
-                    const tile = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, tile.getCurrentHp() - battleDamageInfo.damage));
-
-                    const {
-                        errorCode       : errorCodeForTileDestruction,
-                        damagedTileSet  : damagedTiles,
-                        destroyedTileSet: destroyedTiles,
-                    } = handleDestructionForTile(war, tile);
-                    if (errorCodeForTileDestruction) {
-                        return errorCodeForTileDestruction;
-                    }
-
-                    for (const t of damagedTiles) {
+                    const result = handleDestructionForTile(war, tile);
+                    for (const t of Helpers.getExisted(result.damagedTileSet)) {
                         damagedTileSet.add(t);
                     }
-                    for (const t of destroyedTiles) {
+                    for (const t of Helpers.getExisted(result.destroyedTileSet)) {
                         destroyedTileSet.add(t);
                     }
                 }
@@ -1135,7 +881,7 @@ namespace WarActionExecutor {
                 const configVersion     = war.getConfigVersion();
                 const affectedUnitSet   = new Set<BwUnit>();
                 for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = unitMap.getUnitById(affectedUnitData.unitId);
+                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
@@ -1146,7 +892,7 @@ namespace WarActionExecutor {
                 }
 
                 for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(affectedPlayerData.playerIndex).init(affectedPlayerData, configVersion);
+                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
                 }
 
                 const gridVisionEffect      = war.getGridVisionEffect();
@@ -1182,7 +928,7 @@ namespace WarActionExecutor {
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1192,18 +938,13 @@ namespace WarActionExecutor {
                 focusUnit.updateView();
 
             } else {
-                const targetGridIndex                                           = action.targetGridIndex as GridIndex;
-                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = WarDamageCalculator.getFinalBattleDamage({
+                const targetGridIndex       = action.targetGridIndex as GridIndex;
+                const battleDamageInfoArray = WarDamageCalculator.getFinalBattleDamage({
                     war,
                     attackerMovePath: pathNodes,
                     launchUnitId,
                     targetGridIndex,
                 });
-                if (errorCodeForDamage) {
-                    return errorCodeForDamage;
-                } else if (battleDamageInfoArray == null) {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_01;
-                }
 
                 const selfTeamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
                 const allVisibleUnits   = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
@@ -1234,113 +975,45 @@ namespace WarActionExecutor {
                 const damagedTileSet    = new Set<BwTile>();
 
                 for (const battleDamageInfo of battleDamageInfoArray) {
-                    const unitId1 = battleDamageInfo.attackerUnitId;
-                    if (unitId1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_02;
-                    }
-
-                    const unit1 = unitMap.getUnitById(unitId1);
-                    if (unit1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_03;
-                    }
-
-                    const player1 = unit1.getPlayer();
-                    if (player1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_04;
-                    }
-
-                    const damage = battleDamageInfo.damage;
-                    if (damage == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_05;
-                    }
-
+                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_01);
+                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_02);
+                    const player1   = unit1.getPlayer();
+                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_03);
                     affectedPlayerSet.add(player1);
                     affectedUnitSet.add(unit1);
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
-                        const unitGridIndex1 = unit1.getGridIndex();
-                        if (unitGridIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_06;
-                        }
-
-                        const unit2 = unitMap.getUnitById(unitId2);
-                        if (unit2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_07;
-                        }
-
-                        const unitGridIndex2 = unit2.getGridIndex();
-                        if (unitGridIndex2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_08;
-                        }
-
-                        const playerIndex1 = unit1.getPlayerIndex();
-                        if (playerIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_09;
-                        }
-
-                        const playerIndex2 = unit2.getPlayerIndex();
-                        if (playerIndex2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_10;
-                        }
-
-                        const coGridIndexArray1 = unitMap.getCoGridIndexListOnMap(playerIndex1);
-                        if (coGridIndexArray1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_11;
-                        }
-
-                        const coGridIndexArray2 = unitMap.getCoGridIndexListOnMap(playerIndex2);
-                        if (coGridIndexArray2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_12;
-                        }
-
-                        const unitOldHp2 = unit2.getCurrentHp();
-                        if (unitOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_13;
-                        }
-
-                        const player2 = unit2.getPlayer();
-                        if (player2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_14;
-                        }
-
+                        const unitGridIndex1        = unit1.getGridIndex();
+                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_04);
+                        const unitGridIndex2        = unit2.getGridIndex();
+                        const playerIndex1          = unit1.getPlayerIndex();
+                        const playerIndex2          = unit2.getPlayerIndex();
+                        const coGridIndexArray1     = unitMap.getCoGridIndexListOnMap(playerIndex1);
+                        const coGridIndexArray2     = unitMap.getCoGridIndexListOnMap(playerIndex2);
+                        const unitOldHp2            = unit2.getCurrentHp();
+                        const player2               = unit2.getPlayer();
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
                         const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
                         const isInCoZone1           = (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1));
 
-                        const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
-                        if (errorCodeForPrimaryAmmo) {
-                            return errorCodeForPrimaryAmmo;
-                        }
-
-                        const errorCodeForHp = handleHpForUnit(unit2, unitNewHp2);
-                        if (errorCodeForHp) {
-                            return errorCodeForHp;
-                        }
-
-                        const errorCodeForPromotion = handlePromotionForUnitAttackUnit({
+                        handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
+                        handleHpForUnit(unit2, unitNewHp2);
+                        handlePromotionForUnitAttackUnit({
                             attackerPlayer              : player1,
                             attackerUnit                : unit1,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             attackerCoGridIndexListOnMap: coGridIndexArray1,
                             isTargetDestroyed           : unitNewHp2 <= 0,
                         });
-                        if (errorCodeForPromotion) {
-                            return errorCodeForPromotion;
-                        }
-
-                        const errorCodeForFund = handleFundForUnitAttackUnit({
+                        handleFundForUnitAttackUnit({
                             attackerPlayer              : player1,
                             attackerUnit                : unit1,
                             targetUnit                  : unit2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             isAttackerInAttackerCoZone  : isInCoZone1,
                         });
-                        if (errorCodeForFund) {
-                            return errorCodeForFund;
-                        }
-
-                        const errorCodeForEnergy = handleEnergyForUnitAttackUnit({
+                        handleEnergyForUnitAttackUnit({
                             war,
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
@@ -1348,17 +1021,10 @@ namespace WarActionExecutor {
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
-                        if (errorCodeForEnergy) {
-                            return errorCodeForEnergy;
-                        }
-
-                        const errorCodeForUnitDestruction = handleDestructionForUnit({
+                        handleDestructionForUnit({
                             war,
                             unit    : unit2,
                         });
-                        if (errorCodeForUnitDestruction) {
-                            return errorCodeForUnitDestruction;
-                        }
 
                         affectedPlayerSet.add(player2);
                         affectedUnitSet.add(unit2);
@@ -1369,54 +1035,27 @@ namespace WarActionExecutor {
 
                     const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
-                        const tile2 = tileMap.getTile(gridIndex2);
-                        if (tile2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_15;
-                        }
+                        const tile2         = tileMap.getTile(gridIndex2);
+                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_05);
+                        handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
+                        handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
 
-                        const tileOldHp2 = tile2.getCurrentHp();
-                        if (tileOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_16;
-                        }
-
-                        const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
-                        if (errorCodeForPrimaryAmmo) {
-                            return errorCodeForPrimaryAmmo;
-                        }
-
-                        const errorCodeForHp = handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
-                        if (errorCodeForHp) {
-                            return errorCodeForHp;
-                        }
-
-                        const {
-                            errorCode       : errorCodeForTileDestruction,
-                            damagedTileSet  : damagedTiles,
-                            destroyedTileSet: destroyedTiles,
-                        } = handleDestructionForTile(war, tile2);
-                        if (errorCodeForTileDestruction) {
-                            return errorCodeForTileDestruction;
-                        }
-
-                        for (const tile of damagedTiles) {
+                        const result = handleDestructionForTile(war, tile2);
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of destroyedTiles) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
                         continue;
                     }
 
-                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_17;
+                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_06);
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
-                    if (affectedPlayerIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_18;
-                    }
-
                     if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
                         (affectedPlayer.getAliveState() !== Types.PlayerAliveState.Dead)
                     ) {
@@ -1458,16 +1097,15 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitAttackUnit(war, action)
             : await normalExeUnitAttackUnit(war, action);
     }
-    async function fastExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<ClientErrorCode> {
+    async function fastExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<void> {
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -1477,7 +1115,7 @@ namespace WarActionExecutor {
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1495,38 +1133,26 @@ namespace WarActionExecutor {
                 for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
                     const targetUnitId = battleDamageInfo.targetUnitId;
                     if (targetUnitId != null) {
-                        damagedUnitSet.add(unitMap.getUnitById(targetUnitId));
+                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
                         continue;
                     }
 
-                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
-                    if (targetTileGridIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_00;
-                    }
+                    const targetTileGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_00);
+                    const tile                  = tileMap.getTile(targetTileGridIndex);
+                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
 
-                    const tile = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, tile.getCurrentHp() - battleDamageInfo.damage));
-
-                    const {
-                        errorCode       : errorCodeForTileDestruction,
-                        damagedTileSet  : damagedTiles,
-                        destroyedTileSet: destroyedTiles,
-                    } = handleDestructionForTile(war, tile);
-                    if (errorCodeForTileDestruction) {
-                        return errorCodeForTileDestruction;
-                    }
-
-                    for (const t of damagedTiles) {
+                    const result = handleDestructionForTile(war, tile);
+                    for (const t of Helpers.getExisted(result.damagedTileSet)) {
                         damagedTileSet.add(t);
                     }
-                    for (const t of destroyedTiles) {
+                    for (const t of Helpers.getExisted(result.destroyedTileSet)) {
                         destroyedTileSet.add(t);
                     }
                 }
 
                 const configVersion = war.getConfigVersion();
                 for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = unitMap.getUnitById(affectedUnitData.unitId);
+                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
@@ -1535,31 +1161,25 @@ namespace WarActionExecutor {
                 }
 
                 for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(affectedPlayerData.playerIndex).init(affectedPlayerData, configVersion);
+                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
                 }
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
             } else {
-                const targetGridIndex                                           = action.targetGridIndex as GridIndex;
-                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = WarDamageCalculator.getFinalBattleDamage({
+                const targetGridIndex       = action.targetGridIndex as GridIndex;
+                const battleDamageInfoArray = WarDamageCalculator.getFinalBattleDamage({
                     war,
                     attackerMovePath: pathNodes,
                     launchUnitId,
                     targetGridIndex,
                 });
-                if (errorCodeForDamage) {
-                    return errorCodeForDamage;
-                } else if (battleDamageInfoArray == null) {
-                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_01;
-                }
-
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
@@ -1572,113 +1192,45 @@ namespace WarActionExecutor {
                 const damagedTileSet    = new Set<BwTile>();
 
                 for (const battleDamageInfo of battleDamageInfoArray) {
-                    const unitId1 = battleDamageInfo.attackerUnitId;
-                    if (unitId1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_02;
-                    }
-
-                    const unit1 = unitMap.getUnitById(unitId1);
-                    if (unit1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_03;
-                    }
-
-                    const player1 = unit1.getPlayer();
-                    if (player1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_04;
-                    }
-
-                    const damage = battleDamageInfo.damage;
-                    if (damage == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_05;
-                    }
-
+                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_01);
+                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1),ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_02);
+                    const player1   = unit1.getPlayer();
+                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_03);
                     affectedPlayerSet.add(player1);
                     affectedUnitSet.add(unit1);
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
-                        const unit2 = unitMap.getUnitById(unitId2);
-                        if (unit2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_06;
-                        }
-
-                        const unitGridIndex1 = unit1.getGridIndex();
-                        if (unitGridIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_07;
-                        }
-
-                        const unitGridIndex2 = unit2.getGridIndex();
-                        if (unitGridIndex2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_08;
-                        }
-
-                        const playerIndex1 = unit1.getPlayerIndex();
-                        if (playerIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_09;
-                        }
-
-                        const playerIndex2 = unit2.getPlayerIndex();
-                        if (playerIndex2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_10;
-                        }
-
-                        const coGridIndexArray1 = unitMap.getCoGridIndexListOnMap(playerIndex1);
-                        if (coGridIndexArray1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_11;
-                        }
-
-                        const coGridIndexArray2 = unitMap.getCoGridIndexListOnMap(playerIndex2);
-                        if (coGridIndexArray2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_12;
-                        }
-
-                        const unitOldHp2 = unit2.getCurrentHp();
-                        if (unitOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_13;
-                        }
-
-                        const player2 = unit2.getPlayer();
-                        if (player2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_14;
-                        }
-
+                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_04);
+                        const unitGridIndex1        = unit1.getGridIndex();
+                        const unitGridIndex2        = unit2.getGridIndex();
+                        const playerIndex1          = unit1.getPlayerIndex();
+                        const playerIndex2          = unit2.getPlayerIndex();
+                        const coGridIndexArray1     = unitMap.getCoGridIndexListOnMap(playerIndex1);
+                        const coGridIndexArray2     = unitMap.getCoGridIndexListOnMap(playerIndex2);
+                        const unitOldHp2            = unit2.getCurrentHp();
+                        const player2               = unit2.getPlayer();
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
                         const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
                         const isInCoZone1           = (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1));
 
-                        const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
-                        if (errorCodeForPrimaryAmmo) {
-                            return errorCodeForPrimaryAmmo;
-                        }
-
-                        const errorCodeForHp = handleHpForUnit(unit2, unitNewHp2);
-                        if (errorCodeForHp) {
-                            return errorCodeForHp;
-                        }
-
-                        const errorCodeForPromotion = handlePromotionForUnitAttackUnit({
+                        handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
+                        handleHpForUnit(unit2, unitNewHp2);
+                        handlePromotionForUnitAttackUnit({
                             attackerPlayer              : player1,
                             attackerUnit                : unit1,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             attackerCoGridIndexListOnMap: coGridIndexArray1,
                             isTargetDestroyed           : unitNewHp2 <= 0,
                         });
-                        if (errorCodeForPromotion) {
-                            return errorCodeForPromotion;
-                        }
-
-                        const errorCodeForFund = handleFundForUnitAttackUnit({
+                        handleFundForUnitAttackUnit({
                             attackerPlayer              : player1,
                             attackerUnit                : unit1,
                             targetUnit                  : unit2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             isAttackerInAttackerCoZone  : isInCoZone1,
                         });
-                        if (errorCodeForFund) {
-                            return errorCodeForFund;
-                        }
-
-                        const errorCodeForEnergy = handleEnergyForUnitAttackUnit({
+                        handleEnergyForUnitAttackUnit({
                             war,
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
@@ -1686,17 +1238,10 @@ namespace WarActionExecutor {
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
-                        if (errorCodeForEnergy) {
-                            return errorCodeForEnergy;
-                        }
-
-                        const errorCodeForUnitDestruction = handleDestructionForUnit({
+                        handleDestructionForUnit({
                             war,
                             unit    : unit2,
                         });
-                        if (errorCodeForUnitDestruction) {
-                            return errorCodeForUnitDestruction;
-                        }
 
                         affectedPlayerSet.add(player2);
                         affectedUnitSet.add(unit2);
@@ -1707,54 +1252,27 @@ namespace WarActionExecutor {
 
                     const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
-                        const tile2 = tileMap.getTile(gridIndex2);
-                        if (tile2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_15;
-                        }
+                        const tile2         = tileMap.getTile(gridIndex2);
+                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_05);
+                        handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
+                        handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
 
-                        const tileOldHp2 = tile2.getCurrentHp();
-                        if (tileOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_16;
-                        }
-
-                        const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
-                        if (errorCodeForPrimaryAmmo) {
-                            return errorCodeForPrimaryAmmo;
-                        }
-
-                        const errorCodeForHp = handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
-                        if (errorCodeForHp) {
-                            return errorCodeForHp;
-                        }
-
-                        const {
-                            errorCode       : errorCodeForTileDestruction,
-                            damagedTileSet  : damagedTiles,
-                            destroyedTileSet: destroyedTiles,
-                        } = handleDestructionForTile(war, tile2);
-                        if (errorCodeForTileDestruction) {
-                            return errorCodeForTileDestruction;
-                        }
-
-                        for (const tile of damagedTiles) {
+                        const result = handleDestructionForTile(war, tile2);
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of destroyedTiles) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
                         continue;
                     }
 
-                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_17;
+                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_06);
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
-                    if (affectedPlayerIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_18;
-                    }
-
                     if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
                         (affectedPlayer.getAliveState() !== Types.PlayerAliveState.Dead)
                     ) {
@@ -1763,10 +1281,8 @@ namespace WarActionExecutor {
                 }
             }
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<ClientErrorCode> {
+    async function normalExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<void> {
         const desc = await war.getDescForExeUnitAttackUnit(action);
         (desc) && (FloatText.show(desc));
 
@@ -1779,7 +1295,7 @@ namespace WarActionExecutor {
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1817,31 +1333,19 @@ namespace WarActionExecutor {
                 for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
                     const targetUnitId = battleDamageInfo.targetUnitId;
                     if (targetUnitId != null) {
-                        damagedUnitSet.add(unitMap.getUnitById(targetUnitId));
+                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
                         continue;
                     }
 
-                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
-                    if (targetTileGridIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_00;
-                    }
+                    const targetTileGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_00);
+                    const tile                  = tileMap.getTile(targetTileGridIndex);
+                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
 
-                    const tile = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, tile.getCurrentHp() - battleDamageInfo.damage));
-
-                    const {
-                        errorCode       : errorCodeForTileDestruction,
-                        damagedTileSet  : damagedTiles,
-                        destroyedTileSet: destroyedTiles,
-                    } = handleDestructionForTile(war, tile);
-                    if (errorCodeForTileDestruction) {
-                        return errorCodeForTileDestruction;
-                    }
-
-                    for (const t of damagedTiles) {
+                    const tileDestructionsData = handleDestructionForTile(war, tile);
+                    for (const t of Helpers.getExisted(tileDestructionsData.damagedTileSet)) {
                         damagedTileSet.add(t);
                     }
-                    for (const t of destroyedTiles) {
+                    for (const t of Helpers.getExisted(tileDestructionsData.destroyedTileSet)) {
                         destroyedTileSet.add(t);
                     }
                 }
@@ -1849,7 +1353,7 @@ namespace WarActionExecutor {
                 const configVersion     = war.getConfigVersion();
                 const affectedUnitSet   = new Set<BwUnit>();
                 for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = unitMap.getUnitById(affectedUnitData.unitId);
+                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
                     unit.init(affectedUnitData, configVersion);
                     unit.startRunning(war);
                     if (unit.getCurrentHp() <= 0) {
@@ -1860,7 +1364,7 @@ namespace WarActionExecutor {
                 }
 
                 for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(affectedPlayerData.playerIndex).init(affectedPlayerData, configVersion);
+                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
                 }
 
                 const gridVisionEffect      = war.getGridVisionEffect();
@@ -1896,7 +1400,7 @@ namespace WarActionExecutor {
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1906,19 +1410,13 @@ namespace WarActionExecutor {
                 focusUnit.updateView();
 
             } else {
-                const targetGridIndex                                           = action.targetGridIndex as GridIndex;
-                const { errorCode: errorCodeForDamage, battleDamageInfoArray }  = WarDamageCalculator.getFinalBattleDamage({
+                const targetGridIndex       = action.targetGridIndex as GridIndex;
+                const battleDamageInfoArray = WarDamageCalculator.getFinalBattleDamage({
                     war,
                     attackerMovePath: pathNodes,
                     launchUnitId,
                     targetGridIndex,
                 });
-                if (errorCodeForDamage) {
-                    return errorCodeForDamage;
-                } else if (battleDamageInfoArray == null) {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_01;
-                }
-
                 const selfTeamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
                 const allVisibleUnits   = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
 
@@ -1948,113 +1446,45 @@ namespace WarActionExecutor {
                 const damagedTileSet    = new Set<BwTile>();
 
                 for (const battleDamageInfo of battleDamageInfoArray) {
-                    const unitId1 = battleDamageInfo.attackerUnitId;
-                    if (unitId1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_02;
-                    }
-
-                    const unit1 = unitMap.getUnitById(unitId1);
-                    if (unit1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_03;
-                    }
-
-                    const player1 = unit1.getPlayer();
-                    if (player1 == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_04;
-                    }
-
-                    const damage = battleDamageInfo.damage;
-                    if (damage == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_05;
-                    }
-
+                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_01);
+                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_02);
+                    const player1   = unit1.getPlayer();
+                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_03);
                     affectedPlayerSet.add(player1);
                     affectedUnitSet.add(unit1);
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
-                        const unit2 = unitMap.getUnitById(unitId2);
-                        if (unit2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_06;
-                        }
-
-                        const unitGridIndex1 = unit1.getGridIndex();
-                        if (unitGridIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_07;
-                        }
-
-                        const unitGridIndex2 = unit2.getGridIndex();
-                        if (unitGridIndex2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_08;
-                        }
-
-                        const playerIndex1 = unit1.getPlayerIndex();
-                        if (playerIndex1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_09;
-                        }
-
-                        const playerIndex2 = unit2.getPlayerIndex();
-                        if (playerIndex2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_10;
-                        }
-
-                        const coGridIndexArray1 = unitMap.getCoGridIndexListOnMap(playerIndex1);
-                        if (coGridIndexArray1 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_11;
-                        }
-
-                        const coGridIndexArray2 = unitMap.getCoGridIndexListOnMap(playerIndex2);
-                        if (coGridIndexArray2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_12;
-                        }
-
-                        const unitOldHp2 = unit2.getCurrentHp();
-                        if (unitOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_13;
-                        }
-
-                        const player2 = unit2.getPlayer();
-                        if (player2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_14;
-                        }
-
+                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_04);
+                        const unitGridIndex1        = unit1.getGridIndex();
+                        const unitGridIndex2        = unit2.getGridIndex();
+                        const playerIndex1          = unit1.getPlayerIndex();
+                        const playerIndex2          = unit2.getPlayerIndex();
+                        const coGridIndexArray1     = unitMap.getCoGridIndexListOnMap(playerIndex1);
+                        const coGridIndexArray2     = unitMap.getCoGridIndexListOnMap(playerIndex2);
+                        const unitOldHp2            = unit2.getCurrentHp();
+                        const player2               = unit2.getPlayer();
                         const unitNewHp2            = Math.max(0, unitOldHp2 - damage);
                         const unitLostNormalizedHp2 = WarCommonHelpers.getNormalizedHp(unitOldHp2) - WarCommonHelpers.getNormalizedHp(unitNewHp2);
                         const isInCoZone1           = (unit1.getHasLoadedCo()) || (player1.checkIsInCoZone(unitGridIndex1, coGridIndexArray1));
 
-                        const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
-                        if (errorCodeForPrimaryAmmo) {
-                            return errorCodeForPrimaryAmmo;
-                        }
-
-                        const errorCodeForHp = handleHpForUnit(unit2, unitNewHp2);
-                        if (errorCodeForHp) {
-                            return errorCodeForHp;
-                        }
-
-                        const errorCodeForPromotion = handlePromotionForUnitAttackUnit({
+                        handlePrimaryWeaponAmmoForUnitAttackUnit(unit1, unit2);
+                        handleHpForUnit(unit2, unitNewHp2);
+                        handlePromotionForUnitAttackUnit({
                             attackerPlayer              : player1,
                             attackerUnit                : unit1,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             attackerCoGridIndexListOnMap: coGridIndexArray1,
                             isTargetDestroyed           : unitNewHp2 <= 0,
                         });
-                        if (errorCodeForPromotion) {
-                            return errorCodeForPromotion;
-                        }
-
-                        const errorCodeForFund = handleFundForUnitAttackUnit({
+                        handleFundForUnitAttackUnit({
                             attackerPlayer              : player1,
                             attackerUnit                : unit1,
                             targetUnit                  : unit2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
                             isAttackerInAttackerCoZone  : isInCoZone1,
                         });
-                        if (errorCodeForFund) {
-                            return errorCodeForFund;
-                        }
-
-                        const errorCodeForEnergy = handleEnergyForUnitAttackUnit({
+                        handleEnergyForUnitAttackUnit({
                             war,
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
@@ -2062,17 +1492,10 @@ namespace WarActionExecutor {
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
-                        if (errorCodeForEnergy) {
-                            return errorCodeForEnergy;
-                        }
-
-                        const errorCodeForUnitDestruction = handleDestructionForUnit({
+                        handleDestructionForUnit({
                             war,
                             unit    : unit2,
                         });
-                        if (errorCodeForUnitDestruction) {
-                            return errorCodeForUnitDestruction;
-                        }
 
                         affectedPlayerSet.add(player2);
                         affectedUnitSet.add(unit2);
@@ -2083,54 +1506,27 @@ namespace WarActionExecutor {
 
                     const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
-                        const tile2 = tileMap.getTile(gridIndex2);
-                        if (tile2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_15;
-                        }
+                        const tile2         = tileMap.getTile(gridIndex2);
+                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_05);
+                        handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
+                        handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
 
-                        const tileOldHp2 = tile2.getCurrentHp();
-                        if (tileOldHp2 == null) {
-                            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_16;
-                        }
-
-                        const errorCodeForPrimaryAmmo = handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
-                        if (errorCodeForPrimaryAmmo) {
-                            return errorCodeForPrimaryAmmo;
-                        }
-
-                        const errorCodeForHp = handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
-                        if (errorCodeForHp) {
-                            return errorCodeForHp;
-                        }
-
-                        const {
-                            errorCode       : errorCodeForTileDestruction,
-                            damagedTileSet  : damagedTiles,
-                            destroyedTileSet: destroyedTiles,
-                        } = handleDestructionForTile(war, tile2);
-                        if (errorCodeForTileDestruction) {
-                            return errorCodeForTileDestruction;
-                        }
-
-                        for (const tile of damagedTiles) {
+                        const result = handleDestructionForTile(war, tile2);
+                        for (const tile of Helpers.getExisted(result.damagedTileSet)) {
                             damagedTileSet.add(tile);
                         }
-                        for (const tile of destroyedTiles) {
+                        for (const tile of Helpers.getExisted(result.destroyedTileSet)) {
                             destroyedTileSet.add(tile);
                         }
 
                         continue;
                     }
 
-                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_17;
+                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_06);
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
                     const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
-                    if (affectedPlayerIndex == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_18;
-                    }
-
                     if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
                         (affectedPlayer.getAliveState() !== Types.PlayerAliveState.Dead)
                     ) {
@@ -2172,34 +1568,31 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitBeLoaded(war, action)
             : await normalExeUnitBeLoaded(war, action);
     }
-    async function fastExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<ClientErrorCode> {
+    async function fastExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<void> {
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         focusUnit.setActionState(UnitActionState.Acted);
         if (path.isBlocked) {
             unitMap.setUnitOnMap(focusUnit);
         } else {
-            const loaderUnit = unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
+            const loaderUnit = Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
             unitMap.setUnitLoaded(focusUnit);
             focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<ClientErrorCode> {
+    async function normalExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<void> {
         const desc = await war.getDescForExeUnitBeLoaded(action);
         (desc) && (FloatText.show(desc));
 
@@ -2212,7 +1605,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         focusUnit.setActionState(UnitActionState.Acted);
 
@@ -2223,7 +1616,7 @@ namespace WarActionExecutor {
             focusUnit.updateView();
 
         } else {
-            const loaderUnit = unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
+            const loaderUnit = Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
             unitMap.setUnitLoaded(focusUnit);
             focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
 
@@ -2234,21 +1627,20 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitBuildTile(war, action)
             : await normalExeUnitBuildTile(war, action);
     }
-    async function fastExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<ClientErrorCode> {
+    async function fastExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<void> {
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2256,7 +1648,7 @@ namespace WarActionExecutor {
         if (!path.isBlocked) {
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
             const tile              = war.getTileMap().getTile(endingGridIndex);
-            const buildPoint        = tile.getCurrentBuildPoint() - focusUnit.getBuildAmount();
+            const buildPoint        = Helpers.getExisted(tile.getCurrentBuildPoint()) - Helpers.getExisted(focusUnit.getBuildAmount());
             // if (tile.getIsFogEnabled()) {
             //     tile.setFogDisabled();
             // }
@@ -2264,24 +1656,18 @@ namespace WarActionExecutor {
                 focusUnit.setIsBuildingTile(true);
                 tile.setCurrentBuildPoint(buildPoint);
             } else {
-                const targetTileCfg = focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType());
-                if (targetTileCfg == null) {
-                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitBuildTile_00;
-                }
-
+                const targetTileCfg = Helpers.getExisted(focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType()), ClientErrorCode.BwWarActionExecutor_FastExeUnitBuildTile_00);
                 focusUnit.setIsBuildingTile(false);
-                focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
+                focusUnit.setCurrentBuildMaterial(Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
                 tile.resetByTypeAndPlayerIndex({
-                    baseType        : targetTileCfg.dstBaseType,
-                    objectType      : targetTileCfg.dstObjectType,
+                    baseType        : Helpers.getExisted(targetTileCfg.dstBaseType),
+                    objectType      : Helpers.getExisted(targetTileCfg.dstObjectType),
                     playerIndex     : focusUnit.getPlayerIndex(),
                 });
             }
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<ClientErrorCode> {
+    async function normalExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<void> {
         const desc = await war.getDescForExeUnitBuildTile(action);
         (desc) && (FloatText.show(desc));
 
@@ -2294,7 +1680,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2302,7 +1688,7 @@ namespace WarActionExecutor {
         if (!path.isBlocked) {
             const endingGridIndex   = pathNodes[pathNodes.length - 1];
             const tile              = war.getTileMap().getTile(endingGridIndex);
-            const buildPoint        = tile.getCurrentBuildPoint() - focusUnit.getBuildAmount();
+            const buildPoint        = Helpers.getExisted(tile.getCurrentBuildPoint()) - Helpers.getExisted(focusUnit.getBuildAmount());
             // if (tile.getIsFogEnabled()) {
             //     tile.setFogDisabled();
             // }
@@ -2310,16 +1696,12 @@ namespace WarActionExecutor {
                 focusUnit.setIsBuildingTile(true);
                 tile.setCurrentBuildPoint(buildPoint);
             } else {
-                const targetTileCfg = focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType());
-                if (targetTileCfg == null) {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitBuildTile_00;
-                }
-
+                const targetTileCfg = Helpers.getExisted(focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType()), ClientErrorCode.BwWarActionExecutor_NormalExeUnitBuildTile_00);
                 focusUnit.setIsBuildingTile(false);
-                focusUnit.setCurrentBuildMaterial(focusUnit.getCurrentBuildMaterial() - 1);
+                focusUnit.setCurrentBuildMaterial(Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
                 tile.resetByTypeAndPlayerIndex({
-                    baseType        : targetTileCfg.dstBaseType,
-                    objectType      : targetTileCfg.dstObjectType,
+                    baseType        : Helpers.getExisted(targetTileCfg.dstBaseType),
+                    objectType      : Helpers.getExisted(targetTileCfg.dstObjectType),
                     playerIndex     : focusUnit.getPlayerIndex(),
                 });
             }
@@ -2328,22 +1710,20 @@ namespace WarActionExecutor {
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
         war.updateTilesAndUnitsOnVisibilityChanged();
-
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitCaptureTile(war, action)
             : await normalExeUnitCaptureTile(war, action);
     }
-    async function fastExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<ClientErrorCode> {
+    async function fastExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<void> {
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2354,7 +1734,7 @@ namespace WarActionExecutor {
             // TODO: capture amount is incorrect if the co has zoned capture skill and is invisible!
             const destination       = pathNodes[pathNodes.length - 1];
             const tile              = war.getTileMap().getTile(destination);
-            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount(destination);
+            const restCapturePoint  = Helpers.getExisted(tile.getCurrentCapturePoint()) - Helpers.getExisted(focusUnit.getCaptureAmount(destination));
             if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
                 tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
             }
@@ -2371,12 +1751,11 @@ namespace WarActionExecutor {
                     objectType      : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
                     playerIndex     : focusUnit.getPlayerIndex(),
                 });
+                Notify.dispatch(NotifyType.BwTileBeCaptured);
             }
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<ClientErrorCode> {
+    async function normalExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<void> {
         const desc = await war.getDescForExeUnitCaptureTile(action);
         (desc) && (FloatText.show(desc));
 
@@ -2389,7 +1768,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2402,9 +1781,9 @@ namespace WarActionExecutor {
             // TODO: capture amount is incorrect if the co has zoned capture skill and is invisible!
             const destination           = pathNodes[pathNodes.length - 1];
             const tile                  = war.getTileMap().getTile(destination);
-            const maxCapturePoint       = tile.getMaxCapturePoint();
-            const currentCapturePoint   = tile.getCurrentCapturePoint();
-            const restCapturePoint      = currentCapturePoint - focusUnit.getCaptureAmount(destination);
+            const maxCapturePoint       = Helpers.getExisted(tile.getMaxCapturePoint());
+            const currentCapturePoint   = Helpers.getExisted(tile.getCurrentCapturePoint());
+            const restCapturePoint      = currentCapturePoint - Helpers.getExisted(focusUnit.getCaptureAmount(destination));
             if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
                 tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
             }
@@ -2436,33 +1815,31 @@ namespace WarActionExecutor {
             }
             focusUnit.updateView();
             tile.flushDataToView();
+            Notify.dispatch(NotifyType.BwTileBeCaptured);
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitDive(war: BwWar, action: IWarActionUnitDive, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitDive(war: BwWar, action: IWarActionUnitDive, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitDive(war, action)
             : await normalExeUnitDive(war, action);
     }
-    async function fastExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<ClientErrorCode> {
+    async function fastExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<void> {
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         const isSuccessful  = !path.isBlocked;
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(true));
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<ClientErrorCode> {
+    async function normalExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<void> {
         const desc = await war.getDescForExeUnitDive(action);
         (desc) && (FloatText.show(desc));
 
@@ -2475,7 +1852,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         const isSuccessful  = !path.isBlocked;
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
@@ -2499,22 +1876,21 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitDropUnit(war, action)
             : await normalExeUnitDropUnit(war, action);
     }
-    async function fastExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<ClientErrorCode> {
+    async function fastExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<void> {
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
         const unitMap           = war.getUnitMap();
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2523,13 +1899,13 @@ namespace WarActionExecutor {
         const fogMap                = war.getFogMap();
         const unitsForDrop          : BwUnit[] = [];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = unitMap.getUnitLoadedById(unitId);
+            const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                 unit.setGridIndex(gridIndex);
             }
 
-            unitForDrop.setLoaderUnitId(undefined);
+            unitForDrop.setLoaderUnitId(null);
             unitForDrop.setGridIndex(gridIndex);
             unitForDrop.setActionState(UnitActionState.Acted);
             unitsForDrop.push(unitForDrop);
@@ -2538,10 +1914,8 @@ namespace WarActionExecutor {
                 fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
             }
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<ClientErrorCode> {
+    async function normalExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<void> {
         const desc = await war.getDescForExeUnitDropUnit(action);
         (desc) && (FloatText.show(desc));
 
@@ -2555,7 +1929,7 @@ namespace WarActionExecutor {
         const pathNodes         = path.nodes;
         const unitMap           = war.getUnitMap();
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2564,13 +1938,13 @@ namespace WarActionExecutor {
         const fogMap                = war.getFogMap();
         const unitsForDrop          : BwUnit[] = [];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = unitMap.getUnitLoadedById(unitId);
+            const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                 unit.setGridIndex(gridIndex);
             }
 
-            unitForDrop.setLoaderUnitId(undefined);
+            unitForDrop.setLoaderUnitId(null);
             unitForDrop.setGridIndex(gridIndex);
             unitForDrop.setActionState(UnitActionState.Acted);
             unitsForDrop.push(unitForDrop);
@@ -2599,23 +1973,21 @@ namespace WarActionExecutor {
         }
         await Promise.all(promises);
         war.updateTilesAndUnitsOnVisibilityChanged();
-
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitJoinUnit(war, action)
             : await normalExeUnitJoinUnit(war, action);
     }
-    async function fastExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<ClientErrorCode> {
+    async function fastExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<void> {
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const unitMap           = war.getUnitMap();
-        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
 
         if (path.isBlocked) {
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2623,7 +1995,7 @@ namespace WarActionExecutor {
             focusUnit.setActionState(UnitActionState.Acted);
 
         } else {
-            const targetUnit    = unitMap.getUnitOnMap(endingGridIndex);
+            const targetUnit    = Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
             const player        = war.getPlayer(focusUnit.getPlayerIndex());
             unitMap.removeUnitOnMap(endingGridIndex, true);
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2634,8 +2006,8 @@ namespace WarActionExecutor {
 
             if (focusUnit.checkHasPrimaryWeapon()) {
                 focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
-                    focusUnit.getPrimaryWeaponMaxAmmo(),
-                    focusUnit.getPrimaryWeaponCurrentAmmo() + targetUnit.getPrimaryWeaponCurrentAmmo()
+                    Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
+                    Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo()),
                 ));
             }
 
@@ -2662,7 +2034,7 @@ namespace WarActionExecutor {
             if (maxBuildMaterial != null) {
                 focusUnit.setCurrentBuildMaterial(Math.min(
                     maxBuildMaterial,
-                    focusUnit.getCurrentBuildMaterial() + targetUnit.getCurrentBuildMaterial()
+                    Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Helpers.getExisted(targetUnit.getCurrentBuildMaterial()),
                 ));
             }
 
@@ -2670,7 +2042,7 @@ namespace WarActionExecutor {
             if (maxProduceMaterial != null) {
                 focusUnit.setCurrentProduceMaterial(Math.min(
                     maxProduceMaterial,
-                    focusUnit.getCurrentProduceMaterial() + targetUnit.getCurrentProduceMaterial()
+                    Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Helpers.getExisted(targetUnit.getCurrentProduceMaterial()),
                 ));
             }
 
@@ -2684,19 +2056,15 @@ namespace WarActionExecutor {
             {
                 const maxAmmo = focusUnit.getFlareMaxAmmo();
                 if (maxAmmo != null) {
-                    const focusUnitCurrentAmmo  = focusUnit.getFlareCurrentAmmo();
-                    const targetUnitCurrentAmmo = targetUnit.getFlareCurrentAmmo();
                     focusUnit.setFlareCurrentAmmo(Math.min(
                         maxAmmo,
-                        focusUnitCurrentAmmo + targetUnitCurrentAmmo
+                        Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Helpers.getExisted(targetUnit.getFlareCurrentAmmo()),
                     ));
                 }
             }
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<ClientErrorCode> {
+    async function normalExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<void> {
         const desc = await war.getDescForExeUnitJoinUnit(action);
         (desc) && (FloatText.show(desc));
 
@@ -2710,7 +2078,7 @@ namespace WarActionExecutor {
         const pathNodes         = path.nodes;
         const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const unitMap           = war.getUnitMap();
-        const focusUnit         = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
 
         if (path.isBlocked) {
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2721,7 +2089,7 @@ namespace WarActionExecutor {
             focusUnit.updateView();
 
         } else {
-            const targetUnit    = unitMap.getUnitOnMap(endingGridIndex);
+            const targetUnit    = Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
             const player        = war.getPlayer(focusUnit.getPlayerIndex());
             unitMap.removeUnitOnMap(endingGridIndex, false);
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -2732,8 +2100,8 @@ namespace WarActionExecutor {
 
             if (focusUnit.checkHasPrimaryWeapon()) {
                 focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
-                    focusUnit.getPrimaryWeaponMaxAmmo(),
-                    focusUnit.getPrimaryWeaponCurrentAmmo() + targetUnit.getPrimaryWeaponCurrentAmmo()
+                    Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
+                    Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo())
                 ));
             }
 
@@ -2760,7 +2128,7 @@ namespace WarActionExecutor {
             if (maxBuildMaterial != null) {
                 focusUnit.setCurrentBuildMaterial(Math.min(
                     maxBuildMaterial,
-                    focusUnit.getCurrentBuildMaterial() + targetUnit.getCurrentBuildMaterial()
+                    Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Helpers.getExisted(targetUnit.getCurrentBuildMaterial())
                 ));
             }
 
@@ -2768,7 +2136,7 @@ namespace WarActionExecutor {
             if (maxProduceMaterial != null) {
                 focusUnit.setCurrentProduceMaterial(Math.min(
                     maxProduceMaterial,
-                    focusUnit.getCurrentProduceMaterial() + targetUnit.getCurrentProduceMaterial()
+                    Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Helpers.getExisted(targetUnit.getCurrentProduceMaterial())
                 ));
             }
 
@@ -2782,11 +2150,9 @@ namespace WarActionExecutor {
             {
                 const maxAmmo = focusUnit.getFlareMaxAmmo();
                 if (maxAmmo != null) {
-                    const focusUnitCurrentAmmo  = focusUnit.getFlareCurrentAmmo();
-                    const targetUnitCurrentAmmo = targetUnit.getFlareCurrentAmmo();
                     focusUnit.setFlareCurrentAmmo(Math.min(
                         maxAmmo,
-                        focusUnitCurrentAmmo + targetUnitCurrentAmmo
+                        Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Helpers.getExisted(targetUnit.getFlareCurrentAmmo())
                     ));
                 }
             }
@@ -2797,36 +2163,33 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitLaunchFlare(war, action)
             : await normalExeUnitLaunchFlare(war, action);
     }
-    async function fastExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<ClientErrorCode> {
+    async function fastExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<void> {
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
         const isFlareSucceeded  = !path.isBlocked;
         const targetGridIndex   = action.targetGridIndex as GridIndex;
-        const flareRadius       = focusUnit.getFlareRadius();
+        const flareRadius       = Helpers.getExisted(focusUnit.getFlareRadius());
         if (isFlareSucceeded) {
-            focusUnit.setFlareCurrentAmmo(focusUnit.getFlareCurrentAmmo() - 1);
+            focusUnit.setFlareCurrentAmmo(Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
             war.getFogMap().updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<ClientErrorCode> {
+    async function normalExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<void> {
         const desc = await war.getDescForExeUnitLaunchFlare(action);
         (desc) && (FloatText.show(desc));
 
@@ -2839,16 +2202,16 @@ namespace WarActionExecutor {
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
         const isFlareSucceeded  = !path.isBlocked;
         const targetGridIndex   = action.targetGridIndex as GridIndex;
-        const flareRadius       = focusUnit.getFlareRadius();
+        const flareRadius       = Helpers.getExisted(focusUnit.getFlareRadius());
         if (isFlareSucceeded) {
-            focusUnit.setFlareCurrentAmmo(focusUnit.getFlareCurrentAmmo() - 1);
+            focusUnit.setFlareCurrentAmmo(Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
             war.getFogMap().updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
         }
 
@@ -2862,22 +2225,20 @@ namespace WarActionExecutor {
 
         focusUnit.updateView();
         war.updateTilesAndUnitsOnVisibilityChanged();
-
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitLaunchSilo(war, action)
             : await normalExeUnitLaunchSilo(war, action);
     }
-    async function fastExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<ClientErrorCode> {
+    async function fastExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<void> {
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const launchUnitId  = action.launchUnitId;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2903,10 +2264,8 @@ namespace WarActionExecutor {
                 }
             }
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<ClientErrorCode> {
+    async function normalExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<void> {
         const desc = await war.getDescForExeUnitLaunchSilo(action);
         (desc) && (FloatText.show(desc));
 
@@ -2919,7 +2278,7 @@ namespace WarActionExecutor {
         const pathNodes     = path.nodes;
         const launchUnitId  = action.launchUnitId;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -2961,21 +2320,20 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitLoadCo(war, action)
             : await normalExeUnitLoadCo(war, action);
     }
-    async function fastExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<ClientErrorCode> {
+    async function fastExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<void> {
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
 
@@ -2984,10 +2342,6 @@ namespace WarActionExecutor {
         } else {
             const playerIndex           = focusUnit.getPlayerIndex();
             const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
-            if (energyAddPctOnLoadCo == null) {
-                return ClientErrorCode.BwWarActionExecutor_FastExeUnitLoadCo_00;
-            }
-
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
             focusUnit.setHasLoadedCo(true);
 
@@ -2999,10 +2353,8 @@ namespace WarActionExecutor {
                 player.getCoCurrentEnergy() + Math.floor(coMaxEnergy * energyAddPctOnLoadCo / 100))
             );
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<ClientErrorCode> {
+    async function normalExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<void> {
         const desc = await war.getDescForExeUnitLoadCo(action);
         (desc) && (FloatText.show(desc));
 
@@ -3015,7 +2367,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], action.launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
 
@@ -3024,10 +2376,6 @@ namespace WarActionExecutor {
         } else {
             const playerIndex           = focusUnit.getPlayerIndex();
             const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
-            if (energyAddPctOnLoadCo == null) {
-                return ClientErrorCode.BwWarActionExecutor_NormalExeUnitLoadCo_00;
-            }
-
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
             focusUnit.setHasLoadedCo(true);
 
@@ -3043,22 +2391,20 @@ namespace WarActionExecutor {
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
         war.updateTilesAndUnitsOnVisibilityChanged();
-
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitProduceUnit(war, action)
             : await normalExeUnitProduceUnit(war, action);
     }
-    async function fastExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<ClientErrorCode> {
+    async function fastExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<void> {
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -3083,12 +2429,10 @@ namespace WarActionExecutor {
             player.setFund(player.getFund() - focusUnit.getProduceUnitCost());
             unitMap.setNextUnitId(producedUnitId + 1);
             unitMap.setUnitLoaded(producedUnit);
-            focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial() - 1);
+            focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<ClientErrorCode> {
+    async function normalExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<void> {
         const desc = await war.getDescForExeUnitProduceUnit(action);
         (desc) && (FloatText.show(desc));
 
@@ -3097,10 +2441,10 @@ namespace WarActionExecutor {
         const unitMap       = war.getUnitMap();
         const launchUnitId  = action.launchUnitId;
         const extraData     = action.extraData;
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -3124,17 +2468,16 @@ namespace WarActionExecutor {
                 producedUnit.setActionState(UnitActionState.Acted);
 
                 const player = war.getPlayerInTurn();
-                player.setFund(player.getFund() - extraData.cost);
+                player.setFund(player.getFund() - Helpers.getExisted(extraData.cost));
                 unitMap.setNextUnitId(producedUnitId + 1);
                 unitMap.setUnitLoaded(producedUnit);
-                focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial() - 1);
+                focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
 
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
                 focusUnit.updateView();
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -3161,7 +2504,7 @@ namespace WarActionExecutor {
                 player.setFund(player.getFund() - focusUnit.getProduceUnitCost());
                 unitMap.setNextUnitId(producedUnitId + 1);
                 unitMap.setUnitLoaded(producedUnit);
-                focusUnit.setCurrentProduceMaterial(focusUnit.getCurrentProduceMaterial() - 1);
+                focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
 
                 await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
                 focusUnit.updateView();
@@ -3169,21 +2512,20 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitSupplyUnit(war, action)
             : await normalExeUnitSupplyUnit(war, action);
     }
-    async function fastExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<ClientErrorCode> {
+    async function fastExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<void> {
         const revisedPath   = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -3201,17 +2543,15 @@ namespace WarActionExecutor {
                     const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
                     unit.updateByRepairData({
                         deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
-                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo() : null,
-                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - unit.getPrimaryWeaponCurrentAmmo() : null,
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
+                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
                     });
                     suppliedUnits.push(unit);
                 }
             }
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<ClientErrorCode> {
+    async function normalExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<void> {
         const desc = await war.getDescForExeUnitSupplyUnit(action);
         (desc) && (FloatText.show(desc));
 
@@ -3224,7 +2564,7 @@ namespace WarActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;
         const unitMap       = war.getUnitMap();
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -3244,8 +2584,8 @@ namespace WarActionExecutor {
                     const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
                     unit.updateByRepairData({
                         deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
-                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - unit.getFlareCurrentAmmo() : null,
-                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - unit.getPrimaryWeaponCurrentAmmo() : null,
+                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
+                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
                     });
                     suppliedUnits.push(unit);
                 }
@@ -3262,30 +2602,27 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitSurface(war: BwWar, action: IWarActionUnitSurface, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitSurface(war: BwWar, action: IWarActionUnitSurface, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitSurface(war, action)
             : await normalExeUnitSurface(war, action);
     }
-    async function fastExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<ClientErrorCode> {
+    async function fastExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<void> {
         const unitMap       = war.getUnitMap();
         const revisedPath   = action.path as MovePath;
         const pathNodes     = revisedPath.nodes;
         const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         const isSuccessful  = !revisedPath.isBlocked;
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(false));
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<ClientErrorCode> {
+    async function normalExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<void> {
         const desc = await war.getDescForExeUnitSurface(action);
         (desc) && (FloatText.show(desc));
 
@@ -3298,7 +2635,7 @@ namespace WarActionExecutor {
         const revisedPath   = action.path as MovePath;
         const pathNodes     = revisedPath.nodes;
         const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         const isSuccessful  = !revisedPath.isBlocked;
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
         unitMap.setUnitOnMap(focusUnit);
@@ -3322,49 +2659,23 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill, isFast: boolean): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitUseCoSkill(war, action)
             : await normalExeUnitUseCoSkill(war, action);
     }
-    async function fastExeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill): Promise<ClientErrorCode> {
-        const skillType = action.skillType;
-        if (skillType == null) {
-            return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_00;
-        }
-
-        const unitMap = war.getUnitMap();
-        if (unitMap == null) {
-            return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_01;
-        }
-
-        const revisedPath   = action.path as MovePath;
-        const pathNodes     = revisedPath.nodes;
-        const launchUnitId  = action.launchUnitId;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
-        if (focusUnit == null) {
-            return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_02;
-        }
-
-        const teamIndexInTurn = focusUnit.getTeamIndex();
-        if (teamIndexInTurn == null) {
-            return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_03;
-        }
-
-        const player = focusUnit.getPlayer();
-        if (player == null) {
-            return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_04;
-        }
-
-        const currentEnergy = player.getCoCurrentEnergy();
-        if (currentEnergy == null) {
-            return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_05;
-        }
-
+    async function fastExeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill): Promise<void> {
+        const skillType         = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_00);
+        const unitMap           = war.getUnitMap();
+        const revisedPath       = action.path as MovePath;
+        const pathNodes         = revisedPath.nodes;
+        const launchUnitId      = action.launchUnitId;
+        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_01);
+        const player            = focusUnit.getPlayer();
+        const currentEnergy     = player.getCoCurrentEnergy();
         if (revisedPath.isBlocked) {
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
@@ -3378,32 +2689,21 @@ namespace WarActionExecutor {
             player.setCoUsingSkillType(skillType);
 
             if (skillType === Types.CoSkillType.Power) {
-                const powerEnergy = player.getCoPowerEnergy();
-                if (powerEnergy == null) {
-                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_06;
-                }
+                const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_02);
                 player.setCoCurrentEnergy(currentEnergy - powerEnergy);
 
             } else if (skillType === Types.CoSkillType.SuperPower) {
-                const superPowerEnergy = player.getCoSuperPowerEnergy();
-                if (superPowerEnergy == null) {
-                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_07;
-                }
-
+                const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_03);
                 player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
             } else {
-                return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_08;
+                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_04);
             }
 
             const skillDataList : IDataForUseCoSkill[] = [];
             const skillIdList   = player.getCoCurrentSkills() || [];
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
                 const dataForUseCoSkill = WarCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex);
-                if (dataForUseCoSkill == null) {
-                    return ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_09;
-                }
-
                 WarCoSkillHelpers.exeInstantSkill({
                     war,
                     player,
@@ -3413,24 +2713,18 @@ namespace WarActionExecutor {
                 skillDataList.push(dataForUseCoSkill);
             }
         }
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill): Promise<ClientErrorCode> {
+    async function normalExeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill): Promise<void> {
         const unitMap       = war.getUnitMap();
         const revisedPath   = action.path as MovePath;
         const pathNodes     = revisedPath.nodes;
         const launchUnitId  = action.launchUnitId;
-        const skillType     = action.skillType;
-        if (skillType == null) {
-            return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_00;
-        }
-
-        const extraData = action.extraData;
+        const skillType     = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_00);
+        const extraData     = action.extraData;
         if (extraData) {
             WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
 
-            const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             const player        = focusUnit.getPlayer();
             const currentEnergy = player.getCoCurrentEnergy();
 
@@ -3450,32 +2744,21 @@ namespace WarActionExecutor {
                 player.setCoUsingSkillType(skillType);
 
                 if (skillType === Types.CoSkillType.Power) {
-                    const powerEnergy = player.getCoPowerEnergy();
-                    if (powerEnergy == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_01;
-                    }
+                    const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_01);
                     player.setCoCurrentEnergy(currentEnergy - powerEnergy);
 
                 } else if (skillType === Types.CoSkillType.SuperPower) {
-                    const superPowerEnergy = player.getCoSuperPowerEnergy();
-                    if (superPowerEnergy == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_02;
-                    }
-
+                    const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_02);
                     player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
                 } else {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_03;
+                    throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_03);
                 }
 
-                const skillDataList = extraData.skillDataList;
+                const skillDataList = Helpers.getExisted(extraData.skillDataList);
                 const skillIdList   = player.getCoCurrentSkills() || [];
                 for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                    const dataForUseCoSkill = skillDataList.find(v => v.skillIndex === skillIndex);
-                    if (dataForUseCoSkill == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_04;
-                    }
-
+                    const dataForUseCoSkill = Helpers.getExisted(skillDataList.find(v => v.skillIndex === skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_04);
                     WarCoSkillHelpers.exeInstantSkill({
                         war,
                         player,
@@ -3503,7 +2786,7 @@ namespace WarActionExecutor {
                     const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
                     if (indiscriminateCfg) {
                         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(
-                            skillDataList.find(v => v.skillIndex === i).indiscriminateAreaDamageCenter as GridIndex,
+                            Helpers.getExisted(GridIndexHelpers.convertGridIndex(skillDataList.find(v => v.skillIndex === i)?.indiscriminateAreaDamageCenter)),
                             0,
                             indiscriminateCfg[1],
                             mapSize)
@@ -3518,26 +2801,9 @@ namespace WarActionExecutor {
             }
 
         } else {
-            const focusUnit = unitMap.getUnit(pathNodes[0], launchUnitId);
-            if (focusUnit == null) {
-                return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_05;
-            }
-
-            const teamIndexInTurn = focusUnit.getTeamIndex();
-            if (teamIndexInTurn == null) {
-                return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_06;
-            }
-
-            const player = focusUnit.getPlayer();
-            if (player == null) {
-                return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_07;
-            }
-
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_05);
+            const player        = focusUnit.getPlayer();
             const currentEnergy = player.getCoCurrentEnergy();
-            if (currentEnergy == null) {
-                return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_08;
-            }
-
             if (revisedPath.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -3554,32 +2820,21 @@ namespace WarActionExecutor {
                 player.setCoUsingSkillType(skillType);
 
                 if (skillType === Types.CoSkillType.Power) {
-                    const powerEnergy = player.getCoPowerEnergy();
-                    if (powerEnergy == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_09;
-                    }
+                    const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_06);
                     player.setCoCurrentEnergy(currentEnergy - powerEnergy);
 
                 } else if (skillType === Types.CoSkillType.SuperPower) {
-                    const superPowerEnergy = player.getCoSuperPowerEnergy();
-                    if (superPowerEnergy == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_10;
-                    }
-
+                    const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_07);
                     player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
                 } else {
-                    return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_11;
+                    throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_08);
                 }
 
                 const skillDataList : IDataForUseCoSkill[] = [];
                 const skillIdList   = player.getCoCurrentSkills() || [];
                 for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
                     const dataForUseCoSkill = WarCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex);
-                    if (dataForUseCoSkill == null) {
-                        return ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_12;
-                    }
-
                     WarCoSkillHelpers.exeInstantSkill({
                         war,
                         player,
@@ -3619,28 +2874,25 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnitWait(war: BwWar, action: IWarActionUnitWait, isFast): Promise<ClientErrorCode> {
-        return isFast
+    async function exeUnitWait(war: BwWar, action: IWarActionUnitWait, isFast: boolean): Promise<void> {
+        isFast
             ? await fastExeUnitWait(war, action)
             : await normalExeUnitWait(war, action);
     }
-    async function fastExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<ClientErrorCode> {
+    async function fastExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<void> {
         const unitMap       = war.getUnitMap();
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
-
-        return ClientErrorCode.NoError;
     }
-    async function normalExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<ClientErrorCode> {
+    async function normalExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<void> {
         const desc = await war.getDescForExeUnitWait(action);
         (desc) && (FloatText.show(desc));
 
@@ -3653,7 +2905,7 @@ namespace WarActionExecutor {
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
-        const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
+        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
@@ -3661,22 +2913,16 @@ namespace WarActionExecutor {
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
         war.updateTilesAndUnitsOnVisibilityChanged();
-
-        return ClientErrorCode.NoError;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function exeUnknownAction(): Promise<ClientErrorCode> {
-        return ClientErrorCode.BwWarActionExecutor_ExeUnknownAction_00;
+    async function exeUnknownAction(): Promise<void> {
+        throw Helpers.newError(`Unknown action.`, ClientErrorCode.BwWarActionExecutor_ExeUnknownAction_00);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function handlePrimaryWeaponAmmoForUnitAttackTile(attackerUnit: BwUnit, targetTile: BwTile): ClientErrorCode {
-        const targetArmorType = targetTile.getArmorType();
-        if (targetArmorType == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandlePrimaryWeaponForUnitAttackTile_00;
-        }
-
+    function handlePrimaryWeaponAmmoForUnitAttackTile(attackerUnit: BwUnit, targetTile: BwTile): void {
+        const targetArmorType = Helpers.getExisted(targetTile.getArmorType(), ClientErrorCode.BwWarActionExecutor_HandlePrimaryWeaponForUnitAttackTile_00);
         const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
         if ((attackerAmmo != null)                                                              &&
             (attackerAmmo > 0)                                                                  &&
@@ -3684,28 +2930,15 @@ namespace WarActionExecutor {
         ) {
             attackerUnit.setPrimaryWeaponCurrentAmmo(attackerAmmo - 1);
         }
-
-        return ClientErrorCode.NoError;
     }
-    function handleHpForTile(tile: BwTile, newHp: number): ClientErrorCode {
+    function handleHpForTile(tile: BwTile, newHp: number): void {
         tile.setCurrentHp(newHp);
-
-        return ClientErrorCode.NoError;
     }
     function handleDestructionForTile(war: BwWar, tile: BwTile): ResultForHandleDestructionForTile {
-        const hp = tile.getCurrentHp();
-        if (hp == null) {
-            return { errorCode: ClientErrorCode.BwWarActionExecutor_HandleDestructionForTile_00 };
-        }
-
+        const hp        = Helpers.getExisted(tile.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_HandleDestructionForTile_00);
         const gridIndex = tile.getGridIndex();
-        if (gridIndex == null) {
-            return { errorCode: ClientErrorCode.BwWarActionExecutor_HandleDestructionForTile_01 };
-        }
-
         if (hp > 0) {
             return {
-                errorCode       : ClientErrorCode.NoError,
                 damagedTileSet  : new Set([tile]),
                 destroyedTileSet: new Set(),
             };
@@ -3713,18 +2946,9 @@ namespace WarActionExecutor {
 
         const destroyedTileSet = new Set([tile]);
         if (tile.getType() === TileType.Meteor) {
-            const tileMap           = war.getTileMap();
-            const adjacentPlasmas   = WarCommonHelpers.getAdjacentPlasmas(tileMap, gridIndex);
-            if (adjacentPlasmas == null) {
-                return { errorCode: ClientErrorCode.BwWarActionExecutor_HandleDestructionForTile_02 };
-            }
-
-            for (const g of adjacentPlasmas) {
+            const tileMap = war.getTileMap();
+            for (const g of WarCommonHelpers.getAdjacentPlasmas(tileMap, gridIndex)) {
                 const plasmaTile = tileMap.getTile(g);
-                if (plasmaTile == null) {
-                    return { errorCode: ClientErrorCode.BwWarActionExecutor_HandleDestructionForTile_03 };
-                }
-
                 plasmaTile.destroyTileObject();
                 destroyedTileSet.add(plasmaTile);
             }
@@ -3733,31 +2957,22 @@ namespace WarActionExecutor {
         tile.destroyTileObject();
 
         return {
-            errorCode       : ClientErrorCode.NoError,
             damagedTileSet  : new Set(),
             destroyedTileSet,
         };
     }
-    function handlePrimaryWeaponAmmoForUnitAttackUnit(attackerUnit: BwUnit, targetUnit: BwUnit): ClientErrorCode {
-        const targetArmorType = targetUnit.getArmorType();
-        if (targetArmorType == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandlePrimaryWeaponForUnitAttackUnit_00;
-        }
-
-        const attackerAmmo = attackerUnit.getPrimaryWeaponCurrentAmmo();
+    function handlePrimaryWeaponAmmoForUnitAttackUnit(attackerUnit: BwUnit, targetUnit: BwUnit): void {
+        const targetArmorType   = targetUnit.getArmorType();
+        const attackerAmmo      = attackerUnit.getPrimaryWeaponCurrentAmmo();
         if ((attackerAmmo != null)                                                              &&
             (attackerAmmo > 0)                                                                  &&
             (attackerUnit.getCfgBaseDamage(targetArmorType, Types.WeaponType.Primary) != null)
         ) {
             attackerUnit.setPrimaryWeaponCurrentAmmo(attackerAmmo - 1);
         }
-
-        return ClientErrorCode.NoError;
     }
-    function handleHpForUnit(unit: BwUnit, unitNewHp: number): ClientErrorCode {
+    function handleHpForUnit(unit: BwUnit, unitNewHp: number): void {
         unit.setCurrentHp(unitNewHp);
-
-        return ClientErrorCode.NoError;
     }
     function handlePromotionForUnitAttackUnit({ attackerPlayer, attackerUnit, targetLostNormalizedHp, attackerCoGridIndexListOnMap, isTargetDestroyed}: {
         attackerPlayer              : BwPlayer,
@@ -3765,44 +2980,20 @@ namespace WarActionExecutor {
         targetLostNormalizedHp      : number,
         attackerCoGridIndexListOnMap: GridIndex[],
         isTargetDestroyed           : boolean,
-    }): ClientErrorCode {
-        const configVersion = attackerUnit.getConfigVersion();
-        if (configVersion == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandlePromotionForUnitAttackUnit_00;
-        }
-
-        const attackerUnitType = attackerUnit.getUnitType();
-        if (attackerUnitType == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandlePromotionForUnitAttackUnit_01;
-        }
-
+    }): void {
+        const configVersion     = attackerUnit.getConfigVersion();
+        const attackerUnitType  = attackerUnit.getUnitType();
         const attackerGridIndex = attackerUnit.getGridIndex();
-        if (attackerGridIndex == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandlePromotionForUnitAttackUnit_02;
-        }
-
         if (isTargetDestroyed) {
             attackerUnit.addPromotion();
         }
 
         if (attackerPlayer.getCoId()) {
-            const attackerCoZoneRadius = attackerPlayer.getCoZoneRadius();
-            if (attackerCoZoneRadius == null) {
-                return ClientErrorCode.BwWarActionExecutor_HandlePromotionForUnitAttackUnit_03;
-            }
-
-            const hasAttackerLoadedCo = attackerUnit.getHasLoadedCo();
-            if (hasAttackerLoadedCo == null) {
-                return ClientErrorCode.BwWarActionExecutor_HandlePromotionForUnitAttackUnit_04;
-            }
-
+            const attackerCoZoneRadius  = attackerPlayer.getCoZoneRadius();
+            const hasAttackerLoadedCo   = attackerUnit.getHasLoadedCo();
             for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
-                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
-                if (skillCfg == null) {
-                    return ClientErrorCode.BwWarActionExecutor_HandlePromotionForUnitAttackUnit_05;
-                }
-
-                const cfg = skillCfg.promotionBonusByAttack;
+                const skillCfg  = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                const cfg       = skillCfg.promotionBonusByAttack;
                 if ((cfg)                                                                                                                                                   &&
                     (targetLostNormalizedHp >= cfg[2])                                                                                                                      &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))                                                                      &&
@@ -3817,8 +3008,6 @@ namespace WarActionExecutor {
                 }
             }
         }
-
-        return ClientErrorCode.NoError;
     }
     function handleFundForUnitAttackUnit({ attackerPlayer, attackerUnit, targetUnit, targetLostNormalizedHp, isAttackerInAttackerCoZone } :{
         attackerPlayer              : BwPlayer;
@@ -3826,37 +3015,17 @@ namespace WarActionExecutor {
         targetUnit                  : BwUnit;
         targetLostNormalizedHp      : number;
         isAttackerInAttackerCoZone  : boolean;
-    }): ClientErrorCode {
+    }): void {
         if ((targetLostNormalizedHp == 0) || (attackerPlayer.getCoId() === CommonConstants.CoEmptyId)) {
-            return ClientErrorCode.NoError;
+            return;
         }
 
-        const currentFund = attackerPlayer.getFund();
-        if (currentFund == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandleFundForUnitAttackUnit_00;
-        }
-
-        const configVersion = attackerUnit.getConfigVersion();
-        if (configVersion == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandleFundForUnitAttackUnit_01;
-        }
-
-        const attackerUnitType = attackerUnit.getUnitType();
-        if (attackerUnitType == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandleFundForUnitAttackUnit_02;
-        }
-
-        const targetUnitType = targetUnit.getUnitType();
-        if (targetUnitType == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandleFundForUnitAttackUnit_03;
-        }
-
-        const targetUnitCost = targetUnit.getProductionFinalCost();
-        if (targetUnitCost == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandleFundForUnitAttackUnit_04;
-        }
-
-        let addFund = 0;
+        const currentFund       = attackerPlayer.getFund();
+        const configVersion     = attackerUnit.getConfigVersion();
+        const attackerUnitType  = attackerUnit.getUnitType();
+        const targetUnitType    = targetUnit.getUnitType();
+        const targetUnitCost    = targetUnit.getProductionFinalCost();
+        let addFund             = 0;
         for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
             const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfGetFundByAttackUnit;
             if ((cfg)                                                                               &&
@@ -3869,7 +3038,6 @@ namespace WarActionExecutor {
         }
 
         attackerPlayer.setFund(Math.floor(currentFund + addFund));
-        return ClientErrorCode.NoError;
     }
     function handleEnergyForUnitAttackUnit({ war, attackerPlayer, targetPlayer, targetLostNormalizedHp, isAttackerInAttackerCoZone, isTargetInTargetCoZone }: {
         war                         : BwWar;
@@ -3878,9 +3046,9 @@ namespace WarActionExecutor {
         targetLostNormalizedHp      : number;
         isAttackerInAttackerCoZone  : boolean;
         isTargetInTargetCoZone      : boolean;
-    }): ClientErrorCode {
+    }): void {
         if (targetLostNormalizedHp <= 0) {
-            return ClientErrorCode.NoError;
+            return;
         }
 
         const commonSettingManager = war.getCommonSettingManager();
@@ -3890,18 +3058,8 @@ namespace WarActionExecutor {
                 (coType1 === Types.CoType.Global)
             ) {
                 const playerIndex1  = attackerPlayer.getPlayerIndex();
-                const multiplier1   = playerIndex1 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex1);
-                if (multiplier1 == null) {
-                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier1.`);
-                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00;
-                }
-
-                const energy1 = attackerPlayer.getCoCurrentEnergy();
-                if (energy1 == null) {
-                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty energy1.`);
-                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01;
-                }
-
+                const multiplier1   = Helpers.getExisted(playerIndex1 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex1), ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00);
+                const energy1       = attackerPlayer.getCoCurrentEnergy();
                 attackerPlayer.setCoCurrentEnergy(Math.min(
                     attackerPlayer.getCoMaxEnergy(),
                     energy1 + Math.floor(targetLostNormalizedHp * multiplier1 * CommonConstants.WarRuleEnergyGrowthMultiplierForAttacker / 100),
@@ -3915,41 +3073,23 @@ namespace WarActionExecutor {
                 (coType2 === Types.CoType.Global)
             ) {
                 const playerIndex2  = targetPlayer.getPlayerIndex();
-                const multiplier2   = playerIndex2 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex2);
-                if (multiplier2 == null) {
-                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty multiplier2.`);
-                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_02;
-                }
-
-                const energy2 = targetPlayer.getCoCurrentEnergy();
-                if (energy2 == null) {
-                    Logger.error(`ExeMpwUnitAttackUnit.handleEnergy() empty energy2.`);
-                    return ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_03;
-                }
-
+                const multiplier2   = Helpers.getExisted(playerIndex2 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex2), ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01);
+                const energy2       = targetPlayer.getCoCurrentEnergy();
                 targetPlayer.setCoCurrentEnergy(Math.min(
                     targetPlayer.getCoMaxEnergy(),
                     energy2 + Math.floor(targetLostNormalizedHp * multiplier2 * CommonConstants.WarRuleEnergyGrowthMultiplierForDefender / 100),
                 ));
             }
         }
-
-        return ClientErrorCode.NoError;
     }
     function handleDestructionForUnit({ war, unit }: {
         war             : BwWar,
         unit            : BwUnit,
-    }): ClientErrorCode {
+    }): void {
         const targetGridIndex = unit.getGridIndex();
-        if (targetGridIndex == null) {
-            return ClientErrorCode.BwWarActionExecutor_HandleDestructionForUnit_00;
-        }
-
         if (unit.getCurrentHp() <= 0) {
             WarDestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false);
         }
-
-        return ClientErrorCode.NoError;
     }
 }
 

@@ -1,6 +1,5 @@
 
 
-import Logger           from "../../tools/helpers/Logger";
 import CommonConstants  from "../../tools/helpers/CommonConstants";
 import Helpers          from "../../tools/helpers/Helpers";
 import ProtoTypes       from "../../tools/proto/ProtoTypes";
@@ -35,23 +34,23 @@ namespace MeMfwModel {
 
     export function checkIsValidWarData(): boolean {
         const teamIndexSet = new Set<number>();
-        for (const player of _warData.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray) {
-            teamIndexSet.add(player.teamIndex);
+        for (const player of Helpers.getExisted(_warData.settingsForCommon?.warRule?.ruleForPlayers?.playerRuleDataArray)) {
+            teamIndexSet.add(Helpers.getExisted(player.teamIndex));
         }
         return teamIndexSet.size > 1;
     }
 
     export function getWarRule(): ProtoTypes.WarRule.IWarRule {
-        return getWarData().settingsForCommon.warRule;
+        return Helpers.getExisted(getWarData().settingsForCommon?.warRule);
     }
 
     export function reviseWarRuleForAi(): void {
         setPresetWarRuleId(null);
 
         const warRule           = getWarRule();
-        const playerRuleArray   = warRule.ruleForPlayers.playerRuleDataArray;
+        const playerRuleArray   = Helpers.getExisted(warRule.ruleForPlayers?.playerRuleDataArray);
         let hasAiPlayer         = false;
-        for (const player of getWarData().playerManager.players) {
+        for (const player of Helpers.getExisted(getWarData().playerManager?.players)) {
             const playerRule = playerRuleArray.find(v => v.playerIndex === player.playerIndex);
             if (playerRule == null) {
                 continue;
@@ -65,7 +64,7 @@ namespace MeMfwModel {
             playerRule.fixedCoIdInCcw = isAiPlayer ? player.coId : null;
         }
 
-        const ruleAvailability  = warRule.ruleAvailability;
+        const ruleAvailability  = Helpers.getExisted(warRule.ruleAvailability);
         ruleAvailability.canMrw = false;
         ruleAvailability.canScw = false;
         ruleAvailability.canScw = false;
@@ -74,20 +73,14 @@ namespace MeMfwModel {
     }
 
     function resetDataByPresetWarRuleId(ruleId: number | null): void {
-        const settingsForCommon = getWarData().settingsForCommon;
+        const settingsForCommon = Helpers.getExisted(getWarData().settingsForCommon);
         const mapRawData        = getMapRawData();
-        const playersCount      = mapRawData.playersCountUnneutral;
+        const playersCount      = Helpers.getExisted(mapRawData.playersCountUnneutral);
 
         if (ruleId == null) {
             settingsForCommon.warRule = WarRuleHelpers.createDefaultWarRule(ruleId, playersCount);
         } else {
-            const warRule = mapRawData.warRuleArray.find(r => r.ruleId === ruleId);
-            if (warRule == null) {
-                Logger.error(`McwModel.resetDataByPresetWarRuleId() empty warRule.`);
-                return undefined;
-            }
-
-            settingsForCommon.warRule = Helpers.deepClone(warRule);
+            settingsForCommon.warRule = Helpers.deepClone(Helpers.getExisted(mapRawData.warRuleArray?.find(r => r.ruleId === ruleId)));
         }
 
         setPresetWarRuleId(ruleId);
@@ -95,32 +88,31 @@ namespace MeMfwModel {
             setCoId(playerIndex, WarRuleHelpers.getRandomCoIdWithSettingsForCommon(settingsForCommon, playerIndex));
         }
     }
-    export function setPresetWarRuleId(ruleId: number | null | undefined): void {
-        getWarRule().ruleId                             = ruleId;
-        getWarData().settingsForCommon.presetWarRuleId  = ruleId;
+    export function setPresetWarRuleId(ruleId: number | null): void {
+        getWarRule().ruleId                                                 = ruleId;
+        Helpers.getExisted(getWarData().settingsForCommon).presetWarRuleId  = ruleId;
     }
-    export function getPresetWarRuleId(): number | undefined {
-        return getWarData().settingsForCommon.presetWarRuleId;
+    export function getPresetWarRuleId(): number | null {
+        return getWarData().settingsForCommon?.presetWarRuleId ?? null;
     }
     export function tickPresetWarRuleId(): void {
         const currWarRuleId = getPresetWarRuleId();
-        const warRuleArray  = getMapRawData().warRuleArray;
         if (currWarRuleId == null) {
             resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
         } else {
-            resetDataByPresetWarRuleId((currWarRuleId + 1) % warRuleArray.length);
+            resetDataByPresetWarRuleId((currWarRuleId + 1) % Helpers.getExisted(getMapRawData().warRuleArray).length);
         }
     }
 
     function getPlayer(playerIndex: number): ProtoTypes.WarSerialization.ISerialPlayer {
-        return getWarData().playerManager.players.find(v => v.playerIndex === playerIndex);
+        return Helpers.getExisted(getWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex));
     }
 
     export function setCoId(playerIndex: number, coId: number): void {
         getPlayer(playerIndex).coId = coId;
     }
     export function getCoId(playerIndex: number): number {
-        return getPlayer(playerIndex).coId;
+        return Helpers.getExisted(getPlayer(playerIndex).coId);
     }
 
     function setUnitAndTileSkinId(playerIndex: number, skinId: number): void {
@@ -129,14 +121,14 @@ namespace MeMfwModel {
     export function tickUnitAndTileSkinId(playerIndex: number): void {
         const currSkinId        = getUnitAndTileSkinId(playerIndex);
         const newSkinId         = currSkinId % CommonConstants.UnitAndTileMaxSkinId + 1;
-        const existingPlayer    = getWarData().playerManager.players.find(v => v.unitAndTileSkinId === newSkinId);
+        const existingPlayer    = getWarData().playerManager?.players?.find(v => v.unitAndTileSkinId === newSkinId);
         if (existingPlayer) {
-            setUnitAndTileSkinId(existingPlayer.playerIndex, currSkinId);
+            setUnitAndTileSkinId(Helpers.getExisted(existingPlayer.playerIndex), currSkinId);
         }
         setUnitAndTileSkinId(playerIndex, newSkinId);
     }
     export function getUnitAndTileSkinId(playerIndex: number): number {
-        return getPlayer(playerIndex).unitAndTileSkinId;
+        return Helpers.getExisted(getPlayer(playerIndex).unitAndTileSkinId);
     }
 
     export function setIsControlledByPlayer(playerIndex: number, isByPlayer: boolean): void {
@@ -147,10 +139,10 @@ namespace MeMfwModel {
     }
 
     export function setHasFog(hasFog: boolean): void {
-        getWarRule().ruleForGlobalParams.hasFogByDefault = hasFog;
+        Helpers.getExisted(getWarRule().ruleForGlobalParams).hasFogByDefault = hasFog;
     }
     export function getHasFog(): boolean {
-        return getWarRule().ruleForGlobalParams.hasFogByDefault;
+        return Helpers.getExisted(getWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
     export function tickTeamIndex(playerIndex: number): void {
@@ -188,7 +180,7 @@ namespace MeMfwModel {
         return WarRuleHelpers.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
     }
 
-    export function getBannedCoIdArray(playerIndex: number): number[] {
+    export function getBannedCoIdArray(playerIndex: number): number[] | null {
         return WarRuleHelpers.getBannedCoIdArray(getWarRule(), playerIndex);
     }
     export function addBannedCoId(playerIndex: number, coId: number): void {

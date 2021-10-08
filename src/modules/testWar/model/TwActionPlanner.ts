@@ -7,14 +7,6 @@ namespace TwnsTwActionPlanner {
     import GridIndex    = Types.GridIndex;
     import State        = Types.ActionPlannerState;
     export class TwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for setting common state.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {
-            // nothing to do
-        }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,6 +39,18 @@ namespace TwnsTwActionPlanner {
         }
 
         public setStateRequestingPlayerUseCoSkill(): void {
+            // nothing to do
+        }
+
+        public setStateRequestingPlayerDeleteUnit(): void {
+            // nothing to do
+        }
+
+        public setStateRequestingPlayerVoteForDraw(): void {
+            // nothing to do
+        }
+
+        public setStateRequestingPlayerSurrender(): void {
             // nothing to do
         }
 

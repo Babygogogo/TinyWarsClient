@@ -1,6 +1,9 @@
 
-import CommonModel              from "../../common/model/CommonModel";
+import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Helpers                  from "../../tools/helpers/Helpers";
+import SoundManager             from "../../tools/helpers/SoundManager";
 import StageManager             from "../../tools/helpers/StageManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -9,12 +12,10 @@ import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsBwUnit               from "../model/BwUnit";
 import WarVisibilityHelpers     from "../../tools/warHelpers/WarVisibilityHelpers";
+import TwnsBwUnit               from "../model/BwUnit";
 import TwnsBwWar                from "../model/BwWar";
-import TwnsCommonCoListPanel    from "../../common/view/CommonCoListPanel";
 import TwnsBwProduceUnitPanel   from "./BwProduceUnitPanel";
-import TwnsBwTileBriefPanel     from "./BwTileBriefPanel";
 import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
 import TwnsBwUnitView           from "./BwUnitView";
 
@@ -28,7 +29,7 @@ namespace TwnsBwUnitBriefPanel {
     import BwUnit               = TwnsBwUnit.BwUnit;
     import Tween                = egret.Tween;
 
-    const _CELL_WIDTH           = 80;
+    const _CELL_WIDTH           = 70;
 
     type OpenDataForBwUnitBriefPanel = {
         war : BwWar;
@@ -40,8 +41,8 @@ namespace TwnsBwUnitBriefPanel {
 
         private static _instance: BwUnitBriefPanel;
 
-        private _group      : eui.Group;
-        private _cellList   : BwUnitBriefCell[] = [];
+        private readonly _group!    : eui.Group;
+        private _cellList           : BwUnitBriefCell[] = [];
 
         private _unitList   : BwUnit[] = [];
         private _isLeftSide = true;
@@ -69,18 +70,19 @@ namespace TwnsBwUnitBriefPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
-                { type: NotifyType.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: NotifyType.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
-                { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: NotifyType.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
-                { type: NotifyType.BwWarMenuPanelClosed,           callback: this._onNotifyBwWarMenuPanelClosed },
-                { type: NotifyType.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
-                { type: NotifyType.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
-                { type: NotifyType.BwProduceUnitPanelOpened,       callback: this._onNotifyBwProduceUnitPanelOpened },
-                { type: NotifyType.BwProduceUnitPanelClosed,       callback: this._onNotifyBwProduceUnitPanelClosed },
-                { type: NotifyType.MeUnitChanged,                  callback: this._onNotifyMeUnitChanged },
-                { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.GlobalTouchBegin,                callback: this._onNotifyGlobalTouchBegin },
+                { type: NotifyType.GlobalTouchMove,                 callback: this._onNotifyGlobalTouchMove },
+                { type: NotifyType.BwCursorGridIndexChanged,        callback: this._onNotifyBwCursorGridIndexChanged },
+                { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.BwWarMenuPanelOpened,            callback: this._onNotifyBwWarMenuPanelOpened },
+                { type: NotifyType.BwWarMenuPanelClosed,            callback: this._onNotifyBwWarMenuPanelClosed },
+                { type: NotifyType.BwCoListPanelOpened,             callback: this._onNotifyBwCoListPanelOpened },
+                { type: NotifyType.BwCoListPanelClosed,             callback: this._onNotifyBwCoListPanelClosed },
+                { type: NotifyType.BwProduceUnitPanelOpened,        callback: this._onNotifyBwProduceUnitPanelOpened },
+                { type: NotifyType.BwProduceUnitPanelClosed,        callback: this._onNotifyBwProduceUnitPanelClosed },
+                { type: NotifyType.MeUnitChanged,                   callback: this._onNotifyMeUnitChanged },
+                { type: NotifyType.UnitAnimationTick,               callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,          callback: this._onNotifyUnitStateIndicatorTick },
             ]);
 
             const group     = this._group;
@@ -109,10 +111,10 @@ namespace TwnsBwUnitBriefPanel {
         private _onNotifyGlobalTouchMove(e: egret.Event): void {
             this._adjustPositionOnTouch(e.data);
         }
-        private _onNotifyBwCursorGridIndexChanged(e: egret.Event): void {
+        private _onNotifyBwCursorGridIndexChanged(): void {
             this._updateView();
         }
-        private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwActionPlannerStateChanged(): void {
             const planner = this._getOpenData().war.getActionPlanner();
             if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
                 (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
@@ -120,22 +122,22 @@ namespace TwnsBwUnitBriefPanel {
                 this._updateView();
             }
         }
-        private _onNotifyBwWarMenuPanelOpened(e: egret.Event): void {
+        private _onNotifyBwWarMenuPanelOpened(): void {
             this._updateView();
         }
-        private _onNotifyBwWarMenuPanelClosed(e: egret.Event): void {
+        private _onNotifyBwWarMenuPanelClosed(): void {
             this._updateView();
         }
-        private _onNotifyBwCoListPanelOpened(e: egret.Event): void {
+        private _onNotifyBwCoListPanelOpened(): void {
             this._updateView();
         }
-        private _onNotifyBwCoListPanelClosed(e: egret.Event): void {
+        private _onNotifyBwCoListPanelClosed(): void {
             this._updateView();
         }
-        private _onNotifyBwProduceUnitPanelOpened(e: egret.Event): void {
+        private _onNotifyBwProduceUnitPanelOpened(): void {
             this._updateView();
         }
-        private _onNotifyBwProduceUnitPanelClosed(e: egret.Event): void {
+        private _onNotifyBwProduceUnitPanelClosed(): void {
             this._updateView();
         }
         private _onNotifyMeUnitChanged(e: egret.Event): void {
@@ -144,13 +146,19 @@ namespace TwnsBwUnitBriefPanel {
                 this._updateView();
             }
         }
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
+        private _onNotifyUnitAnimationTick(): void {
             for (const cell of this._cellList) {
                 cell.updateOnAnimationTick();
             }
         }
+        private _onNotifyUnitStateIndicatorTick(): void {
+            for (const cell of this._cellList) {
+                cell.updateOnStateIndicatorTick();
+            }
+        }
 
         private _onCellTouchTap(e: egret.TouchEvent): void {
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             for (let i = 0; i < this._cellList.length; ++i) {
                 if (this._cellList[i] === e.currentTarget) {
                     BwUnitDetailPanel.show({ unit: this._unitList[i] });
@@ -217,29 +225,29 @@ namespace TwnsBwUnitBriefPanel {
         }
 
         private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
-            const tileBriefPanel = TwnsBwTileBriefPanel.BwTileBriefPanel.getInstance();
-            let target = e.target as egret.DisplayObject;
-            while (target) {
-                if ((target) && ((target === tileBriefPanel) || (target === this))) {
-                    return;
-                }
-                target = target.parent;
-            }
+            // const tileBriefPanel = TwnsBwTileBriefPanel.BwTileBriefPanel.getInstance();
+            // let target = e.target as egret.DisplayObject;
+            // while (target) {
+            //     if ((target) && ((target === tileBriefPanel) || (target === this))) {
+            //         return;
+            //     }
+            //     target = target.parent;
+            // }
 
-            const stageWidth        = StageManager.getStage().stageWidth;
-            const currentIsLeftSide = this._isLeftSide;
-            const newIsLeftSide     = e.stageX >= stageWidth / 4 * 3
-                ? true
-                : (e.stageX < stageWidth / 4
-                    ? false
-                    : currentIsLeftSide
-                );
-            if (newIsLeftSide !== currentIsLeftSide) {
-                await this._showCloseAnimation();
-                this._isLeftSide = newIsLeftSide;
-                this._updatePosition();
-                this._showOpenAnimation();
-            }
+            // const stageWidth        = StageManager.getStage().stageWidth;
+            // const currentIsLeftSide = this._isLeftSide;
+            // const newIsLeftSide     = e.stageX >= stageWidth / 4 * 3
+            //     ? true
+            //     : (e.stageX < stageWidth / 4
+            //         ? false
+            //         : currentIsLeftSide
+            //     );
+            // if (newIsLeftSide !== currentIsLeftSide) {
+            //     await this._showCloseAnimation();
+            //     this._isLeftSide = newIsLeftSide;
+            //     this._updatePosition();
+            //     this._showOpenAnimation();
+            // }
         }
 
         private _updatePosition(): void {
@@ -278,25 +286,25 @@ namespace TwnsBwUnitBriefPanel {
         }
     }
 
-    const _IMAGE_SOURCE_HP          = `c03_t99_s02_f03`;
-    const _IMAGE_SOURCE_FUEL        = `c03_t99_s02_f01`;
-    const _IMAGE_SOURCE_AMMO        = `c03_t99_s02_f02`;
-    const _IMAGE_SOURCE_MATERIAL    = `c03_t99_s02_f04`;
-    const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
+    const _IMAGE_SOURCE_HP          = `c04_t10_s00_f00`;
+    const _IMAGE_SOURCE_FUEL        = `c04_t10_s01_f00`;
+    const _IMAGE_SOURCE_AMMO        = `c04_t10_s02_f00`;
+    const _IMAGE_SOURCE_MATERIAL    = `c04_t10_s05_f00`;
+    const _IMAGE_SOURCE_FLARE       = `c04_t10_s02_f00`;
 
     class BwUnitBriefCell extends eui.Component {
-        private _group          : eui.Group;
-        private _conUnitView    : eui.Group;
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelHp        : TwnsUiLabel.UiLabel;
-        private _labelFuel      : TwnsUiLabel.UiLabel;
-        private _labelState     : TwnsUiLabel.UiLabel;
-        private _imgHp          : TwnsUiImage.UiImage;
-        private _imgFuel        : TwnsUiImage.UiImage;
-        private _imgState       : TwnsUiImage.UiImage;
-        private _unitView       : BwUnitView;
+        private readonly _group!        : eui.Group;
+        private readonly _conUnitView!  : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelHp!      : TwnsUiLabel.UiLabel;
+        private readonly _labelFuel!    : TwnsUiLabel.UiLabel;
+        private readonly _labelState!   : TwnsUiLabel.UiLabel;
+        private readonly _imgHp!        : TwnsUiImage.UiImage;
+        private readonly _imgFuel!      : TwnsUiImage.UiImage;
+        private readonly _imgState!     : TwnsUiImage.UiImage;
+        private readonly _unitView      = new BwUnitView();
 
-        private _unit               : BwUnit;
+        private _unit               : BwUnit | null = null;
         private _isChildrenCreated  = false;
 
         public constructor() {
@@ -310,9 +318,8 @@ namespace TwnsBwUnitBriefPanel {
 
             this._isChildrenCreated = true;
 
-            this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
-            this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
-            this._unitView          = new BwUnitView();
+            this._imgHp.source      = _IMAGE_SOURCE_HP;
+            this._imgFuel.source    = _IMAGE_SOURCE_FUEL;
             this._conUnitView.addChild(this._unitView);
             this._updateView();
         }
@@ -325,6 +332,11 @@ namespace TwnsBwUnitBriefPanel {
         public updateOnAnimationTick(): void {
             if (this._isChildrenCreated) {
                 this._unitView.tickUnitAnimationFrame();
+            }
+        }
+
+        public updateOnStateIndicatorTick(): void {
+            if (this._isChildrenCreated) {
                 this._unitView.tickStateAnimationFrame();
             }
         }
@@ -334,30 +346,30 @@ namespace TwnsBwUnitBriefPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             if (this._isChildrenCreated) {
-                const unit = this._unit;
+                const unit = Helpers.getExisted(this._unit);
                 this._unitView.init(unit).startRunningView();
                 this._labelHp.text      = `${unit.getCurrentHp()}`;
                 this._labelFuel.text    = `${unit.getCurrentFuel()}`;
-                this._labelName.text    = Lang.getUnitName(unit.getUnitType());
+                this._labelName.text    = Lang.getUnitName(unit.getUnitType()) ?? CommonConstants.ErrorTextForUndefined;
 
                 if (unit.getCurrentBuildMaterial() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_MATERIAL;
+                    this._imgState.source       = _IMAGE_SOURCE_MATERIAL;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getCurrentBuildMaterial()}`;
                 } else if (unit.getCurrentProduceMaterial() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_MATERIAL;
+                    this._imgState.source       = _IMAGE_SOURCE_MATERIAL;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getCurrentProduceMaterial()}`;
                 } else if (unit.getFlareCurrentAmmo() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FLARE;
+                    this._imgState.source       = _IMAGE_SOURCE_FLARE;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getFlareCurrentAmmo()}`;
                 } else if (unit.getPrimaryWeaponCurrentAmmo() != null) {
                     this._imgState.visible      = true;
-                    this._imgState.source       = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_AMMO;
+                    this._imgState.source       = _IMAGE_SOURCE_AMMO;
                     this._labelState.visible    = true;
                     this._labelState.text       = `${unit.getPrimaryWeaponCurrentAmmo()}`;
                 } else {

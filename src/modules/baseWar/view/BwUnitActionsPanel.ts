@@ -6,6 +6,7 @@ import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
+import TwnsUiImage              from "../../tools/ui/UiImage";
 import TwnsUiLabel              from "../../tools/ui/UiLabel";
 import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
 import TwnsUiPanel              from "../../tools/ui/UiPanel";
@@ -33,8 +34,8 @@ namespace TwnsBwUnitActionsPanel {
 
         private static _instance: BwUnitActionsPanel;
 
-        private _group      : eui.Group;
-        private _listAction : TwnsUiScrollList.UiScrollList<DataForUnitActionRenderer>;
+        private readonly _group!        : eui.Group;
+        private readonly _listAction!   : TwnsUiScrollList.UiScrollList<DataForUnitActionRenderer>;
 
         public static show(openData: OpenDataForBwUnitActionsPanel): void {
             if (!BwUnitActionsPanel._instance) {
@@ -61,7 +62,6 @@ namespace TwnsBwUnitActionsPanel {
                 // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
                 { type: NotifyType.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
             ]);
-            this._listAction.setShortSfxCode(Types.ShortSfxCode.CursorConfirm01);
             this._listAction.setItemRenderer(UnitActionRenderer);
 
             this._showOpenAnimation();
@@ -83,7 +83,11 @@ namespace TwnsBwUnitActionsPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const openData  = this._getOpenData();
+            const openData = this._getOpenData();
+            if (openData == null) {
+                throw Helpers.newError(`BwUnitActionsPanel._updateView() empty openData.`);
+            }
+
             const war       = openData.war;
             const dataArray : DataForUnitActionRenderer[] = [];
             for (const data of openData.actionList) {
@@ -94,7 +98,7 @@ namespace TwnsBwUnitActionsPanel {
                         actionType          : data.actionType,
                         callback            : data.callback,
                         unit                : data.unitForDrop || data.unitForLaunch,
-                        costForProduceUnit  : data.costForProduceUnit,
+                        costForProduceUnit  : data.costForProduceUnit ?? null,
                     });
                 } else {
                     const unitForProduce = new TwnsBwUnit.BwUnit();
@@ -111,17 +115,22 @@ namespace TwnsBwUnitActionsPanel {
                         actionType          : data.actionType,
                         callback            : data.callback,
                         unit                : unitForProduce,
-                        costForProduceUnit  : data.costForProduceUnit,
+                        costForProduceUnit  : data.costForProduceUnit ?? null,
                     });
                 }
             }
 
+            dataArray[dataArray.length - 1].isLastAction = true;
             this._listAction.bindData(dataArray);
-            this._group.height = Math.min(300, (dataArray.length || 1) * 60);
+            this._group.height = Math.min(300, dataArray.length * 60);
         }
 
         private _updatePosition(): void {
-            const openData  = this._getOpenData();
+            const openData = this._getOpenData();
+            if (openData == null) {
+                throw Helpers.newError(`BwUnitActionsPanel._updatePosition() empty openData.`);
+            }
+
             const container = openData.war.getView().getFieldContainer();
             const contents  = container.getContents();
             const gridIndex = openData.destination;
@@ -133,7 +142,7 @@ namespace TwnsBwUnitActionsPanel {
                 (gridIndex.y + 1) * gridSize.height,
             );
 
-            group.x         = Math.max(0, Math.min(point.x, stage.stageWidth - 130));
+            group.x         = Math.max(0, Math.min(point.x, stage.stageWidth - 140));
             group.y         = Math.max(40, Math.min(point.y, stage.stageHeight - group.height));
         }
 
@@ -163,55 +172,65 @@ namespace TwnsBwUnitActionsPanel {
         actionType          : UnitActionType;
         callback            : () => void;
         unit?               : TwnsBwUnit.BwUnit;
-        costForProduceUnit  : number | null | undefined;
+        costForProduceUnit  : number | null;
+        isLastAction?       : boolean;
     };
     class UnitActionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitActionRenderer> {
-        private _labelAction: TwnsUiLabel.UiLabel;
-        private _labelCost  : TwnsUiLabel.UiLabel;
-        private _conUnitView: eui.Group;
+        private readonly _labelAction!      : TwnsUiLabel.UiLabel;
+        private readonly _labelCost!        : TwnsUiLabel.UiLabel;
+        private readonly _conUnitView!      : eui.Group;
+        private readonly _imgBottomLine!    : TwnsUiImage.UiImage;
 
-        private _unitView   : BwUnitView;
+        private readonly _unitView      = new BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitAnimationTick,       callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.UnitStateIndicatorTick,  callback: this._onNotifyUnitStateIndicatorTick },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.CursorConfirm01);
 
-            this._unitView = new BwUnitView();
             this._conUnitView.addChild(this._unitView);
         }
 
         protected _onDataChanged(): void {
-            const data              = this.data;
-            this._labelAction.text  = Lang.getUnitActionName(data.actionType);
+            const data                  = this._getData();
+            this._labelAction.text      = Lang.getUnitActionName(data.actionType) || CommonConstants.ErrorTextForUndefined;
+            this._imgBottomLine.visible = !data.isLastAction;
 
             const unit      = data.unit;
+            const unitView  = this._unitView;
             const labelCost = this._labelCost;
             if (unit == null) {
-                this.currentState   = "withoutUnit";
                 labelCost.text      = "";
+                unitView.visible    = false;
             } else {
-                this.currentState   = "withUnit";
                 if (data.actionType !== Types.UnitActionType.ProduceUnit) {
                     labelCost.text = ``;
                 } else {
                     const cost      = data.costForProduceUnit;
                     labelCost.text  = `${Lang.getText(LangTextType.B0079)}: ${cost != null ? cost : CommonConstants.ErrorTextForUndefined}`;
                 }
-                this._unitView.init(unit).startRunningView();
+                unitView.visible = true;
+                unitView.init(unit).startRunningView();
             }
         }
 
         public onItemTapEvent(): void {
-            const data = this.data;
+            const data = this._getData();
             if (!data.war.getActionPlanner().checkIsStateRequesting()) {
                 data.callback();
             }
         }
 
         private _onNotifyUnitAnimationTick(): void {
-            if (this.data.unit) {
+            if (this.data?.unit) {
                 this._unitView.tickUnitAnimationFrame();
+            }
+        }
+
+        private _onNotifyUnitStateIndicatorTick(): void {
+            if (this.data?.unit) {
                 this._unitView.tickStateAnimationFrame();
             }
         }

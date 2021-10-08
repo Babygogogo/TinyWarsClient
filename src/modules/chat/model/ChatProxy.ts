@@ -1,11 +1,12 @@
 
+import Helpers              from "../../tools/helpers/Helpers";
+import Timer                from "../../tools/helpers/Timer";
+import Types                from "../../tools/helpers/Types";
+import NetManager           from "../../tools/network/NetManager";
 import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Types                from "../../tools/helpers/Types";
-import NetManager           from "../../tools/network/NetManager";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Timer                from "../../tools/helpers/Timer";
 import ChatModel            from "./ChatModel";
 
 namespace ChatProxy {
@@ -19,7 +20,7 @@ namespace ChatProxy {
             { msgCode: NetMessageCodes.MsgChatGetAllMessages,            callback: _onMsgChatGetAllMessages          },
             { msgCode: NetMessageCodes.MsgChatUpdateReadProgress,        callback: _onMsgChatUpdateReadProgress      },
             { msgCode: NetMessageCodes.MsgChatGetAllReadProgressList,    callback: _onMsgChatGetAllReadProgressList  },
-        ], undefined);
+        ], null);
     }
 
     export function reqChatAddMessage(
@@ -36,7 +37,7 @@ namespace ChatProxy {
     function _onMsgChatAddMessage(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatAddMessage.IS;
         if (!data.errorCode) {
-            ChatModel.updateOnAddMessage(data.message, true);
+            ChatModel.updateOnAddMessage(Helpers.getExisted(data.message), true);
             Notify.dispatch(NotifyType.MsgChatAddMessage, data);
         }
     }
@@ -47,7 +48,7 @@ namespace ChatProxy {
     function _onMsgChatGetAllMessages(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatGetAllMessages.IS;
         if (!data.errorCode) {
-            ChatModel.setAllMessages(data.messageList);
+            ChatModel.setAllMessages(data.messageList || []);
             Notify.dispatch(NotifyType.MsgChatGetAllMessages, data);
         }
     }
@@ -68,7 +69,7 @@ namespace ChatProxy {
     function _onMsgChatUpdateReadProgress(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatUpdateReadProgress.IS;
         if (!data.errorCode) {
-            ChatModel.setReadProgress(data.progress);
+            ChatModel.setReadProgress(Helpers.getExisted(data.progress));
             Notify.dispatch(NotifyType.MsgChatUpdateReadProgress, data);
         }
     }
@@ -79,7 +80,7 @@ namespace ChatProxy {
     function _onMsgChatGetAllReadProgressList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgChatGetAllReadProgressList.IS;
         if (!data.errorCode) {
-            ChatModel.resetAllReadProgress(data.list);
+            ChatModel.resetAllReadProgress(data.list || []);
             Notify.dispatch(NotifyType.MsgChatGetAllReadProgressList, data);
         }
     }

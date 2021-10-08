@@ -1,8 +1,9 @@
 
-import Types            from "./Types";
-import ProtoTypes       from "../proto/ProtoTypes";
-import Lang             from "../lang/Lang";
-import TwnsLangTextType from "../lang/LangTextType";
+import Lang                 from "../lang/Lang";
+import TwnsLangTextType     from "../lang/LangTextType";
+import ProtoTypes           from "../proto/ProtoTypes";
+import TwnsClientErrorCode  from "./ClientErrorCode";
+import Types                from "./Types";
 
 namespace Helpers {
     import ColorType            = Types.ColorType;
@@ -10,6 +11,7 @@ namespace Helpers {
     import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import LangTextType         = TwnsLangTextType.LangTextType;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([
@@ -31,21 +33,21 @@ namespace Helpers {
         return egret.Capabilities.renderMode === "webgl";
     }
 
-    export function checkIsAccountValid(str: string | undefined | null): boolean {
+    export function checkIsAccountValid(str: Types.Undefinable<string>): boolean {
         return (typeof str === "string")
             && (str.length >= 6)
             && (str.length <= 20)
             && (str.search(/\W/) < 0);
     }
 
-    export function checkIsPasswordValid(str: string | undefined | null): boolean {
+    export function checkIsPasswordValid(str: Types.Undefinable<string>): boolean {
         return (typeof str === "string")
             && (str.length >= 6)
             && (str.length <= 20)
             && (str.search(/\W/) < 0);
     }
 
-    export function checkIsNicknameValid(str: string | undefined | null): boolean {
+    export function checkIsNicknameValid(str: Types.Undefinable<string>): boolean {
         return (typeof str === "string")
             && (str.length >= 4)
             && (str.length <= 20);
@@ -55,7 +57,7 @@ namespace Helpers {
         return (typeof str == "string") && (str.length >= 17) && (str.length <= 18);
     }
 
-    export function formatString(...args: (number | string | null | undefined)[]): string {
+    export function formatString(...args: (Types.Undefinable<number | string>)[]): string {
         let i = 0, a: any, f = args[i++] as string, m: any[] | null, p, c, x;
         const o = [], s = '';
 
@@ -76,7 +78,7 @@ namespace Helpers {
 
             m = /^\x25(?:(\d+)\$)?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fosuxX])/.exec(f);
             if (m) {
-                if (((a = args[m[1] || i++]) == null) || (a == undefined)) {
+                if (((a = args[m[1] || i++]) == null) || (a == null)) {
                     throw ('Too few arguments.');
                 }
                 if (/[^s]/.test(m[7])) {
@@ -119,9 +121,9 @@ namespace Helpers {
         return (new Array(times + 1)).join(str);
     }
 
-    export function getSuffixForRank(rank: number | null | undefined): string | undefined {
+    export function getSuffixForRank(rank: Types.Undefinable<number>): string | null {
         if (rank == null) {
-            return undefined;
+            return null;
         } else {
             if (Math.floor(rank / 10) % 10 === 1) {
                 return `th`;
@@ -145,23 +147,22 @@ namespace Helpers {
             if ((color === ColorType.Gray) || (color === ColorType.Dark)) {
                 obj.filters = [COLOR_MATRIX_FILTERS[color]];
             } else if (color === ColorType.Origin) {
-                // @ts-ignore
-                obj.filters = undefined;
+                (obj.filters as any) = null;
             } else {
-                obj.filters = [new egret.ColorMatrixFilter(getColorMatrix(color, value))];
+                obj.filters = [new egret.ColorMatrixFilter(getColorMatrix(color, value) ?? void 0)];
             }
         }
     }
 
-    // export function getMessageCode(container: IMessageContainer): MessageCodes | undefined {
+    // export function getMessageCode(container: IMessageContainer): MessageCodes | null {
     //     const name = getMessageName(container);
-    //     return name == null ? undefined : MessageCodes[name as any] as any;
+    //     return name == null ? null : MessageCodes[name as any] as any;
     // }
-    export function getMessageName(container: IMessageContainer): (keyof IMessageContainer) | undefined {
+    export function getMessageName(container: IMessageContainer): (keyof IMessageContainer) | null {
         for (const k in container) {
             return k as keyof IMessageContainer;
         }
-        return undefined;
+        return null;
     }
 
     export function getWarActionName(container: IWarActionContainer): string | null {
@@ -197,7 +198,7 @@ namespace Helpers {
         return value === +value;
     }
 
-    export function checkIsValidLanguageType(t: number | null | undefined): boolean {
+    export function checkIsValidLanguageType(t: Types.Undefinable<number>): boolean {
         return (t === Types.LanguageType.Chinese)
             || (t === Types.LanguageType.English);
     }
@@ -219,7 +220,7 @@ namespace Helpers {
         return (length >= minLength) && (length <= maxLength);
     }
     export function checkIsValidLanguageTextArray({ list, minTextLength, maxTextLength, minTextCount }: {
-        list            : ILanguageText[];
+        list            : Types.Undefinable<ILanguageText[]>;
         minTextLength   : number;
         maxTextLength   : number;
         minTextCount    : number;
@@ -275,6 +276,9 @@ namespace Helpers {
     }
     export function checkHasElement<T>(arr: T[], element: T): boolean {
         return arr.indexOf(element) >= 0;
+    }
+    export function getNonNullElements<T>(arr: Types.Undefinable<T>[]): T[] {
+        return arr.filter(v => v != null) as T[];
     }
 
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */
@@ -395,9 +399,9 @@ namespace Helpers {
             });
         }
     }
-    export function createLazyFunc<T>(func: () => T): () => T | undefined {
+    export function createLazyFunc<T>(func: () => T): () => T {
         let hasCalled   = false;
-        let result      : T | undefined;
+        let result      : T;
         return () => {
             if (!hasCalled) {
                 hasCalled   = true;
@@ -407,7 +411,7 @@ namespace Helpers {
         };
     }
 
-    function getColorMatrix(color: Types.ColorType, value = 100): number[] | undefined {
+    function getColorMatrix(color: Types.ColorType, value = 100): number[] | null {
         switch (color) {
             case Types.ColorType.Blue:
                 return [
@@ -450,7 +454,7 @@ namespace Helpers {
                 ];
 
             default:
-                return undefined;
+                return null;
         }
     }
 
@@ -471,6 +475,27 @@ namespace Helpers {
         if (callback) {
             tween.call(callback);
         }
+    }
+
+    export function getDefined<T>(value: T | undefined, errorCode: ClientErrorCode): T {
+        if (value === undefined) {
+            throw Helpers.newError(`Undefined value.`, errorCode);
+        }
+
+        return value;
+    }
+    export function getExisted<T>(value: Types.Undefinable<T>, errorCode?: ClientErrorCode): T {
+        if (value == null) {
+            throw newError(`Empty value`, errorCode);
+        }
+
+        return value;
+    }
+
+    export function newError(msg: string, errorCode?: ClientErrorCode): Types.CustomError {
+        const error     : Types.CustomError = new Error(msg);
+        error.errorCode = errorCode;
+        return error;
     }
 }
 

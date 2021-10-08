@@ -1,4 +1,5 @@
 
+import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
@@ -21,21 +22,21 @@ namespace TwnsMeOffsetPanel {
 
         private static _instance: MeOffsetPanel;
 
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _inputOffsetX   : TwnsUiTextInput.UiTextInput;
-        private _inputOffsetY   : TwnsUiTextInput.UiTextInput;
-        private _labelTips      : TwnsUiLabel.UiLabel;
-        private _btnCancel      : TwnsUiButton.UiButton;
-        private _btnConfirm     : TwnsUiButton.UiButton;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _inputOffsetX! : TwnsUiTextInput.UiTextInput;
+        private readonly _inputOffsetY! : TwnsUiTextInput.UiTextInput;
+        private readonly _labelTips!    : TwnsUiLabel.UiLabel;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
-        private _offsetX   : number;
-        private _offsetY  : number;
+        private _offsetX    : number | null = null;
+        private _offsetY    : number | null = null;
 
         public static show(): void {
             if (!MeOffsetPanel._instance) {
                 MeOffsetPanel._instance = new MeOffsetPanel();
             }
-            MeOffsetPanel._instance.open(undefined);
+            MeOffsetPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -75,9 +76,9 @@ namespace TwnsMeOffsetPanel {
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
-            const offsetX   = this._offsetX;
-            const offsetY   = this._offsetY;
-            const war       = MeModel.getWar();
+            const offsetX   = Helpers.getExisted(this._offsetX);
+            const offsetY   = Helpers.getExisted(this._offsetY);
+            const war       = Helpers.getExisted(MeModel.getWar());
             if ((offsetX !== 0) || (offsetY !== 0)) {
                 war.stopRunning();
                 await war.initWithMapEditorData({

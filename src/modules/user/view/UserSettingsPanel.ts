@@ -10,7 +10,6 @@ import TwnsMmMainMenuPanel          from "../../mapManagement/view/MmMainMenuPan
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import Helpers                      from "../../tools/helpers/Helpers";
 import LocalStorage                 from "../../tools/helpers/LocalStorage";
-import Logger                       from "../../tools/helpers/Logger";
 import StageManager                 from "../../tools/helpers/StageManager";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
@@ -34,18 +33,8 @@ import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
 import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
 namespace TwnsUserSettingsPanel {
-    import UserChangeNicknamePanel  = TwnsUserChangeNicknamePanel.UserChangeNicknamePanel;
-    import UserSetPasswordPanel     = TwnsUserSetPasswordPanel.UserSetPasswordPanel;
-    import UserChangeDiscordIdPanel = TwnsUserChangeDiscordIdPanel.UserChangeDiscordIdPanel;
-    import UserOnlineUsersPanel     = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
-    import UserSetSoundPanel        = TwnsUserSetSoundPanel.UserSetSoundPanel;
-    import UserSetStageScalePanel   = TwnsUserSetStageScalePanel.UserSetStageScalePanel;
-    import UserSetPrivilegePanel    = TwnsUserSetPrivilegePanel.UserSetPrivilegePanel;
-    import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
-    import MmMainMenuPanel          = TwnsMmMainMenuPanel.MmMainMenuPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import CommonChangeVersionPanel = TwnsCommonChangeVersionPanel.CommonChangeVersionPanel;
 
     export class UserSettingsPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -53,39 +42,40 @@ namespace TwnsUserSettingsPanel {
 
         private static _instance: UserSettingsPanel;
 
-        private readonly _imgMask               : TwnsUiImage.UiImage;
-        private readonly _labelTitle            : TwnsUiLabel.UiLabel;
-        private readonly _btnClose              : TwnsUiButton.UiButton;
-        private readonly _group                 : eui.Group;
-        private readonly _scroller              : eui.Scroller;
+        private readonly _imgMask!                  : TwnsUiImage.UiImage;
+        private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!                 : TwnsUiButton.UiButton;
+        private readonly _group!                    : eui.Group;
+        private readonly _scroller!                 : eui.Scroller;
 
-        private readonly _uiRadioLanguage       : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioTexture        : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioUnitAnimation  : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioTileAnimation  : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioShowGridBorder : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioLanguage!          : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioTexture!           : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioUnitAnimation!     : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioTileAnimation!     : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioShowGridBorder!    : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioUnitOpacity!       : TwnsUiRadioButton.UiRadioButton;
 
-        private readonly _groupButtons          : eui.Group;
-        private readonly _btnChangeNickname     : TwnsUiButton.UiButton;
-        private readonly _btnChangePassword     : TwnsUiButton.UiButton;
-        private readonly _btnChangeDiscordId    : TwnsUiButton.UiButton;
-        private readonly _btnChangeGameVersion  : TwnsUiButton.UiButton;
-        private readonly _btnRankList           : TwnsUiButton.UiButton;
-        private readonly _btnShowOnlineUsers    : TwnsUiButton.UiButton;
-        private readonly _btnSetSound           : TwnsUiButton.UiButton;
-        private readonly _btnSetStageScaler     : TwnsUiButton.UiButton;
-        private readonly _btnServerStatus       : TwnsUiButton.UiButton;
-        private readonly _btnComplaint          : TwnsUiButton.UiButton;
-        private readonly _btnUnitsInfo          : TwnsUiButton.UiButton;
-        private readonly _btnChangeLog          : TwnsUiButton.UiButton;
-        private readonly _btnSetPrivilege       : TwnsUiButton.UiButton;
-        private readonly _btnMapManagement      : TwnsUiButton.UiButton;
+        private readonly _groupButtons!             : eui.Group;
+        private readonly _btnChangeNickname!        : TwnsUiButton.UiButton;
+        private readonly _btnChangePassword!        : TwnsUiButton.UiButton;
+        private readonly _btnChangeDiscordId!       : TwnsUiButton.UiButton;
+        private readonly _btnChangeGameVersion!     : TwnsUiButton.UiButton;
+        private readonly _btnRankList!              : TwnsUiButton.UiButton;
+        private readonly _btnShowOnlineUsers!       : TwnsUiButton.UiButton;
+        private readonly _btnSetSound!              : TwnsUiButton.UiButton;
+        private readonly _btnSetStageScaler!        : TwnsUiButton.UiButton;
+        private readonly _btnServerStatus!          : TwnsUiButton.UiButton;
+        private readonly _btnComplaint!             : TwnsUiButton.UiButton;
+        private readonly _btnUnitsInfo!             : TwnsUiButton.UiButton;
+        private readonly _btnChangeLog!             : TwnsUiButton.UiButton;
+        private readonly _btnSetPrivilege!          : TwnsUiButton.UiButton;
+        private readonly _btnMapManagement!         : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!UserSettingsPanel._instance) {
                 UserSettingsPanel._instance = new UserSettingsPanel();
             }
-            UserSettingsPanel._instance.open(undefined);
+            UserSettingsPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -104,12 +94,13 @@ namespace TwnsUserSettingsPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: NotifyType.IsShowGridBorderChanged,            callback: this._onNotifyIsShowGridBorderChanged },
-                { type: NotifyType.MsgUserGetPublicInfo,               callback: this._onMsgUserGetPublicInfo },
-                { type: NotifyType.MsgUserSetNickname,                 callback: this._onMsgUserSetNickname },
-                { type: NotifyType.MsgUserSetDiscordId,                callback: this._onMsgUserSetDiscordId },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyUserSettingsIsShowGridBorderChanged },
+                { type: NotifyType.UserSettingsUnitOpacityChanged,      callback: this._onNotifyUserSettingsUnitOpacityChanged },
+                { type: NotifyType.MsgUserGetPublicInfo,                callback: this._onMsgUserGetPublicInfo },
+                { type: NotifyType.MsgUserSetNickname,                  callback: this._onMsgUserSetNickname },
+                { type: NotifyType.MsgUserSetDiscordId,                 callback: this._onMsgUserSetDiscordId },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,               callback: this.close },
@@ -222,12 +213,30 @@ namespace TwnsUserSettingsPanel {
                     return UserModel.getSelfSettingsIsShowGridBorder();
                 },
             });
+            this._uiRadioUnitOpacity.setData({
+                titleTextType   : LangTextType.B0356,
+                leftTextType    : LangTextType.B0561,
+                rightTextType   : LangTextType.B0562,
+                callbackOnLeft  : () => {
+                    UserProxy.reqUserSetSettings({
+                        unitOpacity : 0,
+                    });
+                },
+                callbackOnRight : () => {
+                    UserProxy.reqUserSetSettings({
+                        unitOpacity : 100,
+                    });
+                },
+                checkerForLeftOn: () => {
+                    return UserModel.getSelfSettingsUnitOpacity() != 100;
+                },
+            });
 
             this._showOpenAnimation();
 
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                Logger.error(`UserSettingsPanel._onOpened() empty selfUserId.`);
+                throw Helpers.newError(`UserSettingsPanel._onOpened() empty selfUserId.`);
             } else {
                 UserProxy.reqUserGetPublicInfo(selfUserId);
             }
@@ -245,8 +254,11 @@ namespace TwnsUserSettingsPanel {
         private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._uiRadioTexture.updateView();
         }
-        private _onNotifyIsShowGridBorderChanged(): void {
+        private _onNotifyUserSettingsIsShowGridBorderChanged(): void {
             this._uiRadioShowGridBorder.updateView();
+        }
+        private _onNotifyUserSettingsUnitOpacityChanged(): void {
+            this._uiRadioUnitOpacity.updateView();
         }
         private _onMsgUserGetPublicInfo(): void {
             this._updateView();
@@ -254,7 +266,7 @@ namespace TwnsUserSettingsPanel {
         private _onMsgUserSetNickname(): void {
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                Logger.error(`UserSettingsPanel._onMsgUserSetNickname() empty selfUserId.`);
+                throw Helpers.newError(`UserSettingsPanel._onMsgUserSetNickname() empty selfUserId.`);
             } else {
                 UserProxy.reqUserGetPublicInfo(selfUserId);
             }
@@ -262,34 +274,34 @@ namespace TwnsUserSettingsPanel {
         private _onMsgUserSetDiscordId(): void {
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                Logger.error(`UserSettingsPanel._onMsgUserSetDiscordId() empty selfUserId.`);
+                throw Helpers.newError(`UserSettingsPanel._onMsgUserSetDiscordId() empty selfUserId.`);
             } else {
                 UserProxy.reqUserGetPublicInfo(selfUserId);
             }
         }
         private _onTouchedBtnChangeNickname(): void {
-            UserChangeNicknamePanel.show();
+            TwnsUserChangeNicknamePanel.UserChangeNicknamePanel.show();
         }
         private _onTouchedBtnChangePassword(): void {
-            UserSetPasswordPanel.show();
+            TwnsUserSetPasswordPanel.UserSetPasswordPanel.show();
         }
         private _onTouchedBtnChangeDiscordId(): void {
-            UserChangeDiscordIdPanel.show();
+            TwnsUserChangeDiscordIdPanel.UserChangeDiscordIdPanel.show();
         }
         private _onTouchedBtnChangeGameVersion(): void {
-            CommonChangeVersionPanel.show();
+            TwnsCommonChangeVersionPanel.CommonChangeVersionPanel.show();
         }
         private _onTouchedBtnRankList(): void {
             TwnsCommonRankListPanel.CommonRankListPanel.show();
         }
         private _onTouchedBtnShowOnlineUsers(): void {
-            UserOnlineUsersPanel.show();
+            TwnsUserOnlineUsersPanel.UserOnlineUsersPanel.show();
         }
         private _onTouchedBtnSetSound(): void {
-            UserSetSoundPanel.show();
+            TwnsUserSetSoundPanel.UserSetSoundPanel.show();
         }
         private _onTouchedBtnSetStageScaler(): void {
-            UserSetStageScalePanel.show();
+            TwnsUserSetStageScalePanel.UserSetStageScalePanel.show();
         }
         private _onTouchedBtnServerStatus(): void {
             TwnsCommonServerStatusPanel.CommonServerStatusPanel.show();
@@ -299,7 +311,7 @@ namespace TwnsUserSettingsPanel {
             TwnsChatPanel.ChatPanel.show({ toUserId: CommonConstants.AdminUserId });
         }
         private _onTouchedBtnUnitsInfo(): void {
-            CommonDamageChartPanel.show();
+            TwnsCommonDamageChartPanel.CommonDamageChartPanel.show();
         }
         private _onTouchedBtnChangeLog(): void {
             TwnsChangeLogPanel.ChangeLogPanel.show();
@@ -307,15 +319,15 @@ namespace TwnsUserSettingsPanel {
         private _onTouchedBtnSetPrivilege(): void {
             const selfUserId = UserModel.getSelfUserId();
             if (selfUserId == null) {
-                Logger.error(`UserSettingsPanel._onTouchedBtnSetPrivilege() empty selfUserId.`);
+                throw Helpers.newError(`UserSettingsPanel._onTouchedBtnSetPrivilege() empty selfUserId.`);
             } else {
-                UserSetPrivilegePanel.show({ userId: selfUserId });
+                TwnsUserSetPrivilegePanel.UserSetPrivilegePanel.show({ userId: selfUserId });
             }
         }
         private _onTouchedBtnMapManagement(): void {
             StageManager.closeAllPanels();
             TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-            MmMainMenuPanel.show();
+            TwnsMmMainMenuPanel.MmMainMenuPanel.show();
         }
 
         private _showOpenAnimation(): void {
@@ -366,10 +378,10 @@ namespace TwnsUserSettingsPanel {
             group.addChild(this._btnChangeLog);
             group.addChild(this._btnUnitsInfo);
             group.addChild(this._btnComplaint);
-            if (await UserModel.getIsSelfAdmin()) {
+            if (UserModel.getIsSelfAdmin()) {
                 group.addChild(this._btnSetPrivilege);
             }
-            if ((await UserModel.getIsSelfAdmin()) || (await UserModel.getIsSelfMapCommittee())) {
+            if ((UserModel.getIsSelfAdmin()) || (UserModel.getIsSelfMapCommittee())) {
                 group.addChild(this._btnMapManagement);
             }
         }

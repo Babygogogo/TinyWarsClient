@@ -2,7 +2,7 @@
 import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
 import TwnsSpwWarMenuPanel  from "../../singlePlayerWar/view/SpwWarMenuPanel";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import Logger               from "../../tools/helpers/Logger";
+import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
@@ -14,100 +14,29 @@ namespace TwnsSfwWar {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class SfwWar extends SpwWar {
-        private _settingsForSfw : ISettingsForSfw;
+        private _settingsForSfw?    : ISettingsForSfw;
 
-        public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data);
-            if (baseInitError) {
-                return baseInitError;
-            }
-
-            const settingsForSfw = data.settingsForSfw;
-            if (settingsForSfw == null) {
-                return ClientErrorCode.SfwWarInit00;
-            }
-
-            this._setSettingsForSfw(settingsForSfw);
+        public async init(data: ISerialWar): Promise<void> {
+            await this._baseInit(data);
+            this._setSettingsForSfw(Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
 
             this._initView();
-
-            return ClientErrorCode.NoError;
         }
 
         public serialize(): ISerialWar {
-            const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
-            if (settingsForCommon == null) {
-                Logger.error(`SfwWar.serialize() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            const settingsForSfw = this._getSettingsForSfw();
-            if (settingsForSfw == null) {
-                Logger.error(`SfwWar.serialize() empty settingsForSfw.`);
-                return undefined;
-            }
-
-            const playerManager = this.getPlayerManager();
-            if (playerManager == null) {
-                Logger.error(`SfwWar.serialize() empty playerManager.`);
-                return undefined;
-            }
-
-            const turnManager = this.getTurnManager();
-            if (turnManager == null) {
-                Logger.error(`SfwWar.serialize() empty turnManager.`);
-                return undefined;
-            }
-
-            const field = this.getField();
-            if (field == null) {
-                Logger.error(`SfwWar.serialize() empty field.`);
-                return undefined;
-            }
-
-            const warEventManager = this.getWarEventManager();
-            if (warEventManager == null) {
-                Logger.error(`SfwWar.serialize() empty warEventManager.`);
-                return undefined;
-            }
-
-            const serialPlayerManager = playerManager.serialize();
-            if (serialPlayerManager == null) {
-                Logger.error(`SfwWar.serialize() empty serialPlayerManager.`);
-                return undefined;
-            }
-
-            const serialTurnManager = turnManager.serialize();
-            if (serialTurnManager == null) {
-                Logger.error(`SfwWar.serialize() empty serialTurnManager.`);
-                return undefined;
-            }
-
-            const serialField = field.serialize();
-            if (serialField == null) {
-                Logger.error(`SfwWar.serialize() empty serialField.`);
-                return undefined;
-            }
-
-            const serialWarEventManager = warEventManager.serialize();
-            if (serialWarEventManager == null) {
-                Logger.error(`SfwWar.serialize() empty serialWarEventManager.`);
-                return undefined;
-            }
-
             return {
-                settingsForCommon,
-                settingsForSfw,
+                settingsForCommon           : this.getCommonSettingManager().getSettingsForCommon(),
+                settingsForSfw              : this._getSettingsForSfw(),
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
                 executedActions             : [],
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
-                warEventManager             : serialWarEventManager,
-                playerManager               : serialPlayerManager,
-                turnManager                 : serialTurnManager,
-                field                       : serialField,
+                warEventManager             : this.getWarEventManager().serialize(),
+                playerManager               : this.getPlayerManager().serialize(),
+                turnManager                 : this.getTurnManager().serialize(),
+                field                       : this.getField().serialize(),
             };
         }
 
@@ -130,23 +59,23 @@ namespace TwnsSfwWar {
                 : Types.WarType.SfwStd;
         }
 
-        public getMapId(): number | undefined {
-            return undefined;
+        public getMapId(): number | null {
+            return null;
         }
 
         public getCanCheat(): boolean {
             return true;
         }
 
-        public getSettingsBootTimerParams(): number[] | null | undefined {
+        public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }
 
         private _setSettingsForSfw(settings: ISettingsForSfw): void {
             this._settingsForSfw = settings;
         }
-        private _getSettingsForSfw(): ISettingsForSfw | null | undefined {
-            return this._settingsForSfw;
+        private _getSettingsForSfw(): ISettingsForSfw {
+            return Helpers.getExisted(this._settingsForSfw);
         }
     }
 }

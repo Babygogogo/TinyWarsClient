@@ -4,9 +4,9 @@ import TwnsCommonAlertPanel from "../../common/view/CommonAlertPanel";
 import TwnsScwWar           from "../../singleCustomWar/model/ScwWar";
 import TwnsSfwWar           from "../../singleFreeWar/model/SfwWar";
 import TwnsSrwWar           from "../../singleRankWar/model/SrwWar";
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import FlowManager          from "../../tools/helpers/FlowManager";
+import Helpers              from "../../tools/helpers/Helpers";
 import Logger               from "../../tools/helpers/Logger";
 import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
@@ -25,13 +25,13 @@ namespace SpwModel {
     import SrwWar                   = TwnsSrwWar.SrwWar;
     import SpwPlayerManager         = TwnsSpwPlayerManager.SpwPlayerManager;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import WarSerialization         = ProtoTypes.WarSerialization;
     import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
     import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
     import BwWar                    = TwnsBwWar.BwWar;
 
-    let _war: SpwWar;
+    let _war: SpwWar | null = null;
+
     export function init(): void {
         // nothing to do.
     }
@@ -49,26 +49,8 @@ namespace SpwModel {
             unloadWar();
         }
 
-        const war = warData.settingsForScw
-            ? new ScwWar()
-            : (warData.settingsForSfw
-                ? new SfwWar()
-                : (warData.settingsForSrw
-                    ? new SrwWar()
-                    : null
-                )
-            );
-        if (war == null) {
-            Logger.error(`SpwModel.loadWar() empty war.`);
-            return undefined;
-        }
-
-        const initError = await war.init(warData);
-        if (initError) {
-            Logger.warn(`SpwModel.loadWar() initError: ${initError}`);
-            return undefined;
-        }
-
+        const war = createWarByWarData(warData);
+        await war.init(warData);
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);
@@ -85,10 +67,10 @@ namespace SpwModel {
         }
     }
 
-    export function getWar(): SpwWar | undefined | null {
+    export function getWar(): SpwWar | null {
         return _war;
     }
-    function setWar(war: SpwWar | null | undefined): void {
+    function setWar(war: SpwWar | null): void {
         _war = war;
     }
 
@@ -126,20 +108,7 @@ namespace SpwModel {
             return;
         }
 
-        const {
-            errorCode   : errorCodeForRobotAction,
-            action      : robotAction,
-        } = await WarRobot.getNextAction(war);
-        if (errorCodeForRobotAction) {
-            Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() errorCodeForRobotAction: ${errorCodeForRobotAction}`);
-            _warsWithRobotRunning.delete(war);
-            return;
-        } else if (robotAction == null) {
-            Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() empty robotAction!`);
-            _warsWithRobotRunning.delete(war);
-            return;
-        }
-
+        const robotAction = await WarRobot.getNextAction(war);
         if (!war.getIsRunning()) {
             _warsWithRobotRunning.delete(war);
             return;
@@ -151,13 +120,18 @@ namespace SpwModel {
         await checkAndHandleAutoActionsAndRobotRecursively(war);
     }
 
-    async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
-        if (!checkCanExecuteAction(war)) {
-            Logger.error(`SpwModel.handlePlayerOrRobotAction() checkCanExecuteAction(war) is not true!`);
-            return ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_00;
+    async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<void> {
+        if (war.getIsEnded()) {
+            throw Helpers.newError(`war.getIsEnded() is true.`);
+        }
+        if (war.getIsExecutingAction()) {
+            throw Helpers.newError(`war.getIsExecutingAction() is true.`);
+        }
+        if (!war.getIsRunning()) {
+            throw Helpers.newError(`war.getIsRunning() is false.`);
         }
 
-        return await reviseAndExecute(war, action);
+        await reviseAndExecute(war, action);
     }
 
     function checkAndEndWar(war: BwWar): boolean {
@@ -217,15 +191,13 @@ namespace SpwModel {
         // Handle the WaitBeginTurn phase.
         const turnPhaseCode = war.getTurnPhaseCode();
         if (turnPhaseCode == null) {
-            Logger.error(`SpwModel.checkAndHandleSystemActions() empty turnPhaseCode.`);
-            return false;
+            throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() empty turnPhaseCode.`);
         }
 
         const playerManager = war.getPlayerManager();
         const playerInTurn  = playerManager.getPlayerInTurn();
         if (playerInTurn == null) {
-            Logger.error(`SpwModel.checkAndHandleSystemActions() empty playerInTurn.`);
-            return false;
+            throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() empty playerInTurn.`);
         }
 
         if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
@@ -237,8 +209,7 @@ namespace SpwModel {
         // Handle the booted players (make them dying).
         if (war.checkIsBoot()) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                Logger.error(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`);
-                return false;
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`);
             }
 
             await handleSystemHandleBootPlayer(war);
@@ -251,8 +222,7 @@ namespace SpwModel {
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
             const player = playerManager.getPlayer(playerIndex);
             if (player == null) {
-                Logger.error(`SpwModel.checkAndHandleSystemActions() empty player.`);
-                return false;
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() empty player.`);
             }
 
             if (player.getAliveState() === Types.PlayerAliveState.Dying) {
@@ -265,8 +235,7 @@ namespace SpwModel {
         // Handle neutral player (end turn).
         if (playerInTurn.checkIsNeutral()) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                Logger.error(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
-                return false;
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
             }
 
             await handleSystemEndTurn(war);
@@ -277,8 +246,7 @@ namespace SpwModel {
         // Handle the dead player in turn (end turn).
         if (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                Logger.error(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
-                return false;
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
             }
 
             await handleSystemEndTurn(war);
@@ -289,78 +257,68 @@ namespace SpwModel {
         // No system action available.
         return false;
     }
-    async function handleSystemBeginTurn(war: BwWar): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemBeginTurn(war: BwWar): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemBeginTurn    : {
             },
         });
     }
-    async function handleSystemCallWarEvent(war: BwWar, warEventId: number): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemCallWarEvent(war: BwWar, warEventId: number): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemCallWarEvent : {
                 warEventId,
             },
         });
     }
-    async function handleSystemDestroyPlayerForce(war: BwWar, playerIndex: number): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemDestroyPlayerForce(war: BwWar, playerIndex: number): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemDestroyPlayerForce   : {
                 targetPlayerIndex           : playerIndex,
             },
         });
     }
-    async function handleSystemEndWar(war: BwWar): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemEndWar(war: BwWar): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndWar   : {
             },
         });
     }
-    async function handleSystemHandleBootPlayer(war: BwWar): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemHandleBootPlayer(war: BwWar): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                        : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemHandleBootPlayer : {
             },
         });
     }
-    async function handleSystemEndTurn(war: BwWar): Promise<ClientErrorCode> {
-        return await reviseAndExecute(war, {
+    async function handleSystemEndTurn(war: BwWar): Promise<void> {
+        await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndTurn  : {
             },
         });
     }
 
-    function checkCanExecuteAction(war: BwWar): boolean {
-        return (war != null)                &&
-            (!war.getIsEnded())             &&
-            (!war.getIsExecutingAction())   &&
-            (war.getIsRunning());
-    }
-    async function reviseAndExecute(war: BwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
-        const {
-            errorCode   : errorCodeForRevisedAction,
-            action      : revisedAction,
-        } = WarActionReviser.revise(war, action);
-        if (errorCodeForRevisedAction) {
-            Logger.error(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}.`);
-            return errorCodeForRevisedAction;
-        } else if (revisedAction == null) {
-            Logger.error(`SpwModel.reviseAndExecute() empty revisedAction!.`);
-            return ClientErrorCode.SpwModel_ReviseAndExecute_00;
-        }
-
-        const errorCodeForExecute = await WarActionExecutor.checkAndExecute(war, revisedAction, false);
-        if (errorCodeForExecute) {
-            Logger.error(`SpwModel.reviseAndExecute() errorCodeForExecute: ${errorCodeForExecute}.`);
-            return errorCodeForExecute;
-        }
+    async function reviseAndExecute(war: BwWar, action: IWarActionContainer): Promise<void> {
+        const revisedAction = WarActionReviser.revise(war, action);
+        await WarActionExecutor.checkAndExecute(war, revisedAction, false);
 
         war.getExecutedActionManager().addExecutedAction(revisedAction);
-        return ClientErrorCode.NoError;
+    }
+
+    function createWarByWarData(warData: ProtoTypes.WarSerialization.ISerialWar): SpwWar {
+        if (warData.settingsForScw) {
+            return new ScwWar();
+        } else if (warData.settingsForSfw) {
+            return new SfwWar();
+        } else if (warData.settingsForSrw) {
+            return new SrwWar();
+        } else {
+            throw Helpers.newError(`Invalid warData.`);
+        }
     }
 }
 

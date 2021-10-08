@@ -1,24 +1,25 @@
 
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
-import FloatText        from "../../tools/helpers/FloatText";
-import Helpers          from "../../tools/helpers/Helpers";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import Types            from "../../tools/helpers/Types";
-import WarMapModel      from "../../warMap/model/WarMapModel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+import WarMapModel          from "../../warMap/model/WarMapModel";
 
 namespace TwnsCommonJoinRoomPasswordPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     type OpenData = {
-        warName             : string | undefined;
-        mapId               : number | undefined;
+        warName             : string | null;
+        mapId               : number | null;
         password            : string;
         callbackOnSucceed   : () => void;
     };
@@ -28,15 +29,15 @@ namespace TwnsCommonJoinRoomPasswordPanel {
 
         private static _instance: CommonJoinRoomPasswordPanel;
 
-        private readonly _imgMask               : TwnsUiImage.UiImage;
-        private readonly _group                 : eui.Group;
-        private readonly _labelTitle            : TwnsUiLabel.UiLabel;
-        private readonly _labelRoomTitle        : TwnsUiLabel.UiLabel;
-        private readonly _labelPasswordTitle    : TwnsUiLabel.UiLabel;
-        private readonly _labelWarName          : TwnsUiLabel.UiLabel;
-        private readonly _inputWarPassword      : TwnsUiTextInput.UiTextInput;
-        private readonly _btnCancel             : TwnsUiButton.UiButton;
-        private readonly _btnConfirm            : TwnsUiButton.UiButton;
+        private readonly _imgMask!              : TwnsUiImage.UiImage;
+        private readonly _group!                : eui.Group;
+        private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _labelRoomTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelPasswordTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelWarName!         : TwnsUiLabel.UiLabel;
+        private readonly _inputWarPassword!     : TwnsUiTextInput.UiTextInput;
+        private readonly _btnCancel!            : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!CommonJoinRoomPasswordPanel._instance) {
@@ -110,7 +111,7 @@ namespace TwnsCommonJoinRoomPasswordPanel {
             } else {
                 const mapId = openData.mapId;
                 if (mapId != null) {
-                    label.text = await WarMapModel.getMapNameInCurrentLanguage(mapId);
+                    label.text = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
                 } else {
                     label.text = Lang.getText(LangTextType.B0555);
                 }

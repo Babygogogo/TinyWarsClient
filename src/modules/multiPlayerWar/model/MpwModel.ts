@@ -12,6 +12,7 @@ import TwnsClientErrorCode                  from "../../tools/helpers/ClientErro
 import CommonConstants                      from "../../tools/helpers/CommonConstants";
 import FloatText                            from "../../tools/helpers/FloatText";
 import FlowManager                          from "../../tools/helpers/FlowManager";
+import Helpers                              from "../../tools/helpers/Helpers";
 import Logger                               from "../../tools/helpers/Logger";
 import Types                                from "../../tools/helpers/Types";
 import Lang                                 from "../../tools/lang/Lang";
@@ -47,11 +48,11 @@ namespace MpwModel {
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
     let _allWarInfoList         : IMpwWarInfo[] = [];
-    let _mcwPreviewingWarId     : number | undefined;
-    let _mrwPreviewingWarId     : number | undefined;
-    let _mfwPreviewingWarId     : number | undefined;
-    let _ccwPreviewingWarId     : number | undefined;
-    let _war                    : MpwWar | undefined;
+    let _mcwPreviewingWarId     : number | null = null;
+    let _mrwPreviewingWarId     : number | null = null;
+    let _mfwPreviewingWarId     : number | null = null;
+    let _ccwPreviewingWarId     : number | null = null;
+    let _war                    : MpwWar | null = null;
     const _cachedActions        : IWarActionContainer[] = [];
 
     export function init(): void {
@@ -76,44 +77,44 @@ namespace MpwModel {
     export function getMyCcwWarInfoArray(): IMpwWarInfo[] {
         return getAllMyWarInfoList().filter(v => v.settingsForCcw != null);
     }
-    export function getMyWarInfo(warId: number): IMpwWarInfo | undefined {
-        return getAllMyWarInfoList().find(v => v.warId === warId);
+    export function getMyWarInfo(warId: number): IMpwWarInfo | null {
+        return getAllMyWarInfoList().find(v => v.warId === warId) ?? null;
     }
 
-    export function getMcwPreviewingWarId(): number | undefined {
+    export function getMcwPreviewingWarId(): number | null {
         return _mcwPreviewingWarId;
     }
-    export function setMcwPreviewingWarId(warId: number | undefined): void {
+    export function setMcwPreviewingWarId(warId: number | null): void {
         if (getMcwPreviewingWarId() != warId) {
             _mcwPreviewingWarId = warId;
             Notify.dispatch(NotifyType.McwPreviewingWarIdChanged);
         }
     }
 
-    export function getMrwPreviewingWarId(): number | undefined {
+    export function getMrwPreviewingWarId(): number | null {
         return _mrwPreviewingWarId;
     }
-    export function setMrwPreviewingWarId(warId: number | undefined): void {
+    export function setMrwPreviewingWarId(warId: number | null): void {
         if (getMrwPreviewingWarId() != warId) {
             _mrwPreviewingWarId = warId;
             Notify.dispatch(NotifyType.MrwPreviewingWarIdChanged);
         }
     }
 
-    export function getMfwPreviewingWarId(): number | undefined {
+    export function getMfwPreviewingWarId(): number | null {
         return _mfwPreviewingWarId;
     }
-    export function setMfwPreviewingWarId(warId: number | undefined): void {
+    export function setMfwPreviewingWarId(warId: number | null): void {
         if (getMfwPreviewingWarId() != warId) {
             _mfwPreviewingWarId = warId;
             Notify.dispatch(NotifyType.MfwPreviewingWarIdChanged);
         }
     }
 
-    export function getCcwPreviewingWarId(): number | undefined {
+    export function getCcwPreviewingWarId(): number | null {
         return _ccwPreviewingWarId;
     }
-    export function setCcwPreviewingWarId(warId: number | undefined): void {
+    export function setCcwPreviewingWarId(warId: number | null): void {
         if (getCcwPreviewingWarId() != warId) {
             _ccwPreviewingWarId = warId;
             Notify.dispatch(NotifyType.CcwPreviewingWarIdChanged);
@@ -132,7 +133,7 @@ namespace MpwModel {
     export function checkIsRedForMyCcwWars(): boolean {
         return checkIsRedForMyWars(getMyCcwWarInfoArray());
     }
-    export function checkIsRedForMyWar(warInfo: IMpwWarInfo | null | undefined): boolean {
+    export function checkIsRedForMyWar(warInfo: IMpwWarInfo | null): boolean {
         if (warInfo == null) {
             return false;
         } else {
@@ -145,13 +146,13 @@ namespace MpwModel {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function createDataForCommonWarBasicSettingsPage(warId: number): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const warInfo = getMyWarInfo(warId);
+    export async function createDataForCommonWarBasicSettingsPage(warId: number | null): Promise<OpenDataForCommonWarBasicSettingsPage> {
+        const warInfo = warId == null ? null : getMyWarInfo(warId);
         if (warInfo == null) {
-            return { dataArrayForListSettings: [] };
+            return null;
         }
 
-        const warRule                                                               = warInfo.settingsForCommon.warRule;
+        const warRule                                                               = Helpers.getExisted(warInfo.settingsForCommon?.warRule);
         const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
         if (settingsForMcw) {
             return await createDataForCommonWarBasicSettingsPageForMcw(warRule, settingsForMcw);
@@ -162,56 +163,55 @@ namespace MpwModel {
         } else if (settingsForMfw) {
             return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForMfw);
         } else {
-            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPage() invalid warInfo.`);
-            return { dataArrayForListSettings: [] };
+            throw Helpers.newError(`Invalid warInfo.`);
         }
     }
     async function createDataForCommonWarBasicSettingsPageForMcw(warRule: IWarRule, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const bootTimerParams   = settingsForMcw.bootTimerParams;
+        const bootTimerParams   = Helpers.getExisted(settingsForMcw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForMcw.mapId),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)),
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarName,
-                    currentValue    : settingsForMcw.warName,
+                    currentValue    : settingsForMcw.warName ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
-                    currentValue    : settingsForMcw.warPassword,
+                    currentValue    : settingsForMcw.warPassword ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
-                    currentValue    : settingsForMcw.warComment,
+                    currentValue    : settingsForMcw.warComment ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             ],
         };
@@ -220,7 +220,7 @@ namespace MpwModel {
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
                 warRule,
-                callbackOnModify: undefined,
+                callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
@@ -228,67 +228,67 @@ namespace MpwModel {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             );
         } else {
-            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPageForMcw() invalid timerType.`);
+            throw Helpers.newError(`MpwModel.createDataForCommonWarBasicSettingsPageForMcw() invalid timerType.`);
         }
 
         return openData;
     }
     async function createDataForCommonWarBasicSettingsPageForCcw(warRule: IWarRule, settingsForCcw: ISettingsForCcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const bootTimerParams   = settingsForCcw.bootTimerParams;
+        const bootTimerParams   = Helpers.getExisted(settingsForCcw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForCcw.mapId),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForCcw.mapId)),
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarName,
-                    currentValue    : settingsForCcw.warName,
+                    currentValue    : settingsForCcw.warName ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
-                    currentValue    : settingsForCcw.warPassword,
+                    currentValue    : settingsForCcw.warPassword ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
-                    currentValue    : settingsForCcw.warComment,
+                    currentValue    : settingsForCcw.warComment ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             ],
         };
@@ -297,7 +297,7 @@ namespace MpwModel {
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
                 warRule,
-                callbackOnModify: undefined,
+                callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
@@ -305,17 +305,17 @@ namespace MpwModel {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             );
         } else {
-            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPageForCcw() invalid timerType.`);
+            throw Helpers.newError(`MpwModel.createDataForCommonWarBasicSettingsPageForCcw() invalid timerType.`);
         }
 
         return openData;
@@ -327,27 +327,27 @@ namespace MpwModel {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(settingsForMrw.mapId),
+                    currentValue    : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMrw.mapId)),
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             ],
         };
@@ -356,7 +356,7 @@ namespace MpwModel {
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
                 warRule,
-                callbackOnModify: undefined,
+                callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
@@ -364,61 +364,61 @@ namespace MpwModel {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             );
         } else {
-            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPageForMrw() invalid timerType.`);
+            throw Helpers.newError(`MpwModel.createDataForCommonWarBasicSettingsPageForMrw() invalid timerType.`);
         }
 
         return openData;
     }
     async function createDataForCommonWarBasicSettingsPageForMfw(warRule: IWarRule, settingsForMfw: ISettingsForMfw): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const bootTimerParams   = settingsForMfw.bootTimerParams;
+        const bootTimerParams   = Helpers.getExisted(settingsForMfw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
             dataArrayForListSettings    : [
                 {
                     settingsType    : WarBasicSettingsType.WarName,
-                    currentValue    : settingsForMfw.warName,
+                    currentValue    : settingsForMfw.warName ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarPassword,
-                    currentValue    : settingsForMfw.warPassword,
+                    currentValue    : settingsForMfw.warPassword ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarComment,
-                    currentValue    : settingsForMfw.warComment,
+                    currentValue    : settingsForMfw.warComment ?? null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.WarRuleTitle,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.HasFog,
-                    currentValue    : undefined,
+                    currentValue    : null,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             ],
         };
@@ -427,7 +427,7 @@ namespace MpwModel {
                 settingsType    : WarBasicSettingsType.TimerRegularParam,
                 currentValue    : bootTimerParams[1],
                 warRule,
-                callbackOnModify: undefined,
+                callbackOnModify: null,
             });
         } else if (timerType === Types.BootTimerType.Incremental) {
             openData.dataArrayForListSettings.push(
@@ -435,32 +435,33 @@ namespace MpwModel {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam1,
                     currentValue    : bootTimerParams[1],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
                 {
                     settingsType    : WarBasicSettingsType.TimerIncrementalParam2,
                     currentValue    : bootTimerParams[2],
                     warRule,
-                    callbackOnModify: undefined,
+                    callbackOnModify: null,
                 },
             );
         } else {
-            Logger.error(`MpwModel.createDataForCommonWarBasicSettingsPageForMfw() invalid timerType.`);
+            throw Helpers.newError(`MpwModel.createDataForCommonWarBasicSettingsPageForMfw() invalid timerType.`);
         }
 
         return openData;
     }
 
-    export async function createDataForCommonWarAdvancedSettingsPage(warId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage | undefined> {
-        const warInfo = getMyWarInfo(warId);
+    export async function createDataForCommonWarAdvancedSettingsPage(warId: number | null): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+        const warInfo = warId == null ? null : getMyWarInfo(warId);
         if (warInfo == null) {
-            return undefined;
+            return null;
         }
 
-        const settingsForCommon                                                     = warInfo.settingsForCommon;
-        const { warRule, configVersion }                                            = settingsForCommon;
+        const settingsForCommon                                                     = Helpers.getExisted(warInfo.settingsForCommon);
+        const warRule                                                               = Helpers.getExisted(settingsForCommon.warRule);
+        const configVersion                                                         = Helpers.getExisted(settingsForCommon.configVersion);
+        const hasFog                                                                = warRule.ruleForGlobalParams?.hasFogByDefault;
         const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
-        const hasFog                                                                = warRule.ruleForGlobalParams.hasFogByDefault;
         if (settingsForCcw) {
             return {
                 configVersion,
@@ -486,41 +487,41 @@ namespace MpwModel {
                 warType     : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };
         } else {
-            Logger.error(`MpwModel.createDataForCommonWarAdvancedSettingsPage() invalid warInfo.`);
-            return undefined;
+            throw Helpers.newError(`MpwModel.createDataForCommonWarAdvancedSettingsPage() invalid warInfo.`);
         }
     }
 
-    export async function createDataForCommonWarPlayerInfoPage(warId: number): Promise<OpenDataForCommonWarPlayerInfoPage | undefined> {
-        const warInfo = getMyWarInfo(warId);
+    export async function createDataForCommonWarPlayerInfoPage(warId: number | null): Promise<OpenDataForCommonWarPlayerInfoPage> {
+        const warInfo = warId == null ? null : getMyWarInfo(warId);
         if (warInfo == null) {
-            return undefined;
+            return null;
         }
 
-        const settingsForCommon = warInfo.settingsForCommon;
-        const warRule           = settingsForCommon.warRule;
+        const settingsForCommon = Helpers.getExisted(warInfo.settingsForCommon);
+        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
         for (const playerInfo of warInfo.playerInfoList || []) {
-            const { playerIndex, userId } = playerInfo;
+            const playerIndex   = Helpers.getExisted(playerInfo.playerIndex);
+            const userId        = playerInfo.userId ?? null;
             playerInfoArray.push({
                 playerIndex,
                 teamIndex           : WarRuleHelpers.getTeamIndex(warRule, playerIndex),
                 isAi                : userId == null,
                 userId,
-                coId                : playerInfo.coId,
-                unitAndTileSkinId   : playerInfo.unitAndTileSkinId,
-                isReady             : undefined,
+                coId                : Helpers.getExisted(playerInfo.coId),
+                unitAndTileSkinId   : Helpers.getExisted(playerInfo.unitAndTileSkinId),
+                isReady             : null,
                 isInTurn            : playerIndex === warInfo.playerIndexInTurn,
                 isDefeat            : !playerInfo.isAlive,
             });
         }
 
         return {
-            configVersion           : settingsForCommon.configVersion,
-            playersCountUnneutral   : WarRuleHelpers.getPlayersCount(warRule),
-            roomOwnerPlayerIndex    : undefined,
-            callbackOnDeletePlayer  : undefined,
-            callbackOnExitRoom      : undefined,
+            configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
+            playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
+            roomOwnerPlayerIndex    : null,
+            callbackOnDeletePlayer  : null,
+            callbackOnExitRoom      : null,
             playerInfoArray,
         };
     }
@@ -528,43 +529,32 @@ namespace MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<{ errorCode: ClientErrorCode, war?: MpwWar }> {
+    export async function loadWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<MpwWar> {
         if (getWar()) {
             Logger.warn(`MpwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
         const war = createWarByWarData(data);
-        if (war == null) {
-            return { errorCode: ClientErrorCode.MpwModel_LoadWar_00 };
-        }
-
-        const initError = await war.init(data);
-        if (initError) {
-            return { errorCode: initError };
-        }
-
+        await war.init(data);
         war.startRunning().startRunningView();
         _setWar(war);
 
-        return {
-            errorCode   : ClientErrorCode.NoError,
-            war,
-        };
+        return war;
     }
     export function unloadWar(): void {
         const war = getWar();
         if (war) {
             war.stopRunning();
-            _setWar(undefined);
+            _setWar(null);
             _cachedActions.length = 0;
         }
     }
 
-    export function getWar(): MpwWar | undefined {
+    export function getWar(): MpwWar | null {
         return _war;
     }
-    function _setWar(war: MpwWar | undefined): void {
+    function _setWar(war: MpwWar | null): void {
         _war = war;
     }
 
@@ -601,7 +591,7 @@ namespace MpwModel {
                 if (requestType === Types.SyncWarRequestType.PlayerForce) {
                     war.setIsEnded(true);
                     if (warData == null) {
-                        Logger.error(`MpwModel.updateOnPlayerSyncWar() empty warData 1.`);
+                        throw Helpers.newError(`MpwModel.updateOnPlayerSyncWar() empty warData 1.`);
                     } else {
                         await FlowManager.gotoMultiPlayerWar(warData);
                         FloatText.show(Lang.getText(LangTextType.A0038));
@@ -611,12 +601,12 @@ namespace MpwModel {
                     const cachedActionsCount    = _cachedActions.length;
                     const executedActionsCount  = war.getExecutedActionManager().getExecutedActionsCount();
                     if (executedActionsCount == null) {
-                        Logger.error(`MpwModel.updateOnPlayerSyncWar() empty executedActionsCount.`);
+                        throw Helpers.newError(`MpwModel.updateOnPlayerSyncWar() empty executedActionsCount.`);
                     } else {
                         if (data.executedActionsCount !== executedActionsCount + cachedActionsCount) {
                             war.setIsEnded(true);
                             if (warData == null) {
-                                Logger.error(`MpwModel.updateOnPlayerSyncWar() empty warData 2.`);
+                                throw Helpers.newError(`MpwModel.updateOnPlayerSyncWar() empty warData 2.`);
                             } else {
                                 await FlowManager.gotoMultiPlayerWar(warData);
                                 FloatText.show(Lang.getText(LangTextType.A0036));
@@ -673,7 +663,7 @@ namespace MpwModel {
         if ((war) && (war.getWarId() === warId)) {
             const executedActionsCount = war.getExecutedActionManager().getExecutedActionsCount();
             if (executedActionsCount == null) {
-                Logger.error(`MpwModel.updateByActionContainer() empty executedActionsCount.`);
+                throw Helpers.newError(`MpwModel.updateByActionContainer() empty executedActionsCount.`);
             } else {
                 if (container.actionId !== executedActionsCount + _cachedActions.length) {
                     MpwProxy.reqMpwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
@@ -697,16 +687,11 @@ namespace MpwModel {
 
         const selfUserId = UserModel.getSelfUserId();
         if (selfUserId == null) {
-            Logger.error(`MpwModel.checkAndRunFirstCachedAction() empty selfUserId.`);
-            return;
+            throw Helpers.newError(`MpwModel.checkAndRunFirstCachedAction() empty selfUserId.`);
         }
 
         war.getExecutedActionManager().addExecutedAction(container);
-
-        const errorCode = await WarActionExecutor.checkAndExecute(war, container, false);
-        if (errorCode) {
-            Logger.error(`MpwModel.checkAndRunFirstCachedAction() errorCode: ${errorCode}.`);
-        }
+        await WarActionExecutor.checkAndExecute(war, container, false);
 
         const playerManager     = war.getPlayerManager();
         const remainingVotes    = war.getDrawVoteManager().getRemainingVotes();
@@ -752,7 +737,7 @@ namespace MpwModel {
         }
     }
 
-    function createWarByWarData(data: ProtoTypes.WarSerialization.ISerialWar): MpwWar | undefined {
+    function createWarByWarData(data: ProtoTypes.WarSerialization.ISerialWar): MpwWar {
         if (data.settingsForMcw) {
             return new McwWar();
         } else if (data.settingsForMrw) {
@@ -762,7 +747,7 @@ namespace MpwModel {
         } else if (data.settingsForCcw) {
             return new CcwWar();
         } else {
-            return undefined;
+            throw Helpers.newError(`Invalid data.`);
         }
     }
 }

@@ -3,7 +3,7 @@
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" width="240" horizontalCenter="0" verticalCenter="0" height="100">
-        <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+        <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2"
                              left="0" right="0" top="0" bottom="0" />
         <e:Group x="20" verticalCenter="0">
             <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="Label" x="0" y="0" size="16" />

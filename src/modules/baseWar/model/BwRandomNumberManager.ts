@@ -1,7 +1,8 @@
 
-import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
-import Logger                   from "../../tools/helpers/Logger";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace TwnsBwRandomNumberManager {
     import ISeedRandomState = ProtoTypes.Structure.ISeedRandomState;
@@ -9,77 +10,61 @@ namespace TwnsBwRandomNumberManager {
 
     export class BwRandomNumberManager {
         private _isNeedReplay?              : boolean;
-        private _seedRandomInitialState?    : ProtoTypes.Structure.ISeedRandomState;
-        private _randomNumberGenerator?     : seedrandom.prng;
+        private _seedRandomInitialState?    : ProtoTypes.Structure.ISeedRandomState | null;
+        private _randomNumberGenerator?     : seedrandom.prng | null;
 
         public init({ isNeedSeedRandom, initialState, currentState }: {
             isNeedSeedRandom: boolean;
-            initialState    : ISeedRandomState | null | undefined;
-            currentState    : ISeedRandomState | null | undefined;
-        }): ClientErrorCode {
+            initialState    : Types.Undefinable<ISeedRandomState>;
+            currentState    : Types.Undefinable<ISeedRandomState>;
+        }): void {
             this._setIsNeedReplay(isNeedSeedRandom);
 
             if (isNeedSeedRandom) {
                 // TODO: check if the states are valid.
                 if (initialState == null) {
-                    return ClientErrorCode.BwRandomNumberManager00;
+                    throw Helpers.newError(`Empty initialState.`);
                 }
                 this._setSeedRandomInitialState(initialState);
 
                 if (currentState == null) {
-                    return ClientErrorCode.BwRandomNumberManager01;
+                    throw Helpers.newError(`Empty currentState.`);
                 }
                 this._setRandomNumberGenerator(new Math.seedrandom("", { state: currentState }));
             }
-
-            return ClientErrorCode.NoError;
         }
 
         private _setIsNeedReplay(isNeedReplay: boolean): void {
             this._isNeedReplay = isNeedReplay;
         }
-        private _getIsNeedReplay(): boolean | undefined {
-            return this._isNeedReplay;
+        private _getIsNeedReplay(): boolean {
+            return Helpers.getExisted(this._isNeedReplay);
         }
 
         private _setRandomNumberGenerator(generator: seedrandom.prng): void {
             this._randomNumberGenerator = generator;
         }
-        private _getRandomNumberGenerator(): seedrandom.prng | undefined {
-            return this._randomNumberGenerator;
+        private _getRandomNumberGenerator(): seedrandom.prng | null {
+            return Helpers.getDefined(this._randomNumberGenerator, ClientErrorCode.BwRandomNumberManager_GetRandomNumberGenerator_00);
         }
 
-        public getRandomNumber(): number | undefined {
+        public getRandomNumber(): number {
             if (!this._getIsNeedReplay()) {
                 return Math.random();
             }
 
-            const generator = this._getRandomNumberGenerator();
-            if (generator == null) {
-                Logger.error(`BwRandomNumberManager.getRandomNumber() empty generator.`);
-                return undefined;
-            }
-            return generator();
+            return Helpers.getExisted(this._getRandomNumberGenerator())();
         }
 
-        public getSeedRandomCurrentState(): ProtoTypes.Structure.ISeedRandomState | undefined {
-            if (!this._getIsNeedReplay()) {
-                return undefined;
-            }
-
-            const generator = this._getRandomNumberGenerator();
-            if (generator == null) {
-                Logger.error(`BwRandomNumberManager.getRandomNumber() empty generator.`);
-                return undefined;
-            }
-            return generator.state();
+        public getSeedRandomCurrentState(): ProtoTypes.Structure.ISeedRandomState {
+            return Helpers.getExisted(this._getRandomNumberGenerator()).state();
         }
 
         private _setSeedRandomInitialState(state: ProtoTypes.Structure.ISeedRandomState): void {
             this._seedRandomInitialState = state;
         }
-        public getSeedRandomInitialState(): ProtoTypes.Structure.ISeedRandomState | undefined {
-            return this._seedRandomInitialState;
+        public getSeedRandomInitialState(): ProtoTypes.Structure.ISeedRandomState | null {
+            return Helpers.getDefined(this._seedRandomInitialState, ClientErrorCode.BwRandomNumberManager_GetSeedRandomInitialState_00);
         }
     }
 }

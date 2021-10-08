@@ -9,9 +9,9 @@ namespace TwnsUiButton {
     import ShortSfxCode = Types.ShortSfxCode;
 
     export class UiButton extends eui.Button {
-        private _imgExtra       : eui.Image;
-        private _imgDisplay     : TwnsUiImage.UiImage;
-        private _imgRed         : eui.Image;
+        private readonly _imgExtra!     : eui.Image;
+        private readonly _imgDisplay!   : TwnsUiImage.UiImage;
+        private readonly _imgRed!       : eui.Image;
 
         private _shortSfxCode   = ShortSfxCode.ButtonNeutral01;
 
@@ -74,9 +74,9 @@ namespace TwnsUiButton {
         }
         private _onTouchBegin(): void {
             Helpers.changeColor(this, Types.ColorType.White, 50);
-            SoundManager.playShortSfx(this.getShortSfxCode());
         }
         private _onTouchEnd(): void {
+            SoundManager.playShortSfx(this.getShortSfxCode());
             Helpers.changeColor(this, Types.ColorType.Origin);
         }
         private _onTouchReleaseOutside(): void {

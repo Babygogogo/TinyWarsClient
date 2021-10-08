@@ -8,7 +8,7 @@
                         <e:itemRendererSkinName>
                             <e:Skin height="40">
                                 <e:Group left="0" right="0" top="0" bottom="0">
-                                    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000"
+                                    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0000"
                                                     alpha="0.4" scale9Grid="1,1,2,2" locked="true" />
                                     <TwnsUiLabel:UiLabel id="_labelName" text="War Name" textColor="0xFFFFFF" size="16"
                                                     verticalCenter="0" bold="true" left="10" width="130" wordWrap="true" />
@@ -40,7 +40,7 @@
                                             <e:itemRendererSkinName>
                                                 <e:Skin width="120" height="40">
                                                     <e:Group left="0" right="0" top="0" bottom="0">
-                                                        <TwnsUiImage:UiImage source="commonRectangle0001" top="6" bottom="6"
+                                                        <TwnsUiImage:UiImage source="uncompressedRectangle0001" top="6" bottom="6"
                                                                         left="20" right="20" scale9Grid="2,2,1,1" />
                                                         <TwnsUiLabel:UiLabel id="_labelValue" text="Label" size="16"
                                                                         verticalAlign="middle" textAlign="center"

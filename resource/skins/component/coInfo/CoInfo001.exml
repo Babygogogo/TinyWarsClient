@@ -4,11 +4,11 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing" class="Skins.Component.CoInfo.CoInfo001">
     <e:Group id="_group" horizontalCenter="0" verticalCenter="0" width="360" height="400">
         <e:Group left="0" right="0" top="0" bottom="0">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2"
                                  left="0" right="0" top="38" bottom="0" />
             <e:Group y="0" left="0" right="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
-                                     source="commonColorGrey0001" y="0" left="0" right="0" />
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
                 <TwnsUiLabel:UiLabel id="_labelCoName" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
             </e:Group>
         </e:Group>
@@ -49,7 +49,7 @@
                             <e:VerticalLayout gap="2" />
                         </e:layout>
                     </e:Group>
-                    <TwnsUiImage:UiImage y="-8" source="commonColorWhite0000" height="2" width="320" x="0" />
+                    <TwnsUiImage:UiImage y="-8" source="uncompressedColorWhite0000" height="2" width="320" x="0" />
                     <e:layout>
                         <e:VerticalLayout/>
                     </e:layout>
@@ -101,9 +101,9 @@
                     <e:itemRendererSkinName>
                         <e:Skin height="24" width="50" currentState="up" states="up,down">
                             <e:Group left="0" top="0" bottom="0" right="0">
-                                <TwnsUiImage:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0"
+                                <TwnsUiImage:UiImage source="uncompressedRectangle0000" scale9Grid="2,2,1,1" left="0"
                                                      right="0" top="0" bottom="0" x="0" y="0" visible.up="false" />
-                                <TwnsUiImage:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0"
+                                <TwnsUiImage:UiImage scale9Grid="2,2,1,1" source="uncompressedRectangle0001" left="0"
                                                      right="0" top="0" bottom="0" x="0" y="0" visible.up="true"
                                                      visible.down="false" />
                                 <TwnsUiLabel:UiLabel id="_labelType" text="P1" size="12" textColor="0xCCCCCC"

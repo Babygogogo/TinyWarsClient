@@ -3,16 +3,16 @@
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing" height="540"
         xmlns:TwnsUiCoInfo="TwnsUiCoInfo.*">
-    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
     <e:Group id="_group" horizontalCenter="0" height="400" verticalCenter="0">
         <e:Group width="360" height="400" y="0" x="0">
             <e:Group left="0" right="0" top="0" bottom="0" locked="true">
-                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001"
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                      scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
                 <e:Group y="0" left="0" right="0">
                     <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
-                                         source="commonColorGrey0001" y="0" left="0" right="0" />
+                                         source="uncompressedColorGrey0001" y="0" left="0" right="0" />
                     <TwnsUiLabel:UiLabel id="_labelAvailableCoTitle" text="注册" x="30" size="22" bold="true"
                                          verticalCenter="2" />
                 </e:Group>

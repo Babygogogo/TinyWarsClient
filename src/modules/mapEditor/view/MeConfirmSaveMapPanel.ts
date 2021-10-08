@@ -1,5 +1,6 @@
 
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -24,25 +25,24 @@ namespace TwnsMeConfirmSaveMapPanel {
 
         private static _instance: MeConfirmSaveMapPanel;
 
-        private _labelTitle             : TwnsUiLabel.UiLabel;
-        private _labelContent           : TwnsUiLabel.UiLabel;
-        private _labelReviewDescTitle   : TwnsUiLabel.UiLabel;
-        private _labelReviewDesc        : TwnsUiLabel.UiLabel;
-        private _groupNeedReview        : eui.Group;
-        private _imgNeedReview          : TwnsUiImage.UiImage;
-        private _labelNeedReview        : TwnsUiLabel.UiLabel;
-        private _btnCancel              : TwnsUiButton.UiButton;
-        private _btnConfirm             : TwnsUiButton.UiButton;
+        private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _labelContent!         : TwnsUiLabel.UiLabel;
+        private readonly _labelReviewDescTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelReviewDesc!      : TwnsUiLabel.UiLabel;
+        private readonly _groupNeedReview!      : eui.Group;
+        private readonly _imgNeedReview!        : TwnsUiImage.UiImage;
+        private readonly _labelNeedReview!      : TwnsUiLabel.UiLabel;
+        private readonly _btnCancel!            : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
-        private _slotIndex  : number;
-        private _mapRawData : ProtoTypes.Map.IMapRawData;
-        private _needReview : boolean;
+        private _mapRawData : ProtoTypes.Map.IMapRawData | null = null;
+        private _needReview = false;
 
         public static show(): void {
             if (!MeConfirmSaveMapPanel._instance) {
                 MeConfirmSaveMapPanel._instance = new MeConfirmSaveMapPanel();
             }
-            MeConfirmSaveMapPanel._instance.open(undefined);
+            MeConfirmSaveMapPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -72,42 +72,42 @@ namespace TwnsMeConfirmSaveMapPanel {
             this._needReview = false;
             this._updateImgNeedReview();
 
-            const war                           = MeModel.getWar();
-            const mapRawData                    = war.serializeForMap();
+            const mapRawData                    = Helpers.getExisted(MeModel.getWar()).serializeForMap();
             const errorCode                     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
             this._mapRawData                    = mapRawData;
-            this._slotIndex                     = war.getMapSlotIndex();
             this._groupNeedReview.visible       = !errorCode;
             this._labelReviewDescTitle.visible  = !!errorCode;
-            this._labelReviewDesc.text          = errorCode ? Lang.getErrorText(errorCode) : undefined;
+            this._labelReviewDesc.text          = errorCode ? Lang.getErrorText(errorCode) : ``;
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const needReview = this._needReview;
+        private _onTouchedBtnConfirm(): void {
+            const needReview    = this._needReview;
+            const slotIndex     = Helpers.getExisted(MeModel.getWar()).getMapSlotIndex();
+            const mapRawData    = Helpers.getExisted(this._mapRawData);
             if ((!needReview) || (!MeModel.checkHasReviewingMap())) {
-                MeProxy.reqMeSubmitMap(this._slotIndex, this._mapRawData, needReview);
+                MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
                 this.close();
             } else {
                 CommonConfirmPanel.show({
                     content : Lang.getText(LangTextType.A0084),
                     callback: () => {
-                        MeProxy.reqMeSubmitMap(this._slotIndex, this._mapRawData, needReview);
+                        MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
                         this.close();
                     },
                 });
             }
         }
 
-        private _onTouchedGroupNeedReview(e: egret.TouchEvent): void {
+        private _onTouchedGroupNeedReview(): void {
             this._needReview = !this._needReview;
             this._updateImgNeedReview();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

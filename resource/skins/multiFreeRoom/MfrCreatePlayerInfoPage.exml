@@ -7,11 +7,11 @@
                     <e:Skin width="140" height="320" currentState="up" states="up,down">
                         <e:Group left="0" right="0" top="0" bottom="0">
                             <TwnsUiImage:UiImage scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0"
-                                            source="commonColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
+                                            source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
                             <e:Group left="0" right="0" top="0" bottom="0" x="0" y="0" scaleX="1" scaleY="1">
                                 <e:Group id="_groupCo" horizontalCenter="0" y="20">
                                     <e:Group horizontalCenter="0">
-                                        <TwnsUiImage:UiImage id="_imgSkin" scaleX="1" scaleY="1" source="commonRectangle0002"
+                                        <TwnsUiImage:UiImage id="_imgSkin" scaleX="1" scaleY="1" source="uncompressedRectangle0002"
                                                         scale9Grid="2,2,1,1" width="100" height="100"
                                                         horizontalCenter="0" verticalCenter="0" />
                                         <TwnsUiImage:UiImage id="_imgCoHead" scaleX="1" scaleY="1" horizontalCenter="0"
@@ -21,7 +21,7 @@
                                                     y="-6" />
                                     <e:Group width="120" height="24" y="88" horizontalCenter="0">
                                         <TwnsUiImage:UiImage scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0"
-                                                        scale9Grid="1,1,2,2" x="0" y="228" source="commonColorBlack0000"
+                                                        scale9Grid="1,1,2,2" x="0" y="228" source="uncompressedColorBlack0000"
                                                         locked="true" />
                                         <TwnsUiLabel:UiLabel id="_labelCo" text="zhaotiantong" size="16" scaleX="1"
                                                         scaleY="1" verticalCenter="0" bold="true" horizontalCenter="0" />
@@ -36,7 +36,7 @@
                                 </e:Group>
                                 <TwnsUiLabel:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="20" size="16" y="158"
                                                 bold="true" />
-                                <TwnsUiImage:UiImage width="100" height="1" y="180" source="commonColorWhite0000"
+                                <TwnsUiImage:UiImage width="100" height="1" y="180" source="uncompressedColorWhite0000"
                                                 horizontalCenter="0" />
                                 <e:Group x="20" y="190">
                                     <TwnsUiLabel:UiLabel id="_labelRankStdTitle" text="明战排位" size="12" x="0" y="0"

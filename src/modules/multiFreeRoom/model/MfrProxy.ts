@@ -1,10 +1,10 @@
 
+import MfrModel             from "../../multiFreeRoom/model/MfrModel";
+import NetManager           from "../../tools/network/NetManager";
 import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import NetManager           from "../../tools/network/NetManager";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import MfrModel             from "../../multiFreeRoom/model/MfrModel";
 
 namespace MfrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -26,7 +26,7 @@ namespace MfrProxy {
             { msgCode: NetMessageCodes.MsgMfrGetJoinableRoomInfoList,    callback: _onMsgMfrGetJoinableRoomInfoList },
             { msgCode: NetMessageCodes.MsgMfrGetJoinedRoomInfoList,      callback: _onMsgMfrGetJoinedRoomInfoList },
             { msgCode: NetMessageCodes.MsgMfrStartWar,                   callback: _onMsgMfrStartWar },
-        ], undefined);
+        ], null);
     }
 
     export function reqCreateRoom(param: ProtoTypes.NetMessage.MsgMfrCreateRoom.IC): void {
@@ -170,7 +170,7 @@ namespace MfrProxy {
     function _onMsgMfrGetJoinableRoomInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMfrGetJoinableRoomInfoList.IS;
         if (!data.errorCode) {
-            MfrModel.setJoinableRoomInfoList(data.roomInfoList);
+            MfrModel.setJoinableRoomInfoList(data.roomInfoList || []);
             Notify.dispatch(NotifyType.MsgMfrGetJoinableRoomInfoList, data);
         }
     }
@@ -184,7 +184,7 @@ namespace MfrProxy {
     function _onMsgMfrGetJoinedRoomInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMfrGetJoinedRoomInfoList.IS;
         if (!data.errorCode) {
-            MfrModel.setJoinedRoomInfoList(data.roomInfoList);
+            MfrModel.setJoinedRoomInfoList(data.roomInfoList || []);
             Notify.dispatch(NotifyType.MsgMfrGetJoinedRoomInfoList, data);
         }
     }

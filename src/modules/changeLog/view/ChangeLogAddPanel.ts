@@ -1,16 +1,17 @@
 
-import ChangeLogProxy   from "../../changeLog/model/ChangeLogProxy";
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import FloatText        from "../../tools/helpers/FloatText";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
+import ChangeLogProxy       from "../../changeLog/model/ChangeLogProxy";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
 namespace TwnsChangeLogAddPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -23,21 +24,21 @@ namespace TwnsChangeLogAddPanel {
 
         private static _instance: ChangeLogAddPanel;
 
-        private _inputChinese   : TwnsUiTextInput.UiTextInput;
-        private _inputEnglish   : TwnsUiTextInput.UiTextInput;
-        private _labelTip       : TwnsUiLabel.UiLabel;
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _labelChinese   : TwnsUiLabel.UiLabel;
-        private _labelEnglish   : TwnsUiLabel.UiLabel;
-        private _btnModify      : TwnsUiButton.UiButton;
-        private _btnClose       : TwnsUiButton.UiButton;
+        private readonly _inputChinese! : TwnsUiTextInput.UiTextInput;
+        private readonly _inputEnglish! : TwnsUiTextInput.UiTextInput;
+        private readonly _labelTip!     : TwnsUiLabel.UiLabel;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelChinese! : TwnsUiLabel.UiLabel;
+        private readonly _labelEnglish! : TwnsUiLabel.UiLabel;
+        private readonly _btnModify!    : TwnsUiButton.UiButton;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!ChangeLogAddPanel._instance) {
                 ChangeLogAddPanel._instance = new ChangeLogAddPanel();
             }
 
-            ChangeLogAddPanel._instance.open(undefined);
+            ChangeLogAddPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -69,20 +70,20 @@ namespace TwnsChangeLogAddPanel {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnModify(e: egret.TouchEvent): void {
+        private _onTouchedBtnModify(): void {
             const chineseText   = this._inputChinese.text || ``;
             const englishText   = this._inputEnglish.text || ``;
             const textList      : ILanguageText[] = [
                 { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
                 { languageType: Types.LanguageType.English, text: englishText || chineseText },
             ];
-            if (textList.every(v => v.text.length <= 0)) {
+            if (textList.every(v => Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => v.text.length > CommonConstants.ChangeLogTextMaxLength)) {
+            } else if (textList.some(v => Helpers.getExisted(v.text).length > CommonConstants.ChangeLogTextMaxLength)) {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.ChangeLogTextMaxLength));
             } else {
                 ChangeLogProxy.reqChangeLogAddMessage(textList);

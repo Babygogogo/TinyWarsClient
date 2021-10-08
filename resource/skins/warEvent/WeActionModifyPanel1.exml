@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
         xmlns:w="http://ns.egret.com/wing">
-    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" locked="true" />
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001" locked="true" />
     <e:Group top="40" bottom="0" width="760" horizontalCenter="0">
-        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" top="0" bottom="0" right="0" locked="true" />
         <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
                         horizontalCenter="0" locked="true" />
@@ -32,7 +32,7 @@
                 <e:itemRendererSkinName>
                     <e:Skin currentState="up" states="down,up" width="750" height="210">
                         <e:Group left="0" right="0" top="0" bottom="0">
-                            <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
                                             anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
                                             locked="true" />
                             <e:Group left="0" right="0" top="0">
@@ -93,7 +93,7 @@
                                                             anchorOffsetY="0" maxChars="20">
                                             <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
-                                                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
                                                                     height="30" textColor="0xffffff" />
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
@@ -105,7 +105,7 @@
                                                             anchorOffsetY="0" maxChars="20">
                                             <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
-                                                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
                                                                     height="30" textColor="0xffffff" />
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
@@ -124,7 +124,7 @@
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
                                             <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
-                                                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
                                                                     height="30" textColor="0xffffff" />
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
@@ -158,7 +158,7 @@
                                                             anchorOffsetY="0" maxChars="20">
                                             <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
-                                                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
                                                                     height="30" textColor="0xffffff" />
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
@@ -177,7 +177,7 @@
                                                             anchorOffsetY="0" maxChars="20">
                                             <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
-                                                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
                                                                     height="30" textColor="0xffffff" />
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
@@ -196,7 +196,7 @@
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
                                             <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
-                                                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
                                                                     height="30" textColor="0xffffff" />
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
@@ -233,7 +233,7 @@
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
                                             <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
-                                                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
                                                                     height="30" textColor="0xffffff" />
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
@@ -252,7 +252,7 @@
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
                                             <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
-                                                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
                                                                     height="30" textColor="0xffffff" />
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
@@ -289,7 +289,7 @@
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
                                             <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
-                                                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
                                                                     height="30" textColor="0xffffff" />
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"
@@ -308,7 +308,7 @@
                                                             anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
                                             <TwnsUiButton:skinName>
                                                 <e:Skin width="100" height="30">
-                                                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
                                                     <e:EditableText id="textDisplay" size="20" left="0" right="0"
                                                                     height="30" textColor="0xffffff" />
                                                     <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0"

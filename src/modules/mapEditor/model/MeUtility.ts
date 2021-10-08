@@ -1,13 +1,13 @@
 
 import TwnsBwTile           from "../../baseWar/model/BwTile";
-import TwnsBwTileMap from "../../baseWar/model/BwTileMap";
+import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
 import TwnsBwUnit           from "../../baseWar/model/BwUnit";
 import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
 import TwnsTwWar            from "../../testWar/model/TwWar";
 import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers from "../../tools/helpers/GridIndexHelpers";
+import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
 import Helpers              from "../../tools/helpers/Helpers";
 import Timer                from "../../tools/helpers/Timer";
 import Types                from "../../tools/helpers/Types";
@@ -23,7 +23,6 @@ import TwnsMeWar            from "./MeWar";
 namespace MeUtility {
     import BwTile               = TwnsBwTile.BwTile;
     import MeWar                = TwnsMeWar.MeWar;
-    import TwWar                = TwnsTwWar.TwWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import GridIndex            = Types.GridIndex;
     import TileObjectType       = Types.TileObjectType;
@@ -88,7 +87,7 @@ namespace MeUtility {
         const mapWidth  = 20;
         const mapHeight = 15;
         return {
-            designerName            : await UserModel.getSelfNickname(),
+            designerName            : UserModel.getSelfNickname(),
             designerUserId          : UserModel.getSelfUserId(),
             mapNameArray            : [
                 { languageType: LanguageType.Chinese, text: `${Lang.getText(LangTextType.B0279, LanguageType.Chinese)} - ${slotIndex}`},
@@ -121,7 +120,7 @@ namespace MeUtility {
         return {
             gridIndex,
             baseType        : tileBaseType,
-            decoratorType   : undefined,
+            decoratorType   : null,
             objectType      : TileObjectType.Empty,
             playerIndex     : CommonConstants.WarNeutralPlayerIndex,
         };
@@ -129,11 +128,11 @@ namespace MeUtility {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function createISerialWar(data: ProtoTypes.Map.IMapEditorData): WarSerialization.ISerialWar {
-        const mapRawData        = data.mapRawData;
+        const mapRawData        = Helpers.getExisted(data.mapRawData);
         const warRuleArray      = mapRawData.warRuleArray;
         const unitDataArray     = mapRawData.unitDataArray || [];
         const warRule           = (warRuleArray ? warRuleArray[0] : null) || WarRuleHelpers.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
-        const ruleForPlayers    = warRule.ruleForPlayers;
+        const ruleForPlayers    = Helpers.getExisted(warRule.ruleForPlayers);
         if (ruleForPlayers.playerRuleDataArray == null) {
             ruleForPlayers.playerRuleDataArray = WarRuleHelpers.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex);
         } else {
@@ -147,7 +146,7 @@ namespace MeUtility {
 
         return {
             settingsForCommon   : {
-                configVersion   : ConfigManager.getLatestFormalVersion(),
+                configVersion   : ConfigManager.getLatestConfigVersion(),
                 presetWarRuleId : warRule.ruleId,
                 warRule,
             },
@@ -246,14 +245,14 @@ namespace MeUtility {
     function getNewTileDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialTile[] {
         const tileList: ISerialTile[] = [];
         for (const tileData of mapRawData.tileDataArray || []) {
-            const gridIndex = tileData.gridIndex;
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
             if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
                 tileList.push(tileData);
             }
         }
 
-        const oldWidth  = mapRawData.mapWidth;
-        const oldHeight = mapRawData.mapHeight;
+        const oldWidth  = Helpers.getExisted(mapRawData.mapWidth);
+        const oldHeight = Helpers.getExisted(mapRawData.mapHeight);
         for (let x = 0; x < newWidth; ++x) {
             for (let y = 0; y < newHeight; ++y) {
                 if ((x >= oldWidth) || (y >= oldHeight)) {
@@ -267,7 +266,7 @@ namespace MeUtility {
     function getNewUnitDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialUnit[] {
         const unitList: ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
-            const gridIndex = unitData.gridIndex;
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
             if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
                 unitList.push(unitData);
             }
@@ -294,11 +293,11 @@ namespace MeUtility {
         };
     }
     function getNewTileDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialTile[] {
-        const width         = mapRawData.mapWidth;
-        const height        = mapRawData.mapHeight;
+        const width         = Helpers.getExisted(mapRawData.mapWidth);
+        const height        = Helpers.getExisted(mapRawData.mapHeight);
         const tileDataList  : ISerialTile[] = [];
-        for (const tileData of mapRawData.tileDataArray) {
-            const gridIndex = tileData.gridIndex;
+        for (const tileData of Helpers.getExisted(mapRawData.tileDataArray)) {
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
             const newX      = gridIndex.x + offsetX;
             const newY      = gridIndex.y + offsetY;
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
@@ -323,11 +322,11 @@ namespace MeUtility {
         return tileDataList;
     }
     function getNewUnitDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialUnit[] {
-        const width         = mapRawData.mapWidth;
-        const height        = mapRawData.mapHeight;
+        const width         = Helpers.getExisted(mapRawData.mapWidth);
+        const height        = Helpers.getExisted(mapRawData.mapHeight);
         const unitDataArray : ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
-            const gridIndex = unitData.gridIndex;
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
             const newX      = gridIndex.x + offsetX;
             const newY      = gridIndex.y + offsetY;
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
@@ -340,7 +339,7 @@ namespace MeUtility {
         const allUnitsDict  = new Map<number, { unit: ISerialUnit, newUnitId: number }>();
         let nextUnitId      = 0;
         for (const unit of unitDataArray) {
-            allUnitsDict.set(unit.unitId, { unit, newUnitId: nextUnitId } );
+            allUnitsDict.set(Helpers.getExisted(unit.unitId), { unit, newUnitId: nextUnitId } );
             ++nextUnitId;
         }
         for (const [, value] of allUnitsDict) {
@@ -349,7 +348,7 @@ namespace MeUtility {
 
             const loaderUnitId = unit.loaderUnitId;
             if (loaderUnitId != null) {
-                unit.loaderUnitId = allUnitsDict.get(loaderUnitId).newUnitId;
+                unit.loaderUnitId = Helpers.getExisted(allUnitsDict.get(loaderUnitId)).newUnitId;
             }
         }
 
@@ -370,7 +369,7 @@ namespace MeUtility {
 
             const loaderUnitId = unit.getLoaderUnitId();
             if (loaderUnitId != null) {
-                unit.setLoaderUnitId(allUnits.get(loaderUnitId).newUnitId);
+                unit.setLoaderUnitId(Helpers.getExisted(allUnits.get(loaderUnitId)).newUnitId);
             }
         }
         unitMap.setNextUnitId(nextUnitId);
@@ -392,20 +391,20 @@ namespace MeUtility {
             for (let y = 0; y < height; ++y) {
                 const gridIndex = { x, y };
                 const tile      = tileMap.getTile(gridIndex);
-                if (checkIsSymmetrical(tile, tileMap.getTile(getSymmetricalGridIndex(gridIndex, SymmetryType.LeftToRight, mapSize)), SymmetryType.LeftToRight)) {
+                if (checkIsSymmetrical(tile, tileMap.getTile(Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.LeftToRight, mapSize))), SymmetryType.LeftToRight)) {
                     ++countLeftRight;
                 }
-                if (checkIsSymmetrical(tile, tileMap.getTile(getSymmetricalGridIndex(gridIndex, SymmetryType.UpToDown, mapSize)), SymmetryType.UpToDown)) {
+                if (checkIsSymmetrical(tile, tileMap.getTile(Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.UpToDown, mapSize))), SymmetryType.UpToDown)) {
                     ++countUpDown;
                 }
-                if (checkIsSymmetrical(tile, tileMap.getTile(getSymmetricalGridIndex(gridIndex, SymmetryType.Rotation, mapSize)), SymmetryType.Rotation)) {
+                if (checkIsSymmetrical(tile, tileMap.getTile(Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.Rotation, mapSize))), SymmetryType.Rotation)) {
                     ++countRotational;
                 }
                 if (isSquare) {
-                    if (checkIsSymmetrical(tile, tileMap.getTile(getSymmetricalGridIndex(gridIndex, SymmetryType.UpLeftToDownRight, mapSize)), SymmetryType.UpLeftToDownRight)) {
+                    if (checkIsSymmetrical(tile, tileMap.getTile(Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.UpLeftToDownRight, mapSize))), SymmetryType.UpLeftToDownRight)) {
                         ++countUpLeftDownRight;
                     }
-                    if (checkIsSymmetrical(tile, tileMap.getTile(getSymmetricalGridIndex(gridIndex, SymmetryType.UpRightToDownLeft, mapSize)), SymmetryType.UpRightToDownLeft)) {
+                    if (checkIsSymmetrical(tile, tileMap.getTile(Helpers.getExisted(getSymmetricalGridIndex(gridIndex, SymmetryType.UpRightToDownLeft, mapSize))), SymmetryType.UpRightToDownLeft)) {
                         ++countUpRightDownLeft;
                     }
                 }
@@ -421,7 +420,7 @@ namespace MeUtility {
             UpRightToDownLeft   : isSquare ? totalGrids - countUpRightDownLeft : null,
         };
     }
-    export function getSymmetricalGridIndex(gridIndex: GridIndex, symmetryType: SymmetryType, mapSize: Types.MapSize): GridIndex {
+    export function getSymmetricalGridIndex(gridIndex: GridIndex, symmetryType: SymmetryType, mapSize: Types.MapSize): GridIndex | null {
         const { width, height } = mapSize;
         if (symmetryType === SymmetryType.LeftToRight) {
             return {
@@ -488,12 +487,12 @@ namespace MeUtility {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | undefined, shapeId: number | undefined } {
+    export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | null, shapeId: number | null } {
         const tile = tileMap.getTile(gridIndex);
         if (tile == null) {
             return {
-                decoratorType   : undefined,
-                shapeId         : undefined,
+                decoratorType   : null,
+                shapeId         : null,
             };
         }
 
@@ -532,7 +531,7 @@ namespace MeUtility {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        ? { decoratorType: null,                        shapeId: null }
                         : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
                 } else {
                     return isSea2
@@ -545,7 +544,7 @@ namespace MeUtility {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        ? { decoratorType: null,                        shapeId: null }
                         : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
                 } else {
                     return isSea2
@@ -558,7 +557,7 @@ namespace MeUtility {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        ? { decoratorType: null,                        shapeId: null }
                         : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
                 } else {
                     return isSea2
@@ -571,7 +570,7 @@ namespace MeUtility {
                 const isSea2 = checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 }));
                 if (isSea1) {
                     return isSea2
-                        ? { decoratorType: undefined,                   shapeId: undefined }
+                        ? { decoratorType: null,                        shapeId: null }
                         : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
                 } else {
                     return isSea2
@@ -581,38 +580,38 @@ namespace MeUtility {
 
             } else if ((shapeId === 16) || (shapeId === 20) || (shapeId === 24) || (shapeId === 28)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
-                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
 
             } else if ((shapeId === 17) || (shapeId === 21) || (shapeId === 25) || (shapeId === 29)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
-                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
 
             } else if ((shapeId === 18) || (shapeId === 22) || (shapeId === 26) || (shapeId === 30)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
-                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Corner,    shapeId: 8 };
 
             } else if ((shapeId === 19) || (shapeId === 23) || (shapeId === 27) || (shapeId === 31)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
-                    ? { decoratorType: undefined,                   shapeId: undefined }
+                    ? { decoratorType: null,                        shapeId: null }
                     : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
 
             } else {
                 return {
-                    decoratorType   : undefined,
-                    shapeId         : undefined,
+                    decoratorType   : null,
+                    shapeId         : null,
                 };
             }
         }
 
         return {
-            decoratorType   : undefined,
-            shapeId         : undefined,
+            decoratorType   : null,
+            shapeId         : null,
         };
     }
-    function checkIsSeaOrEmpty(tileMap: TwnsBwTileMap.BwTileMap, gridIndex): boolean {
+    function checkIsSeaOrEmpty(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         } else {
@@ -622,7 +621,7 @@ namespace MeUtility {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function getErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-        const configVersion = ConfigManager.getLatestFormalVersion();
+        const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             return ClientErrorCode.MapRawDataValidation00;
         }
@@ -649,7 +648,7 @@ namespace MeUtility {
 
         const warRuleError = WarRuleHelpers.getErrorCodeForWarRuleArray({
             ruleList                : mapRawData.warRuleArray,
-            playersCountUnneutral   : mapRawData.playersCountUnneutral!,
+            playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
             allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(mapRawData.warEventFullData),
             configVersion,
         });
@@ -662,14 +661,9 @@ namespace MeUtility {
             return warEventError;
         }
 
-        const testWarError = await new TwWar().initByMapRawData(mapRawData);
-        if (testWarError) {
-            return testWarError;
-        }
-
-        return ClientErrorCode.NoError;
+        return await new TwnsTwWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData);
     }
-    function getErrorCodeForMapDesigner(mapDesigner: string | null | undefined): ClientErrorCode {
+    function getErrorCodeForMapDesigner(mapDesigner: Types.Undefinable<string>): ClientErrorCode {
         if ((mapDesigner == null)                                       ||
             (mapDesigner.length <= 0)                                   ||
             (mapDesigner.length > CommonConstants.MapMaxDesignerLength)
@@ -679,7 +673,7 @@ namespace MeUtility {
             return ClientErrorCode.NoError;
         }
     }
-    function getErrorCodeForMapNameArray(mapNameList: ProtoTypes.Structure.ILanguageText[] | null | undefined): ClientErrorCode {
+    function getErrorCodeForMapNameArray(mapNameList: Types.Undefinable<ProtoTypes.Structure.ILanguageText[]>): ClientErrorCode {
         if (!Helpers.checkIsValidLanguageTextArray({
             list            : mapNameList,
             maxTextLength   : CommonConstants.MapMaxNameLength,
@@ -691,7 +685,7 @@ namespace MeUtility {
 
         return ClientErrorCode.NoError;
     }
-    function getErrorCodeForUnitArray(unitArray: ProtoTypes.WarSerialization.ISerialUnit[] | null | undefined): ClientErrorCode {
+    function getErrorCodeForUnitArray(unitArray: Types.Undefinable<ProtoTypes.WarSerialization.ISerialUnit[]>): ClientErrorCode {
         if (!WarCommonHelpers.checkIsUnitIdCompact(unitArray)) {
             return ClientErrorCode.MapRawDataValidation03;
         }

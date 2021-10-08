@@ -1,10 +1,14 @@
 
-import Logger           from "../helpers/Logger";
-import TwnsUiComponent  from "./UiComponent";
+import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+import Helpers              from "../helpers/Helpers";
+import Logger               from "../helpers/Logger";
+import TwnsUiComponent      from "./UiComponent";
 
 namespace TwnsUiTabPage {
+    import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
+
     export abstract class UiTabPage<OpenData> extends TwnsUiComponent.UiComponent {
-        private _openData   : OpenData;
+        private _openData?  : OpenData;
 
         protected constructor() {
             super();
@@ -27,7 +31,10 @@ namespace TwnsUiTabPage {
             this._openData = data;
         }
         protected _getOpenData(): OpenData {
-            return this._openData;
+            return Helpers.getDefined(this._openData, ClientErrorCode.UiTabPage_GetOpenData_00);
+        }
+        private _clearOpenData(): void {
+            delete this._openData;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -37,8 +44,7 @@ namespace TwnsUiTabPage {
             (this.parent) && (this.parent.removeChild(this));
 
             this._doClose();
-
-            this._setOpenData(undefined);
+            this._clearOpenData();
         }
     }
 }

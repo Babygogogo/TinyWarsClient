@@ -2,6 +2,7 @@
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -32,22 +33,22 @@ namespace TwnsMeChooseTileBasePanel {
 
         private static _instance: MeChooseTileBasePanel;
 
-        private _listCategory       : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
-        private _listRecent         : TwnsUiScrollList.UiScrollList<DataForTileBaseRenderer>;
-        private _labelRecentTitle   : TwnsUiLabel.UiLabel;
-        private _btnCancel          : TwnsUiButton.UiButton;
-        private _groupFill          : eui.Group;
-        private _imgFill            : TwnsUiImage.UiImage;
-        private _labelFill          : TwnsUiLabel.UiLabel;
+        private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileBaseRenderer>;
+        private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
+        private readonly _groupFill!        : eui.Group;
+        private readonly _imgFill!          : TwnsUiImage.UiImage;
+        private readonly _labelFill!        : TwnsUiLabel.UiLabel;
 
-        private _needFill           : boolean;
+        private _needFill           = false;
         private _dataListForRecent  : DataForTileBaseRenderer[] = [];
 
         public static show(): void {
             if (!MeChooseTileBasePanel._instance) {
                 MeChooseTileBasePanel._instance = new MeChooseTileBasePanel();
             }
-            MeChooseTileBasePanel._instance.open(undefined);
+            MeChooseTileBasePanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeChooseTileBasePanel._instance) {
@@ -140,7 +141,7 @@ namespace TwnsMeChooseTileBasePanel {
                     typeMap.set(baseType, []);
                 }
 
-                const list = typeMap.get(baseType);
+                const list = Helpers.getExisted(typeMap.get(baseType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
                     if ((baseType === Types.TileBaseType.Sea) && (shapeId !== 0)) {
                         continue;
@@ -180,8 +181,8 @@ namespace TwnsMeChooseTileBasePanel {
         panel                   : MeChooseTileBasePanel;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
-        private _labelCategory  : TwnsUiLabel.UiLabel;
-        private _listTileBase   : TwnsUiScrollList.UiScrollList<DataForTileBaseRenderer>;
+        private readonly _labelCategory!    : TwnsUiLabel.UiLabel;
+        private readonly _listTileBase!     : TwnsUiScrollList.UiScrollList<DataForTileBaseRenderer>;
 
         protected _onOpened(): void {
             this._listTileBase.setItemRenderer(TileBaseRenderer);
@@ -189,9 +190,9 @@ namespace TwnsMeChooseTileBasePanel {
         }
 
         protected _onDataChanged(): void {
-            const data                      = this.data;
+            const data                      = this._getData();
             const dataListForDrawTileBase   = data.dataListForDrawTileBase;
-            this._labelCategory.text        = Lang.getTileName(ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty));
+            this._labelCategory.text        = Lang.getTileName(ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty)) ?? CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileBase   : DataForTileBaseRenderer[] = [];
             const panel                 = data.panel;
@@ -210,8 +211,8 @@ namespace TwnsMeChooseTileBasePanel {
         panel               : MeChooseTileBasePanel;
     };
     class TileBaseRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileBaseRenderer> {
-        private _group          : eui.Group;
-        private _conTileView    : eui.Group;
+        private readonly _group!        : eui.Group;
+        private readonly _conTileView!  : eui.Group;
 
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
@@ -233,7 +234,7 @@ namespace TwnsMeChooseTileBasePanel {
         }
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             const dataForDrawTileBase   = data.dataForDrawTileBase;
             this._tileView.init({
                 tileBaseShapeId     : dataForDrawTileBase.shapeId,
@@ -248,18 +249,18 @@ namespace TwnsMeChooseTileBasePanel {
         }
 
         public onItemTapEvent(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             const panel                 = data.panel;
             const dataForDrawTileBase   = data.dataForDrawTileBase;
             if (!panel.getNeedFill()) {
                 panel.updateOnChooseTileBase(dataForDrawTileBase);
                 panel.close();
-                MeModel.getWar().getDrawer().setModeDrawTileBase(dataForDrawTileBase);
+                Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawTileBase(dataForDrawTileBase);
             } else {
                 CommonConfirmPanel.show({
                     content : Lang.getText(LangTextType.A0089),
                     callback: () => {
-                        const war           = MeModel.getWar();
+                        const war           = Helpers.getExisted(MeModel.getWar());
                         const configVersion = war.getConfigVersion();
                         for (const tile of war.getTileMap().getAllTiles()) {
                             tile.init({

@@ -4,11 +4,8 @@ import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
 import TwnsRwWar            from "./RwWar";
 
 namespace TwnsRwFogMap {
-    import BwFogMap = TwnsBwFogMap.BwFogMap;
-    import RwWar    = TwnsRwWar.RwWar;
-
-    export class RwFogMap extends BwFogMap {
-        public startRunning(war: RwWar): void {
+    export class RwFogMap extends TwnsBwFogMap.BwFogMap {
+        public startRunning(war: TwnsRwWar.RwWar): void {
             this._setWar(war);
 
             const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());

@@ -1,17 +1,17 @@
 
-import FloatText        from "../../tools/helpers/FloatText";
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
-import UserModel        from "../../user/model/UserModel";
-import UserProxy        from "../../user/model/UserProxy";
+import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+import UserModel            from "../../user/model/UserModel";
+import UserProxy            from "../../user/model/UserProxy";
 
 namespace TwnsUserChangeNicknamePanel {
     import NotifyType   = TwnsNotifyType.NotifyType;
@@ -21,22 +21,14 @@ namespace TwnsUserChangeNicknamePanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
-        // @ts-ignore
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _group         : eui.Group;
-        // @ts-ignore
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelNickname : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelNote     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _inputNickname : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
-        private readonly _btnConfirm    : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private readonly _btnClose      : TwnsUiButton.UiButton;
+        private readonly _imgMask!          : TwnsUiImage.UiImage;
+        private readonly _group!            : eui.Group;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
+        private readonly _labelNote!        : TwnsUiLabel.UiLabel;
+        private readonly _inputNickname!    : TwnsUiTextInput.UiTextInput;
+        private readonly _btnConfirm!       : TwnsUiButton.UiButton;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
 
         private _isRequesting   = false;
 
@@ -46,7 +38,7 @@ namespace TwnsUserChangeNicknamePanel {
             if (!UserChangeNicknamePanel._instance) {
                 UserChangeNicknamePanel._instance = new UserChangeNicknamePanel();
             }
-            UserChangeNicknamePanel._instance.open(undefined);
+            UserChangeNicknamePanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

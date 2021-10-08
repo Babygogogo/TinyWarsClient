@@ -16,7 +16,7 @@ namespace RwProxy {
             { msgCode: NetMessageCodes.MsgReplayGetInfoList,    callback: _onMsgReplayGetInfoList },
             { msgCode: NetMessageCodes.MsgReplayGetData,        callback: _onMsgReplayGetData },
             { msgCode: NetMessageCodes.MsgReplaySetRating,      callback: _onMsgReplaySetRating },
-        ], undefined);
+        ], null);
     }
 
     export function reqReplayInfos(replayFilter: ProtoTypes.Replay.IReplayFilter | null): void {
@@ -29,7 +29,7 @@ namespace RwProxy {
     function _onMsgReplayGetInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetInfoList.IS;
         if (!data.errorCode) {
-            RwModel.setReplayInfoList(data.infos);
+            RwModel.setReplayInfoList(data.infos || []);
             Notify.dispatch(NotifyType.MsgReplayGetInfoList, data);
         }
     }

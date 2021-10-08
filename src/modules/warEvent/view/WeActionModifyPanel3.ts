@@ -8,7 +8,6 @@ import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import FloatText                    from "../../tools/helpers/FloatText";
 import Helpers                      from "../../tools/helpers/Helpers";
-import Logger                       from "../../tools/helpers/Logger";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -45,14 +44,14 @@ namespace TwnsWeActionModifyPanel3 {
 
         private static _instance: WeActionModifyPanel3;
 
-        private readonly _btnBack               : TwnsUiButton.UiButton;
-        private readonly _btnType               : TwnsUiButton.UiButton;
-        private readonly _btnPlay               : TwnsUiButton.UiButton;
-        private readonly _btnAddDialogue        : TwnsUiButton.UiButton;
-        private readonly _btnClear              : TwnsUiButton.UiButton;
-        private readonly _labelTitle            : TwnsUiLabel.UiLabel;
-        private readonly _labelDialoguesCount   : TwnsUiLabel.UiLabel;
-        private readonly _listDialogue          : TwnsUiScrollList.UiScrollList<DataForDialogueRenderer>;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnType!              : TwnsUiButton.UiButton;
+        private readonly _btnPlay!              : TwnsUiButton.UiButton;
+        private readonly _btnAddDialogue!       : TwnsUiButton.UiButton;
+        private readonly _btnClear!             : TwnsUiButton.UiButton;
+        private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _labelDialoguesCount!  : TwnsUiLabel.UiLabel;
+        private readonly _listDialogue!         : TwnsUiScrollList.UiScrollList<DataForDialogueRenderer>;
 
         public static show(openData: OpenDataForWeActionModifyPanel3): void {
             if (!WeActionModifyPanel3._instance) {
@@ -103,7 +102,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnAddDialogue(): void {
-            const dialogueArray = this._getOpenData().action.WeaDialogue.dataArray;
+            const dialogueArray = Helpers.getExisted(this._getOpenData().action.WeaDialogue?.dataArray);
             if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
@@ -117,7 +116,7 @@ namespace TwnsWeActionModifyPanel3 {
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
-                    openData.action.WeaDialogue.dataArray.length = 0;
+                    Helpers.getExisted(openData.action.WeaDialogue?.dataArray).length = 0;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             });
@@ -135,14 +134,8 @@ namespace TwnsWeActionModifyPanel3 {
         private _onTouchedBtnPlay(): void {
             const openData          = this._getOpenData();
             const action            = openData.action;
-            const dialogueAction    = action.WeaDialogue;
-            if (dialogueAction == null) {
-                Logger.error(`WeActionModifyPanel3._onTouchedBtnPlay() dialogueAction == null.`);
-                FloatText.show(Lang.getText(LangTextType.A0299));
-                return;
-            }
-
-            const errorTip = WarEventHelper.getErrorTipForAction(openData.fullData, action, openData.war);
+            const dialogueAction    = Helpers.getExisted(action.WeaDialogue);
+            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, openData.war);
             if (errorTip) {
                 FloatText.show(errorTip);
                 return;
@@ -166,7 +159,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
+            this._labelTitle.text       = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData?.actionId}`;
             this._btnType.label         = Lang.getText(LangTextType.B0516);
             this._btnPlay.label         = Lang.getText(LangTextType.B0667);
             this._btnAddDialogue.label  = Lang.getText(LangTextType.B0666);
@@ -179,7 +172,7 @@ namespace TwnsWeActionModifyPanel3 {
             const action    = openData.action;
             const war       = openData.war;
             const dataArray : DataForDialogueRenderer[] = [];
-            for (const dataForAddUnit of action.WeaDialogue.dataArray || []) {
+            for (const dataForAddUnit of action.WeaDialogue?.dataArray || []) {
                 dataArray.push({
                     war,
                     action,
@@ -203,26 +196,26 @@ namespace TwnsWeActionModifyPanel3 {
         dataForDialogue : ProtoTypes.WarEvent.WeaDialogue.IDataForDialogue;
     };
     class DialogueRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDialogueRenderer> {
-        private readonly _labelError        : TwnsUiLabel.UiLabel;
-        private readonly _btnChangeType     : TwnsUiButton.UiButton;
-        private readonly _btnInsert         : TwnsUiButton.UiButton;
-        private readonly _btnUp             : TwnsUiButton.UiButton;
-        private readonly _btnDelete         : TwnsUiButton.UiButton;
-        private readonly _labelDialogueType : TwnsUiLabel.UiLabel;
-        private readonly _groupCoDialogue   : eui.Group;
-        private readonly _groupLeftSide     : eui.Group;
-        private readonly _imgLeftSide       : TwnsUiImage.UiImage;
-        private readonly _labelLeftSide     : TwnsUiLabel.UiLabel;
-        private readonly _btnCo             : TwnsUiButton.UiButton;
-        private readonly _labelCo           : TwnsUiLabel.UiLabel;
-        private readonly _btnChineseName    : TwnsUiButton.UiButton;
-        private readonly _labelChineseName  : TwnsUiLabel.UiLabel;
-        private readonly _btnEnglishName    : TwnsUiButton.UiButton;
-        private readonly _labelEnglishName  : TwnsUiLabel.UiLabel;
-        private readonly _btnChinese        : TwnsUiButton.UiButton;
-        private readonly _labelChinese      : TwnsUiLabel.UiLabel;
-        private readonly _btnEnglish        : TwnsUiButton.UiButton;
-        private readonly _labelEnglish      : TwnsUiLabel.UiLabel;
+        private readonly _labelError!           : TwnsUiLabel.UiLabel;
+        private readonly _btnChangeType!        : TwnsUiButton.UiButton;
+        private readonly _btnInsert!            : TwnsUiButton.UiButton;
+        private readonly _btnUp!                : TwnsUiButton.UiButton;
+        private readonly _btnDelete!            : TwnsUiButton.UiButton;
+        private readonly _labelDialogueType!    : TwnsUiLabel.UiLabel;
+        private readonly _groupCoDialogue!      : eui.Group;
+        private readonly _groupLeftSide!        : eui.Group;
+        private readonly _imgLeftSide!          : TwnsUiImage.UiImage;
+        private readonly _labelLeftSide!        : TwnsUiLabel.UiLabel;
+        private readonly _btnCo!                : TwnsUiButton.UiButton;
+        private readonly _labelCo!              : TwnsUiLabel.UiLabel;
+        private readonly _btnChineseName!       : TwnsUiButton.UiButton;
+        private readonly _labelChineseName!     : TwnsUiLabel.UiLabel;
+        private readonly _btnEnglishName!       : TwnsUiButton.UiButton;
+        private readonly _labelEnglishName!     : TwnsUiLabel.UiLabel;
+        private readonly _btnChinese!           : TwnsUiButton.UiButton;
+        private readonly _labelChinese!         : TwnsUiLabel.UiLabel;
+        private readonly _btnEnglish!           : TwnsUiButton.UiButton;
+        private readonly _labelEnglish!         : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -250,14 +243,14 @@ namespace TwnsWeActionModifyPanel3 {
         // callbacks
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnChangeType(): void {
-            const dataForDialogue = this.data.dataForDialogue;
+            const dataForDialogue = this._getData().dataForDialogue;
 
             {
                 const dataForAside = dataForDialogue.dataForAside;
                 if (dataForAside) {
                     delete dataForDialogue.dataForAside;
                     dataForDialogue.dataForCoDialogue = {
-                        coId        : ConfigManager.getCoIdArrayForDialogue(ConfigManager.getLatestFormalVersion())[0],
+                        coId        : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))[0],
                         side        : Types.WarEventActionDialogueSide.Left,
                         textArray   : dataForAside.textArray,
                     };
@@ -278,12 +271,12 @@ namespace TwnsWeActionModifyPanel3 {
                 }
             }
 
-            Logger.error(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnChangeType() invalid dataForDialogue.`);
+            throw Helpers.newError(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnChangeType() invalid dataForDialogue.`);
         }
 
         private _onTouchedBtnInsert(): void {
-            const data          = this.data;
-            const dialogueArray = data.action.WeaDialogue.dataArray;
+            const data          = this._getData();
+            const dialogueArray = Helpers.getExisted(data.action.WeaDialogue?.dataArray);
             if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
@@ -293,8 +286,8 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnUp(): void {
-            const data          = this.data;
-            const dialogueArray = data.action.WeaDialogue.dataArray;
+            const data          = this._getData();
+            const dialogueArray = Helpers.getExisted(data.action.WeaDialogue?.dataArray);
             const index         = dialogueArray.indexOf(data.dataForDialogue);
             if (index > 0) {
                 [dialogueArray[index - 1], dialogueArray[index]] = [dialogueArray[index], dialogueArray[index - 1]];
@@ -308,7 +301,7 @@ namespace TwnsWeActionModifyPanel3 {
                 CommonConfirmPanel.show({
                     content : Lang.getText(LangTextType.A0029),
                     callback: () => {
-                        Helpers.deleteElementFromArray(data.action.WeaDialogue.dataArray, data.dataForDialogue);
+                        Helpers.deleteElementFromArray(Helpers.getExisted(data.action.WeaDialogue?.dataArray), data.dataForDialogue);
                         Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     },
                 });
@@ -316,7 +309,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedGroupLeftSide(): void {
-            const data = this.data.dataForDialogue.dataForCoDialogue;
+            const data = this._getData().dataForDialogue.dataForCoDialogue;
             if (data) {
                 data.side = data.side === Types.WarEventActionDialogueSide.Left
                     ? Types.WarEventActionDialogueSide.Right
@@ -326,11 +319,11 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnCo(): void {
-            const dataForCoDialogue = this.data.dataForDialogue.dataForCoDialogue;
+            const dataForCoDialogue = this._getData().dataForDialogue.dataForCoDialogue;
             if (dataForCoDialogue) {
-                const currentCoId = dataForCoDialogue.coId;
+                const currentCoId = dataForCoDialogue.coId ?? null;
                 TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
-                    availableCoIdArray  : ConfigManager.getCoIdArrayForDialogue(ConfigManager.getLatestFormalVersion()),
+                    availableCoIdArray  : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion())),
                     currentCoId,
                     callbackOnConfirm   : coId => {
                         if (coId !== currentCoId) {
@@ -343,10 +336,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnChineseName(): void {
-            const dataForDialogue = this.data.dataForDialogue.dataForCoDialogue;
-            if (dataForDialogue == null) {
-                throw new Error(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnChineseName() empty dataForDialogue.`);
-            }
+            const dataForDialogue       = Helpers.getExisted(this._getData().dataForDialogue.dataForCoDialogue);
             dataForDialogue.nameArray   = dataForDialogue.nameArray || [];
             const textArray             = dataForDialogue.nameArray;
             const textData              = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
@@ -386,10 +376,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnEnglishName(): void {
-            const dataForDialogue = this.data.dataForDialogue.dataForCoDialogue;
-            if (dataForDialogue == null) {
-                throw new Error(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnEnglishName() empty dataForDialogue.`);
-            }
+            const dataForDialogue       = Helpers.getExisted(this._getData().dataForDialogue.dataForCoDialogue);
             dataForDialogue.nameArray   = dataForDialogue.nameArray || [];
             const textArray             = dataForDialogue.nameArray;
             const textData              = textArray.find(v => v.languageType === Types.LanguageType.English);
@@ -429,8 +416,8 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnChinese(): void {
-            const dataForDialogue   = this.data.dataForDialogue;
-            const textArray         = dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray;
+            const dataForDialogue   = this._getData().dataForDialogue;
+            const textArray         = Helpers.getExisted(dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray);
             const textData          = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
             const currentText       = textData?.text;
 
@@ -466,8 +453,8 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnEnglish(): void {
-            const dataForDialogue   = this.data.dataForDialogue;
-            const textArray         = dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray;
+            const dataForDialogue   = this._getData().dataForDialogue;
+            const textArray         = Helpers.getExisted(dataForDialogue.dataForAside?.textArray || dataForDialogue.dataForCoDialogue?.textArray);
             const textData          = textArray.find(v => v.languageType === Types.LanguageType.English);
             const currentText       = textData?.text;
 
@@ -512,7 +499,7 @@ namespace TwnsWeActionModifyPanel3 {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const dataForDialogue   = this.data.dataForDialogue;
+            const dataForDialogue   = this._getData().dataForDialogue;
             const dataForCoDialogue = dataForDialogue.dataForCoDialogue;
             const groupCoDialogue   = this._groupCoDialogue;
             if (dataForCoDialogue == null) {
@@ -520,7 +507,7 @@ namespace TwnsWeActionModifyPanel3 {
             } else {
                 groupCoDialogue.visible     = true;
                 this._imgLeftSide.visible   = dataForCoDialogue.side === Types.WarEventActionDialogueSide.Left;
-                this._labelCo.text          = ConfigManager.getCoNameAndTierText(ConfigManager.getLatestFormalVersion(), dataForCoDialogue.coId);
+                this._labelCo.text          = ConfigManager.getCoNameAndTierText(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Helpers.getExisted(dataForCoDialogue.coId));
             }
 
             {
@@ -538,7 +525,7 @@ namespace TwnsWeActionModifyPanel3 {
             }
 
             {
-                const textArray = dataForCoDialogue ? dataForCoDialogue.textArray : dataForDialogue.dataForAside.textArray;
+                const textArray = dataForCoDialogue ? dataForCoDialogue.textArray : dataForDialogue.dataForAside?.textArray;
                 this._labelChinese.text = Lang.getLanguageText({
                     textArray,
                     useAlternate: false,
@@ -569,7 +556,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _updateLabelError(): void {
-            const data      = this.data.dataForDialogue;
+            const data      = this._getData().dataForDialogue;
             const errorTips = WarEventHelper.getErrorTipForWeaDialogueData(data);
             const label     = this._labelError;
             if (errorTips) {
@@ -582,7 +569,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _updateLabelDialogueType(): void {
-            const data  = this.data.dataForDialogue;
+            const data  = this._getData().dataForDialogue;
             const label = this._labelDialogueType;
             if (data.dataForAside) {
                 label.text = `${Lang.getText(LangTextType.B0669)}: ${Lang.getText(LangTextType.B0670)}`;

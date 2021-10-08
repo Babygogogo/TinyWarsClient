@@ -1,16 +1,16 @@
 
-import CommonProxy      from "../../common/model/CommonProxy";
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import CommonProxy          from "../../common/model/CommonProxy";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonServerStatusPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -22,37 +22,25 @@ namespace TwnsCommonServerStatusPanel {
 
         private static _instance: CommonServerStatusPanel;
 
-        // @ts-ignore
-        private readonly _imgMask                   : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _group                     : eui.Group;
-        // @ts-ignore
-        private readonly _labelTitle                : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _btnClose                  : TwnsUiButton.UiButton;
+        private readonly _imgMask!                  : TwnsUiImage.UiImage;
+        private readonly _group!                    : eui.Group;
+        private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!                 : TwnsUiButton.UiButton;
 
-        // @ts-ignore
-        private readonly _labelAccountsTitle        : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelAccounts             : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelOnlineTimeTitle      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelOnlineTime           : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelNewAccountsTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelNewAccounts          : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelActiveAccountsTitle  : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _labelActiveAccounts       : TwnsUiLabel.UiLabel;
+        private readonly _labelAccountsTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelAccounts!            : TwnsUiLabel.UiLabel;
+        private readonly _labelOnlineTimeTitle!     : TwnsUiLabel.UiLabel;
+        private readonly _labelOnlineTime!          : TwnsUiLabel.UiLabel;
+        private readonly _labelNewAccountsTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelNewAccounts!         : TwnsUiLabel.UiLabel;
+        private readonly _labelActiveAccountsTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelActiveAccounts!      : TwnsUiLabel.UiLabel;
 
         public static show(): void {
             if (!CommonServerStatusPanel._instance) {
                 CommonServerStatusPanel._instance = new CommonServerStatusPanel();
             }
-            CommonServerStatusPanel._instance.open(undefined);
+            CommonServerStatusPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

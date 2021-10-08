@@ -1,10 +1,10 @@
 
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import Helpers          from "../../tools/helpers/Helpers";
-import Types            from "../../tools/helpers/Types";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonHelpPanel {
     type OpenData = {
@@ -17,12 +17,12 @@ namespace TwnsCommonHelpPanel {
 
         private static _instance: CommonHelpPanel;
 
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        private readonly _group         : eui.Group;
-        private readonly _btnClose      : TwnsUiButton.UiButton;
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        private readonly _scrContent    : eui.Scroller;
-        private readonly _labelContent  : TwnsUiLabel.UiLabel;
+        private readonly _imgMask!      : TwnsUiImage.UiImage;
+        private readonly _group!        : eui.Group;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _scrContent!   : eui.Scroller;
+        private readonly _labelContent! : TwnsUiLabel.UiLabel;
 
         public static show(openData: OpenData): void {
             if (!CommonHelpPanel._instance) {

@@ -26,25 +26,27 @@ namespace TwnsLobbyBottomPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: LobbyBottomPanel;
+        private static _instance        : LobbyBottomPanel | null = null;
 
-        private _groupBottom    : eui.Group;
-        private _btnMyInfo      : TwnsUiButton.UiButton;
-        private _btnChat        : TwnsUiButton.UiButton;
-        private _btnMapEditor   : TwnsUiButton.UiButton;
-        private _btnGameData    : TwnsUiButton.UiButton;
+        private readonly _groupBottom!  : eui.Group;
+        private readonly _btnMyInfo!    : TwnsUiButton.UiButton;
+        private readonly _btnChat!      : TwnsUiButton.UiButton;
+        private readonly _btnMapEditor! : TwnsUiButton.UiButton;
+        private readonly _btnGameData!  : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!LobbyBottomPanel._instance) {
                 LobbyBottomPanel._instance = new LobbyBottomPanel();
             }
-            LobbyBottomPanel._instance.open(undefined);
+            LobbyBottomPanel._instance.open();
         }
-
         public static async hide(): Promise<void> {
             if (LobbyBottomPanel._instance) {
                 await LobbyBottomPanel._instance.close();
             }
+        }
+        public static getInstance(): LobbyBottomPanel | null {
+            return LobbyBottomPanel._instance;
         }
 
         private constructor() {
@@ -82,7 +84,9 @@ namespace TwnsLobbyBottomPanel {
         private _onTouchedBtnMyInfo(): void {
             UserOnlineUsersPanel.hide();
             TwnsChatPanel.ChatPanel.hide();
-            UserPanel.show({ userId: UserModel.getSelfUserId() });
+            UserPanel.show({
+                userId: Helpers.getExisted(UserModel.getSelfUserId()),
+            });
         }
 
         private _onTouchedBtnChat(): void {

@@ -1,29 +1,29 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Logger           from "../../tools/helpers/Logger";
-import Notify           from "../../tools/notify/Notify";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel        from "../../user/model/UserModel";
-import MrrModel         from "./MrrModel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Helpers              from "../../tools/helpers/Helpers";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+import UserModel            from "../../user/model/UserModel";
+import MrrModel             from "./MrrModel";
 
 namespace MrrSelfSettingsModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
 
-    let _roomId             : number | null | undefined;
-    let _coId               : number | null | undefined;
-    let _unitAndTileSkinId  : number | null | undefined;
-    let _availableCoIdArray : number[] | null | undefined;
+    let _roomId             : number | null;
+    let _coId               : number | null;
+    let _unitAndTileSkinId  : number | null;
+    let _availableCoIdArray : number[] | null;
 
     export async function resetData(roomId: number): Promise<void> {
         setRoomId(roomId);
-        setCoId(null);
-        setUnitAndTileSkinId(null);
-        setAvailableCoIdArray(null);
+        clearCoId();
+        clearUnitAndTileSkinId();
+        clearAvailableCoIdArray();
 
-        const roomInfo          = await MrrModel.getRoomInfo(roomId);
+        const roomInfo          = Helpers.getExisted(await MrrModel.getRoomInfo(roomId));
         const playerDataList    = roomInfo ? roomInfo.playerDataList || [] : [];
         const selfUserId        = UserModel.getSelfUserId();
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
@@ -31,93 +31,76 @@ namespace MrrSelfSettingsModel {
             return;
         }
 
-        const selfPlayerIndex       = selfPlayerData.playerIndex;
+        const selfPlayerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
         const availableCoIdArray    = generateAvailableCoIdArray(roomInfo, selfPlayerIndex);
         if ((availableCoIdArray == null) || (!availableCoIdArray.length)) {
-            Logger.error(`MrrModel.SelfSettings.resetData() empty availableCoIdArray.`);
-            return undefined;
+            throw Helpers.newError(`Empty availableCoIdArray`);
         }
         setAvailableCoIdArray(availableCoIdArray);
 
         if (selfPlayerData.isReady) {
-            setCoId(selfPlayerData.coId);
-            setUnitAndTileSkinId(selfPlayerData.unitAndTileSkinId);
+            setCoId(Helpers.getExisted(selfPlayerData.coId));
+            setUnitAndTileSkinId(Helpers.getExisted(selfPlayerData.unitAndTileSkinId));
         } else {
             const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
             if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
-                Logger.error(`MrrModel.SelfSettings.resetData() empty availableSkinIdList.`);
-                return undefined;
+                throw Helpers.newError(`Empty availableSkinIdList.`);
             }
 
             setCoId(CommonConstants.CoEmptyId);
             setUnitAndTileSkinId(availableSkinIdList.indexOf(selfPlayerIndex) >= 0 ? selfPlayerIndex : availableSkinIdList[0]);
         }
     }
-    function setRoomId(roomId: number | null | undefined): void {
+    function setRoomId(roomId: number): void {
         _roomId = roomId;
     }
-    export function getRoomId(): number | null | undefined {
+    export function getRoomId(): number | null {
         return _roomId;
     }
 
-    export function setCoId(coId: number | null | undefined): void {
+    export function setCoId(coId: number): void {
         if (_coId !== coId) {
             _coId = coId;
             Notify.dispatch(NotifyType.MrrSelfSettingsCoIdChanged);
         }
     }
-    export function getCoId(): number | null | undefined {
+    export function getCoId(): number | null {
         return _coId;
     }
+    function clearCoId(): void {
+        _coId = null;
+    }
 
-    export function setUnitAndTileSkinId(skinId: number | null | undefined): void {
+    export function setUnitAndTileSkinId(skinId: number): void {
         if (_unitAndTileSkinId !== skinId) {
             _unitAndTileSkinId = skinId;
             Notify.dispatch(NotifyType.MrrSelfSettingsSkinIdChanged);
         }
     }
-    export function getUnitAndTileSkinId(): number | null | undefined {
+    export function getUnitAndTileSkinId(): number | null {
         return _unitAndTileSkinId;
     }
+    function clearUnitAndTileSkinId(): void {
+        _unitAndTileSkinId = null;
+    }
 
-    function setAvailableCoIdArray(idArray: number[] | null | undefined): void {
+    function setAvailableCoIdArray(idArray: number[]): void {
         _availableCoIdArray = idArray;
     }
-    export function getAvailableCoIdArray(): number[] | null | undefined {
+    export function getAvailableCoIdArray(): number[] | null {
         return _availableCoIdArray;
     }
-    function generateAvailableCoIdArray(roomInfo: IMrrRoomInfo, playerIndex: number): number[] | undefined {
-        const settingsForCommon = roomInfo.settingsForCommon;
-        if (settingsForCommon == null) {
-            Logger.error(`MrrModel.generateAvailableCoIdList() empty settingsForCommon.`);
-            return undefined;
-        }
+    function clearAvailableCoIdArray(): void {
+        _availableCoIdArray = null;
+    }
 
-        const configVersion = settingsForCommon.configVersion;
-        if (configVersion == null) {
-            Logger.error(`MrrModel.generateAvailableCoIdList() empty configVersion.`);
-            return undefined;
-        }
-
-        const settingsForMrw = roomInfo.settingsForMrw;
-        if (settingsForMrw == null) {
-            Logger.error(`MrrModel.generateAvailableCoIdList() empty settingsForMrw.`);
-            return undefined;
-        }
-
-        const dataArrayForBanCo = settingsForMrw.dataArrayForBanCo;
-        if (dataArrayForBanCo == null) {
-            Logger.error(`MrrModel.generateAvailableCoIdList() empty dataArrayForBanCo.`);
-            return undefined;
-        }
-
-        const playerRule = WarRuleHelpers.getPlayerRule(settingsForCommon.warRule, playerIndex);
-        if (playerRule == null) {
-            Logger.error(`MrrModel.generateAvailableCoIdList() empty playerRule.`);
-            return undefined;
-        }
-
-        const bannedCoIdSet = new Set<number>(playerRule.bannedCoIdArray);
+    function generateAvailableCoIdArray(roomInfo: IMrrRoomInfo, playerIndex: number): number[] {
+        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
+        const configVersion     = Helpers.getExisted(settingsForCommon.configVersion);
+        const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
+        const dataArrayForBanCo = Helpers.getExisted(settingsForMrw.dataArrayForBanCo);
+        const playerRule        = WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.warRule), playerIndex);
+        const bannedCoIdSet     = new Set<number>(playerRule.bannedCoIdArray);
         for (const data of dataArrayForBanCo) {
             for (const coId of data.bannedCoIdList || []) {
                 bannedCoIdSet.add(coId);
@@ -127,20 +110,13 @@ namespace MrrSelfSettingsModel {
         return WarRuleHelpers.getAvailableCoIdArray(configVersion, bannedCoIdSet);
     }
 
-    function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] | undefined {
-        const playerDataList = roomInfo.playerDataList;
-        if (playerDataList == null) {
-            Logger.error(`MrrModel.SelfSettings.generateAvailableSkinIdList() empty playerDataList.`);
-            return undefined;
-        }
-
+    function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] {
         const usedSkinIds = new Set<number>();
-        for (const playerData of playerDataList) {
+        for (const playerData of Helpers.getExisted(roomInfo.playerDataList)) {
             if (playerData.isReady) {
-                const skinId = playerData.unitAndTileSkinId;
+                const skinId = Helpers.getExisted(playerData.unitAndTileSkinId);
                 if (usedSkinIds.has(skinId)) {
-                    Logger.error(`MrrModel.SelfSettings.generateAvailableSkinIdList() duplicated skinId!`);
-                    return undefined;
+                    throw Helpers.newError(`Duplicated skinId: ${skinId}`);
                 }
 
                 usedSkinIds.add(skinId);

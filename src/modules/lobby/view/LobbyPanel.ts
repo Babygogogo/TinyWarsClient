@@ -32,55 +32,40 @@ namespace TwnsLobbyPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: LobbyPanel;
+        private static _instance            : LobbyPanel | null = null;
 
-        // @ts-ignore
-        private _groupTips      : eui.Group;
-        // @ts-ignore
-        private _groupWelcome   : eui.Group;
-        // @ts-ignore
-        private _labelTips0     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelTips1     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _groupQq        : eui.Group;
-        // @ts-ignore
-        private _labelTips2     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelTips3     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _groupDiscord   : eui.Group;
-        // @ts-ignore
-        private _labelTips4     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelTips5     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _groupGithub    : eui.Group;
-        // @ts-ignore
-        private _labelTips6     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelTips7     : TwnsUiLabel.UiLabel;
+        private readonly _groupTips!        : eui.Group;
+        private readonly _groupWelcome!     : eui.Group;
+        private readonly _labelTips0!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTips1!       : TwnsUiLabel.UiLabel;
+        private readonly _groupQq!          : eui.Group;
+        private readonly _labelTips2!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTips3!       : TwnsUiLabel.UiLabel;
+        private readonly _groupDiscord!     : eui.Group;
+        private readonly _labelTips4!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTips5!       : TwnsUiLabel.UiLabel;
+        private readonly _groupGithub!      : eui.Group;
+        private readonly _labelTips6!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTips7!       : TwnsUiLabel.UiLabel;
 
-        // @ts-ignore
-        private _group          : eui.Group;
-        // @ts-ignore
-        private _btnSinglePlayer: TwnsUiButton.UiButton;
-        // @ts-ignore
-        private _btnMultiPlayer : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private _btnRanking     : TwnsUiButton.UiButton;
+        private readonly _group!            : eui.Group;
+        private readonly _btnSinglePlayer!  : TwnsUiButton.UiButton;
+        private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
+        private readonly _btnRanking!       : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!LobbyPanel._instance) {
                 LobbyPanel._instance = new LobbyPanel();
             }
-            LobbyPanel._instance.open(undefined);
+            LobbyPanel._instance.open();
         }
-
         public static async hide(): Promise<void> {
             if (LobbyPanel._instance) {
                 await LobbyPanel._instance.close();
             }
+        }
+        public static getInstance(): LobbyPanel | null {
+            return LobbyPanel._instance;
         }
 
         private constructor() {
@@ -275,18 +260,18 @@ namespace TwnsLobbyPanel {
 
         private async _updateBtnMultiPlayer(): Promise<void> {
             this._btnMultiPlayer.setRedVisible(
-                (MpwModel.checkIsRedForMyMcwWars())  ||
-                (MpwModel.checkIsRedForMyMfwWars())  ||
-                (MpwModel.checkIsRedForMyCcwWars())  ||
-                (await McrModel.checkIsRed())        ||
-                (await MfrModel.checkIsRed())        ||
+                (MpwModel.checkIsRedForMyMcwWars())                                                             ||
+                (MpwModel.checkIsRedForMyMfwWars())                                                             ||
+                (MpwModel.checkIsRedForMyCcwWars())                                                             ||
+                (await McrModel.checkIsRed()) ||
+                (await MfrModel.checkIsRed()) ||
                 (await CcrModel.checkIsRed())
             );
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (MpwModel.checkIsRedForMyMrwWars()) ||
+                (MpwModel.checkIsRedForMyMrwWars())                                                             ||
                 (await MrrModel.checkIsRed())
             );
         }

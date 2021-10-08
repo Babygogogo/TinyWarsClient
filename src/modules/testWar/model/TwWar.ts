@@ -5,7 +5,7 @@ import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager"
 import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Logger                       from "../../tools/helpers/Logger";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
 import ProtoTypes                   from "../../tools/proto/ProtoTypes";
@@ -53,111 +53,118 @@ namespace TwnsTwWar {
             // nothing to do.
         }
 
-        public async getDescForExePlayerDeleteUnit(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExePlayerDeleteUnit(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExePlayerEndTurn(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExePlayerEndTurn(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExePlayerProduceUnit(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExePlayerProduceUnit(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExePlayerSurrender(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExePlayerSurrender(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExePlayerVoteForDraw(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExePlayerVoteForDraw(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeSystemBeginTurn(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeSystemBeginTurn(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeSystemCallWarEvent(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeSystemCallWarEvent(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeSystemDestroyPlayerForce(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeSystemDestroyPlayerForce(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeSystemEndWar(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeSystemEndWar(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeSystemEndTurn(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeSystemEndTurn(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeSystemHandleBootPlayer(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeSystemHandleBootPlayer(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitAttackTile(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitAttackTile(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitAttackUnit(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitAttackUnit(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitBeLoaded(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitBeLoaded(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitBuildTile(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitBuildTile(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitCaptureTile(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitCaptureTile(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitDive(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitDive(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitDropUnit(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitDropUnit(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitJoinUnit(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitJoinUnit(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitLaunchFlare(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitLaunchFlare(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitLaunchSilo(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitLaunchSilo(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitLoadCo(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitLoadCo(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitProduceUnit(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitProduceUnit(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitSupplyUnit(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitSupplyUnit(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitSurface(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitSurface(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitUseCoSkill(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitUseCoSkill(): Promise<string | null> {
+            return null;
         }
-        public async getDescForExeUnitWait(): Promise<string | undefined> {
-            return undefined;
+        public async getDescForExeUnitWait(): Promise<string | null> {
+            return null;
         }
 
-        public async init(data: ISerialWar): Promise<ClientErrorCode> {
-            const baseInitError = await this._baseInit(data);
-            if (baseInitError) {
-                return baseInitError;
-            }
+        public async init(data: ISerialWar): Promise<void> {
+            await this._baseInit(data);
+        }
+        public async initByMapRawData(mapRawData: IMapRawData): Promise<void> {
+            await this.init(await _createDataForCreateTwWar(mapRawData));
+        }
+
+        public async getErrorCodeForInit(data: ISerialWar): Promise<ClientErrorCode> {
+            await this.init(data).catch(e => {
+                const error = e as Types.CustomError;
+                return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInit_00;
+            });
 
             return ClientErrorCode.NoError;
         }
-        public async initByMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-            const warData = await _createDataForCreateTwWar(mapRawData);
-            if (warData == null) {
-                return ClientErrorCode.TwWarInitByMapRawData00;
-            }
+        public async getErrorCodeForInitByMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
+            await this.initByMapRawData(mapRawData).catch(e => {
+                const error = e as Types.CustomError;
+                return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitByMapRawData_00;
+            });
 
-            return await this.init(warData);
+            return ClientErrorCode.NoError;
         }
 
         public getWarType(): Types.WarType {
             return Types.WarType.Test;
         }
 
-        public getMapId(): number | null | undefined {
-            return undefined;
+        public getMapId(): number | null {
+            return null;
         }
 
         public getIsNeedExecutedAction(): boolean {
@@ -171,41 +178,26 @@ namespace TwnsTwWar {
             return false;
         }
 
-        public getSettingsBootTimerParams(): number[] | null | undefined {
+        public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }
     }
 
-    async function _createDataForCreateTwWar(mapRawData: IMapRawData): Promise<ISerialWar | undefined> {
-        const dataForPlayerManager = await _createInitialPlayerManagerDataForTw(mapRawData);
-        if (!dataForPlayerManager) {
-            Logger.error(`TwWar._createDataForCreateTwWar() failed _createInitialPlayerManagerDataForTw().`);
-            return undefined;
-        }
-
-        const fieldData = await _createInitialFieldData(mapRawData);
-        if (fieldData == null) {
-            Logger.error(`TwWar._createDataForCreateTwWar() empty fieldData.`);
-            return undefined;
-        }
-
-        const warRule = (mapRawData.warRuleArray || [])[0];
-        if (warRule == null) {
-            Logger.error(`TwWar._createDataForCreateTwWar() empty warRule.`);
-            return undefined;
-        }
-
-        const seedRandomState = new Math.seedrandom("" + Math.random(), { state: true }).state();
+    async function _createDataForCreateTwWar(mapRawData: IMapRawData): Promise<ISerialWar> {
+        const dataForPlayerManager  = await _createInitialPlayerManagerDataForTw(mapRawData);
+        const fieldData             = await _createInitialFieldData(mapRawData);
+        const warRule               = (mapRawData.warRuleArray || [])[0];
+        const seedRandomState       = new Math.seedrandom("" + Math.random(), { state: true }).state();
         return {
             settingsForCommon       : {
-                configVersion       : ConfigManager.getLatestFormalVersion(),
+                configVersion       : ConfigManager.getLatestConfigVersion(),
                 warRule,
                 presetWarRuleId     : warRule.ruleId,
             },
 
             warId                   : -1,
             executedActions         : [],
-            remainingVotesForDraw   : undefined,
+            remainingVotesForDraw   : null,
             playerManager           : dataForPlayerManager,
             turnManager             : _createInitialTurnData(),
             field                   : fieldData,
@@ -227,26 +219,15 @@ namespace TwnsTwWar {
         };
     }
 
-    async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData): Promise<WarSerialization.ISerialPlayerManager | undefined> {
-        const configVersion = ConfigManager.getLatestFormalVersion();
-        if (configVersion == null) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty configVersion.`);
-            return undefined;
-        }
-
+    async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData): Promise<WarSerialization.ISerialPlayerManager> {
+        const configVersion         = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
         const playersCountUnneutral = mapRawData.playersCountUnneutral;
         if ((playersCountUnneutral == null) || (playersCountUnneutral < 2)) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() invalid playersCount!`);
-            return undefined;
+            throw Helpers.newError(`Invalid playersCountUnneutral: ${playersCountUnneutral}`);
         }
 
         const bootTimerParams   = [Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue];
-        const restTimeToBoot    = bootTimerParams ? bootTimerParams[1] : undefined;
-        if (restTimeToBoot == null) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty restTimeToBoot.`);
-            return undefined;
-        }
-
+        const restTimeToBoot    = bootTimerParams[1];
         const players = [_createInitialSinglePlayerData({
             playerIndex         : 0,
             teamIndex           : 0,
@@ -256,38 +237,17 @@ namespace TwnsTwWar {
             unitAndTileSkinId   : 0,
         })];
 
-        const warRule = (mapRawData.warRuleArray || [])[0];
-        if (warRule == null) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty warRule.`);
-            return undefined;
-        }
-
-        const ruleForPlayers = warRule.ruleForPlayers;
-        if (ruleForPlayers == null) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty ruleForPlayers.`);
-            return undefined;
-        }
-
-        const ruleAvailability = warRule.ruleAvailability;
-        if (ruleAvailability == null) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty ruleAvailability.`);
-            return undefined;
-        }
-
+        const warRule           = (mapRawData.warRuleArray || [])[0];
+        const ruleForPlayers    = Helpers.getExisted(warRule.ruleForPlayers);
+        const ruleAvailability  = Helpers.getExisted(warRule.ruleAvailability);
         if ((WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability })) ||
             ((ruleForPlayers.playerRuleDataArray || []).length !== playersCountUnneutral)
         ) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() invalid ruleForPlayers! ${JSON.stringify(bootTimerParams)}`);
-            return undefined;
+            throw Helpers.newError(`Invalid ruleForPlayers.`);
         }
 
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const teamIndex = WarRuleHelpers.getTeamIndexByRuleForPlayers(ruleForPlayers, playerIndex);
-            if (teamIndex == null) {
-                Logger.error(`TwWar._createInitialPlayerManagerDataForTw() invalid teamIndex!`);
-                return undefined;
-            }
-
             players.push(_createInitialSinglePlayerData({
                 playerIndex,
                 teamIndex,
@@ -301,13 +261,8 @@ namespace TwnsTwWar {
         return { players };
     }
 
-    async function _createInitialFieldData(mapRawData: IMapRawData): Promise<WarSerialization.ISerialField | undefined> {
-        const tiles = mapRawData.tileDataArray;
-        if (tiles == null) {
-            Logger.error(`TwWar._createInitialFieldData() empty tiles.`);
-            return undefined;
-        }
-
+    async function _createInitialFieldData(mapRawData: IMapRawData): Promise<WarSerialization.ISerialField> {
+        const tiles = Helpers.getExisted(mapRawData.tileDataArray);
         const units = mapRawData.unitDataArray || [];
         return {
             tileMap     : {
@@ -326,8 +281,8 @@ namespace TwnsTwWar {
     type DataForCreateSinglePlayerData = {
         playerIndex         : number;
         teamIndex           : number;
-        userId              : number | null | undefined;
-        coId                : number | null | undefined;
+        userId              : number | null;
+        coId                : number | null;
         restTimeToBoot      : number;
         unitAndTileSkinId   : number;
     };

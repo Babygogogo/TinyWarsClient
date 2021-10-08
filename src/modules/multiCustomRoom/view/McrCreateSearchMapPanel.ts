@@ -22,28 +22,28 @@ namespace TwnsMcrCreateSearchMapPanel {
 
         private static _instance: McrCreateSearchMapPanel;
 
-        private readonly _imgMask                   : TwnsUiImage.UiImage;
+        private readonly _imgMask!                  : TwnsUiImage.UiImage;
 
-        private readonly _group                     : eui.Group;
-        private readonly _btnClose                  : TwnsUiButton.UiButton;
-        private readonly _btnReset                  : TwnsUiButton.UiButton;
-        private readonly _btnSearch                 : TwnsUiButton.UiButton;
-        private readonly _labelName                 : TwnsUiLabel.UiLabel;
-        private readonly _labelMapNameTitle         : TwnsUiLabel.UiLabel;
-        private readonly _labelDesignerTitle        : TwnsUiLabel.UiLabel;
-        private readonly _labelPlayersCountTitle    : TwnsUiLabel.UiLabel;
-        private readonly _labelPlayedTimesTitle     : TwnsUiLabel.UiLabel;
-        private readonly _labelMinRatingTitle       : TwnsUiLabel.UiLabel;
-        private readonly _labelDesc                 : TwnsUiLabel.UiLabel;
-        private readonly _inputMapName              : TwnsUiTextInput.UiTextInput;
-        private readonly _inputDesigner             : TwnsUiTextInput.UiTextInput;
-        private readonly _inputPlayersCount         : TwnsUiTextInput.UiTextInput;
-        private readonly _inputPlayedTimes          : TwnsUiTextInput.UiTextInput;
-        private readonly _inputMinRating            : TwnsUiTextInput.UiTextInput;
+        private readonly _group!                    : eui.Group;
+        private readonly _btnClose!                 : TwnsUiButton.UiButton;
+        private readonly _btnReset!                 : TwnsUiButton.UiButton;
+        private readonly _btnSearch!                : TwnsUiButton.UiButton;
+        private readonly _labelName!                : TwnsUiLabel.UiLabel;
+        private readonly _labelMapNameTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelDesignerTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayersCountTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayedTimesTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelMinRatingTitle!      : TwnsUiLabel.UiLabel;
+        private readonly _labelDesc!                : TwnsUiLabel.UiLabel;
+        private readonly _inputMapName!             : TwnsUiTextInput.UiTextInput;
+        private readonly _inputDesigner!            : TwnsUiTextInput.UiTextInput;
+        private readonly _inputPlayersCount!        : TwnsUiTextInput.UiTextInput;
+        private readonly _inputPlayedTimes!         : TwnsUiTextInput.UiTextInput;
+        private readonly _inputMinRating!           : TwnsUiTextInput.UiTextInput;
 
-        private readonly _labelTagFogTitle          : TwnsUiLabel.UiLabel;
-        private readonly _labelTagFog               : TwnsUiLabel.UiLabel;
-        private readonly _btnTagFog                 : TwnsUiButton.UiButton;
+        private readonly _labelTagFogTitle!         : TwnsUiLabel.UiLabel;
+        private readonly _labelTagFog!              : TwnsUiLabel.UiLabel;
+        private readonly _btnTagFog!                : TwnsUiButton.UiButton;
 
         private _mapTag         : ProtoTypes.Map.IDataForMapTag = {};
 
@@ -51,7 +51,7 @@ namespace TwnsMcrCreateSearchMapPanel {
             if (!McrCreateSearchMapPanel._instance) {
                 McrCreateSearchMapPanel._instance = new McrCreateSearchMapPanel();
             }
-            McrCreateSearchMapPanel._instance.open(undefined);
+            McrCreateSearchMapPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (McrCreateSearchMapPanel._instance) {
@@ -145,7 +145,7 @@ namespace TwnsMcrCreateSearchMapPanel {
             } else if (hasFog == false) {
                 label.text = Lang.getText(LangTextType.B0013);
             } else {
-                label.text = undefined;
+                label.text = ``;
             }
         }
 

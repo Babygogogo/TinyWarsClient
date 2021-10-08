@@ -1,5 +1,7 @@
 
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -27,9 +29,9 @@ namespace TwnsWeActionAddUnitListPanel {
 
         private static _instance: WeActionAddUnitListPanel;
 
-        private _labelTitle : TwnsUiLabel.UiLabel;
-        private _btnClose   : TwnsUiButton.UiButton;
-        private _listType   : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
+        private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
 
         public static show(openData: OpenDataForWeActionAddUnitListPanel): void {
             if (!WeActionAddUnitListPanel._instance) {
@@ -64,7 +66,7 @@ namespace TwnsWeActionAddUnitListPanel {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -98,7 +100,7 @@ namespace TwnsWeActionAddUnitListPanel {
         dataForAddUnit  : IDataForAddUnit;
     };
     class TypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTypeRenderer> {
-        private _labelType  : TwnsUiLabel.UiLabel;
+        private readonly _labelType!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -115,17 +117,13 @@ namespace TwnsWeActionAddUnitListPanel {
             this._updateLabelType();
         }
 
-        private _onTouchedSelf(e: egret.TouchEvent): void {
-            const data = this.data;
-            if (data == null) {
-                return;
-            }
-
+        private _onTouchedSelf(): void {
+            const data = this._getData();
             resetUnitType(data.dataForAddUnit, data.newUnitType);
             WeActionAddUnitListPanel.hide();
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE
+        private _onNotifyLanguageChanged(): void {        // DONE
             this._updateComponentsForLanguage();
         }
 
@@ -137,25 +135,25 @@ namespace TwnsWeActionAddUnitListPanel {
             const data  = this.data;
             const label = this._labelType;
             if (data == null) {
-                label.text = undefined;
+                label.text = ``;
             } else {
-                label.text = Lang.getUnitName(data.newUnitType);
+                label.text = Lang.getUnitName(data.newUnitType) || CommonConstants.ErrorTextForUndefined;
             }
         }
     }
 
     function resetUnitType(data: IDataForAddUnit, unitType: Types.UnitType): void {
-        const unitData = data.unitData;
+        const unitData = Helpers.getExisted(data.unitData);
         if (unitData.unitType !== unitType) {
             unitData.unitType                   = unitType;
-            unitData.primaryWeaponCurrentAmmo   = undefined;
-            unitData.isCapturingTile            = undefined;
-            unitData.isDiving                   = undefined;
-            unitData.flareCurrentAmmo           = undefined;
-            unitData.currentFuel                = undefined;
-            unitData.currentBuildMaterial       = undefined;
-            unitData.currentProduceMaterial     = undefined;
-            unitData.isBuildingTile             = undefined;
+            unitData.primaryWeaponCurrentAmmo   = null;
+            unitData.isCapturingTile            = null;
+            unitData.isDiving                   = null;
+            unitData.flareCurrentAmmo           = null;
+            unitData.currentFuel                = null;
+            unitData.currentBuildMaterial       = null;
+            unitData.currentProduceMaterial     = null;
+            unitData.isBuildingTile             = null;
         }
     }
 }

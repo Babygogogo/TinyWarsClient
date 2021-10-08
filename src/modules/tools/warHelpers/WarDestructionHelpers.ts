@@ -1,9 +1,9 @@
 
 import TwnsBwWar            from "../../baseWar/model/BwWar";
-import CommonConstants      from "../helpers/CommonConstants";
-import Types                from "../helpers/Types";
-import Logger               from "../helpers/Logger";
 import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+import CommonConstants      from "../helpers/CommonConstants";
+import Helpers              from "../helpers/Helpers";
+import Types                from "../helpers/Types";
 
 namespace WarDestructionHelpers {
     import GridIndex        = Types.GridIndex;
@@ -11,18 +11,10 @@ namespace WarDestructionHelpers {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import BwWar            = TwnsBwWar.BwWar;
 
-    export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): ClientErrorCode {
-        const unitMap   = war.getUnitMap();
-        const unit      = unitMap.getUnitOnMap(gridIndex);
-        if (unit == null) {
-            return ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_00;
-        }
-
-        const allCoUnits = unitMap.getAllCoUnits(unit.getPlayerIndex());
-        if (allCoUnits == null) {
-            return ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_01;
-        }
-
+    export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): void {
+        const unitMap       = war.getUnitMap();
+        const unit          = Helpers.getExisted(unitMap.getUnitOnMap(gridIndex), ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_00);
+        const allCoUnits    = unitMap.getAllCoUnits(unit.getPlayerIndex());
         unitMap.removeUnitOnMap(gridIndex, true);
         war.getTileMap().getTile(gridIndex).updateOnUnitLeave();
 
@@ -35,11 +27,7 @@ namespace WarDestructionHelpers {
         const player                = unit.getPlayer();
         const destroyedCoUnitsCount = destroyedUnits.filter(u => u.getHasLoadedCo()).length;
         if (destroyedCoUnitsCount > 0) {
-            const currentEnergy = player.getCoCurrentEnergy();
-            if (currentEnergy == null) {
-                return ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_02;
-            }
-
+            const currentEnergy     = player.getCoCurrentEnergy();
             const totalCoUnitsCount = allCoUnits.length;
             const restCoUnitsCount  = totalCoUnitsCount - destroyedCoUnitsCount;
             player.setCoIsDestroyedInTurn(true);
@@ -58,14 +46,12 @@ namespace WarDestructionHelpers {
             const warView = war.getView();
             (warView) && (warView.showVibration());
         }
-
-        return ClientErrorCode.NoError;
     }
 
     export function destroyPlayerForce(war: BwWar, playerIndex: number, showExplosionEffect: boolean): void {
         const unitMap           = war.getUnitMap();
         const tileMap           = war.getTileMap();
-        const gridVisionEffect  = showExplosionEffect ? war.getGridVisionEffect() : undefined;
+        const gridVisionEffect  = showExplosionEffect ? war.getGridVisionEffect() : null;
         let hasRemovedUnit      = false;
         for (const unit of unitMap.getAllUnitsOnMap()) {
             if (unit.getPlayerIndex() === playerIndex) {
@@ -85,18 +71,8 @@ namespace WarDestructionHelpers {
 
         for (const tile of tileMap.getAllTiles()) {
             if (tile.getPlayerIndex() === playerIndex) {
-                const baseType = tile.getBaseType();
-                if (baseType == null) {
-                    Logger.error(`DestructionHelpers.destroyPlayerForce() empty baseType.`);
-                    continue;
-                }
-
-                const objectType = tile.getObjectType();
-                if (objectType == null) {
-                    Logger.error(`DestructionHelpers.destroyPlayerForce() empty objectType.`);
-                    continue;
-                }
-
+                const baseType      = tile.getBaseType();
+                const objectType    = tile.getObjectType();
                 const hp            = tile.getCurrentHp();
                 const buildPoint    = tile.getCurrentBuildPoint();
                 const capturePoint  = tile.getCurrentCapturePoint();
@@ -113,20 +89,20 @@ namespace WarDestructionHelpers {
 
         war.getFogMap().resetAllMapsForPlayer(playerIndex);
 
-        const player = war.getPlayer(playerIndex)!;
+        const player = war.getPlayer(playerIndex);
         player.setAliveState(Types.PlayerAliveState.Dead);
         player.setCoIsDestroyedInTurn(true);
         player.setCoCurrentEnergy(0);
         player.setCoUsingSkillType(Types.CoSkillType.Passive);
 
-        war.getDrawVoteManager().setRemainingVotes(undefined);
+        war.getDrawVoteManager().setRemainingVotes(null);
     }
 
     export function removeUnitOnMap(war: BwWar, gridIndex: GridIndex): void {
         war.getTileMap().getTile(gridIndex).updateOnUnitLeave();
 
         const unitMap   = war.getUnitMap();
-        const unit      = unitMap.getUnitOnMap(gridIndex)!;
+        const unit      = Helpers.getExisted(unitMap.getUnitOnMap(gridIndex));
 
         unitMap.removeUnitOnMap(gridIndex, true);
         for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
@@ -138,11 +114,6 @@ namespace WarDestructionHelpers {
         if (war.getFogMap().checkHasFogCurrently()) {
             for (const [unitId, unit] of unitMap.getLoadedUnits()) {
                 const teamIndex = unit.getTeamIndex();
-                if (teamIndex == null) {
-                    Logger.error(`DestructionHelpers.removeInvisibleLoadedUnits() empty teamIndex.`);
-                    continue;
-                }
-
                 if (!watcherTeamIndexes.has(teamIndex)) {
                     unitMap.removeUnitLoaded(unitId);
                 }

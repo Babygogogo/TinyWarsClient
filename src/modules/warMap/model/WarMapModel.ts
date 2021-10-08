@@ -1,10 +1,11 @@
 
-import Types            from "../../tools/helpers/Types";
-import Notify           from "../../tools/notify/Notify";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import WarMapProxy      from "./WarMapProxy";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import Lang             from "../../tools/lang/Lang";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import Notify               from "../../tools/notify/Notify";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import ProtoTypes           from "../../tools/proto/ProtoTypes";
+import WarMapProxy          from "./WarMapProxy";
 
 namespace WarMapModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -20,8 +21,8 @@ namespace WarMapModel {
     const _BRIEF_DATA_DICT      = new Map<number, IMapBriefData>();
 
     let _reviewingMaps          : IMapEditorData[];
-    const _rawDataRequests      = new Map<number, ((info: MsgMapGetRawDataIs | undefined | null) => void)[]>();
-    const _briefDataRequests    = new Map<number, ((info: MsgMapGetBriefDataIs | undefined | null) => void)[]>();
+    const _rawDataRequests      = new Map<number, ((info: MsgMapGetRawDataIs) => void)[]>();
+    const _briefDataRequests    = new Map<number, ((info: MsgMapGetBriefDataIs) => void)[]>();
 
     export function init(): void {
         // nothing to do.
@@ -30,7 +31,7 @@ namespace WarMapModel {
     export function resetBriefDataDict(dataList: IMapBriefData[]): void {
         _BRIEF_DATA_DICT.clear();
         for (const data of dataList || []) {
-            _BRIEF_DATA_DICT.set(data.mapExtraData.mapId, data);
+            _BRIEF_DATA_DICT.set(Helpers.getExisted(data.mapExtraData?.mapId), data);
         }
     }
     export function getBriefDataDict(): typeof _BRIEF_DATA_DICT {
@@ -38,11 +39,11 @@ namespace WarMapModel {
     }
 
     export function setBriefData(data: IMapBriefData): void {
-        _BRIEF_DATA_DICT.set(data.mapExtraData.mapId, data);
+        _BRIEF_DATA_DICT.set(Helpers.getExisted(data.mapExtraData?.mapId), data);
     }
-    export function getBriefData(mapId: number): Promise<IMapBriefData | undefined | null> {
+    export function getBriefData(mapId: number): Promise<IMapBriefData | null> {
         if (mapId == null) {
-            return new Promise<IMapBriefData>(resolve => resolve(undefined));
+            return new Promise<IMapBriefData | null>(resolve => resolve(null));
         }
 
         const localData = _BRIEF_DATA_DICT.get(mapId);
@@ -51,8 +52,8 @@ namespace WarMapModel {
         }
 
         if (_briefDataRequests.has(mapId)) {
-            return new Promise<IMapBriefData>((resolve) => {
-                _briefDataRequests.get(mapId).push(info => resolve(info.mapBriefData));
+            return new Promise<IMapBriefData | null>((resolve) => {
+                Helpers.getExisted(_briefDataRequests.get(mapId)).push(info => resolve(info.mapBriefData ?? null));
             });
         }
 
@@ -63,7 +64,7 @@ namespace WarMapModel {
                     Notify.removeEventListener(NotifyType.MsgMapGetBriefData,        callbackOnSucceed);
                     Notify.removeEventListener(NotifyType.MsgMapGetBriefDataFailed,  callbackOnFailed);
 
-                    for (const cb of _briefDataRequests.get(mapId)) {
+                    for (const cb of Helpers.getExisted(_briefDataRequests.get(mapId))) {
                         cb(data);
                     }
                     _briefDataRequests.delete(mapId);
@@ -77,7 +78,7 @@ namespace WarMapModel {
                     Notify.removeEventListener(NotifyType.MsgMapGetBriefData,        callbackOnSucceed);
                     Notify.removeEventListener(NotifyType.MsgMapGetBriefDataFailed,  callbackOnFailed);
 
-                    for (const cb of _briefDataRequests.get(mapId)) {
+                    for (const cb of Helpers.getExisted(_briefDataRequests.get(mapId))) {
                         cb(data);
                     }
                     _briefDataRequests.delete(mapId);
@@ -93,12 +94,12 @@ namespace WarMapModel {
         });
 
         return new Promise((resolve) => {
-            _briefDataRequests.set(mapId, [info => resolve(info.mapBriefData)]);
+            _briefDataRequests.set(mapId, [info => resolve(info.mapBriefData ?? null)]);
         });
     }
     export function updateOnSetMapEnabled(data: ProtoTypes.NetMessage.MsgMmSetMapEnabled.IS): void {
         if (!data.isEnabled) {
-            _BRIEF_DATA_DICT.delete(data.mapId);
+            _BRIEF_DATA_DICT.delete(Helpers.getExisted(data.mapId));
         }
     }
 
@@ -111,34 +112,11 @@ namespace WarMapModel {
         }
     }
     export async function getDesignerName(mapId: number): Promise<string | null> {
-        const rawData = await getRawData(mapId);
-        return rawData ? rawData.designerName : null;
-    }
-    export async function getPlayerRule(mapId: number, warRuleId: number, playerIndex: number): Promise<ProtoTypes.WarRule.IDataForPlayerRule | undefined> {
-        const mapRawData = await getRawData(mapId);
-        if (mapRawData == null) {
-            return undefined;
-        }
-
-        const warRule = (mapRawData.warRuleArray || []).find(v => v.ruleId === warRuleId);
-        if (warRuleId == null) {
-            return undefined;
-        }
-
-        const ruleForPlayers = warRule.ruleForPlayers;
-        if (ruleForPlayers == null) {
-            return undefined;
-        }
-
-        return (ruleForPlayers.playerRuleDataArray || []).find(v => v.playerIndex === playerIndex);
+        return (await getRawData(mapId))?.designerName ?? null;
     }
     export async function getMultiPlayerTotalPlayedTimes(mapId: number): Promise<number> {
-        const mapBriefData = await getBriefData(mapId);
-        if (!mapBriefData) {
-            return undefined;
-        }
-
-        const complexInfo   = mapBriefData.mapExtraData.mapComplexInfo;
+        const mapBriefData  = Helpers.getExisted(await getBriefData(mapId));
+        const complexInfo   = mapBriefData.mapExtraData?.mapComplexInfo;
         let totalTimes      = 0;
         for (const info of complexInfo ? complexInfo.warStatisticsArray || [] : []) {
             if ((info.warType === WarType.McwFog) ||
@@ -152,21 +130,27 @@ namespace WarMapModel {
 
         return totalTimes;
     }
-    export async function getAverageRating(mapId: number): Promise<number> {
+    export async function getAverageRating(mapId: number): Promise<number | null> {
         const mapBriefData = await getBriefData(mapId);
         const mapExtraData = mapBriefData ? mapBriefData.mapExtraData : null;
-        const totalRaters   = mapExtraData ? mapExtraData.totalRaters : null;
-        return totalRaters ? mapExtraData.totalRating / totalRaters : undefined;
+        const totalRaters  = mapExtraData ? mapExtraData.totalRaters : null;
+        return totalRaters
+            ? (Helpers.getExisted(mapExtraData?.totalRating) / totalRaters)
+            : null;
+    }
+    export async function getTotalRatersCount(mapId: number): Promise<number | null> {
+        const mapBriefData = await getBriefData(mapId);
+        return mapBriefData ? mapBriefData.mapExtraData?.totalRaters ?? 0 : null;
     }
 
     export function updateRawDataDict(dataList: IMapRawData[]): void {
         for (const data of dataList || []) {
-            setRawData(data.mapId, data);
+            setRawData(Helpers.getExisted(data.mapId), data);
         }
     }
-    export function getRawData(mapId: number): Promise<IMapRawData | undefined> {
+    export function getRawData(mapId: number): Promise<IMapRawData | null> {
         if (mapId == null) {
-            return new Promise<IMapRawData>((resolve) => resolve(undefined));
+            return new Promise<IMapRawData | null>((resolve) => resolve(null));
         }
 
         const localData = getLocalMapRawData(mapId);
@@ -175,8 +159,8 @@ namespace WarMapModel {
         }
 
         if (_rawDataRequests.has(mapId)) {
-            return new Promise<IMapRawData>((resolve) => {
-                _rawDataRequests.get(mapId).push(info => resolve(info.mapRawData));
+            return new Promise<IMapRawData | null>((resolve) => {
+                Helpers.getExisted(_rawDataRequests.get(mapId)).push(info => resolve(info.mapRawData ?? null));
             });
         }
 
@@ -187,7 +171,7 @@ namespace WarMapModel {
                     Notify.removeEventListener(NotifyType.MsgMapGetRawData,        callbackOnSucceed);
                     Notify.removeEventListener(NotifyType.MsgMapGetRawDataFailed,  callbackOnFailed);
 
-                    for (const cb of _rawDataRequests.get(mapId)) {
+                    for (const cb of Helpers.getExisted(_rawDataRequests.get(mapId))) {
                         cb(data);
                     }
                     _rawDataRequests.delete(mapId);
@@ -201,7 +185,7 @@ namespace WarMapModel {
                     Notify.removeEventListener(NotifyType.MsgMapGetRawData,        callbackOnSucceed);
                     Notify.removeEventListener(NotifyType.MsgMapGetRawDataFailed,  callbackOnFailed);
 
-                    for (const cb of _rawDataRequests.get(mapId)) {
+                    for (const cb of Helpers.getExisted(_rawDataRequests.get(mapId))) {
                         cb(data);
                     }
                     _rawDataRequests.delete(mapId);
@@ -217,7 +201,7 @@ namespace WarMapModel {
         });
 
         return new Promise((resolve) => {
-            _rawDataRequests.set(mapId, [info => resolve(info.mapRawData)]);
+            _rawDataRequests.set(mapId, [info => resolve(info.mapRawData ?? null)]);
         });
     }
     export function setRawData(mapId: number, mapRawData: IMapRawData): void {
@@ -227,14 +211,14 @@ namespace WarMapModel {
         _RAW_DATA_DICT.set(mapId, mapRawData);
     }
 
-    function getLocalMapRawData(mapId: number): IMapRawData | undefined {
+    function getLocalMapRawData(mapId: number): IMapRawData | null {
         // LocalStorage的地图版本可能比服务器上的旧，因此暂时禁用
         // if (!_RAW_DATA_DICT.has(mapId)) {
         //     const data = LocalStorage.getMapRawData(mapId);
         //     (data) && (_RAW_DATA_DICT.set(mapId, data));
         // }
 
-        return _RAW_DATA_DICT.get(mapId);
+        return _RAW_DATA_DICT.get(mapId) ?? null;
     }
 
     export function setMmReviewingMaps(maps: IMapEditorData[]): void {

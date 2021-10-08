@@ -4,7 +4,6 @@ import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
 import Helpers                  from "../../tools/helpers/Helpers";
-import Logger                   from "../../tools/helpers/Logger";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -26,9 +25,9 @@ namespace TwnsCommonBanCoPanel {
         configVersion       : string;
         bannedCoIdArray     : number[];
         fullCoIdArray       : number[];
-        maxBanCount         : number | undefined;
-        selfCoId            : number | undefined;
-        callbackOnConfirm   : ((bannedCoIdSet: Set<number>) => void) | undefined;
+        maxBanCount         : number | null;
+        selfCoId            : number | null;
+        callbackOnConfirm   : ((bannedCoIdSet: Set<number>) => void) | null;
     };
     export class CommonBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBanCoPanel> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
@@ -36,21 +35,21 @@ namespace TwnsCommonBanCoPanel {
 
         private static _instance: CommonBanCoPanel;
 
-        private readonly _imgMask                   : TwnsUiImage.UiImage;
-        private readonly _group                     : eui.Group;
-        private readonly _labelAvailableCoTitle     : TwnsUiLabel.UiLabel;
+        private readonly _imgMask!                  : TwnsUiImage.UiImage;
+        private readonly _group!                    : eui.Group;
+        private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;
         // private readonly _groupCoTiers              : eui.Group;
-        private readonly _groupCoNames              : eui.Group;
-        private readonly _btnCancel                 : TwnsUiButton.UiButton;
-        private readonly _btnConfirm                : TwnsUiButton.UiButton;
-        private readonly _btnClose                  : TwnsUiButton.UiButton;
-        private readonly _uiCoInfo                  : TwnsUiCoInfo.UiCoInfo;
+        private readonly _groupCoNames!             : eui.Group;
+        private readonly _btnCancel!                : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!               : TwnsUiButton.UiButton;
+        private readonly _btnClose!                 : TwnsUiButton.UiButton;
+        private readonly _uiCoInfo!                 : TwnsUiCoInfo.UiCoInfo;
 
         // private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
         private _bannedCoIdSet          = new Set<number>();
-        private _previewCoId            : number;
+        private _previewCoId            : number | null = null;
 
         public static show(openData: OpenDataForCommonBanCoPanel): void {
             if (!CommonBanCoPanel._instance) {
@@ -112,7 +111,7 @@ namespace TwnsCommonBanCoPanel {
                 this._updateComponentsForPreviewCoId();
             }
         }
-        private _getPreviewCoId(): number {
+        private _getPreviewCoId(): number | null {
             return this._previewCoId;
         }
 
@@ -127,7 +126,7 @@ namespace TwnsCommonBanCoPanel {
             const openData = this._getOpenData();
             const callback = openData.callbackOnConfirm;
             if (callback == null) {
-                Logger.error(`CommonBanCoPanel._onTouchedBtnConfirm() empty callback.`);
+                throw Helpers.newError(`CommonBanCoPanel._onTouchedBtnConfirm() empty callback.`);
             } else {
                 const bannedCoIdSet = this._bannedCoIdSet;
                 if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
@@ -189,7 +188,7 @@ namespace TwnsCommonBanCoPanel {
 
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
             const renderer  = e.currentTarget as RendererForCoName;
-            const coId      = renderer.getCoId();
+            const coId      = Helpers.getExisted(renderer.getCoId());
             this._setPreviewCoId(coId);
 
             const openData = this._getOpenData();
@@ -330,7 +329,7 @@ namespace TwnsCommonBanCoPanel {
         private _updateGroupCoNames(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             for (const renderer of this._renderersForCoNames) {
-                renderer.setIsAvailable(!bannedCoIdSet.has(renderer.getCoId()));
+                renderer.setIsAvailable(!bannedCoIdSet.has(Helpers.getExisted(renderer.getCoId())));
             }
         }
 
@@ -432,13 +431,13 @@ namespace TwnsCommonBanCoPanel {
     // }
 
     class RendererForCoName extends TwnsUiComponent.UiComponent {
-        private readonly _imgUnselected : TwnsUiImage.UiImage;
-        private readonly _imgSelected   : TwnsUiImage.UiImage;
-        private readonly _labelName     : TwnsUiLabel.UiLabel;
+        private readonly _imgUnselected!    : TwnsUiImage.UiImage;
+        private readonly _imgSelected!      : TwnsUiImage.UiImage;
+        private readonly _labelName!        : TwnsUiLabel.UiLabel;
 
-        private _configVersion  : string;
-        private _coId           : number;
-        private _isAvailable    : boolean;
+        private _configVersion  : string | null = null;
+        private _coId           : number | null = null;
+        private _isAvailable    : boolean | null = null;
 
         public constructor() {
             super();
@@ -458,7 +457,7 @@ namespace TwnsCommonBanCoPanel {
             this._coId = coId;
             this._updateView();
         }
-        public getCoId(): number {
+        public getCoId(): number | null {
             return this._coId;
         }
 
@@ -466,7 +465,7 @@ namespace TwnsCommonBanCoPanel {
             this._isAvailable = isAvailable;
             this._updateView();
         }
-        public getIsAvailable(): boolean {
+        public getIsAvailable(): boolean | null {
             return this._isAvailable;
         }
 
@@ -475,10 +474,10 @@ namespace TwnsCommonBanCoPanel {
                 return;
             }
 
-            const isAvailable           = this._isAvailable;
+            const isAvailable           = !!this._isAvailable;
             this._imgSelected.visible   = isAvailable;
             this._imgUnselected.visible = !isAvailable;
-            this._labelName.text        = ConfigManager.getCoBasicCfg(this._configVersion, this._coId)?.name || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = ConfigManager.getCoBasicCfg(Helpers.getExisted(this._configVersion), Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined;
         }
     }
 }

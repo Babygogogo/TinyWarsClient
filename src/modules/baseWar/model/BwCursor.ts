@@ -1,5 +1,4 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import Helpers              from "../../tools/helpers/Helpers";
 import SoundManager         from "../../tools/helpers/SoundManager";
 import Types                from "../../tools/helpers/Types";
@@ -11,44 +10,37 @@ import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwCursor {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar            = TwnsBwWar.BwWar;
-    import BwCursorView     = TwnsBwCursorView.BwCursorView;
 
     export class BwCursor {
         private _gridX              = 0;
         private _gridY              = 0;
-        private _previousGridIndex  : Types.GridIndex;
-        private _mapSize            : Types.MapSize;
+        private _previousGridIndex  : Types.GridIndex | null = null;
+        private _mapSize?           : Types.MapSize;
         private _isMovableByTouches = true;
-        private readonly _view      = new BwCursorView();
+        private readonly _view      = new TwnsBwCursorView.BwCursorView();
 
-        private _war    : BwWar;
+        private _war?               : TwnsBwWar.BwWar;
 
         private _notifyListeners: Notify.Listener[] = [
             { type: NotifyType.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
             { type: NotifyType.BwCursorDragged,                callback: this._onNotifyBwCursorDragged },
-            { type: NotifyType.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
-        public init(mapSize: Types.MapSize): ClientErrorCode {
+        public init(mapSize: Types.MapSize): void {
             this._setMapSize(Helpers.deepClone(mapSize));
             this.setGridIndex({ x: 0, y: 0 });
 
             this.getView().init(this);
-
-            return ClientErrorCode.NoError;
         }
-        public fastInit(mapSize: Types.MapSize): ClientErrorCode {
+        public fastInit(): void {
             this.getView().fastInit(this);
-
-            return ClientErrorCode.NoError;
         }
 
-        public startRunning(war: BwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             this._war = war;
 
-            Notify.addEventListeners(this._notifyListeners, this, undefined, 10);
+            Notify.addEventListeners(this._notifyListeners, this, false, 10);
         }
         public startRunningView(): void {
             this.getView().startRunningView();
@@ -77,18 +69,18 @@ namespace TwnsBwCursor {
                 SoundManager.playShortSfx(Types.ShortSfxCode.CursorMove01);
             }
         }
-        private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwActionPlannerStateChanged(): void {
             this.updateView();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWar(): BwWar {
-            return this._war;
+        public getWar(): TwnsBwWar.BwWar {
+            return Helpers.getExisted(this._war);
         }
 
-        public getView(): BwCursorView {
+        public getView(): TwnsBwCursorView.BwCursorView {
             return this._view;
         }
         public updateView(): void {
@@ -109,7 +101,7 @@ namespace TwnsBwCursor {
             this._mapSize = size;
         }
         public getMapSize(): Types.MapSize {
-            return this._mapSize;
+            return Helpers.getExisted(this._mapSize);
         }
 
         public getGridX(): number {
@@ -123,7 +115,7 @@ namespace TwnsBwCursor {
 
             this._gridX = gridIndex.x;
             this._gridY = gridIndex.y;
-            Notify.dispatch(NotifyType.BwCursorGridIndexChanged);
+            Notify.dispatch(NotifyType.BwCursorGridIndexChanged, this);
         }
         public getGridIndex(): Types.GridIndex {
             return { x: this.getGridX(), y: this.getGridY() };
@@ -132,7 +124,7 @@ namespace TwnsBwCursor {
         private _setPreviousGridIndex(gridIndex: Types.GridIndex): void {
             this._previousGridIndex = gridIndex;
         }
-        public getPreviousGridIndex(): Types.GridIndex | undefined {
+        public getPreviousGridIndex(): Types.GridIndex | null {
             return this._previousGridIndex;
         }
 

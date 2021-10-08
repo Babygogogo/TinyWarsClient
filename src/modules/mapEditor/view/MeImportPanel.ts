@@ -1,5 +1,7 @@
 
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -23,15 +25,15 @@ namespace TwnsMeImportPanel {
 
         private static _instance: MeImportPanel;
 
-        private _group      : eui.Group;
-        private _listMap    : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
-        private _btnCancel  : TwnsUiButton.UiButton;
+        private readonly _group!        : eui.Group;
+        private readonly _listMap!      : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MeImportPanel._instance) {
                 MeImportPanel._instance = new MeImportPanel();
             }
-            MeImportPanel._instance.open(undefined);
+            MeImportPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeImportPanel._instance) {
@@ -65,7 +67,7 @@ namespace TwnsMeImportPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -81,7 +83,7 @@ namespace TwnsMeImportPanel {
             for (const [mapFileName] of WarMapModel.getBriefDataDict()) {
                 dataList.push({
                     mapId: mapFileName,
-                    mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapFileName),
+                    mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapFileName) ?? CommonConstants.ErrorTextForUndefined,
                     panel       : this,
                 });
             }
@@ -100,20 +102,20 @@ namespace TwnsMeImportPanel {
         panel   : MeImportPanel;
     };
     class MapRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapRenderer> {
-        private _group          : eui.Group;
-        private _labelName      : TwnsUiLabel.UiLabel;
+        private readonly _group!        : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data              = this.data;
+            const data              = this._getData();
             this._labelName.text    = data.mapName;
         }
 
         public onItemTapEvent(): void {
-            const data = this.data;
+            const data = this._getData();
             CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0095) + `\n"${data.mapName}"`,
                 callback: async () => {
-                    const war = MeModel.getWar();
+                    const war = Helpers.getExisted(MeModel.getWar());
                     war.stopRunning();
                     await war.initWithMapEditorData({
                         mapRawData  : await WarMapModel.getRawData(data.mapId),

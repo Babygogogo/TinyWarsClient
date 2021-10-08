@@ -1,13 +1,13 @@
 
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Types                from "../../tools/helpers/Types";
-import Helpers              from "../../tools/helpers/Helpers";
-import Lang                 from "../../tools/lang/Lang";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonAlertPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -25,12 +25,12 @@ namespace TwnsCommonAlertPanel {
 
         private static _instance: CommonAlertPanel;
 
-        private readonly _imgMask       : TwnsUiImage.UiImage;
-        private readonly _group         : eui.Group;
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        private readonly _scrContent    : eui.Scroller;
-        private readonly _labelContent  : TwnsUiLabel.UiLabel;
-        private readonly _btnConfirm    : TwnsUiButton.UiButton;
+        private readonly _imgMask!      : TwnsUiImage.UiImage;
+        private readonly _group!        : eui.Group;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _scrContent!   : eui.Scroller;
+        private readonly _labelContent! : TwnsUiLabel.UiLabel;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!CommonAlertPanel._instance) {
@@ -74,14 +74,14 @@ namespace TwnsCommonAlertPanel {
             await this._showCloseAnimation();
         }
 
-        private _onTouchedBtnClose(e: egret.TouchEvent): void {
+        private _onTouchedBtnClose(): void {
             const openData = this._getOpenData();
             (openData.callback) && (openData.callback());
 
             this.close();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

@@ -1,7 +1,7 @@
 
-import SoundManager     from "../../tools/helpers/SoundManager";
-import Types            from "../../tools/helpers/Types";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import SoundManager         from "../../tools/helpers/SoundManager";
+import Types                from "../../tools/helpers/Types";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsBwCaptureProgressPanel {
     type OpenDataForBwCaptureProgressPanel = {
@@ -16,8 +16,8 @@ namespace TwnsBwCaptureProgressPanel {
 
         private static _instance: BwCaptureProgressPanel;
 
-        private readonly _group         : eui.Group;
-        private readonly _pbarProgress  : eui.ProgressBar;
+        private readonly _group!        : eui.Group;
+        private readonly _pbarProgress! : eui.ProgressBar;
 
         public static show(openData: OpenDataForBwCaptureProgressPanel): void {
             if (!BwCaptureProgressPanel._instance) {

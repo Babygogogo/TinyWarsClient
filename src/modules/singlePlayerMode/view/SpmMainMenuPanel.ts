@@ -27,21 +27,21 @@ namespace TwnsSpmMainMenuPanel {
 
         private static _instance: SpmMainMenuPanel;
 
-        private readonly _groupLeft         : eui.Group;
-        private readonly _btnCampaign       : TwnsUiButton.UiButton;
-        private readonly _btnCreateCustomWar: TwnsUiButton.UiButton;
-        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
+        private readonly _groupLeft!            : eui.Group;
+        private readonly _btnCampaign!          : TwnsUiButton.UiButton;
+        private readonly _btnCreateCustomWar!   : TwnsUiButton.UiButton;
+        private readonly _btnContinueWar!       : TwnsUiButton.UiButton;
 
-        private readonly _group             : eui.Group;
-        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
-        private readonly _btnRanking        : TwnsUiButton.UiButton;
-        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
+        private readonly _group!                : eui.Group;
+        private readonly _btnMultiPlayer!       : TwnsUiButton.UiButton;
+        private readonly _btnRanking!           : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer!      : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!SpmMainMenuPanel._instance) {
                 SpmMainMenuPanel._instance = new SpmMainMenuPanel();
             }
-            SpmMainMenuPanel._instance.open(undefined);
+            SpmMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -78,28 +78,28 @@ namespace TwnsSpmMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onMsgUserLogout(e: egret.Event): void {
+        private _onMsgUserLogout(): void {
             this.close();
         }
 
-        private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
+        private _onTouchedBtnMultiPlayer(): void {
             this.close();
             TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
         }
-        private _onTouchedBtnRanking(e: egret.TouchEvent): void {
+        private _onTouchedBtnRanking(): void {
             this.close();
             TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
         }
-        private _onTouchedBtnCampaign(e: egret.TouchEvent): void {
+        private _onTouchedBtnCampaign(): void {
             FloatText.show(Lang.getText(LangTextType.A0053));
         }
-        private _onTouchedBtnCreateCustomWar(e: egret.TouchEvent): void {
+        private _onTouchedBtnCreateCustomWar(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            ScrCreateMapListPanel.show();
+            ScrCreateMapListPanel.show(null);
         }
-        private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
+        private _onTouchedBtnContinueWar(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
@@ -157,7 +157,7 @@ namespace TwnsSpmMainMenuPanel {
             });
         }
         private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve, reject) => {
+            return new Promise<void>((resolve) => {
                 const group = this._group;
                 Tween.removeTweens(group);
                 Tween.get(group)

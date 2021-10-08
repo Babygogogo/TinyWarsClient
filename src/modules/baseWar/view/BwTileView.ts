@@ -1,7 +1,7 @@
 
 import CommonModel      from "../../common/model/CommonModel";
 import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Logger           from "../../tools/helpers/Logger";
+import Helpers          from "../../tools/helpers/Helpers";
 import Timer            from "../../tools/helpers/Timer";
 import Types            from "../../tools/helpers/Types";
 import ProtoTypes       from "../../tools/proto/ProtoTypes";
@@ -26,7 +26,7 @@ namespace TwnsBwTileView {
         private readonly _imgDecorator  = new TwnsUiImage.UiImage();
         private readonly _imgObject     = new TwnsUiImage.UiImage();
 
-        private _data   : DataForTileView;
+        private _data   : DataForTileView | null = null;
 
         public constructor() {
             this._imgBase.anchorOffsetY         = GRID_HEIGHT;
@@ -37,35 +37,15 @@ namespace TwnsBwTileView {
         public setData(data: DataForTileView): void {
             this._data = data;
         }
-        public getData(): DataForTileView {
+        public getData(): DataForTileView | null {
             return this._data;
         }
 
         public updateView(): void {
-            const data = this.getData();
-            if (data == null) {
-                Logger.error(`BwTileView.updateView() empty tileData.`);
-                return undefined;
-            }
-
-            const skinId = data.skinId;
-            if (skinId == null) {
-                Logger.error(`BwTileView.updateView() empty skinId.`);
-                return undefined;
-            }
-
-            const hasFog = data.hasFog;
-            if (hasFog == null) {
-                Logger.error(`BwTileView.updateView() empty hasFog.`);
-                return undefined;
-            }
-
-            const tileData = data.tileData;
-            if (tileData == null) {
-                Logger.error(`BwTileView.updateView() empty tileData.`);
-                return undefined;
-            }
-
+            const data      = Helpers.getExisted(this.getData());
+            const skinId    = Helpers.getExisted(data.skinId);
+            const hasFog    = Helpers.getExisted(data.hasFog);
+            const tileData  = Helpers.getExisted(data.tileData);
             const version   = UserModel.getSelfSettingsTextureVersion();
             const tickCount = Timer.getTileAnimationTickCount();
 
@@ -73,8 +53,7 @@ namespace TwnsBwTileView {
                 const objectType    = tileData.objectType;
                 const imgObject     = this.getImgObject();
                 if (objectType == null) {
-                    Logger.error(`BwTileView.updateView() empty objectType.`);
-                    imgObject.visible = false;
+                    throw Helpers.newError(`BwTileView.updateView() empty objectType.`);
                 } else if (objectType === TileObjectType.Empty) {
                     imgObject.visible = false;
                 } else {
@@ -94,8 +73,7 @@ namespace TwnsBwTileView {
                 const baseType  = tileData.baseType;
                 const imgBase   = this.getImgBase();
                 if (baseType == null) {
-                    Logger.error(`BwTileView.updateView() empty baseType.`);
-                    imgBase.visible = false;
+                    throw Helpers.newError(`BwTileView.updateView() empty baseType.`);
                 } else if (baseType === TileBaseType.Empty) {
                     imgBase.visible = false;
                 } else {
@@ -122,7 +100,7 @@ namespace TwnsBwTileView {
                         version,
                         skinId          : CommonConstants.UnitAndTileNeutralSkinId,
                         decoratorType,
-                        shapeId         : tileData.decoratorShapeId,
+                        shapeId         : tileData.decoratorShapeId ?? null,
                         isDark          : hasFog,
                         tickCount,
                     });

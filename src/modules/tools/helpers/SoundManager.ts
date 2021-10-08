@@ -1,12 +1,12 @@
 
-import TwnsBwWar        from "../../baseWar/model/BwWar";
-import Lang             from "../lang/Lang";
-import TwnsLangTextType from "../lang/LangTextType";
-import FloatText        from "./FloatText";
-import Helpers          from "./Helpers";
-import LocalStorage     from "./LocalStorage";
-import Logger           from "./Logger";
-import Types            from "./Types";
+import TwnsBwWar            from "../../baseWar/model/BwWar";
+import Lang                 from "../lang/Lang";
+import TwnsLangTextType     from "../lang/LangTextType";
+import FloatText            from "./FloatText";
+import Helpers              from "./Helpers";
+import LocalStorage         from "./LocalStorage";
+import Logger               from "./Logger";
+import Types                from "./Types";
 
 namespace SoundManager {
     import SoundType            = Types.SoundType;
@@ -52,11 +52,12 @@ namespace SoundManager {
         // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
     ]);
     const _SHORT_SFX_PARAM = new Map<ShortSfxCode, ShortSfxParams>([
-        [ ShortSfxCode.ButtonNeutral01,   { name: "buttonNeutral01.mp3" } ],
-        [ ShortSfxCode.ButtonConfirm01,   { name: "buttonConfirm01.mp3" } ],
-        [ ShortSfxCode.ButtonCancel01,    { name: "buttonCancel01.mp3"  } ],
-        [ ShortSfxCode.CursorConfirm01,   { name: "cursorConfirm01.mp3" } ],
-        [ ShortSfxCode.CursorMove01,      { name: "cursorMove01.mp3"    } ],
+        [ ShortSfxCode.ButtonNeutral01,     { name: "buttonNeutral01.mp3" } ],
+        [ ShortSfxCode.ButtonConfirm01,     { name: "buttonConfirm01.mp3" } ],
+        [ ShortSfxCode.ButtonCancel01,      { name: "buttonCancel01.mp3"  } ],
+        [ ShortSfxCode.ButtonForbidden01,   { name: `buttonForbidden01.mp3`} ],
+        [ ShortSfxCode.CursorConfirm01,     { name: "cursorConfirm01.mp3" } ],
+        [ ShortSfxCode.CursorMove01,        { name: "cursorMove01.mp3"    } ],
     ]);
 
     let _isInitialized          = false;
@@ -68,13 +69,13 @@ namespace SoundManager {
 
     const _bgmBufferCache       = new Map<BgmCode, AudioBuffer>();
     let _bgmGain                : GainNode;
-    let _bgmSourceNode          : AudioBufferSourceNode | undefined;
+    let _bgmSourceNode          : AudioBufferSourceNode | null = null;
 
     let _effectMute             = DEFAULT_MUTE;
     let _effectVolume           = DEFAULT_VOLUME;
 
     const _shortSfxBufferCache  = new Map<ShortSfxCode, AudioBuffer>();
-    // const _shortSfxDict         : { [shortSfxCode: number]: egret.SoundChannel | undefined } = {};
+    // const _shortSfxDict         : { [shortSfxCode: number]: egret.SoundChannel | null } = {};
     let _sfxGain                : GainNode;
 
     // const audio = new Audio(getResourcePath("war01.mp3", SoundType.Bgm));
@@ -119,7 +120,7 @@ namespace SoundManager {
         try {
             _audioContext.resume();
         } catch (e) {
-            // Logger.error(`SoundManager.resume() error.`);
+            // throw Helpers.newError(`SoundManager.resume() error.`);
         }
     }
     export function pause(): void {
@@ -128,7 +129,7 @@ namespace SoundManager {
         try {
             _audioContext.suspend();
         } catch (e) {
-            // Logger.error(`SoundManager.pause() error.`);
+            // throw Helpers.newError(`SoundManager.pause() error.`);
         }
         _stopAllShortSfx();
     }
@@ -159,8 +160,7 @@ namespace SoundManager {
     export function playCoBgmWithWar(war: TwnsBwWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
         if (player == null) {
-            Logger.error(`SoundManager.playCoBgmWithWar() empty player.`);
-            return;
+            throw Helpers.newError(`SoundManager.playCoBgmWithWar() empty player.`);
         }
 
         if ((player.checkIsNeutral()) && (!force)) {
@@ -249,8 +249,7 @@ namespace SoundManager {
     async function _playBgmForNormal(bgmCode: BgmCode): Promise<void> {
         const params = _BGM_PARAMS.get(bgmCode);
         if (params == null) {
-            Logger.error(`SoundManager._playBgmForNormal() empty params.`);
-            return;
+            throw Helpers.newError(`SoundManager._playBgmForNormal() empty params.`);
         }
 
         const cacheDict     = _bgmBufferCache;
@@ -260,12 +259,16 @@ namespace SoundManager {
         } else {
             const path = getResourcePath(params.name, SoundType.Bgm);
             if (path == null) {
-                Logger.error(`SoundManager._playBgmForNormal() empty path.`);
-                return;
+                throw Helpers.newError(`SoundManager._playBgmForNormal() empty path.`);
             }
 
-            const audioBuffer = await loadAudioBuffer(path);
-            if (audioBuffer == null) {
+            const audioBuffer = await loadAudioBuffer(path).catch(err => {
+                // CompatibilityHelpers.showError(err); throw err;
+                Logger.error(`SoundManager._playBgmForNormal() loadAudioBuffer error: ${(err as Error).message}.`);
+                return;
+            });
+            if (!audioBuffer) {
+                // throw Helpers.newError(`SoundManager._playBgmForNormal() empty audioBuffer.`);
                 Logger.error(`SoundManager._playBgmForNormal() empty audioBuffer.`);
                 return;
             }
@@ -295,13 +298,9 @@ namespace SoundManager {
     }
     function _stopBgmForNormal(): void {
         if (_bgmSourceNode) {
-            try {
-                _bgmSourceNode.stop();
-                _bgmSourceNode.disconnect();
-            } catch (e) {
-                Logger.error(`SoundManager._stopBgmForNormal() error.`);
-            }
-            _bgmSourceNode = undefined;
+            _bgmSourceNode.stop();
+            _bgmSourceNode.disconnect();
+            _bgmSourceNode = null;
         }
     }
 
@@ -366,8 +365,7 @@ namespace SoundManager {
 
         const params = _SHORT_SFX_PARAM.get(shortSfxCode);
         if (params == null) {
-            Logger.error(`SoundManager.playShortSfx() empty params.`);
-            return;
+            throw Helpers.newError(`SoundManager.playShortSfx() empty params.`);
         }
 
         const cacheDict     = _shortSfxBufferCache;
@@ -377,12 +375,16 @@ namespace SoundManager {
         } else {
             const path = getResourcePath(params.name, SoundType.Effect);
             if (path == null) {
-                Logger.error(`SoundManager._playEffectForNormal() empty path.`);
-                return;
+                throw Helpers.newError(`SoundManager._playEffectForNormal() empty path.`);
             }
 
-            const audioBuffer = await loadAudioBuffer(path);
-            if (audioBuffer == null) {
+            const audioBuffer = await loadAudioBuffer(path).catch(err => {
+                // CompatibilityHelpers.showError(err); throw err;
+                Logger.error(`SoundManager.playShortSfx() loadAudioBuffer error: ${(err as Error).message}`);
+                return;
+            });
+            if (!audioBuffer) {
+                // throw Helpers.newError(`SoundManager.playShortSfx() empty audioBuffer.`);
                 Logger.error(`SoundManager.playShortSfx() empty audioBuffer.`);
                 return;
             }
@@ -411,9 +413,9 @@ namespace SoundManager {
     //         try {
     //             eff.stop();
     //         } catch (e) {
-    //             Logger.error(`SoundManager._stopShortSfx() error.`);
+    //             throw Helpers.newError(`SoundManager._stopShortSfx() error.`);
     //         }
-    //         effectDict[shortSfxCode] = undefined;
+    //         effectDict[shortSfxCode] = null;
     //     }
     // }
 
@@ -425,7 +427,7 @@ namespace SoundManager {
         //         try {
         //             eff.stop();
         //         } catch (e) {
-        //             Logger.error(`SoundManager._stopAllShortSfx() error.`);
+        //             throw Helpers.newError(`SoundManager._stopAllShortSfx() error.`);
         //         }
         //     }
         // }
@@ -450,17 +452,17 @@ namespace SoundManager {
         _stopAllShortSfx();
     }
 
-    function getResourcePath(musicName: string, soundType: SoundType): string | undefined {
+    function getResourcePath(musicName: string, soundType: SoundType): string | null {
         switch (soundType) {
             case SoundType.Bgm      : return _SOUND_PATH + "bgm/" + musicName;
             case SoundType.Effect   : return _SOUND_PATH + "effect/" + musicName;
-            default                 : return undefined;
+            default                 : return null;
         }
     }
 
-    async function loadAudioBuffer(fullName: string): Promise<AudioBuffer | undefined> {
+    async function loadAudioBuffer(fullName: string): Promise<AudioBuffer | null> {
         if (!_audioContext) {
-            return undefined;
+            return null;
         }
 
         const arrayBuffer = await RES.getResByUrl(
@@ -468,14 +470,19 @@ namespace SoundManager {
             () => {
                 // nothing to do.
             },
-            undefined,
+            null,
             RES.ResourceItem.TYPE_BIN
         );
         if (!arrayBuffer) {
-            return undefined;
+            return null;
         }
 
-        return await _audioContext.decodeAudioData(arrayBuffer);
+        const buffer = await _audioContext.decodeAudioData(arrayBuffer).catch(err => {
+            // CompatibilityHelpers.showError(err); throw err;
+            Logger.error(`SoundManager.loadAudioBuffer() decodeAudioData error: ${(err as Error).message}`);
+            return null;
+        });
+        return buffer;
     }
 }
 

@@ -1,4 +1,5 @@
 
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -35,7 +36,7 @@ namespace TwnsWwHandleRequestDetailPanel {
         private readonly _btnConfirm!               : TwnsUiButton.UiButton;
         private readonly _btnCancel!                : TwnsUiButton.UiButton;
 
-        private _dataForListPlayer  : DataForRequesterRenderer[] | undefined;
+        private _dataForListPlayer  : DataForRequesterRenderer[] | null = null;
 
         public static show(openData: OpenDataForMcrWatchHandleRequestDetailPanel): void {
             if (!WwHandleRequestDetailPanel._instance) {
@@ -72,7 +73,7 @@ namespace TwnsWwHandleRequestDetailPanel {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._dataForListPlayer = undefined;
+            this._dataForListPlayer = null;
         }
 
         public setRequesterSelected(index: number, selected: boolean): void {
@@ -160,17 +161,17 @@ namespace TwnsWwHandleRequestDetailPanel {
         private readonly _imgDecline!               : TwnsUiImage.UiImage;
 
         protected _onDataChanged(): void {
-            const data                          = this.data;
+            const data                          = this._getData();
             this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(LangTextType.B0012) : "";
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(LangTextType.B0012) : "";
             this._imgAccept.visible             = data.isAccept;
             this._imgDecline.visible            = !data.isAccept;
-            UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name);
+            UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name ?? CommonConstants.ErrorTextForUndefined);
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
-                const data = this.data;
+                const data = this._getData();
                 data.panel.setRequesterSelected(e.itemIndex, !data.isAccept);
             }
         }

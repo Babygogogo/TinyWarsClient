@@ -1,20 +1,15 @@
 
 import TwnsBwPlayer                     from "../../baseWar/model/BwPlayer";
-import TwnsBwUnitMap                    from "../../baseWar/model/BwUnitMap";
 import TwnsChatPanel                    from "../../chat/view/ChatPanel";
 import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
 import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel";
-import TwnsLobbyBackgroundPanel         from "../../lobby/view/LobbyBackgroundPanel";
-import MfrCreateModel                   from "../../multiFreeRoom/model/MfrCreateModel";
-import TwnsMfrCreateSettingsPanel       from "../../multiFreeRoom/view/MfrCreateSettingsPanel";
 import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
 import TwnsTwWar                        from "../../testWar/model/TwWar";
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import FloatText                        from "../../tools/helpers/FloatText";
 import FlowManager                      from "../../tools/helpers/FlowManager";
-import Logger                           from "../../tools/helpers/Logger";
-import StageManager                     from "../../tools/helpers/StageManager";
+import Helpers                          from "../../tools/helpers/Helpers";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -35,16 +30,8 @@ import RwProxy                          from "../model/RwProxy";
 import TwnsRwWar                        from "../model/RwWar";
 
 namespace TwnsRwWarMenuPanel {
-    import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonInputPanel             = TwnsCommonInputPanel.CommonInputPanel;
-    import UserSettingsPanel            = TwnsUserSettingsPanel.UserSettingsPanel;
-    import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
-    import RwWar                        = TwnsRwWar.RwWar;
-    import TwWar                        = TwnsTwWar.TwWar;
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import LangTextType                 = TwnsLangTextType.LangTextType;
-    import BwPlayer                     = TwnsBwPlayer.BwPlayer;
-    import BwUnitMap                    = TwnsBwUnitMap.BwUnitMap;
 
     // eslint-disable-next-line no-shadow
     enum MenuType {
@@ -58,37 +45,34 @@ namespace TwnsRwWarMenuPanel {
 
         private static _instance: RwWarMenuPanel;
 
-        private _group          : eui.Group;
-        private _listCommand    : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
-        private _labelNoCommand : TwnsUiLabel.UiLabel;
-        private _btnBack        : TwnsUiButton.UiButton;
+        private readonly _group!                : eui.Group;
+        private readonly _listCommand!          : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
+        private readonly _labelNoCommand!       : TwnsUiLabel.UiLabel;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
 
-        private _groupInfo              : eui.Group;
-        private _labelMenuTitle         : TwnsUiLabel.UiLabel;
-        private _labelWarInfoTitle      : TwnsUiLabel.UiLabel;
-        private _labelPlayerInfoTitle   : TwnsUiLabel.UiLabel;
-        private _btnMapName             : TwnsUiButton.UiButton;
-        private _labelMapName           : TwnsUiLabel.UiLabel;
-        private _btnMapDesigner         : TwnsUiButton.UiButton;
-        private _labelMapDesigner       : TwnsUiLabel.UiLabel;
-        private _btnWarId               : TwnsUiButton.UiButton;
-        private _labelWarId             : TwnsUiLabel.UiLabel;
-        private _btnTurnIndex           : TwnsUiButton.UiButton;
-        private _labelTurnIndex         : TwnsUiLabel.UiLabel;
-        private _btnActionId            : TwnsUiButton.UiButton;
-        private _labelActionId          : TwnsUiLabel.UiLabel;
-        private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _groupInfo!            : eui.Group;
+        private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelWarInfoTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerInfoTitle! : TwnsUiLabel.UiLabel;
+        private readonly _btnMapName!           : TwnsUiButton.UiButton;
+        private readonly _labelMapName!         : TwnsUiLabel.UiLabel;
+        private readonly _btnMapDesigner!       : TwnsUiButton.UiButton;
+        private readonly _labelMapDesigner!     : TwnsUiLabel.UiLabel;
+        private readonly _btnWarId!             : TwnsUiButton.UiButton;
+        private readonly _labelWarId!           : TwnsUiLabel.UiLabel;
+        private readonly _btnTurnIndex!         : TwnsUiButton.UiButton;
+        private readonly _labelTurnIndex!       : TwnsUiLabel.UiLabel;
+        private readonly _btnActionId!          : TwnsUiButton.UiButton;
+        private readonly _labelActionId!        : TwnsUiLabel.UiLabel;
+        private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
-        private _war        : RwWar;
-        private _unitMap    : BwUnitMap;
-        private _dataForList: DataForCommandRenderer[];
-        private _menuType   = MenuType.Main;
+        private _menuType       = MenuType.Main;
 
         public static show(): void {
             if (!RwWarMenuPanel._instance) {
                 RwWarMenuPanel._instance = new RwWarMenuPanel();
             }
-            RwWarMenuPanel._instance.open(undefined);
+            RwWarMenuPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (RwWarMenuPanel._instance) {
@@ -109,7 +93,7 @@ namespace TwnsRwWarMenuPanel {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.BwActionPlannerStateChanged,        callback: this._onNotifyMcwPlannerStateChanged },
+                { type: NotifyType.BwActionPlannerStateSet,        callback: this._onNotifyMcwPlannerStateChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.MsgSpmCreateSfw,                    callback: this._onNotifyMsgSpmCreateSfw },
                 { type: NotifyType.MsgReplaySetRating,                 callback: this._onMsgReplaySetRating },
@@ -120,21 +104,17 @@ namespace TwnsRwWarMenuPanel {
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            const war           = RwModel.getWar();
-            this._war           = war;
-            this._unitMap       = war.getUnitMap();
-            this._menuType      = MenuType.Main;
-
+            this._menuType = MenuType.Main;
             this._updateView();
 
             Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            this._war           = null;
-            this._unitMap       = null;
-            this._dataForList   = null;
-
             Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
+        }
+
+        private _getWar(): TwnsRwWar.RwWar {
+            return Helpers.getExisted(RwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,13 +134,13 @@ namespace TwnsRwWarMenuPanel {
 
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            CommonConfirmPanel.show({
+            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
-                        slotIndex       : data.slotIndex,
-                        slotExtraData   : data.extraData,
-                        warData         : data.warData,
+                        slotIndex       : Helpers.getExisted(data.slotIndex),
+                        slotExtraData   : Helpers.getExisted(data.extraData),
+                        warData         : Helpers.getExisted(data.warData),
                     });
                 },
             });
@@ -178,8 +158,7 @@ namespace TwnsRwWarMenuPanel {
                 this._menuType = MenuType.Main;
                 this._updateListCommand();
             } else {
-                Logger.error(`McwWarMenuPanel._onTouchedBtnBack() invalid this._menuType: ${type}`);
-                this.close();
+                throw Helpers.newError(`Invalid menuType: ${type}`);
             }
         }
 
@@ -194,13 +173,13 @@ namespace TwnsRwWarMenuPanel {
         }
 
         private _updateListCommand(): void {
-            this._dataForList = this._createDataForList();
-            if (!this._dataForList.length) {
+            const dataArray = this._createDataForList();
+            if (!dataArray.length) {
                 this._labelNoCommand.visible = true;
                 this._listCommand.clear();
             } else {
                 this._labelNoCommand.visible = false;
-                this._listCommand.bindData(this._dataForList);
+                this._listCommand.bindData(dataArray);
             }
         }
 
@@ -217,17 +196,17 @@ namespace TwnsRwWarMenuPanel {
         }
 
         private async _updateGroupInfo(): Promise<void> {
-            const war                               = this._war;
-            const mapFileName                       = war.getMapId();
-            this._labelMapName.text                 = await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----";
-            this._labelMapDesigner.text             = await WarMapModel.getDesignerName(mapFileName) || "----";
-            this._labelWarId.text                   = `${war.getReplayId()}`;
-            this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
-            this._labelActionId.text                = `${war.getNextActionId()} / ${war.getExecutedActionManager().getExecutedActionsCount()}`;
+            const war                   = this._getWar();
+            const mapId                 = war.getMapId();
+            this._labelMapName.text     = await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----";
+            this._labelMapDesigner.text = await WarMapModel.getDesignerName(mapId) || "----";
+            this._labelWarId.text       = `${war.getReplayId()}`;
+            this._labelTurnIndex.text   = `${war.getTurnManager().getTurnIndex()}`;
+            this._labelActionId.text    = `${war.getNextActionId()} / ${war.getExecutedActionManager().getExecutedActionsCount()}`;
         }
 
         private _updateListPlayer(): void {
-            const war   = this._war;
+            const war   = this._getWar();
             const data  : DataForPlayerRenderer[] = [];
             war.getPlayerManager().forEachPlayer(false, player => {
                 data.push({
@@ -248,31 +227,30 @@ namespace TwnsRwWarMenuPanel {
             } else if (type === MenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
-                Logger.error(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
-                return [];
+                throw Helpers.newError(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
             }
         }
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
-            return [
+            return Helpers.getNonNullElements([
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandRate(),
                 // this._createCommandChat(),
                 this._createCommandGotoRwReplayListPanel(),
                 this._createCommandGotoLobby(),
-            ].filter(v => !!v);
+            ]);
         }
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
-            return [
+            return Helpers.getNonNullElements([
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
                 this._createCommandUserSettings(),
                 this._createCommandSetPathMode(),
-            ].filter(v => !!v);
+            ]);
         }
 
-        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
+        private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0080),
                 callback: () => {
@@ -286,7 +264,7 @@ namespace TwnsRwWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0365),
                 callback: () => {
-                    CommonInputPanel.show({
+                    TwnsCommonInputPanel.CommonInputPanel.show({
                         title           : `${Lang.getText(LangTextType.B0365)}`,
                         currentValue    : "",
                         maxChars        : 2,
@@ -298,7 +276,7 @@ namespace TwnsRwWarMenuPanel {
                             if ((!text) || (isNaN(value)) || (value > CommonConstants.ReplayMaxRating) || (value < CommonConstants.ReplayMinRating)) {
                                 FloatText.show(Lang.getText(LangTextType.A0098));
                             } else {
-                                RwProxy.reqReplaySetRating(this._war.getReplayId(), value);
+                                RwProxy.reqReplaySetRating(this._getWar().getReplayId(), value);
                             }
                         },
                     });
@@ -316,11 +294,11 @@ namespace TwnsRwWarMenuPanel {
             };
         }
 
-        private _createCommandGotoRwReplayListPanel(): DataForCommandRenderer | undefined {
+        private _createCommandGotoRwReplayListPanel(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0651),
                 callback: () => {
-                    CommonConfirmPanel.show({
+                    TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                         title   : Lang.getText(LangTextType.B0651),
                         content : Lang.getText(LangTextType.A0225),
                         callback: () => FlowManager.gotoRwReplayListPanel(),
@@ -329,11 +307,11 @@ namespace TwnsRwWarMenuPanel {
             };
         }
 
-        private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
+        private _createCommandGotoLobby(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0054),
                 callback: () => {
-                    CommonConfirmPanel.show({
+                    TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                         title   : Lang.getText(LangTextType.B0054),
                         content : Lang.getText(LangTextType.A0025),
                         callback: () => FlowManager.gotoLobby(),
@@ -343,21 +321,21 @@ namespace TwnsRwWarMenuPanel {
         }
 
         private _createCommandSimulation(): DataForCommandRenderer | null {
-            const war = this._war;
+            const war = this._getWar();
             return {
                 name    : Lang.getText(LangTextType.B0325),
                 callback: () => {
                     if (war.getIsExecutingAction()) {
                         FloatText.show(Lang.getText(LangTextType.A0103));
                     } else {
-                        SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
+                        TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
                     }
                 },
             };
         }
 
         private _createCommandCreateMfr(): DataForCommandRenderer | null {
-            const war = this._war;
+            const war = this._getWar();
             return {
                 name    : Lang.getText(LangTextType.B0557),
                 callback: async () => {
@@ -372,20 +350,16 @@ namespace TwnsRwWarMenuPanel {
                         return;
                     }
 
-                    const errorCode = await (new TwWar()).init(warData);
+                    const errorCode = await (new TwnsTwWar.TwWar()).getErrorCodeForInit(warData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
-                    CommonConfirmPanel.show({
+                    TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0201),
                         callback: () => {
-                            MfrCreateModel.resetDataByInitialWarData(warData);
-                            RwModel.unloadWar();
-                            StageManager.closeAllPanels();
-                            TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-                            TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
+                            FlowManager.gotoMfrCreateSettingsPanel(warData);
                         }
                     });
                 }
@@ -395,7 +369,7 @@ namespace TwnsRwWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0560),
                 callback: () => {
-                    UserSettingsPanel.show();
+                    TwnsUserSettingsPanel.UserSettingsPanel.show();
                 }
             };
         }
@@ -404,7 +378,7 @@ namespace TwnsRwWarMenuPanel {
                 name    : Lang.getText(LangTextType.B0430),
                 callback: () => {
                     const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
-                    CommonConfirmPanel.show({
+                    TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                         content : Lang.getFormattedText(
                             LangTextType.F0033,
                             Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
@@ -437,41 +411,41 @@ namespace TwnsRwWarMenuPanel {
     };
 
     class CommandRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCommandRenderer> {
-        private _group      : eui.Group;
-        private _labelName  : TwnsUiLabel.UiLabel;
+        private readonly _group!        : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
             this._updateView();
         }
 
         public onItemTapEvent(): void {
-            this.data.callback();
+            this._getData().callback();
         }
 
         private _updateView(): void {
-            const data = this.data;
+            const data              = this._getData();
             this._labelName.text    = data.name;
         }
     }
 
     type DataForPlayerRenderer = {
-        war     : RwWar;
-        player  : BwPlayer;
+        war     : TwnsRwWar.RwWar;
+        player  : TwnsBwPlayer.BwPlayer;
     };
 
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private _group      : eui.Group;
-        private _labelName  : TwnsUiLabel.UiLabel;
-        private _labelForce : TwnsUiLabel.UiLabel;
-        private _labelLost  : TwnsUiLabel.UiLabel;
-        private _listInfo   : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _group!        : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelForce!   : TwnsUiLabel.UiLabel;
+        private readonly _labelLost!    : TwnsUiLabel.UiLabel;
+        private readonly _listInfo!     : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const data                  = this.data;
+            const data                  = this._getData();
             const war                   = data.war;
             const player                = data.player;
             this._labelName.text        = await player.getNickname();
@@ -491,7 +465,7 @@ namespace TwnsRwWarMenuPanel {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data;
+            const data          = this._getData();
             const war           = data.war;
             const player        = data.player;
             const playerIndex   = player.getPlayerIndex();
@@ -514,20 +488,20 @@ namespace TwnsRwWarMenuPanel {
             ];
         }
         private _createDataColor(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(LangTextType.B0397),
-                infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()),
+                infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()) || CommonConstants.ErrorTextForUndefined,
                 infoColor   : 0xFFFFFF,
             };
         }
         private _createDataFund(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0032),
@@ -536,9 +510,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataBuildings(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const info = this._getTilesCountAndIncome(war, playerIndex);
             return {
@@ -548,9 +522,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataCoName(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const cfg = ConfigManager.getCoBasicCfg(war.getConfigVersion(), player.getCoId());
             return {
@@ -562,9 +536,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataEnergy(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue         = player.getCoCurrentEnergy();
             const powerEnergy       = player.getCoPowerEnergy();
@@ -582,9 +556,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataUnitAndValue(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const unitsCountAndValue = this._getUnitsCountAndValue(war, playerIndex);
             return {
@@ -594,9 +568,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataInitialFund(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
             return {
@@ -606,9 +580,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataIncomeMultiplier(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
             return {
@@ -618,9 +592,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataEnergyAddPctOnLoadCo(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             return {
@@ -630,9 +604,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataEnergyGrowthMultiplier(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
             return {
@@ -642,9 +616,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataMoveRangeModifier(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
             return {
@@ -654,9 +628,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataAttackPowerModifier(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
             return {
@@ -666,9 +640,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataVisionRangeModifier(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
             return {
@@ -678,9 +652,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataLuckLowerLimit(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
             return {
@@ -690,9 +664,9 @@ namespace TwnsRwWarMenuPanel {
             };
         }
         private _createDataLuckUpperLimit(
-            war         : RwWar,
+            war         : TwnsRwWar.RwWar,
             playerIndex : number,
-            player      : BwPlayer,
+            player      : TwnsBwPlayer.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
             return {
@@ -702,7 +676,7 @@ namespace TwnsRwWarMenuPanel {
             };
         }
 
-        private _getTilesCountAndIncome(war: RwWar, playerIndex: number): { count: number, income: number } {
+        private _getTilesCountAndIncome(war: TwnsRwWar.RwWar, playerIndex: number): { count: number, income: number } {
             let count   = 0;
             let income  = 0;
             for (const tile of war.getTileMap().getAllTiles()) {
@@ -714,7 +688,7 @@ namespace TwnsRwWarMenuPanel {
             return { count, income };
         }
 
-        private _getUnitsCountAndValue(war: RwWar, playerIndex: number): { count: number, value: number } {
+        private _getUnitsCountAndValue(war: TwnsRwWar.RwWar, playerIndex: number): { count: number, value: number } {
             const unitMap   = war.getUnitMap();
             let count       = 0;
             let value       = 0;
@@ -740,11 +714,11 @@ namespace TwnsRwWarMenuPanel {
     };
 
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : TwnsUiButton.UiButton;
-        private _labelValue : TwnsUiLabel.UiLabel;
+        private readonly _btnTitle!     : TwnsUiButton.UiButton;
+        private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;

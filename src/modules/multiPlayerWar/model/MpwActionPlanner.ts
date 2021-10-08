@@ -1,13 +1,13 @@
 
 import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
 import TwnsBwUnit               from "../../baseWar/model/BwUnit";
-import TwnsBwProduceUnitPanel   from "../../baseWar/view/BwProduceUnitPanel";
+import TwnsBwDamagePreviewPanel from "../../baseWar/view/BwDamagePreviewPanel";
 import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import MpwProxy                 from "../../multiPlayerWar/model/MpwProxy";
 import FloatText                from "../../tools/helpers/FloatText";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
-import Logger                   from "../../tools/helpers/Logger";
+import Helpers                  from "../../tools/helpers/Helpers";
 import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -16,7 +16,6 @@ import UserModel                from "../../user/model/UserModel";
 import TwnsMpwWar               from "./MpwWar";
 
 namespace TwnsMpwActionPlanner {
-    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
@@ -27,40 +26,12 @@ namespace TwnsMpwActionPlanner {
     import UnitType             = Types.UnitType;
 
     export class MpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
-        private _getPlayerIndexLoggedIn(): number | undefined {
+        private _getPlayerIndexLoggedIn(): number | null {
             const war = this._getWar();
             if (!(war instanceof TwnsMpwWar.MpwWar)) {
-                Logger.error(`MpwActionPlanner._getPlayerIndexLoggedIn() empty war.`);
-                return undefined;
+                throw Helpers.newError(`Invalid war.`);
             }
             return war.getPlayerIndexLoggedIn();
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for setting common state.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {
-            this._clearFocusUnitOnMap();
-            this._clearFocusUnitLoaded();
-            this._clearChoosingUnitForDrop();
-            this._clearChosenUnitsForDrop();
-            this._clearAvailableDropDestinations();
-            this._clearDataForPreviewingAttackableArea();
-            this._clearDataForPreviewingMovableArea();
-
-            this._setState(State.ChoosingProductionTarget);
-            this._updateView();
-
-            const war = this._getWar();
-            if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateChoosingProductionTargetOnTap() empty war.`);
-                return;
-            }
-
-            BwProduceUnitPanel.show({
-                gridIndex,
-                war,
-            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,8 +40,7 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerProduceUnit() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerProduceUnit() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -89,8 +59,7 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerVoteForDraw(isAgree: boolean): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerVoteForDraw() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerVoteForDraw() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -107,8 +76,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitProduceUnit(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitProduceUnit() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitProduceUnit() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -128,8 +96,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitBeLoaded(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -149,8 +116,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitJoin(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -170,8 +136,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitUseCoSuperPower(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitUseCoSuperPower() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitUseCoSuperPower() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -192,8 +157,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitUseCoPower(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitUseCoPower() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitUseCoPower() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -214,8 +178,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitLoadCo(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitLoadCo() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLoadCo() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -235,8 +198,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitWait(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitWait() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitWait() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -256,8 +218,7 @@ namespace TwnsMpwActionPlanner {
         protected _setStateRequestingUnitAttackUnit(targetGridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitAttackUnit() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitAttackUnit() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -279,8 +240,7 @@ namespace TwnsMpwActionPlanner {
         protected _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitAttackTile() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitAttackTile() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -302,8 +262,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitBuildTile(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitBuildTile() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBuildTile() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -323,8 +282,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitCaptureTile(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitCaptureTile() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitCaptureTile() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -344,8 +302,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitDive(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitDive() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDive() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -365,8 +322,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitSurface(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitSurface() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitSurface() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -386,8 +342,7 @@ namespace TwnsMpwActionPlanner {
         protected _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void {
             const unit = this.getChoosingUnitForDrop();
             if (unit == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty unit.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty unit.`);
             }
 
             this._pushBackChosenUnitForDrop({
@@ -402,8 +357,7 @@ namespace TwnsMpwActionPlanner {
 
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -428,8 +382,7 @@ namespace TwnsMpwActionPlanner {
 
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitDropOnChooseAction() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnChooseAction() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -450,8 +403,7 @@ namespace TwnsMpwActionPlanner {
         protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitLaunchFlare() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLaunchFlare() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -472,8 +424,7 @@ namespace TwnsMpwActionPlanner {
         protected _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitLaunchSilo() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLaunchSilo() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -494,8 +445,7 @@ namespace TwnsMpwActionPlanner {
         private _setStateRequestingUnitSupply(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner._setStateRequestingUnitSupply() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitSupply() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -515,8 +465,7 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerEndTurn(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerEndTurn() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerEndTurn() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -532,8 +481,7 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerSurrender(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerSurrender() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerSurrender() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -549,14 +497,12 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerDeleteUnit(): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty war.`);
             }
 
             const gridIndex = war.getCursor().getGridIndex();
             if (gridIndex == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty gridIndex.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty gridIndex.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -573,8 +519,7 @@ namespace TwnsMpwActionPlanner {
         public setStateRequestingPlayerUseCoSkill(skillType: Types.CoSkillType): void {
             const war = this._getWar();
             if (war == null) {
-                Logger.error(`MpwActionPlanner.setStateRequestingPlayerUseCoSkill() empty war.`);
-                return;
+                throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerUseCoSkill() empty war.`);
             }
 
             MpwProxy.reqMpwExecuteWarAction(war, {
@@ -600,16 +545,16 @@ namespace TwnsMpwActionPlanner {
             } else {
                 TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
             }
+            if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
+                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.show({ war: this._getWar() });
+            } else {
+                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.hide();
+            }
         }
 
         protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
             const war           = this._getWar();
-            const playerInTurn  = war ? war.getPlayerInTurn() : undefined;
-            if (playerInTurn == null) {
-                Logger.error(`MpwActionPlanner._checkCanControlUnit() empty playerInTurn.`);
-                return false;
-            }
-
+            const playerInTurn  = war.getPlayerInTurn();
             return (playerInTurn.getUserId() === UserModel.getSelfUserId())
                 && (playerInTurn.getPlayerIndex() === unit.getPlayerIndex());
         }
@@ -618,18 +563,13 @@ namespace TwnsMpwActionPlanner {
         // Functions for getting the next state when the player inputs.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State {
-            const selfPlayerIndex = this._getPlayerIndexLoggedIn();
-            if (selfPlayerIndex == null) {
-                Logger.error(`MpwActionPlanner._getNextStateOnTapWhenIdle() empty selfPlayerIndex.`);
-                return State.Idle;
-            }
-
+            const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
+                if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
@@ -653,8 +593,7 @@ namespace TwnsMpwActionPlanner {
                 const cursor                    = this.getCursor();
                 const cursorPreviousGridIndex   = cursor ? cursor.getPreviousGridIndex() : null;
                 if (cursorPreviousGridIndex == null) {
-                    Logger.error(`MpwActionPlanner._getNextStateOnTapWhenChoosingAttackTarget() empty cursorPreviousGridIndex.`);
-                    return State.Idle;
+                    throw Helpers.newError(`MpwActionPlanner._getNextStateOnTapWhenChoosingAttackTarget() empty cursorPreviousGridIndex.`);
                 }
 
                 if (GridIndexHelpers.checkIsEqual(cursorPreviousGridIndex, gridIndex)) {
@@ -681,8 +620,7 @@ namespace TwnsMpwActionPlanner {
 
                 const focusUnit = this.getFocusUnit();
                 if (focusUnit == null) {
-                    Logger.error(`MpwActionPlanner._getNextStateOnTapWhenChoosingDropDestination() empty focusUnit.`);
-                    return State.Idle;
+                    throw Helpers.newError(`MpwActionPlanner._getNextStateOnTapWhenChoosingDropDestination() empty focusUnit.`);
                 }
 
                 const restLoadedUnits = focusUnit.getLoadedUnits().filter(unit => chosenUnits.every(u => u !== unit));
@@ -696,10 +634,11 @@ namespace TwnsMpwActionPlanner {
             }
         }
         protected _getNextStateOnTapWhenChoosingFlareDestination(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > this.getFocusUnit().getFlareMaxRange()) {
+            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Helpers.getExisted(this.getFocusUnit()?.getFlareMaxRange())) {
                 return State.ChoosingAction;
             } else {
-                if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                const previousGridIndex = this.getCursor().getPreviousGridIndex();
+                if ((previousGridIndex) && GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex)) {
                     return State.RequestingUnitLaunchFlare;
                 } else {
                     return State.ChoosingFlareDestination;
@@ -707,14 +646,16 @@ namespace TwnsMpwActionPlanner {
             }
         }
         protected _getNextStateOnTapWhenChoosingSiloDestination(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+            const previousGridIndex = this.getCursor().getPreviousGridIndex();
+            if ((previousGridIndex) && GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex)) {
                 return State.RequestingUnitLaunchSilo;
             } else {
                 return State.ChoosingSiloDestination;
             }
         }
         protected _getNextStateOnTapWhenChoosingProductionTarget(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.checkIsEqual(this.getCursor().getPreviousGridIndex(), gridIndex)) {
+            const previousGridIndex = this.getCursor().getPreviousGridIndex();
+            if ((previousGridIndex) && GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex)) {
                 return State.ChoosingProductionTarget;
             } else {
                 const turnManager       = this._getTurnManager();
@@ -723,7 +664,7 @@ namespace TwnsMpwActionPlanner {
                 const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
                 if (!unit) {
                     const tile = this._getTileMap().getTile(gridIndex);
-                    if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
+                    if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                         return State.ChoosingProductionTarget;
                     } else {
                         return State.Idle;
@@ -748,7 +689,7 @@ namespace TwnsMpwActionPlanner {
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
+                if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
@@ -776,7 +717,7 @@ namespace TwnsMpwActionPlanner {
             const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
             if (!unit) {
                 const tile = this._getTileMap().getTile(gridIndex);
-                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
+                if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
                     return State.Idle;
@@ -803,7 +744,7 @@ namespace TwnsMpwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _getActionUnitBeLoaded(): TwnsBwActionPlanner.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
-            const focusUnit     = this.getFocusUnit();
+            const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
@@ -815,7 +756,7 @@ namespace TwnsMpwActionPlanner {
         }
         protected _getActionUnitJoin(): TwnsBwActionPlanner.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
-            const focusUnit     = this.getFocusUnit();
+            const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
@@ -829,7 +770,7 @@ namespace TwnsMpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return !this.getFocusUnit().checkCanUseCoSkill(Types.CoSkillType.SuperPower)
+                return !Helpers.getExisted(this.getFocusUnit()).checkCanUseCoSkill(Types.CoSkillType.SuperPower)
                     ? []
                     : [{
                         actionType  : UnitActionType.UseCoSuperPower,
@@ -846,7 +787,7 @@ namespace TwnsMpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return !this.getFocusUnit().checkCanUseCoSkill(Types.CoSkillType.Power)
+                return !Helpers.getExisted(this.getFocusUnit()).checkCanUseCoSkill(Types.CoSkillType.Power)
                     ? []
                     : [{
                         actionType  : UnitActionType.UseCoPower,
@@ -863,7 +804,7 @@ namespace TwnsMpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return this.getFocusUnit().checkCanLoadCoAfterMovePath(this.getMovePath())
+                return Helpers.getExisted(this.getFocusUnit()).checkCanLoadCoAfterMovePath(this.getMovePath())
                     ? [{ actionType: UnitActionType.LoadCo, callback: () => this._setStateRequestingUnitLoadCo() }]
                     : [];
             }
@@ -872,7 +813,7 @@ namespace TwnsMpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
                     ? [{ actionType: UnitActionType.Capture, callback: () => this._setStateRequestingUnitCaptureTile() }]
                     : [];
             }
@@ -881,7 +822,7 @@ namespace TwnsMpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanDive())
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanDive())
                     ? [{ actionType: UnitActionType.Dive, callback: () => this._setStateRequestingUnitDive() }]
                     : [];
             }
@@ -890,7 +831,7 @@ namespace TwnsMpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanSurface())
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanSurface())
                     ? [{ actionType: UnitActionType.Surface, callback: () => this._setStateRequestingUnitSurface() }]
                     : [];
             }
@@ -899,7 +840,7 @@ namespace TwnsMpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
                     ? [{ actionType: UnitActionType.BuildTile, callback: () => this._setStateRequestingUnitBuildTile() }]
                     : [];
             }
@@ -908,11 +849,11 @@ namespace TwnsMpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                const focusUnit     = this.getFocusUnit();
+                const focusUnit     = Helpers.getExisted(this.getFocusUnit());
                 const playerIndex   = focusUnit.getPlayerIndex();
                 const unitMap       = this._getUnitMap();
                 if (focusUnit.checkIsAdjacentUnitSupplier()) {
-                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this._getMapSize())) {
+                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this.getMapSize())) {
                         const unit = unitMap.getUnitOnMap(gridIndex);
                         if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                             return [{ actionType: UnitActionType.Supply, callback: () => this._setStateRequestingUnitSupply() }];
@@ -926,32 +867,27 @@ namespace TwnsMpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                const focusUnit = this.getFocusUnit();
-                if (focusUnit == null) {
-                    Logger.error(`MpwActionPlanner._getActionUnitProduceUnit() empty focusUnit.`);
-                    return [];
-                }
-
-                const produceUnitType = focusUnit.getProduceUnitType();
+                const focusUnit         = Helpers.getExisted(this.getFocusUnit());
+                const produceUnitType   = focusUnit.getProduceUnitType();
                 if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
                     return [];
                 } else {
                     const costForProduceUnit = focusUnit.getProduceUnitCost();
-                    if (focusUnit.getCurrentProduceMaterial() < 1) {
+                    if (Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) < 1) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0051)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
-                    } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
+                    } else if (focusUnit.getLoadedUnitsCount() >= Helpers.getExisted(focusUnit.getMaxLoadUnitsCount())) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0052)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
-                    } else if ((this._getWar() as TwnsMpwWar.MpwWar).getPlayerLoggedIn().getFund() < costForProduceUnit) {
+                    } else if (Helpers.getExisted((this._getWar() as TwnsMpwWar.MpwWar).getPlayerLoggedIn()?.getFund()) < costForProduceUnit) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0053)),

@@ -29,23 +29,23 @@ namespace TwnsMrrMainMenuPanel {
 
         private static _instance: MrrMainMenuPanel;
 
-        private readonly _group             : eui.Group;
-        private readonly _btnMultiPlayer    : TwnsUiButton.UiButton;
-        private readonly _btnRanking        : TwnsUiButton.UiButton;
-        private readonly _btnSinglePlayer   : TwnsUiButton.UiButton;
+        private readonly _group!                : eui.Group;
+        private readonly _btnMultiPlayer!       : TwnsUiButton.UiButton;
+        private readonly _btnRanking!           : TwnsUiButton.UiButton;
+        private readonly _btnSinglePlayer!      : TwnsUiButton.UiButton;
 
-        private readonly _groupLeft         : eui.Group;
-        private readonly _btnSetGameNumber  : TwnsUiButton.UiButton;
-        private readonly _btnMyRoom         : TwnsUiButton.UiButton;
-        private readonly _btnContinueWar    : TwnsUiButton.UiButton;
-        private readonly _btnPreviewStdMaps : TwnsUiButton.UiButton;
-        private readonly _btnPreviewFogMaps : TwnsUiButton.UiButton;
+        private readonly _groupLeft!            : eui.Group;
+        private readonly _btnSetGameNumber!     : TwnsUiButton.UiButton;
+        private readonly _btnMyRoom!            : TwnsUiButton.UiButton;
+        private readonly _btnContinueWar!       : TwnsUiButton.UiButton;
+        private readonly _btnPreviewStdMaps!    : TwnsUiButton.UiButton;
+        private readonly _btnPreviewFogMaps!    : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MrrMainMenuPanel._instance) {
                 MrrMainMenuPanel._instance = new MrrMainMenuPanel();
             }
-            MrrMainMenuPanel._instance.open(undefined);
+            MrrMainMenuPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -88,49 +88,49 @@ namespace TwnsMrrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
+        private _onTouchedBtnMultiPlayer(): void {
             this.close();
             TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
         }
-        private _onTouchedBtnSinglePlayer(e: egret.TouchEvent): void {
+        private _onTouchedBtnSinglePlayer(): void {
             this.close();
             SpmMainMenuPanel.show();
         }
-        private _onTouchedBtnSetGameNumber(e: egret.TouchEvent): void {
+        private _onTouchedBtnSetGameNumber(): void {
             MrrSetMaxConcurrentCountPanel.show();
         }
-        private _onTouchedBtnMyRoom(e: egret.TouchEvent): void {
+        private _onTouchedBtnMyRoom(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             MrrMyRoomListPanel.show();
         }
-        private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
+        private _onTouchedBtnContinueWar(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             TwnsMrwMyWarListPanel.MrwMyWarListPanel.show();
         }
-        private _onTouchedBtnPreviewStdMaps(e: egret.TouchEvent): void {
+        private _onTouchedBtnPreviewStdMaps(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             MrrPreviewMapListPanel.show({ hasFog: false });
         }
-        private _onTouchedBtnPreviewFogMaps(e: egret.TouchEvent): void {
+        private _onTouchedBtnPreviewFogMaps(): void {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
             MrrPreviewMapListPanel.show({ hasFog: true });
         }
 
-        private _onMsgUserLogout(e: egret.Event): void {
+        private _onMsgUserLogout(): void {
             this.close();
         }
-        private _onMsgMrrGetRoomPublicInfo(e: egret.Event): void {
+        private _onMsgMrrGetRoomPublicInfo(): void {
             this._updateComponentsForRed();
         }
-        private _onMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
+        private _onMsgMrrGetMyRoomPublicInfoList(): void {
             this._updateComponentsForRed();
         }
 
@@ -206,7 +206,7 @@ namespace TwnsMrrMainMenuPanel {
             });
         }
         private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve, reject) => {
+            return new Promise<void>((resolve) => {
                 const group = this._group;
                 Tween.removeTweens(group);
                 Tween.get(group)

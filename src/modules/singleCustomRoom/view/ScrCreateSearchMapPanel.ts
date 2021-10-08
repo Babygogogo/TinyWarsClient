@@ -19,27 +19,27 @@ namespace TwnsScrCreateSearchMapPanel {
 
         private static _instance: ScrCreateSearchMapPanel;
 
-        private _btnClose               : TwnsUiButton.UiButton;
-        private _btnReset               : TwnsUiButton.UiButton;
-        private _btnSearch              : TwnsUiButton.UiButton;
-        private _labelName              : TwnsUiLabel.UiLabel;
-        private _labelMapNameTitle      : TwnsUiLabel.UiLabel;
-        private _labelDesignerTitle     : TwnsUiLabel.UiLabel;
-        private _labelPlayersCountTitle : TwnsUiLabel.UiLabel;
-        private _labelPlayedTimesTitle  : TwnsUiLabel.UiLabel;
-        private _labelMinRatingTitle    : TwnsUiLabel.UiLabel;
-        private _labelDesc              : TwnsUiLabel.UiLabel;
-        private _inputMapName           : TwnsUiTextInput.UiTextInput;
-        private _inputDesigner          : TwnsUiTextInput.UiTextInput;
-        private _inputPlayersCount      : TwnsUiTextInput.UiTextInput;
-        private _inputPlayedTimes       : TwnsUiTextInput.UiTextInput;
-        private _inputMinRating         : TwnsUiTextInput.UiTextInput;
+        private readonly _btnClose!                 : TwnsUiButton.UiButton;
+        private readonly _btnReset!                 : TwnsUiButton.UiButton;
+        private readonly _btnSearch!                : TwnsUiButton.UiButton;
+        private readonly _labelName!                : TwnsUiLabel.UiLabel;
+        private readonly _labelMapNameTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelDesignerTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayersCountTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayedTimesTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelMinRatingTitle!      : TwnsUiLabel.UiLabel;
+        private readonly _labelDesc!                : TwnsUiLabel.UiLabel;
+        private readonly _inputMapName!             : TwnsUiTextInput.UiTextInput;
+        private readonly _inputDesigner!            : TwnsUiTextInput.UiTextInput;
+        private readonly _inputPlayersCount!        : TwnsUiTextInput.UiTextInput;
+        private readonly _inputPlayedTimes!         : TwnsUiTextInput.UiTextInput;
+        private readonly _inputMinRating!           : TwnsUiTextInput.UiTextInput;
 
         public static show(): void {
             if (!ScrCreateSearchMapPanel._instance) {
                 ScrCreateSearchMapPanel._instance = new ScrCreateSearchMapPanel();
             }
-            ScrCreateSearchMapPanel._instance.open(undefined);
+            ScrCreateSearchMapPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (ScrCreateSearchMapPanel._instance) {
@@ -67,16 +67,16 @@ namespace TwnsScrCreateSearchMapPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnClose(e: egret.TouchEvent): void {
+        private _onTouchedBtnClose(): void {
             this.close();
         }
 
-        private _onTouchedBtnReset(e: egret.TouchEvent): void {
+        private _onTouchedBtnReset(): void {
             TwnsScrCreateMapListPanel.ScrCreateMapListPanel.getInstance().setMapFilters({});
             this.close();
         }
 
-        private _onTouchedBtnSearch(e: egret.TouchEvent): void {
+        private _onTouchedBtnSearch(): void {
             TwnsScrCreateMapListPanel.ScrCreateMapListPanel.getInstance().setMapFilters({
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
@@ -87,7 +87,7 @@ namespace TwnsScrCreateSearchMapPanel {
             this.close();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

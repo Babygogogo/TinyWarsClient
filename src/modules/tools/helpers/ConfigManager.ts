@@ -5,7 +5,6 @@ import TwnsNotifyType   from "../notify/NotifyType";
 import ProtoManager     from "../proto/ProtoManager";
 import CommonConstants  from "./CommonConstants";
 import Helpers          from "./Helpers";
-import Logger           from "./Logger";
 import Types            from "./Types";
 
 namespace ConfigManager {
@@ -179,13 +178,13 @@ namespace ConfigManager {
         return flags;
     }
 
-    const _ALL_CONFIGS       = new Map<string, ExtendedFullConfig>();
+    const _ALL_CONFIGS          = new Map<string, ExtendedFullConfig>();
     const _INVALID_CONFIGS      = new Set<string>();
     const _AVAILABLE_CO_LIST    = new Map<string, CoBasicCfg[]>();
     const _CO_TIERS             = new Map<string, number[]>();
     const _CO_ID_LIST_IN_TIER   = new Map<string, Map<number, number[]>>();
     const _CUSTOM_CO_ID_LIST    = new Map<string, number[]>();
-    let _latestFormalVersion    : string;
+    let _latestConfigVersion    : string | null = null;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Exports.
@@ -194,43 +193,38 @@ namespace ConfigManager {
         // nothing to do.
     }
 
-    export function getLatestFormalVersion(): string {
-        return _latestFormalVersion;
+    export function getLatestConfigVersion(): string | null {
+        return _latestConfigVersion;
     }
     export function setLatestFormalVersion(version: string): void {
-        _latestFormalVersion = version;
+        _latestConfigVersion = version;
     }
     export async function checkIsVersionValid(version: string): Promise<boolean> {
         return (await loadConfig(version)) != null;
     }
 
-    export async function loadConfig(version: string): Promise<ExtendedFullConfig | undefined> {
+    export async function loadConfig(version: string): Promise<ExtendedFullConfig | null> {
         const cachedConfig = getCachedConfig(version);
         if (cachedConfig) {
             return cachedConfig;
         }
 
         if (_INVALID_CONFIGS.has(version)) {
-            return undefined;
+            return null;
         }
 
-        let configBin: any;
-        let rawConfig: Types.FullConfig | undefined;
-        try {
-            configBin = await RES.getResByUrl(
-                `resource/config/FullConfig${version}.bin`,
-                undefined,
-                undefined,
-                RES.ResourceItem.TYPE_BIN
-            );
-            rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : undefined;
-        } catch (e) {
-            // nothing to do for now
-        }
+        let rawConfig   : Types.FullConfig | null = null;
+        const configBin = await RES.getResByUrl(
+            `resource/config/FullConfig${version}.bin`,
+            void 0,
+            null,
+            RES.ResourceItem.TYPE_BIN
+        );
+        rawConfig = configBin ? ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : null;
 
         if (rawConfig == null) {
             _INVALID_CONFIGS.add(version);
-            return undefined;
+            return null;
         }
 
         const unitPromotionCfg  = _destructUnitPromotionCfg(rawConfig.UnitPromotion);
@@ -256,29 +250,56 @@ namespace ConfigManager {
 
         return fullCfg;
     }
-    export function getCachedConfig(version: string): ExtendedFullConfig | undefined {
-        return _ALL_CONFIGS.get(version);
+    export function getCachedConfig(version: string): ExtendedFullConfig | null {
+        return _ALL_CONFIGS.get(version) ?? null;
     }
     function setCachedConfig(version: string, config: ExtendedFullConfig) {
         _ALL_CONFIGS.set(version, config);
     }
 
-    export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType | undefined {
-        return CommonConstants.TileTypeMapping.get(baseType)?.get(objectType);
+    export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
+        const mapping = CommonConstants.TileTypeMapping.get(baseType);
+        if (mapping == null) {
+            throw Helpers.newError(`Empty mapping.`);
+        }
+
+        const tileType = mapping.get(objectType);
+        if (tileType == null) {
+            throw Helpers.newError(`Empty tileType`);
+        }
+
+        return tileType;
     }
 
-    export function getTileTemplateCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): TileTemplateCfg | undefined {
-        const tileType = getTileType(baseType, objectType);
-        return tileType == null ? undefined : getTileTemplateCfgByType(version, tileType);
+    export function getTileTemplateCfgByType(version: string, tileType: TileType): TileTemplateCfg {
+        const dict = _ALL_CONFIGS.get(version)?.TileTemplate;
+        if (dict == null) {
+            throw Helpers.newError(`Empty dict.`);
+        }
+
+        const cfg = dict[tileType];
+        if (cfg == null) {
+            throw Helpers.newError(`Empty cfg.`);
+        }
+
+        return cfg;
     }
-    export function getTileTemplateCfgByType(version: string, tileType: TileType): TileTemplateCfg | undefined {
-        const cfgDict = _ALL_CONFIGS.get(version)?.TileTemplate;
-        return cfgDict ? cfgDict[tileType] : undefined;
+    export function getTileTemplateCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): TileTemplateCfg {
+        return getTileTemplateCfgByType(version, getTileType(baseType, objectType));
     }
 
-    export function getTileTypesByCategory(version: string, category: TileCategory): TileType[] | undefined | null {
-        const cfgDict = _ALL_CONFIGS.get(version)?.TileCategory;
-        return cfgDict ? cfgDict[category]?.tileTypes : undefined;
+    export function getTileTypesByCategory(version: string, category: TileCategory): TileType[] {
+        const dict = _ALL_CONFIGS.get(version)?.TileCategory;
+        if (dict == null) {
+            throw Helpers.newError(`Empty dict.`);
+        }
+
+        const cfg = dict[category];
+        if (cfg == null) {
+            throw Helpers.newError(`Empty cfg.`);
+        }
+
+        return cfg.tileTypes || [];
     }
 
     export function checkIsValidPlayerIndexForTile(playerIndex: number, baseType: TileBaseType, objectType: TileObjectType): boolean {
@@ -342,28 +363,57 @@ namespace ConfigManager {
         }
     }
 
-    export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg | undefined {
-        const cfgDict = _ALL_CONFIGS.get(version)?.UnitTemplate;
-        return cfgDict ? cfgDict[unitType] : undefined;
+    export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {
+        const templateCfgDict = _ALL_CONFIGS.get(version)?.UnitTemplate;
+        if (templateCfgDict == null) {
+            throw Helpers.newError(`Empty templateCfgDict.`);
+        }
+
+        const cfg = templateCfgDict[unitType];
+        if (cfg == null) {
+            throw Helpers.newError(`Empty cfg.`);
+        }
+
+        return cfg;
     }
 
-    export function getUnitTypesByCategory(version: string, category: UnitCategory): UnitType[] | undefined | null {
-        const cfgDict = _ALL_CONFIGS.get(version)?.UnitCategory;
-        return cfgDict ? cfgDict[category]?.unitTypes : undefined;
+    export function getUnitTypesByCategory(version: string, category: UnitCategory): UnitType[] {
+        const categoryDict = _ALL_CONFIGS.get(version)?.UnitCategory;
+        if (categoryDict == null) {
+            throw Helpers.newError(`Empty categoryDict.`);
+        }
+
+        const categoryCfg  = categoryDict[category];
+        if (categoryCfg == null) {
+            throw Helpers.newError(`Empty categoryCfg.`);
+        }
+
+        return categoryCfg.unitTypes || [];
     }
 
-    export function checkIsUnitTypeInCategory(version: string, unitType: UnitType, category: UnitCategory): boolean {
-        const types = getUnitTypesByCategory(version, category);
-        return (types != null) && (types.indexOf(unitType) >= 0);
+    export function checkIsUnitTypeInCategory(
+        version : string,
+        unitType: UnitType,
+        category: UnitCategory
+    ): boolean {
+        return getUnitTypesByCategory(version, category).indexOf(unitType) >= 0;
     }
 
-    export function checkIsTileTypeInCategory(version: string, tileType: TileType, category: TileCategory): boolean {
-        const types = getTileTypesByCategory(version, category);
-        return (types != null) && (types.indexOf(tileType) >= 0);
+    export function checkIsTileTypeInCategory(
+        version : string,
+        tileType: TileType,
+        category: TileCategory,
+    ): boolean {
+        return getTileTypesByCategory(version, category).indexOf(tileType) >= 0;
     }
 
-    export function getUnitMaxPromotion(version: string): number | undefined {
-        return _ALL_CONFIGS.get(version)?.maxUnitPromotion;
+    export function getUnitMaxPromotion(version: string): number {
+        const maxPromotion = _ALL_CONFIGS.get(version)?.maxUnitPromotion;
+        if (maxPromotion == null) {
+            throw Helpers.newError(`Empty maxPromotion.`);
+        }
+
+        return maxPromotion;
     }
 
     export function checkHasSecondaryWeapon(version: string, unitType: UnitType): boolean {
@@ -371,247 +421,303 @@ namespace ConfigManager {
         return cfg ? cfg[unitType] : false;
     }
 
-    export function getUnitPromotionAttackBonus(version: string, promotion: number): number | undefined {
-        const cfg = _ALL_CONFIGS.get(version)?.UnitPromotion;
-        return cfg ? cfg[promotion]?.attackBonus : undefined;
+    export function getUnitPromotionAttackBonus(version: string, promotion: number): number {
+        const dict = _ALL_CONFIGS.get(version)?.UnitPromotion;
+        if (dict == null) {
+            throw Helpers.newError(`Empty dict.`);
+        }
+
+        const bonus = dict[promotion]?.attackBonus;
+        if (bonus == null) {
+            throw Helpers.newError(`Empty bonus.`);
+        }
+
+        return bonus;
     }
-    export function getUnitPromotionDefenseBonus(version: string, promotion: number): number | undefined {
-        const cfg = _ALL_CONFIGS.get(version)?.UnitPromotion;
-        return cfg ? cfg[promotion]?.defenseBonus : undefined;
+    export function getUnitPromotionDefenseBonus(version: string, promotion: number): number {
+        const dict = _ALL_CONFIGS.get(version)?.UnitPromotion;
+        if (dict == null) {
+            throw Helpers.newError(`Empty dict.`);
+        }
+
+        const bonus = dict[promotion]?.defenseBonus;
+        if (bonus == null) {
+            throw Helpers.newError(`Empty dict.`);
+        }
+
+        return bonus;
     }
 
-    export function getDamageChartCfgs(version: string, attackerType: UnitType): { [armorType: number]: { [weaponType: number]: DamageChartCfg } } | undefined {
+    export function getDamageChartCfgs(version: string, attackerType: UnitType): { [armorType: number]: { [weaponType: number]: DamageChartCfg } } {
         const cfgDict = _ALL_CONFIGS.get(version)?.DamageChart;
-        return cfgDict ? cfgDict[attackerType] : undefined;
+        if (cfgDict == null) {
+            throw Helpers.newError(`Empty cfgDict.`);
+        }
+
+        const cfg = cfgDict[attackerType];
+        if (cfg == null) {
+            throw Helpers.newError(`Empty cfg`);
+        }
+
+        return cfg;
     }
 
-    export function getBuildableTileCfgs(version: string, unitType: UnitType): { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | undefined {
+    export function getBuildableTileCfgs(version: string, unitType: UnitType): { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | null {
         const cfgDict = _ALL_CONFIGS.get(version)?.BuildableTile;
-        return cfgDict ? cfgDict[unitType] : undefined;
+        if (cfgDict == null) {
+            throw Helpers.newError(`Empty cfgDict.`);
+        }
+
+        return cfgDict[unitType] ?? null;
     }
 
-    export function getVisionBonusCfg(version: string, unitType: UnitType): { [tileType: number]: VisionBonusCfg } | undefined {
+    export function getVisionBonusCfg(version: string, unitType: UnitType): { [tileType: number]: VisionBonusCfg } | null {
         const cfgDict = _ALL_CONFIGS.get(version)?.VisionBonus;
-        return cfgDict ? cfgDict[unitType] : undefined;
+        if (cfgDict == null) {
+            throw Helpers.newError(`Empty cfgDict.`);
+        }
+
+        return cfgDict[unitType] ?? null;
     }
 
-    export function getMoveCostCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): { [moveType: number]: MoveCostCfg } | undefined {
-        const tileType = getTileType(baseType, objectType);
-        return tileType == null ? undefined : getMoveCostCfgByTileType(version, tileType);
+    export function getMoveCostCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): { [moveType: number]: MoveCostCfg } {
+        return getMoveCostCfgByTileType(version, getTileType(baseType, objectType));
     }
-    export function getMoveCostCfgByTileType(version: string, tileType: TileType): { [moveType: number]: MoveCostCfg } | undefined {
+    export function getMoveCostCfgByTileType(version: string, tileType: TileType): { [moveType: number]: MoveCostCfg } {
         const cfgDict = _ALL_CONFIGS.get(version)?.MoveCost;
-        return cfgDict ? cfgDict[tileType] : undefined;
+        if (cfgDict == null) {
+            throw Helpers.newError(`Empty cfgDict.`);
+        }
+
+        const cfg = cfgDict[tileType];
+        if (cfg == null) {
+            throw Helpers.newError(`Empty cfg.`);
+        }
+
+        return cfg;
     }
 
-    export function getTileObjectTypeByTileType(type: TileType): TileObjectType | undefined {
-        return CommonConstants.TileTypeToTileObjectType.get(type);
+    export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
+        const tileObjectType = CommonConstants.TileTypeToTileObjectType.get(type);
+        if (tileObjectType == null) {
+            throw Helpers.newError(`Empty tileObjectType.`);
+        }
+
+        return tileObjectType;
     }
 
-    export function getTileBaseImageSource(
-        params: {
-            version     : Types.UnitAndTileTextureVersion;
-            skinId      : number;
-            baseType    : TileBaseType;
-            isDark      : boolean;
-            shapeId     : number;
-            tickCount   : number;
-        },
-    ): string | undefined {
-        const { version, skinId, baseType, isDark, shapeId, tickCount } = params;
+    export function getTileBaseImageSource({version, skinId, baseType, isDark, shapeId, tickCount}: {
+        version     : Types.UnitAndTileTextureVersion;
+        skinId      : number;
+        baseType    : TileBaseType;
+        isDark      : boolean;
+        shapeId     : number;
+        tickCount   : number;
+    }): string {
         if (baseType === TileBaseType.Empty) {
-            return undefined;
+            return ``;
         }
 
-        const cfgForVersion = CommonConstants.TileBaseFrameConfigs.get(version);
-        const cfgForFrame   = cfgForVersion ? cfgForVersion.get(baseType) : undefined;
+        const cfgForFrame = CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType);
         if (cfgForFrame == null) {
-            return undefined;
-        } else {
-            const ticksPerFrame     = cfgForFrame.ticksPerFrame;
-            const textForDark       = isDark ? `state01` : `state00`;
-            const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
-            const textForVersion    = `ver${Helpers.getNumText(version)}`;
-            const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-            const textForType       = `type${Helpers.getNumText(baseType)}`;
-            const textForFrame      = ticksPerFrame < Number.MAX_VALUE
-                ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
-                : `frame00`;
-            return `tileBase_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
-        }
-    }
-    export function getTileDecoratorImageSource(
-        params: {
-            version         : Types.UnitAndTileTextureVersion;
-            skinId          : number;
-            decoratorType   : TileDecoratorType;
-            isDark          : boolean;
-            shapeId         : number;
-            tickCount       : number;
-        },
-    ): string | undefined {
-        const { version, skinId, decoratorType, isDark, shapeId, tickCount } = params;
-        if (decoratorType === TileDecoratorType.Empty) {
-            return undefined;
+            throw Helpers.newError(`Empty cfgForFrame.`);
         }
 
-        const cfgForVersion = CommonConstants.TileDecoratorFrameConfigs.get(version);
-        const cfgForFrame   = cfgForVersion ? cfgForVersion.get(decoratorType) : undefined;
-        if (cfgForFrame == null) {
-            return undefined;
-        } else {
-            const ticksPerFrame     = cfgForFrame.ticksPerFrame;
-            const textForDark       = isDark ? `state01` : `state00`;
-            const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
-            const textForVersion    = `ver${Helpers.getNumText(version)}`;
-            const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-            const textForType       = `type${Helpers.getNumText(decoratorType)}`;
-            const textForFrame      = ticksPerFrame < Number.MAX_VALUE
-                ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
-                : `frame00`;
-            return `tileDecorator_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
-        }
+        const ticksPerFrame     = cfgForFrame.ticksPerFrame;
+        const textForDark       = isDark ? `state01` : `state00`;
+        const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
+        const textForVersion    = `ver${Helpers.getNumText(version)}`;
+        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
+        const textForType       = `type${Helpers.getNumText(baseType)}`;
+        const textForFrame      = ticksPerFrame < Number.MAX_VALUE
+            ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
+            : `frame00`;
+        return `tileBase_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
-    export function getTileObjectImageSource(
-        params: {
-            version     : Types.UnitAndTileTextureVersion;
-            skinId      : number;
-            objectType  : TileObjectType;
-            isDark      : boolean;
-            shapeId     : number;
-            tickCount   : number;
-        },
-    ): string | undefined {
-        const { version, skinId, objectType, isDark, shapeId, tickCount } = params;
+    export function getTileDecoratorImageSource({version, skinId, decoratorType, isDark, shapeId, tickCount}: {
+        version         : Types.UnitAndTileTextureVersion;
+        skinId          : number;
+        decoratorType   : TileDecoratorType | null;
+        isDark          : boolean;
+        shapeId         : number | null;
+        tickCount       : number;
+    }): string {
+        if ((decoratorType == null) || (decoratorType === TileDecoratorType.Empty)) {
+            return ``;
+        }
+
+        const cfgForFrame = CommonConstants.TileDecoratorFrameConfigs.get(version)?.get(decoratorType);
+        if (cfgForFrame == null) {
+            throw Helpers.newError(`Empty cfgForFrame.`);
+        }
+
+        const ticksPerFrame     = cfgForFrame.ticksPerFrame;
+        const textForDark       = isDark ? `state01` : `state00`;
+        const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
+        const textForVersion    = `ver${Helpers.getNumText(version)}`;
+        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
+        const textForType       = `type${Helpers.getNumText(decoratorType)}`;
+        const textForFrame      = ticksPerFrame < Number.MAX_VALUE
+            ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
+            : `frame00`;
+        return `tileDecorator_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+    }
+    export function getTileObjectImageSource({version, skinId, objectType, isDark, shapeId, tickCount}: {
+        version     : Types.UnitAndTileTextureVersion;
+        skinId      : number;
+        objectType  : TileObjectType;
+        isDark      : boolean;
+        shapeId     : number;
+        tickCount   : number;
+    }): string {
         if (objectType === TileObjectType.Empty) {
-            return undefined;
+            return ``;
         }
 
-        const cfgForVersion = CommonConstants.TileObjectFrameConfigs.get(version);
-        const cfgForFrame   = cfgForVersion ? cfgForVersion.get(objectType) : undefined;
+        const cfgForFrame = CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType);
         if (cfgForFrame == null) {
-            return undefined;
-        } else {
-            const ticksPerFrame     = cfgForFrame.ticksPerFrame;
-            const textForDark       = isDark ? `state01` : `state00`;
-            const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
-            const textForVersion    = `ver${Helpers.getNumText(version)}`;
-            const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-            const textForType       = `type${Helpers.getNumText(objectType)}`;
-            const textForFrame      = ticksPerFrame < Number.MAX_VALUE
-                ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
-                : `frame00`;
-            return `tileObject_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+            throw Helpers.newError(`Empty cfgForFrame.`);
         }
+
+        const ticksPerFrame     = cfgForFrame.ticksPerFrame;
+        const textForDark       = isDark ? `state01` : `state00`;
+        const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
+        const textForVersion    = `ver${Helpers.getNumText(version)}`;
+        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
+        const textForType       = `type${Helpers.getNumText(objectType)}`;
+        const textForFrame      = ticksPerFrame < Number.MAX_VALUE
+            ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
+            : `frame00`;
+        return `tileObject_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
 
     export function getUnitAndTileDefaultSkinId(playerIndex: number): number {
         return playerIndex;
     }
 
-    export function getUnitImageSource(
-        { version, skinId, unitType, isDark, isMoving, tickCount }: {
-            version     : Types.UnitAndTileTextureVersion;
-            skinId      : number;
-            unitType    : UnitType;
-            isDark      : boolean;
-            isMoving    : boolean;
-            tickCount   : number;
-        },
-    ): string | undefined {
-        const cfgForVersion = CommonConstants.UnitImageConfigs.get(version);
-        const cfgForUnit    = cfgForVersion ? cfgForVersion.get(unitType) : undefined;
-        const cfgForFrame   = cfgForUnit
-            ? (isMoving ? cfgForUnit.moving : cfgForUnit.idle)
-            : undefined;
-        if (cfgForFrame == null) {
-            return undefined;
-        } else {
-            const ticksPerFrame     = cfgForFrame.ticksPerFrame;
-            const textForDark       = isDark ? `state01` : `state00`;
-            const textForMoving     = isMoving ? `act01` : `act00`;
-            const textForVersion    = `ver${Helpers.getNumText(version)}`;
-            const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
-            const textForType       = `type${Helpers.getNumText(unitType)}`;
-            const textForFrame      = `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`;
-            return `unit_${textForVersion}_${textForType}_${textForDark}_${textForMoving}_${textForSkin}_${textForFrame}`;
+    export function getUnitImageSource({ version, skinId, unitType, isDark, isMoving, tickCount }: {
+        version     : Types.UnitAndTileTextureVersion;
+        skinId      : number;
+        unitType    : UnitType;
+        isDark      : boolean;
+        isMoving    : boolean;
+        tickCount   : number;
+    }): string {
+        const cfgForUnit = CommonConstants.UnitImageConfigs.get(version)?.get(unitType);
+        if (cfgForUnit == null) {
+            throw Helpers.newError(`Empty cfgForUnit.`);
         }
+
+        const cfgForFrame       = isMoving ? cfgForUnit.moving : cfgForUnit.idle;
+        const ticksPerFrame     = cfgForFrame.ticksPerFrame;
+        const textForDark       = isDark ? `state01` : `state00`;
+        const textForMoving     = isMoving ? `act01` : `act00`;
+        const textForVersion    = `ver${Helpers.getNumText(version)}`;
+        const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
+        const textForType       = `type${Helpers.getNumText(unitType)}`;
+        const textForFrame      = `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`;
+        return `unit_${textForVersion}_${textForType}_${textForDark}_${textForMoving}_${textForSkin}_${textForFrame}`;
     }
 
-    export function getRankName(version: string, rankScore: number): string | undefined {
-        const cfg = getPlayerRankCfg(version, rankScore);
-        return cfg ? Lang.getStringInCurrentLanguage(cfg.nameList) : undefined;
+    export function getRankName(version: string, rankScore: number): string {
+        const name = Lang.getStringInCurrentLanguage(getPlayerRankCfg(version, rankScore).nameList);
+        if (name == null) {
+            throw Helpers.newError(`Empty name.`);
+        }
+
+        return name;
     }
-    export function getPlayerRankCfg(version: string, rankScore: number): PlayerRankCfg | undefined {
-        const cfgs = _ALL_CONFIGS.get(version)?.PlayerRank;
-        if (cfgs == null) {
-            return undefined;
+    export function getPlayerRankCfg(version: string, rankScore: number): PlayerRankCfg {
+        const cfgDict = _ALL_CONFIGS.get(version)?.PlayerRank;
+        if (cfgDict == null) {
+            throw Helpers.newError(`Empty cfgDict.`);
         }
 
         let maxRank = -1;
-        let maxCfg  : PlayerRankCfg | undefined;
-        for (const i in cfgs) {
-            const currCfg   = cfgs[i];
+        let maxCfg  : PlayerRankCfg | null = null;
+        for (const i in cfgDict) {
+            const currCfg   = cfgDict[i];
             const currRank  = currCfg.rank;
             if ((rankScore >= currCfg.minScore) && (currRank > maxRank)) {
                 maxRank = currRank;
                 maxCfg  = currCfg;
             }
         }
+
+        if (maxCfg == null) {
+            throw Helpers.newError(`Empty maxCfg.`);
+        }
         return maxCfg;
     }
 
-    export function getCoBasicCfg(version: string, coId: number): CoBasicCfg | undefined {
+    export function getCoBasicCfg(version: string, coId: number): CoBasicCfg {
+        const cfg = getAllCoBasicCfgDict(version)[coId];
+        if (cfg == null) {
+            throw Helpers.newError(`Empty cfg.`);
+        }
+
+        return cfg;
+    }
+    export function getAllCoBasicCfgDict(version: string): { [coId: number]: CoBasicCfg } {
         const cfgDict = _ALL_CONFIGS.get(version)?.CoBasic;
-        return cfgDict ? cfgDict[coId] : undefined;
+        if (cfgDict == null) {
+            throw Helpers.newError(`Empty cfgDict.`);
+        }
+
+        return cfgDict;
     }
-    export function getAllCoBasicCfgDict(version: string): { [coId: number]: CoBasicCfg } | null | undefined {
-        return _ALL_CONFIGS.get(version)?.CoBasic;
-    }
-    export function getCoNameAndTierText(version: string, coId: number | null | undefined): string | undefined {
-        const coConfig = coId == null ? null : getCoBasicCfg(version, coId);
-        return coConfig
-            // ? `(${coConfig.name}(T${coConfig.tier}))`
-            ? `${coConfig.name}`
-            : undefined;
+    export function getCoNameAndTierText(version: string, coId: number): string {
+        // const coConfig = coId == null ? null : getCoBasicCfg(version, coId);
+        // return coConfig
+        //     // ? `(${coConfig.name}(T${coConfig.tier}))`
+        //     ? `${coConfig.name}`
+        //     : null;
+
+        const name = getCoBasicCfg(version, coId).name;
+        if (name == null) {
+            throw Helpers.newError(`Empty name.`);
+        }
+
+        return name;
     }
     export function getCoType(version: string, coId: number): Types.CoType {
-        const maxLoadCount = getCoBasicCfg(version, coId)?.maxLoadCount;
+        const maxLoadCount = getCoBasicCfg(version, coId).maxLoadCount;
         if (maxLoadCount == null) {
-            return Types.CoType.Undefined;
-        } else {
-            return maxLoadCount > 0 ? Types.CoType.Zoned : Types.CoType.Global;
+            throw Helpers.newError(`Empty maxLoadCount.`);
         }
+
+        return maxLoadCount > 0 ? Types.CoType.Zoned : Types.CoType.Global;
     }
 
-    export function getCoSkillCfg(version: string, skillId: number): CoSkillCfg | undefined {
+    export function getCoSkillCfg(version: string, skillId: number): CoSkillCfg {
         const cfgDict = _ALL_CONFIGS.get(version)?.CoSkill;
-        return cfgDict ? cfgDict[skillId] : undefined;
+        if (cfgDict == null) {
+            throw Helpers.newError(`Empty cfgDict.`);
+        }
+
+        const cfg = cfgDict[skillId];
+        if (cfg == null) {
+            throw Helpers.newError(`Empty cfg.`);
+        }
+
+        return cfg;
     }
-    export function getCoSkillArray(version: string, coId: number, skillType: Types.CoSkillType): number[] | null | undefined {
+    export function getCoSkillArray(version: string, coId: number, skillType: Types.CoSkillType): number[] {
         const coConfig = getCoBasicCfg(version, coId);
-        if (coConfig == null) {
-            return undefined;
-        } else {
-            switch (skillType) {
-                case Types.CoSkillType.Passive      : return coConfig.passiveSkills;
-                case Types.CoSkillType.Power        : return coConfig.powerSkills;
-                case Types.CoSkillType.SuperPower   : return coConfig.superPowerSkills;
-                default                             : return undefined;
-            }
+        switch (skillType) {
+            case Types.CoSkillType.Passive      : return coConfig.passiveSkills || [];
+            case Types.CoSkillType.Power        : return coConfig.powerSkills || [];
+            case Types.CoSkillType.SuperPower   : return coConfig.superPowerSkills || [];
+            default                             : throw Helpers.newError(`Invalid skillType.`);
         }
     }
-    export function getCoSkillDescArray(version: string, coId: number, skillType: Types.CoSkillType): string[] | null | undefined {
+    export function getCoSkillDescArray(version: string, coId: number, skillType: Types.CoSkillType): string[] {
         const coConfig = getCoBasicCfg(version, coId);
-        if (coConfig == null) {
-            return undefined;
-        } else {
-            switch (skillType) {
-                case Types.CoSkillType.Passive      : return coConfig.passiveDesc;
-                case Types.CoSkillType.Power        : return coConfig.copDesc;
-                case Types.CoSkillType.SuperPower   : return coConfig.scopDesc;
-                default                             : return undefined;
-            }
+        switch (skillType) {
+            case Types.CoSkillType.Passive      : return coConfig.passiveDesc || [];
+            case Types.CoSkillType.Power        : return coConfig.copDesc || [];
+            case Types.CoSkillType.SuperPower   : return coConfig.scopDesc || [];
+            default                             : throw Helpers.newError(`Invalid skillType.`);
         }
     }
 
@@ -693,8 +799,7 @@ namespace ConfigManager {
 
         const cfgs = _CO_ID_LIST_IN_TIER.get(version);
         if (cfgs == null) {
-            Logger.error(`ConfigManager.getEnabledCoIdListInTier() empty cfgs.`);
-            return [];
+            throw Helpers.newError(`ConfigManager.getEnabledCoIdListInTier() empty cfgs.`);
         }
 
         const currentIdArray = cfgs.get(tier);
@@ -727,31 +832,25 @@ namespace ConfigManager {
         }
     }
 
-    export function getCoBustImageSource(coId: number): string | undefined {
-        return coId == null
-            ? undefined
-            : `coBust${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    export function getCoBustImageSource(coId: number): string {
+        return `coBust${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
     }
-    export function getCoHeadImageSource(coId: number): string | undefined {
-        return coId == null
-            ? undefined
-            : `coHead${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    export function getCoHeadImageSource(coId: number): string {
+        return `coHead${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    }
+    export function getCoEyeImageSource(coId: number, isAlive: boolean): string {
+        return `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
     }
 
-    export function checkIsUnitDivingByDefault(version: string, unitType: UnitType): boolean | undefined {
-        const templateCfg = getUnitTemplateCfg(version, unitType);
-        if (templateCfg == null) {
-            Logger.error(`ConfigManager.checkIsUnitDivingByDefault() empty templateCfg.`);
-            return undefined;
-        }
-        return checkIsUnitDivingByDefaultWithTemplateCfg(templateCfg);
+    export function checkIsUnitDivingByDefault(version: string, unitType: UnitType): boolean {
+        return checkIsUnitDivingByDefaultWithTemplateCfg(getUnitTemplateCfg(version, unitType));
     }
-    export function checkIsUnitDivingByDefaultWithTemplateCfg(templateCfg: UnitTemplateCfg): boolean {
+    export function checkIsUnitDivingByDefaultWithTemplateCfg(templateCfg: Types.UnitTemplateCfg): boolean {
         const diveCfgs = templateCfg.diveCfgs;
         return (diveCfgs != null) && (!!diveCfgs[1]);
     }
 
-    export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: number | null | undefined): boolean {
+    export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: Types.Undefinable<number>): boolean {
         if (tileObjectType === TileObjectType.Empty) {
             return !shapeId;
         } else {
@@ -760,12 +859,12 @@ namespace ConfigManager {
                 && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
         }
     }
-    export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: number | null | undefined): boolean {
+    export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: Types.Undefinable<number>): boolean {
         const cfg = CommonConstants.TileBaseShapeConfigs.get(tileBaseType);
         return (!!cfg)
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
-    export function checkIsValidTileDecoratorShapeId(type: TileDecoratorType | null | undefined, shapeId: number | null | undefined): boolean {
+    export function checkIsValidTileDecoratorShapeId(type: Types.Undefinable<TileDecoratorType>, shapeId: Types.Undefinable<number>): boolean {
         if (type == null) {
             return shapeId == null;
         }
@@ -798,19 +897,22 @@ namespace ConfigManager {
     }): boolean {
         return getSymmetricalTileBaseShapeId(params.baseType, params.shapeId1, params.symmetryType) === (params.shapeId2 || 0);
     }
-    export function checkIsTileDecoratorSymmetrical(params: {
-        decoratorType   : TileDecoratorType;
-        shapeId1        : number | null | undefined;
-        shapeId2        : number | null | undefined;
+    export function checkIsTileDecoratorSymmetrical({ decoratorType, shapeId1, shapeId2, symmetryType }: {
+        decoratorType   : TileDecoratorType | null;
+        shapeId1        : Types.Undefinable<number>;
+        shapeId2        : Types.Undefinable<number>;
         symmetryType    : Types.SymmetryType;
     }): boolean {
-        const { shapeId1, shapeId2 } = params;
+        if (decoratorType == null) {
+            return (shapeId1 == null) && (shapeId2 == null);
+        }
+
         if (shapeId1 == null) {
             return shapeId2 == null;
         } else if (shapeId2 == null) {
             return shapeId1 == null;
         } else {
-            return getSymmetricalTileDecoratorShapeId(params.decoratorType, shapeId1, params.symmetryType) === shapeId2;
+            return getSymmetricalTileDecoratorShapeId(decoratorType, shapeId1, symmetryType) === shapeId2;
         }
     }
     export function checkIsTileObjectSymmetrical(params: {

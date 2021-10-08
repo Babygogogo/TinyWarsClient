@@ -1,23 +1,23 @@
 
-import Logger                   from "../helpers/Logger";
+import Helpers                  from "../helpers/Helpers";
 import SoundManager             from "../helpers/SoundManager";
-import Types                    from "../helpers/Types";
 import TwnsUiComponent          from "./UiComponent";
+import TwnsUiListItemRenderer   from "./UiListItemRenderer";
 import TwnsUiTabItemRenderer    from "./UiTabItemRenderer";
 import TwnsUiTabPage            from "./UiTabPage";
 
 namespace TwnsUiTab {
     export class UiTab<DataForTabItemRenderer, DataForPage> extends TwnsUiComponent.UiComponent {
-        private readonly _bar           : eui.TabBar;  // 页签栏
-        private readonly _page          : eui.Group;   // 页面内容，仅用于占位
+        private readonly _bar!          : eui.TabBar;  // 页签栏
+        private readonly _page!         : eui.Group;   // 页面内容，仅用于占位
 
         private _tabDataArray           : DataForUiTab<DataForTabItemRenderer, DataForPage>[] = [];
-        private _selectedIndex          : number;
+        private _selectedIndex          = -1;
 
-        private _cachedItemRenderer     : new () => TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer>;
-        private _cachedTabDataArray     : DataForUiTab<DataForTabItemRenderer, DataForPage>[];
+        private _cachedItemRenderer     : (new () => TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer>) | null = null;
+        private _cachedTabDataArray     : DataForUiTab<DataForTabItemRenderer, DataForPage>[] | null = null;
         private _cachedPageDataDict     = new Map<number, DataForPage>();
-        private _cachedSelectedIndex    : number;
+        private _cachedSelectedIndex    : number | null = null;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -42,7 +42,7 @@ namespace TwnsUiTab {
                         tabDataArray[index].pageData = pageData;
                     }
                 }
-                this.bindData(tabDataArray, this._cachedSelectedIndex);
+                this.bindData(tabDataArray, Helpers.getExisted(this._cachedSelectedIndex));
 
                 this._cachedTabDataArray    = null;
                 this._cachedSelectedIndex   = null;
@@ -54,31 +54,32 @@ namespace TwnsUiTab {
             this.clear();
         }
 
-        private _onItemTapBar(e: eui.ItemTapEvent): void {
-            const index = e.itemIndex;
+        private _onItemTapBar(e: egret.Event): void {
+            const event = e as eui.ItemTapEvent;
+            const index = event.itemIndex;
             const data  = this._getTabDataArray()[index];
             if ((data.callbackOnTouchedItem == null) || (data.callbackOnTouchedItem())) {
                 this._setSelectedIndex(index);
             } else {
                 this._bar.selectedIndex = this.getSelectedIndex();
             }
+
+            const item = this._bar.getElementAt(index);
+            if (item instanceof TwnsUiListItemRenderer.UiListItemRenderer) {
+                SoundManager.playShortSfx(item.getShortSfxCode());
+                item.onItemTapEvent(event);
+            }
         }
         private _onTouchBeginBar(): void {
-            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            // SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _setSelectedIndex(index: number): void {
             if (!this.getIsOpening()) {
-                Logger.error(`UiTab._setSelectedIndex() not opening.`);
-                return;
+                throw Helpers.newError(`UiTab._setSelectedIndex() not opening.`);
             }
 
-            const data = this._getTabDataArray()[index];
-            if (!data) {
-                Logger.error(`UiTab.setSelectedIndex() empty data.`);
-                return;
-            }
-
+            const data = Helpers.getExisted(this._getTabDataArray()[index]);
             this._removeAllCachedPagesFromParent();
             this._bar.selectedIndex = index;
             this._selectedIndex     = index;
@@ -93,15 +94,11 @@ namespace TwnsUiTab {
         }
 
         public getPageInstance(index: number): TwnsUiTabPage.UiTabPage<DataForPage> {
-            const tabData = this._getTabDataArray()[index];
-            if (!tabData) {
-                return undefined;
-            } else {
-                if (!tabData.pageInstance) {
-                    tabData.pageInstance = new tabData.pageClass();
-                }
-                return tabData.pageInstance;
+            const tabData = Helpers.getExisted(this._getTabDataArray()[index]);
+            if (!tabData.pageInstance) {
+                tabData.pageInstance = new tabData.pageClass();
             }
+            return tabData.pageInstance;
         }
 
         public setBarItemRenderer(itemRenderer: new () => TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer>): void {
@@ -114,8 +111,7 @@ namespace TwnsUiTab {
 
         public bindData(dataArray: DataForUiTab<DataForTabItemRenderer, DataForPage>[], selectedIndex = 0): void {
             if (!dataArray.length) {
-                Logger.error(`UiTab.bindData() empty data.`);
-                return;
+                throw Helpers.newError(`UiTab.bindData() empty data.`);
             }
 
             if (!this.getIsOpening()) {
@@ -145,13 +141,8 @@ namespace TwnsUiTab {
                 return;
             }
 
-            const tabData = this._getTabDataArray()[index];
-            if (!tabData) {
-                Logger.error(`UiTab.updatePageData() invalid index.`);
-                return;
-            }
-
-            tabData.pageData = pageData;
+            const tabData       = Helpers.getExisted(this._getTabDataArray()[index]);
+            tabData.pageData    = pageData;
             if ((index === this.getSelectedIndex()) && (refreshPage)) {
                 this._setSelectedIndex(index);
             }
@@ -160,7 +151,7 @@ namespace TwnsUiTab {
         public clear() : void {
             this._removeAllCachedPagesFromParent();
             this._getTabDataArray().length  = 0;
-            this._selectedIndex             = null;
+            this._selectedIndex             = -1;
             this._cachedItemRenderer        = null;
             this._cachedSelectedIndex       = null;
             this._cachedTabDataArray        = null;
@@ -181,10 +172,10 @@ namespace TwnsUiTab {
 
     type DataForUiTab<DataForTabItemRenderer, DataForPage> = {
         callbackOnTouchedItem?  : () => boolean;
-        tabItemData?            : DataForTabItemRenderer;
+        tabItemData             : DataForTabItemRenderer;
 
         pageClass               : new () => TwnsUiTabPage.UiTabPage<DataForPage>;
-        pageData?               : DataForPage;
+        pageData                : DataForPage;
 
         /**
          * 页面的实例。设计意图是作为UiTab的页面缓存使用，因此外部不必提供此值；

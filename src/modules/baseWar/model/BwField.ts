@@ -1,7 +1,9 @@
 
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsClientErrorCode      from "../../tools/helpers/ClientErrorCode";
+import Helpers                  from "../../tools/helpers/Helpers";
+import Types                    from "../../tools/helpers/Types";
 import ProtoTypes               from "../../tools/proto/ProtoTypes";
+import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 import TwnsBwFieldView          from "../view/BwFieldView";
 import TwnsBwActionPlanner      from "./BwActionPlanner";
 import TwnsBwCursor             from "./BwCursor";
@@ -32,137 +34,85 @@ namespace TwnsBwField {
         public abstract getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner;
 
         public init({ data, configVersion, playersCountUnneutral }: {
-            data                    : ISerialField | null | undefined;
+            data                    : Types.Undefinable<ISerialField>;
             configVersion           : string;
             playersCountUnneutral   : number;
-        }): ClientErrorCode {
+        }): void {
             if (data == null) {
-                return ClientErrorCode.BwFieldInit00;
+                throw Helpers.newError(`Empty data.`, ClientErrorCode.BwField_Init_00);
             }
 
             const mapSize = WarCommonHelpers.getMapSize(data.tileMap);
             if (!WarCommonHelpers.checkIsValidMapSize(mapSize)) {
-                return ClientErrorCode.BwFieldInit01;
+                throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwField_Init_01);
             }
 
-            const fogMapError = this.getFogMap().init({
+            this.getFogMap().init({
                 data                : data.fogMap,
                 mapSize,
                 playersCountUnneutral
             });
-            if (fogMapError) {
-                return fogMapError;
-            }
 
-            const tileMap       = this.getTileMap();
-            const tileMapError  = tileMap.init({
+            const tileMap = this.getTileMap();
+            tileMap.init({
                 data                : data.tileMap,
                 configVersion,
                 mapSize,
                 playersCountUnneutral
             });
-            if (tileMapError) {
-                return tileMapError;
-            }
 
-            const unitMap       = this.getUnitMap();
-            const unitMapError  = unitMap.init({
+            const unitMap = this.getUnitMap();
+            unitMap.init({
                 data                : data.unitMap,
                 configVersion,
                 mapSize,
                 playersCountUnneutral
             });
-            if (unitMapError) {
-                return unitMapError;
-            }
 
             const { width, height } = mapSize;
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
                     const gridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
-                    if (tile == null) {
-                        return ClientErrorCode.BwFieldInit02;
-                    }
-
                     if ((tile.getMaxHp() != null) && (unitMap.getUnitOnMap(gridIndex))) {
-                        return ClientErrorCode.BwFieldInit03;
+                        throw Helpers.newError(`There is a unit on an attackable tile.`, ClientErrorCode.BwField_Init_02);
                     }
                 }
             }
 
-            const actionPlannerError = this.getActionPlanner().init(mapSize);
-            if (actionPlannerError) {
-                return actionPlannerError;
-            }
-
-            const cursorError = this.getCursor().init(mapSize);
-            if (cursorError) {
-                return cursorError;
-            }
-
-            const gridVisualEffectError = this.getGridVisualEffect().init();
-            if (gridVisualEffectError) {
-                return gridVisualEffectError;
-            }
-
+            this.getActionPlanner().init(mapSize);
+            this.getCursor().init(mapSize);
+            this.getGridVisualEffect().init();
             this.getView().init(this);
-
-            return ClientErrorCode.NoError;
         }
         public fastInit({ data, configVersion, playersCountUnneutral }: {
             data                    : ISerialField;
             configVersion           : string;
             playersCountUnneutral   : number;
-        }): ClientErrorCode {
-            const mapSize       = WarCommonHelpers.getMapSize(data.tileMap);
-            const fogMapError   = this.getFogMap().fastInit({
+        }): void {
+            const mapSize = WarCommonHelpers.getMapSize(data.tileMap);
+            this.getFogMap().fastInit({
                 data                : data.fogMap,
                 mapSize,
                 playersCountUnneutral
             });
-            if (fogMapError) {
-                return fogMapError;
-            }
-
-            const tileMapError = this.getTileMap().fastInit({
+            this.getTileMap().fastInit({
                 data                : data.tileMap,
                 configVersion,
                 mapSize,
                 playersCountUnneutral,
             });
-            if (tileMapError) {
-                return tileMapError;
-            }
-
-            const unitMapError = this.getUnitMap().fastInit({
+            this.getUnitMap().fastInit({
                 data                : data.unitMap,
                 configVersion,
                 mapSize,
                 playersCountUnneutral,
             });
-            if (unitMapError) {
-                return unitMapError;
-            }
 
-            const cursorError = this.getCursor().fastInit(mapSize);
-            if (cursorError) {
-                return cursorError;
-            }
-
-            const actionPlannerError = this.getActionPlanner().fastInit(mapSize);
-            if (actionPlannerError) {
-                return actionPlannerError;
-            }
-
-            const gridVisualEffectError = this.getGridVisualEffect().fastInit();
-            if (gridVisualEffectError) {
-                return gridVisualEffectError;
-            }
-
+            this.getCursor().fastInit();
+            this.getActionPlanner().fastInit();
+            this.getGridVisualEffect().fastInit();
             this.getView().fastInit(this);
-
-            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

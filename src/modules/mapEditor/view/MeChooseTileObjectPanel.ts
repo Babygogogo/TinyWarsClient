@@ -1,6 +1,7 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
 import ConfigManager            from "../../tools/helpers/ConfigManager";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -27,10 +28,10 @@ namespace TwnsMeChooseTileObjectPanel {
 
         private static _instance: MeChooseTileObjectPanel;
 
-        private _labelRecentTitle   : TwnsUiLabel.UiLabel;
-        private _listRecent         : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
-        private _listCategory       : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
-        private _btnCancel          : TwnsUiButton.UiButton;
+        private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
+        private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
+        private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
         private _dataListForRecent  : DataForTileObjectRenderer[] = [];
 
@@ -38,7 +39,7 @@ namespace TwnsMeChooseTileObjectPanel {
             if (!MeChooseTileObjectPanel._instance) {
                 MeChooseTileObjectPanel._instance = new MeChooseTileObjectPanel();
             }
-            MeChooseTileObjectPanel._instance.open(undefined);
+            MeChooseTileObjectPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeChooseTileObjectPanel._instance) {
@@ -116,7 +117,7 @@ namespace TwnsMeChooseTileObjectPanel {
                         mapping.set(playerIndex, []);
                     }
 
-                    const dataListForDrawTileObject = mapping.get(playerIndex);
+                    const dataListForDrawTileObject = Helpers.getExisted(mapping.get(playerIndex));
                     for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
                         dataListForDrawTileObject.push({
                             objectType,
@@ -155,8 +156,8 @@ namespace TwnsMeChooseTileObjectPanel {
         panel                       : MeChooseTileObjectPanel;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
-        private _labelCategory  : TwnsUiLabel.UiLabel;
-        private _listTileObject : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
+        private readonly _labelCategory!    : TwnsUiLabel.UiLabel;
+        private readonly _listTileObject!   : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
 
         protected _onOpened(): void {
             this._listTileObject.setItemRenderer(TileObjectRenderer);
@@ -164,7 +165,7 @@ namespace TwnsMeChooseTileObjectPanel {
         }
 
         protected _onDataChanged(): void {
-            const data                      = this.data;
+            const data                      = this._getData();
             const dataListForDrawTileObject = data.dataListForDrawTileObject;
             this._labelCategory.text        = Lang.getPlayerForceName(dataListForDrawTileObject[0].playerIndex);
 
@@ -185,9 +186,9 @@ namespace TwnsMeChooseTileObjectPanel {
         panel                   : MeChooseTileObjectPanel;
     };
     class TileObjectRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileObjectRenderer> {
-        private _group          : eui.Group;
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _conTileView    : eui.Group;
+        private readonly _group!        : eui.Group;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _conTileView!  : eui.Group;
 
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
@@ -209,10 +210,10 @@ namespace TwnsMeChooseTileObjectPanel {
         }
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             const dataForDrawTileObject = data.dataForDrawTileObject;
             const tileObjectType        = dataForDrawTileObject.objectType;
-            this._labelName.text        = Lang.getTileName(ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType));
+            this._labelName.text        = Lang.getTileName(ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType)) || CommonConstants.ErrorTextForUndefined;
             this._tileView.init({
                 tileObjectType,
                 tileObjectShapeId   : dataForDrawTileObject.shapeId,
@@ -226,12 +227,12 @@ namespace TwnsMeChooseTileObjectPanel {
         }
 
         public onItemTapEvent(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             const panel                 = data.panel;
             const dataForDrawTileObject = data.dataForDrawTileObject;
             panel.updateOnChooseTileObject(dataForDrawTileObject);
             panel.close();
-            MeModel.getWar().getDrawer().setModeDrawTileObject(dataForDrawTileObject);
+            Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawTileObject(dataForDrawTileObject);
         }
     }
 }

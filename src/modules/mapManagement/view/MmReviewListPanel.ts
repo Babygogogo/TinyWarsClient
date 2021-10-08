@@ -1,5 +1,7 @@
 
+import CommonConstants          from "../../tools/helpers/CommonConstants";
 import FlowManager              from "../../tools/helpers/FlowManager";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -26,21 +28,21 @@ namespace TwnsMmReviewListPanel {
 
         private static _instance: MmReviewListPanel;
 
-        private _zoomMap        : TwnsUiZoomableMap.UiZoomableMap;
-        private _labelNoData    : TwnsUiLabel.UiLabel;
-        private _labelMenuTitle : TwnsUiLabel.UiLabel;
-        private _labelLoading   : TwnsUiLabel.UiLabel;
-        private _listMap        : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
-        private _btnBack        : TwnsUiButton.UiButton;
+        private readonly _zoomMap!          : TwnsUiZoomableMap.UiZoomableMap;
+        private readonly _labelNoData!      : TwnsUiLabel.UiLabel;
+        private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading!     : TwnsUiLabel.UiLabel;
+        private readonly _listMap!          : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
+        private readonly _btnBack!          : TwnsUiButton.UiButton;
 
         private _dataForListMap     : DataForMapRenderer[] = [];
-        private _selectedWarIndex   : number;
+        private _selectedIndex      : number | null = null;
 
         public static show(): void {
             if (!MmReviewListPanel._instance) {
                 MmReviewListPanel._instance = new MmReviewListPanel();
             }
-            MmReviewListPanel._instance.open(undefined);
+            MmReviewListPanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MmReviewListPanel._instance) {
@@ -72,11 +74,11 @@ namespace TwnsMmReviewListPanel {
         }
 
         public async setSelectedIndex(newIndex: number): Promise<void> {
-            const oldIndex         = this._selectedWarIndex;
-            const dataList         = this._dataForListMap;
-            this._selectedWarIndex = dataList[newIndex] ? newIndex : undefined;
+            const oldIndex      = this.getSelectedIndex();
+            const dataList      = this._dataForListMap;
+            this._selectedIndex = dataList[newIndex] ? newIndex : null;
 
-            if (dataList[oldIndex]) {
+            if ((oldIndex != null) && (dataList[oldIndex])) {
                 this._listMap.updateSingleData(oldIndex, dataList[oldIndex]);
             }
 
@@ -87,14 +89,14 @@ namespace TwnsMmReviewListPanel {
                 this._zoomMap.clearMap();
             }
         }
-        public getSelectedIndex(): number {
-            return this._selectedWarIndex;
+        public getSelectedIndex(): number | null {
+            return this._selectedIndex;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onMsgMmGetReviewingMaps(e: egret.Event): void {
+        private _onMsgMmGetReviewingMaps(): void {
             const newData               = this._createDataForListMap(WarMapModel.getMmReviewingMaps());
             this._dataForListMap        = newData;
             this._labelLoading.visible  = false;
@@ -109,11 +111,11 @@ namespace TwnsMmReviewListPanel {
             this.setSelectedIndex(0);
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
             TwnsMmMainMenuPanel.MmMainMenuPanel.show();
         }
@@ -160,10 +162,10 @@ namespace TwnsMmReviewListPanel {
         panel   : MmReviewListPanel;
     };
     class MapRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapRenderer> {
-        private _btnChoose      : TwnsUiButton.UiButton;
-        private _labelName      : TwnsUiLabel.UiLabel;
-        private _labelStatus    : TwnsUiLabel.UiLabel;
-        private _btnNext        : TwnsUiButton.UiButton;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelStatus!  : TwnsUiLabel.UiLabel;
+        private readonly _btnNext!      : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -173,24 +175,24 @@ namespace TwnsMmReviewListPanel {
         }
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             const mapEditorData         = data.mapEditorData;
-            const mapRawData            = mapEditorData.mapRawData;
-            const status                = mapEditorData.reviewStatus;
+            const mapRawData            = Helpers.getExisted(mapEditorData.mapRawData);
+            const status                = Helpers.getExisted(mapEditorData.reviewStatus);
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelStatus.text      = Lang.getMapReviewStatusText(status);
+            this._labelStatus.text      = Lang.getMapReviewStatusText(status) ?? CommonConstants.ErrorTextForUndefined;
             this._labelStatus.textColor = getReviewStatusTextColor(status);
             this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || `(${Lang.getText(LangTextType.B0277)})`;
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data;
+        private _onTouchTapBtnChoose(): void {
+            const data = this._getData();
             data.panel.setSelectedIndex(data.index);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data = this.data.mapEditorData;
-            FlowManager.gotoMapEditorWar(data.mapRawData, data.slotIndex, true);
+        private _onTouchTapBtnNext(): void {
+            const data = this._getData().mapEditorData;
+            FlowManager.gotoMapEditorWar(Helpers.getExisted(data.mapRawData), Helpers.getExisted(data.slotIndex), true);
         }
     }
 

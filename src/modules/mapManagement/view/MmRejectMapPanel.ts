@@ -1,13 +1,14 @@
 
-import TwnsMeWar        from "../../mapEditor/model/MeWar";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
-import TwnsUiTextInput  from "../../tools/ui/UiTextInput";
-import WarMapProxy      from "../../warMap/model/WarMapProxy";
+import TwnsMeWar            from "../../mapEditor/model/MeWar";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
+import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+import WarMapProxy          from "../../warMap/model/WarMapProxy";
 
 namespace TwnsMmRejectMapPanel {
     import MeWar        = TwnsMeWar.MeWar;
@@ -22,16 +23,11 @@ namespace TwnsMmRejectMapPanel {
 
         private static _instance: MmRejectMapPanel;
 
-        // @ts-ignore
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _labelTips      : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private _inputReason    : TwnsUiTextInput.UiTextInput;
-        // @ts-ignore
-        private _btnCancel      : TwnsUiButton.UiButton;
-        // @ts-ignore
-        private _btnConfirm     : TwnsUiButton.UiButton;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelTips!    : TwnsUiLabel.UiLabel;
+        private readonly _inputReason!  : TwnsUiTextInput.UiTextInput;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
         public static show(openData: OpenData): void {
             if (!MmRejectMapPanel._instance) {
@@ -59,10 +55,11 @@ namespace TwnsMmRejectMapPanel {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
             ]);
 
-            this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
-            this._btnCancel.label   = Lang.getText(LangTextType.B0154);
-            this._labelTitle.text   = Lang.getText(LangTextType.B0297);
-            this._labelTips.text    = Lang.getText(LangTextType.A0094);
+            this._inputReason.maxChars  = CommonConstants.MapReviewCommentMaxLength;
+            this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
+            this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+            this._labelTitle.text       = Lang.getText(LangTextType.B0297);
+            this._labelTips.text        = Lang.getText(LangTextType.A0094);
         }
 
         private _onTouchedBtnCancel(): void {

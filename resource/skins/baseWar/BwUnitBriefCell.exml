@@ -1,20 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="80" height="120" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_group" height="120" width="80">
-        <TwnsUiImage:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <e:Group id="_conUnitView" y="28" scaleX="0.5" scaleY="0.5" x="22" touchChildren="false" touchEnabled="false" />
-        <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="12" textColor="0xffffff" y="8" horizontalCenter="0"
-                        stroke="2" />
-        <TwnsUiImage:UiImage id="_imgHp" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="58" x="18"
-                        source="v01_c03_t99_s02_f03" scaleX="0.65" scaleY="0.65" />
-        <TwnsUiImage:UiImage id="_imgFuel" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="73" x="18" scaleX="0.65"
-                        scaleY="0.65" source="v01_c03_t99_s02_f01" />
-        <TwnsUiImage:UiImage id="_imgState" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="88" x="18"
-                        source="v01_c03_t99_s02_f02" scaleX="0.65" scaleY="0.65" />
-        <TwnsUiLabel:UiLabel id="_labelHp" text="100" size="14" textColor="0xFFFFFF" y="68" x="42" />
-        <TwnsUiLabel:UiLabel id="_labelFuel" text="100" size="14" textColor="0xFFFFFF" y="83" x="42" />
-        <TwnsUiLabel:UiLabel id="_labelState" text="20" size="14" textColor="0xFFFFFF" y="98" x="42" />
+<e:Skin width="70" height="120" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group id="_group" width="70" height="120" x="0" y="0">
+        <e:Group scaleX="1" scaleY="1" left="0" right="2" top="0" bottom="0">
+            <e:Group y="0" left="0" right="0" locked="true">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" source="uncompressedColorGrey0001"
+                                     scale9Grid="1,1,1,1" height="20" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelName" text="地名五个字" size="12" textColor="0xffffff" horizontalCenter="0"
+                                     verticalCenter="0" maxTextWidth="66" />
+            </e:Group>
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="19" bottom="0"
+                                 x="10" y="10" visible="true" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" />
+            <e:Group id="_conUnitView" y="38" scaleX="0.5" scaleY="0.5" x="16" touchChildren="false"
+                     touchEnabled="false" />
+            <e:Group y="74" horizontalCenter="0">
+                <e:Group x="0" y="0">
+                    <TwnsUiImage:UiImage id="_imgHp" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                                         source="c04_t10_s00_f00" width="10" height="10" verticalCenter="0" />
+                    <TwnsUiLabel:UiLabel id="_labelHp" text="100" size="12" textColor="0xFFFFFF" x="16"
+                                         verticalCenter="1" />
+                </e:Group>
+                <e:Group x="0" y="15">
+                    <TwnsUiImage:UiImage id="_imgFuel" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0" width="10"
+                                         height="10" source="c04_t10_s01_f00" verticalCenter="0" />
+                    <TwnsUiLabel:UiLabel id="_labelFuel" text="100" size="12" textColor="0xFFFFFF" x="16"
+                                         verticalCenter="1" />
+                </e:Group>
+                <e:Group x="0" y="30">
+                    <TwnsUiImage:UiImage id="_imgState" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                                         source="c04_t10_s02_f00" width="10" height="10" verticalCenter="0" />
+                    <TwnsUiLabel:UiLabel id="_labelState" text="20" size="12" textColor="0xFFFFFF" x="16"
+                                         verticalCenter="1" />
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout gap="1" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
     </e:Group>
 </e:Skin>

@@ -1,4 +1,5 @@
 
+import Helpers                      from "../../tools/helpers/Helpers";
 import TwnsBwField                  from "../model/BwField";
 import TwnsBwActionPlannerView      from "./BwActionPlannerView";
 import TwnsBwCursorView             from "./BwCursorView";
@@ -7,21 +8,15 @@ import TwnsBwTileMapView            from "./BwTileMapView";
 import TwnsBwUnitMapView            from "./BwUnitMapView";
 
 namespace TwnsBwFieldView {
-    import BwGridVisualEffectView   = TwnsBwGridVisualEffectView.BwGridVisualEffectView;
-    import BwTileMapView            = TwnsBwTileMapView.BwTileMapView;
-    import BwUnitMapView            = TwnsBwUnitMapView.BwUnitMapView;
-    import BwField                  = TwnsBwField.BwField;
-    import BwCursorView             = TwnsBwCursorView.BwCursorView;
-
     export class BwFieldView extends egret.DisplayObjectContainer {
-        private _field                  : BwField;
-        private _tileMapView            : BwTileMapView;
-        private _actionPlannerView      : TwnsBwActionPlannerView.BwActionPlannerView;
-        private _unitMapView            : BwUnitMapView;
-        private _cursorView             : BwCursorView;
-        private _gridVisionEffectView   : BwGridVisualEffectView;
+        private _field?                 : TwnsBwField.BwField;
+        private _tileMapView?           : TwnsBwTileMapView.BwTileMapView;
+        private _actionPlannerView?     : TwnsBwActionPlannerView.BwActionPlannerView;
+        private _unitMapView?           : TwnsBwUnitMapView.BwUnitMapView;
+        private _cursorView?            : TwnsBwCursorView.BwCursorView;
+        private _gridVisionEffectView?  : TwnsBwGridVisualEffectView.BwGridVisualEffectView;
 
-        public init(field: BwField): void {
+        public init(field: TwnsBwField.BwField): void {
             if (!this._field) {
                 this._field = field;
 
@@ -38,7 +33,7 @@ namespace TwnsBwFieldView {
                 this.addChild(this._gridVisionEffectView);
             }
         }
-        public fastInit(field: BwField): void {
+        public fastInit(field: TwnsBwField.BwField): void {
             this._field = field;
         }
 
@@ -49,11 +44,11 @@ namespace TwnsBwFieldView {
             // nothing to do
         }
 
-        private _getUnitMapView(): BwUnitMapView {
-            return this._unitMapView;
+        private _getUnitMapView(): TwnsBwUnitMapView.BwUnitMapView {
+            return Helpers.getExisted(this._unitMapView);
         }
-        private _getTileMapView(): BwTileMapView {
-            return this._tileMapView;
+        private _getTileMapView(): TwnsBwTileMapView.BwTileMapView {
+            return Helpers.getExisted(this._tileMapView);
         }
 
         public setUnitsVisible(visible: boolean): void {

@@ -1,14 +1,13 @@
 
 import TwnsBwFogMap         from "../../baseWar/model/BwFogMap";
+import TwnsBwWar            from "../../baseWar/model/BwWar";
 import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
-import TwnsSpwWar           from "./SpwWar";
 
 namespace TwnsSpwFogMap {
     import BwFogMap = TwnsBwFogMap.BwFogMap;
-    import SpwWar   = TwnsSpwWar.SpwWar;
 
     export class SpwFogMap extends BwFogMap {
-        public startRunning(war: SpwWar): void {
+        public startRunning(war: TwnsBwWar.BwWar): void {
             this._setWar(war);
 
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();

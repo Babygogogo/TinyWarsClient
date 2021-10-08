@@ -1,15 +1,15 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import SoundManager     from "../../tools/helpers/SoundManager";
-import Types            from "../../tools/helpers/Types";
-import Lang             from "../../tools/lang/Lang";
-import TwnsLangTextType from "../../tools/lang/LangTextType";
-import TwnsNotifyType   from "../../tools/notify/NotifyType";
-import TwnsUiButton     from "../../tools/ui/UiButton";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import TwnsUiLabel      from "../../tools/ui/UiLabel";
-import TwnsUiPanel      from "../../tools/ui/UiPanel";
+import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Helpers              from "../../tools/helpers/Helpers";
+import SoundManager         from "../../tools/helpers/SoundManager";
+import Types                from "../../tools/helpers/Types";
+import Lang                 from "../../tools/lang/Lang";
+import TwnsLangTextType     from "../../tools/lang/LangTextType";
+import TwnsNotifyType       from "../../tools/notify/NotifyType";
+import TwnsUiButton         from "../../tools/ui/UiButton";
+import TwnsUiImage          from "../../tools/ui/UiImage";
+import TwnsUiLabel          from "../../tools/ui/UiLabel";
+import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsUserSetSoundPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -21,43 +21,43 @@ namespace TwnsUserSetSoundPanel {
 
         private static _instance: UserSetSoundPanel;
 
-        private readonly _imgMask           : TwnsUiImage.UiImage;
-        private readonly _group             : eui.Group;
-        private readonly _labelTitle        : TwnsUiLabel.UiLabel;
+        private readonly _imgMask!              : TwnsUiImage.UiImage;
+        private readonly _group!                : eui.Group;
+        private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
 
-        private readonly _labelBgmTitle     : TwnsUiLabel.UiLabel;
-        private readonly _imgBgmMute        : TwnsUiImage.UiImage;
-        private readonly _groupBgmVolume    : eui.Group;
-        private readonly _imgBgmBar         : TwnsUiImage.UiImage;
-        private readonly _imgBgmPoint       : TwnsUiImage.UiImage;
-        private readonly _labelBgmVolume    : TwnsUiLabel.UiLabel;
+        private readonly _labelBgmTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _imgBgmMute!           : TwnsUiImage.UiImage;
+        private readonly _groupBgmVolume!       : eui.Group;
+        private readonly _imgBgmBar!            : TwnsUiImage.UiImage;
+        private readonly _imgBgmPoint!          : TwnsUiImage.UiImage;
+        private readonly _labelBgmVolume!       : TwnsUiLabel.UiLabel;
 
-        private readonly _labelEffectTitle  : TwnsUiLabel.UiLabel;
-        private readonly _imgEffectMute     : TwnsUiImage.UiImage;
-        private readonly _groupEffectVolume : eui.Group;
-        private readonly _imgEffectBar      : TwnsUiImage.UiImage;
-        private readonly _imgEffectPoint    : TwnsUiImage.UiImage;
-        private readonly _labelEffectVolume : TwnsUiLabel.UiLabel;
+        private readonly _labelEffectTitle!     : TwnsUiLabel.UiLabel;
+        private readonly _imgEffectMute!        : TwnsUiImage.UiImage;
+        private readonly _groupEffectVolume!    : eui.Group;
+        private readonly _imgEffectBar!         : TwnsUiImage.UiImage;
+        private readonly _imgEffectPoint!       : TwnsUiImage.UiImage;
+        private readonly _labelEffectVolume!    : TwnsUiLabel.UiLabel;
 
-        private readonly _labelSwitchBgm    : TwnsUiLabel.UiLabel;
-        private readonly _labelBgmName      : TwnsUiLabel.UiLabel;
-        private readonly _btnPrevBgm        : TwnsUiButton.UiButton;
-        private readonly _btnNextBgm        : TwnsUiButton.UiButton;
+        private readonly _labelSwitchBgm!       : TwnsUiLabel.UiLabel;
+        private readonly _labelBgmName!         : TwnsUiLabel.UiLabel;
+        private readonly _btnPrevBgm!           : TwnsUiButton.UiButton;
+        private readonly _btnNextBgm!           : TwnsUiButton.UiButton;
 
-        private readonly _btnCancel         : TwnsUiButton.UiButton;
-        private readonly _btnDefault        : TwnsUiButton.UiButton;
-        private readonly _btnConfirm        : TwnsUiButton.UiButton;
+        private readonly _btnCancel!            : TwnsUiButton.UiButton;
+        private readonly _btnDefault!           : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
-        private _prevBgmMute                : boolean | undefined;
-        private _prevBgmVolume              : number | undefined;
-        private _prevEffectMute             : boolean | undefined;
-        private _prevEffectVolume           : number | undefined;
+        private _prevBgmMute                : boolean | null = null;
+        private _prevBgmVolume              : number | null = null;
+        private _prevEffectMute             : boolean | null = null;
+        private _prevEffectVolume           : number | null = null;
 
         public static show(): void {
             if (!UserSetSoundPanel._instance) {
                 UserSetSoundPanel._instance = new UserSetSoundPanel();
             }
-            UserSetSoundPanel._instance.open(undefined);
+            UserSetSoundPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

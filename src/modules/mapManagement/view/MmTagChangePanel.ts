@@ -1,4 +1,5 @@
 
+import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
@@ -25,16 +26,14 @@ namespace TwnsMmTagChangePanel {
 
         private static _instance: MmTagChangePanel;
 
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _btnWarRule     : TwnsUiButton.UiButton;
-        private _btnCancel      : TwnsUiButton.UiButton;
-        private _btnConfirm     : TwnsUiButton.UiButton;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnWarRule!   : TwnsUiButton.UiButton;
+        private readonly _btnCancel!    : TwnsUiButton.UiButton;
+        private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
-        private _groupFog       : eui.Group;
-        private _labelFog       : TwnsUiLabel.UiLabel;
-        private _imgFog         : TwnsUiImage.UiImage;
-
-        private _mapId          : number;
+        private readonly _groupFog!     : eui.Group;
+        private readonly _labelFog!     : TwnsUiLabel.UiLabel;
+        private readonly _imgFog!       : TwnsUiImage.UiImage;
 
         public static show(openData: OpenDataForMmTagChangePanel): void {
             if (!MmTagChangePanel._instance) {
@@ -69,34 +68,31 @@ namespace TwnsMmTagChangePanel {
 
             this._updateComponentsForLanguage();
 
-            const mapId = this._getOpenData().mapId;
-            this._mapId = mapId;
-
-            const mapTag            = (await WarMapModel.getBriefData(mapId)).mapTag || {};
-            this._imgFog.visible    = !!mapTag.fog;
+            const briefData         = Helpers.getExisted(await WarMapModel.getBriefData(this._getOpenData().mapId));
+            this._imgFog.visible    = !!(briefData.mapTag || {}).fog;
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            WarMapProxy.reqMmSetMapTag(this._mapId, {
+        private _onTouchedBtnConfirm(): void {
+            WarMapProxy.reqMmSetMapTag(this._getOpenData().mapId, {
                 fog : this._imgFog.visible ? true : null,
             });
             this.close();
         }
 
-        private async _onTouchedBtnWarRule(e: egret.TouchEvent): Promise<void> {
-            MmWarRulePanel.show(await WarMapModel.getRawData(this._mapId));
+        private async _onTouchedBtnWarRule(): Promise<void> {
+            MmWarRulePanel.show(Helpers.getExisted(await WarMapModel.getRawData(this._getOpenData().mapId)));
             this.close();
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private _onTouchedGroupMcw(e: egret.TouchEvent): void {
+        private _onTouchedGroupMcw(): void {
             this._imgFog.visible = !this._imgFog.visible;
         }
 

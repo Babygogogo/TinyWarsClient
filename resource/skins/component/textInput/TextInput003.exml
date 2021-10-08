@@ -2,7 +2,7 @@
 <e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing"
         class="Skins.Component.TextInput.TextInput003">
     <e:Group left="0" right="0" top="0" bottom="0">
-        <e:Image right="0" bottom="0" source="commonColorWhite0000" left="0" height="1" />
+        <e:Image right="0" bottom="0" source="uncompressedColorWhite0000" left="0" height="1" />
         <e:EditableText id="textDisplay" size="20" textColor="0xffffff" top="0" bottom="0" verticalAlign="middle"
                         left="0" right="0" />
         <e:Label id="promptDisplay" size="20" touchEnabled="false" left="0" right="0" text="" textColor="0x808080"

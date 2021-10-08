@@ -1,6 +1,7 @@
 
 import CommonConstants      from "../../tools/helpers/CommonConstants";
 import FloatText            from "../../tools/helpers/FloatText";
+import Helpers              from "../../tools/helpers/Helpers";
 import Types                from "../../tools/helpers/Types";
 import Lang                 from "../../tools/lang/Lang";
 import TwnsLangTextType     from "../../tools/lang/LangTextType";
@@ -24,21 +25,21 @@ namespace TwnsMeModifyMapNamePanel {
 
         private static _instance: MeModifyMapNamePanel;
 
-        private _inputChinese   : TwnsUiTextInput.UiTextInput;
-        private _inputEnglish   : TwnsUiTextInput.UiTextInput;
-        private _labelTip       : TwnsUiLabel.UiLabel;
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _labelChinese   : TwnsUiLabel.UiLabel;
-        private _labelEnglish   : TwnsUiLabel.UiLabel;
-        private _btnModify      : TwnsUiButton.UiButton;
-        private _btnClose       : TwnsUiButton.UiButton;
+        private readonly _inputChinese! : TwnsUiTextInput.UiTextInput;
+        private readonly _inputEnglish! : TwnsUiTextInput.UiTextInput;
+        private readonly _labelTip!     : TwnsUiLabel.UiLabel;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelChinese! : TwnsUiLabel.UiLabel;
+        private readonly _labelEnglish! : TwnsUiLabel.UiLabel;
+        private readonly _btnModify!    : TwnsUiButton.UiButton;
+        private readonly _btnClose!     : TwnsUiButton.UiButton;
 
         public static show(): void {
             if (!MeModifyMapNamePanel._instance) {
                 MeModifyMapNamePanel._instance = new MeModifyMapNamePanel();
             }
 
-            MeModifyMapNamePanel._instance.open(undefined);
+            MeModifyMapNamePanel._instance.open();
         }
 
         public static async hide(): Promise<void> {
@@ -70,23 +71,23 @@ namespace TwnsMeModifyMapNamePanel {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnModify(e: egret.TouchEvent): void {
+        private _onTouchedBtnModify(): void {
             const chineseText   = this._inputChinese.text || ``;
             const englishText   = this._inputEnglish.text || ``;
             const textList      : ILanguageText[] = [
                 { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
                 { languageType: Types.LanguageType.English, text: englishText || chineseText },
             ];
-            if (textList.every(v => v.text.length <= 0)) {
+            if (textList.every(v => Helpers.getExisted(v.text).length <= 0)) {
                 FloatText.show(Lang.getText(LangTextType.A0155));
-            } else if (textList.some(v => v.text.length > CommonConstants.MapMaxNameLength)) {
+            } else if (textList.some(v => Helpers.getExisted(v.text).length > CommonConstants.MapMaxNameLength)) {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.MapMaxNameLength));
             } else {
-                MeModel.getWar().setMapNameArray(textList);
+                Helpers.getExisted(MeModel.getWar()).setMapNameArray(textList);
                 Notify.dispatch(NotifyType.MeMapNameChanged);
                 this.close();
             }
@@ -95,9 +96,9 @@ namespace TwnsMeModifyMapNamePanel {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const textList          = MeModel.getWar().getMapNameArray() || [];
-            this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese });
-            this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English });
+            const textList          = Helpers.getExisted(MeModel.getWar()).getMapNameArray() || [];
+            this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese }) ?? ``;
+            this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English }) ?? ``;
         }
 
         private _updateComponentsForLanguage(): void {

@@ -1,12 +1,13 @@
 
-import TwnsUiImage                  from "./UiImage";
-import TwnsUiComponent              from "./UiComponent";
-import TwnsUiLabel                  from "./UiLabel";
-import TwnsLangTextType             from "../lang/LangTextType";
-import TwnsNotifyType               from "../notify/NotifyType";
-import Lang                         from "../lang/Lang";
-import Notify                       from "../notify/Notify";
-import Types                        from "../helpers/Types";
+import SoundManager     from "../helpers/SoundManager";
+import Types            from "../helpers/Types";
+import Lang             from "../lang/Lang";
+import TwnsLangTextType from "../lang/LangTextType";
+import Notify           from "../notify/Notify";
+import TwnsNotifyType   from "../notify/NotifyType";
+import TwnsUiComponent  from "./UiComponent";
+import TwnsUiImage      from "./UiImage";
+import TwnsUiLabel      from "./UiLabel";
 
 namespace TwnsUiRadioButton {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -25,22 +26,15 @@ namespace TwnsUiRadioButton {
     };
 
     export class UiRadioButton extends TwnsUiComponent.UiComponent {
-        // @ts-ignore
-        private readonly _labelTitle    : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _imgLeftOn     : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _imgLeftOff    : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _labelLeft     : TwnsUiLabel.UiLabel;
-        // @ts-ignore
-        private readonly _imgRightOn    : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _imgRightOff   : TwnsUiImage.UiImage;
-        // @ts-ignore
-        private readonly _labelRight    : TwnsUiLabel.UiLabel;
+        private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _imgLeftOn!    : TwnsUiImage.UiImage;
+        private readonly _imgLeftOff!   : TwnsUiImage.UiImage;
+        private readonly _labelLeft!    : TwnsUiLabel.UiLabel;
+        private readonly _imgRightOn!   : TwnsUiImage.UiImage;
+        private readonly _imgRightOff!  : TwnsUiImage.UiImage;
+        private readonly _labelRight!   : TwnsUiLabel.UiLabel;
 
-        private _data                   : DataForUiRadioButton | undefined;
+        private _data                   : DataForUiRadioButton | null = null;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -64,7 +58,7 @@ namespace TwnsUiRadioButton {
 
             this.updateView();
         }
-        private _getData(): DataForUiRadioButton | undefined {
+        private _getData(): DataForUiRadioButton | null {
             return this._data;
         }
         private _clearData(): void {
@@ -74,7 +68,7 @@ namespace TwnsUiRadioButton {
                 (notifyListenerArray) && (Notify.removeEventListeners(notifyListenerArray));
             }
 
-            this._data = undefined;
+            this._data = null;
         }
 
         public updateView(): void {
@@ -114,6 +108,7 @@ namespace TwnsUiRadioButton {
             if (data) {
                 data.callbackOnLeft();
                 this.updateView();
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
             }
         }
         private _onTouchedImgRightOff(): void {
@@ -121,6 +116,7 @@ namespace TwnsUiRadioButton {
             if (data) {
                 data.callbackOnRight();
                 this.updateView();
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
             }
         }
         private _onNotifyLanguageChanged(): void {

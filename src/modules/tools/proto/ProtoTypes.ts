@@ -20186,6 +20186,9 @@ export declare namespace User {
 
         /** UserSettings isShowGridBorder */
         isShowGridBorder?: (boolean|null);
+
+        /** UserSettings unitOpacity */
+        unitOpacity?: (number|null);
     }
 
     /** Represents a UserSettings. */
@@ -20205,6 +20208,9 @@ export declare namespace User {
 
         /** UserSettings isShowGridBorder. */
         public isShowGridBorder: boolean;
+
+        /** UserSettings unitOpacity. */
+        public unitOpacity: number;
 
         /**
          * Creates a new UserSettings instance using the specified properties.
@@ -20390,6 +20396,9 @@ export declare namespace User {
 
         /** UserComplexInfo userMapRatingArray */
         userMapRatingArray?: (User.IUserMapRating[]|null);
+
+        /** UserComplexInfo lastChatTime */
+        lastChatTime?: (number|null);
     }
 
     /** Represents a UserComplexInfo. */
@@ -20415,6 +20424,9 @@ export declare namespace User {
 
         /** UserComplexInfo userMapRatingArray. */
         public userMapRatingArray: User.IUserMapRating[];
+
+        /** UserComplexInfo lastChatTime. */
+        public lastChatTime: number;
 
         /**
          * Creates a new UserComplexInfo instance using the specified properties.

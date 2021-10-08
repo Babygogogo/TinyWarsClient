@@ -1,7 +1,7 @@
 
-import Logger               from "../../tools/helpers/Logger";
 import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
 import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
+import Helpers              from "../../tools/helpers/Helpers";
 
 namespace TwnsSpwPlayerManager {
     import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;
@@ -25,7 +25,7 @@ namespace TwnsSpwPlayerManager {
             for (const player of this.getHumanPlayers()) {
                 const playerIndex = player.getPlayerIndex();
                 if (playerIndex == null) {
-                    Logger.error(`SpwPlayerManager.getHumanPlayerIndexes() empty playerIndex.`);
+                    throw Helpers.newError(`SpwPlayerManager.getHumanPlayerIndexes() empty playerIndex.`);
                 } else {
                     playerIndexes.push(playerIndex);
                 }
@@ -41,15 +41,13 @@ namespace TwnsSpwPlayerManager {
                 // return this.getAliveWatcherTeamIndexes(UserModel.getSelfUserId());
                 const player = this.getPlayerInTurn();
                 if (player == null) {
-                    Logger.error(`SpwPlayerManager.getAliveWatcherTeamIndexesForSelf() empty player.`);
-                    return new Set();
+                    throw Helpers.newError(`SpwPlayerManager.getAliveWatcherTeamIndexesForSelf() empty player.`);
                 }
 
                 if (player.getUserId() != null) {
                     const teamIndex = player.getTeamIndex();
                     if (teamIndex == null) {
-                        Logger.error(`SpwPlayerManager.getAliveWatcherTeamIndexesForSelf() empty player.teamIndex.`);
-                        return new Set();
+                        throw Helpers.newError(`SpwPlayerManager.getAliveWatcherTeamIndexesForSelf() empty player.teamIndex.`);
                     }
                     return new Set<number>([teamIndex]);
                 } else {
@@ -57,7 +55,7 @@ namespace TwnsSpwPlayerManager {
                     for (const p of humanPlayers) {
                         const teamIndex = p.getTeamIndex();
                         if (teamIndex == null) {
-                            Logger.error(`SpwPlayerManager.getAliveWatcherTeamIndexesForSelf() empty p.teamIndex.`);
+                            throw Helpers.newError(`SpwPlayerManager.getAliveWatcherTeamIndexesForSelf() empty p.teamIndex.`);
                         } else {
                             teamIndexes.add(teamIndex);
                         }

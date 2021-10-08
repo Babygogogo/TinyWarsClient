@@ -7,7 +7,8 @@ import WarMapModel              from "../../warMap/model/WarMapModel";
 import CommonConstants          from "../helpers/CommonConstants";
 import ConfigManager            from "../helpers/ConfigManager";
 import FloatText                from "../helpers/FloatText";
-import SoundManager from "../helpers/SoundManager";
+import Helpers                  from "../helpers/Helpers";
+import SoundManager             from "../helpers/SoundManager";
 import Types                    from "../helpers/Types";
 import Lang                     from "../lang/Lang";
 import TwnsLangTextType         from "../lang/LangTextType";
@@ -33,27 +34,27 @@ namespace TwnsUiMapInfo {
     };
 
     export class UiMapInfo extends TwnsUiComponent.UiComponent {
-        private readonly _groupTile             : eui.Group;
-        private readonly _listTile              : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
+        private readonly _groupTile!                : eui.Group;
+        private readonly _listTile!                 : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
 
-        private readonly _groupMapInfo          : eui.Group;
-        private readonly _labelMapName          : TwnsUiLabel.UiLabel;
-        private readonly _labelDesignerTitle    : TwnsUiLabel.UiLabel;
-        private readonly _labelDesigner         : TwnsUiLabel.UiLabel;
-        private readonly _labelRatingTitle      : TwnsUiLabel.UiLabel;
-        private readonly _labelRating           : TwnsUiLabel.UiLabel;
-        private readonly _groupMyRating         : eui.Group;
-        private readonly _labelMyRatingTitle    : TwnsUiLabel.UiLabel;
-        private readonly _labelMyRating         : TwnsUiLabel.UiLabel;
-        private readonly _imgSetMyRating        : TwnsUiImage.UiImage;
-        private readonly _labelPlayedTimesTitle : TwnsUiLabel.UiLabel;
-        private readonly _labelPlayedTimes      : TwnsUiLabel.UiLabel;
-        private readonly _labelPlayersCountTitle: TwnsUiLabel.UiLabel;
-        private readonly _labelPlayersCount     : TwnsUiLabel.UiLabel;
-        private readonly _labelMapSizeTitle     : TwnsUiLabel.UiLabel;
-        private readonly _labelMapSize          : TwnsUiLabel.UiLabel;
+        private readonly _groupMapInfo!             : eui.Group;
+        private readonly _labelMapName!             : TwnsUiLabel.UiLabel;
+        private readonly _labelDesigner!            : TwnsUiLabel.UiLabel;
+        private readonly _labelRatingTitle!         : TwnsUiLabel.UiLabel;
+        private readonly _labelRating!              : TwnsUiLabel.UiLabel;
+        private readonly _labelRaters!              : TwnsUiLabel.UiLabel;
+        private readonly _groupMyRating!            : eui.Group;
+        private readonly _labelMyRatingTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelMyRating!            : TwnsUiLabel.UiLabel;
+        private readonly _imgSetMyRating!           : TwnsUiImage.UiImage;
+        private readonly _labelPlayedTimesTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayedTimes!         : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayersCountTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayersCount!        : TwnsUiLabel.UiLabel;
+        private readonly _labelMapSizeTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelMapSize!             : TwnsUiLabel.UiLabel;
 
-        private _data: DataForUiMapInfo | null;
+        private _data: DataForUiMapInfo | null = null;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -102,7 +103,7 @@ namespace TwnsUiMapInfo {
                     currentValue    : `${UserModel.getMapRating(mapId) || 0}`,
                     maxChars        : 2,
                     charRestrict    : "0-9",
-                    tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                    tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]\n${Lang.getText(LangTextType.A0238)}`,
                     callback        : panel => {
                         const text  = panel.getInputText();
                         const value = text ? Number(text) : NaN;
@@ -118,20 +119,22 @@ namespace TwnsUiMapInfo {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelDesignerTitle.text       = `${Lang.getText(LangTextType.B0163)}:`;
             this._labelPlayersCountTitle.text   = Lang.getText(LangTextType.B0229);
             this._labelPlayedTimesTitle.text    = Lang.getText(LangTextType.B0565);
             this._labelMapSizeTitle.text        = Lang.getText(LangTextType.B0300);
             this._labelRatingTitle.text         = Lang.getText(LangTextType.B0364);
             this._labelMyRatingTitle.text       = Lang.getText(LangTextType.B0363);
+            this._updateLabelDesigner();
         }
 
         private async _updateComponentsForMapInfo(): Promise<void> {
+            this._updateLabelDesigner();
+
             const data              = this._data;
             const labelMapName      = this._labelMapName;
-            const labelDesigner     = this._labelDesigner;
             const labelPlayersCount = this._labelPlayersCount;
             const labelRating       = this._labelRating;
+            const labelRaters       = this._labelRaters;
             const labelMyRating     = this._labelMyRating;
             const labelPlayedTimes  = this._labelPlayedTimes;
             const labelMapSize      = this._labelMapSize;
@@ -139,9 +142,9 @@ namespace TwnsUiMapInfo {
 
             if (data == null) {
                 labelMapName.text       = `--`;
-                labelDesigner.text      = `--`;
                 labelPlayersCount.text  = `--`;
                 labelRating.text        = `--`;
+                labelRaters.text        = `(--)`;
                 labelMyRating.text      = `--`;
                 labelPlayedTimes.text   = `--`;
                 labelMapSize.text       = `--`;
@@ -153,35 +156,58 @@ namespace TwnsUiMapInfo {
             const mapInfo = data.mapInfo;
             if (mapInfo) {
                 const mapId             = mapInfo.mapId;
-                const mapRawData        = await WarMapModel.getRawData(mapId);
+                const mapRawData        = Helpers.getExisted(await WarMapModel.getRawData(mapId));
                 const rating            = await WarMapModel.getAverageRating(mapId);
                 const myRating          = UserModel.getMapRating(mapId);
-                labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId);
-                labelDesigner.text      = mapRawData.designerName;
+                labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
                 labelPlayersCount.text  = `${mapRawData.playersCountUnneutral}`;
                 labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
+                labelRaters.text        = `(${await WarMapModel.getTotalRatersCount(mapId)})`;
                 labelMyRating.text      = myRating != null ? `${myRating}` : Lang.getText(LangTextType.B0001);
                 labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)}`;
                 labelMapSize.text       = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
                 btnSetMyRating.visible  = true;
-                this._listTile.bindData(generateDataForListTile(mapRawData.tileDataArray));
+                this._listTile.bindData(generateDataForListTile(Helpers.getExisted(mapRawData.tileDataArray)));
 
                 return;
             }
 
             const warData = data.warData;
             if (warData) {
-                const tileMapData       = warData.field.tileMap;
+                const tileMapData       = Helpers.getExisted(warData.field?.tileMap);
                 const mapSize           = WarCommonHelpers.getMapSize(tileMapData);
                 labelMapName.text       = `--`;
-                labelDesigner.text      = `--`;
-                labelPlayersCount.text  = `${warData.playerManager.players.length - 1}`;
+                labelPlayersCount.text  = `${Helpers.getExisted(warData.playerManager?.players).length - 1}`;
                 labelRating.text        = `--`;
+                labelRaters.text        = `(--)`;
                 labelPlayedTimes.text   = `--`;
                 labelMapSize.text       = `${mapSize.width} x ${mapSize.height}`;
                 btnSetMyRating.visible  = false;
-                this._listTile.bindData(generateDataForListTile(tileMapData.tiles));
+                this._listTile.bindData(generateDataForListTile(Helpers.getExisted(tileMapData.tiles)));
 
+                return;
+            }
+        }
+
+        private async _updateLabelDesigner(): Promise<void> {
+            const data              = this._data;
+            const labelDesigner     = this._labelDesigner;
+            const prefix            = `${Lang.getText(LangTextType.B0163)}: `;
+            if (data == null) {
+                labelDesigner.text  = `${prefix}--`;
+                return;
+            }
+
+            const mapInfo = data.mapInfo;
+            if (mapInfo) {
+                const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapInfo.mapId));
+                labelDesigner.text  = `${prefix}${mapRawData.designerName || CommonConstants.ErrorTextForUndefined}`;
+                return;
+            }
+
+            const warData = data.warData;
+            if (warData) {
+                labelDesigner.text  = `${prefix}--`;
                 return;
             }
         }
@@ -190,7 +216,7 @@ namespace TwnsUiMapInfo {
     function generateDataForListTile(tileDataArray: ProtoTypes.WarSerialization.ISerialTile[]): DataForTileRenderer[] {
         const tileCountDict = new Map<TileType, number>();
         for (const tile of tileDataArray || []) {
-            const tileType = ConfigManager.getTileType(tile.baseType, tile.objectType);
+            const tileType = ConfigManager.getTileType(Helpers.getExisted(tile.baseType), Helpers.getExisted(tile.objectType));
             if (tileType != null) {
                 tileCountDict.set(tileType, (tileCountDict.get(tileType) || 0) + 1);
             }
@@ -221,9 +247,9 @@ namespace TwnsUiMapInfo {
         num             : number;
     };
     class TileRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileRenderer> {
-        private _group          : eui.Group;
-        private _conTileView    : eui.Group;
-        private _labelNum       : TwnsUiLabel.UiLabel;
+        private readonly _group!        : eui.Group;
+        private readonly _conTileView!  : eui.Group;
+        private readonly _labelNum!     : TwnsUiLabel.UiLabel;
 
         private _tileView       = new TwnsMeTileSimpleView.MeTileSimpleView();
 
@@ -231,6 +257,7 @@ namespace TwnsUiMapInfo {
             this._setNotifyListenerArray([
                 { type: NotifyType.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
 
             const tileView      = this._tileView;
             const conTileView   = this._conTileView;
@@ -245,7 +272,7 @@ namespace TwnsUiMapInfo {
         }
 
         protected _onDataChanged(): void {
-            const data          = this.data;
+            const data          = this._getData();
             this._labelNum.text = `x${data.num}`;
 
             const tileObjectType = ConfigManager.getTileObjectTypeByTileType(data.tileType);

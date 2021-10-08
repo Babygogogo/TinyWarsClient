@@ -1,11 +1,12 @@
 
 import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
 import TwnsBwUnit               from "../../baseWar/model/BwUnit";
-import TwnsBwProduceUnitPanel   from "../../baseWar/view/BwProduceUnitPanel";
+import TwnsBwDamagePreviewPanel from "../../baseWar/view/BwDamagePreviewPanel";
 import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
 import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
 import FloatText                from "../../tools/helpers/FloatText";
 import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+import Helpers                  from "../../tools/helpers/Helpers";
 import SoundManager             from "../../tools/helpers/SoundManager";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
@@ -17,7 +18,6 @@ import TwnsSpwWar               from "./SpwWar";
 
 namespace TwnsSpwActionPlanner {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
     import SpwWar               = TwnsSpwWar.SpwWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
@@ -33,33 +33,13 @@ namespace TwnsSpwActionPlanner {
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for setting common state.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {
-            this._clearFocusUnitOnMap();
-            this._clearFocusUnitLoaded();
-            this._clearChoosingUnitForDrop();
-            this._clearChosenUnitsForDrop();
-            this._clearAvailableDropDestinations();
-            this._clearDataForPreviewingAttackableArea();
-            this._clearDataForPreviewingMovableArea();
-
-            this._setState(State.ChoosingProductionTarget);
-            this._updateView();
-            BwProduceUnitPanel.show({
-                gridIndex,
-                war     : this._getWar(),
-            });
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
             this._setState(State.RequestingPlayerProduceUnit);
             this._updateView();
 
-            SpwLocalProxy.reqPlayerProduceUnit({ war: this._getWar() as SpwWar, gridIndex, unitType, unitHp });
+            SpwLocalProxy.reqPlayerProduceUnit({ war: this._getWar(), gridIndex, unitType, unitHp });
         }
 
         public setStateRequestingPlayerUseCoSkill(skillType: Types.CoSkillType): void {
@@ -74,7 +54,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitProduceUnit(this._getWar() as SpwWar, this._generateIMovePath(), unit ? unit.getUnitId() : undefined);
+            SpwLocalProxy.reqUnitProduceUnit(this._getWar(), this._generateIMovePath(), unit ? unit.getUnitId() : null);
         }
 
         private _setStateRequestingUnitBeLoaded(): void {
@@ -82,7 +62,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitBeLoaded(this._getWar() as SpwWar, this._generateIMovePath(), unit ? unit.getUnitId() : undefined);
+            SpwLocalProxy.reqUnitBeLoaded(this._getWar(), this._generateIMovePath(), unit ? unit.getUnitId() : null);
         }
 
         private _setStateRequestingUnitJoin(): void {
@@ -90,7 +70,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitJoin(this._getWar() as SpwWar, this._generateIMovePath(), unit ? unit.getUnitId() : undefined);
+            SpwLocalProxy.reqUnitJoin(this._getWar(), this._generateIMovePath(), unit ? unit.getUnitId() : null);
         }
 
         private _setStateRequestingUnitUseCoSuperPower(): void {
@@ -98,7 +78,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitUseCoSkill({ war: this._getWar() as SpwWar, skillType: Types.CoSkillType.SuperPower, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : null });
+            SpwLocalProxy.reqUnitUseCoSkill({ war: this._getWar(), skillType: Types.CoSkillType.SuperPower, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : null });
         }
 
         private _setStateRequestingUnitUseCoPower(): void {
@@ -106,7 +86,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitUseCoSkill({ war: this._getWar() as SpwWar, skillType: Types.CoSkillType.Power, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : null });
+            SpwLocalProxy.reqUnitUseCoSkill({ war: this._getWar(), skillType: Types.CoSkillType.Power, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : null });
         }
 
         private _setStateRequestingUnitLoadCo(): void {
@@ -114,7 +94,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitLoadCo(this._getWar() as SpwWar, this._generateIMovePath(), unit ? unit.getUnitId() : null);
+            SpwLocalProxy.reqUnitLoadCo(this._getWar(), this._generateIMovePath(), unit ? unit.getUnitId() : null);
         }
 
         private _setStateRequestingUnitWait(): void {
@@ -122,7 +102,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitWait(this._getWar() as SpwWar, this._generateIMovePath(), unit ? unit.getUnitId() : undefined);
+            SpwLocalProxy.reqUnitWait(this._getWar(), this._generateIMovePath(), unit ? unit.getUnitId() : null);
         }
 
         protected _setStateRequestingUnitAttackUnit(targetGridIndex: GridIndex): void {
@@ -131,7 +111,12 @@ namespace TwnsSpwActionPlanner {
             SoundManager.playShortSfx(Types.ShortSfxCode.CursorConfirm01);
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitAttackUnit({ war: this._getWar() as SpwWar, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : undefined, targetGridIndex });
+            SpwLocalProxy.reqUnitAttackUnit({
+                war             : this._getWar(),
+                path            : this._generateIMovePath(),
+                launchUnitId    : unit ? unit.getUnitId() : null,
+                targetGridIndex,
+            });
         }
 
         protected _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {
@@ -140,7 +125,12 @@ namespace TwnsSpwActionPlanner {
             SoundManager.playShortSfx(Types.ShortSfxCode.CursorConfirm01);
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitAttackTile({ war: this._getWar() as SpwWar, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : undefined, targetGridIndex });
+            SpwLocalProxy.reqUnitAttackTile({
+                war             : this._getWar(),
+                path            : this._generateIMovePath(),
+                launchUnitId    : unit ? unit.getUnitId() : null,
+                targetGridIndex,
+            });
         }
 
         private _setStateRequestingUnitBuildTile(): void {
@@ -148,7 +138,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitBuildTile(this._getWar() as SpwWar, this._generateIMovePath(), unit ? unit.getUnitId() : undefined);
+            SpwLocalProxy.reqUnitBuildTile(this._getWar(), this._generateIMovePath(), unit ? unit.getUnitId() : null);
         }
 
         private _setStateRequestingUnitCaptureTile(): void {
@@ -156,7 +146,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitCaptureTile(this._getWar() as SpwWar, this._generateIMovePath(), unit ? unit.getUnitId() : undefined);
+            SpwLocalProxy.reqUnitCaptureTile(this._getWar(), this._generateIMovePath(), unit ? unit.getUnitId() : null);
         }
 
         private _setStateRequestingUnitDive(): void {
@@ -164,7 +154,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitDive(this._getWar() as SpwWar, this._generateIMovePath(), unit ? unit.getUnitId() : undefined);
+            SpwLocalProxy.reqUnitDive(this._getWar(), this._generateIMovePath(), unit ? unit.getUnitId() : null);
         }
 
         private _setStateRequestingUnitSurface(): void {
@@ -172,7 +162,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitSurface(this._getWar() as SpwWar, this._generateIMovePath(), unit ? unit.getUnitId() : undefined);
+            SpwLocalProxy.reqUnitSurface(this._getWar(), this._generateIMovePath(), unit ? unit.getUnitId() : null);
         }
 
         protected _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void {
@@ -180,7 +170,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             this._pushBackChosenUnitForDrop({
-                unit        : this.getChoosingUnitForDrop(),
+                unit        : Helpers.getExisted(this.getChoosingUnitForDrop()),
                 destination : gridIndex,
             });
 
@@ -190,7 +180,7 @@ namespace TwnsSpwActionPlanner {
             }
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitDrop({ war: this._getWar() as SpwWar, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : undefined, dropDestinations: destinations });
+            SpwLocalProxy.reqUnitDrop({ war: this._getWar(), path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : null, dropDestinations: destinations });
         }
         private _setStateRequestingUnitDropOnChooseAction(): void {
             this._setState(State.RequestingUnitDrop);
@@ -202,7 +192,7 @@ namespace TwnsSpwActionPlanner {
             }
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitDrop({ war: this._getWar() as SpwWar, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : undefined, dropDestinations: destinations });
+            SpwLocalProxy.reqUnitDrop({ war: this._getWar(), path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : null, dropDestinations: destinations });
         }
 
         protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
@@ -210,7 +200,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitLaunchFlare({ war: this._getWar() as SpwWar, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : undefined, targetGridIndex: gridIndex });
+            SpwLocalProxy.reqUnitLaunchFlare({ war: this._getWar(), path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : null, targetGridIndex: gridIndex });
         }
 
         protected _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void {
@@ -218,7 +208,7 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitLaunchSilo({ war: this._getWar() as SpwWar, path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : undefined, targetGridIndex: gridIndex });
+            SpwLocalProxy.reqUnitLaunchSilo({ war: this._getWar(), path: this._generateIMovePath(), launchUnitId: unit ? unit.getUnitId() : null, targetGridIndex: gridIndex });
         }
 
         private _setStateRequestingUnitSupply(): void {
@@ -226,21 +216,35 @@ namespace TwnsSpwActionPlanner {
             this._updateView();
 
             const unit = this.getFocusUnitLoaded();
-            SpwLocalProxy.reqUnitSupply(this._getWar() as SpwWar, this._generateIMovePath(), unit ? unit.getUnitId() : undefined);
+            SpwLocalProxy.reqUnitSupply(this._getWar(), this._generateIMovePath(), unit ? unit.getUnitId() : null);
         }
 
         public setStateRequestingPlayerEndTurn(): void {
             this._setState(State.RequestingPlayerEndTurn);
             this._updateView();
 
-            SpwLocalProxy.reqPlayerEndTurn(this._getWar() as SpwWar);
+            SpwLocalProxy.reqPlayerEndTurn(this._getWar());
         }
 
         public setStateRequestingPlayerDeleteUnit(): void {
             this._setState(State.RequestingPlayerDeleteUnit);
 
             this._updateView();
-            SpwLocalProxy.reqPlayerDeleteUnit(this._getWar() as SpwWar, this.getCursor().getGridIndex());
+            SpwLocalProxy.reqPlayerDeleteUnit(this._getWar(), this.getCursor().getGridIndex());
+        }
+
+        public setStateRequestingPlayerVoteForDraw(isAgree: boolean): void {
+            this._setState(State.RequestingPlayerVoteForDraw);
+
+            this._updateView();
+            SpwLocalProxy.reqPlayerVoteForDraw(this._getWar(), isAgree);
+        }
+
+        public setStateRequestingPlayerSurrender(): void {
+            this._setState(State.RequestingPlayerSurrender);
+
+            this._updateView();
+            SpwLocalProxy.reqPlayerSurrender(this._getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,6 +258,11 @@ namespace TwnsSpwActionPlanner {
                 TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
             } else {
                 TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
+            }
+            if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
+                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.show({ war: this._getWar() });
+            } else {
+                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.hide();
             }
         }
 
@@ -301,7 +310,8 @@ namespace TwnsSpwActionPlanner {
             if (!this.checkHasAttackableGridAfterMove(gridIndex)) {
                 return State.ChoosingAction;
             } else {
-                if (GridIndexHelpers.checkIsEqual(this.getCursor().getPreviousGridIndex(), gridIndex)) {
+                const previousGridIndex = this.getCursor().getPreviousGridIndex();
+                if ((previousGridIndex != null) && (GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex))) {
                     if (this._getUnitMap().getUnitOnMap(gridIndex)) {
                         return State.RequestingUnitAttackUnit;
                     } else {
@@ -313,7 +323,7 @@ namespace TwnsSpwActionPlanner {
             }
         }
         protected _getNextStateOnTapWhenChoosingDropDestination(gridIndex: GridIndex): State {
-            if (this.getAvailableDropDestinations().every(g => !GridIndexHelpers.checkIsEqual(g, gridIndex))) {
+            if (Helpers.getExisted(this.getAvailableDropDestinations()).every(g => !GridIndexHelpers.checkIsEqual(g, gridIndex))) {
                 return State.ChoosingAction;
             } else {
                 const chosenUnits               = [this.getChoosingUnitForDrop()];
@@ -323,7 +333,7 @@ namespace TwnsSpwActionPlanner {
                     chosenDropDestinations.push(data.destination);
                 }
 
-                const restLoadedUnits = this.getFocusUnit().getLoadedUnits().filter(unit => chosenUnits.every(u => u !== unit));
+                const restLoadedUnits = Helpers.getExisted(this.getFocusUnit()).getLoadedUnits().filter(unit => chosenUnits.every(u => u !== unit));
                 for (const unit of restLoadedUnits) {
                     if (this._calculateAvailableDropDestination(unit, chosenDropDestinations).length) {
                         return State.ChoosingAction;
@@ -334,10 +344,11 @@ namespace TwnsSpwActionPlanner {
             }
         }
         protected _getNextStateOnTapWhenChoosingFlareDestination(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > this.getFocusUnit().getFlareMaxRange()) {
+            if (GridIndexHelpers.getDistance(this.getMovePathDestination(), gridIndex) > Helpers.getExisted(Helpers.getExisted(this.getFocusUnit()).getFlareMaxRange())) {
                 return State.ChoosingAction;
             } else {
-                if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                const previousGridIndex = this.getCursor().getPreviousGridIndex();
+                if ((previousGridIndex != null) && GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex)) {
                     return State.RequestingUnitLaunchFlare;
                 } else {
                     return State.ChoosingFlareDestination;
@@ -345,14 +356,16 @@ namespace TwnsSpwActionPlanner {
             }
         }
         protected _getNextStateOnTapWhenChoosingSiloDestination(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+            const previousGridIndex = this.getCursor().getPreviousGridIndex();
+            if ((previousGridIndex != null) && (GridIndexHelpers.checkIsEqual(gridIndex, previousGridIndex))) {
                 return State.RequestingUnitLaunchSilo;
             } else {
                 return State.ChoosingSiloDestination;
             }
         }
         protected _getNextStateOnTapWhenChoosingProductionTarget(gridIndex: GridIndex): State {
-            if (GridIndexHelpers.checkIsEqual(this.getCursor().getPreviousGridIndex(), gridIndex)) {
+            const previousGridIndex = this.getCursor().getPreviousGridIndex();
+            if ((previousGridIndex != null) && (GridIndexHelpers.checkIsEqual(previousGridIndex, gridIndex))) {
                 return State.ChoosingProductionTarget;
             } else {
                 const turnManager       = this._getTurnManager();
@@ -441,7 +454,7 @@ namespace TwnsSpwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _getActionUnitBeLoaded(): TwnsBwActionPlanner.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
-            const focusUnit     = this.getFocusUnit();
+            const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
@@ -453,7 +466,7 @@ namespace TwnsSpwActionPlanner {
         }
         protected _getActionUnitJoin(): TwnsBwActionPlanner.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
-            const focusUnit     = this.getFocusUnit();
+            const focusUnit     = Helpers.getExisted(this.getFocusUnit());
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
                 return [];
             } else {
@@ -467,7 +480,7 @@ namespace TwnsSpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return !this.getFocusUnit().checkCanUseCoSkill(Types.CoSkillType.SuperPower)
+                return !Helpers.getExisted(this.getFocusUnit()).checkCanUseCoSkill(Types.CoSkillType.SuperPower)
                     ? []
                     : [{
                         actionType  : UnitActionType.UseCoSuperPower,
@@ -484,7 +497,7 @@ namespace TwnsSpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return !this.getFocusUnit().checkCanUseCoSkill(Types.CoSkillType.Power)
+                return !Helpers.getExisted(this.getFocusUnit()).checkCanUseCoSkill(Types.CoSkillType.Power)
                     ? []
                     : [{
                         actionType  : UnitActionType.UseCoPower,
@@ -501,7 +514,7 @@ namespace TwnsSpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return this.getFocusUnit().checkCanLoadCoAfterMovePath(this.getMovePath())
+                return Helpers.getExisted(this.getFocusUnit()).checkCanLoadCoAfterMovePath(this.getMovePath())
                     ? [{ actionType: UnitActionType.LoadCo, callback: () => this._setStateRequestingUnitLoadCo() }]
                     : [];
             }
@@ -510,7 +523,7 @@ namespace TwnsSpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanCaptureTile(this._getTileMap().getTile(this.getMovePathDestination())))
                     ? [{ actionType: UnitActionType.Capture, callback: () => this._setStateRequestingUnitCaptureTile() }]
                     : [];
             }
@@ -519,7 +532,7 @@ namespace TwnsSpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanDive())
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanDive())
                     ? [{ actionType: UnitActionType.Dive, callback: () => this._setStateRequestingUnitDive() }]
                     : [];
             }
@@ -528,7 +541,7 @@ namespace TwnsSpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanSurface())
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanSurface())
                     ? [{ actionType: UnitActionType.Surface, callback: () => this._setStateRequestingUnitSurface() }]
                     : [];
             }
@@ -537,7 +550,7 @@ namespace TwnsSpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                return (this.getFocusUnit().checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
+                return (Helpers.getExisted(this.getFocusUnit()).checkCanBuildOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
                     ? [{ actionType: UnitActionType.BuildTile, callback: () => this._setStateRequestingUnitBuildTile() }]
                     : [];
             }
@@ -546,11 +559,11 @@ namespace TwnsSpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                const focusUnit     = this.getFocusUnit();
+                const focusUnit     = Helpers.getExisted(this.getFocusUnit());
                 const playerIndex   = focusUnit.getPlayerIndex();
                 const unitMap       = this._getUnitMap();
                 if (focusUnit.checkIsAdjacentUnitSupplier()) {
-                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this._getMapSize())) {
+                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(this.getMovePathDestination(), this.getMapSize())) {
                         const unit = unitMap.getUnitOnMap(gridIndex);
                         if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                             return [{ actionType: UnitActionType.Supply, callback: () => this._setStateRequestingUnitSupply() }];
@@ -564,27 +577,27 @@ namespace TwnsSpwActionPlanner {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
-                const focusUnit         = this.getFocusUnit();
+                const focusUnit         = Helpers.getExisted(this.getFocusUnit());
                 const produceUnitType   = focusUnit.getProduceUnitType();
                 if ((this.getFocusUnitLoaded()) || (this.getMovePath().length !== 1) || (produceUnitType == null)) {
                     return [];
                 } else {
                     const costForProduceUnit = focusUnit.getProduceUnitCost();
-                    if (focusUnit.getCurrentProduceMaterial() < 1) {
+                    if (Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) < 1) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0051)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
-                    } else if (focusUnit.getLoadedUnitsCount() >= focusUnit.getMaxLoadUnitsCount()) {
+                    } else if (focusUnit.getLoadedUnitsCount() >= Helpers.getExisted(focusUnit.getMaxLoadUnitsCount())) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0052)),
                             costForProduceUnit,
                             produceUnitType,
                         }];
-                    } else if ((this._getWar() as SpwWar).getPlayerInTurn().getFund() < costForProduceUnit) {
+                    } else if ((this._getWar()).getPlayerInTurn().getFund() < costForProduceUnit) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0053)),
@@ -634,54 +647,25 @@ namespace TwnsSpwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: TwnsBwUnit.BwUnit): number | undefined {
+        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: TwnsBwUnit.BwUnit): number | null {
             if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
-                return undefined;
+                return null;
             } else {
                 const existingUnit = this._getUnitMap().getVisibleUnitOnMap(targetGridIndex);
                 if ((existingUnit)                                              &&
                     (existingUnit.getTeamIndex() !== movingUnit.getTeamIndex())
                 ) {
-                    return undefined;
+                    return null;
                 } else {
                     return this._getTileMap().getTile(targetGridIndex).getMoveCostByUnit(movingUnit);
                 }
             }
         }
 
-        protected _resetAttackableArea(): void {
-            const focusUnit             = this.getFocusUnit();
-            const canAttackAfterMove    = focusUnit.checkCanAttackAfterMove();
-            const isLoaded              = focusUnit.getLoaderUnitId() != null;
-            const beginningGridIndex    = focusUnit.getGridIndex();
-            const hasAmmo               = (focusUnit.getPrimaryWeaponCurrentAmmo() > 0) || (focusUnit.checkHasSecondaryWeapon());
-            const unitMap               = this._getUnitMap();
-            this._setAttackableArea(WarCommonHelpers.createAttackableArea({
-                movableArea     : this.getMovableArea(),
-                mapSize         : this.getMapSize(),
-                minAttackRange  : focusUnit.getMinAttackRange(),
-                maxAttackRange  : focusUnit.getFinalMaxAttackRange(),
-                checkCanAttack  : (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
-                    if (!hasAmmo) {
-                        return false;
-                    } else {
-                        const existingUnit = unitMap.getVisibleUnitOnMap(moveGridIndex);
-                        if ((existingUnit) && (existingUnit !== focusUnit)) {
-                            return false;
-                        } else {
-                            const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
-                            return ((!isLoaded) || (hasMoved))
-                                && ((canAttackAfterMove) || (!hasMoved));
-                        }
-                    }
-                },
-            }));
-        }
-
         protected _addUnitForPreviewAttackableArea(unit: TwnsBwUnit.BwUnit): void {
             const canAttackAfterMove    = unit.checkCanAttackAfterMove();
             const beginningGridIndex    = unit.getGridIndex();
-            const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
+            const hasAmmo               = (!!unit.getPrimaryWeaponCurrentAmmo()) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
             const newArea               = WarCommonHelpers.createAttackableArea({
@@ -694,7 +678,7 @@ namespace TwnsSpwActionPlanner {
                 mapSize,
                 minAttackRange: unit.getMinAttackRange(),
                 maxAttackRange: unit.getFinalMaxAttackRange(),
-                checkCanAttack: (moveGridIndex, attackGridIndex) => {
+                checkCanAttack: (moveGridIndex) => {
                     const existingUnit = unitMap.getVisibleUnitOnMap(moveGridIndex);
                     return ((!existingUnit) || (existingUnit === unit))
                         && (hasAmmo)

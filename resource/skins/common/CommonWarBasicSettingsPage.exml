@@ -7,14 +7,14 @@
                 <e:itemRendererSkinName>
                     <e:Skin width="450" height="40">
                         <e:Group top="0" bottom="0" left="0" right="0">
-                            <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000"
+                            <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0000"
                                                  scale9Grid="1,1,2,2" />
                             <TwnsUiLabel:UiLabel id="_labelTitle" text="War Password" textColor="0xFFFFFF" size="16"
                                                  maxTextWidth="120" x="10" verticalCenter="0" bold="true" />
                             <TwnsUiButton:UiButton id="_btnHelp" x="140" verticalCenter="0"
                                                    skinName="Skins.Component.Button.ButtonHelp001" />
                             <e:Group verticalCenter="0" height="32" x="170" width="300">
-                                <TwnsUiImage:UiImage source="commonRectangle0001" scale9Grid="2,2,1,1" left="0"
+                                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" left="0"
                                                      right="0" top="0" bottom="0" />
                                 <TwnsUiLabel:UiLabel id="_labelValue" size="16" touchEnabled="false" text="Yes" x="10"
                                                      verticalCenter="1" textColor="0xFFFFFF" />

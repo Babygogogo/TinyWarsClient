@@ -1,27 +1,27 @@
 
+import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
 import CommonConstants      from "../../tools/helpers/CommonConstants";
+import Helpers              from "../../tools/helpers/Helpers";
+import Types                from "../../tools/helpers/Types";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import Types                from "../../tools/helpers/Types";
-import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
-import MfrModel             from "./MfrModel";
 
 namespace MfrJoinModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IMfrRoomInfo     = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
-    export type DataForJoinRoom = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
+    type DataForJoinRoom    = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
 
     const _dataForJoinRoom: DataForJoinRoom = {
         roomId              : null,
         playerIndex         : null,
         isReady             : true,
     };
-    const _availablePlayerIndexList : number[] = [];
-    let _joinedPreviewingRoomId     : number;
+    let _joinedPreviewingRoomId     : number | null = null;
 
-    export function getData(): DataForJoinRoom {
+    function getData(): DataForJoinRoom {
         return _dataForJoinRoom;
     }
     export function getFastJoinData(roomInfo: IMfrRoomInfo): DataForJoinRoom | null {
@@ -37,8 +37,8 @@ namespace MfrJoinModel {
         }
     }
 
-    export function getTargetRoomId(): number {
-        return getData().roomId;
+    export function getTargetRoomId(): number | null {
+        return Helpers.getDefined(getData().roomId, ClientErrorCode.MfrJoinModel_GetTargetRoomId_00);
     }
     export function setTargetRoomId(roomId: number): void {
         if (getTargetRoomId() !== roomId) {
@@ -47,64 +47,7 @@ namespace MfrJoinModel {
         }
     }
 
-    export async function getRoomInfo(): Promise<IMfrRoomInfo | null> {
-        return await MfrModel.getRoomInfo(getTargetRoomId());
-    }
-    export async function getTeamIndex(): Promise<number> {
-        return WarRuleHelpers.getPlayerRule((await MfrModel.getRoomInfo(getTargetRoomId())).settingsForMfw.initialWarData.settingsForCommon.warRule, getPlayerIndex()).teamIndex;
-    }
-
-    export function resetData(roomInfo: IMfrRoomInfo): void {
-        const availablePlayerIndexList    = generateAvailablePlayerIndexArray(roomInfo);
-        const playerIndex                 = availablePlayerIndexList[0];
-        setTargetRoomId(roomInfo.roomId);
-        setAvailablePlayerIndexList(availablePlayerIndexList);
-        setPlayerIndex(playerIndex);
-        setIsReady(true);
-    }
-    export function clearData(): void {
-        setIsReady(true);
-        setPlayerIndex(null);
-        setTargetRoomId(null);
-        setAvailablePlayerIndexList(null);
-    }
-
-    export function checkCanJoin(): boolean {
-        const availablePlayerIndexList = getAvailablePlayerIndexList();
-        return (availablePlayerIndexList != null) && (availablePlayerIndexList.length > 0);
-    }
-
-    function setPlayerIndex(playerIndex: number): void {
-        getData().playerIndex = playerIndex;
-    }
-    export async function tickPlayerIndex(): Promise<void> {
-        const list = getAvailablePlayerIndexList();
-        if (list.length > 1) {
-            setPlayerIndex(list[(list.indexOf(getPlayerIndex()) + 1) % list.length]);
-        }
-    }
-    export function getPlayerIndex(): number {
-        return getData().playerIndex;
-    }
-
-    export function setIsReady(isReady: boolean): void {
-        getData().isReady = isReady;
-    }
-    export function getIsReady(): boolean {
-        return getData().isReady;
-    }
-
-    function setAvailablePlayerIndexList(list: number[]): void {
-        _availablePlayerIndexList.length = 0;
-        for (const playerIndex of list || []) {
-            _availablePlayerIndexList.push(playerIndex);
-        }
-    }
-    export function getAvailablePlayerIndexList(): number[] {
-        return _availablePlayerIndexList;
-    }
-
-    export function getJoinedPreviewingRoomId(): number {
+    export function getJoinedPreviewingRoomId(): number | null {
         return _joinedPreviewingRoomId;
     }
     export function setJoinedPreviewingRoomId(roomId: number | null): void {
@@ -115,10 +58,10 @@ namespace MfrJoinModel {
     }
 
     function generateAvailablePlayerIndexArray(roomInfo: IMfrRoomInfo): number[] {
-        const playerDataArray   = roomInfo.playerDataList;
+        const playerDataArray   = Helpers.getExisted(roomInfo.playerDataList);
         const indexArray        : number[] = [];
-        for (const player of roomInfo.settingsForMfw.initialWarData.playerManager.players) {
-            const playerIndex = player.playerIndex;
+        for (const player of Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.playerManager?.players)) {
+            const playerIndex = Helpers.getExisted(player.playerIndex);
             if ((player.aliveState !== Types.PlayerAliveState.Dead)         &&
                 (playerIndex !== CommonConstants.WarNeutralPlayerIndex)     &&
                 (playerDataArray.every(v => v.playerIndex !== playerIndex))

@@ -1,10 +1,11 @@
 
+import McrModel             from "../../multiCustomRoom/model/McrModel";
+import NetManager           from "../../tools/network/NetManager";
 import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import NetManager           from "../../tools/network/NetManager";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import McrModel             from "../../multiCustomRoom/model/McrModel";
+import McrJoinModel         from "./McrJoinModel";
 
 namespace McrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -26,7 +27,7 @@ namespace McrProxy {
             { msgCode: NetMessageCodes.MsgMcrGetJoinableRoomInfoList,    callback: _onMsgMcrGetJoinableRoomInfoList },
             { msgCode: NetMessageCodes.MsgMcrGetJoinedRoomInfoList,      callback: _onMsgMcrGetJoinedRoomInfoList },
             { msgCode: NetMessageCodes.MsgMcrStartWar,                   callback: _onMsgMcrStartWar },
-        ], undefined);
+        ], null);
     }
 
     export function reqCreateRoom(param: NetMessage.MsgMcrCreateRoom.IC): void {
@@ -72,6 +73,7 @@ namespace McrProxy {
         const data = e.data as NetMessage.MsgMcrDeleteRoomByServer.IS;
         if (!data.errorCode) {
             McrModel.updateOnMsgMcrDeleteRoomByServer(data);
+            McrJoinModel.updateOnMsgMcrDeleteRoomByServer();
             Notify.dispatch(NotifyType.MsgMcrDeleteRoomByServer, data);
         }
     }
@@ -182,7 +184,8 @@ namespace McrProxy {
     function _onMsgMcrGetJoinableRoomInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrGetJoinableRoomInfoList.IS;
         if (!data.errorCode) {
-            McrModel.setJoinableRoomInfoList(data.roomInfoList);
+            McrModel.setJoinableRoomInfoList(data.roomInfoList || []);
+            McrJoinModel.updateOnMsgMcrGetJoinableRoomInfoList();
             Notify.dispatch(NotifyType.MsgMcrGetJoinableRoomInfoList, data);
         }
     }
@@ -196,7 +199,7 @@ namespace McrProxy {
     function _onMsgMcrGetJoinedRoomInfoList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrGetJoinedRoomInfoList.IS;
         if (!data.errorCode) {
-            McrModel.setJoinedRoomInfoList(data.roomInfoList);
+            McrModel.setJoinedRoomInfoList(data.roomInfoList || []);
             Notify.dispatch(NotifyType.MsgMcrGetJoinedRoomInfoList, data);
         }
     }

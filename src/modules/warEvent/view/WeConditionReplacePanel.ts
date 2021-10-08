@@ -1,4 +1,6 @@
 
+import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Types                    from "../../tools/helpers/Types";
 import Lang                     from "../../tools/lang/Lang";
 import TwnsLangTextType         from "../../tools/lang/LangTextType";
@@ -28,10 +30,10 @@ namespace TwnsWeConditionReplacePanel {
 
         private static _instance: WeConditionReplacePanel;
 
-        private _listCondition      : TwnsUiScrollList.UiScrollList<DataForConditionRenderer>;
-        private _labelTitle         : TwnsUiLabel.UiLabel;
-        private _labelNoCondition   : TwnsUiLabel.UiLabel;
-        private _btnClose           : TwnsUiButton.UiButton;
+        private readonly _listCondition!    : TwnsUiScrollList.UiScrollList<DataForConditionRenderer>;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelNoCondition! : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
 
         public static show(openData: OpenDataForWeConditionReplacePanel): void {
             if (!WeConditionReplacePanel._instance) {
@@ -66,7 +68,7 @@ namespace TwnsWeConditionReplacePanel {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -93,7 +95,7 @@ namespace TwnsWeConditionReplacePanel {
                 dataArray.push({
                     parentNodeId,
                     srcConditionId,
-                    candidateConditionId : condition.WecCommonData.conditionId,
+                    candidateConditionId : Helpers.getExisted(condition.WecCommonData?.conditionId),
                     fullData,
                 });
             }
@@ -110,10 +112,10 @@ namespace TwnsWeConditionReplacePanel {
         fullData            : IWarEventFullData;
     };
     class ConditionRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForConditionRenderer> {
-        private _labelConditionId   : TwnsUiLabel.UiLabel;
-        private _labelCondition     : TwnsUiLabel.UiLabel;
-        private _btnCopy            : TwnsUiButton.UiButton;
-        private _btnSelect          : TwnsUiButton.UiButton;
+        private readonly _labelConditionId! : TwnsUiLabel.UiLabel;
+        private readonly _labelCondition!   : TwnsUiLabel.UiLabel;
+        private readonly _btnCopy!          : TwnsUiButton.UiButton;
+        private readonly _btnSelect!        : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -133,12 +135,8 @@ namespace TwnsWeConditionReplacePanel {
             this._updateBtnSelect();
         }
 
-        private _onTouchedBtnCopy(e: egret.TouchEvent): void {          // DONE
-            const data = this.data;
-            if (data == null) {
-                return;
-            }
-
+        private _onTouchedBtnCopy(): void {          // DONE
+            const data = this._getData();
             if (WarEventHelper.cloneAndReplaceConditionInParentNode({
                 fullData                : data.fullData,
                 parentNodeId            : data.parentNodeId,
@@ -149,12 +147,8 @@ namespace TwnsWeConditionReplacePanel {
                 WeConditionReplacePanel.hide();
             }
         }
-        private _onTouchedBtnSelect(e: egret.TouchEvent): void {        // DONE
-            const data = this.data;
-            if (data == null) {
-                return;
-            }
-
+        private _onTouchedBtnSelect(): void {        // DONE
+            const data = this._getData();
             if (WarEventHelper.replaceConditionInParentNode({
                 fullData        : data.fullData,
                 parentNodeId    : data.parentNodeId,
@@ -165,7 +159,7 @@ namespace TwnsWeConditionReplacePanel {
                 WeConditionReplacePanel.hide();
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE
+        private _onNotifyLanguageChanged(): void {        // DONE
             this._updateComponentsForLanguage();
         }
 
@@ -178,30 +172,22 @@ namespace TwnsWeConditionReplacePanel {
         }
 
         private _updateLabelConditionId(): void {
-            const data = this.data;
-            if (data) {
-                this._labelConditionId.text  = `${Lang.getText(LangTextType.B0502)}: C${data.candidateConditionId}`;
-            }
+            const data                  = this._getData();
+            this._labelConditionId.text = `${Lang.getText(LangTextType.B0502)}: C${data.candidateConditionId}`;
         }
         private _updateLabelCondition(): void {
-            const data = this.data;
-            if (data == null) {
-                return;
-            }
-
-            const condition = (data.fullData.conditionArray || []).find(v => v.WecCommonData.conditionId === data.candidateConditionId);
+            const data      = this._getData();
+            const condition = (data.fullData.conditionArray || []).find(v => v.WecCommonData?.conditionId === data.candidateConditionId);
             const label     = this._labelCondition;
             if (condition == null) {
                 label.text = Lang.getText(LangTextType.A0160);
             } else {
-                label.text = WarEventHelper.getDescForCondition(condition);
+                label.text = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateBtnSelect(): void {
-            const data = this.data;
-            if (data) {
-                this._btnSelect.visible = data.srcConditionId !== data.candidateConditionId;
-            }
+            const data              = this._getData();
+            this._btnSelect.visible = data.srcConditionId !== data.candidateConditionId;
         }
     }
 }

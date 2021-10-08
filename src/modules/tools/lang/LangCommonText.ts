@@ -277,8 +277,16 @@ namespace TwnsLangCommonText {
             `You can use any character for the nickname, and the nickname should consist of at least 4 characters.`,
         ],
         [LangTextType.A0067]: [
-            `输入正确的Discord ID，并加入以下游戏频道即可实时收到游戏相关消息，如回合轮转等。`,
-            `By entering your correct discord ID and joining the following discord server you can receive tinywars-related information, including turn notification.`,
+            [
+                `输入正确的Discord ID，并加入以下游戏频道即可实时收到游戏相关消息，如回合轮转等。`,
+                `Discord ID 是一串17或18位的纯数字。要获取该ID，您需要前往您的Discord用户设置，打开开发者模式，然后可以在个人账号信息页面中找到它。`,
+                `Discord ID 对所有打开了开发者模式的discord用户都是公开的（无论您本人是否打开开发者模式），因此不存在隐私和安全问题。`
+            ].join(`\n`),
+            [
+                `By entering your correct discord ID and joining the following discord server you can receive tinywars-related information, including turn notification.`,
+                `The discord ID is a string of 17 or 18 digits. Please go to your discord user settings, turn on the developer mode in the advanced page, and then you can find it in your account info page by clicking the icon next to your username.`,
+                `The discord ID is public to every discord user who turns on the developer mode no matter you turn on the developer mode or not, therefore there is no security and/or privacy issue.`
+            ].join(`\n`),
         ],
         [LangTextType.A0068]: [
             `可点击以下各个文字以更改设置`,
@@ -990,6 +998,30 @@ namespace TwnsLangCommonText {
             `当前的地图数据将被覆盖（但存档不受影响）。您确定要继续导入吗？`,
             `The current map data will be overwritten, but the saved data will not be affected. Are you sure to import?`,
         ],
+        [LangTextType.A0238]: [
+            `您对地图的评分越高，该地图在您参与的排位赛中的出现率也越高。`,
+            `The higher your rating, the higher the probability that the map will be selected in your ranked matches.`,
+        ],
+        [LangTextType.A0239]: [
+            `请等待电脑回合结束后再进行此操作`,
+            `Please wait until the A.I.'s turn ends.`,
+        ],
+        [LangTextType.A0240]: [
+            `您在本回合内已处理过求和信息`,
+            `You have already set draw in this turn.`,
+        ],
+        [LangTextType.A0241]: [
+            `已有其他玩家发起了和局请求。您是否同意该请求？`,
+            `Another player has requested a drawn game. Do you want to accept the request?`,
+        ],
+        [LangTextType.A0242]: [
+            `请等到您的回合再进行此操作`,
+            `Please wait until your turn begins.`,
+        ],
+        [LangTextType.A0243]: [
+            `您确定要切换CO搭载状态吗？`,
+            `Are you sure to switch the CO onboard state?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1123,7 +1155,7 @@ namespace TwnsLangCommonText {
             `Player`,
         ],
         [LangTextType.B0032]: [
-            `金钱`,
+            `资金`,
             `Fund`,
         ],
         [LangTextType.B0033]: [
@@ -1212,7 +1244,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0054]: [
             `返回大厅`,
-            `Go to lobby`,
+            `Go to Lobby`,
         ],
         [LangTextType.B0055]: [
             `投降`,
@@ -1563,7 +1595,7 @@ namespace TwnsLangCommonText {
             `Infinity`,
         ],
         [LangTextType.B0142]: [
-            `发动COP`,
+            `Power`,
             `Power`,
         ],
         [LangTextType.B0143]: [
@@ -1571,8 +1603,8 @@ namespace TwnsLangCommonText {
             `Help`,
         ],
         [LangTextType.B0144]: [
-            `发动SCOP`,
-            `SCOP`,
+            `S-Power`,
+            `S-Power`,
         ],
         [LangTextType.B0145]: [
             `选择CO`,
@@ -1820,7 +1852,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0206]: [
             `观战`,
-            `Watch`,
+            `Spectate Wars`,
         ],
         [LangTextType.B0207]: [
             `发起请求`,
@@ -1828,7 +1860,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0208]: [
             `处理请求`,
-            `Handle Request`,
+            `Handle Requests`,
         ],
         [LangTextType.B0209]: [
             `暂无请求`,
@@ -1872,7 +1904,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0219]: [
             `删除观战者`,
-            `Delete Watcher`,
+            `Delete Spectators`,
         ],
         [LangTextType.B0220]: [
             `删除`,
@@ -2403,8 +2435,8 @@ namespace TwnsLangCommonText {
             `For all players`,
         ],
         [LangTextType.B0356]: [
-            `雾战中隐蔽部队`,
-            `Hide units in FoW`,
+            `隐蔽部队`,
+            `Hide units`,
         ],
         [LangTextType.B0357]: [
             `被占领即失败`,
@@ -3718,6 +3750,62 @@ namespace TwnsLangCommonText {
             `英文名称`,
             `English Name`,
         ],
+        [LangTextType.B0685]: [
+            `空闲部队`,
+            `Idle Unit`,
+        ],
+        [LangTextType.B0686]: [
+            `空闲建筑`,
+            `Idle Tile`,
+        ],
+        [LangTextType.B0687]: [
+            `回合`,
+            `Turn`,
+        ],
+        [LangTextType.B0688]: [
+            `部队数与价值`,
+            `Units and Value`,
+        ],
+        [LangTextType.B0689]: [
+            `建筑数与收入`,
+            `Buildings and Income`,
+        ],
+        [LangTextType.B0690]: [
+            `和局`,
+            `Set Draw`,
+        ],
+        [LangTextType.B0691]: [
+            `生产`,
+            `Build`,
+        ],
+        [LangTextType.B0692]: [
+            `主武器`,
+            `Main`,
+        ],
+        [LangTextType.B0693]: [
+            `副武器`,
+            `Sub`,
+        ],
+        [LangTextType.B0694]: [
+            `攻击`,
+            `ATK`,
+        ],
+        [LangTextType.B0695]: [
+            `防御`,
+            `DEF`,
+        ],
+        [LangTextType.B0696]: [
+            `射程`,
+            `Range`,
+        ],
+        [LangTextType.B0697]: [
+            `可移动后攻击`,
+            `Run & Hit`,
+        ],
+        [LangTextType.B0698]: [
+            `搭载部队`,
+            `Loaded Units`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4252,6 +4340,10 @@ namespace TwnsLangCommonText {
         [LangTextType.F0071]: [
             `#%d 对话数据不合法`,
             `The #%d dialogue is invalid.`,
+        ],
+        [LangTextType.F0072]: [
+            `您确定要修改 P%d 的所属队伍吗？`,
+            `Are you sure to modify the team of P%d?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

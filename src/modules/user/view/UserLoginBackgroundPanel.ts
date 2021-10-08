@@ -3,6 +3,7 @@ import TwnsCommonChangeVersionPanel from "../../common/view/CommonChangeVersionP
 import CommonConstants              from "../../tools/helpers/CommonConstants";
 import ConfigManager                from "../../tools/helpers/ConfigManager";
 import Helpers                      from "../../tools/helpers/Helpers";
+import LocalStorage                 from "../../tools/helpers/LocalStorage";
 import SoundManager                 from "../../tools/helpers/SoundManager";
 import Timer                        from "../../tools/helpers/Timer";
 import Types                        from "../../tools/helpers/Types";
@@ -30,30 +31,32 @@ namespace TwnsUserLoginBackgroundPanel {
         protected readonly _LAYER_TYPE   = Types.LayerType.Bottom;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: UserLoginBackgroundPanel;
+        private static _instance            : UserLoginBackgroundPanel | null = null;
 
-        private readonly _imgBackground     : TwnsUiImage.UiImage;
+        private readonly _imgBackground!    : TwnsUiImage.UiImage;
 
-        private readonly _groupRightButton  : eui.Group;
-        private readonly _btnVersion        : TwnsUiButton.UiButton;
-        private readonly _btnSound          : TwnsUiButton.UiButton;
+        private readonly _groupRightButton! : eui.Group;
+        private readonly _btnVersion!       : TwnsUiButton.UiButton;
+        private readonly _btnSound!         : TwnsUiButton.UiButton;
 
-        private readonly _labelVersion      : TwnsUiLabel.UiLabel;
-        private readonly _listLanguage      : TwnsUiScrollList.UiScrollList<DataForLanguageRenderer>;
-        private readonly _groupCopyright    : eui.Group;
-        private readonly _groupUnits        : eui.Group;
+        private readonly _labelVersion!     : TwnsUiLabel.UiLabel;
+        private readonly _listLanguage!     : TwnsUiScrollList.UiScrollList<DataForLanguageRenderer>;
+        private readonly _groupCopyright!   : eui.Group;
+        private readonly _groupUnits!       : eui.Group;
 
         public static show(): void {
             if (!UserLoginBackgroundPanel._instance) {
                 UserLoginBackgroundPanel._instance = new UserLoginBackgroundPanel();
             }
-            UserLoginBackgroundPanel._instance.open(undefined);
+            UserLoginBackgroundPanel._instance.open();
         }
-
         public static async hide(): Promise<void> {
             if (UserLoginBackgroundPanel._instance) {
                 await UserLoginBackgroundPanel._instance.close();
             }
+        }
+        public static getInstance(): UserLoginBackgroundPanel | null {
+            return UserLoginBackgroundPanel._instance;
         }
 
         private constructor() {
@@ -82,7 +85,7 @@ namespace TwnsUserLoginBackgroundPanel {
             this._updateComponentsForLanguage();
             this._initListLanguage();
 
-            if (ConfigManager.getLatestFormalVersion()) {
+            if (ConfigManager.getLatestConfigVersion()) {
                 // this._initGroupUnits();
             }
         }
@@ -223,7 +226,7 @@ namespace TwnsUserLoginBackgroundPanel {
         languageType: Types.LanguageType;
     };
     class LanguageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLanguageRenderer> {
-        private readonly _labelLanguage : TwnsUiLabel.UiLabel;
+        private readonly _labelLanguage!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -234,7 +237,7 @@ namespace TwnsUserLoginBackgroundPanel {
             ]);
         }
         protected _onDataChanged(): void {
-            this._labelLanguage.text = Lang.getLanguageTypeName(this.data.languageType) || `??`;
+            this._labelLanguage.text = Lang.getLanguageTypeName(this._getData().languageType) || `??`;
 
             this._updateCurrentState();
         }
@@ -243,9 +246,10 @@ namespace TwnsUserLoginBackgroundPanel {
             this._updateCurrentState();
         }
         private _onTouchedSelf(): void {
-            const languageType = this.data.languageType;
+            const languageType = this._getData().languageType;
             if (Lang.getCurrentLanguageType() !== languageType) {
                 Lang.setLanguageType(languageType);
+                LocalStorage.setLanguageType(languageType);
                 Notify.dispatch(NotifyType.LanguageChanged);
             }
         }

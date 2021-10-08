@@ -19,10 +19,7 @@
         "scope": "typescript",
         "prefix": "ce",
         "body": [
-            "if ($1 == null) {",
-            "    Logger.error(`$2 empty $1.`);",
-            "    return undefined;",
-            "}",
+            ".catch(err => { CompatibilityHelpers.showError(err); throw err; })",
         ],
     },
     "Show Close Animation": {
@@ -34,6 +31,20 @@
             "        ",
             "    });",
             "}",
+        ],
+    },
+    "Helpers.getExisted()": {
+        "scope": "typescript",
+        "prefix": "hge",
+        "body": [
+            "Helpers.getExisted(",
+        ],
+    },
+    "Throw Error": {
+        "scope": "typescript",
+        "prefix": "te",
+        "body": [
+            "throw Helpers.newError(`$1`);",
         ],
     },
 }

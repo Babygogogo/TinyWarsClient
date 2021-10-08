@@ -1,6 +1,7 @@
 
 import TwnsBwWar                    from "../../baseWar/model/BwWar";
 import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -32,16 +33,16 @@ namespace TwnsWeActionModifyPanel2 {
 
         private static _instance: WeActionModifyPanel2;
 
-        private _labelTitle             : TwnsUiLabel.UiLabel;
-        private _btnType                : TwnsUiButton.UiButton;
-        private _btnBack                : TwnsUiButton.UiButton;
-        private _labelPlayerIndexTitle  : TwnsUiLabel.UiLabel;
-        private _labelPlayerIndex       : TwnsUiLabel.UiLabel;
-        private _btnSwitchPlayerIndex   : TwnsUiButton.UiButton;
-        private _labelPlayerStateTitle  : TwnsUiLabel.UiLabel;
-        private _labelPlayerState       : TwnsUiLabel.UiLabel;
-        private _btnSwitchPlayerState   : TwnsUiButton.UiButton;
-        private _labelTips              : TwnsUiLabel.UiLabel;
+        private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
+        private readonly _btnType!                  : TwnsUiButton.UiButton;
+        private readonly _btnBack!                  : TwnsUiButton.UiButton;
+        private readonly _labelPlayerIndexTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerIndex!         : TwnsUiLabel.UiLabel;
+        private readonly _btnSwitchPlayerIndex!     : TwnsUiButton.UiButton;
+        private readonly _labelPlayerStateTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerState!         : TwnsUiLabel.UiLabel;
+        private readonly _btnSwitchPlayerState!     : TwnsUiButton.UiButton;
+        private readonly _labelTips!                : TwnsUiLabel.UiLabel;
 
         public static show(openData: OpenDataForWeActionModifyPanel2): void {
             if (!WeActionModifyPanel2._instance) {
@@ -79,25 +80,25 @@ namespace TwnsWeActionModifyPanel2 {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyWarEventFullDataChanged(e: egret.Event): void {
+        private _onNotifyWarEventFullDataChanged(): void {
             this._updateLabelPlayerIndex();
             this._updateLabelPlayerState();
             this._updateLabelTips();
         }
 
-        private _onTouchedBtnSwitchPlayerIndex(e: egret.TouchEvent): void {
-            const action        = this._getOpenData().action.WeaSetPlayerAliveState;
+        private _onTouchedBtnSwitchPlayerIndex(): void {
+            const action        = Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState);
             action.playerIndex  = ((action.playerIndex || 0) % CommonConstants.WarMaxPlayerIndex) + 1;
 
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
-        private _onTouchedBtnSwitchPlayerState(e: egret.TouchEvent): void {
-            const action    = this._getOpenData().action.WeaSetPlayerAliveState;
+        private _onTouchedBtnSwitchPlayerState(): void {
+            const action    = Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState);
             const state     = action.playerAliveState;
             if (state === PlayerAliveState.Alive) {
                 action.playerAliveState = PlayerAliveState.Dying;
@@ -110,7 +111,7 @@ namespace TwnsWeActionModifyPanel2 {
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
-        private _onTouchedBtnType(e: egret.TouchEvent): void {
+        private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
             WeActionTypeListPanel.show({
                 war         : openData.war,
@@ -131,7 +132,7 @@ namespace TwnsWeActionModifyPanel2 {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text               = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData.actionId}`;
+            this._labelTitle.text               = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData?.actionId}`;
             this._btnType.label                 = Lang.getText(LangTextType.B0516);
             this._btnSwitchPlayerIndex.label    = Lang.getText(LangTextType.B0520);
             this._btnSwitchPlayerState.label    = Lang.getText(LangTextType.B0520);
@@ -144,15 +145,15 @@ namespace TwnsWeActionModifyPanel2 {
         }
 
         private _updateLabelPlayerIndex(): void {
-            this._labelPlayerIndex.text = `P${this._getOpenData().action.WeaSetPlayerAliveState.playerIndex || `??`}`;
+            this._labelPlayerIndex.text = `P${this._getOpenData().action.WeaSetPlayerAliveState?.playerIndex || `??`}`;
         }
 
         private _updateLabelPlayerState(): void {
-            this._labelPlayerState.text = Lang.getPlayerAliveStateName(this._getOpenData().action.WeaSetPlayerAliveState.playerAliveState);
+            this._labelPlayerState.text = Lang.getPlayerAliveStateName(Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState?.playerAliveState)) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelTips(): void {
-            this._labelTips.text = getTipsForPlayerAliveState(this._getOpenData().action.WeaSetPlayerAliveState.playerAliveState);
+            this._labelTips.text = getTipsForPlayerAliveState(Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState?.playerAliveState)) || CommonConstants.ErrorTextForUndefined;
         }
     }
 
@@ -161,7 +162,7 @@ namespace TwnsWeActionModifyPanel2 {
             case PlayerAliveState.Alive : return Lang.getText(LangTextType.A0214);
             case PlayerAliveState.Dying : return Lang.getText(LangTextType.A0215);
             case PlayerAliveState.Dead  : return Lang.getText(LangTextType.A0216);
-            default                     : return undefined;
+            default                     : throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
         }
     }
 }

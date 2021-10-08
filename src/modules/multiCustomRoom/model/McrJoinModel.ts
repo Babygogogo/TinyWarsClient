@@ -1,5 +1,6 @@
 
 import CommonConstants          from "../../tools/helpers/CommonConstants";
+import Helpers                  from "../../tools/helpers/Helpers";
 import Notify                   from "../../tools/notify/Notify";
 import TwnsNotifyType           from "../../tools/notify/NotifyType";
 import ProtoTypes               from "../../tools/proto/ProtoTypes";
@@ -13,8 +14,8 @@ namespace McrJoinModel {
     export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMcrCreateRoom.IC;
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
 
-    let _targetRoomId               : number;
-    let _joinedPreviewingRoomId     : number;
+    let _targetRoomId               : number | null = null;
+    let _joinedPreviewingRoomId     : number | null = null;
 
     export function getFastJoinData(roomInfo: IMcrRoomInfo): DataForJoinRoom | null {
         const playerIndex       = generateAvailablePlayerIndexList(roomInfo)[0];
@@ -25,7 +26,7 @@ namespace McrJoinModel {
             return {
                 roomId          : roomInfo.roomId,
                 isReady         : false,
-                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
+                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(Helpers.getExisted(roomInfo.settingsForCommon), playerIndex),
                 playerIndex,
                 unitAndTileSkinId,
             };
@@ -41,12 +42,8 @@ namespace McrJoinModel {
             Notify.dispatch(NotifyType.McrJoinTargetRoomIdChanged);
         }
     }
-    export async function getTargetRoomInfo(): Promise<IMcrRoomInfo | null> {
-        const roomId = getTargetRoomId();
-        return roomId == null ? null : await McrModel.getRoomInfo(roomId);
-    }
 
-    export function getJoinedPreviewingRoomId(): number {
+    export function getJoinedPreviewingRoomId(): number | null {
         return _joinedPreviewingRoomId;
     }
     export function setJoinedPreviewingRoomId(roomId: number | null): void {
@@ -56,9 +53,28 @@ namespace McrJoinModel {
         }
     }
 
+    export function updateOnMsgMcrGetJoinableRoomInfoList(): void {
+        reviseTargetRoomId();
+    }
+    export function updateOnMsgMcrDeleteRoomByServer(): void {
+        reviseTargetRoomId();
+    }
+
+    function reviseTargetRoomId(): void {
+        const roomIdSet = McrModel.getUnjoinedRoomIdSet();
+        if (roomIdSet.size <= 0) {
+            setTargetRoomId(null);
+        } else {
+            const roomId = getTargetRoomId();
+            if ((roomId == null) || (!roomIdSet.has(roomId))) {
+                setTargetRoomId(roomIdSet.values().next().value);
+            }
+        }
+    }
+
     function generateAvailablePlayerIndexList(info: IMcrRoomInfo): number[] {
-        const playersCount      = WarRuleHelpers.getPlayersCount(info.settingsForCommon.warRule);
-        const playerInfoList    = info.playerDataList;
+        const playersCount      = WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(info.settingsForCommon?.warRule));
+        const playerInfoList    = Helpers.getExisted(info.playerDataList);
         const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {
             if (playerInfoList.every(v => v.playerIndex !== i)) {
@@ -69,9 +85,10 @@ namespace McrJoinModel {
     }
 
     function generateAvailableSkinIdList(roomInfo: IMcrRoomInfo): number[] {
-        const idList: number[] = [];
+        const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
+        const idList            : number[] = [];
         for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
-            if (roomInfo.playerDataList.every(v => v.unitAndTileSkinId !== skinId)) {
+            if (playerDataList.every(v => v.unitAndTileSkinId !== skinId)) {
                 idList.push(skinId);
             }
         }

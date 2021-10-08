@@ -7,6 +7,7 @@ import TwnsCommonInputPanel             from "../../common/view/CommonInputPanel
 import CommonConstants                  from "../../tools/helpers/CommonConstants";
 import ConfigManager                    from "../../tools/helpers/ConfigManager";
 import FloatText                        from "../../tools/helpers/FloatText";
+import Helpers                          from "../../tools/helpers/Helpers";
 import Types                            from "../../tools/helpers/Types";
 import Lang                             from "../../tools/lang/Lang";
 import TwnsLangTextType                 from "../../tools/lang/LangTextType";
@@ -32,7 +33,6 @@ import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 namespace TwnsMeWarRulePanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonHelpPanel          = TwnsCommonHelpPanel.CommonHelpPanel;
-    import CommonInputPanel         = TwnsCommonInputPanel.CommonInputPanel;
     import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
     import MeField                  = TwnsMeField.MeField;
     import MeWar                    = TwnsMeWar.MeWar;
@@ -52,50 +52,49 @@ namespace TwnsMeWarRulePanel {
 
         private static _instance: MeWarRulePanel;
 
-        private _labelMenuTitle         : TwnsUiLabel.UiLabel;
-        private _listWarRule            : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
-        private _btnAddRule             : TwnsUiButton.UiButton;
-        private _btnDelete              : TwnsUiButton.UiButton;
-        private _btnBack                : TwnsUiButton.UiButton;
+        private readonly _labelMenuTitle!         : TwnsUiLabel.UiLabel;
+        private readonly _listWarRule!            : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
+        private readonly _btnAddRule!             : TwnsUiButton.UiButton;
+        private readonly _btnDelete!              : TwnsUiButton.UiButton;
+        private readonly _btnBack!                : TwnsUiButton.UiButton;
 
-        private _btnModifyRuleName      : TwnsUiButton.UiButton;
-        private _labelRuleName          : TwnsUiLabel.UiLabel;
+        private readonly _btnModifyRuleName!      : TwnsUiButton.UiButton;
+        private readonly _labelRuleName!          : TwnsUiLabel.UiLabel;
 
-        private _btnModifyHasFog        : TwnsUiButton.UiButton;
-        private _imgHasFog              : TwnsUiImage.UiImage;
-        private _btnHelpHasFog          : TwnsUiButton.UiButton;
+        private readonly _btnModifyHasFog!        : TwnsUiButton.UiButton;
+        private readonly _imgHasFog!              : TwnsUiImage.UiImage;
+        private readonly _btnHelpHasFog!          : TwnsUiButton.UiButton;
 
-        private _labelAvailability      : TwnsUiLabel.UiLabel;
-        private _btnAvailabilityMcw     : TwnsUiButton.UiButton;
-        private _imgAvailabilityMcw     : TwnsUiImage.UiImage;
-        private _btnAvailabilityScw     : TwnsUiButton.UiButton;
-        private _imgAvailabilityScw     : TwnsUiImage.UiImage;
-        private _btnAvailabilityMrw     : TwnsUiButton.UiButton;
-        private _imgAvailabilityMrw     : TwnsUiImage.UiImage;
-        private _btnAvailabilityCcw     : TwnsUiButton.UiButton;
-        private _imgAvailabilityCcw     : TwnsUiImage.UiImage;
-        private _btnAvailabilitySrw     : TwnsUiButton.UiButton;
-        private _imgAvailabilitySrw     : TwnsUiImage.UiImage;
+        private readonly _labelAvailability!      : TwnsUiLabel.UiLabel;
+        private readonly _btnAvailabilityMcw!     : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilityMcw!     : TwnsUiImage.UiImage;
+        private readonly _btnAvailabilityScw!     : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilityScw!     : TwnsUiImage.UiImage;
+        private readonly _btnAvailabilityMrw!     : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilityMrw!     : TwnsUiImage.UiImage;
+        private readonly _btnAvailabilityCcw!     : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilityCcw!     : TwnsUiImage.UiImage;
+        private readonly _btnAvailabilitySrw!     : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilitySrw!     : TwnsUiImage.UiImage;
 
-        private _labelWarEventListTitle : TwnsUiLabel.UiLabel;
-        private _btnTestWarEvent        : TwnsUiButton.UiButton;
-        private _btnAddWarEvent         : TwnsUiButton.UiButton;
-        private _btnEditWarEvent        : TwnsUiButton.UiButton;
-        private _listWarEvent           : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
+        private readonly _labelWarEventListTitle! : TwnsUiLabel.UiLabel;
+        private readonly _btnTestWarEvent!        : TwnsUiButton.UiButton;
+        private readonly _btnAddWarEvent!         : TwnsUiButton.UiButton;
+        private readonly _btnEditWarEvent!        : TwnsUiButton.UiButton;
+        private readonly _listWarEvent!           : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
 
-        private _labelPlayerList        : TwnsUiLabel.UiLabel;
-        private _listPlayer             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _labelPlayerList!        : TwnsUiLabel.UiLabel;
+        private readonly _listPlayer!             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
-        private _war                    : MeWar;
         private _dataForListWarRule     : DataForWarRuleNameRenderer[] = [];
-        private _selectedIndex          : number;
-        private _selectedRule           : IWarRule;
+        private _selectedIndex          : number | null = null;
+        private _selectedRule           : IWarRule | null = null;
 
         public static show(): void {
             if (!MeWarRulePanel._instance) {
                 MeWarRulePanel._instance = new MeWarRulePanel();
             }
-            MeWarRulePanel._instance.open(undefined);
+            MeWarRulePanel._instance.open();
         }
         public static async hide(): Promise<void> {
             if (MeWarRulePanel._instance) {
@@ -142,12 +141,9 @@ namespace TwnsMeWarRulePanel {
 
             this._updateComponentsForLanguage();
 
-            this._war = MeModel.getWar();
             this._resetView();
         }
         protected async _onClosed(): Promise<void> {
-            this._war = null;
-
             Notify.dispatch(NotifyType.BwCoListPanelClosed);
         }
 
@@ -159,17 +155,23 @@ namespace TwnsMeWarRulePanel {
                 this._updateComponentsForRule();
 
             } else {
-                const oldIndex      = this._selectedIndex;
+                const oldIndex      = this.getSelectedIndex();
                 this._selectedIndex = newIndex;
                 this._selectedRule  = dataList[newIndex].rule;
-                (dataList[oldIndex])    && (this._listWarRule.updateSingleData(oldIndex, dataList[oldIndex]));
+                if ((oldIndex != null) && (dataList[oldIndex])) {
+                    this._listWarRule.updateSingleData(oldIndex, dataList[oldIndex]);
+                }
                 (oldIndex !== newIndex) && (this._listWarRule.updateSingleData(newIndex, dataList[newIndex]));
 
                 this._updateComponentsForRule();
             }
         }
-        public getSelectedIndex(): number {
+        public getSelectedIndex(): number | null {
             return this._selectedIndex;
+        }
+
+        private _getWar(): MeWar {
+            return Helpers.getExisted(MeModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -195,14 +197,14 @@ namespace TwnsMeWarRulePanel {
         private _onTouchedBtnDelete(): void {
             const selectedRule = this._selectedRule;
             if (selectedRule != null) {
-                const war = this._war;
+                const war = this._getWar();
                 if (war.getWarRuleArray().length <= 1) {
                     FloatText.show(Lang.getText(LangTextType.A0096));
                 } else {
                     CommonConfirmPanel.show({
                         content : Lang.getText(LangTextType.A0097),
                         callback: () => {
-                            war.deleteWarRule(selectedRule.ruleId);
+                            war.deleteWarRule(Helpers.getExisted(selectedRule.ruleId));
                             this._resetView();
                         },
                     });
@@ -211,7 +213,7 @@ namespace TwnsMeWarRulePanel {
         }
 
         private _onTouchedBtnAddRule(): void {
-            const war = this._war;
+            const war = this._getWar();
             if (war.getWarRuleArray().length >= CommonConstants.WarRuleMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0099));
             } else {
@@ -229,7 +231,7 @@ namespace TwnsMeWarRulePanel {
 
         private _onTouchedBtnModifyHasFog(): void {
             const rule = this._selectedRule;
-            if ((rule) && (!this._war.getIsReviewingMap())) {
+            if ((rule) && (!this._getWar().getIsReviewingMap())) {
                 WarRuleHelpers.setHasFogByDefault(rule, !WarRuleHelpers.getHasFogByDefault(rule));
                 this._updateImgHasFog(rule);
             }
@@ -237,45 +239,48 @@ namespace TwnsMeWarRulePanel {
 
         private _onTouchedBtnModifyRuleName(): void {
             const rule = this._selectedRule;
-            if ((rule) && (!this._war.getIsReviewingMap())) {
-                MeModifyRuleNamePanel.show({ ruleId: rule.ruleId });
+            if ((rule) && (!this._getWar().getIsReviewingMap())) {
+                MeModifyRuleNamePanel.show({ ruleId: Helpers.getExisted(rule.ruleId) });
             }
         }
 
         private _onTouchedBtnAvailabilityMcw(): void {
             const rule = this._selectedRule;
-            if ((rule) && (!this._war.getIsReviewingMap())) {
-                rule.ruleAvailability.canMcw = !rule.ruleAvailability.canMcw;
+            if ((rule) && (!this._getWar().getIsReviewingMap())) {
+                const ruleAvailability  = Helpers.getExisted(rule.ruleAvailability);
+                ruleAvailability.canMcw = !ruleAvailability.canMcw;
                 this._updateImgAvailabilityMcw(rule);
             }
         }
 
         private _onTouchedBtnAvailabilityScw(): void {
             const rule = this._selectedRule;
-            if ((rule) && (!this._war.getIsReviewingMap())) {
-                rule.ruleAvailability.canScw = !rule.ruleAvailability.canScw;
+            if ((rule) && (!this._getWar().getIsReviewingMap())) {
+                const ruleAvailability  = Helpers.getExisted(rule.ruleAvailability);
+                ruleAvailability.canScw = !ruleAvailability.canScw;
                 this._updateImgAvailabilityScw(rule);
             }
         }
 
         private _onTouchedBtnAvailabilityMrw(): void {
             const rule = this._selectedRule;
-            if ((rule) && (!this._war.getIsReviewingMap())) {
-                rule.ruleAvailability.canMrw = !rule.ruleAvailability.canMrw;
+            if ((rule) && (!this._getWar().getIsReviewingMap())) {
+                const ruleAvailability  = Helpers.getExisted(rule.ruleAvailability);
+                ruleAvailability.canMrw = !ruleAvailability.canMrw;
                 this._updateImgAvailabilityMrw(rule);
             }
         }
 
         private _onTouchedBtnAvailabilityCcw(): void {
             const rule = this._selectedRule;
-            if ((rule) && (!this._war.getIsReviewingMap())) {
-                const ruleAvailability  = rule.ruleAvailability;
+            if ((rule) && (!this._getWar().getIsReviewingMap())) {
+                const ruleAvailability  = Helpers.getExisted(rule.ruleAvailability);
                 const canCcw            = !ruleAvailability.canCcw;
                 ruleAvailability.canCcw = canCcw;
                 this._updateImgAvailabilityCcw(rule);
 
                 if (!canCcw) {
-                    for (const playerRule of rule.ruleForPlayers.playerRuleDataArray || []) {
+                    for (const playerRule of rule.ruleForPlayers?.playerRuleDataArray || []) {
                         playerRule.fixedCoIdInCcw = null;
                         this._updateListPlayerRule(rule);
                     }
@@ -285,23 +290,27 @@ namespace TwnsMeWarRulePanel {
 
         private _onTouchedBtnAvailabilitySrw(): void {
             const rule = this._selectedRule;
-            if ((rule) && (!this._war.getIsReviewingMap())) {
-                rule.ruleAvailability.canSrw = !rule.ruleAvailability.canSrw;
+            if ((rule) && (!this._getWar().getIsReviewingMap())) {
+                const ruleAvailability  = Helpers.getExisted(rule.ruleAvailability);
+                ruleAvailability.canSrw = !ruleAvailability.canSrw;
                 this._updateImgAvailabilitySrw(rule);
             }
         }
 
         private _onTouchedBtnEditWarEvent(): void {
             WeEventListPanel.show({
-                war: this._war,
+                war: this._getWar(),
             });
             this.close();
         }
 
         private _onTouchedBtnAddWarEvent(): void {
-            MeAddWarEventToRulePanel.show({
-                warRule : this._selectedRule,
-            });
+            const warRule = this._selectedRule;
+            if (warRule) {
+                MeAddWarEventToRulePanel.show({
+                    warRule,
+                });
+            }
         }
 
         private _onTouchedBtnTestWarEvent(): void {
@@ -464,11 +473,11 @@ namespace TwnsMeWarRulePanel {
                 ],
             };
 
-            this._war.getWarEventManager().init({
+            this._getWar().getWarEventManager().init({
                 warEventFullData: testData,
-                calledCountList : undefined,
+                calledCountList : null,
             });
-            this._selectedRule.warEventIdArray = [1, 2];
+            Helpers.getExisted(this._selectedRule).warEventIdArray = [1, 2];
             this._updateListWarEvent();
         }
 
@@ -476,7 +485,7 @@ namespace TwnsMeWarRulePanel {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _resetView(): void {
-            const canModify                 = !this._war.getIsReviewingMap();
+            const canModify                 = !this._getWar().getIsReviewingMap();
             const colorForButtons           = canModify ? 0x00FF00 : 0xFFFFFF;
             this._btnDelete.visible         = canModify;
             this._btnAddRule.visible        = canModify;
@@ -521,7 +530,7 @@ namespace TwnsMeWarRulePanel {
         private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
             const data  : DataForWarRuleNameRenderer[] = [];
             let index   = 0;
-            for (const rule of this._war.getWarRuleArray()) {
+            for (const rule of this._getWar().getWarRuleArray()) {
                 data.push({
                     index,
                     rule,
@@ -546,31 +555,31 @@ namespace TwnsMeWarRulePanel {
             this._updateListPlayerRule(rule);
         }
 
-        private _updateLabelRuleName(rule: IWarRule): void {
-            this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(LangTextType.B0001);
+        private _updateLabelRuleName(rule: IWarRule | null): void {
+            this._labelRuleName.text = Lang.concatLanguageTextList(rule?.ruleNameArray) || Lang.getText(LangTextType.B0001);
         }
-        private _updateImgHasFog(rule: IWarRule): void {
-            this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;
+        private _updateImgHasFog(rule: IWarRule | null): void {
+            this._imgHasFog.visible = rule ? !!rule.ruleForGlobalParams?.hasFogByDefault : false;
         }
-        private _updateImgAvailabilityMcw(rule: IWarRule): void {
-            this._imgAvailabilityMcw.visible = rule ? rule.ruleAvailability.canMcw : false;
+        private _updateImgAvailabilityMcw(rule: IWarRule | null): void {
+            this._imgAvailabilityMcw.visible = rule ? !!rule.ruleAvailability?.canMcw : false;
         }
-        private _updateImgAvailabilityScw(rule: IWarRule): void {
-            this._imgAvailabilityScw.visible = rule ? rule.ruleAvailability.canScw : false;
+        private _updateImgAvailabilityScw(rule: IWarRule | null ): void {
+            this._imgAvailabilityScw.visible = rule ? !!rule.ruleAvailability?.canScw : false;
         }
-        private _updateImgAvailabilityMrw(rule: IWarRule): void {
-            this._imgAvailabilityMrw.visible = rule ? rule.ruleAvailability.canMrw : false;
+        private _updateImgAvailabilityMrw(rule: IWarRule | null): void {
+            this._imgAvailabilityMrw.visible = rule ? !!rule.ruleAvailability?.canMrw : false;
         }
-        private _updateImgAvailabilityCcw(rule: IWarRule): void {
-            this._imgAvailabilityCcw.visible = rule ? rule.ruleAvailability.canCcw : false;
+        private _updateImgAvailabilityCcw(rule: IWarRule | null): void {
+            this._imgAvailabilityCcw.visible = rule ? !!rule.ruleAvailability?.canCcw : false;
         }
-        private _updateImgAvailabilitySrw(rule: IWarRule): void {
-            this._imgAvailabilitySrw.visible = rule ? rule.ruleAvailability.canSrw : false;
+        private _updateImgAvailabilitySrw(rule: IWarRule | null): void {
+            this._imgAvailabilitySrw.visible = rule ? !!rule.ruleAvailability?.canSrw : false;
         }
         private _updateListWarEvent(): void {
             const dataArray         : DataForWarEventRenderer[] = [];
-            const warRule           = this._selectedRule;
-            const warEventManager   = this._war.getWarEventManager();
+            const warRule           = Helpers.getExisted(this._selectedRule);
+            const warEventManager   = this._getWar().getWarEventManager();
             for (const warEventId of warRule.warEventIdArray || []) {
                 dataArray.push({
                     panel   : this,
@@ -581,22 +590,27 @@ namespace TwnsMeWarRulePanel {
             }
             this._listWarEvent.bindData(dataArray);
         }
-        private _updateListPlayerRule(rule: IWarRule): void {
-            const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataArray : null;
-            const listPlayer            = this._listPlayer;
+        private _updateListPlayerRule(rule: IWarRule | null): void {
+            const listPlayer = this._listPlayer;
+            if (rule == null) {
+                listPlayer.clear();
+                return;
+            }
+
+            const playerRuleDataList = rule.ruleForPlayers?.playerRuleDataArray;
             if ((!playerRuleDataList) || (!playerRuleDataList.length)) {
                 listPlayer.clear();
             } else {
                 const dataList              : DataForPlayerRenderer[] = [];
-                const playersCountUnneutral = (this._war.getField() as MeField).getMaxPlayerIndex();
-                let index       = 0;
+                const playersCountUnneutral = (this._getWar().getField() as MeField).getMaxPlayerIndex();
+                let index                   = 0;
                 for (const playerRule of playerRuleDataList) {
-                    if (playerRule.playerIndex <= playersCountUnneutral) {
+                    if (Helpers.getExisted(playerRule.playerIndex) <= playersCountUnneutral) {
                         dataList.push({
                             index,
                             playerRule,
                             warRule     : rule,
-                            isReviewing : this._war.getIsReviewingMap(),
+                            isReviewing : this._getWar().getIsReviewingMap(),
                             panel       : this,
                         });
                         ++index;
@@ -613,8 +627,8 @@ namespace TwnsMeWarRulePanel {
         panel   : MeWarRulePanel;
     };
     class WarRuleNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRuleNameRenderer> {
-        private _btnChoose: TwnsUiButton.UiButton;
-        private _labelName: TwnsUiLabel.UiLabel;
+        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -623,14 +637,14 @@ namespace TwnsMeWarRulePanel {
         }
 
         protected _onDataChanged(): void {
-            const data              = this.data;
+            const data              = this._getData();
             const index             = data.index;
             this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelName.text    = `${Lang.getText(LangTextType.B0318)} ${index}`;
         }
 
         private _onTouchTapBtnChoose(): void {
-            const data = this.data;
+            const data = this._getData();
             data.panel.setSelectedIndex(data.index);
         }
     }
@@ -643,7 +657,7 @@ namespace TwnsMeWarRulePanel {
         panel       : MeWarRulePanel;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private _listInfo   : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
+        private readonly _listInfo! : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -665,7 +679,7 @@ namespace TwnsMeWarRulePanel {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data;
+            const data          = this._getData();
             const warRule       = data.warRule;
             const playerRule    = data.playerRule;
             const isReviewing   = data.isReviewing;
@@ -689,7 +703,7 @@ namespace TwnsMeWarRulePanel {
         private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0018),
-                infoText                : Lang.getPlayerForceName(playerRule.playerIndex),
+                infoText                : Lang.getPlayerForceName(Helpers.getExisted(playerRule.playerIndex)),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
             };
@@ -697,12 +711,12 @@ namespace TwnsMeWarRulePanel {
         private _createDataTeamIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(LangTextType.B0019),
-                infoText                : Lang.getPlayerTeamName(playerRule.teamIndex),
+                infoText                : Lang.getPlayerTeamName(Helpers.getExisted(playerRule.teamIndex)) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : isReviewing
                     ? null
                     : () => {
-                        WarRuleHelpers.tickTeamIndex(warRule, playerRule.playerIndex);
+                        WarRuleHelpers.tickTeamIndex(warRule, Helpers.getExisted(playerRule.playerIndex));
                         this._updateView();
                     },
             };
@@ -724,7 +738,7 @@ namespace TwnsMeWarRulePanel {
             };
         }
         private _createDataInitialFund(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.initialFund;
+            const currValue = Helpers.getExisted(playerRule.initialFund);
             return {
                 titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
@@ -734,7 +748,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0178),
                             currentValue    : "" + currValue,
                             maxChars        : 7,
@@ -746,7 +760,7 @@ namespace TwnsMeWarRulePanel {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    WarRuleHelpers.setInitialFund(warRule, playerRule.playerIndex, value);
+                                    WarRuleHelpers.setInitialFund(warRule, Helpers.getExisted(playerRule.playerIndex), value);
                                     this._updateView();
                                 }
                             },
@@ -755,7 +769,7 @@ namespace TwnsMeWarRulePanel {
             };
         }
         private _createDataIncomeMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.incomeMultiplier;
+            const currValue = Helpers.getExisted(playerRule.incomeMultiplier);
             return {
                 titleText               : Lang.getText(LangTextType.B0179),
                 infoText                : `${currValue}%`,
@@ -765,7 +779,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
                         const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0179),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -777,7 +791,7 @@ namespace TwnsMeWarRulePanel {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    WarRuleHelpers.setIncomeMultiplier(warRule, playerRule.playerIndex, value);
+                                    WarRuleHelpers.setIncomeMultiplier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
                                     this._updateView();
                                 }
                             },
@@ -786,7 +800,7 @@ namespace TwnsMeWarRulePanel {
             };
         }
         private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.energyAddPctOnLoadCo;
+            const currValue = Helpers.getExisted(playerRule.energyAddPctOnLoadCo);
             return {
                 titleText               : Lang.getText(LangTextType.B0180),
                 infoText                : `${currValue}%`,
@@ -796,7 +810,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0180),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -808,7 +822,7 @@ namespace TwnsMeWarRulePanel {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    WarRuleHelpers.setEnergyAddPctOnLoadCo(warRule, playerRule.playerIndex, value);
+                                    WarRuleHelpers.setEnergyAddPctOnLoadCo(warRule, Helpers.getExisted(playerRule.playerIndex), value);
                                     this._updateView();
                                 }
                             },
@@ -817,7 +831,7 @@ namespace TwnsMeWarRulePanel {
             };
         }
         private _createDataEnergyGrowthMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.energyGrowthMultiplier;
+            const currValue = Helpers.getExisted(playerRule.energyGrowthMultiplier);
             return {
                 titleText               : Lang.getText(LangTextType.B0181),
                 infoText                : `${currValue}%`,
@@ -827,7 +841,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0181),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -839,7 +853,7 @@ namespace TwnsMeWarRulePanel {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    WarRuleHelpers.setEnergyGrowthMultiplier(warRule, playerRule.playerIndex, value);
+                                    WarRuleHelpers.setEnergyGrowthMultiplier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
                                     this._updateView();
                                 }
                             },
@@ -848,7 +862,7 @@ namespace TwnsMeWarRulePanel {
             };
         }
         private _createDataMoveRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.moveRangeModifier;
+            const currValue = Helpers.getExisted(playerRule.moveRangeModifier);
             return {
                 titleText               : Lang.getText(LangTextType.B0182),
                 infoText                : `${currValue}`,
@@ -858,7 +872,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0182),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -870,7 +884,7 @@ namespace TwnsMeWarRulePanel {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    WarRuleHelpers.setMoveRangeModifier(warRule, playerRule.playerIndex, value);
+                                    WarRuleHelpers.setMoveRangeModifier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
                                     this._updateView();
                                 }
                             },
@@ -879,7 +893,7 @@ namespace TwnsMeWarRulePanel {
             };
         }
         private _createDataAttackPowerModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.attackPowerModifier;
+            const currValue = Helpers.getExisted(playerRule.attackPowerModifier);
             return {
                 titleText               : Lang.getText(LangTextType.B0183),
                 infoText                : `${currValue}%`,
@@ -889,7 +903,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
                         const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0183),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -901,7 +915,7 @@ namespace TwnsMeWarRulePanel {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    WarRuleHelpers.setAttackPowerModifier(warRule, playerRule.playerIndex, value);
+                                    WarRuleHelpers.setAttackPowerModifier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
                                     this._updateView();
                                 }
                             },
@@ -910,7 +924,7 @@ namespace TwnsMeWarRulePanel {
             };
         }
         private _createDataVisionRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.visionRangeModifier;
+            const currValue = Helpers.getExisted(playerRule.visionRangeModifier);
             return {
                 titleText               : Lang.getText(LangTextType.B0184),
                 infoText                : `${currValue}`,
@@ -920,7 +934,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0184),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -932,7 +946,7 @@ namespace TwnsMeWarRulePanel {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(LangTextType.A0098));
                                 } else {
-                                    WarRuleHelpers.setVisionRangeModifier(warRule, playerRule.playerIndex, value);
+                                    WarRuleHelpers.setVisionRangeModifier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
                                     this._updateView();
                                 }
                             },
@@ -941,8 +955,8 @@ namespace TwnsMeWarRulePanel {
             };
         }
         private _createDataLuckLowerLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue     = playerRule.luckLowerLimit;
-            const playerIndex   = playerRule.playerIndex;
+            const currValue     = Helpers.getExisted(playerRule.luckLowerLimit);
+            const playerIndex   = Helpers.getExisted(playerRule.playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0189),
                 infoText                : `${currValue}%`,
@@ -952,7 +966,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0189),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -979,8 +993,8 @@ namespace TwnsMeWarRulePanel {
             };
         }
         private _createDataLuckUpperLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue     = playerRule.luckUpperLimit;
-            const playerIndex   = playerRule.playerIndex;
+            const currValue     = Helpers.getExisted(playerRule.luckUpperLimit);
+            const playerIndex   = Helpers.getExisted(playerRule.playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0190),
                 infoText                : `${currValue}%`,
@@ -990,7 +1004,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        CommonInputPanel.show({
+                        TwnsCommonInputPanel.CommonInputPanel.show({
                             title           : Lang.getText(LangTextType.B0190),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -1025,12 +1039,12 @@ namespace TwnsMeWarRulePanel {
                 callbackOnTouchedTitle  : isReviewing
                     ? null
                     : () => {
-                        if (!warRule.ruleAvailability.canCcw) {
+                        if (!warRule.ruleAvailability?.canCcw) {
                             FloatText.show(Lang.getText(LangTextType.A0221));
                             return;
                         }
 
-                        const playerIndex = playerRule.playerIndex;
+                        const playerIndex = Helpers.getExisted(playerRule.playerIndex);
                         if (isControlledByAi) {
                             WarRuleHelpers.setFixedCoIdInCcw(warRule, playerIndex, null);
                         } else {
@@ -1042,7 +1056,7 @@ namespace TwnsMeWarRulePanel {
         }
         private _createDataAiControlInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const coId          = playerRule.fixedCoIdInCcw;
-            const configVersion = ConfigManager.getLatestFormalVersion();
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
             return {
                 titleText               : Lang.getText(LangTextType.B0644),
                 infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),
@@ -1050,7 +1064,7 @@ namespace TwnsMeWarRulePanel {
                 callbackOnTouchedTitle  : isReviewing
                     ? null
                     : () => {
-                        if (!warRule.ruleAvailability.canCcw) {
+                        if (!warRule.ruleAvailability?.canCcw) {
                             FloatText.show(Lang.getText(LangTextType.A0221));
                             return;
                         }
@@ -1060,10 +1074,10 @@ namespace TwnsMeWarRulePanel {
                             coIdArray.push(cfg.coId);
                         }
                         CommonChooseCoPanel.show({
-                            currentCoId         : playerRule.fixedCoIdInCcw,
+                            currentCoId         : playerRule.fixedCoIdInCcw ?? null,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {
-                                WarRuleHelpers.setFixedCoIdInCcw(warRule, playerRule.playerIndex, newCoId);
+                                WarRuleHelpers.setFixedCoIdInCcw(warRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
                                 this._updateView();
                             },
                         });
@@ -1079,8 +1093,8 @@ namespace TwnsMeWarRulePanel {
         callbackOnTouchedTitle  : (() => void) | null;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : TwnsUiButton.UiButton;
-        private _labelValue : TwnsUiLabel.UiLabel;
+        private readonly _btnTitle!     : TwnsUiButton.UiButton;
+        private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -1089,7 +1103,7 @@ namespace TwnsMeWarRulePanel {
         }
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;
@@ -1110,12 +1124,12 @@ namespace TwnsMeWarRulePanel {
         warRule         : IWarRule;
     };
     class WarEventRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventRenderer> {
-        private _labelWarEventIdTitle   : TwnsUiLabel.UiLabel;
-        private _labelWarEventId        : TwnsUiLabel.UiLabel;
-        private _btnUp                  : TwnsUiButton.UiButton;
-        private _btnDown                : TwnsUiButton.UiButton;
-        private _btnDelete              : TwnsUiButton.UiButton;
-        private _labelWarEventName      : TwnsUiLabel.UiLabel;
+        private readonly _labelWarEventIdTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelWarEventId!      : TwnsUiLabel.UiLabel;
+        private readonly _btnUp!                : TwnsUiButton.UiButton;
+        private readonly _btnDown!              : TwnsUiButton.UiButton;
+        private readonly _btnDelete!            : TwnsUiButton.UiButton;
+        private readonly _labelWarEventName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -1156,7 +1170,7 @@ namespace TwnsMeWarRulePanel {
         }
 
         protected _onDataChanged(): void {
-            const data                  = this.data;
+            const data                  = this._getData();
             this._labelWarEventId.text  = `${data.warEventId}`;
             this._updateLabelWarEventName();
         }
@@ -1171,7 +1185,7 @@ namespace TwnsMeWarRulePanel {
         private _updateLabelWarEventName(): void {
             const data = this.data;
             if (data) {
-                this._labelWarEventName.text = Lang.getLanguageText({ textArray: data.warEventManager.getWarEvent(data.warEventId).eventNameArray });
+                this._labelWarEventName.text = Lang.getLanguageText({ textArray: data.warEventManager.getWarEvent(data.warEventId).eventNameArray }) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
     }

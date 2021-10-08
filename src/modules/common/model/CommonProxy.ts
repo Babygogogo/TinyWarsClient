@@ -1,11 +1,12 @@
 
-import CommonModel          from "./CommonModel";
+import ConfigManager        from "../../tools/helpers/ConfigManager";
+import Helpers              from "../../tools/helpers/Helpers";
+import NetManager           from "../../tools/network/NetManager";
+import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import Notify               from "../../tools/notify/Notify";
 import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
 import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import NetManager           from "../../tools/network/NetManager";
+import CommonModel          from "./CommonModel";
 
 namespace CommonProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -19,7 +20,7 @@ namespace CommonProxy {
             { msgCode: NetMessageCodes.MsgCommonLatestConfigVersion, callback: _onMsgCommonLatestConfigVersion },
             { msgCode: NetMessageCodes.MsgCommonGetServerStatus,     callback: _onMsgCommonGetServerStatus, },
             { msgCode: NetMessageCodes.MsgCommonGetRankList,         callback: _onMsgCommonGetRankList },
-        ], undefined);
+        ], null);
     }
 
     export function reqCommonHeartbeat(counter: number): void {
@@ -42,7 +43,7 @@ namespace CommonProxy {
 
     function _onMsgCommonLatestConfigVersion(e: egret.Event): void {
         const data      = e.data as ProtoTypes.NetMessage.MsgCommonLatestConfigVersion.IS;
-        const version   = data.version;
+        const version   = Helpers.getExisted(data.version);
         ConfigManager.setLatestFormalVersion(version);
         ConfigManager.loadConfig(version);
         Notify.dispatch(NotifyType.MsgCommonLatestConfigVersion, data);
@@ -64,7 +65,7 @@ namespace CommonProxy {
     function _onMsgCommonGetRankList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCommonGetRankList.IS;
         if (!data.errorCode) {
-            CommonModel.setRankList(data.rankDataList);
+            CommonModel.setRankList(data.rankDataList || []);
             Notify.dispatch(NotifyType.MsgCommonGetRankList, data);
         }
     }

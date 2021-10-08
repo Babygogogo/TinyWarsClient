@@ -27,7 +27,7 @@ namespace TwnsBwGridVisualEffectView {
     const SKILL_ACTIVATION_OFFSET_Y = - (336 -_GRID_HEIGHT) / 2;
 
     export class BwGridVisualEffectView extends egret.DisplayObjectContainer {
-        private _gridVisualEffect           : BwGridVisualEffect;
+        private _gridVisualEffect!          : BwGridVisualEffect;
 
         private _layerForBlock              = new egret.DisplayObjectContainer();
         private _layerForDive               = new egret.DisplayObjectContainer();

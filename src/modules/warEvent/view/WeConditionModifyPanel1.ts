@@ -1,4 +1,6 @@
 
+import CommonConstants              from "../../tools/helpers/CommonConstants";
+import Helpers                      from "../../tools/helpers/Helpers";
 import Types                        from "../../tools/helpers/Types";
 import Lang                         from "../../tools/lang/Lang";
 import TwnsLangTextType             from "../../tools/lang/LangTextType";
@@ -31,16 +33,16 @@ namespace TwnsWeConditionModifyPanel1 {
 
         private static _instance: WeConditionModifyPanel1;
 
-        private _labelTitle     : TwnsUiLabel.UiLabel;
-        private _btnClose       : TwnsUiButton.UiButton;
-        private _btnType        : TwnsUiButton.UiButton;
-        private _labelDesc      : TwnsUiLabel.UiLabel;
-        private _labelError     : TwnsUiLabel.UiLabel;
-        private _groupIsNot     : eui.Group;
-        private _labelIsNot     : TwnsUiLabel.UiLabel;
-        private _imgIsNot       : TwnsUiImage.UiImage;
-        private _labelTurnIndex : TwnsUiLabel.UiLabel;
-        private _inputTurnIndex : TwnsUiTextInput.UiTextInput;
+        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
+        private readonly _btnType!          : TwnsUiButton.UiButton;
+        private readonly _labelDesc!        : TwnsUiLabel.UiLabel;
+        private readonly _labelError!       : TwnsUiLabel.UiLabel;
+        private readonly _groupIsNot!       : eui.Group;
+        private readonly _labelIsNot!       : TwnsUiLabel.UiLabel;
+        private readonly _imgIsNot!         : TwnsUiImage.UiImage;
+        private readonly _labelTurnIndex!   : TwnsUiLabel.UiLabel;
+        private readonly _inputTurnIndex!   : TwnsUiTextInput.UiTextInput;
 
         public static show(openData: OpenDataForWeConditionModifyPanel1): void {
             if (!WeConditionModifyPanel1._instance) {
@@ -78,30 +80,29 @@ namespace TwnsWeConditionModifyPanel1 {
             this._updateView();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onTouchedBtnType(e: egret.TouchEvent): void {
+        private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
             WeConditionTypeListPanel.show({
                 fullData    : openData.fullData,
                 condition   : openData.condition,
             });
         }
-        private _onTouchedGroupIsNot(e: egret.TouchEvent): void {
-            const data  = this._getCondition().WecTurnIndexEqualTo;
+        private _onTouchedGroupIsNot(): void {
+            const data  = Helpers.getExisted(this._getCondition().WecTurnIndexEqualTo);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onFocusOutInputTurnIndex(e: egret.FocusEvent): void {
+        private _onFocusOutInputTurnIndex(): void {
             const value = parseInt(this._inputTurnIndex.text);
-            const data  = this._getCondition().WecTurnIndexEqualTo;
             if (isNaN(value)) {
                 this._updateInputTurnIndex();
             } else {
-                data.valueEqualTo = value;
+                Helpers.getExisted(this._getCondition().WecTurnIndexEqualTo).valueEqualTo = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputTurnIndex();
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -117,7 +118,7 @@ namespace TwnsWeConditionModifyPanel1 {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = `${Lang.getText(LangTextType.B0501)} C${this._getCondition().WecCommonData.conditionId}`;
+            this._labelTitle.text       = `${Lang.getText(LangTextType.B0501)} C${this._getCondition().WecCommonData?.conditionId}`;
             this._btnClose.label        = Lang.getText(LangTextType.B0146);
             this._btnType.label         = Lang.getText(LangTextType.B0516);
             this._labelIsNot.text       = Lang.getText(LangTextType.B0517);
@@ -133,13 +134,13 @@ namespace TwnsWeConditionModifyPanel1 {
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition);
+            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
-            this._imgIsNot.visible = !!this._getCondition().WecTurnIndexEqualTo.isNot;
+            this._imgIsNot.visible = !!this._getCondition().WecTurnIndexEqualTo?.isNot;
         }
         private _updateInputTurnIndex(): void {
-            this._inputTurnIndex.text = `${this._getCondition().WecTurnIndexEqualTo.valueEqualTo}`;
+            this._inputTurnIndex.text = `${this._getCondition().WecTurnIndexEqualTo?.valueEqualTo}`;
         }
 
         private _getCondition(): IWarEventCondition {
