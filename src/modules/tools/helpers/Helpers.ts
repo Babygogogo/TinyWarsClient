@@ -158,11 +158,11 @@ namespace Helpers {
     //     const name = getMessageName(container);
     //     return name == null ? null : MessageCodes[name as any] as any;
     // }
-    export function getMessageName(container: IMessageContainer): (keyof IMessageContainer) | null {
+    export function getMessageName(container: IMessageContainer): keyof IMessageContainer {
         for (const k in container) {
             return k as keyof IMessageContainer;
         }
-        return null;
+        throw newError(`Invalid container.`, ClientErrorCode.Helpers_GetMessageName_00);
     }
 
     export function getWarActionName(container: IWarActionContainer): string | null {
@@ -479,7 +479,7 @@ namespace Helpers {
 
     export function getDefined<T>(value: T | undefined, errorCode: ClientErrorCode): T {
         if (value === undefined) {
-            throw Helpers.newError(`Undefined value.`, errorCode);
+            throw newError(`Undefined value.`, errorCode);
         }
 
         return value;

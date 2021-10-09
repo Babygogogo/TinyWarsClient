@@ -25,6 +25,7 @@
 // import TwnsWeConditionModifyPanel8      from "../view/WeConditionModifyPanel8";
 // import TwnsWeConditionModifyPanel9      from "../view/WeConditionModifyPanel9";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarEventHelper {
     import WeConditionModifyPanel1  = TwnsWeConditionModifyPanel1.WeConditionModifyPanel1;
     import WeConditionModifyPanel10 = TwnsWeConditionModifyPanel10.WeConditionModifyPanel10;
@@ -1706,7 +1707,7 @@ namespace WarEventHelper {
             };
         } else {
             // TODO handle more condition types.
-            throw Helpers.newError(`WarEventHelper.resetCondition() invalid conditionType.`);
+            throw Helpers.newError(`Invalid conditionType: ${conditionType}.`, ClientErrorCode.WarEventHelper_ResetCondition_00);
         }
     }
 
@@ -1750,7 +1751,7 @@ namespace WarEventHelper {
         } else if (condition.WecPlayerAliveStateEqualTo) {
             WeConditionModifyPanel12.show({ fullData, condition });
         } else {
-            throw Helpers.newError(`WarEventHelper.openConditionModifyPanel() invalid condition.`);
+            throw Helpers.newError(`Invalid condition.`, ClientErrorCode.WarEventHelper_OpenConditionModifyPanel_00);
         }
     }
 
@@ -1794,7 +1795,7 @@ namespace WarEventHelper {
                 dataArray: [],
             };
         } else {
-            throw Helpers.newError(`WarEventHelper.resetCondition() invalid conditionType.`);
+            throw Helpers.newError(`Invalid actionType: ${actionType}.`, ClientErrorCode.WarEventHelper_ResetAction_00);
         }
     }
 
@@ -1811,7 +1812,7 @@ namespace WarEventHelper {
         } else if (action.WeaDialogue) {
             TwnsWeActionModifyPanel3.WeActionModifyPanel3.show({ war, fullData, action });
         } else {
-            throw Helpers.newError(`WarEventHelper.openActionModifyPanel() invalid action.`);
+            throw Helpers.newError(`Invalid action.`, ClientErrorCode.WarEventHelper_OpenActionModifyPanel_00);
         }
     }
 
@@ -2014,11 +2015,7 @@ namespace WarEventHelper {
     }
 
     export function addDefaultCondition(fullData: IWarEventFullData, nodeId: number): number { // DONE
-        const node = getNode(fullData, nodeId);
-        if (node == null) {
-            throw Helpers.newError(`Empty node.`);
-        }
-
+        const node = Helpers.getExisted(getNode(fullData, nodeId), ClientErrorCode.WarEventHelper_AddDefaultCondition_00);
         if (node.conditionIdArray == null) {
             node.conditionIdArray = [];
         }

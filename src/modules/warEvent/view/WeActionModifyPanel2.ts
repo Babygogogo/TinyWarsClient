@@ -13,6 +13,7 @@
 // import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel2 {
     import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
@@ -20,6 +21,7 @@ namespace TwnsWeActionModifyPanel2 {
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                    = TwnsBwWar.BwWar;
 
     type OpenDataForWeActionModifyPanel2 = {
@@ -162,7 +164,7 @@ namespace TwnsWeActionModifyPanel2 {
             case PlayerAliveState.Alive : return Lang.getText(LangTextType.A0214);
             case PlayerAliveState.Dying : return Lang.getText(LangTextType.A0215);
             case PlayerAliveState.Dead  : return Lang.getText(LangTextType.A0216);
-            default                     : throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`);
+            default                     : throw Helpers.newError(`Invalid playerAliveState: ${playerAliveState}`, ClientErrorCode.WeActionModifyPanel2_GetTipsForPlayerAliveState_00);
         }
     }
 }

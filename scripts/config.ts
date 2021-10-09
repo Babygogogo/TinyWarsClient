@@ -6,7 +6,7 @@ import * as path from 'path';
 import { UglifyPlugin, IncrementCompilePlugin, CompilePlugin, ManifestPlugin, ExmlPlugin, EmitResConfigFilePlugin, TextureMergerPlugin, RenamePlugin, StartServerPlugin } from 'built-in';
 import { CustomPlugin } from './myplugin';
 import { EuiCompilerPlugin } from './plugins/eui-compiler-plugin';
-import { WebpackDevServerPlugin, WebpackBundlePlugin } from './plugins/webpack-plugin';
+// import { WebpackDevServerPlugin, WebpackBundlePlugin } from './plugins/webpack-plugin';
 
 const USE_OLD_COMPILER = true;
 
@@ -29,16 +29,17 @@ const config: ResourceManagerConfig = {
                     new ExmlPlugin('debug'), // 非 EUI 项目关闭此设置
                     // new EuiCompilerPlugin(),//新的 eui 编译器
 
-                    USE_OLD_COMPILER
-                        ? new IncrementCompilePlugin()
-                        : new WebpackBundlePlugin({ //新的 Webpack 编译器
-                            libraryType: "debug",
-                            defines: { DEBUG: true, RELEASE: false },
-                            typescript: { mode: 'legacy' },
-                            html: {
-                                templateFilePath: "template/web/index.html"
-                            }
-                        }),
+                    new IncrementCompilePlugin(),
+                    // USE_OLD_COMPILER
+                    //     ? new IncrementCompilePlugin()
+                    //     : new WebpackBundlePlugin({ //新的 Webpack 编译器
+                    //         libraryType: "debug",
+                    //         defines: { DEBUG: true, RELEASE: false },
+                    //         typescript: { mode: 'legacy' },
+                    //         html: {
+                    //             templateFilePath: "template/web/index.html"
+                    //         }
+                    //     }),
 
                     new ManifestPlugin({ output: "manifest.json" })
                 ]
@@ -51,16 +52,17 @@ const config: ResourceManagerConfig = {
                 commands: [
                     new CustomPlugin(),
 
-                    USE_OLD_COMPILER
-                        ? new CompilePlugin({ libraryType: "release", defines: { DEBUG: false, RELEASE: true } })
-                        : new WebpackBundlePlugin({ //新的 Webpack 编译器
-                            libraryType: "release",
-                            defines: { DEBUG: false, RELEASE: true },
-                            typescript: { mode: 'legacy' },
-                            html: {
-                                templateFilePath: "template/web/index.html"
-                            },
-                        }),
+                    new CompilePlugin({ libraryType: "release", defines: { DEBUG: false, RELEASE: true } }),
+                    // USE_OLD_COMPILER
+                    //     ? new CompilePlugin({ libraryType: "release", defines: { DEBUG: false, RELEASE: true } })
+                    //     : new WebpackBundlePlugin({ //新的 Webpack 编译器
+                    //         libraryType: "release",
+                    //         defines: { DEBUG: false, RELEASE: true },
+                    //         typescript: { mode: 'legacy' },
+                    //         html: {
+                    //             templateFilePath: "template/web/index.html"
+                    //         },
+                    //     }),
 
                     new ExmlPlugin('commonjs2'), // 非 EUI 项目关闭此设置
                     // new EuiCompilerPlugin(),//新的 eui 编译器
@@ -91,17 +93,18 @@ const config: ResourceManagerConfig = {
                     new ExmlPlugin('debug'), // 非 EUI 项目关闭此设置
                     // new EuiCompilerPlugin(),//新的 eui 编译器
 
-                    USE_OLD_COMPILER
-                        ? new IncrementCompilePlugin()
-                        : new WebpackDevServerPlugin({ //新的 Webpack 编译器
-                            libraryType: "debug",
-                            defines: { DEBUG: true, RELEASE: false },
-                            typescript: { mode: 'legacy' },
-                            html: {
-                                templateFilePath: "template/web/index.html"
-                            },
-                            open: true
-                        }),
+                    new IncrementCompilePlugin(),
+                    // USE_OLD_COMPILER
+                    //     ? new IncrementCompilePlugin()
+                    //     : new WebpackDevServerPlugin({ //新的 Webpack 编译器
+                    //         libraryType: "debug",
+                    //         defines: { DEBUG: true, RELEASE: false },
+                    //         typescript: { mode: 'legacy' },
+                    //         html: {
+                    //             templateFilePath: "template/web/index.html"
+                    //         },
+                    //         open: true
+                    //     }),
                 ]
             };
         }

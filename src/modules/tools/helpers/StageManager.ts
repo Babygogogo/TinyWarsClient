@@ -6,9 +6,11 @@
 // import Helpers          from "./Helpers";
 // import Types            from "./Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace StageManager {
     import LayerType            = Types.LayerType;
     import NotifyType           = TwnsNotifyType.NotifyType;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     // The game is in landscape mode, which means that its design max height equals its design width, 960.
     const DESIGN_WIDTH         = 960;
@@ -100,7 +102,7 @@ namespace StageManager {
 
     function _addLayer(layerType: LayerType): void {
         if (_LAYERS.has(layerType)) {
-            throw Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`);
+            throw Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`, ClientErrorCode.StageManager_AddLayer_00);
         }
 
         const layer = new UiLayer();

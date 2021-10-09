@@ -23,7 +23,9 @@
 // import TwnsScrCreatePlayerInfoPage          from "./ScrCreatePlayerInfoPage";
 // import TwnsScrCreateSaveSlotsPanel          from "./ScrCreateSaveSlotsPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsScrCreateSettingsPanel {
+    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import ScrCreateAdvancedSettingsPage            = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
@@ -245,7 +247,7 @@ namespace TwnsScrCreateSettingsPanel {
                         warRule,
                         callbackOnModify: (newValue: string | number | null) => {
                             if (typeof newValue === "number") {
-                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`, ClientErrorCode.ScrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00);
                             }
                             ScrCreateModel.setSlotComment(newValue);
                             this._updateCommonWarBasicSettingsPage();

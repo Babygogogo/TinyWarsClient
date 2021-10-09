@@ -19,6 +19,7 @@
 // import TwnsWeEventRenamePanel       from "./WeEventRenamePanel";
 // import TwnsWeNodeReplacePanel       from "./WeNodeReplacePanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeCommandPanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeWar                    = TwnsMeWar.MeWar;
@@ -28,6 +29,7 @@ namespace TwnsWeCommandPanel {
     import WeActionReplacePanel     = TwnsWeActionReplacePanel.WeActionReplacePanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import ColorValue               = Types.ColorValue;
     import WarEventDescType         = Types.WarEventDescType;
 
@@ -391,7 +393,7 @@ namespace TwnsWeCommandPanel {
             } else if (descType === WarEventDescType.EventMaxCallCountTotal) {
                 label.text = `${Lang.getText(LangTextType.B0317)} E${openData.eventId || `???`}`;
             } else {
-                throw Helpers.newError(`Invalid descType: ${descType}`);
+                throw Helpers.newError(`Invalid descType: ${descType}`, ClientErrorCode.WeCommandPanel_UpdateLabelTitle_00);
             }
         }
 
@@ -411,7 +413,7 @@ namespace TwnsWeCommandPanel {
             } else if (descType === WarEventDescType.Action) {
                 this._updateForAction(data);
             } else {
-                throw Helpers.newError(`Invalid descType: ${descType}`);
+                throw Helpers.newError(`Invalid descType: ${descType}`, ClientErrorCode.WeCommandPanel_UpdateLabelDescAndButtons_00);
             }
         }
         private _updateForEvent(data: OpenDataForWeCommandPanel): void {                      // DONE

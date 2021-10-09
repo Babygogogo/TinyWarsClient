@@ -10,9 +10,11 @@
 // import ProtoManager         from "../proto/ProtoManager";
 // import Helpers              from "../helpers/Helpers";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace NetManager {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -34,17 +36,9 @@ namespace NetManager {
 
     class NetMessageDispatcher extends egret.EventDispatcher {
         public dispatchWithContainer(container: ProtoTypes.NetMessage.IMessageContainer): void {
-            const messageName = Helpers.getMessageName(container);
-            if (messageName == null) {
-                throw Helpers.newError(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageName.`);
-            }
-
+            const messageName   = Helpers.getMessageName(container);
             const message       = container[messageName];
-            const messageData   = message ? message.s : null;
-            if (messageData == null) {
-                throw Helpers.newError(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageData.`);
-            }
-
+            const messageData   = Helpers.getExisted(message ? message.s : null, ClientErrorCode.NetManager_NetMessageDispatcher_DispatchWithContainer_00);
             if (container.MsgMpwCommonHandleBoot) {
                 // Don't show the error text.
             } else {
@@ -100,15 +94,7 @@ namespace NetManager {
             (errorText) && (FloatText.show(errorText));
         } else {
             const messageName = Helpers.getMessageName(container);
-            if (messageName == null) {
-                throw Helpers.newError(`NetManager.send() empty name.`);
-            }
-
             const encodedData = ProtoManager.encodeAsMessageContainer(container);
-            if (encodedData == null) {
-                throw Helpers.newError(`NetManager.send() empty encodedData.`);
-            }
-
             Logger.log("%cNetManager send: ", "background:#97FF4F;", messageName, ", length: ", encodedData.byteLength, "\n", container[messageName]);
             _socket.writeBytes(new egret.ByteArray(encodedData));
             _socket.flush();
@@ -164,14 +150,14 @@ namespace NetManager {
             (tips) && (FloatText.show(tips));
 
             if (_socket == null) {
-                throw Helpers.newError(`NetManager.onSocketClose() empty _socket.`);
+                throw Helpers.newError(`NetManager.onSocketClose() empty _socket.`, ClientErrorCode.NetManager_OnSocketClose_00);
             }
             _socket.connectByUrl(FULL_URL);
         }
     }
     function onSocketData(): void {
         if (_socket == null) {
-            throw Helpers.newError(`NetManager.onSocketData() empty _socket.`);
+            throw Helpers.newError(`NetManager.onSocketData() empty _socket.`, ClientErrorCode.NetManager_OnSocketData_00);
         }
 
         const data = new egret.ByteArray();
@@ -179,10 +165,6 @@ namespace NetManager {
 
         const container     = ProtoManager.decodeAsMessageContainer(data.rawBuffer);
         const messageName   = Helpers.getMessageName(container);
-        if (messageName == null) {
-            throw Helpers.newError(`NetManager.onSocketData() empty messageName.`);
-        }
-
         Logger.log("%cNetManager receive: ", "background:#FFD777", messageName, ", length: ", data.length, "\n", container[messageName]);
 
         if (container.MsgCommonServerDisconnect) {

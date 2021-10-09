@@ -12,6 +12,7 @@
 // import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
 // import WarMapModel                          from "../../warMap/model/WarMapModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WwModel {
     import IMpwWatchInfo                            = ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -197,7 +198,7 @@ namespace WwModel {
                 },
             );
         } else {
-            throw Helpers.newError(`McrModel.createDataForCommonWarBasicSettingsPage() invalid timerType.`);
+            throw Helpers.newError(`Invalid timerType.`, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_03);
         }
 
         return openData;

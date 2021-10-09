@@ -8,6 +8,7 @@
 // import Types                from "../helpers/Types";
 // import CommonConstants      from "../helpers/CommonConstants";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarRuleHelpers {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
@@ -209,7 +210,7 @@ namespace WarRuleHelpers {
         const warEventIdArray   = Helpers.getExisted(warRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
-            throw Helpers.newError(`WarRuleHelpers.moveWarEventId() invalid currIndex: ${currIndex}`);
+            throw Helpers.newError(`Invalid currIndex: ${currIndex}`, ClientErrorCode.WarRuleHelpers_MoveWarEventId_00);
         }
 
         const newIndex = Math.max(0, Math.min(warEventIdArray.length - 1, currIndex + deltaIndex));
@@ -222,7 +223,7 @@ namespace WarRuleHelpers {
         const warEventIdArray   = Helpers.getExisted(warRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
-            throw Helpers.newError(`BwWarRuleHelper.deleteWarEventId() invalid currIndex: ${currIndex}`);
+            throw Helpers.newError(`Invalid currIndex: ${currIndex}`, ClientErrorCode.WarRuleHelpers_DeleteWarEventId_00);
         }
 
         warEventIdArray.splice(currIndex, 1);
@@ -234,7 +235,7 @@ namespace WarRuleHelpers {
 
         const warEventIdArray = warRule.warEventIdArray;
         if (warEventIdArray.indexOf(warEventId) >= 0) {
-            throw Helpers.newError(`BwWarRuleHelper.addWarEventId() the warEventId exists: ${warEventId}.`);
+            throw Helpers.newError(`The warEventId exists: ${warEventId}.`, ClientErrorCode.WarRuleHelpers_AddWarEventId_00);
         }
 
         warEventIdArray.push(warEventId);
@@ -249,7 +250,7 @@ namespace WarRuleHelpers {
     }
     export function getRandomCoIdWithCoIdList(coIdList: number[]): number {
         if ((coIdList == null) || (coIdList.length <= 0)) {
-            throw Helpers.newError(`Empty coIdList.`);
+            throw Helpers.newError(`Empty coIdList.`, ClientErrorCode.WarRuleHelpers_GetRandomCoIdWithCoIdList_00);
         } else {
             if (coIdList.length <= 1) {
                 return coIdList[0];

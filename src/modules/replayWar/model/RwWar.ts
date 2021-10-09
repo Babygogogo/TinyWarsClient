@@ -18,6 +18,7 @@
 // import TwnsRwField                  from "./RwField";
 // import TwnsRwPlayerManager          from "./RwPlayerManager";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsRwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
@@ -222,7 +223,7 @@ namespace TwnsRwWar {
             } else if (this._getSettingsForScw()) {
                 return hasFog ? WarType.ScwFog : WarType.ScwStd;
             } else {
-                throw Helpers.newError(`Invalid war data.`);
+                throw Helpers.newError(`Invalid war data.`, ClientErrorCode.RwWar_GetWarType_00);
             }
         }
         public getIsNeedExecutedAction(): boolean {
@@ -247,7 +248,7 @@ namespace TwnsRwWar {
                 return Helpers.getExisted(settingsForScw.mapId);
             }
 
-            throw Helpers.newError(`Invalid war data.`);
+            throw Helpers.newError(`Invalid war data.`, ClientErrorCode.RwWar_GetMapId_00);
         }
         public getIsWarMenuPanelOpening(): boolean {
             return TwnsRwWarMenuPanel.RwWarMenuPanel.getIsOpening();

@@ -14,6 +14,7 @@
 // import TwnsTwField                  from "./TwField";
 // import TwnsTwPlayerManager          from "./TwPlayerManager";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsTwWar {
     import BwWarEventManager    = TwnsBwWarEventManager.BwWarEventManager;
     import TwPlayerManager      = TwnsTwPlayerManager.TwPlayerManager;
@@ -223,7 +224,7 @@ namespace TwnsTwWar {
         const configVersion         = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
         const playersCountUnneutral = mapRawData.playersCountUnneutral;
         if ((playersCountUnneutral == null) || (playersCountUnneutral < 2)) {
-            throw Helpers.newError(`Invalid playersCountUnneutral: ${playersCountUnneutral}`);
+            throw Helpers.newError(`Invalid playersCountUnneutral: ${playersCountUnneutral}`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_00);
         }
 
         const bootTimerParams   = [Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue];
@@ -243,7 +244,7 @@ namespace TwnsTwWar {
         if ((WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability })) ||
             ((ruleForPlayers.playerRuleDataArray || []).length !== playersCountUnneutral)
         ) {
-            throw Helpers.newError(`Invalid ruleForPlayers.`);
+            throw Helpers.newError(`Invalid ruleForPlayers.`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_01);
         }
 
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {

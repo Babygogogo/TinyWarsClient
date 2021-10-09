@@ -12,7 +12,9 @@
 // import TwnsUiListItemRenderer   from "./UiListItemRenderer";
 // import TwnsUiScrollList         from "./UiScrollList";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiCoInfo {
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import CoSkillType      = Types.CoSkillType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -142,7 +144,7 @@ namespace TwnsUiCoInfo {
                 // nothing to do
 
             } else {
-                throw Helpers.newError(`Invalid coType: ${coType}`);
+                throw Helpers.newError(`Invalid coType: ${coType}`, ClientErrorCode.UiCoInfo_UpdateComponentsForCoInfo_00);
             }
 
             this._updateComponentsForSkill();
@@ -204,7 +206,7 @@ namespace TwnsUiCoInfo {
 
     type DataForSkillTypeRenderer = {
         coSkillType : CoSkillType;
-        component   : TwnsUiCoInfo.UiCoInfo;
+        component   : UiCoInfo;
     };
     class SkillTypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSkillTypeRenderer> {
         private readonly _labelType!    : TwnsUiLabel.UiLabel;

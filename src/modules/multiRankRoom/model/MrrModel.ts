@@ -15,7 +15,9 @@
 // import MrrProxy                             from "./MrrProxy";
 // import MrrSelfSettingsModel                 from "./MrrSelfSettingsModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MrrModel {
+    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import NetMessage                               = ProtoTypes.NetMessage;
@@ -335,7 +337,7 @@ namespace MrrModel {
                 },
             );
         } else {
-            throw Helpers.newError(`MrrModel.createDataForCommonWarBasicSettingsPage() invalid timerType: ${timerType}`);
+            throw Helpers.newError(`MrrModel.createDataForCommonWarBasicSettingsPage() invalid timerType: ${timerType}`, ClientErrorCode.MrrModel_CreateDataForCommonWarBasicSettingsPage_00);
         }
 
         return openData;

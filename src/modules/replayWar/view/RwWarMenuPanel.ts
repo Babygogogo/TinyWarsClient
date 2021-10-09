@@ -29,9 +29,11 @@
 // import RwProxy                          from "../model/RwProxy";
 // import TwnsRwWar                        from "../model/RwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsRwWarMenuPanel {
-    import NotifyType                   = TwnsNotifyType.NotifyType;
-    import LangTextType                 = TwnsLangTextType.LangTextType;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = TwnsLangTextType.LangTextType;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     // eslint-disable-next-line no-shadow
     enum MenuType {
@@ -158,7 +160,7 @@ namespace TwnsRwWarMenuPanel {
                 this._menuType = MenuType.Main;
                 this._updateListCommand();
             } else {
-                throw Helpers.newError(`Invalid menuType: ${type}`);
+                throw Helpers.newError(`Invalid menuType: ${type}`, ClientErrorCode.RwWarMenuPanel_OnTouchedBtnBack_00);
             }
         }
 
@@ -227,7 +229,7 @@ namespace TwnsRwWarMenuPanel {
             } else if (type === MenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
-                throw Helpers.newError(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
+                throw Helpers.newError(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`, ClientErrorCode.RwWarMenuPanel_CreateDataForList_00);
             }
         }
 

@@ -32,9 +32,11 @@
 // import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
 // import TwnsUserSetStageScalePanel   from "./UserSetStageScalePanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserSettingsPanel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
     export class UserSettingsPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -234,12 +236,8 @@ namespace TwnsUserSettingsPanel {
 
             this._showOpenAnimation();
 
-            const selfUserId = UserModel.getSelfUserId();
-            if (selfUserId == null) {
-                throw Helpers.newError(`UserSettingsPanel._onOpened() empty selfUserId.`);
-            } else {
-                UserProxy.reqUserGetPublicInfo(selfUserId);
-            }
+            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnOpened_00);
+            UserProxy.reqUserGetPublicInfo(selfUserId);
 
             this._scroller.viewport.scrollV = 0;
             this._updateView();
@@ -264,20 +262,12 @@ namespace TwnsUserSettingsPanel {
             this._updateView();
         }
         private _onMsgUserSetNickname(): void {
-            const selfUserId = UserModel.getSelfUserId();
-            if (selfUserId == null) {
-                throw Helpers.newError(`UserSettingsPanel._onMsgUserSetNickname() empty selfUserId.`);
-            } else {
-                UserProxy.reqUserGetPublicInfo(selfUserId);
-            }
+            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnMsgUserSetNickname_00);
+            UserProxy.reqUserGetPublicInfo(selfUserId);
         }
         private _onMsgUserSetDiscordId(): void {
-            const selfUserId = UserModel.getSelfUserId();
-            if (selfUserId == null) {
-                throw Helpers.newError(`UserSettingsPanel._onMsgUserSetDiscordId() empty selfUserId.`);
-            } else {
-                UserProxy.reqUserGetPublicInfo(selfUserId);
-            }
+            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnMsgUserSetDiscordId_00);
+            UserProxy.reqUserGetPublicInfo(selfUserId);
         }
         private _onTouchedBtnChangeNickname(): void {
             TwnsUserChangeNicknamePanel.UserChangeNicknamePanel.show();
@@ -317,12 +307,8 @@ namespace TwnsUserSettingsPanel {
             TwnsChangeLogPanel.ChangeLogPanel.show();
         }
         private _onTouchedBtnSetPrivilege(): void {
-            const selfUserId = UserModel.getSelfUserId();
-            if (selfUserId == null) {
-                throw Helpers.newError(`UserSettingsPanel._onTouchedBtnSetPrivilege() empty selfUserId.`);
-            } else {
-                TwnsUserSetPrivilegePanel.UserSetPrivilegePanel.show({ userId: selfUserId });
-            }
+            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnTouchedBtnSetPrivilege_00);
+            TwnsUserSetPrivilegePanel.UserSetPrivilegePanel.show({ userId: selfUserId });
         }
         private _onTouchedBtnMapManagement(): void {
             StageManager.closeAllPanels();

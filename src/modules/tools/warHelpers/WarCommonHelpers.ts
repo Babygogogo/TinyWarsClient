@@ -14,6 +14,7 @@
 // import WarRuleHelpers       from "./WarRuleHelpers";
 // import WarVisibilityHelpers from "./WarVisibilityHelpers";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarCommonHelpers {
     import GridIndex        = Types.GridIndex;
     import MovableArea      = Types.MovableArea;
@@ -412,7 +413,7 @@ namespace WarCommonHelpers {
             return (distance != null) && (distance <= coZoneRadius);
 
         } else {
-            throw Helpers.newError(`Invalid coSkillAreaType: ${coSkillAreaType}`);
+            throw Helpers.newError(`Invalid coSkillAreaType: ${coSkillAreaType}`, ClientErrorCode.WarCommonHelpers_CheckIsGridIndexInsideCoSkillArea_00);
         }
     }
 
@@ -560,11 +561,7 @@ namespace WarCommonHelpers {
             const configVersion = war.getConfigVersion();
             const unitMap       = war.getUnitMap();
             for (const unitData of unitsData) {
-                const unitId = unitData.unitId;
-                if (unitId == null) {
-                    throw Helpers.newError(`WarCommonHelpers.addUnitsBeforeExecutingAction() empty unitId.`);
-                }
-
+                const unitId = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_AddUnitsBeforeExecutingAction_00);
                 if (!unitMap.getUnitById(unitId)) {
                     const unit = new TwnsBwUnit.BwUnit();
                     unit.init(unitData, configVersion);
@@ -827,7 +824,7 @@ namespace WarCommonHelpers {
             case 2                                      : return `uncompressedTriangle0002`;
             case 3                                      : return `uncompressedTriangle0003`;
             case 4                                      : return `uncompressedTriangle0004`;
-            default                                     : throw Helpers.newError(`Invalid skinId: ${skinId}`);
+            default                                     : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetImageSourceForCoEyeFrame_00);
         }
     }
 
@@ -838,7 +835,7 @@ namespace WarCommonHelpers {
             case 2  : return 0x34A7DE;
             case 3  : return 0xF9D803;
             case 4  : return 0x000000;
-            default : throw Helpers.newError(`Invalid skinId: ${skinId}`);
+            default : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetTextColorForSkinId_00);
         }
     }
     export function getTextStrokeForSkinId(skinId: number): number {
@@ -848,7 +845,7 @@ namespace WarCommonHelpers {
             case 2  : return 0;
             case 3  : return 0;
             case 4  : return 1;
-            default : throw Helpers.newError(`Invalid skinId: ${skinId}`);
+            default : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetTextStrokeForSkinId_00);
         }
     }
 

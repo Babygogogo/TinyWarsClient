@@ -2,9 +2,11 @@
 // import Logger               from "../helpers/Logger";
 // import ProtoTypes           from "./ProtoTypes";
 // import Helpers              from "../helpers/Helpers";
-// import * as protobuf            from "../../../../libs/modules/ProtobufJs/ProtobufJs";
+// import * as protobuf        from "../../../../libs/modules/ProtobufJs/ProtobufJs";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace ProtoManager {
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import IMessageContainer        = ProtoTypes.NetMessage.IMessageContainer;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import IMapRawData              = ProtoTypes.Map.IMapRawData;
@@ -42,7 +44,7 @@ namespace ProtoManager {
         if (Helpers.getMessageName(action) != null) {
             return MessageContainerClass.encode(action).finish();
         } else {
-            throw Helpers.newError(`ProtoManager.encodeAsMessageContainer() invalid message! ${JSON.stringify(action)}`);
+            throw Helpers.newError(`ProtoManager.encodeAsMessageContainer() invalid message! ${JSON.stringify(action)}`, ClientErrorCode.ProtoManager_EncodeAsMessageContainer_00);
         }
     }
     export function decodeAsMessageContainer(data: Uint8Array | ArrayBuffer): IMessageContainer {

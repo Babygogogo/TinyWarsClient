@@ -8,11 +8,13 @@
 // import Logger               from "./Logger";
 // import Types                from "./Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace SoundManager {
     import SoundType            = Types.SoundType;
     import BgmCode              = Types.BgmCode;
     import ShortSfxCode         = Types.ShortSfxCode;
     import LangTextType         = TwnsLangTextType.LangTextType;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     export const DEFAULT_MUTE   = false;
     export const DEFAULT_VOLUME = 1;
@@ -159,10 +161,6 @@ namespace SoundManager {
     }
     export function playCoBgmWithWar(war: TwnsBwWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
-        if (player == null) {
-            throw Helpers.newError(`SoundManager.playCoBgmWithWar() empty player.`);
-        }
-
         if ((player.checkIsNeutral()) && (!force)) {
             return;
         }
@@ -247,22 +245,14 @@ namespace SoundManager {
         }
     }
     async function _playBgmForNormal(bgmCode: BgmCode): Promise<void> {
-        const params = _BGM_PARAMS.get(bgmCode);
-        if (params == null) {
-            throw Helpers.newError(`SoundManager._playBgmForNormal() empty params.`);
-        }
-
+        const params        = Helpers.getExisted(_BGM_PARAMS.get(bgmCode), ClientErrorCode.SoundManager_PlayBgmForNormal_00);
         const cacheDict     = _bgmBufferCache;
         const cachedBuffer  = cacheDict.get(bgmCode);
         if (cachedBuffer) {
             _doPlayBgmForNormal(cachedBuffer, params);
         } else {
-            const path = getResourcePath(params.name, SoundType.Bgm);
-            if (path == null) {
-                throw Helpers.newError(`SoundManager._playBgmForNormal() empty path.`);
-            }
-
-            const audioBuffer = await loadAudioBuffer(path).catch(err => {
+            const path          = getResourcePath(params.name, SoundType.Bgm);
+            const audioBuffer   = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager._playBgmForNormal() loadAudioBuffer error: ${(err as Error).message}.`);
                 return;
@@ -363,22 +353,14 @@ namespace SoundManager {
             return;
         }
 
-        const params = _SHORT_SFX_PARAM.get(shortSfxCode);
-        if (params == null) {
-            throw Helpers.newError(`SoundManager.playShortSfx() empty params.`);
-        }
-
+        const params        = Helpers.getExisted(_SHORT_SFX_PARAM.get(shortSfxCode), ClientErrorCode.SoundManager_PlayShortSfx_00);
         const cacheDict     = _shortSfxBufferCache;
         const cachedBuffer  = cacheDict.get(shortSfxCode);
         if (cachedBuffer) {
             _doPlayShortSfx(cachedBuffer);
         } else {
-            const path = getResourcePath(params.name, SoundType.Effect);
-            if (path == null) {
-                throw Helpers.newError(`SoundManager._playEffectForNormal() empty path.`);
-            }
-
-            const audioBuffer = await loadAudioBuffer(path).catch(err => {
+            const path          = getResourcePath(params.name, SoundType.Effect);
+            const audioBuffer   = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager.playShortSfx() loadAudioBuffer error: ${(err as Error).message}`);
                 return;
@@ -452,11 +434,11 @@ namespace SoundManager {
         _stopAllShortSfx();
     }
 
-    function getResourcePath(musicName: string, soundType: SoundType): string | null {
+    function getResourcePath(musicName: string, soundType: SoundType): string {
         switch (soundType) {
             case SoundType.Bgm      : return _SOUND_PATH + "bgm/" + musicName;
             case SoundType.Effect   : return _SOUND_PATH + "effect/" + musicName;
-            default                 : return null;
+            default                 : throw Helpers.newError(`Invalid soundType: ${soundType}`, ClientErrorCode.SoundManager_GetResourcePath_00);
         }
     }
 

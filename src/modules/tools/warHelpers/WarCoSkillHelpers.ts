@@ -11,7 +11,9 @@
 // import ProtoTypes       from "../proto/ProtoTypes";
 // import WarCommonHelpers from "./WarCommonHelpers";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarCoSkillHelpers {
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwPlayer             = TwnsBwPlayer.BwPlayer;
     import GridIndex            = Types.GridIndex;
     import Structure            = ProtoTypes.Structure;
@@ -66,10 +68,6 @@ namespace WarCoSkillHelpers {
         }
 
         const currFund = player.getFund();
-        if (currFund == null) {
-            throw Helpers.newError(`WarCoSkillHelpers.exeSelfFund() empty currFund.`);
-        }
-
         player.setFund(Math.floor(currFund * cfg[0] / 100 + cfg[1]));
     }
 
@@ -83,33 +81,17 @@ namespace WarCoSkillHelpers {
             return;
         }
 
-        const selfFund = player.getFund();
-        if (selfFund == null) {
-            throw Helpers.newError(`WarCoSkillHelpers.exeEnemyEnergy() empty selfFund.`);
-        }
-
+        const selfFund      = player.getFund();
         const selfTeamIndex = player.getTeamIndex();
-        if (selfTeamIndex == null) {
-            throw Helpers.newError(`WarCoSkillHelpers.exeEnemyEnergy() empty selfTeamIndex.`);
-        }
-
-        const modifier = cfg[0] * selfFund / 10000 + cfg[1];
+        const modifier      = cfg[0] * selfFund / 10000 + cfg[1];
         for (const p of war.getPlayerManager().getAllPlayers()) {
             const teamIndex = p.getTeamIndex();
-            if (teamIndex == null) {
-                throw Helpers.newError(`WarCoSkillHelpers.exeEnemyEnergy() empty teamIndex.`);
-            }
-
             if ((teamIndex === selfTeamIndex) || (teamIndex === CommonConstants.WarNeutralTeamIndex)) {
                 continue;
             }
 
             const currentEnergy = p.getCoCurrentEnergy();
-            if (currentEnergy == null) {
-                throw Helpers.newError(`WarCoSkillHelpers.exeEnemyEnergy() empty currentEnergy.`);
-            }
-
-            const maxEnergy = p.getCoMaxEnergy();
+            const maxEnergy     = p.getCoMaxEnergy();
             p.setCoCurrentEnergy(Math.max(
                 0,
                 Math.min(
@@ -133,39 +115,23 @@ namespace WarCoSkillHelpers {
 
         const selfPlayerIndex = player.getPlayerIndex();
         if ((selfPlayerIndex == null) || (selfPlayerIndex === CommonConstants.WarNeutralPlayerIndex)) {
-            throw Helpers.newError(`WarCoSkillHelpers.exeSelfAddUnit() empty selfPlayerIndex.`);
+            throw Helpers.newError(`Invalid selfPlayerIndex: ${selfPlayerIndex}.`, ClientErrorCode.WarCoSkillHelpers_ExeSelfAddUnit_00);
         }
 
         const configVersion = war.getConfigVersion();
-        if (configVersion == null) {
-            throw Helpers.newError(`WarCoSkillHelpers.exeSelfAddUnit() empty configVersion.`);
-        }
-
-        const coZoneRadius = player.getCoZoneRadius();
-        if (coZoneRadius == null) {
-            throw Helpers.newError(`WarCoSkillHelpers.exeSelfAddUnit() empty coZoneRadius.`);
-        }
-
-        const unitMap = war.getUnitMap();
+        const coZoneRadius  = player.getCoZoneRadius();
+        const unitMap       = war.getUnitMap();
         for (const tile of war.getTileMap().getAllTiles()) {
             if (tile.getPlayerIndex() !== selfPlayerIndex) {
                 continue;
             }
 
             const gridIndex = tile.getGridIndex();
-            if (gridIndex == null) {
-                throw Helpers.newError(`WarCoSkillHelpers.exeSelfAddUnit() empty gridIndex.`);
-            }
-
             if (unitMap.getUnitOnMap(gridIndex)) {
                 continue;
             }
 
             const tileType = tile.getType();
-            if (tileType == null) {
-                throw Helpers.newError(`WarCoSkillHelpers.exeSelfAddUnit() empty tileType.`);
-            }
-
             if ((!ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[1]))                                 ||
                 (!WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                     gridIndex,
@@ -177,12 +143,8 @@ namespace WarCoSkillHelpers {
                 continue;
             }
 
-            const unitId = unitMap.getNextUnitId();
-            if (unitId == null) {
-                throw Helpers.newError(`WarCoSkillHelpers.exeSelfAddUnit() empty unitId.`);
-            }
-
             // cfg:（范围类别，地形类别，部队种类，hp，状态（0=未行动，1=已行动））
+            const unitId = unitMap.getNextUnitId();
             const unit = new TwnsBwUnit.BwUnit();
             unit.init({
                 gridIndex,
@@ -667,7 +629,7 @@ namespace WarCoSkillHelpers {
             const category      = cfg[1];
             const actionState   : Types.UnitActionState = cfg[2];
             if ((actionState !== Types.UnitActionState.Acted) && (actionState !== Types.UnitActionState.Idle)) {
-                throw Helpers.newError(`Invalid actionState: ${actionState}`);
+                throw Helpers.newError(`Invalid actionState: ${actionState}`, ClientErrorCode.WarCoSkillHelpers_ExeSelfUnitActionState_00);
             }
 
             for (const unit of unitMap.getAllUnits()) {
@@ -728,7 +690,7 @@ namespace WarCoSkillHelpers {
                 : getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
 
         } else {
-            throw Helpers.newError(`Invalid targetType: ${targetType}`);
+            throw Helpers.newError(`Invalid targetType: ${targetType}`, ClientErrorCode.WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_00);
         }
     }
 

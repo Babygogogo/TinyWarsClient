@@ -15,11 +15,18 @@
     // 	],
     // 	"description": "Log output to console"
     // }
-    "Check Empty": {
+    "Catch Error": {
         "scope": "typescript",
         "prefix": "ce",
         "body": [
             ".catch(err => { CompatibilityHelpers.showError(err); throw err; })",
+        ],
+    },
+    "Import ClientErrorCode": {
+        "scope": "typescript",
+        "prefix": "ic",
+        "body": [
+            "import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;",
         ],
     },
     "Show Close Animation": {

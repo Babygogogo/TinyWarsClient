@@ -12,6 +12,7 @@
 // import TwnsLangErrorText    from "./LangErrorText";
 // import TwnsLangTextType     from "./LangTextType";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Lang {
     import LanguageType             = Types.LanguageType;
     import WarEventConditionType    = Types.WarEventConditionType;
@@ -50,7 +51,7 @@ namespace Lang {
         if (text != null) {
             return text;
         } else {
-            throw Helpers.newError(`Lang.getText() empty text: ${t} ${languageType}`);
+            throw Helpers.newError(`Lang.getText() empty text: ${t} ${languageType}`, ClientErrorCode.Lang_GetText_00);
         }
     }
 
@@ -261,18 +262,18 @@ namespace Lang {
 
     export function getWarBasicSettingsName(type: Types.WarBasicSettingsType): string | null {
         switch (type) {
-            case Types.WarBasicSettingsType.MapName                 : return Lang.getText(LangTextType.B0225);
-            case Types.WarBasicSettingsType.WarName                 : return Lang.getText(LangTextType.B0185);
-            case Types.WarBasicSettingsType.WarPassword             : return Lang.getText(LangTextType.B0186);
-            case Types.WarBasicSettingsType.WarComment              : return Lang.getText(LangTextType.B0187);
-            case Types.WarBasicSettingsType.WarRuleTitle            : return Lang.getText(LangTextType.B0318);
-            case Types.WarBasicSettingsType.HasFog                  : return Lang.getText(LangTextType.B0020);
-            case Types.WarBasicSettingsType.TimerType               : return Lang.getText(LangTextType.B0574);
-            case Types.WarBasicSettingsType.TimerRegularParam       : return Lang.getText(LangTextType.B0021);
-            case Types.WarBasicSettingsType.TimerIncrementalParam1  : return Lang.getText(LangTextType.B0389);
-            case Types.WarBasicSettingsType.TimerIncrementalParam2  : return Lang.getText(LangTextType.B0390);
-            case Types.WarBasicSettingsType.SpmSaveSlotIndex        : return Lang.getText(LangTextType.B0255);
-            case Types.WarBasicSettingsType.SpmSaveSlotComment      : return Lang.getText(LangTextType.B0605);
+            case Types.WarBasicSettingsType.MapName                 : return getText(LangTextType.B0225);
+            case Types.WarBasicSettingsType.WarName                 : return getText(LangTextType.B0185);
+            case Types.WarBasicSettingsType.WarPassword             : return getText(LangTextType.B0186);
+            case Types.WarBasicSettingsType.WarComment              : return getText(LangTextType.B0187);
+            case Types.WarBasicSettingsType.WarRuleTitle            : return getText(LangTextType.B0318);
+            case Types.WarBasicSettingsType.HasFog                  : return getText(LangTextType.B0020);
+            case Types.WarBasicSettingsType.TimerType               : return getText(LangTextType.B0574);
+            case Types.WarBasicSettingsType.TimerRegularParam       : return getText(LangTextType.B0021);
+            case Types.WarBasicSettingsType.TimerIncrementalParam1  : return getText(LangTextType.B0389);
+            case Types.WarBasicSettingsType.TimerIncrementalParam2  : return getText(LangTextType.B0390);
+            case Types.WarBasicSettingsType.SpmSaveSlotIndex        : return getText(LangTextType.B0255);
+            case Types.WarBasicSettingsType.SpmSaveSlotComment      : return getText(LangTextType.B0605);
             default                                                 : return null;
         }
     }
