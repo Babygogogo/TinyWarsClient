@@ -1,31 +1,31 @@
 
-import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
-import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
-import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
-import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
-import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
-import TwnsClientErrorCode                  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import FloatText                            from "../../tools/helpers/FloatText";
-import Helpers                              from "../../tools/helpers/Helpers";
-import Types                                from "../../tools/helpers/Types";
-import Lang                                 from "../../tools/lang/Lang";
-import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-import TwnsNotifyType                       from "../../tools/notify/NotifyType";
-import ProtoTypes                           from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                         from "../../tools/ui/UiButton";
-import TwnsUiLabel                          from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                          from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
-import TwnsUiTab                            from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
-import WarMapModel                          from "../../warMap/model/WarMapModel";
-import WwModel                              from "../model/WwModel";
-import WwProxy                              from "../model/WwProxy";
-import TwnsWwDeleteWatcherDetailPanel       from "./WwDeleteWatcherDetailPanel";
-import TwnsWwMainMenuPanel                  from "./WwMainMenuPanel";
+// import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+// import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+// import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+// import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
+// import TwnsLobbyBottomPanel                 from "../../lobby/view/LobbyBottomPanel";
+// import TwnsLobbyTopPanel                    from "../../lobby/view/LobbyTopPanel";
+// import TwnsClientErrorCode                  from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants                      from "../../tools/helpers/CommonConstants";
+// import FloatText                            from "../../tools/helpers/FloatText";
+// import Helpers                              from "../../tools/helpers/Helpers";
+// import Types                                from "../../tools/helpers/Types";
+// import Lang                                 from "../../tools/lang/Lang";
+// import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton                         from "../../tools/ui/UiButton";
+// import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+// import TwnsUiTab                            from "../../tools/ui/UiTab";
+// import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+// import WarMapModel                          from "../../warMap/model/WarMapModel";
+// import WwModel                              from "../model/WwModel";
+// import WwProxy                              from "../model/WwProxy";
+// import TwnsWwDeleteWatcherDetailPanel       from "./WwDeleteWatcherDetailPanel";
+// import TwnsWwMainMenuPanel                  from "./WwMainMenuPanel";
 
 namespace TwnsWwDeleteWatcherWarsPanel {
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -400,4 +400,4 @@ namespace TwnsWwDeleteWatcherWarsPanel {
     }
 }
 
-export default TwnsWwDeleteWatcherWarsPanel;
+// export default TwnsWwDeleteWatcherWarsPanel;

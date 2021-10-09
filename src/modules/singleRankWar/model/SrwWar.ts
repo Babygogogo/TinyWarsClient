@@ -1,11 +1,11 @@
 
-import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
-import TwnsSpwWarMenuPanel  from "../../singlePlayerWar/view/SpwWarMenuPanel";
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import FloatText            from "../../tools/helpers/FloatText";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
+// import TwnsSpwWarMenuPanel  from "../../singlePlayerWar/view/SpwWarMenuPanel";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import FloatText            from "../../tools/helpers/FloatText";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace TwnsSrwWar {
     import SpwWar           = TwnsSpwWar.SpwWar;
@@ -106,4 +106,4 @@ namespace TwnsSrwWar {
     }
 }
 
-export default TwnsSrwWar;
+// export default TwnsSrwWar;

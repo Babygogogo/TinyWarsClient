@@ -1,17 +1,17 @@
 
-import ChatModel                    from "../../chat/model/ChatModel";
-import TwnsChatPanel                from "../../chat/view/ChatPanel";
-import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
-import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Types                        from "../../tools/helpers/Types";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import UserModel                    from "../../user/model/UserModel";
-import TwnsUserOnlineUsersPanel     from "../../user/view/UserOnlineUsersPanel";
-import TwnsUserPanel                from "../../user/view/UserPanel";
-import TwnsLobbyTopPanel            from "./LobbyTopPanel";
+// import ChatModel                    from "../../chat/model/ChatModel";
+// import TwnsChatPanel                from "../../chat/view/ChatPanel";
+// import TwnsCommonDamageChartPanel   from "../../common/view/CommonDamageChartPanel";
+// import TwnsMeMapListPanel           from "../../mapEditor/view/MeMapListPanel";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import Types                        from "../../tools/helpers/Types";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import TwnsUiButton                 from "../../tools/ui/UiButton";
+// import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+// import UserModel                    from "../../user/model/UserModel";
+// import TwnsUserOnlineUsersPanel     from "../../user/view/UserOnlineUsersPanel";
+// import TwnsUserPanel                from "../../user/view/UserPanel";
+// import TwnsLobbyTopPanel            from "./LobbyTopPanel";
 
 namespace TwnsLobbyBottomPanel {
     import UserPanel                = TwnsUserPanel.UserPanel;
@@ -176,4 +176,4 @@ namespace TwnsLobbyBottomPanel {
     }
 }
 
-export default TwnsLobbyBottomPanel;
+// export default TwnsLobbyBottomPanel;

@@ -1,11 +1,11 @@
 
-import CommonModel      from "../../common/model/CommonModel";
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import Timer            from "../../tools/helpers/Timer";
-import Types            from "../../tools/helpers/Types";
-import TwnsUiImage      from "../../tools/ui/UiImage";
-import UserModel        from "../../user/model/UserModel";
+// import CommonModel      from "../../common/model/CommonModel";
+// import CommonConstants  from "../../tools/helpers/CommonConstants";
+// import Helpers          from "../../tools/helpers/Helpers";
+// import Timer            from "../../tools/helpers/Timer";
+// import Types            from "../../tools/helpers/Types";
+// import TwnsUiImage      from "../../tools/ui/UiImage";
+// import UserModel        from "../../user/model/UserModel";
 
 namespace TwnsMeTileSimpleView {
     import TileBaseType             = Types.TileBaseType;
@@ -136,4 +136,4 @@ namespace TwnsMeTileSimpleView {
     }
 }
 
-export default TwnsMeTileSimpleView;
+// export default TwnsMeTileSimpleView;

@@ -1,9 +1,9 @@
 
-import TwnsBwField          from "../../baseWar/model/BwField";
-import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
-import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
-import TwnsSpwActionPlanner from "./SpwActionPlanner";
-import TwnsSpwFogMap        from "./SpwFogMap";
+// import TwnsBwField          from "../../baseWar/model/BwField";
+// import TwnsBwTileMap        from "../../baseWar/model/BwTileMap";
+// import TwnsBwUnitMap        from "../../baseWar/model/BwUnitMap";
+// import TwnsSpwActionPlanner from "./SpwActionPlanner";
+// import TwnsSpwFogMap        from "./SpwFogMap";
 
 namespace TwnsSpwField {
     import BwField          = TwnsBwField.BwField;
@@ -32,4 +32,4 @@ namespace TwnsSpwField {
     }
 }
 
-export default TwnsSpwField;
+// export default TwnsSpwField;

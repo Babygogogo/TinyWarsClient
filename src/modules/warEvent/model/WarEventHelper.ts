@@ -1,29 +1,29 @@
 
-import TwnsBwWar                        from "../../baseWar/model/BwWar";
-import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
-import CommonConstants                  from "../../tools/helpers/CommonConstants";
-import ConfigManager                    from "../../tools/helpers/ConfigManager";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Types                            from "../../tools/helpers/Types";
-import Lang                             from "../../tools/lang/Lang";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers                 from "../../tools/warHelpers/WarCommonHelpers";
-import TwnsWeActionModifyPanel1         from "../view/WeActionModifyPanel1";
-import TwnsWeActionModifyPanel2         from "../view/WeActionModifyPanel2";
-import TwnsWeActionModifyPanel3         from "../view/WeActionModifyPanel3";
-import TwnsWeConditionModifyPanel1      from "../view/WeConditionModifyPanel1";
-import TwnsWeConditionModifyPanel10     from "../view/WeConditionModifyPanel10";
-import TwnsWeConditionModifyPanel11     from "../view/WeConditionModifyPanel11";
-import TwnsWeConditionModifyPanel12     from "../view/WeConditionModifyPanel12";
-import TwnsWeConditionModifyPanel2      from "../view/WeConditionModifyPanel2";
-import TwnsWeConditionModifyPanel3      from "../view/WeConditionModifyPanel3";
-import TwnsWeConditionModifyPanel4      from "../view/WeConditionModifyPanel4";
-import TwnsWeConditionModifyPanel5      from "../view/WeConditionModifyPanel5";
-import TwnsWeConditionModifyPanel6      from "../view/WeConditionModifyPanel6";
-import TwnsWeConditionModifyPanel7      from "../view/WeConditionModifyPanel7";
-import TwnsWeConditionModifyPanel8      from "../view/WeConditionModifyPanel8";
-import TwnsWeConditionModifyPanel9      from "../view/WeConditionModifyPanel9";
+// import TwnsBwWar                        from "../../baseWar/model/BwWar";
+// import TwnsClientErrorCode              from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants                  from "../../tools/helpers/CommonConstants";
+// import ConfigManager                    from "../../tools/helpers/ConfigManager";
+// import Helpers                          from "../../tools/helpers/Helpers";
+// import Types                            from "../../tools/helpers/Types";
+// import Lang                             from "../../tools/lang/Lang";
+// import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+// import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+// import WarCommonHelpers                 from "../../tools/warHelpers/WarCommonHelpers";
+// import TwnsWeActionModifyPanel1         from "../view/WeActionModifyPanel1";
+// import TwnsWeActionModifyPanel2         from "../view/WeActionModifyPanel2";
+// import TwnsWeActionModifyPanel3         from "../view/WeActionModifyPanel3";
+// import TwnsWeConditionModifyPanel1      from "../view/WeConditionModifyPanel1";
+// import TwnsWeConditionModifyPanel10     from "../view/WeConditionModifyPanel10";
+// import TwnsWeConditionModifyPanel11     from "../view/WeConditionModifyPanel11";
+// import TwnsWeConditionModifyPanel12     from "../view/WeConditionModifyPanel12";
+// import TwnsWeConditionModifyPanel2      from "../view/WeConditionModifyPanel2";
+// import TwnsWeConditionModifyPanel3      from "../view/WeConditionModifyPanel3";
+// import TwnsWeConditionModifyPanel4      from "../view/WeConditionModifyPanel4";
+// import TwnsWeConditionModifyPanel5      from "../view/WeConditionModifyPanel5";
+// import TwnsWeConditionModifyPanel6      from "../view/WeConditionModifyPanel6";
+// import TwnsWeConditionModifyPanel7      from "../view/WeConditionModifyPanel7";
+// import TwnsWeConditionModifyPanel8      from "../view/WeConditionModifyPanel8";
+// import TwnsWeConditionModifyPanel9      from "../view/WeConditionModifyPanel9";
 
 namespace WarEventHelper {
     import WeConditionModifyPanel1  = TwnsWeConditionModifyPanel1.WeConditionModifyPanel1;
@@ -2254,4 +2254,4 @@ namespace WarEventHelper {
     }
 }
 
-export default WarEventHelper;
+// export default WarEventHelper;

@@ -1,9 +1,9 @@
 
-import TwnsMpwWar           from "../../multiPlayerWar/model/MpwWar";
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsMpwWar           from "../../multiPlayerWar/model/MpwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace TwnsCcwWar {
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
@@ -69,4 +69,4 @@ namespace TwnsCcwWar {
     }
 }
 
-export default TwnsCcwWar;
+// export default TwnsCcwWar;

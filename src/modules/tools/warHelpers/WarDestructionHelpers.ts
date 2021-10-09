@@ -1,9 +1,9 @@
 
-import TwnsBwWar            from "../../baseWar/model/BwWar";
-import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
-import CommonConstants      from "../helpers/CommonConstants";
-import Helpers              from "../helpers/Helpers";
-import Types                from "../helpers/Types";
+// import TwnsBwWar            from "../../baseWar/model/BwWar";
+// import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+// import CommonConstants      from "../helpers/CommonConstants";
+// import Helpers              from "../helpers/Helpers";
+// import Types                from "../helpers/Types";
 
 namespace WarDestructionHelpers {
     import GridIndex        = Types.GridIndex;
@@ -122,4 +122,4 @@ namespace WarDestructionHelpers {
     }
 }
 
-export default WarDestructionHelpers;
+// export default WarDestructionHelpers;

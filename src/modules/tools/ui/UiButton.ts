@@ -1,9 +1,9 @@
 
-import TwnsUiLabel      from "./UiLabel";
-import TwnsUiImage      from "./UiImage";
-import Helpers          from "../helpers/Helpers";
-import Types            from "../helpers/Types";
-import SoundManager     from "../helpers/SoundManager";
+// import TwnsUiLabel      from "./UiLabel";
+// import TwnsUiImage      from "./UiImage";
+// import Helpers          from "../helpers/Helpers";
+// import Types            from "../helpers/Types";
+// import SoundManager     from "../helpers/SoundManager";
 
 namespace TwnsUiButton {
     import ShortSfxCode = Types.ShortSfxCode;
@@ -85,4 +85,4 @@ namespace TwnsUiButton {
     }
 }
 
-export default TwnsUiButton;
+// export default TwnsUiButton;

@@ -1,17 +1,17 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import TwnsBwDialoguePanel  from "../view/BwDialoguePanel";
-import TwnsBwTileMap        from "./BwTileMap";
-import TwnsBwUnit           from "./BwUnit";
-import TwnsBwUnitMap        from "./BwUnitMap";
-import TwnsBwWar            from "./BwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+// import TwnsBwDialoguePanel  from "../view/BwDialoguePanel";
+// import TwnsBwTileMap        from "./BwTileMap";
+// import TwnsBwUnit           from "./BwUnit";
+// import TwnsBwUnitMap        from "./BwUnitMap";
+// import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwWarEventManager {
     import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
@@ -589,4 +589,4 @@ namespace TwnsBwWarEventManager {
 
 }
 
-export default TwnsBwWarEventManager;
+// export default TwnsBwWarEventManager;

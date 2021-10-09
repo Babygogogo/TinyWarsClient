@@ -18,4 +18,4 @@ namespace NoSleepManager {
     }
 }
 
-export default NoSleepManager;
+// export default NoSleepManager;

@@ -1,7 +1,7 @@
 
-import SoundManager         from "../../tools/helpers/SoundManager";
-import Types                from "../../tools/helpers/Types";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import SoundManager         from "../../tools/helpers/SoundManager";
+// import Types                from "../../tools/helpers/Types";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsBwCaptureProgressPanel {
     type OpenDataForBwCaptureProgressPanel = {
@@ -64,4 +64,4 @@ namespace TwnsBwCaptureProgressPanel {
     }
 }
 
-export default TwnsBwCaptureProgressPanel;
+// export default TwnsBwCaptureProgressPanel;

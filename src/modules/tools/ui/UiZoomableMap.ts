@@ -1,9 +1,9 @@
 
-import TwnsWarMapView           from "../../warMap/view/WarMapView";
-import Types                    from "../helpers/Types";
-import ProtoTypes               from "../proto/ProtoTypes";
-import TwnsUiComponent          from "./UiComponent";
-import TwnsUiZoomableComponent  from "./UiZoomableComponent";
+// import TwnsWarMapView           from "../../warMap/view/WarMapView";
+// import Types                    from "../helpers/Types";
+// import ProtoTypes               from "../proto/ProtoTypes";
+// import TwnsUiComponent          from "./UiComponent";
+// import TwnsUiZoomableComponent  from "./UiZoomableComponent";
 
 namespace TwnsUiZoomableMap {
     export class UiZoomableMap extends TwnsUiComponent.UiComponent {
@@ -62,4 +62,4 @@ namespace TwnsUiZoomableMap {
     }
 }
 
-export default TwnsUiZoomableMap;
+// export default TwnsUiZoomableMap;

@@ -1,22 +1,22 @@
 
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import CcrModel                 from "../../coopCustomRoom/model/CcrModel";
-import McrModel                 from "../../multiCustomRoom/model/McrModel";
-import TwnsMcrMainMenuPanel     from "../../multiCustomRoom/view/McrMainMenuPanel";
-import MfrModel                 from "../../multiFreeRoom/model/MfrModel";
-import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
-import MrrModel                 from "../../multiRankRoom/model/MrrModel";
-import TwnsMrrMainMenuPanel     from "../../multiRankRoom/view/MrrMainMenuPanel";
-import TwnsSpmMainMenuPanel     from "../../singlePlayerMode/view/SpmMainMenuPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import CcrModel                 from "../../coopCustomRoom/model/CcrModel";
+// import McrModel                 from "../../multiCustomRoom/model/McrModel";
+// import TwnsMcrMainMenuPanel     from "../../multiCustomRoom/view/McrMainMenuPanel";
+// import MfrModel                 from "../../multiFreeRoom/model/MfrModel";
+// import MpwModel                 from "../../multiPlayerWar/model/MpwModel";
+// import MrrModel                 from "../../multiRankRoom/model/MrrModel";
+// import TwnsMrrMainMenuPanel     from "../../multiRankRoom/view/MrrMainMenuPanel";
+// import TwnsSpmMainMenuPanel     from "../../singlePlayerMode/view/SpmMainMenuPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
 namespace TwnsLobbyPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -278,4 +278,4 @@ namespace TwnsLobbyPanel {
     }
 }
 
-export default TwnsLobbyPanel;
+// export default TwnsLobbyPanel;

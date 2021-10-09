@@ -306,4 +306,4 @@ namespace TwnsNotifyType {
     }
 }
 
-export default TwnsNotifyType;
+// export default TwnsNotifyType;

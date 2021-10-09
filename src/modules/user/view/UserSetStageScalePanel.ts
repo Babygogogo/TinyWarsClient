@@ -1,17 +1,17 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import Helpers              from "../../tools/helpers/Helpers";
-import LocalStorage         from "../../tools/helpers/LocalStorage";
-import SoundManager         from "../../tools/helpers/SoundManager";
-import StageManager         from "../../tools/helpers/StageManager";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import LocalStorage         from "../../tools/helpers/LocalStorage";
+// import SoundManager         from "../../tools/helpers/SoundManager";
+// import StageManager         from "../../tools/helpers/StageManager";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiButton         from "../../tools/ui/UiButton";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsUserSetStageScalePanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -195,4 +195,4 @@ namespace TwnsUserSetStageScalePanel {
     }
 }
 
-export default TwnsUserSetStageScalePanel;
+// export default TwnsUserSetStageScalePanel;

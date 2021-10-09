@@ -1,6 +1,6 @@
 
-import Helpers      from "../../tools/helpers/Helpers";
-import ProtoTypes   from "../../tools/proto/ProtoTypes";
+// import Helpers      from "../../tools/helpers/Helpers";
+// import ProtoTypes   from "../../tools/proto/ProtoTypes";
 
 namespace SpmSrwRankModel {
     import NetMessage   = ProtoTypes.NetMessage;
@@ -23,4 +23,4 @@ namespace SpmSrwRankModel {
     }
 }
 
-export default SpmSrwRankModel;
+// export default SpmSrwRankModel;

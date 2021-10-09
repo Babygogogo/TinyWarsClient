@@ -1,10 +1,10 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import Helpers              from "../../tools/helpers/Helpers";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
-import TwnsBwWar            from "./BwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+// import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwCommonSettingManager {
     import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
@@ -111,4 +111,4 @@ namespace TwnsBwCommonSettingManager {
     }
 }
 
-export default TwnsBwCommonSettingManager;
+// export default TwnsBwCommonSettingManager;

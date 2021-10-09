@@ -1,21 +1,21 @@
 
-import FloatText                from "../../tools/helpers/FloatText";
-import Helpers                  from "../../tools/helpers/Helpers";
-import LocalStorage             from "../../tools/helpers/LocalStorage";
-import NoSleepManager           from "../../tools/helpers/NoSleepManager";
-import SoundManager             from "../../tools/helpers/SoundManager";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
-import UserModel                from "../model/UserModel";
-import UserProxy                from "../model/UserProxy";
-import TwnsUserRegisterPanel    from "./UserRegisterPanel";
+// import FloatText                from "../../tools/helpers/FloatText";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import LocalStorage             from "../../tools/helpers/LocalStorage";
+// import NoSleepManager           from "../../tools/helpers/NoSleepManager";
+// import SoundManager             from "../../tools/helpers/SoundManager";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
+// import UserModel                from "../model/UserModel";
+// import UserProxy                from "../model/UserProxy";
+// import TwnsUserRegisterPanel    from "./UserRegisterPanel";
 
 namespace TwnsUserLoginPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -218,4 +218,4 @@ namespace TwnsUserLoginPanel {
     }
 }
 
-export default TwnsUserLoginPanel;
+// export default TwnsUserLoginPanel;

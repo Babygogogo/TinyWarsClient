@@ -1,10 +1,10 @@
 
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import TwnsUiButton         from "../../tools/ui/UiButton";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonHelpPanel {
     type OpenData = {
@@ -92,4 +92,4 @@ namespace TwnsCommonHelpPanel {
     }
 }
 
-export default TwnsCommonHelpPanel;
+// export default TwnsCommonHelpPanel;

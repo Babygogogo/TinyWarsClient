@@ -1,9 +1,9 @@
 
-import Types                    from "../../tools/helpers/Types";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUserSettingsPanel    from "../../user/view/UserSettingsPanel";
+// import Types                    from "../../tools/helpers/Types";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUserSettingsPanel    from "../../user/view/UserSettingsPanel";
 
 namespace TwnsLobbyTopRightPanel {
     import UserSettingsPanel    = TwnsUserSettingsPanel.UserSettingsPanel;
@@ -86,4 +86,4 @@ namespace TwnsLobbyTopRightPanel {
     }
 }
 
-export default TwnsLobbyTopRightPanel;
+// export default TwnsLobbyTopRightPanel;

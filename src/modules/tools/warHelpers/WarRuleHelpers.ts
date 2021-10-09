@@ -1,12 +1,12 @@
 
-import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
-import ConfigManager        from "../helpers/ConfigManager";
-import Helpers              from "../helpers/Helpers";
-import ProtoTypes           from "../proto/ProtoTypes";
-import Lang                 from "../lang/Lang";
-import TwnsLangTextType     from "../lang/LangTextType";
-import Types                from "../helpers/Types";
-import CommonConstants      from "../helpers/CommonConstants";
+// import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
+// import ConfigManager        from "../helpers/ConfigManager";
+// import Helpers              from "../helpers/Helpers";
+// import ProtoTypes           from "../proto/ProtoTypes";
+// import Lang                 from "../lang/Lang";
+// import TwnsLangTextType     from "../lang/LangTextType";
+// import Types                from "../helpers/Types";
+// import CommonConstants      from "../helpers/CommonConstants";
 
 namespace WarRuleHelpers {
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -773,4 +773,4 @@ namespace WarRuleHelpers {
     }
 }
 
-export default WarRuleHelpers;
+// export default WarRuleHelpers;

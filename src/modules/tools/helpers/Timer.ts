@@ -1,15 +1,15 @@
 
-import CommonModel      from "../../common/model/CommonModel";
-import CommonProxy      from "../../common/model/CommonProxy";
-import Lang             from "../lang/Lang";
-import TwnsLangTextType from "../lang/LangTextType";
-import NetManager       from "../network/NetManager";
-import Notify           from "../notify/Notify";
-import TwnsNotifyType   from "../notify/NotifyType";
-import ProtoTypes       from "../proto/ProtoTypes";
-import FloatText        from "./FloatText";
-import Helpers          from "./Helpers";
-import LocalStorage     from "./LocalStorage";
+// import CommonModel      from "../../common/model/CommonModel";
+// import CommonProxy      from "../../common/model/CommonProxy";
+// import Lang             from "../lang/Lang";
+// import TwnsLangTextType from "../lang/LangTextType";
+// import NetManager       from "../network/NetManager";
+// import Notify           from "../notify/Notify";
+// import TwnsNotifyType   from "../notify/NotifyType";
+// import ProtoTypes       from "../proto/ProtoTypes";
+// import FloatText        from "./FloatText";
+// import Helpers          from "./Helpers";
+// import LocalStorage     from "./LocalStorage";
 
 namespace Timer {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -157,4 +157,4 @@ namespace Timer {
     }
 }
 
-export default Timer;
+// export default Timer;

@@ -1,10 +1,10 @@
 
-import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
-import TwnsSpwWarMenuPanel  from "../../singlePlayerWar/view/SpwWarMenuPanel";
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsSpwWar           from "../../singlePlayerWar/model/SpwWar";
+// import TwnsSpwWarMenuPanel  from "../../singlePlayerWar/view/SpwWarMenuPanel";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace TwnsScwWar {
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
@@ -78,4 +78,4 @@ namespace TwnsScwWar {
     }
 }
 
-export default TwnsScwWar;
+// export default TwnsScwWar;

@@ -1,17 +1,17 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import FloatText            from "../../tools/helpers/FloatText";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
-import WarMapModel          from "../../warMap/model/WarMapModel";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import FloatText            from "../../tools/helpers/FloatText";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiButton         from "../../tools/ui/UiButton";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+// import WarMapModel          from "../../warMap/model/WarMapModel";
 
 namespace TwnsCommonJoinRoomPasswordPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -149,4 +149,4 @@ namespace TwnsCommonJoinRoomPasswordPanel {
     }
 }
 
-export default TwnsCommonJoinRoomPasswordPanel;
+// export default TwnsCommonJoinRoomPasswordPanel;

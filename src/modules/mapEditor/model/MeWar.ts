@@ -1,18 +1,18 @@
 
-import TwnsBwWar                    from "../../baseWar/model/BwWar";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Timer                        from "../../tools/helpers/Timer";
-import Types                        from "../../tools/helpers/Types";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
-import TwnsMeWarMenuPanel           from "../view/MeWarMenuPanel";
-import TwnsMeCommonSettingManager   from "./MeCommonSettingManager";
-import TwnsMeDrawer                 from "./MeDrawer";
-import TwnsMeField                  from "./MeField";
-import TwnsMePlayerManager          from "./MePlayerManager";
-import MeUtility                    from "./MeUtility";
-import TwnsMeWarEventManager        from "./MeWarEventManager";
+// import TwnsBwWar                    from "../../baseWar/model/BwWar";
+// import CommonConstants              from "../../tools/helpers/CommonConstants";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import Timer                        from "../../tools/helpers/Timer";
+// import Types                        from "../../tools/helpers/Types";
+// import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+// import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
+// import TwnsMeWarMenuPanel           from "../view/MeWarMenuPanel";
+// import TwnsMeCommonSettingManager   from "./MeCommonSettingManager";
+// import TwnsMeDrawer                 from "./MeDrawer";
+// import TwnsMeField                  from "./MeField";
+// import TwnsMePlayerManager          from "./MePlayerManager";
+// import MeUtility                    from "./MeUtility";
+// import TwnsMeWarEventManager        from "./MeWarEventManager";
 
 namespace TwnsMeWar {
     import WarAction                = ProtoTypes.WarAction;
@@ -331,4 +331,4 @@ namespace TwnsMeWar {
     }
 }
 
-export default TwnsMeWar;
+// export default TwnsMeWar;

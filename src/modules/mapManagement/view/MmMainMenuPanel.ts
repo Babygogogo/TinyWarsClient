@@ -1,18 +1,18 @@
 
-import FloatText                    from "../../tools/helpers/FloatText";
-import FlowManager                  from "../../tools/helpers/FlowManager";
-import Types                        from "../../tools/helpers/Types";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
-import TwnsMmAvailabilityListPanel  from "./MmAvailabilityListPanel";
-import TwnsMmReviewListPanel        from "./MmReviewListPanel";
-import TwnsMmTagListPanel           from "./MmTagListPanel";
+// import FloatText                    from "../../tools/helpers/FloatText";
+// import FlowManager                  from "../../tools/helpers/FlowManager";
+// import Types                        from "../../tools/helpers/Types";
+// import Lang                         from "../../tools/lang/Lang";
+// import TwnsLangTextType             from "../../tools/lang/LangTextType";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import TwnsUiButton                 from "../../tools/ui/UiButton";
+// import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+// import TwnsMmAvailabilityListPanel  from "./MmAvailabilityListPanel";
+// import TwnsMmReviewListPanel        from "./MmReviewListPanel";
+// import TwnsMmTagListPanel           from "./MmTagListPanel";
 
 namespace TwnsMmMainMenuPanel {
     import MmReviewListPanel        = TwnsMmReviewListPanel.MmReviewListPanel;
@@ -138,4 +138,4 @@ namespace TwnsMmMainMenuPanel {
     }
 }
 
-export default TwnsMmMainMenuPanel;
+// export default TwnsMmMainMenuPanel;

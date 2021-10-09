@@ -329,4 +329,4 @@ namespace Sha1Generator {
     }
 }
 
-export default Sha1Generator;
+// export default Sha1Generator;

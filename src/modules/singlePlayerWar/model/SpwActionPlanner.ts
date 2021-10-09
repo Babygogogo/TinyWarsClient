@@ -1,20 +1,20 @@
 
-import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
-import TwnsBwUnit               from "../../baseWar/model/BwUnit";
-import TwnsBwDamagePreviewPanel from "../../baseWar/view/BwDamagePreviewPanel";
-import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import FloatText                from "../../tools/helpers/FloatText";
-import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
-import Helpers                  from "../../tools/helpers/Helpers";
-import SoundManager             from "../../tools/helpers/SoundManager";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import ProtoTypes               from "../../tools/proto/ProtoTypes";
-import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
-import SpwLocalProxy            from "./SpwLocalProxy";
-import TwnsSpwWar               from "./SpwWar";
+// import TwnsBwActionPlanner      from "../../baseWar/model/BwActionPlanner";
+// import TwnsBwUnit               from "../../baseWar/model/BwUnit";
+// import TwnsBwDamagePreviewPanel from "../../baseWar/view/BwDamagePreviewPanel";
+// import TwnsBwUnitActionsPanel   from "../../baseWar/view/BwUnitActionsPanel";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import FloatText                from "../../tools/helpers/FloatText";
+// import GridIndexHelpers         from "../../tools/helpers/GridIndexHelpers";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import SoundManager             from "../../tools/helpers/SoundManager";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import ProtoTypes               from "../../tools/proto/ProtoTypes";
+// import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
+// import SpwLocalProxy            from "./SpwLocalProxy";
+// import TwnsSpwWar               from "./SpwWar";
 
 namespace TwnsSpwActionPlanner {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -719,4 +719,4 @@ namespace TwnsSpwActionPlanner {
     }
 }
 
-export default TwnsSpwActionPlanner;
+// export default TwnsSpwActionPlanner;

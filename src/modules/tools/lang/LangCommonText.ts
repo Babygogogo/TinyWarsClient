@@ -1,5 +1,5 @@
 
-import TwnsLangTextType     from "./LangTextType";
+// import TwnsLangTextType     from "./LangTextType";
 
 namespace TwnsLangCommonText {
     import LangTextType = TwnsLangTextType.LangTextType;
@@ -4558,4 +4558,4 @@ namespace TwnsLangCommonText {
     };
 }
 
-export default TwnsLangCommonText;
+// export default TwnsLangCommonText;

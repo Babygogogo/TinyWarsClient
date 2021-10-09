@@ -1,6 +1,6 @@
 
-import TwnsBwFogMap from "../../baseWar/model/BwFogMap";
-import TwnsBwWar    from "../../baseWar/model/BwWar";
+// import TwnsBwFogMap from "../../baseWar/model/BwFogMap";
+// import TwnsBwWar    from "../../baseWar/model/BwWar";
 
 namespace TwnsTwFogMap {
     import BwFogMap = TwnsBwFogMap.BwFogMap;
@@ -13,4 +13,4 @@ namespace TwnsTwFogMap {
     }
 }
 
-export default TwnsTwFogMap;
+// export default TwnsTwFogMap;

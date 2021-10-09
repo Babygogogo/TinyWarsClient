@@ -1,7 +1,7 @@
 
-import Types            from "./Types";
-import ProtoTypes       from "../proto/ProtoTypes";
-import CommonConstants  from "./CommonConstants";
+// import Types            from "./Types";
+// import ProtoTypes       from "../proto/ProtoTypes";
+// import CommonConstants  from "./CommonConstants";
 
 namespace GridIndexHelpers {
     import GridIndex            = Types.GridIndex;
@@ -147,4 +147,4 @@ namespace GridIndexHelpers {
     }
 }
 
-export default GridIndexHelpers;
+// export default GridIndexHelpers;

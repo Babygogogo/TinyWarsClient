@@ -1,14 +1,14 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
-import UserModel            from "../../user/model/UserModel";
-import TwnsBwUnitMap        from "../model/BwUnitMap";
-import TwnsBwUnitView       from "./BwUnitView";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+// import UserModel            from "../../user/model/UserModel";
+// import TwnsBwUnitMap        from "../model/BwUnitMap";
+// import TwnsBwUnitView       from "./BwUnitView";
 
 namespace TwnsBwUnitMapView {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -248,4 +248,4 @@ namespace TwnsBwUnitMapView {
     }
 }
 
-export default TwnsBwUnitMapView;
+// export default TwnsBwUnitMapView;

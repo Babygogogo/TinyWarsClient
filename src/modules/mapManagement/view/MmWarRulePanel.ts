@@ -1,19 +1,19 @@
 
-import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
-import CommonConstants                  from "../../tools/helpers/CommonConstants";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Types                            from "../../tools/helpers/Types";
-import Lang                             from "../../tools/lang/Lang";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                     from "../../tools/ui/UiButton";
-import TwnsUiImage                      from "../../tools/ui/UiImage";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
-import TwnsMmWarRuleAvailableCoPanel    from "./MmWarRuleAvailableCoPanel";
+// import TwnsCommonHelpPanel              from "../../common/view/CommonHelpPanel";
+// import CommonConstants                  from "../../tools/helpers/CommonConstants";
+// import Helpers                          from "../../tools/helpers/Helpers";
+// import Types                            from "../../tools/helpers/Types";
+// import Lang                             from "../../tools/lang/Lang";
+// import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton                     from "../../tools/ui/UiButton";
+// import TwnsUiImage                      from "../../tools/ui/UiImage";
+// import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer           from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
+// import TwnsMmWarRuleAvailableCoPanel    from "./MmWarRuleAvailableCoPanel";
 
 namespace TwnsMmWarRulePanel {
     import CommonHelpPanel              = TwnsCommonHelpPanel.CommonHelpPanel;
@@ -453,4 +453,4 @@ namespace TwnsMmWarRulePanel {
     }
 }
 
-export default TwnsMmWarRulePanel;
+// export default TwnsMmWarRulePanel;

@@ -1,6 +1,6 @@
 
-import ProtoTypes           from "../proto/ProtoTypes";
-import TwnsClientErrorCode  from "./ClientErrorCode";
+// import ProtoTypes           from "../proto/ProtoTypes";
+// import TwnsClientErrorCode  from "./ClientErrorCode";
 
 namespace Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -715,4 +715,4 @@ namespace Types {
     }
 }
 
-export default Types;
+// export default Types;

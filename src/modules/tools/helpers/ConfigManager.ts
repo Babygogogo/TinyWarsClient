@@ -1,11 +1,11 @@
 
-import Lang             from "../lang/Lang";
-import Notify           from "../notify/Notify";
-import TwnsNotifyType   from "../notify/NotifyType";
-import ProtoManager     from "../proto/ProtoManager";
-import CommonConstants  from "./CommonConstants";
-import Helpers          from "./Helpers";
-import Types            from "./Types";
+// import Lang             from "../lang/Lang";
+// import Notify           from "../notify/Notify";
+// import TwnsNotifyType   from "../notify/NotifyType";
+// import ProtoManager     from "../proto/ProtoManager";
+// import CommonConstants  from "./CommonConstants";
+// import Helpers          from "./Helpers";
+// import Types            from "./Types";
 
 namespace ConfigManager {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -925,4 +925,4 @@ namespace ConfigManager {
     }
 }
 
-export default ConfigManager;
+// export default ConfigManager;

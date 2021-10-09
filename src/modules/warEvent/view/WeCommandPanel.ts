@@ -1,23 +1,23 @@
 
-import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
-import TwnsCommonInputPanel         from "../../common/view/CommonInputPanel";
-import TwnsMeWar                    from "../../mapEditor/model/MeWar";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import FloatText                    from "../../tools/helpers/FloatText";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Types                        from "../../tools/helpers/Types";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import WarEventHelper               from "../model/WarEventHelper";
-import TwnsWeActionReplacePanel     from "./WeActionReplacePanel";
-import TwnsWeConditionReplacePanel  from "./WeConditionReplacePanel";
-import TwnsWeEventRenamePanel       from "./WeEventRenamePanel";
-import TwnsWeNodeReplacePanel       from "./WeNodeReplacePanel";
+// import TwnsCommonConfirmPanel       from "../../common/view/CommonConfirmPanel";
+// import TwnsCommonInputPanel         from "../../common/view/CommonInputPanel";
+// import TwnsMeWar                    from "../../mapEditor/model/MeWar";
+// import CommonConstants              from "../../tools/helpers/CommonConstants";
+// import FloatText                    from "../../tools/helpers/FloatText";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import Types                        from "../../tools/helpers/Types";
+// import Lang                         from "../../tools/lang/Lang";
+// import TwnsLangTextType             from "../../tools/lang/LangTextType";
+// import Notify                       from "../../tools/notify/Notify";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import TwnsUiButton                 from "../../tools/ui/UiButton";
+// import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+// import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+// import WarEventHelper               from "../model/WarEventHelper";
+// import TwnsWeActionReplacePanel     from "./WeActionReplacePanel";
+// import TwnsWeConditionReplacePanel  from "./WeConditionReplacePanel";
+// import TwnsWeEventRenamePanel       from "./WeEventRenamePanel";
+// import TwnsWeNodeReplacePanel       from "./WeNodeReplacePanel";
 
 namespace TwnsWeCommandPanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -513,4 +513,4 @@ namespace TwnsWeCommandPanel {
     }
 }
 
-export default TwnsWeCommandPanel;
+// export default TwnsWeCommandPanel;

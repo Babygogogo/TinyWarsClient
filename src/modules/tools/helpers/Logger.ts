@@ -1,5 +1,5 @@
 
-import Types     from "./Types";
+// import Types     from "./Types";
 
 namespace Logger {
     import LogLevel         = Types.LogLevel;
@@ -83,4 +83,4 @@ namespace Logger {
     }
 }
 
-export default Logger;
+// export default Logger;

@@ -1,9 +1,9 @@
 
-import Lang                 from "../lang/Lang";
-import TwnsLangTextType     from "../lang/LangTextType";
-import ProtoTypes           from "../proto/ProtoTypes";
-import TwnsClientErrorCode  from "./ClientErrorCode";
-import Types                from "./Types";
+// import Lang                 from "../lang/Lang";
+// import TwnsLangTextType     from "../lang/LangTextType";
+// import ProtoTypes           from "../proto/ProtoTypes";
+// import TwnsClientErrorCode  from "./ClientErrorCode";
+// import Types                from "./Types";
 
 namespace Helpers {
     import ColorType            = Types.ColorType;
@@ -499,4 +499,4 @@ namespace Helpers {
     }
 }
 
-export default Helpers;
+// export default Helpers;

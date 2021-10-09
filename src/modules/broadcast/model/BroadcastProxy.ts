@@ -1,10 +1,10 @@
 
-import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Notify               from "../../tools/notify/Notify";
-import NetManager           from "../../tools/network/NetManager";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import BroadcastModel       from "./BroadcastModel";
+// import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Notify               from "../../tools/notify/Notify";
+// import NetManager           from "../../tools/network/NetManager";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import BroadcastModel       from "./BroadcastModel";
 
 namespace BroadcastProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -76,4 +76,4 @@ namespace BroadcastProxy {
     }
 }
 
-export default BroadcastProxy;
+// export default BroadcastProxy;

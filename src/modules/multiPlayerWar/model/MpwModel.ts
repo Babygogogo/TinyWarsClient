@@ -1,30 +1,30 @@
 
-import TwnsCommonAlertPanel                 from "../../common/view/CommonAlertPanel";
-import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
-import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
-import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
-import TwnsCcwWar                           from "../../coopCustomWar/model/CcwWar";
-import TwnsMcwWar                           from "../../multiCustomWar/model/McwWar";
-import TwnsMfwWar                           from "../../multiFreeWar/model/MfwWar";
-import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
-import TwnsMrwWar                           from "../../multiRankWar/model/MrwWar";
-import TwnsClientErrorCode                  from "../../tools/helpers/ClientErrorCode";
-import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import FloatText                            from "../../tools/helpers/FloatText";
-import FlowManager                          from "../../tools/helpers/FlowManager";
-import Helpers                              from "../../tools/helpers/Helpers";
-import Logger                               from "../../tools/helpers/Logger";
-import Types                                from "../../tools/helpers/Types";
-import Lang                                 from "../../tools/lang/Lang";
-import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-import Notify                               from "../../tools/notify/Notify";
-import TwnsNotifyType                       from "../../tools/notify/NotifyType";
-import ProtoTypes                           from "../../tools/proto/ProtoTypes";
-import WarActionExecutor                    from "../../tools/warHelpers/WarActionExecutor";
-import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel                            from "../../user/model/UserModel";
-import WarMapModel                          from "../../warMap/model/WarMapModel";
-import TwnsMpwWar                           from "./MpwWar";
+// import TwnsCommonAlertPanel                 from "../../common/view/CommonAlertPanel";
+// import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+// import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+// import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
+// import TwnsCcwWar                           from "../../coopCustomWar/model/CcwWar";
+// import TwnsMcwWar                           from "../../multiCustomWar/model/McwWar";
+// import TwnsMfwWar                           from "../../multiFreeWar/model/MfwWar";
+// import MpwProxy                             from "../../multiPlayerWar/model/MpwProxy";
+// import TwnsMrwWar                           from "../../multiRankWar/model/MrwWar";
+// import TwnsClientErrorCode                  from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants                      from "../../tools/helpers/CommonConstants";
+// import FloatText                            from "../../tools/helpers/FloatText";
+// import FlowManager                          from "../../tools/helpers/FlowManager";
+// import Helpers                              from "../../tools/helpers/Helpers";
+// import Logger                               from "../../tools/helpers/Logger";
+// import Types                                from "../../tools/helpers/Types";
+// import Lang                                 from "../../tools/lang/Lang";
+// import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+// import Notify                               from "../../tools/notify/Notify";
+// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+// import WarActionExecutor                    from "../../tools/warHelpers/WarActionExecutor";
+// import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+// import UserModel                            from "../../user/model/UserModel";
+// import WarMapModel                          from "../../warMap/model/WarMapModel";
+// import TwnsMpwWar                           from "./MpwWar";
 
 namespace MpwModel {
     import MpwWar                                   = TwnsMpwWar.MpwWar;
@@ -752,4 +752,4 @@ namespace MpwModel {
     }
 }
 
-export default MpwModel;
+// export default MpwModel;

@@ -1,9 +1,9 @@
 
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonBlockPanel {
     type OpenDataForCommonBlockPanel = {
@@ -84,4 +84,4 @@ namespace TwnsCommonBlockPanel {
     }
 }
 
-export default TwnsCommonBlockPanel;
+// export default TwnsCommonBlockPanel;

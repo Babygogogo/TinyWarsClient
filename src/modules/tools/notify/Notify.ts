@@ -1,5 +1,5 @@
 
-import TwnsNotifyType   from "./NotifyType";
+// import TwnsNotifyType   from "./NotifyType";
 
 namespace Notify {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -60,4 +60,4 @@ namespace Notify {
     }
 }
 
-export default Notify;
+// export default Notify;

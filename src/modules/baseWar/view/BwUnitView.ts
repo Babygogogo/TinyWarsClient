@@ -1,14 +1,14 @@
 
-import TwnsBwUnit           from "../model/BwUnit";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import Timer                from "../../tools/helpers/Timer";
-import CommonModel          from "../../common/model/CommonModel";
-import UserModel            from "../../user/model/UserModel";
-import Types                from "../../tools/helpers/Types";
-import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import TwnsBwUnit           from "../model/BwUnit";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import Timer                from "../../tools/helpers/Timer";
+// import CommonModel          from "../../common/model/CommonModel";
+// import UserModel            from "../../user/model/UserModel";
+// import Types                from "../../tools/helpers/Types";
+// import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
 
 namespace TwnsBwUnitView {
     import UnitAnimationType    = Types.UnitAnimationType;
@@ -344,4 +344,4 @@ namespace TwnsBwUnitView {
     }
 }
 
-export default TwnsBwUnitView;
+// export default TwnsBwUnitView;

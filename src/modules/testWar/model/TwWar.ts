@@ -1,18 +1,18 @@
 
-import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
-import TwnsBwWar                    from "../../baseWar/model/BwWar";
-import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
-import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Helpers                      from "../../tools/helpers/Helpers";
-import Timer                        from "../../tools/helpers/Timer";
-import Types                        from "../../tools/helpers/Types";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
-import WarEventHelper               from "../../warEvent/model/WarEventHelper";
-import TwnsTwField                  from "./TwField";
-import TwnsTwPlayerManager          from "./TwPlayerManager";
+// import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
+// import TwnsBwWar                    from "../../baseWar/model/BwWar";
+// import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
+// import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+// import CommonConstants              from "../../tools/helpers/CommonConstants";
+// import ConfigManager                from "../../tools/helpers/ConfigManager";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import Timer                        from "../../tools/helpers/Timer";
+// import Types                        from "../../tools/helpers/Types";
+// import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+// import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
+// import WarEventHelper               from "../../warEvent/model/WarEventHelper";
+// import TwnsTwField                  from "./TwField";
+// import TwnsTwPlayerManager          from "./TwPlayerManager";
 
 namespace TwnsTwWar {
     import BwWarEventManager    = TwnsBwWarEventManager.BwWarEventManager;
@@ -305,4 +305,4 @@ namespace TwnsTwWar {
     }
 }
 
-export default TwnsTwWar;
+// export default TwnsTwWar;

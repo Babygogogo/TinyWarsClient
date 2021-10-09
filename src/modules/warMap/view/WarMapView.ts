@@ -1,18 +1,18 @@
 
-import CommonModel          from "../../common/model/CommonModel";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Timer                from "../../tools/helpers/Timer";
-import Types                from "../../tools/helpers/Types";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import UserModel            from "../../user/model/UserModel";
-import TwnsWarMapUnitView   from "./WarMapUnitView";
+// import CommonModel          from "../../common/model/CommonModel";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Timer                from "../../tools/helpers/Timer";
+// import Types                from "../../tools/helpers/Types";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+// import UserModel            from "../../user/model/UserModel";
+// import TwnsWarMapUnitView   from "./WarMapUnitView";
 
 namespace TwnsWarMapView {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -440,4 +440,4 @@ namespace TwnsWarMapView {
     }
 }
 
-export default TwnsWarMapView;
+// export default TwnsWarMapView;

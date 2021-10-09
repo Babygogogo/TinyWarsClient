@@ -1,15 +1,15 @@
 
-import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsBwUnitMapView    from "../view/BwUnitMapView";
-import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
-import TwnsBwUnit           from "./BwUnit";
-import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
-import TwnsBwWar            from "./BwWar";
+// import TwnsClientErrorCode  from "../../tools/helpers/ClientErrorCode";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsBwUnitMapView    from "../view/BwUnitMapView";
+// import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
+// import TwnsBwUnit           from "./BwUnit";
+// import WarVisibilityHelpers from "../../tools/warHelpers/WarVisibilityHelpers";
+// import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwUnitMap {
     import GridIndex        = Types.GridIndex;
@@ -478,4 +478,4 @@ namespace TwnsBwUnitMap {
     }
 }
 
-export default TwnsBwUnitMap;
+// export default TwnsBwUnitMap;

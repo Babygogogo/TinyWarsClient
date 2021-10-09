@@ -1,10 +1,10 @@
 
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiCoInfo         from "../../tools/ui/UiCoInfo";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiCoInfo         from "../../tools/ui/UiCoInfo";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
 namespace TwnsCommonCoInfoPanel {
     import NotifyType   = TwnsNotifyType.NotifyType;
@@ -103,4 +103,4 @@ namespace TwnsCommonCoInfoPanel {
     }
 }
 
-export default TwnsCommonCoInfoPanel;
+// export default TwnsCommonCoInfoPanel;

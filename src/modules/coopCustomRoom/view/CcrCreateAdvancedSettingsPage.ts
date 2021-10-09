@@ -1,24 +1,24 @@
 
-import TwnsCommonBanCoPanel     from "../../common/view/CommonBanCoPanel";
-import TwnsCommonChooseCoPanel  from "../../common/view/CommonChooseCoPanel";
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
-import FloatText                from "../../tools/helpers/FloatText";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import Notify                   from "../../tools/notify/Notify";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
-import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
-import CcrCreateModel           from "../model/CcrCreateModel";
+// import TwnsCommonBanCoPanel     from "../../common/view/CommonBanCoPanel";
+// import TwnsCommonChooseCoPanel  from "../../common/view/CommonChooseCoPanel";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import TwnsCommonHelpPanel      from "../../common/view/CommonHelpPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import ConfigManager            from "../../tools/helpers/ConfigManager";
+// import FloatText                from "../../tools/helpers/FloatText";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import Notify                   from "../../tools/notify/Notify";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
+// import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
+// import CcrCreateModel           from "../model/CcrCreateModel";
 
 namespace TwnsCcrCreateAdvancedSettingsPage {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -642,4 +642,4 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
     }
 }
 
-export default TwnsCcrCreateAdvancedSettingsPage;
+// export default TwnsCcrCreateAdvancedSettingsPage;

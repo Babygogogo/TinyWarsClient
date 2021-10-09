@@ -1,16 +1,16 @@
 
-import CommonConstants          from "../helpers/CommonConstants";
-import ConfigManager            from "../helpers/ConfigManager";
-import Helpers                  from "../helpers/Helpers";
-import Types                    from "../helpers/Types";
-import Lang                     from "../lang/Lang";
-import TwnsLangTextType         from "../lang/LangTextType";
-import TwnsNotifyType           from "../notify/NotifyType";
-import TwnsUiComponent          from "./UiComponent";
-import TwnsUiImage              from "./UiImage";
-import TwnsUiLabel              from "./UiLabel";
-import TwnsUiListItemRenderer   from "./UiListItemRenderer";
-import TwnsUiScrollList         from "./UiScrollList";
+// import CommonConstants          from "../helpers/CommonConstants";
+// import ConfigManager            from "../helpers/ConfigManager";
+// import Helpers                  from "../helpers/Helpers";
+// import Types                    from "../helpers/Types";
+// import Lang                     from "../lang/Lang";
+// import TwnsLangTextType         from "../lang/LangTextType";
+// import TwnsNotifyType           from "../notify/NotifyType";
+// import TwnsUiComponent          from "./UiComponent";
+// import TwnsUiImage              from "./UiImage";
+// import TwnsUiLabel              from "./UiLabel";
+// import TwnsUiListItemRenderer   from "./UiListItemRenderer";
+// import TwnsUiScrollList         from "./UiScrollList";
 
 namespace TwnsUiCoInfo {
     import CoSkillType      = Types.CoSkillType;
@@ -238,4 +238,4 @@ namespace TwnsUiCoInfo {
     }
 }
 
-export default TwnsUiCoInfo;
+// export default TwnsUiCoInfo;

@@ -1,9 +1,9 @@
 
-import CommonConstants  from "../../tools/helpers/CommonConstants";
-import Helpers          from "../../tools/helpers/Helpers";
-import ProtoTypes       from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel        from "../../user/model/UserModel";
+// import CommonConstants  from "../../tools/helpers/CommonConstants";
+// import Helpers          from "../../tools/helpers/Helpers";
+// import ProtoTypes       from "../../tools/proto/ProtoTypes";
+// import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
+// import UserModel        from "../../user/model/UserModel";
 
 namespace MeSimModel {
     import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
@@ -194,4 +194,4 @@ namespace MeSimModel {
     }
 }
 
-export default MeSimModel;
+// export default MeSimModel;

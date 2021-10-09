@@ -1,11 +1,11 @@
 
-import Helpers              from "../../tools/helpers/Helpers";
-import NetManager           from "../../tools/network/NetManager";
-import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarMapModel          from "./WarMapModel";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import NetManager           from "../../tools/network/NetManager";
+// import TwnsNetMessageCodes  from "../../tools/network/NetMessageCodes";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarMapModel          from "./WarMapModel";
 
 namespace WarMapProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -162,4 +162,4 @@ namespace WarMapProxy {
     }
 }
 
-export default WarMapProxy;
+// export default WarMapProxy;

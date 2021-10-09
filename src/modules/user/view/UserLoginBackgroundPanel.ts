@@ -1,24 +1,24 @@
 
-import TwnsCommonChangeVersionPanel from "../../common/view/CommonChangeVersionPanel";
-import CommonConstants              from "../../tools/helpers/CommonConstants";
-import ConfigManager                from "../../tools/helpers/ConfigManager";
-import Helpers                      from "../../tools/helpers/Helpers";
-import LocalStorage                 from "../../tools/helpers/LocalStorage";
-import SoundManager                 from "../../tools/helpers/SoundManager";
-import Timer                        from "../../tools/helpers/Timer";
-import Types                        from "../../tools/helpers/Types";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import TwnsUiButton                 from "../../tools/ui/UiButton";
-import TwnsUiImage                  from "../../tools/ui/UiImage";
-import TwnsUiLabel                  from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                  from "../../tools/ui/UiPanel";
-import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
-import TwnsWarMapUnitView           from "../../warMap/view/WarMapUnitView";
-import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
+// import TwnsCommonChangeVersionPanel from "../../common/view/CommonChangeVersionPanel";
+// import CommonConstants              from "../../tools/helpers/CommonConstants";
+// import ConfigManager                from "../../tools/helpers/ConfigManager";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import LocalStorage                 from "../../tools/helpers/LocalStorage";
+// import SoundManager                 from "../../tools/helpers/SoundManager";
+// import Timer                        from "../../tools/helpers/Timer";
+// import Types                        from "../../tools/helpers/Types";
+// import Lang                         from "../../tools/lang/Lang";
+// import TwnsLangTextType             from "../../tools/lang/LangTextType";
+// import Notify                       from "../../tools/notify/Notify";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import TwnsUiButton                 from "../../tools/ui/UiButton";
+// import TwnsUiImage                  from "../../tools/ui/UiImage";
+// import TwnsUiLabel                  from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer       from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel                  from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList             from "../../tools/ui/UiScrollList";
+// import TwnsWarMapUnitView           from "../../warMap/view/WarMapUnitView";
+// import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
 
 namespace TwnsUserLoginBackgroundPanel {
     import WarMapUnitView           = TwnsWarMapUnitView.WarMapUnitView;
@@ -278,4 +278,4 @@ namespace TwnsUserLoginBackgroundPanel {
     // }
 }
 
-export default TwnsUserLoginBackgroundPanel;
+// export default TwnsUserLoginBackgroundPanel;

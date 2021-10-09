@@ -1,14 +1,14 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import Helpers              from "../../tools/helpers/Helpers";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiTabPage        from "../../tools/ui/UiTabPage";
-import WarMapModel          from "../../warMap/model/WarMapModel";
-import RwModel              from "../model/RwModel";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiTabPage        from "../../tools/ui/UiTabPage";
+// import WarMapModel          from "../../warMap/model/WarMapModel";
+// import RwModel              from "../model/RwModel";
 
 namespace TwnsRwReplayWarInfoPage {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -144,4 +144,4 @@ namespace TwnsRwReplayWarInfoPage {
     }
 }
 
-export default TwnsRwReplayWarInfoPage;
+// export default TwnsRwReplayWarInfoPage;

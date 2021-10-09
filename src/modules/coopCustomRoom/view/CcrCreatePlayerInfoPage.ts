@@ -1,22 +1,22 @@
 
-import TwnsCommonChooseCoPanel  from "../../common/view/CommonChooseCoPanel";
-import TwnsCommonCoInfoPanel    from "../../common/view/CommonCoInfoPanel";
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
-import FloatText                from "../../tools/helpers/FloatText";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
-import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
-import CcrCreateModel           from "../model/CcrCreateModel";
+// import TwnsCommonChooseCoPanel  from "../../common/view/CommonChooseCoPanel";
+// import TwnsCommonCoInfoPanel    from "../../common/view/CommonCoInfoPanel";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import ConfigManager            from "../../tools/helpers/ConfigManager";
+// import FloatText                from "../../tools/helpers/FloatText";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
+// import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
+// import CcrCreateModel           from "../model/CcrCreateModel";
 
 namespace TwnsCcrCreatePlayerInfoPage {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -308,4 +308,4 @@ namespace TwnsCcrCreatePlayerInfoPage {
     }
 }
 
-export default TwnsCcrCreatePlayerInfoPage;
+// export default TwnsCcrCreatePlayerInfoPage;

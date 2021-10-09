@@ -1,10 +1,10 @@
 
-import TwnsNetMessageCodes          from "../../tools/network/NetMessageCodes";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import RwModel                      from "./RwModel";
-import NetManager                   from "../../tools/network/NetManager";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+// import TwnsNetMessageCodes          from "../../tools/network/NetMessageCodes";
+// import Notify                       from "../../tools/notify/Notify";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import RwModel                      from "./RwModel";
+// import NetManager                   from "../../tools/network/NetManager";
+// import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 
 namespace RwProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -67,4 +67,4 @@ namespace RwProxy {
     }
 }
 
-export default RwProxy;
+// export default RwProxy;

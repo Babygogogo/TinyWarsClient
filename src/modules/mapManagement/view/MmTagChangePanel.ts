@@ -1,16 +1,16 @@
 
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import WarMapModel          from "../../warMap/model/WarMapModel";
-import WarMapProxy          from "../../warMap/model/WarMapProxy";
-import TwnsMmWarRulePanel   from "./MmWarRulePanel";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiButton         from "../../tools/ui/UiButton";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import WarMapModel          from "../../warMap/model/WarMapModel";
+// import WarMapProxy          from "../../warMap/model/WarMapProxy";
+// import TwnsMmWarRulePanel   from "./MmWarRulePanel";
 
 namespace TwnsMmTagChangePanel {
     import MmWarRulePanel   = TwnsMmWarRulePanel.MmWarRulePanel;
@@ -106,4 +106,4 @@ namespace TwnsMmTagChangePanel {
     }
 }
 
-export default TwnsMmTagChangePanel;
+// export default TwnsMmTagChangePanel;

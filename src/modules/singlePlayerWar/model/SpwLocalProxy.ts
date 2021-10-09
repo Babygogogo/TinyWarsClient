@@ -1,8 +1,8 @@
 
-import TwnsBwWar    from "../../baseWar/model/BwWar";
-import Types        from "../../tools/helpers/Types";
-import ProtoTypes   from "../../tools/proto/ProtoTypes";
-import SpwModel     from "./SpwModel";
+// import TwnsBwWar    from "../../baseWar/model/BwWar";
+// import Types        from "../../tools/helpers/Types";
+// import ProtoTypes   from "../../tools/proto/ProtoTypes";
+// import SpwModel     from "./SpwModel";
 
 namespace SpwLocalProxy {
     import GridIndex    = Types.GridIndex;
@@ -265,4 +265,4 @@ namespace SpwLocalProxy {
     }
 }
 
-export default SpwLocalProxy;
+// export default SpwLocalProxy;

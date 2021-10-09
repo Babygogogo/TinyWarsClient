@@ -1,26 +1,26 @@
 
-import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel";
-import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
-import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
-import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
-import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
-import TwnsTwWar                        from "../../testWar/model/TwWar";
-import FloatText                        from "../../tools/helpers/FloatText";
-import FlowManager                      from "../../tools/helpers/FlowManager";
-import Helpers                          from "../../tools/helpers/Helpers";
-import Types                            from "../../tools/helpers/Types";
-import Lang                             from "../../tools/lang/Lang";
-import TwnsLangTextType                 from "../../tools/lang/LangTextType";
-import Notify                           from "../../tools/notify/Notify";
-import TwnsNotifyType                   from "../../tools/notify/NotifyType";
-import ProtoTypes                       from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                     from "../../tools/ui/UiButton";
-import TwnsUiImage                      from "../../tools/ui/UiImage";
-import TwnsUiLabel                      from "../../tools/ui/UiLabel";
-import TwnsUiPanel                      from "../../tools/ui/UiPanel";
-import UserModel                        from "../../user/model/UserModel";
-import UserProxy                        from "../../user/model/UserProxy";
-import TwnsMpwWar                       from "../model/MpwWar";
+// import TwnsBwUnitListPanel              from "../../baseWar/view/BwUnitListPanel";
+// import TwnsCommonConfirmPanel           from "../../common/view/CommonConfirmPanel";
+// import MpwModel                         from "../../multiPlayerWar/model/MpwModel";
+// import MpwProxy                         from "../../multiPlayerWar/model/MpwProxy";
+// import TwnsSpmCreateSfwSaveSlotsPanel   from "../../singlePlayerMode/view/SpmCreateSfwSaveSlotsPanel";
+// import TwnsTwWar                        from "../../testWar/model/TwWar";
+// import FloatText                        from "../../tools/helpers/FloatText";
+// import FlowManager                      from "../../tools/helpers/FlowManager";
+// import Helpers                          from "../../tools/helpers/Helpers";
+// import Types                            from "../../tools/helpers/Types";
+// import Lang                             from "../../tools/lang/Lang";
+// import TwnsLangTextType                 from "../../tools/lang/LangTextType";
+// import Notify                           from "../../tools/notify/Notify";
+// import TwnsNotifyType                   from "../../tools/notify/NotifyType";
+// import ProtoTypes                       from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton                     from "../../tools/ui/UiButton";
+// import TwnsUiImage                      from "../../tools/ui/UiImage";
+// import TwnsUiLabel                      from "../../tools/ui/UiLabel";
+// import TwnsUiPanel                      from "../../tools/ui/UiPanel";
+// import UserModel                        from "../../user/model/UserModel";
+// import UserProxy                        from "../../user/model/UserProxy";
+// import TwnsMpwWar                       from "../model/MpwWar";
 
 namespace TwnsMpwWarMenuPanel {
     import LangTextType                 = TwnsLangTextType.LangTextType;
@@ -401,4 +401,4 @@ namespace TwnsMpwWarMenuPanel {
     }
 }
 
-export default TwnsMpwWarMenuPanel;
+// export default TwnsMpwWarMenuPanel;

@@ -1,8 +1,8 @@
 
-import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
-import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
-import Helpers              from "../../tools/helpers/Helpers";
-import UserModel            from "../../user/model/UserModel";
+// import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
+// import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import UserModel            from "../../user/model/UserModel";
 
 namespace TwnsMpwPlayerManager {
     import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;
@@ -32,4 +32,4 @@ namespace TwnsMpwPlayerManager {
     }
 }
 
-export default TwnsMpwPlayerManager;
+// export default TwnsMpwPlayerManager;

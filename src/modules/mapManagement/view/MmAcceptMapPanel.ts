@@ -1,16 +1,16 @@
 
-import TwnsMeWar            from "../../mapEditor/model/MeWar";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiButton         from "../../tools/ui/UiButton";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
-import WarMapProxy          from "../../warMap/model/WarMapProxy";
+// import TwnsMeWar            from "../../mapEditor/model/MeWar";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiButton         from "../../tools/ui/UiButton";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
+// import WarMapProxy          from "../../warMap/model/WarMapProxy";
 
 namespace TwnsMmAcceptMapPanel {
     import MeWar        = TwnsMeWar.MeWar;
@@ -162,4 +162,4 @@ namespace TwnsMmAcceptMapPanel {
     }
 }
 
-export default TwnsMmAcceptMapPanel;
+// export default TwnsMmAcceptMapPanel;

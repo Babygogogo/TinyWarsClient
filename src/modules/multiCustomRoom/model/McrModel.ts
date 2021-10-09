@@ -1,17 +1,17 @@
 
-import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
-import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
-import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
-import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
-import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import Helpers                              from "../../tools/helpers/Helpers";
-import Types                                from "../../tools/helpers/Types";
-import Notify                               from "../../tools/notify/Notify";
-import TwnsNotifyType                       from "../../tools/notify/NotifyType";
-import ProtoTypes                           from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel                            from "../../user/model/UserModel";
-import WarMapModel                          from "../../warMap/model/WarMapModel";
+// import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+// import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+// import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
+// import McrProxy                             from "../../multiCustomRoom/model/McrProxy";
+// import CommonConstants                      from "../../tools/helpers/CommonConstants";
+// import Helpers                              from "../../tools/helpers/Helpers";
+// import Types                                from "../../tools/helpers/Types";
+// import Notify                               from "../../tools/notify/Notify";
+// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+// import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+// import UserModel                            from "../../user/model/UserModel";
+// import WarMapModel                          from "../../warMap/model/WarMapModel";
 
 namespace McrModel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
@@ -404,4 +404,4 @@ namespace McrModel {
     }
 }
 
-export default McrModel;
+// export default McrModel;

@@ -1,8 +1,8 @@
 
-import Logger               from "../helpers/Logger";
-import ProtoTypes           from "./ProtoTypes";
-import Helpers              from "../helpers/Helpers";
-import * as protobuf            from "../../../../libs/modules/ProtobufJs/ProtobufJs";
+// import Logger               from "../helpers/Logger";
+// import ProtoTypes           from "./ProtoTypes";
+// import Helpers              from "../helpers/Helpers";
+// import * as protobuf            from "../../../../libs/modules/ProtobufJs/ProtobufJs";
 
 namespace ProtoManager {
     import IMessageContainer        = ProtoTypes.NetMessage.IMessageContainer;
@@ -85,4 +85,4 @@ namespace ProtoManager {
     }
 }
 
-export default ProtoManager;
+// export default ProtoManager;

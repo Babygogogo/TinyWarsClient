@@ -1,7 +1,7 @@
 
-import Notify       from "../notify/Notify";
-import Types        from "../helpers/Types";
-import Helpers      from "../helpers/Helpers";
+// import Notify       from "../notify/Notify";
+// import Types        from "../helpers/Types";
+// import Helpers      from "../helpers/Helpers";
 
 namespace TwnsUiListItemRenderer {
     import UiListener       = Types.UiListener;
@@ -181,4 +181,4 @@ namespace TwnsUiListItemRenderer {
     }
 }
 
-export default TwnsUiListItemRenderer;
+// export default TwnsUiListItemRenderer;

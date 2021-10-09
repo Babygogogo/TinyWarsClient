@@ -1,22 +1,22 @@
 
-import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
-import TwnsBwWar                    from "../../baseWar/model/BwWar";
-import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
-import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
-import FloatText                    from "../../tools/helpers/FloatText";
-import Helpers                      from "../../tools/helpers/Helpers";
-import SoundManager                 from "../../tools/helpers/SoundManager";
-import Types                        from "../../tools/helpers/Types";
-import Lang                         from "../../tools/lang/Lang";
-import TwnsLangTextType             from "../../tools/lang/LangTextType";
-import Notify                       from "../../tools/notify/Notify";
-import TwnsNotifyType               from "../../tools/notify/NotifyType";
-import ProtoTypes                   from "../../tools/proto/ProtoTypes";
-import WarActionExecutor            from "../../tools/warHelpers/WarActionExecutor";
-import WarVisibilityHelpers         from "../../tools/warHelpers/WarVisibilityHelpers";
-import TwnsRwWarMenuPanel           from "../view/RwWarMenuPanel";
-import TwnsRwField                  from "./RwField";
-import TwnsRwPlayerManager          from "./RwPlayerManager";
+// import TwnsBwCommonSettingManager   from "../../baseWar/model/BwCommonSettingManager";
+// import TwnsBwWar                    from "../../baseWar/model/BwWar";
+// import TwnsBwWarEventManager        from "../../baseWar/model/BwWarEventManager";
+// import TwnsClientErrorCode          from "../../tools/helpers/ClientErrorCode";
+// import FloatText                    from "../../tools/helpers/FloatText";
+// import Helpers                      from "../../tools/helpers/Helpers";
+// import SoundManager                 from "../../tools/helpers/SoundManager";
+// import Types                        from "../../tools/helpers/Types";
+// import Lang                         from "../../tools/lang/Lang";
+// import TwnsLangTextType             from "../../tools/lang/LangTextType";
+// import Notify                       from "../../tools/notify/Notify";
+// import TwnsNotifyType               from "../../tools/notify/NotifyType";
+// import ProtoTypes                   from "../../tools/proto/ProtoTypes";
+// import WarActionExecutor            from "../../tools/warHelpers/WarActionExecutor";
+// import WarVisibilityHelpers         from "../../tools/warHelpers/WarVisibilityHelpers";
+// import TwnsRwWarMenuPanel           from "../view/RwWarMenuPanel";
+// import TwnsRwField                  from "./RwField";
+// import TwnsRwPlayerManager          from "./RwPlayerManager";
 
 namespace TwnsRwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -448,4 +448,4 @@ namespace TwnsRwWar {
     }
 }
 
-export default TwnsRwWar;
+// export default TwnsRwWar;

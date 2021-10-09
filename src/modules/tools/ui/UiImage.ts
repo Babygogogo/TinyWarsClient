@@ -5,4 +5,4 @@ namespace TwnsUiImage {
     }
 }
 
-export default TwnsUiImage;
+// export default TwnsUiImage;

@@ -1,7 +1,7 @@
 
-import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
-import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
-import Helpers              from "../../tools/helpers/Helpers";
+// import TwnsBwPlayer         from "../../baseWar/model/BwPlayer";
+// import TwnsBwPlayerManager  from "../../baseWar/model/BwPlayerManager";
+// import Helpers              from "../../tools/helpers/Helpers";
 
 namespace TwnsSpwPlayerManager {
     import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;
@@ -71,4 +71,4 @@ namespace TwnsSpwPlayerManager {
     }
 }
 
-export default TwnsSpwPlayerManager;
+// export default TwnsSpwPlayerManager;

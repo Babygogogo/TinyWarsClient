@@ -2390,4 +2390,4 @@ namespace TwnsClientErrorCode {
     }
 }
 
-export default TwnsClientErrorCode;
+// export default TwnsClientErrorCode;

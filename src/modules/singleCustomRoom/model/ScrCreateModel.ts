@@ -1,17 +1,17 @@
 
-import SpmModel             from "../../singlePlayerMode/model/SpmModel";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import ConfigManager        from "../../tools/helpers/ConfigManager";
-import Helpers              from "../../tools/helpers/Helpers";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import Notify               from "../../tools/notify/Notify";
-import NotifyData           from "../../tools/notify/NotifyData";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel            from "../../user/model/UserModel";
-import WarMapModel          from "../../warMap/model/WarMapModel";
+// import SpmModel             from "../../singlePlayerMode/model/SpmModel";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import ConfigManager        from "../../tools/helpers/ConfigManager";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import Notify               from "../../tools/notify/Notify";
+// import NotifyData           from "../../tools/notify/NotifyData";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
+// import UserModel            from "../../user/model/UserModel";
+// import WarMapModel          from "../../warMap/model/WarMapModel";
 
 namespace ScrCreateModel {
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -366,4 +366,4 @@ namespace ScrCreateModel {
     }
 }
 
-export default ScrCreateModel;
+// export default ScrCreateModel;

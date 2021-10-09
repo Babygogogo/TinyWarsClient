@@ -1,10 +1,10 @@
 
-import Notify           from "../notify/Notify";
-import TwnsNotifyType   from "../notify/NotifyType";
-import TwnsUiPanel      from "../ui/UiPanel";
-import CommonConstants  from "./CommonConstants";
-import Helpers          from "./Helpers";
-import Types            from "./Types";
+// import Notify           from "../notify/Notify";
+// import TwnsNotifyType   from "../notify/NotifyType";
+// import TwnsUiPanel      from "../ui/UiPanel";
+// import CommonConstants  from "./CommonConstants";
+// import Helpers          from "./Helpers";
+// import Types            from "./Types";
 
 namespace StageManager {
     import LayerType            = Types.LayerType;
@@ -199,4 +199,4 @@ namespace StageManager {
     }
 }
 
-export default StageManager;
+// export default StageManager;

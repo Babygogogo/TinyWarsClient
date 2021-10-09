@@ -1,7 +1,7 @@
 
-import TwnsBwCursor     from "../../baseWar/model/BwCursor";
-import TwnsBwPlayer     from "../../baseWar/model/BwPlayer";
-import Types            from "../helpers/Types";
+// import TwnsBwCursor     from "../../baseWar/model/BwCursor";
+// import TwnsBwPlayer     from "../../baseWar/model/BwPlayer";
+// import Types            from "../helpers/Types";
 
 namespace NotifyData {
     import GridIndex        = Types.GridIndex;
@@ -22,4 +22,4 @@ namespace NotifyData {
     export type ScrCreatePlayerInfoChanged  = { playerIndex: number };
 }
 
-export default NotifyData;
+// export default NotifyData;

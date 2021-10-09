@@ -1,13 +1,13 @@
 
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
-import Helpers              from "../../tools/helpers/Helpers";
-import NotifyData           from "../../tools/notify/NotifyData";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import Types                from "../../tools/helpers/Types";
-import TwnsBwCursor         from "../model/BwCursor";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import GridIndexHelpers     from "../../tools/helpers/GridIndexHelpers";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import NotifyData           from "../../tools/notify/NotifyData";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import Types                from "../../tools/helpers/Types";
+// import TwnsBwCursor         from "../model/BwCursor";
 
 namespace TwnsBwCursorView {
     import GridIndex            = Types.GridIndex;
@@ -504,4 +504,4 @@ namespace TwnsBwCursorView {
     }
 }
 
-export default TwnsBwCursorView;
+// export default TwnsBwCursorView;

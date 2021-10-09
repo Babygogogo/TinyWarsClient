@@ -1,19 +1,19 @@
 
-import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel              from "../../tools/ui/UiPanel";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import TwnsMeDrawer             from "../model/MeDrawer";
-import MeModel                  from "../model/MeModel";
-import TwnsMeTileSimpleView     from "./MeTileSimpleView";
+// import TwnsCommonConfirmPanel   from "../../common/view/CommonConfirmPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel              from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import TwnsMeDrawer             from "../model/MeDrawer";
+// import MeModel                  from "../model/MeModel";
+// import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
 namespace TwnsMeChooseTileDecoratorPanel {
     import DataForDrawTileDecorator = TwnsMeDrawer.DataForDrawTileDecorator;
@@ -251,4 +251,4 @@ namespace TwnsMeChooseTileDecoratorPanel {
     }
 }
 
-export default TwnsMeChooseTileDecoratorPanel;
+// export default TwnsMeChooseTileDecoratorPanel;

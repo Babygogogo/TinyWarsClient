@@ -1,15 +1,15 @@
 
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import TwnsUiImage          from "../../tools/ui/UiImage";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import MeModel              from "../model/MeModel";
-import MeUtility            from "../model/MeUtility";
-import TwnsMeWar            from "../model/MeWar";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import TwnsUiImage          from "../../tools/ui/UiImage";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import MeModel              from "../model/MeModel";
+// import MeUtility            from "../model/MeUtility";
+// import TwnsMeWar            from "../model/MeWar";
 
 namespace TwnsMeSymmetryPanel {
     import MeWar        = TwnsMeWar.MeWar;
@@ -275,4 +275,4 @@ namespace TwnsMeSymmetryPanel {
     }
 }
 
-export default TwnsMeSymmetryPanel;
+// export default TwnsMeSymmetryPanel;

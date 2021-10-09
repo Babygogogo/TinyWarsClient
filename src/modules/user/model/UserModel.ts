@@ -1,14 +1,14 @@
 
-import CommonModel          from "../../common/model/CommonModel";
-import FloatText            from "../../tools/helpers/FloatText";
-import Helpers              from "../../tools/helpers/Helpers";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsLangTextType     from "../../tools/lang/LangTextType";
-import Notify               from "../../tools/notify/Notify";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import UserProxy            from "./UserProxy";
+// import CommonModel          from "../../common/model/CommonModel";
+// import FloatText            from "../../tools/helpers/FloatText";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsLangTextType     from "../../tools/lang/LangTextType";
+// import Notify               from "../../tools/notify/Notify";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import UserProxy            from "./UserProxy";
 
 namespace UserModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -295,4 +295,4 @@ namespace UserModel {
     }
 }
 
-export default UserModel;
+// export default UserModel;

@@ -1,13 +1,13 @@
 
-import SoundManager     from "../helpers/SoundManager";
-import Types            from "../helpers/Types";
-import Lang             from "../lang/Lang";
-import TwnsLangTextType from "../lang/LangTextType";
-import Notify           from "../notify/Notify";
-import TwnsNotifyType   from "../notify/NotifyType";
-import TwnsUiComponent  from "./UiComponent";
-import TwnsUiImage      from "./UiImage";
-import TwnsUiLabel      from "./UiLabel";
+// import SoundManager     from "../helpers/SoundManager";
+// import Types            from "../helpers/Types";
+// import Lang             from "../lang/Lang";
+// import TwnsLangTextType from "../lang/LangTextType";
+// import Notify           from "../notify/Notify";
+// import TwnsNotifyType   from "../notify/NotifyType";
+// import TwnsUiComponent  from "./UiComponent";
+// import TwnsUiImage      from "./UiImage";
+// import TwnsUiLabel      from "./UiLabel";
 
 namespace TwnsUiRadioButton {
     import LangTextType     = TwnsLangTextType.LangTextType;
@@ -129,4 +129,4 @@ namespace TwnsUiRadioButton {
     }
 }
 
-export default TwnsUiRadioButton;
+// export default TwnsUiRadioButton;

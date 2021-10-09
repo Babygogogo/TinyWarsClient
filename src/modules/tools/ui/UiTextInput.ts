@@ -4,4 +4,4 @@ namespace TwnsUiTextInput {
     }
 }
 
-export default TwnsUiTextInput;
+// export default TwnsUiTextInput;

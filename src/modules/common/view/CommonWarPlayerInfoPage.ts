@@ -1,22 +1,22 @@
 
-import TwnsChatPanel            from "../../chat/view/ChatPanel";
-import CommonConstants          from "../../tools/helpers/CommonConstants";
-import ConfigManager            from "../../tools/helpers/ConfigManager";
-import Helpers                  from "../../tools/helpers/Helpers";
-import Types                    from "../../tools/helpers/Types";
-import Lang                     from "../../tools/lang/Lang";
-import TwnsLangTextType         from "../../tools/lang/LangTextType";
-import TwnsNotifyType           from "../../tools/notify/NotifyType";
-import TwnsUiButton             from "../../tools/ui/UiButton";
-import TwnsUiImage              from "../../tools/ui/UiImage";
-import TwnsUiLabel              from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
-import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
-import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
-import UserModel                from "../../user/model/UserModel";
-import TwnsUserPanel            from "../../user/view/UserPanel";
-import TwnsCommonCoInfoPanel    from "./CommonCoInfoPanel";
-import TwnsCommonConfirmPanel   from "./CommonConfirmPanel";
+// import TwnsChatPanel            from "../../chat/view/ChatPanel";
+// import CommonConstants          from "../../tools/helpers/CommonConstants";
+// import ConfigManager            from "../../tools/helpers/ConfigManager";
+// import Helpers                  from "../../tools/helpers/Helpers";
+// import Types                    from "../../tools/helpers/Types";
+// import Lang                     from "../../tools/lang/Lang";
+// import TwnsLangTextType         from "../../tools/lang/LangTextType";
+// import TwnsNotifyType           from "../../tools/notify/NotifyType";
+// import TwnsUiButton             from "../../tools/ui/UiButton";
+// import TwnsUiImage              from "../../tools/ui/UiImage";
+// import TwnsUiLabel              from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer   from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
+// import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
+// import UserModel                from "../../user/model/UserModel";
+// import TwnsUserPanel            from "../../user/view/UserPanel";
+// import TwnsCommonCoInfoPanel    from "./CommonCoInfoPanel";
+// import TwnsCommonConfirmPanel   from "./CommonConfirmPanel";
 
 namespace TwnsCommonWarPlayerInfoPage {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -310,4 +310,4 @@ namespace TwnsCommonWarPlayerInfoPage {
     }
 }
 
-export default TwnsCommonWarPlayerInfoPage;
+// export default TwnsCommonWarPlayerInfoPage;

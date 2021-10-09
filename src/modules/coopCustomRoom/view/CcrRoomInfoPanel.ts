@@ -1,35 +1,35 @@
 
-import TwnsChatPanel                        from "../../chat/view/ChatPanel";
-import TwnsCommonChooseCoPanel              from "../../common/view/CommonChooseCoPanel";
-import TwnsCommonConfirmPanel               from "../../common/view/CommonConfirmPanel";
-import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
-import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
-import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
-import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
-import CcrModel                             from "../../coopCustomRoom/model/CcrModel";
-import CommonConstants                      from "../../tools/helpers/CommonConstants";
-import ConfigManager                        from "../../tools/helpers/ConfigManager";
-import FloatText                            from "../../tools/helpers/FloatText";
-import Helpers                              from "../../tools/helpers/Helpers";
-import Types                                from "../../tools/helpers/Types";
-import Lang                                 from "../../tools/lang/Lang";
-import TwnsLangTextType                     from "../../tools/lang/LangTextType";
-import TwnsNotifyType                       from "../../tools/notify/NotifyType";
-import ProtoTypes                           from "../../tools/proto/ProtoTypes";
-import TwnsUiButton                         from "../../tools/ui/UiButton";
-import TwnsUiImage                          from "../../tools/ui/UiImage";
-import TwnsUiLabel                          from "../../tools/ui/UiLabel";
-import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
-import TwnsUiPanel                          from "../../tools/ui/UiPanel";
-import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
-import TwnsUiTab                            from "../../tools/ui/UiTab";
-import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
-import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
-import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
-import UserModel                            from "../../user/model/UserModel";
-import WarMapModel                          from "../../warMap/model/WarMapModel";
-import CcrProxy                             from "../model/CcrProxy";
-import TwnsCcrMyRoomListPanel               from "./CcrMyRoomListPanel";
+// import TwnsChatPanel                        from "../../chat/view/ChatPanel";
+// import TwnsCommonChooseCoPanel              from "../../common/view/CommonChooseCoPanel";
+// import TwnsCommonConfirmPanel               from "../../common/view/CommonConfirmPanel";
+// import TwnsCommonWarAdvancedSettingsPage    from "../../common/view/CommonWarAdvancedSettingsPage";
+// import TwnsCommonWarBasicSettingsPage       from "../../common/view/CommonWarBasicSettingsPage";
+// import TwnsCommonWarMapInfoPage             from "../../common/view/CommonWarMapInfoPage";
+// import TwnsCommonWarPlayerInfoPage          from "../../common/view/CommonWarPlayerInfoPage";
+// import CcrModel                             from "../../coopCustomRoom/model/CcrModel";
+// import CommonConstants                      from "../../tools/helpers/CommonConstants";
+// import ConfigManager                        from "../../tools/helpers/ConfigManager";
+// import FloatText                            from "../../tools/helpers/FloatText";
+// import Helpers                              from "../../tools/helpers/Helpers";
+// import Types                                from "../../tools/helpers/Types";
+// import Lang                                 from "../../tools/lang/Lang";
+// import TwnsLangTextType                     from "../../tools/lang/LangTextType";
+// import TwnsNotifyType                       from "../../tools/notify/NotifyType";
+// import ProtoTypes                           from "../../tools/proto/ProtoTypes";
+// import TwnsUiButton                         from "../../tools/ui/UiButton";
+// import TwnsUiImage                          from "../../tools/ui/UiImage";
+// import TwnsUiLabel                          from "../../tools/ui/UiLabel";
+// import TwnsUiListItemRenderer               from "../../tools/ui/UiListItemRenderer";
+// import TwnsUiPanel                          from "../../tools/ui/UiPanel";
+// import TwnsUiScrollList                     from "../../tools/ui/UiScrollList";
+// import TwnsUiTab                            from "../../tools/ui/UiTab";
+// import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
+// import WarCommonHelpers                     from "../../tools/warHelpers/WarCommonHelpers";
+// import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
+// import UserModel                            from "../../user/model/UserModel";
+// import WarMapModel                          from "../../warMap/model/WarMapModel";
+// import CcrProxy                             from "../model/CcrProxy";
+// import TwnsCcrMyRoomListPanel               from "./CcrMyRoomListPanel";
 
 namespace TwnsCcrRoomInfoPanel {
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
@@ -785,4 +785,4 @@ namespace TwnsCcrRoomInfoPanel {
     }
 }
 
-export default TwnsCcrRoomInfoPanel;
+// export default TwnsCcrRoomInfoPanel;

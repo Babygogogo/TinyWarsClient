@@ -1,14 +1,14 @@
 
-import CommonConstants      from "../../tools/helpers/CommonConstants";
-import Helpers              from "../../tools/helpers/Helpers";
-import StageManager         from "../../tools/helpers/StageManager";
-import Types                from "../../tools/helpers/Types";
-import Lang                 from "../../tools/lang/Lang";
-import TwnsNotifyType       from "../../tools/notify/NotifyType";
-import ProtoTypes           from "../../tools/proto/ProtoTypes";
-import TwnsUiLabel          from "../../tools/ui/UiLabel";
-import TwnsUiPanel          from "../../tools/ui/UiPanel";
-import BroadcastModel       from "../model/BroadcastModel";
+// import CommonConstants      from "../../tools/helpers/CommonConstants";
+// import Helpers              from "../../tools/helpers/Helpers";
+// import StageManager         from "../../tools/helpers/StageManager";
+// import Types                from "../../tools/helpers/Types";
+// import Lang                 from "../../tools/lang/Lang";
+// import TwnsNotifyType       from "../../tools/notify/NotifyType";
+// import ProtoTypes           from "../../tools/proto/ProtoTypes";
+// import TwnsUiLabel          from "../../tools/ui/UiLabel";
+// import TwnsUiPanel          from "../../tools/ui/UiPanel";
+// import BroadcastModel       from "../model/BroadcastModel";
 
 namespace TwnsBroadcastPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -112,4 +112,4 @@ namespace TwnsBroadcastPanel {
     }
 }
 
-export default TwnsBroadcastPanel;
+// export default TwnsBroadcastPanel;
