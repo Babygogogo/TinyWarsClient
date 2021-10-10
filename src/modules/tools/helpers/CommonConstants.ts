@@ -108,8 +108,6 @@ namespace CommonConstants {
     export const WarRuleOffenseBonusDefault                 = 0;
     export const WarRuleEnergyGrowthMultiplierMinLimit      = 0;
     export const WarRuleEnergyGrowthMultiplierMaxLimit      = 10000;
-    export const WarRuleEnergyGrowthMultiplierForAttacker   = 1;
-    export const WarRuleEnergyGrowthMultiplierForDefender   = 0;
     export const WarRuleEnergyGrowthMultiplierDefault       = 100;
     export const WarRuleIncomeMultiplierMinLimit            = 0;
     export const WarRuleIncomeMultiplierMaxLimit            = 10000;

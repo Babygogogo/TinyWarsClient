@@ -25,6 +25,7 @@ namespace ConfigManager {
     import BuildableTileCfg     = Types.BuildableTileCfg;
     import VisionBonusCfg       = Types.VisionBonusCfg;
     import CoBasicCfg           = Types.CoBasicCfg;
+    import SystemCfg            = Types.SystemCfg;
     import TileCategoryCfg      = Types.TileCategoryCfg;
     import UnitCategoryCfg      = Types.UnitCategoryCfg;
     import MoveCostCfg          = Types.MoveCostCfg;
@@ -36,6 +37,7 @@ namespace ConfigManager {
     // Internal types.
     ////////////////////////////////////////////////////////////////////////////////
     type ExtendedFullConfig = {
+        System                  : SystemCfg;
         TileCategory            : { [category: number]: TileCategoryCfg };
         UnitCategory            : { [category: number]: UnitCategoryCfg };
         TileTemplate            : { [tileType: number]: TileTemplateCfg };
@@ -55,6 +57,9 @@ namespace ConfigManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Initializers.
     ////////////////////////////////////////////////////////////////////////////////
+    function _destructSystemCfg(data: SystemCfg): SystemCfg {
+        return Helpers.deepClone(data);
+    }
     function _destructTileCategoryCfg(data: TileCategoryCfg[]): { [category: number]: TileCategoryCfg } {
         const dst: { [category: number]: TileCategoryCfg } = {};
         for (const d of data) {
@@ -232,6 +237,7 @@ namespace ConfigManager {
         const unitPromotionCfg  = _destructUnitPromotionCfg(rawConfig.UnitPromotion);
         const damageChartCfg    = _destructDamageChartCfg(rawConfig.DamageChart);
         const fullCfg           : ExtendedFullConfig = {
+            System              : _destructSystemCfg(rawConfig.System),
             TileCategory        : _destructTileCategoryCfg(rawConfig.TileCategory),
             UnitCategory        : _destructUnitCategoryCfg(rawConfig.UnitCategory),
             TileTemplate        : _destructTileTemplateCfg(rawConfig.TileTemplate, version),
@@ -257,6 +263,16 @@ namespace ConfigManager {
     }
     function setCachedConfig(version: string, config: ExtendedFullConfig) {
         _ALL_CONFIGS.set(version, config);
+    }
+
+    function getSystemCfg(version: string): SystemCfg {
+        return Helpers.getExisted(_ALL_CONFIGS.get(version)?.System, ClientErrorCode.ConfigManager_GetSystemCfg_00);
+    }
+    export function getSystemEnergyGrowthMultiplierForAttacker(version: string): number {
+        return Helpers.getExisted(getSystemCfg(version).energyGrowthMultiplierArray[0], ClientErrorCode.ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_00);
+    }
+    export function getSystemEnergyGrowthMultiplierForDefender(version: string): number {
+        return Helpers.getExisted(getSystemCfg(version).energyGrowthMultiplierArray[1], ClientErrorCode.ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_00);
     }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {

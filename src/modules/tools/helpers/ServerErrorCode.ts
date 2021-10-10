@@ -28,6 +28,17 @@ export const enum ServerErrorCode {
     ConfigManager_InitAllConfigs_0008,
     ConfigManager_InitAllConfigs_0009,
 
+    ConfigManager_ValidateSystemCfg_0000,
+    ConfigManager_ValidateSystemCfg_0001,
+    ConfigManager_ValidateSystemCfg_0002,
+    ConfigManager_ValidateSystemCfg_0003,
+    ConfigManager_ValidateSystemCfg_0004,
+    ConfigManager_ValidateSystemCfg_0005,
+    ConfigManager_ValidateSystemCfg_0006,
+    ConfigManager_ValidateSystemCfg_0007,
+    ConfigManager_ValidateSystemCfg_0008,
+    ConfigManager_ValidateSystemCfg_0009,
+
     ConfigManager_ValidateUnitTemplateCfgDict_0000,
     ConfigManager_ValidateUnitTemplateCfgDict_0001,
     ConfigManager_ValidateUnitTemplateCfgDict_0002,
@@ -214,6 +225,39 @@ export const enum ServerErrorCode {
     ConfigManager_GetLatestConfigVersion_0007,
     ConfigManager_GetLatestConfigVersion_0008,
     ConfigManager_GetLatestConfigVersion_0009,
+
+    ConfigManager_GetSystemCfg_0000,
+    ConfigManager_GetSystemCfg_0001,
+    ConfigManager_GetSystemCfg_0002,
+    ConfigManager_GetSystemCfg_0003,
+    ConfigManager_GetSystemCfg_0004,
+    ConfigManager_GetSystemCfg_0005,
+    ConfigManager_GetSystemCfg_0006,
+    ConfigManager_GetSystemCfg_0007,
+    ConfigManager_GetSystemCfg_0008,
+    ConfigManager_GetSystemCfg_0009,
+
+    ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_0000,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_0001,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_0002,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_0003,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_0004,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_0005,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_0006,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_0007,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_0008,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_0009,
+
+    ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0000,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0001,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0002,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0003,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0004,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0005,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0006,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0007,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0008,
+    ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0009,
 
     ConfigManager_GetTileType_0000,
     ConfigManager_GetTileType_0001,
@@ -8014,4 +8058,3 @@ export const enum ServerErrorCode {
     MsgUserSetSettings0002,
 }
 }
-// export default TwnsServerErrorCode;

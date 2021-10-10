@@ -3051,7 +3051,8 @@ namespace WarActionExecutor {
             return;
         }
 
-        const commonSettingManager = war.getCommonSettingManager();
+        const commonSettingManager  = war.getCommonSettingManager();
+        const configVersion         = war.getConfigVersion();
         if (!attackerPlayer.checkCoIsUsingActiveSkill()) {
             const coType1 = attackerPlayer.getCoType();
             if (((coType1 === Types.CoType.Zoned) && (isAttackerInAttackerCoZone)) ||
@@ -3062,7 +3063,7 @@ namespace WarActionExecutor {
                 const energy1       = attackerPlayer.getCoCurrentEnergy();
                 attackerPlayer.setCoCurrentEnergy(Math.min(
                     attackerPlayer.getCoMaxEnergy(),
-                    energy1 + Math.floor(targetLostNormalizedHp * multiplier1 * CommonConstants.WarRuleEnergyGrowthMultiplierForAttacker / 100),
+                    energy1 + Math.floor(targetLostNormalizedHp * multiplier1 * ConfigManager.getSystemEnergyGrowthMultiplierForAttacker(configVersion) / 100),
                 ));
             }
         }
@@ -3077,7 +3078,7 @@ namespace WarActionExecutor {
                 const energy2       = targetPlayer.getCoCurrentEnergy();
                 targetPlayer.setCoCurrentEnergy(Math.min(
                     targetPlayer.getCoMaxEnergy(),
-                    energy2 + Math.floor(targetLostNormalizedHp * multiplier2 * CommonConstants.WarRuleEnergyGrowthMultiplierForDefender / 100),
+                    energy2 + Math.floor(targetLostNormalizedHp * multiplier2 * ConfigManager.getSystemEnergyGrowthMultiplierForDefender(configVersion) / 100),
                 ));
             }
         }

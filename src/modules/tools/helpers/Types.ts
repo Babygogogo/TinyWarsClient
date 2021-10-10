@@ -2,10 +2,14 @@
 // import ProtoTypes           from "../proto/ProtoTypes";
 // import TwnsClientErrorCode  from "./ClientErrorCode";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Config types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export interface SystemCfg extends ProtoTypes.Config.ISystemCfg {
+        energyGrowthMultiplierArray: number[];
+    }
     export interface TileCategoryCfg extends ProtoTypes.Config.ITileCategoryCfg {
         category: TileCategory;
     }
@@ -75,6 +79,7 @@ namespace Types {
         name        : string;
     }
     export interface FullConfig extends ProtoTypes.Config.FullConfig {
+        System          : SystemCfg;
         TileCategory    : TileCategoryCfg[];
         UnitCategory    : UnitCategoryCfg[];
         TileTemplate    : TileTemplateCfg[];

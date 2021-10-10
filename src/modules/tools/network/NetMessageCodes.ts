@@ -122,4 +122,3 @@ MsgCcrGetJoinedRoomInfoList = 350,
 MsgCcrGetRoomInfo = 351,
 MsgCcrGetJoinableRoomInfoList = 352,
 }}
-// export default TwnsNetMessageCodes;
