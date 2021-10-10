@@ -812,6 +812,8 @@ namespace WarCommonHelpers {
         } else if (skinId === 3) {
             return isSelected ? `uncompressedCircle0004` : `uncompressedCircle0005`;
         } else if (skinId === 4) {
+            return isSelected ? `uncompressedCircle0010` : `uncompressedCircle0011`;
+        } else if (skinId === 5) {
             return isSelected ? `uncompressedCircle0006` : `uncompressedCircle0007`;
         } else {
             return ``;
@@ -825,6 +827,16 @@ namespace WarCommonHelpers {
             case 3                                      : return `uncompressedTriangle0003`;
             case 4                                      : return `uncompressedTriangle0004`;
             default                                     : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetImageSourceForCoEyeFrame_00);
+        }
+    }
+    export function getImageSourceForCoHeadFrame(skinId: Types.Undefinable<number>): string {
+        switch (skinId) {
+            case 1  : return `uncompressedRectangle0002`;
+            case 2  : return `uncompressedRectangle0003`;
+            case 3  : return `uncompressedRectangle0004`;
+            case 4  : return `uncompressedRectangle0008`;
+            case 5  : return `uncompressedRectangle0005`;
+            default : return `uncompressedRectangle0006`;
         }
     }
 

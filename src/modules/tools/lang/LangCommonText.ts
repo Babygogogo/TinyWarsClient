@@ -3882,7 +3882,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B1018]: [
             `超级等离子`,
-            `GreenPlasma`,
+            `SuperPlasma`,
         ],
         [LangTextType.B1019]: [
             `陨石`,

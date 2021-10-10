@@ -622,10 +622,10 @@ namespace WarCoSkillHelpers {
         player          : BwPlayer,
         coGridIndexList : GridIndex[],
     ): void {
-        const cfg = skillCfg.selfPromotionGain;
+        const cfg = skillCfg.selfUnitActionState;
         if (cfg) {
-            const playerIndex = player.getPlayerIndex();
-            const zoneRadius = player.getCoZoneRadius();
+            const playerIndex   = player.getPlayerIndex();
+            const zoneRadius    = player.getCoZoneRadius();
             const category      = cfg[1];
             const actionState   : Types.UnitActionState = cfg[2];
             if ((actionState !== Types.UnitActionState.Acted) && (actionState !== Types.UnitActionState.Idle)) {

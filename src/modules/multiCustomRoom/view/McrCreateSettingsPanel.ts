@@ -27,6 +27,7 @@
 // import TwnsMcrCreateAdvancedSettingsPage    from "./McrCreateAdvancedSettingsPage";
 // import TwnsMcrCreateMapListPanel            from "./McrCreateMapListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMcrCreateSettingsPanel {
     import McrCreateAdvancedSettingsPage            = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;

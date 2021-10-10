@@ -16,6 +16,7 @@
 // import UserModel                from "../../user/model/UserModel";
 // import MfrCreateModel           from "../model/MfrCreateModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMfrCreatePlayerInfoPage {
     import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -132,7 +133,7 @@ namespace TwnsMfrCreatePlayerInfoPage {
             this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.warRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
 
             const playerData            = Helpers.getExisted(initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex));
-            this._imgSkin.source        = getSourceForImgSkin(playerData.unitAndTileSkinId);
+            this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoHeadFrame(playerData.unitAndTileSkinId);
 
             const coId                  = Helpers.getExisted(playerData.coId);
             const coCfg                 = ConfigManager.getCoBasicCfg(Helpers.getExisted(settingsForCommon.configVersion), coId);
@@ -161,16 +162,6 @@ namespace TwnsMfrCreatePlayerInfoPage {
             this._labelRankFog.text     = fogRankInfo
                 ? `${fogScore == null ? CommonConstants.RankInitialScore : fogScore} (${fogRank == null ? `--` : `${fogRank}${Helpers.getSuffixForRank(fogRank)}`})`
                 : `??`;
-        }
-    }
-
-    function getSourceForImgSkin(skinId: Types.Undefinable<number>): string {
-        switch (skinId) {
-            case 1  : return `uncompressedRectangle0002`;
-            case 2  : return `uncompressedRectangle0003`;
-            case 3  : return `uncompressedRectangle0004`;
-            case 4  : return `uncompressedRectangle0005`;
-            default : return `uncompressedRectangle0006`;
         }
     }
 }

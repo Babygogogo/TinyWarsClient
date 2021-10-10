@@ -18,6 +18,7 @@
 // import WarRuleHelpers               from "../../tools/warHelpers/WarRuleHelpers";
 // import ScrCreateModel               from "../model/ScrCreateModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsScrCreatePlayerInfoPage {
     import CommonCoInfoPanel        = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -181,7 +182,7 @@ namespace TwnsScrCreatePlayerInfoPage {
             this._labelTeamIndex.text   = Lang.getPlayerTeamName(WarRuleHelpers.getTeamIndex(Helpers.getExisted(settingsForCommon.warRule), playerIndex)) || CommonConstants.ErrorTextForUndefined;
 
             const playerData            = this._getPlayerData();
-            this._imgSkin.source        = getSourceForImgSkin(Helpers.getExisted(playerData.unitAndTileSkinId));
+            this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoHeadFrame(Helpers.getExisted(playerData.unitAndTileSkinId));
             this._labelPlayerType.text  = playerData.userId == null
                 ? Lang.getText(LangTextType.B0607)
                 : Lang.getText(LangTextType.B0031);
@@ -195,16 +196,6 @@ namespace TwnsScrCreatePlayerInfoPage {
 
         private _getPlayerData(): ProtoTypes.Structure.IDataForPlayerInRoom {
             return ScrCreateModel.getPlayerInfo(this._getData().playerIndex);
-        }
-    }
-
-    function getSourceForImgSkin(skinId: number): string {
-        switch (skinId) {
-            case 1  : return `uncompressedRectangle0002`;
-            case 2  : return `uncompressedRectangle0003`;
-            case 3  : return `uncompressedRectangle0004`;
-            case 4  : return `uncompressedRectangle0005`;
-            default : return `uncompressedRectangle0006`;
         }
     }
 }

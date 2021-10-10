@@ -18,6 +18,7 @@
 // import TwnsCommonCoInfoPanel    from "./CommonCoInfoPanel";
 // import TwnsCommonConfirmPanel   from "./CommonConfirmPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonWarPlayerInfoPage {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
@@ -221,7 +222,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             const playerIndex           = playerInfo.playerIndex;
             this._labelPlayerIndex.text = Lang.getPlayerForceName(playerIndex);
             this._labelTeamIndex.text   = Lang.getPlayerTeamName(playerInfo.teamIndex) || CommonConstants.ErrorTextForUndefined;
-            this._imgSkin.source        = getSourceForImgSkin(playerInfo.unitAndTileSkinId);
+            this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoHeadFrame(playerInfo.unitAndTileSkinId);
 
             const coId              = playerInfo.coId;
             const labelCo           = this._labelCo;
@@ -296,16 +297,6 @@ namespace TwnsCommonWarPlayerInfoPage {
             this._labelRankFog.text     = fogRankInfo
                 ? `${fogScore == null ? CommonConstants.RankInitialScore : fogScore} (${fogRank == null ? `--` : `${fogRank}${Helpers.getSuffixForRank(fogRank)}`})`
                 : `??`;
-        }
-    }
-
-    function getSourceForImgSkin(skinId: Types.Undefinable<number>): string {
-        switch (skinId) {
-            case 1  : return `uncompressedRectangle0002`;
-            case 2  : return `uncompressedRectangle0003`;
-            case 3  : return `uncompressedRectangle0004`;
-            case 4  : return `uncompressedRectangle0005`;
-            default : return `uncompressedRectangle0006`;
         }
     }
 }
