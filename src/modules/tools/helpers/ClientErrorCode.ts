@@ -1793,6 +1793,17 @@ namespace TwnsClientErrorCode {
         WarActionReviser_ReviseSystemHandleBootPlayer_08,
         WarActionReviser_ReviseSystemHandleBootPlayer_09,
 
+        WarActionReviser_ReviseSystemVoteForDraw_00,
+        WarActionReviser_ReviseSystemVoteForDraw_01,
+        WarActionReviser_ReviseSystemVoteForDraw_02,
+        WarActionReviser_ReviseSystemVoteForDraw_03,
+        WarActionReviser_ReviseSystemVoteForDraw_04,
+        WarActionReviser_ReviseSystemVoteForDraw_05,
+        WarActionReviser_ReviseSystemVoteForDraw_06,
+        WarActionReviser_ReviseSystemVoteForDraw_07,
+        WarActionReviser_ReviseSystemVoteForDraw_08,
+        WarActionReviser_ReviseSystemVoteForDraw_09,
+
         WarActionReviser_ReviseUnitAttackUnit_00,
         WarActionReviser_ReviseUnitAttackUnit_01,
         WarActionReviser_ReviseUnitAttackUnit_02,

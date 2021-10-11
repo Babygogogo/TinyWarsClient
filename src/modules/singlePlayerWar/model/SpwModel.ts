@@ -193,7 +193,6 @@ namespace SpwModel {
         // Handle the WaitBeginTurn phase.
         const turnPhaseCode = war.getTurnPhaseCode();
         const playerManager = war.getPlayerManager();
-        const playerInTurn  = playerManager.getPlayerInTurn();
         if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
             await handleSystemBeginTurn(war);
             await checkAndHandleSystemActions(war);
@@ -222,21 +221,23 @@ namespace SpwModel {
             }
         }
 
-        // Handle neutral player (end turn).
-        if (playerInTurn.checkIsNeutral()) {
-            if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_01);
-            }
-
-            await handleSystemEndTurn(war);
+        // Handle system vote for draw.
+        const playerInTurn = playerManager.getPlayerInTurn();
+        if ((war.getDrawVoteManager().getRemainingVotes())                                                      &&
+            (!playerInTurn.getHasVotedForDraw())                                                                &&
+            ((playerInTurn.checkIsNeutral()) || (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead))
+        ) {
+            await handleSystemVoteForDraw(war);
             await checkAndHandleSystemActions(war);
             return true;
         }
 
-        // Handle the dead player in turn (end turn).
-        if (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead) {
+        // Handle system end turn.
+        if ((playerInTurn.checkIsNeutral())                                 ||
+            (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead)
+        ) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_02);
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_01);
             }
 
             await handleSystemEndTurn(war);
@@ -267,6 +268,14 @@ namespace SpwModel {
             actionId                            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemDestroyPlayerForce   : {
                 targetPlayerIndex           : playerIndex,
+            },
+        });
+    }
+    async function handleSystemVoteForDraw(war: BwWar): Promise<void> {
+        await reviseAndExecute(war, {
+            actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
+            WarActionSystemVoteForDraw  : {
+                isAgree : true,
             },
         });
     }
