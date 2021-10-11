@@ -42,6 +42,7 @@ namespace TwnsRwWar {
         private _settingsForMcw?                    : ProtoTypes.WarSettings.ISettingsForMcw | null;
         private _settingsForScw?                    : ProtoTypes.WarSettings.ISettingsForScw | null;
         private _settingsForMrw?                    : ProtoTypes.WarSettings.ISettingsForMrw | null;
+        private _settingsForCcw?                    : ProtoTypes.WarSettings.ISettingsForCcw | null;
 
         private _replayId?                          : number;
         private _isAutoReplay                       = false;
@@ -54,6 +55,7 @@ namespace TwnsRwWar {
             this._setSettingsForMcw(warData.settingsForMcw ?? null);
             this._setSettingsForScw(warData.settingsForScw ?? null);
             this._setSettingsForMrw(warData.settingsForMrw ?? null);
+            this._setSettingsForCcw(warData.settingsForCcw ?? null);
             this.setNextActionId(0);
 
             this.setCheckPointId(0, 0);
@@ -222,6 +224,8 @@ namespace TwnsRwWar {
                 return hasFog ? WarType.MrwFog : WarType.MrwStd;
             } else if (this._getSettingsForScw()) {
                 return hasFog ? WarType.ScwFog : WarType.ScwStd;
+            } else if (this._getSettingsForCcw()) {
+                return hasFog ? WarType.CcwFog : WarType.CcwStd;
             } else {
                 throw Helpers.newError(`Invalid war data.`, ClientErrorCode.RwWar_GetWarType_00);
             }
@@ -246,6 +250,11 @@ namespace TwnsRwWar {
             const settingsForScw = this._getSettingsForScw();
             if (settingsForScw) {
                 return Helpers.getExisted(settingsForScw.mapId);
+            }
+
+            const settingsForCcw = this._getSettingsForCcw();
+            if (settingsForCcw) {
+                return Helpers.getExisted(settingsForCcw.mapId);
             }
 
             throw Helpers.newError(`Invalid war data.`, ClientErrorCode.RwWar_GetMapId_00);
@@ -279,6 +288,12 @@ namespace TwnsRwWar {
         }
         private _setSettingsForMrw(value: ProtoTypes.WarSettings.ISettingsForMrw | null): void {
             this._settingsForMrw = value;
+        }
+        private _getSettingsForCcw(): ProtoTypes.WarSettings.ISettingsForCcw | null {
+            return Helpers.getDefined(this._settingsForCcw, ClientErrorCode.RwWar_GetSettingsForCcw_00);
+        }
+        private _setSettingsForCcw(value: ProtoTypes.WarSettings.ISettingsForCcw | null): void {
+            this._settingsForCcw = value;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

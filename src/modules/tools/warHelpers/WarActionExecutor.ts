@@ -22,6 +22,7 @@
 // import WarDestructionHelpers        from "./WarDestructionHelpers";
 // import WarVisibilityHelpers         from "./WarVisibilityHelpers";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarActionExecutor {
     import GridIndex                            = Types.GridIndex;
     import UnitActionState                      = Types.UnitActionState;
@@ -42,6 +43,7 @@ namespace WarActionExecutor {
     import IWarActionSystemEndWar               = WarAction.IWarActionSystemEndWar;
     import IWarActionSystemEndTurn              = WarAction.IWarActionSystemEndTurn;
     import IWarActionSystemHandleBootPlayer     = WarAction.IWarActionSystemHandleBootPlayer;
+    import IWarActionSystemVoteForDraw          = WarAction.IWarActionSystemVoteForDraw;
     import IWarActionUnitAttackTile             = WarAction.IWarActionUnitAttackTile;
     import IWarActionUnitAttackUnit             = WarAction.IWarActionUnitAttackUnit;
     import IWarActionUnitBeLoaded               = WarAction.IWarActionUnitBeLoaded;
@@ -104,6 +106,7 @@ namespace WarActionExecutor {
         else if (action.WarActionSystemEndWar)              { await exeSystemEndWar(war, action.WarActionSystemEndWar, isFast); }
         else if (action.WarActionSystemEndTurn)             { await exeSystemEndTurn(war, action.WarActionSystemEndTurn, isFast); }
         else if (action.WarActionSystemHandleBootPlayer)    { await exeSystemHandleBootPlayer(war, action.WarActionSystemHandleBootPlayer, isFast); }
+        else if (action.WarActionSystemVoteForDraw)         { await exeSystemVoteForDraw(war, action.WarActionSystemVoteForDraw, isFast); }
         else if (action.WarActionUnitAttackTile)            { await exeUnitAttackTile(war, action.WarActionUnitAttackTile, isFast); }
         else if (action.WarActionUnitAttackUnit)            { await exeUnitAttackUnit(war, action.WarActionUnitAttackUnit, isFast); }
         else if (action.WarActionUnitBeLoaded)              { await exeUnitBeLoaded(war, action.WarActionUnitBeLoaded, isFast); }
@@ -296,7 +299,7 @@ namespace WarActionExecutor {
         if (!action.isAgree) {
             drawVoteManager.setRemainingVotes(null);
         } else {
-            drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
+            drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || drawVoteManager.getMaxVotes()) - 1);
         }
     }
     async function normalExePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw): Promise<void> {
@@ -310,7 +313,7 @@ namespace WarActionExecutor {
         if (!action.isAgree) {
             drawVoteManager.setRemainingVotes(null);
         } else {
-            drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
+            drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || drawVoteManager.getMaxVotes()) - 1);
         }
     }
 
@@ -417,7 +420,6 @@ namespace WarActionExecutor {
 
         } else {
             const player            = war.getPlayerInTurn();
-            const teamIndexInTurn   = player.getTeamIndex();
             const currentEnergy     = player.getCoCurrentEnergy();
             player.setCoUsingSkillType(skillType);
 
@@ -491,7 +493,9 @@ namespace WarActionExecutor {
 
         const playerInTurn  = war.getPlayerInTurn();
         const playerIndex   = playerInTurn.getPlayerIndex();
-        if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
+        if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex)         &&
+            (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
+        ) {
             const nickname = await playerInTurn.getNickname();
             await new Promise<void>(resolve => {
                 TwnsBwBeginTurnPanel.BwBeginTurnPanel.show({
@@ -625,6 +629,16 @@ namespace WarActionExecutor {
         (desc) && (FloatText.show(desc));
 
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    async function exeSystemVoteForDraw(war: BwWar, action: IWarActionSystemVoteForDraw, isFast: boolean): Promise<void> {
+        const drawVoteManager = war.getDrawVoteManager();
+        drawVoteManager.setRemainingVotes(action.isAgree
+            ? Helpers.getExisted(drawVoteManager.getRemainingVotes(), ClientErrorCode.WarActionExecutor_ExeSystemVoteForDraw_00) - 1
+            : null
+        );
+        war.getPlayerInTurn().setHasVotedForDraw(true);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

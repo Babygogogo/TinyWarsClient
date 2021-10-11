@@ -646,7 +646,7 @@ namespace TwnsBwTurnManager {
             const restTime  = Helpers.getExisted(extraData.restTimeToBootForCurrentPlayer, ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithExtraData_01);
             war.getPlayerInTurn().setRestTimeToBoot(restTime);
 
-            const info = this._getNextTurnAndPlayerIndex(null);
+            const info = this._getNextTurnAndPlayerIndex();
             this._setTurnIndex(info.turnIndex);
             this._setPlayerIndexInTurn(info.playerIndex);
             this._setEnterTurnTime(Timer.getServerTimestamp());
@@ -686,7 +686,7 @@ namespace TwnsBwTurnManager {
                 }
             }
 
-            const info = this._getNextTurnAndPlayerIndex(null);
+            const info = this._getNextTurnAndPlayerIndex();
             this._setTurnIndex(info.turnIndex);
             this._setPlayerIndexInTurn(info.playerIndex);
             this._setEnterTurnTime(Timer.getServerTimestamp());
@@ -738,13 +738,13 @@ namespace TwnsBwTurnManager {
                 Notify.dispatch(NotifyType.BwPlayerIndexInTurnChanged);
             }
         }
-        public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number {
-            const data          = this._getNextTurnAndPlayerIndex(null, playerIndex);
+        public getNextAlivePlayerIndex(playerIndex: number, includeNeutral = false): number {
+            const data          = this._getNextAliveTurnAndPlayerIndex(null, playerIndex);
             const playerIndex1  = data.playerIndex;
             if ((playerIndex1 !== CommonConstants.WarNeutralPlayerIndex) || (includeNeutral)) {
                 return playerIndex1;
             } else {
-                const nextData = this._getNextTurnAndPlayerIndex(data.turnIndex, playerIndex1);
+                const nextData = this._getNextAliveTurnAndPlayerIndex(data.turnIndex, playerIndex1);
                 return nextData.playerIndex;
             }
         }
@@ -767,6 +767,22 @@ namespace TwnsBwTurnManager {
         }
 
         private _getNextTurnAndPlayerIndex(
+            currTurnIndex   = this.getTurnIndex(),
+            currPlayerIndex = this.getPlayerIndexInTurn(),
+        ): Types.TurnAndPlayerIndex {
+            if (currPlayerIndex < this.getWar().getPlayerManager().getTotalPlayersCount(false)) {
+                return {
+                    turnIndex   : currTurnIndex,
+                    playerIndex : currPlayerIndex + 1,
+                };
+            } else {
+                return {
+                    turnIndex   : currTurnIndex + 1,
+                    playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                };
+            }
+        }
+        private _getNextAliveTurnAndPlayerIndex(
             currTurnIndex   : number | null,
             currPlayerIndex = this.getPlayerIndexInTurn(),
         ): TurnAndPlayerIndex {

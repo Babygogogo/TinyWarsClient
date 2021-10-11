@@ -978,14 +978,6 @@ namespace WarCommonHelpers {
 
         return ClientErrorCode.NoError;
     }
-
-    export function checkCanVoteForDraw({ playerIndex, aliveState }: {
-        playerIndex : number;
-        aliveState  : Types.PlayerAliveState;
-    }): boolean {
-        return (playerIndex !== CommonConstants.WarNeutralPlayerIndex)
-            && (aliveState !== Types.PlayerAliveState.Dead);
-    }
 }
 
 // export default WarCommonHelpers;

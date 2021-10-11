@@ -10362,6 +10362,96 @@ export declare namespace WarAction {
         }
     }
 
+    /** Properties of a WarActionSystemVoteForDraw. */
+    interface IWarActionSystemVoteForDraw {
+
+        /** WarActionSystemVoteForDraw isAgree */
+        isAgree?: (boolean|null);
+    }
+
+    /** Represents a WarActionSystemVoteForDraw. */
+    class WarActionSystemVoteForDraw implements IWarActionSystemVoteForDraw {
+
+        /**
+         * Constructs a new WarActionSystemVoteForDraw.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionSystemVoteForDraw);
+
+        /** WarActionSystemVoteForDraw isAgree. */
+        public isAgree: boolean;
+
+        /**
+         * Creates a new WarActionSystemVoteForDraw instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionSystemVoteForDraw instance
+         */
+        public static create(properties?: WarAction.IWarActionSystemVoteForDraw): WarAction.WarActionSystemVoteForDraw;
+
+        /**
+         * Encodes the specified WarActionSystemVoteForDraw message. Does not implicitly {@link WarAction.WarActionSystemVoteForDraw.verify|verify} messages.
+         * @param message WarActionSystemVoteForDraw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionSystemVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionSystemVoteForDraw message, length delimited. Does not implicitly {@link WarAction.WarActionSystemVoteForDraw.verify|verify} messages.
+         * @param message WarActionSystemVoteForDraw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionSystemVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionSystemVoteForDraw message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionSystemVoteForDraw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemVoteForDraw;
+
+        /**
+         * Decodes a WarActionSystemVoteForDraw message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionSystemVoteForDraw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemVoteForDraw;
+
+        /**
+         * Verifies a WarActionSystemVoteForDraw message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionSystemVoteForDraw message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionSystemVoteForDraw
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemVoteForDraw;
+
+        /**
+         * Creates a plain object from a WarActionSystemVoteForDraw message. Also converts values to other types if specified.
+         * @param message WarActionSystemVoteForDraw
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionSystemVoteForDraw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionSystemVoteForDraw to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarActionPlayerEndTurn. */
     interface IWarActionPlayerEndTurn {
 
@@ -14673,6 +14763,9 @@ export declare namespace WarAction {
         /** WarActionContainer WarActionSystemHandleBootPlayer */
         WarActionSystemHandleBootPlayer?: (WarAction.IWarActionSystemHandleBootPlayer|null);
 
+        /** WarActionContainer WarActionSystemVoteForDraw */
+        WarActionSystemVoteForDraw?: (WarAction.IWarActionSystemVoteForDraw|null);
+
         /** WarActionContainer WarActionPlayerEndTurn */
         WarActionPlayerEndTurn?: (WarAction.IWarActionPlayerEndTurn|null);
 
@@ -14769,6 +14862,9 @@ export declare namespace WarAction {
 
         /** WarActionContainer WarActionSystemHandleBootPlayer. */
         public WarActionSystemHandleBootPlayer?: (WarAction.IWarActionSystemHandleBootPlayer|null);
+
+        /** WarActionContainer WarActionSystemVoteForDraw. */
+        public WarActionSystemVoteForDraw?: (WarAction.IWarActionSystemVoteForDraw|null);
 
         /** WarActionContainer WarActionPlayerEndTurn. */
         public WarActionPlayerEndTurn?: (WarAction.IWarActionPlayerEndTurn|null);

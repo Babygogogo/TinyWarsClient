@@ -6,6 +6,7 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwDrawVoteManager {
     import ISerialPlayerManager = ProtoTypes.WarSerialization.ISerialPlayerManager;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
@@ -19,15 +20,7 @@ namespace TwnsBwDrawVoteManager {
             if (remainingVotes == null) {
                 this.setRemainingVotes(null);
             } else {
-                let maxVotes = 0;
-                for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
-                    if (WarCommonHelpers.checkCanVoteForDraw({
-                        playerIndex : Helpers.getExisted(playerData.playerIndex),
-                        aliveState  : Helpers.getExisted(playerData.aliveState),
-                    })) {
-                        ++maxVotes;
-                    }
-                }
+                const maxVotes = playerManagerData?.players?.length ?? 0;
                 if (remainingVotes >= maxVotes) {
                     throw Helpers.newError(`remainingVotes >= maxVotes.`, ClientErrorCode.BwDrawVoteManager_Init_00);
                 }
@@ -47,14 +40,7 @@ namespace TwnsBwDrawVoteManager {
         }
 
         public getMaxVotes(): number {
-            let maxVotes = 0;
-            this._getWar().getPlayerManager().forEachPlayer(false, player => {
-                if (player.checkCanVoteForDraw()) {
-                    ++maxVotes;
-                }
-            });
-
-            return maxVotes;
+            return this._getWar().getPlayerManager().getTotalPlayersCount(true);
         }
 
         public checkIsDraw(): boolean {

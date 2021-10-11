@@ -177,6 +177,7 @@ namespace TwnsBwWar {
         public startRunning(): BwWar {
             this.getCommonSettingManager().startRunning(this);
             this.getWarEventManager().startRunning(this);
+            this.getDrawVoteManager().startRunning(this);
             this.getTurnManager().startRunning(this);
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);
