@@ -826,6 +826,7 @@ namespace WarCommonHelpers {
             case 2                                      : return `uncompressedTriangle0002`;
             case 3                                      : return `uncompressedTriangle0003`;
             case 4                                      : return `uncompressedTriangle0004`;
+            case 5                                      : return `uncompressedTriangle0005`;
             default                                     : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetImageSourceForCoEyeFrame_00);
         }
     }
@@ -846,7 +847,8 @@ namespace WarCommonHelpers {
             case 1  : return 0xF4664F;
             case 2  : return 0x34A7DE;
             case 3  : return 0xF9D803;
-            case 4  : return 0x000000;
+            case 4  : return 0x3ADA22;
+            case 5  : return 0x000000;
             default : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetTextColorForSkinId_00);
         }
     }
@@ -856,7 +858,8 @@ namespace WarCommonHelpers {
             case 1  : return 0;
             case 2  : return 0;
             case 3  : return 0;
-            case 4  : return 1;
+            case 4  : return 0;
+            case 5  : return 1;
             default : throw Helpers.newError(`Invalid skinId: ${skinId}`, ClientErrorCode.WarCommonHelpers_GetTextStrokeForSkinId_00);
         }
     }

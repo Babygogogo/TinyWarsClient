@@ -78,6 +78,7 @@ namespace Lang {
             case 2  : return getText(LangTextType.B0009);
             case 3  : return getText(LangTextType.B0010);
             case 4  : return getText(LangTextType.B0011);
+            case 5  : return getText(LangTextType.B0699);
             default : return null;
         }
     }
@@ -326,6 +327,7 @@ namespace Lang {
             case 2  : return getText(LangTextType.B0005);
             case 3  : return getText(LangTextType.B0006);
             case 4  : return getText(LangTextType.B0007);
+            case 5  : return getText(LangTextType.B0700);
             default : return null;
         }
     }

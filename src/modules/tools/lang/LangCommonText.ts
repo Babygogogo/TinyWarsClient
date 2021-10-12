@@ -1055,8 +1055,8 @@ namespace TwnsLangCommonText {
             "Yellow",
         ],
         [LangTextType.B0007]: [
-            "黑",
-            "Black",
+            "绿",
+            "Green",
         ],
         [LangTextType.B0008]: [
             "A队",
@@ -3806,6 +3806,14 @@ namespace TwnsLangCommonText {
             `搭载部队`,
             `Loaded Units`,
         ],
+        [LangTextType.B0699]: [
+            "E队",
+            "Team E",
+        ],
+        [LangTextType.B0700]: [
+            "黑",
+            "Black",
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4357,7 +4365,7 @@ namespace TwnsLangCommonText {
                 `此外，可以使用队友的建筑来维修/补给自己的部队（消耗自己的金钱），但不能占领队友的建筑。`,
                 ``,
                 `预览地图时，各个势力的颜色与行动顺序的对应关系如下（您可以在创建/加入房间时选择您想要的颜色）：`,
-                `红=1，蓝=2，黄=3，黑=4`,
+                `红=1，蓝=2，黄=3，绿=4, 黑=5`,
                 ``,
                 `默认为当前可用选项中的第一项。`,
             ].join("\n"),
@@ -4369,7 +4377,7 @@ namespace TwnsLangCommonText {
                 `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
                 ``,
                 `When previewing the map, the colors of the forces correspond to the order of action as follows (you can choose the color you want when creating/adding rooms)`,
-                `Red = 1, Blue = 2, Yellow = 3, Black = 4`,
+                `Red = 1, Blue = 2, Yellow = 3, Green = 4, Black = 5`,
                 ``,
                 `By default you will be given the first choice among the available ones.`,
             ].join("\n"),

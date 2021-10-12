@@ -78,14 +78,14 @@ namespace CommonConstants {
     export const UnitHpNormalizer                       = 10;
     export const UnitMaxHp                              = 100;
     export const UnitAndTileMinSkinId                   = 1;
-    export const UnitAndTileMaxSkinId                   = 4;
+    export const UnitAndTileMaxSkinId                   = 5;
     export const UnitAndTileNeutralSkinId               = 0;
 
     export const CoEmptyId                              = 0;
 
     export const WarNeutralPlayerIndex                  = 0;
     export const WarFirstPlayerIndex                    = 1;
-    export const WarMaxPlayerIndex                      = 4;
+    export const WarMaxPlayerIndex                      = 5;
     export const WarNeutralTeamIndex                    = 0;
     export const WarFirstTeamIndex                      = 1;
     export const WarFirstTurnIndex                      = 1;
