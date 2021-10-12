@@ -4,30 +4,21 @@
         xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="450" height="360" horizontalCenter="0" verticalCenter="0">
+    <e:Group id="_group" width="450" height="320" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                  scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
             <e:Group y="0" left="0" right="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
                                      source="uncompressedColorGrey0001" y="0" left="0" right="0" />
-                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiLabel:UiLabel id="_labelName" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
                 <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
                                        verticalCenter="0" right="30" />
             </e:Group>
         </e:Group>
         <TwnsUiLabel:UiLabel id="_labelDesc" text="注:任意条件均可留空,等同于不限查找结果" size="12" lineSpacing="3" wordWrap="true"
-                             textAlign="center" x="20" y="56" textColor="0xAAAAAA" />
-        <e:Group y="80" horizontalCenter="0">
-            <e:Group x="10" y="10" height="32" width="410">
-                <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0000"
-                                     alpha="0.4" scale9Grid="1,1,2,2" />
-                <TwnsUiLabel:UiLabel id="_labelReplayIdTitle" text="Replay ID" textColor="0xFFFFFF" size="16"
-                                     maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <TwnsUiTextInput:UiTextInput id="_inputReplayId" width="270" anchorOffsetX="0" anchorOffsetY="0"
-                                             maxChars="10" verticalCenter="0" height="24" right="6" restrict="0-9."
-                                             skinName="Skins.Component.TextInput.TextInput002" />
-            </e:Group>
+                             textAlign="center" x="20" y="50" textColor="0xAAAAAA" />
+        <e:Group x="20" y="80">
             <e:Group x="0" y="0" height="32" width="410">
                 <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0000"
                                      alpha="0.4" scale9Grid="1,1,2,2" />
@@ -40,9 +31,9 @@
             <e:Group x="0" y="0" height="32" width="410">
                 <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0000"
                                      alpha="0.4" scale9Grid="1,1,2,2" />
-                <TwnsUiLabel:UiLabel id="_labelUserNicknameTitle" text="User Nickname" textColor="0xFFFFFF" size="16"
+                <TwnsUiLabel:UiLabel id="_labelPlayerNameTitle" text="Player Nickname" textColor="0xFFFFFF" size="16"
                                      maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <TwnsUiTextInput:UiTextInput id="_inputUserNickname" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
+                <TwnsUiTextInput:UiTextInput id="_inputPlayerName" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
                                              verticalCenter="0" height="24" right="6"
                                              skinName="Skins.Component.TextInput.TextInput002"></TwnsUiTextInput:UiTextInput>
             </e:Group>
@@ -58,54 +49,32 @@
             <e:Group x="0" y="0" height="32" width="410">
                 <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0000"
                                      alpha="0.4" scale9Grid="1,1,2,2" />
-                <TwnsUiLabel:UiLabel id="_labelMinMyRatingTitle" text="My Rating" textColor="0xFFFFFF" size="16"
+                <TwnsUiLabel:UiLabel id="_labelPlayersCountTitle" text="Players" textColor="0xFFFFFF" size="16"
                                      maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <TwnsUiTextInput:UiTextInput id="_inputMinMyRating" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="2"
-                                             verticalCenter="0" height="24" right="6" restrict="0-9"
+                <TwnsUiTextInput:UiTextInput id="_inputPlayersCount" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="1"
+                                             verticalCenter="0" height="24" right="6" restrict="2-4"
                                              skinName="Skins.Component.TextInput.TextInput002"></TwnsUiTextInput:UiTextInput>
             </e:Group>
-            <e:Group x="10" y="10" height="32" width="410">
+            <e:Group x="0" y="0" height="32" width="410">
                 <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlack0000"
                                      alpha="0.4" scale9Grid="1,1,2,2" />
-                <TwnsUiLabel:UiLabel id="_labelMinGlobalRatingTitle" text="Global Rating" textColor="0xFFFFFF" size="16"
+                <TwnsUiLabel:UiLabel id="_labelWarIdTitle" text="War ID" textColor="0xFFFFFF" size="16"
                                      maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <TwnsUiTextInput:UiTextInput id="_inputMinGlobalRating" width="270" anchorOffsetX="0" anchorOffsetY="0"
-                                             maxChars="2" verticalCenter="0" height="24" right="6" restrict="0-9"
-                                             skinName="Skins.Component.TextInput.TextInput002" />
+                <TwnsUiTextInput:UiTextInput id="_inputWarId" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="10"
+                                             verticalCenter="0" height="24" right="6" restrict="0-9"
+                                             skinName="Skins.Component.TextInput.TextInput002"></TwnsUiTextInput:UiTextInput>
             </e:Group>
             <e:layout>
                 <e:VerticalLayout gap="4" />
             </e:layout>
         </e:Group>
-        <e:Group bottom="20" right="20">
-            <TwnsUiButton:UiButton id="_btnSearch" label="确定" width="80" x="0" y="0">
-                <TwnsUiButton:skinName>
-                    <e:Skin>
-                        <e:Group left="0" right="0" y="0">
-                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedPentagon0000"
-                                     scale9Grid="4,4,1,1" />
-                            <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="asdf"
-                                                 textAlign="center" verticalAlign="middle" left="10" top="8" bottom="8"
-                                                 wordWrap="true" bold="true" />
-                        </e:Group>
-                    </e:Skin>
-                </TwnsUiButton:skinName>
-            </TwnsUiButton:UiButton>
-            <TwnsUiButton:UiButton id="_btnReset" label="全部显示" width="80" x="10" y="10">
-                <TwnsUiButton:skinName>
-                    <e:Skin>
-                        <e:Group left="0" right="0" y="0">
-                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedPentagon0009"
-                                     scale9Grid="2,3,1,1" />
-                            <TwnsUiLabel:UiLabel id="labelDisplay" size="12" text="asdf" textAlign="center"
-                                                 verticalAlign="middle" left="10" top="8" bottom="8" wordWrap="true"
-                                                 bold="true" textColor="0x000000" />
-                        </e:Group>
-                    </e:Skin>
-                </TwnsUiButton:skinName>
-            </TwnsUiButton:UiButton>
+        <e:Group bottom="20" horizontalCenter="0">
+            <TwnsUiButton:UiButton id="_btnSearch" label="确定" width="120" x="0" y="0"
+                                   skinName="Skins.Component.Button.ButtonYellow001"></TwnsUiButton:UiButton>
+            <TwnsUiButton:UiButton id="_btnReset" label="全部显示" width="120" x="10" y="10"
+                                   skinName="Skins.Component.Button.ButtonBlue001"></TwnsUiButton:UiButton>
             <e:layout>
-                <e:HorizontalLayout gap="30" />
+                <e:HorizontalLayout gap="60" />
             </e:layout>
         </e:Group>
     </e:Group>

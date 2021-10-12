@@ -6,6 +6,7 @@
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 // import WwModel                  from "./WwModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WwProxy {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import NetMessage           = ProtoTypes.NetMessage;
@@ -24,16 +25,27 @@ namespace WwProxy {
         ], null);
     }
 
-    export function reqUnwatchedWarInfos(): void {
+    export function reqUnwatchedWarInfos({ warId, coName, mapName, userNickname, playersCountUnneutral }: {
+        warId?                  : number | null;
+        coName?                 : string | null;
+        mapName?                : string | null;
+        userNickname?           : string | null;
+        playersCountUnneutral?  : number | null;
+    }): void {
         NetManager.send({
             MsgMpwWatchGetUnwatchedWarInfos: { c: {
+                warId,
+                coName,
+                mapName,
+                userNickname,
+                playersCountUnneutral,
             } },
         });
     }
     function _onMsgMpwWatchGetUnwatchedWarInfos(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetUnwatchedWarInfos.IS;
         if (!data.errorCode) {
-            WwModel.setUnwatchedWarInfos(data.infos || []);
+            WwModel.setUnwatchedWarInfos(data.infoArray || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetUnwatchedWarInfos, data);
         }
     }

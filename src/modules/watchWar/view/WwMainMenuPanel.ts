@@ -100,7 +100,7 @@ namespace TwnsWwMainMenuPanel {
             this.close();
             TwnsLobbyTopPanel.LobbyTopPanel.hide();
             TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrWatchMakeRequestWarsPanel.show();
+            McrWatchMakeRequestWarsPanel.show({});
         }
 
         private _onTouchedBtnHandleRequest(): void {

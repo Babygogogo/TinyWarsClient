@@ -12,6 +12,7 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 // import RwProxy              from "../model/RwProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsRwSearchReplayPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -27,8 +28,9 @@ namespace TwnsRwSearchReplayPanel {
         private readonly _group!                        : eui.Group;
         private readonly _btnReset!                     : TwnsUiButton.UiButton;
         private readonly _btnSearch!                    : TwnsUiButton.UiButton;
-        private readonly _labelName!                    : TwnsUiLabel.UiLabel;
+        private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
         private readonly _labelDesc!                    : TwnsUiLabel.UiLabel;
+        private readonly _btnClose!                     : TwnsUiButton.UiButton;
 
         private readonly _labelReplayIdTitle!           : TwnsUiLabel.UiLabel;
         private readonly _inputReplayId!                : TwnsUiTextInput.UiTextInput;
@@ -70,6 +72,7 @@ namespace TwnsRwSearchReplayPanel {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
+                { ui: this._btnClose,               callback: this.close },
                 { ui: this._btnReset,               callback: this._onTouchedBtnReset },
                 { ui: this._btnSearch,              callback: this._onTouchedBtnSearch },
                 { ui: this._inputMinGlobalRating,   callback: this._onFocusOutInputMinGlobalRating, eventType: egret.Event.FOCUS_OUT },
@@ -125,7 +128,7 @@ namespace TwnsRwSearchReplayPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelName.text                    = Lang.getText(LangTextType.B0447);
+            this._labelTitle.text                   = Lang.getText(LangTextType.B0228);
             this._labelReplayIdTitle.text           = Lang.getText(LangTextType.B0235);
             this._labelMapNameTitle.text            = Lang.getText(LangTextType.B0225);
             this._labelUserNicknameTitle.text       = Lang.getText(LangTextType.B0393);

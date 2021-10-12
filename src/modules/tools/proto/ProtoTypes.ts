@@ -42121,6 +42121,21 @@ export declare namespace NetMessage {
 
         /** Properties of a C. */
         interface IC {
+
+            /** C warId */
+            warId?: (number|null);
+
+            /** C mapName */
+            mapName?: (string|null);
+
+            /** C playersCountUnneutral */
+            playersCountUnneutral?: (number|null);
+
+            /** C userNickname */
+            userNickname?: (string|null);
+
+            /** C coName */
+            coName?: (string|null);
         }
 
         /** Represents a C. */
@@ -42131,6 +42146,21 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              */
             constructor(properties?: NetMessage.MsgMpwWatchGetUnwatchedWarInfos.IC);
+
+            /** C warId. */
+            public warId: number;
+
+            /** C mapName. */
+            public mapName: string;
+
+            /** C playersCountUnneutral. */
+            public playersCountUnneutral: number;
+
+            /** C userNickname. */
+            public userNickname: string;
+
+            /** C coName. */
+            public coName: string;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -42209,8 +42239,8 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S infos */
-            infos?: (MultiPlayerWar.IMpwWatchInfo[]|null);
+            /** S infoArray */
+            infoArray?: (MultiPlayerWar.IMpwWatchInfo[]|null);
         }
 
         /** Represents a S. */
@@ -42225,8 +42255,8 @@ export declare namespace NetMessage {
             /** S errorCode. */
             public errorCode: number;
 
-            /** S infos. */
-            public infos: MultiPlayerWar.IMpwWatchInfo[];
+            /** S infoArray. */
+            public infoArray: MultiPlayerWar.IMpwWatchInfo[];
 
             /**
              * Creates a new S instance using the specified properties.

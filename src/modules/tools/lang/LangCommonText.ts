@@ -2584,7 +2584,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0393]: [
             `玩家昵称`,
-            `User Nickname`,
+            `Player Nickname`,
         ],
         [LangTextType.B0394]: [
             `CO名称`,

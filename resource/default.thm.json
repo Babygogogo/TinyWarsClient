@@ -213,7 +213,8 @@
 		"resource/skins/watchWar/WwMainMenuPanel.exml",
 		"resource/skins/watchWar/WwMakeRequestDetailPanel.exml",
 		"resource/skins/watchWar/WwMakeRequestWarsPanel.exml",
-		"resource/skins/watchWar/WwOngoingWarsPanel.exml"
+		"resource/skins/watchWar/WwOngoingWarsPanel.exml",
+		"resource/skins/watchWar/WwSearchWarPanel.exml"
 	],
 	"path": "resource/default.thm.json"
 }

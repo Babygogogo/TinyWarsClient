@@ -27,6 +27,7 @@
 // import TwnsWwMainMenuPanel                  from "./WwMainMenuPanel";
 // import TwnsWwMakeRequestDetailPanel         from "./WwMakeRequestDetailPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWwMakeRequestWarsPanel {
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -36,7 +37,14 @@ namespace TwnsWwMakeRequestWarsPanel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
-    export class WwMakeRequestWarsPanel extends TwnsUiPanel.UiPanel<void> {
+    type WarFilter = {
+        warId?                  : number | null;
+        coName?                 : string | null;
+        mapName?                : string | null;
+        userNickname?           : string | null;
+        playersCountUnneutral?  : number | null;
+    };
+    export class WwMakeRequestWarsPanel extends TwnsUiPanel.UiPanel<WarFilter | null> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -51,6 +59,7 @@ namespace TwnsWwMakeRequestWarsPanel {
         private readonly _labelChooseWar!       : TwnsUiLabel.UiLabel;
 
         private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnSearch!            : TwnsUiButton.UiButton;
         private readonly _btnNextStep!          : TwnsUiButton.UiButton;
 
         private readonly _groupWarList!         : eui.Group;
@@ -58,19 +67,24 @@ namespace TwnsWwMakeRequestWarsPanel {
         private readonly _labelNoWar!           : TwnsUiLabel.UiLabel;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
+        private _warFilter          : WarFilter = {};
         private _hasReceivedData    = false;
         private _isTabInitialized   = false;
 
-        public static show(): void {
+        public static show(filter: WarFilter | null): void {
             if (!WwMakeRequestWarsPanel._instance) {
                 WwMakeRequestWarsPanel._instance = new WwMakeRequestWarsPanel();
             }
-            WwMakeRequestWarsPanel._instance.open();
+
+            WwMakeRequestWarsPanel._instance.open(filter);
         }
         public static async hide(): Promise<void> {
             if (WwMakeRequestWarsPanel._instance) {
                 await WwMakeRequestWarsPanel._instance.close();
             }
+        }
+        public static getInstance(): WwMakeRequestWarsPanel {
+            return WwMakeRequestWarsPanel._instance;
         }
 
         public constructor() {
@@ -87,6 +101,7 @@ namespace TwnsWwMakeRequestWarsPanel {
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
+                { ui: this._btnSearch,      callback: this._onTouchTapBtnSearch },
                 { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
@@ -101,10 +116,16 @@ namespace TwnsWwMakeRequestWarsPanel {
             this._updateGroupWarList();
             this._updateComponentsForTargetWarInfo();
 
-            WwProxy.reqUnwatchedWarInfos();
+            this.setWarFilter(this._getOpenData() ?? this._warFilter);
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
+        }
+
+        public setWarFilter(filter: WarFilter): void {
+            this._warFilter = filter;
+
+            reqDataArray(filter);
         }
 
         public async setAndReviseSelectedWarId(warId: number, needScroll: boolean): Promise<void> {
@@ -136,7 +157,7 @@ namespace TwnsWwMakeRequestWarsPanel {
 
         private _onNotifyMsgMpwWatchMakeRequest(): void {
             FloatText.show(Lang.getText(LangTextType.A0060));
-            WwProxy.reqUnwatchedWarInfos();
+            reqDataArray(this._warFilter);
         }
 
         private _onTouchTapBtnBack(): void {
@@ -144,6 +165,10 @@ namespace TwnsWwMakeRequestWarsPanel {
             TwnsLobbyTopPanel.LobbyTopPanel.show();
             TwnsLobbyBottomPanel.LobbyBottomPanel.show();
             TwnsWwMainMenuPanel.WwMainMenuPanel.show();
+        }
+
+        private _onTouchTapBtnSearch(): void {
+            TwnsWwSearchWarPanel.WwSearchWarPanel.show();
         }
 
         private _onTouchedBtnNextStep(): void {
@@ -203,6 +228,7 @@ namespace TwnsWwMakeRequestWarsPanel {
             this._labelChooseWar.text       = Lang.getText(LangTextType.B0589);
             this._btnBack.label             = Lang.getText(LangTextType.B0146);
             this._labelNoWar.text           = Lang.getText(LangTextType.B0210);
+            this._btnSearch.label           = Lang.getText(LangTextType.B0228);
             this._btnNextStep.label         = Lang.getText(LangTextType.B0566);
         }
 
@@ -268,6 +294,11 @@ namespace TwnsWwMakeRequestWarsPanel {
                 endProps    : { alpha: 1, y: 20 },
             });
             Helpers.resetTween({
+                obj         : this._btnSearch,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 80 },
+            });
+            Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
@@ -295,6 +326,11 @@ namespace TwnsWwMakeRequestWarsPanel {
                     beginProps  : { alpha: 1, y: 20 },
                     endProps    : { alpha: 0, y: -20 },
                     callback    : resolve,
+                });
+                Helpers.resetTween({
+                    obj         : this._btnSearch,
+                    beginProps  : { alpha: 1, y: 80 },
+                    endProps    : { alpha: 0, y: 40 },
                 });
                 Helpers.resetTween({
                     obj         : this._groupNavigator,
@@ -397,6 +433,16 @@ namespace TwnsWwMakeRequestWarsPanel {
                 }
             }
         }
+    }
+
+    function reqDataArray(filter: WarFilter): void {
+        WwProxy.reqUnwatchedWarInfos({
+            warId                   : filter.warId,
+            coName                  : filter.coName,
+            mapName                 : filter.mapName,
+            userNickname            : filter.userNickname,
+            playersCountUnneutral   : filter.playersCountUnneutral,
+        });
     }
 }
 
