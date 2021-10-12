@@ -843,30 +843,26 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : true,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
 
             } else {
-                const selfTeamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-                const allVisibleUnits   = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
-
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, action.targetGridIndex as GridIndex);
-                if ((!allVisibleUnits.has(focusUnit))                   &&
-                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
-                        war,
-                        gridIndex           : pathNodes[pathNodes.length - 1],
-                        unitType            : focusUnit.getUnitType(),
-                        isDiving            : focusUnit.getIsDiving(),
-                        unitPlayerIndex     : focusUnit.getPlayerIndex(),
-                        observerTeamIndexes : selfTeamIndexes,
-                    }))
-                ) {
-                    allVisibleUnits.add(focusUnit);
-                }
+                const allVisibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : false,
+                    aiming      : action.targetGridIndex as GridIndex,
+                });
 
                 const tileMap           = war.getTileMap();
                 const damagedTileSet    = new Set<BwTile>();
@@ -948,7 +944,12 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : true,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
 
             } else {
@@ -960,26 +961,17 @@ namespace WarActionExecutor {
                     targetGridIndex,
                 });
 
-                const selfTeamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-                const allVisibleUnits   = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
-
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, targetGridIndex);
-                if ((!allVisibleUnits.has(focusUnit))                   &&
-                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
-                        war,
-                        gridIndex           : pathNodes[pathNodes.length - 1],
-                        unitType            : focusUnit.getUnitType(),
-                        isDiving            : focusUnit.getIsDiving(),
-                        unitPlayerIndex     : focusUnit.getPlayerIndex(),
-                        observerTeamIndexes : selfTeamIndexes,
-                    }))
-                ) {
-                    allVisibleUnits.add(focusUnit);
-                }
+                const allVisibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : false,
+                    aiming      : targetGridIndex,
+                });
 
                 const tileMap           = war.getTileMap();
                 const affectedPlayerSet = new Set<BwPlayer>();
@@ -1315,29 +1307,28 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : true,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
 
             } else {
-                const selfTeamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-                const allVisibleUnits   = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
-
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, action.targetGridIndex as GridIndex);
-                if ((!allVisibleUnits.has(focusUnit))                   &&
-                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
-                        war,
-                        gridIndex           : pathNodes[pathNodes.length - 1],
-                        unitType            : focusUnit.getUnitType(),
-                        isDiving            : focusUnit.getIsDiving(),
-                        unitPlayerIndex     : focusUnit.getPlayerIndex(),
-                        observerTeamIndexes : selfTeamIndexes,
-                    }))
-                ) {
-                    allVisibleUnits.add(focusUnit);
+                const allVisibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                {
+                    const targetGridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(action.targetGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_00);
+                    await focusUnit.moveViewAlongPath({
+                        pathNodes,
+                        isDiving    : focusUnit.getIsDiving(),
+                        isBlocked   : false,
+                        aiming      : allVisibleUnits.has(Helpers.getExisted(unitMap.getUnitOnMap(targetGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_01)) ? targetGridIndex : null,
+                    });
                 }
 
                 const tileMap           = war.getTileMap();
@@ -1351,7 +1342,7 @@ namespace WarActionExecutor {
                         continue;
                     }
 
-                    const targetTileGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_00);
+                    const targetTileGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_02);
                     const tile                  = tileMap.getTile(targetTileGridIndex);
                     tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
 
@@ -1420,7 +1411,12 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : true,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
 
             } else {
@@ -1431,26 +1427,17 @@ namespace WarActionExecutor {
                     launchUnitId,
                     targetGridIndex,
                 });
-                const selfTeamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-                const allVisibleUnits   = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, selfTeamIndexes);
-
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false, targetGridIndex);
-                if ((!allVisibleUnits.has(focusUnit))                   &&
-                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
-                        war,
-                        gridIndex           : pathNodes[pathNodes.length - 1],
-                        unitType            : focusUnit.getUnitType(),
-                        isDiving            : focusUnit.getIsDiving(),
-                        unitPlayerIndex     : focusUnit.getPlayerIndex(),
-                        observerTeamIndexes : selfTeamIndexes,
-                    }))
-                ) {
-                    allVisibleUnits.add(focusUnit);
-                }
+                const allVisibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : false,
+                    aiming      : allVisibleUnits.has(Helpers.getExisted(unitMap.getUnitOnMap(targetGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_03)) ? targetGridIndex : null,
+                });
 
                 const tileMap           = war.getTileMap();
                 const affectedPlayerSet = new Set<BwPlayer>();
@@ -1460,16 +1447,16 @@ namespace WarActionExecutor {
                 const damagedTileSet    = new Set<BwTile>();
 
                 for (const battleDamageInfo of battleDamageInfoArray) {
-                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_01);
-                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_02);
+                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_04);
+                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_05);
                     const player1   = unit1.getPlayer();
-                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_03);
+                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_06);
                     affectedPlayerSet.add(player1);
                     affectedUnitSet.add(unit1);
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
-                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_04);
+                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_07);
                         const unitGridIndex1        = unit1.getGridIndex();
                         const unitGridIndex2        = unit2.getGridIndex();
                         const playerIndex1          = unit1.getPlayerIndex();
@@ -1521,7 +1508,7 @@ namespace WarActionExecutor {
                     const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2         = tileMap.getTile(gridIndex2);
-                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_05);
+                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_08);
                         handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
                         handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
 
@@ -1536,7 +1523,7 @@ namespace WarActionExecutor {
                         continue;
                     }
 
-                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_06);
+                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_09);
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
@@ -1626,7 +1613,12 @@ namespace WarActionExecutor {
         if (path.isBlocked) {
             unitMap.setUnitOnMap(focusUnit);
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
             focusUnit.updateView();
 
         } else {
@@ -1634,7 +1626,12 @@ namespace WarActionExecutor {
             unitMap.setUnitLoaded(focusUnit);
             focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
             focusUnit.updateView();
             focusUnit.setViewVisible(false);
             loaderUnit.updateView();
@@ -1721,7 +1718,12 @@ namespace WarActionExecutor {
             }
         }
 
-        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+        await focusUnit.moveViewAlongPath({
+            pathNodes,
+            isDiving    : focusUnit.getIsDiving(),
+            isBlocked   : path.isBlocked,
+            aiming      : null,
+        });
         focusUnit.updateView();
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
@@ -1788,7 +1790,12 @@ namespace WarActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : true,
+                aiming      : null,
+            });
             focusUnit.updateView();
 
         } else {
@@ -1816,7 +1823,12 @@ namespace WarActionExecutor {
                 });
             }
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : false,
+                aiming      : null,
+            });
             if (war.getPlayerInTurn().getUserId() === UserModel.getSelfUserId()) {
                 await new Promise<void>(resolve => {
                     TwnsBwCaptureProgressPanel.BwCaptureProgressPanel.show({
@@ -1873,7 +1885,12 @@ namespace WarActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(true));
 
-        await focusUnit.moveViewAlongPath(pathNodes, false, path.isBlocked);
+        await focusUnit.moveViewAlongPath({
+            pathNodes,
+            isDiving    : false,
+            isBlocked   : path.isBlocked,
+            aiming      : null,
+        });
         focusUnit.updateView();
         if (isSuccessful) {
             const endingGridIndex = pathNodes[pathNodes.length - 1];
@@ -1968,7 +1985,12 @@ namespace WarActionExecutor {
             }
         }
 
-        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+        await focusUnit.moveViewAlongPath({
+            pathNodes,
+            isDiving    : focusUnit.getIsDiving(),
+            isBlocked   : path.isBlocked,
+            aiming      : null,
+        });
         if (action.isDropBlocked) {
             war.getGridVisionEffect().showEffectBlock(endingGridIndex);
         }
@@ -1977,11 +1999,12 @@ namespace WarActionExecutor {
         const promises: Promise<void>[] = [];
         for (const unitForDrop of unitsForDrop) {
             promises.push((async () => {
-                await unitForDrop.moveViewAlongPath(
-                    [endingGridIndex, unitForDrop.getGridIndex()],
-                    unitForDrop.getIsDiving(),
-                    false,
-                );
+                await unitForDrop.moveViewAlongPath({
+                    pathNodes   : [endingGridIndex, unitForDrop.getGridIndex()],
+                    isDiving    : unitForDrop.getIsDiving(),
+                    isBlocked   : false,
+                    aiming      : null,
+                });
                 unitForDrop.updateView();
             })());
         }
@@ -2099,7 +2122,12 @@ namespace WarActionExecutor {
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
             focusUnit.updateView();
 
         } else {
@@ -2171,7 +2199,12 @@ namespace WarActionExecutor {
                 }
             }
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
             focusUnit.updateView();
             unitMap.getView().removeUnit(targetUnit.getView());
         }
@@ -2229,7 +2262,12 @@ namespace WarActionExecutor {
             war.getFogMap().updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
         }
 
-        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+        await focusUnit.moveViewAlongPath({
+            pathNodes,
+            isDiving    : focusUnit.getIsDiving(),
+            isBlocked   : path.isBlocked,
+            aiming      : null,
+        });
         if ((isFlareSucceeded) && (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex()))) {
             const effect = war.getGridVisionEffect();
             for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, war.getTileMap().getMapSize())) {
@@ -2298,7 +2336,12 @@ namespace WarActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
             focusUnit.updateView();
 
         } else {
@@ -2320,7 +2363,12 @@ namespace WarActionExecutor {
                 }
             }
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
             const effect = war.getGridVisionEffect();
             for (const grid of targetGrids) {
                 effect.showEffectSiloExplosion(grid);
@@ -2402,7 +2450,12 @@ namespace WarActionExecutor {
             );
         }
 
-        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+        await focusUnit.moveViewAlongPath({
+            pathNodes,
+            isDiving    : focusUnit.getIsDiving(),
+            isBlocked   : path.isBlocked,
+            aiming      : null,
+        });
         focusUnit.updateView();
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
@@ -2464,7 +2517,12 @@ namespace WarActionExecutor {
             focusUnit.setActionState(UnitActionState.Acted);
 
             if (path.isBlocked) {
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : path.isBlocked,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
 
             } else {
@@ -2487,7 +2545,12 @@ namespace WarActionExecutor {
                 unitMap.setUnitLoaded(producedUnit);
                 focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : path.isBlocked,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
             }
 
@@ -2497,7 +2560,12 @@ namespace WarActionExecutor {
             focusUnit.setActionState(UnitActionState.Acted);
 
             if (path.isBlocked) {
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : path.isBlocked,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
 
             } else {
@@ -2520,7 +2588,12 @@ namespace WarActionExecutor {
                 unitMap.setUnitLoaded(producedUnit);
                 focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : path.isBlocked,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
             }
         }
@@ -2585,7 +2658,12 @@ namespace WarActionExecutor {
 
         const isBlocked = revisedPath.isBlocked;
         if (isBlocked) {
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked);
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked,
+                aiming      : null,
+             });
             focusUnit.updateView();
 
         } else {
@@ -2605,7 +2683,12 @@ namespace WarActionExecutor {
                 }
             }
 
-            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked);
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked,
+                aiming      : null,
+            });
             focusUnit.updateView();
 
             const gridVisionEffect = war.getGridVisionEffect();
@@ -2656,7 +2739,12 @@ namespace WarActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
         (isSuccessful) && (focusUnit.setIsDiving(false));
 
-        await focusUnit.moveViewAlongPath(pathNodes, true, revisedPath.isBlocked);
+        await focusUnit.moveViewAlongPath({
+            pathNodes,
+            isDiving    : true,
+            isBlocked   : revisedPath.isBlocked,
+            aiming      : null,
+        });
         focusUnit.updateView();
         if (isSuccessful) {
             const endingGridIndex = pathNodes[pathNodes.length - 1];
@@ -2747,7 +2835,12 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : revisedPath.isBlocked,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
 
             } else {
@@ -2781,7 +2874,12 @@ namespace WarActionExecutor {
                     });
                 }
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : revisedPath.isBlocked,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
 
                 const gridVisionEffect  = war.getGridVisionEffect();
@@ -2823,7 +2921,12 @@ namespace WarActionExecutor {
                 unitMap.setUnitOnMap(focusUnit);
                 focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : revisedPath.isBlocked,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
 
             } else {
@@ -2858,7 +2961,12 @@ namespace WarActionExecutor {
                     skillDataList.push(dataForUseCoSkill);
                 }
 
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : revisedPath.isBlocked,
+                    aiming      : null,
+                });
                 focusUnit.updateView();
 
                 const gridVisionEffect  = war.getGridVisionEffect();
@@ -2924,7 +3032,12 @@ namespace WarActionExecutor {
         unitMap.setUnitOnMap(focusUnit);
         focusUnit.setActionState(UnitActionState.Acted);
 
-        await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
+        await focusUnit.moveViewAlongPath({
+            pathNodes,
+            isDiving    : focusUnit.getIsDiving(),
+            isBlocked   : path.isBlocked,
+            aiming      : null,
+        });
         focusUnit.updateView();
         war.updateTilesAndUnitsOnVisibilityChanged();
     }

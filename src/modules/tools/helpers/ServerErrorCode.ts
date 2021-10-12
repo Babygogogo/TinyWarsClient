@@ -5165,6 +5165,17 @@ export const enum ServerErrorCode {
     WarCoSkillHelpers_ExeIndiscriminateAreaDamage_0008,
     WarCoSkillHelpers_ExeIndiscriminateAreaDamage_0009,
 
+    WarCoSkillHelpers_ExeSelfFlareAmmoGain_0000,
+    WarCoSkillHelpers_ExeSelfFlareAmmoGain_0001,
+    WarCoSkillHelpers_ExeSelfFlareAmmoGain_0002,
+    WarCoSkillHelpers_ExeSelfFlareAmmoGain_0003,
+    WarCoSkillHelpers_ExeSelfFlareAmmoGain_0004,
+    WarCoSkillHelpers_ExeSelfFlareAmmoGain_0005,
+    WarCoSkillHelpers_ExeSelfFlareAmmoGain_0006,
+    WarCoSkillHelpers_ExeSelfFlareAmmoGain_0007,
+    WarCoSkillHelpers_ExeSelfFlareAmmoGain_0008,
+    WarCoSkillHelpers_ExeSelfFlareAmmoGain_0009,
+
     WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_0000,
     WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_0001,
     WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_0002,

@@ -13,6 +13,7 @@
 // import TwnsBwTile           from "./BwTile";
 // import TwnsBwWar            from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnit {
     import UnitActionState      = Types.UnitActionState;
     import ArmorType            = Types.ArmorType;
@@ -216,8 +217,13 @@ namespace TwnsBwUnit {
             this.getView().visible = visible;
         }
 
-        public moveViewAlongPath(pathNodes: GridIndex[], isDiving: boolean, isBlocked: boolean, aiming?: GridIndex): Promise<void> {
-            return this.getView().moveAlongPath(pathNodes, isDiving, isBlocked, aiming ?? null);
+        public moveViewAlongPath({ pathNodes, isDiving, isBlocked, aiming }: {
+            pathNodes   : GridIndex[];
+            isDiving    : boolean;
+            isBlocked   : boolean;
+            aiming      : GridIndex | null;
+        }): Promise<void> {
+            return this.getView().moveAlongPath(pathNodes, isDiving, isBlocked, aiming);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

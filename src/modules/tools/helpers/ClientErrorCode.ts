@@ -1499,6 +1499,17 @@ namespace TwnsClientErrorCode {
         WarCoSkillHelpers_ExeSelfUnitActionState_08,
         WarCoSkillHelpers_ExeSelfUnitActionState_09,
 
+        WarCoSkillHelpers_ExeSelfFlareAmmoGain_00,
+        WarCoSkillHelpers_ExeSelfFlareAmmoGain_01,
+        WarCoSkillHelpers_ExeSelfFlareAmmoGain_02,
+        WarCoSkillHelpers_ExeSelfFlareAmmoGain_03,
+        WarCoSkillHelpers_ExeSelfFlareAmmoGain_04,
+        WarCoSkillHelpers_ExeSelfFlareAmmoGain_05,
+        WarCoSkillHelpers_ExeSelfFlareAmmoGain_06,
+        WarCoSkillHelpers_ExeSelfFlareAmmoGain_07,
+        WarCoSkillHelpers_ExeSelfFlareAmmoGain_08,
+        WarCoSkillHelpers_ExeSelfFlareAmmoGain_09,
+
         WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_00,
         WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_01,
         WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_02,

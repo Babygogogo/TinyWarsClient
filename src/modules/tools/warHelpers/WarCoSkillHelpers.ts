@@ -56,6 +56,7 @@ namespace WarCoSkillHelpers {
         exeIndiscriminateAreaDamage(configVersion, skillCfg, unitMap, player, coGridIndexList, extraData);
         exeSelfPromotionGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeSelfUnitActionState(configVersion, skillCfg, unitMap, player, coGridIndexList);
+        exeSelfFlareAmmoGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
     }
 
     function exeSelfFund({ skillCfg, player }: {
@@ -645,6 +646,53 @@ namespace WarCoSkillHelpers {
                     }))
                 ) {
                     unit.setActionState(actionState);
+                }
+            }
+        }
+    }
+
+    function exeSelfFlareAmmoGain(
+        configVersion   : string,
+        skillCfg        : Types.CoSkillCfg,
+        unitMap         : BwUnitMap,
+        player          : BwPlayer,
+        coGridIndexList : GridIndex[],
+    ): void {
+        const cfg = skillCfg.selfFlareAmmoGain;
+        if (cfg) {
+            const playerIndex   = player.getPlayerIndex();
+            const zoneRadius    = player.getCoZoneRadius();
+            const category      = cfg[1];
+            const modifier      = cfg[2];
+            for (const unit of unitMap.getAllUnits()) {
+                const maxAmmo = unit.getFlareMaxAmmo();
+                if (maxAmmo == null) {
+                    continue;
+                }
+
+                const unitType      = unit.getUnitType();
+                const gridIndex     = unit.getGridIndex();
+                const currentAmmo   = Helpers.getExisted(unit.getFlareCurrentAmmo(), ClientErrorCode.WarCoSkillHelpers_ExeSelfFlareAmmoGain_00);
+                if ((unit.getPlayerIndex() === playerIndex)                                         &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, category))    &&
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap: () => coGridIndexList,
+                        coZoneRadius            : zoneRadius,
+                    }))
+                ) {
+                    if (modifier > 0) {
+                        unit.setFlareCurrentAmmo(Math.min(
+                            maxAmmo,
+                            currentAmmo + Math.floor(maxAmmo * modifier / 100)
+                        ));
+                    } else {
+                        unit.setFlareCurrentAmmo(Math.max(
+                            0,
+                            Math.floor(currentAmmo * (100 + modifier) / 100)
+                        ));
+                    }
                 }
             }
         }
