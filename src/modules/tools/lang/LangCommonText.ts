@@ -3814,6 +3814,22 @@ namespace TwnsLangCommonText {
             "黑",
             "Black",
         ],
+        [LangTextType.B0701]: [
+            `正常天气`,
+            `Normal`,
+        ],
+        [LangTextType.B0702]: [
+            `沙尘暴`,
+            `Sandstorm`,
+        ],
+        [LangTextType.B0703]: [
+            `雪天`,
+            `Snowy`,
+        ],
+        [LangTextType.B0704]: [
+            `雨天`,
+            `Rainy`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

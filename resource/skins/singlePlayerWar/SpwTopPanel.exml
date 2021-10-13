@@ -7,6 +7,8 @@
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
                                  source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" alpha="0.9" />
             <e:Group y="0" right="20">
+                <TwnsUiLabel:UiLabel id="_labelWeather" text="Sandstorm" size="14" x="10" textColor="0xFFFFFF" y="24"
+                                     maxTextWidth="68" />
                 <TwnsUiLabel:UiLabel id="_labelSinglePlayer" text="Single Player" size="14" x="0" textColor="0xFFFFFF"
                                      y="14" />
                 <TwnsUiButton:UiButton id="_btnChat" label="" x="0" width="50" y="0" height="40">
@@ -36,7 +38,7 @@
                     </TwnsUiButton:skinName>
                 </TwnsUiButton:UiButton>
                 <e:layout>
-                    <e:HorizontalLayout gap="20" verticalAlign="middle" />
+                    <e:HorizontalLayout gap="16" verticalAlign="middle" />
                 </e:layout>
             </e:Group>
         </e:Group>
@@ -72,21 +74,18 @@
                                                          verticalCenter="0" />
                                 </e:Group>
                                 <e:Group x="80" verticalCenter="0">
-                                    <TwnsUiLabel:UiLabel text="E:" textColor="0xFFFFFF" size="14" x="10" bold="true"
-                                                         y="0" />
+                                    <TwnsUiLabel:UiLabel text="E:" textColor="0xFFFFFF" size="14" bold="true" y="0"
+                                                         maxTextWidth="14" />
                                     <TwnsUiLabel:UiLabel id="_labelEnergy" text="999(SP)" textColor="0xFFFFFF" size="14"
-                                                         x="0" bold="true" y="0" />
-                                    <e:layout>
-                                        <e:HorizontalLayout gap="2" />
-                                    </e:layout>
+                                                         x="16" bold="true" y="0" maxTextWidth="54" />
                                 </e:Group>
                                 <e:Group x="160" verticalCenter="0">
-                                    <TwnsUiLabel:UiLabel text="F:" size="14" bold="true" textColor="0xF9D803" left="0"
-                                                         top="0" />
-                                    <TwnsUiLabel:UiLabel id="_labelFund" text="999999" size="14" x="20" bold="true"
-                                                         textColor="0xF9D803" top="0" />
-                                    <TwnsUiLabel:UiLabel id="_labelAddFund" text="(+99999)" size="12" x="70"
-                                                         textColor="0xFFFFFF" height="13" bottom="0" />
+                                    <TwnsUiLabel:UiLabel text="F:" size="14" bold="true" textColor="0xF9D803" x="0"
+                                                         y="0" maxTextWidth="14" />
+                                    <TwnsUiLabel:UiLabel id="_labelFund" text="999999" size="14" x="16" bold="true"
+                                                         textColor="0xF9D803" y="0" maxTextWidth="48" />
+                                    <TwnsUiLabel:UiLabel id="_labelAddFund" text="(+99999)" size="12" x="68"
+                                                         textColor="0xFFFFFF" height="13" bottom="0" maxTextWidth="50" />
                                 </e:Group>
                             </e:Group>
                         </e:Skin>
@@ -101,7 +100,7 @@
                     <e:Group x="0" y="5">
                         <TwnsUiLabel:UiLabel text="E:" size="16" textColor="0xF9D803" maxTextWidth="200" left="0"
                                              top="0" bold="true" />
-                        <TwnsUiLabel:UiLabel id="_labelCurrEnergy" text="99" size="16" x="28" textColor="0xF9D803"
+                        <TwnsUiLabel:UiLabel id="_labelCurrEnergy" text="99" size="16" x="20" textColor="0xF9D803"
                                              maxTextWidth="200" top="0" bold="true" />
                     </e:Group>
                     <e:Group x="20" y="0" height="13">
@@ -122,7 +121,7 @@
                         <TwnsUiLabel:UiLabel text="F:" size="16" maxTextWidth="100" textColor="0xF9D803" top="0"
                                              left="0" bold="true" />
                         <TwnsUiLabel:UiLabel id="_labelFund" text="999999" size="16" textColor="0xF9D803"
-                                             maxTextWidth="100" top="0" x="28" bold="true" />
+                                             maxTextWidth="100" top="0" x="20" bold="true" />
                     </e:Group>
                     <TwnsUiLabel:UiLabel id="_labelAddFund" text="(+10000)" size="12" x="340" y="12" maxTextWidth="100"
                                          textColor="0xFFFFFF" height="13" />

@@ -2001,6 +2001,126 @@ export declare namespace Config {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WeatherCfg. */
+    interface IWeatherCfg {
+
+        /** WeatherCfg weatherType */
+        weatherType?: (number|null);
+
+        /** WeatherCfg fog */
+        fog?: (number|null);
+
+        /** WeatherCfg offenseBonus */
+        offenseBonus?: (number[]|null);
+
+        /** WeatherCfg movementBonus */
+        movementBonus?: (number[]|null);
+
+        /** WeatherCfg unitVisionFixed */
+        unitVisionFixed?: (number[]|null);
+
+        /** WeatherCfg tileVisionFixed */
+        tileVisionFixed?: (number[]|null);
+    }
+
+    /** Represents a WeatherCfg. */
+    class WeatherCfg implements IWeatherCfg {
+
+        /**
+         * Constructs a new WeatherCfg.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Config.IWeatherCfg);
+
+        /** WeatherCfg weatherType. */
+        public weatherType: number;
+
+        /** WeatherCfg fog. */
+        public fog: number;
+
+        /** WeatherCfg offenseBonus. */
+        public offenseBonus: number[];
+
+        /** WeatherCfg movementBonus. */
+        public movementBonus: number[];
+
+        /** WeatherCfg unitVisionFixed. */
+        public unitVisionFixed: number[];
+
+        /** WeatherCfg tileVisionFixed. */
+        public tileVisionFixed: number[];
+
+        /**
+         * Creates a new WeatherCfg instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeatherCfg instance
+         */
+        public static create(properties?: Config.IWeatherCfg): Config.WeatherCfg;
+
+        /**
+         * Encodes the specified WeatherCfg message. Does not implicitly {@link Config.WeatherCfg.verify|verify} messages.
+         * @param message WeatherCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Config.IWeatherCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeatherCfg message, length delimited. Does not implicitly {@link Config.WeatherCfg.verify|verify} messages.
+         * @param message WeatherCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Config.IWeatherCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeatherCfg message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeatherCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Config.WeatherCfg;
+
+        /**
+         * Decodes a WeatherCfg message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeatherCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Config.WeatherCfg;
+
+        /**
+         * Verifies a WeatherCfg message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeatherCfg message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeatherCfg
+         */
+        public static fromObject(object: { [k: string]: any }): Config.WeatherCfg;
+
+        /**
+         * Creates a plain object from a WeatherCfg message. Also converts values to other types if specified.
+         * @param message WeatherCfg
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Config.WeatherCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeatherCfg to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a FullConfig. */
     interface IFullConfig {
 
@@ -2042,6 +2162,9 @@ export declare namespace Config {
 
         /** FullConfig CoSkill */
         CoSkill?: (Config.ICoSkillCfg[]|null);
+
+        /** FullConfig Weather */
+        Weather?: (Config.IWeatherCfg[]|null);
     }
 
     /** Represents a FullConfig. */
@@ -2091,6 +2214,9 @@ export declare namespace Config {
 
         /** FullConfig CoSkill. */
         public CoSkill: Config.ICoSkillCfg[];
+
+        /** FullConfig Weather. */
+        public Weather: Config.IWeatherCfg[];
 
         /**
          * Creates a new FullConfig instance using the specified properties.
@@ -6479,6 +6605,9 @@ export declare namespace WarRule {
 
         /** RuleForGlobalParams hasFogByDefault */
         hasFogByDefault?: (boolean|null);
+
+        /** RuleForGlobalParams defaultWeatherType */
+        defaultWeatherType?: (number|null);
     }
 
     /** Represents a RuleForGlobalParams. */
@@ -6492,6 +6621,9 @@ export declare namespace WarRule {
 
         /** RuleForGlobalParams hasFogByDefault. */
         public hasFogByDefault: boolean;
+
+        /** RuleForGlobalParams defaultWeatherType. */
+        public defaultWeatherType: number;
 
         /**
          * Creates a new RuleForGlobalParams instance using the specified properties.
@@ -9168,6 +9300,108 @@ export declare namespace WarSerialization {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a SerialWeatherManager. */
+    interface ISerialWeatherManager {
+
+        /** SerialWeatherManager forceWeatherType */
+        forceWeatherType?: (number|null);
+
+        /** SerialWeatherManager expireTurnIndex */
+        expireTurnIndex?: (number|null);
+
+        /** SerialWeatherManager expirePlayerIndex */
+        expirePlayerIndex?: (number|null);
+    }
+
+    /** Represents a SerialWeatherManager. */
+    class SerialWeatherManager implements ISerialWeatherManager {
+
+        /**
+         * Constructs a new SerialWeatherManager.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ISerialWeatherManager);
+
+        /** SerialWeatherManager forceWeatherType. */
+        public forceWeatherType: number;
+
+        /** SerialWeatherManager expireTurnIndex. */
+        public expireTurnIndex: number;
+
+        /** SerialWeatherManager expirePlayerIndex. */
+        public expirePlayerIndex: number;
+
+        /**
+         * Creates a new SerialWeatherManager instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SerialWeatherManager instance
+         */
+        public static create(properties?: WarSerialization.ISerialWeatherManager): WarSerialization.SerialWeatherManager;
+
+        /**
+         * Encodes the specified SerialWeatherManager message. Does not implicitly {@link WarSerialization.SerialWeatherManager.verify|verify} messages.
+         * @param message SerialWeatherManager message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ISerialWeatherManager, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified SerialWeatherManager message, length delimited. Does not implicitly {@link WarSerialization.SerialWeatherManager.verify|verify} messages.
+         * @param message SerialWeatherManager message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ISerialWeatherManager, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a SerialWeatherManager message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SerialWeatherManager
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.SerialWeatherManager;
+
+        /**
+         * Decodes a SerialWeatherManager message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SerialWeatherManager
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.SerialWeatherManager;
+
+        /**
+         * Verifies a SerialWeatherManager message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SerialWeatherManager message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SerialWeatherManager
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.SerialWeatherManager;
+
+        /**
+         * Creates a plain object from a SerialWeatherManager message. Also converts values to other types if specified.
+         * @param message SerialWeatherManager
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.SerialWeatherManager, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SerialWeatherManager to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a SerialWar. */
     interface ISerialWar {
 
@@ -9221,6 +9455,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar warEventManager */
         warEventManager?: (WarSerialization.ISerialWarEventManager|null);
+
+        /** SerialWar weatherManager */
+        weatherManager?: (WarSerialization.ISerialWeatherManager|null);
     }
 
     /** Represents a SerialWar. */
@@ -9282,6 +9519,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar warEventManager. */
         public warEventManager?: (WarSerialization.ISerialWarEventManager|null);
+
+        /** SerialWar weatherManager. */
+        public weatherManager?: (WarSerialization.ISerialWeatherManager|null);
 
         /**
          * Creates a new SerialWar instance using the specified properties.

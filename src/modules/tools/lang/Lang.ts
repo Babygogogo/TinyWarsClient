@@ -19,6 +19,7 @@ namespace Lang {
     import WarEventActionType       = Types.WarEventActionType;
     import PlayerRuleType           = Types.PlayerRuleType;
     import GameVersion              = Types.GameVersion;
+    import WeatherType              = Types.WeatherType;
     import BgmCode                  = Types.BgmCode;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import ServerErrorCode          = TwnsServerErrorCode.ServerErrorCode;
@@ -433,6 +434,16 @@ namespace Lang {
             case PlayerRuleType.AiCoIdInCcw             : return getText(LangTextType.B0641);
             case PlayerRuleType.AiControlInCcw          : return getText(LangTextType.B0642);
             default                                     : return null;
+        }
+    }
+
+    export function getWeatherName(weatherType: WeatherType): string {
+        switch (weatherType) {
+            case WeatherType.Clear      : return getText(LangTextType.B0701);
+            case WeatherType.Sandstorm  : return getText(LangTextType.B0702);
+            case WeatherType.Snowy      : return getText(LangTextType.B0703);
+            case WeatherType.Rainy      : return getText(LangTextType.B0704);
+            default                     : throw Helpers.newError(`Invalid weatherType: ${weatherType}`, ClientErrorCode.Lang_GetWeatherName_00);
         }
     }
 

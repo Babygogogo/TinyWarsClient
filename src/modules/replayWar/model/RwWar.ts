@@ -208,6 +208,7 @@ namespace TwnsRwWar {
                     seedRandomCurrentState      : randomNumberManager.getSeedRandomCurrentState(),
                     executedActions             : null,
                     remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
+                    weatherManager              : this.getWeatherManager().serialize(),
                     warEventManager             : Helpers.deepClone(this.getWarEventManager().serialize()),
                     playerManager               : this.getPlayerManager().serialize(),
                     turnManager                 : this.getTurnManager().serialize(),

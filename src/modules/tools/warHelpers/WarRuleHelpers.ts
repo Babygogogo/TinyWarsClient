@@ -45,6 +45,13 @@ namespace WarRuleHelpers {
         Helpers.getExisted(warRule.ruleForGlobalParams).hasFogByDefault = hasFog;
     }
 
+    export function getDefaultWeatherType(warRule: IWarRule): Types.WeatherType {
+        return warRule.ruleForGlobalParams?.defaultWeatherType ?? Types.WeatherType.Clear;
+    }
+    export function setDefaultWeatherType(warRule: IWarRule, weatherType: Types.WeatherType): void {
+        Helpers.getExisted(warRule.ruleForGlobalParams, ClientErrorCode.WarRuleHelpers_SetDefaultWeatherType_00).defaultWeatherType = weatherType;
+    }
+
     export function getIncomeMultiplier(warRule: IWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(warRule, playerIndex);
         return Helpers.getExisted(playerRule.incomeMultiplier);

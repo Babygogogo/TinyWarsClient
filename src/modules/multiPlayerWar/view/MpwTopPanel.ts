@@ -28,6 +28,7 @@
 // import TwnsUserSettingsPanel    from "../../user/view/UserSettingsPanel";
 // import TwnsMpwWarMenuPanel      from "./MpwWarMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwTopPanel {
     import UserPanel            = TwnsUserPanel.UserPanel;
     import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
@@ -50,6 +51,7 @@ namespace TwnsMpwTopPanel {
         private static _instance: MpwTopPanel;
 
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
+        private readonly _labelWeather!         : TwnsUiLabel.UiLabel;
         private readonly _groupTimer!           : eui.Group;
         private readonly _labelTimer!           : TwnsUiLabel.UiLabel;
         private readonly _btnChat!              : TwnsUiButton.UiButton;
@@ -100,6 +102,7 @@ namespace TwnsMpwTopPanel {
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.BwTileBeCaptured,                callback: this._onNotifyBwTileBeCaptured },
+                { type: NotifyType.BwForceWeatherTypeChanged,       callback: this._onNotifyBwForceWeatherTypeChanged },
                 { type: NotifyType.MsgChatGetAllReadProgressList,   callback: this._onNotifyMsgChatGetAllReadProgressList },
                 { type: NotifyType.MsgChatUpdateReadProgress,       callback: this._onNotifyMsgChatUpdateReadProgress },
                 { type: NotifyType.MsgChatGetAllMessages,           callback: this._onNotifyMsgChatGetAllMessages },
@@ -165,6 +168,9 @@ namespace TwnsMpwTopPanel {
         }
         private _onNotifyBwTileBeCaptured(): void {
             this._updateLabelFundAndAddFund();
+        }
+        private _onNotifyBwForceWeatherTypeChanged(): void {
+            this._updateLabelWeather();
         }
 
         private _onNotifyMsgChatGetAllReadProgressList(): void {
@@ -244,6 +250,7 @@ namespace TwnsMpwTopPanel {
             this._updateImgSkinAndCo();
             this._updateLabelPlayerState();
             this._updateLabelPlayer();
+            this._updateLabelWeather();
             this._updateGroupTimer();
             this._updateLabelFundAndAddFund();
             this._updateLabelEnergy();
@@ -252,6 +259,7 @@ namespace TwnsMpwTopPanel {
 
         private _updateComponentsForLanguage(): void {
             // nothing to do
+            this._updateLabelWeather();
         }
 
         private _updateListPlayer(): void {
@@ -279,6 +287,10 @@ namespace TwnsMpwTopPanel {
         private async _updateLabelPlayer(): Promise<void> {
             const player            = this._getOpenData().war.getPlayerInTurn();
             this._labelPlayer.text  = `${await player.getNickname()}`;
+        }
+
+        private _updateLabelWeather(): void {
+            this._labelWeather.text = Lang.getWeatherName(this._getOpenData().war.getWeatherManager().getCurrentWeatherType());
         }
 
         private _updateGroupTimer(): void {

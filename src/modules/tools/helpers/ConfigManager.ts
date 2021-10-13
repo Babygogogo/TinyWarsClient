@@ -32,6 +32,7 @@ namespace ConfigManager {
     import UnitPromotionCfg     = Types.UnitPromotionCfg;
     import PlayerRankCfg        = Types.PlayerRankCfg;
     import CoSkillCfg           = Types.CoSkillCfg;
+    import WeatherCfg           = Types.WeatherCfg;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Internal types.
@@ -50,6 +51,7 @@ namespace ConfigManager {
         PlayerRank              : { [minScore: number]: PlayerRankCfg };
         CoBasic                 : { [coId: number]: CoBasicCfg };
         CoSkill                 : { [skillId: number]: CoSkillCfg };
+        Weather                 : { [weatherType: number]: WeatherCfg };
         maxUnitPromotion?       : number;
         secondaryWeaponFlag?    : { [unitType: number]: boolean };
     };
@@ -160,6 +162,13 @@ namespace ConfigManager {
         }
         return dst;
     }
+    function _destructWeatherCfg(data: WeatherCfg[]): { [weatherType: number]: WeatherCfg } {
+        const dst: { [weatherType: number]: WeatherCfg } = {};
+        for (const d of data) {
+            dst[d.weatherType] = d;
+        }
+        return dst;
+    }
     function _getMaxUnitPromotion(cfg: { [promotion: number]: UnitPromotionCfg }): number {
         let maxPromotion = 0;
         for (const p in cfg) {
@@ -248,6 +257,7 @@ namespace ConfigManager {
             PlayerRank          : _destructPlayerRankCfg(rawConfig.PlayerRank),
             CoBasic             : _destructCoBasicCfg(rawConfig.CoBasic),
             CoSkill             : _destructCoSkillCfg(rawConfig.CoSkill),
+            Weather             : _destructWeatherCfg(rawConfig.Weather),
             DamageChart         : damageChartCfg,
             UnitPromotion       : unitPromotionCfg,
             maxUnitPromotion    : _getMaxUnitPromotion(unitPromotionCfg),
@@ -584,6 +594,10 @@ namespace ConfigManager {
             case Types.CoSkillType.SuperPower   : return coConfig.scopDesc || [];
             default                             : throw Helpers.newError(`Invalid skillType: ${skillType}.`, ClientErrorCode.ConfigManager_GetCoSkillDescArray_00);
         }
+    }
+
+    export function getWeatherCfg(version: string, weatherType: Types.WeatherType): WeatherCfg {
+        return Helpers.getExisted(_ALL_CONFIGS.get(version)?.Weather[weatherType], ClientErrorCode.ConfigManager_GetWeatherCfg_00);
     }
 
     export function getEnabledCoArray(version: string): CoBasicCfg[] {

@@ -31,6 +31,7 @@ namespace TwnsScwWar {
                 seedRandomCurrentState      : null,
                 executedActions             : [],
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
+                weatherManager              : this.getWeatherManager().serialize(),
                 warEventManager             : this.getWarEventManager().serialize(),
                 playerManager               : this.getPlayerManager().serialize(),
                 turnManager                 : this.getTurnManager().serialize(),

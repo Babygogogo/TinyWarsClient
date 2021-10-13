@@ -78,6 +78,9 @@ namespace Types {
         skillId     : number;
         name        : string;
     }
+    export interface WeatherCfg extends ProtoTypes.Config.IWeatherCfg {
+        weatherType : number;
+    }
     export interface FullConfig extends ProtoTypes.Config.FullConfig {
         System          : SystemCfg;
         TileCategory    : TileCategoryCfg[];
@@ -92,6 +95,7 @@ namespace Types {
         PlayerRank      : PlayerRankCfg[];
         CoBasic         : CoBasicCfg[];
         CoSkill         : CoSkillCfg[];
+        Weather         : WeatherCfg[];
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -415,6 +419,20 @@ namespace Types {
         None,
         Clear,
         Fog,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum WeatherFogType {
+        Fog         = 1,
+        NoFog       = 2,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum WeatherType {
+        Clear       = 1,
+        Sandstorm   = 2,
+        Snowy       = 3,
+        Rainy       = 4,
     }
 
     // eslint-disable-next-line no-shadow

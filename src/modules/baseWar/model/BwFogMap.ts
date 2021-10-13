@@ -9,6 +9,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import WarCommonHelpers     from "../../tools/warHelpers/WarCommonHelpers";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwFogMap {
     import ForceFogCode             = Types.ForceFogCode;
     import GridIndex                = Types.GridIndex;
@@ -187,8 +188,21 @@ namespace TwnsBwFogMap {
         }
         public checkHasFogCurrently(): boolean {
             const fogCode = this.getForceFogCode();
-            return (fogCode === ForceFogCode.Fog)
-                || ((this.checkHasFogByDefault()) && (fogCode !== ForceFogCode.Clear));
+            if (fogCode === ForceFogCode.Fog) {
+                return true;
+            } else if (fogCode === ForceFogCode.Clear) {
+                return false;
+            } else {
+                const war               = this._getWar();
+                const weatherFogType    = ConfigManager.getWeatherCfg(war.getConfigVersion(), war.getWeatherManager().getCurrentWeatherType()).fog;
+                if (weatherFogType === Types.WeatherFogType.Fog) {
+                    return true;
+                } else if (weatherFogType === Types.WeatherFogType.NoFog) {
+                    return false;
+                } else {
+                    return this.checkHasFogByDefault();
+                }
+            }
         }
 
         public setForceExpireTurnIndex(index: number | null): void {

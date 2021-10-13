@@ -85,6 +85,7 @@ namespace TwnsNotifyType {
         BwCoEnergyChanged,
         BwCoUsingSkillTypeChanged,
         BwCoIdChanged,
+        BwForceWeatherTypeChanged,
 
         BwCursorTapped,
         BwCursorDragged,
