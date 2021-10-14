@@ -378,6 +378,7 @@ namespace Lang {
             case BgmCode.Co0009         : return getText(LangTextType.B0658);
             case BgmCode.Co0010         : return getText(LangTextType.B0653);
             case BgmCode.Co0011         : return getText(LangTextType.B0659);
+            case BgmCode.Co0042         : return getText(LangTextType.B0706);
             case BgmCode.Co9999         : return getText(LangTextType.B0639);
             default                     : return null;
         }

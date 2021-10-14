@@ -3834,6 +3834,10 @@ namespace TwnsLangCommonText {
             `天气`,
             `Weather`,
         ],
+        [LangTextType.B0706]: [
+            `Mr. Bear`,
+            `Mr. Bear`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

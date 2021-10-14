@@ -271,6 +271,7 @@ namespace Types {
         Co0009,
         Co0010,
         Co0011,
+        Co0042,
         Co9999,
     }
 

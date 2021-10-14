@@ -1802,6 +1802,9 @@ export declare namespace Config {
 
         /** CoSkillCfg selfUnitIgnoreWeather */
         selfUnitIgnoreWeather?: (number[]|null);
+
+        /** CoSkillCfg changeWeather */
+        changeWeather?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1935,6 +1938,9 @@ export declare namespace Config {
 
         /** CoSkillCfg selfUnitIgnoreWeather. */
         public selfUnitIgnoreWeather: number[];
+
+        /** CoSkillCfg changeWeather. */
+        public changeWeather: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.
