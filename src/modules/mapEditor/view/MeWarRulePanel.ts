@@ -30,6 +30,7 @@
 // import TwnsMeModifyRuleNamePanel        from "./MeModifyRuleNamePanel";
 // import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWarRulePanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonHelpPanel          = TwnsCommonHelpPanel.CommonHelpPanel;
@@ -52,39 +53,42 @@ namespace TwnsMeWarRulePanel {
 
         private static _instance: MeWarRulePanel;
 
-        private readonly _labelMenuTitle!         : TwnsUiLabel.UiLabel;
-        private readonly _listWarRule!            : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
-        private readonly _btnAddRule!             : TwnsUiButton.UiButton;
-        private readonly _btnDelete!              : TwnsUiButton.UiButton;
-        private readonly _btnBack!                : TwnsUiButton.UiButton;
+        private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _listWarRule!              : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
+        private readonly _btnAddRule!               : TwnsUiButton.UiButton;
+        private readonly _btnDelete!                : TwnsUiButton.UiButton;
+        private readonly _btnBack!                  : TwnsUiButton.UiButton;
 
-        private readonly _btnModifyRuleName!      : TwnsUiButton.UiButton;
-        private readonly _labelRuleName!          : TwnsUiLabel.UiLabel;
+        private readonly _btnModifyRuleName!        : TwnsUiButton.UiButton;
+        private readonly _labelRuleName!            : TwnsUiLabel.UiLabel;
 
-        private readonly _btnModifyHasFog!        : TwnsUiButton.UiButton;
-        private readonly _imgHasFog!              : TwnsUiImage.UiImage;
-        private readonly _btnHelpHasFog!          : TwnsUiButton.UiButton;
+        private readonly _btnModifyHasFog!          : TwnsUiButton.UiButton;
+        private readonly _imgHasFog!                : TwnsUiImage.UiImage;
+        private readonly _btnHelpHasFog!            : TwnsUiButton.UiButton;
 
-        private readonly _labelAvailability!      : TwnsUiLabel.UiLabel;
-        private readonly _btnAvailabilityMcw!     : TwnsUiButton.UiButton;
-        private readonly _imgAvailabilityMcw!     : TwnsUiImage.UiImage;
-        private readonly _btnAvailabilityScw!     : TwnsUiButton.UiButton;
-        private readonly _imgAvailabilityScw!     : TwnsUiImage.UiImage;
-        private readonly _btnAvailabilityMrw!     : TwnsUiButton.UiButton;
-        private readonly _imgAvailabilityMrw!     : TwnsUiImage.UiImage;
-        private readonly _btnAvailabilityCcw!     : TwnsUiButton.UiButton;
-        private readonly _imgAvailabilityCcw!     : TwnsUiImage.UiImage;
-        private readonly _btnAvailabilitySrw!     : TwnsUiButton.UiButton;
-        private readonly _imgAvailabilitySrw!     : TwnsUiImage.UiImage;
+        private readonly _btnModifyWeather!         : TwnsUiButton.UiButton;
+        private readonly _labelWeather!             : TwnsUiLabel.UiLabel;
 
-        private readonly _labelWarEventListTitle! : TwnsUiLabel.UiLabel;
-        private readonly _btnTestWarEvent!        : TwnsUiButton.UiButton;
-        private readonly _btnAddWarEvent!         : TwnsUiButton.UiButton;
-        private readonly _btnEditWarEvent!        : TwnsUiButton.UiButton;
-        private readonly _listWarEvent!           : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
+        private readonly _labelAvailability!        : TwnsUiLabel.UiLabel;
+        private readonly _btnAvailabilityMcw!       : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilityMcw!       : TwnsUiImage.UiImage;
+        private readonly _btnAvailabilityScw!       : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilityScw!       : TwnsUiImage.UiImage;
+        private readonly _btnAvailabilityMrw!       : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilityMrw!       : TwnsUiImage.UiImage;
+        private readonly _btnAvailabilityCcw!       : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilityCcw!       : TwnsUiImage.UiImage;
+        private readonly _btnAvailabilitySrw!       : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilitySrw!       : TwnsUiImage.UiImage;
 
-        private readonly _labelPlayerList!        : TwnsUiLabel.UiLabel;
-        private readonly _listPlayer!             : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
+        private readonly _labelWarEventListTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnTestWarEvent!          : TwnsUiButton.UiButton;
+        private readonly _btnAddWarEvent!           : TwnsUiButton.UiButton;
+        private readonly _btnEditWarEvent!          : TwnsUiButton.UiButton;
+        private readonly _listWarEvent!             : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
+
+        private readonly _labelPlayerList!          : TwnsUiLabel.UiLabel;
+        private readonly _listPlayer!               : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
         private _dataForListWarRule     : DataForWarRuleNameRenderer[] = [];
         private _selectedIndex          : number | null = null;
@@ -125,6 +129,7 @@ namespace TwnsMeWarRulePanel {
                 { ui: this._btnDelete,              callback: this._onTouchedBtnDelete },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
                 { ui: this._btnModifyHasFog,        callback: this._onTouchedBtnModifyHasFog },
+                { ui: this._btnModifyWeather,       callback: this._onTouchedBtnModifyWeather },
                 { ui: this._btnModifyRuleName,      callback: this._onTouchedBtnModifyRuleName },
                 { ui: this._btnAvailabilityMcw,     callback: this._onTouchedBtnAvailabilityMcw },
                 { ui: this._btnAvailabilityScw,     callback: this._onTouchedBtnAvailabilityScw },
@@ -234,6 +239,15 @@ namespace TwnsMeWarRulePanel {
             if ((rule) && (!this._getWar().getIsReviewingMap())) {
                 WarRuleHelpers.setHasFogByDefault(rule, !WarRuleHelpers.getHasFogByDefault(rule));
                 this._updateImgHasFog(rule);
+            }
+        }
+
+        private _onTouchedBtnModifyWeather(): void {
+            const rule  = this._selectedRule;
+            const war   = this._getWar();
+            if ((rule) && (!war.getIsReviewingMap())) {
+                WarRuleHelpers.tickDefaultWeatherType(rule, war.getConfigVersion());
+                this._updateLabelWeather(rule);
             }
         }
 
@@ -499,6 +513,7 @@ namespace TwnsMeWarRulePanel {
             this._btnAvailabilityScw.setTextColor(colorForButtons);
             this._btnAvailabilitySrw.setTextColor(colorForButtons);
             this._btnModifyHasFog.setTextColor(colorForButtons);
+            this._btnModifyWeather.setTextColor(colorForButtons);
             this._btnDelete.setTextColor(0xFF0000);
             this._btnAddRule.setTextColor(colorForButtons);
             this._btnModifyRuleName.setTextColor(colorForButtons);
@@ -522,6 +537,7 @@ namespace TwnsMeWarRulePanel {
             this._btnAddRule.label              = Lang.getText(LangTextType.B0320);
             this._btnModifyRuleName.label       = Lang.getText(LangTextType.B0315);
             this._btnModifyHasFog.label         = Lang.getText(LangTextType.B0020);
+            this._btnModifyWeather.label        = Lang.getText(LangTextType.B0705);
             this._labelWarEventListTitle.text   = Lang.getText(LangTextType.B0461);
             this._btnAddWarEvent.label          = Lang.getText(LangTextType.B0320);
             this._btnEditWarEvent.label         = Lang.getText(LangTextType.B0465);
@@ -545,6 +561,7 @@ namespace TwnsMeWarRulePanel {
         private _updateComponentsForRule(): void {
             const rule = this._selectedRule;
             this._updateLabelRuleName(rule);
+            this._updateLabelWeather(rule);
             this._updateImgHasFog(rule);
             this._updateImgAvailabilityMcw(rule);
             this._updateImgAvailabilityScw(rule);
@@ -557,6 +574,9 @@ namespace TwnsMeWarRulePanel {
 
         private _updateLabelRuleName(rule: IWarRule | null): void {
             this._labelRuleName.text = Lang.concatLanguageTextList(rule?.ruleNameArray) || Lang.getText(LangTextType.B0001);
+        }
+        private _updateLabelWeather(rule: IWarRule | null): void {
+            this._labelWeather.text = Lang.getWeatherName(rule ? WarRuleHelpers.getDefaultWeatherType(rule) : Types.WeatherType.Clear);
         }
         private _updateImgHasFog(rule: IWarRule | null): void {
             this._imgHasFog.visible = rule ? !!rule.ruleForGlobalParams?.hasFogByDefault : false;

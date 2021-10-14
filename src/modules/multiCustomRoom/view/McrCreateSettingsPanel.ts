@@ -311,6 +311,16 @@ namespace TwnsMcrCreateSettingsPanel {
                         },
                     },
                     {
+                        settingsType    : WarBasicSettingsType.Weather,
+                        currentValue    : null,
+                        warRule,
+                        callbackOnModify: () => {
+                            McrCreateModel.tickDefaultWeatherType();
+                            McrCreateModel.setCustomWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
                         warRule,

@@ -1799,6 +1799,9 @@ export declare namespace Config {
 
         /** CoSkillCfg selfFlareAmmoGain */
         selfFlareAmmoGain?: (number[]|null);
+
+        /** CoSkillCfg selfUnitIgnoreWeather */
+        selfUnitIgnoreWeather?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1929,6 +1932,9 @@ export declare namespace Config {
 
         /** CoSkillCfg selfFlareAmmoGain. */
         public selfFlareAmmoGain: number[];
+
+        /** CoSkillCfg selfUnitIgnoreWeather. */
+        public selfUnitIgnoreWeather: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.

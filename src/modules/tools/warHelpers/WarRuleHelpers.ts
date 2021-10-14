@@ -51,6 +51,11 @@ namespace WarRuleHelpers {
     export function setDefaultWeatherType(warRule: IWarRule, weatherType: Types.WeatherType): void {
         Helpers.getExisted(warRule.ruleForGlobalParams, ClientErrorCode.WarRuleHelpers_SetDefaultWeatherType_00).defaultWeatherType = weatherType;
     }
+    export function tickDefaultWeatherType(warRule: IWarRule, configVersion: string): void {
+        const typeArray     = ConfigManager.getAvailableWeatherTypes(configVersion);
+        const weatherType   = getDefaultWeatherType(warRule);
+        setDefaultWeatherType(warRule, typeArray[(typeArray.indexOf(weatherType) + 1) % typeArray.length]);
+    }
 
     export function getIncomeMultiplier(warRule: IWarRule, playerIndex: number): number {
         const playerRule = getPlayerRule(warRule, playerIndex);
@@ -282,7 +287,8 @@ namespace WarRuleHelpers {
                 canCcw  : false,
             },
             ruleForGlobalParams : {
-                hasFogByDefault : false,
+                hasFogByDefault     : false,
+                defaultWeatherType  : Types.WeatherType.Clear,
             },
             ruleForPlayers: {
                 playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
@@ -740,9 +746,23 @@ namespace WarRuleHelpers {
     }
 
     function getErrorCodeForRuleForGlobalParams(rule: IRuleForGlobalParams): ClientErrorCode {
-        const hasFogByDefault = rule.hasFogByDefault;
-        if (hasFogByDefault == null) {
-            return ClientErrorCode.WarRuleGlobalParamsValidation00;
+        {
+            const hasFogByDefault = rule.hasFogByDefault;
+            if (hasFogByDefault == null) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_00;
+            }
+        }
+
+        {
+            const defaultWeatherType = rule.defaultWeatherType;
+            if ((defaultWeatherType != null)                            &&
+                (defaultWeatherType !== Types.WeatherType.Clear)        &&
+                (defaultWeatherType !== Types.WeatherType.Rainy)        &&
+                (defaultWeatherType !== Types.WeatherType.Sandstorm)    &&
+                (defaultWeatherType !== Types.WeatherType.Snowy)
+            ) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_01;
+            }
         }
 
         return ClientErrorCode.NoError;

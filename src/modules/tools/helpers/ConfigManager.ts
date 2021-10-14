@@ -599,6 +599,14 @@ namespace ConfigManager {
     export function getWeatherCfg(version: string, weatherType: Types.WeatherType): WeatherCfg {
         return Helpers.getExisted(_ALL_CONFIGS.get(version)?.Weather[weatherType], ClientErrorCode.ConfigManager_GetWeatherCfg_00);
     }
+    export function getAvailableWeatherTypes(version: string): Types.WeatherType[] {
+        const cfgDict   = Helpers.getExisted(_ALL_CONFIGS.get(version)?.Weather, ClientErrorCode.ConfigManager_GetAvailableWeatherTypes_00);
+        const typeArray : Types.WeatherType[] = [];
+        for (const i in cfgDict) {
+            typeArray.push(cfgDict[i].weatherType);
+        }
+        return typeArray;
+    }
 
     export function getEnabledCoArray(version: string): CoBasicCfg[] {
         const currentArray = _AVAILABLE_CO_LIST.get(version);

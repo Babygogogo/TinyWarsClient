@@ -49,6 +49,9 @@ namespace TwnsBwWeatherManager {
         public getCurrentWeatherType(): WeatherType {
             return this.getForceWeatherType() ?? this.getDefaultWeatherType();
         }
+        public getCurrentWeatherCfg(): Types.WeatherCfg {
+            return ConfigManager.getWeatherCfg(this._getWar().getConfigVersion(), this.getCurrentWeatherType());
+        }
 
         public setForceWeatherType(type: WeatherType | null): void {
             if (this._forceWeatherType !== type) {

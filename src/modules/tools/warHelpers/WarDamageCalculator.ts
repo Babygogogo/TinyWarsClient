@@ -70,6 +70,7 @@ namespace WarDamageCalculator {
         const totalAmount = settingsModifier
             + amountFromPromotion
             + amountFromCo
+            + attacker.getAttackModifierByWeather(attackerGridIndex)
             + amountFromGlobalTiles;
         return Math.max(1 + totalAmount / 100, 0);
     }

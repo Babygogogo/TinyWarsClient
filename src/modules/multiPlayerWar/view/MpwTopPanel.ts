@@ -110,6 +110,7 @@ namespace TwnsMpwTopPanel {
                 { type: NotifyType.MsgUserGetOnlineState,           callback: this._onNotifyMsgUserGetOnlineState },
             ]);
             this._setUiListenerArray([
+                { ui: this._labelWeather,       callback: this._onTouchedLabelWeather },
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._groupInfo,          callback: this._onTouchedGroupInfo },
@@ -118,6 +119,7 @@ namespace TwnsMpwTopPanel {
                 { ui: this._btnExpand,          callback: this._onTouchedBtnExpand },
                 { ui: this._btnNarrow,          callback: this._onTouchedBtnNarrow },
             ]);
+            this._labelWeather.touchEnabled = true;
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._setPanelSkinState(PanelSkinState.Normal);
 
@@ -195,6 +197,14 @@ namespace TwnsMpwTopPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks for touch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onTouchedLabelWeather(): void {
+            TwnsCommonHelpPanel.CommonHelpPanel.show({
+                title  : Lang.getText(LangTextType.B0705),
+                content: Lang.getText(LangTextType.R0009),
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+
         private _onTouchedGroupPlayer(): void {
             const userId = this._getOpenData().war.getPlayerInTurn().getUserId();
             if (userId != null) {

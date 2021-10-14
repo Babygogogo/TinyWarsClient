@@ -348,6 +348,12 @@ namespace TwnsSpmWarListPanel {
                     currentValue    : null,
                     callbackOnModify: null,
                 },
+                {
+                    settingsType    : WarBasicSettingsType.Weather,
+                    currentValue    : null,
+                    warRule,
+                    callbackOnModify: null,
+                },
             ] };
         }
 

@@ -272,6 +272,10 @@ namespace ScrCreateModel {
         setHasFog(!getHasFog());
     }
 
+    export function tickDefaultWeatherType(): void {
+        WarRuleHelpers.tickDefaultWeatherType(getWarRule(), getConfigVersion());
+    }
+
     export function setInitialFund(playerIndex: number, initialFund: number): void {
         setPresetWarRuleId(null);
 

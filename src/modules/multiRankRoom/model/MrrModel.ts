@@ -307,6 +307,12 @@ namespace MrrModel {
                     callbackOnModify: null,
                 },
                 {
+                    settingsType    : WarBasicSettingsType.Weather,
+                    currentValue    : null,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,

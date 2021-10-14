@@ -1354,6 +1354,17 @@ namespace TwnsClientErrorCode {
         ConfigManager_GetWeatherCfg_08,
         ConfigManager_GetWeatherCfg_09,
 
+        ConfigManager_GetAvailableWeatherTypes_00,
+        ConfigManager_GetAvailableWeatherTypes_01,
+        ConfigManager_GetAvailableWeatherTypes_02,
+        ConfigManager_GetAvailableWeatherTypes_03,
+        ConfigManager_GetAvailableWeatherTypes_04,
+        ConfigManager_GetAvailableWeatherTypes_05,
+        ConfigManager_GetAvailableWeatherTypes_06,
+        ConfigManager_GetAvailableWeatherTypes_07,
+        ConfigManager_GetAvailableWeatherTypes_08,
+        ConfigManager_GetAvailableWeatherTypes_09,
+
         ConfigManager_GetCoSkillArray_00,
         ConfigManager_GetCoSkillArray_01,
         ConfigManager_GetCoSkillArray_02,
@@ -1565,6 +1576,17 @@ namespace TwnsClientErrorCode {
         WarRuleHelpers_GetRandomCoIdWithCoIdList_08,
         WarRuleHelpers_GetRandomCoIdWithCoIdList_09,
 
+        WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_00,
+        WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_01,
+        WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_02,
+        WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_03,
+        WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_04,
+        WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_05,
+        WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_06,
+        WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_07,
+        WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_08,
+        WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_09,
+
         WarCoSkillHelpers_ExeSelfAddUnit_00,
         WarCoSkillHelpers_ExeSelfAddUnit_01,
         WarCoSkillHelpers_ExeSelfAddUnit_02,
@@ -1707,8 +1729,6 @@ namespace TwnsClientErrorCode {
         MrrModel_CreateDataForCommonWarBasicSettingsPage_07,
         MrrModel_CreateDataForCommonWarBasicSettingsPage_08,
         MrrModel_CreateDataForCommonWarBasicSettingsPage_09,
-
-        WarRuleGlobalParamsValidation00,
 
         UnitDataValidation00,
         UnitDataValidation01,

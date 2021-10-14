@@ -3830,6 +3830,10 @@ namespace TwnsLangCommonText {
             `雨天`,
             `Rainy`,
         ],
+        [LangTextType.B0705]: [
+            `天气`,
+            `Weather`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4577,6 +4581,25 @@ namespace TwnsLangCommonText {
             [
                 `The Coop Mode is a multi-player mode.`,
                 `Unlike the Normal Mode, A.I. plays in this mode. You can team up with A.I. and/or other players to play against other A.I. and/or players.`,
+            ].join(`\n`),
+        ],
+
+        [LangTextType.R0009]: [
+            [
+                `天气会改变局内所有玩家的属性，具体影响如下：`,
+                ``,
+                `正常天气：没有任何影响`,
+                `沙尘暴：所有部队攻击力-30%`,
+                `雪天：所有部队移动力-1`,
+                `雨天：强制进入雾战，且所有地形视野改为0，所有部队视野改为1`,
+            ].join(`\n`),
+            [
+                `The weather modifies all players's attributes as below:`,
+                ``,
+                `Normal: nothing is changed.`,
+                `Sandstorm: all units' offense -30%.`,
+                `Snowy: all units' move range -1.`,
+                `Rainy: force FoW, all tiles' vision become 0, and all units' vision become 1.`,
             ].join(`\n`),
         ],
     };

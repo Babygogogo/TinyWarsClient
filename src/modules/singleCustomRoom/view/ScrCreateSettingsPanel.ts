@@ -234,6 +234,16 @@ namespace TwnsScrCreateSettingsPanel {
                         },
                     },
                     {
+                        settingsType    : WarBasicSettingsType.Weather,
+                        currentValue    : null,
+                        warRule,
+                        callbackOnModify: () => {
+                            ScrCreateModel.tickDefaultWeatherType();
+                            ScrCreateModel.setCustomWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
                         settingsType    : WarBasicSettingsType.SpmSaveSlotIndex,
                         currentValue    : ScrCreateModel.getSaveSlotIndex(),
                         warRule,

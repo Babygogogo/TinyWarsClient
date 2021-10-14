@@ -716,6 +716,7 @@ namespace Types {
         WarComment,
         WarRuleTitle,
         HasFog,
+        Weather,
         TimerType,
         TimerRegularParam,
         TimerIncrementalParam1,
