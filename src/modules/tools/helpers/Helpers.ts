@@ -5,6 +5,7 @@
 // import TwnsClientErrorCode  from "./ClientErrorCode";
 // import Types                from "./Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Helpers {
     import ColorType            = Types.ColorType;
     import ILanguageText        = ProtoTypes.Structure.ILanguageText;
@@ -258,8 +259,8 @@ namespace Helpers {
         return true;
     }
 
-    export function pickRandomElement<T>(list: T[]): T {
-        return list[Math.floor(Math.random() * list.length)];
+    export function pickRandomElement<T>(list: T[], randomValue?: number): T {
+        return list[Math.floor((randomValue ?? Math.random()) * list.length)];
     }
     export function deleteElementFromArray<T>(arr: T[], element: T, maxDeleteCount = Number.MAX_VALUE): number {
         let index       = 0;

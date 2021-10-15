@@ -536,7 +536,7 @@ namespace WarCommonHelpers {
         }
     }
 
-    export function updateTilesAndUnitsBeforeExecutingAction(
+    export function updateTilesAndUnits(
         war         : TwnsBwWar.BwWar,
         extraData   : Types.Undefinable<{
             actingTiles?        : ISerialTile[] | null;

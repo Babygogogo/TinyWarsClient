@@ -198,9 +198,13 @@ namespace TwnsMpwTopPanel {
         // Callbacks for touch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedLabelWeather(): void {
+            const weatherManager    = this._getOpenData().war.getWeatherManager();
+            const expireTurnIndex   = weatherManager.getExpireTurnIndex();
             TwnsCommonHelpPanel.CommonHelpPanel.show({
                 title  : Lang.getText(LangTextType.B0705),
-                content: Lang.getText(LangTextType.R0009),
+                content: expireTurnIndex == null
+                    ? Lang.getText(LangTextType.R0009)
+                    : `${Lang.getFormattedText(LangTextType.F0073, expireTurnIndex, weatherManager.getExpirePlayerIndex())}\n\n${Lang.getText(LangTextType.R0009)}`,
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }

@@ -15,6 +15,7 @@
 // import TwnsBwUnit               from "./BwUnit";
 // import TwnsBwWar                from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTurnManager {
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import TurnPhaseCode                = Types.TurnPhaseCode;
@@ -148,8 +149,9 @@ namespace TwnsBwTurnManager {
             this._runPhaseResetVisionForCurrentPlayer();
             this._runPhaseTickTurnAndPlayerIndexWithExtraData(action);
             this._runPhaseResetSkillState();
-            this._runPhaseResetVisionForNextPlayer();
             this._runPhaseResetVotesForDraw();
+            this._runPhaseUpdateWeatherWithExtraData(action);
+            this._runPhaseResetVisionForNextPlayer();
             this._runPhaseWaitBeginTurn();
 
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
@@ -164,8 +166,9 @@ namespace TwnsBwTurnManager {
             this._runPhaseResetVisionForCurrentPlayer();
             this._runPhaseTickTurnAndPlayerIndexWithoutExtraData();
             this._runPhaseResetSkillState();
-            this._runPhaseResetVisionForNextPlayer();
             this._runPhaseResetVotesForDraw();
+            this._runPhaseUpdateWeatherWithoutExtraData();
+            this._runPhaseResetVisionForNextPlayer();
             this._runPhaseWaitBeginTurn();
 
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
@@ -703,14 +706,23 @@ namespace TwnsBwTurnManager {
                 war.getTileMap().getView().updateCoZone();
             }
         }
-        private _runPhaseResetVisionForNextPlayer(): void {
-            const war = this.getWar();
-            war.updateTilesAndUnitsOnVisibilityChanged();
-        }
         private _runPhaseResetVotesForDraw(): void {
             const war       = this.getWar();
             const player    = war.getPlayerInTurn();
             player.setHasVotedForDraw(false);
+        }
+        private _runPhaseUpdateWeatherWithExtraData(data: IWarActionPlayerEndTurn): void {
+            const war = this.getWar();
+            war.getWeatherManager().updateOnPlayerTurnSwitched();
+
+            WarCommonHelpers.updateTilesAndUnits(war, data.extraData);
+        }
+        private _runPhaseUpdateWeatherWithoutExtraData(): void {
+            this.getWar().getWeatherManager().updateOnPlayerTurnSwitched();
+        }
+        private _runPhaseResetVisionForNextPlayer(): void {
+            const war = this.getWar();
+            war.updateTilesAndUnitsOnVisibilityChanged();
         }
         private _runPhaseWaitBeginTurn(): void {
             // Do nothing.

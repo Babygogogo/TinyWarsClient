@@ -217,7 +217,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
 
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
@@ -359,7 +359,7 @@ namespace WarActionExecutor {
         const skillType = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_00);
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            // WarCommonHelpers.updateTilesAndUnits(war, extraData);
 
             const player        = war.getPlayerInTurn();
             const currentEnergy = player.getCoCurrentEnergy();
@@ -473,6 +473,10 @@ namespace WarActionExecutor {
             }
         }
 
+        WarCommonHelpers.updateTilesAndUnits(war, {
+            discoveredTiles: extraData?.discoveredTilesAfterAction,
+            discoveredUnits: extraData?.discoveredUnitsAfterAction,
+        });
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
 
@@ -655,7 +659,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
 
             const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
@@ -835,7 +839,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
 
             const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
@@ -1119,7 +1123,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
 
             const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
@@ -1299,7 +1303,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
 
             const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
@@ -1599,7 +1603,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -1684,7 +1688,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -1777,7 +1781,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -1871,7 +1875,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -1952,7 +1956,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const path              = action.path as MovePath;
@@ -2107,7 +2111,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const path              = action.path as MovePath;
@@ -2242,7 +2246,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -2323,7 +2327,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -2422,7 +2426,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const path          = action.path as MovePath;
@@ -2510,7 +2514,7 @@ namespace WarActionExecutor {
         const extraData     = action.extraData;
         const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
 
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
@@ -2644,7 +2648,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const revisedPath   = action.path as MovePath;
@@ -2725,7 +2729,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const unitMap       = war.getUnitMap();
@@ -2824,7 +2828,7 @@ namespace WarActionExecutor {
         const skillType     = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_00);
         const extraData     = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
 
             const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             const player        = focusUnit.getPlayer();
@@ -2995,6 +2999,11 @@ namespace WarActionExecutor {
             }
         }
 
+
+        WarCommonHelpers.updateTilesAndUnits(war, {
+            discoveredTiles : extraData?.discoveredTilesAfterAction,
+            discoveredUnits : extraData?.discoveredUnitsAfterAction,
+        });
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
 
@@ -3020,7 +3029,7 @@ namespace WarActionExecutor {
 
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnitsBeforeExecutingAction(war, extraData);
+            WarCommonHelpers.updateTilesAndUnits(war, extraData);
         }
 
         const unitMap       = war.getUnitMap();

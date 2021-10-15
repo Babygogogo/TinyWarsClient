@@ -1631,6 +1631,17 @@ namespace TwnsClientErrorCode {
         WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_08,
         WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_09,
 
+        WarCoSkillHelpers_ExeChangeWeather_00,
+        WarCoSkillHelpers_ExeChangeWeather_01,
+        WarCoSkillHelpers_ExeChangeWeather_02,
+        WarCoSkillHelpers_ExeChangeWeather_03,
+        WarCoSkillHelpers_ExeChangeWeather_04,
+        WarCoSkillHelpers_ExeChangeWeather_05,
+        WarCoSkillHelpers_ExeChangeWeather_06,
+        WarCoSkillHelpers_ExeChangeWeather_07,
+        WarCoSkillHelpers_ExeChangeWeather_08,
+        WarCoSkillHelpers_ExeChangeWeather_09,
+
         WarCommonHelpers_CheckIsGridIndexInsideCoSkillArea_00,
         WarCommonHelpers_CheckIsGridIndexInsideCoSkillArea_01,
         WarCommonHelpers_CheckIsGridIndexInsideCoSkillArea_02,

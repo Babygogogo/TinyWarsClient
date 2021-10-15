@@ -392,6 +392,7 @@ namespace TwnsRwWar {
             const playersCountUnneutral = this.getPlayerManager().getTotalPlayersCount(false);
 
             this.setNextActionId(checkPointData.nextActionId);
+            this.getWeatherManager().fastInit(warData.weatherManager);
             this.getPlayerManager().fastInit(Helpers.getExisted(warData.playerManager), configVersion);
             this.getTurnManager().fastInit(Helpers.getExisted(warData.turnManager), playersCountUnneutral);
             this.getWarEventManager().fastInit(Helpers.getExisted(warData.warEventManager));

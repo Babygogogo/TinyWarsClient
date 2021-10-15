@@ -4377,6 +4377,10 @@ namespace TwnsLangCommonText {
             `您确定要修改 P%d 的所属队伍吗？`,
             `Are you sure to modify the team of P%d?`,
         ],
+        [LangTextType.F0073]: [
+            `当前天气将在第%d回合、P%d回合开始前结束。`,
+            `The current weather will end before D%d P%d's turn begins.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.

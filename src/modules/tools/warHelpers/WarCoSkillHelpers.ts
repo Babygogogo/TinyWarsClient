@@ -57,6 +57,7 @@ namespace WarCoSkillHelpers {
         exeSelfPromotionGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeSelfUnitActionState(configVersion, skillCfg, unitMap, player, coGridIndexList);
         exeSelfFlareAmmoGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
+        exeChangeWeather({ skillCfg, war, player, extraData });
     }
 
     function exeSelfFund({ skillCfg, player }: {
@@ -698,6 +699,23 @@ namespace WarCoSkillHelpers {
         }
     }
 
+    function exeChangeWeather({ skillCfg, war, player, extraData }: {
+        skillCfg    : Types.CoSkillCfg;
+        war         : BwWar;
+        player      : BwPlayer;
+        extraData   : IDataForUseCoSkill;
+    }): void {
+        const cfg = skillCfg.changeWeather;
+        if (cfg) {
+            const weatherManager    = war.getWeatherManager();
+            const playerIndex       = player.getPlayerIndex();
+            weatherManager.setForceWeatherType(Helpers.getExisted(extraData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeather_00));
+            weatherManager.setExpirePlayerIndex(playerIndex);
+            weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + cfg[0]);
+            war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+        }
+    }
+
     export function getDataForUseCoSkill(
         war         : BwWar,
         player      : BwPlayer,
@@ -710,12 +728,22 @@ namespace WarCoSkillHelpers {
             skillIndex,
         };
 
-        if (skillCfg.indiscriminateAreaDamage) {
-            const unitMap   = war.getUnitMap();
-            const teamIndex = player.getTeamIndex();
-            const valueMap  = Helpers.getExisted(getValueMap(unitMap, teamIndex));
-            const center    = Helpers.getExisted(getIndiscriminateAreaDamageCenter(war, valueMap, skillCfg.indiscriminateAreaDamage));
-            dataForUseCoSkill.indiscriminateAreaDamageCenter = center;
+        {
+            const cfg = skillCfg.indiscriminateAreaDamage;
+            if (cfg) {
+                const unitMap   = war.getUnitMap();
+                const teamIndex = player.getTeamIndex();
+                const valueMap  = Helpers.getExisted(getValueMap(unitMap, teamIndex));
+                const center    = Helpers.getExisted(getIndiscriminateAreaDamageCenter(war, valueMap, cfg));
+                dataForUseCoSkill.indiscriminateAreaDamageCenter = center;
+            }
+        }
+
+        {
+            const cfg = skillCfg.changeWeather;
+            if (cfg) {
+                dataForUseCoSkill.newWeatherType = Helpers.pickRandomElement(cfg.slice(1), war.getRandomNumberManager().getRandomNumber());
+            }
         }
 
         return dataForUseCoSkill;

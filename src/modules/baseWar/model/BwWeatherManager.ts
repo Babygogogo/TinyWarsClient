@@ -17,6 +17,9 @@ namespace TwnsBwWeatherManager {
             this.setExpireTurnIndex(data?.expireTurnIndex ?? null);
             this.setExpirePlayerIndex(data?.expirePlayerIndex ?? null);
         }
+        public fastInit(data: Types.Undefinable<ISerialWeatherManager>): void {
+            this.init(data);
+        }
 
         public serialize(): ISerialWeatherManager {
             return {
@@ -75,6 +78,24 @@ namespace TwnsBwWeatherManager {
         }
         public getExpireTurnIndex(): number | null {
             return Helpers.getDefined(this._expireTurnIndex, ClientErrorCode.BwWeatherManager_GetExpireTurnIndex_00);
+        }
+
+        public updateOnPlayerTurnSwitched(): void {
+            const expireTurnIndex   = this.getExpireTurnIndex();
+            const expirePlayerIndex = this.getExpirePlayerIndex();
+            if ((expireTurnIndex == null) || (expirePlayerIndex == null)) {
+                return;
+            }
+
+            const turnManager       = this._getWar().getTurnManager();
+            const currentTurnIndex  = turnManager.getTurnIndex();
+            if ((expireTurnIndex < currentTurnIndex)                                                                ||
+                (expireTurnIndex === currentTurnIndex) && (expirePlayerIndex <= turnManager.getPlayerIndexInTurn())
+            ) {
+                this.setForceWeatherType(null);
+                this.setExpireTurnIndex(null);
+                this.setExpirePlayerIndex(null);
+            }
         }
     }
 }

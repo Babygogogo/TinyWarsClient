@@ -10534,6 +10534,12 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemEndTurn restTimeToBootForCurrentPlayer */
             restTimeToBootForCurrentPlayer?: (number|null);
+
+            /** ExtraDataForSystemEndTurn discoveredUnits */
+            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForSystemEndTurn discoveredTiles */
+            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
         }
 
         /** Represents an ExtraDataForSystemEndTurn. */
@@ -10547,6 +10553,12 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemEndTurn restTimeToBootForCurrentPlayer. */
             public restTimeToBootForCurrentPlayer: number;
+
+            /** ExtraDataForSystemEndTurn discoveredUnits. */
+            public discoveredUnits: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForSystemEndTurn discoveredTiles. */
+            public discoveredTiles: WarSerialization.ISerialTile[];
 
             /**
              * Creates a new ExtraDataForSystemEndTurn instance using the specified properties.
@@ -10807,6 +10819,12 @@ export declare namespace WarAction {
 
             /** ExtraDataForPlayerEndTurn restTimeToBootForCurrentPlayer */
             restTimeToBootForCurrentPlayer?: (number|null);
+
+            /** ExtraDataForPlayerEndTurn discoveredUnits */
+            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForPlayerEndTurn discoveredTiles */
+            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
         }
 
         /** Represents an ExtraDataForPlayerEndTurn. */
@@ -10820,6 +10838,12 @@ export declare namespace WarAction {
 
             /** ExtraDataForPlayerEndTurn restTimeToBootForCurrentPlayer. */
             public restTimeToBootForCurrentPlayer: number;
+
+            /** ExtraDataForPlayerEndTurn discoveredUnits. */
+            public discoveredUnits: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForPlayerEndTurn discoveredTiles. */
+            public discoveredTiles: WarSerialization.ISerialTile[];
 
             /**
              * Creates a new ExtraDataForPlayerEndTurn instance using the specified properties.
@@ -11483,11 +11507,11 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForPlayerUseCoSkill. */
         interface IExtraDataForPlayerUseCoSkill {
 
-            /** ExtraDataForPlayerUseCoSkill discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForPlayerUseCoSkill discoveredUnitsAfterAction */
+            discoveredUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForPlayerUseCoSkill discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForPlayerUseCoSkill discoveredTilesAfterAction */
+            discoveredTilesAfterAction?: (WarSerialization.ISerialTile[]|null);
 
             /** ExtraDataForPlayerUseCoSkill skillDataArray */
             skillDataArray?: (Structure.IDataForUseCoSkill[]|null);
@@ -11502,11 +11526,11 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill);
 
-            /** ExtraDataForPlayerUseCoSkill discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForPlayerUseCoSkill discoveredUnitsAfterAction. */
+            public discoveredUnitsAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForPlayerUseCoSkill discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForPlayerUseCoSkill discoveredTilesAfterAction. */
+            public discoveredTilesAfterAction: WarSerialization.ISerialTile[];
 
             /** ExtraDataForPlayerUseCoSkill skillDataArray. */
             public skillDataArray: Structure.IDataForUseCoSkill[];
@@ -14891,11 +14915,11 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitUseCoSkill. */
         interface IExtraDataForUnitUseCoSkill {
 
-            /** ExtraDataForUnitUseCoSkill discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitUseCoSkill discoveredUnitsAfterAction */
+            discoveredUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitUseCoSkill discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitUseCoSkill discoveredTilesAfterAction */
+            discoveredTilesAfterAction?: (WarSerialization.ISerialTile[]|null);
 
             /** ExtraDataForUnitUseCoSkill actingUnits */
             actingUnits?: (WarSerialization.ISerialUnit[]|null);
@@ -14913,11 +14937,11 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitUseCoSkill.IExtraDataForUnitUseCoSkill);
 
-            /** ExtraDataForUnitUseCoSkill discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitUseCoSkill discoveredUnitsAfterAction. */
+            public discoveredUnitsAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitUseCoSkill discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitUseCoSkill discoveredTilesAfterAction. */
+            public discoveredTilesAfterAction: WarSerialization.ISerialTile[];
 
             /** ExtraDataForUnitUseCoSkill actingUnits. */
             public actingUnits: WarSerialization.ISerialUnit[];
@@ -16658,6 +16682,9 @@ export declare namespace Structure {
 
         /** DataForUseCoSkill indiscriminateAreaDamageCenter */
         indiscriminateAreaDamageCenter?: (Structure.IGridIndex|null);
+
+        /** DataForUseCoSkill newWeatherType */
+        newWeatherType?: (number|null);
     }
 
     /** Represents a DataForUseCoSkill. */
@@ -16674,6 +16701,9 @@ export declare namespace Structure {
 
         /** DataForUseCoSkill indiscriminateAreaDamageCenter. */
         public indiscriminateAreaDamageCenter?: (Structure.IGridIndex|null);
+
+        /** DataForUseCoSkill newWeatherType. */
+        public newWeatherType: number;
 
         /**
          * Creates a new DataForUseCoSkill instance using the specified properties.

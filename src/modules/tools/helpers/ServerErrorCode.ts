@@ -5273,6 +5273,17 @@ export const enum ServerErrorCode {
     WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_0008,
     WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_0009,
 
+    WarCoSkillHelpers_ExeChangeWeather_0000,
+    WarCoSkillHelpers_ExeChangeWeather_0001,
+    WarCoSkillHelpers_ExeChangeWeather_0002,
+    WarCoSkillHelpers_ExeChangeWeather_0003,
+    WarCoSkillHelpers_ExeChangeWeather_0004,
+    WarCoSkillHelpers_ExeChangeWeather_0005,
+    WarCoSkillHelpers_ExeChangeWeather_0006,
+    WarCoSkillHelpers_ExeChangeWeather_0007,
+    WarCoSkillHelpers_ExeChangeWeather_0008,
+    WarCoSkillHelpers_ExeChangeWeather_0009,
+
     MapRawDataValidation0000,
     MapRawDataValidation0001,
     MapRawDataValidation0002,
