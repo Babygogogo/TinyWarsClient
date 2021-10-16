@@ -712,7 +712,7 @@ namespace WarCoSkillHelpers {
             weatherManager.setForceWeatherType(Helpers.getExisted(extraData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeather_00));
             weatherManager.setExpirePlayerIndex(playerIndex);
             weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + cfg[0]);
-            war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+            // war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
         }
     }
 

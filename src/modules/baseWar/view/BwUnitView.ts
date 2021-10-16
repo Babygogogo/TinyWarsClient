@@ -10,6 +10,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import CommonConstants      from "../../tools/helpers/CommonConstants";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitView {
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
@@ -151,6 +152,9 @@ namespace TwnsBwUnitView {
             if (isAlwaysVisible) {
                 this.visible = true;
             }
+            if ((path.length > 0) || (aiming)) {
+                SoundManager.playLongSfxForMoveUnit(unitType);
+            }
 
             for (let i = 1; i < path.length; ++i) {
                 const gridIndex = path[i];
@@ -217,6 +221,7 @@ namespace TwnsBwUnitView {
                         ) {
                             war.getGridVisionEffect().showEffectBlock(endingGridIndex);
                         }
+                        SoundManager.fadeoutLongSfxForMoveUnit();
 
                         resolve();
                     });
@@ -246,6 +251,7 @@ namespace TwnsBwUnitView {
                         ) {
                             war.getGridVisionEffect().showEffectBlock(endingGridIndex);
                         }
+                        SoundManager.fadeoutLongSfxForMoveUnit();
 
                         resolve();
                     });

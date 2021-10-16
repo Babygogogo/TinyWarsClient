@@ -13,6 +13,8 @@ namespace SoundManager {
     import SoundType            = Types.SoundType;
     import BgmCode              = Types.BgmCode;
     import ShortSfxCode         = Types.ShortSfxCode;
+    import LongSfxCode          = Types.LongSfxCode;
+    import UnitType             = Types.UnitType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
@@ -25,6 +27,11 @@ namespace SoundManager {
     const CoBgmMaxCode  = BgmCode.Co9999;
 
     type BgmParams = {
+        name    : string;
+        start   : number;
+        end     : number;
+    };
+    type LongSfxParams = {
         name    : string;
         start   : number;
         end     : number;
@@ -51,16 +58,53 @@ namespace SoundManager {
         [ BgmCode.Co0010,       { name: "co0010.mp3",       start: 4.95,    end: 62     } ],
         [ BgmCode.Co0011,       { name: "co0011.mp3",       start: 7.45,    end: 61.2   } ],
         [ BgmCode.Co0042,       { name: "co0042.mp3",       start: 7.6,     end: 60.1   } ],
-        [ BgmCode.Co9999,       { name: "co9999.mp3",       start: 4.7,     end: 115.44 } ],
+        [ BgmCode.Co9999,       { name: "co9999.mp3",       start: 1.52,    end: 2.61   } ],
         // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
     ]);
     const _SHORT_SFX_PARAM = new Map<ShortSfxCode, ShortSfxParams>([
-        [ ShortSfxCode.ButtonNeutral01,     { name: "buttonNeutral01.mp3" } ],
-        [ ShortSfxCode.ButtonConfirm01,     { name: "buttonConfirm01.mp3" } ],
-        [ ShortSfxCode.ButtonCancel01,      { name: "buttonCancel01.mp3"  } ],
-        [ ShortSfxCode.ButtonForbidden01,   { name: `buttonForbidden01.mp3`} ],
-        [ ShortSfxCode.CursorConfirm01,     { name: "cursorConfirm01.mp3" } ],
-        [ ShortSfxCode.CursorMove01,        { name: "cursorMove01.mp3"    } ],
+        [ ShortSfxCode.ButtonNeutral01,     { name: "buttonNeutral01.mp3"   } ],
+        [ ShortSfxCode.ButtonConfirm01,     { name: "buttonConfirm01.mp3"   } ],
+        [ ShortSfxCode.ButtonCancel01,      { name: "buttonCancel01.mp3"    } ],
+        [ ShortSfxCode.ButtonForbidden01,   { name: `buttonForbidden01.mp3` } ],
+        [ ShortSfxCode.CursorConfirm01,     { name: "cursorConfirm01.mp3"   } ],
+        [ ShortSfxCode.CursorMove01,        { name: "cursorMove01.mp3"      } ],
+        [ ShortSfxCode.Explode,             { name: "explode.mp3"           } ],
+    ]);
+    const _LONG_SFX_PARAMS = new Map<LongSfxCode, LongSfxParams>([
+        [ LongSfxCode.NavalMove,        { name: "navalMove.mp3",    start: 1.52,    end: 2.61                       } ], // 0.37
+        [ LongSfxCode.CopterMove,       { name: "copterMove.mp3",   start: 0.06,    end: 0.06 + (0.351 - 0.047) * 4 } ],
+        [ LongSfxCode.JetMove,          { name: "jetMove.mp3",      start: 1.518,   end: 1.518 + 0.192 * 1          } ],
+        [ LongSfxCode.TireMove,         { name: "tireMove.mp3",     start: 0.62,    end: 0.62 + 0.266 * 1           } ],
+        [ LongSfxCode.FootMove,         { name: "footMove.mp3",     start: 0.00,    end: 0.153                      } ],
+        [ LongSfxCode.TankMove,         { name: "tankMove.mp3",     start: 0.15,    end: 0.25                       } ],
+    ]);
+    const _UNIT_MOVE_SFX_CODES = new Map<UnitType, LongSfxCode>([
+        [ UnitType.Infantry,        LongSfxCode.FootMove    ],
+        [ UnitType.Mech,            LongSfxCode.FootMove    ],
+        [ UnitType.Bike,            LongSfxCode.TireMove    ],
+        [ UnitType.Recon,           LongSfxCode.TireMove    ],
+        [ UnitType.Flare,           LongSfxCode.TankMove    ],
+        [ UnitType.AntiAir,         LongSfxCode.TankMove    ],
+        [ UnitType.Tank,            LongSfxCode.TankMove    ],
+        [ UnitType.MediumTank,      LongSfxCode.TankMove    ],
+        [ UnitType.WarTank,         LongSfxCode.TankMove    ],
+        [ UnitType.Artillery,       LongSfxCode.TankMove    ],
+        [ UnitType.AntiTank,        LongSfxCode.TireMove    ],
+        [ UnitType.Rockets,         LongSfxCode.TireMove    ],
+        [ UnitType.Missiles,        LongSfxCode.TireMove    ],
+        [ UnitType.Rig,             LongSfxCode.TankMove    ],
+        [ UnitType.Fighter,         LongSfxCode.JetMove     ],
+        [ UnitType.Bomber,          LongSfxCode.JetMove     ],
+        [ UnitType.Duster,          LongSfxCode.CopterMove  ],
+        [ UnitType.BattleCopter,    LongSfxCode.CopterMove  ],
+        [ UnitType.TransportCopter, LongSfxCode.CopterMove  ],
+        [ UnitType.Seaplane,        LongSfxCode.JetMove     ],
+        [ UnitType.Battleship,      LongSfxCode.NavalMove   ],
+        [ UnitType.Carrier,         LongSfxCode.NavalMove   ],
+        [ UnitType.Submarine,       LongSfxCode.NavalMove   ],
+        [ UnitType.Cruiser,         LongSfxCode.NavalMove   ],
+        [ UnitType.Lander,          LongSfxCode.NavalMove   ],
+        [ UnitType.Gunboat,         LongSfxCode.NavalMove   ],
     ]);
 
     let _isInitialized          = false;
@@ -74,12 +118,17 @@ namespace SoundManager {
     let _bgmGain                : GainNode;
     let _bgmSourceNode          : AudioBufferSourceNode | null = null;
 
-    let _effectMute             = DEFAULT_MUTE;
-    let _effectVolume           = DEFAULT_VOLUME;
+    let _sfxMute                = DEFAULT_MUTE;
+    let _sfxVolume              = DEFAULT_VOLUME;
+    let _playingLongSfxCode     = LongSfxCode.None;
 
+    const _longSfxBufferCache   = new Map<LongSfxCode, AudioBuffer>();
     const _shortSfxBufferCache  = new Map<ShortSfxCode, AudioBuffer>();
+    let _shortSfxGain           : GainNode;
+    let _longSfxGain            : GainNode;
+    let _longSfxSourceNode      : AudioBufferSourceNode | null = null;
+
     // const _shortSfxDict         : { [shortSfxCode: number]: egret.SoundChannel | null } = {};
-    let _sfxGain                : GainNode;
 
     // const audio = new Audio(getResourcePath("war01.mp3", SoundType.Bgm));
     // audio.play();
@@ -103,9 +152,13 @@ namespace SoundManager {
         try {
             _audioContext   = new AudioContext();
             _bgmGain        = _audioContext.createGain();
-            _sfxGain        = _audioContext.createGain();
-            _bgmGain.connect(_audioContext.destination);
-            _sfxGain.connect(_audioContext.destination);
+            _shortSfxGain   = _audioContext.createGain();
+            _longSfxGain    = _audioContext.createGain();
+
+            const destination = _audioContext.destination;
+            _bgmGain.connect(destination);
+            _shortSfxGain.connect(destination);
+            _longSfxGain.connect(destination);
         } catch (e) {
             FloatText.show(Lang.getText(LangTextType.A0196));
         }
@@ -296,7 +349,7 @@ namespace SoundManager {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // effect(各种音效)
+    // 音效音量控制
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _initEffectMute(): void {
         setIsEffectMute(LocalStorage.getIsSoundEffectMute());
@@ -306,14 +359,15 @@ namespace SoundManager {
             return;
         }
 
-        _effectMute = isMute;
-        _updateSfxVolume();
+        _sfxMute = isMute;
+        _updateShortSfxVolume();
+        _updateLongSfxVolume();
     }
     export function setIsEffectMuteToStore(): void {
         LocalStorage.setIsSoundEffectMute(getIsEffectMute());
     }
     export function getIsEffectMute(): boolean {
-        return _effectMute;
+        return _sfxMute;
     }
 
     function _initEffectVolume(): void {
@@ -325,22 +379,28 @@ namespace SoundManager {
             return;
         }
 
-        _effectVolume = volume;
-        _updateSfxVolume();
+        _sfxVolume = volume;
+        _updateShortSfxVolume();
+        _updateLongSfxVolume();
     }
     export function setEffectVolumeToStore(): void {
         LocalStorage.setSoundEffectVolume(getEffectVolume());
     }
     export function getEffectVolume(): number {
-        return _effectVolume;
+        return _sfxVolume;
     }
     function _getRevisedSfxVolume(): number {
         return getIsEffectMute() ? 0 : getEffectVolume();
     }
-    function _updateSfxVolume(): void {
-        const gain = _sfxGain;
-        if (gain) {
-            gain.gain.value = _getRevisedSfxVolume();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 短音效，可以同时播放多个
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    function _updateShortSfxVolume(): void {
+        const volume        = _getRevisedSfxVolume();
+        const shortSfxGain  = _shortSfxGain;
+        if (shortSfxGain) {
+            shortSfxGain.gain.value = volume;
         }
     }
 
@@ -360,7 +420,7 @@ namespace SoundManager {
         if (cachedBuffer) {
             _doPlayShortSfx(cachedBuffer);
         } else {
-            const path          = getResourcePath(params.name, SoundType.Effect);
+            const path          = getResourcePath(params.name, SoundType.Sfx);
             const audioBuffer   = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager.playShortSfx() loadAudioBuffer error: ${(err as Error).message}`);
@@ -385,7 +445,7 @@ namespace SoundManager {
 
         const sourceNode    = _audioContext.createBufferSource();
         sourceNode.buffer   = buffer;
-        sourceNode.connect(_sfxGain);
+        sourceNode.connect(_shortSfxGain);
         sourceNode.start();
     }
 
@@ -418,6 +478,103 @@ namespace SoundManager {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 长音效，同时只能有一个在播放
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function playLongSfxForMoveUnit(unitType: Types.UnitType): void {
+        _updateLongSfxVolume();
+        playLongSfx(Helpers.getExisted(_UNIT_MOVE_SFX_CODES.get(unitType), ClientErrorCode.SoundManager_PlayLongSfxForMoveUnit_00));
+    }
+    export function fadeoutLongSfxForMoveUnit(): void {
+        const longSfxGain = _longSfxGain;
+        if (longSfxGain) {
+            longSfxGain.gain.setValueAtTime(_getRevisedSfxVolume(), _audioContext.currentTime);
+            longSfxGain.gain.exponentialRampToValueAtTime(0.01, _audioContext.currentTime + 0.8);
+            egret.setTimeout(() => playLongSfx(LongSfxCode.None), null, 800);
+        }
+    }
+
+    function _updateLongSfxVolume(): void {
+        const volume        = _getRevisedSfxVolume();
+        const longSfxGain   = _longSfxGain;
+        if (longSfxGain) {
+            longSfxGain.gain.value = volume;
+        }
+    }
+
+    function _setPlayingLongSfxCode(longSfxCode: LongSfxCode): void {
+        _playingLongSfxCode = longSfxCode;
+    }
+    export function getPlayingLongSfxCode(): LongSfxCode {
+        return _playingLongSfxCode;
+    }
+    /** 播放长音效，同时只能有一个在播放 */
+    function playLongSfx(longSfxCode: LongSfxCode, forcePlayFromBeginning = false): void {
+        if (!_isInitialized) {
+            return;
+        }
+
+        if (!longSfxCode) {
+            _setPlayingLongSfxCode(longSfxCode);
+            _stopLongSfx();
+            return;
+        }
+
+        if ((getPlayingLongSfxCode() !== longSfxCode) || (forcePlayFromBeginning)) {
+            _setPlayingLongSfxCode(longSfxCode);
+            _playLongSfxForNormal(longSfxCode);
+        }
+    }
+    async function _playLongSfxForNormal(longSfxCode: LongSfxCode): Promise<void> {
+        const params        = Helpers.getExisted(_LONG_SFX_PARAMS.get(longSfxCode), ClientErrorCode.SoundManager_PlayLongSfxForNormal_00);
+        const cacheDict     = _longSfxBufferCache;
+        const cachedBuffer  = cacheDict.get(longSfxCode);
+        if (cachedBuffer) {
+            _doPlayLongSfxForNormal(cachedBuffer, params);
+        } else {
+            const path          = getResourcePath(params.name, SoundType.Sfx);
+            const audioBuffer   = await loadAudioBuffer(path).catch(err => {
+                // CompatibilityHelpers.showError(err); throw err;
+                Logger.error(`SoundManager._playLongSfxForNormal() loadAudioBuffer error: ${(err as Error).message}.`);
+                return;
+            });
+            if (!audioBuffer) {
+                // throw Helpers.newError(`SoundManager._playLongSfxForNormal() empty audioBuffer.`);
+                Logger.error(`SoundManager._playLongSfxForNormal() empty audioBuffer.`);
+                return;
+            }
+
+            cacheDict.set(longSfxCode, audioBuffer);
+            _doPlayLongSfxForNormal(audioBuffer, params);
+        }
+    }
+    function _doPlayLongSfxForNormal(buffer: AudioBuffer, params: LongSfxParams): void {
+        if (!buffer) {
+            return;
+        }
+
+        _stopLongSfx();
+
+        _longSfxSourceNode              = _audioContext.createBufferSource();
+        _longSfxSourceNode.buffer       = buffer;
+        _longSfxSourceNode.loopStart    = params.start;
+        _longSfxSourceNode.loopEnd      = params.end;
+        _longSfxSourceNode.loop         = true;
+        _longSfxSourceNode.connect(_longSfxGain);
+        _longSfxSourceNode.start();
+    }
+
+    function _stopLongSfx(): void {
+        _stopLongSfxForNormal();
+    }
+    function _stopLongSfxForNormal(): void {
+        if (_longSfxSourceNode) {
+            _longSfxSourceNode.stop();
+            _longSfxSourceNode.disconnect();
+            _longSfxSourceNode = null;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     // 资源回收
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function dispose(): void {
@@ -438,7 +595,7 @@ namespace SoundManager {
     function getResourcePath(musicName: string, soundType: SoundType): string {
         switch (soundType) {
             case SoundType.Bgm      : return _SOUND_PATH + "bgm/" + musicName;
-            case SoundType.Effect   : return _SOUND_PATH + "effect/" + musicName;
+            case SoundType.Sfx   : return _SOUND_PATH + "effect/" + musicName;
             default                 : throw Helpers.newError(`Invalid soundType: ${soundType}`, ClientErrorCode.SoundManager_GetResourcePath_00);
         }
     }

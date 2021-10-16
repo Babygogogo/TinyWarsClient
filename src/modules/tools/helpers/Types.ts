@@ -250,7 +250,7 @@ namespace Types {
     // eslint-disable-next-line no-shadow
     export enum SoundType {
         Bgm,
-        Effect,
+        Sfx,
     }
 
     // eslint-disable-next-line no-shadow
@@ -284,6 +284,18 @@ namespace Types {
         ButtonForbidden01,
         CursorConfirm01,
         CursorMove01,
+        Explode,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum LongSfxCode {
+        None,
+        NavalMove,
+        CopterMove,
+        JetMove,
+        TireMove,
+        FootMove,
+        TankMove,
     }
 
     export const UiState = {
