@@ -3,6 +3,7 @@
 namespace TwnsBwWeatherManager {
     import WeatherType              = Types.WeatherType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import LangTextType             = TwnsLangTextType.LangTextType;
     import ISerialWeatherManager    = ProtoTypes.WarSerialization.ISerialWeatherManager;
 
     export class BwWeatherManager {
@@ -95,6 +96,22 @@ namespace TwnsBwWeatherManager {
                 this.setForceWeatherType(null);
                 this.setExpireTurnIndex(null);
                 this.setExpirePlayerIndex(null);
+            }
+        }
+
+        public getDesc(): string {
+            const expireTurnIndex = this.getExpireTurnIndex();
+            const currentWeatherName = Lang.getWeatherName(this.getCurrentWeatherType());
+            const defaultWeatherName = Lang.getWeatherName(this.getDefaultWeatherType());
+            if (expireTurnIndex == null) {
+                return `${Lang.getFormattedText(LangTextType.F0073, currentWeatherName, defaultWeatherName)}`
+                    + `\n\n${Lang.getText(LangTextType.R0009)}`;
+            } else {
+                const war           = this._getWar();
+                const turnManager   = war.getTurnManager();
+                return `${Lang.getFormattedText(LangTextType.F0073, currentWeatherName, defaultWeatherName)}`
+                    + `\n${Lang.getFormattedText(LangTextType.F0074, expireTurnIndex, this.getExpirePlayerIndex(), turnManager.getTurnIndex(), turnManager.getPlayerIndexInTurn())}`
+                    + `\n\n${Lang.getText(LangTextType.R0009)}`;
             }
         }
     }

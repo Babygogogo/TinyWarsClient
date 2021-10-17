@@ -938,6 +938,7 @@ namespace WarActionExecutor {
                 }
                 if ((isVisibleUnitDestroyed) || (destroyedTileSet.size)) {
                     war.getView().showVibration();
+                    SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
                 }
             }
 
@@ -1102,6 +1103,7 @@ namespace WarActionExecutor {
                 }
                 if ((isVisibleUnitDestroyed) || (destroyedTileSet.size)) {
                     war.getView().showVibration();
+                    SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
                 }
             }
         }
@@ -1405,6 +1407,7 @@ namespace WarActionExecutor {
                 }
                 if ((isVisibleUnitDestroyed) || (destroyedTileSet.size)) {
                     war.getView().showVibration();
+                    SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
                 }
             }
 
@@ -1568,6 +1571,7 @@ namespace WarActionExecutor {
                 }
                 if ((isVisibleUnitDestroyed) || (destroyedTileSet.size)) {
                     war.getView().showVibration();
+                    SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
                 }
             }
         }

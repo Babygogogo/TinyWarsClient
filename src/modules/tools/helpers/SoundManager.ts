@@ -106,6 +106,7 @@ namespace SoundManager {
         [ UnitType.Lander,          LongSfxCode.NavalMove   ],
         [ UnitType.Gunboat,         LongSfxCode.NavalMove   ],
     ]);
+    const _UNIT_MOVE_FADEOUT_TIME = 0.6;
 
     let _isInitialized          = false;
     let _audioContext           : AudioContext;
@@ -488,8 +489,8 @@ namespace SoundManager {
         const longSfxGain = _longSfxGain;
         if (longSfxGain) {
             longSfxGain.gain.setValueAtTime(_getRevisedSfxVolume(), _audioContext.currentTime);
-            longSfxGain.gain.exponentialRampToValueAtTime(0.01, _audioContext.currentTime + 0.8);
-            egret.setTimeout(() => playLongSfx(LongSfxCode.None), null, 800);
+            longSfxGain.gain.exponentialRampToValueAtTime(0.01, _audioContext.currentTime + _UNIT_MOVE_FADEOUT_TIME);
+            egret.setTimeout(() => playLongSfx(LongSfxCode.None), null, _UNIT_MOVE_FADEOUT_TIME * 1000);
         }
     }
 

@@ -319,6 +319,7 @@
 		"bin-debug/modules/mapManagement/view/MmMainMenuPanel.js",
 		"bin-debug/modules/mapManagement/view/MmMergeListPanel.js",
 		"bin-debug/modules/user/view/UserRegisterPanel.js",
+		"bin-debug/modules/user/view/UserSetAvatarPanel.js",
 		"bin-debug/modules/user/view/UserSetPasswordPanel.js",
 		"bin-debug/modules/user/view/UserSetPrivilegePanel.js",
 		"bin-debug/modules/user/view/UserSetSoundPanel.js",

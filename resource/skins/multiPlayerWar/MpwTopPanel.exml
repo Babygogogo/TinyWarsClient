@@ -8,7 +8,7 @@
                                  source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" alpha="0.9" />
             <e:Group y="0" right="20">
                 <TwnsUiLabel:UiLabel id="_labelWeather" text="Sandstorm" size="14" x="10" textColor="0xFFFFFF" y="24"
-                                     maxTextWidth="68" />
+                                     maxTextWidth="68" height="30" verticalAlign="middle" />
                 <e:Group id="_groupTimer" x="270" verticalCenter="0" width="90">
                     <TwnsUiImage:UiImage x="10" y="10" scaleX="0.7" scaleY="0.7" source="commonIcon0008" />
                     <TwnsUiLabel:UiLabel id="_labelTimer" text="999:00:00" size="14" x="0" textColor="0xFFFFFF" y="14"

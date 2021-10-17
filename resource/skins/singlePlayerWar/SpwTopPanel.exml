@@ -8,7 +8,7 @@
                                  source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" alpha="0.9" />
             <e:Group y="0" right="20">
                 <TwnsUiLabel:UiLabel id="_labelWeather" text="Sandstorm" size="14" x="10" textColor="0xFFFFFF" y="24"
-                                     maxTextWidth="68" />
+                                     maxTextWidth="68" height="30" verticalAlign="middle" />
                 <TwnsUiLabel:UiLabel id="_labelSinglePlayer" text="Single Player" size="14" x="0" textColor="0xFFFFFF"
                                      y="14" />
                 <TwnsUiButton:UiButton id="_btnChat" label="" x="0" width="50" y="0" height="40">

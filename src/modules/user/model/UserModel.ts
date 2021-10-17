@@ -10,6 +10,7 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import UserProxy            from "./UserProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace UserModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -18,6 +19,7 @@ namespace UserModel {
     import IUserSettings        = ProtoTypes.User.IUserSettings;
     import IUserSelfInfo        = ProtoTypes.User.IUserSelfInfo;
     import IUserPrivilege       = ProtoTypes.User.IUserPrivilege;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     let _isLoggedIn                 = false;
     let _selfInfo                   : IUserSelfInfo | null = null;
@@ -105,6 +107,14 @@ namespace UserModel {
     function setSelfNickname(nickname: string): void {
         const info = getSelfInfo();
         (info) && (info.nickname = nickname);
+    }
+
+    export function getSelfAvatarId(): number | null {
+        return getSelfInfo()?.userComplexInfo?.avatarId ?? null;
+    }
+    export function setSelfAvatarId(avatarId: number): void {
+        const userComplexInfo = getSelfInfo()?.userComplexInfo;
+        (userComplexInfo) && (userComplexInfo.avatarId = avatarId);
     }
 
     export function getSelfDiscordId(): string | null {
@@ -276,6 +286,9 @@ namespace UserModel {
                 });
             }
         }
+    }
+    export function updateOnMsgUserSetAvatarId(data: NetMessage.MsgUserSetAvatarId.IS): void {
+        setSelfAvatarId(Helpers.getExisted(data.avatarId, ClientErrorCode.UserModel_UpdateOnMsgUserSetAvatarId_00));
     }
 
     function _onNotifyNetworkDisconnected(): void {

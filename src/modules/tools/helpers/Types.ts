@@ -81,6 +81,9 @@ namespace Types {
     export interface WeatherCfg extends ProtoTypes.Config.IWeatherCfg {
         weatherType : number;
     }
+    export interface UserAvatarCfg extends ProtoTypes.Config.IUserAvatarCfg {
+        avatarId    : number;
+    }
     export interface FullConfig extends ProtoTypes.Config.FullConfig {
         System          : SystemCfg;
         TileCategory    : TileCategoryCfg[];
@@ -96,6 +99,7 @@ namespace Types {
         CoBasic         : CoBasicCfg[];
         CoSkill         : CoSkillCfg[];
         Weather         : WeatherCfg[];
+        UserAvatar      : UserAvatarCfg[];
     }
 
     ////////////////////////////////////////////////////////////////////////////////

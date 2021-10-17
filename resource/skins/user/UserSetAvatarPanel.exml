@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" />
+    <e:Group id="_group" width="530" height="320" horizontalCenter="0" verticalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
+                                       verticalCenter="0" right="30" />
+            </e:Group>
+        </e:Group>
+        <TwnsUiScrollList:UiScrollList id="_sclAvatar" left="30" right="30" top="50" bottom="70">
+            <e:List requireSelection="true">
+                <e:itemRendererSkinName>
+                    <e:Skin height="50" width="50" currentState="up" states="down,up">
+                        <e:Group left="0" top="0" bottom="0" right="0">
+                            <TwnsUiImage:UiImage id="_imgAvatar" horizontalCenter="0" verticalCenter="0"
+                                                 source="userAvatar0001" scaleX="0.5" scaleY="0.5" alpha.up="0.3"
+                                                 alpha="0.3" alpha.down="1" />
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:TileLayout orientation="rows" paddingTop="2" requestedColumnCount="8" verticalGap="10"
+                                  columnAlign="justifyUsingGap" />
+                </e:layout>
+            </e:List>
+        </TwnsUiScrollList:UiScrollList>
+        <e:Group horizontalCenter="0" bottom="20">
+            <TwnsUiImage:UiImage id="_imgAvatar" anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,2,2" x="0" y="0"
+                                 source="userAvatar0001" scaleX="0.4" scaleY="0.4" />
+            <TwnsUiButton:UiButton id="_btnConfirm" label="聊天" skinName="Skins.Component.Button.ButtonYellow001"
+                                   width="100" left="0" top="0" />
+            <TwnsUiButton:UiButton id="_btnCancel" label="聊天" width="100" left="0" top="0"
+                                   skinName="Skins.Component.Button.ButtonGrey001" />
+            <e:layout>
+                <e:HorizontalLayout gap="60" verticalAlign="bottom" />
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

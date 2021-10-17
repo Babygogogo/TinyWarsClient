@@ -3838,6 +3838,10 @@ namespace TwnsLangCommonText {
             `Mr. Bear`,
             `Mr. Bear`,
         ],
+        [LangTextType.B0707]: [
+            `头像`,
+            `Avatar`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4378,8 +4382,12 @@ namespace TwnsLangCommonText {
             `Are you sure to modify the team of P%d?`,
         ],
         [LangTextType.F0073]: [
-            `当前天气将在第%d回合、P%d回合开始前结束。`,
-            `The current weather will end before D%d P%d's turn begins.`,
+            `当前天气：%s（默认：%s）。`,
+            `Current weather: %s (default: %s).`,
+        ],
+        [LangTextType.F0074]: [
+            `当前天气将在第%d回合、P%d开始前结束（当前：第%d回合、P%d）。`,
+            `The current weather will end before D%d P%d's turn begins (current: D%d P%d).`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

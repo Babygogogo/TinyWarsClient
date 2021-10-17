@@ -2133,6 +2133,102 @@ export declare namespace Config {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a UserAvatarCfg. */
+    interface IUserAvatarCfg {
+
+        /** UserAvatarCfg avatarId */
+        avatarId?: (number|null);
+
+        /** UserAvatarCfg sortWeight */
+        sortWeight?: (number|null);
+    }
+
+    /** Represents a UserAvatarCfg. */
+    class UserAvatarCfg implements IUserAvatarCfg {
+
+        /**
+         * Constructs a new UserAvatarCfg.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Config.IUserAvatarCfg);
+
+        /** UserAvatarCfg avatarId. */
+        public avatarId: number;
+
+        /** UserAvatarCfg sortWeight. */
+        public sortWeight: number;
+
+        /**
+         * Creates a new UserAvatarCfg instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns UserAvatarCfg instance
+         */
+        public static create(properties?: Config.IUserAvatarCfg): Config.UserAvatarCfg;
+
+        /**
+         * Encodes the specified UserAvatarCfg message. Does not implicitly {@link Config.UserAvatarCfg.verify|verify} messages.
+         * @param message UserAvatarCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Config.IUserAvatarCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified UserAvatarCfg message, length delimited. Does not implicitly {@link Config.UserAvatarCfg.verify|verify} messages.
+         * @param message UserAvatarCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Config.IUserAvatarCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a UserAvatarCfg message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns UserAvatarCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Config.UserAvatarCfg;
+
+        /**
+         * Decodes a UserAvatarCfg message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns UserAvatarCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Config.UserAvatarCfg;
+
+        /**
+         * Verifies a UserAvatarCfg message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a UserAvatarCfg message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UserAvatarCfg
+         */
+        public static fromObject(object: { [k: string]: any }): Config.UserAvatarCfg;
+
+        /**
+         * Creates a plain object from a UserAvatarCfg message. Also converts values to other types if specified.
+         * @param message UserAvatarCfg
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Config.UserAvatarCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UserAvatarCfg to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a FullConfig. */
     interface IFullConfig {
 
@@ -2177,6 +2273,9 @@ export declare namespace Config {
 
         /** FullConfig Weather */
         Weather?: (Config.IWeatherCfg[]|null);
+
+        /** FullConfig UserAvatar */
+        UserAvatar?: (Config.IUserAvatarCfg[]|null);
     }
 
     /** Represents a FullConfig. */
@@ -2229,6 +2328,9 @@ export declare namespace Config {
 
         /** FullConfig Weather. */
         public Weather: Config.IWeatherCfg[];
+
+        /** FullConfig UserAvatar. */
+        public UserAvatar: Config.IUserAvatarCfg[];
 
         /**
          * Creates a new FullConfig instance using the specified properties.
@@ -20879,6 +20981,9 @@ export declare namespace User {
 
         /** UserComplexInfo lastChatTime */
         lastChatTime?: (number|null);
+
+        /** UserComplexInfo avatarId */
+        avatarId?: (number|null);
     }
 
     /** Represents a UserComplexInfo. */
@@ -20907,6 +21012,9 @@ export declare namespace User {
 
         /** UserComplexInfo lastChatTime. */
         public lastChatTime: number;
+
+        /** UserComplexInfo avatarId. */
+        public avatarId: number;
 
         /**
          * Creates a new UserComplexInfo instance using the specified properties.
@@ -21105,6 +21213,9 @@ export declare namespace User {
         /** UserPublicInfo lastActivityTime */
         lastActivityTime?: (number|null);
 
+        /** UserPublicInfo avatarId */
+        avatarId?: (number|null);
+
         /** UserPublicInfo userPrivilege */
         userPrivilege?: (User.IUserPrivilege|null);
 
@@ -21150,6 +21261,9 @@ export declare namespace User {
 
         /** UserPublicInfo lastActivityTime. */
         public lastActivityTime: number;
+
+        /** UserPublicInfo avatarId. */
+        public avatarId: number;
 
         /** UserPublicInfo userPrivilege. */
         public userPrivilege?: (User.IUserPrivilege|null);
@@ -21506,6 +21620,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetMapRating */
         MsgUserSetMapRating?: (NetMessage.IMsgUserSetMapRating|null);
+
+        /** MessageContainer MsgUserSetAvatarId */
+        MsgUserSetAvatarId?: (NetMessage.IMsgUserSetAvatarId|null);
 
         /** MessageContainer MsgMapGetEnabledBriefDataList */
         MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
@@ -21873,6 +21990,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetMapRating. */
         public MsgUserSetMapRating?: (NetMessage.IMsgUserSetMapRating|null);
+
+        /** MessageContainer MsgUserSetAvatarId. */
+        public MsgUserSetAvatarId?: (NetMessage.IMsgUserSetAvatarId|null);
 
         /** MessageContainer MsgMapGetEnabledBriefDataList. */
         public MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
@@ -29130,6 +29250,291 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgUserSetMapRating.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgUserSetAvatarId. */
+    interface IMsgUserSetAvatarId {
+
+        /** MsgUserSetAvatarId c */
+        c?: (NetMessage.MsgUserSetAvatarId.IC|null);
+
+        /** MsgUserSetAvatarId s */
+        s?: (NetMessage.MsgUserSetAvatarId.IS|null);
+    }
+
+    /** Represents a MsgUserSetAvatarId. */
+    class MsgUserSetAvatarId implements IMsgUserSetAvatarId {
+
+        /**
+         * Constructs a new MsgUserSetAvatarId.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserSetAvatarId);
+
+        /** MsgUserSetAvatarId c. */
+        public c?: (NetMessage.MsgUserSetAvatarId.IC|null);
+
+        /** MsgUserSetAvatarId s. */
+        public s?: (NetMessage.MsgUserSetAvatarId.IS|null);
+
+        /**
+         * Creates a new MsgUserSetAvatarId instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserSetAvatarId instance
+         */
+        public static create(properties?: NetMessage.IMsgUserSetAvatarId): NetMessage.MsgUserSetAvatarId;
+
+        /**
+         * Encodes the specified MsgUserSetAvatarId message. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.verify|verify} messages.
+         * @param message MsgUserSetAvatarId message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserSetAvatarId, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserSetAvatarId message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.verify|verify} messages.
+         * @param message MsgUserSetAvatarId message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserSetAvatarId, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserSetAvatarId message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserSetAvatarId
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetAvatarId;
+
+        /**
+         * Decodes a MsgUserSetAvatarId message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserSetAvatarId
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetAvatarId;
+
+        /**
+         * Verifies a MsgUserSetAvatarId message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserSetAvatarId message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserSetAvatarId
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetAvatarId;
+
+        /**
+         * Creates a plain object from a MsgUserSetAvatarId message. Also converts values to other types if specified.
+         * @param message MsgUserSetAvatarId
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserSetAvatarId, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserSetAvatarId to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserSetAvatarId {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C avatarId */
+            avatarId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetAvatarId.IC);
+
+            /** C avatarId. */
+            public avatarId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetAvatarId.IC): NetMessage.MsgUserSetAvatarId.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetAvatarId.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetAvatarId.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetAvatarId.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetAvatarId.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetAvatarId.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetAvatarId.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S avatarId */
+            avatarId?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetAvatarId.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S avatarId. */
+            public avatarId: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetAvatarId.IS): NetMessage.MsgUserSetAvatarId.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetAvatarId.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetAvatarId.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetAvatarId.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetAvatarId.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetAvatarId.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetAvatarId.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

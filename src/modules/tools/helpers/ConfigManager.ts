@@ -33,6 +33,7 @@ namespace ConfigManager {
     import PlayerRankCfg        = Types.PlayerRankCfg;
     import CoSkillCfg           = Types.CoSkillCfg;
     import WeatherCfg           = Types.WeatherCfg;
+    import UserAvatarCfg        = Types.UserAvatarCfg;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Internal types.
@@ -52,6 +53,7 @@ namespace ConfigManager {
         CoBasic                 : { [coId: number]: CoBasicCfg };
         CoSkill                 : { [skillId: number]: CoSkillCfg };
         Weather                 : { [weatherType: number]: WeatherCfg };
+        UserAvatar              : { [avatarId: number]: UserAvatarCfg };
         maxUnitPromotion?       : number;
         secondaryWeaponFlag?    : { [unitType: number]: boolean };
     };
@@ -169,6 +171,13 @@ namespace ConfigManager {
         }
         return dst;
     }
+    function _destructUserAvatarCfg(data: UserAvatarCfg[]): { [avatarId: number]: UserAvatarCfg } {
+        const dst: { [avatarId: number]: UserAvatarCfg } = {};
+        for (const d of data) {
+            dst[d.avatarId] = d;
+        }
+        return dst;
+    }
     function _getMaxUnitPromotion(cfg: { [promotion: number]: UnitPromotionCfg }): number {
         let maxPromotion = 0;
         for (const p in cfg) {
@@ -258,6 +267,7 @@ namespace ConfigManager {
             CoBasic             : _destructCoBasicCfg(rawConfig.CoBasic),
             CoSkill             : _destructCoSkillCfg(rawConfig.CoSkill),
             Weather             : _destructWeatherCfg(rawConfig.Weather),
+            UserAvatar          : _destructUserAvatarCfg(rawConfig.UserAvatar),
             DamageChart         : damageChartCfg,
             UnitPromotion       : unitPromotionCfg,
             maxUnitPromotion    : _getMaxUnitPromotion(unitPromotionCfg),
@@ -723,6 +733,25 @@ namespace ConfigManager {
     }
     export function getCoEyeImageSource(coId: number, isAlive: boolean): string {
         return `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    }
+
+    export function getUserAvatarImageSource(avatarId: number): string {
+        return `userAvatar${Helpers.getNumText(avatarId, 4)}`;
+    }
+    export function getAvailableUserAvatarIdArray(version: string): number[] {
+        const cfgArray: { avatarId: number, sortWeight: number }[] = [];
+        const cfgDict = _ALL_CONFIGS.get(version)?.UserAvatar;
+        if (cfgDict) {
+            for (const i in cfgDict) {
+                const cfg = cfgDict[i];
+                cfgArray.push({
+                    avatarId    : cfg.avatarId,
+                    sortWeight  : cfg.sortWeight ?? Number.MAX_VALUE,
+                });
+            }
+        }
+
+        return cfgArray.sort((v1, v2) => v1.sortWeight - v2.sortWeight).map(v => v.avatarId);
     }
 
     export function checkIsUnitDivingByDefault(version: string, unitType: UnitType): boolean {

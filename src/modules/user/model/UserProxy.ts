@@ -8,6 +8,7 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import UserModel            from "../../user/model/UserModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace UserProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
@@ -27,6 +28,7 @@ namespace UserProxy {
             { msgCode: NetMessageCodes.MsgUserSetPassword,      callback: _onMsgUserSetPassword, },
             { msgCode: NetMessageCodes.MsgUserSetSettings,      callback: _onMsgUserSetSettings, },
             { msgCode: NetMessageCodes.MsgUserSetMapRating,     callback: _onMsgUserSetMapRating },
+            { msgCode: NetMessageCodes.MsgUserSetAvatarId,      callback: _onMsgUserSetAvatarId },
         ]);
     }
 
@@ -214,6 +216,23 @@ namespace UserProxy {
         if (!data.errorCode) {
             UserModel.updateOnMsgUserSetMapRating(data);
             Notify.dispatch(NotifyType.MsgUserSetMapRating, data);
+        }
+    }
+
+    export function reqSetAvatarId(avatarId: number): void {
+        NetManager.send({
+            MsgUserSetAvatarId: { c: {
+                avatarId,
+            }, },
+        });
+    }
+    async function _onMsgUserSetAvatarId(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgUserSetAvatarId.IS;
+        if (data.errorCode) {
+            Notify.dispatch(NotifyType.MsgUserSetAvatarIdFailed, data);
+        } else {
+            UserModel.updateOnMsgUserSetAvatarId(data);
+            Notify.dispatch(NotifyType.MsgUserSetAvatarId, data);
         }
     }
 }
