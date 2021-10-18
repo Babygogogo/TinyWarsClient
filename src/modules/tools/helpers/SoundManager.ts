@@ -108,26 +108,27 @@ namespace SoundManager {
     ]);
     const _UNIT_MOVE_FADEOUT_TIME = 0.6;
 
-    let _isInitialized          = false;
-    let _audioContext           : AudioContext;
+    let _isInitialized              = false;
+    let _audioContext               : AudioContext;
 
-    let _bgmMute                = DEFAULT_MUTE;
-    let _bgmVolume              = DEFAULT_VOLUME;    // 音量范围是0～1，1为最大音量
-    let _playingBgmCode         = BgmCode.None;
+    let _bgmMute                    = DEFAULT_MUTE;
+    let _bgmVolume                  = DEFAULT_VOLUME;    // 音量范围是0～1，1为最大音量
+    let _playingBgmCode             = BgmCode.None;
 
-    const _bgmBufferCache       = new Map<BgmCode, AudioBuffer>();
-    let _bgmGain                : GainNode;
-    let _bgmSourceNode          : AudioBufferSourceNode | null = null;
+    const _bgmBufferCache           = new Map<BgmCode, AudioBuffer>();
+    let _bgmGain                    : GainNode;
+    let _bgmSourceNode              : AudioBufferSourceNode | null = null;
 
-    let _sfxMute                = DEFAULT_MUTE;
-    let _sfxVolume              = DEFAULT_VOLUME;
-    let _playingLongSfxCode     = LongSfxCode.None;
+    let _sfxMute                    = DEFAULT_MUTE;
+    let _sfxVolume                  = DEFAULT_VOLUME;
+    let _playingLongSfxCode         = LongSfxCode.None;
+    let _timeoutIdForStopLongSfx    : number | null = null;
 
-    const _longSfxBufferCache   = new Map<LongSfxCode, AudioBuffer>();
-    const _shortSfxBufferCache  = new Map<ShortSfxCode, AudioBuffer>();
-    let _shortSfxGain           : GainNode;
-    let _longSfxGain            : GainNode;
-    let _longSfxSourceNode      : AudioBufferSourceNode | null = null;
+    const _longSfxBufferCache       = new Map<LongSfxCode, AudioBuffer>();
+    const _shortSfxBufferCache      = new Map<ShortSfxCode, AudioBuffer>();
+    let _shortSfxGain               : GainNode;
+    let _longSfxGain                : GainNode;
+    let _longSfxSourceNode          : AudioBufferSourceNode | null = null;
 
     // const _shortSfxDict         : { [shortSfxCode: number]: egret.SoundChannel | null } = {};
 
@@ -482,6 +483,14 @@ namespace SoundManager {
     // 长音效，同时只能有一个在播放
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function playLongSfxForMoveUnit(unitType: Types.UnitType): void {
+        if (_timeoutIdForStopLongSfx != null) {
+            egret.clearTimeout(_timeoutIdForStopLongSfx);
+            _timeoutIdForStopLongSfx = null;
+        }
+        if (_longSfxGain) {
+            _longSfxGain.gain.cancelScheduledValues(_audioContext.currentTime);
+        }
+
         _updateLongSfxVolume();
         playLongSfx(Helpers.getExisted(_UNIT_MOVE_SFX_CODES.get(unitType), ClientErrorCode.SoundManager_PlayLongSfxForMoveUnit_00));
     }
@@ -490,7 +499,7 @@ namespace SoundManager {
         if (longSfxGain) {
             longSfxGain.gain.setValueAtTime(_getRevisedSfxVolume(), _audioContext.currentTime);
             longSfxGain.gain.exponentialRampToValueAtTime(0.01, _audioContext.currentTime + _UNIT_MOVE_FADEOUT_TIME);
-            egret.setTimeout(() => playLongSfx(LongSfxCode.None), null, _UNIT_MOVE_FADEOUT_TIME * 1000);
+            _timeoutIdForStopLongSfx = egret.setTimeout(() => playLongSfx(LongSfxCode.None), null, _UNIT_MOVE_FADEOUT_TIME * 1000);
         }
     }
 
