@@ -293,6 +293,8 @@ namespace FlowManager {
         TwnsLobbyTopRightPanel.LobbyTopRightPanel.show();
         TwnsBroadcastPanel.BroadcastPanel.show();
         TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

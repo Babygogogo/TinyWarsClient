@@ -13,6 +13,7 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWarMapBuildingListPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -116,6 +117,7 @@ namespace TwnsWarMapBuildingListPanel {
         private readonly _labelNum2!        : TwnsUiLabel.UiLabel;
         private readonly _labelNum3!        : TwnsUiLabel.UiLabel;
         private readonly _labelNum4!        : TwnsUiLabel.UiLabel;
+        private readonly _labelNum5!        : TwnsUiLabel.UiLabel;
         private readonly _labelTotalNum!    : TwnsUiLabel.UiLabel;
 
         private _tileView       = new TwnsMeTileSimpleView.MeTileSimpleView();
@@ -139,6 +141,7 @@ namespace TwnsWarMapBuildingListPanel {
                 this._labelNum2,
                 this._labelNum3,
                 this._labelNum4,
+                this._labelNum5,
             );
         }
         protected _onClosed(): void {

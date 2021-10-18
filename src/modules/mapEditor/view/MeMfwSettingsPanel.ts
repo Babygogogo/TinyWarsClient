@@ -19,6 +19,7 @@
 // import TwnsMeMfwBasicSettingsPage       from "./MeMfwBasicSettingsPage";
 // import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeMfwSettingsPanel {
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeMfwAdvancedSettingsPage    = TwnsMeMfwAdvancedSettingsPage.MeMfwAdvancedSettingsPage;

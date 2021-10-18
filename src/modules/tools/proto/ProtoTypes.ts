@@ -21684,6 +21684,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMmSetMapTag */
         MsgMmSetMapTag?: (NetMessage.IMsgMmSetMapTag|null);
 
+        /** MessageContainer MsgMmSetMapName */
+        MsgMmSetMapName?: (NetMessage.IMsgMmSetMapName|null);
+
         /** MessageContainer MsgReplaySetRating */
         MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
 
@@ -22053,6 +22056,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMmSetMapTag. */
         public MsgMmSetMapTag?: (NetMessage.IMsgMmSetMapTag|null);
+
+        /** MessageContainer MsgMmSetMapName. */
+        public MsgMmSetMapName?: (NetMessage.IMsgMmSetMapName|null);
 
         /** MessageContainer MsgReplaySetRating. */
         public MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
@@ -35574,6 +35580,303 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMmSetMapTag.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMmSetMapName. */
+    interface IMsgMmSetMapName {
+
+        /** MsgMmSetMapName c */
+        c?: (NetMessage.MsgMmSetMapName.IC|null);
+
+        /** MsgMmSetMapName s */
+        s?: (NetMessage.MsgMmSetMapName.IS|null);
+    }
+
+    /** Represents a MsgMmSetMapName. */
+    class MsgMmSetMapName implements IMsgMmSetMapName {
+
+        /**
+         * Constructs a new MsgMmSetMapName.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMmSetMapName);
+
+        /** MsgMmSetMapName c. */
+        public c?: (NetMessage.MsgMmSetMapName.IC|null);
+
+        /** MsgMmSetMapName s. */
+        public s?: (NetMessage.MsgMmSetMapName.IS|null);
+
+        /**
+         * Creates a new MsgMmSetMapName instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMmSetMapName instance
+         */
+        public static create(properties?: NetMessage.IMsgMmSetMapName): NetMessage.MsgMmSetMapName;
+
+        /**
+         * Encodes the specified MsgMmSetMapName message. Does not implicitly {@link NetMessage.MsgMmSetMapName.verify|verify} messages.
+         * @param message MsgMmSetMapName message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMmSetMapName, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMmSetMapName message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapName.verify|verify} messages.
+         * @param message MsgMmSetMapName message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMmSetMapName, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMmSetMapName message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMmSetMapName
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapName;
+
+        /**
+         * Decodes a MsgMmSetMapName message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMmSetMapName
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapName;
+
+        /**
+         * Verifies a MsgMmSetMapName message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMmSetMapName message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMmSetMapName
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapName;
+
+        /**
+         * Creates a plain object from a MsgMmSetMapName message. Also converts values to other types if specified.
+         * @param message MsgMmSetMapName
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMmSetMapName, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMmSetMapName to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMmSetMapName {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C mapId */
+            mapId?: (number|null);
+
+            /** C mapNameArray */
+            mapNameArray?: (Structure.ILanguageText[]|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMmSetMapName.IC);
+
+            /** C mapId. */
+            public mapId: number;
+
+            /** C mapNameArray. */
+            public mapNameArray: Structure.ILanguageText[];
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgMmSetMapName.IC): NetMessage.MsgMmSetMapName.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmSetMapName.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMmSetMapName.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapName.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMmSetMapName.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapName.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapName.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapName.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMmSetMapName.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S mapId */
+            mapId?: (number|null);
+
+            /** S mapNameArray */
+            mapNameArray?: (Structure.ILanguageText[]|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMmSetMapName.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S mapId. */
+            public mapId: number;
+
+            /** S mapNameArray. */
+            public mapNameArray: Structure.ILanguageText[];
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMmSetMapName.IS): NetMessage.MsgMmSetMapName.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmSetMapName.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMmSetMapName.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapName.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMmSetMapName.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapName.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapName.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapName.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMmSetMapName.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

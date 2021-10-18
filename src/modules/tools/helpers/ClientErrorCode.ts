@@ -3122,6 +3122,17 @@ namespace TwnsClientErrorCode {
         McrCreateModel_GetPresetWarRuleId_08,
         McrCreateModel_GetPresetWarRuleId_09,
 
+        WarMapModel_UpdateOnSetMapName_00,
+        WarMapModel_UpdateOnSetMapName_01,
+        WarMapModel_UpdateOnSetMapName_02,
+        WarMapModel_UpdateOnSetMapName_03,
+        WarMapModel_UpdateOnSetMapName_04,
+        WarMapModel_UpdateOnSetMapName_05,
+        WarMapModel_UpdateOnSetMapName_06,
+        WarMapModel_UpdateOnSetMapName_07,
+        WarMapModel_UpdateOnSetMapName_08,
+        WarMapModel_UpdateOnSetMapName_09,
+
         WwModel_CreateDataForCommonWarMapInfoPage_00,
         WwModel_CreateDataForCommonWarMapInfoPage_01,
         WwModel_CreateDataForCommonWarMapInfoPage_02,

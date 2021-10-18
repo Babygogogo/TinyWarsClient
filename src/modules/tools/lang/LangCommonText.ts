@@ -1,6 +1,7 @@
 
 // import TwnsLangTextType     from "./LangTextType";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLangCommonText {
     import LangTextType = TwnsLangTextType.LangTextType;
 
@@ -3841,6 +3842,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0707]: [
             `头像`,
             `Avatar`,
+        ],
+        [LangTextType.B0708]: [
+            `改名`,
+            `Rename`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

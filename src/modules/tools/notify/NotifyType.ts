@@ -188,6 +188,7 @@ namespace TwnsNotifyType {
         MsgMmGetReviewingMaps,
         MsgMmReviewMap,
         MsgMmSetMapTag,
+        MsgMmSetMapName,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgMcrCreateRoom,
