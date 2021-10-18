@@ -1101,6 +1101,17 @@ namespace TwnsClientErrorCode {
         ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_08,
         ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_09,
 
+        ConfigManager_GetSystemMaxBanCoCount_00,
+        ConfigManager_GetSystemMaxBanCoCount_01,
+        ConfigManager_GetSystemMaxBanCoCount_02,
+        ConfigManager_GetSystemMaxBanCoCount_03,
+        ConfigManager_GetSystemMaxBanCoCount_04,
+        ConfigManager_GetSystemMaxBanCoCount_05,
+        ConfigManager_GetSystemMaxBanCoCount_06,
+        ConfigManager_GetSystemMaxBanCoCount_07,
+        ConfigManager_GetSystemMaxBanCoCount_08,
+        ConfigManager_GetSystemMaxBanCoCount_09,
+
         ConfigManager_GetTileType_00,
         ConfigManager_GetTileType_01,
         ConfigManager_GetTileType_02,

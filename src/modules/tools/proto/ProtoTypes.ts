@@ -92,6 +92,9 @@ export declare namespace Config {
 
         /** SystemCfg energyGrowthMultiplierArray */
         energyGrowthMultiplierArray?: (number[]|null);
+
+        /** SystemCfg maxBanCount */
+        maxBanCount?: (number|null);
     }
 
     /** Represents a SystemCfg. */
@@ -105,6 +108,9 @@ export declare namespace Config {
 
         /** SystemCfg energyGrowthMultiplierArray. */
         public energyGrowthMultiplierArray: number[];
+
+        /** SystemCfg maxBanCount. */
+        public maxBanCount: number;
 
         /**
          * Creates a new SystemCfg instance using the specified properties.

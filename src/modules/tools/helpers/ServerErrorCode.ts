@@ -290,6 +290,17 @@ export const enum ServerErrorCode {
     ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0008,
     ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_0009,
 
+    ConfigManager_GetSystemMaxBanCoCount_0000,
+    ConfigManager_GetSystemMaxBanCoCount_0001,
+    ConfigManager_GetSystemMaxBanCoCount_0002,
+    ConfigManager_GetSystemMaxBanCoCount_0003,
+    ConfigManager_GetSystemMaxBanCoCount_0004,
+    ConfigManager_GetSystemMaxBanCoCount_0005,
+    ConfigManager_GetSystemMaxBanCoCount_0006,
+    ConfigManager_GetSystemMaxBanCoCount_0007,
+    ConfigManager_GetSystemMaxBanCoCount_0008,
+    ConfigManager_GetSystemMaxBanCoCount_0009,
+
     ConfigManager_GetTileType_0000,
     ConfigManager_GetTileType_0001,
     ConfigManager_GetTileType_0002,

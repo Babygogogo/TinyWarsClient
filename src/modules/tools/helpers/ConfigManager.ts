@@ -295,6 +295,10 @@ namespace ConfigManager {
         return Helpers.getExisted(getSystemCfg(version).energyGrowthMultiplierArray[1], ClientErrorCode.ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_00);
     }
 
+    export function getSystemMaxBanCoCount(version: string): number {
+        return Helpers.getExisted(getSystemCfg(version).maxBanCount, ClientErrorCode.ConfigManager_GetSystemMaxBanCoCount_00);
+    }
+
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
         const mapping = Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);
         return Helpers.getExisted(mapping.get(objectType), ClientErrorCode.ConfigManager_GetTileType_01);

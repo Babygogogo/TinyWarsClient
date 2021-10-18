@@ -1,6 +1,7 @@
 
 // import Types    from "./Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace CommonConstants {
     import TileBaseType         = Types.TileBaseType;
     import TileDecoratorType    = Types.TileDecoratorType;
@@ -65,7 +66,6 @@ namespace CommonConstants {
     export const RankInitialScore                       = 1200;
     export const RankMaxConcurrentCount                 = 10;
     export const RankMinConcurrentCount                 = 0;
-    export const RankMaxBanCoCount                      = 3;
     export const RankRoomPhaseTime                      = 3600 * 24;
 
     export const ChatMessageMaxLength                   = 200;
