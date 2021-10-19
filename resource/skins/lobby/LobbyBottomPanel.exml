@@ -39,7 +39,7 @@
                                     </e:layout>
                                 </e:Group>
                                 <TwnsUiImage:UiImage id="_imgRed" scaleX="0.6" scaleY="0.6" source="commonIcon0000"
-                                                     right="-10" top="-6" />
+                                                     right="-10" top="-6" visible="false" />
                             </e:Group>
                         </e:Skin>
                     </TwnsUiButton:skinName>

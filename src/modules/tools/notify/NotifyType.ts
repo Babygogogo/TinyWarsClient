@@ -169,6 +169,8 @@ namespace TwnsNotifyType {
         MsgUserSetNicknameFailed,
         MsgUserSetAvatarId,
         MsgUserSetAvatarIdFailed,
+        MsgUserSetMapEditorAutoSaveTime,
+        MsgUserSetMapEditorAutoSaveTimeFailed,
         MsgUserSetDiscordId,
         MsgUserSetDiscordIdFailed,
         MsgUserGetOnlineUsers,

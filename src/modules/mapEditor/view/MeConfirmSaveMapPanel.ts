@@ -14,6 +14,7 @@
 // import MeProxy                  from "../model/MeProxy";
 // import MeUtility                from "../model/MeUtility";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeConfirmSaveMapPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -85,20 +86,31 @@ namespace TwnsMeConfirmSaveMapPanel {
         }
 
         private _onTouchedBtnConfirm(): void {
-            const needReview    = this._needReview;
-            const slotIndex     = Helpers.getExisted(MeModel.getWar()).getMapSlotIndex();
-            const mapRawData    = Helpers.getExisted(this._mapRawData);
-            if ((!needReview) || (!MeModel.checkHasReviewingMap())) {
-                MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
-                this.close();
-            } else {
+            const needReview            = this._needReview;
+            const slotIndex             = Helpers.getExisted(MeModel.getWar()).getMapSlotIndex();
+            const mapRawData            = Helpers.getExisted(this._mapRawData);
+            const reviewingSlotIndex    = MeModel.getReviewingMapSlotIndex();
+            if (reviewingSlotIndex === slotIndex) {
                 CommonConfirmPanel.show({
-                    content : Lang.getText(LangTextType.A0084),
+                    content : Lang.getText(LangTextType.A0245),
                     callback: () => {
                         MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
                         this.close();
                     },
                 });
+            } else {
+                if ((needReview) && (reviewingSlotIndex != null)) {
+                    CommonConfirmPanel.show({
+                        content : Lang.getText(LangTextType.A0084),
+                        callback: () => {
+                            MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
+                            this.close();
+                        },
+                    });
+                } else {
+                    MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
+                    this.close();
+                }
             }
         }
 

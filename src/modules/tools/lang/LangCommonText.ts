@@ -1023,6 +1023,26 @@ namespace TwnsLangCommonText {
             `您确定要切换CO搭载状态吗？`,
             `Are you sure to switch the CO onboard state?`,
         ],
+        [LangTextType.A0244]: [
+            `已成功保存并提审地图`,
+            `The map has been submitted for review successfully.`,
+        ],
+        [LangTextType.A0245]: [
+            `您已提审此地图的上一个版本。\n若继续保存此地图（不论是否提审），则上一个版本会被自动撤销提审。\n\n确定要继续吗？`,
+            `You have submitted the previous version of this map for review.\nIf you continue saving this map, the submitted version will not be reviewed.\n\nAre you sure to continue?`,
+        ],
+        [LangTextType.A0246]: [
+            `请填写自动保存的时间间隔，单位为秒。\n若当前地图已被提审，则自动保存功能将失效。\n您可以不填写时间间隔，以此禁用自动保存功能。`,
+            `Please input the time interval for auto save.\nThe auto save function will be disabled if the current map is being reviewed.\nYou can clear the input to cancel the auto save function.`,
+        ],
+        [LangTextType.A0247]: [
+            `已启用自动保存`,
+            `The auto save function is enabled successfully.`,
+        ],
+        [LangTextType.A0248]: [
+            `已禁用自动保存`,
+            `The auto save function is disabled successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3846,6 +3866,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0708]: [
             `改名`,
             `Rename`,
+        ],
+        [LangTextType.B0709]: [
+            `自动保存`,
+            `Auto Save`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -117,6 +117,14 @@ namespace UserModel {
         (userComplexInfo) && (userComplexInfo.avatarId = avatarId);
     }
 
+    export function getSelfMapEditorAutoSaveTime(): number | null {
+        return getSelfInfo()?.userComplexInfo?.mapEditorAutoSaveTime ?? null;
+    }
+    export function setSelfMapEditorAutoSaveTime(time: number | null): void {
+        const userComplexInfo = getSelfInfo()?.userComplexInfo;
+        (userComplexInfo) && (userComplexInfo.mapEditorAutoSaveTime = time);
+    }
+
     export function getSelfDiscordId(): string | null {
         const info = getSelfInfo();
         return info ? info.discordId ?? null : null;
@@ -289,6 +297,9 @@ namespace UserModel {
     }
     export function updateOnMsgUserSetAvatarId(data: NetMessage.MsgUserSetAvatarId.IS): void {
         setSelfAvatarId(Helpers.getExisted(data.avatarId, ClientErrorCode.UserModel_UpdateOnMsgUserSetAvatarId_00));
+    }
+    export function updateOnMsgUserSetMapEditorAutoSaveTime(data: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS): void {
+        setSelfMapEditorAutoSaveTime(data.time ?? null);
     }
 
     function _onNotifyNetworkDisconnected(): void {

@@ -20990,6 +20990,9 @@ export declare namespace User {
 
         /** UserComplexInfo avatarId */
         avatarId?: (number|null);
+
+        /** UserComplexInfo mapEditorAutoSaveTime */
+        mapEditorAutoSaveTime?: (number|null);
     }
 
     /** Represents a UserComplexInfo. */
@@ -21021,6 +21024,9 @@ export declare namespace User {
 
         /** UserComplexInfo avatarId. */
         public avatarId: number;
+
+        /** UserComplexInfo mapEditorAutoSaveTime. */
+        public mapEditorAutoSaveTime: number;
 
         /**
          * Creates a new UserComplexInfo instance using the specified properties.
@@ -21630,6 +21636,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgUserSetAvatarId */
         MsgUserSetAvatarId?: (NetMessage.IMsgUserSetAvatarId|null);
 
+        /** MessageContainer MsgUserSetMapEditorAutoSaveTime */
+        MsgUserSetMapEditorAutoSaveTime?: (NetMessage.IMsgUserSetMapEditorAutoSaveTime|null);
+
         /** MessageContainer MsgMapGetEnabledBriefDataList */
         MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
 
@@ -22002,6 +22011,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetAvatarId. */
         public MsgUserSetAvatarId?: (NetMessage.IMsgUserSetAvatarId|null);
+
+        /** MessageContainer MsgUserSetMapEditorAutoSaveTime. */
+        public MsgUserSetMapEditorAutoSaveTime?: (NetMessage.IMsgUserSetMapEditorAutoSaveTime|null);
 
         /** MessageContainer MsgMapGetEnabledBriefDataList. */
         public MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
@@ -29556,6 +29568,291 @@ export declare namespace NetMessage {
         }
     }
 
+    /** Properties of a MsgUserSetMapEditorAutoSaveTime. */
+    interface IMsgUserSetMapEditorAutoSaveTime {
+
+        /** MsgUserSetMapEditorAutoSaveTime c */
+        c?: (NetMessage.MsgUserSetMapEditorAutoSaveTime.IC|null);
+
+        /** MsgUserSetMapEditorAutoSaveTime s */
+        s?: (NetMessage.MsgUserSetMapEditorAutoSaveTime.IS|null);
+    }
+
+    /** Represents a MsgUserSetMapEditorAutoSaveTime. */
+    class MsgUserSetMapEditorAutoSaveTime implements IMsgUserSetMapEditorAutoSaveTime {
+
+        /**
+         * Constructs a new MsgUserSetMapEditorAutoSaveTime.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserSetMapEditorAutoSaveTime);
+
+        /** MsgUserSetMapEditorAutoSaveTime c. */
+        public c?: (NetMessage.MsgUserSetMapEditorAutoSaveTime.IC|null);
+
+        /** MsgUserSetMapEditorAutoSaveTime s. */
+        public s?: (NetMessage.MsgUserSetMapEditorAutoSaveTime.IS|null);
+
+        /**
+         * Creates a new MsgUserSetMapEditorAutoSaveTime instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserSetMapEditorAutoSaveTime instance
+         */
+        public static create(properties?: NetMessage.IMsgUserSetMapEditorAutoSaveTime): NetMessage.MsgUserSetMapEditorAutoSaveTime;
+
+        /**
+         * Encodes the specified MsgUserSetMapEditorAutoSaveTime message. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.verify|verify} messages.
+         * @param message MsgUserSetMapEditorAutoSaveTime message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserSetMapEditorAutoSaveTime, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserSetMapEditorAutoSaveTime message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.verify|verify} messages.
+         * @param message MsgUserSetMapEditorAutoSaveTime message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserSetMapEditorAutoSaveTime, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserSetMapEditorAutoSaveTime message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserSetMapEditorAutoSaveTime
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapEditorAutoSaveTime;
+
+        /**
+         * Decodes a MsgUserSetMapEditorAutoSaveTime message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserSetMapEditorAutoSaveTime
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapEditorAutoSaveTime;
+
+        /**
+         * Verifies a MsgUserSetMapEditorAutoSaveTime message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserSetMapEditorAutoSaveTime message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserSetMapEditorAutoSaveTime
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapEditorAutoSaveTime;
+
+        /**
+         * Creates a plain object from a MsgUserSetMapEditorAutoSaveTime message. Also converts values to other types if specified.
+         * @param message MsgUserSetMapEditorAutoSaveTime
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserSetMapEditorAutoSaveTime, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserSetMapEditorAutoSaveTime to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserSetMapEditorAutoSaveTime {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C time */
+            time?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetMapEditorAutoSaveTime.IC);
+
+            /** C time. */
+            public time: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetMapEditorAutoSaveTime.IC): NetMessage.MsgUserSetMapEditorAutoSaveTime.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapEditorAutoSaveTime.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapEditorAutoSaveTime.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapEditorAutoSaveTime.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S time */
+            time?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S time. */
+            public time: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS): NetMessage.MsgUserSetMapEditorAutoSaveTime.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapEditorAutoSaveTime.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapEditorAutoSaveTime.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapEditorAutoSaveTime.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a MsgMapGetEnabledBriefDataList. */
     interface IMsgMapGetEnabledBriefDataList {
 
@@ -31474,6 +31771,9 @@ export declare namespace NetMessage {
 
             /** S mapRawDataErrorCode */
             mapRawDataErrorCode?: (number|null);
+
+            /** S needReview */
+            needReview?: (boolean|null);
         }
 
         /** Represents a S. */
@@ -31490,6 +31790,9 @@ export declare namespace NetMessage {
 
             /** S mapRawDataErrorCode. */
             public mapRawDataErrorCode: number;
+
+            /** S needReview. */
+            public needReview: boolean;
 
             /**
              * Creates a new S instance using the specified properties.

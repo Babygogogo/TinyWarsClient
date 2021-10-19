@@ -22,6 +22,7 @@
 // import TwnsMeVisibilityPanel            from "./MeVisibilityPanel";
 // import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeTopPanel {
     import BwUnitView               = TwnsBwUnitView.BwUnitView;
     import MeDrawer                 = TwnsMeDrawer.MeDrawer;
@@ -85,6 +86,7 @@ namespace TwnsMeTopPanel {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.TimeTick,                        callback: this._onNotifyTimeTick },
                 { type: NotifyType.TileAnimationTick,               callback: this._onNotifyTileAnimationTick },
                 { type: NotifyType.UnitAnimationTick,               callback: this._onNotifyUnitAnimationTick },
                 { type: NotifyType.UnitStateIndicatorTick,          callback: this._onNotifyUnitStateIndicatorTick },
@@ -95,6 +97,7 @@ namespace TwnsMeTopPanel {
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.MsgMeSubmitMap,                  callback: this._onMsgMeSubmitMap },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnModePreview,             callback: this._onTouchedBtnModePreview },
@@ -136,6 +139,24 @@ namespace TwnsMeTopPanel {
         private _onNotifyLanguageChanged(): void  {
             this._updateComponentsForLanguage();
         }
+        private _onNotifyTimeTick(): void {
+            const autoSaveTime = UserModel.getSelfMapEditorAutoSaveTime();
+            if ((!autoSaveTime) || (Timer.getServerTimestamp() % autoSaveTime !== 0)) {
+                return;
+            }
+
+            const war = MeModel.getWar();
+            if ((war == null) || (!war.getIsMapModified()) || (war.getIsReviewingMap())) {
+                return;
+            }
+
+            const slotIndex = war.getMapSlotIndex();
+            if (slotIndex === MeModel.getReviewingMapSlotIndex()) {
+                return;
+            }
+
+            MeProxy.reqMeSubmitMap(slotIndex, war.serializeForMap(), false);
+        }
         private _onNotifyTileAnimationTick(): void {
             this._tileView.updateOnAnimationTick();
         }
@@ -169,6 +190,22 @@ namespace TwnsMeTopPanel {
         private _onNotifyBwActionPlannerStateChanged(): void {
             this._updateBtnModePreview();
             this._updateBtnDeleteTileObject();
+        }
+        private _onMsgMeSubmitMap(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMeSubmitMap.IS;
+            if (!data.needReview) {
+                FloatText.show(Lang.getText(LangTextType.A0085));
+            } else {
+                const errorCode = data.mapRawDataErrorCode;
+                if (errorCode) {
+                    FloatText.show(Lang.getText(LangTextType.A0197));
+                    FloatText.show(Lang.getErrorText(errorCode));
+                } else {
+                    FloatText.show(Lang.getText(LangTextType.A0244));
+                }
+            }
+
+            this._getWar().setIsMapModified(false);
         }
 
         private _onTouchedBtnModePreview(): void {

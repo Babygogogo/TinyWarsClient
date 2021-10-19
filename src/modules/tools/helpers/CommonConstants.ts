@@ -59,6 +59,8 @@ namespace CommonConstants {
 
     export const MapEditorSlotMaxCountForNormal         = 3;
     export const MapEditorSlotMaxCountForCommittee      = 100;
+    export const MapEditorAutoSaveMinTime               = 180;
+    export const MapEditorAutoSaveMaxTime               = 1800;
     export const MapReviewCommentMaxLength              = 1000;
     export const SpwSaveSlotMaxCount                    = 10;
     export const SpmSaveSlotCommentMaxLength            = 15;

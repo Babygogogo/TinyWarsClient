@@ -16,19 +16,20 @@ namespace UserProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgUserLogin,            callback: _onMsgUserLogin, },
-            { msgCode: NetMessageCodes.MsgUserRegister,         callback: _onMsgUserRegister, },
-            { msgCode: NetMessageCodes.MsgUserLogout,           callback: _onMsgUserLogout, },
-            { msgCode: NetMessageCodes.MsgUserGetPublicInfo,    callback: _onMsgUserGetPublicInfo, },
-            { msgCode: NetMessageCodes.MsgUserGetOnlineState,   callback: _onMsgUserGetOnlineState },
-            { msgCode: NetMessageCodes.MsgUserSetNickname,      callback: _onMsgUserSetNickname, },
-            { msgCode: NetMessageCodes.MsgUserSetDiscordId,     callback: _onMsgUserSetDiscordId, },
-            { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,   callback: _onMsgUserGetOnlineUsers, },
-            { msgCode: NetMessageCodes.MsgUserSetPrivilege,     callback: _onMsgUserSetPrivilege, },
-            { msgCode: NetMessageCodes.MsgUserSetPassword,      callback: _onMsgUserSetPassword, },
-            { msgCode: NetMessageCodes.MsgUserSetSettings,      callback: _onMsgUserSetSettings, },
-            { msgCode: NetMessageCodes.MsgUserSetMapRating,     callback: _onMsgUserSetMapRating },
-            { msgCode: NetMessageCodes.MsgUserSetAvatarId,      callback: _onMsgUserSetAvatarId },
+            { msgCode: NetMessageCodes.MsgUserLogin,                    callback: _onMsgUserLogin, },
+            { msgCode: NetMessageCodes.MsgUserRegister,                 callback: _onMsgUserRegister, },
+            { msgCode: NetMessageCodes.MsgUserLogout,                   callback: _onMsgUserLogout, },
+            { msgCode: NetMessageCodes.MsgUserGetPublicInfo,            callback: _onMsgUserGetPublicInfo, },
+            { msgCode: NetMessageCodes.MsgUserGetOnlineState,           callback: _onMsgUserGetOnlineState },
+            { msgCode: NetMessageCodes.MsgUserSetNickname,              callback: _onMsgUserSetNickname, },
+            { msgCode: NetMessageCodes.MsgUserSetDiscordId,             callback: _onMsgUserSetDiscordId, },
+            { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,           callback: _onMsgUserGetOnlineUsers, },
+            { msgCode: NetMessageCodes.MsgUserSetPrivilege,             callback: _onMsgUserSetPrivilege, },
+            { msgCode: NetMessageCodes.MsgUserSetPassword,              callback: _onMsgUserSetPassword, },
+            { msgCode: NetMessageCodes.MsgUserSetSettings,              callback: _onMsgUserSetSettings, },
+            { msgCode: NetMessageCodes.MsgUserSetMapRating,             callback: _onMsgUserSetMapRating },
+            { msgCode: NetMessageCodes.MsgUserSetAvatarId,              callback: _onMsgUserSetAvatarId },
+            { msgCode: NetMessageCodes.MsgUserSetMapEditorAutoSaveTime, callback: _onMsgUserSetMapEditorAutoSaveTime },
         ]);
     }
 
@@ -233,6 +234,23 @@ namespace UserProxy {
         } else {
             UserModel.updateOnMsgUserSetAvatarId(data);
             Notify.dispatch(NotifyType.MsgUserSetAvatarId, data);
+        }
+    }
+
+    export function reqSetMapEditorAutoSaveTime(time: number | null): void {
+        NetManager.send({
+            MsgUserSetMapEditorAutoSaveTime: { c: {
+                time,
+            }, },
+        });
+    }
+    async function _onMsgUserSetMapEditorAutoSaveTime(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgUserSetMapEditorAutoSaveTime.IS;
+        if (data.errorCode) {
+            Notify.dispatch(NotifyType.MsgUserSetMapEditorAutoSaveTimeFailed, data);
+        } else {
+            UserModel.updateOnMsgUserSetMapEditorAutoSaveTime(data);
+            Notify.dispatch(NotifyType.MsgUserSetMapEditorAutoSaveTime, data);
         }
     }
 }
