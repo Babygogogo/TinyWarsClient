@@ -223,7 +223,7 @@ namespace TwnsBwUnit {
             isBlocked   : boolean;
             aiming      : GridIndex | null;
         }): Promise<void> {
-            return this.getView().moveAlongPath(pathNodes, isDiving, isBlocked, aiming);
+            return this.getView().moveAlongPath({ path: pathNodes, isDiving, isBlocked, aiming });
         }
 
         ////////////////////////////////////////////////////////////////////////////////

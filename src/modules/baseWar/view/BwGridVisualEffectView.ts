@@ -6,25 +6,33 @@
 // import TwnsUiImage              from "../../tools/ui/UiImage";
 // import TwnsBwGridVisualEffect   from "../model/BwGridVisualEffect";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwGridVisualEffectView {
     import GridIndex            = Types.GridIndex;
     import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
-    const BLOCK_OFFSET_X            = Math.floor(_GRID_WIDTH * 0.3);
-    const BLOCK_OFFSET_Y            = Math.floor(_GRID_HEIGHT * 0.3);
-    const DIVE_OFFSET_X             = -_GRID_WIDTH;
-    const DIVE_OFFSET_Y             = -_GRID_HEIGHT;
-    const EXPLOSION_OFFSET_X        = -_GRID_WIDTH;
-    const EXPLOSION_OFFSET_Y        = -_GRID_HEIGHT * 2;
-    const DAMAGE_OFFSET_X           = -_GRID_WIDTH;
-    const DAMAGE_OFFSET_Y           = -_GRID_HEIGHT;
-    const SUPPLY_OFFSET_X           = Math.floor(_GRID_WIDTH * 0.3);
-    const SUPPLY_OFFSET_Y           = Math.floor(_GRID_HEIGHT * 0.3);
-    const REPAIR_OFFSET_X           = Math.floor(_GRID_WIDTH * 0.3);
-    const REPAIR_OFFSET_Y           = Math.floor(_GRID_HEIGHT * 0.3);
-    const SKILL_ACTIVATION_OFFSET_X = - (336 -_GRID_WIDTH) / 2;
-    const SKILL_ACTIVATION_OFFSET_Y = - (336 -_GRID_HEIGHT) / 2;
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = CommonConstants.GridSize;
+    const BLOCK_OFFSET_X                                = Math.floor(_GRID_WIDTH * 0.3);
+    const BLOCK_OFFSET_Y                                = Math.floor(_GRID_HEIGHT * 0.3);
+    const DIVE_OFFSET_X                                 = -_GRID_WIDTH;
+    const DIVE_OFFSET_Y                                 = -_GRID_HEIGHT;
+    const EXPLOSION_OFFSET_X                            = -_GRID_WIDTH;
+    const EXPLOSION_OFFSET_Y                            = -_GRID_HEIGHT * 2;
+    const DAMAGE_OFFSET_X                               = -_GRID_WIDTH;
+    const DAMAGE_OFFSET_Y                               = -_GRID_HEIGHT;
+    const SUPPLY_OFFSET_X                               = Math.floor(_GRID_WIDTH * 0.3);
+    const SUPPLY_OFFSET_Y                               = Math.floor(_GRID_HEIGHT * 0.3);
+    const REPAIR_OFFSET_X                               = Math.floor(_GRID_WIDTH * 0.3);
+    const REPAIR_OFFSET_Y                               = Math.floor(_GRID_HEIGHT * 0.3);
+    const SKILL_ACTIVATION_OFFSET_X                     = - (336 -_GRID_WIDTH) / 2;
+    const SKILL_ACTIVATION_OFFSET_Y                     = - (336 -_GRID_HEIGHT) / 2;
+    const _AIMING_FRAME_DURATION                        = 100;
+    const _IMG_SOURCES_FOR_AIMING                       = [
+        `c04_t03_s02_f01`,
+        `c04_t03_s02_f02`,
+        `c04_t03_s02_f03`,
+        `c04_t03_s02_f04`,
+    ];
 
     export class BwGridVisualEffectView extends egret.DisplayObjectContainer {
         private _gridVisualEffect!          : BwGridVisualEffect;
@@ -38,6 +46,7 @@ namespace TwnsBwGridVisualEffectView {
         private _layerForSupply             = new egret.DisplayObjectContainer();
         private _layerForRepair             = new egret.DisplayObjectContainer();
         private _layerForSkillActivation    = new egret.DisplayObjectContainer();
+        private _layerForAiming             = new egret.DisplayObjectContainer();
 
         public constructor() {
             super();
@@ -51,6 +60,7 @@ namespace TwnsBwGridVisualEffectView {
             this.addChild(this._layerForDamage);
             this.addChild(this._layerForFlare);
             this.addChild(this._layerForSkillActivation);
+            this.addChild(this._layerForAiming);
         }
 
         public init(gridVisualEffect: BwGridVisualEffect): void {
@@ -108,6 +118,10 @@ namespace TwnsBwGridVisualEffectView {
 
         public showEffectSurface(gridIndex: GridIndex): void {
             this._layerForSurface.addChild(createEffectSurface(gridIndex));
+        }
+
+        public showEffectAiming(gridIndex: GridIndex, timeMs: number): void {
+            this._layerForAiming.addChild(createEffectAiming(gridIndex, timeMs));
         }
     }
 
@@ -264,6 +278,30 @@ namespace TwnsBwGridVisualEffectView {
             tween.wait(50).set({ source: `c04_t08_s08_f${Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
+
+        return img;
+    }
+
+    function createEffectAiming(gridIndex: GridIndex, timeMs: number): egret.DisplayObject {
+        const img   = new TwnsUiImage.UiImage(_IMG_SOURCES_FOR_AIMING[0]);
+        img.x       = _GRID_WIDTH * (gridIndex.x - 1);
+        img.y       = _GRID_HEIGHT * (gridIndex.y - 1);
+
+        const totalFramesCount  = _IMG_SOURCES_FOR_AIMING.length;
+        let frameIndex          = 0;
+        egret.Tween.get(img, { loop: true })
+            .wait(_AIMING_FRAME_DURATION)
+            .call(() => {
+                frameIndex = (frameIndex + 1) % totalFramesCount;
+                img.source = _IMG_SOURCES_FOR_AIMING[frameIndex];
+            });
+
+        egret.Tween.get(img)
+            .wait(timeMs)
+            .call(() => {
+                (img.parent) && (img.parent.removeChild(img));
+                egret.Tween.removeTweens(img);
+            });
 
         return img;
     }
