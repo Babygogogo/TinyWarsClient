@@ -16,6 +16,7 @@
 // import TwnsCommonHelpPanel      from "./CommonHelpPanel";
 // import TwnsCommonInputPanel     from "./CommonInputPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonWarBasicSettingsPage {
     import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -83,6 +84,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
         protected _onDataChanged(): void {
             this._updateView();
@@ -108,6 +110,8 @@ namespace TwnsCommonWarBasicSettingsPage {
                 this._modifyAsWarRuleTitle();
             } else if (settingsType === WarBasicSettingsType.HasFog) {
                 this._modifyAsHasFog();
+            } else if (settingsType === WarBasicSettingsType.Weather) {
+                this._modifyAsWeather();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 this._modifyAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
@@ -130,6 +134,11 @@ namespace TwnsCommonWarBasicSettingsPage {
                 CommonHelpPanel.show({
                     title  : Lang.getText(LangTextType.B0020),
                     content: Lang.getText(LangTextType.R0002),
+                });
+            } else if (settingsType === WarBasicSettingsType.Weather) {
+                CommonHelpPanel.show({
+                    title  : Lang.getText(LangTextType.B0705),
+                    content: Lang.getText(LangTextType.R0009),
                 });
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 CommonHelpPanel.show({
@@ -160,6 +169,8 @@ namespace TwnsCommonWarBasicSettingsPage {
                 this._updateViewAsWarRuleTitle();
             } else if (settingsType === WarBasicSettingsType.HasFog) {
                 this._updateViewAsHasFog();
+            } else if (settingsType === WarBasicSettingsType.Weather) {
+                this._updateViewAsWeather();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 this._updateViewAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
@@ -210,6 +221,14 @@ namespace TwnsCommonWarBasicSettingsPage {
             const labelValue        = this._labelValue;
             labelValue.text         = Lang.getText(hasFog ? LangTextType.B0012 : LangTextType.B0013);
             labelValue.textColor    = hasFog ? 0xFFFF00 : 0xFFFFFF;
+            this._btnHelp.visible   = true;
+        }
+        private _updateViewAsWeather(): void {
+            const data              = this._getData();
+            const weatherType       = WarRuleHelpers.getDefaultWeatherType(data.warRule);
+            const labelValue        = this._labelValue;
+            labelValue.text         = Lang.getWeatherName(weatherType);
+            labelValue.textColor    = weatherType === Types.WeatherType.Clear ? 0xFFFFFF: 0xFFFF00;
             this._btnHelp.visible   = true;
         }
         private _updateViewAsTimerType(): void {
@@ -306,6 +325,18 @@ namespace TwnsCommonWarBasicSettingsPage {
             callback(null);
         }
         private _modifyAsHasFog(): void {
+            const data      = this._getData();
+            const callback  = Helpers.getExisted(data.callbackOnModify);
+            if (data.warRule.ruleId == null) {
+                callback(null);
+            } else {
+                TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                    content : Lang.getText(LangTextType.A0129),
+                    callback: () => callback(null),
+                });
+            }
+        }
+        private _modifyAsWeather(): void {
             const data      = this._getData();
             const callback  = Helpers.getExisted(data.callbackOnModify);
             if (data.warRule.ruleId == null) {

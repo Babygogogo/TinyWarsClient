@@ -8,8 +8,10 @@
 // import UserModel            from "../../user/model/UserModel";
 // import MrrModel             from "./MrrModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MrrSelfSettingsModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
 
     let _roomId             : number | null;
@@ -33,8 +35,8 @@ namespace MrrSelfSettingsModel {
 
         const selfPlayerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
         const availableCoIdArray    = generateAvailableCoIdArray(roomInfo, selfPlayerIndex);
-        if ((availableCoIdArray == null) || (!availableCoIdArray.length)) {
-            throw Helpers.newError(`Empty availableCoIdArray`);
+        if (!availableCoIdArray.length) {
+            throw Helpers.newError(`Empty availableCoIdArray`, ClientErrorCode.MrrSelfSettingsModel_ResetData_00);
         }
         setAvailableCoIdArray(availableCoIdArray);
 
@@ -43,8 +45,8 @@ namespace MrrSelfSettingsModel {
             setUnitAndTileSkinId(Helpers.getExisted(selfPlayerData.unitAndTileSkinId));
         } else {
             const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
-            if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
-                throw Helpers.newError(`Empty availableSkinIdList.`);
+            if (!availableSkinIdList.length) {
+                throw Helpers.newError(`Empty availableSkinIdList.`, ClientErrorCode.MrrSelfSettingsModel_ResetData_01);
             }
 
             setCoId(CommonConstants.CoEmptyId);
@@ -116,7 +118,7 @@ namespace MrrSelfSettingsModel {
             if (playerData.isReady) {
                 const skinId = Helpers.getExisted(playerData.unitAndTileSkinId);
                 if (usedSkinIds.has(skinId)) {
-                    throw Helpers.newError(`Duplicated skinId: ${skinId}`);
+                    throw Helpers.newError(`Duplicated skinId: ${skinId}`, ClientErrorCode.MrrSelfSettingsModel_GenerateAvailableSkinIdList_00);
                 }
 
                 usedSkinIds.add(skinId);

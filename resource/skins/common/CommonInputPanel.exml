@@ -4,7 +4,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing" xmlns:TwnsUiTextInput="TwnsUiTextInput.*">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" />
-    <e:Group id="_group" width="460" height="250" horizontalCenter="0" verticalCenter="0">
+    <e:Group id="_group" width="460" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0" locked="true">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                  scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
@@ -14,7 +14,7 @@
                 <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
             </e:Group>
         </e:Group>
-        <e:Group y="50" horizontalCenter="0">
+        <e:Group left="30" right="30" top="50" bottom="70">
             <TwnsUiTextInput:UiTextInput id="_input" anchorOffsetX="0" anchorOffsetY="0" maxChars="3" width="400"
                                          horizontalCenter="0" top="0" height="80">
                 <TwnsUiButton:skinName>

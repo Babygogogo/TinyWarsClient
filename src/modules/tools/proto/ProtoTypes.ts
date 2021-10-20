@@ -87,6 +87,102 @@ export declare class Config implements IConfig {
 
 export declare namespace Config {
 
+    /** Properties of a SystemCfg. */
+    interface ISystemCfg {
+
+        /** SystemCfg energyGrowthMultiplierArray */
+        energyGrowthMultiplierArray?: (number[]|null);
+
+        /** SystemCfg maxBanCount */
+        maxBanCount?: (number|null);
+    }
+
+    /** Represents a SystemCfg. */
+    class SystemCfg implements ISystemCfg {
+
+        /**
+         * Constructs a new SystemCfg.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Config.ISystemCfg);
+
+        /** SystemCfg energyGrowthMultiplierArray. */
+        public energyGrowthMultiplierArray: number[];
+
+        /** SystemCfg maxBanCount. */
+        public maxBanCount: number;
+
+        /**
+         * Creates a new SystemCfg instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SystemCfg instance
+         */
+        public static create(properties?: Config.ISystemCfg): Config.SystemCfg;
+
+        /**
+         * Encodes the specified SystemCfg message. Does not implicitly {@link Config.SystemCfg.verify|verify} messages.
+         * @param message SystemCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Config.ISystemCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified SystemCfg message, length delimited. Does not implicitly {@link Config.SystemCfg.verify|verify} messages.
+         * @param message SystemCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Config.ISystemCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a SystemCfg message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SystemCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Config.SystemCfg;
+
+        /**
+         * Decodes a SystemCfg message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SystemCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Config.SystemCfg;
+
+        /**
+         * Verifies a SystemCfg message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SystemCfg message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SystemCfg
+         */
+        public static fromObject(object: { [k: string]: any }): Config.SystemCfg;
+
+        /**
+         * Creates a plain object from a SystemCfg message. Also converts values to other types if specified.
+         * @param message SystemCfg
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Config.SystemCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SystemCfg to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a TileCategoryCfg. */
     interface ITileCategoryCfg {
 
@@ -1706,6 +1802,15 @@ export declare namespace Config {
 
         /** CoSkillCfg selfAddUnit */
         selfAddUnit?: (number[]|null);
+
+        /** CoSkillCfg selfFlareAmmoGain */
+        selfFlareAmmoGain?: (number[]|null);
+
+        /** CoSkillCfg selfUnitIgnoreWeather */
+        selfUnitIgnoreWeather?: (number[]|null);
+
+        /** CoSkillCfg changeWeather */
+        changeWeather?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1834,6 +1939,15 @@ export declare namespace Config {
         /** CoSkillCfg selfAddUnit. */
         public selfAddUnit: number[];
 
+        /** CoSkillCfg selfFlareAmmoGain. */
+        public selfFlareAmmoGain: number[];
+
+        /** CoSkillCfg selfUnitIgnoreWeather. */
+        public selfUnitIgnoreWeather: number[];
+
+        /** CoSkillCfg changeWeather. */
+        public changeWeather: number[];
+
         /**
          * Creates a new CoSkillCfg instance using the specified properties.
          * @param [properties] Properties to set
@@ -1905,8 +2019,227 @@ export declare namespace Config {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WeatherCfg. */
+    interface IWeatherCfg {
+
+        /** WeatherCfg weatherType */
+        weatherType?: (number|null);
+
+        /** WeatherCfg fog */
+        fog?: (number|null);
+
+        /** WeatherCfg offenseBonus */
+        offenseBonus?: (number[]|null);
+
+        /** WeatherCfg movementBonus */
+        movementBonus?: (number[]|null);
+
+        /** WeatherCfg unitVisionFixed */
+        unitVisionFixed?: (number[]|null);
+
+        /** WeatherCfg tileVisionFixed */
+        tileVisionFixed?: (number[]|null);
+    }
+
+    /** Represents a WeatherCfg. */
+    class WeatherCfg implements IWeatherCfg {
+
+        /**
+         * Constructs a new WeatherCfg.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Config.IWeatherCfg);
+
+        /** WeatherCfg weatherType. */
+        public weatherType: number;
+
+        /** WeatherCfg fog. */
+        public fog: number;
+
+        /** WeatherCfg offenseBonus. */
+        public offenseBonus: number[];
+
+        /** WeatherCfg movementBonus. */
+        public movementBonus: number[];
+
+        /** WeatherCfg unitVisionFixed. */
+        public unitVisionFixed: number[];
+
+        /** WeatherCfg tileVisionFixed. */
+        public tileVisionFixed: number[];
+
+        /**
+         * Creates a new WeatherCfg instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeatherCfg instance
+         */
+        public static create(properties?: Config.IWeatherCfg): Config.WeatherCfg;
+
+        /**
+         * Encodes the specified WeatherCfg message. Does not implicitly {@link Config.WeatherCfg.verify|verify} messages.
+         * @param message WeatherCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Config.IWeatherCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeatherCfg message, length delimited. Does not implicitly {@link Config.WeatherCfg.verify|verify} messages.
+         * @param message WeatherCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Config.IWeatherCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeatherCfg message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeatherCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Config.WeatherCfg;
+
+        /**
+         * Decodes a WeatherCfg message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeatherCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Config.WeatherCfg;
+
+        /**
+         * Verifies a WeatherCfg message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeatherCfg message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeatherCfg
+         */
+        public static fromObject(object: { [k: string]: any }): Config.WeatherCfg;
+
+        /**
+         * Creates a plain object from a WeatherCfg message. Also converts values to other types if specified.
+         * @param message WeatherCfg
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Config.WeatherCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeatherCfg to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a UserAvatarCfg. */
+    interface IUserAvatarCfg {
+
+        /** UserAvatarCfg avatarId */
+        avatarId?: (number|null);
+
+        /** UserAvatarCfg sortWeight */
+        sortWeight?: (number|null);
+    }
+
+    /** Represents a UserAvatarCfg. */
+    class UserAvatarCfg implements IUserAvatarCfg {
+
+        /**
+         * Constructs a new UserAvatarCfg.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Config.IUserAvatarCfg);
+
+        /** UserAvatarCfg avatarId. */
+        public avatarId: number;
+
+        /** UserAvatarCfg sortWeight. */
+        public sortWeight: number;
+
+        /**
+         * Creates a new UserAvatarCfg instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns UserAvatarCfg instance
+         */
+        public static create(properties?: Config.IUserAvatarCfg): Config.UserAvatarCfg;
+
+        /**
+         * Encodes the specified UserAvatarCfg message. Does not implicitly {@link Config.UserAvatarCfg.verify|verify} messages.
+         * @param message UserAvatarCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Config.IUserAvatarCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified UserAvatarCfg message, length delimited. Does not implicitly {@link Config.UserAvatarCfg.verify|verify} messages.
+         * @param message UserAvatarCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Config.IUserAvatarCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a UserAvatarCfg message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns UserAvatarCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Config.UserAvatarCfg;
+
+        /**
+         * Decodes a UserAvatarCfg message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns UserAvatarCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Config.UserAvatarCfg;
+
+        /**
+         * Verifies a UserAvatarCfg message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a UserAvatarCfg message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UserAvatarCfg
+         */
+        public static fromObject(object: { [k: string]: any }): Config.UserAvatarCfg;
+
+        /**
+         * Creates a plain object from a UserAvatarCfg message. Also converts values to other types if specified.
+         * @param message UserAvatarCfg
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Config.UserAvatarCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UserAvatarCfg to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a FullConfig. */
     interface IFullConfig {
+
+        /** FullConfig System */
+        System?: (Config.ISystemCfg|null);
 
         /** FullConfig TileCategory */
         TileCategory?: (Config.ITileCategoryCfg[]|null);
@@ -1943,6 +2276,12 @@ export declare namespace Config {
 
         /** FullConfig CoSkill */
         CoSkill?: (Config.ICoSkillCfg[]|null);
+
+        /** FullConfig Weather */
+        Weather?: (Config.IWeatherCfg[]|null);
+
+        /** FullConfig UserAvatar */
+        UserAvatar?: (Config.IUserAvatarCfg[]|null);
     }
 
     /** Represents a FullConfig. */
@@ -1953,6 +2292,9 @@ export declare namespace Config {
          * @param [properties] Properties to set
          */
         constructor(properties?: Config.IFullConfig);
+
+        /** FullConfig System. */
+        public System?: (Config.ISystemCfg|null);
 
         /** FullConfig TileCategory. */
         public TileCategory: Config.ITileCategoryCfg[];
@@ -1989,6 +2331,12 @@ export declare namespace Config {
 
         /** FullConfig CoSkill. */
         public CoSkill: Config.ICoSkillCfg[];
+
+        /** FullConfig Weather. */
+        public Weather: Config.IWeatherCfg[];
+
+        /** FullConfig UserAvatar. */
+        public UserAvatar: Config.IUserAvatarCfg[];
 
         /**
          * Creates a new FullConfig instance using the specified properties.
@@ -6377,6 +6725,9 @@ export declare namespace WarRule {
 
         /** RuleForGlobalParams hasFogByDefault */
         hasFogByDefault?: (boolean|null);
+
+        /** RuleForGlobalParams defaultWeatherType */
+        defaultWeatherType?: (number|null);
     }
 
     /** Represents a RuleForGlobalParams. */
@@ -6390,6 +6741,9 @@ export declare namespace WarRule {
 
         /** RuleForGlobalParams hasFogByDefault. */
         public hasFogByDefault: boolean;
+
+        /** RuleForGlobalParams defaultWeatherType. */
+        public defaultWeatherType: number;
 
         /**
          * Creates a new RuleForGlobalParams instance using the specified properties.
@@ -9066,6 +9420,108 @@ export declare namespace WarSerialization {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a SerialWeatherManager. */
+    interface ISerialWeatherManager {
+
+        /** SerialWeatherManager forceWeatherType */
+        forceWeatherType?: (number|null);
+
+        /** SerialWeatherManager expireTurnIndex */
+        expireTurnIndex?: (number|null);
+
+        /** SerialWeatherManager expirePlayerIndex */
+        expirePlayerIndex?: (number|null);
+    }
+
+    /** Represents a SerialWeatherManager. */
+    class SerialWeatherManager implements ISerialWeatherManager {
+
+        /**
+         * Constructs a new SerialWeatherManager.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ISerialWeatherManager);
+
+        /** SerialWeatherManager forceWeatherType. */
+        public forceWeatherType: number;
+
+        /** SerialWeatherManager expireTurnIndex. */
+        public expireTurnIndex: number;
+
+        /** SerialWeatherManager expirePlayerIndex. */
+        public expirePlayerIndex: number;
+
+        /**
+         * Creates a new SerialWeatherManager instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SerialWeatherManager instance
+         */
+        public static create(properties?: WarSerialization.ISerialWeatherManager): WarSerialization.SerialWeatherManager;
+
+        /**
+         * Encodes the specified SerialWeatherManager message. Does not implicitly {@link WarSerialization.SerialWeatherManager.verify|verify} messages.
+         * @param message SerialWeatherManager message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ISerialWeatherManager, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified SerialWeatherManager message, length delimited. Does not implicitly {@link WarSerialization.SerialWeatherManager.verify|verify} messages.
+         * @param message SerialWeatherManager message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ISerialWeatherManager, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a SerialWeatherManager message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SerialWeatherManager
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.SerialWeatherManager;
+
+        /**
+         * Decodes a SerialWeatherManager message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SerialWeatherManager
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.SerialWeatherManager;
+
+        /**
+         * Verifies a SerialWeatherManager message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SerialWeatherManager message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SerialWeatherManager
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.SerialWeatherManager;
+
+        /**
+         * Creates a plain object from a SerialWeatherManager message. Also converts values to other types if specified.
+         * @param message SerialWeatherManager
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.SerialWeatherManager, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SerialWeatherManager to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a SerialWar. */
     interface ISerialWar {
 
@@ -9119,6 +9575,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar warEventManager */
         warEventManager?: (WarSerialization.ISerialWarEventManager|null);
+
+        /** SerialWar weatherManager */
+        weatherManager?: (WarSerialization.ISerialWeatherManager|null);
     }
 
     /** Represents a SerialWar. */
@@ -9180,6 +9639,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar warEventManager. */
         public warEventManager?: (WarSerialization.ISerialWarEventManager|null);
+
+        /** SerialWar weatherManager. */
+        public weatherManager?: (WarSerialization.ISerialWeatherManager|null);
 
         /**
          * Creates a new SerialWar instance using the specified properties.
@@ -10180,6 +10642,12 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemEndTurn restTimeToBootForCurrentPlayer */
             restTimeToBootForCurrentPlayer?: (number|null);
+
+            /** ExtraDataForSystemEndTurn discoveredUnits */
+            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForSystemEndTurn discoveredTiles */
+            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
         }
 
         /** Represents an ExtraDataForSystemEndTurn. */
@@ -10193,6 +10661,12 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemEndTurn restTimeToBootForCurrentPlayer. */
             public restTimeToBootForCurrentPlayer: number;
+
+            /** ExtraDataForSystemEndTurn discoveredUnits. */
+            public discoveredUnits: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForSystemEndTurn discoveredTiles. */
+            public discoveredTiles: WarSerialization.ISerialTile[];
 
             /**
              * Creates a new ExtraDataForSystemEndTurn instance using the specified properties.
@@ -10264,6 +10738,96 @@ export declare namespace WarAction {
              */
             public toJSON(): { [k: string]: any };
         }
+    }
+
+    /** Properties of a WarActionSystemVoteForDraw. */
+    interface IWarActionSystemVoteForDraw {
+
+        /** WarActionSystemVoteForDraw isAgree */
+        isAgree?: (boolean|null);
+    }
+
+    /** Represents a WarActionSystemVoteForDraw. */
+    class WarActionSystemVoteForDraw implements IWarActionSystemVoteForDraw {
+
+        /**
+         * Constructs a new WarActionSystemVoteForDraw.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionSystemVoteForDraw);
+
+        /** WarActionSystemVoteForDraw isAgree. */
+        public isAgree: boolean;
+
+        /**
+         * Creates a new WarActionSystemVoteForDraw instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionSystemVoteForDraw instance
+         */
+        public static create(properties?: WarAction.IWarActionSystemVoteForDraw): WarAction.WarActionSystemVoteForDraw;
+
+        /**
+         * Encodes the specified WarActionSystemVoteForDraw message. Does not implicitly {@link WarAction.WarActionSystemVoteForDraw.verify|verify} messages.
+         * @param message WarActionSystemVoteForDraw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionSystemVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionSystemVoteForDraw message, length delimited. Does not implicitly {@link WarAction.WarActionSystemVoteForDraw.verify|verify} messages.
+         * @param message WarActionSystemVoteForDraw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionSystemVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionSystemVoteForDraw message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionSystemVoteForDraw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemVoteForDraw;
+
+        /**
+         * Decodes a WarActionSystemVoteForDraw message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionSystemVoteForDraw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemVoteForDraw;
+
+        /**
+         * Verifies a WarActionSystemVoteForDraw message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionSystemVoteForDraw message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionSystemVoteForDraw
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemVoteForDraw;
+
+        /**
+         * Creates a plain object from a WarActionSystemVoteForDraw message. Also converts values to other types if specified.
+         * @param message WarActionSystemVoteForDraw
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionSystemVoteForDraw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionSystemVoteForDraw to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
     }
 
     /** Properties of a WarActionPlayerEndTurn. */
@@ -10363,6 +10927,12 @@ export declare namespace WarAction {
 
             /** ExtraDataForPlayerEndTurn restTimeToBootForCurrentPlayer */
             restTimeToBootForCurrentPlayer?: (number|null);
+
+            /** ExtraDataForPlayerEndTurn discoveredUnits */
+            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForPlayerEndTurn discoveredTiles */
+            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
         }
 
         /** Represents an ExtraDataForPlayerEndTurn. */
@@ -10376,6 +10946,12 @@ export declare namespace WarAction {
 
             /** ExtraDataForPlayerEndTurn restTimeToBootForCurrentPlayer. */
             public restTimeToBootForCurrentPlayer: number;
+
+            /** ExtraDataForPlayerEndTurn discoveredUnits. */
+            public discoveredUnits: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForPlayerEndTurn discoveredTiles. */
+            public discoveredTiles: WarSerialization.ISerialTile[];
 
             /**
              * Creates a new ExtraDataForPlayerEndTurn instance using the specified properties.
@@ -11039,11 +11615,11 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForPlayerUseCoSkill. */
         interface IExtraDataForPlayerUseCoSkill {
 
-            /** ExtraDataForPlayerUseCoSkill discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForPlayerUseCoSkill discoveredUnitsAfterAction */
+            discoveredUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForPlayerUseCoSkill discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForPlayerUseCoSkill discoveredTilesAfterAction */
+            discoveredTilesAfterAction?: (WarSerialization.ISerialTile[]|null);
 
             /** ExtraDataForPlayerUseCoSkill skillDataArray */
             skillDataArray?: (Structure.IDataForUseCoSkill[]|null);
@@ -11058,11 +11634,11 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill);
 
-            /** ExtraDataForPlayerUseCoSkill discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForPlayerUseCoSkill discoveredUnitsAfterAction. */
+            public discoveredUnitsAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForPlayerUseCoSkill discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForPlayerUseCoSkill discoveredTilesAfterAction. */
+            public discoveredTilesAfterAction: WarSerialization.ISerialTile[];
 
             /** ExtraDataForPlayerUseCoSkill skillDataArray. */
             public skillDataArray: Structure.IDataForUseCoSkill[];
@@ -14447,11 +15023,11 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitUseCoSkill. */
         interface IExtraDataForUnitUseCoSkill {
 
-            /** ExtraDataForUnitUseCoSkill discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitUseCoSkill discoveredUnitsAfterAction */
+            discoveredUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitUseCoSkill discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitUseCoSkill discoveredTilesAfterAction */
+            discoveredTilesAfterAction?: (WarSerialization.ISerialTile[]|null);
 
             /** ExtraDataForUnitUseCoSkill actingUnits */
             actingUnits?: (WarSerialization.ISerialUnit[]|null);
@@ -14469,11 +15045,11 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitUseCoSkill.IExtraDataForUnitUseCoSkill);
 
-            /** ExtraDataForUnitUseCoSkill discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitUseCoSkill discoveredUnitsAfterAction. */
+            public discoveredUnitsAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitUseCoSkill discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitUseCoSkill discoveredTilesAfterAction. */
+            public discoveredTilesAfterAction: WarSerialization.ISerialTile[];
 
             /** ExtraDataForUnitUseCoSkill actingUnits. */
             public actingUnits: WarSerialization.ISerialUnit[];
@@ -14577,6 +15153,9 @@ export declare namespace WarAction {
         /** WarActionContainer WarActionSystemHandleBootPlayer */
         WarActionSystemHandleBootPlayer?: (WarAction.IWarActionSystemHandleBootPlayer|null);
 
+        /** WarActionContainer WarActionSystemVoteForDraw */
+        WarActionSystemVoteForDraw?: (WarAction.IWarActionSystemVoteForDraw|null);
+
         /** WarActionContainer WarActionPlayerEndTurn */
         WarActionPlayerEndTurn?: (WarAction.IWarActionPlayerEndTurn|null);
 
@@ -14673,6 +15252,9 @@ export declare namespace WarAction {
 
         /** WarActionContainer WarActionSystemHandleBootPlayer. */
         public WarActionSystemHandleBootPlayer?: (WarAction.IWarActionSystemHandleBootPlayer|null);
+
+        /** WarActionContainer WarActionSystemVoteForDraw. */
+        public WarActionSystemVoteForDraw?: (WarAction.IWarActionSystemVoteForDraw|null);
 
         /** WarActionContainer WarActionPlayerEndTurn. */
         public WarActionPlayerEndTurn?: (WarAction.IWarActionPlayerEndTurn|null);
@@ -16208,6 +16790,9 @@ export declare namespace Structure {
 
         /** DataForUseCoSkill indiscriminateAreaDamageCenter */
         indiscriminateAreaDamageCenter?: (Structure.IGridIndex|null);
+
+        /** DataForUseCoSkill newWeatherType */
+        newWeatherType?: (number|null);
     }
 
     /** Represents a DataForUseCoSkill. */
@@ -16224,6 +16809,9 @@ export declare namespace Structure {
 
         /** DataForUseCoSkill indiscriminateAreaDamageCenter. */
         public indiscriminateAreaDamageCenter?: (Structure.IGridIndex|null);
+
+        /** DataForUseCoSkill newWeatherType. */
+        public newWeatherType: number;
 
         /**
          * Creates a new DataForUseCoSkill instance using the specified properties.
@@ -20399,6 +20987,12 @@ export declare namespace User {
 
         /** UserComplexInfo lastChatTime */
         lastChatTime?: (number|null);
+
+        /** UserComplexInfo avatarId */
+        avatarId?: (number|null);
+
+        /** UserComplexInfo mapEditorAutoSaveTime */
+        mapEditorAutoSaveTime?: (number|null);
     }
 
     /** Represents a UserComplexInfo. */
@@ -20427,6 +21021,12 @@ export declare namespace User {
 
         /** UserComplexInfo lastChatTime. */
         public lastChatTime: number;
+
+        /** UserComplexInfo avatarId. */
+        public avatarId: number;
+
+        /** UserComplexInfo mapEditorAutoSaveTime. */
+        public mapEditorAutoSaveTime: number;
 
         /**
          * Creates a new UserComplexInfo instance using the specified properties.
@@ -20625,6 +21225,9 @@ export declare namespace User {
         /** UserPublicInfo lastActivityTime */
         lastActivityTime?: (number|null);
 
+        /** UserPublicInfo avatarId */
+        avatarId?: (number|null);
+
         /** UserPublicInfo userPrivilege */
         userPrivilege?: (User.IUserPrivilege|null);
 
@@ -20670,6 +21273,9 @@ export declare namespace User {
 
         /** UserPublicInfo lastActivityTime. */
         public lastActivityTime: number;
+
+        /** UserPublicInfo avatarId. */
+        public avatarId: number;
 
         /** UserPublicInfo userPrivilege. */
         public userPrivilege?: (User.IUserPrivilege|null);
@@ -21027,6 +21633,12 @@ export declare namespace NetMessage {
         /** MessageContainer MsgUserSetMapRating */
         MsgUserSetMapRating?: (NetMessage.IMsgUserSetMapRating|null);
 
+        /** MessageContainer MsgUserSetAvatarId */
+        MsgUserSetAvatarId?: (NetMessage.IMsgUserSetAvatarId|null);
+
+        /** MessageContainer MsgUserSetMapEditorAutoSaveTime */
+        MsgUserSetMapEditorAutoSaveTime?: (NetMessage.IMsgUserSetMapEditorAutoSaveTime|null);
+
         /** MessageContainer MsgMapGetEnabledBriefDataList */
         MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
 
@@ -21086,6 +21698,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMmSetMapTag */
         MsgMmSetMapTag?: (NetMessage.IMsgMmSetMapTag|null);
+
+        /** MessageContainer MsgMmSetMapName */
+        MsgMmSetMapName?: (NetMessage.IMsgMmSetMapName|null);
 
         /** MessageContainer MsgReplaySetRating */
         MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
@@ -21394,6 +22009,12 @@ export declare namespace NetMessage {
         /** MessageContainer MsgUserSetMapRating. */
         public MsgUserSetMapRating?: (NetMessage.IMsgUserSetMapRating|null);
 
+        /** MessageContainer MsgUserSetAvatarId. */
+        public MsgUserSetAvatarId?: (NetMessage.IMsgUserSetAvatarId|null);
+
+        /** MessageContainer MsgUserSetMapEditorAutoSaveTime. */
+        public MsgUserSetMapEditorAutoSaveTime?: (NetMessage.IMsgUserSetMapEditorAutoSaveTime|null);
+
         /** MessageContainer MsgMapGetEnabledBriefDataList. */
         public MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
 
@@ -21453,6 +22074,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMmSetMapTag. */
         public MsgMmSetMapTag?: (NetMessage.IMsgMmSetMapTag|null);
+
+        /** MessageContainer MsgMmSetMapName. */
+        public MsgMmSetMapName?: (NetMessage.IMsgMmSetMapName|null);
 
         /** MessageContainer MsgReplaySetRating. */
         public MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
@@ -28659,6 +29283,576 @@ export declare namespace NetMessage {
         }
     }
 
+    /** Properties of a MsgUserSetAvatarId. */
+    interface IMsgUserSetAvatarId {
+
+        /** MsgUserSetAvatarId c */
+        c?: (NetMessage.MsgUserSetAvatarId.IC|null);
+
+        /** MsgUserSetAvatarId s */
+        s?: (NetMessage.MsgUserSetAvatarId.IS|null);
+    }
+
+    /** Represents a MsgUserSetAvatarId. */
+    class MsgUserSetAvatarId implements IMsgUserSetAvatarId {
+
+        /**
+         * Constructs a new MsgUserSetAvatarId.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserSetAvatarId);
+
+        /** MsgUserSetAvatarId c. */
+        public c?: (NetMessage.MsgUserSetAvatarId.IC|null);
+
+        /** MsgUserSetAvatarId s. */
+        public s?: (NetMessage.MsgUserSetAvatarId.IS|null);
+
+        /**
+         * Creates a new MsgUserSetAvatarId instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserSetAvatarId instance
+         */
+        public static create(properties?: NetMessage.IMsgUserSetAvatarId): NetMessage.MsgUserSetAvatarId;
+
+        /**
+         * Encodes the specified MsgUserSetAvatarId message. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.verify|verify} messages.
+         * @param message MsgUserSetAvatarId message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserSetAvatarId, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserSetAvatarId message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.verify|verify} messages.
+         * @param message MsgUserSetAvatarId message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserSetAvatarId, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserSetAvatarId message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserSetAvatarId
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetAvatarId;
+
+        /**
+         * Decodes a MsgUserSetAvatarId message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserSetAvatarId
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetAvatarId;
+
+        /**
+         * Verifies a MsgUserSetAvatarId message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserSetAvatarId message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserSetAvatarId
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetAvatarId;
+
+        /**
+         * Creates a plain object from a MsgUserSetAvatarId message. Also converts values to other types if specified.
+         * @param message MsgUserSetAvatarId
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserSetAvatarId, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserSetAvatarId to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserSetAvatarId {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C avatarId */
+            avatarId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetAvatarId.IC);
+
+            /** C avatarId. */
+            public avatarId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetAvatarId.IC): NetMessage.MsgUserSetAvatarId.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetAvatarId.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetAvatarId.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetAvatarId.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetAvatarId.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetAvatarId.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetAvatarId.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S avatarId */
+            avatarId?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetAvatarId.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S avatarId. */
+            public avatarId: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetAvatarId.IS): NetMessage.MsgUserSetAvatarId.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetAvatarId.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetAvatarId.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetAvatarId.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetAvatarId.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetAvatarId.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetAvatarId.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetAvatarId.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgUserSetMapEditorAutoSaveTime. */
+    interface IMsgUserSetMapEditorAutoSaveTime {
+
+        /** MsgUserSetMapEditorAutoSaveTime c */
+        c?: (NetMessage.MsgUserSetMapEditorAutoSaveTime.IC|null);
+
+        /** MsgUserSetMapEditorAutoSaveTime s */
+        s?: (NetMessage.MsgUserSetMapEditorAutoSaveTime.IS|null);
+    }
+
+    /** Represents a MsgUserSetMapEditorAutoSaveTime. */
+    class MsgUserSetMapEditorAutoSaveTime implements IMsgUserSetMapEditorAutoSaveTime {
+
+        /**
+         * Constructs a new MsgUserSetMapEditorAutoSaveTime.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserSetMapEditorAutoSaveTime);
+
+        /** MsgUserSetMapEditorAutoSaveTime c. */
+        public c?: (NetMessage.MsgUserSetMapEditorAutoSaveTime.IC|null);
+
+        /** MsgUserSetMapEditorAutoSaveTime s. */
+        public s?: (NetMessage.MsgUserSetMapEditorAutoSaveTime.IS|null);
+
+        /**
+         * Creates a new MsgUserSetMapEditorAutoSaveTime instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserSetMapEditorAutoSaveTime instance
+         */
+        public static create(properties?: NetMessage.IMsgUserSetMapEditorAutoSaveTime): NetMessage.MsgUserSetMapEditorAutoSaveTime;
+
+        /**
+         * Encodes the specified MsgUserSetMapEditorAutoSaveTime message. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.verify|verify} messages.
+         * @param message MsgUserSetMapEditorAutoSaveTime message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserSetMapEditorAutoSaveTime, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserSetMapEditorAutoSaveTime message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.verify|verify} messages.
+         * @param message MsgUserSetMapEditorAutoSaveTime message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserSetMapEditorAutoSaveTime, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserSetMapEditorAutoSaveTime message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserSetMapEditorAutoSaveTime
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapEditorAutoSaveTime;
+
+        /**
+         * Decodes a MsgUserSetMapEditorAutoSaveTime message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserSetMapEditorAutoSaveTime
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapEditorAutoSaveTime;
+
+        /**
+         * Verifies a MsgUserSetMapEditorAutoSaveTime message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserSetMapEditorAutoSaveTime message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserSetMapEditorAutoSaveTime
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapEditorAutoSaveTime;
+
+        /**
+         * Creates a plain object from a MsgUserSetMapEditorAutoSaveTime message. Also converts values to other types if specified.
+         * @param message MsgUserSetMapEditorAutoSaveTime
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserSetMapEditorAutoSaveTime, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserSetMapEditorAutoSaveTime to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserSetMapEditorAutoSaveTime {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C time */
+            time?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetMapEditorAutoSaveTime.IC);
+
+            /** C time. */
+            public time: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetMapEditorAutoSaveTime.IC): NetMessage.MsgUserSetMapEditorAutoSaveTime.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapEditorAutoSaveTime.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapEditorAutoSaveTime.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapEditorAutoSaveTime.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S time */
+            time?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S time. */
+            public time: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS): NetMessage.MsgUserSetMapEditorAutoSaveTime.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetMapEditorAutoSaveTime.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetMapEditorAutoSaveTime.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetMapEditorAutoSaveTime.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetMapEditorAutoSaveTime.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetMapEditorAutoSaveTime.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a MsgMapGetEnabledBriefDataList. */
     interface IMsgMapGetEnabledBriefDataList {
 
@@ -30577,6 +31771,9 @@ export declare namespace NetMessage {
 
             /** S mapRawDataErrorCode */
             mapRawDataErrorCode?: (number|null);
+
+            /** S needReview */
+            needReview?: (boolean|null);
         }
 
         /** Represents a S. */
@@ -30593,6 +31790,9 @@ export declare namespace NetMessage {
 
             /** S mapRawDataErrorCode. */
             public mapRawDataErrorCode: number;
+
+            /** S needReview. */
+            public needReview: boolean;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -34689,6 +35889,303 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMmSetMapTag.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMmSetMapName. */
+    interface IMsgMmSetMapName {
+
+        /** MsgMmSetMapName c */
+        c?: (NetMessage.MsgMmSetMapName.IC|null);
+
+        /** MsgMmSetMapName s */
+        s?: (NetMessage.MsgMmSetMapName.IS|null);
+    }
+
+    /** Represents a MsgMmSetMapName. */
+    class MsgMmSetMapName implements IMsgMmSetMapName {
+
+        /**
+         * Constructs a new MsgMmSetMapName.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMmSetMapName);
+
+        /** MsgMmSetMapName c. */
+        public c?: (NetMessage.MsgMmSetMapName.IC|null);
+
+        /** MsgMmSetMapName s. */
+        public s?: (NetMessage.MsgMmSetMapName.IS|null);
+
+        /**
+         * Creates a new MsgMmSetMapName instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMmSetMapName instance
+         */
+        public static create(properties?: NetMessage.IMsgMmSetMapName): NetMessage.MsgMmSetMapName;
+
+        /**
+         * Encodes the specified MsgMmSetMapName message. Does not implicitly {@link NetMessage.MsgMmSetMapName.verify|verify} messages.
+         * @param message MsgMmSetMapName message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMmSetMapName, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMmSetMapName message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapName.verify|verify} messages.
+         * @param message MsgMmSetMapName message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMmSetMapName, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMmSetMapName message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMmSetMapName
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapName;
+
+        /**
+         * Decodes a MsgMmSetMapName message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMmSetMapName
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapName;
+
+        /**
+         * Verifies a MsgMmSetMapName message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMmSetMapName message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMmSetMapName
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapName;
+
+        /**
+         * Creates a plain object from a MsgMmSetMapName message. Also converts values to other types if specified.
+         * @param message MsgMmSetMapName
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMmSetMapName, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMmSetMapName to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMmSetMapName {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C mapId */
+            mapId?: (number|null);
+
+            /** C mapNameArray */
+            mapNameArray?: (Structure.ILanguageText[]|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMmSetMapName.IC);
+
+            /** C mapId. */
+            public mapId: number;
+
+            /** C mapNameArray. */
+            public mapNameArray: Structure.ILanguageText[];
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgMmSetMapName.IC): NetMessage.MsgMmSetMapName.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmSetMapName.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMmSetMapName.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapName.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMmSetMapName.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapName.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapName.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapName.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMmSetMapName.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S mapId */
+            mapId?: (number|null);
+
+            /** S mapNameArray */
+            mapNameArray?: (Structure.ILanguageText[]|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMmSetMapName.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S mapId. */
+            public mapId: number;
+
+            /** S mapNameArray. */
+            public mapNameArray: Structure.ILanguageText[];
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMmSetMapName.IS): NetMessage.MsgMmSetMapName.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmSetMapName.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMmSetMapName.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapName.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMmSetMapName.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapName.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapName.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapName.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMmSetMapName.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -41923,6 +43420,21 @@ export declare namespace NetMessage {
 
         /** Properties of a C. */
         interface IC {
+
+            /** C warId */
+            warId?: (number|null);
+
+            /** C mapName */
+            mapName?: (string|null);
+
+            /** C playersCountUnneutral */
+            playersCountUnneutral?: (number|null);
+
+            /** C userNickname */
+            userNickname?: (string|null);
+
+            /** C coName */
+            coName?: (string|null);
         }
 
         /** Represents a C. */
@@ -41933,6 +43445,21 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              */
             constructor(properties?: NetMessage.MsgMpwWatchGetUnwatchedWarInfos.IC);
+
+            /** C warId. */
+            public warId: number;
+
+            /** C mapName. */
+            public mapName: string;
+
+            /** C playersCountUnneutral. */
+            public playersCountUnneutral: number;
+
+            /** C userNickname. */
+            public userNickname: string;
+
+            /** C coName. */
+            public coName: string;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -42011,8 +43538,8 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S infos */
-            infos?: (MultiPlayerWar.IMpwWatchInfo[]|null);
+            /** S infoArray */
+            infoArray?: (MultiPlayerWar.IMpwWatchInfo[]|null);
         }
 
         /** Represents a S. */
@@ -42027,8 +43554,8 @@ export declare namespace NetMessage {
             /** S errorCode. */
             public errorCode: number;
 
-            /** S infos. */
-            public infos: MultiPlayerWar.IMpwWatchInfo[];
+            /** S infoArray. */
+            public infoArray: MultiPlayerWar.IMpwWatchInfo[];
 
             /**
              * Creates a new S instance using the specified properties.
@@ -56077,4 +57604,3 @@ export declare namespace NetMessage {
     }
 }
 }
-// export default ProtoTypes;

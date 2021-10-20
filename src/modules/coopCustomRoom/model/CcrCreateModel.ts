@@ -251,6 +251,10 @@ namespace CcrCreateModel {
         return Helpers.getExisted(getWarRule().ruleForGlobalParams?.hasFogByDefault);
     }
 
+    export function tickDefaultWeatherType(): void {
+        WarRuleHelpers.tickDefaultWeatherType(getWarRule(), getConfigVersion());
+    }
+
     export function setBootTimerParams(params: number[]): void {
         getSettingsForCcw().bootTimerParams = params;
     }

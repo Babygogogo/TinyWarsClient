@@ -4,6 +4,7 @@
 // import StageManager from "./StageManager";
 // import Types        from "./Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace FloatText {
     const SHOW_TIME_MS      = 3000;
     const LOCK_TIME_MS      = 480;
@@ -28,11 +29,7 @@ namespace FloatText {
         if ((_dataArray.length > 0) && (_timeoutIdForLock == null)) {
             _timeoutIdForLock = egret.setTimeout(onTimerComplete, null, LOCK_TIME_MS);
 
-            const layer = StageManager.getLayer(Types.LayerType.Notify2);
-            if (layer == null) {
-                throw Helpers.newError(`FloatText.showFloatText() empty layer.`);
-            }
-
+            const layer     = StageManager.getLayer(Types.LayerType.Notify2);
             const floatText = new UiFloatText(_dataArray.splice(0, 1)[0]);
             layer.addChild(floatText);
             floatText.y      = START_Y;

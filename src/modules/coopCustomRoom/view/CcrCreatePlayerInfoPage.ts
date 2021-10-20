@@ -18,6 +18,7 @@
 // import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
 // import CcrCreateModel           from "../model/CcrCreateModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrCreatePlayerInfoPage {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
@@ -275,7 +276,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
 
             const isSelfPlayer      = CcrCreateModel.getSelfPlayerIndex() === playerIndex;
             const isHumanPlayer     = playerRule.fixedCoIdInCcw == null;
-            this._imgSkin.source    = getSourceForImgSkin(
+            this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoHeadFrame(
                 isSelfPlayer
                     ? CcrCreateModel.getSelfUnitAndTileSkinId()
                     : (isHumanPlayer ? null : CcrCreateModel.getAiSkinId(playerIndex))
@@ -294,16 +295,6 @@ namespace TwnsCcrCreatePlayerInfoPage {
             this._imgCoInfo.visible         = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
             this._btnChangeCo.visible       = (isSelfPlayer) || (!isHumanPlayer);
             this._btnChangeSkinId.visible   = (isSelfPlayer) || (!isHumanPlayer);
-        }
-    }
-
-    function getSourceForImgSkin(skinId: number | null): string {
-        switch (skinId) {
-            case 1  : return `uncompressedRectangle0002`;
-            case 2  : return `uncompressedRectangle0003`;
-            case 3  : return `uncompressedRectangle0004`;
-            case 4  : return `uncompressedRectangle0005`;
-            default : return `uncompressedRectangle0006`;
         }
     }
 }

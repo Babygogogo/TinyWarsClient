@@ -17,11 +17,10 @@
 // import TwnsMmAvailabilitySearchPanel    from "./MmAvailabilitySearchPanel";
 // import TwnsMmMainMenuPanel              from "./MmMainMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmAvailabilityListPanel {
-    import MmAvailabilitySearchPanel    = TwnsMmAvailabilitySearchPanel.MmAvailabilitySearchPanel;
-    import MmAvailabilityChangePanel    = TwnsMmAvailabilityChangePanel.MmAvailabilityChangePanel;
-    import LangTextType                 = TwnsLangTextType.LangTextType;
-    import NotifyType                   = TwnsNotifyType.NotifyType;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type FiltersForMapList = {
         mapName?        : string | null;
@@ -150,7 +149,7 @@ namespace TwnsMmAvailabilityListPanel {
         }
 
         private _onTouchTapBtnSearch(): void {
-            MmAvailabilitySearchPanel.show();
+            TwnsMmAvailabilitySearchPanel.MmAvailabilitySearchPanel.show();
         }
 
         private _onTouchTapBtnBack(): void {
@@ -235,16 +234,13 @@ namespace TwnsMmAvailabilityListPanel {
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
+            this._setNotifyListenerArray([
+                { type: NotifyType.MsgMmSetMapName, callback: this._onNotifyMsgMmSetMapName },
+            ]);
         }
 
         protected _onDataChanged(): void {
-            const data          = this._getData();
-            const mapId         = data.mapId;
-            const labelName     = this._labelName;
-            this.currentState   = mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelId.text  = `ID: ${mapId}`;
-            labelName.text      = ``;
-            WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
+            this._updateView();
         }
 
         private _onTouchTapBtnChoose(): void {
@@ -253,7 +249,24 @@ namespace TwnsMmAvailabilityListPanel {
         }
 
         private _onTouchTapBtnNext(): void {
-            MmAvailabilityChangePanel.show({ mapId: this._getData().mapId });
+            TwnsMmAvailabilityChangePanel.MmAvailabilityChangePanel.show({ mapId: this._getData().mapId });
+        }
+
+        private _onNotifyMsgMmSetMapName(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMmSetMapName.IS;
+            if (data.mapId === this._getData().mapId) {
+                this._updateView();
+            }
+        }
+
+        private _updateView(): void {
+            const data          = this._getData();
+            const mapId         = data.mapId;
+            const labelName     = this._labelName;
+            this.currentState   = mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
+            this._labelId.text  = `ID: ${mapId}`;
+            labelName.text      = ``;
+            WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v ?? CommonConstants.ErrorTextForUndefined);
         }
     }
 }

@@ -8,6 +8,7 @@
 // import Types                from "../helpers/Types";
 // import CommonConstants      from "../helpers/CommonConstants";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarRuleHelpers {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
@@ -42,6 +43,18 @@ namespace WarRuleHelpers {
     }
     export function setHasFogByDefault(warRule: IWarRule, hasFog: boolean): void {
         Helpers.getExisted(warRule.ruleForGlobalParams).hasFogByDefault = hasFog;
+    }
+
+    export function getDefaultWeatherType(warRule: IWarRule): Types.WeatherType {
+        return warRule.ruleForGlobalParams?.defaultWeatherType ?? Types.WeatherType.Clear;
+    }
+    export function setDefaultWeatherType(warRule: IWarRule, weatherType: Types.WeatherType): void {
+        Helpers.getExisted(warRule.ruleForGlobalParams, ClientErrorCode.WarRuleHelpers_SetDefaultWeatherType_00).defaultWeatherType = weatherType;
+    }
+    export function tickDefaultWeatherType(warRule: IWarRule, configVersion: string): void {
+        const typeArray     = ConfigManager.getAvailableWeatherTypes(configVersion);
+        const weatherType   = getDefaultWeatherType(warRule);
+        setDefaultWeatherType(warRule, typeArray[(typeArray.indexOf(weatherType) + 1) % typeArray.length]);
     }
 
     export function getIncomeMultiplier(warRule: IWarRule, playerIndex: number): number {
@@ -209,7 +222,7 @@ namespace WarRuleHelpers {
         const warEventIdArray   = Helpers.getExisted(warRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
-            throw Helpers.newError(`WarRuleHelpers.moveWarEventId() invalid currIndex: ${currIndex}`);
+            throw Helpers.newError(`Invalid currIndex: ${currIndex}`, ClientErrorCode.WarRuleHelpers_MoveWarEventId_00);
         }
 
         const newIndex = Math.max(0, Math.min(warEventIdArray.length - 1, currIndex + deltaIndex));
@@ -222,7 +235,7 @@ namespace WarRuleHelpers {
         const warEventIdArray   = Helpers.getExisted(warRule.warEventIdArray);
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
-            throw Helpers.newError(`BwWarRuleHelper.deleteWarEventId() invalid currIndex: ${currIndex}`);
+            throw Helpers.newError(`Invalid currIndex: ${currIndex}`, ClientErrorCode.WarRuleHelpers_DeleteWarEventId_00);
         }
 
         warEventIdArray.splice(currIndex, 1);
@@ -234,7 +247,7 @@ namespace WarRuleHelpers {
 
         const warEventIdArray = warRule.warEventIdArray;
         if (warEventIdArray.indexOf(warEventId) >= 0) {
-            throw Helpers.newError(`BwWarRuleHelper.addWarEventId() the warEventId exists: ${warEventId}.`);
+            throw Helpers.newError(`The warEventId exists: ${warEventId}.`, ClientErrorCode.WarRuleHelpers_AddWarEventId_00);
         }
 
         warEventIdArray.push(warEventId);
@@ -249,7 +262,7 @@ namespace WarRuleHelpers {
     }
     export function getRandomCoIdWithCoIdList(coIdList: number[]): number {
         if ((coIdList == null) || (coIdList.length <= 0)) {
-            throw Helpers.newError(`Empty coIdList.`);
+            throw Helpers.newError(`Empty coIdList.`, ClientErrorCode.WarRuleHelpers_GetRandomCoIdWithCoIdList_00);
         } else {
             if (coIdList.length <= 1) {
                 return coIdList[0];
@@ -274,7 +287,8 @@ namespace WarRuleHelpers {
                 canCcw  : false,
             },
             ruleForGlobalParams : {
-                hasFogByDefault : false,
+                hasFogByDefault     : false,
+                defaultWeatherType  : Types.WeatherType.Clear,
             },
             ruleForPlayers: {
                 playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
@@ -732,9 +746,23 @@ namespace WarRuleHelpers {
     }
 
     function getErrorCodeForRuleForGlobalParams(rule: IRuleForGlobalParams): ClientErrorCode {
-        const hasFogByDefault = rule.hasFogByDefault;
-        if (hasFogByDefault == null) {
-            return ClientErrorCode.WarRuleGlobalParamsValidation00;
+        {
+            const hasFogByDefault = rule.hasFogByDefault;
+            if (hasFogByDefault == null) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_00;
+            }
+        }
+
+        {
+            const defaultWeatherType = rule.defaultWeatherType;
+            if ((defaultWeatherType != null)                            &&
+                (defaultWeatherType !== Types.WeatherType.Clear)        &&
+                (defaultWeatherType !== Types.WeatherType.Rainy)        &&
+                (defaultWeatherType !== Types.WeatherType.Sandstorm)    &&
+                (defaultWeatherType !== Types.WeatherType.Snowy)
+            ) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForGlobalParams_01;
+            }
         }
 
         return ClientErrorCode.NoError;

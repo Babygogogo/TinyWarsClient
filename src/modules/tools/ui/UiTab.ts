@@ -6,7 +6,9 @@
 // import TwnsUiTabItemRenderer    from "./UiTabItemRenderer";
 // import TwnsUiTabPage            from "./UiTabPage";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiTab {
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     export class UiTab<DataForTabItemRenderer, DataForPage> extends TwnsUiComponent.UiComponent {
         private readonly _bar!          : eui.TabBar;  // 页签栏
         private readonly _page!         : eui.Group;   // 页面内容，仅用于占位
@@ -76,7 +78,7 @@ namespace TwnsUiTab {
 
         private _setSelectedIndex(index: number): void {
             if (!this.getIsOpening()) {
-                throw Helpers.newError(`UiTab._setSelectedIndex() not opening.`);
+                throw Helpers.newError(`UiTab._setSelectedIndex() not opening.`, ClientErrorCode.UiTab_SetSelectedIndex_00);
             }
 
             const data = Helpers.getExisted(this._getTabDataArray()[index]);
@@ -111,7 +113,7 @@ namespace TwnsUiTab {
 
         public bindData(dataArray: DataForUiTab<DataForTabItemRenderer, DataForPage>[], selectedIndex = 0): void {
             if (!dataArray.length) {
-                throw Helpers.newError(`UiTab.bindData() empty data.`);
+                throw Helpers.newError(`UiTab.bindData() empty data.`, ClientErrorCode.UiTab_BindData_00);
             }
 
             if (!this.getIsOpening()) {

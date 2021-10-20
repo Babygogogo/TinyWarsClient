@@ -7,8 +7,10 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarMapProxy          from "./WarMapProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarMapModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import WarType              = Types.WarType;
     import MsgMapGetRawDataIs   = NetMessage.MsgMapGetRawData.IS;
     import MsgMapGetBriefDataIs = NetMessage.MsgMapGetBriefData.IS;
@@ -97,10 +99,20 @@ namespace WarMapModel {
             _briefDataRequests.set(mapId, [info => resolve(info.mapBriefData ?? null)]);
         });
     }
+
     export function updateOnSetMapEnabled(data: ProtoTypes.NetMessage.MsgMmSetMapEnabled.IS): void {
         if (!data.isEnabled) {
             _BRIEF_DATA_DICT.delete(Helpers.getExisted(data.mapId));
         }
+    }
+    export async function updateOnSetMapName(data: ProtoTypes.NetMessage.MsgMmSetMapName.IS): Promise<void> {
+        const mapId         = Helpers.getExisted(data.mapId, ClientErrorCode.WarMapModel_UpdateOnSetMapName_00);
+        const mapNameArray  = Helpers.getExisted(data.mapNameArray, ClientErrorCode.WarMapModel_UpdateOnSetMapName_01);
+        const mapBriefData  = await getBriefData(mapId);
+        (mapBriefData) && (mapBriefData.mapNameArray = mapNameArray);
+
+        const mapRawData = await getRawData(mapId);
+        (mapRawData) && (mapRawData.mapNameArray = mapNameArray);
     }
 
     export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {

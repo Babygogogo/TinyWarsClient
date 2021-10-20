@@ -1,6 +1,7 @@
 
 // import Types    from "./Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace CommonConstants {
     import TileBaseType         = Types.TileBaseType;
     import TileDecoratorType    = Types.TileDecoratorType;
@@ -58,6 +59,8 @@ namespace CommonConstants {
 
     export const MapEditorSlotMaxCountForNormal         = 3;
     export const MapEditorSlotMaxCountForCommittee      = 100;
+    export const MapEditorAutoSaveMinTime               = 180;
+    export const MapEditorAutoSaveMaxTime               = 1800;
     export const MapReviewCommentMaxLength              = 1000;
     export const SpwSaveSlotMaxCount                    = 10;
     export const SpmSaveSlotCommentMaxLength            = 15;
@@ -65,7 +68,6 @@ namespace CommonConstants {
     export const RankInitialScore                       = 1200;
     export const RankMaxConcurrentCount                 = 10;
     export const RankMinConcurrentCount                 = 0;
-    export const RankMaxBanCoCount                      = 3;
     export const RankRoomPhaseTime                      = 3600 * 24;
 
     export const ChatMessageMaxLength                   = 200;
@@ -78,14 +80,14 @@ namespace CommonConstants {
     export const UnitHpNormalizer                       = 10;
     export const UnitMaxHp                              = 100;
     export const UnitAndTileMinSkinId                   = 1;
-    export const UnitAndTileMaxSkinId                   = 4;
+    export const UnitAndTileMaxSkinId                   = 5;
     export const UnitAndTileNeutralSkinId               = 0;
 
     export const CoEmptyId                              = 0;
 
     export const WarNeutralPlayerIndex                  = 0;
     export const WarFirstPlayerIndex                    = 1;
-    export const WarMaxPlayerIndex                      = 4;
+    export const WarMaxPlayerIndex                      = 5;
     export const WarNeutralTeamIndex                    = 0;
     export const WarFirstTeamIndex                      = 1;
     export const WarFirstTurnIndex                      = 1;
@@ -108,8 +110,6 @@ namespace CommonConstants {
     export const WarRuleOffenseBonusDefault                 = 0;
     export const WarRuleEnergyGrowthMultiplierMinLimit      = 0;
     export const WarRuleEnergyGrowthMultiplierMaxLimit      = 10000;
-    export const WarRuleEnergyGrowthMultiplierForAttacker   = 1;
-    export const WarRuleEnergyGrowthMultiplierForDefender   = 0;
     export const WarRuleEnergyGrowthMultiplierDefault       = 100;
     export const WarRuleIncomeMultiplierMinLimit            = 0;
     export const WarRuleIncomeMultiplierMaxLimit            = 10000;

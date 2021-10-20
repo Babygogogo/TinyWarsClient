@@ -8,6 +8,7 @@
 // import TwnsBwCursorView     from "../view/BwCursorView";
 // import TwnsBwWar            from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwCursor {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
@@ -22,9 +23,9 @@ namespace TwnsBwCursor {
         private _war?               : TwnsBwWar.BwWar;
 
         private _notifyListeners: Notify.Listener[] = [
-            { type: NotifyType.BwCursorTapped,                 callback: this._onNotifyBwCursorTapped },
-            { type: NotifyType.BwCursorDragged,                callback: this._onNotifyBwCursorDragged },
-            { type: NotifyType.BwActionPlannerStateSet,    callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.BwCursorTapped,              callback: this._onNotifyBwCursorTapped },
+            { type: NotifyType.BwCursorDragged,             callback: this._onNotifyBwCursorDragged },
+            { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
         public init(mapSize: Types.MapSize): void {
@@ -87,21 +88,18 @@ namespace TwnsBwCursor {
             this.getView().updateView();
         }
 
-        public setVisibleForConForNormal(visible: boolean): void {
-            this.getView().setVisibleForConForNormal(visible);
-        }
-        public setVisibleForConForTarget(visible: boolean): void {
-            this.getView().setVisibleForConForTarget(visible);
-        }
-        public setVisibleForConForSiloArea(visible: boolean): void {
-            this.getView().setVisibleForConForSiloArea(visible);
-        }
-
         private _setMapSize(size: Types.MapSize): void {
             this._mapSize = size;
         }
         public getMapSize(): Types.MapSize {
             return Helpers.getExisted(this._mapSize);
+        }
+
+        public setIsVisible(visible: boolean): void {
+            this.getView().visible = visible;
+        }
+        public getIsVisible(): boolean {
+            return this.getView().visible;
         }
 
         public getGridX(): number {

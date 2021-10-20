@@ -5,6 +5,7 @@
 // import TwnsBwGridVisualEffectView   from "../view/BwGridVisualEffectView";
 // import TwnsBwWar                    from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwGridVisualEffect {
     import GridIndex                = Types.GridIndex;
     import NotifyType               = TwnsNotifyType.NotifyType;
@@ -13,13 +14,13 @@ namespace TwnsBwGridVisualEffect {
         private readonly _view = new TwnsBwGridVisualEffectView.BwGridVisualEffectView();
 
         private _notifyListeners: Notify.Listener[] = [
-            { type: NotifyType.BwUnitBeAttacked,   callback: this._onNotifyBwUnitBeAttacked },
-            { type: NotifyType.BwUnitBeDestroyed,  callback: this._onNotifyBwUnitBeDestroyed },
-            { type: NotifyType.BwUnitBeRepaired,   callback: this._onNotifyBwUnitBeRepaired },
-            { type: NotifyType.BwUnitBeSupplied,   callback: this._onNotifyBwUnitBeSupplied },
-            { type: NotifyType.BwTileBeDestroyed,  callback: this._onNotifyBwTileBeDestroyed },
-            { type: NotifyType.BwTileBeAttacked,   callback: this._onNotifyBwTileBeAttacked },
-            { type: NotifyType.BwSiloExploded,     callback: this._onNotifyBwSiloExploded },
+            // { type: NotifyType.BwUnitBeAttacked,   callback: this._onNotifyBwUnitBeAttacked },
+            // { type: NotifyType.BwUnitBeDestroyed,  callback: this._onNotifyBwUnitBeDestroyed },
+            // { type: NotifyType.BwUnitBeRepaired,   callback: this._onNotifyBwUnitBeRepaired },
+            // { type: NotifyType.BwUnitBeSupplied,   callback: this._onNotifyBwUnitBeSupplied },
+            // { type: NotifyType.BwTileBeDestroyed,  callback: this._onNotifyBwTileBeDestroyed },
+            // { type: NotifyType.BwTileBeAttacked,   callback: this._onNotifyBwTileBeAttacked },
+            // { type: NotifyType.BwSiloExploded,     callback: this._onNotifyBwSiloExploded },
         ];
 
         public init(): void {
@@ -48,33 +49,33 @@ namespace TwnsBwGridVisualEffect {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyBwUnitBeAttacked(e: egret.Event): void {
-            // nothing to do
-        }
+        // private _onNotifyBwUnitBeAttacked(e: egret.Event): void {
+        //     // nothing to do
+        // }
 
-        private _onNotifyBwUnitBeDestroyed(e: egret.Event): void {
-            // nothing to do
-        }
+        // private _onNotifyBwUnitBeDestroyed(e: egret.Event): void {
+        //     // nothing to do
+        // }
 
-        private _onNotifyBwUnitBeRepaired(e: egret.Event): void {
-            // nothing to do
-        }
+        // private _onNotifyBwUnitBeRepaired(e: egret.Event): void {
+        //     // nothing to do
+        // }
 
-        private _onNotifyBwUnitBeSupplied(e: egret.Event): void {
-            // nothing to do
-        }
+        // private _onNotifyBwUnitBeSupplied(e: egret.Event): void {
+        //     // nothing to do
+        // }
 
-        private _onNotifyBwTileBeAttacked(e: egret.Event): void {
-            // nothing to do
-        }
+        // private _onNotifyBwTileBeAttacked(e: egret.Event): void {
+        //     // nothing to do
+        // }
 
-        private _onNotifyBwTileBeDestroyed(e: egret.Event): void {
-            // nothing to do
-        }
+        // private _onNotifyBwTileBeDestroyed(e: egret.Event): void {
+        //     // nothing to do
+        // }
 
-        private _onNotifyBwSiloExploded(e: egret.Event): void {
-            // nothing to do
-        }
+        // private _onNotifyBwSiloExploded(e: egret.Event): void {
+        //     // nothing to do
+        // }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The public functions.
@@ -117,6 +118,10 @@ namespace TwnsBwGridVisualEffect {
 
         public showEffectSurface(gridIndex: GridIndex): void {
             this.getView().showEffectSurface(gridIndex);
+        }
+
+        public showEffectAiming(gridIndex: GridIndex, timeMs: number): void {
+            this.getView().showEffectAiming(gridIndex, timeMs);
         }
     }
 }

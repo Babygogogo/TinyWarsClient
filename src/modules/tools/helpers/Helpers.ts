@@ -5,6 +5,7 @@
 // import TwnsClientErrorCode  from "./ClientErrorCode";
 // import Types                from "./Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Helpers {
     import ColorType            = Types.ColorType;
     import ILanguageText        = ProtoTypes.Structure.ILanguageText;
@@ -158,11 +159,11 @@ namespace Helpers {
     //     const name = getMessageName(container);
     //     return name == null ? null : MessageCodes[name as any] as any;
     // }
-    export function getMessageName(container: IMessageContainer): (keyof IMessageContainer) | null {
+    export function getMessageName(container: IMessageContainer): keyof IMessageContainer {
         for (const k in container) {
             return k as keyof IMessageContainer;
         }
-        return null;
+        throw newError(`Invalid container.`, ClientErrorCode.Helpers_GetMessageName_00);
     }
 
     export function getWarActionName(container: IWarActionContainer): string | null {
@@ -258,8 +259,8 @@ namespace Helpers {
         return true;
     }
 
-    export function pickRandomElement<T>(list: T[]): T {
-        return list[Math.floor(Math.random() * list.length)];
+    export function pickRandomElement<T>(list: T[], randomValue?: number): T {
+        return list[Math.floor((randomValue ?? Math.random()) * list.length)];
     }
     export function deleteElementFromArray<T>(arr: T[], element: T, maxDeleteCount = Number.MAX_VALUE): number {
         let index       = 0;
@@ -479,7 +480,7 @@ namespace Helpers {
 
     export function getDefined<T>(value: T | undefined, errorCode: ClientErrorCode): T {
         if (value === undefined) {
-            throw Helpers.newError(`Undefined value.`, errorCode);
+            throw newError(`Undefined value.`, errorCode);
         }
 
         return value;

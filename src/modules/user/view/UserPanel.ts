@@ -16,6 +16,7 @@
 // import UserModel                from "../../user/model/UserModel";
 // import UserProxy                from "../../user/model/UserProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserPanel {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
@@ -35,8 +36,9 @@ namespace TwnsUserPanel {
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
 
-        private readonly _groupButtons!             : TwnsUiButton.UiButton;
         private readonly _btnChat!                  : TwnsUiButton.UiButton;
+        private readonly _imgAvatar!                : TwnsUiImage.UiImage;
+        private readonly _btnSetAvatar!             : TwnsUiButton.UiButton;
         private readonly _imgLogo!                  : TwnsUiImage.UiImage;
 
         private readonly _labelStdRankScoreTitle!   : TwnsUiLabel.UiLabel;
@@ -101,13 +103,15 @@ namespace TwnsUserPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgUserGetPublicInfo,   callback: this._onMsgUserGetPublicInfo },
-                { type: NotifyType.MsgUserSetNickname,     callback: this._onMsgUserSetNickname },
-                { type: NotifyType.MsgUserSetDiscordId,    callback: this._onMsgUserSetDiscordId },
+                { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserGetPublicInfo,    callback: this._onNotifyMsgUserGetPublicInfo },
+                { type: NotifyType.MsgUserSetNickname,      callback: this._onNotifyMsgUserSetNickname },
+                { type: NotifyType.MsgUserSetDiscordId,     callback: this._onNotifyMsgUserSetDiscordId },
+                { type: NotifyType.MsgUserSetAvatarId,      callback: this._onNotifyMsgUserSetAvatarId },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
+                { ui: this._btnSetAvatar,       callback: this._onTouchedBtnSetAvatar },
                 { ui: this._btnClose,           callback: this.close },
             ]);
             this._sclHistoryStd.setItemRenderer(HistoryRenderer);
@@ -126,16 +130,22 @@ namespace TwnsUserPanel {
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onMsgUserGetPublicInfo(): void {
+        private _onNotifyMsgUserGetPublicInfo(): void {
             this._updateView();
         }
-        private _onMsgUserSetNickname(): void {
+        private _onNotifyMsgUserSetNickname(): void {
             const userId = this._getOpenData().userId;
             if (userId === UserModel.getSelfUserId()) {
                 UserProxy.reqUserGetPublicInfo(userId);
             }
         }
-        private _onMsgUserSetDiscordId(): void {
+        private _onNotifyMsgUserSetDiscordId(): void {
+            const userId = this._getOpenData().userId;
+            if (userId === UserModel.getSelfUserId()) {
+                UserProxy.reqUserGetPublicInfo(userId);
+            }
+        }
+        private _onNotifyMsgUserSetAvatarId(): void {
             const userId = this._getOpenData().userId;
             if (userId === UserModel.getSelfUserId()) {
                 UserProxy.reqUserGetPublicInfo(userId);
@@ -145,6 +155,9 @@ namespace TwnsUserPanel {
             const userId = this._getOpenData().userId;
             this.close();
             TwnsChatPanel.ChatPanel.show({ toUserId: userId });
+        }
+        private _onTouchedBtnSetAvatar(): void {
+            TwnsUserSetAvatarPanel.UserSetAvatarPanel.show();
         }
 
         private _showOpenAnimation(): void {
@@ -177,7 +190,7 @@ namespace TwnsUserPanel {
 
         private async _updateView(): Promise<void> {
             const userId    = this._getOpenData().userId;
-            const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : null;
+            const info      = await UserModel.getUserPublicInfo(userId);
             if (info) {
                 const registerTime          = info.registerTime;
                 const labelRegisterTime1    = this._labelRegisterTime1;
@@ -208,18 +221,22 @@ namespace TwnsUserPanel {
 
             this._updateComponentsForLanguage();
             this._updateLabelOnlineTime();
-            this._updateGroupButtons();
+            this._updateBtnChat();
+            this._updateBtnSetAvatar();
+            this._updateImgAvatar();
         }
 
-        private async _updateGroupButtons(): Promise<void> {
-            const group = this._groupButtons;
-            group.removeChildren();
+        private _updateBtnChat(): void {
+            this._btnChat.visible = this._getOpenData().userId !== UserModel.getSelfUserId();
+        }
 
-            if (this._getOpenData().userId !== UserModel.getSelfUserId()) {
-                group.addChild(this._btnChat);
-            } else {
-                group.addChild(this._imgLogo);
-            }
+        private _updateBtnSetAvatar(): void {
+            this._btnSetAvatar.visible = this._getOpenData().userId === UserModel.getSelfUserId();
+        }
+
+        private async _updateImgAvatar(): Promise<void> {
+            const info              = await UserModel.getUserPublicInfo(this._getOpenData().userId);
+            this._imgAvatar.source  = ConfigManager.getUserAvatarImageSource(info?.avatarId ?? 1);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -242,13 +259,14 @@ namespace TwnsUserPanel {
             this._labelHistoryFogLose.text      = Lang.getText(LangTextType.B0551);
             this._labelHistoryFogDraw.text      = Lang.getText(LangTextType.B0552);
             this._labelHistoryFogRatio.text     = Lang.getText(LangTextType.B0553);
+            this._btnChat.label                 = Lang.getText(LangTextType.B0383);
+            this._btnSetAvatar.label            = Lang.getText(LangTextType.B0707);
 
             this._updateLabelTitle();
             this._updateComponentsForStdRank();
             this._updateComponentsForFogRank();
             this._updateSclHistoryStd();
             this._updateSclHistoryFog();
-            this._updateBtnChat();
         }
 
         private async _updateLabelTitle(): Promise<void> {
@@ -321,9 +339,6 @@ namespace TwnsUserPanel {
             const info                  = await UserModel.getUserPublicInfo(this._getOpenData().userId);
             const onlineTime            = info ? info.onlineTime : null;
             this._labelOnlineTime.text  = onlineTime == null ? CommonConstants.ErrorTextForUndefined : Helpers.getTimeDurationText2(onlineTime);
-        }
-        private _updateBtnChat(): void {
-            this._btnChat.label = Lang.getText(LangTextType.B0383);
         }
     }
 

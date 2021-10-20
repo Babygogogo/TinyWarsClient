@@ -26,6 +26,7 @@
 // import ChatModel                from "../model/ChatModel";
 // import ChatProxy                from "../model/ChatProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsChatPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -679,6 +680,7 @@ namespace TwnsChatPanel {
         message: ProtoTypes.Chat.IChatMessage;
     };
     class MessageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMessageRenderer> {
+        private readonly _imgAvatar!    : TwnsUiImage.UiImage;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _labelContent! : TwnsUiLabel.UiLabel;
 
@@ -692,7 +694,8 @@ namespace TwnsChatPanel {
 
             const userInfo = Helpers.getExisted(await UserModel.getUserPublicInfo(fromUserId));
             if ((this._getIsOpening()) && (data === this._getData())) {
-                this._labelName.text = `${userInfo.nickname || `???`}    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;
+                this._imgAvatar.source  = ConfigManager.getUserAvatarImageSource(userInfo.avatarId ?? 1);
+                this._labelName.text    = `${userInfo.nickname || `???`}    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;
             }
         }
 

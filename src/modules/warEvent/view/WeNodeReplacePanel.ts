@@ -14,9 +14,11 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 // import WarEventHelper           from "../model/WarEventHelper";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeNodeReplacePanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
 
     type OpenDataForWeNodeReplacePanel = {
@@ -148,11 +150,7 @@ namespace TwnsWeNodeReplacePanel {
             const fullData          = data.fullData;
             const parentNodeId      = data.parentNodeId;
             const candidateNodeId   = data.candidateNodeId;
-            const candidateNode     = (fullData.conditionNodeArray || []).find(v => v.nodeId === candidateNodeId);
-            if (candidateNode == null) {
-                throw Helpers.newError(`Empty candidateNode.`);
-            }
-
+            const candidateNode     = Helpers.getExisted((fullData.conditionNodeArray || []).find(v => v.nodeId === candidateNodeId), ClientErrorCode.WeNodeReplacePanel_NodeRenderer_OnTouchedBtnCopy_00);
             const isAnd             = Helpers.getExisted(candidateNode.isAnd);
             const conditionIdArray  = (candidateNode.conditionIdArray || []).concat();
             const subNodeIdArray    = (candidateNode.subNodeIdArray || []).concat();

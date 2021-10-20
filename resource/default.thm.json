@@ -116,6 +116,7 @@
 		"resource/skins/mapManagement/MmAvailabilityListPanel.exml",
 		"resource/skins/mapManagement/MmAvailabilitySearchPanel.exml",
 		"resource/skins/mapManagement/MmMainMenuPanel.exml",
+		"resource/skins/mapManagement/MmMapRenamePanel.exml",
 		"resource/skins/mapManagement/MmMergeListPanel.exml",
 		"resource/skins/mapManagement/MmRejectMapPanel.exml",
 		"resource/skins/mapManagement/MmReviewListPanel.exml",
@@ -175,6 +176,7 @@
 		"resource/skins/user/UserOnlineUsersPanel.exml",
 		"resource/skins/user/UserPanel.exml",
 		"resource/skins/user/UserRegisterPanel.exml",
+		"resource/skins/user/UserSetAvatarPanel.exml",
 		"resource/skins/user/UserSetPasswordPanel.exml",
 		"resource/skins/user/UserSetPrivilegePanel.exml",
 		"resource/skins/user/UserSetSoundPanel.exml",
@@ -213,7 +215,8 @@
 		"resource/skins/watchWar/WwMainMenuPanel.exml",
 		"resource/skins/watchWar/WwMakeRequestDetailPanel.exml",
 		"resource/skins/watchWar/WwMakeRequestWarsPanel.exml",
-		"resource/skins/watchWar/WwOngoingWarsPanel.exml"
+		"resource/skins/watchWar/WwOngoingWarsPanel.exml",
+		"resource/skins/watchWar/WwSearchWarPanel.exml"
 	],
 	"path": "resource/default.thm.json"
 }

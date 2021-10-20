@@ -7,7 +7,9 @@
 // import Helpers          from "./Helpers";
 // import Types            from "./Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace ConfigManager {
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import TileBaseType         = Types.TileBaseType;
     import TileDecoratorType    = Types.TileDecoratorType;
@@ -23,17 +25,21 @@ namespace ConfigManager {
     import BuildableTileCfg     = Types.BuildableTileCfg;
     import VisionBonusCfg       = Types.VisionBonusCfg;
     import CoBasicCfg           = Types.CoBasicCfg;
+    import SystemCfg            = Types.SystemCfg;
     import TileCategoryCfg      = Types.TileCategoryCfg;
     import UnitCategoryCfg      = Types.UnitCategoryCfg;
     import MoveCostCfg          = Types.MoveCostCfg;
     import UnitPromotionCfg     = Types.UnitPromotionCfg;
     import PlayerRankCfg        = Types.PlayerRankCfg;
     import CoSkillCfg           = Types.CoSkillCfg;
+    import WeatherCfg           = Types.WeatherCfg;
+    import UserAvatarCfg        = Types.UserAvatarCfg;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Internal types.
     ////////////////////////////////////////////////////////////////////////////////
     type ExtendedFullConfig = {
+        System                  : SystemCfg;
         TileCategory            : { [category: number]: TileCategoryCfg };
         UnitCategory            : { [category: number]: UnitCategoryCfg };
         TileTemplate            : { [tileType: number]: TileTemplateCfg };
@@ -46,6 +52,8 @@ namespace ConfigManager {
         PlayerRank              : { [minScore: number]: PlayerRankCfg };
         CoBasic                 : { [coId: number]: CoBasicCfg };
         CoSkill                 : { [skillId: number]: CoSkillCfg };
+        Weather                 : { [weatherType: number]: WeatherCfg };
+        UserAvatar              : { [avatarId: number]: UserAvatarCfg };
         maxUnitPromotion?       : number;
         secondaryWeaponFlag?    : { [unitType: number]: boolean };
     };
@@ -53,6 +61,9 @@ namespace ConfigManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Initializers.
     ////////////////////////////////////////////////////////////////////////////////
+    function _destructSystemCfg(data: SystemCfg): SystemCfg {
+        return Helpers.deepClone(data);
+    }
     function _destructTileCategoryCfg(data: TileCategoryCfg[]): { [category: number]: TileCategoryCfg } {
         const dst: { [category: number]: TileCategoryCfg } = {};
         for (const d of data) {
@@ -153,6 +164,20 @@ namespace ConfigManager {
         }
         return dst;
     }
+    function _destructWeatherCfg(data: WeatherCfg[]): { [weatherType: number]: WeatherCfg } {
+        const dst: { [weatherType: number]: WeatherCfg } = {};
+        for (const d of data) {
+            dst[d.weatherType] = d;
+        }
+        return dst;
+    }
+    function _destructUserAvatarCfg(data: UserAvatarCfg[]): { [avatarId: number]: UserAvatarCfg } {
+        const dst: { [avatarId: number]: UserAvatarCfg } = {};
+        for (const d of data) {
+            dst[d.avatarId] = d;
+        }
+        return dst;
+    }
     function _getMaxUnitPromotion(cfg: { [promotion: number]: UnitPromotionCfg }): number {
         let maxPromotion = 0;
         for (const p in cfg) {
@@ -230,6 +255,7 @@ namespace ConfigManager {
         const unitPromotionCfg  = _destructUnitPromotionCfg(rawConfig.UnitPromotion);
         const damageChartCfg    = _destructDamageChartCfg(rawConfig.DamageChart);
         const fullCfg           : ExtendedFullConfig = {
+            System              : _destructSystemCfg(rawConfig.System),
             TileCategory        : _destructTileCategoryCfg(rawConfig.TileCategory),
             UnitCategory        : _destructUnitCategoryCfg(rawConfig.UnitCategory),
             TileTemplate        : _destructTileTemplateCfg(rawConfig.TileTemplate, version),
@@ -240,6 +266,8 @@ namespace ConfigManager {
             PlayerRank          : _destructPlayerRankCfg(rawConfig.PlayerRank),
             CoBasic             : _destructCoBasicCfg(rawConfig.CoBasic),
             CoSkill             : _destructCoSkillCfg(rawConfig.CoSkill),
+            Weather             : _destructWeatherCfg(rawConfig.Weather),
+            UserAvatar          : _destructUserAvatarCfg(rawConfig.UserAvatar),
             DamageChart         : damageChartCfg,
             UnitPromotion       : unitPromotionCfg,
             maxUnitPromotion    : _getMaxUnitPromotion(unitPromotionCfg),
@@ -257,49 +285,37 @@ namespace ConfigManager {
         _ALL_CONFIGS.set(version, config);
     }
 
+    function getSystemCfg(version: string): SystemCfg {
+        return Helpers.getExisted(_ALL_CONFIGS.get(version)?.System, ClientErrorCode.ConfigManager_GetSystemCfg_00);
+    }
+    export function getSystemEnergyGrowthMultiplierForAttacker(version: string): number {
+        return Helpers.getExisted(getSystemCfg(version).energyGrowthMultiplierArray[0], ClientErrorCode.ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_00);
+    }
+    export function getSystemEnergyGrowthMultiplierForDefender(version: string): number {
+        return Helpers.getExisted(getSystemCfg(version).energyGrowthMultiplierArray[1], ClientErrorCode.ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_00);
+    }
+
+    export function getSystemMaxBanCoCount(version: string): number {
+        return Helpers.getExisted(getSystemCfg(version).maxBanCount, ClientErrorCode.ConfigManager_GetSystemMaxBanCoCount_00);
+    }
+
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
-        const mapping = CommonConstants.TileTypeMapping.get(baseType);
-        if (mapping == null) {
-            throw Helpers.newError(`Empty mapping.`);
-        }
-
-        const tileType = mapping.get(objectType);
-        if (tileType == null) {
-            throw Helpers.newError(`Empty tileType`);
-        }
-
-        return tileType;
+        const mapping = Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);
+        return Helpers.getExisted(mapping.get(objectType), ClientErrorCode.ConfigManager_GetTileType_01);
     }
 
     export function getTileTemplateCfgByType(version: string, tileType: TileType): TileTemplateCfg {
-        const dict = _ALL_CONFIGS.get(version)?.TileTemplate;
-        if (dict == null) {
-            throw Helpers.newError(`Empty dict.`);
-        }
-
-        const cfg = dict[tileType];
-        if (cfg == null) {
-            throw Helpers.newError(`Empty cfg.`);
-        }
-
-        return cfg;
+        const dict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.TileTemplate, ClientErrorCode.ConfigManager_GetTileTemplateCfgByType_00);
+        return Helpers.getExisted(dict[tileType], ClientErrorCode.ConfigManager_GetTileTemplateCfgByType_01);
     }
     export function getTileTemplateCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): TileTemplateCfg {
         return getTileTemplateCfgByType(version, getTileType(baseType, objectType));
     }
 
     export function getTileTypesByCategory(version: string, category: TileCategory): TileType[] {
-        const dict = _ALL_CONFIGS.get(version)?.TileCategory;
-        if (dict == null) {
-            throw Helpers.newError(`Empty dict.`);
-        }
-
-        const cfg = dict[category];
-        if (cfg == null) {
-            throw Helpers.newError(`Empty cfg.`);
-        }
-
-        return cfg.tileTypes || [];
+        const dict  = Helpers.getExisted(_ALL_CONFIGS.get(version)?.TileCategory, ClientErrorCode.ConfigManager_GetTileTypesByCategory_00);
+        const cfg   = Helpers.getExisted(dict[category], ClientErrorCode.ConfigManager_GetTileTypesByCategory_01);
+        return cfg.tileTypes ?? [];
     }
 
     export function checkIsValidPlayerIndexForTile(playerIndex: number, baseType: TileBaseType, objectType: TileObjectType): boolean {
@@ -364,30 +380,13 @@ namespace ConfigManager {
     }
 
     export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {
-        const templateCfgDict = _ALL_CONFIGS.get(version)?.UnitTemplate;
-        if (templateCfgDict == null) {
-            throw Helpers.newError(`Empty templateCfgDict.`);
-        }
-
-        const cfg = templateCfgDict[unitType];
-        if (cfg == null) {
-            throw Helpers.newError(`Empty cfg.`);
-        }
-
-        return cfg;
+        const templateCfgDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.UnitTemplate, ClientErrorCode.ConfigManager_GetUnitTemplateCfg_00);
+        return Helpers.getExisted(templateCfgDict[unitType], ClientErrorCode.ConfigManager_GetUnitTemplateCfg_01);
     }
 
     export function getUnitTypesByCategory(version: string, category: UnitCategory): UnitType[] {
-        const categoryDict = _ALL_CONFIGS.get(version)?.UnitCategory;
-        if (categoryDict == null) {
-            throw Helpers.newError(`Empty categoryDict.`);
-        }
-
-        const categoryCfg  = categoryDict[category];
-        if (categoryCfg == null) {
-            throw Helpers.newError(`Empty categoryCfg.`);
-        }
-
+        const categoryDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.UnitCategory, ClientErrorCode.ConfigManager_GetUnitTypesByCategory_00);
+        const categoryCfg  = Helpers.getExisted(categoryDict[category], ClientErrorCode.ConfigManager_GetUnitTypesByCategory_01);
         return categoryCfg.unitTypes || [];
     }
 
@@ -408,12 +407,7 @@ namespace ConfigManager {
     }
 
     export function getUnitMaxPromotion(version: string): number {
-        const maxPromotion = _ALL_CONFIGS.get(version)?.maxUnitPromotion;
-        if (maxPromotion == null) {
-            throw Helpers.newError(`Empty maxPromotion.`);
-        }
-
-        return maxPromotion;
+        return Helpers.getExisted(_ALL_CONFIGS.get(version)?.maxUnitPromotion, ClientErrorCode.ConfigManager_GetUnitMaxPromotion_00);
     }
 
     export function checkHasSecondaryWeapon(version: string, unitType: UnitType): boolean {
@@ -422,61 +416,26 @@ namespace ConfigManager {
     }
 
     export function getUnitPromotionAttackBonus(version: string, promotion: number): number {
-        const dict = _ALL_CONFIGS.get(version)?.UnitPromotion;
-        if (dict == null) {
-            throw Helpers.newError(`Empty dict.`);
-        }
-
-        const bonus = dict[promotion]?.attackBonus;
-        if (bonus == null) {
-            throw Helpers.newError(`Empty bonus.`);
-        }
-
-        return bonus;
+        const dict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.UnitPromotion, ClientErrorCode.ConfigManager_GetUnitPromotionAttackBonus_00);
+        return Helpers.getExisted(dict[promotion]?.attackBonus, ClientErrorCode.ConfigManager_GetUnitPromotionAttackBonus_01);
     }
     export function getUnitPromotionDefenseBonus(version: string, promotion: number): number {
-        const dict = _ALL_CONFIGS.get(version)?.UnitPromotion;
-        if (dict == null) {
-            throw Helpers.newError(`Empty dict.`);
-        }
-
-        const bonus = dict[promotion]?.defenseBonus;
-        if (bonus == null) {
-            throw Helpers.newError(`Empty dict.`);
-        }
-
-        return bonus;
+        const dict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.UnitPromotion, ClientErrorCode.ConfigManager_GetUnitPromotionDefenseBonus_00);
+        return Helpers.getExisted(dict[promotion]?.defenseBonus, ClientErrorCode.ConfigManager_GetUnitPromotionDefenseBonus_01);
     }
 
     export function getDamageChartCfgs(version: string, attackerType: UnitType): { [armorType: number]: { [weaponType: number]: DamageChartCfg } } {
-        const cfgDict = _ALL_CONFIGS.get(version)?.DamageChart;
-        if (cfgDict == null) {
-            throw Helpers.newError(`Empty cfgDict.`);
-        }
-
-        const cfg = cfgDict[attackerType];
-        if (cfg == null) {
-            throw Helpers.newError(`Empty cfg`);
-        }
-
-        return cfg;
+        const cfgDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.DamageChart, ClientErrorCode.ConfigManager_GetDamageChartCfgs_00);
+        return Helpers.getExisted(cfgDict[attackerType], ClientErrorCode.ConfigManager_GetDamageChartCfgs_01);
     }
 
     export function getBuildableTileCfgs(version: string, unitType: UnitType): { [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | null {
-        const cfgDict = _ALL_CONFIGS.get(version)?.BuildableTile;
-        if (cfgDict == null) {
-            throw Helpers.newError(`Empty cfgDict.`);
-        }
-
+        const cfgDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.BuildableTile, ClientErrorCode.ConfigManager_GetBuildableTileCfgs_00);
         return cfgDict[unitType] ?? null;
     }
 
     export function getVisionBonusCfg(version: string, unitType: UnitType): { [tileType: number]: VisionBonusCfg } | null {
-        const cfgDict = _ALL_CONFIGS.get(version)?.VisionBonus;
-        if (cfgDict == null) {
-            throw Helpers.newError(`Empty cfgDict.`);
-        }
-
+        const cfgDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.VisionBonus, ClientErrorCode.ConfigManager_GetVisionBonusCfg_00);
         return cfgDict[unitType] ?? null;
     }
 
@@ -484,26 +443,12 @@ namespace ConfigManager {
         return getMoveCostCfgByTileType(version, getTileType(baseType, objectType));
     }
     export function getMoveCostCfgByTileType(version: string, tileType: TileType): { [moveType: number]: MoveCostCfg } {
-        const cfgDict = _ALL_CONFIGS.get(version)?.MoveCost;
-        if (cfgDict == null) {
-            throw Helpers.newError(`Empty cfgDict.`);
-        }
-
-        const cfg = cfgDict[tileType];
-        if (cfg == null) {
-            throw Helpers.newError(`Empty cfg.`);
-        }
-
-        return cfg;
+        const cfgDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.MoveCost, ClientErrorCode.ConfigManager_GetMoveCostCfgByTileType_00);
+        return Helpers.getExisted(cfgDict[tileType], ClientErrorCode.ConfigManager_GetMoveCostCfgByTileType_01);
     }
 
     export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
-        const tileObjectType = CommonConstants.TileTypeToTileObjectType.get(type);
-        if (tileObjectType == null) {
-            throw Helpers.newError(`Empty tileObjectType.`);
-        }
-
-        return tileObjectType;
+        return Helpers.getExisted(CommonConstants.TileTypeToTileObjectType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }
 
     export function getTileBaseImageSource({version, skinId, baseType, isDark, shapeId, tickCount}: {
@@ -518,11 +463,7 @@ namespace ConfigManager {
             return ``;
         }
 
-        const cfgForFrame = CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType);
-        if (cfgForFrame == null) {
-            throw Helpers.newError(`Empty cfgForFrame.`);
-        }
-
+        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType), ClientErrorCode.ConfigManager_GetTileBaseImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
         const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
@@ -546,11 +487,7 @@ namespace ConfigManager {
             return ``;
         }
 
-        const cfgForFrame = CommonConstants.TileDecoratorFrameConfigs.get(version)?.get(decoratorType);
-        if (cfgForFrame == null) {
-            throw Helpers.newError(`Empty cfgForFrame.`);
-        }
-
+        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileDecoratorFrameConfigs.get(version)?.get(decoratorType), ClientErrorCode.ConfigManager_GetTileDecoratorImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
         const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
@@ -574,11 +511,7 @@ namespace ConfigManager {
             return ``;
         }
 
-        const cfgForFrame = CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType);
-        if (cfgForFrame == null) {
-            throw Helpers.newError(`Empty cfgForFrame.`);
-        }
-
+        const cfgForFrame       = Helpers.getExisted(CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType), ClientErrorCode.ConfigManager_GetTileObjectImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
         const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
@@ -603,11 +536,7 @@ namespace ConfigManager {
         isMoving    : boolean;
         tickCount   : number;
     }): string {
-        const cfgForUnit = CommonConstants.UnitImageConfigs.get(version)?.get(unitType);
-        if (cfgForUnit == null) {
-            throw Helpers.newError(`Empty cfgForUnit.`);
-        }
-
+        const cfgForUnit        = Helpers.getExisted(CommonConstants.UnitImageConfigs.get(version)?.get(unitType), ClientErrorCode.ConfigManager_GetUnitImageSource_00);
         const cfgForFrame       = isMoving ? cfgForUnit.moving : cfgForUnit.idle;
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
@@ -620,21 +549,12 @@ namespace ConfigManager {
     }
 
     export function getRankName(version: string, rankScore: number): string {
-        const name = Lang.getStringInCurrentLanguage(getPlayerRankCfg(version, rankScore).nameList);
-        if (name == null) {
-            throw Helpers.newError(`Empty name.`);
-        }
-
-        return name;
+        return Helpers.getExisted(Lang.getStringInCurrentLanguage(getPlayerRankCfg(version, rankScore).nameList), ClientErrorCode.ConfigManager_GetRankName_00);
     }
     export function getPlayerRankCfg(version: string, rankScore: number): PlayerRankCfg {
-        const cfgDict = _ALL_CONFIGS.get(version)?.PlayerRank;
-        if (cfgDict == null) {
-            throw Helpers.newError(`Empty cfgDict.`);
-        }
-
-        let maxRank = -1;
-        let maxCfg  : PlayerRankCfg | null = null;
+        const cfgDict   = Helpers.getExisted(_ALL_CONFIGS.get(version)?.PlayerRank, ClientErrorCode.ConfigManager_GetPlayerRankCfg_00);
+        let maxRank     = -1;
+        let maxCfg      : PlayerRankCfg | null = null;
         for (const i in cfgDict) {
             const currCfg   = cfgDict[i];
             const currRank  = currCfg.rank;
@@ -644,27 +564,14 @@ namespace ConfigManager {
             }
         }
 
-        if (maxCfg == null) {
-            throw Helpers.newError(`Empty maxCfg.`);
-        }
-        return maxCfg;
+        return Helpers.getExisted(maxCfg, ClientErrorCode.ConfigManager_GetPlayerRankCfg_01);
     }
 
     export function getCoBasicCfg(version: string, coId: number): CoBasicCfg {
-        const cfg = getAllCoBasicCfgDict(version)[coId];
-        if (cfg == null) {
-            throw Helpers.newError(`Empty cfg.`);
-        }
-
-        return cfg;
+        return Helpers.getExisted(getAllCoBasicCfgDict(version)[coId], ClientErrorCode.ConfigManager_GetCoBasicCfg_00);
     }
     export function getAllCoBasicCfgDict(version: string): { [coId: number]: CoBasicCfg } {
-        const cfgDict = _ALL_CONFIGS.get(version)?.CoBasic;
-        if (cfgDict == null) {
-            throw Helpers.newError(`Empty cfgDict.`);
-        }
-
-        return cfgDict;
+        return Helpers.getExisted(_ALL_CONFIGS.get(version)?.CoBasic, ClientErrorCode.ConfigManager_GetAllCoBasicCfgDict_00);
     }
     export function getCoNameAndTierText(version: string, coId: number): string {
         // const coConfig = coId == null ? null : getCoBasicCfg(version, coId);
@@ -673,34 +580,16 @@ namespace ConfigManager {
         //     ? `${coConfig.name}`
         //     : null;
 
-        const name = getCoBasicCfg(version, coId).name;
-        if (name == null) {
-            throw Helpers.newError(`Empty name.`);
-        }
-
-        return name;
+        return Helpers.getExisted(getCoBasicCfg(version, coId).name, ClientErrorCode.ConfigManager_GetCoNameAndTierText_00);
     }
     export function getCoType(version: string, coId: number): Types.CoType {
-        const maxLoadCount = getCoBasicCfg(version, coId).maxLoadCount;
-        if (maxLoadCount == null) {
-            throw Helpers.newError(`Empty maxLoadCount.`);
-        }
-
+        const maxLoadCount = Helpers.getExisted(getCoBasicCfg(version, coId).maxLoadCount, ClientErrorCode.ConfigManager_GetCoType_00);
         return maxLoadCount > 0 ? Types.CoType.Zoned : Types.CoType.Global;
     }
 
     export function getCoSkillCfg(version: string, skillId: number): CoSkillCfg {
-        const cfgDict = _ALL_CONFIGS.get(version)?.CoSkill;
-        if (cfgDict == null) {
-            throw Helpers.newError(`Empty cfgDict.`);
-        }
-
-        const cfg = cfgDict[skillId];
-        if (cfg == null) {
-            throw Helpers.newError(`Empty cfg.`);
-        }
-
-        return cfg;
+        const cfgDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.CoSkill, ClientErrorCode.ConfigManager_GetCoSkillCfg_00);
+        return Helpers.getExisted(cfgDict[skillId], ClientErrorCode.ConfigManager_GetCoSkillCfg_01);
     }
     export function getCoSkillArray(version: string, coId: number, skillType: Types.CoSkillType): number[] {
         const coConfig = getCoBasicCfg(version, coId);
@@ -708,7 +597,7 @@ namespace ConfigManager {
             case Types.CoSkillType.Passive      : return coConfig.passiveSkills || [];
             case Types.CoSkillType.Power        : return coConfig.powerSkills || [];
             case Types.CoSkillType.SuperPower   : return coConfig.superPowerSkills || [];
-            default                             : throw Helpers.newError(`Invalid skillType.`);
+            default                             : throw Helpers.newError(`Invalid skillType: ${skillType}.`, ClientErrorCode.ConfigManager_GetCoSkillArray_00);
         }
     }
     export function getCoSkillDescArray(version: string, coId: number, skillType: Types.CoSkillType): string[] {
@@ -717,8 +606,20 @@ namespace ConfigManager {
             case Types.CoSkillType.Passive      : return coConfig.passiveDesc || [];
             case Types.CoSkillType.Power        : return coConfig.copDesc || [];
             case Types.CoSkillType.SuperPower   : return coConfig.scopDesc || [];
-            default                             : throw Helpers.newError(`Invalid skillType.`);
+            default                             : throw Helpers.newError(`Invalid skillType: ${skillType}.`, ClientErrorCode.ConfigManager_GetCoSkillDescArray_00);
         }
+    }
+
+    export function getWeatherCfg(version: string, weatherType: Types.WeatherType): WeatherCfg {
+        return Helpers.getExisted(_ALL_CONFIGS.get(version)?.Weather[weatherType], ClientErrorCode.ConfigManager_GetWeatherCfg_00);
+    }
+    export function getAvailableWeatherTypes(version: string): Types.WeatherType[] {
+        const cfgDict   = Helpers.getExisted(_ALL_CONFIGS.get(version)?.Weather, ClientErrorCode.ConfigManager_GetAvailableWeatherTypes_00);
+        const typeArray : Types.WeatherType[] = [];
+        for (const i in cfgDict) {
+            typeArray.push(cfgDict[i].weatherType);
+        }
+        return typeArray;
     }
 
     export function getEnabledCoArray(version: string): CoBasicCfg[] {
@@ -797,12 +698,8 @@ namespace ConfigManager {
             _CO_ID_LIST_IN_TIER.set(version, new Map<number, number[]>());
         }
 
-        const cfgs = _CO_ID_LIST_IN_TIER.get(version);
-        if (cfgs == null) {
-            throw Helpers.newError(`ConfigManager.getEnabledCoIdListInTier() empty cfgs.`);
-        }
-
-        const currentIdArray = cfgs.get(tier);
+        const cfgs              = Helpers.getExisted(_CO_ID_LIST_IN_TIER.get(version), ClientErrorCode.ConfigManager_GetEnabledCoIdListInTier_00);
+        const currentIdArray    = cfgs.get(tier);
         if (currentIdArray) {
             return currentIdArray;
         } else {
@@ -840,6 +737,25 @@ namespace ConfigManager {
     }
     export function getCoEyeImageSource(coId: number, isAlive: boolean): string {
         return `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    }
+
+    export function getUserAvatarImageSource(avatarId: number): string {
+        return `userAvatar${Helpers.getNumText(avatarId, 4)}`;
+    }
+    export function getAvailableUserAvatarIdArray(version: string): number[] {
+        const cfgArray: { avatarId: number, sortWeight: number }[] = [];
+        const cfgDict = _ALL_CONFIGS.get(version)?.UserAvatar;
+        if (cfgDict) {
+            for (const i in cfgDict) {
+                const cfg = cfgDict[i];
+                cfgArray.push({
+                    avatarId    : cfg.avatarId,
+                    sortWeight  : cfg.sortWeight ?? Number.MAX_VALUE,
+                });
+            }
+        }
+
+        return cfgArray.sort((v1, v2) => v1.sortWeight - v2.sortWeight).map(v => v.avatarId);
     }
 
     export function checkIsUnitDivingByDefault(version: string, unitType: UnitType): boolean {

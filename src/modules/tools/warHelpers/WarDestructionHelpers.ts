@@ -5,6 +5,7 @@
 // import Helpers              from "../helpers/Helpers";
 // import Types                from "../helpers/Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarDestructionHelpers {
     import GridIndex        = Types.GridIndex;
     import TileObjectType   = Types.TileObjectType;
@@ -45,6 +46,7 @@ namespace WarDestructionHelpers {
 
             const warView = war.getView();
             (warView) && (warView.showVibration());
+            SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
         }
     }
 
@@ -67,6 +69,7 @@ namespace WarDestructionHelpers {
         if ((showExplosionEffect) && (hasRemovedUnit)) {
             const warView = war.getView();
             (warView) && (warView.showVibration());
+            SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
         }
 
         for (const tile of tileMap.getAllTiles()) {

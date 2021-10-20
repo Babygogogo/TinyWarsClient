@@ -3,6 +3,7 @@
 // import Types        from "../helpers/Types";
 // import Helpers      from "../helpers/Helpers";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiListItemRenderer {
     import UiListener       = Types.UiListener;
     import ShortSfxCode     = Types.ShortSfxCode;
@@ -10,6 +11,7 @@ namespace TwnsUiListItemRenderer {
     export class UiListItemRenderer<DataForRenderer> extends eui.ItemRenderer {
         private _isChildrenCreated          = false;
         private _isSkinLoaded               = false;
+        private _isDataEverChanged          = false;
         private _isOpening                  = false;
 
         private _shortSfxCode               = ShortSfxCode.ButtonNeutral01;
@@ -17,7 +19,6 @@ namespace TwnsUiListItemRenderer {
         private _uiListenerArray            : UiListener[] | null = null;
 
         public data                         : Types.Undefinable<DataForRenderer>;
-        private _isDataChangedBeforeOpen    = false;
 
         public constructor() {
             super();
@@ -68,11 +69,7 @@ namespace TwnsUiListItemRenderer {
 
                 this._onOpened();
                 this._registerListeners();
-
-                if (this._getIsDataChangedBeforeOpen()) {
-                    this._setIsDataChangedBeforeOpen(false);
-                    this._onDataChanged();
-                }
+                this._onDataChanged();
             }
         }
         private _doClose(): void {
@@ -96,7 +93,8 @@ namespace TwnsUiListItemRenderer {
         private _checkIsReadyForOpen(): boolean {
             return (this.stage != null)
                 && (this._isChildrenCreated)
-                && (this._isSkinLoaded);
+                && (this._isSkinLoaded)
+                && (this._getIsDataEverChanged());
         }
         protected _getIsOpening(): boolean {
             return this._isOpening;
@@ -111,17 +109,18 @@ namespace TwnsUiListItemRenderer {
         protected dataChanged(): void {
             super.dataChanged();
 
+            this._setIsDataEverChanged(true);
             if (this._getIsOpening()) {
                 this._onDataChanged();
             } else {
-                this._setIsDataChangedBeforeOpen(true);
+                this._doOpen();
             }
         }
-        private _getIsDataChangedBeforeOpen(): boolean {
-            return this._isDataChangedBeforeOpen;
+        private _getIsDataEverChanged(): boolean {
+            return this._isDataEverChanged;
         }
-        private _setIsDataChangedBeforeOpen(isChanged: boolean): void {
-            this._isDataChangedBeforeOpen = isChanged;
+        private _setIsDataEverChanged(isChanged: boolean): void {
+            this._isDataEverChanged = isChanged;
         }
 
         protected _getData(): DataForRenderer {

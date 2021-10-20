@@ -42,6 +42,7 @@
 // import TwnsMeTileSimpleView         from "./MeTileSimpleView";
 // import TwnsMeWarRulePanel           from "./MeWarRulePanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWarMenuPanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import BwUnitView               = TwnsBwUnitView.BwUnitView;
@@ -124,12 +125,12 @@ namespace TwnsMeWarMenuPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: NotifyType.MeMapNameChanged,                   callback: this._onNotifyMeMapNameChanged },
-                { type: NotifyType.MsgMeSubmitMap,                     callback: this._onMsgMeSubmitMap },
-                { type: NotifyType.MsgMmReviewMap,                     callback: this._onMsgMmReviewMap },
-                { type: NotifyType.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: NotifyType.MeMapNameChanged,                    callback: this._onNotifyMeMapNameChanged },
+                { type: NotifyType.MsgMmReviewMap,                      callback: this._onMsgMmReviewMap },
+                { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onMsgSpmCreateSfw },
+                { type: NotifyType.MsgUserSetMapEditorAutoSaveTime,     callback: this._onNotifyMsgUserSetMapEditorAutoSaveTime },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
@@ -157,17 +158,6 @@ namespace TwnsMeWarMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onMsgMeSubmitMap(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMeSubmitMap.IS;
-            if (data.mapRawDataErrorCode) {
-                FloatText.show(Lang.getText(LangTextType.A0197));
-                FloatText.show(Lang.getErrorText(data.mapRawDataErrorCode));
-            } else {
-                FloatText.show(Lang.getText(LangTextType.A0085));
-            }
-            this._getWar().setIsMapModified(false);
-        }
-
         private _onMsgMmReviewMap(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMmReviewMap.IS;
             if (data.isAccept) {
@@ -190,6 +180,11 @@ namespace TwnsMeWarMenuPanel {
                     });
                 },
             });
+        }
+
+        private _onNotifyMsgUserSetMapEditorAutoSaveTime(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgUserSetMapEditorAutoSaveTime.IS;
+            FloatText.show(Lang.getText(data.time == null ? LangTextType.A0248 : LangTextType.A0247));
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -427,6 +422,7 @@ namespace TwnsMeWarMenuPanel {
 
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
             return Helpers.getNonNullElements([
+                this._createCommandAutoSaveMap(),
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
                 this._createCommandUserSettings(),
@@ -599,6 +595,46 @@ namespace TwnsMeWarMenuPanel {
                     });
                 },
             };
+        }
+
+        private _createCommandAutoSaveMap(): DataForCommandRenderer | null {
+            if (this._getWar().getIsReviewingMap()) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(LangTextType.B0709),
+                    callback: () => {
+                        const currValue = UserModel.getSelfMapEditorAutoSaveTime();
+                        const minValue  = CommonConstants.MapEditorAutoSaveMinTime;
+                        const maxValue  = CommonConstants.MapEditorAutoSaveMaxTime;
+                        TwnsCommonInputPanel.CommonInputPanel.show({
+                            title           : Lang.getText(LangTextType.B0709),
+                            currentValue    : `${currValue ?? ``}`,
+                            maxChars        : 4,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}](s)\n${Lang.getText(LangTextType.A0246)}`,
+                            canBeEmpty      : true,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                if (!text) {
+                                    if (currValue != null) {
+                                        UserProxy.reqSetMapEditorAutoSaveTime(null);
+                                    }
+                                } else {
+                                    const value = Number(text);
+                                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                        FloatText.show(Lang.getText(LangTextType.A0098));
+                                    } else {
+                                        if (currValue !== value) {
+                                            UserProxy.reqSetMapEditorAutoSaveTime(value);
+                                        }
+                                    }
+                                }
+                            },
+                        });
+                    },
+                };
+            }
         }
 
         private _createCommandSimulation(): DataForCommandRenderer | null {

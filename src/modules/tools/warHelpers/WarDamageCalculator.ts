@@ -10,6 +10,7 @@
 // import ProtoTypes           from "../proto/ProtoTypes";
 // import WarCommonHelpers     from "./WarCommonHelpers";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarDamageCalculator {
     import GridIndex            = Types.GridIndex;
     import IBattleDamageInfo    = ProtoTypes.Structure.IBattleDamageInfo;
@@ -70,6 +71,7 @@ namespace WarDamageCalculator {
         const totalAmount = settingsModifier
             + amountFromPromotion
             + amountFromCo
+            + attacker.getAttackModifierByWeather(attackerGridIndex)
             + amountFromGlobalTiles;
         return Math.max(1 + totalAmount / 100, 0);
     }

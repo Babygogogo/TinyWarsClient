@@ -7,6 +7,7 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import WarMapModel          from "./WarMapModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarMapProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
@@ -23,6 +24,7 @@ namespace WarMapProxy {
             { msgCode: NetMessageCodes.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
             { msgCode: NetMessageCodes.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
             { msgCode: NetMessageCodes.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
+            { msgCode: NetMessageCodes.MsgMmSetMapName,                 callback: _onMsgMmSetMapName },
         ], null);
     }
 
@@ -158,6 +160,20 @@ namespace WarMapProxy {
         const data = e.data as NetMessage.MsgMmSetMapTag.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgMmSetMapTag, data);
+        }
+    }
+
+    export function reqMmSetMapName(mapId: number, mapNameArray: ProtoTypes.Structure.ILanguageText[]): void {
+        NetManager.send({ MsgMmSetMapName: { c: {
+            mapId,
+            mapNameArray,
+        } } });
+    }
+    async function _onMsgMmSetMapName(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgMmSetMapName.IS;
+        if (!data.errorCode) {
+            await WarMapModel.updateOnSetMapName(data);
+            Notify.dispatch(NotifyType.MsgMmSetMapName, data);
         }
     }
 }

@@ -6,6 +6,7 @@
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 // import TwnsBwWar            from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwCommonSettingManager {
     import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
@@ -26,13 +27,8 @@ namespace TwnsBwCommonSettingManager {
                 throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwCommonSettingManager_Init_00);
             }
 
-            const warRule = settings.warRule;
-            if (warRule == null) {
-                throw Helpers.newError(`Empty warRule.`, ClientErrorCode.BwCommonSettingManager_Init_01);
-            }
-
             const errorCodeForWarRule = WarRuleHelpers.getErrorCodeForWarRule({
-                rule                : warRule,
+                rule                : Helpers.getExisted(settings.warRule, ClientErrorCode.BwCommonSettingManager_Init_01),
                 allWarEventIdArray,
                 configVersion,
                 playersCountUnneutral,
@@ -78,6 +74,10 @@ namespace TwnsBwCommonSettingManager {
         public getSettingsHasFogByDefault(): boolean {
             return WarRuleHelpers.getHasFogByDefault(this.getWarRule());
         }
+        public getSettingsDefaultWeatherType(): Types.WeatherType {
+            return WarRuleHelpers.getDefaultWeatherType(this.getWarRule());
+        }
+
         public getSettingsIncomeMultiplier(playerIndex: number): number {
             return WarRuleHelpers.getIncomeMultiplier(this.getWarRule(), playerIndex);
         }

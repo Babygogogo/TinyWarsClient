@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
-        xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" />
-    <e:Group id="_group" width="740" height="420" horizontalCenter="0" verticalCenter="0">
+    <e:Group id="_group" width="740" height="480" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2"
-                                 left="0" right="0" top="38" bottom="0" />
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
             <e:Group y="0" left="0" right="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
                                      source="uncompressedColorGrey0001" y="0" left="0" right="0" />
@@ -16,83 +17,92 @@
             </e:Group>
         </e:Group>
         <e:Group y="50" left="30">
-            <e:Group x="480" y="0">
-                <e:Group y="80" x="10">
-                    <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
-                                         scale9Grid="1,1,2,2" />
-                    <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2" bottom="2"
-                                         left="90" />
-                    <TwnsUiLabel:UiLabel id="_labelUserIdTitle" text="User ID" size="12" textColor="0xFFFFFF" x="10"
-                                         verticalCenter="1" />
-                    <TwnsUiLabel:UiLabel id="_labelUserId" text="99999999" textColor="0xFFFFFF" size="16" x="100"
-                                         verticalCenter="1" />
-                </e:Group>
-                <e:Group y="90" x="20">
-                    <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
-                                         scale9Grid="1,1,2,2" />
-                    <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2" bottom="2"
-                                         left="90" />
-                    <TwnsUiLabel:UiLabel text="Discord ID" size="12" textColor="0xFFFFFF" x="10" verticalCenter="1" />
-                    <TwnsUiLabel:UiLabel id="_labelDiscordId" text="99999999" textColor="0xFFFFFF" size="16" x="100"
-                                         verticalCenter="1" />
-                </e:Group>
-                <e:Group y="100" x="30">
-                    <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
-                                         scale9Grid="1,1,2,2" />
-                    <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2" bottom="2"
-                                         left="90" />
-                    <TwnsUiLabel:UiLabel id="_labelRegisterTimeTitle" text="Register Time" size="12"
-                                         textColor="0xFFFFFF" x="10" verticalCenter="1" />
-                    <e:Group x="100" verticalCenter="1">
-                        <TwnsUiLabel:UiLabel id="_labelRegisterTime1" text="99999999" textColor="0xFFFFFF" size="16"
-                                             x="0" y="0" />
-                        <TwnsUiLabel:UiLabel id="_labelRegisterTime2" text="99999999" textColor="0xFFFFFF" size="16"
-                                             x="10" y="0" />
-                        <e:layout>
-                            <e:HorizontalLayout/>
-                        </e:layout>
-                    </e:Group>
-                </e:Group>
-                <e:Group y="110" x="40">
-                    <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
-                                         scale9Grid="1,1,2,2" />
-                    <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2" bottom="2"
-                                         left="90" />
-                    <TwnsUiLabel:UiLabel id="_labelLastLoginTimeTitle" text="Register Time" size="12"
-                                         textColor="0xFFFFFF" x="10" verticalCenter="1" />
-                    <e:Group x="100" verticalCenter="1">
-                        <TwnsUiLabel:UiLabel id="_labelLastLoginTime1" text="99999999" textColor="0xFFFFFF" size="16"
-                                             x="0" y="0" />
-                        <TwnsUiLabel:UiLabel id="_labelLastLoginTime2" text="99999999" textColor="0xFFFFFF" size="16"
-                                             x="10" y="0" />
-                        <e:layout>
-                            <e:HorizontalLayout/>
-                        </e:layout>
-                    </e:Group>
-                </e:Group>
-                <e:Group y="100" x="30">
-                    <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
-                                         scale9Grid="1,1,2,2" />
-                    <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2" bottom="2"
-                                         left="90" />
-                    <TwnsUiLabel:UiLabel id="_labelOnlineTimeTitle" text="Discord ID" size="12" textColor="0xFFFFFF"
-                                         x="10" verticalCenter="1" />
-                    <TwnsUiLabel:UiLabel id="_labelOnlineTime" text="99999999" textColor="0xFFFFFF" size="16" x="100"
-                                         verticalCenter="1" />
-                </e:Group>
-                <e:Group y="110" x="40">
-                    <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
-                                         scale9Grid="1,1,2,2" />
-                    <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2" bottom="2"
-                                         left="90" />
-                    <TwnsUiLabel:UiLabel text="Discord ID" size="12" textColor="0xFFFFFF" x="10" verticalCenter="1"
-                                         id="_labelLoginCountTitle" />
-                    <TwnsUiLabel:UiLabel id="_labelLoginCount" text="99999999" textColor="0xFFFFFF" size="16" x="100"
-                                         verticalCenter="1" />
+            <e:Group x="0" y="0">
+                <TwnsUiImage:UiImage id="_imgAvatar" x="10" y="10" scale9Grid="1,1,2,2" source="userAvatar0001"
+                                     scaleX="0.44" scaleY="0.44" />
+                <e:Group x="90" y="6">
+                    <TwnsUiButton:UiButton id="_btnChat" label="聊天" skinName="Skins.Component.Button.ButtonYellow001"
+                                           width="100" left="0" top="0" />
+                    <TwnsUiButton:UiButton id="_btnSetAvatar" label="聊天"
+                                           skinName="Skins.Component.Button.ButtonYellow001" width="100" left="0"
+                                           top="0" />
                 </e:Group>
                 <e:layout>
-                    <e:VerticalLayout gap="20" />
+                    <e:HorizontalLayout verticalAlign="middle" gap="46" />
                 </e:layout>
+            </e:Group>
+            <e:Group y="80" x="10">
+                <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
+                                     scale9Grid="1,1,2,2" />
+                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2"
+                                     bottom="2" left="90" />
+                <TwnsUiLabel:UiLabel id="_labelUserIdTitle" text="User ID" size="12" textColor="0xFFFFFF" x="10"
+                                     verticalCenter="1" />
+                <TwnsUiLabel:UiLabel id="_labelUserId" text="99999999" textColor="0xFFFFFF" size="16" x="100"
+                                     verticalCenter="1" />
+            </e:Group>
+            <e:Group y="90" x="20">
+                <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
+                                     scale9Grid="1,1,2,2" />
+                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2"
+                                     bottom="2" left="90" />
+                <TwnsUiLabel:UiLabel text="Discord ID" size="12" textColor="0xFFFFFF" x="10" verticalCenter="1" />
+                <TwnsUiLabel:UiLabel id="_labelDiscordId" text="99999999" textColor="0xFFFFFF" size="16" x="100"
+                                     verticalCenter="1" />
+            </e:Group>
+            <e:Group y="100" x="30">
+                <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
+                                     scale9Grid="1,1,2,2" />
+                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2"
+                                     bottom="2" left="90" />
+                <TwnsUiLabel:UiLabel id="_labelRegisterTimeTitle" text="Register Time" size="12" textColor="0xFFFFFF"
+                                     x="10" verticalCenter="1" />
+                <e:Group x="100" verticalCenter="1">
+                    <TwnsUiLabel:UiLabel id="_labelRegisterTime1" text="99999999" textColor="0xFFFFFF" size="16" x="0"
+                                         y="0" />
+                    <TwnsUiLabel:UiLabel id="_labelRegisterTime2" text="99999999" textColor="0xFFFFFF" size="16" x="10"
+                                         y="0" />
+                    <e:layout>
+                        <e:HorizontalLayout/>
+                    </e:layout>
+                </e:Group>
+            </e:Group>
+            <e:Group y="110" x="40">
+                <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
+                                     scale9Grid="1,1,2,2" />
+                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2"
+                                     bottom="2" left="90" />
+                <TwnsUiLabel:UiLabel id="_labelLastLoginTimeTitle" text="Register Time" size="12" textColor="0xFFFFFF"
+                                     x="10" verticalCenter="1" />
+                <e:Group x="100" verticalCenter="1">
+                    <TwnsUiLabel:UiLabel id="_labelLastLoginTime1" text="99999999" textColor="0xFFFFFF" size="16" x="0"
+                                         y="0" />
+                    <TwnsUiLabel:UiLabel id="_labelLastLoginTime2" text="99999999" textColor="0xFFFFFF" size="16" x="10"
+                                         y="0" />
+                    <e:layout>
+                        <e:HorizontalLayout/>
+                    </e:layout>
+                </e:Group>
+            </e:Group>
+            <e:Group y="100" x="30">
+                <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
+                                     scale9Grid="1,1,2,2" />
+                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2"
+                                     bottom="2" left="90" />
+                <TwnsUiLabel:UiLabel id="_labelOnlineTimeTitle" text="Discord ID" size="12" textColor="0xFFFFFF" x="10"
+                                     verticalCenter="1" />
+                <TwnsUiLabel:UiLabel id="_labelOnlineTime" text="99999999" textColor="0xFFFFFF" size="16" x="100"
+                                     verticalCenter="1" />
+            </e:Group>
+            <e:Group y="110" x="40">
+                <TwnsUiImage:UiImage width="280" x="0" height="30" y="0" source="uncompressedColorBlack0002"
+                                     scale9Grid="1,1,2,2" />
+                <TwnsUiImage:UiImage source="uncompressedRectangle0001" scale9Grid="2,2,1,1" right="10" top="2"
+                                     bottom="2" left="90" />
+                <TwnsUiLabel:UiLabel text="Discord ID" size="12" textColor="0xFFFFFF" x="10" verticalCenter="1"
+                                     id="_labelLoginCountTitle" />
+                <TwnsUiLabel:UiLabel id="_labelLoginCount" text="99999999" textColor="0xFFFFFF" size="16" x="100"
+                                     verticalCenter="1" />
             </e:Group>
             <e:layout>
                 <e:VerticalLayout gap="20" />
@@ -129,8 +139,8 @@
                 </e:Group>
                 <e:Group x="0" y="40">
                     <e:Group x="0" y="0">
-                        <TwnsUiImage:UiImage alpha="0.8" scale9Grid="1,1,2,2" source="uncompressedColorBlue0000" width="360"
-                                             height="26" y="0" x="0" />
+                        <TwnsUiImage:UiImage alpha="0.8" scale9Grid="1,1,2,2" source="uncompressedColorBlue0000"
+                                             width="360" height="26" y="0" x="0" />
                         <TwnsUiLabel:UiLabel id="_labelHistoryStd" text="明战" textColor="0xFFFFFF" size="14"
                                              verticalCenter="1" horizontalCenter="-140" bold="true" />
                         <TwnsUiLabel:UiLabel id="_labelHistoryStdWin" text="胜" textColor="0xFFFFFF" size="14"
@@ -249,13 +259,6 @@
                 <e:VerticalLayout gap="20" />
             </e:layout>
         </e:Group>
-        <e:Group id="_groupButtons" left="30" bottom="10">
-            <TwnsUiImage:UiImage id="_imgLogo" left="30" bottom="10" source="login_title_001" scaleX="0.5" scaleY="0.5" />
-            <TwnsUiButton:UiButton id="_btnChat" label="聊天" x="0" y="344"
-                                   skinName="Skins.Component.Button.ButtonYellow001" width="100" />
-            <e:layout>
-                <e:HorizontalLayout gap="50" />
-            </e:layout>
-        </e:Group>
+        <TwnsUiImage:UiImage id="_imgLogo" left="30" bottom="10" source="login_title_001" scaleX="0.58" scaleY="0.58" />
     </e:Group>
 </e:Skin>

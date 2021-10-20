@@ -7,10 +7,12 @@
 // import TwnsNotifyType           from "../notify/NotifyType";
 // import TwnsUiListItemRenderer   from "./UiListItemRenderer";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiScrollList {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import UiListener       = Types.UiListener;
-    import ShortSfxCode     = Types.ShortSfxCode;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import UiListener           = Types.UiListener;
+    import ShortSfxCode         = Types.ShortSfxCode;
 
     export class UiScrollList<DataForRenderer> extends eui.Scroller {
         private _isChildrenCreated          = false;
@@ -82,12 +84,12 @@ namespace TwnsUiScrollList {
 
         private _onOpened(): void {
             if (this.numChildren !== 1) {
-                throw Helpers.newError(`UiScrollList._onAllSkinPartsAdded() this.numChildren !== 1`);
+                throw Helpers.newError(`UiScrollList._onAllSkinPartsAdded() this.numChildren !== 1`, ClientErrorCode.UiScrollList_OnOpened_00);
             }
 
             const list = this.getChildAt(0);
             if ((list == null) || (!(list instanceof eui.List))) {
-                throw Helpers.newError(`UiScrollList._onAllSkinPartsAdded() invalid list!`);
+                throw Helpers.newError(`UiScrollList._onAllSkinPartsAdded() invalid list!`, ClientErrorCode.UiScrollList_OnOpened_01);
             }
 
             this._setNotifyListenerArray([
@@ -235,7 +237,7 @@ namespace TwnsUiScrollList {
 
             const dataProvider = this._getDataProvider();
             if (dataProvider == null) {
-                throw Helpers.newError(`UiScrollList.bindData() empty dataProvider.`);
+                throw Helpers.newError(`UiScrollList.bindData() empty dataProvider.`, ClientErrorCode.UiScrollList_BindData_00);
             }
 
             dataProvider.replaceAll(dataArray);
@@ -250,11 +252,11 @@ namespace TwnsUiScrollList {
             if (this.getIsOpening()) {
                 const dataProvider = this._getDataProvider();
                 if (dataProvider == null) {
-                    throw Helpers.newError(`UiScrollList.updateSingleData() empty dataProvider.`);
+                    throw Helpers.newError(`UiScrollList.updateSingleData() empty dataProvider.`, ClientErrorCode.UiScrollList_UpdateSingleData_00);
                 }
 
                 if ((index < 0) || (index >= dataProvider.length)) {
-                    throw Helpers.newError(`UiScrollList.updateSingleData() invalid index.`);
+                    throw Helpers.newError(`UiScrollList.updateSingleData() invalid index.`, ClientErrorCode.UiScrollList_UpdateSingleData_01);
                 } else {
                     dataProvider.replaceItemAt(data, index);
                 }
@@ -272,7 +274,7 @@ namespace TwnsUiScrollList {
             if (this.getIsOpening()) {
                 const dataProvider = this._getDataProvider();
                 if (dataProvider == null) {
-                    throw Helpers.newError(`UiScrollList.refresh() empty dataProvider.`);
+                    throw Helpers.newError(`UiScrollList.refresh() empty dataProvider.`, ClientErrorCode.UiScrollList_Refresh_00);
                 }
 
                 dataProvider.refresh();
@@ -289,7 +291,7 @@ namespace TwnsUiScrollList {
             if (this.getIsOpening()) {
                 const dataProvider = this._getDataProvider();
                 if (dataProvider == null) {
-                    throw Helpers.newError(`UiScrollList.clear() empty dataProvider.`);
+                    throw Helpers.newError(`UiScrollList.clear() empty dataProvider.`, ClientErrorCode.UiScrollList_Clear_00);
                 }
 
                 dataProvider.removeAll();

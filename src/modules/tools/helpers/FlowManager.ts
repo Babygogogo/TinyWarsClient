@@ -71,7 +71,9 @@
 // import Timer                        from "./Timer";
 // import Types                        from "./Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace FlowManager {
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
@@ -266,7 +268,7 @@ namespace FlowManager {
         } else if (warType === WarType.Me) {
             _gotoMeMapListPanel();
         } else {
-            throw Helpers.newError(`FlowManager.gotoMyWarListPanel() invalid warType: ${warType}.`);
+            throw Helpers.newError(`FlowManager.gotoMyWarListPanel() invalid warType: ${warType}.`, ClientErrorCode.FlowManager_GotoMyWarListPanel_00);
         }
     }
     export function gotoRwReplayListPanel(): void {
@@ -291,6 +293,8 @@ namespace FlowManager {
         TwnsLobbyTopRightPanel.LobbyTopRightPanel.show();
         TwnsBroadcastPanel.BroadcastPanel.show();
         TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -344,11 +348,7 @@ namespace FlowManager {
 
     function _onMsgMpwCommonContinueWar(e: egret.Event): void {
         const data      = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
-        const warData   = data.war;
-        if (warData == null) {
-            throw Helpers.newError(`FlowManager._onMsgMpwCommonContinueWar() empty warData.`);
-        }
-
+        const warData   = Helpers.getExisted(data.war, ClientErrorCode.FlowManager_OnMsgMpwCommonContinueWar_00);
         gotoMultiPlayerWar(warData);
     }
 

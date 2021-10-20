@@ -18,7 +18,9 @@
 // import TwnsSpwPlayerManager from "./SpwPlayerManager";
 // import TwnsSpwWar           from "./SpwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace SpwModel {
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import SpwWar                   = TwnsSpwWar.SpwWar;
     import ScwWar                   = TwnsScwWar.ScwWar;
     import SfwWar                   = TwnsSfwWar.SfwWar;
@@ -122,13 +124,13 @@ namespace SpwModel {
 
     async function handlePlayerOrRobotAction(war: BwWar, action: IWarActionContainer): Promise<void> {
         if (war.getIsEnded()) {
-            throw Helpers.newError(`war.getIsEnded() is true.`);
+            throw Helpers.newError(`war.getIsEnded() is true.`, ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_00);
         }
         if (war.getIsExecutingAction()) {
-            throw Helpers.newError(`war.getIsExecutingAction() is true.`);
+            throw Helpers.newError(`war.getIsExecutingAction() is true.`, ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_01);
         }
         if (!war.getIsRunning()) {
-            throw Helpers.newError(`war.getIsRunning() is false.`);
+            throw Helpers.newError(`war.getIsRunning() is false.`, ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_02);
         }
 
         await reviseAndExecute(war, action);
@@ -190,16 +192,7 @@ namespace SpwModel {
 
         // Handle the WaitBeginTurn phase.
         const turnPhaseCode = war.getTurnPhaseCode();
-        if (turnPhaseCode == null) {
-            throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() empty turnPhaseCode.`);
-        }
-
         const playerManager = war.getPlayerManager();
-        const playerInTurn  = playerManager.getPlayerInTurn();
-        if (playerInTurn == null) {
-            throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() empty playerInTurn.`);
-        }
-
         if (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn) {
             await handleSystemBeginTurn(war);
             await checkAndHandleSystemActions(war);
@@ -209,7 +202,7 @@ namespace SpwModel {
         // Handle the booted players (make them dying).
         if (war.checkIsBoot()) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`);
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_00);
             }
 
             await handleSystemHandleBootPlayer(war);
@@ -221,10 +214,6 @@ namespace SpwModel {
         const playersCount = playerManager.getTotalPlayersCount(false);
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
             const player = playerManager.getPlayer(playerIndex);
-            if (player == null) {
-                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() empty player.`);
-            }
-
             if (player.getAliveState() === Types.PlayerAliveState.Dying) {
                 await handleSystemDestroyPlayerForce(war, playerIndex);
                 await checkAndHandleSystemActions(war);
@@ -232,21 +221,23 @@ namespace SpwModel {
             }
         }
 
-        // Handle neutral player (end turn).
-        if (playerInTurn.checkIsNeutral()) {
-            if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
-            }
-
-            await handleSystemEndTurn(war);
+        // Handle system vote for draw.
+        const playerInTurn = playerManager.getPlayerInTurn();
+        if ((war.getDrawVoteManager().getRemainingVotes())                                                      &&
+            (!playerInTurn.getHasVotedForDraw())                                                                &&
+            ((playerInTurn.checkIsNeutral()) || (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead))
+        ) {
+            await handleSystemVoteForDraw(war);
             await checkAndHandleSystemActions(war);
             return true;
         }
 
-        // Handle the dead player in turn (end turn).
-        if (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead) {
+        // Handle system end turn.
+        if ((playerInTurn.checkIsNeutral())                                 ||
+            (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead)
+        ) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_01);
             }
 
             await handleSystemEndTurn(war);
@@ -277,6 +268,14 @@ namespace SpwModel {
             actionId                            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemDestroyPlayerForce   : {
                 targetPlayerIndex           : playerIndex,
+            },
+        });
+    }
+    async function handleSystemVoteForDraw(war: BwWar): Promise<void> {
+        await reviseAndExecute(war, {
+            actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
+            WarActionSystemVoteForDraw  : {
+                isAgree : true,
             },
         });
     }
@@ -317,7 +316,7 @@ namespace SpwModel {
         } else if (warData.settingsForSrw) {
             return new SrwWar();
         } else {
-            throw Helpers.newError(`Invalid warData.`);
+            throw Helpers.newError(`Invalid warData.`, ClientErrorCode.SpwModel_CreateWarByWarData_00);
         }
     }
 }

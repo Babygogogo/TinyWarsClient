@@ -22,6 +22,7 @@
 // import TwnsSpwWar               from "../model/SpwWar";
 // import TwnsSpwWarMenuPanel      from "./SpwWarMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwTopPanel {
     import UserPanel            = TwnsUserPanel.UserPanel;
     import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
@@ -44,6 +45,7 @@ namespace TwnsSpwTopPanel {
         private static _instance: SpwTopPanel;
 
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
+        private readonly _labelWeather!         : TwnsUiLabel.UiLabel;
         private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
         private readonly _btnChat!              : TwnsUiButton.UiButton;
         private readonly _btnSettings!          : TwnsUiButton.UiButton;
@@ -90,6 +92,7 @@ namespace TwnsSpwTopPanel {
                 { type: NotifyType.BwPlayerIndexInTurnChanged,      callback: this._onNotifyBwPlayerIndexInTurnChanged },
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: NotifyType.BwForceWeatherTypeChanged,       callback: this._onNotifyBwForceWeatherTypeChanged },
                 { type: NotifyType.BwTileBeCaptured,                callback: this._onNotifyBwTileBeCaptured },
                 { type: NotifyType.MsgChatGetAllReadProgressList,   callback: this._onNotifyMsgChatGetAllReadProgressList },
                 { type: NotifyType.MsgChatUpdateReadProgress,       callback: this._onNotifyMsgChatUpdateReadProgress },
@@ -97,6 +100,7 @@ namespace TwnsSpwTopPanel {
                 { type: NotifyType.MsgChatAddMessage,               callback: this._onNotifyMsgChatAddMessage },
             ]);
             this._setUiListenerArray([
+                { ui: this._labelWeather,       callback: this._onTouchedLabelWeather },
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._groupInfo,          callback: this._onTouchedGroupInfo },
@@ -105,6 +109,7 @@ namespace TwnsSpwTopPanel {
                 { ui: this._btnExpand,          callback: this._onTouchedBtnExpand },
                 { ui: this._btnNarrow,          callback: this._onTouchedBtnNarrow },
             ]);
+            this._labelWeather.touchEnabled = true;
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._setPanelSkinState(PanelSkinState.Normal);
 
@@ -132,6 +137,9 @@ namespace TwnsSpwTopPanel {
             this._updateLabelEnergy();
             SoundManager.playCoBgmWithWar(this._getOpenData().war, false);
         }
+        private _onNotifyBwForceWeatherTypeChanged(): void {
+            this._updateLabelWeather();
+        }
         private _onNotifyBwTileBeCaptured(): void {
             this._updateLabelFundAndAddFund();
         }
@@ -152,6 +160,14 @@ namespace TwnsSpwTopPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks for touch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onTouchedLabelWeather(): void {
+            TwnsCommonHelpPanel.CommonHelpPanel.show({
+                title  : Lang.getText(LangTextType.B0705),
+                content: this._getOpenData().war.getWeatherManager().getDesc(),
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+
         private _onTouchedGroupPlayer(): void {
             const userId = this._getOpenData().war.getPlayerInTurn().getUserId();
             if (userId != null) {
@@ -198,6 +214,7 @@ namespace TwnsSpwTopPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
+            this._updateLabelWeather();
             this._updateListPlayer();
             this._updateImgSkinAndCo();
             this._updateLabelPlayer();
@@ -208,6 +225,11 @@ namespace TwnsSpwTopPanel {
 
         private _updateComponentsForLanguage(): void {
             this._labelSinglePlayer.text = Lang.getText(LangTextType.B0138);
+            this._updateLabelWeather();
+        }
+
+        private _updateLabelWeather(): void {
+            this._labelWeather.text = Lang.getWeatherName(this._getOpenData().war.getWeatherManager().getCurrentWeatherType());
         }
 
         private _updateListPlayer(): void {

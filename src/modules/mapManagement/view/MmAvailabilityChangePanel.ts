@@ -13,6 +13,7 @@
 // import WarMapProxy              from "../../warMap/model/WarMapProxy";
 // import TwnsMmWarRulePanel       from "./MmWarRulePanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmAvailabilityChangePanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MmWarRulePanel       = TwnsMmWarRulePanel.MmWarRulePanel;
@@ -54,6 +55,7 @@ namespace TwnsMmAvailabilityChangePanel {
 
         private readonly _btnDelete!    : TwnsUiButton.UiButton;
         private readonly _btnWarRule!   : TwnsUiButton.UiButton;
+        private readonly _btnRename!    : TwnsUiButton.UiButton;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
@@ -86,6 +88,7 @@ namespace TwnsMmAvailabilityChangePanel {
                 { ui: this._btnDelete,      callback: this._onTouchedBtnDelete },
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
                 { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
+                { ui: this._btnRename,      callback: this._onTouchedBtnRename },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
                 { ui: this._groupCcw,       callback: this._onTouchedGroupCcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
@@ -135,6 +138,10 @@ namespace TwnsMmAvailabilityChangePanel {
             this.close();
         }
 
+        private _onTouchedBtnRename(): void {
+            TwnsMmMapRenamePanel.MmMapRenamePanel.show({ mapId: this._getOpenData().mapId });
+        }
+
         private _onTouchedBtnCancel(): void {
             this.close();
         }
@@ -180,6 +187,7 @@ namespace TwnsMmAvailabilityChangePanel {
             this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
             this._btnDelete.label   = Lang.getText(LangTextType.B0270);
             this._btnWarRule.label  = Lang.getText(LangTextType.B0314);
+            this._btnRename.label   = Lang.getText(LangTextType.B0708);
             this._labelMcw.text     = Lang.getText(LangTextType.B0200);
             this._labelCcw.text     = Lang.getText(LangTextType.B0619);
             this._labelMrwStd.text  = Lang.getText(LangTextType.B0404);

@@ -13,6 +13,7 @@
 // import TwnsBwUnit           from "./BwUnit";
 // import TwnsBwWar            from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTile {
     import TileType             = Types.TileType;
     import TileObjectType       = Types.TileObjectType;
@@ -707,17 +708,33 @@ namespace TwnsBwTile {
         public getVisionRangeForPlayer(playerIndex: number): number | null {
             if ((!this.checkIsVisionEnabledForAllPlayers()) && (this.getPlayerIndex() !== playerIndex)) {
                 return null;
-            } else {
-                return Math.max(
-                    0,
-                    this.getCfgVisionRange() + this.getWar().getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex),
-                );
             }
+
+            const war                   = this.getWar();
+            const tileVisionFixedCfg    = war.getWeatherManager().getCurrentWeatherCfg().tileVisionFixed;
+            if (tileVisionFixedCfg) {
+                if (ConfigManager.checkIsTileTypeInCategory(war.getConfigVersion(), this.getType(), tileVisionFixedCfg[0])) {
+                    return tileVisionFixedCfg[1];
+                }
+            }
+
+            return Math.max(
+                0,
+                this.getCfgVisionRange() + war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex),
+            );
         }
         public getVisionRangeForTeamIndexes(teamIndexes: Set<number>): number | null {
-            const war               = this.getWar();
-            const cfgVisionRange    = this.getCfgVisionRange();
+            const war                   = this.getWar();
+            const cfgVisionRange        = this.getCfgVisionRange();
+            const tileVisionFixedCfg    = war.getWeatherManager().getCurrentWeatherCfg().tileVisionFixed;
+
             if (this.checkIsVisionEnabledForAllPlayers()) {
+                if (tileVisionFixedCfg) {
+                    if (ConfigManager.checkIsTileTypeInCategory(war.getConfigVersion(), this.getType(), tileVisionFixedCfg[0])) {
+                        return tileVisionFixedCfg[1];
+                    }
+                }
+
                 let maxModifier = Number.MIN_VALUE;
                 war.getPlayerManager().forEachPlayer(false, player => {
                     if ((player.getAliveState() !== Types.PlayerAliveState.Dead) &&
@@ -731,6 +748,12 @@ namespace TwnsBwTile {
             }
 
             if (teamIndexes.has(this.getTeamIndex())) {
+                if (tileVisionFixedCfg) {
+                    if (ConfigManager.checkIsTileTypeInCategory(war.getConfigVersion(), this.getType(), tileVisionFixedCfg[0])) {
+                        return tileVisionFixedCfg[1];
+                    }
+                }
+
                 return Math.max(0, cfgVisionRange + war.getCommonSettingManager().getSettingsVisionRangeModifier(this.getPlayerIndex()));
             }
 

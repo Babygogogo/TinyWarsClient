@@ -99,7 +99,7 @@ namespace TwnsBwUnitListPanel {
         private _onTouchedBtnSwitch(): void {
             const playerIndex = this._playerIndex;
             if (playerIndex != null) {
-                this._playerIndex = this._getOpenData().war.getTurnManager().getNextPlayerIndex(playerIndex);
+                this._playerIndex = this._getOpenData().war.getTurnManager().getNextAlivePlayerIndex(playerIndex);
                 this._updateComponentsForUnits();
             }
         }

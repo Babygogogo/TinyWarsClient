@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001" locked="true" />
+    <e:Group id="_group" width="560" height="330" horizontalCenter="0" verticalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" right="0" top="0" bottom="0" locked="true" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="标题" textColor="0xffffff" y="10" size="24" horizontalCenter="0"
+                        locked="true" />
+        <e:Group y="40" left="20" right="20">
+            <TwnsUiLabel:UiLabel id="_labelChinese" text="中文" textColor="0xFFFFFF" size="14" textAlign="center"
+                            wordWrap="true" top="0" left="0" />
+            <TwnsUiTextInput:UiTextInput id="_inputChinese" anchorOffsetX="0" anchorOffsetY="0" maxChars="200" left="0" right="0"
+                                height="80" y="20">
+                <TwnsUiButton:skinName>
+                    <e:Skin width="100" height="30">
+                        <e:Image source="uncompressedColorPink0000" left="0" right="0" bottom="0" />
+                        <e:EditableText id="textDisplay" size="24" left="0" right="0" textColor="0xffffff" top="0"
+                                        bottom="0" multiline="true" text="" />
+                        <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                 height="30" textColor="0x808080" />
+                    </e:Skin>
+                </TwnsUiButton:skinName>
+            </TwnsUiTextInput:UiTextInput>
+        </e:Group>
+        <e:Group y="160" left="20" right="20">
+            <TwnsUiLabel:UiLabel id="_labelEnglish" text="中文" textColor="0xFFFFFF" size="14" textAlign="center"
+                            wordWrap="true" top="0" left="0" />
+            <TwnsUiTextInput:UiTextInput id="_inputEnglish" anchorOffsetX="0" anchorOffsetY="0" maxChars="200" left="0" right="0"
+                                height="80" y="20">
+                <TwnsUiButton:skinName>
+                    <e:Skin width="100" height="30">
+                        <e:Image source="uncompressedColorPink0000" left="0" right="0" bottom="0" />
+                        <e:EditableText id="textDisplay" size="24" left="0" right="0" textColor="0xffffff" top="0"
+                                        bottom="0" multiline="true" text="" />
+                        <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                 height="30" textColor="0x808080" />
+                    </e:Skin>
+                </TwnsUiButton:skinName>
+            </TwnsUiTextInput:UiTextInput>
+        </e:Group>
+        <TwnsUiLabel:UiLabel id="_labelTip" text="提示" textColor="0xFFFFFF" size="14" textAlign="center" wordWrap="true"
+                        horizontalCenter="0" bottom="44" locked="true" />
+        <e:Group horizontalCenter="0" bottom="10" locked="true">
+            <TwnsUiButton:UiButton id="_btnClose" label="取消" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0"
+                             y="0" width="100" />
+            <TwnsUiButton:UiButton id="_btnModify" label="确定" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="160"
+                             y="0" width="100" />
+        </e:Group>
+    </e:Group>
+</e:Skin>

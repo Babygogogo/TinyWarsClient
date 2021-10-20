@@ -15,6 +15,7 @@
 // import TwnsBwUnit               from "./BwUnit";
 // import TwnsBwWar                from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTurnManager {
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import TurnPhaseCode                = Types.TurnPhaseCode;
@@ -148,8 +149,9 @@ namespace TwnsBwTurnManager {
             this._runPhaseResetVisionForCurrentPlayer();
             this._runPhaseTickTurnAndPlayerIndexWithExtraData(action);
             this._runPhaseResetSkillState();
-            this._runPhaseResetVisionForNextPlayer();
             this._runPhaseResetVotesForDraw();
+            this._runPhaseUpdateWeatherWithExtraData(action);
+            this._runPhaseResetVisionForNextPlayer();
             this._runPhaseWaitBeginTurn();
 
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
@@ -164,8 +166,9 @@ namespace TwnsBwTurnManager {
             this._runPhaseResetVisionForCurrentPlayer();
             this._runPhaseTickTurnAndPlayerIndexWithoutExtraData();
             this._runPhaseResetSkillState();
-            this._runPhaseResetVisionForNextPlayer();
             this._runPhaseResetVotesForDraw();
+            this._runPhaseUpdateWeatherWithoutExtraData();
+            this._runPhaseResetVisionForNextPlayer();
             this._runPhaseWaitBeginTurn();
 
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
@@ -646,7 +649,7 @@ namespace TwnsBwTurnManager {
             const restTime  = Helpers.getExisted(extraData.restTimeToBootForCurrentPlayer, ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithExtraData_01);
             war.getPlayerInTurn().setRestTimeToBoot(restTime);
 
-            const info = this._getNextTurnAndPlayerIndex(null);
+            const info = this._getNextTurnAndPlayerIndex();
             this._setTurnIndex(info.turnIndex);
             this._setPlayerIndexInTurn(info.playerIndex);
             this._setEnterTurnTime(Timer.getServerTimestamp());
@@ -686,7 +689,7 @@ namespace TwnsBwTurnManager {
                 }
             }
 
-            const info = this._getNextTurnAndPlayerIndex(null);
+            const info = this._getNextTurnAndPlayerIndex();
             this._setTurnIndex(info.turnIndex);
             this._setPlayerIndexInTurn(info.playerIndex);
             this._setEnterTurnTime(Timer.getServerTimestamp());
@@ -703,14 +706,23 @@ namespace TwnsBwTurnManager {
                 war.getTileMap().getView().updateCoZone();
             }
         }
-        private _runPhaseResetVisionForNextPlayer(): void {
-            const war = this.getWar();
-            war.updateTilesAndUnitsOnVisibilityChanged();
-        }
         private _runPhaseResetVotesForDraw(): void {
             const war       = this.getWar();
             const player    = war.getPlayerInTurn();
             player.setHasVotedForDraw(false);
+        }
+        private _runPhaseUpdateWeatherWithExtraData(data: IWarActionPlayerEndTurn): void {
+            const war = this.getWar();
+            war.getWeatherManager().updateOnPlayerTurnSwitched();
+
+            WarCommonHelpers.updateTilesAndUnits(war, data.extraData);
+        }
+        private _runPhaseUpdateWeatherWithoutExtraData(): void {
+            this.getWar().getWeatherManager().updateOnPlayerTurnSwitched();
+        }
+        private _runPhaseResetVisionForNextPlayer(): void {
+            const war = this.getWar();
+            war.updateTilesAndUnitsOnVisibilityChanged();
         }
         private _runPhaseWaitBeginTurn(): void {
             // Do nothing.
@@ -738,13 +750,13 @@ namespace TwnsBwTurnManager {
                 Notify.dispatch(NotifyType.BwPlayerIndexInTurnChanged);
             }
         }
-        public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number {
-            const data          = this._getNextTurnAndPlayerIndex(null, playerIndex);
+        public getNextAlivePlayerIndex(playerIndex: number, includeNeutral = false): number {
+            const data          = this._getNextAliveTurnAndPlayerIndex(null, playerIndex);
             const playerIndex1  = data.playerIndex;
             if ((playerIndex1 !== CommonConstants.WarNeutralPlayerIndex) || (includeNeutral)) {
                 return playerIndex1;
             } else {
-                const nextData = this._getNextTurnAndPlayerIndex(data.turnIndex, playerIndex1);
+                const nextData = this._getNextAliveTurnAndPlayerIndex(data.turnIndex, playerIndex1);
                 return nextData.playerIndex;
             }
         }
@@ -767,6 +779,22 @@ namespace TwnsBwTurnManager {
         }
 
         private _getNextTurnAndPlayerIndex(
+            currTurnIndex   = this.getTurnIndex(),
+            currPlayerIndex = this.getPlayerIndexInTurn(),
+        ): Types.TurnAndPlayerIndex {
+            if (currPlayerIndex < this.getWar().getPlayerManager().getTotalPlayersCount(false)) {
+                return {
+                    turnIndex   : currTurnIndex,
+                    playerIndex : currPlayerIndex + 1,
+                };
+            } else {
+                return {
+                    turnIndex   : currTurnIndex + 1,
+                    playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                };
+            }
+        }
+        private _getNextAliveTurnAndPlayerIndex(
             currTurnIndex   : number | null,
             currPlayerIndex = this.getPlayerIndexInTurn(),
         ): TurnAndPlayerIndex {

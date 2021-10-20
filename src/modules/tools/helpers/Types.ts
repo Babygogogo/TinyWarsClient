@@ -2,10 +2,14 @@
 // import ProtoTypes           from "../proto/ProtoTypes";
 // import TwnsClientErrorCode  from "./ClientErrorCode";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Config types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export interface SystemCfg extends ProtoTypes.Config.ISystemCfg {
+        energyGrowthMultiplierArray: number[];
+    }
     export interface TileCategoryCfg extends ProtoTypes.Config.ITileCategoryCfg {
         category: TileCategory;
     }
@@ -74,7 +78,14 @@ namespace Types {
         skillId     : number;
         name        : string;
     }
+    export interface WeatherCfg extends ProtoTypes.Config.IWeatherCfg {
+        weatherType : number;
+    }
+    export interface UserAvatarCfg extends ProtoTypes.Config.IUserAvatarCfg {
+        avatarId    : number;
+    }
     export interface FullConfig extends ProtoTypes.Config.FullConfig {
+        System          : SystemCfg;
         TileCategory    : TileCategoryCfg[];
         UnitCategory    : UnitCategoryCfg[];
         TileTemplate    : TileTemplateCfg[];
@@ -87,6 +98,8 @@ namespace Types {
         PlayerRank      : PlayerRankCfg[];
         CoBasic         : CoBasicCfg[];
         CoSkill         : CoSkillCfg[];
+        Weather         : WeatherCfg[];
+        UserAvatar      : UserAvatarCfg[];
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -241,7 +254,7 @@ namespace Types {
     // eslint-disable-next-line no-shadow
     export enum SoundType {
         Bgm,
-        Effect,
+        Sfx,
     }
 
     // eslint-disable-next-line no-shadow
@@ -262,6 +275,7 @@ namespace Types {
         Co0009,
         Co0010,
         Co0011,
+        Co0042,
         Co9999,
     }
 
@@ -274,6 +288,18 @@ namespace Types {
         ButtonForbidden01,
         CursorConfirm01,
         CursorMove01,
+        Explode,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum LongSfxCode {
+        None,
+        NavalMove,
+        CopterMove,
+        JetMove,
+        TireMove,
+        FootMove,
+        TankMove,
     }
 
     export const UiState = {
@@ -410,6 +436,20 @@ namespace Types {
         None,
         Clear,
         Fog,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum WeatherFogType {
+        Fog         = 1,
+        NoFog       = 2,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export enum WeatherType {
+        Clear       = 1,
+        Sandstorm   = 2,
+        Snowy       = 3,
+        Rainy       = 4,
     }
 
     // eslint-disable-next-line no-shadow
@@ -693,6 +733,7 @@ namespace Types {
         WarComment,
         WarRuleTitle,
         HasFog,
+        Weather,
         TimerType,
         TimerRegularParam,
         TimerIncrementalParam1,

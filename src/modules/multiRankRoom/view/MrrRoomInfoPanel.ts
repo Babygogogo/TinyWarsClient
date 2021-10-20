@@ -33,6 +33,7 @@
 // import MrrSelfSettingsModel                 from "../model/MrrSelfSettingsModel";
 // import TwnsMrrMyRoomListPanel               from "./MrrMyRoomListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMrrRoomInfoPanel {
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -188,7 +189,7 @@ namespace TwnsMrrRoomInfoPanel {
                 TwnsCommonBanCoPanel.CommonBanCoPanel.show({
                     configVersion,
                     playerIndex         : Helpers.getExisted(selfPlayerData.playerIndex),
-                    maxBanCount         : CommonConstants.RankMaxBanCoCount,
+                    maxBanCount         : ConfigManager.getSystemMaxBanCoCount(configVersion),
                     fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                     bannedCoIdArray     : [],
                     selfCoId            : null,

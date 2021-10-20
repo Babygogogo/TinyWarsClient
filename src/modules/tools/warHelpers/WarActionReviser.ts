@@ -51,6 +51,7 @@ namespace WarActionReviser {
         else if (rawAction.WarActionSystemEndWar)               { return reviseSystemEndWar(war, rawAction.WarActionSystemEndWar); }
         else if (rawAction.WarActionSystemEndTurn)              { return reviseSystemEndTurn(war, rawAction.WarActionSystemEndTurn); }
         else if (rawAction.WarActionSystemHandleBootPlayer)     { return reviseSystemHandleBootPlayer(war, rawAction.WarActionSystemHandleBootPlayer); }
+        else if (rawAction.WarActionSystemVoteForDraw)          { return reviseSystemVoteForDraw(war, rawAction.WarActionSystemVoteForDraw); }
         else if (rawAction.WarActionUnitAttackTile)             { return reviseUnitAttackTile(war, rawAction.WarActionUnitAttackTile); }
         else if (rawAction.WarActionUnitAttackUnit)             { return reviseUnitAttackUnit(war, rawAction.WarActionUnitAttackUnit); }
         else if (rawAction.WarActionUnitBeLoaded)               { return reviseUnitBeLoaded(war, rawAction.WarActionUnitBeLoaded); }
@@ -354,6 +355,25 @@ namespace WarActionReviser {
 
         return {
             WarActionSystemHandleBootPlayer: {
+            },
+        };
+    }
+
+    function reviseSystemVoteForDraw(war: BwWar, rawAction: WarAction.IWarActionSystemVoteForDraw): IWarActionContainer {
+        const playerInTurn = war.getPlayerInTurn();
+        if (war.getTurnPhaseCode() !== Types.TurnPhaseCode.Main) {
+            throw Helpers.newError(`Invalid turnPhaseCode.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_00);
+        }
+
+        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
+            (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
+        ) {
+            throw Helpers.newError(`Invalid playerIndex or aliveState.`, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_01);
+        }
+
+        return {
+            WarActionSystemVoteForDraw: {
+                isAgree: Helpers.getExisted(rawAction.isAgree, ClientErrorCode.WarActionReviser_ReviseSystemVoteForDraw_02),
             },
         };
     }

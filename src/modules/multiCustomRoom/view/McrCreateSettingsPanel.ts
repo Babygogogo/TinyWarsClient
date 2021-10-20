@@ -27,6 +27,7 @@
 // import TwnsMcrCreateAdvancedSettingsPage    from "./McrCreateAdvancedSettingsPage";
 // import TwnsMcrCreateMapListPanel            from "./McrCreateMapListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMcrCreateSettingsPanel {
     import McrCreateAdvancedSettingsPage            = TwnsMcrCreateAdvancedSettingsPage.McrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -305,6 +306,16 @@ namespace TwnsMcrCreateSettingsPanel {
                         warRule,
                         callbackOnModify: () => {
                             McrCreateModel.setHasFog(!McrCreateModel.getHasFog());
+                            McrCreateModel.setCustomWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.Weather,
+                        currentValue    : null,
+                        warRule,
+                        callbackOnModify: () => {
+                            McrCreateModel.tickDefaultWeatherType();
                             McrCreateModel.setCustomWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
                         },

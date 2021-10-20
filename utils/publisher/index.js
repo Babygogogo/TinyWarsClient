@@ -77,8 +77,6 @@ function getNumText(num, targetLength = 2) {
 
 function getCommonConstantsForPublish(currData) {
     return currData
-        .replace(/= Types\.GameVersion\..*/,                            `= Types.GameVersion.${publishConfig.gameVersion};`)
-        .replace(/const WarRuleEnergyGrowthMultiplierForAttacker.*/,    `const WarRuleEnergyGrowthMultiplierForAttacker = ${publishConfig.warRuleEnergyGrowthMultiplierForAttacker};`)
-        .replace(/const WarRuleEnergyGrowthMultiplierForDefender.*/,    `const WarRuleEnergyGrowthMultiplierForDefender = ${publishConfig.warRuleEnergyGrowthMultiplierForDefender};`);
+        .replace(/= Types\.GameVersion\..*/,                            `= Types.GameVersion.${publishConfig.gameVersion};`);
         // .replace(/= Types\.GameMode\..*/,       `= ${publishConfig.gameMode};`);
 }

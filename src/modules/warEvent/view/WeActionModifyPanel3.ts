@@ -23,10 +23,12 @@
 // import WarEventHelper               from "../model/WarEventHelper";
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel3 {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import ColorValue               = Types.ColorValue;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
@@ -271,7 +273,7 @@ namespace TwnsWeActionModifyPanel3 {
                 }
             }
 
-            throw Helpers.newError(`WeActionModifyPanel3.DialogueRenderer._onTouchedBtnChangeType() invalid dataForDialogue.`);
+            throw Helpers.newError(`Invalid dataForDialogue.`, ClientErrorCode.WeActionModifyPanel3_OnTouchedBtnChangeType_00);
         }
 
         private _onTouchedBtnInsert(): void {

@@ -1,6 +1,7 @@
 
 // import TwnsLangTextType     from "./LangTextType";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLangCommonText {
     import LangTextType = TwnsLangTextType.LangTextType;
 
@@ -1022,6 +1023,26 @@ namespace TwnsLangCommonText {
             `您确定要切换CO搭载状态吗？`,
             `Are you sure to switch the CO onboard state?`,
         ],
+        [LangTextType.A0244]: [
+            `已成功保存并提审地图`,
+            `The map has been submitted for review successfully.`,
+        ],
+        [LangTextType.A0245]: [
+            `您已提审此地图的上一个版本。\n若继续保存此地图（不论是否提审），则上一个版本会被自动撤销提审。\n\n确定要继续吗？`,
+            `You have submitted the previous version of this map for review.\nIf you continue saving this map, the submitted version will not be reviewed.\n\nAre you sure to continue?`,
+        ],
+        [LangTextType.A0246]: [
+            `请填写自动保存的时间间隔，单位为秒。\n若当前地图已被提审，则自动保存功能将失效。\n您可以不填写时间间隔，以此禁用自动保存功能。`,
+            `Please input the time interval for auto save.\nThe auto save function will be disabled if the current map is being reviewed.\nYou can clear the input to cancel the auto save function.`,
+        ],
+        [LangTextType.A0247]: [
+            `已启用自动保存`,
+            `The auto save function is enabled successfully.`,
+        ],
+        [LangTextType.A0248]: [
+            `已禁用自动保存`,
+            `The auto save function is disabled successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1055,8 +1076,8 @@ namespace TwnsLangCommonText {
             "Yellow",
         ],
         [LangTextType.B0007]: [
-            "黑",
-            "Black",
+            "绿",
+            "Green",
         ],
         [LangTextType.B0008]: [
             "A队",
@@ -2584,7 +2605,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0393]: [
             `玩家昵称`,
-            `User Nickname`,
+            `Player Nickname`,
         ],
         [LangTextType.B0394]: [
             `CO名称`,
@@ -3806,6 +3827,50 @@ namespace TwnsLangCommonText {
             `搭载部队`,
             `Loaded Units`,
         ],
+        [LangTextType.B0699]: [
+            "E队",
+            "Team E",
+        ],
+        [LangTextType.B0700]: [
+            "黑",
+            "Black",
+        ],
+        [LangTextType.B0701]: [
+            `正常天气`,
+            `Normal`,
+        ],
+        [LangTextType.B0702]: [
+            `沙尘暴`,
+            `Sandstorm`,
+        ],
+        [LangTextType.B0703]: [
+            `雪天`,
+            `Snowy`,
+        ],
+        [LangTextType.B0704]: [
+            `雨天`,
+            `Rainy`,
+        ],
+        [LangTextType.B0705]: [
+            `天气`,
+            `Weather`,
+        ],
+        [LangTextType.B0706]: [
+            `Mr. Bear`,
+            `Mr. Bear`,
+        ],
+        [LangTextType.B0707]: [
+            `头像`,
+            `Avatar`,
+        ],
+        [LangTextType.B0708]: [
+            `改名`,
+            `Rename`,
+        ],
+        [LangTextType.B0709]: [
+            `自动保存`,
+            `Auto Save`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -3882,7 +3947,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B1018]: [
             `超级等离子`,
-            `GreenPlasma`,
+            `SuperPlasma`,
         ],
         [LangTextType.B1019]: [
             `陨石`,
@@ -4345,6 +4410,14 @@ namespace TwnsLangCommonText {
             `您确定要修改 P%d 的所属队伍吗？`,
             `Are you sure to modify the team of P%d?`,
         ],
+        [LangTextType.F0073]: [
+            `当前天气：%s（默认：%s）。`,
+            `Current weather: %s (default: %s).`,
+        ],
+        [LangTextType.F0074]: [
+            `当前天气将在第%d回合、P%d开始前结束（当前：第%d回合、P%d）。`,
+            `The current weather will end before D%d P%d's turn begins (current: D%d P%d).`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.
@@ -4357,7 +4430,7 @@ namespace TwnsLangCommonText {
                 `此外，可以使用队友的建筑来维修/补给自己的部队（消耗自己的金钱），但不能占领队友的建筑。`,
                 ``,
                 `预览地图时，各个势力的颜色与行动顺序的对应关系如下（您可以在创建/加入房间时选择您想要的颜色）：`,
-                `红=1，蓝=2，黄=3，黑=4`,
+                `红=1，蓝=2，黄=3，绿=4, 黑=5`,
                 ``,
                 `默认为当前可用选项中的第一项。`,
             ].join("\n"),
@@ -4369,7 +4442,7 @@ namespace TwnsLangCommonText {
                 `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
                 ``,
                 `When previewing the map, the colors of the forces correspond to the order of action as follows (you can choose the color you want when creating/adding rooms)`,
-                `Red = 1, Blue = 2, Yellow = 3, Black = 4`,
+                `Red = 1, Blue = 2, Yellow = 3, Green = 4, Black = 5`,
                 ``,
                 `By default you will be given the first choice among the available ones.`,
             ].join("\n"),
@@ -4553,6 +4626,25 @@ namespace TwnsLangCommonText {
             [
                 `The Coop Mode is a multi-player mode.`,
                 `Unlike the Normal Mode, A.I. plays in this mode. You can team up with A.I. and/or other players to play against other A.I. and/or players.`,
+            ].join(`\n`),
+        ],
+
+        [LangTextType.R0009]: [
+            [
+                `天气会改变局内所有玩家的属性，具体影响如下：`,
+                ``,
+                `正常天气：没有任何影响`,
+                `沙尘暴：所有部队攻击力-30%`,
+                `雪天：所有部队移动力-1`,
+                `雨天：强制进入雾战，且所有地形视野改为0，所有部队视野改为1`,
+            ].join(`\n`),
+            [
+                `The weather modifies all players's attributes as below:`,
+                ``,
+                `Normal: nothing is changed.`,
+                `Sandstorm: all units' offense -30%.`,
+                `Snowy: all units' move range -1.`,
+                `Rainy: force FoW, all tiles' vision become 0, and all units' vision become 1.`,
             ].join(`\n`),
         ],
     };

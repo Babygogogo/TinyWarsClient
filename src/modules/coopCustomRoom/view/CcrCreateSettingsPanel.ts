@@ -241,6 +241,16 @@ namespace TwnsCcrCreateSettingsPanel {
                         },
                     },
                     {
+                        settingsType    : WarBasicSettingsType.Weather,
+                        currentValue    : null,
+                        warRule,
+                        callbackOnModify: () => {
+                            CcrCreateModel.tickDefaultWeatherType();
+                            CcrCreateModel.setCustomWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
                         warRule,

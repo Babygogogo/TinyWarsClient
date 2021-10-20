@@ -18,6 +18,7 @@
 // import TwnsRwField                  from "./RwField";
 // import TwnsRwPlayerManager          from "./RwPlayerManager";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsRwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
@@ -41,6 +42,7 @@ namespace TwnsRwWar {
         private _settingsForMcw?                    : ProtoTypes.WarSettings.ISettingsForMcw | null;
         private _settingsForScw?                    : ProtoTypes.WarSettings.ISettingsForScw | null;
         private _settingsForMrw?                    : ProtoTypes.WarSettings.ISettingsForMrw | null;
+        private _settingsForCcw?                    : ProtoTypes.WarSettings.ISettingsForCcw | null;
 
         private _replayId?                          : number;
         private _isAutoReplay                       = false;
@@ -53,6 +55,7 @@ namespace TwnsRwWar {
             this._setSettingsForMcw(warData.settingsForMcw ?? null);
             this._setSettingsForScw(warData.settingsForScw ?? null);
             this._setSettingsForMrw(warData.settingsForMrw ?? null);
+            this._setSettingsForCcw(warData.settingsForCcw ?? null);
             this.setNextActionId(0);
 
             this.setCheckPointId(0, 0);
@@ -205,6 +208,7 @@ namespace TwnsRwWar {
                     seedRandomCurrentState      : randomNumberManager.getSeedRandomCurrentState(),
                     executedActions             : null,
                     remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
+                    weatherManager              : this.getWeatherManager().serialize(),
                     warEventManager             : Helpers.deepClone(this.getWarEventManager().serialize()),
                     playerManager               : this.getPlayerManager().serialize(),
                     turnManager                 : this.getTurnManager().serialize(),
@@ -221,8 +225,10 @@ namespace TwnsRwWar {
                 return hasFog ? WarType.MrwFog : WarType.MrwStd;
             } else if (this._getSettingsForScw()) {
                 return hasFog ? WarType.ScwFog : WarType.ScwStd;
+            } else if (this._getSettingsForCcw()) {
+                return hasFog ? WarType.CcwFog : WarType.CcwStd;
             } else {
-                throw Helpers.newError(`Invalid war data.`);
+                throw Helpers.newError(`Invalid war data.`, ClientErrorCode.RwWar_GetWarType_00);
             }
         }
         public getIsNeedExecutedAction(): boolean {
@@ -247,7 +253,12 @@ namespace TwnsRwWar {
                 return Helpers.getExisted(settingsForScw.mapId);
             }
 
-            throw Helpers.newError(`Invalid war data.`);
+            const settingsForCcw = this._getSettingsForCcw();
+            if (settingsForCcw) {
+                return Helpers.getExisted(settingsForCcw.mapId);
+            }
+
+            throw Helpers.newError(`Invalid war data.`, ClientErrorCode.RwWar_GetMapId_00);
         }
         public getIsWarMenuPanelOpening(): boolean {
             return TwnsRwWarMenuPanel.RwWarMenuPanel.getIsOpening();
@@ -278,6 +289,12 @@ namespace TwnsRwWar {
         }
         private _setSettingsForMrw(value: ProtoTypes.WarSettings.ISettingsForMrw | null): void {
             this._settingsForMrw = value;
+        }
+        private _getSettingsForCcw(): ProtoTypes.WarSettings.ISettingsForCcw | null {
+            return Helpers.getDefined(this._settingsForCcw, ClientErrorCode.RwWar_GetSettingsForCcw_00);
+        }
+        private _setSettingsForCcw(value: ProtoTypes.WarSettings.ISettingsForCcw | null): void {
+            this._settingsForCcw = value;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -375,6 +392,7 @@ namespace TwnsRwWar {
             const playersCountUnneutral = this.getPlayerManager().getTotalPlayersCount(false);
 
             this.setNextActionId(checkPointData.nextActionId);
+            this.getWeatherManager().fastInit(warData.weatherManager);
             this.getPlayerManager().fastInit(Helpers.getExisted(warData.playerManager), configVersion);
             this.getTurnManager().fastInit(Helpers.getExisted(warData.turnManager), playersCountUnneutral);
             this.getWarEventManager().fastInit(Helpers.getExisted(warData.warEventManager));

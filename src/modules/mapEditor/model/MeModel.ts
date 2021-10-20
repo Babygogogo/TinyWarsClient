@@ -8,6 +8,7 @@
 // import MeUtility            from "./MeUtility";
 // import TwnsMeWar            from "./MeWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MeModel {
     import MeWar            = TwnsMeWar.MeWar;
     import MapReviewStatus  = Types.MapReviewStatus;
@@ -55,13 +56,13 @@ namespace MeModel {
         return MAP_DICT.get(slotIndex) ?? null;
     }
 
-    export function checkHasReviewingMap(): boolean {
-        for (const [, data] of MAP_DICT) {
+    export function getReviewingMapSlotIndex(): number | null {
+        for (const [slotIndex, data] of MAP_DICT) {
             if (data.reviewStatus === MapReviewStatus.Reviewing) {
-                return true;
+                return slotIndex;
             }
         }
-        return false;
+        return null;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

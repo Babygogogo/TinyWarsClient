@@ -35,14 +35,14 @@
                 <TwnsUiScrollList:UiScrollList id="_listPlayer" y="0" left="160" right="0">
                     <e:List>
                         <e:itemRendererSkinName>
-                            <e:Skin width="120" currentState="up" states="down,up">
+                            <e:Skin width="116" currentState="up" states="down,up">
                                 <e:Group left="0" right="0" top="0" bottom="0">
                                     <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="P1" horizontalCenter="0" bold="true"
                                                     size="24" y="12" />
                                     <TwnsUiScrollList:UiScrollList id="_listInfo" y="50" horizontalCenter="0">
                                         <e:List>
                                             <e:itemRendererSkinName>
-                                                <e:Skin width="120" height="40">
+                                                <e:Skin width="116" height="40">
                                                     <e:Group left="0" right="0" top="0" bottom="0">
                                                         <TwnsUiImage:UiImage source="uncompressedRectangle0001" top="6" bottom="6"
                                                                         left="20" right="20" scale9Grid="2,2,1,1" />

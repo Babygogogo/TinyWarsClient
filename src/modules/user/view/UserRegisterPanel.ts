@@ -15,9 +15,11 @@
 // import UserModel            from "../model/UserModel";
 // import UserProxy            from "../model/UserProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserRegisterPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     export class UserRegisterPanel extends TwnsUiPanel.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
@@ -83,11 +85,7 @@ namespace TwnsUserRegisterPanel {
             const data = e.data as ProtoTypes.NetMessage.MsgUserRegister.IS;
             FloatText.show(Lang.getText(LangTextType.A0004));
 
-            const account = data.account;
-            if (account == null) {
-                throw Helpers.newError(`RegisterPanel._onMsgUserRegister() empty account!`);
-            }
-
+            const account   = Helpers.getExisted(data.account, ClientErrorCode.UserRegisterPanel_OnMsgUserRegister_00);
             const password  = this._inputPassword.text;
             LocalStorage.setAccount(account);
             LocalStorage.setPassword(password);

@@ -23,6 +23,7 @@
 // import WarMapModel                          from "../../warMap/model/WarMapModel";
 // import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMrrPreviewMapListPanel {
     import OpenDataForCommonWarAdvancedSettingsPage     = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage        = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -296,6 +297,12 @@ namespace TwnsMrrPreviewMapListPanel {
                         callbackOnModify: null,
                     },
                     {
+                        settingsType    : WarBasicSettingsType.Weather,
+                        currentValue    : null,
+                        warRule,
+                        callbackOnModify: null,
+                    },
+                    {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
                         warRule,
@@ -326,7 +333,7 @@ namespace TwnsMrrPreviewMapListPanel {
                     },
                 );
             } else {
-                throw Helpers.newError(`Invalid timerType: ${timerType}`);
+                throw Helpers.newError(`Invalid timerType: ${timerType}`, ClientErrorCode.MrrPreviewMapListPanel_CreateDataForCommonWarBasicSettingsPage_00);
             }
 
             return openData;

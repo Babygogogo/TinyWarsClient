@@ -13,6 +13,7 @@
 // import WarVisibilityHelpers from "./WarVisibilityHelpers";
 // import TwnsBwWar            from "../../baseWar/model/BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarRobot {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
@@ -484,11 +485,18 @@ namespace WarRobot {
             : (!commonParams.war.getUnitMap().getUnitOnMap(gridIndex));
     }
 
-    function getBetterScoreAndAction(data1: ScoreAndAction | null | undefined, data2: ScoreAndAction): ScoreAndAction {
+    function getBetterScoreAndAction(war: BwWar, data1: ScoreAndAction | null | undefined, data2: ScoreAndAction): ScoreAndAction {
         if (data1 == null) {
             return data2;
         } else {
-            return data1.score >= data2.score ? data1 : data2;
+            const score1 = data1.score;
+            const score2 = data2.score;
+            if (score1 === score2) {
+                // TODO: 此算法改变了war，理想算法下不应该改变war
+                return war.getRandomNumberManager().getRandomNumber() > 0.5 ? data1 : data2;
+            } else {
+                return score1 > score2 ? data1 : data2;
+            }
         }
     }
 
@@ -1443,6 +1451,16 @@ namespace WarRobot {
         return -10;
     }
 
+    async function getScoreForActionUnitLoadCo(unit: BwUnit): Promise<number> {
+        await Helpers.checkAndCallLater();
+
+        if (unit.getUnitType() !== Types.UnitType.Tank) {
+            return -9999;
+        } else {
+            return unit.getCurrentHp() * 10;
+        }
+    }
+
     async function getScoreForActionPlayerProduceUnit(commonParams: CommonParams, gridIndex: GridIndex, unitType: UnitType, idleFactoriesCount: number): Promise<number | null> {
         await Helpers.checkAndCallLater();
 
@@ -1613,6 +1631,7 @@ namespace WarRobot {
             });
 
             bestScoreAndAction = getBetterScoreAndAction(
+                war,
                 bestScoreAndAction,
                 {
                     score,
@@ -1766,18 +1785,22 @@ namespace WarRobot {
             let bestScoreAndAction  : ScoreAndAction | null = null;
             for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance(gridIndex, 0, flareMaxRange, mapSize)) {
                 const score         = await getScoreForActionUnitLaunchFlare(commonParams, unit, targetGridIndex);
-                bestScoreAndAction  = getBetterScoreAndAction(bestScoreAndAction, {
-                    score,
-                    action  : { WarActionUnitLaunchFlare: {
-                        path        : {
-                            nodes           : pathNodes,
-                            fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
-                            isBlocked       : false,
-                        },
-                        launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
-                        targetGridIndex,
-                    } },
-                });
+                bestScoreAndAction  = getBetterScoreAndAction(
+                    war,
+                    bestScoreAndAction,
+                    {
+                        score,
+                        action  : { WarActionUnitLaunchFlare: {
+                            path        : {
+                                nodes           : pathNodes,
+                                fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                                isBlocked       : false,
+                            },
+                            launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+                            targetGridIndex,
+                        } },
+                    }
+                );
             }
 
             return bestScoreAndAction;
@@ -1801,7 +1824,7 @@ namespace WarRobot {
                     },
                     launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                 } },
-        };
+            };
         }
     }
 
@@ -1812,6 +1835,26 @@ namespace WarRobot {
         return {
             score,
             action  : { WarActionUnitWait: {
+                path        : {
+                    nodes           : pathNodes,
+                    fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                    isBlocked       : false,
+                },
+                launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+            } },
+        };
+    }
+
+    async function getScoreAndActionUnitLoadCo(unit: BwUnit, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
+        await Helpers.checkAndCallLater();
+
+        if (!unit.checkCanLoadCoAfterMovePath(pathNodes)) {
+            return null;
+        }
+
+        return {
+            score   : await getScoreForActionUnitLoadCo(unit),
+            action  : { WarActionUnitLoadCo: {
                 path        : {
                     nodes           : pathNodes,
                     fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
@@ -1847,15 +1890,17 @@ namespace WarRobot {
             getScoreAndActionUnitLaunchFlare(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitSurface(unit, gridIndex, pathNodes),
             getScoreAndActionUnitWait(unit, pathNodes),
+            getScoreAndActionUnitLoadCo(unit, pathNodes),
         ]);
 
-        let bestScoreAndAction: ScoreAndAction | null = null;
+        const war               = commonParams.war;
+        let bestScoreAndAction  : ScoreAndAction | null = null;
         for (const scoreAndAction of resultArray) {
             if (scoreAndAction == null) {
                 continue;
             }
 
-            bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction);
+            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction);
         }
 
         return bestScoreAndAction;
@@ -1870,6 +1915,7 @@ namespace WarRobot {
         const originGridIndex       = candidateUnit.getGridIndex();
         // const scoreMapForDistance   = await _createScoreMapForDistance(candidateUnit);
         const { width: mapWidth, height: mapHeight }    = commonParams.mapSize;
+        const war                                       = commonParams.war;
         let bestScoreAndAction                          : ScoreAndAction | null = null;
         for (let x = 0; x < mapWidth; ++x) {
             if (reachableArea[x] == null) {
@@ -1908,6 +1954,7 @@ namespace WarRobot {
                     damageMap   : ((action.WarActionUnitDive) || ((candidateUnit.getIsDiving()) && (!action.WarActionUnitSurface))) ? damageMapForDive : damageMapForSurface,
                 });
                 bestScoreAndAction  = getBetterScoreAndAction(
+                    war,
                     bestScoreAndAction,
                     {
                         action,
@@ -1992,7 +2039,7 @@ namespace WarRobot {
                 continue;
             }
 
-            bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction);
+            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction);
         }
 
         return bestScoreAndAction ? bestScoreAndAction.action : null;
@@ -2020,7 +2067,8 @@ namespace WarRobot {
     async function getActionForPhase1(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         await Helpers.checkAndCallLater();
 
-        let bestScoreAndAction: ScoreAndAction | null = null;
+        const war               = commonParams.war;
+        let bestScoreAndAction  : ScoreAndAction | null = null;
         for (const unit of await getCandidateUnitsForPhase1(commonParams)) {
             const scoreAndAction = await getBestScoreAndActionForCandidateUnit(commonParams, unit);
             if (scoreAndAction == null) {
@@ -2029,7 +2077,7 @@ namespace WarRobot {
 
             const action = scoreAndAction.action;
             if ((action.WarActionUnitAttackUnit) || (action.WarActionUnitAttackTile)) {
-                bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction);
+                bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction);
             }
         }
 
@@ -2040,14 +2088,15 @@ namespace WarRobot {
     async function getActionForPhase2(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         await Helpers.checkAndCallLater();
 
-        let bestScoreAndAction: ScoreAndAction | null = null;
+        const war               = commonParams.war;
+        let bestScoreAndAction  : ScoreAndAction | null = null;
         for (const unit of await getCandidateUnitsForPhase2(commonParams)) {
             const scoreAndAction = await getBestScoreAndActionForCandidateUnit(commonParams, unit);
             if (scoreAndAction == null) {
                 continue;
             }
 
-            bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction);
+            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction);
         }
 
         return bestScoreAndAction ? bestScoreAndAction.action : null;
@@ -2057,14 +2106,15 @@ namespace WarRobot {
     async function getActionForPhase3(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         await Helpers.checkAndCallLater();
 
-        let bestScoreAndAction: ScoreAndAction | null | undefined = null;
+        const war               = commonParams.war;
+        let bestScoreAndAction  : ScoreAndAction | null | undefined = null;
         for (const unit of await getCandidateUnitsForPhase3(commonParams)) {
             const scoreAndAction = await getBestScoreAndActionForCandidateUnit(commonParams, unit);
             if (scoreAndAction == null) {
                 continue;
             }
 
-            bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction);
+            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction);
         }
 
         return  bestScoreAndAction ? bestScoreAndAction.action : null;
@@ -2197,7 +2247,6 @@ namespace WarRobot {
 
         return action;
     }
-
 }
 
 // export default WarRobot;

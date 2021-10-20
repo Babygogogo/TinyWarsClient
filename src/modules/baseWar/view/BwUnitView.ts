@@ -10,6 +10,7 @@
 // import Helpers              from "../../tools/helpers/Helpers";
 // import CommonConstants      from "../../tools/helpers/CommonConstants";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitView {
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
@@ -20,6 +21,7 @@ namespace TwnsBwUnitView {
     const _IMG_UNIT_STAND_X                             = _GRID_WIDTH * 2 / 4;
     const _IMG_UNIT_STATE_WIDTH                         = 28;
     const _IMG_UNIT_STATE_HEIGHT                        = 36;
+    const _AIMING_TIME_MS                               = 500;
 
     export class BwUnitView extends egret.DisplayObjectContainer {
         private _imgHp      = new TwnsUiImage.UiImage();
@@ -128,12 +130,12 @@ namespace TwnsBwUnitView {
             return this._framesForStateAnimation;
         }
 
-        public moveAlongPath(
-            path        : GridIndex[],
-            isDiving    : boolean,
-            isBlocked   : boolean,
-            aiming      : GridIndex | null,
-        ): Promise<void> {
+        public moveAlongPath({ path, isDiving, isBlocked, aiming }: {
+            path        : GridIndex[];
+            isDiving    : boolean;
+            isBlocked   : boolean;
+            aiming      : GridIndex | null;
+        }): Promise<void> {
             this.showUnitAnimation(UnitAnimationType.Move);
 
             const startingPoint = GridIndexHelpers.createPointByGridIndex(path[0]);
@@ -150,6 +152,9 @@ namespace TwnsBwUnitView {
             const tween                 = egret.Tween.get(this);
             if (isAlwaysVisible) {
                 this.visible = true;
+            }
+            if ((path.length > 0) || (aiming)) {
+                SoundManager.playLongSfxForMoveUnit(unitType);
             }
 
             for (let i = 1; i < path.length; ++i) {
@@ -217,6 +222,7 @@ namespace TwnsBwUnitView {
                         ) {
                             war.getGridVisionEffect().showEffectBlock(endingGridIndex);
                         }
+                        SoundManager.fadeoutLongSfxForMoveUnit();
 
                         resolve();
                     });
@@ -224,15 +230,13 @@ namespace TwnsBwUnitView {
                     const cursor = war.getCursor();
                     tween.call(() => {
                         cursor.setIsMovableByTouches(false);
-                        cursor.setGridIndex(aiming);
-                        cursor.updateView();
-                        cursor.setVisibleForConForTarget(true);
-                        cursor.setVisibleForConForNormal(false);
+                        cursor.setIsVisible(false);
+                        war.getGridVisionEffect().showEffectAiming(aiming, _AIMING_TIME_MS);
                     })
-                    .wait(500)
+                    .wait(_AIMING_TIME_MS)
                     .call(() => {
                         cursor.setIsMovableByTouches(true);
-                        cursor.updateView();
+                        cursor.setIsVisible(true);
                         this._setImgUnitFlippedX(false);
                         if ((isBlocked)                                         &&
                             (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
@@ -246,6 +250,7 @@ namespace TwnsBwUnitView {
                         ) {
                             war.getGridVisionEffect().showEffectBlock(endingGridIndex);
                         }
+                        SoundManager.fadeoutLongSfxForMoveUnit();
 
                         resolve();
                     });

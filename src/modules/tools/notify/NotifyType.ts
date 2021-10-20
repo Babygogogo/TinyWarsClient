@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsNotifyType {
     // eslint-disable-next-line no-shadow
     export const enum NotifyType {
@@ -85,6 +86,7 @@ namespace TwnsNotifyType {
         BwCoEnergyChanged,
         BwCoUsingSkillTypeChanged,
         BwCoIdChanged,
+        BwForceWeatherTypeChanged,
 
         BwCursorTapped,
         BwCursorDragged,
@@ -165,6 +167,10 @@ namespace TwnsNotifyType {
         MsgUserGetOnlineState,
         MsgUserSetNickname,
         MsgUserSetNicknameFailed,
+        MsgUserSetAvatarId,
+        MsgUserSetAvatarIdFailed,
+        MsgUserSetMapEditorAutoSaveTime,
+        MsgUserSetMapEditorAutoSaveTimeFailed,
         MsgUserSetDiscordId,
         MsgUserSetDiscordIdFailed,
         MsgUserGetOnlineUsers,
@@ -184,6 +190,7 @@ namespace TwnsNotifyType {
         MsgMmGetReviewingMaps,
         MsgMmReviewMap,
         MsgMmSetMapTag,
+        MsgMmSetMapName,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgMcrCreateRoom,
