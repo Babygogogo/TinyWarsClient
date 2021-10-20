@@ -27,6 +27,7 @@
 // import WwProxy                              from "../model/WwProxy";
 // import TwnsWwMainMenuPanel                  from "./WwMainMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWwOngoingWarsPanel {
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -341,13 +342,11 @@ namespace TwnsWwOngoingWarsPanel {
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
         }
 
@@ -358,10 +357,6 @@ namespace TwnsWwOngoingWarsPanel {
         private _onTouchTapBtnChoose(): void {
             const data = this._getData();
             data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.info.warInfo?.warId, ClientErrorCode.WwOngoingWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
-        }
-
-        private async _onTouchTapBtnNext(): Promise<void> {
-            WwProxy.reqWatchContinueWar(Helpers.getExisted(this._getData().info.warInfo?.warId, ClientErrorCode.WwOngoingWarsPanel_WarRenderer_OnTouchTapBtnNext_00));
         }
 
         private async _updateLabelName(): Promise<void> {

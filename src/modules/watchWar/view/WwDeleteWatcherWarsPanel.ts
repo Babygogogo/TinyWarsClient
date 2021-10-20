@@ -27,6 +27,7 @@
 // import TwnsWwDeleteWatcherDetailPanel       from "./WwDeleteWatcherDetailPanel";
 // import TwnsWwMainMenuPanel                  from "./WwMainMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWwDeleteWatcherWarsPanel {
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -337,13 +338,11 @@ namespace TwnsWwDeleteWatcherWarsPanel {
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
@@ -355,12 +354,6 @@ namespace TwnsWwDeleteWatcherWarsPanel {
         private _onTouchTapBtnChoose(): void {
             const data = this._getData();
             data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.info.warInfo?.warId, ClientErrorCode.WwMakeRequestWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
-        }
-
-        private async _onTouchTapBtnNext(): Promise<void> {
-            TwnsWwDeleteWatcherDetailPanel.WwDeleteWatcherDetailPanel.show({
-                watchInfo: this._getData().info,
-            });
         }
 
         private async _updateLabelName(): Promise<void> {

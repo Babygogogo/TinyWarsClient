@@ -21,6 +21,7 @@
 // import TwnsCcrCreateSettingsPanel   from "./CcrCreateSettingsPanel";
 // import TwnsCcrMainMenuPanel         from "./CcrMainMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrCreateMapListPanel {
     import CcrCreateSearchMapPanel  = TwnsCcrCreateSearchMapPanel.CcrCreateSearchMapPanel;
     import CcrCreateSettingsPanel   = TwnsCcrCreateSettingsPanel.CcrCreateSettingsPanel;
@@ -330,13 +331,11 @@ namespace TwnsCcrCreateMapListPanel {
     };
     class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
         }
 
@@ -349,13 +348,6 @@ namespace TwnsCcrCreateMapListPanel {
         private _onTouchTapBtnChoose(): void {
             const data = this._getData();
             data.panel.setAndReviseSelectedMapId(data.mapId);
-        }
-
-        private async _onTouchTapBtnNext(): Promise<void> {
-            const data = this._getData();
-            data.panel.close();
-            await CcrCreateModel.resetDataByMapId(data.mapId);
-            CcrCreateSettingsPanel.show();
         }
     }
 }

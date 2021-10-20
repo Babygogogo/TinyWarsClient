@@ -26,6 +26,7 @@
 // import TwnsMrrMainMenuPanel                 from "./MrrMainMenuPanel";
 // import TwnsMrrRoomInfoPanel                 from "./MrrRoomInfoPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMrrMyRoomListPanel {
     import MrrRoomInfoPanel                         = TwnsMrrRoomInfoPanel.MrrRoomInfoPanel;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
@@ -375,14 +376,12 @@ namespace TwnsMrrMyRoomListPanel {
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
@@ -399,17 +398,6 @@ namespace TwnsMrrMyRoomListPanel {
 
         private _onTouchTapBtnChoose(): void {
             MrrModel.setPreviewingRoomId(this._getData().roomId);
-        }
-
-        private async _onTouchTapBtnNext(): Promise<void> {
-            const roomId = this._getData().roomId;
-            if (roomId != null) {
-                MrrMyRoomListPanel.hide();
-                await MrrSelfSettingsModel.resetData(roomId);
-                MrrRoomInfoPanel.show({
-                    roomId,
-                });
-            }
         }
     }
 }

@@ -24,6 +24,7 @@
 // import TwnsMfrMainMenuPanel                 from "./MfrMainMenuPanel";
 // import TwnsMfrRoomInfoPanel                 from "./MfrRoomInfoPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMfrMyRoomListPanel {
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -431,14 +432,12 @@ namespace TwnsMfrMyRoomListPanel {
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.MfrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMfrJoinedPreviewingRoomIdChanged },
@@ -460,13 +459,6 @@ namespace TwnsMfrMyRoomListPanel {
 
         private _onTouchTapBtnChoose(): void {
             MfrJoinModel.setJoinedPreviewingRoomId(this._getData().roomId);
-        }
-
-        private _onTouchTapBtnNext(): void {
-            MfrMyRoomListPanel.hide();
-            TwnsMfrRoomInfoPanel.MfrRoomInfoPanel.show({
-                roomId  : this._getData().roomId,
-            });
         }
 
         private _updateState(): void {

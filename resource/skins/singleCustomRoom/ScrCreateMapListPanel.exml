@@ -88,8 +88,6 @@
                             </TwnsUiButton:UiButton>
                             <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0" x="10"
                                                  maxTextWidth="150" />
-                            <TwnsUiButton:UiButton id="_btnNext" visible.up="false" width="40" top="0" bottom="0" right="0"
-                                                   skinName="Skins.Component.Button.ButtonTriangle001"></TwnsUiButton:UiButton>
                         </e:Skin>
                     </e:itemRendererSkinName>
                     <e:layout>

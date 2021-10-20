@@ -26,6 +26,7 @@
 // import TwnsCcrMainMenuPanel                 from "./CcrMainMenuPanel";
 // import TwnsCcrRoomInfoPanel                 from "./CcrRoomInfoPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrMyRoomListPanel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -422,14 +423,12 @@ namespace TwnsCcrMyRoomListPanel {
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.CcrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyCcrJoinedPreviewingRoomIdChanged },
@@ -457,13 +456,6 @@ namespace TwnsCcrMyRoomListPanel {
 
         private _onTouchTapBtnChoose(): void {
             CcrJoinModel.setJoinedPreviewingRoomId(this._getData().roomId);
-        }
-
-        private _onTouchTapBtnNext(): void {
-            CcrMyRoomListPanel.hide();
-            TwnsCcrRoomInfoPanel.CcrRoomInfoPanel.show({
-                roomId  : this._getData().roomId,
-            });
         }
 
         private _updateState(): void {

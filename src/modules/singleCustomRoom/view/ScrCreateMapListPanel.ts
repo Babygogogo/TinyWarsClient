@@ -21,6 +21,7 @@
 // import TwnsScrCreateSearchMapPanel  from "./ScrCreateSearchMapPanel";
 // import TwnsScrCreateSettingsPanel   from "./ScrCreateSettingsPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsScrCreateMapListPanel {
     import ScrCreateSearchMapPanel  = TwnsScrCreateSearchMapPanel.ScrCreateSearchMapPanel;
     import ScrCreateSettingsPanel   = TwnsScrCreateSettingsPanel.ScrCreateSettingsPanel;
@@ -329,13 +330,11 @@ namespace TwnsScrCreateMapListPanel {
 
     class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
@@ -348,13 +347,6 @@ namespace TwnsScrCreateMapListPanel {
         private _onTouchTapBtnChoose(): void {
             const data = this._getData();
             data.panel.setAndReviseSelectedMapId(data.mapId);
-        }
-
-        private async _onTouchTapBtnNext(): Promise<void> {
-            const data = this._getData();
-            data.panel.close();
-            await ScrCreateModel.resetDataByMapId(data.mapId);
-            ScrCreateSettingsPanel.show();
         }
     }
 }

@@ -25,6 +25,7 @@
 // import SpmModel                             from "../model/SpmModel";
 // import TwnsSpmMainMenuPanel                 from "./SpmMainMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpmWarListPanel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
@@ -448,14 +449,12 @@ namespace TwnsSpmWarListPanel {
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelType!    : TwnsUiLabel.UiLabel;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
@@ -486,18 +485,6 @@ namespace TwnsSpmWarListPanel {
 
         private _onTouchTapBtnChoose(): void {
             SpmModel.setPreviewingSlotIndex(this._getData().slotIndex);
-        }
-
-        private _onTouchTapBtnNext(): void {
-            const slotIndex = this._getData().slotIndex;
-            const slotData  = SpmModel.getSlotDict().get(slotIndex);
-            if (slotData != null) {
-                FlowManager.gotoSinglePlayerWar({
-                    slotIndex,
-                    warData         : slotData.warData,
-                    slotExtraData   : slotData.extraData,
-                });
-            }
         }
     }
 }

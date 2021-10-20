@@ -29,6 +29,7 @@
 // import TwnsCcrMainMenuPanel                 from "./CcrMainMenuPanel";
 // import TwnsCcrRoomInfoPanel                 from "./CcrRoomInfoPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrJoinRoomListPanel {
     import CcrRoomInfoPanel                         = TwnsCcrRoomInfoPanel.CcrRoomInfoPanel;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
@@ -451,14 +452,12 @@ namespace TwnsCcrJoinRoomListPanel {
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgPassword!  : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.CcrJoinTargetRoomIdChanged, callback: this._onNotifyCcrJoinTargetRoomIdChanged },
@@ -490,34 +489,6 @@ namespace TwnsCcrJoinRoomListPanel {
 
         private _onTouchTapBtnChoose(): void {
             CcrJoinModel.setTargetRoomId(this._getData().roomId);
-        }
-
-        private async _onTouchTapBtnNext(): Promise<void> {
-            const roomInfo = await CcrModel.getRoomInfo(this._getData().roomId);
-            if (roomInfo == null) {
-                return;
-            }
-
-            const settingsForCcw    = Helpers.getExisted(roomInfo.settingsForCcw);
-            const callback          = () => {
-                const joinData = CcrJoinModel.getFastJoinData(roomInfo);
-                if (joinData) {
-                    CcrProxy.reqCcrJoinRoom(joinData);
-                } else {
-                    FloatText.show(Lang.getText(LangTextType.A0145));
-                    CcrProxy.reqCcrGetJoinableRoomInfoList();
-                }
-            };
-            if (!settingsForCcw.warPassword) {
-                callback();
-            } else {
-                TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
-                    mapId               : Helpers.getExisted(settingsForCcw.mapId),
-                    warName             : settingsForCcw.warName ?? null,
-                    password            : settingsForCcw.warPassword,
-                    callbackOnSucceed   : callback,
-                });
-            }
         }
 
         private _updateState(): void {

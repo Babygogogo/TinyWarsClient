@@ -27,6 +27,7 @@
 // import TwnsMfrMainMenuPanel                 from "./MfrMainMenuPanel";
 // import TwnsMfrRoomInfoPanel                 from "./MfrRoomInfoPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMfrJoinRoomListPanel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -452,14 +453,12 @@ namespace TwnsMfrJoinRoomListPanel {
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgPassword!  : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
@@ -477,34 +476,6 @@ namespace TwnsMfrJoinRoomListPanel {
 
         private _onTouchTapBtnChoose(): void {
             MfrJoinModel.setTargetRoomId(this._getData().roomId);
-        }
-
-        private async _onTouchTapBtnNext(): Promise<void> {
-            const roomInfo = await MfrModel.getRoomInfo(this._getData().roomId);
-            if (roomInfo == null) {
-                return;
-            }
-
-            const settingsForMfw    = Helpers.getExisted(roomInfo.settingsForMfw);
-            const callback          = () => {
-                const joinData = MfrJoinModel.getFastJoinData(roomInfo);
-                if (joinData) {
-                    MfrProxy.reqMfrJoinRoom(joinData);
-                } else {
-                    FloatText.show(Lang.getText(LangTextType.A0145));
-                    MfrProxy.reqMfrGetJoinableRoomInfoList();
-                }
-            };
-            if (!settingsForMfw.warPassword) {
-                callback();
-            } else {
-                TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
-                    mapId               : null,
-                    warName             : settingsForMfw.warName ?? null,
-                    password            : settingsForMfw.warPassword,
-                    callbackOnSucceed   : callback,
-                });
-            }
         }
     }
 }

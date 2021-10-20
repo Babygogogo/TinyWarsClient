@@ -22,6 +22,7 @@
 // import TwnsUiTab                            from "../../tools/ui/UiTab";
 // import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMfwMyWarListPanel {
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -350,14 +351,12 @@ namespace TwnsMfwMyWarListPanel {
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.MfwPreviewingWarIdChanged,  callback: this._onNotifyMfwPreviewingWarIdChanged },
@@ -386,14 +385,6 @@ namespace TwnsMfwMyWarListPanel {
 
         private _onTouchTapBtnChoose(): void {
             MpwModel.setMfwPreviewingWarId(this._getData().warId);
-        }
-
-        private _onTouchTapBtnNext(): void {
-            TwnsCommonBlockPanel.CommonBlockPanel.show({
-                title   : Lang.getText(LangTextType.B0088),
-                content : Lang.getText(LangTextType.A0040),
-            });
-            MpwProxy.reqMpwCommonContinueWar(this._getData().warId);
         }
 
         private _updateState(): void {

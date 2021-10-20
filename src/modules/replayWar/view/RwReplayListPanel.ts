@@ -25,6 +25,7 @@
 // import TwnsRwReplayWarInfoPage      from "./RwReplayWarInfoPage";
 // import TwnsRwSearchReplayPanel      from "./RwSearchReplayPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsRwReplayListPanel {
     import OpenDataForRwReplayWarInfoPage       = TwnsRwReplayWarInfoPage.OpenDataForRwReplayWarInfoPage;
     import OpenDataForCommonWarMapInfoPage      = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -389,7 +390,6 @@ namespace TwnsRwReplayListPanel {
     };
     class ReplayRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForReplayRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelType!    : TwnsUiLabel.UiLabel;
         private readonly _labelId!      : TwnsUiLabel.UiLabel;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
@@ -397,7 +397,6 @@ namespace TwnsRwReplayListPanel {
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
@@ -421,14 +420,6 @@ namespace TwnsRwReplayListPanel {
 
         private _onTouchTapBtnChoose(): void {
             RwModel.setPreviewingReplayId(this._getData().replayId);
-        }
-
-        private _onTouchTapBtnNext(): void {
-            CommonBlockPanel.show({
-                title   : Lang.getText(LangTextType.B0088),
-                content : Lang.getText(LangTextType.A0040),
-            });
-            RwProxy.reqReplayGetData(this._getData().replayId);
         }
     }
 }
