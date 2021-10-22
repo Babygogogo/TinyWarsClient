@@ -111,12 +111,12 @@ namespace TwnsBwTurnManager {
             }
 
             this._runPhaseGetFundWithExtraData(action);
-            this._runPhaseConsumeFuel();
+            this._runPhaseConsumeFuelWithExtraData(action);
             this._runPhaseRepairUnitByTileWithExtraData(action);
-            this._runPhaseDestroyUnitsOutOfFuel();
+            this._runPhaseDestroyUnitsOutOfFuelWithExtraData(action);
             this._runPhaseRepairUnitByUnitWithExtraData(action);
             this._runPhaseRecoverUnitByCoWithExtraData(action);
-            this._runPhaseActivateMapWeapon();
+            this._runPhaseActivateMapWeaponWithExtraData(action);
             this._runPhaseMainWithExtraData(action);
 
             this._setPhaseCode(TurnPhaseCode.Main);
@@ -128,12 +128,12 @@ namespace TwnsBwTurnManager {
             }
 
             this._runPhaseGetFundWithoutExtraData();
-            this._runPhaseConsumeFuel();
+            this._runPhaseConsumeFuelWithoutExtraData();
             this._runPhaseRepairUnitByTileWithoutExtraData();
-            this._runPhaseDestroyUnitsOutOfFuel();
+            this._runPhaseDestroyUnitsOutOfFuelWithoutExtraData();
             this._runPhaseRepairUnitByUnitWithoutExtraData();
             this._runPhaseRecoverUnitByCoWithoutExtraData();
-            this._runPhaseActivateMapWeapon();
+            this._runPhaseActivateMapWeaponWithoutExtraData();
             this._runPhaseMainWithoutExtraData();
 
             this._setPhaseCode(TurnPhaseCode.Main);
@@ -175,15 +175,7 @@ namespace TwnsBwTurnManager {
         }
 
         private _runPhaseGetFundWithExtraData(data: IWarActionSystemBeginTurn): void {
-            const war           = this.getWar();
-            const playerIndex   = this.getPlayerIndexInTurn();
-            if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
-                const player        = war.getPlayer(playerIndex);
-                const extraData     = Helpers.getExisted(data.extraData, ClientErrorCode.BwTurnManager_RunPhaseGetFundWithExtraData_00);
-                const playerData    = Helpers.getExisted(extraData.playerData, ClientErrorCode.BwTurnManager_RunPhaseGetFundWithExtraData_01);
-                const remainingFund = Helpers.getExisted(playerData.fund, ClientErrorCode.BwTurnManager_RunPhaseGetFundWithExtraData_02);
-                player.setFund(remainingFund);
-            }
+            // nothing to do
         }
         private _runPhaseGetFundWithoutExtraData(): void {
             const war = this.getWar();
@@ -205,7 +197,10 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        private _runPhaseConsumeFuel(): void {
+        private _runPhaseConsumeFuelWithExtraData(data: IWarActionSystemBeginTurn): void {
+            // nothing to do
+        }
+        private _runPhaseConsumeFuelWithoutExtraData(): void {
             const playerIndex = this.getPlayerIndexInTurn();
             const turnIndex = this.getTurnIndex();
             const war = this.getWar();
@@ -221,26 +216,7 @@ namespace TwnsBwTurnManager {
         }
 
         private _runPhaseRepairUnitByTileWithExtraData(data: IWarActionSystemBeginTurn): void {
-            const extraData         = Helpers.getExisted(data.extraData, ClientErrorCode.BwTurnManager_RunPhaseRepairUnitByTileWithExtraData_00);
-            const war               = this.getWar();
-            const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-            const unitMap           = war.getUnitMap();
-            const gridVisionEffect  = war.getGridVisionEffect();
-            for (const repairData of extraData.recoveryDataByTile || []) {
-                const gridIndex = repairData.gridIndex as Types.GridIndex;
-                const unit      = unitMap.getUnit(gridIndex, repairData.unitId);
-                if (unit) {
-                    unit.updateByRepairData(repairData);
-
-                    if (visibleUnits.has(unit)) {
-                        if (repairData.deltaHp) {
-                            gridVisionEffect.showEffectRepair(gridIndex);
-                        } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
-                            gridVisionEffect.showEffectSupply(gridIndex);
-                        }
-                    }
-                }
-            }
+            // nothing to do
         }
         private _runPhaseRepairUnitByTileWithoutExtraData(): void {
             const playerIndex = this.getPlayerIndexInTurn();
@@ -254,7 +230,7 @@ namespace TwnsBwTurnManager {
 
                 const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
                 const tileMap           = war.getTileMap();
-                const gridVisionEffect  = war.getGridVisionEffect();
+                const gridVisionEffect  = war.getGridVisualEffect();
                 for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
                     const gridIndex     = unit.getGridIndex();
                     const tile          = tileMap.getTile(gridIndex);
@@ -287,7 +263,10 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        private _runPhaseDestroyUnitsOutOfFuel(): void {
+        private _runPhaseDestroyUnitsOutOfFuelWithExtraData(data: IWarActionSystemBeginTurn): void {
+            // nothing to do
+        }
+        private _runPhaseDestroyUnitsOutOfFuelWithoutExtraData(): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
                 const war       = this.getWar();
@@ -307,26 +286,7 @@ namespace TwnsBwTurnManager {
         }
 
         private _runPhaseRepairUnitByUnitWithExtraData(data: IWarActionSystemBeginTurn): void {
-            const war               = this.getWar();
-            const extraData         = Helpers.getExisted(data.extraData, ClientErrorCode.BwTurnManager_RunPhaseRepairUnitByUnitWithExtraData_00);
-            const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-            const unitMap           = war.getUnitMap();
-            const gridVisionEffect  = war.getGridVisionEffect();
-            for (const repairData of extraData.recoveryDataByUnit || []) {
-                const gridIndex = repairData.gridIndex as Types.GridIndex;
-                const unit      = unitMap.getUnit(gridIndex, repairData.unitId);
-                if (unit) {
-                    unit.updateByRepairData(repairData);
-
-                    if (visibleUnits.has(unit)) {
-                        if (repairData.deltaHp) {
-                            gridVisionEffect.showEffectRepair(gridIndex);
-                        } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
-                            gridVisionEffect.showEffectSupply(gridIndex);
-                        }
-                    }
-                }
-            }
+            // nothing to do
         }
         private _runPhaseRepairUnitByUnitWithoutExtraData(): void {
             const playerIndex = this.getPlayerIndexInTurn();
@@ -336,7 +296,7 @@ namespace TwnsBwTurnManager {
                 const unitMap           = war.getUnitMap();
                 const mapSize           = unitMap.getMapSize();
                 const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-                const gridVisionEffect  = war.getGridVisionEffect();
+                const gridVisionEffect  = war.getGridVisualEffect();
                 const allUnitsLoaded    : TwnsBwUnit.BwUnit[] = [];
                 for (const unit of unitMap.getAllUnitsLoaded()) {
                     (unit.getPlayerIndex() === playerIndex) && (allUnitsLoaded.push(unit));
@@ -425,26 +385,7 @@ namespace TwnsBwTurnManager {
         }
 
         private _runPhaseRecoverUnitByCoWithExtraData(data: IWarActionSystemBeginTurn): void {
-            const war               = this.getWar();
-            const extraData         = Helpers.getExisted(data.extraData, ClientErrorCode.BwTurnManager_RunPhaseRecoverUnitByCoWithExtraData_01);
-            const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-            const unitMap           = war.getUnitMap();
-            const gridVisionEffect  = war.getGridVisionEffect();
-            for (const repairData of extraData.recoveryDataByCo || []) {
-                const gridIndex = repairData.gridIndex as Types.GridIndex;
-                const unit      = unitMap.getUnit(gridIndex, repairData.unitId);
-                if (unit) {
-                    unit.updateByRepairData(repairData);
-
-                    if (visibleUnits.has(unit)) {
-                        if (repairData.deltaHp) {
-                            gridVisionEffect.showEffectRepair(gridIndex);
-                        } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
-                            gridVisionEffect.showEffectSupply(gridIndex);
-                        }
-                    }
-                }
-            }
+            // nothing to do
         }
         private _runPhaseRecoverUnitByCoWithoutExtraData(): void {
             const playerIndex   = this.getPlayerIndexInTurn();
@@ -455,7 +396,7 @@ namespace TwnsBwTurnManager {
                 const coZoneRadius              = player.getCoZoneRadius();
                 const visibleUnits              = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
                 const unitMap                   = war.getUnitMap();
-                const gridVisionEffect          = war.getGridVisionEffect();
+                const gridVisionEffect          = war.getGridVisualEffect();
                 const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
                 for (const skillId of player.getCoCurrentSkills() || []) {
                     const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
@@ -586,23 +527,90 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        private _runPhaseActivateMapWeapon(): void {
+        private _runPhaseActivateMapWeaponWithExtraData(data: IWarActionSystemBeginTurn): void {
+            // nothing to do for now.
+        }
+        private _runPhaseActivateMapWeaponWithoutExtraData(): void {
             // nothing to do for now.
         }
 
         private _runPhaseMainWithExtraData(data: IWarActionSystemBeginTurn): void {
             const war           = this.getWar();
             const playerIndex   = war.getPlayerIndexInTurn();
+            const configVersion = war.getConfigVersion();
             const extraData     = Helpers.getExisted(data.extraData, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_00);
-            const playerData    = Helpers.getExisted(extraData.playerData, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_01);
-            if (playerData.playerIndex !== playerIndex) {
-                throw Helpers.newError(`Invalid playerData.playerIndex: ${playerData.playerIndex}`, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_02);
+
+            {
+                const playerData = Helpers.getExisted(extraData.playerData, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_01);
+                if (playerData.playerIndex !== playerIndex) {
+                    throw Helpers.newError(`Invalid playerData.playerIndex: ${playerData.playerIndex}`, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_02);
+                }
+                war.getPlayer(playerIndex).init(playerData, configVersion);
             }
 
-            war.getPlayer(playerIndex).init(playerData, war.getConfigVersion());
+            const unitMap           = war.getUnitMap();
+            const gridVisualEffect  = war.getGridVisualEffect();
+            for (const unitData of extraData.unitArrayAfterAction ?? []) {
+                const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_03);
+                const existingUnit  = unitMap.getUnitById(unitId);
+                if (existingUnit) {
+                    const existingUnitData = existingUnit.serialize();
+                    existingUnit.init(unitData, configVersion);
+                    existingUnit.startRunning(war);
+                    existingUnit.startRunningView();
 
-            for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
-                (unit.getPlayerIndex() === playerIndex) && (unit.updateView());
+                    const gridIndex = existingUnit.getGridIndex();
+                    if (WarCommonHelpers.checkIsUnitRepaired(existingUnitData, unitData)) {
+                        gridVisualEffect.showEffectRepair(gridIndex);
+                    } else if (WarCommonHelpers.checkIsUnitSupplied(existingUnitData, unitData, configVersion)) {
+                        gridVisualEffect.showEffectSupply(gridIndex);
+                    }
+
+                } else {
+                    const unit = new TwnsBwUnit.BwUnit();
+                    unit.init(unitData, configVersion);
+
+                    const isOnMap = unit.getLoaderUnitId() == null;
+                    if (isOnMap) {
+                        unitMap.setUnitOnMap(unit);
+                    } else {
+                        unitMap.setUnitLoaded(unit);
+                    }
+                    unit.startRunning(war);
+                    unit.startRunningView();
+                }
+            }
+
+            let isShownExplosionEffect = false;
+            for (const unitId of extraData.destroyedUnitIdArray ?? []) {
+                const unit = unitMap.getUnitById(unitId);
+                if ((unit) && (unit.getLoaderUnitId() == null)) {
+                    const gridIndex = unit.getGridIndex();
+                    WarDestructionHelpers.removeUnitOnMap(war, gridIndex);
+
+                    gridVisualEffect.showEffectExplosion(gridIndex);
+                    isShownExplosionEffect = true;
+                }
+            }
+
+            const tileMap = war.getTileMap();
+            for (const tileData of extraData.tileArrayAfterAction ?? []) {
+                const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_04);
+                const tile              = tileMap.getTile(gridIndex);
+                const hasHpBeforeAction = tile.getMaxHp() != null;
+                tile.init(tileData, configVersion);
+                tile.startRunning(war);
+                tile.startRunningView();
+
+                if ((hasHpBeforeAction) && (tile.getMaxHp() == null)) {
+                    gridVisualEffect.showEffectExplosion(gridIndex);
+                    isShownExplosionEffect = true;
+                }
+            }
+
+            if (isShownExplosionEffect) {
+                war.getView().showVibration();
+                SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
             }
         }
         private _runPhaseMainWithoutExtraData(): void {

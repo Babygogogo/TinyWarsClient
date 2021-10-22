@@ -389,7 +389,7 @@ namespace WarActionExecutor {
                 });
             }
 
-            const gridVisionEffect  = war.getGridVisionEffect();
+            const gridVisionEffect  = war.getGridVisualEffect();
             const playerIndex       = player.getPlayerIndex();
             for (const unit of unitMap.getAllUnitsOnMap()) {
                 unit.updateView();
@@ -448,7 +448,7 @@ namespace WarActionExecutor {
                 skillDataList.push(dataForUseCoSkill);
             }
 
-            const gridVisionEffect  = war.getGridVisionEffect();
+            const gridVisionEffect  = war.getGridVisualEffect();
             const playerIndex       = player.getPlayerIndex();
             for (const unit of unitMap.getAllUnitsOnMap()) {
                 unit.updateView();
@@ -909,7 +909,7 @@ namespace WarActionExecutor {
                     war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
                 }
 
-                const gridVisionEffect      = war.getGridVisionEffect();
+                const gridVisionEffect      = war.getGridVisualEffect();
                 let isVisibleUnitDestroyed  = false;
                 for (const unit of affectedUnitSet) {
                     if (allVisibleUnits.has(unit)) {
@@ -1074,7 +1074,7 @@ namespace WarActionExecutor {
                     }
                 }
 
-                const gridVisionEffect      = war.getGridVisionEffect();
+                const gridVisionEffect      = war.getGridVisualEffect();
                 let isVisibleUnitDestroyed  = false;
                 for (const unit of affectedUnitSet) {
                     if (allVisibleUnits.has(unit)) {
@@ -1378,7 +1378,7 @@ namespace WarActionExecutor {
                     war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
                 }
 
-                const gridVisionEffect      = war.getGridVisionEffect();
+                const gridVisionEffect      = war.getGridVisualEffect();
                 let isVisibleUnitDestroyed  = false;
                 for (const unit of affectedUnitSet) {
                     if (allVisibleUnits.has(unit)) {
@@ -1542,7 +1542,7 @@ namespace WarActionExecutor {
                     }
                 }
 
-                const gridVisionEffect      = war.getGridVisionEffect();
+                const gridVisionEffect      = war.getGridVisualEffect();
                 let isVisibleUnitDestroyed  = false;
                 for (const unit of affectedUnitSet) {
                     if (allVisibleUnits.has(unit)) {
@@ -1910,7 +1910,7 @@ namespace WarActionExecutor {
                 observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
                 isDiving            : false,
             })) {
-                war.getGridVisionEffect().showEffectDive(endingGridIndex);
+                war.getGridVisualEffect().showEffectDive(endingGridIndex);
             }
         }
 
@@ -2000,7 +2000,7 @@ namespace WarActionExecutor {
             aiming      : null,
         });
         if (action.isDropBlocked) {
-            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+            war.getGridVisualEffect().showEffectBlock(endingGridIndex);
         }
         focusUnit.updateView();
 
@@ -2277,7 +2277,7 @@ namespace WarActionExecutor {
             aiming      : null,
         });
         if ((isFlareSucceeded) && (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex()))) {
-            const effect = war.getGridVisionEffect();
+            const effect = war.getGridVisualEffect();
             for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, war.getTileMap().getMapSize())) {
                 effect.showEffectFlare(grid);
             }
@@ -2377,7 +2377,7 @@ namespace WarActionExecutor {
                 isBlocked   : path.isBlocked,
                 aiming      : null,
             });
-            const effect = war.getGridVisionEffect();
+            const effect = war.getGridVisualEffect();
             for (const grid of targetGrids) {
                 effect.showEffectSiloExplosion(grid);
             }
@@ -2699,7 +2699,7 @@ namespace WarActionExecutor {
             });
             focusUnit.updateView();
 
-            const gridVisionEffect = war.getGridVisionEffect();
+            const gridVisionEffect = war.getGridVisualEffect();
             for (const unit of suppliedUnits) {
                 unit.updateView();
                 gridVisionEffect.showEffectSupply(unit.getGridIndex());
@@ -2764,7 +2764,7 @@ namespace WarActionExecutor {
                 observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
                 isDiving            : false,
             })) {
-                war.getGridVisionEffect().showEffectSurface(endingGridIndex);
+                war.getGridVisualEffect().showEffectSurface(endingGridIndex);
             }
         }
 
@@ -2890,7 +2890,7 @@ namespace WarActionExecutor {
                 });
                 focusUnit.updateView();
 
-                const gridVisionEffect  = war.getGridVisionEffect();
+                const gridVisionEffect  = war.getGridVisualEffect();
                 const playerIndex       = focusUnit.getPlayerIndex();
                 for (const unit of unitMap.getAllUnitsOnMap()) {
                     unit.updateView();
@@ -2977,7 +2977,7 @@ namespace WarActionExecutor {
                 });
                 focusUnit.updateView();
 
-                const gridVisionEffect  = war.getGridVisionEffect();
+                const gridVisionEffect  = war.getGridVisualEffect();
                 const playerIndex       = focusUnit.getPlayerIndex();
                 for (const unit of unitMap.getAllUnitsOnMap()) {
                     unit.updateView();

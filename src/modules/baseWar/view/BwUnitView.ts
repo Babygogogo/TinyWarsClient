@@ -220,7 +220,7 @@ namespace TwnsBwUnitView {
                                 observerTeamIndexes : watcherTeamIndexes,
                             }))
                         ) {
-                            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                            war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
                         SoundManager.fadeoutLongSfxForMoveUnit();
 
@@ -231,7 +231,7 @@ namespace TwnsBwUnitView {
                     tween.call(() => {
                         cursor.setIsMovableByTouches(false);
                         cursor.setIsVisible(false);
-                        war.getGridVisionEffect().showEffectAiming(aiming, _AIMING_TIME_MS);
+                        war.getGridVisualEffect().showEffectAiming(aiming, _AIMING_TIME_MS);
                     })
                     .wait(_AIMING_TIME_MS)
                     .call(() => {
@@ -248,7 +248,7 @@ namespace TwnsBwUnitView {
                                 observerTeamIndexes : watcherTeamIndexes,
                             }))
                         ) {
-                            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                            war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
                         SoundManager.fadeoutLongSfxForMoveUnit();
 

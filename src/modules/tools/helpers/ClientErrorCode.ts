@@ -1730,6 +1730,17 @@ namespace TwnsClientErrorCode {
         WarCommonHelpers_GetTextStrokeForSkinId_08,
         WarCommonHelpers_GetTextStrokeForSkinId_09,
 
+        WarCommonHelpers_CheckIsUnitSupplied_00,
+        WarCommonHelpers_CheckIsUnitSupplied_01,
+        WarCommonHelpers_CheckIsUnitSupplied_02,
+        WarCommonHelpers_CheckIsUnitSupplied_03,
+        WarCommonHelpers_CheckIsUnitSupplied_04,
+        WarCommonHelpers_CheckIsUnitSupplied_05,
+        WarCommonHelpers_CheckIsUnitSupplied_06,
+        WarCommonHelpers_CheckIsUnitSupplied_07,
+        WarCommonHelpers_CheckIsUnitSupplied_08,
+        WarCommonHelpers_CheckIsUnitSupplied_09,
+
         BwHelpers_GetRevisedPath_00,
         BwHelpers_GetRevisedPath_01,
         BwHelpers_GetRevisedPath_02,

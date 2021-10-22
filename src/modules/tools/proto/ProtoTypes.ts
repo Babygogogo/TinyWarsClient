@@ -10439,17 +10439,17 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForSystemBeginTurn. */
         interface IExtraDataForSystemBeginTurn {
 
-            /** ExtraDataForSystemBeginTurn recoveryDataByTile */
-            recoveryDataByTile?: (Structure.IDataForModifyUnit[]|null);
-
-            /** ExtraDataForSystemBeginTurn recoveryDataByUnit */
-            recoveryDataByUnit?: (Structure.IDataForModifyUnit[]|null);
-
-            /** ExtraDataForSystemBeginTurn recoveryDataByCo */
-            recoveryDataByCo?: (Structure.IDataForModifyUnit[]|null);
-
             /** ExtraDataForSystemBeginTurn playerData */
             playerData?: (WarSerialization.ISerialPlayer|null);
+
+            /** ExtraDataForSystemBeginTurn unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForSystemBeginTurn destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForSystemBeginTurn tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
         }
 
         /** Represents an ExtraDataForSystemBeginTurn. */
@@ -10461,17 +10461,17 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn);
 
-            /** ExtraDataForSystemBeginTurn recoveryDataByTile. */
-            public recoveryDataByTile: Structure.IDataForModifyUnit[];
-
-            /** ExtraDataForSystemBeginTurn recoveryDataByUnit. */
-            public recoveryDataByUnit: Structure.IDataForModifyUnit[];
-
-            /** ExtraDataForSystemBeginTurn recoveryDataByCo. */
-            public recoveryDataByCo: Structure.IDataForModifyUnit[];
-
             /** ExtraDataForSystemBeginTurn playerData. */
             public playerData?: (WarSerialization.ISerialPlayer|null);
+
+            /** ExtraDataForSystemBeginTurn unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForSystemBeginTurn destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForSystemBeginTurn tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
 
             /**
              * Creates a new ExtraDataForSystemBeginTurn instance using the specified properties.

@@ -441,7 +441,7 @@ namespace WarCommonHelpers {
             && (mapWidth * mapHeight <= CommonConstants.MapMaxGridsCount);
     }
 
-    export function checkIsUnitIdCompact(unitArray: Types.Undefinable<WarSerialization.ISerialUnit[]>): boolean {
+    export function checkIsUnitIdCompact(unitArray: Types.Undefinable<ISerialUnit[]>): boolean {
         if ((unitArray == null) || (unitArray.length <= 0)) {
             return true;
         }
@@ -534,6 +534,66 @@ namespace WarCommonHelpers {
                 tile.updateOnUnitLeave();
             }
         }
+    }
+
+    export function checkIsUnitRepaired(oldUnitData: ISerialUnit, newUnitData: ISerialUnit): boolean {
+        if (oldUnitData.unitType != newUnitData.unitType) {
+            return false;
+        }
+
+        return (newUnitData.currentHp ?? CommonConstants.UnitMaxHp) > (oldUnitData.currentHp ?? CommonConstants.UnitMaxHp);
+    }
+    export function checkIsUnitSupplied(oldUnitData: ISerialUnit, newUnitData: ISerialUnit, configVersion: string): boolean {
+        const unitType = newUnitData.unitType;
+        if ((unitType == null) || (oldUnitData.unitType != newUnitData.unitType)) {
+            return false;
+        }
+
+        const unitCfg = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(configVersion, unitType), ClientErrorCode.WarCommonHelpers_CheckIsUnitSupplied_00);
+        {
+            const maxFuel = unitCfg.maxFuel;
+            if ((newUnitData.currentFuel ?? maxFuel) > (oldUnitData.currentFuel ?? maxFuel)) {
+                return true;
+            }
+        }
+
+        {
+            const maxAmmo = unitCfg.primaryWeaponMaxAmmo;
+            if ((maxAmmo != null)                                                                                       &&
+                ((newUnitData.primaryWeaponCurrentAmmo ?? maxAmmo) > (oldUnitData.primaryWeaponCurrentAmmo ?? maxAmmo))
+            ) {
+                return true;
+            }
+        }
+
+        {
+            const maxAmmo = unitCfg.flareMaxAmmo;
+            if ((maxAmmo != null)                                                                       &&
+                ((newUnitData.flareCurrentAmmo ?? maxAmmo) > (oldUnitData.flareCurrentAmmo ?? maxAmmo))
+            ) {
+                return true;
+            }
+        }
+
+        {
+            const maxMaterial = unitCfg.maxProduceMaterial;
+            if ((maxMaterial != null)                                                                                       &&
+                ((newUnitData.currentProduceMaterial ?? maxMaterial) > (oldUnitData.currentProduceMaterial ?? maxMaterial))
+            ) {
+                return true;
+            }
+        }
+
+        {
+            const maxMaterial = unitCfg.maxBuildMaterial;
+            if ((maxMaterial != null)                                                                                   &&
+                ((newUnitData.currentBuildMaterial ?? maxMaterial) > (oldUnitData.currentBuildMaterial ?? maxMaterial))
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     export function updateTilesAndUnits(

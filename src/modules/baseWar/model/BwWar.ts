@@ -309,7 +309,7 @@ namespace TwnsBwWar {
         public getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
             return this.getField().getActionPlanner();
         }
-        public getGridVisionEffect(): TwnsBwGridVisualEffect.BwGridVisualEffect {
+        public getGridVisualEffect(): TwnsBwGridVisualEffect.BwGridVisualEffect {
             return this.getField().getGridVisualEffect();
         }
         public getCursor(): TwnsBwCursor.BwCursor {
