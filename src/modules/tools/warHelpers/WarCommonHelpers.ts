@@ -654,12 +654,13 @@ namespace WarCommonHelpers {
         }
     }
 
-    export function handleCommonExtraDataForWarActions({ war, playerArrayAfterAction, tileArrayAfterAction, unitArrayAfterAction, destroyedUnitIdArray }: {
+    export function handleCommonExtraDataForWarActions({ war, playerArrayAfterAction, tileArrayAfterAction, unitArrayAfterAction, destroyedUnitIdArray, isFastExecute }: {
         war                     : TwnsBwWar.BwWar;
         playerArrayAfterAction  : Types.Undefinable<WarSerialization.ISerialPlayer[]>;
         tileArrayAfterAction    : Types.Undefinable<WarSerialization.ISerialTile[]>;
         unitArrayAfterAction    : Types.Undefinable<WarSerialization.ISerialUnit[]>;
         destroyedUnitIdArray    : Types.Undefinable<number[]>;
+        isFastExecute           : boolean;
     }): void {
         const configVersion = war.getConfigVersion();
         for (const playerData of playerArrayAfterAction ?? []) {
@@ -679,11 +680,13 @@ namespace WarCommonHelpers {
                 existingUnit.startRunning(war);
                 existingUnit.startRunningView();
 
-                const gridIndex = existingUnit.getGridIndex();
-                if (checkIsUnitRepaired(existingUnitData, unitData)) {
-                    gridVisualEffect.showEffectRepair(gridIndex);
-                } else if (checkIsUnitSupplied(existingUnitData, unitData, configVersion)) {
-                    gridVisualEffect.showEffectSupply(gridIndex);
+                if (!isFastExecute) {
+                    const gridIndex = existingUnit.getGridIndex();
+                    if (checkIsUnitRepaired(existingUnitData, unitData)) {
+                        gridVisualEffect.showEffectRepair(gridIndex);
+                    } else if (checkIsUnitSupplied(existingUnitData, unitData, configVersion)) {
+                        gridVisualEffect.showEffectSupply(gridIndex);
+                    }
                 }
 
             } else {
@@ -708,8 +711,10 @@ namespace WarCommonHelpers {
                 const gridIndex = unit.getGridIndex();
                 WarDestructionHelpers.removeUnitOnMap(war, gridIndex);
 
-                gridVisualEffect.showEffectExplosion(gridIndex);
-                isShownExplosionEffect = true;
+                if (!isFastExecute) {
+                    gridVisualEffect.showEffectExplosion(gridIndex);
+                    isShownExplosionEffect = true;
+                }
             }
         }
 
@@ -722,13 +727,13 @@ namespace WarCommonHelpers {
             tile.startRunning(war);
             tile.startRunningView();
 
-            if ((hasHpBeforeAction) && (tile.getMaxHp() == null)) {
+            if ((!isFastExecute) && (hasHpBeforeAction) && (tile.getMaxHp() == null)) {
                 gridVisualEffect.showEffectExplosion(gridIndex);
                 isShownExplosionEffect = true;
             }
         }
 
-        if (isShownExplosionEffect) {
+        if ((!isFastExecute) && (isShownExplosionEffect)) {
             war.getView().showVibration();
             SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
         }

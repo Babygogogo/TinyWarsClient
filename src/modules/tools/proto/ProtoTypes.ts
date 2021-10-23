@@ -10383,90 +10383,6 @@ export declare namespace WarAction {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarActionSystemHandleBootPlayer. */
-    interface IWarActionSystemHandleBootPlayer {
-    }
-
-    /** Represents a WarActionSystemHandleBootPlayer. */
-    class WarActionSystemHandleBootPlayer implements IWarActionSystemHandleBootPlayer {
-
-        /**
-         * Constructs a new WarActionSystemHandleBootPlayer.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: WarAction.IWarActionSystemHandleBootPlayer);
-
-        /**
-         * Creates a new WarActionSystemHandleBootPlayer instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns WarActionSystemHandleBootPlayer instance
-         */
-        public static create(properties?: WarAction.IWarActionSystemHandleBootPlayer): WarAction.WarActionSystemHandleBootPlayer;
-
-        /**
-         * Encodes the specified WarActionSystemHandleBootPlayer message. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.verify|verify} messages.
-         * @param message WarActionSystemHandleBootPlayer message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: WarAction.IWarActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified WarActionSystemHandleBootPlayer message, length delimited. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.verify|verify} messages.
-         * @param message WarActionSystemHandleBootPlayer message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: WarAction.IWarActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a WarActionSystemHandleBootPlayer message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns WarActionSystemHandleBootPlayer
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemHandleBootPlayer;
-
-        /**
-         * Decodes a WarActionSystemHandleBootPlayer message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns WarActionSystemHandleBootPlayer
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemHandleBootPlayer;
-
-        /**
-         * Verifies a WarActionSystemHandleBootPlayer message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a WarActionSystemHandleBootPlayer message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns WarActionSystemHandleBootPlayer
-         */
-        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemHandleBootPlayer;
-
-        /**
-         * Creates a plain object from a WarActionSystemHandleBootPlayer message. Also converts values to other types if specified.
-         * @param message WarActionSystemHandleBootPlayer
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: WarAction.WarActionSystemHandleBootPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this WarActionSystemHandleBootPlayer to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
     /** Properties of a WarActionSystemEndTurn. */
     interface IWarActionSystemEndTurn {
 
@@ -10562,14 +10478,17 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForSystemEndTurn. */
         interface IExtraDataForSystemEndTurn {
 
-            /** ExtraDataForSystemEndTurn restTimeToBootForCurrentPlayer */
-            restTimeToBootForCurrentPlayer?: (number|null);
+            /** ExtraDataForSystemEndTurn playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForSystemEndTurn discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForSystemEndTurn unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForSystemEndTurn discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForSystemEndTurn destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForSystemEndTurn tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
         }
 
         /** Represents an ExtraDataForSystemEndTurn. */
@@ -10581,14 +10500,17 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionSystemEndTurn.IExtraDataForSystemEndTurn);
 
-            /** ExtraDataForSystemEndTurn restTimeToBootForCurrentPlayer. */
-            public restTimeToBootForCurrentPlayer: number;
+            /** ExtraDataForSystemEndTurn playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForSystemEndTurn discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForSystemEndTurn unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForSystemEndTurn discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForSystemEndTurn destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForSystemEndTurn tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
 
             /**
              * Creates a new ExtraDataForSystemEndTurn instance using the specified properties.
@@ -10660,6 +10582,90 @@ export declare namespace WarAction {
              */
             public toJSON(): { [k: string]: any };
         }
+    }
+
+    /** Properties of a WarActionSystemHandleBootPlayer. */
+    interface IWarActionSystemHandleBootPlayer {
+    }
+
+    /** Represents a WarActionSystemHandleBootPlayer. */
+    class WarActionSystemHandleBootPlayer implements IWarActionSystemHandleBootPlayer {
+
+        /**
+         * Constructs a new WarActionSystemHandleBootPlayer.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionSystemHandleBootPlayer);
+
+        /**
+         * Creates a new WarActionSystemHandleBootPlayer instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionSystemHandleBootPlayer instance
+         */
+        public static create(properties?: WarAction.IWarActionSystemHandleBootPlayer): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Encodes the specified WarActionSystemHandleBootPlayer message. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.verify|verify} messages.
+         * @param message WarActionSystemHandleBootPlayer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionSystemHandleBootPlayer message, length delimited. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.verify|verify} messages.
+         * @param message WarActionSystemHandleBootPlayer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionSystemHandleBootPlayer message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionSystemHandleBootPlayer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Decodes a WarActionSystemHandleBootPlayer message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionSystemHandleBootPlayer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Verifies a WarActionSystemHandleBootPlayer message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionSystemHandleBootPlayer message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionSystemHandleBootPlayer
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Creates a plain object from a WarActionSystemHandleBootPlayer message. Also converts values to other types if specified.
+         * @param message WarActionSystemHandleBootPlayer
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionSystemHandleBootPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionSystemHandleBootPlayer to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
     }
 
     /** Properties of a WarActionSystemVoteForDraw. */
@@ -10847,14 +10853,17 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForPlayerEndTurn. */
         interface IExtraDataForPlayerEndTurn {
 
-            /** ExtraDataForPlayerEndTurn restTimeToBootForCurrentPlayer */
-            restTimeToBootForCurrentPlayer?: (number|null);
+            /** ExtraDataForPlayerEndTurn playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForPlayerEndTurn discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForPlayerEndTurn unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForPlayerEndTurn discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForPlayerEndTurn destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForPlayerEndTurn tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
         }
 
         /** Represents an ExtraDataForPlayerEndTurn. */
@@ -10866,14 +10875,17 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionPlayerEndTurn.IExtraDataForPlayerEndTurn);
 
-            /** ExtraDataForPlayerEndTurn restTimeToBootForCurrentPlayer. */
-            public restTimeToBootForCurrentPlayer: number;
+            /** ExtraDataForPlayerEndTurn playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForPlayerEndTurn discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForPlayerEndTurn unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForPlayerEndTurn discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForPlayerEndTurn destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForPlayerEndTurn tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
 
             /**
              * Creates a new ExtraDataForPlayerEndTurn instance using the specified properties.

@@ -161,13 +161,14 @@ namespace WarActionExecutor {
             : await normalExePlayerEndTurn(war, action);
     }
     async function fastExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
-        war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action, true);
     }
     async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
         // const desc = await war.getDescForExePlayerEndTurn(action);
         // (desc) && (FloatText.show(desc));
 
-        war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action, false);
+        war.updateTilesAndUnitsOnVisibilityChanged();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -487,7 +488,7 @@ namespace WarActionExecutor {
             : await normalExeSystemBeginTurn(war, action);
     }
     async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
-        war.getTurnManager().endPhaseWaitBeginTurn(action);
+        war.getTurnManager().endPhaseWaitBeginTurn(action, true);
     }
     async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemBeginTurn(action);
@@ -511,7 +512,7 @@ namespace WarActionExecutor {
             });
         }
 
-        war.getTurnManager().endPhaseWaitBeginTurn(action);
+        war.getTurnManager().endPhaseWaitBeginTurn(action, false);
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
 
@@ -580,13 +581,14 @@ namespace WarActionExecutor {
             : await normalExeSystemEndTurn(war, action);
     }
     async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
-        war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action, true);
     }
     async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemEndTurn(action);
         // (desc) && (FloatText.show(desc));
 
-        war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action, false);
+        war.updateTilesAndUnitsOnVisibilityChanged();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

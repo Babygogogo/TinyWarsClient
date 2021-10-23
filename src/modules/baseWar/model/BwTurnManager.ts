@@ -93,91 +93,113 @@ namespace TwnsBwTurnManager {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public endPhaseWaitBeginTurn(action: IWarActionSystemBeginTurn): void {
+        public endPhaseWaitBeginTurn(action: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
             this.getWar().getIsExecuteActionsWithExtraData()
-                ? this._endPhaseWaitBeginTurnWithExtraData(action)
-                : this._endPhaseWaitBeginTurnWithoutExtraData();
+                ? this._endPhaseWaitBeginTurnWithExtraData(action, isFastExecute)
+                : this._endPhaseWaitBeginTurnWithoutExtraData(isFastExecute);
         }
-        public endPhaseMain(action: IWarActionPlayerEndTurn): void {
+        public endPhaseMain(action: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
             this.getWar().getIsExecuteActionsWithExtraData()
-                ? this._endPhaseMainWithExtraData(action)
-                : this._endPhaseMainWithoutExtraData();
+                ? this._endPhaseMainWithExtraData(action, isFastExecute)
+                : this._endPhaseMainWithoutExtraData(isFastExecute);
         }
 
-        private _endPhaseWaitBeginTurnWithExtraData(action: IWarActionSystemBeginTurn): void {
+        private _endPhaseWaitBeginTurnWithExtraData(action: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
             const phaseCode = this.getPhaseCode();
             if (phaseCode !== TurnPhaseCode.WaitBeginTurn) {
                 throw Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_00);
             }
 
-            this._runPhaseGetFundWithExtraData(action);
-            this._runPhaseConsumeFuelWithExtraData(action);
-            this._runPhaseRepairUnitByTileWithExtraData(action);
-            this._runPhaseDestroyUnitsOutOfFuelWithExtraData(action);
-            this._runPhaseRepairUnitByUnitWithExtraData(action);
-            this._runPhaseRecoverUnitByCoWithExtraData(action);
-            this._runPhaseActivateMapWeaponWithExtraData(action);
-            this._runPhaseMainWithExtraData(action);
+            this._runPhaseGetFundWithExtraData(action, isFastExecute);
+            this._runPhaseConsumeFuelWithExtraData(action, isFastExecute);
+            this._runPhaseRepairUnitByTileWithExtraData(action, isFastExecute);
+            this._runPhaseDestroyUnitsOutOfFuelWithExtraData(action, isFastExecute);
+            this._runPhaseRepairUnitByUnitWithExtraData(action, isFastExecute);
+            this._runPhaseRecoverUnitByCoWithExtraData(action, isFastExecute);
+            this._runPhaseActivateMapWeaponWithExtraData(action, isFastExecute);
+            this._runPhaseMainWithExtraData(action, isFastExecute);
 
             this._setPhaseCode(TurnPhaseCode.Main);
+
+            const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_01);
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war                     : this.getWar(),
+                playerArrayAfterAction  : extraData.playerArrayAfterAction,
+                tileArrayAfterAction    : extraData.tileArrayAfterAction,
+                unitArrayAfterAction    : extraData.unitArrayAfterAction,
+                destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
+                isFastExecute,
+            });
         }
-        private _endPhaseWaitBeginTurnWithoutExtraData(): void {
+        private _endPhaseWaitBeginTurnWithoutExtraData(isFastExecute: boolean): void {
             const phaseCode = this.getPhaseCode();
             if (phaseCode !== TurnPhaseCode.WaitBeginTurn) {
                 throw Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithoutExtraData_00);
             }
 
-            this._runPhaseGetFundWithoutExtraData();
-            this._runPhaseConsumeFuelWithoutExtraData();
-            this._runPhaseRepairUnitByTileWithoutExtraData();
-            this._runPhaseDestroyUnitsOutOfFuelWithoutExtraData();
-            this._runPhaseRepairUnitByUnitWithoutExtraData();
-            this._runPhaseRecoverUnitByCoWithoutExtraData();
-            this._runPhaseActivateMapWeaponWithoutExtraData();
-            this._runPhaseMainWithoutExtraData();
+            this._runPhaseGetFundWithoutExtraData(isFastExecute);
+            this._runPhaseConsumeFuelWithoutExtraData(isFastExecute);
+            this._runPhaseRepairUnitByTileWithoutExtraData(isFastExecute);
+            this._runPhaseDestroyUnitsOutOfFuelWithoutExtraData(isFastExecute);
+            this._runPhaseRepairUnitByUnitWithoutExtraData(isFastExecute);
+            this._runPhaseRecoverUnitByCoWithoutExtraData(isFastExecute);
+            this._runPhaseActivateMapWeaponWithoutExtraData(isFastExecute);
+            this._runPhaseMainWithoutExtraData(isFastExecute);
 
             this._setPhaseCode(TurnPhaseCode.Main);
         }
 
-        private _endPhaseMainWithExtraData(action: IWarActionPlayerEndTurn): void {
+        private _endPhaseMainWithExtraData(action: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
             const phaseCode = this.getPhaseCode();
             if (phaseCode !== TurnPhaseCode.Main) {
                 throw Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_00);
             }
 
-            this._runPhaseResetUnitState();
-            this._runPhaseResetVisionForCurrentPlayer();
-            this._runPhaseTickTurnAndPlayerIndexWithExtraData(action);
-            this._runPhaseResetSkillState();
-            this._runPhaseResetVotesForDraw();
-            this._runPhaseUpdateWeatherWithExtraData(action);
-            this._runPhaseResetVisionForNextPlayer();
-            this._runPhaseWaitBeginTurn();
+            this._runPhaseResetUnitStateWithExtraData(action, isFastExecute);
+            this._runPhaseResetVisionForCurrentPlayerWithExtraData(action, isFastExecute);
+            this._runPhaseTickTurnAndPlayerIndexWithExtraData(action, isFastExecute);
+            this._runPhaseResetSkillStateWithExtraData(action, isFastExecute);
+            this._runPhaseResetVotesForDrawWithExtraData(action, isFastExecute);
+            this._runPhaseUpdateWeatherWithExtraData(action, isFastExecute);
+            this._runPhaseResetVisionForNextPlayerWithExtraData(action, isFastExecute);
+            this._runPhaseWaitBeginTurnWithExtraData(action, isFastExecute);
 
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
+
+            const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_01);
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war                     : this.getWar(),
+                playerArrayAfterAction  : extraData.playerArrayAfterAction,
+                tileArrayAfterAction    : extraData.tileArrayAfterAction,
+                unitArrayAfterAction    : extraData.unitArrayAfterAction,
+                destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
+                isFastExecute,
+            });
         }
-        private _endPhaseMainWithoutExtraData(): void {
+        private _endPhaseMainWithoutExtraData(isFastExecute: boolean): void {
             const phaseCode = this.getPhaseCode();
             if (phaseCode !== TurnPhaseCode.Main) {
                 throw Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseMainWithoutExtraData_00);
             }
 
-            this._runPhaseResetUnitState();
-            this._runPhaseResetVisionForCurrentPlayer();
-            this._runPhaseTickTurnAndPlayerIndexWithoutExtraData();
-            this._runPhaseResetSkillState();
-            this._runPhaseResetVotesForDraw();
-            this._runPhaseUpdateWeatherWithoutExtraData();
-            this._runPhaseResetVisionForNextPlayer();
-            this._runPhaseWaitBeginTurn();
+            this._runPhaseResetUnitStateWithoutExtraData(isFastExecute);
+            this._runPhaseResetVisionForCurrentPlayerWithoutExtraData(isFastExecute);
+            this._runPhaseTickTurnAndPlayerIndexWithoutExtraData(isFastExecute);
+            this._runPhaseResetSkillStateWithoutExtraData(isFastExecute);
+            this._runPhaseResetVotesForDrawWithoutExtraData(isFastExecute);
+            this._runPhaseUpdateWeatherWithoutExtraData(isFastExecute);
+            this._runPhaseResetVisionForNextPlayerWithoutExtraData(isFastExecute);
+            this._runPhaseWaitBeginTurnWithoutExtraData(isFastExecute);
 
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
         }
 
-        private _runPhaseGetFundWithExtraData(data: IWarActionSystemBeginTurn): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseGetFundWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
             // nothing to do
         }
-        private _runPhaseGetFundWithoutExtraData(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseGetFundWithoutExtraData(isFastExecute: boolean): void {
             const war = this.getWar();
             const playerIndex = this.getPlayerIndexInTurn();
             const player = war.getPlayer(playerIndex);
@@ -197,10 +219,12 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        private _runPhaseConsumeFuelWithExtraData(data: IWarActionSystemBeginTurn): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseConsumeFuelWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
             // nothing to do
         }
-        private _runPhaseConsumeFuelWithoutExtraData(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseConsumeFuelWithoutExtraData(isFastExecute: boolean): void {
             const playerIndex = this.getPlayerIndexInTurn();
             const turnIndex = this.getTurnIndex();
             const war = this.getWar();
@@ -215,10 +239,11 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        private _runPhaseRepairUnitByTileWithExtraData(data: IWarActionSystemBeginTurn): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseRepairUnitByTileWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
             // nothing to do
         }
-        private _runPhaseRepairUnitByTileWithoutExtraData(): void {
+        private _runPhaseRepairUnitByTileWithoutExtraData(isFastExecute: boolean): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
                 const war           = this.getWar();
@@ -251,7 +276,7 @@ namespace TwnsBwTurnManager {
                         });
                         player.setFund(fund - repairData.cost);
 
-                        if (visibleUnits.has(unit)) {
+                        if ((!isFastExecute) && (visibleUnits.has(unit))) {
                             if (deltaHp) {
                                 gridVisionEffect.showEffectRepair(gridIndex);
                             } else if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
@@ -263,10 +288,11 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        private _runPhaseDestroyUnitsOutOfFuelWithExtraData(data: IWarActionSystemBeginTurn): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseDestroyUnitsOutOfFuelWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
             // nothing to do
         }
-        private _runPhaseDestroyUnitsOutOfFuelWithoutExtraData(): void {
+        private _runPhaseDestroyUnitsOutOfFuelWithoutExtraData(isFastExecute: boolean): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
                 const war       = this.getWar();
@@ -279,16 +305,17 @@ namespace TwnsBwTurnManager {
                     ) {
                         const gridIndex = unit.getGridIndex();
                         fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
-                        WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+                        WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
                     }
                 }
             }
         }
 
-        private _runPhaseRepairUnitByUnitWithExtraData(data: IWarActionSystemBeginTurn): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseRepairUnitByUnitWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
             // nothing to do
         }
-        private _runPhaseRepairUnitByUnitWithoutExtraData(): void {
+        private _runPhaseRepairUnitByUnitWithoutExtraData(isFastExecute: boolean): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
                 const war               = this.getWar();
@@ -322,7 +349,7 @@ namespace TwnsBwTurnManager {
                         });
                         player.setFund(fund - repairData.cost);
 
-                        if (visibleUnits.has(loader)) {
+                        if ((!isFastExecute) && (visibleUnits.has(loader))) {
                             if (deltaHp) {
                                 gridVisionEffect.showEffectRepair(gridIndex);
                             } else if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
@@ -343,7 +370,7 @@ namespace TwnsBwTurnManager {
                             deltaFlareAmmo,
                         });
 
-                        if (visibleUnits.has(loader)) {
+                        if ((!isFastExecute) && (visibleUnits.has(loader))) {
                             if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
                                 gridVisionEffect.showEffectSupply(gridIndex);
                             }
@@ -372,7 +399,7 @@ namespace TwnsBwTurnManager {
                                 });
                                 suppliedUnitIds.add(unitId);
 
-                                if (visibleUnits.has(unit)) {
+                                if ((!isFastExecute) && (visibleUnits.has(unit))) {
                                     if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
                                         gridVisionEffect.showEffectSupply(gridIndex);
                                     }
@@ -384,10 +411,11 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        private _runPhaseRecoverUnitByCoWithExtraData(data: IWarActionSystemBeginTurn): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseRecoverUnitByCoWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
             // nothing to do
         }
-        private _runPhaseRecoverUnitByCoWithoutExtraData(): void {
+        private _runPhaseRecoverUnitByCoWithoutExtraData(isFastExecute: boolean): void {
             const playerIndex   = this.getPlayerIndexInTurn();
             const war           = this.getWar();
             const player        = war.getPlayer(playerIndex);
@@ -445,7 +473,7 @@ namespace TwnsBwTurnManager {
                                 });
                                 player.setFund(currentFund - Math.floor(normalizedRepairHp * productionCost / normalizedMaxHp));
 
-                                if (visibleUnits.has(unit)) {
+                                if ((!isFastExecute) && (visibleUnits.has(unit))) {
                                     gridVisionEffect.showEffectRepair(gridIndex);
                                 }
                             }
@@ -478,7 +506,7 @@ namespace TwnsBwTurnManager {
                                     deltaPrimaryWeaponAmmo  : null,
                                 });
 
-                                if (visibleUnits.has(unit)) {
+                                if ((!isFastExecute) && (visibleUnits.has(unit))) {
                                     if (deltaFuel > 0) {
                                         gridVisionEffect.showEffectSupply(unitGridIndex);
                                     }
@@ -514,7 +542,7 @@ namespace TwnsBwTurnManager {
                                         deltaPrimaryWeaponAmmo,
                                     });
 
-                                    if (visibleUnits.has(unit)) {
+                                    if ((!isFastExecute) && (visibleUnits.has(unit))) {
                                         if (deltaPrimaryWeaponAmmo > 0) {
                                             gridVisionEffect.showEffectSupply(unitGridIndex);
                                         }
@@ -527,24 +555,21 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        private _runPhaseActivateMapWeaponWithExtraData(data: IWarActionSystemBeginTurn): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseActivateMapWeaponWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
             // nothing to do for now.
         }
-        private _runPhaseActivateMapWeaponWithoutExtraData(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseActivateMapWeaponWithoutExtraData(isFastExecute: boolean): void {
             // nothing to do for now.
         }
 
-        private _runPhaseMainWithExtraData(data: IWarActionSystemBeginTurn): void {
-            const extraData = Helpers.getExisted(data.extraData, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_00);
-            WarCommonHelpers.handleCommonExtraDataForWarActions({
-                war                     : this.getWar(),
-                playerArrayAfterAction  : extraData.playerArrayAfterAction,
-                tileArrayAfterAction    : extraData.tileArrayAfterAction,
-                unitArrayAfterAction    : extraData.unitArrayAfterAction,
-                destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
-            });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseMainWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
+            // nothing to do
         }
-        private _runPhaseMainWithoutExtraData(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseMainWithoutExtraData(isFastExecute: boolean): void {
             const war           = this.getWar();
             const playerIndex   = this.getPlayerIndexInTurn();
             const player        = war.getPlayer(playerIndex);
@@ -564,7 +589,12 @@ namespace TwnsBwTurnManager {
             }
         }
 
-        private _runPhaseResetUnitState(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseResetUnitStateWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
+            // nothing to do
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseResetUnitStateWithoutExtraData(isFastExecute: boolean): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
                 const war = this.getWar();
@@ -576,25 +606,28 @@ namespace TwnsBwTurnManager {
                 }
             }
         }
-        private _runPhaseResetVisionForCurrentPlayer(): void {
-            const war           = this.getWar();
-            const playerIndex   = war.getPlayerIndexInTurn();
-            war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseResetVisionForCurrentPlayerWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
+            const war = this.getWar();
+            war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseResetVisionForCurrentPlayerWithoutExtraData(isFastExecute: boolean): void {
+            const war = this.getWar();
+            war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
         }
 
-        private _runPhaseTickTurnAndPlayerIndexWithExtraData(data: IWarActionPlayerEndTurn): void {
-            const war       = this.getWar();
-            const extraData = Helpers.getExisted(data.extraData, ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithExtraData_00);
-            const restTime  = Helpers.getExisted(extraData.restTimeToBootForCurrentPlayer, ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithExtraData_01);
-            war.getPlayerInTurn().setRestTimeToBoot(restTime);
-
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseTickTurnAndPlayerIndexWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
             const info = this._getNextTurnAndPlayerIndex();
             this._setTurnIndex(info.turnIndex);
             this._setPlayerIndexInTurn(info.playerIndex);
             this._setEnterTurnTime(Timer.getServerTimestamp());
-            war.getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
+            this.getWar().getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
         }
-        private _runPhaseTickTurnAndPlayerIndexWithoutExtraData(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseTickTurnAndPlayerIndexWithoutExtraData(isFastExecute: boolean): void {
             const playerIndex   = this.getPlayerIndexInTurn();
             const war           = this.getWar();
             const currTime      = Timer.getServerTimestamp();
@@ -635,7 +668,12 @@ namespace TwnsBwTurnManager {
             war.getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
         }
 
-        private _runPhaseResetSkillState(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseResetSkillStateWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
+            // nothing to do
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseResetSkillStateWithoutExtraData(isFastExecute: boolean): void {
             const war       = this.getWar();
             const player    = war.getPlayerInTurn();
             player.setCoIsDestroyedInTurn(false);
@@ -645,25 +683,46 @@ namespace TwnsBwTurnManager {
                 war.getTileMap().getView().updateCoZone();
             }
         }
-        private _runPhaseResetVotesForDraw(): void {
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseResetVotesForDrawWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
+            // nothing to do
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseResetVotesForDrawWithoutExtraData(isFastExecute: boolean): void {
             const war       = this.getWar();
             const player    = war.getPlayerInTurn();
             player.setHasVotedForDraw(false);
         }
-        private _runPhaseUpdateWeatherWithExtraData(data: IWarActionPlayerEndTurn): void {
-            const war = this.getWar();
-            war.getWeatherManager().updateOnPlayerTurnSwitched();
 
-            WarCommonHelpers.updateTilesAndUnits(war, data.extraData);
-        }
-        private _runPhaseUpdateWeatherWithoutExtraData(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseUpdateWeatherWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
             this.getWar().getWeatherManager().updateOnPlayerTurnSwitched();
         }
-        private _runPhaseResetVisionForNextPlayer(): void {
-            const war = this.getWar();
-            war.updateTilesAndUnitsOnVisibilityChanged();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseUpdateWeatherWithoutExtraData(isFastExecute: boolean): void {
+            this.getWar().getWeatherManager().updateOnPlayerTurnSwitched();
         }
-        private _runPhaseWaitBeginTurn(): void {
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseResetVisionForNextPlayerWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
+            // if (!isFastExecute) {
+            //     this.getWar().updateTilesAndUnitsOnVisibilityChanged();
+            // }
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseResetVisionForNextPlayerWithoutExtraData(isFastExecute: boolean): void {
+            // if (!isFastExecute) {
+            //     this.getWar().updateTilesAndUnitsOnVisibilityChanged();
+            // }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseWaitBeginTurnWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
+            // Do nothing.
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseWaitBeginTurnWithoutExtraData(isFastExecute: boolean): void {
             // Do nothing.
         }
 

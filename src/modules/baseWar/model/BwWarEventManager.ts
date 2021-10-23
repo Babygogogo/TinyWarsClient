@@ -103,6 +103,7 @@ namespace TwnsBwWarEventManager {
                 tileArrayAfterAction    : extraData.tileArrayAfterAction,
                 unitArrayAfterAction    : extraData.unitArrayAfterAction,
                 destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
+                isFastExecute,
             });
         }
         private async _callWarEventWithoutExtraData(warEventId: number, isFastExecute: boolean): Promise<void> { // DONE
@@ -130,7 +131,7 @@ namespace TwnsBwWarEventManager {
             if (action.WeaAddUnit) {
                 await this._callActionAddUnitWithoutExtraData(action.WeaAddUnit, isFastExecute);
             } else if (action.WeaSetPlayerAliveState) {
-                await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState);
+                await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState, isFastExecute);
             } else if (action.WeaDialogue) {
                 await this._callActionDialogueWithoutExtraData(action.WeaDialogue, isFastExecute);
             } else {
@@ -140,9 +141,11 @@ namespace TwnsBwWarEventManager {
             // TODO add more actions.
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionAddUnitWithExtraData(action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<void> {
             // nothing to do
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionAddUnitWithoutExtraData(action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<void> {
             const unitArray = action.unitArray;
             if ((unitArray == null) || (!unitArray.length)) {
@@ -211,10 +214,12 @@ namespace TwnsBwWarEventManager {
             }
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionSetPlayerAliveStateWithExtraData(action: WarEvent.IWeaSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
             // nothing to do
         }
-        private async _callActionSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaSetPlayerAliveState): Promise<void> {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
             const war = this._getWar();
             const playerIndex = action.playerIndex;
             if ((playerIndex == null) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {

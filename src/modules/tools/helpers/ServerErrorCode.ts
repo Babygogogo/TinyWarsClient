@@ -2756,6 +2756,17 @@ export const enum ServerErrorCode {
     WarCommonHelpers_GetErrorCodeForUnitDataIgnoringUnitId_0018,
     WarCommonHelpers_GetErrorCodeForUnitDataIgnoringUnitId_0019,
 
+    WarCommonHelpers_SendMessageForExecuteWarAction_0000,
+    WarCommonHelpers_SendMessageForExecuteWarAction_0001,
+    WarCommonHelpers_SendMessageForExecuteWarAction_0002,
+    WarCommonHelpers_SendMessageForExecuteWarAction_0003,
+    WarCommonHelpers_SendMessageForExecuteWarAction_0004,
+    WarCommonHelpers_SendMessageForExecuteWarAction_0005,
+    WarCommonHelpers_SendMessageForExecuteWarAction_0006,
+    WarCommonHelpers_SendMessageForExecuteWarAction_0007,
+    WarCommonHelpers_SendMessageForExecuteWarAction_0008,
+    WarCommonHelpers_SendMessageForExecuteWarAction_0009,
+
     WarDestructionHelpers_DestroyUnitOnMap_0000,
     WarDestructionHelpers_DestroyUnitOnMap_0001,
     WarDestructionHelpers_DestroyUnitOnMap_0002,
