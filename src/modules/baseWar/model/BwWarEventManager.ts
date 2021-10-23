@@ -13,12 +13,13 @@
 // import TwnsBwUnitMap        from "./BwUnitMap";
 // import TwnsBwWar            from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwWarEventManager {
     import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
     import IDataForWarEventCalledCount      = ProtoTypes.WarSerialization.IDataForWarEventCalledCount;
     import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
     import WarEvent                         = ProtoTypes.WarEvent;
-    import IExtraDataForSystemCallWarEvent  = ProtoTypes.WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent;
+    import IWarActionSystemCallWarEvent     = ProtoTypes.WarAction.IWarActionSystemCallWarEvent;
     import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
     import BwUnitMap                        = TwnsBwUnitMap.BwUnitMap;
     import BwWar                            = TwnsBwWar.BwWar;
@@ -85,38 +86,64 @@ namespace TwnsBwWarEventManager {
             return Helpers.getDefined(this._calledCountList, ClientErrorCode.BwWarEventManager_GetCalledCountList_00);
         }
 
-        public async callWarEvent(warEventId: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent[]> { // DONE
-            const event = this.getWarEvent(warEventId);
-            if (event == null) {
-                throw Helpers.newError(`Empty event.`);
-            }
-
-            const extraDataList : IExtraDataForSystemCallWarEvent[] = [];
-            const actionIdArray = event.actionIdArray || [];
-            for (let index = 0; index < actionIdArray.length; ++index) {
-                const extraData = await this._callWarAction(actionIdArray[index], index, isFastExecute);
-                if (extraData) {
-                    extraDataList.push(extraData);
-                }
-            }
-
-            return extraDataList;
+        public async callWarEvent(action: IWarActionSystemCallWarEvent, isFastExecute: boolean): Promise<void> {
+            this._getWar().getIsExecuteActionsWithExtraData()
+                ? await this._callWarEventWithExtraData(action, isFastExecute)
+                : await this._callWarEventWithoutExtraData(Helpers.getExisted(action.warEventId, ClientErrorCode.BwWarEventManager_CallWarEvent_00), isFastExecute);
         }
-        private async _callWarAction(warEventActionId: number, indexForActionIdList: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | null> {
+        private async _callWarEventWithExtraData(action: IWarActionSystemCallWarEvent, isFastExecute: boolean): Promise<void> {
+            for (const actionId of this.getWarEvent(Helpers.getExisted(action.warEventId, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_00)).actionIdArray || []) {
+                await this._callWarActionWithExtraData(actionId, isFastExecute);
+            }
+
+            const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_01);
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war                     : this._getWar(),
+                playerArrayAfterAction  : extraData.playerArrayAfterAction,
+                tileArrayAfterAction    : extraData.tileArrayAfterAction,
+                unitArrayAfterAction    : extraData.unitArrayAfterAction,
+                destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
+            });
+        }
+        private async _callWarEventWithoutExtraData(warEventId: number, isFastExecute: boolean): Promise<void> { // DONE
+            for (const actionId of this.getWarEvent(warEventId).actionIdArray || []) {
+                await this._callWarActionWithoutExtraData(actionId, isFastExecute);
+            }
+        }
+
+        private async _callWarActionWithExtraData(warEventActionId: number, isFastExecute: boolean): Promise<void> {
             const action = this.getWarEventAction(warEventActionId);
             if (action.WeaAddUnit) {
-                return await this._callActionAddUnit(indexForActionIdList, action.WeaAddUnit, isFastExecute);
+                await this._callActionAddUnitWithExtraData(action.WeaAddUnit, isFastExecute);
             } else if (action.WeaSetPlayerAliveState) {
-                return await this._callActionSetPlayerAliveState(action.WeaSetPlayerAliveState);
+                await this._callActionSetPlayerAliveStateWithExtraData(action.WeaSetPlayerAliveState, isFastExecute);
             } else if (action.WeaDialogue) {
-                return await this._callActionDialogue(action.WeaDialogue, isFastExecute);
+                await this._callActionDialogueWithExtraData(action.WeaDialogue, isFastExecute);
             } else {
                 throw Helpers.newError(`Invalid action.`);
             }
 
             // TODO add more actions.
         }
-        private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | null> {
+        private async _callWarActionWithoutExtraData(warEventActionId: number, isFastExecute: boolean): Promise<void> {
+            const action = this.getWarEventAction(warEventActionId);
+            if (action.WeaAddUnit) {
+                await this._callActionAddUnitWithoutExtraData(action.WeaAddUnit, isFastExecute);
+            } else if (action.WeaSetPlayerAliveState) {
+                await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState);
+            } else if (action.WeaDialogue) {
+                await this._callActionDialogueWithoutExtraData(action.WeaDialogue, isFastExecute);
+            } else {
+                throw Helpers.newError(`Invalid action.`);
+            }
+
+            // TODO add more actions.
+        }
+
+        private async _callActionAddUnitWithExtraData(action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<void> {
+            // nothing to do
+        }
+        private async _callActionAddUnitWithoutExtraData(action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<void> {
             const unitArray = action.unitArray;
             if ((unitArray == null) || (!unitArray.length)) {
                 throw Helpers.newError(`Empty unitArray.`);
@@ -128,7 +155,6 @@ namespace TwnsBwWarEventManager {
             const playerManager     = war.getPlayerManager();
             const configVersion     = war.getConfigVersion();
             const mapSize           = unitMap.getMapSize();
-            const resultingUnitList : ProtoTypes.WarSerialization.ISerialUnit[] = [];
             for (const data of unitArray) {
                 const unitData = Helpers.getExisted(data.unitData);
                 if (unitData.loaderUnitId != null) {
@@ -179,19 +205,16 @@ namespace TwnsBwWarEventManager {
                 const unit = new TwnsBwUnit.BwUnit();
                 unit.init(revisedUnitData, configVersion);
 
-                resultingUnitList.push(revisedUnitData);
                 unit.startRunning(war);
                 unitMap.setNextUnitId(unitId + 1);
                 unitMap.setUnitOnMap(unit);
             }
-            return {
-                indexForActionIdList,
-                ExtraDataForWeaAddUnit: {
-                    unitList    : resultingUnitList,
-                },
-            };
         }
-        private async _callActionSetPlayerAliveState(action: WarEvent.IWeaSetPlayerAliveState): Promise<null> {
+
+        private async _callActionSetPlayerAliveStateWithExtraData(action: WarEvent.IWeaSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
+            // nothing to do
+        }
+        private async _callActionSetPlayerAliveStateWithoutExtraData(action: WarEvent.IWeaSetPlayerAliveState): Promise<void> {
             const war = this._getWar();
             const playerIndex = action.playerIndex;
             if ((playerIndex == null) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
@@ -210,18 +233,29 @@ namespace TwnsBwWarEventManager {
             if (player) {
                 player.setAliveState(playerAliveState);
             }
-
-            return null;
         }
-        private async _callActionDialogue(action: WarEvent.IWeaDialogue, isFast: boolean): Promise<null> {
+
+        private async _callActionDialogueWithExtraData(action: WarEvent.IWeaDialogue, isFast: boolean): Promise<void> {
             if (isFast) {
-                return null;
+                return;
             }
 
-            return new Promise<null>(resolve => {
+            return new Promise<void>(resolve => {
                 TwnsBwDialoguePanel.BwDialoguePanel.show({
                     actionData      : action,
-                    callbackOnClose : () => resolve(null),
+                    callbackOnClose : () => resolve(),
+                });
+            });
+        }
+        private async _callActionDialogueWithoutExtraData(action: WarEvent.IWeaDialogue, isFast: boolean): Promise<void> {
+            if (isFast) {
+                return;
+            }
+
+            return new Promise<void>(resolve => {
+                TwnsBwDialoguePanel.BwDialoguePanel.show({
+                    actionData      : action,
+                    callbackOnClose : () => resolve(),
                 });
             });
         }

@@ -179,7 +179,7 @@ namespace TwnsMpwWar {
             }
         }
 
-        public getIsRunTurnPhaseWithExtraData(): boolean {
+        public getIsExecuteActionsWithExtraData(): boolean {
             return true;
         }
 

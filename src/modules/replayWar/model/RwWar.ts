@@ -268,7 +268,7 @@ namespace TwnsRwWar {
             return [Types.BootTimerType.NoBoot];
         }
 
-        public getIsRunTurnPhaseWithExtraData(): boolean {
+        public getIsExecuteActionsWithExtraData(): boolean {
             return false;
         }
 

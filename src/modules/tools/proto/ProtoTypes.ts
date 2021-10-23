@@ -9801,14 +9801,215 @@ export declare class WarAction implements IWarAction {
 
 export declare namespace WarAction {
 
+    /** Properties of a WarActionSystemBeginTurn. */
+    interface IWarActionSystemBeginTurn {
+
+        /** WarActionSystemBeginTurn extraData */
+        extraData?: (WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn|null);
+    }
+
+    /** Represents a WarActionSystemBeginTurn. */
+    class WarActionSystemBeginTurn implements IWarActionSystemBeginTurn {
+
+        /**
+         * Constructs a new WarActionSystemBeginTurn.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionSystemBeginTurn);
+
+        /** WarActionSystemBeginTurn extraData. */
+        public extraData?: (WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn|null);
+
+        /**
+         * Creates a new WarActionSystemBeginTurn instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionSystemBeginTurn instance
+         */
+        public static create(properties?: WarAction.IWarActionSystemBeginTurn): WarAction.WarActionSystemBeginTurn;
+
+        /**
+         * Encodes the specified WarActionSystemBeginTurn message. Does not implicitly {@link WarAction.WarActionSystemBeginTurn.verify|verify} messages.
+         * @param message WarActionSystemBeginTurn message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionSystemBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionSystemBeginTurn message, length delimited. Does not implicitly {@link WarAction.WarActionSystemBeginTurn.verify|verify} messages.
+         * @param message WarActionSystemBeginTurn message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionSystemBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionSystemBeginTurn message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionSystemBeginTurn
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemBeginTurn;
+
+        /**
+         * Decodes a WarActionSystemBeginTurn message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionSystemBeginTurn
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemBeginTurn;
+
+        /**
+         * Verifies a WarActionSystemBeginTurn message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionSystemBeginTurn message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionSystemBeginTurn
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemBeginTurn;
+
+        /**
+         * Creates a plain object from a WarActionSystemBeginTurn message. Also converts values to other types if specified.
+         * @param message WarActionSystemBeginTurn
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionSystemBeginTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionSystemBeginTurn to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionSystemBeginTurn {
+
+        /** Properties of an ExtraDataForSystemBeginTurn. */
+        interface IExtraDataForSystemBeginTurn {
+
+            /** ExtraDataForSystemBeginTurn playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+
+            /** ExtraDataForSystemBeginTurn unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForSystemBeginTurn destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForSystemBeginTurn tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+        }
+
+        /** Represents an ExtraDataForSystemBeginTurn. */
+        class ExtraDataForSystemBeginTurn implements IExtraDataForSystemBeginTurn {
+
+            /**
+             * Constructs a new ExtraDataForSystemBeginTurn.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn);
+
+            /** ExtraDataForSystemBeginTurn playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
+
+            /** ExtraDataForSystemBeginTurn unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForSystemBeginTurn destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForSystemBeginTurn tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /**
+             * Creates a new ExtraDataForSystemBeginTurn instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemBeginTurn instance
+             */
+            public static create(properties?: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn): WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn;
+
+            /**
+             * Encodes the specified ExtraDataForSystemBeginTurn message. Does not implicitly {@link WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn.verify|verify} messages.
+             * @param message ExtraDataForSystemBeginTurn message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemBeginTurn message, length delimited. Does not implicitly {@link WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn.verify|verify} messages.
+             * @param message ExtraDataForSystemBeginTurn message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemBeginTurn message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemBeginTurn
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn;
+
+            /**
+             * Decodes an ExtraDataForSystemBeginTurn message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemBeginTurn
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn;
+
+            /**
+             * Verifies an ExtraDataForSystemBeginTurn message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemBeginTurn message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemBeginTurn
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemBeginTurn message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemBeginTurn
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemBeginTurn to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WarActionSystemCallWarEvent. */
     interface IWarActionSystemCallWarEvent {
 
         /** WarActionSystemCallWarEvent warEventId */
         warEventId?: (number|null);
 
-        /** WarActionSystemCallWarEvent extraDataList */
-        extraDataList?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent[]|null);
+        /** WarActionSystemCallWarEvent extraData */
+        extraData?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent|null);
     }
 
     /** Represents a WarActionSystemCallWarEvent. */
@@ -9823,8 +10024,8 @@ export declare namespace WarAction {
         /** WarActionSystemCallWarEvent warEventId. */
         public warEventId: number;
 
-        /** WarActionSystemCallWarEvent extraDataList. */
-        public extraDataList: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent[];
+        /** WarActionSystemCallWarEvent extraData. */
+        public extraData?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent|null);
 
         /**
          * Creates a new WarActionSystemCallWarEvent instance using the specified properties.
@@ -9899,104 +10100,20 @@ export declare namespace WarAction {
 
     namespace WarActionSystemCallWarEvent {
 
-        /** Properties of an ExtraDataForWeaAddUnit. */
-        interface IExtraDataForWeaAddUnit {
-
-            /** ExtraDataForWeaAddUnit unitList */
-            unitList?: (WarSerialization.ISerialUnit[]|null);
-        }
-
-        /** Represents an ExtraDataForWeaAddUnit. */
-        class ExtraDataForWeaAddUnit implements IExtraDataForWeaAddUnit {
-
-            /**
-             * Constructs a new ExtraDataForWeaAddUnit.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit);
-
-            /** ExtraDataForWeaAddUnit unitList. */
-            public unitList: WarSerialization.ISerialUnit[];
-
-            /**
-             * Creates a new ExtraDataForWeaAddUnit instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns ExtraDataForWeaAddUnit instance
-             */
-            public static create(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
-
-            /**
-             * Encodes the specified ExtraDataForWeaAddUnit message. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit.verify|verify} messages.
-             * @param message ExtraDataForWeaAddUnit message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified ExtraDataForWeaAddUnit message, length delimited. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit.verify|verify} messages.
-             * @param message ExtraDataForWeaAddUnit message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes an ExtraDataForWeaAddUnit message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns ExtraDataForWeaAddUnit
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
-
-            /**
-             * Decodes an ExtraDataForWeaAddUnit message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns ExtraDataForWeaAddUnit
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
-
-            /**
-             * Verifies an ExtraDataForWeaAddUnit message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates an ExtraDataForWeaAddUnit message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns ExtraDataForWeaAddUnit
-             */
-            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
-
-            /**
-             * Creates a plain object from an ExtraDataForWeaAddUnit message. Also converts values to other types if specified.
-             * @param message ExtraDataForWeaAddUnit
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this ExtraDataForWeaAddUnit to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
         /** Properties of an ExtraDataForSystemCallWarEvent. */
         interface IExtraDataForSystemCallWarEvent {
 
-            /** ExtraDataForSystemCallWarEvent indexForActionIdList */
-            indexForActionIdList?: (number|null);
+            /** ExtraDataForSystemCallWarEvent playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForSystemCallWarEvent ExtraDataForWeaAddUnit */
-            ExtraDataForWeaAddUnit?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit|null);
+            /** ExtraDataForSystemCallWarEvent unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForSystemCallWarEvent destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForSystemCallWarEvent tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
         }
 
         /** Represents an ExtraDataForSystemCallWarEvent. */
@@ -10008,11 +10125,17 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent);
 
-            /** ExtraDataForSystemCallWarEvent indexForActionIdList. */
-            public indexForActionIdList: number;
+            /** ExtraDataForSystemCallWarEvent playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForSystemCallWarEvent ExtraDataForWeaAddUnit. */
-            public ExtraDataForWeaAddUnit?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit|null);
+            /** ExtraDataForSystemCallWarEvent unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForSystemCallWarEvent destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForSystemCallWarEvent tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
 
             /**
              * Creates a new ExtraDataForSystemCallWarEvent instance using the specified properties.
@@ -10342,207 +10465,6 @@ export declare namespace WarAction {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a WarActionSystemBeginTurn. */
-    interface IWarActionSystemBeginTurn {
-
-        /** WarActionSystemBeginTurn extraData */
-        extraData?: (WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn|null);
-    }
-
-    /** Represents a WarActionSystemBeginTurn. */
-    class WarActionSystemBeginTurn implements IWarActionSystemBeginTurn {
-
-        /**
-         * Constructs a new WarActionSystemBeginTurn.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: WarAction.IWarActionSystemBeginTurn);
-
-        /** WarActionSystemBeginTurn extraData. */
-        public extraData?: (WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn|null);
-
-        /**
-         * Creates a new WarActionSystemBeginTurn instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns WarActionSystemBeginTurn instance
-         */
-        public static create(properties?: WarAction.IWarActionSystemBeginTurn): WarAction.WarActionSystemBeginTurn;
-
-        /**
-         * Encodes the specified WarActionSystemBeginTurn message. Does not implicitly {@link WarAction.WarActionSystemBeginTurn.verify|verify} messages.
-         * @param message WarActionSystemBeginTurn message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: WarAction.IWarActionSystemBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified WarActionSystemBeginTurn message, length delimited. Does not implicitly {@link WarAction.WarActionSystemBeginTurn.verify|verify} messages.
-         * @param message WarActionSystemBeginTurn message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: WarAction.IWarActionSystemBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a WarActionSystemBeginTurn message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns WarActionSystemBeginTurn
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemBeginTurn;
-
-        /**
-         * Decodes a WarActionSystemBeginTurn message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns WarActionSystemBeginTurn
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemBeginTurn;
-
-        /**
-         * Verifies a WarActionSystemBeginTurn message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a WarActionSystemBeginTurn message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns WarActionSystemBeginTurn
-         */
-        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemBeginTurn;
-
-        /**
-         * Creates a plain object from a WarActionSystemBeginTurn message. Also converts values to other types if specified.
-         * @param message WarActionSystemBeginTurn
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: WarAction.WarActionSystemBeginTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this WarActionSystemBeginTurn to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    namespace WarActionSystemBeginTurn {
-
-        /** Properties of an ExtraDataForSystemBeginTurn. */
-        interface IExtraDataForSystemBeginTurn {
-
-            /** ExtraDataForSystemBeginTurn playerData */
-            playerData?: (WarSerialization.ISerialPlayer|null);
-
-            /** ExtraDataForSystemBeginTurn unitArrayAfterAction */
-            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForSystemBeginTurn destroyedUnitIdArray */
-            destroyedUnitIdArray?: (number[]|null);
-
-            /** ExtraDataForSystemBeginTurn tileArrayAfterAction */
-            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
-        }
-
-        /** Represents an ExtraDataForSystemBeginTurn. */
-        class ExtraDataForSystemBeginTurn implements IExtraDataForSystemBeginTurn {
-
-            /**
-             * Constructs a new ExtraDataForSystemBeginTurn.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn);
-
-            /** ExtraDataForSystemBeginTurn playerData. */
-            public playerData?: (WarSerialization.ISerialPlayer|null);
-
-            /** ExtraDataForSystemBeginTurn unitArrayAfterAction. */
-            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForSystemBeginTurn destroyedUnitIdArray. */
-            public destroyedUnitIdArray: number[];
-
-            /** ExtraDataForSystemBeginTurn tileArrayAfterAction. */
-            public tileArrayAfterAction: WarSerialization.ISerialTile[];
-
-            /**
-             * Creates a new ExtraDataForSystemBeginTurn instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns ExtraDataForSystemBeginTurn instance
-             */
-            public static create(properties?: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn): WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn;
-
-            /**
-             * Encodes the specified ExtraDataForSystemBeginTurn message. Does not implicitly {@link WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn.verify|verify} messages.
-             * @param message ExtraDataForSystemBeginTurn message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified ExtraDataForSystemBeginTurn message, length delimited. Does not implicitly {@link WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn.verify|verify} messages.
-             * @param message ExtraDataForSystemBeginTurn message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes an ExtraDataForSystemBeginTurn message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns ExtraDataForSystemBeginTurn
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn;
-
-            /**
-             * Decodes an ExtraDataForSystemBeginTurn message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns ExtraDataForSystemBeginTurn
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn;
-
-            /**
-             * Verifies an ExtraDataForSystemBeginTurn message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates an ExtraDataForSystemBeginTurn message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns ExtraDataForSystemBeginTurn
-             */
-            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn;
-
-            /**
-             * Creates a plain object from an ExtraDataForSystemBeginTurn message. Also converts values to other types if specified.
-             * @param message ExtraDataForSystemBeginTurn
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: WarAction.WarActionSystemBeginTurn.ExtraDataForSystemBeginTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this ExtraDataForSystemBeginTurn to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
     }
 
     /** Properties of a WarActionSystemEndTurn. */

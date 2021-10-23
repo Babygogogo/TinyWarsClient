@@ -512,6 +512,7 @@ namespace WarActionExecutor {
         }
 
         war.getTurnManager().endPhaseWaitBeginTurn(action);
+        war.updateTilesAndUnitsOnVisibilityChanged();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -524,7 +525,7 @@ namespace WarActionExecutor {
         const warEventManager   = war.getWarEventManager();
         const warEventId        = Helpers.getExisted(action.warEventId);
         warEventManager.updateWarEventCalledCountOnCall(warEventId);
-        await warEventManager.callWarEvent(warEventId, true);
+        await warEventManager.callWarEvent(action, true);
     }
     async function normalExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
         const desc = await war.getDescForExeSystemCallWarEvent(action);
@@ -533,38 +534,7 @@ namespace WarActionExecutor {
         const warEventManager   = war.getWarEventManager();
         const warEventId        = Helpers.getExisted(action.warEventId);
         warEventManager.updateWarEventCalledCountOnCall(warEventId);
-
-        const extraDataList = action.extraDataList;
-        if (extraDataList == null) {
-            await warEventManager.callWarEvent(warEventId, false);
-        } else {
-            const unitMap       = war.getUnitMap();
-            const configVersion = war.getConfigVersion();
-            const actionIdArray = Helpers.getExisted(warEventManager.getWarEvent(warEventId).actionIdArray);
-            for (let index = 0; index < actionIdArray.length; ++index) {
-                const warEventAction = warEventManager.getWarEventAction(actionIdArray[index]);
-                if (warEventAction.WeaAddUnit) {
-                    for (const unitData of extraDataList.find(v => v.indexForActionIdList === index)?.ExtraDataForWeaAddUnit?.unitList || []) {
-                        const unit = new BwUnit();
-                        unit.init(unitData, configVersion);
-                        unit.startRunning(war);
-                        unit.startRunningView();
-                        unitMap.setUnitOnMap(unit);
-                        unitMap.setNextUnitId(Math.max(Helpers.getExisted(unitData.unitId) + 1, unitMap.getNextUnitId()));
-                    }
-
-                } else if (warEventAction.WeaSetPlayerAliveState) {
-                    const actionData    = warEventAction.WeaSetPlayerAliveState;
-                    const player        = war.getPlayer(Helpers.getExisted(actionData.playerIndex));
-                    if (player != null) {
-                        player.setAliveState(Helpers.getExisted(actionData.playerAliveState));
-                    }
-
-                } else {
-                    // TODO add executors for other actions.
-                }
-            }
-        }
+        await warEventManager.callWarEvent(action, false);
 
         war.updateTilesAndUnitsOnVisibilityChanged();
     }

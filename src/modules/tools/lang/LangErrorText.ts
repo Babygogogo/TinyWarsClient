@@ -192,6 +192,10 @@ namespace TwnsLangErrorText {
             `存在未被引用的事件动作`,
             `There is a redundant event action.`,
         ],
+        [ClientErrorCode.WarEventFullDataValidation11]: [
+            `存在未被引用的事件条件节点`,
+            `There is a redundant event condition node.`,
+        ],
         [ClientErrorCode.WarEventFullDataValidation12]: [
             `存在未被引用的事件`,
             `There is a redundant event.`,

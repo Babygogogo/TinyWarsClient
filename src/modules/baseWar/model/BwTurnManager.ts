@@ -94,12 +94,12 @@ namespace TwnsBwTurnManager {
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public endPhaseWaitBeginTurn(action: IWarActionSystemBeginTurn): void {
-            this.getWar().getIsRunTurnPhaseWithExtraData()
+            this.getWar().getIsExecuteActionsWithExtraData()
                 ? this._endPhaseWaitBeginTurnWithExtraData(action)
                 : this._endPhaseWaitBeginTurnWithoutExtraData();
         }
         public endPhaseMain(action: IWarActionPlayerEndTurn): void {
-            this.getWar().getIsRunTurnPhaseWithExtraData()
+            this.getWar().getIsExecuteActionsWithExtraData()
                 ? this._endPhaseMainWithExtraData(action)
                 : this._endPhaseMainWithoutExtraData();
         }
@@ -535,83 +535,14 @@ namespace TwnsBwTurnManager {
         }
 
         private _runPhaseMainWithExtraData(data: IWarActionSystemBeginTurn): void {
-            const war           = this.getWar();
-            const playerIndex   = war.getPlayerIndexInTurn();
-            const configVersion = war.getConfigVersion();
-            const extraData     = Helpers.getExisted(data.extraData, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_00);
-
-            {
-                const playerData = Helpers.getExisted(extraData.playerData, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_01);
-                if (playerData.playerIndex !== playerIndex) {
-                    throw Helpers.newError(`Invalid playerData.playerIndex: ${playerData.playerIndex}`, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_02);
-                }
-                war.getPlayer(playerIndex).init(playerData, configVersion);
-            }
-
-            const unitMap           = war.getUnitMap();
-            const gridVisualEffect  = war.getGridVisualEffect();
-            for (const unitData of extraData.unitArrayAfterAction ?? []) {
-                const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_03);
-                const existingUnit  = unitMap.getUnitById(unitId);
-                if (existingUnit) {
-                    const existingUnitData = existingUnit.serialize();
-                    existingUnit.init(unitData, configVersion);
-                    existingUnit.startRunning(war);
-                    existingUnit.startRunningView();
-
-                    const gridIndex = existingUnit.getGridIndex();
-                    if (WarCommonHelpers.checkIsUnitRepaired(existingUnitData, unitData)) {
-                        gridVisualEffect.showEffectRepair(gridIndex);
-                    } else if (WarCommonHelpers.checkIsUnitSupplied(existingUnitData, unitData, configVersion)) {
-                        gridVisualEffect.showEffectSupply(gridIndex);
-                    }
-
-                } else {
-                    const unit = new TwnsBwUnit.BwUnit();
-                    unit.init(unitData, configVersion);
-
-                    const isOnMap = unit.getLoaderUnitId() == null;
-                    if (isOnMap) {
-                        unitMap.setUnitOnMap(unit);
-                    } else {
-                        unitMap.setUnitLoaded(unit);
-                    }
-                    unit.startRunning(war);
-                    unit.startRunningView();
-                }
-            }
-
-            let isShownExplosionEffect = false;
-            for (const unitId of extraData.destroyedUnitIdArray ?? []) {
-                const unit = unitMap.getUnitById(unitId);
-                if ((unit) && (unit.getLoaderUnitId() == null)) {
-                    const gridIndex = unit.getGridIndex();
-                    WarDestructionHelpers.removeUnitOnMap(war, gridIndex);
-
-                    gridVisualEffect.showEffectExplosion(gridIndex);
-                    isShownExplosionEffect = true;
-                }
-            }
-
-            const tileMap = war.getTileMap();
-            for (const tileData of extraData.tileArrayAfterAction ?? []) {
-                const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_04);
-                const tile              = tileMap.getTile(gridIndex);
-                const hasHpBeforeAction = tile.getMaxHp() != null;
-                tile.init(tileData, configVersion);
-                tile.startRunning(war);
-                tile.startRunningView();
-
-                if ((hasHpBeforeAction) && (tile.getMaxHp() == null)) {
-                    gridVisualEffect.showEffectExplosion(gridIndex);
-                    isShownExplosionEffect = true;
-                }
-            }
-
-            if (isShownExplosionEffect) {
-                war.getView().showVibration();
-                SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
-            }
+            const extraData = Helpers.getExisted(data.extraData, ClientErrorCode.BwTurnManager_RunPhaseMainWithExtraData_00);
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war                     : this.getWar(),
+                playerArrayAfterAction  : extraData.playerArrayAfterAction,
+                tileArrayAfterAction    : extraData.tileArrayAfterAction,
+                unitArrayAfterAction    : extraData.unitArrayAfterAction,
+                destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
+            });
         }
         private _runPhaseMainWithoutExtraData(): void {
             const war           = this.getWar();

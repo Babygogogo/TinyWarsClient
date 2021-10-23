@@ -156,7 +156,7 @@ namespace TwnsSpwWar {
             return this._warEventManager;
         }
 
-        public getIsRunTurnPhaseWithExtraData(): boolean {
+        public getIsExecuteActionsWithExtraData(): boolean {
             return false;
         }
 

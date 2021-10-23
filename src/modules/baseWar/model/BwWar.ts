@@ -55,7 +55,7 @@ namespace TwnsBwWar {
         public abstract getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager;
         public abstract getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager;
         public abstract getSettingsBootTimerParams(): number[];
-        public abstract getIsRunTurnPhaseWithExtraData(): boolean;
+        public abstract getIsExecuteActionsWithExtraData(): boolean;
         public abstract updateTilesAndUnitsOnVisibilityChanged(): void;
         public abstract getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | null>;
         public abstract getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | null>;

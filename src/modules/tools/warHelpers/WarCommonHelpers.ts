@@ -654,6 +654,86 @@ namespace WarCommonHelpers {
         }
     }
 
+    export function handleCommonExtraDataForWarActions({ war, playerArrayAfterAction, tileArrayAfterAction, unitArrayAfterAction, destroyedUnitIdArray }: {
+        war                     : TwnsBwWar.BwWar;
+        playerArrayAfterAction  : Types.Undefinable<WarSerialization.ISerialPlayer[]>;
+        tileArrayAfterAction    : Types.Undefinable<WarSerialization.ISerialTile[]>;
+        unitArrayAfterAction    : Types.Undefinable<WarSerialization.ISerialUnit[]>;
+        destroyedUnitIdArray    : Types.Undefinable<number[]>;
+    }): void {
+        const configVersion = war.getConfigVersion();
+        for (const playerData of playerArrayAfterAction ?? []) {
+            const player = war.getPlayer(Helpers.getExisted(playerData.playerIndex, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_00));
+            player.init(playerData, configVersion);
+            player.startRunning(war);
+        }
+
+        const unitMap           = war.getUnitMap();
+        const gridVisualEffect  = war.getGridVisualEffect();
+        for (const unitData of unitArrayAfterAction ?? []) {
+            const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_01);
+            const existingUnit  = unitMap.getUnitById(unitId);
+            if (existingUnit) {
+                const existingUnitData = existingUnit.serialize();
+                existingUnit.init(unitData, configVersion);
+                existingUnit.startRunning(war);
+                existingUnit.startRunningView();
+
+                const gridIndex = existingUnit.getGridIndex();
+                if (checkIsUnitRepaired(existingUnitData, unitData)) {
+                    gridVisualEffect.showEffectRepair(gridIndex);
+                } else if (checkIsUnitSupplied(existingUnitData, unitData, configVersion)) {
+                    gridVisualEffect.showEffectSupply(gridIndex);
+                }
+
+            } else {
+                const unit = new TwnsBwUnit.BwUnit();
+                unit.init(unitData, configVersion);
+
+                const isOnMap = unit.getLoaderUnitId() == null;
+                if (isOnMap) {
+                    unitMap.setUnitOnMap(unit);
+                } else {
+                    unitMap.setUnitLoaded(unit);
+                }
+                unit.startRunning(war);
+                unit.startRunningView();
+            }
+        }
+
+        let isShownExplosionEffect = false;
+        for (const unitId of destroyedUnitIdArray ?? []) {
+            const unit = unitMap.getUnitById(unitId);
+            if ((unit) && (unit.getLoaderUnitId() == null)) {
+                const gridIndex = unit.getGridIndex();
+                WarDestructionHelpers.removeUnitOnMap(war, gridIndex);
+
+                gridVisualEffect.showEffectExplosion(gridIndex);
+                isShownExplosionEffect = true;
+            }
+        }
+
+        const tileMap = war.getTileMap();
+        for (const tileData of tileArrayAfterAction ?? []) {
+            const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_02);
+            const tile              = tileMap.getTile(gridIndex);
+            const hasHpBeforeAction = tile.getMaxHp() != null;
+            tile.init(tileData, configVersion);
+            tile.startRunning(war);
+            tile.startRunningView();
+
+            if ((hasHpBeforeAction) && (tile.getMaxHp() == null)) {
+                gridVisualEffect.showEffectExplosion(gridIndex);
+                isShownExplosionEffect = true;
+            }
+        }
+
+        if (isShownExplosionEffect) {
+            war.getView().showVibration();
+            SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
+        }
+    }
+
     export function getAdjacentPlasmas(tileMap: TwnsBwTileMap.BwTileMap, origin: GridIndex): GridIndex[] {
         const plasmas           = [origin];
         const mapSize           = tileMap.getMapSize();
