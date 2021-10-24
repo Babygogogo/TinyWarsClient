@@ -9907,6 +9907,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemBeginTurn tileArrayAfterAction */
             tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForSystemBeginTurn nextUnitId */
+            nextUnitId?: (number|null);
         }
 
         /** Represents an ExtraDataForSystemBeginTurn. */
@@ -9929,6 +9932,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemBeginTurn tileArrayAfterAction. */
             public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForSystemBeginTurn nextUnitId. */
+            public nextUnitId: number;
 
             /**
              * Creates a new ExtraDataForSystemBeginTurn instance using the specified properties.
@@ -10114,6 +10120,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemCallWarEvent tileArrayAfterAction */
             tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForSystemCallWarEvent nextUnitId */
+            nextUnitId?: (number|null);
         }
 
         /** Represents an ExtraDataForSystemCallWarEvent. */
@@ -10136,6 +10145,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemCallWarEvent tileArrayAfterAction. */
             public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForSystemCallWarEvent nextUnitId. */
+            public nextUnitId: number;
 
             /**
              * Creates a new ExtraDataForSystemCallWarEvent instance using the specified properties.
@@ -10489,6 +10501,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemEndTurn tileArrayAfterAction */
             tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForSystemEndTurn nextUnitId */
+            nextUnitId?: (number|null);
         }
 
         /** Represents an ExtraDataForSystemEndTurn. */
@@ -10511,6 +10526,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemEndTurn tileArrayAfterAction. */
             public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForSystemEndTurn nextUnitId. */
+            public nextUnitId: number;
 
             /**
              * Creates a new ExtraDataForSystemEndTurn instance using the specified properties.
@@ -10864,6 +10882,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForPlayerEndTurn tileArrayAfterAction */
             tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForPlayerEndTurn nextUnitId */
+            nextUnitId?: (number|null);
         }
 
         /** Represents an ExtraDataForPlayerEndTurn. */
@@ -10886,6 +10907,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForPlayerEndTurn tileArrayAfterAction. */
             public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForPlayerEndTurn nextUnitId. */
+            public nextUnitId: number;
 
             /**
              * Creates a new ExtraDataForPlayerEndTurn instance using the specified properties.
@@ -11162,17 +11186,20 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForPlayerProduceUnit. */
         interface IExtraDataForPlayerProduceUnit {
 
-            /** ExtraDataForPlayerProduceUnit discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForPlayerProduceUnit playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForPlayerProduceUnit discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForPlayerProduceUnit unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForPlayerProduceUnit cost */
-            cost?: (number|null);
+            /** ExtraDataForPlayerProduceUnit destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
 
-            /** ExtraDataForPlayerProduceUnit unitData */
-            unitData?: (WarSerialization.ISerialUnit|null);
+            /** ExtraDataForPlayerProduceUnit tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForPlayerProduceUnit nextUnitId */
+            nextUnitId?: (number|null);
         }
 
         /** Represents an ExtraDataForPlayerProduceUnit. */
@@ -11184,17 +11211,20 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionPlayerProduceUnit.IExtraDataForPlayerProduceUnit);
 
-            /** ExtraDataForPlayerProduceUnit discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForPlayerProduceUnit playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForPlayerProduceUnit discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForPlayerProduceUnit unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForPlayerProduceUnit cost. */
-            public cost: number;
+            /** ExtraDataForPlayerProduceUnit destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
 
-            /** ExtraDataForPlayerProduceUnit unitData. */
-            public unitData?: (WarSerialization.ISerialUnit|null);
+            /** ExtraDataForPlayerProduceUnit tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForPlayerProduceUnit nextUnitId. */
+            public nextUnitId: number;
 
             /**
              * Creates a new ExtraDataForPlayerProduceUnit instance using the specified properties.

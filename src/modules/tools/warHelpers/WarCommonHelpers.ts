@@ -654,12 +654,13 @@ namespace WarCommonHelpers {
         }
     }
 
-    export function handleCommonExtraDataForWarActions({ war, playerArrayAfterAction, tileArrayAfterAction, unitArrayAfterAction, destroyedUnitIdArray, isFastExecute }: {
+    export function handleCommonExtraDataForWarActions({ war, playerArrayAfterAction, tileArrayAfterAction, unitArrayAfterAction, destroyedUnitIdArray, nextUnitId, isFastExecute }: {
         war                     : TwnsBwWar.BwWar;
         playerArrayAfterAction  : Types.Undefinable<WarSerialization.ISerialPlayer[]>;
         tileArrayAfterAction    : Types.Undefinable<WarSerialization.ISerialTile[]>;
         unitArrayAfterAction    : Types.Undefinable<WarSerialization.ISerialUnit[]>;
         destroyedUnitIdArray    : Types.Undefinable<number[]>;
+        nextUnitId              : number;
         isFastExecute           : boolean;
     }): void {
         const configVersion = war.getConfigVersion();
@@ -669,7 +670,9 @@ namespace WarCommonHelpers {
             player.startRunning(war);
         }
 
-        const unitMap           = war.getUnitMap();
+        const unitMap = war.getUnitMap();
+        unitMap.setNextUnitId(nextUnitId);
+
         const gridVisualEffect  = war.getGridVisualEffect();
         for (const unitData of unitArrayAfterAction ?? []) {
             const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_01);

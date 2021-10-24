@@ -103,6 +103,7 @@ namespace TwnsBwWarEventManager {
                 tileArrayAfterAction    : extraData.tileArrayAfterAction,
                 unitArrayAfterAction    : extraData.unitArrayAfterAction,
                 destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
+                nextUnitId              : Helpers.getExisted(extraData.nextUnitId, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_02),
                 isFastExecute,
             });
         }

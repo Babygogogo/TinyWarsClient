@@ -128,6 +128,7 @@ namespace TwnsBwTurnManager {
                 tileArrayAfterAction    : extraData.tileArrayAfterAction,
                 unitArrayAfterAction    : extraData.unitArrayAfterAction,
                 destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
+                nextUnitId              : Helpers.getExisted(extraData.nextUnitId, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_02),
                 isFastExecute,
             });
         }
@@ -173,6 +174,7 @@ namespace TwnsBwTurnManager {
                 tileArrayAfterAction    : extraData.tileArrayAfterAction,
                 unitArrayAfterAction    : extraData.unitArrayAfterAction,
                 destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
+                nextUnitId              : Helpers.getExisted(extraData.nextUnitId, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_02),
                 isFastExecute,
             });
         }

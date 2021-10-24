@@ -178,67 +178,36 @@ namespace WarActionExecutor {
             : await normalExePlayerProduceUnit(war, action);
     }
     async function fastExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
-        const unitType      = action.unitType as Types.UnitType;
-        const gridIndex     = action.gridIndex as GridIndex;
-        const unitHp        = Helpers.getExisted(action.unitHp, ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_00);
-        const configVersion = war.getConfigVersion();
-        const unitMap       = war.getUnitMap();
-        const unitId        = unitMap.getNextUnitId();
-        const playerInTurn  = war.getPlayerInTurn();
-        const playerIndex   = playerInTurn.getPlayerIndex();
-        const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
-        const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
-        const costModifier  = playerInTurn.getUnitCostModifier(gridIndex, false, unitType);
-        const cost          = Math.floor(
-            cfgCost
-            * (skillCfg ? skillCfg[5] : 100)
-            * WarCommonHelpers.getNormalizedHp(unitHp)
-            * costModifier
-            / 100
-            / CommonConstants.UnitHpNormalizer
-        );
-        const unit          = new BwUnit();
-        unit.init({
-            gridIndex,
-            playerIndex,
-            unitType,
-            unitId,
-            actionState : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
-            currentHp   : unitHp != null ? unitHp : CommonConstants.UnitMaxHp,
-        }, configVersion);
-        unit.startRunning(war);
-        unit.startRunningView();
-        unitMap.setUnitOnMap(unit);
-        unitMap.setNextUnitId(unitId + 1);
-        playerInTurn.setFund(playerInTurn.getFund() - cost);
+        handlePlayerProduceUnit(war, action);
     }
     async function normalExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
         const desc = await war.getDescForExePlayerProduceUnit(action);
         (desc) && (FloatText.show(desc));
 
+        handlePlayerProduceUnit(war, action);
+        war.updateTilesAndUnitsOnVisibilityChanged();
+    }
+
+    function handlePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): void {
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-
-            const unitMap       = war.getUnitMap();
-            const unitId        = unitMap.getNextUnitId();
-            const playerInTurn  = war.getPlayerInTurn();
-            const unitData      = Helpers.getExisted(extraData.unitData, ClientErrorCode.BwWarActionExecutor_NormalExePlayerProduceUnit_00);
-            const unit          = new BwUnit();
-            unit.init(unitData, war.getConfigVersion());
-            unit.startRunning(war);
-            unit.startRunningView();
-            unitMap.setUnitOnMap(unit);
-            unitMap.setNextUnitId(unitId + 1);
-            playerInTurn.setFund(playerInTurn.getFund() - Helpers.getExisted(extraData.cost));
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction  : extraData.playerArrayAfterAction,
+                tileArrayAfterAction    : extraData.tileArrayAfterAction,
+                unitArrayAfterAction    : extraData.unitArrayAfterAction,
+                destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
+                nextUnitId              : Helpers.getExisted(extraData.nextUnitId, ClientErrorCode.WarActionExecutor_HandlePlayerProduceUnit_00),
+                isFastExecute           : true,
+            });
 
         } else {
+            const unitMap       = war.getUnitMap();
+            const unitId        = unitMap.getNextUnitId();
             const gridIndex     = action.gridIndex as GridIndex;
             const unitType      = Helpers.getExisted(action.unitType);
             const unitHp        = Helpers.getExisted(action.unitHp);
             const configVersion = war.getConfigVersion();
-            const unitMap       = war.getUnitMap();
-            const unitId        = unitMap.getNextUnitId();
             const playerInTurn  = war.getPlayerInTurn();
             const playerIndex   = playerInTurn.getPlayerIndex();
             const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
@@ -266,8 +235,6 @@ namespace WarActionExecutor {
             unitMap.setNextUnitId(unitId + 1);
             playerInTurn.setFund(playerInTurn.getFund() - cost);
         }
-
-        war.updateTilesAndUnitsOnVisibilityChanged();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
