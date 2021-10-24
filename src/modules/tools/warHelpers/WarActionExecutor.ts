@@ -292,159 +292,108 @@ namespace WarActionExecutor {
             : await normalExePlayerUseCoSkill(war, action);
     }
     async function fastExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<void> {
-        const skillType         = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_00);
         const playerInTurn      = war.getPlayerInTurn();
-        const currentEnergy     = playerInTurn.getCoCurrentEnergy();
-        playerInTurn.setCoUsingSkillType(skillType);
+        const skillType         = Helpers.getExisted(action.skillType, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_00);
+        const skillIdArray      = playerInTurn.getCoSkills(skillType);
+        const actionExtraData   = action.extraData;
 
-        if (skillType === Types.CoSkillType.Power) {
-            const powerEnergy = Helpers.getExisted(playerInTurn.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_01);
-            playerInTurn.setCoCurrentEnergy(currentEnergy - powerEnergy);
+        if (actionExtraData) {
+            const skillDataArray = Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_01);
+            for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
+                WarCoSkillHelpers.exeInstantSkill({
+                    war,
+                    player          : playerInTurn,
+                    skillId         : skillIdArray[skillIndex],
+                    skillData       : Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_02),
+                    hasExtraData    : true,
+                    isFastExecute   : true,
+                });
+            }
 
-        } else if (skillType === Types.CoSkillType.SuperPower) {
-            const superPowerEnergy = Helpers.getExisted(playerInTurn.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_02);
-            playerInTurn.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction  : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction    : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction    : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray    : actionExtraData.destroyedUnitIdArray,
+                nextUnitId              : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_03),
+                isFastExecute           : true,
+            });
 
         } else {
-            throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_03);
-        }
+            playerInTurn.updateOnUseCoSkill(skillType);
 
-        const skillDataList : IDataForUseCoSkill[] = [];
-        const skillIdList   = playerInTurn.getCoCurrentSkills() || [];
-        for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-            const dataForUseCoSkill = Helpers.getExisted(WarCoSkillHelpers.getDataForUseCoSkill(war, playerInTurn, skillIndex), ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_04);
-            WarCoSkillHelpers.exeInstantSkill({
-                war,
-                player      : playerInTurn,
-                skillId     : skillIdList[skillIndex],
-                extraData   : dataForUseCoSkill,
-            });
-            skillDataList.push(dataForUseCoSkill);
+            for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
+                WarCoSkillHelpers.exeInstantSkill({
+                    war,
+                    player          : playerInTurn,
+                    skillId         : skillIdArray[skillIndex],
+                    skillData       : WarCoSkillHelpers.getDataForUseCoSkill(war, playerInTurn, skillIndex),
+                    hasExtraData    : false,
+                    isFastExecute   : true,
+                });
+            }
         }
     }
     async function normalExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<void> {
-        const unitMap   = war.getUnitMap();
-        const skillType = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_00);
-        const extraData = action.extraData;
-        if (extraData) {
-            // WarCommonHelpers.updateTilesAndUnits(war, extraData);
+        const playerInTurn      = war.getPlayerInTurn();
+        const skillType         = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_00);
+        const skillIdArray      = playerInTurn.getCoSkills(skillType);
+        const actionExtraData   = action.extraData;
+        const unitMap           = war.getUnitMap();
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const playerIndex       = playerInTurn.getPlayerIndex();
 
-            const player        = war.getPlayerInTurn();
-            const currentEnergy = player.getCoCurrentEnergy();
-            player.setCoUsingSkillType(skillType);
-
-            if (skillType === Types.CoSkillType.Power) {
-                const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_01);
-                player.setCoCurrentEnergy(currentEnergy - powerEnergy);
-
-            } else if (skillType === Types.CoSkillType.SuperPower) {
-                const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_02);
-                player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
-
-            } else {
-                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_03);
-            }
-
-            const skillDataArray    = Helpers.getExisted(extraData.skillDataArray);
-            const skillIdList       = player.getCoCurrentSkills() || [];
-            for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                const dataForUseCoSkill = Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_04);
+        if (actionExtraData) {
+            const skillDataArray = Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_01);
+            for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
                 WarCoSkillHelpers.exeInstantSkill({
                     war,
-                    player,
-                    skillId     : skillIdList[skillIndex],
-                    extraData   : dataForUseCoSkill,
+                    player          : playerInTurn,
+                    skillId         : skillIdArray[skillIndex],
+                    skillData       : Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_02),
+                    hasExtraData    : true,
+                    isFastExecute   : false,
                 });
             }
 
-            const gridVisionEffect  = war.getGridVisualEffect();
-            const playerIndex       = player.getPlayerIndex();
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction  : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction    : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction    : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray    : actionExtraData.destroyedUnitIdArray,
+                nextUnitId              : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_03),
+                isFastExecute           : false,
+            });
+
             for (const unit of unitMap.getAllUnitsOnMap()) {
-                unit.updateView();
                 if (unit.getPlayerIndex() === playerIndex) {
-                    gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
-                }
-            }
-
-            const configVersion = war.getConfigVersion();
-            const mapSize       = unitMap.getMapSize();
-            for (let i = 0; i < skillIdList.length; ++i) {
-                const skillCfg          = ConfigManager.getCoSkillCfg(configVersion, skillIdList[i]);
-                const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
-                if (indiscriminateCfg) {
-                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(
-                        skillDataArray.find(v => v.skillIndex === i)?.indiscriminateAreaDamageCenter as GridIndex,
-                        0,
-                        indiscriminateCfg[1],
-                        mapSize)
-                    ) {
-                        const unit = unitMap.getUnitOnMap(gridIndex);
-                        (unit) && (unit.updateView());
-
-                        gridVisionEffect.showEffectExplosion(gridIndex);
-                    }
+                    gridVisualEffect.showEffectSkillActivation(unit.getGridIndex());
                 }
             }
 
         } else {
-            const player            = war.getPlayerInTurn();
-            const currentEnergy     = player.getCoCurrentEnergy();
-            player.setCoUsingSkillType(skillType);
+            playerInTurn.updateOnUseCoSkill(skillType);
 
-            if (skillType === Types.CoSkillType.Power) {
-                const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_05);
-                player.setCoCurrentEnergy(currentEnergy - powerEnergy);
-
-            } else if (skillType === Types.CoSkillType.SuperPower) {
-                const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_06);
-                player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
-
-            } else {
-                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_07);
-            }
-
-            const skillDataList : IDataForUseCoSkill[] = [];
-            const skillIdList   = player.getCoCurrentSkills() || [];
-            for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                const dataForUseCoSkill = Helpers.getExisted(WarCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_08);
+            for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
                 WarCoSkillHelpers.exeInstantSkill({
                     war,
-                    player,
-                    skillId     : skillIdList[skillIndex],
-                    extraData   : dataForUseCoSkill,
+                    player          : playerInTurn,
+                    skillId         : skillIdArray[skillIndex],
+                    skillData       : WarCoSkillHelpers.getDataForUseCoSkill(war, playerInTurn, skillIndex),
+                    hasExtraData    : false,
+                    isFastExecute   : false,
                 });
-                skillDataList.push(dataForUseCoSkill);
             }
 
-            const gridVisionEffect  = war.getGridVisualEffect();
-            const playerIndex       = player.getPlayerIndex();
             for (const unit of unitMap.getAllUnitsOnMap()) {
-                unit.updateView();
                 if (unit.getPlayerIndex() === playerIndex) {
-                    gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
-                }
-            }
-
-            const configVersion = war.getConfigVersion();
-            const mapSize       = unitMap.getMapSize();
-            for (let i = 0; i < skillIdList.length; ++i) {
-                const skillCfg          = ConfigManager.getCoSkillCfg(configVersion, skillIdList[i]);
-                const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
-                if (indiscriminateCfg) {
-                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(skillDataList[i].indiscriminateAreaDamageCenter as GridIndex, 0, indiscriminateCfg[1], mapSize)) {
-                        const unit = unitMap.getUnitOnMap(gridIndex);
-                        (unit) && (unit.updateView());
-
-                        gridVisionEffect.showEffectExplosion(gridIndex);
-                    }
+                    gridVisualEffect.showEffectSkillActivation(unit.getGridIndex());
                 }
             }
         }
 
-        WarCommonHelpers.updateTilesAndUnits(war, {
-            discoveredTiles: extraData?.discoveredTilesAfterAction,
-            discoveredUnits: extraData?.discoveredUnitsAfterAction,
-        });
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
 
@@ -2757,7 +2706,7 @@ namespace WarActionExecutor {
                     war,
                     player,
                     skillId     : skillIdList[skillIndex],
-                    extraData   : dataForUseCoSkill,
+                    skillData   : dataForUseCoSkill,
                 });
                 skillDataList.push(dataForUseCoSkill);
             }
@@ -2817,7 +2766,7 @@ namespace WarActionExecutor {
                         war,
                         player,
                         skillId     : skillIdList[skillIndex],
-                        extraData   : dataForUseCoSkill,
+                        skillData   : dataForUseCoSkill,
                     });
                 }
 
@@ -2903,7 +2852,7 @@ namespace WarActionExecutor {
                         war,
                         player,
                         skillId     : skillIdList[skillIndex],
-                        extraData   : dataForUseCoSkill,
+                        skillData   : dataForUseCoSkill,
                     });
                     skillDataList.push(dataForUseCoSkill);
                 }

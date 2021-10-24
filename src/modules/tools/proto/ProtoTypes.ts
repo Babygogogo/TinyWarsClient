@@ -11579,11 +11579,20 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForPlayerUseCoSkill. */
         interface IExtraDataForPlayerUseCoSkill {
 
-            /** ExtraDataForPlayerUseCoSkill discoveredUnitsAfterAction */
-            discoveredUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForPlayerUseCoSkill playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForPlayerUseCoSkill discoveredTilesAfterAction */
-            discoveredTilesAfterAction?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForPlayerUseCoSkill unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForPlayerUseCoSkill destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForPlayerUseCoSkill tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForPlayerUseCoSkill nextUnitId */
+            nextUnitId?: (number|null);
 
             /** ExtraDataForPlayerUseCoSkill skillDataArray */
             skillDataArray?: (Structure.IDataForUseCoSkill[]|null);
@@ -11598,11 +11607,20 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill);
 
-            /** ExtraDataForPlayerUseCoSkill discoveredUnitsAfterAction. */
-            public discoveredUnitsAfterAction: WarSerialization.ISerialUnit[];
+            /** ExtraDataForPlayerUseCoSkill playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForPlayerUseCoSkill discoveredTilesAfterAction. */
-            public discoveredTilesAfterAction: WarSerialization.ISerialTile[];
+            /** ExtraDataForPlayerUseCoSkill unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForPlayerUseCoSkill destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForPlayerUseCoSkill tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForPlayerUseCoSkill nextUnitId. */
+            public nextUnitId: number;
 
             /** ExtraDataForPlayerUseCoSkill skillDataArray. */
             public skillDataArray: Structure.IDataForUseCoSkill[];

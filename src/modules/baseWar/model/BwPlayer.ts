@@ -12,6 +12,7 @@
 // import UserModel            from "../../user/model/UserModel";
 // import TwnsBwWar            from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwPlayer {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import GridIndex        = Types.GridIndex;
@@ -371,6 +372,23 @@ namespace TwnsBwPlayer {
             } else {
                 return false;
             }
+        }
+
+        public updateOnUseCoSkill(skillType: Types.CoSkillType): void {
+            const currentEnergy = this.getCoCurrentEnergy();
+            if (skillType === Types.CoSkillType.Power) {
+                const powerEnergy = Helpers.getExisted(this.getCoPowerEnergy(), ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_00);
+                this.setCoCurrentEnergy(currentEnergy - powerEnergy);
+
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                const superPowerEnergy = Helpers.getExisted(this.getCoSuperPowerEnergy(), ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_01);
+                this.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
+
+            } else {
+                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_02);
+            }
+
+            this.setCoUsingSkillType(skillType);
         }
 
         public getCoIsDestroyedInTurn(): boolean {
