@@ -258,6 +258,20 @@ namespace TwnsBwFogMap {
                 }
             }
         }
+        public updateMapFromPathsByExtraUnitAndPath(movingUnit: Types.Undefinable<WarSerialization.ISerialUnit>, movingPath: Types.Undefinable<ProtoTypes.Structure.IGridIndexAndPathInfo[]>): void {
+            if (movingUnit) {
+                const war   = this._getWar();
+                const unit  = new TwnsBwUnit.BwUnit();
+                unit.init(movingUnit, war.getConfigVersion());
+                unit.startRunning(war);
+
+                const path = Helpers.getExisted(movingPath, ClientErrorCode.BwFogMap_UpdateMapFromPathsByUnitDataAndPath_00);
+                this.updateMapFromPathsByUnitAndPath(
+                    unit,
+                    path.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v.gridIndex), ClientErrorCode.BwFogMap_UpdateMapFromPathsByUnitDataAndPath_01))
+                );
+            }
+        }
         public updateMapFromPathsByFlare(playerIndex: number, flareGridIndex: GridIndex, flareRadius: number): void {
             const map = this._getMapFromPath(playerIndex);
             for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(flareGridIndex, 0, flareRadius, this.getMapSize())) {

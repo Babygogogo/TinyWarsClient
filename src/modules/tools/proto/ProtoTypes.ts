@@ -15005,17 +15005,29 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitUseCoSkill. */
         interface IExtraDataForUnitUseCoSkill {
 
-            /** ExtraDataForUnitUseCoSkill discoveredUnitsAfterAction */
-            discoveredUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitUseCoSkill playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForUnitUseCoSkill discoveredTilesAfterAction */
-            discoveredTilesAfterAction?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitUseCoSkill unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitUseCoSkill actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitUseCoSkill destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
 
-            /** ExtraDataForUnitUseCoSkill skillDataList */
-            skillDataList?: (Structure.IDataForUseCoSkill[]|null);
+            /** ExtraDataForUnitUseCoSkill tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForUnitUseCoSkill nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForUnitUseCoSkill movingUnit */
+            movingUnit?: (WarSerialization.ISerialUnit|null);
+
+            /** ExtraDataForUnitUseCoSkill movingPath */
+            movingPath?: (Structure.IGridIndexAndPathInfo[]|null);
+
+            /** ExtraDataForUnitUseCoSkill skillDataArray */
+            skillDataArray?: (Structure.IDataForUseCoSkill[]|null);
         }
 
         /** Represents an ExtraDataForUnitUseCoSkill. */
@@ -15027,17 +15039,29 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitUseCoSkill.IExtraDataForUnitUseCoSkill);
 
-            /** ExtraDataForUnitUseCoSkill discoveredUnitsAfterAction. */
-            public discoveredUnitsAfterAction: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitUseCoSkill playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForUnitUseCoSkill discoveredTilesAfterAction. */
-            public discoveredTilesAfterAction: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitUseCoSkill unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitUseCoSkill actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitUseCoSkill destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
 
-            /** ExtraDataForUnitUseCoSkill skillDataList. */
-            public skillDataList: Structure.IDataForUseCoSkill[];
+            /** ExtraDataForUnitUseCoSkill tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForUnitUseCoSkill nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForUnitUseCoSkill movingUnit. */
+            public movingUnit?: (WarSerialization.ISerialUnit|null);
+
+            /** ExtraDataForUnitUseCoSkill movingPath. */
+            public movingPath: Structure.IGridIndexAndPathInfo[];
+
+            /** ExtraDataForUnitUseCoSkill skillDataArray. */
+            public skillDataArray: Structure.IDataForUseCoSkill[];
 
             /**
              * Creates a new ExtraDataForUnitUseCoSkill instance using the specified properties.
@@ -16117,6 +16141,108 @@ export declare namespace Structure {
 
         /**
          * Converts this GridIndex to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a GridIndexAndPathInfo. */
+    interface IGridIndexAndPathInfo {
+
+        /** GridIndexAndPathInfo gridIndex */
+        gridIndex?: (Structure.IGridIndex|null);
+
+        /** GridIndexAndPathInfo isVisible */
+        isVisible?: (boolean|null);
+
+        /** GridIndexAndPathInfo isBlocked */
+        isBlocked?: (boolean|null);
+    }
+
+    /** Represents a GridIndexAndPathInfo. */
+    class GridIndexAndPathInfo implements IGridIndexAndPathInfo {
+
+        /**
+         * Constructs a new GridIndexAndPathInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.IGridIndexAndPathInfo);
+
+        /** GridIndexAndPathInfo gridIndex. */
+        public gridIndex?: (Structure.IGridIndex|null);
+
+        /** GridIndexAndPathInfo isVisible. */
+        public isVisible: boolean;
+
+        /** GridIndexAndPathInfo isBlocked. */
+        public isBlocked: boolean;
+
+        /**
+         * Creates a new GridIndexAndPathInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns GridIndexAndPathInfo instance
+         */
+        public static create(properties?: Structure.IGridIndexAndPathInfo): Structure.GridIndexAndPathInfo;
+
+        /**
+         * Encodes the specified GridIndexAndPathInfo message. Does not implicitly {@link Structure.GridIndexAndPathInfo.verify|verify} messages.
+         * @param message GridIndexAndPathInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.IGridIndexAndPathInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified GridIndexAndPathInfo message, length delimited. Does not implicitly {@link Structure.GridIndexAndPathInfo.verify|verify} messages.
+         * @param message GridIndexAndPathInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.IGridIndexAndPathInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a GridIndexAndPathInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns GridIndexAndPathInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.GridIndexAndPathInfo;
+
+        /**
+         * Decodes a GridIndexAndPathInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns GridIndexAndPathInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.GridIndexAndPathInfo;
+
+        /**
+         * Verifies a GridIndexAndPathInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a GridIndexAndPathInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns GridIndexAndPathInfo
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.GridIndexAndPathInfo;
+
+        /**
+         * Creates a plain object from a GridIndexAndPathInfo message. Also converts values to other types if specified.
+         * @param message GridIndexAndPathInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.GridIndexAndPathInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this GridIndexAndPathInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };

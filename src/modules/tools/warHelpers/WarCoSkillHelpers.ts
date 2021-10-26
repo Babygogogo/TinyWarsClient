@@ -215,7 +215,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeSelfHpGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -251,6 +250,7 @@ namespace WarCoSkillHelpers {
                             currentHp + modifier
                         ),
                     ));
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
@@ -262,7 +262,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeEnemyHpGainWithoutExtraData({ configVersion, skillCfg, war, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -302,6 +301,7 @@ namespace WarCoSkillHelpers {
                             currentHp + modifier
                         ),
                     ));
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
@@ -313,7 +313,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeSelfFuelGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -353,6 +352,7 @@ namespace WarCoSkillHelpers {
                             Math.floor(currentFuel * (100 + modifier) / 100)
                         ));
                     }
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
@@ -364,7 +364,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeEnemyFuelGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -404,6 +403,7 @@ namespace WarCoSkillHelpers {
                             Math.floor(currentFuel * (100 + modifier) / 100)
                         ));
                     }
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
@@ -415,7 +415,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeSelfMaterialGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -461,6 +460,7 @@ namespace WarCoSkillHelpers {
                                 Math.floor(currentBuildMaterial * (100 + modifier) / 100)
                             ));
                         }
+                        (!isFastExecute) && (unit.updateView());
                     }
 
                     if (maxProduceMaterial != null) {
@@ -476,6 +476,7 @@ namespace WarCoSkillHelpers {
                                 Math.floor(currentProduceMaterial * (100 + modifier) / 100)
                             ));
                         }
+                        (!isFastExecute) && (unit.updateView());
                     }
                 }
             }
@@ -488,7 +489,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeEnemyMaterialGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -534,6 +534,7 @@ namespace WarCoSkillHelpers {
                                 Math.floor(currentBuildMaterial * (100 + modifier) / 100)
                             ));
                         }
+                        (!isFastExecute) && (unit.updateView());
                     }
 
                     if (maxProduceMaterial != null) {
@@ -549,6 +550,7 @@ namespace WarCoSkillHelpers {
                                 Math.floor(currentProduceMaterial * (100 + modifier) / 100)
                             ));
                         }
+                        (!isFastExecute) && (unit.updateView());
                     }
                 }
             }
@@ -561,7 +563,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeSelfPrimaryAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -605,6 +606,7 @@ namespace WarCoSkillHelpers {
                             Math.floor(currentAmmo * (100 + modifier) / 100)
                         ));
                     }
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
@@ -616,7 +618,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeEnemyPrimaryAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -660,12 +661,12 @@ namespace WarCoSkillHelpers {
                             Math.floor(currentAmmo * (100 + modifier) / 100)
                         ));
                     }
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeIndiscriminateAreaDamageWithExtraData({ war, skillCfg, unitMap, skillData, isFastExecute }: {
         war             : BwWar;
         skillCfg        : ICoSkillCfg;
@@ -688,7 +689,6 @@ namespace WarCoSkillHelpers {
             gridVisualEffect.showEffectExplosion(gridIndex);
         }
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeIndiscriminateAreaDamageWithoutExtraData({ war, skillCfg, unitMap, skillData, isFastExecute }: {
         war             : BwWar;
         skillCfg        : ICoSkillCfg;
@@ -710,6 +710,7 @@ namespace WarCoSkillHelpers {
             if (unit) {
                 const currentHp = unit.getCurrentHp();
                 unit.setCurrentHp(Math.max(1, currentHp - hpDamage));
+                (!isFastExecute) && (unit.updateView());
             }
 
             if (!isFastExecute) {
@@ -724,7 +725,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeSelfPromotionGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -760,6 +760,7 @@ namespace WarCoSkillHelpers {
                             currentPromotion + modifier
                         ),
                     ));
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
@@ -771,7 +772,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeSelfUnitActionStateWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -803,6 +803,7 @@ namespace WarCoSkillHelpers {
                     }))
                 ) {
                     unit.setActionState(actionState);
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
@@ -814,7 +815,6 @@ namespace WarCoSkillHelpers {
     }): void {
         // nothing to do
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function exeSelfFlareAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
@@ -858,6 +858,7 @@ namespace WarCoSkillHelpers {
                             Math.floor(currentAmmo * (100 + modifier) / 100)
                         ));
                     }
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }

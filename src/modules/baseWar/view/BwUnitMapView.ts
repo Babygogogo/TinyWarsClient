@@ -10,6 +10,7 @@
 // import TwnsBwUnitMap        from "../model/BwUnitMap";
 // import TwnsBwUnitView       from "./BwUnitView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitMapView {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import BwUnitView           = TwnsBwUnitView.BwUnitView;
@@ -85,7 +86,7 @@ namespace TwnsBwUnitMapView {
         }
 
         public removeUnit(view: BwUnitView): void {
-            view.parent.removeChild(view);
+            (view.parent) && (view.parent.removeChild(view));
         }
 
         public resetZOrder(unitType: Types.UnitType): void {

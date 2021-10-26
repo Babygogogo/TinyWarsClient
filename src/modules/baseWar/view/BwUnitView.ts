@@ -12,6 +12,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitView {
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
 
@@ -248,6 +249,80 @@ namespace TwnsBwUnitView {
                                 observerTeamIndexes : watcherTeamIndexes,
                             }))
                         ) {
+                            war.getGridVisualEffect().showEffectBlock(endingGridIndex);
+                        }
+                        SoundManager.fadeoutLongSfxForMoveUnit();
+
+                        resolve();
+                    });
+                }
+            });
+        }
+        public moveAlongExtraPath({ path, aiming }: {
+            path        : ProtoTypes.Structure.IGridIndexAndPathInfo[];
+            aiming      : GridIndex | null;
+        }): Promise<void> {
+            this.showUnitAnimation(UnitAnimationType.Move);
+
+            const startingPoint = GridIndexHelpers.createPointByGridIndex(Helpers.getExisted(GridIndexHelpers.convertGridIndex(path[0].gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_00));
+            this.x              = startingPoint.x;
+            this.y              = startingPoint.y;
+
+            const unit          = Helpers.getExisted(this.getUnit());
+            const war           = unit.getWar();
+            const skinIdMod     = unit.getSkinId() % 2;
+            const unitType      = unit.getUnitType();
+            const tween         = egret.Tween.get(this);
+            if ((path.length > 0) || (aiming)) {
+                SoundManager.playLongSfxForMoveUnit(unitType);
+            }
+
+            for (let i = 1; i < path.length; ++i) {
+                const node          = path[i];
+                const gridIndex     = Helpers.getExisted(GridIndexHelpers.convertGridIndex(node.gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_01);
+                const currentX      = gridIndex.x;
+                const previousNode  = path[i - 1];
+                const previousX     = Helpers.getExisted(previousNode.gridIndex?.x, ClientErrorCode.BwUnitView_MoveAlongExtraPath_02);
+                if (currentX < previousX) {
+                    tween.call(() => this._setImgUnitFlippedX(skinIdMod === 1));
+                } else if (currentX > previousX) {
+                    tween.call(() => this._setImgUnitFlippedX(skinIdMod === 0));
+                }
+                tween.call(() => {
+                    this.visible = (!!previousNode.isVisible) || (!!node.isVisible);
+                });
+                tween.to(GridIndexHelpers.createPointByGridIndex(gridIndex), 200);
+            }
+
+            const endingNode        = path[path.length - 1];
+            const isBlockedInEnd    = !!endingNode.isBlocked;
+            const isVisibleInEnd    = !!endingNode.isVisible;
+            const endingGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(endingNode.gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_03);
+            return new Promise<void>(resolve => {
+                if (!aiming) {
+                    tween.call(() => {
+                        this._setImgUnitFlippedX(false);
+                        if ((isBlockedInEnd) && (isVisibleInEnd)) {
+                            war.getGridVisualEffect().showEffectBlock(endingGridIndex);
+                        }
+                        SoundManager.fadeoutLongSfxForMoveUnit();
+
+                        resolve();
+                    });
+                } else {
+                    const cursor = war.getCursor();
+                    tween.call(() => {
+                        cursor.setIsMovableByTouches(false);
+                        cursor.setIsVisible(false);
+                        war.getGridVisualEffect().showEffectAiming(aiming, _AIMING_TIME_MS);
+                    })
+                    .wait(_AIMING_TIME_MS)
+                    .call(() => {
+                        cursor.setIsMovableByTouches(true);
+                        cursor.setIsVisible(true);
+
+                        this._setImgUnitFlippedX(false);
+                        if ((isBlockedInEnd) && (isVisibleInEnd)) {
                             war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
                         SoundManager.fadeoutLongSfxForMoveUnit();

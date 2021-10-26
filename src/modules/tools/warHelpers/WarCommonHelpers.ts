@@ -506,14 +506,10 @@ namespace WarCommonHelpers {
         fuelConsumption : number;
     }): void {
         const unitMap               = war.getUnitMap();
-        const tileMap               = war.getTileMap();
-        const fogMap                = war.getFogMap();
         const beginningGridIndex    = pathNodes[0];
         const focusUnit             = Helpers.getExisted(unitMap.getUnit(beginningGridIndex, launchUnitId));
-        const currentFuel           = focusUnit.getCurrentFuel();
-        const tile                  = tileMap.getTile(beginningGridIndex);
-        fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
-        focusUnit.setCurrentFuel(currentFuel - fuelConsumption);
+        war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
+        focusUnit.setCurrentFuel(focusUnit.getCurrentFuel() - fuelConsumption);
         if (launchUnitId == null) {
             unitMap.removeUnitOnMap(beginningGridIndex, false);
         } else {
@@ -531,9 +527,41 @@ namespace WarCommonHelpers {
             }
 
             if (launchUnitId == null) {
-                tile.updateOnUnitLeave();
+                war.getTileMap().getTile(beginningGridIndex).updateOnUnitLeave();
             }
         }
+    }
+    export async function moveExtraUnit({ war, movingUnitData, movingPath, deleteViewAfterMoving }: {
+        war                     : TwnsBwWar.BwWar;
+        movingUnitData          : Types.Undefinable<WarSerialization.ISerialUnit>;
+        movingPath              : Types.Undefinable<ProtoTypes.Structure.IGridIndexAndPathInfo[]>;
+        deleteViewAfterMoving   : boolean;
+    }): Promise<TwnsBwUnitView.BwUnitView | null> {
+        if (movingUnitData == null) {
+            return null;
+        }
+        if (movingPath == null) {
+            throw Helpers.newError(`Empty movingPath.`, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_00);
+        }
+
+        war.getFogMap().updateMapFromPathsByExtraUnitAndPath(movingUnitData, movingPath);
+
+        const unitId    = Helpers.getExisted(movingUnitData.unitId, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_01);
+        const unitMap   = war.getUnitMap();
+        unitMap.removeUnitById(unitId, true);
+
+        const unit = new TwnsBwUnit.BwUnit();
+        unit.init(movingUnitData, war.getConfigVersion());
+        unit.startRunning(war);
+        unit.startRunningView();
+
+        const unitMapView   = unitMap.getView();
+        const unitView      = unit.getView();
+        unitMapView.addUnit(unitView, true);
+        await unitView.moveAlongExtraPath({ path: movingPath, aiming: null });
+        (deleteViewAfterMoving) && (unitMapView.removeUnit(unitView));
+
+        return unitView;
     }
 
     export function checkIsUnitRepaired(oldUnitData: ISerialUnit, newUnitData: ISerialUnit): boolean {
@@ -678,8 +706,19 @@ namespace WarCommonHelpers {
             const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_01);
             const existingUnit  = unitMap.getUnitById(unitId);
             if (existingUnit) {
+                if (existingUnit.getLoaderUnitId() == null) {
+                    unitMap.removeUnitOnMap(existingUnit.getGridIndex(), true);
+                } else {
+                    unitMap.removeUnitLoaded(unitId);
+                }
+
                 const existingUnitData = existingUnit.serialize();
                 existingUnit.init(unitData, configVersion);
+                if (existingUnit.getLoaderUnitId() == null) {
+                    unitMap.setUnitOnMap(existingUnit);
+                } else {
+                    unitMap.setUnitLoaded(existingUnit);
+                }
                 existingUnit.startRunning(war);
                 existingUnit.startRunningView();
 
@@ -696,8 +735,7 @@ namespace WarCommonHelpers {
                 const unit = new TwnsBwUnit.BwUnit();
                 unit.init(unitData, configVersion);
 
-                const isOnMap = unit.getLoaderUnitId() == null;
-                if (isOnMap) {
+                if (unit.getLoaderUnitId() == null) {
                     unitMap.setUnitOnMap(unit);
                 } else {
                     unitMap.setUnitLoaded(unit);
