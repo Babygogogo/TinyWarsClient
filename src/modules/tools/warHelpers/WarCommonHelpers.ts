@@ -693,6 +693,9 @@ namespace WarCommonHelpers {
         }
     }
 
+    /**
+     * @return the war view is vibrated or not
+     */
     export function handleCommonExtraDataForWarActions({ war, playerArrayAfterAction, tileArrayAfterAction, unitArrayAfterAction, destroyedUnitIdArray, nextUnitId, isFastExecute }: {
         war                     : TwnsBwWar.BwWar;
         playerArrayAfterAction  : Types.Undefinable<WarSerialization.ISerialPlayer[]>;
@@ -701,7 +704,7 @@ namespace WarCommonHelpers {
         destroyedUnitIdArray    : Types.Undefinable<number[]>;
         nextUnitId              : number;
         isFastExecute           : boolean;
-    }): void {
+    }): boolean {
         const configVersion = war.getConfigVersion();
         for (const playerData of playerArrayAfterAction ?? []) {
             const player = war.getPlayer(Helpers.getExisted(playerData.playerIndex, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_00));
@@ -799,6 +802,9 @@ namespace WarCommonHelpers {
         if ((!isFastExecute) && (isShownExplosionEffect)) {
             war.getView().showVibration();
             SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
+            return true;
+        } else {
+            return false;
         }
     }
 
