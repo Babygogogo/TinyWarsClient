@@ -531,10 +531,11 @@ namespace WarCommonHelpers {
             }
         }
     }
-    export async function moveExtraUnit({ war, movingUnitData, movingPath, deleteViewAfterMoving }: {
+    export async function moveExtraUnit({ war, movingUnitData, movingPath, aiming, deleteViewAfterMoving }: {
         war                     : TwnsBwWar.BwWar;
         movingUnitData          : Types.Undefinable<WarSerialization.ISerialUnit>;
         movingPath              : Types.Undefinable<ProtoTypes.Structure.IGridIndexAndPathInfo[]>;
+        aiming                  : GridIndex | null;
         deleteViewAfterMoving   : boolean;
     }): Promise<TwnsBwUnitView.BwUnitView | null> {
         if (movingUnitData == null) {
@@ -558,8 +559,11 @@ namespace WarCommonHelpers {
         const unitMapView   = unitMap.getView();
         const unitView      = unit.getView();
         unitMapView.addUnit(unitView, true);
-        await unitView.moveAlongExtraPath({ path: movingPath, aiming: null });
-        (deleteViewAfterMoving) && (unitMapView.removeUnit(unitView));
+        await unitView.moveAlongExtraPath({
+            path: movingPath,
+            aiming,
+            deleteViewAfterMoving
+        });
 
         return unitView;
     }
@@ -622,6 +626,13 @@ namespace WarCommonHelpers {
         }
 
         return false;
+    }
+    export function checkIsUnitDamaged(oldUnitData: ISerialUnit, newUnitData: ISerialUnit): boolean {
+        if (oldUnitData.unitType != newUnitData.unitType) {
+            return false;
+        }
+
+        return (newUnitData.currentHp ?? CommonConstants.UnitMaxHp) < (oldUnitData.currentHp ?? CommonConstants.UnitMaxHp);
     }
 
     export function updateTilesAndUnits(
@@ -729,6 +740,10 @@ namespace WarCommonHelpers {
                     } else if (checkIsUnitSupplied(existingUnitData, unitData, configVersion)) {
                         gridVisualEffect.showEffectSupply(gridIndex);
                     }
+
+                    if (checkIsUnitDamaged(existingUnitData, unitData)) {
+                        gridVisualEffect.showEffectDamage(gridIndex);
+                    }
                 }
 
             } else {
@@ -763,14 +778,21 @@ namespace WarCommonHelpers {
         for (const tileData of tileArrayAfterAction ?? []) {
             const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_02);
             const tile              = tileMap.getTile(gridIndex);
-            const hasHpBeforeAction = tile.getMaxHp() != null;
+            const hpBeforeAction    = tile.getCurrentHp();
             tile.init(tileData, configVersion);
             tile.startRunning(war);
             tile.startRunningView();
 
-            if ((!isFastExecute) && (hasHpBeforeAction) && (tile.getMaxHp() == null)) {
-                gridVisualEffect.showEffectExplosion(gridIndex);
-                isShownExplosionEffect = true;
+            if (!isFastExecute) {
+                if (hpBeforeAction != null) {
+                    const hpAfterAction = tile.getCurrentHp();
+                    if (hpAfterAction == null) {
+                        gridVisualEffect.showEffectExplosion(gridIndex);
+                        isShownExplosionEffect = true;
+                    } else if (hpAfterAction < hpBeforeAction) {
+                        gridVisualEffect.showEffectDamage(gridIndex);
+                    }
+                }
             }
         }
 

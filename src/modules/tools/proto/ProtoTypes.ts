@@ -12503,23 +12503,29 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitAttackTile. */
         interface IExtraDataForUnitAttackTile {
 
-            /** ExtraDataForUnitAttackTile discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitAttackTile playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForUnitAttackTile discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitAttackTile unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitAttackTile actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitAttackTile destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForUnitAttackTile tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForUnitAttackTile nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForUnitAttackTile movingUnit */
+            movingUnit?: (WarSerialization.ISerialUnit|null);
+
+            /** ExtraDataForUnitAttackTile movingPath */
+            movingPath?: (Structure.IGridIndexAndPathInfo[]|null);
 
             /** ExtraDataForUnitAttackTile battleDamageInfoArray */
             battleDamageInfoArray?: (Structure.IBattleDamageInfo[]|null);
-
-            /** ExtraDataForUnitAttackTile affectedUnitsAfterAction */
-            affectedUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitAttackTile affectedPlayersAfterAction */
-            affectedPlayersAfterAction?: (WarSerialization.ISerialPlayer[]|null);
         }
 
         /** Represents an ExtraDataForUnitAttackTile. */
@@ -12531,23 +12537,29 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitAttackTile.IExtraDataForUnitAttackTile);
 
-            /** ExtraDataForUnitAttackTile discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitAttackTile playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForUnitAttackTile discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitAttackTile unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitAttackTile actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitAttackTile destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForUnitAttackTile tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForUnitAttackTile nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForUnitAttackTile movingUnit. */
+            public movingUnit?: (WarSerialization.ISerialUnit|null);
+
+            /** ExtraDataForUnitAttackTile movingPath. */
+            public movingPath: Structure.IGridIndexAndPathInfo[];
 
             /** ExtraDataForUnitAttackTile battleDamageInfoArray. */
             public battleDamageInfoArray: Structure.IBattleDamageInfo[];
-
-            /** ExtraDataForUnitAttackTile affectedUnitsAfterAction. */
-            public affectedUnitsAfterAction: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitAttackTile affectedPlayersAfterAction. */
-            public affectedPlayersAfterAction: WarSerialization.ISerialPlayer[];
 
             /**
              * Creates a new ExtraDataForUnitAttackTile instance using the specified properties.

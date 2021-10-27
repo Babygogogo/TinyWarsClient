@@ -258,9 +258,10 @@ namespace TwnsBwUnitView {
                 }
             });
         }
-        public moveAlongExtraPath({ path, aiming }: {
-            path        : ProtoTypes.Structure.IGridIndexAndPathInfo[];
-            aiming      : GridIndex | null;
+        public moveAlongExtraPath({ path, aiming, deleteViewAfterMoving }: {
+            path                    : ProtoTypes.Structure.IGridIndexAndPathInfo[];
+            aiming                  : GridIndex | null;
+            deleteViewAfterMoving   : boolean;
         }): Promise<void> {
             this.showUnitAnimation(UnitAnimationType.Move);
 
@@ -297,7 +298,14 @@ namespace TwnsBwUnitView {
             const endingNode        = path[path.length - 1];
             const isBlockedInEnd    = !!endingNode.isBlocked;
             const isVisibleInEnd    = !!endingNode.isVisible;
-            const endingGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(endingNode.gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_03);
+            const unitMapView       = war.getUnitMap().getView();
+            if ((deleteViewAfterMoving) && (!isVisibleInEnd)) {
+                tween.call(() => {
+                    unitMapView.removeUnit(this);
+                });
+            }
+
+            const endingGridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(endingNode.gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_03);
             return new Promise<void>(resolve => {
                 if (!aiming) {
                     tween.call(() => {
@@ -305,6 +313,8 @@ namespace TwnsBwUnitView {
                         if ((isBlockedInEnd) && (isVisibleInEnd)) {
                             war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
+                        (deleteViewAfterMoving) && (unitMapView.removeUnit(this));
+
                         SoundManager.fadeoutLongSfxForMoveUnit();
 
                         resolve();
@@ -325,6 +335,8 @@ namespace TwnsBwUnitView {
                         if ((isBlockedInEnd) && (isVisibleInEnd)) {
                             war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
+                        (deleteViewAfterMoving) && (unitMapView.removeUnit(this));
+
                         SoundManager.fadeoutLongSfxForMoveUnit();
 
                         resolve();
