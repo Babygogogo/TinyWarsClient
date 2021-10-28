@@ -703,13 +703,13 @@ namespace WarCommonHelpers {
      * @return the war view is vibrated or not
      */
     export function handleCommonExtraDataForWarActions({ war, playerArrayAfterAction, tileArrayAfterAction, unitArrayAfterAction, destroyedUnitIdArray, nextUnitId, isFastExecute }: {
-        war                     : TwnsBwWar.BwWar;
-        playerArrayAfterAction  : Types.Undefinable<WarSerialization.ISerialPlayer[]>;
-        tileArrayAfterAction    : Types.Undefinable<WarSerialization.ISerialTile[]>;
-        unitArrayAfterAction    : Types.Undefinable<WarSerialization.ISerialUnit[]>;
-        destroyedUnitIdArray    : Types.Undefinable<number[]>;
-        nextUnitId              : number;
-        isFastExecute           : boolean;
+        war                         : TwnsBwWar.BwWar;
+        playerArrayAfterAction      : Types.Undefinable<WarSerialization.ISerialPlayer[]>;
+        tileArrayAfterAction        : Types.Undefinable<WarSerialization.ISerialTile[]>;
+        unitArrayAfterAction        : Types.Undefinable<WarSerialization.ISerialUnit[]>;
+        destroyedUnitIdArray        : Types.Undefinable<number[]>;
+        nextUnitId                  : number;
+        isFastExecute               : boolean;
     }): boolean {
         const configVersion = war.getConfigVersion();
         for (const playerData of playerArrayAfterAction ?? []) {
