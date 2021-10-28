@@ -11819,11 +11819,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitWait nextUnitId */
             nextUnitId?: (number|null);
 
-            /** ExtraDataForUnitWait movingUnit */
-            movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitWait movingPath */
-            movingPath?: (Structure.IGridIndexAndPathInfo[]|null);
+            /** ExtraDataForUnitWait movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
         }
 
         /** Represents an ExtraDataForUnitWait. */
@@ -11850,11 +11847,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitWait nextUnitId. */
             public nextUnitId: number;
 
-            /** ExtraDataForUnitWait movingUnit. */
-            public movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitWait movingPath. */
-            public movingPath: Structure.IGridIndexAndPathInfo[];
+            /** ExtraDataForUnitWait movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
             /**
              * Creates a new ExtraDataForUnitWait instance using the specified properties.
@@ -12050,11 +12044,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitBeLoaded nextUnitId */
             nextUnitId?: (number|null);
 
-            /** ExtraDataForUnitBeLoaded movingUnit */
-            movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitBeLoaded movingPath */
-            movingPath?: (Structure.IGridIndexAndPathInfo[]|null);
+            /** ExtraDataForUnitBeLoaded movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
         }
 
         /** Represents an ExtraDataForUnitBeLoaded. */
@@ -12081,11 +12072,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitBeLoaded nextUnitId. */
             public nextUnitId: number;
 
-            /** ExtraDataForUnitBeLoaded movingUnit. */
-            public movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitBeLoaded movingPath. */
-            public movingPath: Structure.IGridIndexAndPathInfo[];
+            /** ExtraDataForUnitBeLoaded movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
             /**
              * Creates a new ExtraDataForUnitBeLoaded instance using the specified properties.
@@ -12281,11 +12269,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitCaptureTile nextUnitId */
             nextUnitId?: (number|null);
 
-            /** ExtraDataForUnitCaptureTile movingUnit */
-            movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitCaptureTile movingPath */
-            movingPath?: (Structure.IGridIndexAndPathInfo[]|null);
+            /** ExtraDataForUnitCaptureTile movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
         }
 
         /** Represents an ExtraDataForUnitCaptureTile. */
@@ -12312,11 +12297,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitCaptureTile nextUnitId. */
             public nextUnitId: number;
 
-            /** ExtraDataForUnitCaptureTile movingUnit. */
-            public movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitCaptureTile movingPath. */
-            public movingPath: Structure.IGridIndexAndPathInfo[];
+            /** ExtraDataForUnitCaptureTile movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
             /**
              * Creates a new ExtraDataForUnitCaptureTile instance using the specified properties.
@@ -12518,11 +12500,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitAttackTile nextUnitId */
             nextUnitId?: (number|null);
 
-            /** ExtraDataForUnitAttackTile movingUnit */
-            movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitAttackTile movingPath */
-            movingPath?: (Structure.IGridIndexAndPathInfo[]|null);
+            /** ExtraDataForUnitAttackTile movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
             /** ExtraDataForUnitAttackTile battleDamageInfoArray */
             battleDamageInfoArray?: (Structure.IBattleDamageInfo[]|null);
@@ -12552,11 +12531,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitAttackTile nextUnitId. */
             public nextUnitId: number;
 
-            /** ExtraDataForUnitAttackTile movingUnit. */
-            public movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitAttackTile movingPath. */
-            public movingPath: Structure.IGridIndexAndPathInfo[];
+            /** ExtraDataForUnitAttackTile movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
             /** ExtraDataForUnitAttackTile battleDamageInfoArray. */
             public battleDamageInfoArray: Structure.IBattleDamageInfo[];
@@ -12761,11 +12737,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitAttackUnit nextUnitId */
             nextUnitId?: (number|null);
 
-            /** ExtraDataForUnitAttackUnit movingUnit */
-            movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitAttackUnit movingPath */
-            movingPath?: (Structure.IGridIndexAndPathInfo[]|null);
+            /** ExtraDataForUnitAttackUnit movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
             /** ExtraDataForUnitAttackUnit battleDamageInfoArray */
             battleDamageInfoArray?: (Structure.IBattleDamageInfo[]|null);
@@ -12795,11 +12768,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitAttackUnit nextUnitId. */
             public nextUnitId: number;
 
-            /** ExtraDataForUnitAttackUnit movingUnit. */
-            public movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitAttackUnit movingPath. */
-            public movingPath: Structure.IGridIndexAndPathInfo[];
+            /** ExtraDataForUnitAttackUnit movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
             /** ExtraDataForUnitAttackUnit battleDamageInfoArray. */
             public battleDamageInfoArray: Structure.IBattleDamageInfo[];
@@ -12995,14 +12965,29 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitDropUnit. */
         interface IExtraDataForUnitDropUnit {
 
-            /** ExtraDataForUnitDropUnit discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitDropUnit playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForUnitDropUnit discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitDropUnit unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitDropUnit actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitDropUnit destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForUnitDropUnit tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForUnitDropUnit nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForUnitDropUnit movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitDropUnit isDropBlocked */
+            isDropBlocked?: (boolean|null);
+
+            /** ExtraDataForUnitDropUnit droppingUnitAndPathArray */
+            droppingUnitAndPathArray?: (Structure.IMovingUnitAndPath[]|null);
         }
 
         /** Represents an ExtraDataForUnitDropUnit. */
@@ -13014,14 +12999,29 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitDropUnit.IExtraDataForUnitDropUnit);
 
-            /** ExtraDataForUnitDropUnit discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitDropUnit playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForUnitDropUnit discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitDropUnit unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitDropUnit actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitDropUnit destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForUnitDropUnit tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForUnitDropUnit nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForUnitDropUnit movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitDropUnit isDropBlocked. */
+            public isDropBlocked: boolean;
+
+            /** ExtraDataForUnitDropUnit droppingUnitAndPathArray. */
+            public droppingUnitAndPathArray: Structure.IMovingUnitAndPath[];
 
             /**
              * Creates a new ExtraDataForUnitDropUnit instance using the specified properties.
@@ -15110,11 +15110,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitUseCoSkill nextUnitId */
             nextUnitId?: (number|null);
 
-            /** ExtraDataForUnitUseCoSkill movingUnit */
-            movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitUseCoSkill movingPath */
-            movingPath?: (Structure.IGridIndexAndPathInfo[]|null);
+            /** ExtraDataForUnitUseCoSkill movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
             /** ExtraDataForUnitUseCoSkill skillDataArray */
             skillDataArray?: (Structure.IDataForUseCoSkill[]|null);
@@ -15144,11 +15141,8 @@ export declare namespace WarAction {
             /** ExtraDataForUnitUseCoSkill nextUnitId. */
             public nextUnitId: number;
 
-            /** ExtraDataForUnitUseCoSkill movingUnit. */
-            public movingUnit?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitUseCoSkill movingPath. */
-            public movingPath: Structure.IGridIndexAndPathInfo[];
+            /** ExtraDataForUnitUseCoSkill movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
             /** ExtraDataForUnitUseCoSkill skillDataArray. */
             public skillDataArray: Structure.IDataForUseCoSkill[];
@@ -16435,6 +16429,102 @@ export declare namespace Structure {
 
         /**
          * Converts this MovePath to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a MovingUnitAndPath. */
+    interface IMovingUnitAndPath {
+
+        /** MovingUnitAndPath unit */
+        unit?: (WarSerialization.ISerialUnit|null);
+
+        /** MovingUnitAndPath path */
+        path?: (Structure.IGridIndexAndPathInfo[]|null);
+    }
+
+    /** Represents a MovingUnitAndPath. */
+    class MovingUnitAndPath implements IMovingUnitAndPath {
+
+        /**
+         * Constructs a new MovingUnitAndPath.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.IMovingUnitAndPath);
+
+        /** MovingUnitAndPath unit. */
+        public unit?: (WarSerialization.ISerialUnit|null);
+
+        /** MovingUnitAndPath path. */
+        public path: Structure.IGridIndexAndPathInfo[];
+
+        /**
+         * Creates a new MovingUnitAndPath instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MovingUnitAndPath instance
+         */
+        public static create(properties?: Structure.IMovingUnitAndPath): Structure.MovingUnitAndPath;
+
+        /**
+         * Encodes the specified MovingUnitAndPath message. Does not implicitly {@link Structure.MovingUnitAndPath.verify|verify} messages.
+         * @param message MovingUnitAndPath message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.IMovingUnitAndPath, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MovingUnitAndPath message, length delimited. Does not implicitly {@link Structure.MovingUnitAndPath.verify|verify} messages.
+         * @param message MovingUnitAndPath message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.IMovingUnitAndPath, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MovingUnitAndPath message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MovingUnitAndPath
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.MovingUnitAndPath;
+
+        /**
+         * Decodes a MovingUnitAndPath message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MovingUnitAndPath
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.MovingUnitAndPath;
+
+        /**
+         * Verifies a MovingUnitAndPath message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MovingUnitAndPath message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MovingUnitAndPath
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.MovingUnitAndPath;
+
+        /**
+         * Creates a plain object from a MovingUnitAndPath message. Also converts values to other types if specified.
+         * @param message MovingUnitAndPath
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.MovingUnitAndPath, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MovingUnitAndPath to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };

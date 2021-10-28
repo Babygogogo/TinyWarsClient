@@ -543,7 +543,8 @@ namespace WarActionExecutor {
     async function fastExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<void> {
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(actionExtraData.movingUnit, actionExtraData.movingPath);
+            const movingUnitAndPath = actionExtraData.movingUnitAndPath;
+            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(movingUnitAndPath?.unit, movingUnitAndPath?.path);
 
             WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
@@ -685,8 +686,7 @@ namespace WarActionExecutor {
         if (actionExtraData) {
             await WarCommonHelpers.moveExtraUnit({
                 war,
-                movingUnitData          : actionExtraData.movingUnit,
-                movingPath              : actionExtraData.movingPath,
+                movingUnitAndPath       : actionExtraData.movingUnitAndPath,
                 aiming                  : targetGridIndex,
                 deleteViewAfterMoving   : true,
             });
@@ -886,7 +886,8 @@ namespace WarActionExecutor {
     async function fastExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<void> {
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(actionExtraData.movingUnit, actionExtraData.movingPath);
+            const movingUnitAndPath = actionExtraData.movingUnitAndPath;
+            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(movingUnitAndPath?.unit, movingUnitAndPath?.path);
 
             WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
@@ -1028,12 +1029,12 @@ namespace WarActionExecutor {
         const actionExtraData   = action.extraData;
         const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
         if (actionExtraData) {
-            const movingUnitData    = actionExtraData.movingUnit;
-            const movingPath        = actionExtraData.movingPath;
+            const movingUnitAndPath = actionExtraData.movingUnitAndPath;
+            const movingUnitData    = movingUnitAndPath?.unit;
+            const movingPath        = movingUnitAndPath?.path;
             await WarCommonHelpers.moveExtraUnit({
                 war,
-                movingUnitData,
-                movingPath,
+                movingUnitAndPath,
                 aiming                  : targetGridIndex,
                 deleteViewAfterMoving   : true,
             });
@@ -1245,7 +1246,8 @@ namespace WarActionExecutor {
     async function fastExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<void> {
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(actionExtraData.movingUnit, actionExtraData.movingPath);
+            const movingUnitAndPath = actionExtraData.movingUnitAndPath;
+            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(movingUnitAndPath?.unit, movingUnitAndPath?.path);
 
             WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
@@ -1280,12 +1282,11 @@ namespace WarActionExecutor {
         const unitMap           = war.getUnitMap();
         const actionExtraData   = action.extraData;
         if (actionExtraData) {
-            const movingPath            = actionExtraData.movingPath;
+            const movingUnitAndPath     = actionExtraData.movingUnitAndPath;
             const tileArrayAfterAction  = actionExtraData.tileArrayAfterAction;
             await WarCommonHelpers.moveExtraUnit({
                 war,
-                movingUnitData          : actionExtraData.movingUnit,
-                movingPath,
+                movingUnitAndPath,
                 aiming                  : null,
                 deleteViewAfterMoving   : true,
             });
@@ -1301,7 +1302,8 @@ namespace WarActionExecutor {
             });
 
             {
-                const lastNode = movingPath ? movingPath[movingPath.length - 1] : null;
+                const movingPath    = movingUnitAndPath?.path;
+                const lastNode      = movingPath ? movingPath[movingPath.length - 1] : null;
                 if ((lastNode) && (lastNode.isVisible) && (!lastNode.isBlocked)) {
                     const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitBeLoaded_01);
                     unitMap.getUnitOnMap(gridIndex)?.updateView();
@@ -1444,7 +1446,8 @@ namespace WarActionExecutor {
     async function fastExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<void> {
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(actionExtraData.movingUnit, actionExtraData.movingPath);
+            const movingUnitAndPath = actionExtraData.movingUnitAndPath;
+            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(movingUnitAndPath?.unit, movingUnitAndPath?.path);
 
             WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
@@ -1502,12 +1505,12 @@ namespace WarActionExecutor {
         const playerInTurn      = war.getPlayerInTurn();
         const isSelfInTurn      = playerInTurn.getUserId() === UserModel.getSelfUserId();
         if (actionExtraData) {
-            const movingPath            = actionExtraData.movingPath;
+            const movingUnitAndPath     = actionExtraData.movingUnitAndPath;
+            const movingPath            = movingUnitAndPath?.path;
             const tileArrayAfterAction  = actionExtraData.tileArrayAfterAction;
             const extraUnitView         = await WarCommonHelpers.moveExtraUnit({
                 war,
-                movingUnitData          : actionExtraData.movingUnit,
-                movingPath,
+                movingUnitAndPath,
                 aiming                  : null,
                 deleteViewAfterMoving   : false,
             });
@@ -1680,33 +1683,49 @@ namespace WarActionExecutor {
             : await normalExeUnitDropUnit(war, action);
     }
     async function fastExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<void> {
-        const path              = action.path as MovePath;
-        const launchUnitId      = action.launchUnitId;
-        const pathNodes         = path.nodes;
-        const unitMap           = war.getUnitMap();
-        const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const movingUnitAndPath = actionExtraData.movingUnitAndPath;
+            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(movingUnitAndPath?.unit, movingUnitAndPath?.path);
 
-        const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
-        const fogMap                = war.getFogMap();
-        const unitsForDrop          : BwUnit[] = [];
-        for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
-            unitMap.setUnitUnloaded(unitId, gridIndex);
-            for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
-                unit.setGridIndex(gridIndex);
-            }
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction  : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction    : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction    : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray    : actionExtraData.destroyedUnitIdArray,
+                nextUnitId              : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_FastExeUnitWait_00),
+                isFastExecute           : true,
+            });
+        } else {
+            const path              = action.path as MovePath;
+            const launchUnitId      = action.launchUnitId;
+            const pathNodes         = path.nodes;
+            const unitMap           = war.getUnitMap();
+            const endingGridIndex   = pathNodes[pathNodes.length - 1];
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
 
-            unitForDrop.setLoaderUnitId(null);
-            unitForDrop.setGridIndex(gridIndex);
-            unitForDrop.setActionState(UnitActionState.Acted);
-            unitsForDrop.push(unitForDrop);
+            const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
+            const fogMap                = war.getFogMap();
+            const unitsForDrop          : BwUnit[] = [];
+            for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
+                const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
+                unitMap.setUnitUnloaded(unitId, gridIndex);
+                for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
+                    unit.setGridIndex(gridIndex);
+                }
 
-            if (shouldUpdateFogMap) {
-                fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                unitForDrop.setLoaderUnitId(null);
+                unitForDrop.setGridIndex(gridIndex);
+                unitForDrop.setActionState(UnitActionState.Acted);
+                unitsForDrop.push(unitForDrop);
+
+                if (shouldUpdateFogMap) {
+                    fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                }
             }
         }
     }
@@ -1714,65 +1733,105 @@ namespace WarActionExecutor {
         const desc = await war.getDescForExeUnitDropUnit(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
-
-        const path              = action.path as MovePath;
-        const launchUnitId      = action.launchUnitId;
-        const pathNodes         = path.nodes;
+        const actionExtraData   = action.extraData;
+        const gridVisualEffect  = war.getGridVisualEffect();
         const unitMap           = war.getUnitMap();
-        const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
+        if (actionExtraData) {
+            const movingUnitAndPath = actionExtraData.movingUnitAndPath;
+            const movingUnitView    = await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : false,
+            });
 
-        const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
-        const fogMap                = war.getFogMap();
-        const unitsForDrop          : BwUnit[] = [];
-        for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
-            unitMap.setUnitUnloaded(unitId, gridIndex);
-            for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
-                unit.setGridIndex(gridIndex);
+            const movingPath    = movingUnitAndPath?.path;
+            const lastNode      = movingPath ? movingPath[movingPath?.length - 1] : null;
+            const unitMapView   = unitMap.getView();
+            if (lastNode) {
+                if (lastNode.isVisible) {
+                    if (actionExtraData.isDropBlocked) {
+                        gridVisualEffect.showEffectBlock(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitWait_00));
+                    }
+                } else {
+                    (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
+                }
             }
 
-            unitForDrop.setLoaderUnitId(null);
-            unitForDrop.setGridIndex(gridIndex);
-            unitForDrop.setActionState(UnitActionState.Acted);
-            unitsForDrop.push(unitForDrop);
+            await Promise.all((actionExtraData.droppingUnitAndPathArray ?? []).map(v => WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : v,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            })));
+            (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
 
-            if (shouldUpdateFogMap) {
-                fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction  : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction    : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction    : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray    : actionExtraData.destroyedUnitIdArray,
+                nextUnitId              : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_NormalExeUnitWait_01),
+                isFastExecute           : false,
+            });
+
+        } else {
+            const path              = action.path as MovePath;
+            const launchUnitId      = action.launchUnitId;
+            const pathNodes         = path.nodes;
+            const endingGridIndex   = pathNodes[pathNodes.length - 1];
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
+            const fogMap                = war.getFogMap();
+            const unitsForDrop          : BwUnit[] = [];
+            for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
+                const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
+                unitMap.setUnitUnloaded(unitId, gridIndex);
+                for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
+                    unit.setGridIndex(gridIndex);
+                }
+
+                unitForDrop.setLoaderUnitId(null);
+                unitForDrop.setGridIndex(gridIndex);
+                unitForDrop.setActionState(UnitActionState.Acted);
+                unitsForDrop.push(unitForDrop);
+
+                if (shouldUpdateFogMap) {
+                    fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                }
             }
+
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
+            if (action.isDropBlocked) {
+                gridVisualEffect.showEffectBlock(endingGridIndex);
+            }
+            focusUnit.updateView();
+
+            const promises: Promise<void>[] = [];
+            for (const unitForDrop of unitsForDrop) {
+                promises.push((async () => {
+                    await unitForDrop.moveViewAlongPath({
+                        pathNodes   : [endingGridIndex, unitForDrop.getGridIndex()],
+                        isDiving    : unitForDrop.getIsDiving(),
+                        isBlocked   : false,
+                        aiming      : null,
+                    });
+                    unitForDrop.updateView();
+                })());
+            }
+            await Promise.all(promises);
         }
 
-        await focusUnit.moveViewAlongPath({
-            pathNodes,
-            isDiving    : focusUnit.getIsDiving(),
-            isBlocked   : path.isBlocked,
-            aiming      : null,
-        });
-        if (action.isDropBlocked) {
-            war.getGridVisualEffect().showEffectBlock(endingGridIndex);
-        }
-        focusUnit.updateView();
-
-        const promises: Promise<void>[] = [];
-        for (const unitForDrop of unitsForDrop) {
-            promises.push((async () => {
-                await unitForDrop.moveViewAlongPath({
-                    pathNodes   : [endingGridIndex, unitForDrop.getGridIndex()],
-                    isDiving    : unitForDrop.getIsDiving(),
-                    isBlocked   : false,
-                    aiming      : null,
-                });
-                unitForDrop.updateView();
-            })());
-        }
-        await Promise.all(promises);
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
 
@@ -2538,7 +2597,8 @@ namespace WarActionExecutor {
         const actionExtraData   = action.extraData;
         const skillType         : Types.Undefinable<Types.CoSkillType> = action.skillType;
         if (actionExtraData) {
-            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(actionExtraData.movingUnit, actionExtraData.movingPath);
+            const movingUnitAndPath = actionExtraData.movingUnitAndPath;
+            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(movingUnitAndPath?.unit, movingUnitAndPath?.path);
 
             if (skillType != null) {
                 const skillIdArray      = playerInTurn.getCoSkills(skillType);
@@ -2604,8 +2664,7 @@ namespace WarActionExecutor {
         if (actionExtraData) {
             await WarCommonHelpers.moveExtraUnit({
                 war,
-                movingUnitData          : actionExtraData.movingUnit,
-                movingPath              : actionExtraData.movingPath,
+                movingUnitAndPath       : actionExtraData.movingUnitAndPath,
                 aiming                  : null,
                 deleteViewAfterMoving   : true,
             });
@@ -2697,7 +2756,8 @@ namespace WarActionExecutor {
     async function fastExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<void> {
         const actionExtraData = action.extraData;
         if (actionExtraData) {
-            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(actionExtraData.movingUnit, actionExtraData.movingPath);
+            const movingUnitAndPath = actionExtraData.movingUnitAndPath;
+            war.getFogMap().updateMapFromPathsByExtraUnitAndPath(movingUnitAndPath?.unit, movingUnitAndPath?.path);
 
             WarCommonHelpers.handleCommonExtraDataForWarActions({
                 war,
@@ -2727,8 +2787,7 @@ namespace WarActionExecutor {
         if (actionExtraData) {
             await WarCommonHelpers.moveExtraUnit({
                 war,
-                movingUnitData          : actionExtraData.movingUnit,
-                movingPath              : actionExtraData.movingPath,
+                movingUnitAndPath       : actionExtraData.movingUnitAndPath,
                 aiming                  : null,
                 deleteViewAfterMoving   : true,
             });

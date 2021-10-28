@@ -2789,6 +2789,17 @@ export const enum ServerErrorCode {
     WarCommonHelpers_SendMessageForExecuteWarAction_0008,
     WarCommonHelpers_SendMessageForExecuteWarAction_0009,
 
+    WarCommonHelpers_UpdatePathToSend_0000,
+    WarCommonHelpers_UpdatePathToSend_0001,
+    WarCommonHelpers_UpdatePathToSend_0002,
+    WarCommonHelpers_UpdatePathToSend_0003,
+    WarCommonHelpers_UpdatePathToSend_0004,
+    WarCommonHelpers_UpdatePathToSend_0005,
+    WarCommonHelpers_UpdatePathToSend_0006,
+    WarCommonHelpers_UpdatePathToSend_0007,
+    WarCommonHelpers_UpdatePathToSend_0008,
+    WarCommonHelpers_UpdatePathToSend_0009,
+
     WarDestructionHelpers_DestroyUnitOnMap_0000,
     WarDestructionHelpers_DestroyUnitOnMap_0001,
     WarDestructionHelpers_DestroyUnitOnMap_0002,

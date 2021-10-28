@@ -531,16 +531,22 @@ namespace WarCommonHelpers {
             }
         }
     }
-    export async function moveExtraUnit({ war, movingUnitData, movingPath, aiming, deleteViewAfterMoving }: {
+    export async function moveExtraUnit({ war, movingUnitAndPath, aiming, deleteViewAfterMoving }: {
         war                     : TwnsBwWar.BwWar;
-        movingUnitData          : Types.Undefinable<WarSerialization.ISerialUnit>;
-        movingPath              : Types.Undefinable<ProtoTypes.Structure.IGridIndexAndPathInfo[]>;
+        movingUnitAndPath       : Types.Undefinable<ProtoTypes.Structure.IMovingUnitAndPath>;
         aiming                  : GridIndex | null;
         deleteViewAfterMoving   : boolean;
     }): Promise<TwnsBwUnitView.BwUnitView | null> {
+        if (movingUnitAndPath == null) {
+            return null;
+        }
+
+        const movingUnitData = movingUnitAndPath.unit;
         if (movingUnitData == null) {
             return null;
         }
+
+        const movingPath = movingUnitAndPath.path;
         if (movingPath == null) {
             throw Helpers.newError(`Empty movingPath.`, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_00);
         }
