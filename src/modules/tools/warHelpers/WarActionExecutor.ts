@@ -132,22 +132,58 @@ namespace WarActionExecutor {
             : await normalExePlayerDeleteUnit(war, action);
     }
     async function fastExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
-        const gridIndex = action.gridIndex as GridIndex;
-        const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
-        if (focusUnit) {
-            war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_FastExePlayerDeleteUnit_00),
+                isFastExecute                       : true,
+            });
+        } else {
+            const gridIndex = action.gridIndex as GridIndex;
+            const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
+            if (focusUnit) {
+                war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
+                WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+            }
         }
     }
     async function normalExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
         const desc = await war.getDescForExePlayerDeleteUnit(action);
         (desc) && (FloatText.show(desc));
 
-        const gridIndex = action.gridIndex as GridIndex;
-        const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
-        if (focusUnit) {
-            war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : actionExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_NormalExePlayerDeleteUnit_00),
+                isFastExecute                       : false,
+            });
+
+        } else {
+            const gridIndex = action.gridIndex as GridIndex;
+            const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
+            if (focusUnit) {
+                war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
+                WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+            }
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
@@ -240,17 +276,53 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExePlayerSurrender(war)
+            ? await fastExePlayerSurrender(war, action)
             : await normalExePlayerSurrender(war, action);
     }
-    async function fastExePlayerSurrender(war: BwWar): Promise<void> {
-        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+    async function fastExePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender): Promise<void> {
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_FastExePlayerSurrender_00),
+                isFastExecute                       : true,
+            });
+        } else {
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        }
     }
     async function normalExePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender): Promise<void> {
         const desc = await war.getDescForExePlayerSurrender(action);
         (desc) && (FloatText.show(desc));
 
-        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : actionExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_NormalExePlayerSurrender_00),
+                isFastExecute                       : false,
+            });
+
+        } else {
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,8 +332,22 @@ namespace WarActionExecutor {
             : await normalExePlayerVoteForDraw(war, action);
     }
     async function fastExePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw): Promise<void> {
-        const playerInTurn = war.getPlayerInTurn();
-        playerInTurn.setHasVotedForDraw(true);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_FastExePlayerVoteForDraw_00),
+                isFastExecute                       : true,
+            });
+        } else {
+            const playerInTurn = war.getPlayerInTurn();
+            playerInTurn.setHasVotedForDraw(true);
+        }
 
         const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
@@ -274,8 +360,30 @@ namespace WarActionExecutor {
         const desc = await war.getDescForExePlayerVoteForDraw(action);
         (desc) && (FloatText.show(desc));
 
-        const playerInTurn = war.getPlayerInTurn();
-        playerInTurn.setHasVotedForDraw(true);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : actionExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_NormalExePlayerVoteForDraw_00),
+                isFastExecute                       : false,
+            });
+
+        } else {
+            const playerInTurn = war.getPlayerInTurn();
+            playerInTurn.setHasVotedForDraw(true);
+        }
 
         const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
@@ -467,13 +575,51 @@ namespace WarActionExecutor {
             : await normalExeSystemDestroyPlayerForce(war, action);
     }
     async function fastExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
-        WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), false);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_FastExeSystemDestroyPlayerForce_00),
+                isFastExecute                       : true,
+            });
+            war.getDrawVoteManager().setRemainingVotes(null);
+        } else {
+            WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), false);
+        }
     }
     async function normalExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
         const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
         (desc) && (FloatText.show(desc));
 
-        WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), true);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : actionExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_NormalExeSystemDestroyPlayerForce_00),
+                isFastExecute                       : false,
+            });
+            war.getDrawVoteManager().setRemainingVotes(null);
+
+        } else {
+            WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), true);
+        }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
@@ -514,27 +660,118 @@ namespace WarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeSystemHandleBootPlayer(war)
+            ? await fastExeSystemHandleBootPlayer(war, action)
             : await normalExeSystemHandleBootPlayer(war, action);
     }
-    async function fastExeSystemHandleBootPlayer(war: BwWar): Promise<void> {
-        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+    async function fastExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<void> {
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_FastExeSystemHandleBootPlayer_00),
+                isFastExecute                       : true,
+            });
+        } else {
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        }
     }
     async function normalExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<void> {
         const desc = await war.getDescForExeSystemHandleBootPlayer(action);
         (desc) && (FloatText.show(desc));
 
-        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : actionExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_NormalExeSystemHandleBootPlayer_00),
+                isFastExecute                       : false,
+            });
+
+        } else {
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemVoteForDraw(war: BwWar, action: IWarActionSystemVoteForDraw, isFast: boolean): Promise<void> {
+        isFast
+            ? await fastExeSystemVoteForDraw(war, action)
+            : await normalExeSystemVoteForDraw(war, action);
+    }
+    async function fastExeSystemVoteForDraw(war: BwWar, action: IWarActionSystemVoteForDraw): Promise<void> {
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_FastExeSystemVoteForDraw_00),
+                isFastExecute                       : true,
+            });
+        } else {
+            const playerInTurn = war.getPlayerInTurn();
+            playerInTurn.setHasVotedForDraw(true);
+        }
+
         const drawVoteManager = war.getDrawVoteManager();
-        drawVoteManager.setRemainingVotes(action.isAgree
-            ? Helpers.getExisted(drawVoteManager.getRemainingVotes(), ClientErrorCode.WarActionExecutor_ExeSystemVoteForDraw_00) - 1
-            : null
-        );
-        war.getPlayerInTurn().setHasVotedForDraw(true);
+        if (!action.isAgree) {
+            drawVoteManager.setRemainingVotes(null);
+        } else {
+            drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || drawVoteManager.getMaxVotes()) - 1);
+        }
+    }
+    async function normalExeSystemVoteForDraw(war: BwWar, action: IWarActionSystemVoteForDraw): Promise<void> {
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : actionExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                playerArrayAfterAction              : actionExtraData.playerArrayAfterAction,
+                tileArrayAfterAction                : actionExtraData.tileArrayAfterAction,
+                unitArrayAfterAction                : actionExtraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : actionExtraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : actionExtraData.visibilityArrayFromPathsAfterAction,
+                nextUnitId                          : Helpers.getExisted(actionExtraData.nextUnitId, ClientErrorCode.WarActionExecutor_NormalExeSystemVoteForDraw_00),
+                isFastExecute                       : false,
+            });
+
+        } else {
+            const playerInTurn = war.getPlayerInTurn();
+            playerInTurn.setHasVotedForDraw(true);
+        }
+
+        const drawVoteManager = war.getDrawVoteManager();
+        if (!action.isAgree) {
+            drawVoteManager.setRemainingVotes(null);
+        } else {
+            drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || drawVoteManager.getMaxVotes()) - 1);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

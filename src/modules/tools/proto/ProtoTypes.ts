@@ -10226,6 +10226,9 @@ export declare namespace WarAction {
 
         /** WarActionSystemDestroyPlayerForce targetPlayerIndex */
         targetPlayerIndex?: (number|null);
+
+        /** WarActionSystemDestroyPlayerForce extraData */
+        extraData?: (WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce|null);
     }
 
     /** Represents a WarActionSystemDestroyPlayerForce. */
@@ -10239,6 +10242,9 @@ export declare namespace WarAction {
 
         /** WarActionSystemDestroyPlayerForce targetPlayerIndex. */
         public targetPlayerIndex: number;
+
+        /** WarActionSystemDestroyPlayerForce extraData. */
+        public extraData?: (WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce|null);
 
         /**
          * Creates a new WarActionSystemDestroyPlayerForce instance using the specified properties.
@@ -10311,8 +10317,140 @@ export declare namespace WarAction {
         public toJSON(): { [k: string]: any };
     }
 
+    namespace WarActionSystemDestroyPlayerForce {
+
+        /** Properties of an ExtraDataForSystemDestroyPlayerForce. */
+        interface IExtraDataForSystemDestroyPlayerForce {
+
+            /** ExtraDataForSystemDestroyPlayerForce playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+
+            /** ExtraDataForSystemDestroyPlayerForce unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForSystemDestroyPlayerForce destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForSystemDestroyPlayerForce tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForSystemDestroyPlayerForce nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForSystemDestroyPlayerForce movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForSystemDestroyPlayerForce visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+        }
+
+        /** Represents an ExtraDataForSystemDestroyPlayerForce. */
+        class ExtraDataForSystemDestroyPlayerForce implements IExtraDataForSystemDestroyPlayerForce {
+
+            /**
+             * Constructs a new ExtraDataForSystemDestroyPlayerForce.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce);
+
+            /** ExtraDataForSystemDestroyPlayerForce playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
+
+            /** ExtraDataForSystemDestroyPlayerForce unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForSystemDestroyPlayerForce destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForSystemDestroyPlayerForce tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForSystemDestroyPlayerForce nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForSystemDestroyPlayerForce movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForSystemDestroyPlayerForce visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
+
+            /**
+             * Creates a new ExtraDataForSystemDestroyPlayerForce instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemDestroyPlayerForce instance
+             */
+            public static create(properties?: WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce): WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce;
+
+            /**
+             * Encodes the specified ExtraDataForSystemDestroyPlayerForce message. Does not implicitly {@link WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce.verify|verify} messages.
+             * @param message ExtraDataForSystemDestroyPlayerForce message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemDestroyPlayerForce message, length delimited. Does not implicitly {@link WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce.verify|verify} messages.
+             * @param message ExtraDataForSystemDestroyPlayerForce message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemDestroyPlayerForce message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemDestroyPlayerForce
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce;
+
+            /**
+             * Decodes an ExtraDataForSystemDestroyPlayerForce message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemDestroyPlayerForce
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce;
+
+            /**
+             * Verifies an ExtraDataForSystemDestroyPlayerForce message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemDestroyPlayerForce message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemDestroyPlayerForce
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemDestroyPlayerForce message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemDestroyPlayerForce
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemDestroyPlayerForce to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WarActionSystemEndWar. */
     interface IWarActionSystemEndWar {
+
+        /** WarActionSystemEndWar extraData */
+        extraData?: (WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar|null);
     }
 
     /** Represents a WarActionSystemEndWar. */
@@ -10323,6 +10461,9 @@ export declare namespace WarAction {
          * @param [properties] Properties to set
          */
         constructor(properties?: WarAction.IWarActionSystemEndWar);
+
+        /** WarActionSystemEndWar extraData. */
+        public extraData?: (WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar|null);
 
         /**
          * Creates a new WarActionSystemEndWar instance using the specified properties.
@@ -10393,6 +10534,135 @@ export declare namespace WarAction {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionSystemEndWar {
+
+        /** Properties of an ExtraDataForSystemEndWar. */
+        interface IExtraDataForSystemEndWar {
+
+            /** ExtraDataForSystemEndWar playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+
+            /** ExtraDataForSystemEndWar unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForSystemEndWar destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForSystemEndWar tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForSystemEndWar nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForSystemEndWar movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForSystemEndWar visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+        }
+
+        /** Represents an ExtraDataForSystemEndWar. */
+        class ExtraDataForSystemEndWar implements IExtraDataForSystemEndWar {
+
+            /**
+             * Constructs a new ExtraDataForSystemEndWar.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar);
+
+            /** ExtraDataForSystemEndWar playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
+
+            /** ExtraDataForSystemEndWar unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForSystemEndWar destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForSystemEndWar tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForSystemEndWar nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForSystemEndWar movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForSystemEndWar visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
+
+            /**
+             * Creates a new ExtraDataForSystemEndWar instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemEndWar instance
+             */
+            public static create(properties?: WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar): WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar;
+
+            /**
+             * Encodes the specified ExtraDataForSystemEndWar message. Does not implicitly {@link WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar.verify|verify} messages.
+             * @param message ExtraDataForSystemEndWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemEndWar message, length delimited. Does not implicitly {@link WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar.verify|verify} messages.
+             * @param message ExtraDataForSystemEndWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemEndWar message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemEndWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar;
+
+            /**
+             * Decodes an ExtraDataForSystemEndWar message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemEndWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar;
+
+            /**
+             * Verifies an ExtraDataForSystemEndWar message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemEndWar message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemEndWar
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemEndWar message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemEndWar
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemEndWar to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a WarActionSystemEndTurn. */
@@ -10604,6 +10874,9 @@ export declare namespace WarAction {
 
     /** Properties of a WarActionSystemHandleBootPlayer. */
     interface IWarActionSystemHandleBootPlayer {
+
+        /** WarActionSystemHandleBootPlayer extraData */
+        extraData?: (WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer|null);
     }
 
     /** Represents a WarActionSystemHandleBootPlayer. */
@@ -10614,6 +10887,9 @@ export declare namespace WarAction {
          * @param [properties] Properties to set
          */
         constructor(properties?: WarAction.IWarActionSystemHandleBootPlayer);
+
+        /** WarActionSystemHandleBootPlayer extraData. */
+        public extraData?: (WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer|null);
 
         /**
          * Creates a new WarActionSystemHandleBootPlayer instance using the specified properties.
@@ -10686,11 +10962,143 @@ export declare namespace WarAction {
         public toJSON(): { [k: string]: any };
     }
 
+    namespace WarActionSystemHandleBootPlayer {
+
+        /** Properties of an ExtraDataForSystemHandleBootPlayer. */
+        interface IExtraDataForSystemHandleBootPlayer {
+
+            /** ExtraDataForSystemHandleBootPlayer playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+
+            /** ExtraDataForSystemHandleBootPlayer unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForSystemHandleBootPlayer destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForSystemHandleBootPlayer tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForSystemHandleBootPlayer nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForSystemHandleBootPlayer movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForSystemHandleBootPlayer visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+        }
+
+        /** Represents an ExtraDataForSystemHandleBootPlayer. */
+        class ExtraDataForSystemHandleBootPlayer implements IExtraDataForSystemHandleBootPlayer {
+
+            /**
+             * Constructs a new ExtraDataForSystemHandleBootPlayer.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer);
+
+            /** ExtraDataForSystemHandleBootPlayer playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
+
+            /** ExtraDataForSystemHandleBootPlayer unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForSystemHandleBootPlayer destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForSystemHandleBootPlayer tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForSystemHandleBootPlayer nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForSystemHandleBootPlayer movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForSystemHandleBootPlayer visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
+
+            /**
+             * Creates a new ExtraDataForSystemHandleBootPlayer instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemHandleBootPlayer instance
+             */
+            public static create(properties?: WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer): WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemHandleBootPlayer message. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer.verify|verify} messages.
+             * @param message ExtraDataForSystemHandleBootPlayer message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemHandleBootPlayer message, length delimited. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer.verify|verify} messages.
+             * @param message ExtraDataForSystemHandleBootPlayer message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemHandleBootPlayer message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemHandleBootPlayer
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer;
+
+            /**
+             * Decodes an ExtraDataForSystemHandleBootPlayer message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemHandleBootPlayer
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer;
+
+            /**
+             * Verifies an ExtraDataForSystemHandleBootPlayer message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemHandleBootPlayer message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemHandleBootPlayer
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemHandleBootPlayer message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemHandleBootPlayer
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemHandleBootPlayer to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WarActionSystemVoteForDraw. */
     interface IWarActionSystemVoteForDraw {
 
         /** WarActionSystemVoteForDraw isAgree */
         isAgree?: (boolean|null);
+
+        /** WarActionSystemVoteForDraw extraData */
+        extraData?: (WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw|null);
     }
 
     /** Represents a WarActionSystemVoteForDraw. */
@@ -10704,6 +11112,9 @@ export declare namespace WarAction {
 
         /** WarActionSystemVoteForDraw isAgree. */
         public isAgree: boolean;
+
+        /** WarActionSystemVoteForDraw extraData. */
+        public extraData?: (WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw|null);
 
         /**
          * Creates a new WarActionSystemVoteForDraw instance using the specified properties.
@@ -10774,6 +11185,135 @@ export declare namespace WarAction {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionSystemVoteForDraw {
+
+        /** Properties of an ExtraDataForSystemVoteForDraw. */
+        interface IExtraDataForSystemVoteForDraw {
+
+            /** ExtraDataForSystemVoteForDraw playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+
+            /** ExtraDataForSystemVoteForDraw unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForSystemVoteForDraw destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForSystemVoteForDraw tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForSystemVoteForDraw nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForSystemVoteForDraw movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForSystemVoteForDraw visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+        }
+
+        /** Represents an ExtraDataForSystemVoteForDraw. */
+        class ExtraDataForSystemVoteForDraw implements IExtraDataForSystemVoteForDraw {
+
+            /**
+             * Constructs a new ExtraDataForSystemVoteForDraw.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw);
+
+            /** ExtraDataForSystemVoteForDraw playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
+
+            /** ExtraDataForSystemVoteForDraw unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForSystemVoteForDraw destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForSystemVoteForDraw tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForSystemVoteForDraw nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForSystemVoteForDraw movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForSystemVoteForDraw visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
+
+            /**
+             * Creates a new ExtraDataForSystemVoteForDraw instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemVoteForDraw instance
+             */
+            public static create(properties?: WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw): WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw;
+
+            /**
+             * Encodes the specified ExtraDataForSystemVoteForDraw message. Does not implicitly {@link WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw.verify|verify} messages.
+             * @param message ExtraDataForSystemVoteForDraw message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemVoteForDraw message, length delimited. Does not implicitly {@link WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw.verify|verify} messages.
+             * @param message ExtraDataForSystemVoteForDraw message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemVoteForDraw message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemVoteForDraw
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw;
+
+            /**
+             * Decodes an ExtraDataForSystemVoteForDraw message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemVoteForDraw
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw;
+
+            /**
+             * Verifies an ExtraDataForSystemVoteForDraw message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemVoteForDraw message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemVoteForDraw
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemVoteForDraw message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemVoteForDraw
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemVoteForDraw to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a WarActionPlayerEndTurn. */
@@ -10988,6 +11528,9 @@ export declare namespace WarAction {
 
         /** WarActionPlayerSurrender deprecatedIsBoot */
         deprecatedIsBoot?: (boolean|null);
+
+        /** WarActionPlayerSurrender extraData */
+        extraData?: (WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender|null);
     }
 
     /** Represents a WarActionPlayerSurrender. */
@@ -11001,6 +11544,9 @@ export declare namespace WarAction {
 
         /** WarActionPlayerSurrender deprecatedIsBoot. */
         public deprecatedIsBoot: boolean;
+
+        /** WarActionPlayerSurrender extraData. */
+        public extraData?: (WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender|null);
 
         /**
          * Creates a new WarActionPlayerSurrender instance using the specified properties.
@@ -11071,6 +11617,135 @@ export declare namespace WarAction {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionPlayerSurrender {
+
+        /** Properties of an ExtraDataForPlayerSurrender. */
+        interface IExtraDataForPlayerSurrender {
+
+            /** ExtraDataForPlayerSurrender playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+
+            /** ExtraDataForPlayerSurrender unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForPlayerSurrender destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForPlayerSurrender tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForPlayerSurrender nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForPlayerSurrender movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForPlayerSurrender visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+        }
+
+        /** Represents an ExtraDataForPlayerSurrender. */
+        class ExtraDataForPlayerSurrender implements IExtraDataForPlayerSurrender {
+
+            /**
+             * Constructs a new ExtraDataForPlayerSurrender.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender);
+
+            /** ExtraDataForPlayerSurrender playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
+
+            /** ExtraDataForPlayerSurrender unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForPlayerSurrender destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForPlayerSurrender tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForPlayerSurrender nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForPlayerSurrender movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForPlayerSurrender visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
+
+            /**
+             * Creates a new ExtraDataForPlayerSurrender instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForPlayerSurrender instance
+             */
+            public static create(properties?: WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender): WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerSurrender message. Does not implicitly {@link WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender.verify|verify} messages.
+             * @param message ExtraDataForPlayerSurrender message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerSurrender message, length delimited. Does not implicitly {@link WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender.verify|verify} messages.
+             * @param message ExtraDataForPlayerSurrender message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForPlayerSurrender message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForPlayerSurrender
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender;
+
+            /**
+             * Decodes an ExtraDataForPlayerSurrender message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForPlayerSurrender
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender;
+
+            /**
+             * Verifies an ExtraDataForPlayerSurrender message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForPlayerSurrender message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForPlayerSurrender
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender;
+
+            /**
+             * Creates a plain object from an ExtraDataForPlayerSurrender message. Also converts values to other types if specified.
+             * @param message ExtraDataForPlayerSurrender
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForPlayerSurrender to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a WarActionPlayerProduceUnit. */
@@ -11303,6 +11978,9 @@ export declare namespace WarAction {
 
         /** WarActionPlayerDeleteUnit gridIndex */
         gridIndex?: (Structure.IGridIndex|null);
+
+        /** WarActionPlayerDeleteUnit extraData */
+        extraData?: (WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit|null);
     }
 
     /** Represents a WarActionPlayerDeleteUnit. */
@@ -11316,6 +11994,9 @@ export declare namespace WarAction {
 
         /** WarActionPlayerDeleteUnit gridIndex. */
         public gridIndex?: (Structure.IGridIndex|null);
+
+        /** WarActionPlayerDeleteUnit extraData. */
+        public extraData?: (WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit|null);
 
         /**
          * Creates a new WarActionPlayerDeleteUnit instance using the specified properties.
@@ -11388,11 +12069,143 @@ export declare namespace WarAction {
         public toJSON(): { [k: string]: any };
     }
 
+    namespace WarActionPlayerDeleteUnit {
+
+        /** Properties of an ExtraDataForPlayerDeleteUnit. */
+        interface IExtraDataForPlayerDeleteUnit {
+
+            /** ExtraDataForPlayerDeleteUnit playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+
+            /** ExtraDataForPlayerDeleteUnit unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForPlayerDeleteUnit destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForPlayerDeleteUnit tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForPlayerDeleteUnit nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForPlayerDeleteUnit movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForPlayerDeleteUnit visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+        }
+
+        /** Represents an ExtraDataForPlayerDeleteUnit. */
+        class ExtraDataForPlayerDeleteUnit implements IExtraDataForPlayerDeleteUnit {
+
+            /**
+             * Constructs a new ExtraDataForPlayerDeleteUnit.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit);
+
+            /** ExtraDataForPlayerDeleteUnit playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
+
+            /** ExtraDataForPlayerDeleteUnit unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForPlayerDeleteUnit destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForPlayerDeleteUnit tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForPlayerDeleteUnit nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForPlayerDeleteUnit movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForPlayerDeleteUnit visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
+
+            /**
+             * Creates a new ExtraDataForPlayerDeleteUnit instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForPlayerDeleteUnit instance
+             */
+            public static create(properties?: WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit): WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerDeleteUnit message. Does not implicitly {@link WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit.verify|verify} messages.
+             * @param message ExtraDataForPlayerDeleteUnit message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerDeleteUnit message, length delimited. Does not implicitly {@link WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit.verify|verify} messages.
+             * @param message ExtraDataForPlayerDeleteUnit message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForPlayerDeleteUnit message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForPlayerDeleteUnit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit;
+
+            /**
+             * Decodes an ExtraDataForPlayerDeleteUnit message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForPlayerDeleteUnit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit;
+
+            /**
+             * Verifies an ExtraDataForPlayerDeleteUnit message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForPlayerDeleteUnit message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForPlayerDeleteUnit
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit;
+
+            /**
+             * Creates a plain object from an ExtraDataForPlayerDeleteUnit message. Also converts values to other types if specified.
+             * @param message ExtraDataForPlayerDeleteUnit
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForPlayerDeleteUnit to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WarActionPlayerVoteForDraw. */
     interface IWarActionPlayerVoteForDraw {
 
         /** WarActionPlayerVoteForDraw isAgree */
         isAgree?: (boolean|null);
+
+        /** WarActionPlayerVoteForDraw extraData */
+        extraData?: (WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw|null);
     }
 
     /** Represents a WarActionPlayerVoteForDraw. */
@@ -11406,6 +12219,9 @@ export declare namespace WarAction {
 
         /** WarActionPlayerVoteForDraw isAgree. */
         public isAgree: boolean;
+
+        /** WarActionPlayerVoteForDraw extraData. */
+        public extraData?: (WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw|null);
 
         /**
          * Creates a new WarActionPlayerVoteForDraw instance using the specified properties.
@@ -11476,6 +12292,135 @@ export declare namespace WarAction {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionPlayerVoteForDraw {
+
+        /** Properties of an ExtraDataForPlayerVoteForDraw. */
+        interface IExtraDataForPlayerVoteForDraw {
+
+            /** ExtraDataForPlayerVoteForDraw playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+
+            /** ExtraDataForPlayerVoteForDraw unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForPlayerVoteForDraw destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForPlayerVoteForDraw tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForPlayerVoteForDraw nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForPlayerVoteForDraw movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForPlayerVoteForDraw visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+        }
+
+        /** Represents an ExtraDataForPlayerVoteForDraw. */
+        class ExtraDataForPlayerVoteForDraw implements IExtraDataForPlayerVoteForDraw {
+
+            /**
+             * Constructs a new ExtraDataForPlayerVoteForDraw.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw);
+
+            /** ExtraDataForPlayerVoteForDraw playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
+
+            /** ExtraDataForPlayerVoteForDraw unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForPlayerVoteForDraw destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForPlayerVoteForDraw tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForPlayerVoteForDraw nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForPlayerVoteForDraw movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForPlayerVoteForDraw visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
+
+            /**
+             * Creates a new ExtraDataForPlayerVoteForDraw instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForPlayerVoteForDraw instance
+             */
+            public static create(properties?: WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw): WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerVoteForDraw message. Does not implicitly {@link WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw.verify|verify} messages.
+             * @param message ExtraDataForPlayerVoteForDraw message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerVoteForDraw message, length delimited. Does not implicitly {@link WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw.verify|verify} messages.
+             * @param message ExtraDataForPlayerVoteForDraw message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForPlayerVoteForDraw message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForPlayerVoteForDraw
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw;
+
+            /**
+             * Decodes an ExtraDataForPlayerVoteForDraw message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForPlayerVoteForDraw
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw;
+
+            /**
+             * Verifies an ExtraDataForPlayerVoteForDraw message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForPlayerVoteForDraw message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForPlayerVoteForDraw
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw;
+
+            /**
+             * Creates a plain object from an ExtraDataForPlayerVoteForDraw message. Also converts values to other types if specified.
+             * @param message ExtraDataForPlayerVoteForDraw
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForPlayerVoteForDraw to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a WarActionPlayerUseCoSkill. */
