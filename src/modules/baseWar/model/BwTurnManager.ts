@@ -123,12 +123,13 @@ namespace TwnsBwTurnManager {
 
             const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_01);
             WarCommonHelpers.handleCommonExtraDataForWarActions({
-                war                     : this.getWar(),
-                playerArrayAfterAction  : extraData.playerArrayAfterAction,
-                tileArrayAfterAction    : extraData.tileArrayAfterAction,
-                unitArrayAfterAction    : extraData.unitArrayAfterAction,
-                destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
-                nextUnitId              : Helpers.getExisted(extraData.nextUnitId, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_02),
+                war                                 : this.getWar(),
+                playerArrayAfterAction              : extraData.playerArrayAfterAction,
+                tileArrayAfterAction                : extraData.tileArrayAfterAction,
+                unitArrayAfterAction                : extraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : extraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : null,
+                nextUnitId                          : Helpers.getExisted(extraData.nextUnitId, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_02),
                 isFastExecute,
             });
         }
@@ -169,12 +170,13 @@ namespace TwnsBwTurnManager {
 
             const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_01);
             WarCommonHelpers.handleCommonExtraDataForWarActions({
-                war                     : this.getWar(),
-                playerArrayAfterAction  : extraData.playerArrayAfterAction,
-                tileArrayAfterAction    : extraData.tileArrayAfterAction,
-                unitArrayAfterAction    : extraData.unitArrayAfterAction,
-                destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
-                nextUnitId              : Helpers.getExisted(extraData.nextUnitId, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_02),
+                war                                 : this.getWar(),
+                playerArrayAfterAction              : extraData.playerArrayAfterAction,
+                tileArrayAfterAction                : extraData.tileArrayAfterAction,
+                unitArrayAfterAction                : extraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : extraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : null,
+                nextUnitId                          : Helpers.getExisted(extraData.nextUnitId, ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_02),
                 isFastExecute,
             });
         }

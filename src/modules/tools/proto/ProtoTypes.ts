@@ -11821,6 +11821,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitWait movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitWait visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitWait. */
@@ -11849,6 +11852,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitWait movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitWait visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitWait instance using the specified properties.
@@ -12046,6 +12052,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitBeLoaded movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitBeLoaded visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitBeLoaded. */
@@ -12074,6 +12083,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitBeLoaded movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitBeLoaded visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitBeLoaded instance using the specified properties.
@@ -12271,6 +12283,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitCaptureTile movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitCaptureTile visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitCaptureTile. */
@@ -12299,6 +12314,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitCaptureTile movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitCaptureTile visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitCaptureTile instance using the specified properties.
@@ -12503,6 +12521,9 @@ export declare namespace WarAction {
             /** ExtraDataForUnitAttackTile movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
+            /** ExtraDataForUnitAttackTile visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+
             /** ExtraDataForUnitAttackTile battleDamageInfoArray */
             battleDamageInfoArray?: (Structure.IBattleDamageInfo[]|null);
         }
@@ -12533,6 +12554,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitAttackTile movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitAttackTile visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /** ExtraDataForUnitAttackTile battleDamageInfoArray. */
             public battleDamageInfoArray: Structure.IBattleDamageInfo[];
@@ -12740,6 +12764,9 @@ export declare namespace WarAction {
             /** ExtraDataForUnitAttackUnit movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
+            /** ExtraDataForUnitAttackUnit visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+
             /** ExtraDataForUnitAttackUnit battleDamageInfoArray */
             battleDamageInfoArray?: (Structure.IBattleDamageInfo[]|null);
         }
@@ -12770,6 +12797,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitAttackUnit movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitAttackUnit visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /** ExtraDataForUnitAttackUnit battleDamageInfoArray. */
             public battleDamageInfoArray: Structure.IBattleDamageInfo[];
@@ -12983,6 +13013,9 @@ export declare namespace WarAction {
             /** ExtraDataForUnitDropUnit movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
+            /** ExtraDataForUnitDropUnit visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+
             /** ExtraDataForUnitDropUnit droppingUnitAndPathArray */
             droppingUnitAndPathArray?: (Structure.IMovingUnitAndPath[]|null);
         }
@@ -13013,6 +13046,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitDropUnit movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitDropUnit visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /** ExtraDataForUnitDropUnit droppingUnitAndPathArray. */
             public droppingUnitAndPathArray: Structure.IMovingUnitAndPath[];
@@ -13213,6 +13249,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitBuildTile movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitBuildTile visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitBuildTile. */
@@ -13241,6 +13280,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitBuildTile movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitBuildTile visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitBuildTile instance using the specified properties.
@@ -13438,6 +13480,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitDive movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitDive visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitDive. */
@@ -13466,6 +13511,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitDive movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitDive visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitDive instance using the specified properties.
@@ -13663,6 +13711,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitSurface movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitSurface visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitSurface. */
@@ -13691,6 +13742,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitSurface movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitSurface visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitSurface instance using the specified properties.
@@ -13888,6 +13942,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitJoinUnit movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitJoinUnit visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitJoinUnit. */
@@ -13916,6 +13973,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitJoinUnit movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitJoinUnit visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitJoinUnit instance using the specified properties.
@@ -14102,14 +14162,29 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitLaunchFlare. */
         interface IExtraDataForUnitLaunchFlare {
 
-            /** ExtraDataForUnitLaunchFlare discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLaunchFlare playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForUnitLaunchFlare discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitLaunchFlare unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitLaunchFlare actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLaunchFlare destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForUnitLaunchFlare tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForUnitLaunchFlare nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForUnitLaunchFlare movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitLaunchFlare visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+
+            /** ExtraDataForUnitLaunchFlare flareRadius */
+            flareRadius?: (number|null);
         }
 
         /** Represents an ExtraDataForUnitLaunchFlare. */
@@ -14121,14 +14196,29 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitLaunchFlare.IExtraDataForUnitLaunchFlare);
 
-            /** ExtraDataForUnitLaunchFlare discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLaunchFlare playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForUnitLaunchFlare discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitLaunchFlare unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitLaunchFlare actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLaunchFlare destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForUnitLaunchFlare tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForUnitLaunchFlare nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForUnitLaunchFlare movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitLaunchFlare visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
+
+            /** ExtraDataForUnitLaunchFlare flareRadius. */
+            public flareRadius: number;
 
             /**
              * Creates a new ExtraDataForUnitLaunchFlare instance using the specified properties.
@@ -14315,14 +14405,26 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitLaunchSilo. */
         interface IExtraDataForUnitLaunchSilo {
 
-            /** ExtraDataForUnitLaunchSilo discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLaunchSilo playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForUnitLaunchSilo discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitLaunchSilo unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitLaunchSilo actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLaunchSilo destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForUnitLaunchSilo tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForUnitLaunchSilo nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForUnitLaunchSilo movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitLaunchSilo visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitLaunchSilo. */
@@ -14334,14 +14436,26 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitLaunchSilo.IExtraDataForUnitLaunchSilo);
 
-            /** ExtraDataForUnitLaunchSilo discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLaunchSilo playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForUnitLaunchSilo discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitLaunchSilo unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitLaunchSilo actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLaunchSilo destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForUnitLaunchSilo tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForUnitLaunchSilo nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForUnitLaunchSilo movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitLaunchSilo visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitLaunchSilo instance using the specified properties.
@@ -14522,17 +14636,26 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitProduceUnit. */
         interface IExtraDataForUnitProduceUnit {
 
-            /** ExtraDataForUnitProduceUnit discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitProduceUnit playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForUnitProduceUnit discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitProduceUnit unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitProduceUnit actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitProduceUnit destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
 
-            /** ExtraDataForUnitProduceUnit cost */
-            cost?: (number|null);
+            /** ExtraDataForUnitProduceUnit tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForUnitProduceUnit nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForUnitProduceUnit movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitProduceUnit visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitProduceUnit. */
@@ -14544,17 +14667,26 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitProduceUnit.IExtraDataForUnitProduceUnit);
 
-            /** ExtraDataForUnitProduceUnit discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitProduceUnit playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForUnitProduceUnit discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitProduceUnit unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitProduceUnit actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitProduceUnit destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
 
-            /** ExtraDataForUnitProduceUnit cost. */
-            public cost: number;
+            /** ExtraDataForUnitProduceUnit tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForUnitProduceUnit nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForUnitProduceUnit movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitProduceUnit visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitProduceUnit instance using the specified properties.
@@ -14735,14 +14867,26 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitSupplyUnit. */
         interface IExtraDataForUnitSupplyUnit {
 
-            /** ExtraDataForUnitSupplyUnit discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitSupplyUnit playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForUnitSupplyUnit discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitSupplyUnit unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitSupplyUnit actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitSupplyUnit destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForUnitSupplyUnit tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForUnitSupplyUnit nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForUnitSupplyUnit movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitSupplyUnit visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitSupplyUnit. */
@@ -14754,14 +14898,26 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitSupplyUnit.IExtraDataForUnitSupplyUnit);
 
-            /** ExtraDataForUnitSupplyUnit discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitSupplyUnit playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForUnitSupplyUnit discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitSupplyUnit unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitSupplyUnit actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitSupplyUnit destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForUnitSupplyUnit tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForUnitSupplyUnit nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForUnitSupplyUnit movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitSupplyUnit visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitSupplyUnit instance using the specified properties.
@@ -14942,14 +15098,26 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitLoadCo. */
         interface IExtraDataForUnitLoadCo {
 
-            /** ExtraDataForUnitLoadCo discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLoadCo playerArrayAfterAction */
+            playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
 
-            /** ExtraDataForUnitLoadCo discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitLoadCo unitArrayAfterAction */
+            unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitLoadCo actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLoadCo destroyedUnitIdArray */
+            destroyedUnitIdArray?: (number[]|null);
+
+            /** ExtraDataForUnitLoadCo tileArrayAfterAction */
+            tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+            /** ExtraDataForUnitLoadCo nextUnitId */
+            nextUnitId?: (number|null);
+
+            /** ExtraDataForUnitLoadCo movingUnitAndPath */
+            movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitLoadCo visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
         }
 
         /** Represents an ExtraDataForUnitLoadCo. */
@@ -14961,14 +15129,26 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitLoadCo.IExtraDataForUnitLoadCo);
 
-            /** ExtraDataForUnitLoadCo discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLoadCo playerArrayAfterAction. */
+            public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
 
-            /** ExtraDataForUnitLoadCo discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitLoadCo unitArrayAfterAction. */
+            public unitArrayAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitLoadCo actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLoadCo destroyedUnitIdArray. */
+            public destroyedUnitIdArray: number[];
+
+            /** ExtraDataForUnitLoadCo tileArrayAfterAction. */
+            public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+            /** ExtraDataForUnitLoadCo nextUnitId. */
+            public nextUnitId: number;
+
+            /** ExtraDataForUnitLoadCo movingUnitAndPath. */
+            public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitLoadCo visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /**
              * Creates a new ExtraDataForUnitLoadCo instance using the specified properties.
@@ -15173,6 +15353,9 @@ export declare namespace WarAction {
             /** ExtraDataForUnitUseCoSkill movingUnitAndPath */
             movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
 
+            /** ExtraDataForUnitUseCoSkill visibilityArrayFromPathsAfterAction */
+            visibilityArrayFromPathsAfterAction?: (number[]|null);
+
             /** ExtraDataForUnitUseCoSkill skillDataArray */
             skillDataArray?: (Structure.IDataForUseCoSkill[]|null);
         }
@@ -15203,6 +15386,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForUnitUseCoSkill movingUnitAndPath. */
             public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+            /** ExtraDataForUnitUseCoSkill visibilityArrayFromPathsAfterAction. */
+            public visibilityArrayFromPathsAfterAction: number[];
 
             /** ExtraDataForUnitUseCoSkill skillDataArray. */
             public skillDataArray: Structure.IDataForUseCoSkill[];

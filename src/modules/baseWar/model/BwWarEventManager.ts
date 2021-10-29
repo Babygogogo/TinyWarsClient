@@ -98,12 +98,13 @@ namespace TwnsBwWarEventManager {
 
             const extraData = Helpers.getExisted(action.extraData, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_01);
             WarCommonHelpers.handleCommonExtraDataForWarActions({
-                war                     : this._getWar(),
-                playerArrayAfterAction  : extraData.playerArrayAfterAction,
-                tileArrayAfterAction    : extraData.tileArrayAfterAction,
-                unitArrayAfterAction    : extraData.unitArrayAfterAction,
-                destroyedUnitIdArray    : extraData.destroyedUnitIdArray,
-                nextUnitId              : Helpers.getExisted(extraData.nextUnitId, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_02),
+                war                                 : this._getWar(),
+                playerArrayAfterAction              : extraData.playerArrayAfterAction,
+                tileArrayAfterAction                : extraData.tileArrayAfterAction,
+                unitArrayAfterAction                : extraData.unitArrayAfterAction,
+                destroyedUnitIdArray                : extraData.destroyedUnitIdArray,
+                visibilityArrayFromPathsAfterAction : null,
+                nextUnitId                          : Helpers.getExisted(extraData.nextUnitId, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_02),
                 isFastExecute,
             });
         }

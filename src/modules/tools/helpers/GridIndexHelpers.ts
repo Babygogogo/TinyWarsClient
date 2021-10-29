@@ -3,6 +3,7 @@
 // import ProtoTypes       from "../proto/ProtoTypes";
 // import CommonConstants  from "./CommonConstants";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace GridIndexHelpers {
     import GridIndex            = Types.GridIndex;
     import MapSize              = Types.MapSize;
@@ -144,6 +145,17 @@ namespace GridIndexHelpers {
         }
 
         return grids;
+    }
+
+    export function getGridId(gridIndex: GridIndex, mapSize: MapSize): number {
+        return gridIndex.y * mapSize.width + gridIndex.x;
+    }
+    export function getGridIndexByGridId(gridId: number, mapSize: MapSize): GridIndex {
+        const width = mapSize.width;
+        return {
+            x   : gridId % width,
+            y   : Math.floor(gridId / width),
+        };
     }
 }
 

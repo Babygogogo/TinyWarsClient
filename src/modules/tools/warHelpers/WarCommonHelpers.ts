@@ -551,8 +551,6 @@ namespace WarCommonHelpers {
             throw Helpers.newError(`Empty movingPath.`, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_00);
         }
 
-        war.getFogMap().updateMapFromPathsByExtraUnitAndPath(movingUnitData, movingPath);
-
         const unitId    = Helpers.getExisted(movingUnitData.unitId, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_01);
         const unitMap   = war.getUnitMap();
         unitMap.removeUnitById(unitId, true);
@@ -702,15 +700,20 @@ namespace WarCommonHelpers {
     /**
      * @return the war view is vibrated or not
      */
-    export function handleCommonExtraDataForWarActions({ war, playerArrayAfterAction, tileArrayAfterAction, unitArrayAfterAction, destroyedUnitIdArray, nextUnitId, isFastExecute }: {
-        war                         : TwnsBwWar.BwWar;
-        playerArrayAfterAction      : Types.Undefinable<WarSerialization.ISerialPlayer[]>;
-        tileArrayAfterAction        : Types.Undefinable<WarSerialization.ISerialTile[]>;
-        unitArrayAfterAction        : Types.Undefinable<WarSerialization.ISerialUnit[]>;
-        destroyedUnitIdArray        : Types.Undefinable<number[]>;
-        nextUnitId                  : number;
-        isFastExecute               : boolean;
+    export function handleCommonExtraDataForWarActions({ war, playerArrayAfterAction, tileArrayAfterAction, unitArrayAfterAction, destroyedUnitIdArray, visibilityArrayFromPathsAfterAction, nextUnitId, isFastExecute }: {
+        war                                 : TwnsBwWar.BwWar;
+        playerArrayAfterAction              : Types.Undefinable<WarSerialization.ISerialPlayer[]>;
+        tileArrayAfterAction                : Types.Undefinable<WarSerialization.ISerialTile[]>;
+        unitArrayAfterAction                : Types.Undefinable<WarSerialization.ISerialUnit[]>;
+        destroyedUnitIdArray                : Types.Undefinable<number[]>;
+        visibilityArrayFromPathsAfterAction : Types.Undefinable<number[]>;
+        nextUnitId                          : number;
+        isFastExecute                       : boolean;
     }): boolean {
+        if (visibilityArrayFromPathsAfterAction) {
+            war.getFogMap().updateMapFromPathsByVisibilityArray(war.getPlayerIndexInTurn(), visibilityArrayFromPathsAfterAction);
+        }
+
         const configVersion = war.getConfigVersion();
         for (const playerData of playerArrayAfterAction ?? []) {
             const player = war.getPlayer(Helpers.getExisted(playerData.playerIndex, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_00));
