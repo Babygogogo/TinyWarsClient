@@ -259,6 +259,8 @@ namespace TwnsNotifyType {
         MsgMpwCommonContinueWar,
         MsgMpwCommonSyncWar,
         MsgMpwCommonHandleBoot,
+        MsgMpwGetHalfwayReplayDataFailed,
+        MsgMpwGetHalfwayReplayData,
 
         MsgMpwWatchGetUnwatchedWarInfos,
         MsgMpwWatchGetOngoingWarInfos,

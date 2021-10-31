@@ -175,6 +175,18 @@ namespace TwnsLangErrorText {
             `玩家数量不足，请等待更多玩家进入房间。`,
             `There not enough players in the room. Please wait until more players join.`,
         ],
+        [ServerErrorCode.ExeMpwGetHalfwayReplayData_ExeWithSocket_0001]: [
+            `战局已结束，无法即时回放`,
+            `Failed to replay this war because the war is over.`
+        ],
+        [ServerErrorCode.ExeMpwGetHalfwayReplayData_ExeWithSocket_0002]: [
+            `您无权观看此战局的即时回放，请先申请观战`,
+            `You don't have the permission to view the in-game replay of this war.`,
+        ],
+        [ServerErrorCode.ExeMpwGetHalfwayReplayData_ExeWithSocket_0003]: [
+            `此战局未有回放步骤数据（或数据已丢失），无法即时回放`,
+            `Failed to replay this war because there is no data or some of the data has been lost.`,
+        ],
         [ServerErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,
             `The server is under maintenance.`,

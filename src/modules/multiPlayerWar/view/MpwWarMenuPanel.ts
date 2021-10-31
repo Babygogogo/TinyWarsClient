@@ -22,6 +22,7 @@
 // import UserProxy                        from "../../user/model/UserProxy";
 // import TwnsMpwWar                       from "../model/MpwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwWarMenuPanel {
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
@@ -43,6 +44,7 @@ namespace TwnsMpwWarMenuPanel {
         private readonly _btnSimulation!        : TwnsUiButton.UiButton;
         private readonly _btnFreeMode!          : TwnsUiButton.UiButton;
         private readonly _btnSetPath!           : TwnsUiButton.UiButton;
+        private readonly _btnReplay!            : TwnsUiButton.UiButton;
         private readonly _btnSetDraw!           : TwnsUiButton.UiButton;
         private readonly _btnSurrender!         : TwnsUiButton.UiButton;
         private readonly _btnGotoWarList!       : TwnsUiButton.UiButton;
@@ -77,6 +79,8 @@ namespace TwnsMpwWarMenuPanel {
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onNotifyMsgSpmCreateSfw },
+                { type: NotifyType.MsgMpwGetHalfwayReplayData,          callback: this._onNotifyMsgMpwGetHalfwayReplayData },
+                { type: NotifyType.MsgMpwGetHalfwayReplayDataFailed,    callback: this._onNotifyMsgMpwGetHalfwayReplayDataFailed },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,                                   callback: this.close },
@@ -86,6 +90,7 @@ namespace TwnsMpwWarMenuPanel {
                 { ui: this._btnSimulation,                              callback: this._onTouchedBtnSimulation },
                 { ui: this._btnFreeMode,                                callback: this._onTouchedBtnFreeMode },
                 { ui: this._btnSetPath,                                 callback: this._onTouchedBtnSetPath },
+                { ui: this._btnReplay,                                  callback: this._onTouchedBtnReplay },
                 { ui: this._btnSetDraw,                                 callback: this._onTouchedBtnSetDraw },
                 { ui: this._btnSurrender,                               callback: this._onTouchedBtnSurrender },
                 { ui: this._btnGotoWarList,                             callback: this._onTouchedBtnGotoWarList },
@@ -129,6 +134,13 @@ namespace TwnsMpwWarMenuPanel {
                     });
                 },
             });
+        }
+        private _onNotifyMsgMpwGetHalfwayReplayData(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMpwGetHalfwayReplayData.IS;
+            FlowManager.gotoHalfwayReplayWar(Helpers.deepClone(Helpers.getExisted(data.warData)));
+        }
+        private _onNotifyMsgMpwGetHalfwayReplayDataFailed(): void {
+            TwnsCommonBlockPanel.CommonBlockPanel.hide();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,6 +254,19 @@ namespace TwnsMpwWarMenuPanel {
                         });
                     }
                 }
+            });
+        }
+
+        private _onTouchedBtnReplay(): void {
+            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                content : Lang.getText(LangTextType.A0249),
+                callback: () => {
+                    MpwProxy.reqMpwGetHalfwayReplayData(Helpers.getExisted(this._getWar().getWarId()));
+                    TwnsCommonBlockPanel.CommonBlockPanel.show({
+                        title   : Lang.getText(LangTextType.B0088),
+                        content : Lang.getText(LangTextType.A0040),
+                    });
+                },
             });
         }
 
@@ -378,6 +403,7 @@ namespace TwnsMpwWarMenuPanel {
         private _updateComponentsForLanguage(): void {
             this._labelTitle.text       = Lang.getText(LangTextType.B0155);
             this._btnSync.label         = Lang.getText(LangTextType.B0089);
+            this._btnReplay.label       = Lang.getText(LangTextType.B0710);
             this._btnUnitList.label     = Lang.getText(LangTextType.B0152);
             this._btnDeleteUnit.label   = Lang.getText(LangTextType.B0081);
             this._btnSimulation.label   = Lang.getText(LangTextType.B0325);

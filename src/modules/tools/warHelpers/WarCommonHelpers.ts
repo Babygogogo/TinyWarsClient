@@ -700,33 +700,29 @@ namespace WarCommonHelpers {
     /**
      * @return the war view is vibrated or not
      */
-    export function handleCommonExtraDataForWarActions({ war, playerArrayAfterAction, tileArrayAfterAction, unitArrayAfterAction, destroyedUnitIdArray, visibilityArrayFromPathsAfterAction, nextUnitId, isFastExecute }: {
-        war                                 : TwnsBwWar.BwWar;
-        playerArrayAfterAction              : Types.Undefinable<WarSerialization.ISerialPlayer[]>;
-        tileArrayAfterAction                : Types.Undefinable<WarSerialization.ISerialTile[]>;
-        unitArrayAfterAction                : Types.Undefinable<WarSerialization.ISerialUnit[]>;
-        destroyedUnitIdArray                : Types.Undefinable<number[]>;
-        visibilityArrayFromPathsAfterAction : Types.Undefinable<number[]>;
-        nextUnitId                          : number;
-        isFastExecute                       : boolean;
+    export function handleCommonExtraDataForWarActions({ war, commonExtraData, isFastExecute }: {
+        war                 : TwnsBwWar.BwWar;
+        commonExtraData     : ProtoTypes.Structure.ICommonExtraDataForWarAction;
+        isFastExecute       : boolean;
     }): boolean {
+        const visibilityArrayFromPathsAfterAction = commonExtraData.visibilityArrayFromPathsAfterAction;
         if (visibilityArrayFromPathsAfterAction) {
             war.getFogMap().updateMapFromPathsByVisibilityArray(war.getPlayerIndexInTurn(), visibilityArrayFromPathsAfterAction);
         }
 
         const configVersion = war.getConfigVersion();
-        for (const playerData of playerArrayAfterAction ?? []) {
+        for (const playerData of commonExtraData.playerArrayAfterAction ?? []) {
             const player = war.getPlayer(Helpers.getExisted(playerData.playerIndex, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_00));
             player.init(playerData, configVersion);
             player.startRunning(war);
         }
 
         const unitMap = war.getUnitMap();
-        unitMap.setNextUnitId(nextUnitId);
+        unitMap.setNextUnitId(Helpers.getExisted(commonExtraData.nextUnitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_01));
 
         const gridVisualEffect  = war.getGridVisualEffect();
-        for (const unitData of unitArrayAfterAction ?? []) {
-            const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_01);
+        for (const unitData of commonExtraData.unitArrayAfterAction ?? []) {
+            const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_02);
             const existingUnit  = unitMap.getUnitById(unitId);
             if (existingUnit) {
                 if (existingUnit.getLoaderUnitId() == null) {
@@ -773,7 +769,7 @@ namespace WarCommonHelpers {
         }
 
         let isShownExplosionEffect = false;
-        for (const unitId of destroyedUnitIdArray ?? []) {
+        for (const unitId of commonExtraData.destroyedUnitIdArray ?? []) {
             const unit = unitMap.getUnitById(unitId);
             if ((unit) && (unit.getLoaderUnitId() == null)) {
                 const gridIndex = unit.getGridIndex();
@@ -787,8 +783,8 @@ namespace WarCommonHelpers {
         }
 
         const tileMap = war.getTileMap();
-        for (const tileData of tileArrayAfterAction ?? []) {
-            const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_02);
+        for (const tileData of commonExtraData.tileArrayAfterAction ?? []) {
+            const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_03);
             const tile              = tileMap.getTile(gridIndex);
             const hpBeforeAction    = tile.getCurrentHp();
             tile.init(tileData, configVersion);

@@ -90,8 +90,10 @@ namespace TwnsMeResizePanel {
             const width         = Helpers.getExisted(this._newWidth);
             const height        = Helpers.getExisted(this._newHeight);
             const gridsCount    = width * height;
-            if ((!gridsCount) || (gridsCount <= 0)) {
+            if (gridsCount <= 0) {
                 FloatText.show(Lang.getText(LangTextType.A0087));
+            } else if (gridsCount > CommonConstants.MapMaxGridsCount) {
+                FloatText.show(Lang.getFormattedText(LangTextType.F0023, CommonConstants.MapMaxGridsCount));
             } else {
                 const war       = Helpers.getExisted(MeModel.getWar());
                 const currSize  = war.getTileMap().getMapSize();

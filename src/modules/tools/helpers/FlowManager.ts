@@ -121,6 +121,7 @@ namespace FlowManager {
         WwProxy.init();
         RwProxy.init();
         RwModel.init();
+        HrwModel.init();
         SpmProxy.init();
         SpmModel.init();
         ScrCreateModel.init();
@@ -143,6 +144,7 @@ namespace FlowManager {
     export function gotoLogin(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels(Helpers.getNonNullElements([
@@ -161,6 +163,7 @@ namespace FlowManager {
 
         MpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels(Helpers.getNonNullElements([
@@ -184,6 +187,7 @@ namespace FlowManager {
     export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         const war = await MpwModel.loadWar(data);
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
 
@@ -200,6 +204,7 @@ namespace FlowManager {
     }
     export async function gotoReplayWar(warData: Uint8Array, replayId: number): Promise<void> {
         const war = await RwModel.loadWar(warData, replayId);
+        HrwModel.unloadWar();
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
@@ -207,6 +212,23 @@ namespace FlowManager {
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
         TwnsRwTopPanel.RwTopPanel.show({ war });
+        TwnsBwWarPanel.BwWarPanel.show({ war });
+        TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
+        TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
+        TwnsBroadcastPanel.BroadcastPanel.show();
+
+        SoundManager.playCoBgmWithWar(war, true);
+    }
+    export async function gotoHalfwayReplayWar(warData: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
+        const war = await HrwModel.loadWar(warData);
+        RwModel.unloadWar();
+        MpwModel.unloadWar();
+        SpwModel.unloadWar();
+        MeModel.unloadWar();
+
+        StageManager.closeAllPanels();
+        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
+        TwnsHrwTopPanel.HrwTopPanel.show({ war });
         TwnsBwWarPanel.BwWarPanel.show({ war });
         TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
         TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
@@ -222,6 +244,7 @@ namespace FlowManager {
         const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData });
         MpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         MeModel.unloadWar();
 
         StageManager.closeAllPanels();
@@ -242,6 +265,7 @@ namespace FlowManager {
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
 
         StageManager.closeAllPanels();
         TwnsBwBackgroundPanel.BwBackgroundPanel.show();
@@ -283,6 +307,7 @@ namespace FlowManager {
     export function gotoMfrCreateSettingsPanel(warData: ProtoTypes.WarSerialization.ISerialWar): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
         MfrCreateModel.resetDataByInitialWarData(warData);
@@ -375,6 +400,7 @@ namespace FlowManager {
     function _unloadAllWarsAndOpenCommonPanels(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels(Helpers.getNonNullElements([

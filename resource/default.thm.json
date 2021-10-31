@@ -80,6 +80,8 @@
 		"resource/skins/coopCustomRoom/CcrMyRoomListPanel.exml",
 		"resource/skins/coopCustomRoom/CcrRoomInfoPanel.exml",
 		"resource/skins/coopCustomWar/CcwMyWarListPanel.exml",
+		"resource/skins/halfwayReplayWar/HrwTopPanel.exml",
+		"resource/skins/halfwayReplayWar/HrwWarMenuPanel.exml",
 		"resource/skins/lobby/LobbyBackgroundPanel.exml",
 		"resource/skins/lobby/LobbyBottomPanel.exml",
 		"resource/skins/lobby/LobbyPanel.exml",

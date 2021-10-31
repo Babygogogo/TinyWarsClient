@@ -1043,6 +1043,10 @@ namespace TwnsLangCommonText {
             `已禁用自动保存`,
             `The auto save function is disabled successfully.`,
         ],
+        [LangTextType.A0249]: [
+            `您将离开战局模式并进入回放（您可以随时返回）。\n确定要继续吗？`,
+            `You have to leave the war scene (you can enter it again later).\nAre you sure to continue?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3871,6 +3875,14 @@ namespace TwnsLangCommonText {
             `自动保存`,
             `Auto Save`,
         ],
+        [LangTextType.B0710]: [
+            `回放`,
+            `Replay`,
+        ],
+        [LangTextType.B0711]: [
+            `返回战局`,
+            `Back to War`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4211,8 +4223,8 @@ namespace TwnsLangCommonText {
             `It's %s (p%d)'s turn!!`,
         ],
         [LangTextType.F0023]: [
-            `地图的总格子数必须小于%d，否则不能提审`,
-            `The number of the tiles must be less than %d, or the map can't be submitted for review.`,
+            `地图的总格子数必须小于等于%d`,
+            `The number of the tiles must be less than or equal to %d.`,
         ],
         [LangTextType.F0024]: [
             `修改时间: %s`,
