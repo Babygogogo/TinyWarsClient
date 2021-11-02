@@ -512,18 +512,28 @@ namespace WarActionExecutor {
     }
     async function fastExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
         const warEventManager   = war.getWarEventManager();
-        const warEventId        = Helpers.getExisted(action.warEventId);
-        warEventManager.updateWarEventCalledCountOnCall(warEventId);
-        await warEventManager.callWarEvent(action, true);
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(actionExtraData.warEventId, ClientErrorCode.WarActionExecutor_FastExeSystemCallWarEvent_00));
+            await warEventManager.callWarEvent(action, true);
+        } else {
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(action.warEventId, ClientErrorCode.WarActionExecutor_FastExeSystemCallWarEvent_02));
+            await warEventManager.callWarEvent(action, true);
+        }
     }
     async function normalExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
         const desc = await war.getDescForExeSystemCallWarEvent(action);
         (desc) && (FloatText.show(desc));
 
         const warEventManager   = war.getWarEventManager();
-        const warEventId        = Helpers.getExisted(action.warEventId);
-        warEventManager.updateWarEventCalledCountOnCall(warEventId);
-        await warEventManager.callWarEvent(action, false);
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(actionExtraData.warEventId, ClientErrorCode.WarActionExecutor_NormalExeSystemCallWarEvent_00));
+            await warEventManager.callWarEvent(action, false);
+        } else {
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(action.warEventId, ClientErrorCode.WarActionExecutor_NormalExeSystemCallWarEvent_01));
+            await warEventManager.callWarEvent(action, false);
+        }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
     }

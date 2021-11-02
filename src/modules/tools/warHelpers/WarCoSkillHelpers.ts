@@ -880,6 +880,10 @@ namespace WarCoSkillHelpers {
             weatherManager.setExpirePlayerIndex(playerIndex);
             weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + cfg[0]);
             // war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+
+            if (!isFastExecute) {
+                weatherManager.getView().resetView(false);
+            }
         }
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -898,6 +902,10 @@ namespace WarCoSkillHelpers {
             weatherManager.setExpirePlayerIndex(playerIndex);
             weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + cfg[0]);
             // war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+
+            if (!isFastExecute) {
+                weatherManager.getView().resetView(false);
+            }
         }
     }
 

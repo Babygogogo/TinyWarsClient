@@ -195,12 +195,14 @@ namespace TwnsBwWar {
         public startRunningView(): BwWar {
             this.getView().startRunningView();
             this.getField().startRunningView();
+            this.getWeatherManager().startRunningView();
 
             return this;
         }
         public stopRunning(): BwWar {
             this.getField().stopRunning();
             this.getView().stopRunning();
+            this.getWeatherManager().stopRunning();
 
             this._setIsRunning(false);
 

@@ -49,7 +49,10 @@ fs.writeFileSync(
     fs.readFileSync(INDEX_PATH, "utf8")
         .replace(/window\.CLIENT_VERSION.*/,    `window.CLIENT_VERSION = ${getVersion()};`)
         .replace(/window\.GAME_SERVER_PORT.*/,  `window.GAME_SERVER_PORT = ${publishConfig.gameServerPort};`)
+        .replace(`<title>TinyWars</title>`,     `<title>${publishConfig.gameName}</title>`)
 );
+
+console.log(`Publish succeeded: ${process.argv[2]}`);
 
 function getVersion() {
     const d = new Date();

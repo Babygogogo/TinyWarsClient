@@ -152,7 +152,7 @@ namespace TwnsHrwWar {
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
             const playerIndex = Helpers.getExisted(action.extraData?.targetPlayerIndex);
-            return `P${playerIndex} ${await this.getPlayer(playerIndex).getNickname()}${Lang.getText(LangTextType.B0450)} ${this._getDescSuffix()}`;
+            return `P${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)} ${this._getDescSuffix()}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
             return `${Lang.getText(LangTextType.B0087)} ${this._getDescSuffix()}`;

@@ -119,7 +119,7 @@ namespace Helpers {
     }
 
     export function repeatString(str: string, times: number): string {
-        return (new Array(times + 1)).join(str);
+        return (new Array(Math.max(times, 0) + 1)).join(str);
     }
 
     export function getSuffixForRank(rank: Types.Undefinable<number>): string | null {

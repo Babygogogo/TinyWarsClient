@@ -691,11 +691,21 @@ namespace TwnsBwTurnManager {
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseUpdateWeatherWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
-            this.getWar().getWeatherManager().updateOnPlayerTurnSwitched();
+            const weatherManager = this.getWar().getWeatherManager();
+            weatherManager.updateOnPlayerTurnSwitched();
+
+            if (!isFastExecute) {
+                weatherManager.getView().resetView(false);
+            }
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseUpdateWeatherWithoutExtraData(isFastExecute: boolean): void {
-            this.getWar().getWeatherManager().updateOnPlayerTurnSwitched();
+            const weatherManager = this.getWar().getWeatherManager();
+            weatherManager.updateOnPlayerTurnSwitched();
+
+            if (!isFastExecute) {
+                weatherManager.getView().resetView(false);
+            }
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
