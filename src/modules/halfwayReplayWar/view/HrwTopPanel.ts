@@ -39,10 +39,13 @@ namespace TwnsHrwTopPanel {
         private readonly _groupPlayer!      : eui.Group;
         private readonly _labelPlayer!      : TwnsUiLabel.UiLabel;
         private readonly _labelFund!        : TwnsUiLabel.UiLabel;
+
+        private readonly _groupProgress!    : eui.Group;
         private readonly _labelTurnTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelTurn!        : TwnsUiLabel.UiLabel;
         private readonly _labelActionTitle! : TwnsUiLabel.UiLabel;
         private readonly _labelAction!      : TwnsUiLabel.UiLabel;
+
         private readonly _groupCo!          : eui.Group;
         private readonly _labelCo!          : TwnsUiLabel.UiLabel;
         private readonly _labelCurrEnergy!  : TwnsUiLabel.UiLabel;
@@ -92,6 +95,7 @@ namespace TwnsHrwTopPanel {
             this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
+                { ui: this._groupProgress,      callback: this._onTouchedGroupProgress },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnFastRewind,      callback: this._onTouchedBtnFastRewind },
                 { ui: this._btnFastForward,     callback: this._onTouchedBtnFastForward, },
@@ -156,6 +160,21 @@ namespace TwnsHrwTopPanel {
             CommonCoListPanel.show({ war });
             TwnsHrwWarMenuPanel.HrwWarMenuPanel.hide();
         }
+        private _onTouchedGroupProgress(): void {
+            const war = this._getWar();
+            if (war.getIsAutoReplay()) {
+                war.setIsAutoReplay(false);
+                this._updateView();
+            }
+
+            if (!war.getIsRunning()) {
+                FloatText.show(Lang.getText(LangTextType.A0040));
+            } else if (war.getIsExecutingAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0044));
+            } else {
+                TwnsHrwReplayProgressPanel.HrwReplayProgressPanel.show({ war });
+            }
+        }
         private _onTouchedBtnChat(): void {
             TwnsHrwWarMenuPanel.HrwWarMenuPanel.hide();
             TwnsChatPanel.ChatPanel.show({});
@@ -172,7 +191,7 @@ namespace TwnsHrwTopPanel {
                 FloatText.show(Lang.getText(LangTextType.A0042));
             } else {
                 await Helpers.checkAndCallLater();
-                await war.loadPreviousCheckPoint();
+                await war.loadPreviousCheckpoint();
                 await Helpers.checkAndCallLater();
                 this._updateView();
             }
@@ -189,7 +208,7 @@ namespace TwnsHrwTopPanel {
                 FloatText.show(Lang.getText(LangTextType.A0043));
             } else {
                 await Helpers.checkAndCallLater();
-                await war.loadNextCheckPoint();
+                await war.loadNextCheckpoint();
                 await Helpers.checkAndCallLater();
                 this._updateView();
             }

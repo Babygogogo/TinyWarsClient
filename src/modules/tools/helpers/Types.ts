@@ -208,6 +208,13 @@ namespace Types {
         warData     : ProtoTypes.WarSerialization.ISerialWar;
     };
 
+    export type ReplayCheckpointInfo = {
+        checkpointId: number;
+        nextActionId: number;
+        turnIndex   : number;
+        playerIndex : number;
+    };
+
     export type Undefinable<T> = T | null | undefined;
 
     export interface CustomError extends Error {

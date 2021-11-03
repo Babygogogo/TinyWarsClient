@@ -3883,6 +3883,10 @@ namespace TwnsLangCommonText {
             `返回战局`,
             `Back to War`,
         ],
+        [LangTextType.B0712]: [
+            `回放进度`,
+            `Replay Progress`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
