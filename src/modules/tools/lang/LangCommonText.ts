@@ -1047,6 +1047,26 @@ namespace TwnsLangCommonText {
             `您将离开战局模式并进入回放（您可以随时返回）。\n确定要继续吗？`,
             `You have to leave the war scene (you can enter it again later).\nAre you sure to continue?`,
         ],
+        [LangTextType.A0250]: [
+            `指定坐标不合法`,
+            `The coordinate is not valid.`,
+        ],
+        [LangTextType.A0251]: [
+            `指定坐标超出了地图大小`,
+            `The coordinate is outside the map.`,
+        ],
+        [LangTextType.A0252]: [
+            `指定天气不合法`,
+            `The weather type is not valid.`,
+        ],
+        [LangTextType.A0253]: [
+            `指定持续时间不合法`,
+            `The duration is not valid.`,
+        ],
+        [LangTextType.A0254]: [
+            `设置为0回合可使天气永久持续`,
+            `Set 0 turns to make the weather last forever.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3887,6 +3907,18 @@ namespace TwnsLangCommonText {
             `回放进度`,
             `Replay Progress`,
         ],
+        [LangTextType.B0713]: [
+            `重置视角`,
+            `Reset Viewpoint`,
+        ],
+        [LangTextType.B0714]: [
+            `显示特效`,
+            `Show Effect`,
+        ],
+        [LangTextType.B0715]: [
+            `改变天气`,
+            `Change Weather`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4433,6 +4465,18 @@ namespace TwnsLangCommonText {
         [LangTextType.F0074]: [
             `当前天气将在第%d回合、P%d开始前结束（当前：第%d回合、P%d）。`,
             `The current weather will end before D%d P%d's turn begins (current: D%d P%d).`,
+        ],
+        [LangTextType.F0075]: [
+            `把坐标(%d, %d)移动到屏幕中心`,
+            `Move (%d, %d) to the screen center.`,
+        ],
+        [LangTextType.F0076]: [
+            `把天气改为%s，持续%d回合`,
+            `Set the weather condition to %s for %d turns.`,
+        ],
+        [LangTextType.F0077]: [
+            `把天气永久改为%s`,
+            `Set the weather condition to %s forever.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

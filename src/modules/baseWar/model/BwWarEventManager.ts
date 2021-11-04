@@ -92,7 +92,7 @@ namespace TwnsBwWarEventManager {
                 : await this._callWarEventWithoutExtraData(Helpers.getExisted(action.warEventId, ClientErrorCode.BwWarEventManager_CallWarEvent_00), isFastExecute);
         }
         private async _callWarEventWithExtraData(action: IWarActionSystemCallWarEvent, isFastExecute: boolean): Promise<void> {
-            for (const actionId of this.getWarEvent(Helpers.getExisted(action.warEventId, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_00)).actionIdArray || []) {
+            for (const actionId of this.getWarEvent(Helpers.getExisted(action.extraData?.warEventId, ClientErrorCode.BwWarEventManager_CallWarEventWithExtraData_00)).actionIdArray || []) {
                 await this._callWarActionWithExtraData(actionId, isFastExecute);
             }
 
@@ -117,6 +117,10 @@ namespace TwnsBwWarEventManager {
                 await this._callActionSetPlayerAliveStateWithExtraData(action.WeaSetPlayerAliveState, isFastExecute);
             } else if (action.WeaDialogue) {
                 await this._callActionDialogueWithExtraData(action.WeaDialogue, isFastExecute);
+            } else if (action.WeaSetViewpoint) {
+                await this._callActionSetViewpointWithExtraData(action.WeaSetViewpoint, isFastExecute);
+            } else if (action.WeaSetWeather) {
+                await this._callActionSetWeatherWithExtraData(action.WeaSetWeather, isFastExecute);
             } else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -131,6 +135,10 @@ namespace TwnsBwWarEventManager {
                 await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState, isFastExecute);
             } else if (action.WeaDialogue) {
                 await this._callActionDialogueWithoutExtraData(action.WeaDialogue, isFastExecute);
+            } else if (action.WeaSetViewpoint) {
+                await this._callActionSetViewpointWithoutExtraData(action.WeaSetViewpoint, isFastExecute);
+            } else if (action.WeaSetWeather) {
+                await this._callActionSetWeatherWithoutExtraData(action.WeaSetWeather, isFastExecute);
             } else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -260,6 +268,74 @@ namespace TwnsBwWarEventManager {
                     callbackOnClose : () => resolve(),
                 });
             });
+        }
+
+        private async _callActionSetViewpointWithExtraData(action: WarEvent.IWeaSetViewpoint, isFast: boolean): Promise<void> {
+            const war       = this._getWar();
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(action.gridIndex), ClientErrorCode.BwWarEventManager_CallActionSetViewpointWithExtraData_00);
+            const cursor    = war.getCursor();
+            cursor.setGridIndex(gridIndex);
+            cursor.updateView();
+            war.getView().moveGridToCenter(gridIndex);
+
+            if ((!isFast) && (action.needFocusEffect)) {
+                war.getGridVisualEffect().showEffectAiming(gridIndex, 1000);
+                await new Promise<void>(resolve => {
+                    egret.setTimeout(() => resolve(), null, 1000);
+                });
+            }
+        }
+        private async _callActionSetViewpointWithoutExtraData(action: WarEvent.IWeaSetViewpoint, isFast: boolean): Promise<void> {
+            const war       = this._getWar();
+            const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(action.gridIndex), ClientErrorCode.BwWarEventManager_CallActionSetViewpointWithoutExtraData_00);
+            const cursor    = war.getCursor();
+            cursor.setGridIndex(gridIndex);
+            cursor.updateView();
+            war.getView().moveGridToCenter(gridIndex);
+
+            if ((!isFast) && (action.needFocusEffect)) {
+                war.getGridVisualEffect().showEffectAiming(gridIndex, 1000);
+                await new Promise<void>(resolve => {
+                    egret.setTimeout(() => resolve(), null, 1000);
+                });
+            }
+        }
+
+        private async _callActionSetWeatherWithExtraData(action: WarEvent.IWeaSetWeather, isFast: boolean): Promise<void> {
+            const war               = this._getWar();
+            const weatherManager    = war.getWeatherManager();
+            weatherManager.setForceWeatherType(Helpers.getExisted(action.weatherType, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithExtraData_00));
+
+            const turnsCount = Helpers.getExisted(action.turnsCount, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithExtraData_01);
+            if (turnsCount == 0) {
+                weatherManager.setExpirePlayerIndex(null);
+                weatherManager.setExpireTurnIndex(null);
+            } else {
+                weatherManager.setExpirePlayerIndex(war.getPlayerIndexInTurn());
+                weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + turnsCount);
+            }
+
+            if (!isFast) {
+                weatherManager.getView().resetView(false);
+            }
+        }
+        private async _callActionSetWeatherWithoutExtraData(action: WarEvent.IWeaSetWeather, isFast: boolean): Promise<void> {
+            const war               = this._getWar();
+            const weatherManager    = war.getWeatherManager();
+            weatherManager.setForceWeatherType(Helpers.getExisted(action.weatherType, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithoutExtraData_00));
+
+            const turnsCount = Helpers.getExisted(action.turnsCount, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithoutExtraData_01);
+            if (turnsCount == 0) {
+                weatherManager.setExpirePlayerIndex(null);
+                weatherManager.setExpireTurnIndex(null);
+            } else {
+                weatherManager.setExpirePlayerIndex(war.getPlayerIndexInTurn());
+                weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + turnsCount);
+            }
+
+            if (!isFast) {
+                weatherManager.getView().resetView(false);
+            }
         }
 
         public updateWarEventCalledCountOnCall(eventId: number): void {                     // DONE

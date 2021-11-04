@@ -14,6 +14,7 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 // import WarEventHelper           from "../model/WarEventHelper";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionTypeListPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;

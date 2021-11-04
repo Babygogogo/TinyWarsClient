@@ -69,6 +69,8 @@ namespace TwnsWeActionModifyPanel1 {
         public constructor() {
             super();
 
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/warEvent/WeActionModifyPanel1.exml";
         }
 

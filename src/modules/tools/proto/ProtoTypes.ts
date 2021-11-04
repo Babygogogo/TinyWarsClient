@@ -6033,6 +6033,198 @@ export declare namespace WarEvent {
         }
     }
 
+    /** Properties of a WeaSetViewpoint. */
+    interface IWeaSetViewpoint {
+
+        /** WeaSetViewpoint gridIndex */
+        gridIndex?: (Structure.IGridIndex|null);
+
+        /** WeaSetViewpoint needFocusEffect */
+        needFocusEffect?: (boolean|null);
+    }
+
+    /** Represents a WeaSetViewpoint. */
+    class WeaSetViewpoint implements IWeaSetViewpoint {
+
+        /**
+         * Constructs a new WeaSetViewpoint.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetViewpoint);
+
+        /** WeaSetViewpoint gridIndex. */
+        public gridIndex?: (Structure.IGridIndex|null);
+
+        /** WeaSetViewpoint needFocusEffect. */
+        public needFocusEffect: boolean;
+
+        /**
+         * Creates a new WeaSetViewpoint instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetViewpoint instance
+         */
+        public static create(properties?: WarEvent.IWeaSetViewpoint): WarEvent.WeaSetViewpoint;
+
+        /**
+         * Encodes the specified WeaSetViewpoint message. Does not implicitly {@link WarEvent.WeaSetViewpoint.verify|verify} messages.
+         * @param message WeaSetViewpoint message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetViewpoint, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetViewpoint message, length delimited. Does not implicitly {@link WarEvent.WeaSetViewpoint.verify|verify} messages.
+         * @param message WeaSetViewpoint message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetViewpoint, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetViewpoint message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetViewpoint
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetViewpoint;
+
+        /**
+         * Decodes a WeaSetViewpoint message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetViewpoint
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetViewpoint;
+
+        /**
+         * Verifies a WeaSetViewpoint message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetViewpoint message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetViewpoint
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetViewpoint;
+
+        /**
+         * Creates a plain object from a WeaSetViewpoint message. Also converts values to other types if specified.
+         * @param message WeaSetViewpoint
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetViewpoint, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetViewpoint to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaSetWeather. */
+    interface IWeaSetWeather {
+
+        /** WeaSetWeather weatherType */
+        weatherType?: (number|null);
+
+        /** WeaSetWeather turnsCount */
+        turnsCount?: (number|null);
+    }
+
+    /** Represents a WeaSetWeather. */
+    class WeaSetWeather implements IWeaSetWeather {
+
+        /**
+         * Constructs a new WeaSetWeather.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetWeather);
+
+        /** WeaSetWeather weatherType. */
+        public weatherType: number;
+
+        /** WeaSetWeather turnsCount. */
+        public turnsCount: number;
+
+        /**
+         * Creates a new WeaSetWeather instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetWeather instance
+         */
+        public static create(properties?: WarEvent.IWeaSetWeather): WarEvent.WeaSetWeather;
+
+        /**
+         * Encodes the specified WeaSetWeather message. Does not implicitly {@link WarEvent.WeaSetWeather.verify|verify} messages.
+         * @param message WeaSetWeather message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetWeather, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetWeather message, length delimited. Does not implicitly {@link WarEvent.WeaSetWeather.verify|verify} messages.
+         * @param message WeaSetWeather message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetWeather, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetWeather message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetWeather
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetWeather;
+
+        /**
+         * Decodes a WeaSetWeather message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetWeather
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetWeather;
+
+        /**
+         * Verifies a WeaSetWeather message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetWeather message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetWeather
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetWeather;
+
+        /**
+         * Creates a plain object from a WeaSetWeather message. Also converts values to other types if specified.
+         * @param message WeaSetWeather
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetWeather, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetWeather to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarEventAction. */
     interface IWarEventAction {
 
@@ -6047,6 +6239,12 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaDialogue */
         WeaDialogue?: (WarEvent.IWeaDialogue|null);
+
+        /** WarEventAction WeaSetViewpoint */
+        WeaSetViewpoint?: (WarEvent.IWeaSetViewpoint|null);
+
+        /** WarEventAction WeaSetWeather */
+        WeaSetWeather?: (WarEvent.IWeaSetWeather|null);
     }
 
     /** Represents a WarEventAction. */
@@ -6069,6 +6267,12 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaDialogue. */
         public WeaDialogue?: (WarEvent.IWeaDialogue|null);
+
+        /** WarEventAction WeaSetViewpoint. */
+        public WeaSetViewpoint?: (WarEvent.IWeaSetViewpoint|null);
+
+        /** WarEventAction WeaSetWeather. */
+        public WeaSetWeather?: (WarEvent.IWeaSetWeather|null);
 
         /**
          * Creates a new WarEventAction instance using the specified properties.

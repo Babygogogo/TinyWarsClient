@@ -99,12 +99,12 @@ namespace TwnsBwWarView {
                 (gridIndex.y + 0.5) * gridSize.height,
             );
             const newX      = Math.min(
-                Math.max(currPoint.x, 120),
-                stage.stageWidth - 120,
+                Math.max(currPoint.x, PADDING_HORIZONTAL),
+                stage.stageWidth - PADDING_HORIZONTAL,
             );
             const newY      = Math.min(
-                Math.max(currPoint.y, 120),
-                stage.stageHeight - 120,
+                Math.max(currPoint.y, PADDING_VERTICAL),
+                stage.stageHeight - PADDING_VERTICAL,
             );
             const newPoint  = this._getRevisedContentPointForMoveGrid(gridIndex, newX, newY);
             container.tweenContentToPoint(newPoint.x, newPoint.y, false);

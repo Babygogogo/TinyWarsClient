@@ -440,13 +440,10 @@ namespace TwnsMcrMyRoomListPanel {
             const roomId            = this._getData().roomId;
             this._imgRed.visible    = await McrModel.checkIsRedForRoom(roomId);
 
-            const settingsForMcw    = Helpers.getExisted((await McrModel.getRoomInfo(roomId))?.settingsForMcw);
-            const warName           = settingsForMcw.warName;
-            if (warName) {
-                this._labelName.text = warName;
-            } else {
-                WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
-            }
+            const settingsForMcw    = (await McrModel.getRoomInfo(roomId))?.settingsForMcw;
+            this._labelName.text    = (settingsForMcw == null)
+                ? ``
+                : settingsForMcw.warName ?? await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _onNotifyMcrJoinedPreviewingRoomIdChanged(): void {

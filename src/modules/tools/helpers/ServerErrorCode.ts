@@ -1367,6 +1367,17 @@ export const enum ServerErrorCode {
     BwWarEventManager_CallActionSetPlayerAliveState_0008,
     BwWarEventManager_CallActionSetPlayerAliveState_0009,
 
+    BwWarEventManager_CallActionSetWeather_0000,
+    BwWarEventManager_CallActionSetWeather_0001,
+    BwWarEventManager_CallActionSetWeather_0002,
+    BwWarEventManager_CallActionSetWeather_0003,
+    BwWarEventManager_CallActionSetWeather_0004,
+    BwWarEventManager_CallActionSetWeather_0005,
+    BwWarEventManager_CallActionSetWeather_0006,
+    BwWarEventManager_CallActionSetWeather_0007,
+    BwWarEventManager_CallActionSetWeather_0008,
+    BwWarEventManager_CallActionSetWeather_0009,
+
     BwWarEventManager_UpdateWarEventCalledCountOnCall_0000,
     BwWarEventManager_UpdateWarEventCalledCountOnCall_0001,
     BwWarEventManager_UpdateWarEventCalledCountOnCall_0002,

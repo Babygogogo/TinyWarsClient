@@ -416,6 +416,8 @@ namespace Lang {
             case WarEventActionType.AddUnit                 : return getText(LangTextType.B0617);
             case WarEventActionType.SetPlayerAliveState     : return getText(LangTextType.B0618);
             case WarEventActionType.Dialogue                : return getText(LangTextType.B0674);
+            case WarEventActionType.SetViewpoint            : return getText(LangTextType.B0713);
+            case WarEventActionType.SetWeather              : return getText(LangTextType.B0715);
             default                                         : return null;
         }
     }

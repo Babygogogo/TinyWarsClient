@@ -711,6 +711,8 @@ namespace Types {
         AddUnit,
         SetPlayerAliveState,
         Dialogue,
+        SetViewpoint,
+        SetWeather,
     }
 
     // eslint-disable-next-line no-shadow
