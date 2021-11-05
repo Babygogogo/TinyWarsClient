@@ -4995,6 +4995,210 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WecTilePlayerIndexEqualTo. */
+    interface IWecTilePlayerIndexEqualTo {
+
+        /** WecTilePlayerIndexEqualTo gridIndex */
+        gridIndex?: (Structure.IGridIndex|null);
+
+        /** WecTilePlayerIndexEqualTo playerIndex */
+        playerIndex?: (number|null);
+
+        /** WecTilePlayerIndexEqualTo isNot */
+        isNot?: (boolean|null);
+    }
+
+    /** Represents a WecTilePlayerIndexEqualTo. */
+    class WecTilePlayerIndexEqualTo implements IWecTilePlayerIndexEqualTo {
+
+        /**
+         * Constructs a new WecTilePlayerIndexEqualTo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecTilePlayerIndexEqualTo);
+
+        /** WecTilePlayerIndexEqualTo gridIndex. */
+        public gridIndex?: (Structure.IGridIndex|null);
+
+        /** WecTilePlayerIndexEqualTo playerIndex. */
+        public playerIndex: number;
+
+        /** WecTilePlayerIndexEqualTo isNot. */
+        public isNot: boolean;
+
+        /**
+         * Creates a new WecTilePlayerIndexEqualTo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecTilePlayerIndexEqualTo instance
+         */
+        public static create(properties?: WarEvent.IWecTilePlayerIndexEqualTo): WarEvent.WecTilePlayerIndexEqualTo;
+
+        /**
+         * Encodes the specified WecTilePlayerIndexEqualTo message. Does not implicitly {@link WarEvent.WecTilePlayerIndexEqualTo.verify|verify} messages.
+         * @param message WecTilePlayerIndexEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecTilePlayerIndexEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecTilePlayerIndexEqualTo message, length delimited. Does not implicitly {@link WarEvent.WecTilePlayerIndexEqualTo.verify|verify} messages.
+         * @param message WecTilePlayerIndexEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecTilePlayerIndexEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecTilePlayerIndexEqualTo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecTilePlayerIndexEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTilePlayerIndexEqualTo;
+
+        /**
+         * Decodes a WecTilePlayerIndexEqualTo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecTilePlayerIndexEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTilePlayerIndexEqualTo;
+
+        /**
+         * Verifies a WecTilePlayerIndexEqualTo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecTilePlayerIndexEqualTo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecTilePlayerIndexEqualTo
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTilePlayerIndexEqualTo;
+
+        /**
+         * Creates a plain object from a WecTilePlayerIndexEqualTo message. Also converts values to other types if specified.
+         * @param message WecTilePlayerIndexEqualTo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecTilePlayerIndexEqualTo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecTilePlayerIndexEqualTo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecTileTypeEqualTo. */
+    interface IWecTileTypeEqualTo {
+
+        /** WecTileTypeEqualTo gridIndex */
+        gridIndex?: (Structure.IGridIndex|null);
+
+        /** WecTileTypeEqualTo tileType */
+        tileType?: (number|null);
+
+        /** WecTileTypeEqualTo isNot */
+        isNot?: (boolean|null);
+    }
+
+    /** Represents a WecTileTypeEqualTo. */
+    class WecTileTypeEqualTo implements IWecTileTypeEqualTo {
+
+        /**
+         * Constructs a new WecTileTypeEqualTo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecTileTypeEqualTo);
+
+        /** WecTileTypeEqualTo gridIndex. */
+        public gridIndex?: (Structure.IGridIndex|null);
+
+        /** WecTileTypeEqualTo tileType. */
+        public tileType: number;
+
+        /** WecTileTypeEqualTo isNot. */
+        public isNot: boolean;
+
+        /**
+         * Creates a new WecTileTypeEqualTo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecTileTypeEqualTo instance
+         */
+        public static create(properties?: WarEvent.IWecTileTypeEqualTo): WarEvent.WecTileTypeEqualTo;
+
+        /**
+         * Encodes the specified WecTileTypeEqualTo message. Does not implicitly {@link WarEvent.WecTileTypeEqualTo.verify|verify} messages.
+         * @param message WecTileTypeEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecTileTypeEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecTileTypeEqualTo message, length delimited. Does not implicitly {@link WarEvent.WecTileTypeEqualTo.verify|verify} messages.
+         * @param message WecTileTypeEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecTileTypeEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecTileTypeEqualTo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecTileTypeEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTileTypeEqualTo;
+
+        /**
+         * Decodes a WecTileTypeEqualTo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecTileTypeEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTileTypeEqualTo;
+
+        /**
+         * Verifies a WecTileTypeEqualTo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecTileTypeEqualTo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecTileTypeEqualTo
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTileTypeEqualTo;
+
+        /**
+         * Creates a plain object from a WecTileTypeEqualTo message. Also converts values to other types if specified.
+         * @param message WecTileTypeEqualTo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecTileTypeEqualTo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecTileTypeEqualTo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarEventCondition. */
     interface IWarEventCondition {
 
@@ -5036,6 +5240,12 @@ export declare namespace WarEvent {
 
         /** WarEventCondition WecPlayerAliveStateEqualTo */
         WecPlayerAliveStateEqualTo?: (WarEvent.IWecPlayerAliveStateEqualTo|null);
+
+        /** WarEventCondition WecTilePlayerIndexEqualTo */
+        WecTilePlayerIndexEqualTo?: (WarEvent.IWecTilePlayerIndexEqualTo|null);
+
+        /** WarEventCondition WecTileTypeEqualTo */
+        WecTileTypeEqualTo?: (WarEvent.IWecTileTypeEqualTo|null);
     }
 
     /** Represents a WarEventCondition. */
@@ -5085,6 +5295,12 @@ export declare namespace WarEvent {
 
         /** WarEventCondition WecPlayerAliveStateEqualTo. */
         public WecPlayerAliveStateEqualTo?: (WarEvent.IWecPlayerAliveStateEqualTo|null);
+
+        /** WarEventCondition WecTilePlayerIndexEqualTo. */
+        public WecTilePlayerIndexEqualTo?: (WarEvent.IWecTilePlayerIndexEqualTo|null);
+
+        /** WarEventCondition WecTileTypeEqualTo. */
+        public WecTileTypeEqualTo?: (WarEvent.IWecTileTypeEqualTo|null);
 
         /**
          * Creates a new WarEventCondition instance using the specified properties.

@@ -495,13 +495,6 @@ namespace WarCommonHelpers {
             || (state === Types.ActionPlannerState.RequestingUnitWait);
     }
 
-    export function checkIsValidWeatherType(weatherType: Types.WeatherType): boolean {
-        return (weatherType === Types.WeatherType.Clear)
-            || (weatherType === Types.WeatherType.Rainy)
-            || (weatherType === Types.WeatherType.Sandstorm)
-            || (weatherType === Types.WeatherType.Snowy);
-    }
-
     /**
      * The unit is dangling after moving!
      * You must call unitMap.addUnitOnMap() or unitMap.addUnitLoaded() after calling this function.

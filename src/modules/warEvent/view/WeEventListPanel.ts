@@ -16,6 +16,7 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 // import TwnsWeCommandPanel       from "./WeCommandPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeEventListPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeWar                = TwnsMeWar.MeWar;
@@ -369,11 +370,12 @@ namespace TwnsWeEventListPanel {
             this._labelDesc.text    = `${node.isAnd ? Lang.getText(LangTextType.A0162) : Lang.getText(LangTextType.A0163)}`;
         }
         private _updateForCondition(data: DataForWarEventDescRenderer): void {                  // DONE
+            const war               = data.war;
             const fullData          = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
             const conditionId       = data.conditionId;
             const condition         = Helpers.getExisted(fullData.conditionArray?.find(v => v.WecCommonData?.conditionId === conditionId));
             const prefixArray       = data.prefixArray;
-            const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition);
+            const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;

@@ -280,7 +280,8 @@ namespace TwnsWeCommandPanel {
         private _onTouchedBtnModifyCondition(): void {           // DONE
             const openData  = this._getOpenData();
             const fullData  = Helpers.getExisted(openData.war.getWarEventManager().getWarEventFullData());
-            WarEventHelper.openConditionModifyPanel(fullData, Helpers.getExisted(WarEventHelper.getCondition(fullData, Helpers.getExisted(openData.conditionId))));
+            WarEventHelper.openConditionModifyPanel(
+                { fullData, condition: Helpers.getExisted(WarEventHelper.getCondition(fullData, Helpers.getExisted(openData.conditionId))), war: openData.war }            );
         }
         private _onTouchedBtnReplaceCondition(): void {
             const openData = this._getOpenData();
@@ -483,7 +484,7 @@ namespace TwnsWeCommandPanel {
             const fullData          = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
             const conditionId       = data.conditionId;
             const condition         = Helpers.getExisted(fullData.conditionArray?.find(v => v.WecCommonData?.conditionId === conditionId));
-            const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition);
+            const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition, data.war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;

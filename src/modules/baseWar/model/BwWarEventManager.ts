@@ -444,89 +444,20 @@ namespace TwnsBwWarEventManager {
         private _checkIsMeetCondition(conditionId: number): boolean {
             const condition = this._getCondition(conditionId);
 
-            {
-                const conEventCalledCountTotalEqualTo = condition.WecEventCalledCountTotalEqualTo;
-                if (conEventCalledCountTotalEqualTo) {
-                    return this._checkIsMeetConEventCalledCountTotalEqualTo(conEventCalledCountTotalEqualTo);
-                }
-            }
-
-            {
-                const conEventCalledCountTotalGreaterThan = condition.WecEventCalledCountTotalGreaterThan;
-                if (conEventCalledCountTotalGreaterThan) {
-                    return this._checkIsMeetConEventCalledCountTotalGreaterThan(conEventCalledCountTotalGreaterThan);
-                }
-            }
-
-            {
-                const conEventCalledCountTotalLessThan = condition.WecEventCalledCountTotalLessThan;
-                if (conEventCalledCountTotalLessThan) {
-                    return this._checkIsMeetConEventCalledCountTotalLessThan(conEventCalledCountTotalLessThan);
-                }
-            }
-
-            {
-                const conPlayerAliveStateEqualTo = condition.WecPlayerAliveStateEqualTo;
-                if (conPlayerAliveStateEqualTo) {
-                    return this._checkIsMeetPlayerAliveStateEqualTo(conPlayerAliveStateEqualTo);
-                }
-            }
-
-            {
-                const conPlayerIndexInTurnEqualTo = condition.WecPlayerIndexInTurnEqualTo;
-                if (conPlayerIndexInTurnEqualTo) {
-                    return this._checkIsMeetConPlayerIndexInTurnEqualTo(conPlayerIndexInTurnEqualTo);
-                }
-            }
-
-            {
-                const conPlayerIndexInTurnGreaterThan = condition.WecPlayerIndexInTurnGreaterThan;
-                if (conPlayerIndexInTurnGreaterThan) {
-                    return this._checkIsMeetConPlayerIndexInTurnGreaterThan(conPlayerIndexInTurnGreaterThan);
-                }
-            }
-
-            {
-                const conPlayerIndexInTurnLessThan = condition.WecPlayerIndexInTurnLessThan;
-                if (conPlayerIndexInTurnLessThan) {
-                    return this._checkIsMeetConPlayerIndexInTurnLessThan(conPlayerIndexInTurnLessThan);
-                }
-            }
-
-            {
-                const conTurnIndexEqualTo = condition.WecTurnIndexEqualTo;
-                if (conTurnIndexEqualTo) {
-                    return this._checkIsMeetConTurnIndexEqualTo(conTurnIndexEqualTo);
-                }
-            }
-
-            {
-                const conTurnIndexGreaterThan = condition.WecTurnIndexGreaterThan;
-                if (conTurnIndexGreaterThan) {
-                    return this._checkIsMeetConTurnIndexGreaterThan(conTurnIndexGreaterThan);
-                }
-            }
-
-            {
-                const conTurnIndexLessThan = condition.WecTurnIndexLessThan;
-                if (conTurnIndexLessThan) {
-                    return this._checkIsMeetConTurnIndexLessThan(conTurnIndexLessThan);
-                }
-            }
-
-            {
-                const conTurnIndexRemainderEqualTo = condition.WecTurnIndexRemainderEqualTo;
-                if (conTurnIndexRemainderEqualTo) {
-                    return this._checkIsMeetConTurnIndexRemainderEqualTo(conTurnIndexRemainderEqualTo);
-                }
-            }
-
-            {
-                const conTurnPhase = condition.WecTurnPhaseEqualTo;
-                if (conTurnPhase) {
-                    return this._checkIsMeetConTurnPhaseEqualTo(conTurnPhase);
-                }
-            }
+            if      (condition.WecEventCalledCountTotalEqualTo)     { return this._checkIsMeetConEventCalledCountTotalEqualTo(condition.WecEventCalledCountTotalEqualTo); }
+            else if (condition.WecEventCalledCountTotalGreaterThan) { return this._checkIsMeetConEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan); }
+            else if (condition.WecEventCalledCountTotalLessThan)    { return this._checkIsMeetConEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan); }
+            else if (condition.WecPlayerAliveStateEqualTo)          { return this._checkIsMeetConPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo); }
+            else if (condition.WecPlayerIndexInTurnEqualTo)         { return this._checkIsMeetConPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo); }
+            else if (condition.WecPlayerIndexInTurnGreaterThan)     { return this._checkIsMeetConPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan); }
+            else if (condition.WecPlayerIndexInTurnLessThan)        { return this._checkIsMeetConPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan); }
+            else if (condition.WecTurnIndexEqualTo)                 { return this._checkIsMeetConTurnIndexEqualTo(condition.WecTurnIndexEqualTo); }
+            else if (condition.WecTurnIndexGreaterThan)             { return this._checkIsMeetConTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan); }
+            else if (condition.WecTurnIndexLessThan)                { return this._checkIsMeetConTurnIndexLessThan(condition.WecTurnIndexLessThan); }
+            else if (condition.WecTurnIndexRemainderEqualTo)        { return this._checkIsMeetConTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo); }
+            else if (condition.WecTurnPhaseEqualTo)                 { return this._checkIsMeetConTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo); }
+            else if (condition.WecTilePlayerIndexEqualTo)           { return this._checkIsMeetConTilePlayerIndexEqualTo(condition.WecTilePlayerIndexEqualTo); }
+            else if (condition.WecTileTypeEqualTo)                  { return this._checkIsMeetConTileTypeEqualTo(condition.WecTileTypeEqualTo); }
 
             throw Helpers.newError(`Invalid condition!`);
         }
@@ -556,7 +487,7 @@ namespace TwnsBwWarEventManager {
                 : (isNot ? true : false);
         }
 
-        private _checkIsMeetPlayerAliveStateEqualTo(condition: WarEvent.IWecPlayerAliveStateEqualTo): boolean {
+        private _checkIsMeetConPlayerAliveStateEqualTo(condition: WarEvent.IWecPlayerAliveStateEqualTo): boolean {
             const playerIndexEqualTo    = Helpers.getExisted(condition.playerIndexEqualTo);
             const aliveStateEqualTo     = Helpers.getExisted(condition.aliveStateEqualTo);
             const isNot                 = Helpers.getExisted(condition.isNot);
@@ -630,6 +561,21 @@ namespace TwnsBwWarEventManager {
             const isNot         = Helpers.getExisted(condition.isNot);
             const phaseCode     = this._getWar().getTurnManager().getPhaseCode();
             return (phaseCode === valueEqualTo)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
+        }
+
+        private _checkIsMeetConTilePlayerIndexEqualTo(condition: WarEvent.IWecTilePlayerIndexEqualTo): boolean {
+            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_00));
+            const isNot = condition.isNot;
+            return (tile.getPlayerIndex() === Helpers.getExisted(condition.playerIndex, ClientErrorCode.BwWarEventManager_CheckIsMeetConTilePlayerIndexEqualTo_01))
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
+        }
+        private _checkIsMeetConTileTypeEqualTo(condition: WarEvent.IWecTileTypeEqualTo): boolean {
+            const tile  = this._getWar().getTileMap().getTile(Helpers.getExisted(GridIndexHelpers.convertGridIndex(condition.gridIndex), ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_00));
+            const isNot = condition.isNot;
+            return (tile.getType() === Helpers.getExisted(condition.tileType, ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_01))
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
         }

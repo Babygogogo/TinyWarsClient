@@ -13,6 +13,7 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 // import WarEventHelper           from "../model/WarEventHelper";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeConditionTypeListPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
@@ -21,6 +22,7 @@ namespace TwnsWeConditionTypeListPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     type OpenDataForWeConditionTypeListPanel = {
+        war         : TwnsBwWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
@@ -85,10 +87,11 @@ namespace TwnsWeConditionTypeListPanel {
             const openData  = this._getOpenData();
             const condition = openData.condition;
             const fullData  = openData.fullData;
-
+            const war       = openData.war;
             const dataArray: DataForTypeRenderer[] = [];
             for (const newConditionType of WarEventHelper.getConditionTypeArray()) {
                 dataArray.push({
+                    war,
                     fullData,
                     newConditionType,
                     condition,
@@ -99,6 +102,7 @@ namespace TwnsWeConditionTypeListPanel {
     }
 
     type DataForTypeRenderer = {
+        war             : TwnsBwWar.BwWar;
         fullData        : ProtoTypes.Map.IWarEventFullData;
         newConditionType: ConditionType;
         condition       : IWarEventCondition;
@@ -130,7 +134,7 @@ namespace TwnsWeConditionTypeListPanel {
             const condition     = data.condition;
             if (conditionType !== WarEventHelper.getConditionType(condition)) {
                 WarEventHelper.resetCondition(condition, conditionType);
-                WarEventHelper.openConditionModifyPanel(data.fullData, condition);
+                WarEventHelper.openConditionModifyPanel({ fullData: data.fullData, condition, war: data.war });
                 WeConditionTypeListPanel.hide();
 
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);

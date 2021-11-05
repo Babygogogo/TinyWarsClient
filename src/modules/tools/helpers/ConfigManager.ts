@@ -379,6 +379,13 @@ namespace ConfigManager {
         }
     }
 
+    export function checkIsValidWeatherType(weatherType: Types.WeatherType): boolean {
+        return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.Weather[weatherType] != null;
+    }
+    export function checkIsValidTileType(tileType: Types.TileType): boolean {
+        return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.TileTemplate[tileType] != null;
+    }
+
     export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {
         const templateCfgDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.UnitTemplate, ClientErrorCode.ConfigManager_GetUnitTemplateCfg_00);
         return Helpers.getExisted(templateCfgDict[unitType], ClientErrorCode.ConfigManager_GetUnitTemplateCfg_01);

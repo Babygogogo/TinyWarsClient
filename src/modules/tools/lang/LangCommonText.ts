@@ -1067,6 +1067,14 @@ namespace TwnsLangCommonText {
             `设置为0回合可使天气永久持续`,
             `Set 0 turns to make the weather last forever.`,
         ],
+        [LangTextType.A0255]: [
+            `指定玩家不合法`,
+            `The player is not valid.`,
+        ],
+        [LangTextType.A0256]: [
+            `指定地形类型不合法`,
+            `The tile type is invalid.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3919,6 +3927,18 @@ namespace TwnsLangCommonText {
             `改变天气`,
             `Change Weather`,
         ],
+        [LangTextType.B0716]: [
+            `指定地块所属的玩家是...`,
+            `The tile's owner is ...`,
+        ],
+        [LangTextType.B0717]: [
+            `指定地块的类型是...`,
+            `The tile's type is ...`,
+        ],
+        [LangTextType.B0718]: [
+            `地形类型`,
+            `Tile Type`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4477,6 +4497,22 @@ namespace TwnsLangCommonText {
         [LangTextType.F0077]: [
             `把天气永久改为%s`,
             `Set the weather condition to %s forever.`,
+        ],
+        [LangTextType.F0078]: [
+            `地块(%d, %d)属于玩家P%d`,
+            `The owner of the tile (%d, %d) is P%d.`,
+        ],
+        [LangTextType.F0079]: [
+            `地块(%d, %d)不属于玩家P%d`,
+            `The owner of the tile (%d, %d) is not P%d.`,
+        ],
+        [LangTextType.F0080]: [
+            `地块(%d, %d)的类型是%s`,
+            `The type of the tile (%d, %d) is %s.`,
+        ],
+        [LangTextType.F0081]: [
+            `地块(%d, %d)的类型不是%s`,
+            `The type of the tile (%d, %d) is not %s.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

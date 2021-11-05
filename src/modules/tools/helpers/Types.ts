@@ -704,6 +704,9 @@ namespace Types {
         WecEventCalledCountTotalLessThan,
 
         WecPlayerAliveStateEqualTo,
+
+        WecTilePlayerIndexEqualTo,
+        WecTileTypeEqualTo,
     }
 
     // eslint-disable-next-line no-shadow

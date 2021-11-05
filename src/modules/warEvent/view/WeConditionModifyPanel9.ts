@@ -15,6 +15,7 @@
 // import WarEventHelper               from "../model/WarEventHelper";
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeConditionModifyPanel9 {
     import WeConditionTypeListPanel = TwnsWeConditionTypeListPanel.WeConditionTypeListPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -23,6 +24,7 @@ namespace TwnsWeConditionModifyPanel9 {
     import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
 
     type OpenDataForWeConditionModifyPanel9 = {
+        war         : TwnsBwWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
@@ -91,6 +93,7 @@ namespace TwnsWeConditionModifyPanel9 {
             WeConditionTypeListPanel.show({
                 fullData    : openData.fullData,
                 condition   : openData.condition,
+                war         : openData.war,
             });
         }
         private _onTouchedGroupIsNot(): void {
@@ -148,7 +151,7 @@ namespace TwnsWeConditionModifyPanel9 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const condition         = openData.condition;
-            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition);
+            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition, openData.war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
