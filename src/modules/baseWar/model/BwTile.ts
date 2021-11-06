@@ -554,15 +554,43 @@ namespace TwnsBwTile {
             return this._getMoveCostCfg()[moveType]?.cost ?? null;
         }
         public getMoveCostByUnit(unit: TwnsBwUnit.BwUnit): number | null {
-            const tileType = this.getType();
-            if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))                                            &&
-                (this.getTeamIndex() !== unit.getTeamIndex())                                                                       &&
-                (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), Types.UnitCategory.LargeNaval))
+            const tileType      = this.getType();
+            const unitType      = unit.getUnitType();
+            const war           = this.getWar();
+            const configVersion = war.getConfigVersion();
+            if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))                            &&
+                (this.getTeamIndex() !== unit.getTeamIndex())                                                       &&
+                (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.LargeNaval))
             ) {
                 return null;
-            } else {
-                return this.getMoveCostByMoveType(unit.getMoveType());
             }
+
+            const rawCost = this.getMoveCostByMoveType(unit.getMoveType());
+            if (rawCost == null) {
+                return null;
+            }
+
+            const player                    = unit.getPlayer();
+            const gridIndex                 = this.getGridIndex();
+            const coZoneRadius              = player.getCoZoneRadius();
+            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            for (const skillId of player.getCoCurrentSkills() || []) {
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitMoveCost;
+                if ((cfg)                                                                       &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))  &&
+                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[2]))  &&
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap,
+                        coZoneRadius,
+                    }))
+                ) {
+                    return cfg[3];
+                }
+            }
+
+            return rawCost;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

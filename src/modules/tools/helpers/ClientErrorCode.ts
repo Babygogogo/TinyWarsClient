@@ -1673,6 +1673,17 @@ namespace TwnsClientErrorCode {
         ConfigManager_GetWeatherCfg_08,
         ConfigManager_GetWeatherCfg_09,
 
+        ConfigManager_GetWeatherTypesByCategory_00,
+        ConfigManager_GetWeatherTypesByCategory_01,
+        ConfigManager_GetWeatherTypesByCategory_02,
+        ConfigManager_GetWeatherTypesByCategory_03,
+        ConfigManager_GetWeatherTypesByCategory_04,
+        ConfigManager_GetWeatherTypesByCategory_05,
+        ConfigManager_GetWeatherTypesByCategory_06,
+        ConfigManager_GetWeatherTypesByCategory_07,
+        ConfigManager_GetWeatherTypesByCategory_08,
+        ConfigManager_GetWeatherTypesByCategory_09,
+
         ConfigManager_GetAvailableWeatherTypes_00,
         ConfigManager_GetAvailableWeatherTypes_01,
         ConfigManager_GetAvailableWeatherTypes_02,

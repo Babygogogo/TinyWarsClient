@@ -81,6 +81,9 @@ namespace Types {
     export interface WeatherCfg extends ProtoTypes.Config.IWeatherCfg {
         weatherType : number;
     }
+    export interface WeatherCategoryCfg extends ProtoTypes.Config.IWeatherCategoryCfg {
+        category: WeatherCategory;
+    }
     export interface UserAvatarCfg extends ProtoTypes.Config.IUserAvatarCfg {
         avatarId    : number;
     }
@@ -99,6 +102,7 @@ namespace Types {
         CoBasic         : CoBasicCfg[];
         CoSkill         : CoSkillCfg[];
         Weather         : WeatherCfg[];
+        WeatherCategory : WeatherCategoryCfg[];
         UserAvatar      : UserAvatarCfg[];
     }
 
@@ -401,6 +405,11 @@ namespace Types {
     // eslint-disable-next-line no-shadow
     export enum TileCategory {
         None,          /* 0 */              All,               /* 1 */          LoadableForSeaTransports, /* 2 */   Destroyable,    /* 3 */
+    }
+
+    // eslint-disable-next-line no-shadow
+    export const enum WeatherCategory {
+        None,       All,        Snowy,
     }
 
     // eslint-disable-next-line no-shadow

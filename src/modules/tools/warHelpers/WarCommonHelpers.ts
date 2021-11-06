@@ -639,63 +639,63 @@ namespace WarCommonHelpers {
         return (newUnitData.currentHp ?? CommonConstants.UnitMaxHp) < (oldUnitData.currentHp ?? CommonConstants.UnitMaxHp);
     }
 
-    export function updateTilesAndUnits(
-        war         : TwnsBwWar.BwWar,
-        extraData   : Types.Undefinable<{
-            actingTiles?        : ISerialTile[] | null;
-            actingUnits?        : ISerialUnit[] | null;
-            discoveredTiles?    : ISerialTile[] | null;
-            discoveredUnits?    : ISerialUnit[] | null;
-        }>,
-    ): void {
-        if (extraData) {
-            addUnitsBeforeExecutingAction(war, extraData.actingUnits, false);
-            addUnitsBeforeExecutingAction(war, extraData.discoveredUnits, false);
-            updateTilesBeforeExecutingAction(war, extraData.actingTiles);
-            updateTilesBeforeExecutingAction(war, extraData.discoveredTiles);
-        }
-    }
-    function addUnitsBeforeExecutingAction(
-        war             : TwnsBwWar.BwWar,
-        unitsData       : Types.Undefinable<ISerialUnit[]>,
-        isViewVisible   : boolean
-    ): void {
-        if ((unitsData) && (unitsData.length)) {
-            const configVersion = war.getConfigVersion();
-            const unitMap       = war.getUnitMap();
-            for (const unitData of unitsData) {
-                const unitId = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_AddUnitsBeforeExecutingAction_00);
-                if (!unitMap.getUnitById(unitId)) {
-                    const unit = new TwnsBwUnit.BwUnit();
-                    unit.init(unitData, configVersion);
+    // export function updateTilesAndUnits(
+    //     war         : TwnsBwWar.BwWar,
+    //     extraData   : Types.Undefinable<{
+    //         actingTiles?        : ISerialTile[] | null;
+    //         actingUnits?        : ISerialUnit[] | null;
+    //         discoveredTiles?    : ISerialTile[] | null;
+    //         discoveredUnits?    : ISerialUnit[] | null;
+    //     }>,
+    // ): void {
+    //     if (extraData) {
+    //         addUnitsBeforeExecutingAction(war, extraData.actingUnits, false);
+    //         addUnitsBeforeExecutingAction(war, extraData.discoveredUnits, false);
+    //         updateTilesBeforeExecutingAction(war, extraData.actingTiles);
+    //         updateTilesBeforeExecutingAction(war, extraData.discoveredTiles);
+    //     }
+    // }
+    // function addUnitsBeforeExecutingAction(
+    //     war             : TwnsBwWar.BwWar,
+    //     unitsData       : Types.Undefinable<ISerialUnit[]>,
+    //     isViewVisible   : boolean
+    // ): void {
+    //     if ((unitsData) && (unitsData.length)) {
+    //         const configVersion = war.getConfigVersion();
+    //         const unitMap       = war.getUnitMap();
+    //         for (const unitData of unitsData) {
+    //             const unitId = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_AddUnitsBeforeExecutingAction_00);
+    //             if (!unitMap.getUnitById(unitId)) {
+    //                 const unit = new TwnsBwUnit.BwUnit();
+    //                 unit.init(unitData, configVersion);
 
-                    const isOnMap = unit.getLoaderUnitId() == null;
-                    if (isOnMap) {
-                        unitMap.setUnitOnMap(unit);
-                    } else {
-                        unitMap.setUnitLoaded(unit);
-                    }
-                    unit.startRunning(war);
-                    unit.startRunningView();
-                    unit.setViewVisible(isViewVisible);
-                }
-            }
-        }
-    }
-    function updateTilesBeforeExecutingAction(war: TwnsBwWar.BwWar, tilesData: Types.Undefinable<ISerialTile[]>): void {
-        if ((tilesData) && (tilesData.length)) {
-            const tileMap   = war.getTileMap();
-            for (const tileData of tilesData) {
-                const gridIndex     = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
-                const tile          = tileMap.getTile(gridIndex);
-                const configVersion = tile.getConfigVersion();
-                if (tile.getHasFog()) {
-                    tile.setHasFog(false);
-                    tile.deserialize(tileData, configVersion);
-                }
-            }
-        }
-    }
+    //                 const isOnMap = unit.getLoaderUnitId() == null;
+    //                 if (isOnMap) {
+    //                     unitMap.setUnitOnMap(unit);
+    //                 } else {
+    //                     unitMap.setUnitLoaded(unit);
+    //                 }
+    //                 unit.startRunning(war);
+    //                 unit.startRunningView();
+    //                 unit.setViewVisible(isViewVisible);
+    //             }
+    //         }
+    //     }
+    // }
+    // function updateTilesBeforeExecutingAction(war: TwnsBwWar.BwWar, tilesData: Types.Undefinable<ISerialTile[]>): void {
+    //     if ((tilesData) && (tilesData.length)) {
+    //         const tileMap   = war.getTileMap();
+    //         for (const tileData of tilesData) {
+    //             const gridIndex     = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+    //             const tile          = tileMap.getTile(gridIndex);
+    //             const configVersion = tile.getConfigVersion();
+    //             if (tile.getHasFog()) {
+    //                 tile.setHasFog(false);
+    //                 tile.deserialize(tileData, configVersion);
+    //             }
+    //         }
+    //     }
+    // }
 
     /**
      * @return the war view is vibrated or not
@@ -705,13 +705,15 @@ namespace WarCommonHelpers {
         commonExtraData     : ProtoTypes.Structure.ICommonExtraDataForWarAction;
         isFastExecute       : boolean;
     }): boolean {
-        const visibilityArrayFromPathsAfterAction = commonExtraData.visibilityArrayFromPathsAfterAction;
+        const playerIndexInTurn                     = war.getPlayerIndexInTurn();
+        const visibilityArrayFromPathsAfterAction   = commonExtraData.visibilityArrayFromPathsAfterAction;
         if (visibilityArrayFromPathsAfterAction) {
-            war.getFogMap().updateMapFromPathsByVisibilityArray(war.getPlayerIndexInTurn(), visibilityArrayFromPathsAfterAction);
+            war.getFogMap().updateMapFromPathsByVisibilityArray(playerIndexInTurn, visibilityArrayFromPathsAfterAction);
         }
 
-        const configVersion = war.getConfigVersion();
-        for (const playerData of commonExtraData.playerArrayAfterAction ?? []) {
+        const configVersion             = war.getConfigVersion();
+        const playerArrayAfterAction    = commonExtraData.playerArrayAfterAction ?? [];
+        for (const playerData of playerArrayAfterAction) {
             const player = war.getPlayer(Helpers.getExisted(playerData.playerIndex, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_00));
             player.init(playerData, configVersion);
             player.startRunning(war);
@@ -721,6 +723,7 @@ namespace WarCommonHelpers {
         unitMap.setNextUnitId(Helpers.getExisted(commonExtraData.nextUnitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_01));
 
         const gridVisualEffect  = war.getGridVisualEffect();
+        const updatedUnits      = new Set<TwnsBwUnit.BwUnit>();
         for (const unitData of commonExtraData.unitArrayAfterAction ?? []) {
             const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_02);
             const existingUnit  = unitMap.getUnitById(unitId);
@@ -740,6 +743,7 @@ namespace WarCommonHelpers {
                 }
                 existingUnit.startRunning(war);
                 existingUnit.startRunningView();
+                updatedUnits.add(existingUnit);
 
                 if (!isFastExecute) {
                     const gridIndex = existingUnit.getGridIndex();
@@ -765,6 +769,7 @@ namespace WarCommonHelpers {
                 }
                 unit.startRunning(war);
                 unit.startRunningView();
+                updatedUnits.add(unit);
             }
         }
 
@@ -800,6 +805,14 @@ namespace WarCommonHelpers {
                     } else if (hpAfterAction < hpBeforeAction) {
                         gridVisualEffect.showEffectDamage(gridIndex);
                     }
+                }
+            }
+        }
+
+        if ((!isFastExecute) && (playerArrayAfterAction.some(v => v.playerIndex === playerIndexInTurn))) {
+            for (const unit of unitMap.getAllUnitsOnMap()) {
+                if ((!updatedUnits.has(unit)) && (unit.getPlayerIndex() === playerIndexInTurn)) {
+                    unit.updateView();
                 }
             }
         }

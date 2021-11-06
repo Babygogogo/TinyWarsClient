@@ -502,7 +502,8 @@ namespace TwnsBwUnit {
         }
         public getAttackModifierByWeather(selfGridIndex: GridIndex): number {
             const war               = this.getWar();
-            const offenseBonusCfg   = war.getWeatherManager().getCurrentWeatherCfg().offenseBonus;
+            const weatherManager    = war.getWeatherManager();
+            const offenseBonusCfg   = weatherManager.getCurrentWeatherCfg().offenseBonus;
             if (offenseBonusCfg == null) {
                 return 0;
             }
@@ -518,15 +519,17 @@ namespace TwnsBwUnit {
                 return 0;
             }
 
+            const weatherType               = weatherManager.getCurrentWeatherType();
             const hasLoadedCo               = this.getHasLoadedCo();
             const player                    = this.getPlayer();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of this.getPlayer().getCoCurrentSkills()) {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfUnitIgnoreWeather;
-                if ((cfg)                                                                           &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))  &&
+                if ((cfg)                                                                               &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))          &&
+                    (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))      &&
+                    (ConfigManager.checkIsWeatherTypeInCategory(configVersion, weatherType, cfg[3]))    &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -1135,7 +1138,8 @@ namespace TwnsBwUnit {
         }
         private _getMoveRangeModifierByWeather(): number {
             const war               = this.getWar();
-            const moveRangeBonus    = war.getWeatherManager().getCurrentWeatherCfg().movementBonus;
+            const weatherManager    = war.getWeatherManager();
+            const moveRangeBonus    = weatherManager.getCurrentWeatherCfg().movementBonus;
             if (moveRangeBonus == null) {
                 return 0;
             }
@@ -1146,21 +1150,23 @@ namespace TwnsBwUnit {
             const selfTileType  = war.getTileMap().getTile(selfGridIndex).getType();
             const modifier      = moveRangeBonus[2];
             if ((!modifier)                                                                                 ||
-                (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, moveRangeBonus[0]))     ||
+                (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, moveRangeBonus[0]))      ||
                 (!ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, moveRangeBonus[1]))
             ) {
                 return 0;
             }
 
+            const weatherType               = weatherManager.getCurrentWeatherType();
             const hasLoadedCo               = this.getHasLoadedCo();
             const player                    = this.getPlayer();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of this.getPlayer().getCoCurrentSkills()) {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfUnitIgnoreWeather;
-                if ((cfg)                                                                           &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))  &&
+                if ((cfg)                                                                               &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))          &&
+                    (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))      &&
+                    (ConfigManager.checkIsWeatherTypeInCategory(configVersion, weatherType, cfg[3]))    &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -1517,10 +1523,12 @@ namespace TwnsBwUnit {
 
             const war                   = this.getWar();
             const tileType              = war.getTileMap().getTile(gridIndex).getType();
-            const unitVisionFixedCfg    = war.getWeatherManager().getCurrentWeatherCfg().unitVisionFixed;
+            const weatherManager        = war.getWeatherManager();
+            const unitVisionFixedCfg    = weatherManager.getCurrentWeatherCfg().unitVisionFixed;
             if (unitVisionFixedCfg != null) {
                 const configVersion = war.getConfigVersion();
                 const unitType      = this.getUnitType();
+                const weatherType   = weatherManager.getCurrentWeatherType();
                 if ((ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, unitVisionFixedCfg[0])) &&
                     (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, unitVisionFixedCfg[1]))
                 ) {
@@ -1533,6 +1541,7 @@ namespace TwnsBwUnit {
                         return (skillCfg != null)
                             && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, skillCfg[1]))
                             && (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, skillCfg[2]))
+                            && (ConfigManager.checkIsWeatherTypeInCategory(configVersion, weatherType, skillCfg[3]))
                             && ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                                 coZoneRadius,
                                 gridIndex,

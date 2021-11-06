@@ -89,6 +89,8 @@ namespace TwnsHrwWarMenuPanel {
         public constructor() {
             super();
 
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/halfwayReplayWar/HrwWarMenuPanel.exml`;
         }
 

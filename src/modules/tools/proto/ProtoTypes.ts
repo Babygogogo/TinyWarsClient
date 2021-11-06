@@ -375,6 +375,102 @@ export declare namespace Config {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WeatherCategoryCfg. */
+    interface IWeatherCategoryCfg {
+
+        /** WeatherCategoryCfg category */
+        category?: (number|null);
+
+        /** WeatherCategoryCfg weatherTypes */
+        weatherTypes?: (number[]|null);
+    }
+
+    /** Represents a WeatherCategoryCfg. */
+    class WeatherCategoryCfg implements IWeatherCategoryCfg {
+
+        /**
+         * Constructs a new WeatherCategoryCfg.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Config.IWeatherCategoryCfg);
+
+        /** WeatherCategoryCfg category. */
+        public category: number;
+
+        /** WeatherCategoryCfg weatherTypes. */
+        public weatherTypes: number[];
+
+        /**
+         * Creates a new WeatherCategoryCfg instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeatherCategoryCfg instance
+         */
+        public static create(properties?: Config.IWeatherCategoryCfg): Config.WeatherCategoryCfg;
+
+        /**
+         * Encodes the specified WeatherCategoryCfg message. Does not implicitly {@link Config.WeatherCategoryCfg.verify|verify} messages.
+         * @param message WeatherCategoryCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Config.IWeatherCategoryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeatherCategoryCfg message, length delimited. Does not implicitly {@link Config.WeatherCategoryCfg.verify|verify} messages.
+         * @param message WeatherCategoryCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Config.IWeatherCategoryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeatherCategoryCfg message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeatherCategoryCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Config.WeatherCategoryCfg;
+
+        /**
+         * Decodes a WeatherCategoryCfg message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeatherCategoryCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Config.WeatherCategoryCfg;
+
+        /**
+         * Verifies a WeatherCategoryCfg message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeatherCategoryCfg message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeatherCategoryCfg
+         */
+        public static fromObject(object: { [k: string]: any }): Config.WeatherCategoryCfg;
+
+        /**
+         * Creates a plain object from a WeatherCategoryCfg message. Also converts values to other types if specified.
+         * @param message WeatherCategoryCfg
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Config.WeatherCategoryCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeatherCategoryCfg to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a TileTemplateCfg. */
     interface ITileTemplateCfg {
 
@@ -1811,6 +1907,9 @@ export declare namespace Config {
 
         /** CoSkillCfg changeWeather */
         changeWeather?: (number[]|null);
+
+        /** CoSkillCfg selfUnitMoveCost */
+        selfUnitMoveCost?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1947,6 +2046,9 @@ export declare namespace Config {
 
         /** CoSkillCfg changeWeather. */
         public changeWeather: number[];
+
+        /** CoSkillCfg selfUnitMoveCost. */
+        public selfUnitMoveCost: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.
@@ -2280,6 +2382,9 @@ export declare namespace Config {
         /** FullConfig Weather */
         Weather?: (Config.IWeatherCfg[]|null);
 
+        /** FullConfig WeatherCategory */
+        WeatherCategory?: (Config.IWeatherCategoryCfg[]|null);
+
         /** FullConfig UserAvatar */
         UserAvatar?: (Config.IUserAvatarCfg[]|null);
     }
@@ -2334,6 +2439,9 @@ export declare namespace Config {
 
         /** FullConfig Weather. */
         public Weather: Config.IWeatherCfg[];
+
+        /** FullConfig WeatherCategory. */
+        public WeatherCategory: Config.IWeatherCategoryCfg[];
 
         /** FullConfig UserAvatar. */
         public UserAvatar: Config.IUserAvatarCfg[];

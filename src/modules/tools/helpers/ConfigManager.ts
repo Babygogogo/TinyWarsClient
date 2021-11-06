@@ -33,6 +33,7 @@ namespace ConfigManager {
     import PlayerRankCfg        = Types.PlayerRankCfg;
     import CoSkillCfg           = Types.CoSkillCfg;
     import WeatherCfg           = Types.WeatherCfg;
+    import WeatherCategoryCfg   = Types.WeatherCategoryCfg;
     import UserAvatarCfg        = Types.UserAvatarCfg;
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -53,6 +54,7 @@ namespace ConfigManager {
         CoBasic                 : { [coId: number]: CoBasicCfg };
         CoSkill                 : { [skillId: number]: CoSkillCfg };
         Weather                 : { [weatherType: number]: WeatherCfg };
+        WeatherCategory         : { [category: number]: WeatherCategoryCfg };
         UserAvatar              : { [avatarId: number]: UserAvatarCfg };
         maxUnitPromotion?       : number;
         secondaryWeaponFlag?    : { [unitType: number]: boolean };
@@ -171,6 +173,13 @@ namespace ConfigManager {
         }
         return dst;
     }
+    function _destructWeatherCategoryCfg(data: WeatherCategoryCfg[]): { [category: number]: WeatherCategoryCfg } {
+        const dst: { [category: number]: WeatherCategoryCfg } = {};
+        for (const d of data) {
+            dst[d.category] = d;
+        }
+        return dst;
+    }
     function _destructUserAvatarCfg(data: UserAvatarCfg[]): { [avatarId: number]: UserAvatarCfg } {
         const dst: { [avatarId: number]: UserAvatarCfg } = {};
         for (const d of data) {
@@ -267,6 +276,7 @@ namespace ConfigManager {
             CoBasic             : _destructCoBasicCfg(rawConfig.CoBasic),
             CoSkill             : _destructCoSkillCfg(rawConfig.CoSkill),
             Weather             : _destructWeatherCfg(rawConfig.Weather),
+            WeatherCategory     : _destructWeatherCategoryCfg(rawConfig.WeatherCategory),
             UserAvatar          : _destructUserAvatarCfg(rawConfig.UserAvatar),
             DamageChart         : damageChartCfg,
             UnitPromotion       : unitPromotionCfg,
@@ -619,6 +629,16 @@ namespace ConfigManager {
 
     export function getWeatherCfg(version: string, weatherType: Types.WeatherType): WeatherCfg {
         return Helpers.getExisted(_ALL_CONFIGS.get(version)?.Weather[weatherType], ClientErrorCode.ConfigManager_GetWeatherCfg_00);
+    }
+    export function getWeatherTypesByCategory(version: string, category: Types.WeatherCategory): Types.WeatherType[] {
+        return Helpers.getExisted(_ALL_CONFIGS.get(version)?.WeatherCategory[category], ClientErrorCode.ConfigManager_GetWeatherTypesByCategory_00).weatherTypes ?? [];
+    }
+    export function checkIsWeatherTypeInCategory(
+        version     : string,
+        weatherType : Types.WeatherType,
+        category    : Types.WeatherCategory,
+    ): boolean {
+        return getWeatherTypesByCategory(version, category).indexOf(weatherType) >= 0;
     }
     export function getAvailableWeatherTypes(version: string): Types.WeatherType[] {
         const cfgDict   = Helpers.getExisted(_ALL_CONFIGS.get(version)?.Weather, ClientErrorCode.ConfigManager_GetAvailableWeatherTypes_00);

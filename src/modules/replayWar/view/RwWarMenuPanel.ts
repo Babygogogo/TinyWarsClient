@@ -89,6 +89,8 @@ namespace TwnsRwWarMenuPanel {
         public constructor() {
             super();
 
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/replayWar/RwWarMenuPanel.exml`;
         }
 
