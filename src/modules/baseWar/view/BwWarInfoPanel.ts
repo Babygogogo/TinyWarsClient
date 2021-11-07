@@ -25,6 +25,7 @@
 // import WarMapModel              from "../../warMap/model/WarMapModel";
 // import TwnsBwWar                from "../model/BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwWarInfoPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -129,9 +130,16 @@ namespace TwnsBwWarInfoPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getText(LangTextType.B0223);
             this._labelTurnTitle.text   = Lang.getText(LangTextType.B0687).toLocaleUpperCase();
+            this._updateLabelTitle();
             this._updateLabelMapNameAndDesigner();
+        }
+
+        private _updateLabelTitle(): void {
+            const warId             = this._getOpenData().war.getWarId();
+            this._labelTitle.text   = warId == null
+                ? Lang.getText(LangTextType.B0223)
+                : `${Lang.getText(LangTextType.B0719)} #${warId}`;
         }
 
         private async _updateLabelMapNameAndDesigner(): Promise<void> {

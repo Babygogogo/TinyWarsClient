@@ -11,7 +11,7 @@
             <e:Group y="0" left="0" right="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
                                      source="uncompressedColorGrey0001" y="0" left="0" right="0" />
-                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="War Info" x="30" size="22" bold="true" verticalCenter="2" />
                 <e:Group x="190" bottom="7">
                     <TwnsUiLabel:UiLabel id="_labelMapName" text="注册" x="0" size="18" y="0" />
                     <TwnsUiLabel:UiLabel id="_labelMapDesigner" text="注册" x="10" size="14" y="0" textColor="0xF9D803" />
@@ -93,7 +93,8 @@
                                                                                      size="14" verticalAlign="middle"
                                                                                      maxTextWidth="100" left="0" top="4"
                                                                                      bottom="4" />
-                                                                <TwnsUiImage:UiImage id="_imgModify" scaleX="0.8" scaleY="0.8"
+                                                                <TwnsUiImage:UiImage id="_imgModify" scaleX="0.8"
+                                                                                     scaleY="0.8"
                                                                                      source="commonIcon0021" />
                                                                 <e:layout>
                                                                     <e:HorizontalLayout gap="4" verticalAlign="middle" />

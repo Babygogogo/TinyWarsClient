@@ -23,12 +23,14 @@ namespace WarCoSkillHelpers {
     import ICoSkillCfg          = ProtoTypes.Config.ICoSkillCfg;
 
     type DamageMaps = {
-        hpMap   : number[][];
-        fundMap : number[][];
+        hpMap               : number[][];
+        fundMap             : number[][];
+        capturerValueMap    : number[][];
     };
     type ValueMaps = {
         hpMap       : number[][];
         fundMap     : number[][];
+        capturerMap : boolean[][];
         sameTeamMap : boolean[][];
     };
 
@@ -958,6 +960,9 @@ namespace WarCoSkillHelpers {
                 ? getIndiscriminateAreaDamageCenterForType1(valueMaps, radius, hpDamage)
                 : getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
 
+        } else if (targetType === 4) {
+            return getIndiscriminateAreaDamageCenterForType4(valueMaps, radius, hpDamage);
+
         } else {
             throw Helpers.newError(`Invalid targetType: ${targetType}`, ClientErrorCode.WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_00);
         }
@@ -983,37 +988,48 @@ namespace WarCoSkillHelpers {
         }
     }
 
+    function getIndiscriminateAreaDamageCenterForType4(valueMaps: ValueMaps, radius: number, hpDamage: number): GridIndex {
+        const damageMap = getDamageMap(valueMaps, hpDamage);
+        const centers   = getCentersOfHighestDamage(damageMap.capturerValueMap, radius);
+        if (centers.length === 1) {
+            return centers[0];
+        } else {
+            return getCentersOfHighestDamageForCandidates(damageMap.fundMap, radius, centers);
+        }
+    }
+
     function getValueMap(unitMap: BwUnitMap, teamIndex: number): ValueMaps {
         const { width, height } = unitMap.getMapSize();
         const hpMap             = Helpers.createEmptyMap(width, height, 0);
         const fundMap           = Helpers.createEmptyMap(width, height, 0);
+        const capturerMap       = Helpers.createEmptyMap(width, height, false);
         const sameTeamMap       = Helpers.createEmptyMap(width, height, false);
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
                 const unit = unitMap.getUnitOnMap({ x, y });
                 if (unit) {
-                    const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
-                    const productionFinalCost   = unit.getProductionFinalCost();
-                    const unitTeamIndex         = unit.getTeamIndex();
-                    hpMap[x][y]                 = normalizedCurrentHp;
-                    fundMap[x][y]               = productionFinalCost;
-                    sameTeamMap[x][y]           = unitTeamIndex === teamIndex;
+                    hpMap[x][y]         = unit.getNormalizedCurrentHp();
+                    fundMap[x][y]       = unit.getProductionFinalCost();
+                    capturerMap[x][y]   = unit.checkIsCapturer();
+                    sameTeamMap[x][y]   = unit.getTeamIndex() === teamIndex;
                 }
             }
         }
 
-        return { hpMap, fundMap, sameTeamMap };
+        return { hpMap, fundMap, capturerMap, sameTeamMap };
     }
 
     function getDamageMap(valueMaps: ValueMaps, hpDamage: number): DamageMaps {
         const srcHpMap          = valueMaps.hpMap;
         const srcFundMap        = valueMaps.fundMap;
         const srcSameTeamMap    = valueMaps.sameTeamMap;
+        const srcCapturerMap    = valueMaps.capturerMap;
         const width             = srcHpMap.length;
         const height            = srcHpMap[0].length;
 
-        const hpMap     = Helpers.createEmptyMap(width, height, 0);
-        const fundMap   = Helpers.createEmptyMap(width, height, 0);
+        const hpMap             = Helpers.createEmptyMap(width, height, 0);
+        const fundMap           = Helpers.createEmptyMap(width, height, 0);
+        const capturerValueMap  = Helpers.createEmptyMap(width, height, 0);
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
                 if (srcHpMap[x][y] > 0) {
@@ -1022,10 +1038,13 @@ namespace WarCoSkillHelpers {
                     const isSameTeam        = srcSameTeamMap[x][y];
                     hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;
                     fundMap[x][y]           = isSameTeam ? -realFundDamage * 2 : realFundDamage;
+                    capturerValueMap[x][y]  = isSameTeam
+                        ? (-realHpDamage * 2)
+                        : (srcCapturerMap[x][y] ? realHpDamage * 100000 : realHpDamage);
                 }
             }
         }
-        return { hpMap, fundMap };
+        return { hpMap, fundMap, capturerValueMap };
     }
 
     function getCentersOfHighestDamage(map: number[][], radius: number): GridIndex[] {

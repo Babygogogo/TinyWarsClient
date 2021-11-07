@@ -407,7 +407,8 @@ namespace TwnsBwUnit {
             const coZoneRadius              = player.getCoZoneRadius();
             const fund                      = player.getFund();
             const tileMap                   = this.getWar().getTileMap();
-            const selfTileType              = tileMap.getTile(selfGridIndex).getType();
+            const selfTile                  = tileMap.getTile(selfGridIndex);
+            const selfTileType              = selfTile.getType();
             const playerIndex               = this.getPlayerIndex();
             const promotion                 = this.getCurrentPromotion();
             const hasLoadedCo               = this.getHasLoadedCo();
@@ -496,6 +497,21 @@ namespace TwnsBwUnit {
                         }
                     }
                 }
+
+                {
+                    const cfg = skillCfg.selfOffenseBonusByTileDefense;
+                    if ((cfg)                                                                           &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex               : selfGridIndex,
+                            coSkillAreaType         : cfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius,
+                        })))
+                    ) {
+                        modifier += cfg[2] / 100 * selfTile.getDefenseAmount();
+                    }
+                }
             }
 
             return modifier;
@@ -552,17 +568,14 @@ namespace TwnsBwUnit {
             const configVersion             = this.getConfigVersion();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
-            const selfTileType              = this.getWar().getTileMap().getTile(selfGridIndex).getType();
+            const selfTile                  = this.getWar().getTileMap().getTile(selfGridIndex);
+            const selfTileType              = selfTile.getType();
             const promotion                 = this.getCurrentPromotion();
             const hasLoadedCo               = this.getHasLoadedCo();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifier = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
-                if (skillCfg == null) {
-                    throw Helpers.newError(`Empty skillCfg.`);
-                }
-
                 {
                     const cfg = skillCfg.selfDefenseBonus;
                     if ((cfg)                                                                           &&
@@ -592,6 +605,21 @@ namespace TwnsBwUnit {
                         })))
                     ) {
                         modifier += cfg[3];
+                    }
+                }
+
+                {
+                    const cfg = skillCfg.selfDefenseBonusByTileDefense;
+                    if ((cfg)                                                                           &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex               : selfGridIndex,
+                            coSkillAreaType         : cfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius,
+                        })))
+                    ) {
+                        modifier += cfg[2] / 100 * selfTile.getDefenseAmount();
                     }
                 }
             }
