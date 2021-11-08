@@ -1833,8 +1833,8 @@ export declare namespace Config {
         /** CoSkillCfg selfHpRecovery */
         selfHpRecovery?: (number[]|null);
 
-        /** CoSkillCfg indiscriminateAreaDamage */
-        indiscriminateAreaDamage?: (number[]|null);
+        /** CoSkillCfg fixedAreaDamage */
+        fixedAreaDamage?: (number[]|null);
 
         /** CoSkillCfg selfPromotionGain */
         selfPromotionGain?: (number[]|null);
@@ -1916,6 +1916,9 @@ export declare namespace Config {
 
         /** CoSkillCfg selfDefenseBonusByTileDefense */
         selfDefenseBonusByTileDefense?: (number[]|null);
+
+        /** CoSkillCfg selfRepairAmountBonus */
+        selfRepairAmountBonus?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1978,8 +1981,8 @@ export declare namespace Config {
         /** CoSkillCfg selfHpRecovery. */
         public selfHpRecovery: number[];
 
-        /** CoSkillCfg indiscriminateAreaDamage. */
-        public indiscriminateAreaDamage: number[];
+        /** CoSkillCfg fixedAreaDamage. */
+        public fixedAreaDamage: number[];
 
         /** CoSkillCfg selfPromotionGain. */
         public selfPromotionGain: number[];
@@ -2061,6 +2064,9 @@ export declare namespace Config {
 
         /** CoSkillCfg selfDefenseBonusByTileDefense. */
         public selfDefenseBonusByTileDefense: number[];
+
+        /** CoSkillCfg selfRepairAmountBonus. */
+        public selfRepairAmountBonus: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.
@@ -17991,8 +17997,8 @@ export declare namespace Structure {
         /** DataForUseCoSkill skillIndex */
         skillIndex?: (number|null);
 
-        /** DataForUseCoSkill indiscriminateAreaDamageCenter */
-        indiscriminateAreaDamageCenter?: (Structure.IGridIndex|null);
+        /** DataForUseCoSkill fixedAreaDamageCenter */
+        fixedAreaDamageCenter?: (Structure.IGridIndex|null);
 
         /** DataForUseCoSkill newWeatherType */
         newWeatherType?: (number|null);
@@ -18010,8 +18016,8 @@ export declare namespace Structure {
         /** DataForUseCoSkill skillIndex. */
         public skillIndex: number;
 
-        /** DataForUseCoSkill indiscriminateAreaDamageCenter. */
-        public indiscriminateAreaDamageCenter?: (Structure.IGridIndex|null);
+        /** DataForUseCoSkill fixedAreaDamageCenter. */
+        public fixedAreaDamageCenter?: (Structure.IGridIndex|null);
 
         /** DataForUseCoSkill newWeatherType. */
         public newWeatherType: number;

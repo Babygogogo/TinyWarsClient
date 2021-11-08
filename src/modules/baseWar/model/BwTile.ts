@@ -604,6 +604,30 @@ namespace TwnsBwTile {
             return this._getTemplateCfg().repairAmount ?? null;
         }
 
+        public getNormalizedRepairHpModifier(): number {
+            const player                    = this.getPlayer();
+            const configVersion             = this.getConfigVersion();
+            const gridIndex                 = this.getGridIndex();
+            const coZoneRadius              = player.getCoZoneRadius();
+            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            let totalModifier               = 0;
+            for (const skillId of player.getCoCurrentSkills()) {
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfRepairAmountBonus;
+                if ((cfg)                                               &&
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap,
+                        coZoneRadius,
+                    }))
+                ) {
+                    totalModifier += cfg[1];
+                }
+            }
+
+            return totalModifier;
+        }
+
         public checkCanRepairUnit(unit: TwnsBwUnit.BwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
@@ -637,7 +661,7 @@ namespace TwnsBwTile {
             const normalizedCurrentHp   = WarCommonHelpers.getNormalizedHp(currentHp);
             const normalizedRepairHp    = Math.min(
                 normalizedMaxHp - normalizedCurrentHp,
-                cfgNormalizedRepairHp,
+                cfgNormalizedRepairHp + this.getNormalizedRepairHpModifier(),
                 Math.floor(fund * normalizedMaxHp / productionCost)
             );
             return {

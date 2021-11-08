@@ -356,13 +356,13 @@ namespace TwnsRwWar {
             }];
 
             const allActionArray    = this.getExecutedActionManager().getAllExecutedActions();
-            const playersCount      = this.getPlayerManager().getTotalPlayersCount(true);
+            const maxPlayerIndex    = this.getPlayerManager().getTotalPlayersCount(false);
             const actionsCount      = allActionArray.length;
             for (let i = 1; i < actionsCount; ++i) {
                 const action = allActionArray[i];
                 if ((action.WarActionPlayerEndTurn) || (action.WarActionSystemEndTurn) || (i === actionsCount - 1)) {
                     ++checkpointId;
-                    if (playerIndex < playersCount) {
+                    if (playerIndex < maxPlayerIndex) {
                         ++playerIndex;
                     } else {
                         playerIndex = 0;

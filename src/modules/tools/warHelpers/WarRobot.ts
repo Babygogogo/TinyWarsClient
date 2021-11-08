@@ -52,6 +52,7 @@ namespace WarRobot {
         globalOffenseBonuses    : Map<number, number>;
         globalDefenseBonuses    : Map<number, number>;
         luckValues              : Map<number, number>;
+        randomIndex             : number;
     };
 
     const _IS_NEED_VISIBILITY = true;
@@ -365,6 +366,7 @@ namespace WarRobot {
             globalOffenseBonuses    : await getGlobalOffenseBonuses(war),
             globalDefenseBonuses    : await getGlobalDefenseBonuses(war),
             luckValues              : await getLuckValues(war),
+            randomIndex             : 0,
         };
     }
 
@@ -485,17 +487,28 @@ namespace WarRobot {
             : (!commonParams.war.getUnitMap().getUnitOnMap(gridIndex));
     }
 
-    function getBetterScoreAndAction(war: BwWar, data1: ScoreAndAction | null | undefined, data2: ScoreAndAction): ScoreAndAction {
+    function getBetterScoreAndAction(war: BwWar, data1: ScoreAndAction | null | undefined, data2: ScoreAndAction, commonParams: CommonParams): ScoreAndAction {
         if (data1 == null) {
             return data2;
         } else {
             const score1 = data1.score;
             const score2 = data2.score;
-            if (score1 === score2) {
-                // TODO: 此算法改变了war，理想算法下不应该改变war
-                return war.getRandomNumberManager().getRandomNumber() > 0.5 ? data1 : data2;
-            } else {
+            if (score1 !== score2) {
                 return score1 > score2 ? data1 : data2;
+            } else {
+                const randomNumberManager = war.getRandomNumberManager();
+                if (!randomNumberManager.getIsNeedSeedRandom()) {
+                    return Math.random() > 0.5 ? data1 : data2;
+                } else {
+                    const array     = randomNumberManager.getSeedRandomCurrentState().S || [];
+                    const length    = array.length;
+                    if (!length) {
+                        return data1;
+                    } else {
+                        commonParams.randomIndex = (commonParams.randomIndex + 1) % length;
+                        return array[commonParams.randomIndex] % 2 === 0 ? data1 : data2;
+                    }
+                }
             }
         }
     }
@@ -1654,7 +1667,8 @@ namespace WarRobot {
                             targetGridIndex,
                             launchUnitId,
                         }, },
-                }
+                },
+                commonParams
             );
         }
 
@@ -1799,7 +1813,8 @@ namespace WarRobot {
                             launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                             targetGridIndex,
                         } },
-                    }
+                    },
+                    commonParams
                 );
             }
 
@@ -1900,7 +1915,7 @@ namespace WarRobot {
                 continue;
             }
 
-            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction);
+            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction, commonParams);
         }
 
         return bestScoreAndAction;
@@ -1960,6 +1975,7 @@ namespace WarRobot {
                         action,
                         score   : score + scoreForMovePath + scoreForPosition,
                     },
+                    commonParams
                 );
             }
         }
@@ -2039,7 +2055,7 @@ namespace WarRobot {
                 continue;
             }
 
-            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction);
+            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction, commonParams);
         }
 
         return bestScoreAndAction ? bestScoreAndAction.action : null;
@@ -2077,7 +2093,7 @@ namespace WarRobot {
 
             const action = scoreAndAction.action;
             if ((action.WarActionUnitAttackUnit) || (action.WarActionUnitAttackTile)) {
-                bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction);
+                bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction, commonParams);
             }
         }
 
@@ -2096,7 +2112,7 @@ namespace WarRobot {
                 continue;
             }
 
-            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction);
+            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction, commonParams);
         }
 
         return bestScoreAndAction ? bestScoreAndAction.action : null;
@@ -2114,7 +2130,7 @@ namespace WarRobot {
                 continue;
             }
 
-            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction);
+            bestScoreAndAction = getBetterScoreAndAction(war, bestScoreAndAction, scoreAndAction, commonParams);
         }
 
         return  bestScoreAndAction ? bestScoreAndAction.action : null;

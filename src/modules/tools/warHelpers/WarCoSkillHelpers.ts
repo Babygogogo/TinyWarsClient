@@ -59,7 +59,7 @@ namespace WarCoSkillHelpers {
             exeEnemyMaterialGainWithExtraData({ isFastExecute });
             exeSelfPrimaryAmmoGainWithExtraData({ isFastExecute });
             exeEnemyPrimaryAmmoGainWithExtraData({ isFastExecute });
-            exeIndiscriminateAreaDamageWithExtraData({ war, skillCfg, unitMap, skillData, isFastExecute });
+            exeFixedAreaDamageWithExtraData({ war, skillCfg, unitMap, skillData, isFastExecute });
             exeSelfPromotionGainWithExtraData({ isFastExecute });
             exeSelfUnitActionStateWithExtraData({ isFastExecute });
             exeSelfFlareAmmoGainWithExtraData({ isFastExecute });
@@ -76,7 +76,7 @@ namespace WarCoSkillHelpers {
             exeEnemyMaterialGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
             exeSelfPrimaryAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
             exeEnemyPrimaryAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
-            exeIndiscriminateAreaDamageWithoutExtraData({ war, skillCfg, unitMap, skillData, isFastExecute });
+            exeFixedAreaDamageWithoutExtraData({ war, skillCfg, unitMap, player, skillData, isFastExecute });
             exeSelfPromotionGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
             exeSelfUnitActionStateWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
             exeSelfFlareAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
@@ -669,14 +669,14 @@ namespace WarCoSkillHelpers {
         }
     }
 
-    function exeIndiscriminateAreaDamageWithExtraData({ war, skillCfg, unitMap, skillData, isFastExecute }: {
+    function exeFixedAreaDamageWithExtraData({ war, skillCfg, unitMap, skillData, isFastExecute }: {
         war             : BwWar;
         skillCfg        : ICoSkillCfg;
         unitMap         : BwUnitMap;
         skillData       : IDataForUseCoSkill;
         isFastExecute   : boolean;
     }): void {
-        const cfg = skillCfg.indiscriminateAreaDamage;
+        const cfg = skillCfg.fixedAreaDamage;
         if (cfg == null) {
             return;
         }
@@ -685,33 +685,42 @@ namespace WarCoSkillHelpers {
             return;
         }
 
-        const center            = Helpers.getExisted(skillData.indiscriminateAreaDamageCenter);
+        const center            = Helpers.getExisted(skillData.fixedAreaDamageCenter);
         const gridVisualEffect  = war.getGridVisualEffect();
         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, cfg[1], unitMap.getMapSize())) {
             gridVisualEffect.showEffectExplosion(gridIndex);
         }
     }
-    function exeIndiscriminateAreaDamageWithoutExtraData({ war, skillCfg, unitMap, skillData, isFastExecute }: {
+    function exeFixedAreaDamageWithoutExtraData({ war, skillCfg, unitMap, player, skillData, isFastExecute }: {
         war             : BwWar;
         skillCfg        : ICoSkillCfg;
         unitMap         : BwUnitMap;
+        player          : BwPlayer;
         skillData       : IDataForUseCoSkill;
         isFastExecute   : boolean;
     }): void {
-        const cfg = skillCfg.indiscriminateAreaDamage;
+        const cfg = skillCfg.fixedAreaDamage;
         if (cfg == null) {
             return;
         }
 
-        const center            = Helpers.getExisted(skillData.indiscriminateAreaDamageCenter);
+        const center            = Helpers.getExisted(skillData.fixedAreaDamageCenter);
         const mapSize           = unitMap.getMapSize();
         const hpDamage          = cfg[2] * CommonConstants.UnitHpNormalizer;
+        const isIndiscriminate  = !!cfg[3];
+        const actionState       = cfg[4];
+        const teamIndex         = player.getTeamIndex();
         const gridVisualEffect  = war.getGridVisualEffect();
         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, cfg[1], mapSize)) {
             const unit = unitMap.getUnitOnMap(gridIndex);
-            if (unit) {
-                const currentHp = unit.getCurrentHp();
-                unit.setCurrentHp(Math.max(1, currentHp - hpDamage));
+            if ((unit)                                                      &&
+                ((isIndiscriminate) || (unit.getTeamIndex() !== teamIndex))
+            ) {
+                unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - hpDamage));
+                if (actionState !== -1) {
+                    unit.setActionState(actionState);
+                }
+
                 (!isFastExecute) && (unit.updateView());
             }
 
@@ -924,13 +933,13 @@ namespace WarCoSkillHelpers {
         };
 
         {
-            const cfg = skillCfg.indiscriminateAreaDamage;
+            const cfg = skillCfg.fixedAreaDamage;
             if (cfg) {
                 const unitMap   = war.getUnitMap();
                 const teamIndex = player.getTeamIndex();
                 const valueMap  = Helpers.getExisted(getValueMap(unitMap, teamIndex));
-                const center    = Helpers.getExisted(getIndiscriminateAreaDamageCenter(war, valueMap, cfg));
-                dataForUseCoSkill.indiscriminateAreaDamageCenter = center;
+                const center    = Helpers.getExisted(getFixedAreaDamageCenter(war, valueMap, cfg));
+                dataForUseCoSkill.fixedAreaDamageCenter = center;
             }
         }
 
@@ -944,57 +953,85 @@ namespace WarCoSkillHelpers {
         return dataForUseCoSkill;
     }
 
-    function getIndiscriminateAreaDamageCenter(war: BwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex {
-        const targetType    = indiscriminateCfg[0];
-        const radius        = indiscriminateCfg[1];
-        const hpDamage      = indiscriminateCfg[2];
+    function getFixedAreaDamageCenter(war: BwWar, valueMaps: ValueMaps, cfg: number[]): GridIndex {
+        const targetType        = cfg[0];
+        const radius            = cfg[1];
+        const hpDamage          = cfg[2];
+        const isIndiscriminate  = !!cfg[3];
         if (targetType === 1) { // HP
-            return getIndiscriminateAreaDamageCenterForType1(valueMaps, radius, hpDamage);
+            return getFixedAreaDamageCenterForType1({ war, valueMaps, radius, hpDamage, isIndiscriminate });
 
         } else if (targetType === 2) {  // fund
-            return getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
+            return getFixedAreaDamageCenterForType2({ war, valueMaps, radius, hpDamage, isIndiscriminate });
 
         } else if (targetType === 3) {  // random: HP or fund
-            const randomNumber = war.getRandomNumberManager().getRandomNumber();
-            return randomNumber < 0.5
-                ? getIndiscriminateAreaDamageCenterForType1(valueMaps, radius, hpDamage)
-                : getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
+            return getFixedAreaDamageCenterForType3({ war, valueMaps, radius, hpDamage, isIndiscriminate });
 
         } else if (targetType === 4) {
-            return getIndiscriminateAreaDamageCenterForType4(valueMaps, radius, hpDamage);
+            return getFixedAreaDamageCenterForType4({ war, valueMaps, radius, hpDamage, isIndiscriminate });
 
         } else {
-            throw Helpers.newError(`Invalid targetType: ${targetType}`, ClientErrorCode.WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_00);
+            throw Helpers.newError(`Invalid targetType: ${targetType}`, ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenter_00);
         }
     }
 
-    function getIndiscriminateAreaDamageCenterForType1(valueMaps: ValueMaps, radius: number, hpDamage: number): GridIndex {
-        const damageMap = getDamageMap(valueMaps, hpDamage);
+    function getFixedAreaDamageCenterForType1({ war, valueMaps, radius, hpDamage, isIndiscriminate }: {
+        war                 : BwWar;
+        valueMaps           : ValueMaps;
+        radius              : number;
+        hpDamage            : number;
+        isIndiscriminate    : boolean;
+    }): GridIndex {
+        const damageMap = getDamageMap({ valueMaps, hpDamage, isIndiscriminate });
         const centers   = getCentersOfHighestDamage(damageMap.hpMap, radius);
         if (centers.length === 1) {
             return centers[0];
         } else {
-            return getCentersOfHighestDamageForCandidates(damageMap.fundMap, radius, centers);
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType1_00);
         }
     }
 
-    function getIndiscriminateAreaDamageCenterForType2(valueMaps: ValueMaps, radius: number, hpDamage: number): GridIndex {
-        const damageMap = getDamageMap(valueMaps, hpDamage);
+    function getFixedAreaDamageCenterForType2({ war, valueMaps, radius, hpDamage, isIndiscriminate }: {
+        war                 : BwWar;
+        valueMaps           : ValueMaps;
+        radius              : number;
+        hpDamage            : number;
+        isIndiscriminate    : boolean;
+    }): GridIndex {
+        const damageMap = getDamageMap({ valueMaps, hpDamage, isIndiscriminate });
         const centers   = getCentersOfHighestDamage(damageMap.fundMap, radius);
         if (centers.length === 1) {
             return centers[0];
         } else {
-            return getCentersOfHighestDamageForCandidates(damageMap.hpMap, radius, centers);
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType2_00);
         }
     }
 
-    function getIndiscriminateAreaDamageCenterForType4(valueMaps: ValueMaps, radius: number, hpDamage: number): GridIndex {
-        const damageMap = getDamageMap(valueMaps, hpDamage);
+    function getFixedAreaDamageCenterForType3({ war, valueMaps, radius, hpDamage, isIndiscriminate }: {
+        war                 : BwWar;
+        valueMaps           : ValueMaps;
+        radius              : number;
+        hpDamage            : number;
+        isIndiscriminate    : boolean;
+    }): GridIndex {
+        return war.getRandomNumberManager().getRandomNumber() < 0.5
+            ? getFixedAreaDamageCenterForType1({ war, valueMaps, radius, hpDamage, isIndiscriminate })
+            : getFixedAreaDamageCenterForType2({ war, valueMaps, radius, hpDamage, isIndiscriminate });
+    }
+
+    function getFixedAreaDamageCenterForType4({ war, valueMaps, radius, hpDamage, isIndiscriminate }: {
+        war                 : BwWar;
+        valueMaps           : ValueMaps;
+        radius              : number;
+        hpDamage            : number;
+        isIndiscriminate    : boolean;
+    }): GridIndex {
+        const damageMap = getDamageMap({ valueMaps, hpDamage, isIndiscriminate });
         const centers   = getCentersOfHighestDamage(damageMap.capturerValueMap, radius);
         if (centers.length === 1) {
             return centers[0];
         } else {
-            return getCentersOfHighestDamageForCandidates(damageMap.fundMap, radius, centers);
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType4_00);
         }
     }
 
@@ -1019,7 +1056,11 @@ namespace WarCoSkillHelpers {
         return { hpMap, fundMap, capturerMap, sameTeamMap };
     }
 
-    function getDamageMap(valueMaps: ValueMaps, hpDamage: number): DamageMaps {
+    function getDamageMap({ valueMaps, hpDamage, isIndiscriminate }: {
+        valueMaps       : ValueMaps;
+        hpDamage        : number;
+        isIndiscriminate: boolean;
+    }): DamageMaps {
         const srcHpMap          = valueMaps.hpMap;
         const srcFundMap        = valueMaps.fundMap;
         const srcSameTeamMap    = valueMaps.sameTeamMap;
@@ -1036,11 +1077,19 @@ namespace WarCoSkillHelpers {
                     const realHpDamage      = Math.min(hpDamage, srcHpMap[x][y] - 1);
                     const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / CommonConstants.UnitHpNormalizer);
                     const isSameTeam        = srcSameTeamMap[x][y];
-                    hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;
-                    fundMap[x][y]           = isSameTeam ? -realFundDamage * 2 : realFundDamage;
-                    capturerValueMap[x][y]  = isSameTeam
-                        ? (-realHpDamage * 2)
-                        : (srcCapturerMap[x][y] ? realHpDamage * 100000 : realHpDamage);
+                    if (isIndiscriminate) {
+                        hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;
+                        fundMap[x][y]           = isSameTeam ? -realFundDamage * 2 : realFundDamage;
+                        capturerValueMap[x][y]  = isSameTeam
+                            ? (-realHpDamage * 2)
+                            : (srcCapturerMap[x][y] ? realHpDamage * 100000 : realHpDamage);
+                    } else {
+                        hpMap[x][y]             = isSameTeam ? 0 : realHpDamage;
+                        fundMap[x][y]           = isSameTeam ? 0 : realFundDamage;
+                        capturerValueMap[x][y]  = isSameTeam
+                            ? (0)
+                            : (srcCapturerMap[x][y] ? realHpDamage * 100000 : realHpDamage);
+                    }
                 }
             }
         }
@@ -1052,7 +1101,6 @@ namespace WarCoSkillHelpers {
         const width     = map.length;
         const height    = map[0].length;
         const mapSize   = { width, height };
-        const sumMap    = Helpers.createEmptyMap(width, height, 0);
 
         let maxDamage: number | null = null;
         for (let x = 0; x < width; ++x) {
@@ -1062,7 +1110,6 @@ namespace WarCoSkillHelpers {
                 for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center, 0, radius, mapSize)) {
                     totalDamage += map[gridIndex.x][gridIndex.y];
                 }
-                sumMap[x][y] = totalDamage;
 
                 if ((maxDamage == null) || (totalDamage > maxDamage)) {
                     maxDamage = totalDamage;
@@ -1075,28 +1122,6 @@ namespace WarCoSkillHelpers {
         }
 
         return centers;
-    }
-
-    function getCentersOfHighestDamageForCandidates(map: number[][], radius: number, candidates: GridIndex[]): GridIndex {
-        const mapSize   = { width: map.length, height: map[0].length };
-        const centers   : GridIndex[] = [];
-        let maxDamage   : number | null = null;
-
-        for (const candidate of candidates) {
-            let totalDamage = 0;
-            for (const g of GridIndexHelpers.getGridsWithinDistance(candidate, 0, radius, mapSize)) {
-                totalDamage += map[g.x][g.y];
-            }
-            if ((maxDamage == null) || (totalDamage > maxDamage)) {
-                maxDamage       = totalDamage;
-                centers.length  = 0;
-                centers.push(candidate);
-            } else if (totalDamage === maxDamage) {
-                centers.push(candidate);
-            }
-        }
-
-        return centers[0];
     }
 }
 

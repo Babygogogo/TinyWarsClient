@@ -4,12 +4,13 @@
 // import Types                from "../../tools/helpers/Types";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwRandomNumberManager {
     import ISeedRandomState = ProtoTypes.Structure.ISeedRandomState;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwRandomNumberManager {
-        private _isNeedReplay?              : boolean;
+        private _isNeedSeedRandom?          : boolean;
         private _seedRandomInitialState?    : ProtoTypes.Structure.ISeedRandomState | null;
         private _randomNumberGenerator?     : seedrandom.prng | null;
 
@@ -18,7 +19,7 @@ namespace TwnsBwRandomNumberManager {
             initialState    : Types.Undefinable<ISeedRandomState>;
             currentState    : Types.Undefinable<ISeedRandomState>;
         }): void {
-            this._setIsNeedReplay(isNeedSeedRandom);
+            this._setIsNeedSeedRandom(isNeedSeedRandom);
 
             if (isNeedSeedRandom) {
                 // TODO: check if the states are valid.
@@ -34,11 +35,11 @@ namespace TwnsBwRandomNumberManager {
             }
         }
 
-        private _setIsNeedReplay(isNeedReplay: boolean): void {
-            this._isNeedReplay = isNeedReplay;
+        private _setIsNeedSeedRandom(isNeedReplay: boolean): void {
+            this._isNeedSeedRandom = isNeedReplay;
         }
-        private _getIsNeedReplay(): boolean {
-            return Helpers.getExisted(this._isNeedReplay);
+        public getIsNeedSeedRandom(): boolean {
+            return Helpers.getExisted(this._isNeedSeedRandom);
         }
 
         private _setRandomNumberGenerator(generator: seedrandom.prng): void {
@@ -49,7 +50,7 @@ namespace TwnsBwRandomNumberManager {
         }
 
         public getRandomNumber(): number {
-            if (!this._getIsNeedReplay()) {
+            if (!this.getIsNeedSeedRandom()) {
                 return Math.random();
             }
 

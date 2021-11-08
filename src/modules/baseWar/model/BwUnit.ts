@@ -1416,6 +1416,30 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg().repairAmountForLoadedUnits ?? null;
         }
 
+        public getNormalizedRepairHpModifier(): number {
+            const player                    = this.getPlayer();
+            const configVersion             = this.getConfigVersion();
+            const gridIndex                 = this.getGridIndex();
+            const coZoneRadius              = player.getCoZoneRadius();
+            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            let totalModifier               = 0;
+            for (const skillId of player.getCoCurrentSkills()) {
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfRepairAmountBonus;
+                if ((cfg)                                               &&
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap,
+                        coZoneRadius,
+                    }))
+                ) {
+                    totalModifier += cfg[2];
+                }
+            }
+
+            return totalModifier;
+        }
+
         public setLoaderUnitId(loaderUnitId: number | null): void {
             this._loaderUnitId = loaderUnitId;
         }
@@ -1446,7 +1470,7 @@ namespace TwnsBwUnit {
                 const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
                 const normalizedRepairHp    = Math.min(
                     normalizedMaxHp - normalizedCurrentHp,
-                    repairAmount,
+                    repairAmount + this.getNormalizedRepairHpModifier(),
                     Math.floor(unit.getPlayer().getFund() * normalizedMaxHp / productionCost)
                 );
                 return {
