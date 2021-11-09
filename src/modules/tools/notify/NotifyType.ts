@@ -114,7 +114,7 @@ namespace TwnsNotifyType {
 
         BwTileBeDestroyed,
         BwTileBeAttacked,
-        BwTileBeCaptured,
+        WarActionNormalExecuted,
 
         BwSiloExploded,
 

@@ -396,7 +396,12 @@ namespace TwnsBwUnit {
                 : null;
         }
 
-        public getAttackModifierByCo(selfGridIndex: GridIndex): number {
+        public getAttackModifierByCo({ selfGridIndex, targetUnit, targetGridIndex, isCounter }: {
+            selfGridIndex   : GridIndex;
+            targetUnit      : BwUnit | null;
+            targetGridIndex : GridIndex;
+            isCounter       : boolean;
+        }): number {
             const player = this.getPlayer();
             if (player.getCoId() === CommonConstants.CoEmptyId) {
                 return 0;
@@ -510,6 +515,38 @@ namespace TwnsBwUnit {
                         })))
                     ) {
                         modifier += cfg[2] / 100 * selfTile.getDefenseAmount();
+                    }
+                }
+
+                {
+                    const cfg = skillCfg.selfOffenseBonusByEnemyTileDefense;
+                    if ((cfg)                                                                           &&
+                        (targetUnit)                                                                    &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex               : selfGridIndex,
+                            coSkillAreaType         : cfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius,
+                        })))
+                    ) {
+                        modifier += cfg[2] / 100 * tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit);
+                    }
+                }
+
+                {
+                    const cfg = skillCfg.selfOffenseBonusByCounter;
+                    if ((cfg)                                                                           &&
+                        (isCounter)                                                                     &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex               : selfGridIndex,
+                            coSkillAreaType         : cfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius,
+                        })))
+                    ) {
+                        modifier += cfg[2];
                     }
                 }
             }

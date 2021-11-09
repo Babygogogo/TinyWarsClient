@@ -101,7 +101,7 @@ namespace TwnsMpwTopPanel {
                 { type: NotifyType.BwPlayerIndexInTurnChanged,      callback: this._onNotifyBwPlayerIndexInTurnChanged },
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
-                { type: NotifyType.BwTileBeCaptured,                callback: this._onNotifyBwTileBeCaptured },
+                { type: NotifyType.WarActionNormalExecuted,         callback: this._onNotifyWarActionNormalExecuted },
                 { type: NotifyType.BwForceWeatherTypeChanged,       callback: this._onNotifyBwForceWeatherTypeChanged },
                 { type: NotifyType.MsgChatGetAllReadProgressList,   callback: this._onNotifyMsgChatGetAllReadProgressList },
                 { type: NotifyType.MsgChatUpdateReadProgress,       callback: this._onNotifyMsgChatUpdateReadProgress },
@@ -168,7 +168,7 @@ namespace TwnsMpwTopPanel {
             this._updateLabelEnergy();
             SoundManager.playCoBgmWithWar(this._getOpenData().war, false);
         }
-        private _onNotifyBwTileBeCaptured(): void {
+        private _onNotifyWarActionNormalExecuted(): void {
             this._updateLabelFundAndAddFund();
         }
         private _onNotifyBwForceWeatherTypeChanged(): void {
@@ -413,7 +413,7 @@ namespace TwnsMpwTopPanel {
                 { type: NotifyType.MsgUserGetOnlineState,       callback: this._onNotifyMsgUserGetOnlineState },
                 { type: NotifyType.TimeTick,                    callback: this._onNotifyTimeTick },
                 { type: NotifyType.BwPlayerFundChanged,         callback: this._onNotifyBwPlayerFundChanged },
-                { type: NotifyType.BwTileBeCaptured,            callback: this._onNotifyBwTileBeCaptured },
+                { type: NotifyType.WarActionNormalExecuted,     callback: this._onNotifyWarActionNormalExecuted },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,   callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.BwCoEnergyChanged,           callback: this._onNotifyBwCoEnergyChanged },
             ]);
@@ -453,7 +453,7 @@ namespace TwnsMpwTopPanel {
             }
         }
 
-        private _onNotifyBwTileBeCaptured(): void {
+        private _onNotifyWarActionNormalExecuted(): void {
             this._updateLabelFundAndAddFund();
         }
 

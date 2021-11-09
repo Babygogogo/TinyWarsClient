@@ -159,9 +159,9 @@ namespace TwnsBwWarView {
                 const offsetY           = Math.random() * maxOffset * (Math.random() > 0.5 ? 1 : -1);
                 const fieldContainer    = this._fieldContainer;
                 fieldContainer.top      = offsetY;
-                fieldContainer.bottom   = offsetY;
+                fieldContainer.bottom   = -offsetY;
                 fieldContainer.left     = offsetX;
-                fieldContainer.right    = offsetX;
+                fieldContainer.right    = -offsetX;
             }
         }
 

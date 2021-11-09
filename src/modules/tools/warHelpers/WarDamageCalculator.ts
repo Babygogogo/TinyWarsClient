@@ -51,16 +51,24 @@ namespace WarDamageCalculator {
             : 1 - bonus / 100;
     }
 
-    function getAttackBonusMultiplier({ war, attacker, attackerGridIndex }: {
+    function getAttackBonusMultiplier({ war, attacker, attackerGridIndex, targetUnit, targetGridIndex, isCounter }: {
         war                 : BwWar;
         attacker            : BwUnit;
         attackerGridIndex   : GridIndex;
+        targetUnit          : BwUnit | null;
+        targetGridIndex     : GridIndex;
+        isCounter           : boolean;
     }): number {
-        const amountFromPromotion   = attacker.getPromotionAttackBonus();
-        const amountFromCo          = attacker.getAttackModifierByCo(attackerGridIndex);
         const tileMap               = war.getTileMap();
+        const amountFromPromotion   = attacker.getPromotionAttackBonus();
         const playerIndex           = attacker.getPlayerIndex();
         const settingsModifier      = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
+        const amountFromCo          = attacker.getAttackModifierByCo({
+            selfGridIndex: attackerGridIndex,
+            targetUnit,
+            targetGridIndex,
+            isCounter,
+        });
         let amountFromGlobalTiles   = 0;
         for (const tile of tileMap.getAllTiles()) {
             if (tile.getPlayerIndex() === playerIndex) {
@@ -152,22 +160,30 @@ namespace WarDamageCalculator {
         return attackerUnit.getBaseDamage(armorType) != null;
     }
 
-    function getAttackDamage(
-        war                 : BwWar,
-        attacker            : BwUnit,
-        attackerGridIndex   : GridIndex,
-        attackerHp          : number,
-        target              : BwTile | BwUnit,
-        targetGridIndex     : GridIndex,
-        isWithLuck          : boolean
-    ): number {
+    function getAttackDamage({ war, attacker, attackerGridIndex, attackerHp, target, targetGridIndex, isWithLuck, isCounter }: {
+        war                 : BwWar;
+        attacker            : BwUnit;
+        attackerGridIndex   : GridIndex;
+        attackerHp          : number;
+        target              : BwTile | BwUnit;
+        targetGridIndex     : GridIndex;
+        isWithLuck          : boolean;
+        isCounter           : boolean;
+    }): number {
         const targetArmorType   = Helpers.getExisted(target.getArmorType());
         const baseAttackDamage  = Helpers.getExisted(attacker.getBaseDamage(targetArmorType));
         if (attackerHp <= 0) {
             return 0;
         }
 
-        const attackBonusMultiplier     = getAttackBonusMultiplier({ war, attacker, attackerGridIndex });
+        const attackBonusMultiplier     = getAttackBonusMultiplier({
+            war,
+            attacker,
+            attackerGridIndex,
+            targetUnit          : target instanceof BwUnit ? target : null,
+            targetGridIndex,
+            isCounter,
+        });
         const defenseBonusMultiplier    = getDefenseBonusMultiplier(war, attacker, attackerGridIndex, target, targetGridIndex);
         const luckValue                 = ((isWithLuck) && (target.checkIsArmorAffectByLuck()))
             ? getLuckValue(war, attacker, attackerGridIndex)
@@ -199,7 +215,16 @@ namespace WarDamageCalculator {
                 throw Helpers.newError(`Can not attack.`, ClientErrorCode.DamageCalculator_GetBattleDamage_01);
             }
 
-            const attackDamage = getAttackDamage(war, attackerUnit, attackerGridIndex, attackerHp, targetUnit, targetGridIndex, isWithLuck);
+            const attackDamage = getAttackDamage({
+                war,
+                attacker            : attackerUnit,
+                attackerGridIndex,
+                attackerHp,
+                target              : targetUnit,
+                targetGridIndex,
+                isWithLuck,
+                isCounter           : false,
+            });
             if ((attackDamage == null) || (attackDamage < 0)) {
                 throw Helpers.newError(`Invalid attackDamage: ${attackDamage}`, ClientErrorCode.DamageCalculator_GetBattleDamage_02);
             }
@@ -215,7 +240,16 @@ namespace WarDamageCalculator {
                 (attackDamage < targetUnitHp)                                               &&
                 (checkCanAttackUnit(targetUnit, null, attackerUnit, attackerMovePath))
             ) {
-                const counterDamage = getAttackDamage(war, targetUnit, targetGridIndex, targetUnitHp - attackDamage, attackerUnit, attackerGridIndex, isWithLuck);
+                const counterDamage = getAttackDamage({
+                    war,
+                    attacker            : targetUnit,
+                    attackerGridIndex   : targetGridIndex,
+                    attackerHp          : targetUnitHp - attackDamage,
+                    target              : attackerUnit,
+                    targetGridIndex     : attackerGridIndex,
+                    isWithLuck,
+                    isCounter           : true,
+                });
                 if ((counterDamage == null) || (counterDamage < 0)) {
                     throw Helpers.newError(`Invalid counterDamage: ${counterDamage}`, ClientErrorCode.DamageCalculator_GetBattleDamage_03);
                 }
@@ -237,7 +271,16 @@ namespace WarDamageCalculator {
                 throw Helpers.newError(`Can not attack.`, ClientErrorCode.DamageCalculator_GetBattleDamage_04);
             }
 
-            const attackDamage = getAttackDamage(war, attackerUnit, attackerGridIndex, attackerHp, targetTile, targetGridIndex, isWithLuck);
+            const attackDamage = getAttackDamage({
+                war,
+                attacker            : attackerUnit,
+                attackerGridIndex,
+                attackerHp,
+                target              : targetTile,
+                targetGridIndex,
+                isWithLuck,
+                isCounter           : false,
+            });
             if ((attackDamage == null) || (attackDamage < 0)) {
                 throw Helpers.newError(`Invalid attackDamage.`, ClientErrorCode.DamageCalculator_GetBattleDamage_05);
             }

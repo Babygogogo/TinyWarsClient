@@ -123,6 +123,10 @@ namespace WarActionExecutor {
         else if (action.WarActionUnitUseCoSkill)            { await exeUnitUseCoSkill(war, action.WarActionUnitUseCoSkill, isFast); }
         else if (action.WarActionUnitWait)                  { await exeUnitWait(war, action.WarActionUnitWait, isFast); }
         else                                                { await exeUnknownAction(); }
+
+        if (!isFast) {
+            Notify.dispatch(NotifyType.WarActionNormalExecuted);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,8 +252,9 @@ namespace WarActionExecutor {
                 playerIndex,
                 unitType,
                 unitId,
-                actionState : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
-                currentHp   : unitHp,
+                actionState     : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
+                currentHp       : unitHp,
+                currentPromotion: getPromotionForPlayerProduceUnit(war, gridIndex, unitType),
             }, configVersion);
             unit.startRunning(war);
             unit.startRunningView();
@@ -257,6 +262,29 @@ namespace WarActionExecutor {
             unitMap.setNextUnitId(unitId + 1);
             playerInTurn.setFund(playerInTurn.getFund() - cost);
         }
+    }
+    function getPromotionForPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: Types.UnitType): number {
+        const player                    = war.getPlayerInTurn();
+        const coZoneRadius              = player.getCoZoneRadius();
+        const configVersion             = war.getConfigVersion();
+        const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+        let promotion                   = 0;
+        for (const skillId of war.getPlayerInTurn().getCoCurrentSkills()) {
+            const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfPromotionBonusByProduce;
+            if ((cfg)                                                                           &&
+                (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    gridIndex,
+                    coSkillAreaType         : cfg[0],
+                    getCoGridIndexArrayOnMap,
+                    coZoneRadius,
+                }))
+            ) {
+                promotion += cfg[2];
+            }
+        }
+
+        return promotion;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1660,7 +1688,6 @@ namespace WarActionExecutor {
                         objectType      : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
                         playerIndex     : focusUnit.getPlayerIndex(),
                     });
-                    Notify.dispatch(NotifyType.BwTileBeCaptured);
                 }
             }
         }
@@ -1774,7 +1801,6 @@ namespace WarActionExecutor {
                 }
                 focusUnit.updateView();
                 tile.flushDataToView();
-                Notify.dispatch(NotifyType.BwTileBeCaptured);
             }
         }
 
@@ -2632,12 +2658,14 @@ namespace WarActionExecutor {
                 const gridIndex         = focusUnit.getGridIndex();
                 const producedUnitId    = unitMap.getNextUnitId();
                 const producedUnit      = new BwUnit();
+                const unitType          = Helpers.getExisted(focusUnit.getProduceUnitType(), ClientErrorCode.WarActionExecutor_FastExeUnitProduceUnit_01);
                 producedUnit.init({
                     gridIndex,
-                    playerIndex : focusUnit.getPlayerIndex(),
-                    unitType    : focusUnit.getProduceUnitType(),
-                    unitId      : producedUnitId,
-                    loaderUnitId: focusUnit.getUnitId(),
+                    playerIndex     : focusUnit.getPlayerIndex(),
+                    unitType,
+                    unitId          : producedUnitId,
+                    loaderUnitId    : focusUnit.getUnitId(),
+                    currentPromotion: getPromotionForUnitProduceUnit(war, focusUnit, unitType),
                 }, war.getConfigVersion());
                 producedUnit.startRunning(war);
                 producedUnit.setActionState(UnitActionState.Acted);
@@ -2694,12 +2722,14 @@ namespace WarActionExecutor {
                 const gridIndex         = focusUnit.getGridIndex();
                 const producedUnitId    = unitMap.getNextUnitId();
                 const producedUnit      = new BwUnit();
+                const unitType          = Helpers.getExisted(focusUnit.getProduceUnitType(), ClientErrorCode.WarActionExecutor_NormalExeUnitProduceUnit_00);
                 producedUnit.init({
                     gridIndex,
-                    playerIndex : focusUnit.getPlayerIndex(),
-                    unitType    : focusUnit.getProduceUnitType(),
-                    unitId      : producedUnitId,
-                    loaderUnitId: focusUnit.getUnitId(),
+                    playerIndex     : focusUnit.getPlayerIndex(),
+                    unitType,
+                    unitId          : producedUnitId,
+                    loaderUnitId    : focusUnit.getUnitId(),
+                    currentPromotion: getPromotionForUnitProduceUnit(war, focusUnit, unitType),
                 }, war.getConfigVersion());
                 producedUnit.startRunning(war);
                 producedUnit.setActionState(UnitActionState.Acted);
@@ -2721,6 +2751,32 @@ namespace WarActionExecutor {
         }
 
         war.updateTilesAndUnitsOnVisibilityChanged();
+    }
+
+    function getPromotionForUnitProduceUnit(war: BwWar, producerUnit: BwUnit, targetUnitType: Types.UnitType): number {
+        const player                    = producerUnit.getPlayer();
+        const coZoneRadius              = player.getCoZoneRadius();
+        const gridIndex                 = producerUnit.getGridIndex();
+        const configVersion             = war.getConfigVersion();
+        const hasLoadedCo               = producerUnit.getHasLoadedCo();
+        const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+        let promotion                   = 0;
+        for (const skillId of war.getPlayerInTurn().getCoCurrentSkills()) {
+            const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfPromotionBonusByProduce;
+            if ((cfg)                                                                               &&
+                (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))    &&
+                ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    gridIndex,
+                    coSkillAreaType         : cfg[0],
+                    getCoGridIndexArrayOnMap,
+                    coZoneRadius,
+                })))
+            ) {
+                promotion += cfg[2];
+            }
+        }
+
+        return promotion;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
