@@ -80,11 +80,11 @@
                             <e:itemRendererSkinName>
                                 <e:Skin width="320">
                                     <TwnsUiLabel:UiLabel id="_labelDesc" text="技能描述" size="14" left="0" right="0"
-                                                         wordWrap="true" />
+                                                         wordWrap="true" lineSpacing="1.5"/>
                                 </e:Skin>
                             </e:itemRendererSkinName>
                             <e:layout>
-                                <e:VerticalLayout gap="2" paddingTop="4" />
+                                <e:VerticalLayout gap="6" paddingTop="4" />
                             </e:layout>
                         </e:List>
                     </TwnsUiScrollList:UiScrollList>
