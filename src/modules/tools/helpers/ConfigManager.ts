@@ -395,6 +395,11 @@ namespace ConfigManager {
     export function checkIsValidTileType(tileType: Types.TileType): boolean {
         return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.TileTemplate[tileType] != null;
     }
+    export function checkIsValidUnitAiMode(mode: Types.UnitAiMode): boolean {
+        return (mode === Types.UnitAiMode.NoMove)
+            || (mode === Types.UnitAiMode.Normal)
+            || (mode === Types.UnitAiMode.WaitUntilCanAttack);
+    }
 
     export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {
         const templateCfgDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.UnitTemplate, ClientErrorCode.ConfigManager_GetUnitTemplateCfg_00);

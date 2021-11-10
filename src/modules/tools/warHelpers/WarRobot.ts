@@ -24,6 +24,7 @@ namespace WarRobot {
     import TileType             = Types.TileType;
     import UnitType             = Types.UnitType;
     import UnitActionState      = Types.UnitActionState;
+    import UnitAiMode           = Types.UnitAiMode;
     import BwUnit               = TwnsBwUnit.BwUnit;
     import BwTile               = TwnsBwTile.BwTile;
     import BwWar                = TwnsBwWar.BwWar;
@@ -789,8 +790,9 @@ namespace WarRobot {
         const { war, playerIndexInTurn }    = commonParams;
         const units                         : BwUnit[] = [];
         for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn) &&
-                (unit.getActionState() === UnitActionState.Idle)
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())
             ) {
                 const maxAttackRange = unit.getFinalMaxAttackRange();
                 if ((maxAttackRange != null) && (maxAttackRange > 1)) {
@@ -823,6 +825,7 @@ namespace WarRobot {
         for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
             if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
                 (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())                         &&
                 (unit.getIsCapturingTile())
             ) {
                 units.push(unit);
@@ -853,14 +856,17 @@ namespace WarRobot {
         const { war, playerIndexInTurn }    = commonParams;
         const units                         : BwUnit[] = [];
         for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)   &&
-                (unit.getActionState() === UnitActionState.Idle)
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())
             ) {
                 units.push(unit);
 
                 if (unit.checkCanLaunchLoadedUnit()) {
                     for (const loadedUnit of unit.getLoadedUnits()) {
-                        if (loadedUnit.getActionState() === UnitActionState.Idle) {
+                        if ((loadedUnit.getActionState() === UnitActionState.Idle) &&
+                            (loadedUnit.checkCanAiDoAction())
+                        ) {
                             units.push(loadedUnit);
                         }
                     }
@@ -1924,6 +1930,10 @@ namespace WarRobot {
     async function getBestScoreAndActionForCandidateUnit(commonParams: CommonParams, candidateUnit: BwUnit): Promise<ScoreAndAction | null> {
         await Helpers.checkAndCallLater();
 
+        if (!candidateUnit.checkCanAiDoAction()) {
+            return null;
+        }
+
         const reachableArea         = await getReachableArea({ commonParams, unit: candidateUnit, passableGridIndex: null, blockedGridIndex: null });
         const damageMapForSurface   = await createDamageMap(commonParams, candidateUnit, false);
         const damageMapForDive      = candidateUnit.checkIsDiver() ? await createDamageMap(commonParams, candidateUnit, true) : null;
@@ -1943,10 +1953,15 @@ namespace WarRobot {
                 }
 
                 const gridIndex: GridIndex = { x, y };
-                if ((candidateUnit.getLoaderUnitId() != null)                   &&
-                    (GridIndexHelpers.checkIsEqual(gridIndex, originGridIndex))
-                ) {
-                    continue;
+                if (GridIndexHelpers.checkIsEqual(gridIndex, originGridIndex)) {
+                    if (candidateUnit.getLoaderUnitId() != null) {
+                        continue;
+                    }
+                } else {
+                    const aiMode = candidateUnit.getAiMode();
+                    if (aiMode === UnitAiMode.NoMove) {
+                        continue;
+                    }
                 }
 
                 const pathNodes         = WarCommonHelpers.createShortestMovePath(reachableArea, gridIndex);
@@ -1955,13 +1970,8 @@ namespace WarRobot {
                     continue;
                 }
 
-                const score = scoreAndAction.score;
-                if (score == null) {
-                    continue;
-                }
-
-                const scoreForMovePath  = await getScoreForMovePath(commonParams, candidateUnit, pathNodes);
                 const action            = scoreAndAction.action;
+                const scoreForMovePath  = await getScoreForMovePath(commonParams, candidateUnit, pathNodes);
                 const scoreForPosition  = await getScoreForPosition({
                     commonParams,
                     unit        : candidateUnit,
@@ -1973,7 +1983,7 @@ namespace WarRobot {
                     bestScoreAndAction,
                     {
                         action,
-                        score   : score + scoreForMovePath + scoreForPosition,
+                        score   : scoreAndAction.score + scoreForMovePath + scoreForPosition,
                     },
                     commonParams
                 );

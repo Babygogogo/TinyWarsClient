@@ -1014,7 +1014,8 @@ namespace WarCommonHelpers {
         return (warType === Types.WarType.ScwFog)
             || (warType === Types.WarType.ScwStd)
             || (warType === Types.WarType.SfwFog)
-            || (warType === Types.WarType.SfwStd);
+            || (warType === Types.WarType.SfwStd)
+            || (warType === Types.WarType.Me);
     }
 
     export function getPlayersCountUnneutral(playerManagerData: Types.Undefinable<WarSerialization.ISerialPlayerManager>): number {

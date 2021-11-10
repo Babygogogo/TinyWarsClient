@@ -1075,6 +1075,10 @@ namespace TwnsLangCommonText {
             `指定地形类型不合法`,
             `The tile type is invalid.`,
         ],
+        [LangTextType.A0257]: [
+            `您确定要切换该部队的A.I.模式吗？`,
+            `Are you sure to switch the unit's A.I. mode?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3943,6 +3947,26 @@ namespace TwnsLangCommonText {
             `战局`,
             `War`,
         ],
+        [LangTextType.B0720]: [
+            `A.I.模式`,
+            `A.I. Mode`,
+        ],
+        [LangTextType.B0721]: [
+            `站桩`,
+            `No Move`,
+        ],
+        [LangTextType.B0722]: [
+            `守株待兔`,
+            `Standby`,
+        ],
+        [LangTextType.B0723]: [
+            `正常`,
+            `Normal`,
+        ],
+        [LangTextType.B0724]: [
+            `A.I.模式已切换`,
+            `A.I. Mode switched.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4745,6 +4769,22 @@ namespace TwnsLangCommonText {
                 `Sandstorm: all units' offense -30%.`,
                 `Snowy: all units' move range -1.`,
                 `Rainy: force FoW, all tiles' vision become 0, and all units' vision become 1.`,
+            ].join(`\n`),
+        ],
+        [LangTextType.R0010]: [
+            [
+                `A.I.模式会决定了此部队被A.I.操作时的行动方式，具体如下：`,
+                ``,
+                `0(正常)：A.I.按照自己认为的最佳方式来行动`,
+                `1(守株待兔)：在有敌军进入可攻击范围之内以前，部队不会执行任何行动`,
+                `2(站桩)：部队不会离开自己所处的位置，但会执行任何可能的行动`,
+            ].join(`\n`),
+            [
+                `The A.I. mode determines how the unit will act as below:`,
+                ``,
+                `0(Normal): The unit will do anything the A.I. thinks appropriate.`,
+                `1(Standby): The unit will do nothing util an enemy unit enters it's attackable area.`,
+                `2(No Move): The unit will not move away from the current grid, but will do anything else.`,
             ].join(`\n`),
         ],
     };

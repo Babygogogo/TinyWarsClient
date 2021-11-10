@@ -187,6 +187,15 @@ namespace Lang {
         }
     }
 
+    export function getUnitAiModeName(mode: Types.UnitAiMode): string | null {
+        switch (mode) {
+            case Types.UnitAiMode.NoMove                : return getText(LangTextType.B0721);
+            case Types.UnitAiMode.Normal                : return getText(LangTextType.B0723);
+            case Types.UnitAiMode.WaitUntilCanAttack    : return getText(LangTextType.B0722);
+            default                                     : return null;
+        }
+    }
+
     export function getRankName(playerRank: number): string | null {
         switch (playerRank) {
             case 0  : return getText(LangTextType.B0061);

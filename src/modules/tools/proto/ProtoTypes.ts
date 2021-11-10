@@ -9089,6 +9089,9 @@ export declare namespace WarSerialization {
 
         /** SerialUnit hasLoadedCo */
         hasLoadedCo?: (boolean|null);
+
+        /** SerialUnit aiMode */
+        aiMode?: (number|null);
     }
 
     /** Represents a SerialUnit. */
@@ -9150,6 +9153,9 @@ export declare namespace WarSerialization {
 
         /** SerialUnit hasLoadedCo. */
         public hasLoadedCo: boolean;
+
+        /** SerialUnit aiMode. */
+        public aiMode: number;
 
         /**
          * Creates a new SerialUnit instance using the specified properties.

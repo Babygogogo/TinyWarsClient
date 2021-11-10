@@ -429,6 +429,13 @@ namespace Types {
     }
 
     // eslint-disable-next-line no-shadow
+    export const enum UnitAiMode {
+        Normal              = 0,
+        WaitUntilCanAttack  = 1,
+        NoMove              = 2,
+    }
+
+    // eslint-disable-next-line no-shadow
     export enum PlayerAliveState {
         Alive   = 0,
         Dying   = 1,

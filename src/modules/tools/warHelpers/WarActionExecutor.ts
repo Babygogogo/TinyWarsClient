@@ -434,6 +434,15 @@ namespace WarActionExecutor {
                     isFastExecute   : true,
                 });
             }
+
+            if (playerInTurn.getUserId() == null) {
+                const playerIndex = playerInTurn.getPlayerIndex();
+                for (const unit of war.getUnitMap().getAllUnits()) {
+                    if (unit.getPlayerIndex() === playerIndex) {
+                        unit.checkAndUpdateAiMode();
+                    }
+                }
+            }
         }
     }
     async function normalExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<void> {
@@ -484,6 +493,14 @@ namespace WarActionExecutor {
                     hasExtraData    : false,
                     isFastExecute   : false,
                 });
+            }
+
+            if (playerInTurn.getUserId() == null) {
+                for (const unit of war.getUnitMap().getAllUnits()) {
+                    if (unit.getPlayerIndex() === playerIndex) {
+                        unit.checkAndUpdateAiMode();
+                    }
+                }
             }
 
             for (const unit of unitMap.getAllUnitsOnMap()) {
@@ -3050,6 +3067,15 @@ namespace WarActionExecutor {
                         isFastExecute   : true,
                     });
                 }
+
+                if (playerInTurn.getUserId() == null) {
+                    const playerIndex = playerInTurn.getPlayerIndex();
+                    for (const unit of war.getUnitMap().getAllUnits()) {
+                        if (unit.getPlayerIndex() === playerIndex) {
+                            unit.checkAndUpdateAiMode();
+                        }
+                    }
+                }
             }
         }
     }
@@ -3129,6 +3155,14 @@ namespace WarActionExecutor {
                         hasExtraData    : false,
                         isFastExecute   : false,
                     });
+                }
+
+                if (playerInTurn.getUserId() == null) {
+                    for (const unit of war.getUnitMap().getAllUnits()) {
+                        if (unit.getPlayerIndex() === playerIndex) {
+                            unit.checkAndUpdateAiMode();
+                        }
+                    }
                 }
 
                 for (const unit of unitMap.getAllUnitsOnMap()) {

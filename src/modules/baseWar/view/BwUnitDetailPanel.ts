@@ -25,6 +25,7 @@
 // import TwnsBwUnit                   from "../model/BwUnit";
 // import TwnsBwWar                    from "../model/BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitDetailPanel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -51,6 +52,7 @@ namespace TwnsBwUnitDetailPanel {
         IsDiving,
         HasLoadedCo,
         LoadUnit,
+        AiMode,
     }
 
     type OpenData = {
@@ -207,6 +209,7 @@ namespace TwnsBwUnitDetailPanel {
                 this._createInfoDiving(war, unit),
                 this._createInfoHasLoadedCo(war, unit),
                 this._createInfoLoadUnit(war, unit),
+                this._createInfoAiMode(war, unit),
             ]);
             let index = 0;
             for (const data of dataArray) {
@@ -350,6 +353,16 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
+        private _createInfoAiMode(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+            return ((war.getWarType() !== Types.WarType.Me) && (unit.getPlayer().getUserId() != null))
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : UnitInfoType.AiMode,
+                    war,
+                    unit,
+                };
+        }
 
         private _updateListDamageChart(): void {
             this._listDamageChart.bindData(this._createDataForListDamageChart());
@@ -427,6 +440,7 @@ namespace TwnsBwUnitDetailPanel {
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
         private readonly _imgBg!            : TwnsUiImage.UiImage;
+        private readonly _imgTouchMask!     : TwnsUiImage.UiImage;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelValue!       : TwnsUiLabel.UiLabel;
         private readonly _groupExtra!       : eui.Group;
@@ -435,19 +449,23 @@ namespace TwnsBwUnitDetailPanel {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this,                         callback: this._onTouchedSelf },
+                { ui: this._imgTouchMask,           callback: this._onTouchedImgTouchMask },
+                { ui: this._labelValue,             callback: this._onTouchedLabelValue },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
+
+            this._imgTouchMask.touchEnabled = true;
+            this._labelValue.touchEnabled   = true;
         }
 
         protected _onDataChanged(): void {
             this._updateView();
         }
 
-        private _onTouchedSelf(): void {
+        private _onTouchedImgTouchMask(): void {
             const infoType = this._getData().infoType;
             if (infoType === UnitInfoType.ActionState) {
                 this._modifyAsActionState();
@@ -479,8 +497,18 @@ namespace TwnsBwUnitDetailPanel {
                 this._modifyAsVision();
             } else if (infoType === UnitInfoType.LoadUnit) {
                 this._modifyAsLoadUnit();
+            } else if (infoType === UnitInfoType.AiMode) {
+                this._modifyAsAiMode();
             } else {
                 throw Helpers.newError(`Invalid infoType: ${infoType}`);
+            }
+        }
+        private _onTouchedLabelValue(): void {
+            const infoType = this._getData().infoType;
+            if (infoType === UnitInfoType.AiMode) {
+                this._onTouchedLabelAsAiMode();
+            } else {
+                // nothing to do
             }
         }
 
@@ -523,6 +551,8 @@ namespace TwnsBwUnitDetailPanel {
                 this._updateViewAsVision();
             } else if (infoType === UnitInfoType.LoadUnit) {
                 this._updateViewAsLoadUnit();
+            } else if (infoType === UnitInfoType.AiMode) {
+                this._updateViewAsAiMode();
             } else {
                 throw Helpers.newError(`Invalid infoType: ${infoType}`);
             }
@@ -697,9 +727,21 @@ namespace TwnsBwUnitDetailPanel {
                 this._labelExtraInfo.text   = Lang.getUnitCategoryName(Helpers.getExisted(unit.getLoadUnitCategory())) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
+        private _updateViewAsAiMode(): void {
+            const data                  = this._getData();
+            this._labelTitle.text       = Lang.getText(LangTextType.B0720);
+            this._labelValue.text       = Lang.getUnitAiModeName(data.unit.getAiMode()) ?? CommonConstants.ErrorTextForUndefined;
+            this._imgModify.visible     = WarCommonHelpers.checkCanCheatInWar(data.war.getWarType());
+            this._groupExtra.visible    = false;
+        }
 
         private _modifyAsActionState(): void {
-            const { unit }  = this._getData();
+            const data = this._getData();
+            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
+                return;
+            }
+
+            const unit      = data.unit;
             const state     = unit.getActionState();
             TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                 title       : Lang.getText(LangTextType.B0349),
@@ -774,7 +816,12 @@ namespace TwnsBwUnitDetailPanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _modifyAsFuel(): void {
-            const { unit }  = this._getData();
+            const data = this._getData();
+            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
+                return;
+            }
+
+            const unit      = data.unit;
             const currValue = unit.getCurrentFuel();
             const maxValue  = unit.getMaxFuel();
             const minValue  = 0;
@@ -799,7 +846,13 @@ namespace TwnsBwUnitDetailPanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _modifyAsHasLoadedCo(): void {
-            const { unit, war } = this._getData();
+            const data  = this._getData();
+            const war   = data.war;
+            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
+                return;
+            }
+
+            const unit          = data.unit;
             const hasLoadedCo   = unit.getHasLoadedCo();
             TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                 content : Lang.getText(LangTextType.A0243),
@@ -814,7 +867,12 @@ namespace TwnsBwUnitDetailPanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _modifyAsHp(): void {
-            const { unit }  = this._getData();
+            const data = this._getData();
+            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
+                return;
+            }
+
+            const unit      = data.unit;
             const currValue = unit.getCurrentHp();
             const maxValue  = unit.getMaxHp();
             const minValue  = 1;
@@ -839,7 +897,12 @@ namespace TwnsBwUnitDetailPanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _modifyAsIsDiving(): void {
-            const { unit }  = this._getData();
+            const data = this._getData();
+            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
+                return;
+            }
+
+            const unit      = data.unit;
             const isDiving  = unit.getIsDiving();
             TwnsCommonConfirmPanel.CommonConfirmPanel.show({
                 content     : Lang.getText(LangTextType.A0114),
@@ -855,9 +918,10 @@ namespace TwnsBwUnitDetailPanel {
             // nothing to do
         }
         private _modifyAsPrimaryWeaponAmmo(): void {
-            const { unit, war } = this._getData();
-            const maxValue      = unit.getPrimaryWeaponMaxAmmo();
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
+            const data      = this._getData();
+            const unit      = data.unit;
+            const maxValue  = unit.getPrimaryWeaponMaxAmmo();
+            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType()) || (maxValue == null)) {
                 return;
             }
 
@@ -884,9 +948,10 @@ namespace TwnsBwUnitDetailPanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
         private _modifyAsProduceMaterial(): void {
-            const { unit, war } = this._getData();
-            const maxValue      = unit.getMaxProduceMaterial();
-            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType()) || (maxValue == null)) {
+            const data      = this._getData();
+            const unit      = data.unit;
+            const maxValue  = unit.getMaxProduceMaterial();
+            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType()) || (maxValue == null)) {
                 return;
             }
 
@@ -949,6 +1014,33 @@ namespace TwnsBwUnitDetailPanel {
         }
         private _modifyAsLoadUnit(): void {
             // nothing to do
+        }
+        private _modifyAsAiMode(): void {
+            const data = this._getData();
+            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
+                return;
+            }
+
+            const unit      = data.unit;
+            const aiMode    = unit.getAiMode();
+            if (aiMode === Types.UnitAiMode.NoMove) {
+                unit.setAiMode(Types.UnitAiMode.Normal);
+            } else if (aiMode === Types.UnitAiMode.Normal) {
+                unit.setAiMode(Types.UnitAiMode.WaitUntilCanAttack);
+            } else {
+                unit.setAiMode(Types.UnitAiMode.NoMove);
+            }
+            this._updateView();
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            FloatText.show(Lang.getText(LangTextType.B0724));
+        }
+
+        private _onTouchedLabelAsAiMode(): void {
+            TwnsCommonHelpPanel.CommonHelpPanel.show({
+                title   : Lang.getText(LangTextType.B0720),
+                content : Lang.getText(LangTextType.R0010),
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
     }
 

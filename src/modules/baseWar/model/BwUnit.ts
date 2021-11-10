@@ -21,6 +21,7 @@ namespace TwnsBwUnit {
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
     import UnitType             = Types.UnitType;
+    import UnitAiMode           = Types.UnitAiMode;
     import MoveType             = Types.MoveType;
     import GridIndex            = Types.GridIndex;
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
@@ -47,6 +48,7 @@ namespace TwnsBwUnit {
         private _hasLoadedCo?               : boolean;
         private _loaderUnitId?              : number | null;
         private _primaryWeaponCurrentAmmo?  : number | null;
+        private _aiMode?                    : UnitAiMode | null;
 
         private readonly _view              = new TwnsBwUnitView.BwUnitView();
         private _war?                       : TwnsBwWar.BwWar;
@@ -88,6 +90,7 @@ namespace TwnsBwUnit {
             this.setFlareCurrentAmmo(unitData.flareCurrentAmmo ?? (unitTemplateCfg.flareMaxAmmo ?? null));
             this.setCurrentProduceMaterial(unitData.currentProduceMaterial ?? (unitTemplateCfg.maxProduceMaterial ?? null));
             this.setCurrentBuildMaterial(unitData.currentBuildMaterial ?? (unitTemplateCfg.maxBuildMaterial ?? null));
+            this.setAiMode(unitData.aiMode ?? UnitAiMode.Normal);
 
             this.getView().init(this);
         }
@@ -153,6 +156,9 @@ namespace TwnsBwUnit {
 
             const loaderUnitId = this.getLoaderUnitId();
             (loaderUnitId != null) && (data.loaderUnitId = loaderUnitId);
+
+            const aiMode = this.getAiMode();
+            (aiMode != UnitAiMode.Normal) && (data.aiMode = aiMode);
 
             return data;
         }
@@ -1845,6 +1851,108 @@ namespace TwnsBwUnit {
 
         public getLoadCoCost(): number {
             return Math.floor(ConfigManager.getCoBasicCfg(this.getConfigVersion(), this.getPlayer().getCoId()).boardCostPercentage * this.getProductionCfgCost() / 100);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for ai mode.
+        ////////////////////////////////////////////////////////////////////////////////
+        public setAiMode(aiMode: UnitAiMode): void {
+            if (!ConfigManager.checkIsValidUnitAiMode(aiMode)) {
+                throw Helpers.newError(`Invalid aiMode: ${aiMode}`, ClientErrorCode.BwUnit_SetAiMode_00);
+            }
+
+            this._aiMode = aiMode;
+        }
+        public getAiMode(): UnitAiMode {
+            return Helpers.getExisted(this._aiMode, ClientErrorCode.BwUnit_GetAiMode_00);
+        }
+
+        /**
+         * @returns indicates the ai mode is modified or not
+         */
+        public checkAndUpdateAiMode(): boolean {
+            if (this.getPlayer().getUserId() != null) {
+                return false;
+            }
+
+            const currentMode = this.getAiMode();
+            if (currentMode === UnitAiMode.Normal) {
+                // nothing to do
+                return false;
+
+            } else if (currentMode === UnitAiMode.WaitUntilCanAttack) {
+                const minAttackRange    = this.getMinAttackRange();
+                const maxAttackRange    = this.getFinalMaxAttackRange();
+                if ((minAttackRange == null) || (maxAttackRange == null)) {
+                    return false;
+                }
+
+                const war           = this.getWar();
+                const unitMap       = war.getUnitMap();
+                const tileMap       = war.getTileMap();
+                const mapSize       = unitMap.getMapSize();
+                const selfTeamIndex = this.getTeamIndex();
+                const selfGridIndex = this.getGridIndex();
+                const movableArea   = WarCommonHelpers.createMovableArea({
+                    origin          : selfGridIndex,
+                    maxMoveCost     : this.getFinalMoveRange(),
+                    mapSize,
+                    moveCostGetter  : gridIndex => {
+                        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+                            return null;
+                        } else {
+                            const existingUnit = unitMap.getUnitOnMap(gridIndex);
+                            if ((existingUnit) && (existingUnit.getTeamIndex() != selfTeamIndex)) {
+                                return null;
+                            } else {
+                                return tileMap.getTile(gridIndex).getMoveCostByUnit(this);
+                            }
+                        }
+                    },
+                });
+                const attackableArea = WarCommonHelpers.createAttackableArea({
+                    movableArea,
+                    mapSize,
+                    minAttackRange,
+                    maxAttackRange,
+                    checkCanAttack: (moveGridIndex: GridIndex, targetGridIndex: GridIndex): boolean => {
+                        const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, selfGridIndex);
+                        if (((this.getLoaderUnitId() == null) || (hasMoved))    &&
+                            ((this.checkCanAttackAfterMove()) || (!hasMoved))
+                        ) {
+                            const targetUnit = unitMap.getUnitOnMap(targetGridIndex);
+                            if (targetUnit == null) {
+                                return false;
+                            } else {
+                                const armorType = targetUnit.getArmorType();
+                                return (targetUnit.getTeamIndex() !== selfTeamIndex)
+                                    && ((!targetUnit.getIsDiving()) || (this.checkCanAttackDivingUnits()))
+                                    && (this.getBaseDamage(armorType) != null);
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                });
+
+                if (!attackableArea.length) {
+                    return false;
+                } else {
+                    this.setAiMode(UnitAiMode.Normal);
+                    return true;
+                }
+
+            } else if (currentMode === UnitAiMode.NoMove) {
+                // nothing to do
+                return false;
+
+            } else {
+                throw Helpers.newError(`Invalid currentMode: ${currentMode}`, ClientErrorCode.BwUnit_CheckAndUpdateAiMode_00);
+            }
+        }
+
+        public checkCanAiDoAction(): boolean {
+            return this.getAiMode() !== UnitAiMode.WaitUntilCanAttack;
         }
     }
 

@@ -117,6 +117,7 @@ namespace TwnsBwTurnManager {
             this._runPhaseRepairUnitByUnitWithExtraData(action, isFastExecute);
             this._runPhaseRecoverUnitByCoWithExtraData(action, isFastExecute);
             this._runPhaseActivateMapWeaponWithExtraData(action, isFastExecute);
+            this._runPhaseCheckAndUpdateUnitAiModeWithExtraData(action, isFastExecute);
             this._runPhaseMainWithExtraData(action, isFastExecute);
 
             this._setPhaseCode(TurnPhaseCode.Main);
@@ -141,6 +142,7 @@ namespace TwnsBwTurnManager {
             this._runPhaseRepairUnitByUnitWithoutExtraData(isFastExecute);
             this._runPhaseRecoverUnitByCoWithoutExtraData(isFastExecute);
             this._runPhaseActivateMapWeaponWithoutExtraData(isFastExecute);
+            this._runPhaseCheckAndUpdateUnitAiModeWithoutExtraData(isFastExecute);
             this._runPhaseMainWithoutExtraData(isFastExecute);
 
             this._setPhaseCode(TurnPhaseCode.Main);
@@ -556,6 +558,24 @@ namespace TwnsBwTurnManager {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseActivateMapWeaponWithoutExtraData(isFastExecute: boolean): void {
             // nothing to do for now.
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseCheckAndUpdateUnitAiModeWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
+            // nothing to do
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private _runPhaseCheckAndUpdateUnitAiModeWithoutExtraData(isFastExecute: boolean): void {
+            const war           = this.getWar();
+            const playerInTurn  = war.getPlayerInTurn();
+            if (playerInTurn.getUserId() == null) {
+                const playerIndex = playerInTurn.getPlayerIndex();
+                for (const unit of war.getUnitMap().getAllUnits()) {
+                    if (unit.getPlayerIndex() === playerIndex) {
+                        unit.checkAndUpdateAiMode();
+                    }
+                }
+            }
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
