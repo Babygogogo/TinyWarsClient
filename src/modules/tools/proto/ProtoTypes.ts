@@ -95,6 +95,9 @@ export declare namespace Config {
 
         /** SystemCfg maxBanCount */
         maxBanCount?: (number|null);
+
+        /** SystemCfg dialogueBackgroundMaxId */
+        dialogueBackgroundMaxId?: (number|null);
     }
 
     /** Represents a SystemCfg. */
@@ -111,6 +114,9 @@ export declare namespace Config {
 
         /** SystemCfg maxBanCount. */
         public maxBanCount: number;
+
+        /** SystemCfg dialogueBackgroundMaxId. */
+        public dialogueBackgroundMaxId: number;
 
         /**
          * Creates a new SystemCfg instance using the specified properties.
@@ -6011,6 +6017,9 @@ export declare namespace WarEvent {
 
         /** WeaDialogue dataArray */
         dataArray?: (WarEvent.WeaDialogue.IDataForDialogue[]|null);
+
+        /** WeaDialogue backgroundId */
+        backgroundId?: (number|null);
     }
 
     /** Represents a WeaDialogue. */
@@ -6024,6 +6033,9 @@ export declare namespace WarEvent {
 
         /** WeaDialogue dataArray. */
         public dataArray: WarEvent.WeaDialogue.IDataForDialogue[];
+
+        /** WeaDialogue backgroundId. */
+        public backgroundId: number;
 
         /**
          * Creates a new WeaDialogue instance using the specified properties.

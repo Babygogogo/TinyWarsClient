@@ -308,6 +308,9 @@ namespace ConfigManager {
     export function getSystemMaxBanCoCount(version: string): number {
         return Helpers.getExisted(getSystemCfg(version).maxBanCount, ClientErrorCode.ConfigManager_GetSystemMaxBanCoCount_00);
     }
+    export function getSystemDialogueBackgroundMaxId(version: string): number {
+        return Helpers.getExisted(getSystemCfg(version).dialogueBackgroundMaxId, ClientErrorCode.ConfigManager_GetSystemDialogueBackgroundMaxId_00);
+    }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
         const mapping = Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);
@@ -769,6 +772,9 @@ namespace ConfigManager {
     }
     export function getCoEyeImageSource(coId: number, isAlive: boolean): string {
         return `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    }
+    export function getDialogueBackgroundImage(backgroundId: number): string {
+        return `resource/assets/texture/background/dialogueBackground${Helpers.getNumText(backgroundId, 4)}.jpg`;
     }
 
     export function getUserAvatarImageSource(avatarId: number): string {

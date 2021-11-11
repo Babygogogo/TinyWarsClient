@@ -3,28 +3,32 @@
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-        <TwnsUiImage:UiImage id="_imgBg" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
-                             scale9Grid="1,1,2,2" />
-        <TwnsUiImage:UiImage id="_imgCo1" source="coBust0001" scaleX="-1" bottom="114" horizontalCenter="-250" />
-        <TwnsUiImage:UiImage id="_imgCo2" bottom="114" y="75" source="coBust0011" horizontalCenter="250" />
-        <e:Group id="_groupName1" width="220" bottom="118" visible="true" left="0">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="42"
-                                 source="uncompressedColorGrey0001" y="0" left="0" right="0" />
-            <TwnsUiLabel:UiLabel id="_labelName1" text="Will" x="20" size="22" bold="true" verticalCenter="2" />
-        </e:Group>
-        <e:Group width="220" bottom="118" id="_groupName2" right="0">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="42"
-                                 source="uncompressedColorGrey0001" y="0" left="0" right="0" />
-            <TwnsUiLabel:UiLabel id="_labelName2" text="Caulder" size="22" bold="true" verticalCenter="2" right="20" />
-        </e:Group>
-        <e:Group right="0" bottom="0" height="120" left="0">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2"
+        <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                             scale9Grid="1,1,2,2" x="10" y="10" locked="true" />
+        <e:Group width="720" horizontalCenter="0" verticalCenter="0" height="540">
+            <TwnsUiImage:UiImage id="_imgBg" source="resource/assets/texture/background/dialogueBackground0000.jpg"
                                  left="0" right="0" top="0" bottom="0" />
-            <TwnsUiLabel:UiLabel id="_labelContent" text="你，你不要过来啊！！" textColor="0xFFFFFF" size="18" left="20"
-                                 right="20" textAlign="left" wordWrap="true" lineSpacing="2" top="10" />
+            <TwnsUiImage:UiImage id="_imgCo1" source="coBust0001" scaleX="-1" right="400" bottom="114" />
+            <TwnsUiImage:UiImage id="_imgCo2" source="coBust0011" bottom="114" left="400" />
+            <e:Group id="_groupName1" width="220" visible="true" y="380" x="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="42"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelName1" text="Will" x="20" size="22" bold="true" verticalCenter="2" />
+            </e:Group>
+            <e:Group width="220" id="_groupName2" y="380" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="42"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelName2" text="Caulder" size="22" bold="true" verticalCenter="2" right="20" />
+            </e:Group>
+            <e:Group height="120" y="420" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                     scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0" />
+                <TwnsUiLabel:UiLabel id="_labelContent" text="你，你不要过来啊！！" textColor="0xFFFFFF" size="18" left="20"
+                                     right="20" textAlign="left" wordWrap="true" lineSpacing="2" top="10" />
+            </e:Group>
         </e:Group>
-        <TwnsUiImage:UiImage id="_imgTouchMask" left="0" right="0" top="0" bottom="0"
-                             source="uncompressedColorTransparent0001" scale9Grid="1,1,2,2" x="10" y="10" alpha="0" />
+        <TwnsUiImage:UiImage id="_imgTouchMask" source="uncompressedColorTransparent0001" scale9Grid="1,1,2,2" alpha="0"
+                             left="0" right="0" top="0" bottom="0" />
         <TwnsUiButton:UiButton id="_btnSkip" label="跳过" width="100" x="0" y="0"
                                skinName="Skins.Component.Button.ButtonGrey001" />
     </e:Group>

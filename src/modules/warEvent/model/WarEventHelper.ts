@@ -570,6 +570,11 @@ namespace WarEventHelper {
         return true;
     }
     function checkIsValidWeaDialogue(action: ProtoTypes.WarEvent.IWeaDialogue): boolean {
+        const backgroundId = action.backgroundId;
+        if ((backgroundId != null) && (backgroundId > ConfigManager.getSystemDialogueBackgroundMaxId(Helpers.getExisted(ConfigManager.getLatestConfigVersion())))) {
+            return false;
+        }
+
         const dataArray = action.dataArray;
         if (dataArray == null) {
             return false;
@@ -1421,6 +1426,11 @@ namespace WarEventHelper {
         return null;
     }
     function getErrorTipForWeaDialogue(data: WarEvent.IWeaDialogue): string | null {
+        const backgroundId = data.backgroundId;
+        if ((backgroundId != null) && (backgroundId > ConfigManager.getSystemDialogueBackgroundMaxId(Helpers.getExisted(ConfigManager.getLatestConfigVersion())))) {
+            return Lang.getText(LangTextType.A0258);
+        }
+
         const dialoguesArray    = data.dataArray || [];
         const dialoguesCount    = dialoguesArray.length;
         if ((dialoguesCount <= 0) || (dialoguesCount > CommonConstants.WarEventActionDialogueMaxCount)) {
@@ -1960,7 +1970,8 @@ namespace WarEventHelper {
             };
         } else if (actionType === ActionType.Dialogue) {
             action.WeaDialogue = {
-                dataArray: [],
+                backgroundId    : 0,
+                dataArray       : [],
             };
         } else if (actionType === ActionType.SetViewpoint) {
             action.WeaSetViewpoint = {

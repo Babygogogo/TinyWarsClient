@@ -322,6 +322,17 @@ export const enum ServerErrorCode {
     ConfigManager_GetSystemMaxBanCoCount_0008,
     ConfigManager_GetSystemMaxBanCoCount_0009,
 
+    ConfigManager_GetSystemDialogueBackgroundMaxId_0000,
+    ConfigManager_GetSystemDialogueBackgroundMaxId_0001,
+    ConfigManager_GetSystemDialogueBackgroundMaxId_0002,
+    ConfigManager_GetSystemDialogueBackgroundMaxId_0003,
+    ConfigManager_GetSystemDialogueBackgroundMaxId_0004,
+    ConfigManager_GetSystemDialogueBackgroundMaxId_0005,
+    ConfigManager_GetSystemDialogueBackgroundMaxId_0006,
+    ConfigManager_GetSystemDialogueBackgroundMaxId_0007,
+    ConfigManager_GetSystemDialogueBackgroundMaxId_0008,
+    ConfigManager_GetSystemDialogueBackgroundMaxId_0009,
+
     ConfigManager_GetTileType_0000,
     ConfigManager_GetTileType_0001,
     ConfigManager_GetTileType_0002,

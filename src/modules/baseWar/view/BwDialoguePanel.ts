@@ -13,6 +13,7 @@
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwDialoguePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
 
@@ -72,6 +73,7 @@ namespace TwnsBwDialoguePanel {
 
             this._showOpenAnimation();
 
+            this._imgBg.source  = ConfigManager.getDialogueBackgroundImage(this._getOpenData().actionData.backgroundId ?? 0);
             this._dialogueIndex = 0;
             this._updateComponentsForLanguage();
         }

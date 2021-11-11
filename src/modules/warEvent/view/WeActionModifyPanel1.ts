@@ -23,6 +23,7 @@
 // import TwnsWeActionAddUnitListPanel from "./WeActionAddUnitListPanel";
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel1 {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
@@ -187,6 +188,9 @@ namespace TwnsWeActionModifyPanel1 {
         private readonly _labelNeedMovableTile!     : TwnsUiLabel.UiLabel;
         private readonly _imgNeedMovableTile!       : TwnsUiImage.UiImage;
 
+        private readonly _btnAiMode!                : TwnsUiButton.UiButton;
+        private readonly _labelAiMode!              : TwnsUiLabel.UiLabel;
+
         private readonly _labelGridIndex!           : TwnsUiLabel.UiLabel;
         private readonly _inputGridX!               : TwnsUiTextInput.UiTextInput;
         private readonly _inputGridY!               : TwnsUiTextInput.UiTextInput;
@@ -238,6 +242,7 @@ namespace TwnsWeActionModifyPanel1 {
                 { ui: this._btnDelete,                  callback: this._onTouchedBtnDelete },
                 { ui: this._groupCanBeBlockedByUnit,    callback: this._onTouchedGroupCanBeBlockedByUnit },
                 { ui: this._groupNeedMovableTile,       callback: this._onTouchedGroupNeedMovableTile },
+                { ui: this._btnAiMode,                  callback: this._onTouchedBtnAiMode },
                 { ui: this._groupIsDiving,              callback: this._onTouchedGroupIsDiving },
                 { ui: this._groupHasLoadedCo,           callback: this._onTouchedGroupHasLoadedCo },
                 { ui: this._btnActionState,             callback: this._onTouchedBtnActionState },
@@ -277,6 +282,18 @@ namespace TwnsWeActionModifyPanel1 {
         private _onTouchedGroupNeedMovableTile(): void {
             const data                          = this._getData();
             data.dataForAddUnit.needMovableTile = !data.dataForAddUnit.needMovableTile;
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onTouchedBtnAiMode(): void {
+            const unitData  = Helpers.getExisted(this._getData().dataForAddUnit.unitData);
+            const aiMode    = unitData.aiMode;
+            if (aiMode === Types.UnitAiMode.NoMove) {
+                unitData.aiMode = Types.UnitAiMode.Normal;
+            } else if ((aiMode === Types.UnitAiMode.Normal) || (aiMode == null)) {
+                unitData.aiMode = Types.UnitAiMode.WaitUntilCanAttack;
+            } else {
+                unitData.aiMode = Types.UnitAiMode.NoMove;
+            }
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedGroupIsDiving(): void {
@@ -430,6 +447,7 @@ namespace TwnsWeActionModifyPanel1 {
             this._btnDelete.label               = Lang.getText(LangTextType.B0220);
             this._labelCanBeBlockedByUnit.text  = Lang.getText(LangTextType.B0532);
             this._labelNeedMovableTile.text     = Lang.getText(LangTextType.B0534);
+            this._btnAiMode.label               = Lang.getText(LangTextType.B0720);
             this._labelIsDiving.text            = Lang.getText(LangTextType.B0371);
             this._labelHasLoadedCo.text         = Lang.getText(LangTextType.B0421);
             this._labelGridIndex.text           = Lang.getText(LangTextType.B0531);
@@ -448,6 +466,7 @@ namespace TwnsWeActionModifyPanel1 {
             this._updateLabelError();
             this._updateComponentsForCanBeBlockedByUnit();
             this._updateComponentsForNeedMovableTile();
+            this._updateComponentsForAiMode();
             this._updateComponentsForIsDiving();
             this._updateComponentsForHasLoadedCo();
             this._updateComponentsForActionState();
@@ -480,6 +499,10 @@ namespace TwnsWeActionModifyPanel1 {
         private _updateComponentsForNeedMovableTile(): void {
             const data                          = this._getData();
             this._imgNeedMovableTile.visible    = (!!data.dataForAddUnit.needMovableTile);
+        }
+        private _updateComponentsForAiMode(): void {
+            const data              = this._getData();
+            this._labelAiMode.text  = Lang.getUnitAiModeName(data.dataForAddUnit.unitData?.aiMode ?? Types.UnitAiMode.Normal) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateComponentsForIsDiving(): void {
             const data      = this._getData();

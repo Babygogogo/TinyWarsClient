@@ -1761,6 +1761,17 @@ namespace TwnsClientErrorCode {
         ConfigManager_GetEnabledCoIdListInTier_08,
         ConfigManager_GetEnabledCoIdListInTier_09,
 
+        ConfigManager_GetSystemDialogueBackgroundMaxId_00,
+        ConfigManager_GetSystemDialogueBackgroundMaxId_01,
+        ConfigManager_GetSystemDialogueBackgroundMaxId_02,
+        ConfigManager_GetSystemDialogueBackgroundMaxId_03,
+        ConfigManager_GetSystemDialogueBackgroundMaxId_04,
+        ConfigManager_GetSystemDialogueBackgroundMaxId_05,
+        ConfigManager_GetSystemDialogueBackgroundMaxId_06,
+        ConfigManager_GetSystemDialogueBackgroundMaxId_07,
+        ConfigManager_GetSystemDialogueBackgroundMaxId_08,
+        ConfigManager_GetSystemDialogueBackgroundMaxId_09,
+
         DestructionHelpers_DestroyUnitOnMap_00,
         DestructionHelpers_DestroyUnitOnMap_01,
         DestructionHelpers_DestroyUnitOnMap_02,

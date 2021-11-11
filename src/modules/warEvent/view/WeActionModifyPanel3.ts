@@ -53,6 +53,8 @@ namespace TwnsWeActionModifyPanel3 {
         private readonly _btnClear!             : TwnsUiButton.UiButton;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelDialoguesCount!  : TwnsUiLabel.UiLabel;
+        private readonly _btnBackground!        : TwnsUiButton.UiButton;
+        private readonly _labelBackground!      : TwnsUiLabel.UiLabel;
         private readonly _listDialogue!         : TwnsUiScrollList.UiScrollList<DataForDialogueRenderer>;
 
         public static show(openData: OpenDataForWeActionModifyPanel3): void {
@@ -82,6 +84,7 @@ namespace TwnsWeActionModifyPanel3 {
                 { ui: this._btnType,            callback: this._onTouchedBtnType },
                 { ui: this._btnPlay,            callback: this._onTouchedBtnPlay },
                 { ui: this._btnBack,            callback: this.close },
+                { ui: this._btnBackground,      callback: this._onTouchedBtnBackground },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
@@ -100,6 +103,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onNotifyWarEventFullDataChanged(): void {
+            this._updateComponentsForBackground();
             this._updateComponentsForDialogues();
         }
 
@@ -151,12 +155,19 @@ namespace TwnsWeActionModifyPanel3 {
             });
         }
 
+        private _onTouchedBtnBackground(): void {
+            TwnsWeDialogueBackgroundPanel.WeDialogueBackgroundPanel.show({
+                action: Helpers.getExisted(this._getOpenData().action.WeaDialogue),
+            });
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
+            this._updateComponentsForBackground();
             this._updateComponentsForDialogues();
         }
 
@@ -167,6 +178,11 @@ namespace TwnsWeActionModifyPanel3 {
             this._btnAddDialogue.label  = Lang.getText(LangTextType.B0666);
             this._btnClear.label        = Lang.getText(LangTextType.B0391);
             this._btnBack.label         = Lang.getText(LangTextType.B0146);
+            this._btnBackground.label   = Lang.getText(LangTextType.B0727);
+        }
+
+        private _updateComponentsForBackground(): void {
+            this._labelBackground.text = `${this._getOpenData().action.WeaDialogue?.backgroundId}`;
         }
 
         private _updateComponentsForDialogues(): void {

@@ -1079,6 +1079,10 @@ namespace TwnsLangCommonText {
             `您确定要切换该部队的A.I.模式吗？`,
             `Are you sure to switch the unit's A.I. mode?`,
         ],
+        [LangTextType.A0258]: [
+            `此动作指定的对话背景不合法`,
+            `The background of the dialogues is invalid.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3966,6 +3970,18 @@ namespace TwnsLangCommonText {
         [LangTextType.B0724]: [
             `A.I.模式已切换`,
             `A.I. Mode switched.`,
+        ],
+        [LangTextType.B0725]: [
+            `多人合作明战`,
+            `Coop Std`,
+        ],
+        [LangTextType.B0726]: [
+            `多人合作雾战`,
+            `Coop FoW`,
+        ],
+        [LangTextType.B0727]: [
+            `背景`,
+            `Background`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

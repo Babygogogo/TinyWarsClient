@@ -267,6 +267,8 @@ namespace Lang {
             case Types.WarType.ScwFog   : return getText(LangTextType.B0611);
             case Types.WarType.SfwStd   : return getText(LangTextType.B0612);
             case Types.WarType.SfwFog   : return getText(LangTextType.B0613);
+            case Types.WarType.CcwStd   : return getText(LangTextType.B0725);
+            case Types.WarType.CcwFog   : return getText(LangTextType.B0726);
             default                     : return null;
         }
     }
