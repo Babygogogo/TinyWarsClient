@@ -6405,6 +6405,297 @@ export declare namespace WarEvent {
         }
     }
 
+    /** Properties of a WeaSimpleDialogue. */
+    interface IWeaSimpleDialogue {
+
+        /** WeaSimpleDialogue dataArray */
+        dataArray?: (WarEvent.WeaSimpleDialogue.IDataForDialogue[]|null);
+    }
+
+    /** Represents a WeaSimpleDialogue. */
+    class WeaSimpleDialogue implements IWeaSimpleDialogue {
+
+        /**
+         * Constructs a new WeaSimpleDialogue.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSimpleDialogue);
+
+        /** WeaSimpleDialogue dataArray. */
+        public dataArray: WarEvent.WeaSimpleDialogue.IDataForDialogue[];
+
+        /**
+         * Creates a new WeaSimpleDialogue instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSimpleDialogue instance
+         */
+        public static create(properties?: WarEvent.IWeaSimpleDialogue): WarEvent.WeaSimpleDialogue;
+
+        /**
+         * Encodes the specified WeaSimpleDialogue message. Does not implicitly {@link WarEvent.WeaSimpleDialogue.verify|verify} messages.
+         * @param message WeaSimpleDialogue message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSimpleDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSimpleDialogue message, length delimited. Does not implicitly {@link WarEvent.WeaSimpleDialogue.verify|verify} messages.
+         * @param message WeaSimpleDialogue message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSimpleDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSimpleDialogue message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSimpleDialogue
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSimpleDialogue;
+
+        /**
+         * Decodes a WeaSimpleDialogue message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSimpleDialogue
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSimpleDialogue;
+
+        /**
+         * Verifies a WeaSimpleDialogue message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSimpleDialogue message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSimpleDialogue
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSimpleDialogue;
+
+        /**
+         * Creates a plain object from a WeaSimpleDialogue message. Also converts values to other types if specified.
+         * @param message WeaSimpleDialogue
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSimpleDialogue, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSimpleDialogue to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WeaSimpleDialogue {
+
+        /** Properties of a DataForCoDialogue. */
+        interface IDataForCoDialogue {
+
+            /** DataForCoDialogue side */
+            side?: (number|null);
+
+            /** DataForCoDialogue coId */
+            coId?: (number|null);
+
+            /** DataForCoDialogue textArray */
+            textArray?: (Structure.ILanguageText[]|null);
+
+            /** DataForCoDialogue nameArray */
+            nameArray?: (Structure.ILanguageText[]|null);
+        }
+
+        /** Represents a DataForCoDialogue. */
+        class DataForCoDialogue implements IDataForCoDialogue {
+
+            /**
+             * Constructs a new DataForCoDialogue.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.WeaSimpleDialogue.IDataForCoDialogue);
+
+            /** DataForCoDialogue side. */
+            public side: number;
+
+            /** DataForCoDialogue coId. */
+            public coId: number;
+
+            /** DataForCoDialogue textArray. */
+            public textArray: Structure.ILanguageText[];
+
+            /** DataForCoDialogue nameArray. */
+            public nameArray: Structure.ILanguageText[];
+
+            /**
+             * Creates a new DataForCoDialogue instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns DataForCoDialogue instance
+             */
+            public static create(properties?: WarEvent.WeaSimpleDialogue.IDataForCoDialogue): WarEvent.WeaSimpleDialogue.DataForCoDialogue;
+
+            /**
+             * Encodes the specified DataForCoDialogue message. Does not implicitly {@link WarEvent.WeaSimpleDialogue.DataForCoDialogue.verify|verify} messages.
+             * @param message DataForCoDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.WeaSimpleDialogue.IDataForCoDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified DataForCoDialogue message, length delimited. Does not implicitly {@link WarEvent.WeaSimpleDialogue.DataForCoDialogue.verify|verify} messages.
+             * @param message DataForCoDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.WeaSimpleDialogue.IDataForCoDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a DataForCoDialogue message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns DataForCoDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSimpleDialogue.DataForCoDialogue;
+
+            /**
+             * Decodes a DataForCoDialogue message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns DataForCoDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSimpleDialogue.DataForCoDialogue;
+
+            /**
+             * Verifies a DataForCoDialogue message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a DataForCoDialogue message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns DataForCoDialogue
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.WeaSimpleDialogue.DataForCoDialogue;
+
+            /**
+             * Creates a plain object from a DataForCoDialogue message. Also converts values to other types if specified.
+             * @param message DataForCoDialogue
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.WeaSimpleDialogue.DataForCoDialogue, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this DataForCoDialogue to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a DataForDialogue. */
+        interface IDataForDialogue {
+
+            /** DataForDialogue dataForCoDialogue */
+            dataForCoDialogue?: (WarEvent.WeaSimpleDialogue.IDataForCoDialogue|null);
+        }
+
+        /** Represents a DataForDialogue. */
+        class DataForDialogue implements IDataForDialogue {
+
+            /**
+             * Constructs a new DataForDialogue.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.WeaSimpleDialogue.IDataForDialogue);
+
+            /** DataForDialogue dataForCoDialogue. */
+            public dataForCoDialogue?: (WarEvent.WeaSimpleDialogue.IDataForCoDialogue|null);
+
+            /**
+             * Creates a new DataForDialogue instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns DataForDialogue instance
+             */
+            public static create(properties?: WarEvent.WeaSimpleDialogue.IDataForDialogue): WarEvent.WeaSimpleDialogue.DataForDialogue;
+
+            /**
+             * Encodes the specified DataForDialogue message. Does not implicitly {@link WarEvent.WeaSimpleDialogue.DataForDialogue.verify|verify} messages.
+             * @param message DataForDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.WeaSimpleDialogue.IDataForDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified DataForDialogue message, length delimited. Does not implicitly {@link WarEvent.WeaSimpleDialogue.DataForDialogue.verify|verify} messages.
+             * @param message DataForDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.WeaSimpleDialogue.IDataForDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a DataForDialogue message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns DataForDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSimpleDialogue.DataForDialogue;
+
+            /**
+             * Decodes a DataForDialogue message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns DataForDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSimpleDialogue.DataForDialogue;
+
+            /**
+             * Verifies a DataForDialogue message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a DataForDialogue message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns DataForDialogue
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.WeaSimpleDialogue.DataForDialogue;
+
+            /**
+             * Creates a plain object from a DataForDialogue message. Also converts values to other types if specified.
+             * @param message DataForDialogue
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.WeaSimpleDialogue.DataForDialogue, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this DataForDialogue to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WeaSetViewpoint. */
     interface IWeaSetViewpoint {
 
@@ -6617,6 +6908,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetWeather */
         WeaSetWeather?: (WarEvent.IWeaSetWeather|null);
+
+        /** WarEventAction WeaSimpleDialogue */
+        WeaSimpleDialogue?: (WarEvent.IWeaSimpleDialogue|null);
     }
 
     /** Represents a WarEventAction. */
@@ -6645,6 +6939,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetWeather. */
         public WeaSetWeather?: (WarEvent.IWeaSetWeather|null);
+
+        /** WarEventAction WeaSimpleDialogue. */
+        public WeaSimpleDialogue?: (WarEvent.IWeaSimpleDialogue|null);
 
         /**
          * Creates a new WarEventAction instance using the specified properties.

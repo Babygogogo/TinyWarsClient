@@ -3983,6 +3983,14 @@ namespace TwnsLangCommonText {
             `背景`,
             `Background`,
         ],
+        [LangTextType.B0728]: [
+            `播放简易对话`,
+            `Show Simple Dialogue`,
+        ],
+        [LangTextType.B0729]: [
+            `显示在下侧`,
+            `Show on bottom`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

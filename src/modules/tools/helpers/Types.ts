@@ -732,6 +732,7 @@ namespace Types {
         Dialogue,
         SetViewpoint,
         SetWeather,
+        SimpleDialogue,
     }
 
     // eslint-disable-next-line no-shadow
@@ -781,6 +782,11 @@ namespace Types {
     export enum WarEventActionDialogueSide {
         Left    = 1,
         Right   = 2,
+    }
+    // eslint-disable-next-line no-shadow
+    export enum WarEventActionSimpleDialogueSide {
+        Bottom  = 1,
+        Top     = 2,
     }
 }
 

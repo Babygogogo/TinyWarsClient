@@ -69,6 +69,7 @@ namespace WarEventHelper {
         ActionType.AddUnit,
         ActionType.SetPlayerAliveState,
         ActionType.Dialogue,
+        ActionType.SimpleDialogue,
         ActionType.SetViewpoint,
         ActionType.SetWeather,
     ];
@@ -508,6 +509,13 @@ namespace WarEventHelper {
             }
         }
 
+        {
+            const actionData = action.WeaSimpleDialogue;
+            if (actionData) {
+                return checkIsValidWeaSimpleDialogue(actionData);
+            }
+        }
+
         // TODO add more checkers when the action types grow.
 
         return false;
@@ -673,6 +681,32 @@ namespace WarEventHelper {
         return (weatherType != null)
             && (ConfigManager.checkIsValidWeatherType(weatherType))
             && (data.turnsCount != null);
+    }
+    function checkIsValidWeaSimpleDialogue(action: ProtoTypes.WarEvent.IWeaSimpleDialogue): boolean {
+        const dataArray = action.dataArray;
+        if (dataArray == null) {
+            return false;
+        }
+
+        const dialogueCount = dataArray.length;
+        if ((dialogueCount <= 0) || (dialogueCount > CommonConstants.WarEventActionDialogueMaxCount)) {
+            return false;
+        }
+
+        for (const data of dataArray) {
+            if (Object.keys(data).length !== 1) {
+                return false;
+            }
+
+            {
+                const subData = data.dataForCoDialogue;
+                if ((subData) && (!checkIsValidDataForCoDialogue(subData))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     function checkIsValidWarEventCondition({ condition, mapRawData }: {  // DONE
@@ -1055,7 +1089,8 @@ namespace WarEventHelper {
             || (getDescForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState))
             || (getDescForWeaDialogue(action.WeaDialogue))
             || (getDescForWeaSetViewpoint(action.WeaSetViewpoint))
-            || (getDescForWeaSetWeather(action.WeaSetWeather));
+            || (getDescForWeaSetWeather(action.WeaSetWeather))
+            || (getDescForWeaSimpleDialogue(action.WeaSimpleDialogue));
     }
     function getDescForWeaAddUnit(data: Types.Undefinable<WarEvent.IWeaAddUnit>): string | null {
         if (!data) {
@@ -1119,6 +1154,26 @@ namespace WarEventHelper {
         return (turnsCount == 0)
             ? Lang.getFormattedText(LangTextType.F0077, weatherName)
             : Lang.getFormattedText(LangTextType.F0076, weatherName, turnsCount);
+    }
+    function getDescForWeaSimpleDialogue(data: Types.Undefinable<WarEvent.IWeaSimpleDialogue>): string | null {
+        if (data == null) {
+            return null;
+        } else {
+            const coIdSet = new Set<number>();
+            for (const dialogueData of data.dataArray || []) {
+                const coId = dialogueData.dataForCoDialogue?.coId;
+                (coId != null) && (coIdSet.add(coId));
+            }
+
+            const coNameArray   : string[] = [];
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            for (const coId of coIdSet) {
+                const coName = ConfigManager.getCoNameAndTierText(configVersion, coId);
+                (coName != null) && (coNameArray.push(coName));
+            }
+
+            return Lang.getFormattedText(LangTextType.F0070, coNameArray.join(`, `));
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1371,6 +1426,8 @@ namespace WarEventHelper {
             return getErrorTipForWeaSetViewpoint(action.WeaSetViewpoint, war);
         } else if (action.WeaSetWeather) {
             return getErrorTipForWeaSetWeather(action.WeaSetWeather);
+        } else if (action.WeaSimpleDialogue) {
+            return getErrorTipForWeaSimpleDialogue(action.WeaSimpleDialogue);
         } else {
             return Lang.getText(LangTextType.A0177);
         }
@@ -1513,6 +1570,57 @@ namespace WarEventHelper {
                     maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
                 })) {
                     return Lang.getText(LangTextType.A0232);
+                }
+
+                return null;
+            }
+        }
+
+        return Lang.getText(LangTextType.A0230);
+    }
+    function getErrorTipForWeaSimpleDialogue(data: WarEvent.IWeaSimpleDialogue): string | null {
+        const dialoguesArray    = data.dataArray || [];
+        const dialoguesCount    = dialoguesArray.length;
+        if ((dialoguesCount <= 0) || (dialoguesCount > CommonConstants.WarEventActionDialogueMaxCount)) {
+            return `${Lang.getText(LangTextType.A0227)} (${dialoguesCount} / ${CommonConstants.WarEventActionDialogueMaxCount})`;
+        }
+
+        for (let i = 0; i < dialoguesCount; ++i) {
+            if (getErrorTipForWeaSimpleDialogueData(dialoguesArray[i])) {
+                return Lang.getFormattedText(LangTextType.F0071, i);
+            }
+        }
+
+        return null;
+    }
+    export function getErrorTipForWeaSimpleDialogueData(dialogueData: WarEvent.WeaSimpleDialogue.IDataForDialogue): string | null {
+        if (Object.keys(dialogueData).length !== 1) {
+            return Lang.getText(LangTextType.A0230);
+        }
+
+        const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+        {
+            const dataForCoDialogue = dialogueData.dataForCoDialogue;
+            if (dataForCoDialogue) {
+                const { coId, side, textArray, nameArray } = dataForCoDialogue;
+                if ((coId == null)                                                                                          ||
+                    (coId === CommonConstants.CoEmptyId)                                                                    ||
+                    (ConfigManager.getCoNameAndTierText(configVersion, coId) == null)                                       ||
+                    ((side !== Types.WarEventActionDialogueSide.Left) && (side !== Types.WarEventActionDialogueSide.Right)) ||
+                    (!Helpers.checkIsValidLanguageTextArray({
+                        list            : textArray,
+                        minTextCount    : 1,
+                        minTextLength   : 1,
+                        maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
+                    }))                                                                                                     ||
+                    ((nameArray) && (!Helpers.checkIsValidLanguageTextArray({
+                        list            : nameArray,
+                        minTextCount    : 1,
+                        minTextLength   : 1,
+                        maxTextLength   : CommonConstants.WarEventActionDialogueNameMaxLength,
+                    })))
+                ) {
+                    return Lang.getText(LangTextType.A0231);
                 }
 
                 return null;
@@ -1947,6 +2055,8 @@ namespace WarEventHelper {
             return ActionType.SetViewpoint;
         } else if (action.WeaSetWeather) {
             return ActionType.SetWeather;
+        } else if (action.WeaSimpleDialogue) {
+            return ActionType.SimpleDialogue;
         } else {
             return null;
         }
@@ -1983,6 +2093,10 @@ namespace WarEventHelper {
                 weatherType : Types.WeatherType.Clear,
                 turnsCount  : 0,
             };
+        } else if (actionType === ActionType.SimpleDialogue) {
+            action.WeaSimpleDialogue = {
+                dataArray       : [],
+            };
         } else {
             throw Helpers.newError(`Invalid actionType: ${actionType}.`, ClientErrorCode.WarEventHelper_ResetAction_00);
         }
@@ -1995,6 +2109,7 @@ namespace WarEventHelper {
         TwnsWeActionModifyPanel3.WeActionModifyPanel3.hide();
         TwnsWeActionModifyPanel4.WeActionModifyPanel4.hide();
         TwnsWeActionModifyPanel5.WeActionModifyPanel5.hide();
+        TwnsWeActionModifyPanel6.WeActionModifyPanel6.hide();
 
         if (action.WeaAddUnit) {
             TwnsWeActionModifyPanel1.WeActionModifyPanel1.show({ war, fullData, action });
@@ -2006,6 +2121,8 @@ namespace WarEventHelper {
             TwnsWeActionModifyPanel4.WeActionModifyPanel4.show({ war, fullData, action });
         } else if (action.WeaSetWeather) {
             TwnsWeActionModifyPanel5.WeActionModifyPanel5.show({ war, fullData, action });
+        } else if (action.WeaSimpleDialogue) {
+            TwnsWeActionModifyPanel6.WeActionModifyPanel6.show({ war, fullData, action });
         } else {
             throw Helpers.newError(`Invalid action.`, ClientErrorCode.WarEventHelper_OpenActionModifyPanel_00);
         }
@@ -2368,6 +2485,17 @@ namespace WarEventHelper {
     export function getDefaultAsideData(): ProtoTypes.WarEvent.WeaDialogue.IDataForDialogue {
         return {
             dataForAside: {
+                textArray   : [
+                    { languageType: Lang.getCurrentLanguageType(), text: `...` },
+                ],
+            },
+        };
+    }
+    export function getDefaultSimpleCoDialogueData(): ProtoTypes.WarEvent.WeaSimpleDialogue.IDataForDialogue {
+        return {
+            dataForCoDialogue: {
+                coId        : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))[0],
+                side        : Types.WarEventActionSimpleDialogueSide.Bottom,
                 textArray   : [
                     { languageType: Lang.getCurrentLanguageType(), text: `...` },
                 ],
