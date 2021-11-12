@@ -10,10 +10,11 @@
 // import WarCommonHelpers from "../../tools/warHelpers/WarCommonHelpers";
 // import UserModel        from "../../user/model/UserModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWarMapUnitView {
     const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
-    const IMG_UNIT_STATE_WIDTH                          = 28;
-    const IMG_UNIT_STATE_HEIGHT                         = 36;
+    const IMG_UNIT_STATE_WIDTH                          = 10;
+    const IMG_UNIT_STATE_HEIGHT                         = 12;
 
     export class WarMapUnitView extends egret.DisplayObjectContainer {
         private readonly _imgUnit                   = new TwnsUiImage.UiImage();
@@ -27,18 +28,21 @@ namespace TwnsWarMapUnitView {
         public constructor(data?: Types.WarMapUnitViewData, tickCount?: number) {
             super();
 
-            const imgUnit   = this._imgUnit;
-            imgUnit.bottom  = -GRID_HEIGHT;
+            const imgUnit       = this._imgUnit;
+            imgUnit.smoothing   = false;
+            imgUnit.bottom      = -GRID_HEIGHT;
             this.addChild(imgUnit);
 
-            const imgHp = this._imgHp;
-            imgHp.x     = GRID_WIDTH - IMG_UNIT_STATE_WIDTH - 3 + GRID_WIDTH / 4;
-            imgHp.y     = GRID_HEIGHT - IMG_UNIT_STATE_HEIGHT + GRID_HEIGHT / 2;
+            const imgHp     = this._imgHp;
+            imgHp.smoothing = false;
+            imgHp.x         = GRID_WIDTH - IMG_UNIT_STATE_WIDTH - 1 + GRID_WIDTH / 4;
+            imgHp.y         = GRID_HEIGHT - IMG_UNIT_STATE_HEIGHT + GRID_HEIGHT / 2;
             this.addChild(imgHp);
 
-            const imgState  = this._imgState;
-            imgState.x      = 0 + GRID_WIDTH / 4;
-            imgState.y      = GRID_HEIGHT - IMG_UNIT_STATE_HEIGHT + GRID_HEIGHT / 2;
+            const imgState      = this._imgState;
+            imgState.smoothing  = false;
+            imgState.x          = 0 + GRID_WIDTH / 4;
+            imgState.y          = GRID_HEIGHT - IMG_UNIT_STATE_HEIGHT + GRID_HEIGHT / 2;
             this.addChild(imgState);
 
             (data) && (this.update(data, tickCount));

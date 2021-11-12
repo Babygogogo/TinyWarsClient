@@ -8,6 +8,7 @@
 // import TwnsUiImage      from "../../tools/ui/UiImage";
 // import UserModel        from "../../user/model/UserModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTileView {
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
@@ -29,9 +30,17 @@ namespace TwnsBwTileView {
         private _data   : DataForTileView | null = null;
 
         public constructor() {
-            this._imgBase.anchorOffsetY         = GRID_HEIGHT;
-            this._imgDecorator.anchorOffsetY    = GRID_HEIGHT;
-            this._imgObject.anchorOffsetY       = GRID_HEIGHT * 2;
+            const imgBase               = this._imgBase;
+            imgBase.smoothing           = false;
+            imgBase.anchorOffsetY       = GRID_HEIGHT;
+
+            const imgDecorator          = this._imgDecorator;
+            imgDecorator.smoothing      = false;
+            imgDecorator.anchorOffsetY  = GRID_HEIGHT;
+
+            const imgObject             = this._imgObject;
+            imgObject.smoothing         = false;
+            imgObject.anchorOffsetY     = GRID_HEIGHT * 2;
         }
 
         public setData(data: DataForTileView): void {

@@ -14,6 +14,7 @@
 // import UserModel            from "../../user/model/UserModel";
 // import TwnsWarMapUnitView   from "./WarMapUnitView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWarMapView {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import MapSize          = Types.MapSize;
@@ -128,17 +129,19 @@ namespace TwnsWarMapView {
             const gridBorderLayer                           = this._gridBorderLayer;
             gridBorderLayer.removeChildren();
             for (let x = 0; x <= mapWidth; ++x) {
-                const img   = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
-                img.width   = 2;
-                img.height  = borderHeight;
-                img.x       = (x * GRID_WIDTH) - 1;
+                const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
+                img.smoothing   = false;
+                img.width       = 2;
+                img.height      = borderHeight;
+                img.x           = (x * GRID_WIDTH) - 1;
                 gridBorderLayer.addChild(img);
             }
             for (let y = 0; y <= mapHeight; ++y) {
-                const img   = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
-                img.width   = borderWidth;
-                img.height  = 2;
-                img.y       = (y * GRID_HEIGHT) - 1;
+                const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
+                img.smoothing   = false;
+                img.width       = borderWidth;
+                img.height      = 2;
+                img.y           = (y * GRID_HEIGHT) - 1;
                 gridBorderLayer.addChild(img);
             }
             this._updateGridBorderLayerVisible();
@@ -219,10 +222,11 @@ namespace TwnsWarMapView {
 
                 for (let y = 0; y < height; ++y) {
                     if (column[y] == null) {
-                        const img   = new TwnsUiImage.UiImage();
-                        img.x       = GRID_WIDTH * x;
-                        img.y       = this._getImageY(y);
-                        column[y]   = img;
+                        const img       = new TwnsUiImage.UiImage();
+                        img.smoothing   = false;
+                        img.x           = GRID_WIDTH * x;
+                        img.y           = this._getImageY(y);
+                        column[y]       = img;
                         this.addChild(img);
                     }
                 }

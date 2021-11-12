@@ -20,8 +20,8 @@ namespace TwnsBwUnitView {
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH * 3 / 4;
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_Y               = _GRID_HEIGHT / 2;
     const _IMG_UNIT_STAND_X                             = _GRID_WIDTH * 2 / 4;
-    const _IMG_UNIT_STATE_WIDTH                         = 28;
-    const _IMG_UNIT_STATE_HEIGHT                        = 36;
+    const _IMG_UNIT_STATE_WIDTH                         = 10;
+    const _IMG_UNIT_STATE_HEIGHT                        = 12;
     const _AIMING_TIME_MS                               = 500;
 
     export class BwUnitView extends egret.DisplayObjectContainer {
@@ -37,16 +37,25 @@ namespace TwnsBwUnitView {
         public constructor() {
             super();
 
-            this._imgUnit.anchorOffsetX = _IMG_UNIT_STAND_ANCHOR_OFFSET_X;
-            this._imgUnit.anchorOffsetY = _IMG_UNIT_STAND_ANCHOR_OFFSET_Y;
-            this._imgUnit.x             = _IMG_UNIT_STAND_X;
-            this._imgState.x            = 0;
-            this._imgState.y            = _GRID_HEIGHT - _IMG_UNIT_STATE_HEIGHT;
-            this._imgHp.x               = _GRID_WIDTH - _IMG_UNIT_STATE_WIDTH - 3;
-            this._imgHp.y               = _GRID_HEIGHT - _IMG_UNIT_STATE_HEIGHT;
-            this.addChild(this._imgUnit);
-            this.addChild(this._imgState);
-            this.addChild(this._imgHp);
+            const imgUnit           = this._imgUnit;
+            imgUnit.smoothing       = false;
+            imgUnit.anchorOffsetX   = _IMG_UNIT_STAND_ANCHOR_OFFSET_X;
+            imgUnit.anchorOffsetY   = _IMG_UNIT_STAND_ANCHOR_OFFSET_Y;
+            imgUnit.x               = _IMG_UNIT_STAND_X;
+
+            const imgState      = this._imgState;
+            imgState.smoothing  = false;
+            imgState.x          = 0;
+            imgState.y          = _GRID_HEIGHT - _IMG_UNIT_STATE_HEIGHT;
+
+            const imgHp     = this._imgHp;
+            imgHp.smoothing = false;
+            imgHp.x         = _GRID_WIDTH - _IMG_UNIT_STATE_WIDTH - 1;
+            imgHp.y         = _GRID_HEIGHT - _IMG_UNIT_STATE_HEIGHT;
+
+            this.addChild(imgUnit);
+            this.addChild(imgState);
+            this.addChild(imgHp);
         }
 
         public init(unit: TwnsBwUnit.BwUnit): BwUnitView {

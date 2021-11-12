@@ -7,6 +7,7 @@
 // import TwnsUiImage      from "../../tools/ui/UiImage";
 // import UserModel        from "../../user/model/UserModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeTileSimpleView {
     import TileBaseType             = Types.TileBaseType;
     import TileDecoratorType        = Types.TileDecoratorType;
@@ -28,9 +29,23 @@ namespace TwnsMeTileSimpleView {
         private _playerIndex        : number | null = null;
 
         public constructor() {
-            this.getImgBase().anchorOffsetY         = GRID_HEIGHT;
-            this.getImgDecorator().anchorOffsetY    = GRID_HEIGHT;
-            this.getImgObject().anchorOffsetY       = GRID_HEIGHT * 2;
+            {
+                const img           = this.getImgBase();
+                img.smoothing       = false;
+                img.anchorOffsetY   = GRID_HEIGHT;
+            }
+
+            {
+                const img           = this.getImgDecorator();
+                img.smoothing       = false;
+                img.anchorOffsetY   = GRID_HEIGHT;
+            }
+
+            {
+                const img           = this.getImgObject();
+                img.smoothing       = false;
+                img.anchorOffsetY   = GRID_HEIGHT * 2;
+            }
         }
 
         public init({ tileBaseType, tileBaseShapeId, tileDecoratorType, tileDecoratorShapeId, tileObjectType, tileObjectShapeId, playerIndex }: {

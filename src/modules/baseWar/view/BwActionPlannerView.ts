@@ -87,14 +87,14 @@ namespace TwnsBwActionPlannerView {
     export class BwActionPlannerView extends egret.DisplayObjectContainer {
         private _actionPlanner?             : TwnsBwActionPlanner.BwActionPlanner;
 
-        private _conForGrids                = new egret.DisplayObjectContainer();
-        private _conForMovableGrids         = new egret.DisplayObjectContainer();
-        private _conForMoveDestination      = new egret.DisplayObjectContainer();
-        private _conForAttackableGrids      = new egret.DisplayObjectContainer();
-        private _conForMovePath             = new egret.DisplayObjectContainer();
-        private _imgsForMovableGrids?       : TwnsUiImage.UiImage[][];
-        private _imgsForAttackableGrids?    : TwnsUiImage.UiImage[][];
-        private _imgForMoveDestination?     : TwnsUiImage.UiImage;
+        private _conForGrids                    = new egret.DisplayObjectContainer();
+        private _conForMovableGrids             = new egret.DisplayObjectContainer();
+        private _conForMoveDestination          = new egret.DisplayObjectContainer();
+        private _conForAttackableGrids          = new egret.DisplayObjectContainer();
+        private _conForMovePath                 = new egret.DisplayObjectContainer();
+        private _imgsForMovableGrids?           : TwnsUiImage.UiImage[][];
+        private _imgsForAttackableGrids?        : TwnsUiImage.UiImage[][];
+        private readonly _imgForMoveDestination = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
 
         private _conForUnits            = new egret.DisplayObjectContainer();
         private _focusUnitViews         = new Map<number, BwUnitView>();
@@ -168,6 +168,7 @@ namespace TwnsBwActionPlannerView {
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
                     const image     = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
+                    image.smoothing = false;
                     image.x         = x * _GRID_WIDTH;
                     image.y         = y * _GRID_HEIGHT;
                     image.visible   = false;
@@ -178,11 +179,12 @@ namespace TwnsBwActionPlannerView {
             this._imgsForMovableGrids = images;
         }
         private _initConForMoveDestination(): void {
-            this._conForMoveDestination.removeChildren();
-            this._imgForMoveDestination     = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
-            this._imgForMoveDestination.x   = 0;
-            this._imgForMoveDestination.y   = 0;
-            this._conForMoveDestination.addChild(this._imgForMoveDestination);
+            const img       = this._imgForMoveDestination;
+            img.smoothing   = false;
+
+            const container = this._conForMoveDestination;
+            container.removeChildren();
+            container.addChild(img);
         }
         private _initConForAttackableGrids(): void {
             this._conForAttackableGrids.removeChildren();
@@ -193,6 +195,7 @@ namespace TwnsBwActionPlannerView {
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
                     const image     = new TwnsUiImage.UiImage(_ATTACKABLE_GRID_FRAMES[0]);
+                    image.smoothing = false;
                     image.x         = x * _GRID_WIDTH;
                     image.y         = y * _GRID_HEIGHT;
                     image.visible   = false;
@@ -684,9 +687,10 @@ namespace TwnsBwActionPlannerView {
         if (!source) {
             return null;
         } else {
-            const image = new TwnsUiImage.UiImage(source);
-            image.x = curr.x * _GRID_WIDTH;
-            image.y = curr.y * _GRID_HEIGHT;
+            const image     = new TwnsUiImage.UiImage(source);
+            image.smoothing = false;
+            image.x         = curr.x * _GRID_WIDTH;
+            image.y         = curr.y * _GRID_HEIGHT;
             return image;
         }
     }

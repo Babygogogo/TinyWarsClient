@@ -145,10 +145,11 @@ namespace TwnsBwGridVisualEffectView {
     }
 
     function createEffectDive(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new TwnsUiImage.UiImage(`c04_t08_s07_f01`);
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
-        img.x       = DIVE_OFFSET_X + pos.x;
-        img.y       = DIVE_OFFSET_Y + pos.y;
+        const img       = new TwnsUiImage.UiImage(`c04_t08_s07_f01`);
+        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        img.smoothing   = false;
+        img.x           = DIVE_OFFSET_X + pos.x;
+        img.y           = DIVE_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 7; ++i) {
@@ -160,10 +161,11 @@ namespace TwnsBwGridVisualEffectView {
     }
 
     function createEffectExplosion(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new TwnsUiImage.UiImage(`c04_t08_s01_f01`);
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
-        img.x       = EXPLOSION_OFFSET_X + pos.x;
-        img.y       = EXPLOSION_OFFSET_Y + pos.y;
+        const img       = new TwnsUiImage.UiImage(`c04_t08_s01_f01`);
+        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        img.smoothing   = false;
+        img.x           = EXPLOSION_OFFSET_X + pos.x;
+        img.y           = EXPLOSION_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 9; ++i) {
@@ -179,10 +181,11 @@ namespace TwnsBwGridVisualEffectView {
     }
 
     function createEffectDamage(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
-        img.x       = DAMAGE_OFFSET_X + pos.x;
-        img.y       = DAMAGE_OFFSET_Y + pos.y;
+        const img       = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
+        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        img.smoothing   = false;
+        img.x           = DAMAGE_OFFSET_X + pos.x;
+        img.y           = DAMAGE_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 8; ++i) {
@@ -232,10 +235,11 @@ namespace TwnsBwGridVisualEffectView {
     }
 
     function createEffectSiloExplosion(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
-        img.x       = DAMAGE_OFFSET_X + pos.x;
-        img.y       = DAMAGE_OFFSET_Y + pos.y;
+        const img       = new TwnsUiImage.UiImage(`c04_t08_s02_f01`);
+        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        img.smoothing   = false;
+        img.x           = DAMAGE_OFFSET_X + pos.x;
+        img.y           = DAMAGE_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 8; ++i) {
@@ -253,10 +257,11 @@ namespace TwnsBwGridVisualEffectView {
     }
 
     function createEffectSkillActivation(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new TwnsUiImage.UiImage(`c04_t08_s06_f01`);
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
-        img.x       = SKILL_ACTIVATION_OFFSET_X + pos.x;
-        img.y       = SKILL_ACTIVATION_OFFSET_Y + pos.y;
+        const img       = new TwnsUiImage.UiImage(`c04_t08_s06_f01`);
+        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        img.smoothing   = false;
+        img.x           = SKILL_ACTIVATION_OFFSET_X + pos.x;
+        img.y           = SKILL_ACTIVATION_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 34; ++i) {
@@ -268,10 +273,11 @@ namespace TwnsBwGridVisualEffectView {
     }
 
     function createEffectSurface(gridIndex: GridIndex): egret.DisplayObject {
-        const img   = new TwnsUiImage.UiImage(`c04_t08_s08_f01`);
-        const pos   = GridIndexHelpers.createPointByGridIndex(gridIndex);
-        img.x       = DAMAGE_OFFSET_X + pos.x;
-        img.y       = DAMAGE_OFFSET_Y + pos.y;
+        const img       = new TwnsUiImage.UiImage(`c04_t08_s08_f01`);
+        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        img.smoothing   = false;
+        img.x           = DAMAGE_OFFSET_X + pos.x;
+        img.y           = DAMAGE_OFFSET_Y + pos.y;
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 5; ++i) {
@@ -283,9 +289,10 @@ namespace TwnsBwGridVisualEffectView {
     }
 
     function createEffectAiming(gridIndex: GridIndex, timeMs: number): egret.DisplayObject {
-        const img   = new TwnsUiImage.UiImage(_IMG_SOURCES_FOR_AIMING[0]);
-        img.x       = _GRID_WIDTH * (gridIndex.x - 1);
-        img.y       = _GRID_HEIGHT * (gridIndex.y - 1);
+        const img       = new TwnsUiImage.UiImage(_IMG_SOURCES_FOR_AIMING[0]);
+        img.smoothing   = false;
+        img.x           = _GRID_WIDTH * (gridIndex.x - 1);
+        img.y           = _GRID_HEIGHT * (gridIndex.y - 1);
 
         const totalFramesCount  = _IMG_SOURCES_FOR_AIMING.length;
         let frameIndex          = 0;
