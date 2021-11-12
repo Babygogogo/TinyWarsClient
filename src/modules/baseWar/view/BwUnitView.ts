@@ -69,7 +69,9 @@ namespace TwnsBwUnitView {
         }
 
         public resetAllViews(): void {
-            this._isDark = Helpers.getExisted(this.getUnit()).getActionState() === Types.UnitActionState.Acted;
+            const unit      = Helpers.getExisted(this.getUnit());
+            this._isDark    = unit.getActionState() === Types.UnitActionState.Acted;
+            this._setImgUnitFlippedX(unit.getPlayerIndex() % 2 === 0);
             this.resetStateAnimationFrames();
             this.showUnitAnimation(UnitAnimationType.Stand);
             this.updateImageHp();
@@ -146,7 +148,6 @@ namespace TwnsBwUnitView {
             const unit                  = Helpers.getExisted(this.getUnit());
             const war                   = unit.getWar();
             const playerIndex           = unit.getPlayerIndex();
-            const skinIdMod             = unit.getSkinId() % 2;
             const unitType              = unit.getUnitType();
             const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const isAlwaysVisible       = watcherTeamIndexes.has(unit.getTeamIndex());
@@ -163,9 +164,9 @@ namespace TwnsBwUnitView {
                 const currentX  = gridIndex.x;
                 const previousX = path[i - 1].x;
                 if (currentX < previousX) {
-                    tween.call(() => this._setImgUnitFlippedX(skinIdMod === 1));
+                    tween.call(() => this._setImgUnitFlippedX(true));
                 } else if (currentX > previousX) {
-                    tween.call(() => this._setImgUnitFlippedX(skinIdMod === 0));
+                    tween.call(() => this._setImgUnitFlippedX(false));
                 }
 
                 if (!isAlwaysVisible) {
@@ -210,7 +211,7 @@ namespace TwnsBwUnitView {
             return new Promise<void>(resolve => {
                 if (!aiming) {
                     tween.call(() => {
-                        this._setImgUnitFlippedX(false);
+                        this._setImgUnitFlippedX(playerIndex % 2 === 0);
                         if ((isBlocked)                                         &&
                             (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
@@ -238,7 +239,7 @@ namespace TwnsBwUnitView {
                     .call(() => {
                         cursor.setIsMovableByTouches(true);
                         cursor.setIsVisible(true);
-                        this._setImgUnitFlippedX(false);
+                        this._setImgUnitFlippedX(playerIndex % 2 === 0);
                         if ((isBlocked)                                         &&
                             (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
@@ -271,7 +272,6 @@ namespace TwnsBwUnitView {
 
             const unit          = Helpers.getExisted(this.getUnit());
             const war           = unit.getWar();
-            const skinIdMod     = unit.getSkinId() % 2;
             const unitType      = unit.getUnitType();
             const tween         = egret.Tween.get(this);
             if ((path.length > 0) || (aiming)) {
@@ -285,9 +285,9 @@ namespace TwnsBwUnitView {
                 const previousNode  = path[i - 1];
                 const previousX     = Helpers.getExisted(previousNode.gridIndex?.x, ClientErrorCode.BwUnitView_MoveAlongExtraPath_02);
                 if (currentX < previousX) {
-                    tween.call(() => this._setImgUnitFlippedX(skinIdMod === 1));
+                    tween.call(() => this._setImgUnitFlippedX(true));
                 } else if (currentX > previousX) {
-                    tween.call(() => this._setImgUnitFlippedX(skinIdMod === 0));
+                    tween.call(() => this._setImgUnitFlippedX(false));
                 }
                 tween.call(() => {
                     this.visible = (!!previousNode.isVisible) || (!!node.isVisible);
@@ -309,7 +309,7 @@ namespace TwnsBwUnitView {
             return new Promise<void>(resolve => {
                 if (!aiming) {
                     tween.call(() => {
-                        this._setImgUnitFlippedX(false);
+                        this._setImgUnitFlippedX(unit.getPlayerIndex() % 2 === 0);
                         if ((isBlockedInEnd) && (isVisibleInEnd)) {
                             war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
@@ -331,7 +331,7 @@ namespace TwnsBwUnitView {
                         cursor.setIsMovableByTouches(true);
                         cursor.setIsVisible(true);
 
-                        this._setImgUnitFlippedX(false);
+                        this._setImgUnitFlippedX(unit.getPlayerIndex() % 2 === 0);
                         if ((isBlockedInEnd) && (isVisibleInEnd)) {
                             war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
