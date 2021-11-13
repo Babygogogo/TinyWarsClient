@@ -9,7 +9,7 @@
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="140" height="60">
-                        <e:Group id="_conUnitView" width="60" height="100" x="0" scaleX="0.5" scaleY="0.5"
+                        <e:Group id="_conUnitView" width="60" height="100" x="0" scaleX="1.5" scaleY="1.5"
                                  verticalCenter="4" />
                         <TwnsUiLabel:UiLabel id="_labelAction" text="Label" size="20" verticalAlign="middle"
                                              textAlign="left" right="0" left="40" top="0" bottom="0" />

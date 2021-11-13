@@ -11,12 +11,12 @@
 // import TwnsBwUnit           from "../model/BwUnit";
 // import TwnsBwUnitView       from "./BwUnitView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwActionPlannerView {
     import NotifyType   = TwnsNotifyType.NotifyType;
     import State        = Types.ActionPlannerState;
     import GridIndex    = Types.GridIndex;
     import Direction    = Types.Direction;
-    import BwUnitView   = TwnsBwUnitView.BwUnitView;
 
     const _PATH_GRID_SOURCE_EMPTY               = ``;
     const _PATH_GRID_SOURCE_LINE_VERTICAL       = `c08_t01_s01_f01`;
@@ -97,7 +97,7 @@ namespace TwnsBwActionPlannerView {
         private readonly _imgForMoveDestination = new TwnsUiImage.UiImage(_MOVABLE_GRID_FRAMES[0]);
 
         private _conForUnits            = new egret.DisplayObjectContainer();
-        private _focusUnitViews         = new Map<number, BwUnitView>();
+        private _focusUnitViews         = new Map<number, TwnsBwUnitView.BwUnitView>();
 
         private _notifyEvents: Notify.Listener[] = [
             { type: NotifyType.GridAnimationTick,       callback: this._onNotifyGridAnimationTick },
@@ -664,7 +664,7 @@ namespace TwnsBwActionPlannerView {
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _addUnitView(unit: TwnsBwUnit.BwUnit, gridIndex: GridIndex, alpha = 1): void {
-            const view = new BwUnitView().init(unit).startRunningView();
+            const view = new TwnsBwUnitView.BwUnitView().init(unit).startRunningView();
             // view.alpha = alpha;
             _resetUnitViewXy(view, gridIndex);
             view.showUnitAnimation(Types.UnitAnimationType.Move);
@@ -695,7 +695,7 @@ namespace TwnsBwActionPlannerView {
         }
     }
 
-    function _resetUnitViewXy(view: BwUnitView, gridIndex: GridIndex): void {
+    function _resetUnitViewXy(view: TwnsBwUnitView.BwUnitView, gridIndex: GridIndex): void {
         view.x  = gridIndex.x * _GRID_WIDTH;
         view.y  = gridIndex.y * _GRID_HEIGHT;
     }

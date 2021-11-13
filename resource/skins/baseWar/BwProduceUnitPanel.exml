@@ -6,7 +6,7 @@
                          scale9Grid="1,1,2,2" locked="true" />
     <e:Group id="_group" width="820" height="390" horizontalCenter="0" verticalCenter="0">
         <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
-                             source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" alpha="0.9"/>
+                             source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" alpha="0.9" />
         <TwnsUiScrollList:UiScrollList id="_listUnit" width="780" height="300" y="20" horizontalCenter="0">
             <e:List requireSelection="true">
                 <e:itemRendererSkinName>
@@ -17,7 +17,7 @@
                             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" bottom="0"
                                                  x="10" y="10" source="uncompressedColorYellow0001" height="1"
                                                  visible.up="false" locked="true" />
-                            <e:Group id="_conUnitView" scaleX="0.6" scaleY="0.6" touchChildren="false"
+                            <e:Group id="_conUnitView" scaleX="1.8" scaleY="1.8" touchChildren="false"
                                      touchEnabled="false" left="0" y="10" />
                             <e:Group x="50" verticalCenter="4" touchEnabled="false" touchThrough="true">
                                 <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="12" textColor="0xffffff" y="0"

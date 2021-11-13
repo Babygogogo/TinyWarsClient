@@ -24,7 +24,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeTopPanel {
-    import BwUnitView               = TwnsBwUnitView.BwUnitView;
     import MeDrawer                 = TwnsMeDrawer.MeDrawer;
     import MeWar                    = TwnsMeWar.MeWar;
     import MeChooseTileBasePanel    = TwnsMeChooseTileBasePanel.MeChooseTileBasePanel;
@@ -61,7 +60,7 @@ namespace TwnsMeTopPanel {
         private readonly _btnSymmetry!                  : TwnsUiButton.UiButton;
         private readonly _btnMenu!                      : TwnsUiButton.UiButton;
 
-        private _unitView   = new BwUnitView();
+        private _unitView   = new TwnsBwUnitView.BwUnitView();
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
         public static show(): void {

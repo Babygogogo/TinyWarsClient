@@ -18,10 +18,10 @@
 // import UserModel                from "../../user/model/UserModel";
 // import TwnsWarMapUnitView       from "../../warMap/view/WarMapUnitView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonDamageChartPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import WarMapUnitView   = TwnsWarMapUnitView.WarMapUnitView;
     import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
 
@@ -69,7 +69,7 @@ namespace TwnsCommonDamageChartPanel {
 
         private _selectedIndex                  : number | null = null;
         private _dataForListUnit?               : DataForUnitRenderer[];
-        private readonly _unitView              = new WarMapUnitView();
+        private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
 
         public static show(): void {
             if (!CommonDamageChartPanel._instance) {
@@ -665,7 +665,7 @@ namespace TwnsCommonDamageChartPanel {
         private readonly _group!                : eui.Group;
         private readonly _imgBg!                : TwnsUiImage.UiImage;
         private readonly _conView!              : eui.Group;
-        private readonly _unitView              = new WarMapUnitView();
+        private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
         private readonly _tileView!             : TwnsUiImage.UiImage;
         private readonly _labelPrimaryAttack!   : TwnsUiLabel.UiLabel;
         private readonly _labelSecondaryAttack! : TwnsUiLabel.UiLabel;

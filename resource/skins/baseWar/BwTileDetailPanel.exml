@@ -9,7 +9,7 @@
                              source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
         <e:Group left="30" top="20" bottom="20">
             <e:Group left="0" top="0">
-                <e:Group id="_conTileView" y="34" x="0" touchChildren="false" touchEnabled="false" scaleX="0.4" scaleY="0.4"></e:Group>
+                <e:Group id="_conTileView" y="34" x="0" touchChildren="false" touchEnabled="false" scaleX="1.2" scaleY="1.2"></e:Group>
                 <e:Group x="110" top="0">
                     <TwnsUiLabel:UiLabel id="_labelName" text="地形名五字" size="20" textColor="0xffffff" y="0" x="0"
                                          bold="true" />
@@ -60,7 +60,7 @@
                                                      source="uncompressedColorBlack0002" scale9Grid="1,1,2,2" />
                                 <TwnsUiImage:UiImage top="0" bottom="0" source="uncompressedColorWhite0000" width="1"
                                                      left="0" />
-                                <e:Group id="_conView" y="6" scaleX="0.3" scaleY="0.3" touchChildren="false"
+                                <e:Group id="_conView" y="6" scaleX="0.9" scaleY="0.9" touchChildren="false"
                                          touchEnabled="false" left="4" />
                                 <TwnsUiLabel:UiLabel id="_labelMoveCost" text="9" size="18" textColor="0xffffff" x="36"
                                                      verticalCenter="1" />

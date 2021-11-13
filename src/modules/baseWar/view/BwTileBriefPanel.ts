@@ -15,6 +15,7 @@
 // import TwnsBwTileDetailPanel    from "./BwTileDetailPanel";
 // import TwnsBwTileView           from "./BwTileView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTileBriefPanel {
     import Tween                = egret.Tween;
     import NotifyType           = TwnsNotifyType.NotifyType;

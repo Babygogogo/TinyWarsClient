@@ -20,8 +20,8 @@
 // import TwnsBwCursor             from "../model/BwCursor";
 // import TwnsBwUnitView           from "./BwUnitView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitListPanel {
-    import BwUnitView       = TwnsBwUnitView.BwUnitView;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import BwWar            = TwnsBwWar.BwWar;
@@ -184,7 +184,7 @@ namespace TwnsBwUnitListPanel {
         private readonly _imgHp!            : TwnsUiImage.UiImage;
         private readonly _imgFuel!          : TwnsUiImage.UiImage;
         private readonly _imgState!         : TwnsUiImage.UiImage;
-        private readonly _unitView          = new BwUnitView();
+        private readonly _unitView          = new TwnsBwUnitView.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

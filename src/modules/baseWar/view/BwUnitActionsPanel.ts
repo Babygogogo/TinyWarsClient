@@ -16,12 +16,12 @@
 // import TwnsBwWar                from "../model/BwWar";
 // import TwnsBwUnitView           from "./BwUnitView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitActionsPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import UnitActionType   = Types.UnitActionType;
     import BwWar            = TwnsBwWar.BwWar;
-    import BwUnitView       = TwnsBwUnitView.BwUnitView;
 
     export type OpenDataForBwUnitActionsPanel = {
         war         : BwWar;
@@ -181,7 +181,7 @@ namespace TwnsBwUnitActionsPanel {
         private readonly _conUnitView!      : eui.Group;
         private readonly _imgBottomLine!    : TwnsUiImage.UiImage;
 
-        private readonly _unitView      = new BwUnitView();
+        private readonly _unitView      = new TwnsBwUnitView.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

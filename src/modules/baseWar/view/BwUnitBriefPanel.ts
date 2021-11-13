@@ -19,11 +19,11 @@
 // import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
 // import TwnsBwUnitView           from "./BwUnitView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitBriefPanel {
     import BwCoListPanel        = TwnsCommonCoListPanel.CommonCoListPanel;
     import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
     import BwUnitDetailPanel    = TwnsBwUnitDetailPanel.BwUnitDetailPanel;
-    import BwUnitView           = TwnsBwUnitView.BwUnitView;
     import BwWar                = TwnsBwWar.BwWar;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import BwUnit               = TwnsBwUnit.BwUnit;
@@ -302,7 +302,7 @@ namespace TwnsBwUnitBriefPanel {
         private readonly _imgHp!        : TwnsUiImage.UiImage;
         private readonly _imgFuel!      : TwnsUiImage.UiImage;
         private readonly _imgState!     : TwnsUiImage.UiImage;
-        private readonly _unitView      = new BwUnitView();
+        private readonly _unitView      = new TwnsBwUnitView.BwUnitView();
 
         private _unit               : BwUnit | null = null;
         private _isChildrenCreated  = false;

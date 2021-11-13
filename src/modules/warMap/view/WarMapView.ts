@@ -23,7 +23,6 @@ namespace TwnsWarMapView {
     import ISerialWar       = WarSerialization.ISerialWar;
     import ISerialTile      = WarSerialization.ISerialTile;
     import ISerialPlayer    = WarSerialization.ISerialPlayer;
-    import WarMapUnitView   = TwnsWarMapUnitView.WarMapUnitView;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -131,17 +130,17 @@ namespace TwnsWarMapView {
             for (let x = 0; x <= mapWidth; ++x) {
                 const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                 img.smoothing   = false;
-                img.width       = 2;
+                img.width       = 1;
                 img.height      = borderHeight;
-                img.x           = (x * GRID_WIDTH) - 1;
+                img.x           = (x * GRID_WIDTH) - 0.5;
                 gridBorderLayer.addChild(img);
             }
             for (let y = 0; y <= mapHeight; ++y) {
                 const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                 img.smoothing   = false;
                 img.width       = borderWidth;
-                img.height      = 2;
-                img.y           = (y * GRID_HEIGHT) - 1;
+                img.height      = 1;
+                img.y           = (y * GRID_HEIGHT) - 0.5;
                 gridBorderLayer.addChild(img);
             }
             this._updateGridBorderLayerVisible();
@@ -307,7 +306,7 @@ namespace TwnsWarMapView {
     }
 
     class WarMapUnitMapView extends egret.DisplayObjectContainer {
-        private readonly _unitViews             : WarMapUnitView[] = [];
+        private readonly _unitViews             : TwnsWarMapUnitView.WarMapUnitView[] = [];
         private readonly _airLayer              = new egret.DisplayObjectContainer();
         private readonly _groundLayer           = new egret.DisplayObjectContainer();
         private readonly _seaLayer              = new egret.DisplayObjectContainer();
@@ -378,9 +377,9 @@ namespace TwnsWarMapView {
         }
         private _reviseZOrderForSingleLayer(layer: egret.DisplayObjectContainer): void {
             const unitsCount    = layer.numChildren;
-            const unitViews     : WarMapUnitView[] = [];
+            const unitViews     : TwnsWarMapUnitView.WarMapUnitView[] = [];
             for (let i = 0; i < unitsCount; ++i) {
-                unitViews.push(layer.getChildAt(i) as WarMapUnitView);
+                unitViews.push(layer.getChildAt(i) as TwnsWarMapUnitView.WarMapUnitView);
             }
             unitViews.sort((v1, v2): number => {
                 const g1 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v1.getUnitData()?.gridIndex));
@@ -397,7 +396,7 @@ namespace TwnsWarMapView {
 
         private _addUnit(data: Types.WarMapUnitViewData, tickCount: number): void {
             const unitType = Helpers.getExisted(data.unitType);
-            const view     = new WarMapUnitView(data, tickCount);
+            const view     = new TwnsWarMapUnitView.WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
             const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());

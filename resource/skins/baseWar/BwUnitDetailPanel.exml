@@ -9,7 +9,7 @@
                              source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
         <e:Group x="30" y="20" width="300">
             <e:Group y="0" height="40" left="0">
-                <e:Group id="_conUnitView" touchChildren="false" touchEnabled="false" scaleX="0.5" scaleY="0.5" top="0" />
+                <e:Group id="_conUnitView" touchChildren="false" touchEnabled="false" scaleX="1.5" scaleY="1.5" top="0" />
                 <e:Group x="110" y="0">
                     <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="20" textColor="0xffffff" x="0" bold="true"
                                          y="0" />
@@ -87,7 +87,7 @@
                                     <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0002" left="0"
                                                          right="0" top="0" bottom="0" scale9Grid="1,1,2,2" alpha="0.9"
                                                          locked="true" />
-                                    <e:Group id="_conView" y="3" scaleX="0.27" scaleY="0.27" x="20"
+                                    <e:Group id="_conView" y="3" scaleX="0.81" scaleY="0.81" x="20"
                                              touchChildren="false" touchEnabled="false">
                                         <TwnsUiImage:UiImage id="_tileView" y="-72" />
                                     </e:Group>

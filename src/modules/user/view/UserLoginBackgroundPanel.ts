@@ -20,8 +20,8 @@
 // import TwnsWarMapUnitView           from "../../warMap/view/WarMapUnitView";
 // import TwnsUserSetSoundPanel        from "./UserSetSoundPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserLoginBackgroundPanel {
-    import WarMapUnitView           = TwnsWarMapUnitView.WarMapUnitView;
     import CommonChangeVersionPanel = TwnsCommonChangeVersionPanel.CommonChangeVersionPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -103,7 +103,7 @@ namespace TwnsUserLoginBackgroundPanel {
             const group = this._groupUnits;
             const tick  = Timer.getUnitAnimationTickCount();
             for (let i = group.numChildren - 1; i >= 0; --i) {
-                ((group.getChildAt(i) as eui.Component).getChildAt(0) as WarMapUnitView).updateOnAnimationTick(tick);
+                ((group.getChildAt(i) as eui.Component).getChildAt(0) as TwnsWarMapUnitView.WarMapUnitView).updateOnAnimationTick(tick);
             }
         }
         private _onMsgCommonLatestConfigVersion(): void {

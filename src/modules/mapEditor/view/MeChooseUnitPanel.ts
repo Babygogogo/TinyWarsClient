@@ -16,8 +16,8 @@
 // import TwnsMeDrawer             from "../model/MeDrawer";
 // import MeModel                  from "../model/MeModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeChooseUnitPanel {
-    import BwUnitView       = TwnsBwUnitView.BwUnitView;
     import DataForDrawUnit  = TwnsMeDrawer.DataForDrawUnit;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -184,7 +184,7 @@ namespace TwnsMeChooseUnitPanel {
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _conUnitView!  : eui.Group;
 
-        private _unitView   = new BwUnitView();
+        private _unitView   = new TwnsBwUnitView.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

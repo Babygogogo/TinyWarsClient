@@ -85,17 +85,17 @@ namespace TwnsBwTileMapView {
             for (let x = 0; x <= mapWidth; ++x) {
                 const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                 img.smoothing   = false;
-                img.width       = 2;
+                img.width       = 1;
                 img.height      = borderHeight;
-                img.x           = (x * GRID_WIDTH) - 1;
+                img.x           = (x * GRID_WIDTH) - 0.5;
                 gridBorderLayer.addChild(img);
             }
             for (let y = 0; y <= mapHeight; ++y) {
                 const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                 img.smoothing   = false;
                 img.width       = borderWidth;
-                img.height      = 2;
-                img.y           = (y * GRID_HEIGHT) - 1;
+                img.height      = 1;
+                img.y           = (y * GRID_HEIGHT) - 0.5;
                 gridBorderLayer.addChild(img);
             }
             this._updateGridBorderLayerVisible();

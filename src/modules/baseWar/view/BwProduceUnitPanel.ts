@@ -24,11 +24,11 @@
 // import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
 // import TwnsBwUnitView           from "./BwUnitView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwProduceUnitPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import BwUnitDetailPanel    = TwnsBwUnitDetailPanel.BwUnitDetailPanel;
-    import BwUnitView           = TwnsBwUnitView.BwUnitView;
     import UnitType             = Types.UnitType;
     import GridIndex            = Types.GridIndex;
     import BwWar                = TwnsBwWar.BwWar;
@@ -239,7 +239,7 @@ namespace TwnsBwProduceUnitPanel {
         private readonly _imgProduce!   : TwnsUiImage.UiImage;
         private readonly _labelProduce! : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView      = new BwUnitView();
+        private readonly _unitView      = new TwnsBwUnitView.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

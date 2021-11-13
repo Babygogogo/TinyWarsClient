@@ -14,9 +14,9 @@
                 <e:itemRendererSkinName>
                     <e:Skin width="160" height="50" currentState="up" states="down,up">
                         <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
-                                                 anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
-                                                 visible.up="false" />
+                            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2"
+                                                 anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
+                                                 top="0" bottom="0" visible.up="false" />
                             <TwnsUiLabel:UiLabel id="_labelName" text="选项名六个字" size="20" textColor="0xffffff"
                                                  verticalCenter="0" left="5" right="5" textAlign="center" />
                         </e:Group>
@@ -74,7 +74,7 @@
                             <e:Skin width="60" height="32">
                                 <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                                     <e:Group id="_conTileView" touchChildren="false" touchEnabled="false" left="0"
-                                             bottom="0" scaleX="0.4" scaleY="0.4" width="0" height="0" />
+                                             bottom="0" scaleX="1.2" scaleY="1.2" width="0" height="0" />
                                     <TwnsUiLabel:UiLabel id="_labelNum" text="20" size="16" textColor="0xffffff"
                                                          verticalCenter="0" x="32" />
                                 </e:Group>
@@ -92,7 +92,7 @@
                             <e:Skin width="60" height="32">
                                 <e:Group id="_group" width="60" height="32" x="0" y="0">
                                     <e:Group id="_conUnitView" touchChildren="false" touchEnabled="false" left="0"
-                                             top="2" scaleX="0.4" scaleY="0.4" />
+                                             top="2" scaleX="1.2" scaleY="1.2" />
                                     <TwnsUiLabel:UiLabel id="_labelNum" text="20" size="16" textColor="0xffffff"
                                                          verticalCenter="0" x="32" />
                                 </e:Group>

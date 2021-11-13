@@ -29,7 +29,6 @@
 namespace TwnsBwUnitDetailPanel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import WarMapUnitView           = TwnsWarMapUnitView.WarMapUnitView;
     import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
     import UnitType                 = Types.UnitType;
     import TileType                 = Types.TileType;
@@ -82,7 +81,7 @@ namespace TwnsBwUnitDetailPanel {
         private readonly _labelMain2!           : TwnsUiLabel.UiLabel;
         private readonly _labelSub2!            : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView              = new WarMapUnitView();
+        private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
 
         public static show(openData: OpenData): void {
             if (!BwUnitDetailPanel._instance) {
@@ -1056,7 +1055,7 @@ namespace TwnsBwUnitDetailPanel {
         private readonly _group!                : eui.Group;
         private readonly _imgBg!                : TwnsUiImage.UiImage;
         private readonly _conView!              : eui.Group;
-        private readonly _unitView              = new WarMapUnitView();
+        private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
         private readonly _tileView!             : TwnsUiImage.UiImage;
         private readonly _labelPrimaryAttack!   : TwnsUiLabel.UiLabel;
         private readonly _labelSecondaryAttack! : TwnsUiLabel.UiLabel;

@@ -23,8 +23,8 @@
 // import TwnsBwWar                from "../model/BwWar";
 // import TwnsBwTileView           from "./BwTileView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTileDetailPanel {
-    import WarMapUnitView   = TwnsWarMapUnitView.WarMapUnitView;
     import BwTile           = TwnsBwTile.BwTile;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -665,7 +665,7 @@ namespace TwnsBwTileDetailPanel {
         private readonly _group!            : eui.Group;
         private readonly _imgBg!            : TwnsUiImage.UiImage;
         private readonly _conView!          : eui.Group;
-        private readonly _unitView          = new WarMapUnitView();
+        private readonly _unitView          = new TwnsWarMapUnitView.WarMapUnitView();
         private readonly _labelMoveCost!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {

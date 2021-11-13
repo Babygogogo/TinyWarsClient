@@ -8,7 +8,7 @@
         <e:Group id="_groupMode" x="10" verticalCenter="0">
             <TwnsUiLabel:UiLabel id="_labelMode" text="Mode: Draw Unit" size="14" x="10" textColor="0xFFFFFF" y="10"
                                  width="120" />
-            <e:Group width="72" height="72" x="47" y="8" scaleX="0.25" scaleY="0.25">
+            <e:Group width="72" height="72" x="47" y="8" scaleX="0.75" scaleY="0.75">
                 <e:Group id="_conUnitView" left="0" top="0" />
                 <e:Group id="_conTileView" bottom="0" left="0" />
             </e:Group>

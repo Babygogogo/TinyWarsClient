@@ -45,7 +45,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWarMenuPanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import BwUnitView               = TwnsBwUnitView.BwUnitView;
     import DataForDrawUnit          = TwnsMeDrawer.DataForDrawUnit;
     import MeWar                    = TwnsMeWar.MeWar;
     import MeModifyMapNamePanel     = TwnsMeModifyMapNamePanel.MeModifyMapNamePanel;
@@ -883,7 +882,7 @@ namespace TwnsMeWarMenuPanel {
         private readonly _labelNum!     : TwnsUiLabel.UiLabel;
         private readonly _conUnitView!  : eui.Group;
 
-        private _unitView   = new BwUnitView();
+        private _unitView   = new TwnsBwUnitView.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
