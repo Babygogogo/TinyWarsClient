@@ -9,14 +9,15 @@
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="140" height="60">
-                        <e:Group id="_conUnitView" width="60" height="100" x="0" scaleX="1.5" scaleY="1.5"
-                                 verticalCenter="4" />
+                        <TwnsUiImage:UiImage bottom="0" left="0" right="0" top="0"
+                                             source="uncompressedColorTransparent0000" />
+                        <e:Group id="_conUnitView" x="0" scaleX="1.5" scaleY="1.5" y="10" width="0" height="0" />
                         <TwnsUiLabel:UiLabel id="_labelAction" text="Label" size="20" verticalAlign="middle"
-                                             textAlign="left" right="0" left="40" top="0" bottom="0" />
+                                             textAlign="left" width="100" x="40" verticalCenter="0" />
                         <TwnsUiLabel:UiLabel id="_labelCost" text="费用: 99999" size="12" textColor="0x00ff00" y="4"
                                              x="40" />
-                        <TwnsUiImage:UiImage id="_imgBottomLine" height="1" source="uncompressedColorWhite0000" bottom="0"
-                                             left="0" right="0" />
+                        <TwnsUiImage:UiImage id="_imgBottomLine" height="1" source="uncompressedColorWhite0000"
+                                             bottom="0" left="0" right="0" />
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:layout>
