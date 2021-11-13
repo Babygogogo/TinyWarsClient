@@ -25,7 +25,6 @@ namespace TwnsUiZoomableComponent {
         private _spacingForBottom               = 0;
         private _spacingForLeft                 = 0;
         private _spacingForRight                = 0;
-        private _isMouseWheelListenerEnabled    = false;
         private _isTouchListenerEnabled         = false;
         private _currGlobalTouchPoints          = new Map<number, Point>();
         private _prevGlobalTouchPoints          = new Map<number, Point>();
@@ -71,9 +70,9 @@ namespace TwnsUiZoomableComponent {
         }
 
         public setMouseWheelListenerEnabled(enabled: boolean): void {
-            if ((enabled) && (!this._isMouseWheelListenerEnabled)) {
+            if (enabled) {
                 Notify.addEventListener(NotifyType.MouseWheel, this._onNotifyMouseWheel, this);
-            } else if ((!enabled) && (this._isMouseWheelListenerEnabled)) {
+            } else {
                 Notify.removeEventListener(NotifyType.MouseWheel, this._onNotifyMouseWheel, this);
             }
         }

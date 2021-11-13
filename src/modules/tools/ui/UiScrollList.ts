@@ -288,14 +288,7 @@ namespace TwnsUiScrollList {
             this._cachedScrollHorPercentage = null;
             this._cachedScrollVerPercentage = null;
 
-            if (this.getIsOpening()) {
-                const dataProvider = this._getDataProvider();
-                if (dataProvider == null) {
-                    throw Helpers.newError(`UiScrollList.clear() empty dataProvider.`, ClientErrorCode.UiScrollList_Clear_00);
-                }
-
-                dataProvider.removeAll();
-            }
+            this._getDataProvider()?.removeAll();
         }
 
         public setSelectedIndex(index: number): void {
