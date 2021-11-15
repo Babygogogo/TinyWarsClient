@@ -1794,6 +1794,17 @@ namespace TwnsClientErrorCode {
         PanelManager_OpenViaCachedPanel_08,
         PanelManager_OpenViaCachedPanel_09,
 
+        PanelManager_AddToQueue_00,
+        PanelManager_AddToQueue_01,
+        PanelManager_AddToQueue_02,
+        PanelManager_AddToQueue_03,
+        PanelManager_AddToQueue_04,
+        PanelManager_AddToQueue_05,
+        PanelManager_AddToQueue_06,
+        PanelManager_AddToQueue_07,
+        PanelManager_AddToQueue_08,
+        PanelManager_AddToQueue_09,
+
         DestructionHelpers_DestroyUnitOnMap_00,
         DestructionHelpers_DestroyUnitOnMap_01,
         DestructionHelpers_DestroyUnitOnMap_02,

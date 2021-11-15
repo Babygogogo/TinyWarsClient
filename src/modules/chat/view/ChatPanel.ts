@@ -63,7 +63,6 @@ namespace TwnsChatPanel {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/chat/ChatPanel.exml";
         }
 
         protected override _onOpening(): void {
@@ -200,7 +199,7 @@ namespace TwnsChatPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        protected override _showOpenAnimation(): void {
+        protected override async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -221,8 +220,10 @@ namespace TwnsChatPanel {
                 beginProps  : { alpha: 0, bottom: -40 },
                 endProps    : { alpha: 1, bottom: 0 },
             });
+
+            await Helpers.wait(200);
         }
-        protected override _showCloseAnimation(): void {
+        protected override async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 1 },
@@ -232,7 +233,6 @@ namespace TwnsChatPanel {
                 obj         : this._groupChannel,
                 beginProps  : { alpha: 1, left: 0 },
                 endProps    : { alpha: 0, left: -40 },
-                callback    : () => this._onCloseAnimationEnded(),
             });
             Helpers.resetTween({
                 obj         : this._groupMessage,
@@ -244,6 +244,8 @@ namespace TwnsChatPanel {
                 beginProps  : { alpha: 1, bottom: 0 },
                 endProps    : { alpha: 0, bottom: -40 },
             });
+
+            await Helpers.wait(200);
         }
 
         private _updateComponentsForLanguage(): void {

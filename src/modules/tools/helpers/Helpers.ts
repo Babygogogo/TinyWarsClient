@@ -411,6 +411,11 @@ namespace Helpers {
             return result;
         };
     }
+    export function wait(timeMs: number): Promise<void> {
+        return new Promise<void>(resolve => {
+            egret.setTimeout(resolve, null, timeMs);
+        });
+    }
 
     function getColorMatrix(color: Types.ColorType, value = 100): number[] | null {
         switch (color) {

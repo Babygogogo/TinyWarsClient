@@ -5,7 +5,7 @@ namespace TwnsPanelConfig {
 
     export type PanelConfig<T> = {
         cls             : new () => TwnsUiPanel2.UiPanel2<T>;
-        name            : string;
+        skinName        : string;
         layer           : LayerType;
         isExclusive?    : boolean;
         needCache?      : boolean;
@@ -19,14 +19,10 @@ namespace TwnsPanelConfig {
         PanelConfigDict = {
             ChatPanel  : {
                 cls         : TwnsChatPanel?.ChatPanel,
-                name        : ``,
+                skinName    : `resource/skins/chat/ChatPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
             } as PanelConfig<TwnsChatPanel.OpenData>,
         };
-
-        for (const name in PanelConfigDict) {
-            (PanelConfigDict as any)[name].name = name;
-        }
     }
 }
