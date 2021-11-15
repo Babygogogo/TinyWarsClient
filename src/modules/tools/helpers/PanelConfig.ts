@@ -4,11 +4,11 @@ namespace TwnsPanelConfig {
     import LayerType    = Types.LayerType;
 
     export type PanelConfig<T> = {
-        cls         : new () => TwnsUiPanel2.UiPanel2<T>;
-        name        : string;
-        layer       : LayerType;
-        isExclusive : boolean;
-        needCache?  : boolean;
+        cls             : new () => TwnsUiPanel2.UiPanel2<T>;
+        name            : string;
+        layer           : LayerType;
+        isExclusive?    : boolean;
+        needCache?      : boolean;
     };
 
     export let PanelConfigDict: {
@@ -21,7 +21,6 @@ namespace TwnsPanelConfig {
                 cls         : TwnsChatPanel?.ChatPanel,
                 name        : ``,
                 layer       : LayerType.Hud0,
-                isExclusive : false,
                 needCache   : true,
             } as PanelConfig<TwnsChatPanel.OpenData>,
         };

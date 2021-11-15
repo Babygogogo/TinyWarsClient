@@ -1,7 +1,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsPanelManager {
-    import PanelConfig  = TwnsPanelConfig.PanelConfig;
+    import PanelConfig      = TwnsPanelConfig.PanelConfig;
+    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     const _IS_CACHE_ENABLED         = true;
     const _openingPanelSet          = new Set<PanelConfig<any>>();
@@ -39,13 +40,17 @@ namespace TwnsPanelManager {
         return panel;
     }
     async function openViaRunningPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
-        const panel = Helpers.getExisted(getRunningPanel(config));
+        const panel = Helpers.getExisted(getRunningPanel(config), ClientErrorCode.PanelManager_OpenViaRunningPanel_00);
         if (!checkIsClosingPanel(config)) {
             Logger.warn(`Panel opened via running: ${panel.skinName}`);
             await panel.updateWithOpenData(openData);
         } else {
             Logger.warn(`Panel opened via closing: ${panel.skinName}`);
-            panel.removeEventListener(TwnsUiPanel2.EVENT_PANEL_CLOSE_ANIMATION_ENDED, Helpers.getExisted(getClosingPanelCallback(config)), null);
+            panel.removeEventListener(
+                TwnsUiPanel2.EVENT_PANEL_CLOSE_ANIMATION_ENDED,
+                Helpers.getExisted(getClosingPanelCallback(config), ClientErrorCode.PanelManager_OpenViaRunningPanel_01),
+                null
+            );
             deleteClosingPanelCallback(config);
 
             panel.stopCloseAnimation();
@@ -55,7 +60,7 @@ namespace TwnsPanelManager {
         return panel;
     }
     async function openViaCachedPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
-        const panel = Helpers.getExisted(getCachedPanel(config));
+        const panel = Helpers.getExisted(getCachedPanel(config), ClientErrorCode.PanelManager_OpenViaCachedPanel_00);
         const layer = StageManager.getLayer(config.layer);
         if (config.isExclusive) {
             layer.closeAllPanels();
