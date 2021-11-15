@@ -47,7 +47,7 @@ namespace ChatModel {
 
             } else if (msgToCategory === ChatCategory.WarAndTeam) {
                 addMessage(ChatCategory.WarAndTeam, msg, msgToTarget);
-                if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
+                if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.PanelConfigDict.ChatPanel))) {
                     UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
@@ -56,20 +56,20 @@ namespace ChatModel {
                     addMessage(ChatCategory.Private, msg, msgToTarget);
                 } else {
                     addMessage(ChatCategory.Private, msg, fromUserId);
-                    if ((showFloatText) && (!ChatPanel.getIsOpening())) {
+                    if ((showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.PanelConfigDict.ChatPanel))) {
                         UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                     }
                 }
 
             } else if (msgToCategory === ChatCategory.McrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
-                if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
+                if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.PanelConfigDict.ChatPanel))) {
                     UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 
             } else if (msgToCategory === ChatCategory.MfrRoom) {
                 addMessage(msgToCategory, msg, msgToTarget);
-                if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
+                if ((!isSentBySelf) && (showFloatText) && (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.PanelConfigDict.ChatPanel))) {
                     UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
                 }
 

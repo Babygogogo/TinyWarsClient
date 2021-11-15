@@ -136,7 +136,9 @@ namespace StageManager {
         public closeAllPanels(exceptions?: (TwnsUiPanel.UiPanel<any>)[]): void {
             for (let i = this.numChildren - 1; i >= 0; --i) {
                 const child = this.getChildAt(i);
-                if ((child instanceof TwnsUiPanel.UiPanel) && (!exceptions?.some(v => child === v))) {
+                if (((child instanceof TwnsUiPanel.UiPanel) || (child instanceof TwnsUiPanel2.UiPanel2)) &&
+                    (!exceptions?.some(v => child === v))
+                ) {
                     child.close();
                 }
             }

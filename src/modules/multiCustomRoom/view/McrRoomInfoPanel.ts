@@ -232,7 +232,7 @@ namespace TwnsMcrRoomInfoPanel {
         }
 
         private _onTouchedBtnChat(): void {
-            TwnsChatPanel.ChatPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, {
                 toMcrRoomId: this._getOpenData().roomId,
             });
         }

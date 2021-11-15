@@ -298,7 +298,7 @@ namespace TwnsUserSettingsPanel {
         }
         private _onTouchedBtnComplaint(): void {
             this.close();
-            TwnsChatPanel.ChatPanel.show({ toUserId: CommonConstants.AdminUserId });
+            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, { toUserId: CommonConstants.AdminUserId });
         }
         private _onTouchedBtnUnitsInfo(): void {
             TwnsCommonDamageChartPanel.CommonDamageChartPanel.show();

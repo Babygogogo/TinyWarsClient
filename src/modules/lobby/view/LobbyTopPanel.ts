@@ -93,7 +93,7 @@ namespace TwnsLobbyTopPanel {
 
         private _onTouchedGroupUserInfo(): void {
             UserOnlineUsersPanel.hide();
-            TwnsChatPanel.ChatPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.PanelConfigDict.ChatPanel);
             UserPanel.show({
                 userId: Helpers.getExisted(UserModel.getSelfUserId()),
             });

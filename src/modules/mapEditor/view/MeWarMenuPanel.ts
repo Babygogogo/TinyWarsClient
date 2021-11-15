@@ -560,7 +560,7 @@ namespace TwnsMeWarMenuPanel {
                 name    : Lang.getText(LangTextType.B0383),
                 callback: () => {
                     this.close();
-                    TwnsChatPanel.ChatPanel.show({});
+                    TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, {});
                 },
             };
         }

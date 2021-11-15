@@ -236,7 +236,7 @@ namespace TwnsMpwTopPanel {
 
         private _onTouchedBtnChat(): void {
             TwnsMpwWarMenuPanel.MpwWarMenuPanel.hide();
-            TwnsChatPanel.ChatPanel.show({});
+            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, {});
         }
 
         private _onTouchedBtnSettings(): void {

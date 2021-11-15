@@ -133,6 +133,7 @@ namespace FlowManager {
         CommonModel.init();
         BroadcastProxy.init();
         ChangeLogProxy.init();
+        TwnsPanelConfig.init();
 
         _removeLoadingDom();
         gotoLogin();

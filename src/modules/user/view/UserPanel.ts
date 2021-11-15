@@ -154,7 +154,7 @@ namespace TwnsUserPanel {
         private _onTouchedBtnChat(): void {
             const userId = this._getOpenData().userId;
             this.close();
-            TwnsChatPanel.ChatPanel.show({ toUserId: userId });
+            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, { toUserId: userId });
         }
         private _onTouchedBtnSetAvatar(): void {
             TwnsUserSetAvatarPanel.UserSetAvatarPanel.show();

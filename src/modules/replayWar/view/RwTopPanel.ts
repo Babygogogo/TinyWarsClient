@@ -178,7 +178,7 @@ namespace TwnsRwTopPanel {
         }
         private _onTouchedBtnChat(): void {
             RwWarMenuPanel.hide();
-            TwnsChatPanel.ChatPanel.show({});
+            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, {});
         }
         private async _onTouchedBtnFastRewind(): Promise<void> {
             const war = this._getWar();

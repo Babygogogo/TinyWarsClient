@@ -159,7 +159,7 @@ namespace TwnsCommonWarPlayerInfoPage {
         private _onTouchedBtnChat(): void {
             const userId = this._getData().playerInfo.userId;
             if (userId != null) {
-                TwnsChatPanel.ChatPanel.show({ toUserId: userId });
+                TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, { toUserId: userId });
             }
         }
 

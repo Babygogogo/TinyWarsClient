@@ -83,7 +83,7 @@ namespace TwnsLobbyBottomPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnMyInfo(): void {
             UserOnlineUsersPanel.hide();
-            TwnsChatPanel.ChatPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.PanelConfigDict.ChatPanel);
             UserPanel.show({
                 userId: Helpers.getExisted(UserModel.getSelfUserId()),
             });
@@ -92,10 +92,10 @@ namespace TwnsLobbyBottomPanel {
         private _onTouchedBtnChat(): void {
             UserOnlineUsersPanel.hide();
             UserPanel.hide();
-            if (!TwnsChatPanel.ChatPanel.getIsOpening()) {
-                TwnsChatPanel.ChatPanel.show({ toUserId: null });
+            if (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.PanelConfigDict.ChatPanel)) {
+                TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, { toUserId: null });
             } else {
-                TwnsChatPanel.ChatPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.PanelConfigDict.ChatPanel);
             }
         }
 

@@ -194,7 +194,7 @@ namespace TwnsSpwTopPanel {
 
         private _onTouchedBtnChat(): void {
             TwnsSpwWarMenuPanel.SpwWarMenuPanel.hide();
-            TwnsChatPanel.ChatPanel.show({});
+            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, {});
         }
 
         private _onTouchedBtnSettings(): void {
