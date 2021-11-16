@@ -1045,7 +1045,7 @@ namespace TwnsBwActionPlanner {
             this._updateView();
 
             SoundManager.playShortSfx(ShortSfxCode.CursorConfirm01);
-            TwnsBwProduceUnitPanel.BwProduceUnitPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwProduceUnitPanel, {
                 gridIndex,
                 war         : this._getWar(),
             });
@@ -1678,7 +1678,7 @@ namespace TwnsBwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getDataForUnitActionsPanel(): TwnsBwUnitActionsPanel.OpenDataForBwUnitActionsPanel {
+        protected _getDataForUnitActionsPanel(): TwnsBwUnitActionsPanel.OpenData {
             const destination           = this.getMovePathDestination();
             const actionUnitBeLoaded    = this._getActionUnitBeLoaded();
             const war                   = this._getWar();

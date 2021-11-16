@@ -45,15 +45,10 @@ namespace TwnsBwTileDetailPanel {
         BuildPoint,
     }
 
-    type OpenData = {
+    export type OpenData = {
         tile    : BwTile;
     };
-    export class BwTileDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: BwTileDetailPanel;
-
+    export class BwTileDetailPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
@@ -66,31 +61,7 @@ namespace TwnsBwTileDetailPanel {
 
         private readonly _tileView          = new TwnsBwTileView.BwTileView();
 
-        public static show(openData: OpenData): void {
-            if (!BwTileDetailPanel._instance) {
-                BwTileDetailPanel._instance = new BwTileDetailPanel();
-            }
-            BwTileDetailPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (BwTileDetailPanel._instance) {
-                await BwTileDetailPanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = BwTileDetailPanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/baseWar/BwTileDetailPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.BwActionPlannerStateChanged,     callback: this._onNotifyBwPlannerStateChanged },
@@ -99,6 +70,9 @@ namespace TwnsBwTileDetailPanel {
             this._setUiListenerArray([
                 { ui: this._btnClose,                               callback: this.close },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listInfo.setItemRenderer(InfoRenderer);
             this._listMoveCost.setItemRenderer(MoveCostRenderer);
 
@@ -107,13 +81,12 @@ namespace TwnsBwTileDetailPanel {
             conTileView.addChild(tileView.getImgBase());
             conTileView.addChild(tileView.getImgDecorator());
             conTileView.addChild(tileView.getImgObject());
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            this._conTileView.removeChildren();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,7 +291,7 @@ namespace TwnsBwTileDetailPanel {
             return dataArray.sort(sorterForDataForList);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -329,21 +302,22 @@ namespace TwnsBwTileDetailPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

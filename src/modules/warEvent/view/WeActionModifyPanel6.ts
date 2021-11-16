@@ -143,7 +143,7 @@ namespace TwnsWeActionModifyPanel6 {
                 return;
             }
 
-            TwnsBwSimpleDialoguePanel.BwSimpleDialoguePanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
                 actionData      : dialogueAction,
                 callbackOnClose : () => {
                     // nothing to do
@@ -351,7 +351,7 @@ namespace TwnsWeActionModifyPanel6 {
             const currentText           = textData?.text;
 
             TwnsCommonInputPanel.CommonInputPanel.show({
-                title           : Lang.getText(LangTextType.B0455),
+                title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
                 maxChars        : CommonConstants.WarEventActionDialogueNameMaxLength,
@@ -427,7 +427,7 @@ namespace TwnsWeActionModifyPanel6 {
             const currentText       = textData?.text;
 
             TwnsCommonInputPanel.CommonInputPanel.show({
-                title           : Lang.getText(LangTextType.B0455),
+                title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
                 maxChars        : CommonConstants.WarEventActionDialogueTextMaxLength,

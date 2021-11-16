@@ -9,6 +9,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsRwActionPlanner {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
@@ -26,14 +27,14 @@ namespace TwnsRwActionPlanner {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
             } else {
-                TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwUnitActionsPanel);
             }
             if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
-                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.show({ war: this._getWar() });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDamagePreviewPanel, { war: this._getWar() });
             } else {
-                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwDamagePreviewPanel);
             }
         }
 

@@ -15,6 +15,7 @@
 // import UserModel                from "../../user/model/UserModel";
 // import TwnsMpwWar               from "./MpwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwActionPlanner {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -541,14 +542,14 @@ namespace TwnsMpwActionPlanner {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
             } else {
-                TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwUnitActionsPanel);
             }
             if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
-                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.show({ war: this._getWar() });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDamagePreviewPanel, { war: this._getWar() });
             } else {
-                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwDamagePreviewPanel);
             }
         }
 

@@ -27,15 +27,10 @@ namespace TwnsBwUnitListPanel {
     import BwWar            = TwnsBwWar.BwWar;
     import BwCursor         = TwnsBwCursor.BwCursor;
 
-    type OpenDataForBwUnitListPanel = {
+    export type OpenData = {
         war : BwWar;
     };
-    export class BwUnitListPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitListPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: BwUnitListPanel;
-
+    export class BwUnitListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
         private readonly _labelCountName!   : TwnsUiLabel.UiLabel;
@@ -47,27 +42,7 @@ namespace TwnsBwUnitListPanel {
 
         private _playerIndex    : number | null = null;
 
-        public static show(openData: OpenDataForBwUnitListPanel): void {
-            if (!BwUnitListPanel._instance) {
-                BwUnitListPanel._instance = new BwUnitListPanel();
-            }
-            BwUnitListPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (BwUnitListPanel._instance) {
-                await BwUnitListPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/baseWar/BwUnitListPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.BwActionPlannerStateChanged, callback: this._onNotifyBwPlannerStateChanged },
@@ -75,11 +50,18 @@ namespace TwnsBwUnitListPanel {
             this._setUiListenerArray([
                 { ui: this._btnSwitch, callback: this._onTouchedBtnSwitch },
             ]);
-            this._listUnit.setItemRenderer(UnitRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._listUnit.setItemRenderer(UnitRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             const war           = this._getOpenData().war;
             this._playerIndex   = war.getPlayerIndexInTurn();
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public getSelectedData(): DataForUnitRenderer | null {
@@ -228,7 +210,7 @@ namespace TwnsBwUnitListPanel {
                     current : gridIndex,
                     tappedOn: gridIndex,
                 } as NotifyData.BwCursorTapped);
-                BwUnitListPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwUnitListPanel);
             } else {
                 cursor.setGridIndex(gridIndex);
                 cursor.updateView();

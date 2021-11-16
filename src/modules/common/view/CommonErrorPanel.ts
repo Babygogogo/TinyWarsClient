@@ -50,7 +50,7 @@ namespace TwnsCommonErrorPanel {
 
             this._btnClose.label    = Lang.getText(LangTextType.B0026);
             this._labelTitle.text   = Lang.getText(LangTextType.A0056);
-            this._labelContent.setRichText(this._getOpenData().content);
+            this._labelContent.text = this._getOpenData().content;
         }
 
         private _onTouchedBtnClose(): void {

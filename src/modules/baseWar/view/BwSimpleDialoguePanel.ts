@@ -17,17 +17,11 @@
 namespace TwnsBwSimpleDialoguePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
 
-    type OpenData = {
+    export type OpenData = {
         actionData      : ProtoTypes.WarEvent.IWeaSimpleDialogue;
         callbackOnClose : () => void;
     };
-
-    export class BwSimpleDialoguePanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: BwSimpleDialoguePanel;
-
+    export class BwSimpleDialoguePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _groupCo1!         : eui.Group;
         private readonly _imgCo1!           : TwnsUiImage.UiImage;
@@ -42,26 +36,7 @@ namespace TwnsBwSimpleDialoguePanel {
 
         private _dialogueIndex  = 0;
 
-        public static show(openData: OpenData): void {
-            if (!BwSimpleDialoguePanel._instance) {
-                BwSimpleDialoguePanel._instance = new BwSimpleDialoguePanel();
-            }
-            BwSimpleDialoguePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (BwSimpleDialoguePanel._instance) {
-                await BwSimpleDialoguePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/baseWar/BwSimpleDialoguePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnSkip,        callback: this._onTouchedBtnSkip },
                 { ui: this._imgTouchMask,   callback: this._onTouchedImgTouchMask },
@@ -70,16 +45,16 @@ namespace TwnsBwSimpleDialoguePanel {
                 { type: TwnsNotifyType.NotifyType.LanguageChanged,  callback: this._onNotifyLanguageChanged },
             ]);
             this._imgTouchMask.touchEnabled = true;
-
-            this._showOpenAnimation();
+        }
+        protected async _updateOnOpenDataChanged(oldOpenData: OpenData | null): Promise<void> {
+            if (oldOpenData) {
+                oldOpenData.callbackOnClose();
+            }
 
             this._dialogueIndex = 0;
             this._updateComponentsForLanguage();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
+        protected _onClosing(): void {
             this._getOpenData().callbackOnClose();
         }
 
@@ -189,22 +164,23 @@ namespace TwnsBwSimpleDialoguePanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

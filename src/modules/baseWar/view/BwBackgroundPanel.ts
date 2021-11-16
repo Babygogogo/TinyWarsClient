@@ -2,30 +2,18 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import Types                from "../../tools/helpers/Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwBackgroundPanel {
-    export class BwBackgroundPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Bottom;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: BwBackgroundPanel;
-
-        public static show(): void {
-            if (!BwBackgroundPanel._instance) {
-                BwBackgroundPanel._instance = new BwBackgroundPanel();
-            }
-            BwBackgroundPanel._instance.open();
+    export type OpenData = void;
+    export class BwBackgroundPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+        protected _onOpening(): void {
+            // nothing to do
         }
-
-        public static async hide(): Promise<void> {
-            if (BwBackgroundPanel._instance) {
-                await BwBackgroundPanel._instance.close();
-            }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
         }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/baseWar/BwBackgroundPanel.exml";
+        protected _onClosing(): void {
+            // nothing to do
         }
     }
 }

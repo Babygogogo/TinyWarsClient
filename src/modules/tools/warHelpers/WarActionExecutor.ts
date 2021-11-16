@@ -536,7 +536,7 @@ namespace WarActionExecutor {
         ) {
             const nickname = await playerInTurn.getNickname();
             await new Promise<void>(resolve => {
-                TwnsBwBeginTurnPanel.BwBeginTurnPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBeginTurnPanel, {
                     playerIndex,
                     teamIndex           : playerInTurn.getTeamIndex(),
                     nickname,
@@ -1740,7 +1740,7 @@ namespace WarActionExecutor {
                         return GridIndexHelpers.checkIsEqual(gridIndex, Helpers.getExisted(GridIndexHelpers.convertGridIndex(v.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_03));
                     }), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_04);
                     await new Promise<void>(resolve => {
-                        TwnsBwCaptureProgressPanel.BwCaptureProgressPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwCaptureProgressPanel, {
                             maxValue            : maxCapturePoint,
                             newValue            : maxCapturePoint - (tileDataAfterAction.currentCapturePoint ?? 0),
                             currentValue        : maxCapturePoint - Helpers.getExisted(tile.getCurrentCapturePoint(), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_05),
@@ -1808,7 +1808,7 @@ namespace WarActionExecutor {
                 });
                 if (isSelfInTurn) {
                     await new Promise<void>(resolve => {
-                        TwnsBwCaptureProgressPanel.BwCaptureProgressPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwCaptureProgressPanel, {
                             maxValue            : maxCapturePoint,
                             newValue            : maxCapturePoint - restCapturePoint,
                             currentValue        : maxCapturePoint - currentCapturePoint,

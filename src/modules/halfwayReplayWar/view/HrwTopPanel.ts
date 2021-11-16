@@ -23,7 +23,6 @@ namespace TwnsHrwTopPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
-    import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
 
     type OpenData = {
         war : TwnsHrwWar.HrwWar;
@@ -226,7 +225,7 @@ namespace TwnsHrwTopPanel {
         private _onTouchedBtnUnitList(): void {
             const war = this._getWar();
             war.getField().getActionPlanner().setStateIdle();
-            BwUnitListPanel.show({ war });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitListPanel, { war });
         }
         private _onTouchedBtnMenu(): void {
             const actionPlanner = this._getWar().getActionPlanner();

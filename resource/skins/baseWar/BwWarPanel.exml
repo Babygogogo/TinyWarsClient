@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="960" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing"></e:Skin>
+<e:Skin width="960" height="960" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group id="_group" left="0" right="0" top="0" bottom="0" />
+</e:Skin>

@@ -22,56 +22,27 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitBriefPanel {
     import BwCoListPanel        = TwnsCommonCoListPanel.CommonCoListPanel;
-    import BwProduceUnitPanel   = TwnsBwProduceUnitPanel.BwProduceUnitPanel;
-    import BwUnitDetailPanel    = TwnsBwUnitDetailPanel.BwUnitDetailPanel;
     import BwWar                = TwnsBwWar.BwWar;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import BwUnit               = TwnsBwUnit.BwUnit;
-    import Tween                = egret.Tween;
 
     const _CELL_WIDTH           = 70;
 
-    type OpenDataForBwUnitBriefPanel = {
+    export type OpenData = {
         war : BwWar;
     };
     // eslint-disable-next-line no-shadow
-    export class BwUnitBriefPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitBriefPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: BwUnitBriefPanel;
-
+    export class BwUnitBriefPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _group!    : eui.Group;
         private _cellList           : BwUnitBriefCell[] = [];
 
         private _unitList   : BwUnit[] = [];
         private _isLeftSide = true;
 
-        public static show(openData: OpenDataForBwUnitBriefPanel): void {
-            if (!BwUnitBriefPanel._instance) {
-                BwUnitBriefPanel._instance = new BwUnitBriefPanel();
-            }
-            BwUnitBriefPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (BwUnitBriefPanel._instance) {
-                await BwUnitBriefPanel._instance.close();
-            }
-        }
-        public static getInstance(): BwUnitBriefPanel {
-            return BwUnitBriefPanel._instance;
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = `resource/skins/baseWar/BwUnitBriefPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.GlobalTouchBegin,                callback: this._onNotifyGlobalTouchBegin },
-                { type: NotifyType.GlobalTouchMove,                 callback: this._onNotifyGlobalTouchMove },
+                // { type: NotifyType.GlobalTouchBegin,                callback: this._onNotifyGlobalTouchBegin },
+                // { type: NotifyType.GlobalTouchMove,                 callback: this._onNotifyGlobalTouchMove },
                 { type: NotifyType.BwCursorGridIndexChanged,        callback: this._onNotifyBwCursorGridIndexChanged },
                 { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
                 { type: NotifyType.BwWarMenuPanelOpened,            callback: this._onNotifyBwWarMenuPanelOpened },
@@ -84,17 +55,11 @@ namespace TwnsBwUnitBriefPanel {
                 { type: NotifyType.UnitAnimationTick,               callback: this._onNotifyUnitAnimationTick },
                 { type: NotifyType.UnitStateIndicatorTick,          callback: this._onNotifyUnitStateIndicatorTick },
             ]);
-
-            const group     = this._group;
-            group.alpha     = 0;
-            group.bottom    = -40;
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
+        protected _onClosing(): void {
             for (const cell of this._cellList) {
                 this._destroyCell(cell);
             }
@@ -105,12 +70,12 @@ namespace TwnsBwUnitBriefPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyGlobalTouchBegin(e: egret.Event): void {
-            this._adjustPositionOnTouch(e.data);
-        }
-        private _onNotifyGlobalTouchMove(e: egret.Event): void {
-            this._adjustPositionOnTouch(e.data);
-        }
+        // private _onNotifyGlobalTouchBegin(e: egret.Event): void {
+        //     this._adjustPositionOnTouch(e.data);
+        // }
+        // private _onNotifyGlobalTouchMove(e: egret.Event): void {
+        //     this._adjustPositionOnTouch(e.data);
+        // }
         private _onNotifyBwCursorGridIndexChanged(): void {
             this._updateView();
         }
@@ -161,7 +126,7 @@ namespace TwnsBwUnitBriefPanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             for (let i = 0; i < this._cellList.length; ++i) {
                 if (this._cellList[i] === e.currentTarget) {
-                    BwUnitDetailPanel.show({ unit: this._unitList[i] });
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitDetailPanel, { unit: this._unitList[i] });
                     return;
                 }
             }
@@ -174,7 +139,6 @@ namespace TwnsBwUnitBriefPanel {
             const war = this._getOpenData().war;
             if ((war.getIsWarMenuPanelOpening())            ||
                 (!war.getIsRunning())                       ||
-                (BwProduceUnitPanel.getIsOpening()) ||
                 (BwCoListPanel.getIsOpening())
             ) {
                 this.visible = false;
@@ -224,31 +188,31 @@ namespace TwnsBwUnitBriefPanel {
             }
         }
 
-        private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
-            // const tileBriefPanel = TwnsBwTileBriefPanel.BwTileBriefPanel.getInstance();
-            // let target = e.target as egret.DisplayObject;
-            // while (target) {
-            //     if ((target) && ((target === tileBriefPanel) || (target === this))) {
-            //         return;
-            //     }
-            //     target = target.parent;
-            // }
+        // private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
+        //     const tileBriefPanel = TwnsBwTileBriefPanel.BwTileBriefPanel.getInstance();
+        //     let target = e.target as egret.DisplayObject;
+        //     while (target) {
+        //         if ((target) && ((target === tileBriefPanel) || (target === this))) {
+        //             return;
+        //         }
+        //         target = target.parent;
+        //     }
 
-            // const stageWidth        = StageManager.getStage().stageWidth;
-            // const currentIsLeftSide = this._isLeftSide;
-            // const newIsLeftSide     = e.stageX >= stageWidth / 4 * 3
-            //     ? true
-            //     : (e.stageX < stageWidth / 4
-            //         ? false
-            //         : currentIsLeftSide
-            //     );
-            // if (newIsLeftSide !== currentIsLeftSide) {
-            //     await this._showCloseAnimation();
-            //     this._isLeftSide = newIsLeftSide;
-            //     this._updatePosition();
-            //     this._showOpenAnimation();
-            // }
-        }
+        //     const stageWidth        = StageManager.getStage().stageWidth;
+        //     const currentIsLeftSide = this._isLeftSide;
+        //     const newIsLeftSide     = e.stageX >= stageWidth / 4 * 3
+        //         ? true
+        //         : (e.stageX < stageWidth / 4
+        //             ? false
+        //             : currentIsLeftSide
+        //         );
+        //     if (newIsLeftSide !== currentIsLeftSide) {
+        //         await this._showCloseAnimation();
+        //         this._isLeftSide = newIsLeftSide;
+        //         this._updatePosition();
+        //         this._showOpenAnimation();
+        //     }
+        // }
 
         private _updatePosition(): void {
             const isLeftSide    = this._isLeftSide;
@@ -269,20 +233,25 @@ namespace TwnsBwUnitBriefPanel {
             cell.removeEventListener(egret.TouchEvent.TOUCH_TAP, this._onCellTouchTap, this);
         }
 
-        private _showOpenAnimation(): void {
-            const group = this._group;
-            Tween.removeTweens(group);
-            Tween.get(group)
-                .to({ bottom: 0, alpha: 1 }, 50);
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                const group = this._group;
-                Tween.removeTweens(group);
-                Tween.get(group)
-                    .to({ bottom: -40, alpha: 0 }, 50)
-                    .call(() => resolve());
+        protected async _showOpenAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, bottom: -40 },
+                endProps    : { alpha: 1, bottom: 0 },
+                tweenTime   : 50,
             });
+
+            await Helpers.wait(50);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, bottom: 0 },
+                endProps    : { alpha: 0, bottom: -40 },
+                tweenTime   : 50,
+            });
+
+            await Helpers.wait(50);
         }
     }
 

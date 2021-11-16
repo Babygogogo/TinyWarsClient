@@ -191,12 +191,12 @@ namespace FlowManager {
         MeModel.unloadWar();
 
         StageManager.closeAllPanels();
-        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
         TwnsMpwTopPanel.MpwTopPanel.show({ war });
         TwnsMpwSidePanel.MpwSidePanel.show({ war });
-        TwnsBwWarPanel.BwWarPanel.show({ war });
-        TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
-        TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
         TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playCoBgmWithWar(war, true);
@@ -209,11 +209,11 @@ namespace FlowManager {
         MeModel.unloadWar();
 
         StageManager.closeAllPanels();
-        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
         TwnsRwTopPanel.RwTopPanel.show({ war });
-        TwnsBwWarPanel.BwWarPanel.show({ war });
-        TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
-        TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
         TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playCoBgmWithWar(war, true);
@@ -226,11 +226,11 @@ namespace FlowManager {
         MeModel.unloadWar();
 
         StageManager.closeAllPanels();
-        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
         TwnsHrwTopPanel.HrwTopPanel.show({ war });
-        TwnsBwWarPanel.BwWarPanel.show({ war });
-        TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
-        TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
         TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playCoBgmWithWar(war, true);
@@ -247,12 +247,12 @@ namespace FlowManager {
         MeModel.unloadWar();
 
         StageManager.closeAllPanels();
-        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
         TwnsSpwTopPanel.SpwTopPanel.show({ war });
         TwnsSpwSidePanel.SpwSidePanel.show({ war });
-        TwnsBwWarPanel.BwWarPanel.show({ war });
-        TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
-        TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
         TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playCoBgmWithWar(war, true);
@@ -267,11 +267,11 @@ namespace FlowManager {
         HrwModel.unloadWar();
 
         StageManager.closeAllPanels();
-        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
         TwnsMeTopPanel.MeTopPanel.show();
-        TwnsBwWarPanel.BwWarPanel.show({ war });
-        TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
-        TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
         TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playBgm(Types.BgmCode.MapEditor01);

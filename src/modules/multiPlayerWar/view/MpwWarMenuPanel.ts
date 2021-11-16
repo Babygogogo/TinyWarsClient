@@ -158,7 +158,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _onTouchedBtnUnitList(): void {
-            TwnsBwUnitListPanel.BwUnitListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitListPanel, {
                 war: this._getWar(),
             });
             this.close();

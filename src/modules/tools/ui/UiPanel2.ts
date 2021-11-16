@@ -110,7 +110,7 @@ namespace TwnsUiPanel2 {
 
             await Promise.all([
                 this._showOpenAnimation(),
-                this._updateOnOpenDataChanged(),
+                this._updateOnOpenDataChanged(null),
             ]);
 
             this.removeChild(touchMask);
@@ -137,10 +137,11 @@ namespace TwnsUiPanel2 {
                 throw Helpers.newError(`UiPanel2.updateWithOpenData() !this._checkIsReadyForOpen().`);
             }
 
+            const oldOpenData = this._getOpenData();
             this._setOpenData(openData);
-            await this._updateOnOpenDataChanged();
+            await this._updateOnOpenDataChanged(oldOpenData);
         }
-        protected abstract _updateOnOpenDataChanged(): Promise<void>;
+        protected abstract _updateOnOpenDataChanged(oldOpenData: OpenData | null): Promise<void>;
 
         private _getHasSetOpenData(): boolean {
             return this._hasSetOpenData;
@@ -171,10 +172,10 @@ namespace TwnsUiPanel2 {
             this._setUiListenerArray(null);
             this._setNotifyListenerArray(null);
             this._setCallbackOnTouchedMask(null);
-            this._deleteOpenData();
-            this._onClosing();
 
             await this._showCloseAnimation();
+            this._onClosing();
+            this._deleteOpenData();
 
             this.removeChild(touchMask);
         }

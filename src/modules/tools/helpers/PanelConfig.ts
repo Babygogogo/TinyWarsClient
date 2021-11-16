@@ -12,6 +12,22 @@ namespace TwnsPanelConfig {
     };
 
     export let Dict: {
+        BwBackgroundPanel           : PanelConfig<TwnsBwBackgroundPanel.OpenData>;
+        BwBeginTurnPanel            : PanelConfig<TwnsBwBeginTurnPanel.OpenData>;
+        BwCaptureProgressPanel      : PanelConfig<TwnsBwCaptureProgressPanel.OpenData>;
+        BwDamagePreviewPanel        : PanelConfig<TwnsBwDamagePreviewPanel.OpenData>;
+        BwDialoguePanel             : PanelConfig<TwnsBwDialoguePanel.OpenData>;
+        BwProduceUnitPanel          : PanelConfig<TwnsBwProduceUnitPanel.OpenData>;
+        BwSimpleDialoguePanel       : PanelConfig<TwnsBwSimpleDialoguePanel.OpenData>;
+        BwTileBriefPanel            : PanelConfig<TwnsBwTileBriefPanel.OpenData>;
+        BwTileDetailPanel           : PanelConfig<TwnsBwTileDetailPanel.OpenData>;
+        BwUnitActionsPanel          : PanelConfig<TwnsBwUnitActionsPanel.OpenData>;
+        BwUnitBriefPanel            : PanelConfig<TwnsBwUnitBriefPanel.OpenData>;
+        BwUnitDetailPanel           : PanelConfig<TwnsBwUnitDetailPanel.OpenData>;
+        BwUnitListPanel             : PanelConfig<TwnsBwUnitListPanel.OpenData>;
+        BwWarInfoPanel              : PanelConfig<TwnsBwWarInfoPanel.OpenData>;
+        BwWarPanel                  : PanelConfig<TwnsBwWarPanel.OpenData>
+
         ChatPanel                   : PanelConfig<TwnsChatPanel.OpenData>;
 
         UserChangeDiscordIdPanel    : PanelConfig<TwnsUserChangeDiscordIdPanel.OpenData>;
@@ -31,6 +47,112 @@ namespace TwnsPanelConfig {
 
     export function init(): void {
         Dict = {
+            BwBackgroundPanel: {
+                cls         : TwnsBwBackgroundPanel?.BwBackgroundPanel,
+                skinName    : `resource/skins/baseWar/BwBackgroundPanel.exml`,
+                layer       : LayerType.Bottom,
+                isExclusive : true,
+                needCache   : true,
+            },
+
+            BwBeginTurnPanel: {
+                cls         : TwnsBwBeginTurnPanel?.BwBeginTurnPanel,
+                skinName    : `resource/skins/baseWar/BwBeginTurnPanel.exml`,
+                layer       : LayerType.Notify0,
+                needCache   : true,
+            },
+
+            BwCaptureProgressPanel: {
+                cls         : TwnsBwCaptureProgressPanel?.BwCaptureProgressPanel,
+                skinName    : `resource/skins/baseWar/BwCaptureProgressPanel.exml`,
+                layer       : LayerType.Notify0,
+                needCache   : true,
+            },
+
+            BwDamagePreviewPanel: {
+                cls         : TwnsBwDamagePreviewPanel?.BwDamagePreviewPanel,
+                skinName    : `resource/skins/baseWar/BwDamagePreviewPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
+            },
+
+            BwDialoguePanel: {
+                cls         : TwnsBwDialoguePanel?.BwDialoguePanel,
+                skinName    : `resource/skins/baseWar/BwDialoguePanel.exml`,
+                layer       : LayerType.Hud1,
+            },
+
+            BwProduceUnitPanel: {
+                cls         : TwnsBwProduceUnitPanel?.BwProduceUnitPanel,
+                skinName    : `resource/skins/baseWar/BwProduceUnitPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
+            },
+
+            BwSimpleDialoguePanel: {
+                cls         : TwnsBwSimpleDialoguePanel?.BwSimpleDialoguePanel,
+                skinName    : `resource/skins/baseWar/BwSimpleDialoguePanel.exml`,
+                layer       : LayerType.Hud1,
+            },
+
+            BwTileBriefPanel: {
+                cls         : TwnsBwTileBriefPanel?.BwTileBriefPanel,
+                skinName    : `resource/skins/baseWar/BwTileBriefPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
+            },
+
+            BwTileDetailPanel: {
+                cls         : TwnsBwTileDetailPanel?.BwTileDetailPanel,
+                skinName    : `resource/skins/baseWar/BwTileDetailPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
+            },
+
+            BwUnitActionsPanel: {
+                cls         : TwnsBwUnitActionsPanel?.BwUnitActionsPanel,
+                skinName    : `resource/skins/baseWar/BwUnitActionsPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
+            },
+
+            BwUnitBriefPanel: {
+                cls         : TwnsBwUnitBriefPanel?.BwUnitBriefPanel,
+                skinName    : `resource/skins/baseWar/BwUnitBriefPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
+            },
+
+            BwUnitDetailPanel: {
+                cls         : TwnsBwUnitDetailPanel?.BwUnitDetailPanel,
+                skinName    : `resource/skins/baseWar/BwUnitDetailPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
+            },
+
+            BwUnitListPanel: {
+                cls         : TwnsBwUnitListPanel?.BwUnitListPanel,
+                skinName    : `resource/skins/baseWar/BwUnitListPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
+            },
+
+            BwWarInfoPanel: {
+                cls         : TwnsBwWarInfoPanel?.BwWarInfoPanel,
+                skinName    : `resource/skins/baseWar/BwWarInfoPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
+            },
+
+            BwWarPanel: {
+                cls         : TwnsBwWarPanel?.BwWarPanel,
+                skinName    : `resource/skins/baseWar/BwWarPanel.exml`,
+                layer       : LayerType.Scene,
+                isExclusive : true,
+                needCache   : true,
+            },
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
             ChatPanel: {
                 cls         : TwnsChatPanel?.ChatPanel,
                 skinName    : `resource/skins/chat/ChatPanel.exml`,

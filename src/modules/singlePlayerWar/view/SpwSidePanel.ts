@@ -14,6 +14,7 @@
 // import TwnsSpwWar               from "../model/SpwWar";
 // import TwnsSpwWarMenuPanel      from "./SpwWarMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwSidePanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
@@ -200,7 +201,7 @@ namespace TwnsSpwSidePanel {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsBwWarInfoPanel.BwWarInfoPanel.show({ war });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarInfoPanel, { war });
         }
         private _onTouchedBtnMenu(): void {
             const actionPlanner = this._getOpenData().war.getActionPlanner();

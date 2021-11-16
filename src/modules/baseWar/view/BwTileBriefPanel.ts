@@ -17,26 +17,20 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTileBriefPanel {
-    import Tween                = egret.Tween;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
+    const _IMAGE_SOURCE_CAPTURE = `c04_t10_s04_f00`;
     // const _IMAGE_SOURCE_FUEL    = `c04_t10_s01_f00`;
     // const _IMAGE_SOURCE_AMMO    = `c04_t10_s02_f00`;
     // const _IMAGE_SOURCE_DEFENSE = `c04_t10_s03_f00`;
-    const _IMAGE_SOURCE_CAPTURE = `c04_t10_s04_f00`;
-    const _IMAGE_SOURCE_BUILD   = `c04_t10_s05_f00`;
-    const _CELL_WIDTH           = 80;
+    // const _IMAGE_SOURCE_BUILD   = `c04_t10_s05_f00`;
+    // const _CELL_WIDTH           = 80;
 
-    type OpenData = {
+    export type OpenData = {
         war : TwnsBwWar.BwWar;
     };
-    export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: BwTileBriefPanel;
-
+    export class BwTileBriefPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _conTileView!      : eui.Group;
         private readonly _tileView          = new TwnsBwTileView.BwTileView();
@@ -47,39 +41,16 @@ namespace TwnsBwTileBriefPanel {
         private readonly _imgDefense!       : TwnsUiImage.UiImage;
         private readonly _imgState!         : TwnsUiImage.UiImage;
 
-        public static show(openData: OpenData): void {
-            if (!BwTileBriefPanel._instance) {
-                BwTileBriefPanel._instance = new BwTileBriefPanel();
-            }
-            BwTileBriefPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (BwTileBriefPanel._instance) {
-                await BwTileBriefPanel._instance.close();
-            }
-        }
-        public static getInstance(): BwTileBriefPanel {
-            return BwTileBriefPanel._instance;
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = `resource/skins/baseWar/BwTileBriefPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.GlobalTouchBegin,            callback: this._onNotifyGlobalTouchBegin },
-                { type: NotifyType.GlobalTouchMove,             callback: this._onNotifyGlobalTouchMove },
+                // { type: NotifyType.GlobalTouchBegin,            callback: this._onNotifyGlobalTouchBegin },
+                // { type: NotifyType.GlobalTouchMove,             callback: this._onNotifyGlobalTouchMove },
                 { type: NotifyType.BwCursorGridIndexChanged,    callback: this._onNotifyBwCursorGridIndexChanged },
                 { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwActionPlannerStateChanged },
                 { type: NotifyType.BwWarMenuPanelOpened,        callback: this._onNotifyBwWarMenuPanelOpened },
                 { type: NotifyType.BwWarMenuPanelClosed,        callback: this._onNotifyBwWarMenuPanelClosed },
                 { type: NotifyType.BwCoListPanelOpened,         callback: this._onNotifyBwCoListPanelOpened },
                 { type: NotifyType.BwCoListPanelClosed,         callback: this._onNotifyBwCoListPanelClosed },
-                { type: NotifyType.BwProduceUnitPanelOpened,    callback: this._onNotifyBwProduceUnitPanelOpened },
-                { type: NotifyType.BwProduceUnitPanelClosed,    callback: this._onNotifyBwProduceUnitPanelClosed },
                 { type: NotifyType.MeTileChanged,               callback: this._onNotifyMeTileChanged },
                 { type: NotifyType.TileAnimationTick,           callback: this._onNotifyTileAnimationTick },
             ]);
@@ -92,27 +63,23 @@ namespace TwnsBwTileBriefPanel {
             conTileView.addChild(tileView.getImgBase());
             conTileView.addChild(tileView.getImgDecorator());
             conTileView.addChild(tileView.getImgObject());
-
-            const group     = this._group;
-            group.alpha     = 0;
-            group.bottom    = -40;
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            this._conTileView.removeChildren();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyGlobalTouchBegin(e: egret.Event): void {
-            this._adjustPositionOnTouch(e.data);
-        }
-        private _onNotifyGlobalTouchMove(e: egret.Event): void {
-            this._adjustPositionOnTouch(e.data);
-        }
+        // private _onNotifyGlobalTouchBegin(e: egret.Event): void {
+        //     this._adjustPositionOnTouch(e.data);
+        // }
+        // private _onNotifyGlobalTouchMove(e: egret.Event): void {
+        //     this._adjustPositionOnTouch(e.data);
+        // }
         private _onNotifyBwCursorGridIndexChanged(e: egret.Event): void {
             const data  = e.data as NotifyData.BwCursorGridIndexChanged;
             const war   = this._getOpenData().war;
@@ -140,12 +107,6 @@ namespace TwnsBwTileBriefPanel {
         private _onNotifyBwCoListPanelClosed(): void {
             this._updateView();
         }
-        private _onNotifyBwProduceUnitPanelOpened(): void {
-            this._updateView();
-        }
-        private _onNotifyBwProduceUnitPanelClosed(): void {
-            this._updateView();
-        }
         private _onNotifyMeTileChanged(e: egret.Event): void {
             const data  = e.data as NotifyData.MeTileChanged;
             const war   = this._getOpenData().war;
@@ -160,7 +121,7 @@ namespace TwnsBwTileBriefPanel {
         private _onTouchedThis(): void {
             const war   = this._getOpenData().war;
             const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
-            (tile) && (TwnsBwTileDetailPanel.BwTileDetailPanel.show({ tile }));
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileDetailPanel, { tile });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
@@ -170,7 +131,6 @@ namespace TwnsBwTileBriefPanel {
         private _updateView(): void {
             const war = this._getOpenData().war;
             if ((war.getIsWarMenuPanelOpening())                            ||
-                (TwnsBwProduceUnitPanel.BwProduceUnitPanel.getIsOpening())  ||
                 (TwnsCommonCoListPanel.CommonCoListPanel.getIsOpening())
             ) {
                 this.visible = false;
@@ -212,46 +172,51 @@ namespace TwnsBwTileBriefPanel {
             }
         }
 
-        private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
-            // const unitBriefPanel = TwnsBwUnitBriefPanel.BwUnitBriefPanel.getInstance();
-            // let target = e.target as egret.DisplayObject;
-            // while (target) {
-            //     if ((target) && ((target === this) || (target === unitBriefPanel))) {
-            //         return;
-            //     }
-            //     target = target.parent;
-            // }
+        // private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
+        //     const unitBriefPanel = TwnsBwUnitBriefPanel.BwUnitBriefPanel.getInstance();
+        //     let target = e.target as egret.DisplayObject;
+        //     while (target) {
+        //         if ((target) && ((target === this) || (target === unitBriefPanel))) {
+        //             return;
+        //         }
+        //         target = target.parent;
+        //     }
 
-            // const stageWidth    = StageManager.getStage().stageWidth;
-            // const group         = this._group;
-            // const currentX      = group.x;
-            // const newX          = e.stageX >= stageWidth / 4 * 3
-            //     ? 0
-            //     : (e.stageX < stageWidth / 4
-            //         ? stageWidth - _CELL_WIDTH
-            //         : currentX
-            //     );
-            // if (newX !== currentX) {
-            //     await this._showCloseAnimation();
-            //     group.x = newX;
-            //     this._showOpenAnimation();
-            // }
-        }
+        //     const stageWidth    = StageManager.getStage().stageWidth;
+        //     const group         = this._group;
+        //     const currentX      = group.x;
+        //     const newX          = e.stageX >= stageWidth / 4 * 3
+        //         ? 0
+        //         : (e.stageX < stageWidth / 4
+        //             ? stageWidth - _CELL_WIDTH
+        //             : currentX
+        //         );
+        //     if (newX !== currentX) {
+        //         await this._showCloseAnimation();
+        //         group.x = newX;
+        //         this._showOpenAnimation();
+        //     }
+        // }
 
-        private _showOpenAnimation(): void {
-            const group = this._group;
-            Tween.removeTweens(group);
-            Tween.get(group)
-                .to({ bottom: 0, alpha: 1 }, 50);
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                const group = this._group;
-                Tween.removeTweens(group);
-                Tween.get(group)
-                    .to({ bottom: -40, alpha: 0 }, 50)
-                    .call(() => resolve());
+        protected async _showOpenAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, bottom: -40 },
+                endProps    : { alpha: 1, bottom: 0 },
+                tweenTime   : 50,
             });
+
+            await Helpers.wait(50);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, bottom: 0 },
+                endProps    : { alpha: 0, bottom: -40 },
+                tweenTime   : 50,
+            });
+
+            await Helpers.wait(50);
         }
     }
 }

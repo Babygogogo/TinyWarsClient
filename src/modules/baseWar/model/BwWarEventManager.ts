@@ -121,6 +121,8 @@ namespace TwnsBwWarEventManager {
                 await this._callActionSetViewpointWithExtraData(action.WeaSetViewpoint, isFastExecute);
             } else if (action.WeaSetWeather) {
                 await this._callActionSetWeatherWithExtraData(action.WeaSetWeather, isFastExecute);
+            } else if (action.WeaSimpleDialogue) {
+                await this._callActionSimpleDialogueWithExtraData(action.WeaSimpleDialogue, isFastExecute);
             } else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -139,6 +141,8 @@ namespace TwnsBwWarEventManager {
                 await this._callActionSetViewpointWithoutExtraData(action.WeaSetViewpoint, isFastExecute);
             } else if (action.WeaSetWeather) {
                 await this._callActionSetWeatherWithoutExtraData(action.WeaSetWeather, isFastExecute);
+            } else if (action.WeaSimpleDialogue) {
+                await this._callActionSimpleDialogueWithoutExtraData(action.WeaSimpleDialogue, isFastExecute);
             } else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -251,7 +255,7 @@ namespace TwnsBwWarEventManager {
             }
 
             return new Promise<void>(resolve => {
-                TwnsBwDialoguePanel.BwDialoguePanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -263,7 +267,7 @@ namespace TwnsBwWarEventManager {
             }
 
             return new Promise<void>(resolve => {
-                TwnsBwDialoguePanel.BwDialoguePanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -336,6 +340,31 @@ namespace TwnsBwWarEventManager {
             if (!isFast) {
                 weatherManager.getView().resetView(false);
             }
+        }
+
+        private async _callActionSimpleDialogueWithExtraData(action: WarEvent.IWeaSimpleDialogue, isFast: boolean): Promise<void> {
+            if (isFast) {
+                return;
+            }
+
+            return new Promise<void>(resolve => {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
+                    actionData      : action,
+                    callbackOnClose : () => resolve(),
+                });
+            });
+        }
+        private async _callActionSimpleDialogueWithoutExtraData(action: WarEvent.IWeaSimpleDialogue, isFast: boolean): Promise<void> {
+            if (isFast) {
+                return;
+            }
+
+            return new Promise<void>(resolve => {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
+                    actionData      : action,
+                    callbackOnClose : () => resolve(),
+                });
+            });
         }
 
         public updateWarEventCalledCountOnCall(eventId: number): void {                     // DONE

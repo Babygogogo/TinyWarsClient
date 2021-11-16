@@ -24,6 +24,7 @@
 // import TwnsSpwWar                       from "../model/SpwWar";
 // import TwnsSpwLoadWarPanel              from "./SpwLoadWarPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwWarMenuPanel {
     import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType                 = TwnsLangTextType.LangTextType;
@@ -201,7 +202,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _onTouchedBtnUnitList(): void {
-            TwnsBwUnitListPanel.BwUnitListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitListPanel, {
                 war: this._getWar(),
             });
             this.close();

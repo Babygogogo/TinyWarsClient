@@ -23,39 +23,16 @@ namespace TwnsBwUnitActionsPanel {
     import UnitActionType   = Types.UnitActionType;
     import BwWar            = TwnsBwWar.BwWar;
 
-    export type OpenDataForBwUnitActionsPanel = {
+    export type OpenData = {
         war         : BwWar;
         destination : Types.GridIndex;
         actionList  : TwnsBwActionPlanner.DataForUnitAction[];
     };
-    export class BwUnitActionsPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitActionsPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: BwUnitActionsPanel;
-
+    export class BwUnitActionsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _group!        : eui.Group;
         private readonly _listAction!   : TwnsUiScrollList.UiScrollList<DataForUnitActionRenderer>;
 
-        public static show(openData: OpenDataForBwUnitActionsPanel): void {
-            if (!BwUnitActionsPanel._instance) {
-                BwUnitActionsPanel._instance = new BwUnitActionsPanel();
-            }
-            BwUnitActionsPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (BwUnitActionsPanel._instance) {
-                await BwUnitActionsPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = `resource/skins/baseWar/BwUnitActionsPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 // { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
                 // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
@@ -64,12 +41,14 @@ namespace TwnsBwUnitActionsPanel {
             ]);
             this._listAction.setItemRenderer(UnitActionRenderer);
 
-            this._showOpenAnimation();
-            this._updateView();
             this._updatePosition();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            this._updatePosition();
+            this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,24 +125,25 @@ namespace TwnsBwUnitActionsPanel {
             group.y         = Math.max(40, Math.min(point.y, stage.stageHeight - group.height));
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { scaleX: 0, scaleY: 0 },
                 endProps    : { scaleX: 1, scaleY: 1 },
                 tweenTime   : 100,
             });
+
+            await Helpers.wait(100);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { scaleX: 1, scaleY: 1 },
-                    endProps    : { scaleX: 0, scaleY: 0 },
-                    tweenTime   : 100,
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { scaleX: 1, scaleY: 1 },
+                endProps    : { scaleX: 0, scaleY: 0 },
+                tweenTime   : 100,
             });
+
+            await Helpers.wait(100);
         }
     }
 
