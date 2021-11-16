@@ -22,7 +22,6 @@
 namespace TwnsCommonWarPlayerInfoPage {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
-    import UserPanel            = TwnsUserPanel.UserPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -159,14 +158,14 @@ namespace TwnsCommonWarPlayerInfoPage {
         private _onTouchedBtnChat(): void {
             const userId = this._getData().playerInfo.userId;
             if (userId != null) {
-                TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, { toUserId: userId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: userId });
             }
         }
 
         private _onTouchedBtnInfo(): void {
             const userId = this._getData().playerInfo.userId;
             if (userId != null) {
-                UserPanel.show({ userId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
             }
         }
 

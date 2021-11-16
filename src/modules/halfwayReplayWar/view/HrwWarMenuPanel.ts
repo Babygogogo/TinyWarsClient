@@ -343,7 +343,7 @@ namespace TwnsHrwWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0560),
                 callback: () => {
-                    TwnsUserSettingsPanel.UserSettingsPanel.show();
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
                 }
             };
         }

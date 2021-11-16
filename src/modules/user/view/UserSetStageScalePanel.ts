@@ -13,18 +13,15 @@
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserSetStageScalePanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import StageMinScale    = CommonConstants.StageMinScale;
     import StageMaxScale    = CommonConstants.StageMaxScale;
 
-    export class UserSetStageScalePanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: UserSetStageScalePanel;
-
+    export type OpenData = void;
+    export class UserSetStageScalePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -42,27 +39,7 @@ namespace TwnsUserSetStageScalePanel {
         private _prevScale                  : number | null = null;
         private _selectedScale              : number | null = null;
 
-        public static show(): void {
-            if (!UserSetStageScalePanel._instance) {
-                UserSetStageScalePanel._instance = new UserSetStageScalePanel();
-            }
-            UserSetStageScalePanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (UserSetStageScalePanel._instance) {
-                await UserSetStageScalePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/user/UserSetStageScalePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
             ]);
@@ -76,17 +53,20 @@ namespace TwnsUserSetStageScalePanel {
                 { ui: this._btnDefault,     callback: this._onTouchedBtnDefault },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
             ]);
+            this._setIsTouchMaskEnabled();
             this._setCallbackOnTouchedMask(() => this._onTouchedPanelMask());
 
             const scale         = StageManager.getStageScale();
             this._prevScale     = scale;
             this._selectedScale = scale;
 
-            this._showOpenAnimation();
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +145,7 @@ namespace TwnsUserSetStageScalePanel {
             this._labelScale.text       = `${Helpers.formatString("%.2f", 10000 / scale)}%`;
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -176,21 +156,22 @@ namespace TwnsUserSetStageScalePanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

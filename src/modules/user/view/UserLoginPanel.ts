@@ -17,16 +17,13 @@
 // import UserProxy                from "../model/UserProxy";
 // import TwnsUserRegisterPanel    from "./UserRegisterPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserLoginPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    export class UserLoginPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance                    : UserLoginPanel | null = null;
-
+    export type OpenData = void;
+    export class UserLoginPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _imgTitle!                 : TwnsUiImage.UiImage;
 
         private readonly _groupAccount!             : eui.Group;
@@ -47,28 +44,7 @@ namespace TwnsUserLoginPanel {
         private readonly _btnRegister!              : TwnsUiButton.UiButton;
         private readonly _btnLogin!                 : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!UserLoginPanel._instance) {
-                UserLoginPanel._instance = new UserLoginPanel();
-            }
-            UserLoginPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (UserLoginPanel._instance) {
-                await UserLoginPanel._instance.close();
-            }
-        }
-        public static getInstance(): UserLoginPanel | null {
-            return UserLoginPanel._instance;
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/user/UserLoginPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
@@ -81,8 +57,6 @@ namespace TwnsUserLoginPanel {
                 { ui: this._groupRememberPassword,  callback: this._onTouchedGroupRememberPassword },
             ]);
 
-            this._showOpenAnimation();
-
             const isRememberPassword                = LocalStorage.getIsRememberPassword();
             this._inputAccount.text                 = LocalStorage.getAccount();
             this._inputPassword.text                = isRememberPassword ? LocalStorage.getPassword() : ``;
@@ -91,8 +65,11 @@ namespace TwnsUserLoginPanel {
             this._btnLogin.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
             this._updateComponentsForLanguage();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onMsgUserLogin(): void {
@@ -130,7 +107,7 @@ namespace TwnsUserLoginPanel {
         private _onTouchedBtnRegister(): void {
             NoSleepManager.enable();
 
-            TwnsUserRegisterPanel.UserRegisterPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserRegisterPanel, void 0);
         }
 
         private _onTouchedBtnForgetPassword(): void {
@@ -153,7 +130,7 @@ namespace TwnsUserLoginPanel {
             this._labelPassword.text            = `${Lang.getText(LangTextType.B0171)}:`;
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgTitle,
                 beginProps  : { alpha: 0 },
@@ -184,36 +161,37 @@ namespace TwnsUserLoginPanel {
                 endProps    : { alpha: 1, y: 0 },
                 waitTime    : 1100,
             });
+
+            await Helpers.wait(1100 + CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgTitle,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._groupAccount,
-                    beginProps  : { alpha: 1, y: 0 },
-                    endProps    : { alpha: 0, y: 40 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupPassword,
-                    beginProps  : { alpha: 1, y: 0 },
-                    endProps    : { alpha: 0, y: 40 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupPasswordCommand,
-                    beginProps  : { alpha: 1, y: 0 },
-                    endProps    : { alpha: 0, y: 40 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupButton,
-                    beginProps  : { alpha: 1, y: 0 },
-                    endProps    : { alpha: 0, y: 40 },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgTitle,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._groupAccount,
+                beginProps  : { alpha: 1, y: 0 },
+                endProps    : { alpha: 0, y: 40 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupPassword,
+                beginProps  : { alpha: 1, y: 0 },
+                endProps    : { alpha: 0, y: 40 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupPasswordCommand,
+                beginProps  : { alpha: 1, y: 0 },
+                endProps    : { alpha: 0, y: 40 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupButton,
+                beginProps  : { alpha: 1, y: 0 },
+                endProps    : { alpha: 0, y: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

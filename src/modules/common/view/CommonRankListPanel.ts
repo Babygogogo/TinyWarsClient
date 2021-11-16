@@ -16,8 +16,8 @@
 // import UserModel                from "../../user/model/UserModel";
 // import TwnsUserPanel            from "../../user/view/UserPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonRankListPanel {
-    import UserPanel    = TwnsUserPanel.UserPanel;
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
 
@@ -221,7 +221,7 @@ namespace TwnsCommonRankListPanel {
         private _onTouchedImgBg(): void {
             const data = this.data;
             if (data) {
-                UserPanel.show({ userId: data.userId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId: data.userId });
             }
         }
 

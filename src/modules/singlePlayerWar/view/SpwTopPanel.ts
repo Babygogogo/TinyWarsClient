@@ -24,7 +24,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwTopPanel {
-    import UserPanel            = TwnsUserPanel.UserPanel;
     import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -171,7 +170,7 @@ namespace TwnsSpwTopPanel {
         private _onTouchedGroupPlayer(): void {
             const userId = this._getOpenData().war.getPlayerInTurn().getUserId();
             if (userId != null) {
-                UserPanel.show({ userId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             }
         }
@@ -194,11 +193,11 @@ namespace TwnsSpwTopPanel {
 
         private _onTouchedBtnChat(): void {
             TwnsSpwWarMenuPanel.SpwWarMenuPanel.hide();
-            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, {});
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
         }
 
         private _onTouchedBtnSettings(): void {
-            TwnsUserSettingsPanel.UserSettingsPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
         }
 
         private _onTouchedBtnExpand(): void {
@@ -379,7 +378,7 @@ namespace TwnsSpwTopPanel {
             const data      = this._getData();
             const userId    = data.war.getPlayer(data.playerIndex).getUserId();
             if (userId != null) {
-                UserPanel.show({ userId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
             }
         }
 

@@ -26,13 +26,8 @@ namespace TwnsUserLoginBackgroundPanel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
-    // eslint-disable-next-line no-shadow
-    export class UserLoginBackgroundPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Bottom;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance            : UserLoginBackgroundPanel | null = null;
-
+    export type OpenData = void;
+    export class UserLoginBackgroundPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _imgBackground!    : TwnsUiImage.UiImage;
 
         private readonly _groupRightButton! : eui.Group;
@@ -44,28 +39,7 @@ namespace TwnsUserLoginBackgroundPanel {
         private readonly _groupCopyright!   : eui.Group;
         private readonly _groupUnits!       : eui.Group;
 
-        public static show(): void {
-            if (!UserLoginBackgroundPanel._instance) {
-                UserLoginBackgroundPanel._instance = new UserLoginBackgroundPanel();
-            }
-            UserLoginBackgroundPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (UserLoginBackgroundPanel._instance) {
-                await UserLoginBackgroundPanel._instance.close();
-            }
-        }
-        public static getInstance(): UserLoginBackgroundPanel | null {
-            return UserLoginBackgroundPanel._instance;
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/user/UserLoginBackgroundPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
@@ -78,8 +52,6 @@ namespace TwnsUserLoginBackgroundPanel {
             ]);
             this._listLanguage.setItemRenderer(LanguageRenderer);
 
-            this._showOpenAnimation();
-
             this._imgBackground.touchEnabled = true;
 
             this._updateComponentsForLanguage();
@@ -89,10 +61,10 @@ namespace TwnsUserLoginBackgroundPanel {
                 // this._initGroupUnits();
             }
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
             this._clearGroupUnits();
         }
 
@@ -116,7 +88,7 @@ namespace TwnsUserLoginBackgroundPanel {
             CommonChangeVersionPanel.show();
         }
         private _onTouchedBtnSound(): void {
-            TwnsUserSetSoundPanel.UserSetSoundPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetSoundPanel, void 0);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -135,7 +107,7 @@ namespace TwnsUserLoginBackgroundPanel {
             listLanguage.setSelectedIndex(dataArray.findIndex(v => v.languageType === languageType));
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgBackground,
                 beginProps  : { alpha: 0 },
@@ -165,36 +137,37 @@ namespace TwnsUserLoginBackgroundPanel {
                 endProps    : { alpha: 1 },
                 waitTime    : 1700,
             });
+
+            await Helpers.wait(1700 + CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgBackground,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._listLanguage,
-                    beginProps  : { left: 0, alpha: 1 },
-                    endProps    : { left: -40, alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._labelVersion,
-                    beginProps  : { right: 20, alpha: 1 },
-                    endProps    : { right: -20, alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupRightButton,
-                    beginProps  : { right: 0, alpha: 1 },
-                    endProps    : { right: -40, alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupCopyright,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgBackground,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._listLanguage,
+                beginProps  : { left: 0, alpha: 1 },
+                endProps    : { left: -40, alpha: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._labelVersion,
+                beginProps  : { right: 20, alpha: 1 },
+                endProps    : { right: -20, alpha: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupRightButton,
+                beginProps  : { right: 0, alpha: 1 },
+                endProps    : { right: -40, alpha: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupCopyright,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         // private _initGroupUnits(): void {

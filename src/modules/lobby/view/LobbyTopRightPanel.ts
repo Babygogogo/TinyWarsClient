@@ -6,7 +6,6 @@
 // import TwnsUserSettingsPanel    from "../../user/view/UserSettingsPanel";
 
 namespace TwnsLobbyTopRightPanel {
-    import UserSettingsPanel    = TwnsUserSettingsPanel.UserSettingsPanel;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
     export class LobbyTopRightPanel extends TwnsUiPanel.UiPanel<void> {
@@ -63,7 +62,7 @@ namespace TwnsLobbyTopRightPanel {
         }
 
         private _onTouchedBtnSettings(): void {
-            UserSettingsPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
         }
 
         private _showOpenAnimation(): void {

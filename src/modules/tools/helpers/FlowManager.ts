@@ -149,12 +149,10 @@ namespace FlowManager {
         SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels(Helpers.getNonNullElements([
-            TwnsUserLoginBackgroundPanel.UserLoginBackgroundPanel.getInstance(),
-            TwnsUserLoginPanel.UserLoginPanel.getInstance(),
             TwnsBroadcastPanel.BroadcastPanel.getInstance(),
         ]));
-        TwnsUserLoginBackgroundPanel.UserLoginBackgroundPanel.show();
-        TwnsUserLoginPanel.UserLoginPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.UserLoginBackgroundPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.UserLoginPanel, void 0);
         TwnsBroadcastPanel.BroadcastPanel.show();
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);

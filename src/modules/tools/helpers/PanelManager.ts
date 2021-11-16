@@ -64,7 +64,7 @@ namespace TwnsPanelManager {
         layer.addChild(panel);
 
         if (!panel.getIsChildrenCreated()) {
-            await new Promise<void>(resolve => panel.once(TwnsUiPanel2.EVENT_PANEL_CHILDREN_CREATED, () => resolve(), null));
+            await new Promise<void>(resolve => panel.once(TwnsUiPanel2.EVENT_PANEL_CHILDREN_CREATED, resolve, null));
         }
 
         await panel.initOnOpening(openData);
@@ -109,13 +109,11 @@ namespace TwnsPanelManager {
         panel.skinName  = config.skinName;
         panel.setPanelConfig(config);
 
-        if (panel.getIsSkinLoaded()) {
-            return panel;
-        } else {
-            return await new Promise<TwnsUiPanel2.UiPanel2<T>>(resolve => {
-                panel.once(TwnsUiPanel2.EVENT_PANEL_SKIN_LOADED, () => resolve(panel), null);
-            });
+        if (!panel.getIsSkinLoaded()) {
+            await new Promise<void>(resolve => panel.once(TwnsUiPanel2.EVENT_PANEL_SKIN_LOADED, resolve, null));
         }
+
+        return panel;
     }
 
     export function getRunningPanel<T>(config: PanelConfig<T>): TwnsUiPanel2.UiPanel2<T> | null {

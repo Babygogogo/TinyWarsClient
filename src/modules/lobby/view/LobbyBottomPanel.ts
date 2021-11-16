@@ -13,10 +13,9 @@
 // import TwnsUserPanel                from "../../user/view/UserPanel";
 // import TwnsLobbyTopPanel            from "./LobbyTopPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLobbyBottomPanel {
-    import UserPanel                = TwnsUserPanel.UserPanel;
     import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
-    import UserOnlineUsersPanel     = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
     import MeMapListPanel           = TwnsMeMapListPanel.MeMapListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import Tween                    = egret.Tween;
@@ -82,20 +81,20 @@ namespace TwnsLobbyBottomPanel {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnMyInfo(): void {
-            UserOnlineUsersPanel.hide();
-            TwnsPanelManager.close(TwnsPanelConfig.PanelConfigDict.ChatPanel);
-            UserPanel.show({
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
                 userId: Helpers.getExisted(UserModel.getSelfUserId()),
             });
         }
 
         private _onTouchedBtnChat(): void {
-            UserOnlineUsersPanel.hide();
-            UserPanel.hide();
-            if (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.PanelConfigDict.ChatPanel)) {
-                TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, { toUserId: null });
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserPanel);
+            if (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.ChatPanel)) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: null });
             } else {
-                TwnsPanelManager.close(TwnsPanelConfig.PanelConfigDict.ChatPanel);
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
             }
         }
 

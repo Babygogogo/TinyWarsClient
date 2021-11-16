@@ -22,7 +22,6 @@
 namespace TwnsHrwTopPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import UserPanel            = TwnsUserPanel.UserPanel;
     import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import BwUnitListPanel      = TwnsBwUnitListPanel.BwUnitListPanel;
 
@@ -153,7 +152,7 @@ namespace TwnsHrwTopPanel {
 
         private _onTouchedGroupPlayer(): void {
             const userId = this._getWar().getPlayerInTurn().getUserId();
-            (userId) && (UserPanel.show({ userId }));
+            (userId) && (TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId }));
         }
         private _onTouchedGroupCo(): void {
             const war = this._getWar();
@@ -177,7 +176,7 @@ namespace TwnsHrwTopPanel {
         }
         private _onTouchedBtnChat(): void {
             TwnsHrwWarMenuPanel.HrwWarMenuPanel.hide();
-            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, {});
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
         }
         private async _onTouchedBtnFastRewind(): Promise<void> {
             const war = this._getWar();

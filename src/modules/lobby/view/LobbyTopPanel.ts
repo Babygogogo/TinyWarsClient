@@ -13,8 +13,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLobbyTopPanel {
-    import UserPanel            = TwnsUserPanel.UserPanel;
-    import UserOnlineUsersPanel = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
     export class LobbyTopPanel extends TwnsUiPanel.UiPanel<void> {
@@ -92,9 +90,9 @@ namespace TwnsLobbyTopPanel {
         }
 
         private _onTouchedGroupUserInfo(): void {
-            UserOnlineUsersPanel.hide();
-            TwnsPanelManager.close(TwnsPanelConfig.PanelConfigDict.ChatPanel);
-            UserPanel.show({
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
                 userId: Helpers.getExisted(UserModel.getSelfUserId()),
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);

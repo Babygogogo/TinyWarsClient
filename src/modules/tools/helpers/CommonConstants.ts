@@ -136,8 +136,9 @@ namespace CommonConstants {
         width   : 24,
         height  : 24,
     };
-    export const StageMinScale  = 100;
-    export const StageMaxScale  = 300;
+    export const StageMinScale      = 100;
+    export const StageMaxScale      = 300;
+    export const DefaultTweenTime   = 200;
 
     export const TileTypeMapping = new Map<TileBaseType, Map<TileObjectType, TileType>>([
         [TileBaseType.Beach, new Map([

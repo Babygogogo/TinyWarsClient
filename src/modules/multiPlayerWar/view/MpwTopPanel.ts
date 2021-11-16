@@ -30,7 +30,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwTopPanel {
-    import UserPanel            = TwnsUserPanel.UserPanel;
     import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -208,7 +207,7 @@ namespace TwnsMpwTopPanel {
         private _onTouchedGroupPlayer(): void {
             const userId = this._getOpenData().war.getPlayerInTurn().getUserId();
             if (userId != null) {
-                UserPanel.show({ userId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
 
                 if (userId !== UserModel.getSelfUserId()) {
                     UserProxy.reqUserGetOnlineState(userId);
@@ -236,11 +235,11 @@ namespace TwnsMpwTopPanel {
 
         private _onTouchedBtnChat(): void {
             TwnsMpwWarMenuPanel.MpwWarMenuPanel.hide();
-            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, {});
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
         }
 
         private _onTouchedBtnSettings(): void {
-            TwnsUserSettingsPanel.UserSettingsPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
         }
 
         private _onTouchedBtnExpand(): void {
@@ -469,7 +468,7 @@ namespace TwnsMpwTopPanel {
             const data      = this._getData();
             const userId    = data.war.getPlayer(data.playerIndex).getUserId();
             if (userId != null) {
-                UserPanel.show({ userId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
 
                 if (userId !== UserModel.getSelfUserId()) {
                     UserProxy.reqUserGetOnlineState(userId);

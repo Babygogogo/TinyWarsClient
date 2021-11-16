@@ -33,19 +33,18 @@ namespace TwnsUiPanel2 {
         private _uiListenerArray        : UiListener[] | null = null;
         private _panelConfig            : PanelConfig<OpenData> | null = null;
 
-        private _isTouchMaskEnabled         = false;
-        private _isCloseOnTouchedMask       = false;
-        private _callbackOnTouchedMask      : (() => void) | null = null;
-        private _touchMask?                 : eui.Group;
+        private _isTouchMaskEnabled     = false;
+        private _isCloseOnTouchedMask   = false;
+        private _callbackOnTouchedMask  : (() => void) | null = null;
+        private _touchMask?             : eui.Group;
 
         private _hasSetOpenData         = false;
         private _openData?              : OpenData;
 
-        protected constructor() {
+        public constructor() {
             super();
 
-            this.touchEnabled   = false;
-            this.touchChildren  = false;
+            this.touchEnabled = false;
             this.once(egret.Event.COMPLETE, this._onSkinLoaded, this);
         }
 
@@ -94,6 +93,9 @@ namespace TwnsUiPanel2 {
         // Functions for open self.
         ////////////////////////////////////////////////////////////////////////////////
         public async initOnOpening(openData: OpenData): Promise<void> {
+            const touchMask = createTouchMask();
+            this.addChild(touchMask);
+
             this._setOpenData(openData);
             if (!this._checkIsReadyForOpen()) {
                 throw Helpers.newError(`UiPanel2.initOnOpening() !this._checkIsReadyForOpen().`);
@@ -105,14 +107,13 @@ namespace TwnsUiPanel2 {
 
             this._onOpening();
             this._registerListeners();
-            this._resetTouchMask();
 
             await Promise.all([
                 this._showOpenAnimation(),
                 this._updateOnOpenDataChanged(),
             ]);
 
-            this.touchChildren = true;
+            this.removeChild(touchMask);
         }
         protected abstract _onOpening(): void;
 
@@ -163,7 +164,8 @@ namespace TwnsUiPanel2 {
         }
 
         public async clearOnClosing(): Promise<void> {
-            this.touchChildren = false;
+            const touchMask = createTouchMask();
+            this.addChild(touchMask);
 
             this._unregisterListeners();
             this._setUiListenerArray(null);
@@ -173,6 +175,8 @@ namespace TwnsUiPanel2 {
             this._onClosing();
 
             await this._showCloseAnimation();
+
+            this.removeChild(touchMask);
         }
         protected abstract _onClosing(): void;
 
@@ -214,11 +218,7 @@ namespace TwnsUiPanel2 {
 
             } else {
                 if (!this._touchMask) {
-                    const newMask           = new eui.Group();
-                    const stage             = StageManager.getStage();
-                    newMask.width           = stage.stageWidth;
-                    newMask.height          = stage.stageHeight;
-                    newMask.touchEnabled    = true;
+                    const newMask   = createTouchMask();
                     newMask.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedTouchMask, this);
                     this._touchMask = newMask;
                 }
@@ -308,6 +308,16 @@ namespace TwnsUiPanel2 {
                 }
             }
         }
+    }
+
+    function createTouchMask(): eui.Group {
+        const mask          = new eui.Group();
+        const stage         = StageManager.getStage();
+        mask.width          = stage.stageWidth;
+        mask.height         = stage.stageHeight;
+        mask.touchEnabled   = true;
+
+        return mask;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

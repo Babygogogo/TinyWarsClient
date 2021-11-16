@@ -15,15 +15,14 @@
 // import UserModel                from "../../user/model/UserModel";
 // import UserProxy                from "../../user/model/UserProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserChangeDiscordIdPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    export class UserChangeDiscordIdPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
+    export type OpenData = void;
+    export class UserChangeDiscordIdPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -36,30 +35,7 @@ namespace TwnsUserChangeDiscordIdPanel {
 
         private _isRequesting   = false;
 
-        private static _instance: UserChangeDiscordIdPanel;
-
-        public static show(): void {
-            if (!UserChangeDiscordIdPanel._instance) {
-                UserChangeDiscordIdPanel._instance = new UserChangeDiscordIdPanel();
-            }
-            UserChangeDiscordIdPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (UserChangeDiscordIdPanel._instance) {
-                await UserChangeDiscordIdPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/user/UserChangeDiscordIdPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserSetDiscordId,         callback: this._onMsgUserSetDiscordId },
@@ -70,6 +46,8 @@ namespace TwnsUserChangeDiscordIdPanel {
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._labelUrl,   callback: this._onTouchedLabelUrl },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
             this._isRequesting          = false;
             this._inputDiscordId.text   = UserModel.getSelfDiscordId() ?? ``;
@@ -81,11 +59,13 @@ namespace TwnsUserChangeDiscordIdPanel {
                 style   : { underline: true },
             }];
 
-            this._showOpenAnimation();
             this._updateComponentsForLanguage();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnConfirm(): void {
@@ -136,7 +116,7 @@ namespace TwnsUserChangeDiscordIdPanel {
             this._btnClose.label        = Lang.getText(LangTextType.B0154);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -147,21 +127,22 @@ namespace TwnsUserChangeDiscordIdPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

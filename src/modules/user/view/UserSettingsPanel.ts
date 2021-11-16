@@ -38,12 +38,8 @@ namespace TwnsUserSettingsPanel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
-    export class UserSettingsPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: UserSettingsPanel;
-
+    export type OpenData = void;
+    export class UserSettingsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
@@ -73,28 +69,7 @@ namespace TwnsUserSettingsPanel {
         private readonly _btnSetPrivilege!          : TwnsUiButton.UiButton;
         private readonly _btnMapManagement!         : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!UserSettingsPanel._instance) {
-                UserSettingsPanel._instance = new UserSettingsPanel();
-            }
-            UserSettingsPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (UserSettingsPanel._instance) {
-                await UserSettingsPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/user/UserSettingsPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
@@ -121,7 +96,8 @@ namespace TwnsUserSettingsPanel {
                 { ui: this._btnSetPrivilege,        callback: this._onTouchedBtnSetPrivilege },
                 { ui: this._btnMapManagement,       callback: this._onTouchedBtnMapManagement },
             ]);
-            this._btnClose.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
             this._uiRadioLanguage.setData({
                 titleTextType   : LangTextType.B0627,
@@ -234,16 +210,17 @@ namespace TwnsUserSettingsPanel {
                 },
             });
 
-            this._showOpenAnimation();
-
             const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnOpened_00);
             UserProxy.reqUserGetPublicInfo(selfUserId);
 
             this._scroller.viewport.scrollV = 0;
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -270,13 +247,13 @@ namespace TwnsUserSettingsPanel {
             UserProxy.reqUserGetPublicInfo(selfUserId);
         }
         private _onTouchedBtnChangeNickname(): void {
-            TwnsUserChangeNicknamePanel.UserChangeNicknamePanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserChangeNicknamePanel, void 0);
         }
         private _onTouchedBtnChangePassword(): void {
-            TwnsUserSetPasswordPanel.UserSetPasswordPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetPasswordPanel, void 0);
         }
         private _onTouchedBtnChangeDiscordId(): void {
-            TwnsUserChangeDiscordIdPanel.UserChangeDiscordIdPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserChangeDiscordIdPanel, void 0);
         }
         private _onTouchedBtnChangeGameVersion(): void {
             TwnsCommonChangeVersionPanel.CommonChangeVersionPanel.show();
@@ -285,20 +262,20 @@ namespace TwnsUserSettingsPanel {
             TwnsCommonRankListPanel.CommonRankListPanel.show();
         }
         private _onTouchedBtnShowOnlineUsers(): void {
-            TwnsUserOnlineUsersPanel.UserOnlineUsersPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserOnlineUsersPanel, void 0);
         }
         private _onTouchedBtnSetSound(): void {
-            TwnsUserSetSoundPanel.UserSetSoundPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetSoundPanel, void 0);
         }
         private _onTouchedBtnSetStageScaler(): void {
-            TwnsUserSetStageScalePanel.UserSetStageScalePanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetStageScalePanel, void 0);
         }
         private _onTouchedBtnServerStatus(): void {
             TwnsCommonServerStatusPanel.CommonServerStatusPanel.show();
         }
         private _onTouchedBtnComplaint(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, { toUserId: CommonConstants.AdminUserId });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: CommonConstants.AdminUserId });
         }
         private _onTouchedBtnUnitsInfo(): void {
             TwnsCommonDamageChartPanel.CommonDamageChartPanel.show();
@@ -308,7 +285,7 @@ namespace TwnsUserSettingsPanel {
         }
         private _onTouchedBtnSetPrivilege(): void {
             const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnTouchedBtnSetPrivilege_00);
-            TwnsUserSetPrivilegePanel.UserSetPrivilegePanel.show({ userId: selfUserId });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetPrivilegePanel, { userId: selfUserId });
         }
         private _onTouchedBtnMapManagement(): void {
             StageManager.closeAllPanels();
@@ -316,7 +293,7 @@ namespace TwnsUserSettingsPanel {
             TwnsMmMainMenuPanel.MmMainMenuPanel.show();
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -327,21 +304,22 @@ namespace TwnsUserSettingsPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {

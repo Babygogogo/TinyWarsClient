@@ -192,7 +192,7 @@ namespace TwnsMfrRoomInfoPanel {
         }
 
         private _onTouchedBtnChat(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {
                 toMfrRoomId: this._getOpenData().roomId,
             });
         }

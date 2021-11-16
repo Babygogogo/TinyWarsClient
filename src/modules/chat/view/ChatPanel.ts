@@ -58,13 +58,6 @@ namespace TwnsChatPanel {
         private _dataForListChat: DataForChatPageRenderer[] = [];
         private _selectedIndex  : number | null = null;
 
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-        }
-
         protected override _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
@@ -76,20 +69,23 @@ namespace TwnsChatPanel {
                 { ui: this._btnRefresh, callback: this._onTouchedBtnRefresh },
                 { ui: this._btnSend,    callback: this._onTouchedBtnSend },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listChat.setItemRenderer(ChatPageRenderer);
             this._listMessage.setItemRenderer(MessageRenderer);
             this._inputMessage.maxChars = CommonConstants.ChatMessageMaxLength;
 
             this._updateComponentsForLanguage();
         }
-        protected override _onClosing(): void {
-            this._dataForListChat.length    = 0;
-            this._selectedIndex             = null;
-        }
-        public override async _updateOnOpenDataChanged(): Promise<void> {
+        protected override async _updateOnOpenDataChanged(): Promise<void> {
             this._dataForListChat = await this._createDataForListChat();
             this._listChat.bindData(this._dataForListChat);
             this.setSelectedIndex(this._getDefaultSelectedIndex());
+        }
+        protected override _onClosing(): void {
+            this._dataForListChat.length    = 0;
+            this._selectedIndex             = null;
         }
 
         public setSelectedIndex(newIndex: number): void {
@@ -221,7 +217,7 @@ namespace TwnsChatPanel {
                 endProps    : { alpha: 1, bottom: 0 },
             });
 
-            await Helpers.wait(200);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected override async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
@@ -245,7 +241,7 @@ namespace TwnsChatPanel {
                 endProps    : { alpha: 0, bottom: -40 },
             });
 
-            await Helpers.wait(200);
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -682,7 +678,7 @@ namespace TwnsChatPanel {
                         CommonConfirmPanel.show({
                             content : Lang.getFormattedText(LangTextType.F0025, info.nickname),
                             callback: () => {
-                                TwnsPanelManager.open(TwnsPanelConfig.PanelConfigDict.ChatPanel, { toUserId: userId });
+                                TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: userId });
                             },
                         });
                     }
