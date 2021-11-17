@@ -48,7 +48,6 @@ namespace TwnsBwWar {
         public abstract getMapId(): number | null;
         public abstract getIsNeedExecutedAction(): boolean;
         public abstract getIsNeedSeedRandom(): boolean;
-        public abstract getIsWarMenuPanelOpening(): boolean;
         public abstract getCanCheat(): boolean;
         public abstract getPlayerManager(): TwnsBwPlayerManager.BwPlayerManager;
         public abstract getField(): TwnsBwField.BwField;

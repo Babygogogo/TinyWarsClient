@@ -16,19 +16,15 @@
 // import UserModel                from "../../user/model/UserModel";
 // import WwProxy                  from "../model/WwProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWwMakeRequestDetailPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    type OpenDataForMcrWatchMakeRequestDetailPanel = {
+    export type OpenData = {
         watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     };
-    export class WwMakeRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrWatchMakeRequestDetailPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WwMakeRequestDetailPanel;
-
+    export class WwMakeRequestDetailPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelYes!         : TwnsUiLabel.UiLabel;
         private readonly _labelNo!          : TwnsUiLabel.UiLabel;
@@ -38,27 +34,7 @@ namespace TwnsWwMakeRequestDetailPanel {
 
         private _dataForListPlayer  : DataForPlayerRenderer[] | null = null;
 
-        public static show(openData: OpenDataForMcrWatchMakeRequestDetailPanel): void {
-            if (!WwMakeRequestDetailPanel._instance) {
-                WwMakeRequestDetailPanel._instance = new WwMakeRequestDetailPanel();
-            }
-            WwMakeRequestDetailPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WwMakeRequestDetailPanel._instance) {
-                await WwMakeRequestDetailPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/watchWar/WwMakeRequestDetailPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -66,13 +42,16 @@ namespace TwnsWwMakeRequestDetailPanel {
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
-            this._listPlayer.setItemRenderer(PlayerRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._listPlayer.setItemRenderer(PlayerRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._dataForListPlayer = this._generateDataForListPlayer();
             this._updateView();
         }
-
-        protected async _onClosed(): Promise<void> {
+        protected _onClosing(): void {
             this._dataForListPlayer = null;
         }
 

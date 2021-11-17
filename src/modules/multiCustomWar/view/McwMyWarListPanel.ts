@@ -124,8 +124,8 @@ namespace TwnsMcwMyWarListPanel {
         private _onTouchTapBtnBack(): void {
             this.close();
             TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
-            TwnsLobbyTopPanel.LobbyTopPanel.show();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
 
         private _onTouchedBtnNextStep(): void {

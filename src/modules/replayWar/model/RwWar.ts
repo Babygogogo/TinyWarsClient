@@ -260,9 +260,6 @@ namespace TwnsRwWar {
 
             throw Helpers.newError(`Invalid war data.`, ClientErrorCode.RwWar_GetMapId_00);
         }
-        public getIsWarMenuPanelOpening(): boolean {
-            return TwnsRwWarMenuPanel.RwWarMenuPanel.getIsOpening();
-        }
 
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];

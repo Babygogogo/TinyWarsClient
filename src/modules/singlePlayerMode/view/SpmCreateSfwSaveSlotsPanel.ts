@@ -19,6 +19,7 @@
 // import WarCommonHelpers         from "../../tools/warHelpers/WarCommonHelpers";
 // import WarMapModel              from "../../warMap/model/WarMapModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpmCreateSfwSaveSlotsPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
@@ -26,14 +27,9 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
 
-    export type OpenDataForSpmCreateSfwSaveSlotsPanel = ISerialWar;
+    export type OpenData = ISerialWar;
 
-    export class SpmCreateSfwSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenDataForSpmCreateSfwSaveSlotsPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: SpmCreateSfwSaveSlotsPanel;
-
+    export class SpmCreateSfwSaveSlotsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
@@ -41,28 +37,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
         private readonly _btnHelp!          : TwnsUiButton.UiButton;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForSpmCreateSfwSaveSlotsPanel): void {
-            if (!SpmCreateSfwSaveSlotsPanel._instance) {
-                SpmCreateSfwSaveSlotsPanel._instance = new SpmCreateSfwSaveSlotsPanel();
-            }
-
-            SpmCreateSfwSaveSlotsPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (SpmCreateSfwSaveSlotsPanel._instance) {
-                await SpmCreateSfwSaveSlotsPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/singlePlayerMode/SpmCreateSfwSaveSlotsPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
@@ -70,9 +45,16 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-            this._srlSaveSlot.setItemRenderer(SlotRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._srlSaveSlot.setItemRenderer(SlotRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,7 +148,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
                             slotExtraData   : { slotComment: panel.getInputText() },
                             warData         : data.warData,
                         });
-                        SpmCreateSfwSaveSlotsPanel.hide();
+                        TwnsPanelManager.close(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel);
                     }
                 });
             };

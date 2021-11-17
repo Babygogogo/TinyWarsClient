@@ -275,9 +275,6 @@ namespace TwnsHrwWar {
 
             return null;
         }
-        public getIsWarMenuPanelOpening(): boolean {
-            return TwnsHrwWarMenuPanel.HrwWarMenuPanel.getIsOpening();
-        }
 
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];

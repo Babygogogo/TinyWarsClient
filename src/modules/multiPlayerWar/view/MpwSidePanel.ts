@@ -20,15 +20,10 @@ namespace TwnsMpwSidePanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    type OpenData = {
+    export type OpenData = {
         war     : TwnsMpwWar.MpwWar;
     };
-    export class MpwSidePanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MpwSidePanel;
-
+    export class MpwSidePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _groupLeft!    : eui.Group;
         private readonly _btnCop!       : TwnsUiButton.UiButton;
         private readonly _btnScop!      : TwnsUiButton.UiButton;
@@ -41,26 +36,7 @@ namespace TwnsMpwSidePanel {
         private readonly _btnInfo!      : TwnsUiButton.UiButton;
         private readonly _btnMenu!      : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenData): void {
-            if (!MpwSidePanel._instance) {
-                MpwSidePanel._instance = new MpwSidePanel();
-            }
-            MpwSidePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (MpwSidePanel._instance) {
-                await MpwSidePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiPlayerWar/MpwSidePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.BwTurnPhaseCodeChanged,          callback: this._onNotifyBwTurnPhaseCodeChanged },
@@ -83,8 +59,12 @@ namespace TwnsMpwSidePanel {
             this._btnScop.setShortSfxCode(Types.ShortSfxCode.None);
             this._btnNextUnit.setShortSfxCode(Types.ShortSfxCode.None);
             this._btnNextTile.setShortSfxCode(Types.ShortSfxCode.None);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +188,7 @@ namespace TwnsMpwSidePanel {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            TwnsMpwWarMenuPanel.MpwWarMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MpwWarMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

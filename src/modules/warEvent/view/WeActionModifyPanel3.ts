@@ -26,7 +26,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel3 {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import ColorValue               = Types.ColorValue;
@@ -35,17 +34,12 @@ namespace TwnsWeActionModifyPanel3 {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import BwWar                    = TwnsBwWar.BwWar;
 
-    type OpenDataForWeActionModifyPanel3 = {
+    export type OpenData = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel3 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel3> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeActionModifyPanel3;
-
+    export class WeActionModifyPanel3 extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _btnBack!              : TwnsUiButton.UiButton;
         private readonly _btnType!              : TwnsUiButton.UiButton;
         private readonly _btnPlay!              : TwnsUiButton.UiButton;
@@ -57,27 +51,7 @@ namespace TwnsWeActionModifyPanel3 {
         private readonly _labelBackground!      : TwnsUiLabel.UiLabel;
         private readonly _listDialogue!         : TwnsUiScrollList.UiScrollList<DataForDialogueRenderer>;
 
-        public static show(openData: OpenDataForWeActionModifyPanel3): void {
-            if (!WeActionModifyPanel3._instance) {
-                WeActionModifyPanel3._instance = new WeActionModifyPanel3();
-            }
-            WeActionModifyPanel3._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WeActionModifyPanel3._instance) {
-                await WeActionModifyPanel3._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeActionModifyPanel3.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnAddDialogue,     callback: this._onTouchedBtnAddDialogue },
                 { ui: this._btnClear,           callback: this._onTouchedBtnClear },
@@ -90,9 +64,16 @@ namespace TwnsWeActionModifyPanel3 {
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
             ]);
-            this._listDialogue.setItemRenderer(DialogueRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._listDialogue.setItemRenderer(DialogueRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +111,7 @@ namespace TwnsWeActionModifyPanel3 {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            WeActionTypeListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -156,7 +137,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnBackground(): void {
-            TwnsWeDialogueBackgroundPanel.WeDialogueBackgroundPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeDialogueBackgroundPanel, {
                 action: Helpers.getExisted(this._getOpenData().action.WeaDialogue),
             });
         }

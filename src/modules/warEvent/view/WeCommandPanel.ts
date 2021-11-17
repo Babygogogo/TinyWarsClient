@@ -23,17 +23,13 @@
 namespace TwnsWeCommandPanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeWar                    = TwnsMeWar.MeWar;
-    import WeEventRenamePanel       = TwnsWeEventRenamePanel.WeEventRenamePanel;
-    import WeNodeReplacePanel       = TwnsWeNodeReplacePanel.WeNodeReplacePanel;
-    import WeConditionReplacePanel  = TwnsWeConditionReplacePanel.WeConditionReplacePanel;
-    import WeActionReplacePanel     = TwnsWeActionReplacePanel.WeActionReplacePanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import ColorValue               = Types.ColorValue;
     import WarEventDescType         = Types.WarEventDescType;
 
-    type OpenDataForWeCommandPanel = {
+    export type OpenData = {
         war             : MeWar;
         descType        : WarEventDescType;
         eventId         : number;
@@ -42,12 +38,7 @@ namespace TwnsWeCommandPanel {
         parentNodeId?   : number;
         nodeId?         : number;
     };
-    export class WeCommandPanel extends TwnsUiPanel.UiPanel<OpenDataForWeCommandPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeCommandPanel;
-
+    export class WeCommandPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
         private readonly _labelDesc!                    : TwnsUiLabel.UiLabel;
         private readonly _labelError!                   : TwnsUiLabel.UiLabel;
@@ -72,29 +63,7 @@ namespace TwnsWeCommandPanel {
         private readonly _btnAddAction!                 : TwnsUiButton.UiButton;
         private readonly _btnDeleteAction!              : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForWeCommandPanel): void {
-            if (!WeCommandPanel._instance) {
-                WeCommandPanel._instance = new WeCommandPanel();
-            }
-
-            WeCommandPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (WeCommandPanel._instance) {
-                WeCommandPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeCommandPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose,                       callback: this.close },
                 { ui: this._btnModifyEventName,             callback: this._onTouchedBtnModifyEventName },
@@ -119,12 +88,19 @@ namespace TwnsWeCommandPanel {
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.WarEventFullDataChanged,        callback: this._onNotifyWarEventFullDataChanged },
             ]);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnModifyEventName(): void {           // DONE
             const data = this._getOpenData();
-            WeEventRenamePanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeEventRenamePanel, {
                 war         : data.war,
                 warEventId  : data.eventId,
             });
@@ -233,7 +209,7 @@ namespace TwnsWeCommandPanel {
         }
         private _onTouchedBtnReplaceNode(): void {               // DONE
             const data = this._getOpenData();
-            WeNodeReplacePanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeNodeReplacePanel, {
                 eventId         : data.eventId,
                 parentNodeId    : data.parentNodeId,
                 nodeId          : data.nodeId ?? null,
@@ -285,7 +261,7 @@ namespace TwnsWeCommandPanel {
         }
         private _onTouchedBtnReplaceCondition(): void {
             const openData = this._getOpenData();
-            WeConditionReplacePanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionReplacePanel, {
                 fullData    : Helpers.getExisted(openData.war.getWarEventManager().getWarEventFullData()),
                 parentNodeId: Helpers.getExisted(openData.parentNodeId),
                 conditionId : Helpers.getExisted(openData.conditionId),
@@ -316,7 +292,7 @@ namespace TwnsWeCommandPanel {
         }
         private _onTouchedBtnReplaceAction(): void {
             const openData = this._getOpenData();
-            WeActionReplacePanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionReplacePanel, {
                 fullData    : Helpers.getExisted(openData.war.getWarEventManager().getWarEventFullData()),
                 eventId     : openData.eventId,
                 actionId    : Helpers.getExisted(openData.actionId),
@@ -417,7 +393,7 @@ namespace TwnsWeCommandPanel {
                 throw Helpers.newError(`Invalid descType: ${descType}`, ClientErrorCode.WeCommandPanel_UpdateLabelDescAndButtons_00);
             }
         }
-        private _updateForEvent(data: OpenDataForWeCommandPanel): void {                      // DONE
+        private _updateForEvent(data: OpenData): void {                      // DONE
             const fullData          = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
             const eventId           = data.eventId;
             const event             = Helpers.getExisted(fullData.eventArray?.find(v => v.eventId === eventId));
@@ -434,7 +410,7 @@ namespace TwnsWeCommandPanel {
             group.addChild(this._btnAddAction);
             group.addChild(this._btnDeleteEvent);
         }
-        private _updateForEventCallCountInPlayerTurn(data: OpenDataForWeCommandPanel): void { // DONE
+        private _updateForEventCallCountInPlayerTurn(data: OpenData): void { // DONE
             const fullData          = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
             const eventId           = data.eventId;
             const event             = Helpers.getExisted(fullData.eventArray?.find(v => v.eventId === eventId));
@@ -448,7 +424,7 @@ namespace TwnsWeCommandPanel {
             group.removeChildren();
             group.addChild(this._btnModifyMaxCallCountPerTurn);
         }
-        private _updateForEventCallCountTotal(data: OpenDataForWeCommandPanel): void {        // DONE
+        private _updateForEventCallCountTotal(data: OpenData): void {        // DONE
             const fullData          = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
             const eventId           = data.eventId;
             const event             = Helpers.getExisted(fullData.eventArray?.find(v => v.eventId === eventId));
@@ -462,7 +438,7 @@ namespace TwnsWeCommandPanel {
             group.removeChildren();
             group.addChild(this._btnModifyMaxCallCountTotal);
         }
-        private _updateForConditionNode(data: OpenDataForWeCommandPanel): void {              // DONE
+        private _updateForConditionNode(data: OpenData): void {              // DONE
             const fullData          = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
             const nodeId            = data.nodeId;
             const node              = Helpers.getExisted(fullData.conditionNodeArray?.find(v => v.nodeId === nodeId));
@@ -480,7 +456,7 @@ namespace TwnsWeCommandPanel {
             group.addChild(this._btnReplaceNode);
             group.addChild(this._btnDeleteNode);
         }
-        private _updateForCondition(data: OpenDataForWeCommandPanel): void {                  // DONE
+        private _updateForCondition(data: OpenData): void {                  // DONE
             const fullData          = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
             const conditionId       = data.conditionId;
             const condition         = Helpers.getExisted(fullData.conditionArray?.find(v => v.WecCommonData?.conditionId === conditionId));
@@ -496,7 +472,7 @@ namespace TwnsWeCommandPanel {
             group.addChild(this._btnReplaceCondition);
             group.addChild(this._btnDeleteCondition);
         }
-        private _updateForAction(data: OpenDataForWeCommandPanel): void {                     // DONE
+        private _updateForAction(data: OpenData): void {                     // DONE
             const fullData          = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
             const actionId          = data.actionId;
             const action            = Helpers.getExisted(fullData.actionArray?.find(v => v.WeaCommonData?.actionId === actionId));

@@ -23,18 +23,11 @@ namespace TwnsRwTopPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
-    import RwWarMenuPanel       = TwnsRwWarMenuPanel.RwWarMenuPanel;
 
-    type OpenData = {
+    export type OpenData = {
         war : TwnsRwWar.RwWar;
     };
-    // eslint-disable-next-line no-shadow
-    export class RwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: RwTopPanel;
-
+    export class RwTopPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _groupPlayer!      : eui.Group;
         private readonly _labelPlayer!      : TwnsUiLabel.UiLabel;
         private readonly _labelFund!        : TwnsUiLabel.UiLabel;
@@ -58,26 +51,7 @@ namespace TwnsRwTopPanel {
         private readonly _btnUnitList!      : TwnsUiButton.UiButton;
         private readonly _btnMenu!          : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenData): void {
-            if (!RwTopPanel._instance) {
-                RwTopPanel._instance = new RwTopPanel();
-            }
-            RwTopPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (RwTopPanel._instance) {
-                await RwTopPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/replayWar/RwTopPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
@@ -103,8 +77,12 @@ namespace TwnsRwTopPanel {
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _getWar(): TwnsRwWar.RwWar {
@@ -157,7 +135,6 @@ namespace TwnsRwTopPanel {
         private _onTouchedGroupCo(): void {
             const war = this._getWar();
             CommonCoListPanel.show({ war });
-            RwWarMenuPanel.hide();
         }
         private _onTouchedGroupProgress(): void {
             const war = this._getWar();
@@ -171,11 +148,10 @@ namespace TwnsRwTopPanel {
             } else if (war.getIsExecutingAction()) {
                 FloatText.show(Lang.getText(LangTextType.A0044));
             } else {
-                TwnsRwReplayProgressPanel.RwReplayProgressPanel.show({ war });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.RwReplayProgressPanel, { war });
             }
         }
         private _onTouchedBtnChat(): void {
-            RwWarMenuPanel.hide();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
         }
         private async _onTouchedBtnFastRewind(): Promise<void> {
@@ -233,7 +209,7 @@ namespace TwnsRwTopPanel {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            RwWarMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.RwWarMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

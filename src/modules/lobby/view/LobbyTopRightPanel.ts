@@ -5,40 +5,16 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import TwnsUserSettingsPanel    from "../../user/view/UserSettingsPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLobbyTopRightPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    export class LobbyTopRightPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance            : LobbyTopRightPanel | null = null;
-
+    export type OpenData = void;
+    export class LobbyTopRightPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _btnSettings!      : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!LobbyTopRightPanel._instance) {
-                LobbyTopRightPanel._instance = new LobbyTopRightPanel();
-            }
-            LobbyTopRightPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (LobbyTopRightPanel._instance) {
-                await LobbyTopRightPanel._instance.close();
-            }
-        }
-        public static getInstance(): LobbyTopRightPanel | null {
-            return LobbyTopRightPanel._instance;
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/lobby/LobbyTopRightPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogout,   callback: this._onMsgUserLogout },
@@ -46,11 +22,12 @@ namespace TwnsLobbyTopRightPanel {
             this._setUiListenerArray([
                 { ui: this._btnSettings,    callback: this._onTouchedBtnSettings },
             ]);
-
-            this._showOpenAnimation();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onMsgUserLogout(): void {
@@ -65,22 +42,23 @@ namespace TwnsLobbyTopRightPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
         }
 
-        private _showOpenAnimation(): void {
-            const group = this._group;
-            egret.Tween.removeTweens(group);
-            egret.Tween.get(group)
-                .set({ alpha: 0, top: -40 })
-                .to({ alpha: 1, top: 0 }, 200);
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                const group = this._group;
-                egret.Tween.removeTweens(group);
-                egret.Tween.get(group)
-                    .set({ alpha: 1, top: 0 })
-                    .to({ alpha: 0, top: -40 }, 200)
-                    .call(resolve);
+        protected async _showOpenAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, top: -40 },
+                endProps    : { alpha: 1, top: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, top: 0 },
+                endProps    : { alpha: 0, top: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

@@ -41,7 +41,6 @@ namespace TwnsMeWarRulePanel {
     import MeAvailableCoPanel       = TwnsMeAvailableCoPanel.MeAvailableCoPanel;
     import MeAddWarEventToRulePanel = TwnsMeAddWarEventToRulePanel.MeAddWarEventToRulePanel;
     import MeModifyRuleNamePanel    = TwnsMeModifyRuleNamePanel.MeModifyRuleNamePanel;
-    import WeEventListPanel         = TwnsWeEventListPanel.WeEventListPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarRule                 = ProtoTypes.WarRule.IWarRule;
@@ -312,7 +311,7 @@ namespace TwnsMeWarRulePanel {
         }
 
         private _onTouchedBtnEditWarEvent(): void {
-            WeEventListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeEventListPanel, {
                 war: this._getWar(),
             });
             this.close();

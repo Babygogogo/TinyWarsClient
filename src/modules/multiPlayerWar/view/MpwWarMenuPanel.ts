@@ -27,12 +27,8 @@ namespace TwnsMpwWarMenuPanel {
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
 
-    export class MpwWarMenuPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MpwWarMenuPanel;
-
+    export type OpenData = void;
+    export class MpwWarMenuPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -50,31 +46,7 @@ namespace TwnsMpwWarMenuPanel {
         private readonly _btnGotoWarList!       : TwnsUiButton.UiButton;
         private readonly _btnGotoLobby!         : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!MpwWarMenuPanel._instance) {
-                MpwWarMenuPanel._instance = new MpwWarMenuPanel();
-            }
-            MpwWarMenuPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MpwWarMenuPanel._instance) {
-                await MpwWarMenuPanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = MpwWarMenuPanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/multiPlayerWar/MpwWarMenuPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
@@ -96,17 +68,14 @@ namespace TwnsMpwWarMenuPanel {
                 { ui: this._btnGotoWarList,                             callback: this._onTouchedBtnGotoWarList },
                 { ui: this._btnGotoLobby,                               callback: this._onTouchedBtnGotoLobby },
             ]);
-
-            this._showOpenAnimation();
-
-            this._updateView();
-
-            Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
-            Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _getWar(): TwnsMpwWar.MpwWar {
@@ -201,7 +170,7 @@ namespace TwnsMpwWarMenuPanel {
             }
 
             const war = this._getWar();
-            TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel, war.serializeForCreateSfw());
         }
 
         private async _onTouchedBtnFreeMode(): Promise<void> {
@@ -368,7 +337,7 @@ namespace TwnsMpwWarMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -379,21 +348,22 @@ namespace TwnsMpwWarMenuPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateView(): void {

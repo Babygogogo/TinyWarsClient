@@ -58,7 +58,6 @@ namespace TwnsMeWarMenuPanel {
     import MeImportPanel            = TwnsMeImportPanel.MeImportPanel;
     import MeMfwSettingsPanel       = TwnsMeMfwSettingsPanel.MeMfwSettingsPanel;
     import MeOffsetPanel            = TwnsMeOffsetPanel.MeOffsetPanel;
-    import WeEventListPanel         = TwnsWeEventListPanel.WeEventListPanel;
     import MmAcceptMapPanel         = TwnsMmAcceptMapPanel.MmAcceptMapPanel;
     import MmRejectMapPanel         = TwnsMmRejectMapPanel.MmRejectMapPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
@@ -143,11 +142,9 @@ namespace TwnsMeWarMenuPanel {
 
             this._menuType = TwnsMeWarMenuType.Main;
             this._updateView();
-
-            Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
+            // nothing to do
         }
 
         private _getWar(): MeWar {
@@ -510,7 +507,7 @@ namespace TwnsMeWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0469),
                 callback: () => {
-                    WeEventListPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.WeEventListPanel, {
                         war: this._getWar(),
                     });
                     this.close();

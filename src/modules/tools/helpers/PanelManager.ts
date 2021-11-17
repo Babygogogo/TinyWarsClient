@@ -7,7 +7,7 @@ namespace TwnsPanelManager {
     const _IS_CACHE_ENABLED = true;
     const _runningPanelDict = new Map<PanelConfig<any>, TwnsUiPanel2.UiPanel2<any>>();
     const _cachedPanelDict  = new Map<PanelConfig<any>, TwnsUiPanel2.UiPanel2<any>>();
-    const _queueDict        = new Map<string, (() => Promise<void>)[]>();
+    const _queueDict        = new Map<PanelConfig<any>, (() => Promise<void>)[]>();
 
     /**
      * 打开面板不是瞬时的，因为可能需要加载远程资源。
@@ -23,7 +23,7 @@ namespace TwnsPanelManager {
      * 如果不是以上情况，则会从头创建面板。
      */
     export async function open<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
-        return addToQueue(config.skinName, () => doOpen(config, openData));
+        return addToQueue(config, () => doOpen(config, openData));
     }
     async function doOpen<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
         return getRunningPanel(config)
@@ -41,12 +41,12 @@ namespace TwnsPanelManager {
         return panel;
     }
     async function openViaCachedPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
-        const panel = Helpers.getExisted(getCachedPanel(config), ClientErrorCode.PanelManager_OpenViaCachedPanel_00);
-        const layer = StageManager.getLayer(config.layer);
+        const panel     = Helpers.getExisted(getCachedPanel(config), ClientErrorCode.PanelManager_OpenViaCachedPanel_00);
+        const layerType = config.layer;
         if (config.isExclusive) {
-            layer.closeAllPanels();
+            closeAllPanelsInLayerExcept(layerType, [config]);
         }
-        layer.addChild(panel);
+        StageManager.getLayer(layerType).addChild(panel);
 
         await panel.initOnOpening(openData);
 
@@ -56,12 +56,12 @@ namespace TwnsPanelManager {
         return panel;
     }
     async function openViaCreatePanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
-        const panel = await createPanel(config);
-        const layer = StageManager.getLayer(config.layer);
+        const panel     = await createPanel(config);
+        const layerType = config.layer;
         if (config.isExclusive) {
-            layer.closeAllPanels();
+            closeAllPanelsInLayerExcept(layerType, [config]);
         }
-        layer.addChild(panel);
+        StageManager.getLayer(layerType).addChild(panel);
 
         if (!panel.getIsChildrenCreated()) {
             await new Promise<void>(resolve => panel.once(TwnsUiPanel2.EVENT_PANEL_CHILDREN_CREATED, resolve, null));
@@ -86,7 +86,7 @@ namespace TwnsPanelManager {
      * 轮到此次close时，如果指定面板未被打开，那么此次关闭将直接被忽略，否则就正常进行关闭。
      */
     export async function close<T>(config: PanelConfig<T>): Promise<void> {
-        addToQueue(config.skinName, () => doClose(config));
+        addToQueue(config, () => doClose(config));
     }
     async function doClose<T>(config: PanelConfig<T>): Promise<void> {
         const panel = getRunningPanel(config);
@@ -102,6 +102,31 @@ namespace TwnsPanelManager {
         deleteRunningPanel(config);
 
         Logger.warn(`Panel closed: ${config.skinName}`);
+    }
+    export async function closeAllPanelsExcept(exceptions: PanelConfig<any>[] = []): Promise<void> {
+        const promiseArray: Promise<void>[] = [];
+        for (const [config, queue] of _queueDict) {
+            if (((queue.length) || (getRunningPanel(config)))   &&
+                (exceptions.indexOf(config) < 0)
+            ) {
+                promiseArray.push(close(config));
+            }
+        }
+
+        await Promise.all(promiseArray);
+    }
+    async function closeAllPanelsInLayerExcept(layer: Types.LayerType, exceptions: PanelConfig<any>[] = []): Promise<void> {
+        const promiseArray: Promise<void>[] = [];
+        for (const [config, queue] of _queueDict) {
+            if (((queue.length) || (getRunningPanel(config)))   &&
+                (config.layer === layer)                        &&
+                (exceptions.indexOf(config) < 0)
+            ) {
+                promiseArray.push(close(config));
+            }
+        }
+
+        await Promise.all(promiseArray);
     }
 
     async function createPanel<T>(config: PanelConfig<T>): Promise<TwnsUiPanel2.UiPanel2<T>> {
@@ -133,10 +158,10 @@ namespace TwnsPanelManager {
         _cachedPanelDict.set(config, panel);
     }
 
-    function addToQueue<T>(queueKey: string, rawFunc: () => Promise<T>): Promise<T> {
+    function addToQueue<T>(config: PanelConfig<any>, rawFunc: () => Promise<T>): Promise<T> {
         return new Promise<T>((resolve) => {
             const func = async (): Promise<void> => {
-                const funcList = _queueDict.get(queueKey);
+                const funcList = _queueDict.get(config);
                 if (!funcList) {
                     throw Helpers.newError(`PanelManager.addToQueue() exception queueing 1!!`, ClientErrorCode.PanelManager_AddToQueue_00);
                 } else {
@@ -152,17 +177,18 @@ namespace TwnsPanelManager {
                         if (funcList.length) {
                             funcList[0]();
                         } else {
-                            _queueDict.delete(queueKey);
+                            // _queueDict.delete(config);
                         }
                     }
                 }
             };
 
-            const currQueue = _queueDict.get(queueKey);
+            const currQueue = _queueDict.get(config);
             if (currQueue) {
                 currQueue.push(func);
+                (currQueue.length === 1) && (func());
             } else {
-                _queueDict.set(queueKey, [func]);
+                _queueDict.set(config, [func]);
                 func();
             }
         });

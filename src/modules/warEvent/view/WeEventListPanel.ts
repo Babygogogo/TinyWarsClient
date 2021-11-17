@@ -20,21 +20,15 @@
 namespace TwnsWeEventListPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeWar                = TwnsMeWar.MeWar;
-    import WeCommandPanel       = TwnsWeCommandPanel.WeCommandPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ColorValue           = Types.ColorValue;
     import WarEventDescType     = Types.WarEventDescType;
 
-    type OpenDataForWeEventListPanel = {
+    export type OpenData = {
         war: MeWar;
     };
-    export class WeEventListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeEventListPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeEventListPanel;
-
+    export class WeEventListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _btnBack!      : TwnsUiButton.UiButton;
         private readonly _btnAddEvent!  : TwnsUiButton.UiButton;
         private readonly _btnClear!     : TwnsUiButton.UiButton;
@@ -42,25 +36,7 @@ namespace TwnsWeEventListPanel {
         private readonly _labelNoEvent! : TwnsUiLabel.UiLabel;
         private readonly _listWarEvent! : TwnsUiScrollList.UiScrollList<DataForWarEventDescRenderer>;
 
-        public static show(openData: OpenDataForWeEventListPanel): void {
-            if (!WeEventListPanel._instance) {
-                WeEventListPanel._instance = new WeEventListPanel();
-            }
-            WeEventListPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WeEventListPanel._instance) {
-                await WeEventListPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/warEvent/WeEventListPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnAddEvent,    callback: this._onTouchedBtnAddEvent },
                 { ui: this._btnClear,       callback: this._onTouchedBtnClear },
@@ -71,8 +47,12 @@ namespace TwnsWeEventListPanel {
                 { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyMeWarEventFullDataChanged },
             ]);
             this._listWarEvent.setItemRenderer(WarEventDescRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -271,7 +251,7 @@ namespace TwnsWeEventListPanel {
         private _onTouchedBtnModify(): void {
             const data = this.data;
             if (data) {
-                WeCommandPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.WeCommandPanel, {
                     war             : data.war,
                     descType        : data.descType,
                     eventId         : data.eventId,

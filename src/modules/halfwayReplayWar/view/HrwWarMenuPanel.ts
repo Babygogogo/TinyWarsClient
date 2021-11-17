@@ -110,11 +110,9 @@ namespace TwnsHrwWarMenuPanel {
 
             this._menuType = MenuType.Main;
             this._updateView();
-
-            Notify.dispatch(NotifyType.BwWarMenuPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            Notify.dispatch(NotifyType.BwWarMenuPanelClosed);
+            // nothing to do
         }
 
         private _getWar(): TwnsHrwWar.HrwWar {
@@ -302,7 +300,7 @@ namespace TwnsHrwWarMenuPanel {
                     if (war.getIsExecutingAction()) {
                         FloatText.show(Lang.getText(LangTextType.A0103));
                     } else {
-                        TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel, war.serializeForCreateSfw());
                     }
                 },
             };

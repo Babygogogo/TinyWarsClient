@@ -40,15 +40,10 @@ namespace TwnsMpwTopPanel {
         Expanded,
     }
 
-    type OpenData = {
+    export type OpenData = {
         war     : TwnsMpwWar.MpwWar;
     };
-    export class MpwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MpwTopPanel;
-
+    export class MpwTopPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
         private readonly _labelWeather!         : TwnsUiLabel.UiLabel;
         private readonly _groupTimer!           : eui.Group;
@@ -73,26 +68,7 @@ namespace TwnsMpwTopPanel {
         private readonly _btnExpand!            : TwnsUiButton.UiButton;
         private readonly _btnNarrow!            : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenData): void {
-            if (!MpwTopPanel._instance) {
-                MpwTopPanel._instance = new MpwTopPanel();
-            }
-            MpwTopPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (MpwTopPanel._instance) {
-                await MpwTopPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiPlayerWar/MpwTopPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.TimeTick,                        callback: this._onNotifyTimeTick },
@@ -120,9 +96,14 @@ namespace TwnsMpwTopPanel {
             ]);
             this._labelWeather.touchEnabled = true;
             this._listPlayer.setItemRenderer(PlayerRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._setPanelSkinState(PanelSkinState.Normal);
 
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,7 +202,7 @@ namespace TwnsMpwTopPanel {
             CommonCoListPanel.show({
                 war : this._getOpenData().war,
             });
-            TwnsMpwWarMenuPanel.MpwWarMenuPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.MpwWarMenuPanel);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
@@ -229,12 +210,12 @@ namespace TwnsMpwTopPanel {
             CommonCoListPanel.show({
                 war : this._getOpenData().war,
             });
-            TwnsMpwWarMenuPanel.MpwWarMenuPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.MpwWarMenuPanel);
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         private _onTouchedBtnChat(): void {
-            TwnsMpwWarMenuPanel.MpwWarMenuPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.MpwWarMenuPanel);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
         }
 

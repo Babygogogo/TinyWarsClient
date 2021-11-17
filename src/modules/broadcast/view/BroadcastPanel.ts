@@ -10,44 +10,20 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import BroadcastModel       from "../model/BroadcastModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBroadcastPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     const _FLOW_SPEED = 80;
 
-    export class BroadcastPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Notify0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance        : BroadcastPanel | null = null;
-
+    export type OpenData = void;
+    export class BroadcastPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _groupLamp!    : eui.Group;
         private readonly _labelLamp!    : TwnsUiLabel.UiLabel;
 
         private _ongoingMessageIdSet    = new Set<number>();
 
-        public static show(): void {
-            if (!BroadcastPanel._instance) {
-                BroadcastPanel._instance = new BroadcastPanel();
-            }
-            BroadcastPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (BroadcastPanel._instance) {
-                await BroadcastPanel._instance.close();
-            }
-        }
-        public static getInstance(): BroadcastPanel | null {
-            return BroadcastPanel._instance;
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/broadcast/BroadcastPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.TimeTick,                   callback: this._onNotifyTimeTick },
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
@@ -58,6 +34,12 @@ namespace TwnsBroadcastPanel {
             this.touchChildren  = false;
 
             this._resetView();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyTimeTick(): void {

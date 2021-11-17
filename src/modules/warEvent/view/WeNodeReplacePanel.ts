@@ -21,54 +21,35 @@ namespace TwnsWeNodeReplacePanel {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
 
-    type OpenDataForWeNodeReplacePanel = {
+    export type OpenData = {
         eventId         : number;
         parentNodeId?   : number;
         nodeId          : number | null;
         fullData        : IWarEventFullData;
     };
-    export class WeNodeReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeNodeReplacePanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeNodeReplacePanel;
-
+    export class WeNodeReplacePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _listNode!     : TwnsUiScrollList.UiScrollList<DataForNodeRenderer>;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelNoNode!  : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForWeNodeReplacePanel): void {
-            if (!WeNodeReplacePanel._instance) {
-                WeNodeReplacePanel._instance = new WeNodeReplacePanel();
-            }
-            WeNodeReplacePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (WeNodeReplacePanel._instance) {
-                await WeNodeReplacePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeNodeReplacePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
             ]);
-            this._listNode.setItemRenderer(NodeRenderer);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
+            this._listNode.setItemRenderer(NodeRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {

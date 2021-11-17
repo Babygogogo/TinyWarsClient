@@ -29,17 +29,6 @@
             "import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;",
         ],
     },
-    "Show Close Animation": {
-        "scope": "typescript",
-        "prefix": "showclose",
-        "body": [
-            "private _showCloseAnimation(): Promise<void> {",
-            "    return new Promise<void>((resolve, reject) => {",
-            "        ",
-            "    });",
-            "}",
-        ],
-    },
     "Helpers.getExisted()": {
         "scope": "typescript",
         "prefix": "hge",
@@ -52,6 +41,65 @@
         "prefix": "te",
         "body": [
             "throw Helpers.newError(`$1`);",
+        ],
+    },
+    "Open Panel": {
+        "scope": "typescript",
+        "prefix": "op",
+        "body": [
+            "TwnsPanelManager.open(TwnsPanelConfig.Dict.$1);"
+        ],
+    },
+    "Close Panel": {
+        "scope": "typescript",
+        "prefix": "cp",
+        "body": [
+            "TwnsPanelManager.close(TwnsPanelConfig.Dict.$1);"
+        ],
+    },
+
+    "Panel UpdateOnOpenDataChanged": {
+        "scope": "typescript",
+        "prefix": "upd",
+        "body": [
+            "protected async _updateOnOpenDataChanged(): Promise<void> {",
+            "    // nothing to do",
+            "}",
+        ],
+    },
+    "Panel ShowOpenAnimation": {
+        "scope": "typescript",
+        "prefix": "showo",
+        "body": [
+            "protected async _showOpenAnimation(): Promise<void> {",
+        ],
+    },
+    "Panel ShowCloseAnimation": {
+        "scope": "typescript",
+        "prefix": "showc",
+        "body": [
+            "protected async _showCloseAnimation(): Promise<void> {",
+        ],
+    },
+    "Panel OnOpening": {
+        "scope": "typescript",
+        "prefix": "ono",
+        "body": [
+            "protected _onOpening(): void {",
+        ],
+    },
+    "Panel OnClosing": {
+        "scope": "typescript",
+        "prefix": "onc",
+        "body": [
+            "protected _onClosing(): void {",
+        ],
+    },
+    "Helper Wait": {
+        "scope": "typescript",
+        "prefix": "hw",
+        "body": [
+            "await Helpers.wait(CommonConstants.DefaultTweenTime);",
         ],
     },
 }

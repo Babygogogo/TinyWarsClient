@@ -18,50 +18,30 @@ namespace TwnsWarMapBuildingListPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    type OpenDataForBuildingListPanel = {
+    export type OpenData = {
         configVersion           : string;
         tileDataArray           : ProtoTypes.WarSerialization.ISerialTile[];
         playersCountUnneutral   : number;
     };
-
-    export class WarMapBuildingListPanel extends TwnsUiPanel.UiPanel<OpenDataForBuildingListPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: WarMapBuildingListPanel;
-
+    export class WarMapBuildingListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _listTile!     : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
 
-        public static show(openData: OpenDataForBuildingListPanel): void {
-            if (!WarMapBuildingListPanel._instance) {
-                WarMapBuildingListPanel._instance = new WarMapBuildingListPanel();
-            }
-            WarMapBuildingListPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (WarMapBuildingListPanel._instance) {
-                await WarMapBuildingListPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/warMap/WarMapBuildingListPanel.exml";
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
-            this._listTile.setItemRenderer(TileRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._listTile.setItemRenderer(TileRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
             this._updateListTile();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {

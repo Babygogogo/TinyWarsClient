@@ -100,8 +100,6 @@ namespace TwnsNotifyType {
         BwActionPlannerStateChanged,
         BwActionPlannerMovePathChanged,
 
-        BwWarMenuPanelOpened,
-        BwWarMenuPanelClosed,
         BwProduceUnitPanelOpened,
         BwProduceUnitPanelClosed,
         BwCoListPanelOpened,

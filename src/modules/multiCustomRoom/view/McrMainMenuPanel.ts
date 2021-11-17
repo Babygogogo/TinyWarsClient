@@ -22,6 +22,7 @@
 // import TwnsMcrJoinRoomListPanel     from "./McrJoinRoomListPanel";
 // import TwnsMcrMyRoomListPanel       from "./McrMyRoomListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMcrMainMenuPanel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import Tween                    = egret.Tween;
@@ -97,45 +98,45 @@ namespace TwnsMcrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnRanking(): void {
             this.close();
-            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            TwnsSpmMainMenuPanel.SpmMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
         }
         private _onTouchedBtnCreateRoom(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
             TwnsMcrCreateMapListPanel.McrCreateMapListPanel.show({});
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
             TwnsMcrJoinRoomListPanel.McrJoinRoomListPanel.show();
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
             TwnsMcrMyRoomListPanel.McrMyRoomListPanel.show();
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
             TwnsMcwMyWarListPanel.McwMyWarListPanel.show();
         }
         private _onTouchedBtnWatchWar(): void {
             this.close();
-            TwnsWwMainMenuPanel.WwMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMainMenuPanel, void 0);
         }
         private _onTouchedBtnReplayWar(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            TwnsRwReplayListPanel.RwReplayListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.RwReplayListPanel, void 0);
         }
         private _onTouchedBtnCoopMode(): void {
             this.close();
@@ -143,7 +144,7 @@ namespace TwnsMcrMainMenuPanel {
         }
         private _onTouchedBtnFreeMode(): void {
             this.close();
-            TwnsMfrMainMenuPanel.MfrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMainMenuPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {

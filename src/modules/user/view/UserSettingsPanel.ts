@@ -288,8 +288,10 @@ namespace TwnsUserSettingsPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetPrivilegePanel, { userId: selfUserId });
         }
         private _onTouchedBtnMapManagement(): void {
-            StageManager.closeAllPanels();
-            TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
+            TwnsPanelManager.closeAllPanelsExcept([
+                TwnsPanelConfig.Dict.LobbyBackgroundPanel,
+            ]);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBackgroundPanel, void 0);
             TwnsMmMainMenuPanel.MmMainMenuPanel.show();
         }
 

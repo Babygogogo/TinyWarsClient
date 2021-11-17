@@ -21,7 +21,6 @@
 
 namespace TwnsMeSimSettingsPanel {
     import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
     import MeSimAdvancedSettingsPage    = TwnsMeSimAdvancedSettingsPage.MeSimAdvancedSettingsPage;
     import MeSimBasicSettingsPage       = TwnsMeSimBasicSettingsPage.MeSimBasicSettingsPage;
     import LangTextType                 = TwnsLangTextType.LangTextType;
@@ -91,7 +90,7 @@ namespace TwnsMeSimSettingsPanel {
 
         private _onTouchedBtnConfirm(): void {
             if (MeSimModel.checkIsValidWarData()) {
-                SpmCreateSfwSaveSlotsPanel.show(MeSimModel.getWarData());
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel, MeSimModel.getWarData());
             } else {
                 FloatText.show(Lang.getText(LangTextType.A0146));
             }

@@ -14,56 +14,38 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionAddUnitListPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IDataForAddUnit  = ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    type OpenDataForWeActionAddUnitListPanel = {
+    export type OpenData = {
         configVersion   : string;
         dataForAddUnit  : IDataForAddUnit;
     };
-    export class WeActionAddUnitListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionAddUnitListPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeActionAddUnitListPanel;
-
+    export class WeActionAddUnitListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
 
-        public static show(openData: OpenDataForWeActionAddUnitListPanel): void {
-            if (!WeActionAddUnitListPanel._instance) {
-                WeActionAddUnitListPanel._instance = new WeActionAddUnitListPanel();
-            }
-            WeActionAddUnitListPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (WeActionAddUnitListPanel._instance) {
-                await WeActionAddUnitListPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeActionAddUnitListPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
             ]);
-            this._listType.setItemRenderer(TypeRenderer);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
+            this._listType.setItemRenderer(TypeRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -120,7 +102,7 @@ namespace TwnsWeActionAddUnitListPanel {
         private _onTouchedSelf(): void {
             const data = this._getData();
             resetUnitType(data.dataForAddUnit, data.newUnitType);
-            WeActionAddUnitListPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionAddUnitListPanel);
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onNotifyLanguageChanged(): void {        // DONE

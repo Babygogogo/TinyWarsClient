@@ -17,7 +17,8 @@ namespace TwnsRwSearchReplayPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    export class RwSearchReplayPanel extends TwnsUiPanel.UiPanel<void> {
+    export type OpenData = void;
+    export class RwSearchReplayPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         protected _IS_EXCLUSIVE = false;
         protected _LAYER_TYPE   = Types.LayerType.Hud2;
 
@@ -50,27 +51,7 @@ namespace TwnsRwSearchReplayPanel {
         private readonly _labelMinMyRatingTitle!        : TwnsUiLabel.UiLabel;
         private readonly _inputMinMyRating!             : TwnsUiTextInput.UiTextInput;
 
-        public static show(): void {
-            if (!RwSearchReplayPanel._instance) {
-                RwSearchReplayPanel._instance = new RwSearchReplayPanel();
-            }
-            RwSearchReplayPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (RwSearchReplayPanel._instance) {
-                await RwSearchReplayPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/replayWar/RwSearchReplayPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose,               callback: this.close },
                 { ui: this._btnReset,               callback: this._onTouchedBtnReset },
@@ -81,13 +62,14 @@ namespace TwnsRwSearchReplayPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
-
-            this._showOpenAnimation();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnReset(): void {
@@ -140,7 +122,7 @@ namespace TwnsRwSearchReplayPanel {
             this._btnSearch.label                   = Lang.getText(LangTextType.B0228);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -151,21 +133,22 @@ namespace TwnsRwSearchReplayPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

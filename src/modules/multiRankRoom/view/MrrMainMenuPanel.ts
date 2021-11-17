@@ -15,20 +15,13 @@
 // import TwnsMrrPreviewMapListPanel           from "./MrrPreviewMapListPanel";
 // import TwnsMrrSetMaxConcurrentCountPanel    from "./MrrSetMaxConcurrentCountPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMrrMainMenuPanel {
-    import SpmMainMenuPanel                 = TwnsSpmMainMenuPanel.SpmMainMenuPanel;
-    import MrrMyRoomListPanel               = TwnsMrrMyRoomListPanel.MrrMyRoomListPanel;
-    import MrrSetMaxConcurrentCountPanel    = TwnsMrrSetMaxConcurrentCountPanel.MrrSetMaxConcurrentCountPanel;
-    import MrrPreviewMapListPanel           = TwnsMrrPreviewMapListPanel.MrrPreviewMapListPanel;
     import NotifyType                       = TwnsNotifyType.NotifyType;
     import Tween                            = egret.Tween;
 
-    export class MrrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MrrMainMenuPanel;
-
+    export type OpenData = void;
+    export class MrrMainMenuPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _group!                : eui.Group;
         private readonly _btnMultiPlayer!       : TwnsUiButton.UiButton;
         private readonly _btnRanking!           : TwnsUiButton.UiButton;
@@ -41,26 +34,7 @@ namespace TwnsMrrMainMenuPanel {
         private readonly _btnPreviewStdMaps!    : TwnsUiButton.UiButton;
         private readonly _btnPreviewFogMaps!    : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!MrrMainMenuPanel._instance) {
-                MrrMainMenuPanel._instance = new MrrMainMenuPanel();
-            }
-            MrrMainMenuPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MrrMainMenuPanel._instance) {
-                await MrrMainMenuPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiRankRoom/MrrMainMenuPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
                 { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
@@ -75,14 +49,12 @@ namespace TwnsMrrMainMenuPanel {
                 { type: NotifyType.MsgMrrGetRoomPublicInfo,        callback: this._onMsgMrrGetRoomPublicInfo },
                 { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
             ]);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -94,34 +66,34 @@ namespace TwnsMrrMainMenuPanel {
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            SpmMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
         }
         private _onTouchedBtnSetGameNumber(): void {
-            MrrSetMaxConcurrentCountPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrSetMaxConcurrentCountPanel, void 0);
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            MrrMyRoomListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMyRoomListPanel, void 0);
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            TwnsMrwMyWarListPanel.MrwMyWarListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrwMyWarListPanel, void 0);
         }
         private _onTouchedBtnPreviewStdMaps(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            MrrPreviewMapListPanel.show({ hasFog: false });
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrPreviewMapListPanel, { hasFog: false });
         }
         private _onTouchedBtnPreviewFogMaps(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            MrrPreviewMapListPanel.show({ hasFog: true });
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrPreviewMapListPanel, { hasFog: true });
         }
 
         private _onMsgUserLogout(): void {
@@ -146,7 +118,7 @@ namespace TwnsMrrMainMenuPanel {
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMrwWars());
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             const group = this._group;
             Tween.removeTweens(group);
             group.right = 60;
@@ -204,22 +176,22 @@ namespace TwnsMrrMainMenuPanel {
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                const group = this._group;
-                Tween.removeTweens(group);
-                Tween.get(group)
-                    .set({ alpha: 1, right: 60 })
-                    .to({ alpha: 0, right: 20 }, 200)
-                    .call(resolve);
 
-                const groupLeft = this._groupLeft;
-                Tween.removeTweens(groupLeft);
-                Tween.get(groupLeft)
-                    .set({ alpha: 1, left: 0 })
-                    .to({ alpha: 0, left: -40 }, 200);
+            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, right: 60 },
+                endProps    : { alpha: 0, right: 20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupLeft,
+                beginProps  : { alpha: 1, left: 0 },
+                endProps    : { alpha: 0, left: -40},
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

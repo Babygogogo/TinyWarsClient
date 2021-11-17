@@ -47,8 +47,6 @@ namespace TwnsBwTileBriefPanel {
                 // { type: NotifyType.GlobalTouchMove,             callback: this._onNotifyGlobalTouchMove },
                 { type: NotifyType.BwCursorGridIndexChanged,    callback: this._onNotifyBwCursorGridIndexChanged },
                 { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: NotifyType.BwWarMenuPanelOpened,        callback: this._onNotifyBwWarMenuPanelOpened },
-                { type: NotifyType.BwWarMenuPanelClosed,        callback: this._onNotifyBwWarMenuPanelClosed },
                 { type: NotifyType.BwCoListPanelOpened,         callback: this._onNotifyBwCoListPanelOpened },
                 { type: NotifyType.BwCoListPanelClosed,         callback: this._onNotifyBwCoListPanelClosed },
                 { type: NotifyType.MeTileChanged,               callback: this._onNotifyMeTileChanged },
@@ -95,12 +93,6 @@ namespace TwnsBwTileBriefPanel {
                 this._updateView();
             }
         }
-        private _onNotifyBwWarMenuPanelOpened(): void {
-            this._updateView();
-        }
-        private _onNotifyBwWarMenuPanelClosed(): void {
-            this._updateView();
-        }
         private _onNotifyBwCoListPanelOpened(): void {
             this._updateView();
         }
@@ -129,46 +121,38 @@ namespace TwnsBwTileBriefPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const war = this._getOpenData().war;
-            if ((war.getIsWarMenuPanelOpening())                            ||
-                (TwnsCommonCoListPanel.CommonCoListPanel.getIsOpening())
-            ) {
-                this.visible = false;
+            const war       = this._getOpenData().war;
+            const gridIndex = war.getCursor().getGridIndex();
+            const tile      = war.getTileMap().getTile(gridIndex);
+            const tileView  = this._tileView;
+            tileView.setData({
+                tileData    : tile.serialize(),
+                hasFog      : tile.getHasFog(),
+                skinId      : tile.getSkinId(),
+            });
+            tileView.updateView();
+            this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
+            this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
+            this._labelName.text        = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
+
+            if (tile.getCurrentHp() != null) {
+                this._imgState.visible      = true;
+                this._imgState.source       = _IMAGE_SOURCE_HP;
+                this._labelState.visible    = true;
+                this._labelState.text       = `${tile.getCurrentHp()}`;
+            } else if (tile.getCurrentCapturePoint() != null) {
+                this._imgState.visible      = true;
+                this._imgState.source       = _IMAGE_SOURCE_CAPTURE;
+                this._labelState.visible    = true;
+                this._labelState.text       = `${tile.getCurrentCapturePoint()}`;
+            } else if (tile.getCurrentBuildPoint() != null) {
+                this._imgState.visible      = true;
+                this._imgState.source       = _IMAGE_SOURCE_CAPTURE;
+                this._labelState.visible    = true;
+                this._labelState.text       = `${tile.getCurrentBuildPoint()}`;
             } else {
-                this.visible = true;
-
-                const gridIndex = war.getCursor().getGridIndex();
-                const tile      = war.getTileMap().getTile(gridIndex);
-                const tileView  = this._tileView;
-                tileView.setData({
-                    tileData    : tile.serialize(),
-                    hasFog      : tile.getHasFog(),
-                    skinId      : tile.getSkinId(),
-                });
-                tileView.updateView();
-                this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
-                this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
-                this._labelName.text        = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
-
-                if (tile.getCurrentHp() != null) {
-                    this._imgState.visible      = true;
-                    this._imgState.source       = _IMAGE_SOURCE_HP;
-                    this._labelState.visible    = true;
-                    this._labelState.text       = `${tile.getCurrentHp()}`;
-                } else if (tile.getCurrentCapturePoint() != null) {
-                    this._imgState.visible      = true;
-                    this._imgState.source       = _IMAGE_SOURCE_CAPTURE;
-                    this._labelState.visible    = true;
-                    this._labelState.text       = `${tile.getCurrentCapturePoint()}`;
-                } else if (tile.getCurrentBuildPoint() != null) {
-                    this._imgState.visible      = true;
-                    this._imgState.source       = _IMAGE_SOURCE_CAPTURE;
-                    this._labelState.visible    = true;
-                    this._labelState.text       = `${tile.getCurrentBuildPoint()}`;
-                } else {
-                    this._imgState.visible      = false;
-                    this._labelState.visible    = false;
-                }
+                this._imgState.visible      = false;
+                this._labelState.visible    = false;
             }
         }
 

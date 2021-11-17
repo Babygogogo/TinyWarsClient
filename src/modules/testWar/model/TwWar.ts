@@ -175,10 +175,6 @@ namespace TwnsTwWar {
             return false;
         }
 
-        public getIsWarMenuPanelOpening(): boolean {
-            return false;
-        }
-
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }

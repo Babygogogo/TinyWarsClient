@@ -14,58 +14,40 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 // import WarEventHelper           from "../model/WarEventHelper";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionReplacePanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
 
-    type OpenDataForWeActionReplacePanel = {
+    export type OpenData = {
         fullData    : IWarEventFullData;
         eventId     : number;
         actionId    : number;
     };
-    export class WeActionReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionReplacePanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeActionReplacePanel;
-
+    export class WeActionReplacePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _listAction!       : TwnsUiScrollList.UiScrollList<DataForActionRenderer>;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelNoAction!    : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForWeActionReplacePanel): void {
-            if (!WeActionReplacePanel._instance) {
-                WeActionReplacePanel._instance = new WeActionReplacePanel();
-            }
-            WeActionReplacePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (WeActionReplacePanel._instance) {
-                await WeActionReplacePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeActionReplacePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
             ]);
-            this._listAction.setItemRenderer(ActionRenderer);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
+            this._listAction.setItemRenderer(ActionRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -144,7 +126,7 @@ namespace TwnsWeActionReplacePanel {
                 actionIdForClone    : data.candidateActionId,
             }) != null) {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                WeActionReplacePanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionReplacePanel);
             }
         }
         private _onTouchedBtnSelect(): void {        // DONE
@@ -156,7 +138,7 @@ namespace TwnsWeActionReplacePanel {
                 newActionId : data.candidateActionId,
             })) {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                WeActionReplacePanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionReplacePanel);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE

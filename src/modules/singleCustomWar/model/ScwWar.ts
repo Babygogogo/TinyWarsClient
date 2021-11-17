@@ -6,6 +6,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsScwWar {
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForScw  = ProtoTypes.WarSettings.ISettingsForScw;
@@ -44,9 +45,6 @@ namespace TwnsScwWar {
         }
         public getIsNeedSeedRandom(): boolean {
             return false;
-        }
-        public getIsWarMenuPanelOpening(): boolean {
-            return TwnsSpwWarMenuPanel.SpwWarMenuPanel.getIsOpening();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

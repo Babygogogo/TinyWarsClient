@@ -111,9 +111,6 @@ namespace TwnsMeWar {
         public getMapId(): number | null {
             return null;
         }
-        public getIsWarMenuPanelOpening(): boolean {
-            return TwnsMeWarMenuPanel.MeWarMenuPanel.getIsOpening();
-        }
 
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];

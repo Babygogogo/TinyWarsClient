@@ -137,7 +137,7 @@ namespace TwnsUiPanel2 {
                 throw Helpers.newError(`UiPanel2.updateWithOpenData() !this._checkIsReadyForOpen().`);
             }
 
-            const oldOpenData = this._getOpenData();
+            const oldOpenData = this._openData ?? null;
             this._setOpenData(openData);
             await this._updateOnOpenDataChanged(oldOpenData);
         }

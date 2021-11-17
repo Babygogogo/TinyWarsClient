@@ -21,52 +21,33 @@ namespace TwnsWeConditionTypeListPanel {
     import ConditionType        = Types.WarEventConditionType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    type OpenDataForWeConditionTypeListPanel = {
+    export type OpenData = {
         war         : TwnsBwWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
-    export class WeConditionTypeListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeConditionTypeListPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeConditionTypeListPanel;
-
+    export class WeConditionTypeListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
 
-        public static show(openData: OpenDataForWeConditionTypeListPanel): void {
-            if (!WeConditionTypeListPanel._instance) {
-                WeConditionTypeListPanel._instance = new WeConditionTypeListPanel();
-            }
-            WeConditionTypeListPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (WeConditionTypeListPanel._instance) {
-                await WeConditionTypeListPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeConditionTypeListPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
             ]);
-            this._listType.setItemRenderer(TypeRenderer);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
+            this._listType.setItemRenderer(TypeRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -135,7 +116,7 @@ namespace TwnsWeConditionTypeListPanel {
             if (conditionType !== WarEventHelper.getConditionType(condition)) {
                 WarEventHelper.resetCondition(condition, conditionType);
                 WarEventHelper.openConditionModifyPanel({ fullData: data.fullData, condition, war: data.war });
-                WeConditionTypeListPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionTypeListPanel);
 
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }

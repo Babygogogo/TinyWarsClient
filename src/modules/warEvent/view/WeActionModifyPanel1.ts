@@ -26,8 +26,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel1 {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
-    import WeActionAddUnitListPanel = TwnsWeActionAddUnitListPanel.WeActionAddUnitListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ColorValue               = Types.ColorValue;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
@@ -36,17 +34,12 @@ namespace TwnsWeActionModifyPanel1 {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import BwWar                    = TwnsBwWar.BwWar;
 
-    type OpenDataForWeActionModifyPanel1 = {
+    export type OpenData = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel1 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel1> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeActionModifyPanel1;
-
+    export class WeActionModifyPanel1 extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _btnBack!          : TwnsUiButton.UiButton;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnAddUnit!       : TwnsUiButton.UiButton;
@@ -55,27 +48,7 @@ namespace TwnsWeActionModifyPanel1 {
         private readonly _labelUnitsCount!  : TwnsUiLabel.UiLabel;
         private readonly _listUnit!         : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
 
-        public static show(openData: OpenDataForWeActionModifyPanel1): void {
-            if (!WeActionModifyPanel1._instance) {
-                WeActionModifyPanel1._instance = new WeActionModifyPanel1();
-            }
-            WeActionModifyPanel1._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WeActionModifyPanel1._instance) {
-                await WeActionModifyPanel1._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeActionModifyPanel1.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnAddUnit,     callback: this._onTouchedBtnAddUnit },
                 { ui: this._btnClear,       callback: this._onTouchedBtnClear },
@@ -86,9 +59,16 @@ namespace TwnsWeActionModifyPanel1 {
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
             ]);
-            this._listUnit.setItemRenderer(UnitRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._listUnit.setItemRenderer(UnitRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +104,7 @@ namespace TwnsWeActionModifyPanel1 {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            WeActionTypeListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -320,7 +300,7 @@ namespace TwnsWeActionModifyPanel1 {
         }
         private _onTouchedBtnUnitType(): void {
             const data = this._getData();
-            WeActionAddUnitListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionAddUnitListPanel, {
                 configVersion   : data.war.getConfigVersion(),
                 dataForAddUnit  : data.dataForAddUnit,
             });

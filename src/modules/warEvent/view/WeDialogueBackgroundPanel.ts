@@ -28,56 +28,29 @@
 namespace TwnsWeDialogueBackgroundPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    type OpenDataForWeDialogueBackgroundPanel = {
+    export type OpenData = {
         action  : ProtoTypes.WarEvent.IWeaDialogue;
     };
-    export class WeDialogueBackgroundPanel extends TwnsUiPanel.UiPanel<OpenDataForWeDialogueBackgroundPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeDialogueBackgroundPanel;
-
+    export class WeDialogueBackgroundPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _listBackground!   : TwnsUiScrollList.UiScrollList<DataForBackgroundRenderer>;
 
-        public static show(openData: OpenDataForWeDialogueBackgroundPanel): void {
-            if (!WeDialogueBackgroundPanel._instance) {
-                WeDialogueBackgroundPanel._instance = new WeDialogueBackgroundPanel();
-            }
-            WeDialogueBackgroundPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WeDialogueBackgroundPanel._instance) {
-                await WeDialogueBackgroundPanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = WeDialogueBackgroundPanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/warEvent/WeDialogueBackgroundPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwPlannerStateChanged },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listBackground.setItemRenderer(BackgroundRenderer);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +96,7 @@ namespace TwnsWeDialogueBackgroundPanel {
             return dataArray;
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -134,22 +107,23 @@ namespace TwnsWeDialogueBackgroundPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
 
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -190,14 +164,9 @@ namespace TwnsWeDialogueBackgroundPanel {
         }
 
         private _onTouchedGroupSelect(): void {
-            const data  = this._getData();
-            const panel = data.panel;
-            if (!panel.getIsOpening()) {
-                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
-                return;
-            }
-
-            data.action.backgroundId = data.backgroundId;
+            const data                  = this._getData();
+            const panel                 = data.panel;
+            data.action.backgroundId    = data.backgroundId;
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonConfirm01);
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
             panel.close();

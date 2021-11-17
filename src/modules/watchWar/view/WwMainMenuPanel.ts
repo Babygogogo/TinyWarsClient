@@ -15,20 +15,13 @@
 // import TwnsWwMakeRequestWarsPanel   from "./WwMakeRequestWarsPanel";
 // import TwnsWwOngoingWarsPanel       from "./WwOngoingWarsPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWwMainMenuPanel {
     import NotifyType                       = TwnsNotifyType.NotifyType;
-    import McrWatchOngoingWarsPanel         = TwnsWwOngoingWarsPanel.McrWatchOngoingWarsPanel;
-    import McrWatchMakeRequestWarsPanel     = TwnsWwMakeRequestWarsPanel.WwMakeRequestWarsPanel;
-    import McrWatchDeleteWatcherWarsPanel   = TwnsWwDeleteWatcherWarsPanel.WwDeleteWatcherWarsPanel;
-    import McrWatchHandleRequestWarsPanel   = TwnsWwHandleRequestWarsPanel.WwHandleRequestWarsPanel;
     import Tween                            = egret.Tween;
 
-    export class WwMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: WwMainMenuPanel;
-
+    export type OpenData = void;
+    export class WwMainMenuPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
         private readonly _btnRanking!       : TwnsUiButton.UiButton;
@@ -41,26 +34,7 @@ namespace TwnsWwMainMenuPanel {
         private readonly _btnContinueWar!   : TwnsUiButton.UiButton;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!WwMainMenuPanel._instance) {
-                WwMainMenuPanel._instance = new WwMainMenuPanel();
-            }
-            WwMainMenuPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (WwMainMenuPanel._instance) {
-                await WwMainMenuPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/watchWar/WwMainMenuPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
                 { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
@@ -73,14 +47,12 @@ namespace TwnsWwMainMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
             ]);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -88,40 +60,40 @@ namespace TwnsWwMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnRanking(): void {
             this.close();
-            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            TwnsSpmMainMenuPanel.SpmMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnMakeRequest(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrWatchMakeRequestWarsPanel.show({});
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMakeRequestWarsPanel, {});
         }
 
         private _onTouchedBtnHandleRequest(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrWatchHandleRequestWarsPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WwHandleRequestWarsPanel, void 0);
         }
 
         private _onTouchedBtnDeleteWatcher(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrWatchDeleteWatcherWarsPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WwDeleteWatcherWarsPanel, void 0);
         }
 
         private _onTouchedBtnContinueWar(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            McrWatchOngoingWarsPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WwOngoingWarsPanel, void 0);
         }
 
         private _onTouchedBtnBack(): void {
@@ -140,7 +112,7 @@ namespace TwnsWwMainMenuPanel {
             this._btnHandleRequest.setRedVisible(!!WwModel.getWatchRequestedWarInfos()?.length);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             const group = this._group;
             Tween.removeTweens(group);
             group.right = 60;
@@ -198,21 +170,22 @@ namespace TwnsWwMainMenuPanel {
                 waitTime    : 200 / 4 * 4,
                 endProps    : { alpha: 1, left: 0 },
             });
+
+            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, right: 60 },
-                    endProps    : { alpha: 0, right: 20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupLeft,
-                    beginProps  : { alpha: 1, left: 0 },
-                    endProps    : { alpha: 0, left: -40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, right: 60 },
+                endProps    : { alpha: 0, right: 20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupLeft,
+                beginProps  : { alpha: 1, left: 0 },
+                endProps    : { alpha: 0, left: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

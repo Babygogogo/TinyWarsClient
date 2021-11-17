@@ -18,43 +18,16 @@ namespace TwnsLobbyBottomPanel {
     import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
     import MeMapListPanel           = TwnsMeMapListPanel.MeMapListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import Tween                    = egret.Tween;
 
-    // eslint-disable-next-line no-shadow
-    export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance        : LobbyBottomPanel | null = null;
-
+    export type OpenData = void;
+    export class LobbyBottomPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _groupBottom!  : eui.Group;
         private readonly _btnMyInfo!    : TwnsUiButton.UiButton;
         private readonly _btnChat!      : TwnsUiButton.UiButton;
         private readonly _btnMapEditor! : TwnsUiButton.UiButton;
         private readonly _btnGameData!  : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!LobbyBottomPanel._instance) {
-                LobbyBottomPanel._instance = new LobbyBottomPanel();
-            }
-            LobbyBottomPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (LobbyBottomPanel._instance) {
-                await LobbyBottomPanel._instance.close();
-            }
-        }
-        public static getInstance(): LobbyBottomPanel | null {
-            return LobbyBottomPanel._instance;
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/lobby/LobbyBottomPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnMyInfo,          callback: this._onTouchedBtnMyInfo },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
@@ -68,13 +41,12 @@ namespace TwnsLobbyBottomPanel {
                 { type: NotifyType.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
                 { type: NotifyType.MsgChatAddMessage,              callback: this._onMsgChatAddMessages },
             ]);
-
-            this._showOpenAnimation();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateImgChatRed();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +72,7 @@ namespace TwnsLobbyBottomPanel {
 
         private _onTouchedBtnMapEditor(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
             MeMapListPanel.show();
         }
 
@@ -131,13 +103,12 @@ namespace TwnsLobbyBottomPanel {
             this._btnChat.setRedVisible(ChatModel.checkHasUnreadMessage());
         }
 
-        private _showOpenAnimation(): void {
-            const groupBottom = this._groupBottom;
-            Tween.removeTweens(groupBottom);
-            Tween.get(groupBottom)
-                .set({ alpha: 0, bottom: -40 })
-                .to({ alpha: 1, bottom: 0 }, 200);
-
+        protected async _showOpenAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._groupBottom,
+                beginProps  : { alpha: 0, bottom: -40 },
+                endProps    : { alpha: 1, bottom: 0 },
+            });
             Helpers.resetTween({
                 obj         : this._btnMyInfo,
                 beginProps  : { alpha: 0, top: 40 },
@@ -161,16 +132,17 @@ namespace TwnsLobbyBottomPanel {
                 waitTime    : 200,
                 endProps    : { alpha: 1, top: 0 },
             });
+
+            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                const groupBottom = this._groupBottom;
-                Tween.removeTweens(groupBottom);
-                Tween.get(groupBottom)
-                    .set({ alpha: 1, bottom: 0 })
-                    .to({ alpha: 0, bottom: -40 }, 200)
-                    .call(resolve);
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._groupBottom,
+                beginProps  : { alpha: 1, bottom: 0 },
+                endProps    : { alpha: 0, bottom: -40 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

@@ -21,7 +21,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitBriefPanel {
-    import BwCoListPanel        = TwnsCommonCoListPanel.CommonCoListPanel;
     import BwWar                = TwnsBwWar.BwWar;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import BwUnit               = TwnsBwUnit.BwUnit;
@@ -45,8 +44,6 @@ namespace TwnsBwUnitBriefPanel {
                 // { type: NotifyType.GlobalTouchMove,                 callback: this._onNotifyGlobalTouchMove },
                 { type: NotifyType.BwCursorGridIndexChanged,        callback: this._onNotifyBwCursorGridIndexChanged },
                 { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: NotifyType.BwWarMenuPanelOpened,            callback: this._onNotifyBwWarMenuPanelOpened },
-                { type: NotifyType.BwWarMenuPanelClosed,            callback: this._onNotifyBwWarMenuPanelClosed },
                 { type: NotifyType.BwCoListPanelOpened,             callback: this._onNotifyBwCoListPanelOpened },
                 { type: NotifyType.BwCoListPanelClosed,             callback: this._onNotifyBwCoListPanelClosed },
                 { type: NotifyType.BwProduceUnitPanelOpened,        callback: this._onNotifyBwProduceUnitPanelOpened },
@@ -86,12 +83,6 @@ namespace TwnsBwUnitBriefPanel {
             ) {
                 this._updateView();
             }
-        }
-        private _onNotifyBwWarMenuPanelOpened(): void {
-            this._updateView();
-        }
-        private _onNotifyBwWarMenuPanelClosed(): void {
-            this._updateView();
         }
         private _onNotifyBwCoListPanelOpened(): void {
             this._updateView();
@@ -137,10 +128,7 @@ namespace TwnsBwUnitBriefPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const war = this._getOpenData().war;
-            if ((war.getIsWarMenuPanelOpening())            ||
-                (!war.getIsRunning())                       ||
-                (BwCoListPanel.getIsOpening())
-            ) {
+            if (!war.getIsRunning()) {
                 this.visible = false;
             } else {
                 this.visible = true;

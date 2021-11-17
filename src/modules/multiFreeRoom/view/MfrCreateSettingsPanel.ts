@@ -27,8 +27,8 @@
 // import TwnsMfrCreatePlayerInfoPage          from "./MfrCreatePlayerInfoPage";
 // import TwnsMfrMainMenuPanel                 from "./MfrMainMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMfrCreateSettingsPanel {
-    import MfrMainMenuPanel                         = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
     import MfrCreateAdvancedSettingsPage            = TwnsMfrCreateAdvancedSettingsPage.MfrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -39,12 +39,8 @@ namespace TwnsMfrCreateSettingsPanel {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class MfrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MfrCreateSettingsPanel;
-
+    export type OpenData = void;
+    export class MfrCreateSettingsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _groupNavigator!           : eui.Group;
         private readonly _labelMultiPlayer!         : TwnsUiLabel.UiLabel;
         private readonly _labelFreeMode!            : TwnsUiLabel.UiLabel;
@@ -69,25 +65,7 @@ namespace TwnsMfrCreateSettingsPanel {
         private _timeoutIdForBtnConfirm : number | null = null;
         private _isTabInitialized       = false;
 
-        public static show(): void {
-            if (!MfrCreateSettingsPanel._instance) {
-                MfrCreateSettingsPanel._instance = new MfrCreateSettingsPanel();
-            }
-            MfrCreateSettingsPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MfrCreateSettingsPanel._instance) {
-                await MfrCreateSettingsPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiFreeRoom/MfrCreateSettingsPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
@@ -99,7 +77,8 @@ namespace TwnsMfrCreateSettingsPanel {
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
             this._sclSkinId.setItemRenderer(SkinIdRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
@@ -125,16 +104,13 @@ namespace TwnsMfrCreateSettingsPanel {
             ]);
             this._isTabInitialized = true;
 
-            this._showOpenAnimation();
-
             this._updateComponentsForLanguage();
             this._initSclPlayerIndex();
             this._initSclSkinId();
             this._btnConfirm.enabled = true;
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
             this._clearTimeoutForBtnConfirm();
         }
 
@@ -143,9 +119,9 @@ namespace TwnsMfrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            MfrMainMenuPanel.show();
-            TwnsLobbyTopPanel.LobbyTopPanel.show();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMainMenuPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
         private _onTouchedBtnConfirm(): void {
             const data = MfrCreateModel.getData();
@@ -344,7 +320,7 @@ namespace TwnsMfrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
@@ -370,36 +346,37 @@ namespace TwnsMfrCreateSettingsPanel {
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupSettings,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnConfirm,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupTab,
-                    beginProps  : { alpha: 1, },
-                    endProps    : { alpha: 0, },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
             });
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupSettings,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnConfirm,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 1, },
+                endProps    : { alpha: 0, },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

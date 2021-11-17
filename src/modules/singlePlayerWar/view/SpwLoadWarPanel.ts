@@ -19,18 +19,15 @@
 // import WarMapModel              from "../../warMap/model/WarMapModel";
 // import SpwModel                 from "../model/SpwModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwLoadWarPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: SpwLoadWarPanel;
-
+    export type OpenData = void;
+    export class SpwLoadWarPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
@@ -38,28 +35,7 @@ namespace TwnsSpwLoadWarPanel {
         private readonly _btnHelp!          : TwnsUiButton.UiButton;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!SpwLoadWarPanel._instance) {
-                SpwLoadWarPanel._instance = new SpwLoadWarPanel();
-            }
-
-            SpwLoadWarPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (SpwLoadWarPanel._instance) {
-                await SpwLoadWarPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/singlePlayerWar/SpwLoadWarPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
@@ -67,9 +43,16 @@ namespace TwnsSpwLoadWarPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-            this._srlSaveSlot.setItemRenderer(SlotRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._srlSaveSlot.setItemRenderer(SlotRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

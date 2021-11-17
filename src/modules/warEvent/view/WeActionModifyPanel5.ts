@@ -15,7 +15,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel5 {
-    import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
@@ -23,17 +22,12 @@ namespace TwnsWeActionModifyPanel5 {
     import BwWar                    = TwnsBwWar.BwWar;
     import WeatherType              = Types.WeatherType;
 
-    type OpenDataForWeActionModifyPanel5 = {
+    export type OpenData = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel5 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel5> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeActionModifyPanel5;
-
+    export class WeActionModifyPanel5 extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
@@ -43,27 +37,7 @@ namespace TwnsWeActionModifyPanel5 {
         private readonly _inputTurns!       : TwnsUiTextInput.UiTextInput;
         private readonly _labelTurnsTips!   : TwnsUiLabel.UiLabel;
 
-        public static show(openData: OpenDataForWeActionModifyPanel5): void {
-            if (!WeActionModifyPanel5._instance) {
-                WeActionModifyPanel5._instance = new WeActionModifyPanel5();
-            }
-            WeActionModifyPanel5._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WeActionModifyPanel5._instance) {
-                await WeActionModifyPanel5._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeActionModifyPanel5.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnWeather,             callback: this._onTouchedBtnWeather },
                 { ui: this._btnType,                callback: this._onTouchedBtnType },
@@ -74,8 +48,14 @@ namespace TwnsWeActionModifyPanel5 {
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
             ]);
-
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +88,7 @@ namespace TwnsWeActionModifyPanel5 {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            WeActionTypeListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,

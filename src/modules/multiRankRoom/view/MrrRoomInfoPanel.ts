@@ -44,15 +44,10 @@ namespace TwnsMrrRoomInfoPanel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import NetMessage                               = ProtoTypes.NetMessage;
 
-    type OpenDataForMrrRoomInfoPanel = {
+    export type OpenData = {
         roomId  : number;
     };
-    export class MrrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrRoomInfoPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MrrRoomInfoPanel;
-
+    export class MrrRoomInfoPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _groupTab!                 : eui.Group;
         private readonly _tabSettings!              : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
@@ -92,25 +87,7 @@ namespace TwnsMrrRoomInfoPanel {
 
         private _isTabInitialized = false;
 
-        public static show(openData: OpenDataForMrrRoomInfoPanel): void {
-            if (!MrrRoomInfoPanel._instance) {
-                MrrRoomInfoPanel._instance = new MrrRoomInfoPanel();
-            }
-            MrrRoomInfoPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (MrrRoomInfoPanel._instance) {
-                await MrrRoomInfoPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiRankRoom/MrrRoomInfoPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnBanCo,       callback: this._onTouchedBtnBanCo },
@@ -130,9 +107,8 @@ namespace TwnsMrrRoomInfoPanel {
             this._sclSkinId.setItemRenderer(SkinIdRenderer);
             this._sclReady.setItemRenderer(ReadyRenderer);
             this._btnBanCo.setRedVisible(true);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
@@ -166,9 +142,8 @@ namespace TwnsMrrRoomInfoPanel {
             this._updateGroupSettings();
             this._updateGroupState();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +151,7 @@ namespace TwnsMrrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsMrrMyRoomListPanel.MrrMyRoomListPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMyRoomListPanel, void 0);
         }
 
         private async _onTouchedBtnBanCo(): Promise<void> {
@@ -278,7 +253,7 @@ namespace TwnsMrrRoomInfoPanel {
             if (data.roomId === this._getOpenData().roomId) {
                 FloatText.show(Lang.getText(LangTextType.A0019));
                 this.close();
-                TwnsMrrMyRoomListPanel.MrrMyRoomListPanel.show();
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMyRoomListPanel, void 0);
             }
         }
 
@@ -479,7 +454,7 @@ namespace TwnsMrrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
@@ -510,41 +485,42 @@ namespace TwnsMrrRoomInfoPanel {
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupBanCo,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupSettings,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupState,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupTab,
-                    beginProps  : { alpha: 1, },
-                    endProps    : { alpha: 0, },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
             });
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupBanCo,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupSettings,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupState,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 1, },
+                endProps    : { alpha: 0, },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

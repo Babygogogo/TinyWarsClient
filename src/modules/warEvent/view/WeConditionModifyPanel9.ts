@@ -17,24 +17,18 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeConditionModifyPanel9 {
-    import WeConditionTypeListPanel = TwnsWeConditionTypeListPanel.WeConditionTypeListPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
 
-    type OpenDataForWeConditionModifyPanel9 = {
+    export type OpenData = {
         war         : TwnsBwWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
     /** WecEventCalledCountTotalEqualTo */
-    export class WeConditionModifyPanel9 extends TwnsUiPanel.UiPanel<OpenDataForWeConditionModifyPanel9> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeConditionModifyPanel9;
-
+    export class WeConditionModifyPanel9 extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
         private readonly _btnType!          : TwnsUiButton.UiButton;
@@ -48,28 +42,7 @@ namespace TwnsWeConditionModifyPanel9 {
         private readonly _labelCalledCount! : TwnsUiLabel.UiLabel;
         private readonly _inputCalledCount! : TwnsUiTextInput.UiTextInput;
 
-        public static show(openData: OpenDataForWeConditionModifyPanel9): void {
-            if (!WeConditionModifyPanel9._instance) {
-                WeConditionModifyPanel9._instance = new WeConditionModifyPanel9();
-            }
-            WeConditionModifyPanel9._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (WeConditionModifyPanel9._instance) {
-                await WeConditionModifyPanel9._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeConditionModifyPanel9.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -80,9 +53,16 @@ namespace TwnsWeConditionModifyPanel9 {
                 { ui: this._btnEvent,           callback: this._onTouchedBtnTurnEvent },
                 { ui: this._inputCalledCount,   callback: this._onFocusOutInputCalledCount, eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
-            this._inputCalledCount.restrict = `0-9`;
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
+            this._inputCalledCount.restrict = `0-9`;
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -90,7 +70,7 @@ namespace TwnsWeConditionModifyPanel9 {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            WeConditionTypeListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
                 war         : openData.war,

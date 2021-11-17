@@ -13,10 +13,10 @@
 // import TwnsWarMapBuildingListPanel  from "../../warMap/view/WarMapBuildingListPanel";
 // import MeSimModel                   from "../model/MeSimModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeSimBasicSettingsPage {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonHelpPanel          = TwnsCommonHelpPanel.CommonHelpPanel;
-    import WarMapBuildingListPanel  = TwnsWarMapBuildingListPanel.WarMapBuildingListPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
@@ -97,7 +97,7 @@ namespace TwnsMeSimBasicSettingsPage {
 
         private async _onTouchedBtnBuildings(): Promise<void> {
             const mapRawData = MeSimModel.getMapRawData();
-            WarMapBuildingListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WarMapBuildingListPanel, {
                 configVersion           : Helpers.getExisted(MeSimModel.getWarData().settingsForCommon?.configVersion),
                 tileDataArray           : Helpers.getExisted(mapRawData.tileDataArray),
                 playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),

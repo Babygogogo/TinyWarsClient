@@ -7,9 +7,9 @@
 // import Types                from "../../tools/helpers/Types";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSrwWar {
     import SpwWar           = TwnsSpwWar.SpwWar;
-    import SpwWarMenuPanel  = TwnsSpwWarMenuPanel.SpwWarMenuPanel;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForSrw  = ProtoTypes.WarSettings.ISettingsForSrw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
@@ -67,9 +67,6 @@ namespace TwnsSrwWar {
         }
         public getIsNeedSeedRandom(): boolean {
             return true;
-        }
-        public getIsWarMenuPanelOpening(): boolean {
-            return SpwWarMenuPanel.getIsOpening();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

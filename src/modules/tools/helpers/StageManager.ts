@@ -94,12 +94,6 @@ namespace StageManager {
         return _stageScale;
     }
 
-    export function closeAllPanels(exceptions?: (TwnsUiPanel.UiPanel<any> | TwnsUiPanel2.UiPanel2<any>)[]): void {
-        for (const [, layer] of _LAYERS) {
-            layer.closeAllPanels(exceptions);
-        }
-    }
-
     function _addLayer(layerType: LayerType): void {
         if (_LAYERS.has(layerType)) {
             throw Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`, ClientErrorCode.StageManager_AddLayer_00);

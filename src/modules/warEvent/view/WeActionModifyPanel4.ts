@@ -15,24 +15,18 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel4 {
-    import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import BwWar                    = TwnsBwWar.BwWar;
 
-    type OpenDataForWeActionModifyPanel4 = {
+    export type OpenData = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel4 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel4> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeActionModifyPanel4;
-
+    export class WeActionModifyPanel4 extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _btnType!              : TwnsUiButton.UiButton;
         private readonly _btnBack!              : TwnsUiButton.UiButton;
@@ -45,27 +39,7 @@ namespace TwnsWeActionModifyPanel4 {
         private readonly _imgNeedFocus!         : TwnsUiImage.UiImage;
         private readonly _labelNeedFocus!       : TwnsUiLabel.UiLabel;
 
-        public static show(openData: OpenDataForWeActionModifyPanel4): void {
-            if (!WeActionModifyPanel4._instance) {
-                WeActionModifyPanel4._instance = new WeActionModifyPanel4();
-            }
-            WeActionModifyPanel4._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WeActionModifyPanel4._instance) {
-                await WeActionModifyPanel4._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeActionModifyPanel4.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._groupNeedFocus,         callback: this._onTouchedGroupNeedFocus },
                 { ui: this._btnType,                callback: this._onTouchedBtnType },
@@ -77,8 +51,14 @@ namespace TwnsWeActionModifyPanel4 {
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
             ]);
-
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +82,7 @@ namespace TwnsWeActionModifyPanel4 {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            WeActionTypeListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,

@@ -14,19 +14,14 @@
 // import TwnsUiPanel                  from "../../tools/ui/UiPanel";
 // import TwnsSpmWarListPanel          from "./SpmWarListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpmMainMenuPanel {
-    import SpmWarListPanel          = TwnsSpmWarListPanel.SpmWarListPanel;
-    import ScrCreateMapListPanel    = TwnsScrCreateMapListPanel.ScrCreateMapListPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import Tween                    = egret.Tween;
 
-    export class SpmMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: SpmMainMenuPanel;
-
+    export type OpenData = void;
+    export class SpmMainMenuPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _groupLeft!            : eui.Group;
         private readonly _btnCampaign!          : TwnsUiButton.UiButton;
         private readonly _btnCreateCustomWar!   : TwnsUiButton.UiButton;
@@ -37,26 +32,7 @@ namespace TwnsSpmMainMenuPanel {
         private readonly _btnRanking!           : TwnsUiButton.UiButton;
         private readonly _btnSinglePlayer!      : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!SpmMainMenuPanel._instance) {
-                SpmMainMenuPanel._instance = new SpmMainMenuPanel();
-            }
-            SpmMainMenuPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (SpmMainMenuPanel._instance) {
-                await SpmMainMenuPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/singlePlayerMode/SpmMainMenuPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
@@ -67,12 +43,12 @@ namespace TwnsSpmMainMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
             ]);
-
-            this._showOpenAnimation();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -88,28 +64,28 @@ namespace TwnsSpmMainMenuPanel {
         }
         private _onTouchedBtnRanking(): void {
             this.close();
-            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
         }
         private _onTouchedBtnCampaign(): void {
             FloatText.show(Lang.getText(LangTextType.A0053));
         }
         private _onTouchedBtnCreateCustomWar(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            ScrCreateMapListPanel.show(null);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateMapListPanel, null);
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            SpmWarListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmWarListPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             const group = this._group;
             Tween.removeTweens(group);
             group.right = 60;
@@ -155,22 +131,22 @@ namespace TwnsSpmMainMenuPanel {
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                const group = this._group;
-                Tween.removeTweens(group);
-                Tween.get(group)
-                    .set({ alpha: 1, right: 60 })
-                    .to({ alpha: 0, right: 20 }, 200);
 
-                const groupLeft = this._groupLeft;
-                Tween.removeTweens(groupLeft);
-                Tween.get(groupLeft)
-                    .set({ alpha: 1, left: 0 })
-                    .to({ alpha: 0, left: -40 }, 200)
-                    .call(resolve);
+            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, right: 60 },
+                endProps    : { alpha: 0, right: 20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupLeft,
+                beginProps  : { alpha: 1, left: 0 },
+                endProps    : { alpha: 0, left: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

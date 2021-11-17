@@ -19,15 +19,10 @@ namespace TwnsRwReplayProgressPanel {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    type OpenData = {
+    export type OpenData = {
         war: TwnsRwWar.RwWar;
     };
-    export class RwReplayProgressPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: RwReplayProgressPanel;
-
+    export class RwReplayProgressPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -46,28 +41,7 @@ namespace TwnsRwReplayProgressPanel {
         private _allCheckpointInfoArray?    : Types.ReplayCheckpointInfo[];
         private _selectedCheckpointId?      : number;
 
-        public static show(openData: OpenData): void {
-            if (!RwReplayProgressPanel._instance) {
-                RwReplayProgressPanel._instance = new RwReplayProgressPanel();
-            }
-            RwReplayProgressPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (RwReplayProgressPanel._instance) {
-                await RwReplayProgressPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/replayWar/RwReplayProgressPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
             ]);
@@ -82,8 +56,11 @@ namespace TwnsRwReplayProgressPanel {
                 { ui: this._btnLast,        callback: this._onTouchedBtnLast },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this._setCallbackOnTouchedMask(() => this._onTouchedPanelMask());
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             const war                       = this._getOpenData().war;
             const allCheckpointInfoArray    = war.getAllCheckpointInfoArray();
             const nextActionId              = war.getNextActionId();
@@ -91,11 +68,10 @@ namespace TwnsRwReplayProgressPanel {
             this._allCheckpointInfoArray    = allCheckpointInfoArray;
             this._selectedCheckpointId      = nextCheckpointId >= 0 ? Math.max(nextCheckpointId - 1, 0) : allCheckpointInfoArray.length - 1;
 
-            this._showOpenAnimation();
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +172,7 @@ namespace TwnsRwReplayProgressPanel {
             return Helpers.getExisted(this._allCheckpointInfoArray?.length, ClientErrorCode.RwReplayProgressPanel_GetMaxCheckpointId_00) - 1;
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -207,21 +183,22 @@ namespace TwnsRwReplayProgressPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

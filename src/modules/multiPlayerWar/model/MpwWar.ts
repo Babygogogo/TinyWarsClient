@@ -35,9 +35,6 @@ namespace TwnsMpwWar {
         public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getIsWarMenuPanelOpening(): boolean {
-            return TwnsMpwWarMenuPanel.MpwWarMenuPanel.getIsOpening();
-        }
         public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
             return this._warEventManager;
         }

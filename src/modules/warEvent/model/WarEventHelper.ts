@@ -2005,35 +2005,35 @@ namespace WarEventHelper {
         war         : BwWar;
     }): void {
         // TODO handle more condition types.
-        TwnsWeConditionModifyPanel1.WeConditionModifyPanel1.hide();
-        TwnsWeConditionModifyPanel2.WeConditionModifyPanel2.hide();
-        TwnsWeConditionModifyPanel3.WeConditionModifyPanel3.hide();
-        TwnsWeConditionModifyPanel4.WeConditionModifyPanel4.hide();
-        TwnsWeConditionModifyPanel5.WeConditionModifyPanel5.hide();
-        TwnsWeConditionModifyPanel6.WeConditionModifyPanel6.hide();
-        TwnsWeConditionModifyPanel7.WeConditionModifyPanel7.hide();
-        TwnsWeConditionModifyPanel8.WeConditionModifyPanel8.hide();
-        TwnsWeConditionModifyPanel9.WeConditionModifyPanel9.hide();
-        TwnsWeConditionModifyPanel10.WeConditionModifyPanel10.hide();
-        TwnsWeConditionModifyPanel11.WeConditionModifyPanel11.hide();
-        TwnsWeConditionModifyPanel12.WeConditionModifyPanel12.hide();
-        TwnsWeConditionModifyPanel13.WeConditionModifyPanel13.hide();
-        TwnsWeConditionModifyPanel14.WeConditionModifyPanel14.hide();
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel1);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel2);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel3);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel4);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel5);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel6);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel7);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel8);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel9);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel10);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel11);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel12);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel13);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel14);
 
-        if      (condition.WecTurnIndexEqualTo)                 { TwnsWeConditionModifyPanel1.WeConditionModifyPanel1.show({ fullData, condition, war }); }
-        else if (condition.WecTurnIndexGreaterThan)             { TwnsWeConditionModifyPanel2.WeConditionModifyPanel2.show({ fullData, condition, war }); }
-        else if (condition.WecTurnIndexLessThan)                { TwnsWeConditionModifyPanel3.WeConditionModifyPanel3.show({ fullData, condition, war }); }
-        else if (condition.WecTurnIndexRemainderEqualTo)        { TwnsWeConditionModifyPanel4.WeConditionModifyPanel4.show({ fullData, condition, war }); }
-        else if (condition.WecTurnPhaseEqualTo)                 { TwnsWeConditionModifyPanel5.WeConditionModifyPanel5.show({ fullData, condition, war }); }
-        else if (condition.WecPlayerIndexInTurnEqualTo)         { TwnsWeConditionModifyPanel6.WeConditionModifyPanel6.show({ fullData, condition, war }); }
-        else if (condition.WecPlayerIndexInTurnGreaterThan)     { TwnsWeConditionModifyPanel7.WeConditionModifyPanel7.show({ fullData, condition, war }); }
-        else if (condition.WecPlayerIndexInTurnLessThan)        { TwnsWeConditionModifyPanel8.WeConditionModifyPanel8.show({ fullData, condition, war }); }
-        else if (condition.WecEventCalledCountTotalEqualTo)     { TwnsWeConditionModifyPanel9.WeConditionModifyPanel9.show({ fullData, condition, war }); }
-        else if (condition.WecEventCalledCountTotalGreaterThan) { TwnsWeConditionModifyPanel10.WeConditionModifyPanel10.show({ fullData, condition, war }); }
-        else if (condition.WecEventCalledCountTotalLessThan)    { TwnsWeConditionModifyPanel11.WeConditionModifyPanel11.show({ fullData, condition, war }); }
-        else if (condition.WecPlayerAliveStateEqualTo)          { TwnsWeConditionModifyPanel12.WeConditionModifyPanel12.show({ fullData, condition, war }); }
-        else if (condition.WecTilePlayerIndexEqualTo)           { TwnsWeConditionModifyPanel13.WeConditionModifyPanel13.show({ fullData, condition, war }); }
-        else if (condition.WecTileTypeEqualTo)                  { TwnsWeConditionModifyPanel14.WeConditionModifyPanel14.show({ fullData, condition, war }); }
+        if      (condition.WecTurnIndexEqualTo)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel1, { fullData, condition, war }); }
+        else if (condition.WecTurnIndexGreaterThan)             { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel2, { fullData, condition, war }); }
+        else if (condition.WecTurnIndexLessThan)                { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel3, { fullData, condition, war }); }
+        else if (condition.WecTurnIndexRemainderEqualTo)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel4, { fullData, condition, war }); }
+        else if (condition.WecTurnPhaseEqualTo)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel5, { fullData, condition, war }); }
+        else if (condition.WecPlayerIndexInTurnEqualTo)         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel6, { fullData, condition, war }); }
+        else if (condition.WecPlayerIndexInTurnGreaterThan)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel7, { fullData, condition, war }); }
+        else if (condition.WecPlayerIndexInTurnLessThan)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel8, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCountTotalEqualTo)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel9, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCountTotalGreaterThan) { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel10, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCountTotalLessThan)    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel11, { fullData, condition, war }); }
+        else if (condition.WecPlayerAliveStateEqualTo)          { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel12, { fullData, condition, war }); }
+        else if (condition.WecTilePlayerIndexEqualTo)           { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel13, { fullData, condition, war }); }
+        else if (condition.WecTileTypeEqualTo)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel14, { fullData, condition, war }); }
         else                                                    { throw Helpers.newError(`Invalid condition.`, ClientErrorCode.WarEventHelper_OpenConditionModifyPanel_00); }
     }
 
@@ -2104,25 +2104,25 @@ namespace WarEventHelper {
 
     export function openActionModifyPanel(war: BwWar, fullData: IWarEventFullData, action: IWarEventAction): void {
         // TODO handle more action types.
-        TwnsWeActionModifyPanel1.WeActionModifyPanel1.hide();
-        TwnsWeActionModifyPanel2.WeActionModifyPanel2.hide();
-        TwnsWeActionModifyPanel3.WeActionModifyPanel3.hide();
-        TwnsWeActionModifyPanel4.WeActionModifyPanel4.hide();
-        TwnsWeActionModifyPanel5.WeActionModifyPanel5.hide();
-        TwnsWeActionModifyPanel6.WeActionModifyPanel6.hide();
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel1);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel2);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel3);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel4);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel5);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel6);
 
         if (action.WeaAddUnit) {
-            TwnsWeActionModifyPanel1.WeActionModifyPanel1.show({ war, fullData, action });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel1, { war, fullData, action });
         } else if (action.WeaSetPlayerAliveState) {
-            TwnsWeActionModifyPanel2.WeActionModifyPanel2.show({ war, fullData, action });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel2, { war, fullData, action });
         } else if (action.WeaDialogue) {
-            TwnsWeActionModifyPanel3.WeActionModifyPanel3.show({ war, fullData, action });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel3, { war, fullData, action });
         } else if (action.WeaSetViewpoint) {
-            TwnsWeActionModifyPanel4.WeActionModifyPanel4.show({ war, fullData, action });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel4, { war, fullData, action });
         } else if (action.WeaSetWeather) {
-            TwnsWeActionModifyPanel5.WeActionModifyPanel5.show({ war, fullData, action });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel5, { war, fullData, action });
         } else if (action.WeaSimpleDialogue) {
-            TwnsWeActionModifyPanel6.WeActionModifyPanel6.show({ war, fullData, action });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel6, { war, fullData, action });
         } else {
             throw Helpers.newError(`Invalid action.`, ClientErrorCode.WarEventHelper_OpenActionModifyPanel_00);
         }
