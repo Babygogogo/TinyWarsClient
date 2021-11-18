@@ -38,7 +38,7 @@ namespace TwnsScrCreateSettingsPanel {
     const CONFIRM_INTERVAL_MS = 5000;
 
     export type OpenData = void;
-    export class ScrCreateSettingsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class ScrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupNavigator!       : eui.Group;
         private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
         private readonly _labelCustomMode!      : TwnsUiLabel.UiLabel;
@@ -117,7 +117,7 @@ namespace TwnsScrCreateSettingsPanel {
             if (SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
                 callback();
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0070),
                     callback,
                 });

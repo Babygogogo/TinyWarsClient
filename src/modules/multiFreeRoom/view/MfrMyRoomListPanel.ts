@@ -34,7 +34,7 @@ namespace TwnsMfrMyRoomListPanel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class MfrMyRoomListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MfrMyRoomListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 

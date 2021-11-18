@@ -18,7 +18,7 @@ namespace TwnsRwSearchReplayPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class RwSearchReplayPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class RwSearchReplayPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected _IS_EXCLUSIVE = false;
         protected _LAYER_TYPE   = Types.LayerType.Hud2;
 

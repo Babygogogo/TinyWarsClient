@@ -14,7 +14,7 @@ namespace TwnsBwBeginTurnPanel {
         nickname        : string;
         callbackOnFinish: () => void;
     };
-    export class BwBeginTurnPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwBeginTurnPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
         private readonly _labelNickname!    : TwnsUiLabel.UiLabel;

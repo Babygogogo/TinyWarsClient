@@ -131,17 +131,17 @@ namespace TwnsCommonWarBasicSettingsPage {
         private _onTouchedBtnHelp(): void {
             const settingsType = this._getData().settingsType;
             if (settingsType === WarBasicSettingsType.HasFog) {
-                CommonHelpPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title  : Lang.getText(LangTextType.B0020),
                     content: Lang.getText(LangTextType.R0002),
                 });
             } else if (settingsType === WarBasicSettingsType.Weather) {
-                CommonHelpPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title  : Lang.getText(LangTextType.B0705),
                     content: Lang.getText(LangTextType.R0009),
                 });
             } else if (settingsType === WarBasicSettingsType.TimerType) {
-                CommonHelpPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title  : Lang.getText(LangTextType.B0574),
                     content: Lang.getText(LangTextType.R0003),
                 });
@@ -269,7 +269,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             const data          = this._getData();
             const callback      = Helpers.getExisted(data.callbackOnModify);
             const currentValue  = data.currentValue;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0185),
                 currentValue    : `${currentValue || ``}`,
                 maxChars        : CommonConstants.WarNameMaxLength,
@@ -287,7 +287,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             const data          = this._getData();
             const callback      = Helpers.getExisted(data.callbackOnModify);
             const currentValue  = data.currentValue;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0186),
                 currentValue    : `${currentValue || ``}`,
                 maxChars        : CommonConstants.WarPasswordMaxLength,
@@ -305,7 +305,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             const data          = this._getData();
             const callback      = Helpers.getExisted(data.callbackOnModify);
             const currentValue  = data.currentValue;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0187),
                 currentValue    : `${currentValue || ``}`,
                 maxChars        : CommonConstants.WarCommentMaxLength,
@@ -330,7 +330,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             if (data.warRule.ruleId == null) {
                 callback(null);
             } else {
-                TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0129),
                     callback: () => callback(null),
                 });
@@ -342,7 +342,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             if (data.warRule.ruleId == null) {
                 callback(null);
             } else {
-                TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0129),
                     callback: () => callback(null),
                 });
@@ -364,7 +364,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             const minValue      = 1;
             const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
             const currentValue  = data.currentValue;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0389),
                 currentValue    : `${currentValue}`,
                 maxChars        : 5,
@@ -389,7 +389,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             const minValue      = 0;
             const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
             const currentValue  = data.currentValue;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0390),
                 currentValue    : `${currentValue}`,
                 maxChars        : 5,
@@ -417,7 +417,7 @@ namespace TwnsCommonWarBasicSettingsPage {
             const data          = this._getData();
             const callback      = Helpers.getExisted(data.callbackOnModify);
             const currentValue  = data.currentValue;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0605),
                 currentValue    : `${currentValue || ``}`,
                 maxChars        : CommonConstants.SpmSaveSlotCommentMaxLength,

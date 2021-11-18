@@ -23,7 +23,7 @@ namespace TwnsWarMapBuildingListPanel {
         tileDataArray           : ProtoTypes.WarSerialization.ISerialTile[];
         playersCountUnneutral   : number;
     };
-    export class WarMapBuildingListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WarMapBuildingListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _listTile!     : TwnsUiScrollList.UiScrollList<DataForTileRenderer>;
 

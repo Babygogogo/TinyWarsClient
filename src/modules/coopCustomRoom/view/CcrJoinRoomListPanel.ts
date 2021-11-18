@@ -31,7 +31,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrJoinRoomListPanel {
-    import CcrRoomInfoPanel                         = TwnsCcrRoomInfoPanel.CcrRoomInfoPanel;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -39,12 +38,8 @@ namespace TwnsCcrJoinRoomListPanel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
-    export class CcrJoinRoomListPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: CcrJoinRoomListPanel;
-
+    export type OpenData = void;
+    export class CcrJoinRoomListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
@@ -64,25 +59,7 @@ namespace TwnsCcrJoinRoomListPanel {
         private _hasReceivedData    = false;
         private _isTabInitialized   = false;
 
-        public static show(): void {
-            if (!CcrJoinRoomListPanel._instance) {
-                CcrJoinRoomListPanel._instance = new CcrJoinRoomListPanel();
-            }
-            CcrJoinRoomListPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (CcrJoinRoomListPanel._instance) {
-                await CcrJoinRoomListPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/coopCustomRoom/CcrJoinRoomListPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.CcrJoinTargetRoomIdChanged,      callback: this._onNotifyCcrJoinTargetRoomIdChanged },
@@ -103,9 +80,8 @@ namespace TwnsCcrJoinRoomListPanel {
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listRoom.setItemRenderer(RoomRenderer);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._hasReceivedData   = false;
             this._isTabInitialized  = false;
             await this._initTabSettings();
@@ -115,9 +91,8 @@ namespace TwnsCcrJoinRoomListPanel {
 
             CcrProxy.reqCcrGetJoinableRoomInfoList();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -150,7 +125,7 @@ namespace TwnsCcrJoinRoomListPanel {
             const roomId    = Helpers.getExisted(data.roomId);
             if (data.userId === UserModel.getSelfUserId()) {
                 this.close();
-                CcrRoomInfoPanel.show({ roomId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrRoomInfoPanel, { roomId });
                 FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
             } else {
                 if (roomId === CcrJoinModel.getTargetRoomId()) {
@@ -209,7 +184,7 @@ namespace TwnsCcrJoinRoomListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrMainMenuPanel, void 0);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
@@ -230,7 +205,7 @@ namespace TwnsCcrJoinRoomListPanel {
                 if (!settingsForCcw.warPassword) {
                     callback();
                 } else {
-                    TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonJoinRoomPasswordPanel, {
                         mapId               : Helpers.getExisted(settingsForCcw.mapId),
                         warName             : settingsForCcw.warName ?? null,
                         password            : settingsForCcw.warPassword,
@@ -377,7 +352,7 @@ namespace TwnsCcrJoinRoomListPanel {
             return roomId == null ? null : await CcrModel.createDataForCommonWarAdvancedSettingsPage(roomId);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
@@ -403,36 +378,37 @@ namespace TwnsCcrJoinRoomListPanel {
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupRoomList,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnNextStep,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupTab,
-                    beginProps  : { alpha: 1, },
-                    endProps    : { alpha: 0, },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupRoomList,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnNextStep,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 1, },
+                endProps    : { alpha: 0, },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

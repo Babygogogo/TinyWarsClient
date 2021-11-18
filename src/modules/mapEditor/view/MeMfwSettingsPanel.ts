@@ -27,36 +27,14 @@ namespace TwnsMeMfwSettingsPanel {
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import LangTextType                 = TwnsLangTextType.LangTextType;
 
-    export class MeMfwSettingsPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeMfwSettingsPanel;
-
+    export type OpenData = void;
+    export class MeMfwSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
         private readonly _btnConfirm!       : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!MeMfwSettingsPanel._instance) {
-                MeMfwSettingsPanel._instance = new MeMfwSettingsPanel();
-            }
-            MeMfwSettingsPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeMfwSettingsPanel._instance) {
-                await MeMfwSettingsPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapEditor/MeMfwSettingsPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -66,7 +44,8 @@ namespace TwnsMeMfwSettingsPanel {
                 { type: NotifyType.MsgSpmCreateSfw,    callback: this._onMsgSpmCreateSfw },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -82,10 +61,13 @@ namespace TwnsMeMfwSettingsPanel {
 
             this._updateComponentsForLanguage();
         }
+        protected _onClosing(): void {
+            // nothing to do
+        }
 
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsMeWarMenuPanel.MeWarMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
         }
 
         private async _onTouchedBtnConfirm(): Promise<void> {
@@ -95,7 +77,7 @@ namespace TwnsMeMfwSettingsPanel {
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0201),
                     callback: () => {
                         FlowManager.gotoMfrCreateSettingsPanel(warData);
@@ -106,7 +88,7 @@ namespace TwnsMeMfwSettingsPanel {
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({

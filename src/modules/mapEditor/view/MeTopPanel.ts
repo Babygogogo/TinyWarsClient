@@ -26,23 +26,12 @@
 namespace TwnsMeTopPanel {
     import MeDrawer                 = TwnsMeDrawer.MeDrawer;
     import MeWar                    = TwnsMeWar.MeWar;
-    import MeChooseTileBasePanel    = TwnsMeChooseTileBasePanel.MeChooseTileBasePanel;
-    import MeChooseUnitPanel        = TwnsMeChooseUnitPanel.MeChooseUnitPanel;
-    import MeWarMenuPanel           = TwnsMeWarMenuPanel.MeWarMenuPanel;
-    import MeChooseTileObjectPanel  = TwnsMeChooseTileObjectPanel.MeChooseTileObjectPanel;
-    import MeVisibilityPanel        = TwnsMeVisibilityPanel.MeVisibilityPanel;
-    import MeSymmetryPanel          = TwnsMeSymmetryPanel.MeSymmetryPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import DrawerMode               = Types.MapEditorDrawerMode;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
-    // eslint-disable-next-line no-shadow
-    export class MeTopPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeTopPanel;
-
+    export type OpenData = void;
+    export class MeTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupMode!                    : eui.Group;
         private readonly _labelMode!                    : TwnsUiLabel.UiLabel;
         private readonly _conUnitView!                  : eui.Group;
@@ -63,26 +52,7 @@ namespace TwnsMeTopPanel {
         private _unitView   = new TwnsBwUnitView.BwUnitView();
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
-        public static show(): void {
-            if (!MeTopPanel._instance) {
-                MeTopPanel._instance = new MeTopPanel();
-            }
-            MeTopPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeTopPanel._instance) {
-                await MeTopPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapEditor/MeTopPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.TimeTick,                        callback: this._onNotifyTimeTick },
@@ -121,8 +91,13 @@ namespace TwnsMeTopPanel {
 
             this._initTileView();
             this._initUnitView();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            this._conTileView.removeChildren();
+            this._conUnitView.removeChildren();
         }
 
         private _getWar(): MeWar {
@@ -211,16 +186,16 @@ namespace TwnsMeTopPanel {
             this._getDrawer().setModePreview();
         }
         private _onTouchedBtnModeDrawTileBase(): void {
-            MeChooseTileBasePanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseTileBasePanel, void 0);
         }
         private _onTouchedBtnModeDrawTileDecorator(): void {
-            TwnsMeChooseTileDecoratorPanel.MeChooseTileDecoratorPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseTileDecoratorPanel, void 0);
         }
         private _onTouchedBtnModeDrawTileObject(): void {
-            MeChooseTileObjectPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseTileObjectPanel, void 0);
         }
         private _onTouchedBtnModeDrawUnit(): void {
-            MeChooseUnitPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseUnitPanel, void 0);
         }
         private _onTouchedBtnModeDeleteTileObject(): void {
             this._getDrawer().setModeDeleteTileObject();
@@ -232,14 +207,14 @@ namespace TwnsMeTopPanel {
             this._getDrawer().setModeDeleteUnit();
         }
         private _onTouchedBtnVisibility(): void {
-            MeVisibilityPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeVisibilityPanel, void 0);
         }
         private _onTouchedBtnSymmetry(): void {
-            MeSymmetryPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeSymmetryPanel, void 0);
         }
 
         private _onTouchedBtnMenu(): void {
-            MeWarMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

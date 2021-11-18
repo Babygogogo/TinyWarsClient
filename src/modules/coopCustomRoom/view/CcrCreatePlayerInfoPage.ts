@@ -20,9 +20,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrCreatePlayerInfoPage {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
-    import CommonChooseCoPanel  = TwnsCommonChooseCoPanel.CommonChooseCoPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -109,7 +106,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
                 : (WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.warRule), playerIndex).fixedCoIdInCcw);
 
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                CommonCoInfoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
                     configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
                     coId,
                 });
@@ -151,7 +148,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
                     if (CcrCreateModel.getPresetWarRuleId() == null) {
                         callback();
                     } else {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0129),
                             callback: () => {
                                 CcrCreateModel.setCustomWarRuleId();
@@ -175,7 +172,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
                     if (CcrCreateModel.getPresetWarRuleId() == null) {
                         callback();
                     } else {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0129),
                             callback: () => {
                                 CcrCreateModel.setCustomWarRuleId();
@@ -201,7 +198,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
             const playerRule    = WarRuleHelpers.getPlayerRule(warRule, playerIndex);
             const configVersion = Helpers.getExisted(CcrCreateModel.getData().settingsForCommon?.configVersion);
             if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
-                CommonChooseCoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                     currentCoId         : CcrCreateModel.getSelfCoId(),
                     availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, configVersion }),
                     callbackOnConfirm   : (coId) => {
@@ -220,7 +217,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
                             coIdArray.push(cfg.coId);
                         }
 
-                        CommonChooseCoPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                             currentCoId         : coId,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId) => {
@@ -235,7 +232,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
                     if (warRule.ruleId == null) {
                         callback();
                     } else {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0129),
                             callback: () => {
                                 CcrCreateModel.setCustomWarRuleId();

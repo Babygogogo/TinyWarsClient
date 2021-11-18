@@ -8,7 +8,7 @@ namespace TwnsBwWarPanel {
     export type OpenData = {
         war: TwnsBwWar.BwWar;
     };
-    export class BwWarPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwWarPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!    : eui.Group;
 
         protected _onOpening(): void {

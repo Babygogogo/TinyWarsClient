@@ -48,7 +48,7 @@ namespace TwnsBwTileDetailPanel {
     export type OpenData = {
         tile    : BwTile;
     };
-    export class BwTileDetailPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwTileDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
@@ -548,7 +548,7 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCurrentHp();
             const minValue  = 1;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0339),
                 currentValue    : "" + currValue,
                 maxChars        : 3,
@@ -577,7 +577,7 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCurrentCapturePoint();
             const minValue  = 1;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0361),
                 currentValue    : "" + currValue,
                 maxChars        : 3,
@@ -606,7 +606,7 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCurrentBuildPoint();
             const minValue  = 1;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0362),
                 currentValue    : "" + currValue,
                 maxChars        : 3,

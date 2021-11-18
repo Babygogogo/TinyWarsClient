@@ -32,7 +32,7 @@ namespace TwnsMfwMyWarListPanel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class MfwMyWarListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MfwMyWarListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarPlayerInfoPage>;
 
@@ -106,7 +106,7 @@ namespace TwnsMfwMyWarListPanel {
         private _onTouchedBtnNextStep(): void {
             const warId = MpwModel.getMfwPreviewingWarId();
             if (warId != null) {
-                TwnsCommonBlockPanel.CommonBlockPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0040),
                 });

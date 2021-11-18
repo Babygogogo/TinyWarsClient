@@ -35,7 +35,7 @@ namespace MpwProxy {
     function _onMsgMpwCommonBroadcastGameStart(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwCommonBroadcastGameStart.IS;
         Lang.getGameStartDesc(data).then(desc => {
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0392),
                 content : desc,
                 callback: () => {

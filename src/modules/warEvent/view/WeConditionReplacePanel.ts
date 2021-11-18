@@ -25,7 +25,7 @@ namespace TwnsWeConditionReplacePanel {
         parentNodeId    : number;
         conditionId     : number;
     };
-    export class WeConditionReplacePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeConditionReplacePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listCondition!    : TwnsUiScrollList.UiScrollList<DataForConditionRenderer>;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelNoCondition! : TwnsUiLabel.UiLabel;

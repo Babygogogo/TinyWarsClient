@@ -31,7 +31,7 @@ namespace TwnsBwUnitBriefPanel {
         war : BwWar;
     };
     // eslint-disable-next-line no-shadow
-    export class BwUnitBriefPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwUnitBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!    : eui.Group;
         private _cellList           : BwUnitBriefCell[] = [];
 
@@ -44,8 +44,6 @@ namespace TwnsBwUnitBriefPanel {
                 // { type: NotifyType.GlobalTouchMove,                 callback: this._onNotifyGlobalTouchMove },
                 { type: NotifyType.BwCursorGridIndexChanged,        callback: this._onNotifyBwCursorGridIndexChanged },
                 { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: NotifyType.BwCoListPanelOpened,             callback: this._onNotifyBwCoListPanelOpened },
-                { type: NotifyType.BwCoListPanelClosed,             callback: this._onNotifyBwCoListPanelClosed },
                 { type: NotifyType.BwProduceUnitPanelOpened,        callback: this._onNotifyBwProduceUnitPanelOpened },
                 { type: NotifyType.BwProduceUnitPanelClosed,        callback: this._onNotifyBwProduceUnitPanelClosed },
                 { type: NotifyType.MeUnitChanged,                   callback: this._onNotifyMeUnitChanged },
@@ -83,12 +81,6 @@ namespace TwnsBwUnitBriefPanel {
             ) {
                 this._updateView();
             }
-        }
-        private _onNotifyBwCoListPanelOpened(): void {
-            this._updateView();
-        }
-        private _onNotifyBwCoListPanelClosed(): void {
-            this._updateView();
         }
         private _onNotifyBwProduceUnitPanelOpened(): void {
             this._updateView();

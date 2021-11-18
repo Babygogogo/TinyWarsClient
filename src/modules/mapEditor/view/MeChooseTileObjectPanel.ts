@@ -15,6 +15,7 @@
 // import MeModel                  from "../model/MeModel";
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeChooseTileObjectPanel {
     import DataForDrawTileObject    = TwnsMeDrawer.DataForDrawTileObject;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -22,12 +23,8 @@ namespace TwnsMeChooseTileObjectPanel {
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseTileObjectPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeChooseTileObjectPanel;
-
+    export type OpenData = void;
+    export class MeChooseTileObjectPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
@@ -35,40 +32,27 @@ namespace TwnsMeChooseTileObjectPanel {
 
         private _dataListForRecent  : DataForTileObjectRenderer[] = [];
 
-        public static show(): void {
-            if (!MeChooseTileObjectPanel._instance) {
-                MeChooseTileObjectPanel._instance = new MeChooseTileObjectPanel();
-            }
-            MeChooseTileObjectPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeChooseTileObjectPanel._instance) {
-                await MeChooseTileObjectPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeChooseTileObjectPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listRecent.setItemRenderer(TileObjectRenderer);
             this._listCategory.setItemRenderer(CategoryRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._updateListRecent();
             this._updateListCategory();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public updateOnChooseTileObject(data: DataForDrawTileObject): void {

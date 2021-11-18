@@ -22,7 +22,7 @@ namespace TwnsUserSetPrivilegePanel {
     export type OpenData = {
         userId  : number;
     };
-    export class UserSetPrivilegePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class UserSetPrivilegePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _btnGetInfo!               : TwnsUiButton.UiButton;
         private readonly _inputUserId!              : TwnsUiTextInput.UiTextInput;
         private readonly _labelUserName!            : TwnsUiLabel.UiLabel;

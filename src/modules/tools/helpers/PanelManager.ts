@@ -5,8 +5,8 @@ namespace TwnsPanelManager {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     const _IS_CACHE_ENABLED = true;
-    const _runningPanelDict = new Map<PanelConfig<any>, TwnsUiPanel2.UiPanel2<any>>();
-    const _cachedPanelDict  = new Map<PanelConfig<any>, TwnsUiPanel2.UiPanel2<any>>();
+    const _runningPanelDict = new Map<PanelConfig<any>, TwnsUiPanel.UiPanel<any>>();
+    const _cachedPanelDict  = new Map<PanelConfig<any>, TwnsUiPanel.UiPanel<any>>();
     const _queueDict        = new Map<PanelConfig<any>, (() => Promise<void>)[]>();
 
     /**
@@ -22,10 +22,10 @@ namespace TwnsPanelManager {
      *
      * 如果不是以上情况，则会从头创建面板。
      */
-    export async function open<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
+    export async function open<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
         return addToQueue(config, () => doOpen(config, openData));
     }
-    async function doOpen<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
+    async function doOpen<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
         return getRunningPanel(config)
             ? openViaRunningPanel(config, openData)
             : (getCachedPanel(config)
@@ -33,14 +33,14 @@ namespace TwnsPanelManager {
                 : openViaCreatePanel(config, openData)
             );
     }
-    async function openViaRunningPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
+    async function openViaRunningPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
         const panel = Helpers.getExisted(getRunningPanel(config), ClientErrorCode.PanelManager_OpenViaRunningPanel_00);
         await panel.updateWithOpenData(openData);
 
         Logger.warn(`Panel opened via running: ${config.skinName}`);
         return panel;
     }
-    async function openViaCachedPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
+    async function openViaCachedPanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
         const panel     = Helpers.getExisted(getCachedPanel(config), ClientErrorCode.PanelManager_OpenViaCachedPanel_00);
         const layerType = config.layer;
         if (config.isExclusive) {
@@ -55,7 +55,7 @@ namespace TwnsPanelManager {
         Logger.warn(`Panel opened via cache: ${config.skinName}`);
         return panel;
     }
-    async function openViaCreatePanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel2.UiPanel2<T>> {
+    async function openViaCreatePanel<T>(config: PanelConfig<T>, openData: T): Promise<TwnsUiPanel.UiPanel<T>> {
         const panel     = await createPanel(config);
         const layerType = config.layer;
         if (config.isExclusive) {
@@ -64,7 +64,7 @@ namespace TwnsPanelManager {
         StageManager.getLayer(layerType).addChild(panel);
 
         if (!panel.getIsChildrenCreated()) {
-            await new Promise<void>(resolve => panel.once(TwnsUiPanel2.EVENT_PANEL_CHILDREN_CREATED, resolve, null));
+            await new Promise<void>(resolve => panel.once(TwnsUiPanel.EVENT_PANEL_CHILDREN_CREATED, resolve, null));
         }
 
         await panel.initOnOpening(openData);
@@ -129,32 +129,32 @@ namespace TwnsPanelManager {
         await Promise.all(promiseArray);
     }
 
-    async function createPanel<T>(config: PanelConfig<T>): Promise<TwnsUiPanel2.UiPanel2<T>> {
+    async function createPanel<T>(config: PanelConfig<T>): Promise<TwnsUiPanel.UiPanel<T>> {
         const panel     = new config.cls();
         panel.skinName  = config.skinName;
         panel.setPanelConfig(config);
 
         if (!panel.getIsSkinLoaded()) {
-            await new Promise<void>(resolve => panel.once(TwnsUiPanel2.EVENT_PANEL_SKIN_LOADED, resolve, null));
+            await new Promise<void>(resolve => panel.once(TwnsUiPanel.EVENT_PANEL_SKIN_LOADED, resolve, null));
         }
 
         return panel;
     }
 
-    export function getRunningPanel<T>(config: PanelConfig<T>): TwnsUiPanel2.UiPanel2<T> | null {
+    export function getRunningPanel<T>(config: PanelConfig<T>): TwnsUiPanel.UiPanel<T> | null {
         return _runningPanelDict.get(config) ?? null;
     }
-    function addRunningPanel<T>(config: PanelConfig<T>, panel: TwnsUiPanel2.UiPanel2<T>): void {
+    function addRunningPanel<T>(config: PanelConfig<T>, panel: TwnsUiPanel.UiPanel<T>): void {
         _runningPanelDict.set(config, panel);
     }
     function deleteRunningPanel<T>(config: PanelConfig<T>): void {
         _runningPanelDict.delete(config);
     }
 
-    function getCachedPanel<T>(config: PanelConfig<T>): TwnsUiPanel2.UiPanel2<T> | null {
+    function getCachedPanel<T>(config: PanelConfig<T>): TwnsUiPanel.UiPanel<T> | null {
         return _cachedPanelDict.get(config) ?? null;
     }
-    function addCachedPanel<T>(config: PanelConfig<T>, panel: TwnsUiPanel2.UiPanel2<T>): void {
+    function addCachedPanel<T>(config: PanelConfig<T>, panel: TwnsUiPanel.UiPanel<T>): void {
         _cachedPanelDict.set(config, panel);
     }
 

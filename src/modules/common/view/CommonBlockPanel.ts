@@ -5,55 +5,33 @@
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonBlockPanel {
-    type OpenDataForCommonBlockPanel = {
+    export type OpenData = {
         title  : string;
         content: string;
     };
-    export class CommonBlockPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBlockPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: CommonBlockPanel;
-
+    export class CommonBlockPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _scrContent!   : eui.Scroller;
         private readonly _labelContent! : TwnsUiLabel.UiLabel;
 
-        public static show(openData: OpenDataForCommonBlockPanel): void {
-            if (!CommonBlockPanel._instance) {
-                CommonBlockPanel._instance = new CommonBlockPanel();
-            }
-            CommonBlockPanel._instance.open(openData);
+        protected _onOpening(): void {
+            // nothing to do
         }
-
-        public static async hide(): Promise<void> {
-            if (CommonBlockPanel._instance) {
-                await CommonBlockPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/common/CommonBlockPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             const openData                      = this._getOpenData();
             this._labelTitle.text               = openData.title;
             this._scrContent.viewport.scrollV   = 0;
             this._labelContent.setRichText(openData.content);
-
-            this._showOpenAnimation();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -64,22 +42,23 @@ namespace TwnsCommonBlockPanel {
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
 
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: -40 },
-                    callback    : resolve,
-                });
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

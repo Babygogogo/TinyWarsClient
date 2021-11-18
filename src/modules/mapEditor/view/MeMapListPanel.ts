@@ -17,17 +17,14 @@
 // import MeModel                  from "../model/MeModel";
 // import MeProxy                  from "../model/MeProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeMapListPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    export class MeMapListPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MeMapListPanel;
-
+    export type OpenData = void;
+    export class MeMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _zoomMap!          : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelNoData!      : TwnsUiLabel.UiLabel;
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
@@ -38,25 +35,7 @@ namespace TwnsMeMapListPanel {
         private _dataForListMap     : DataForMapRenderer[] = [];
         private _selectedIndex      : number | null = null;
 
-        public static show(): void {
-            if (!MeMapListPanel._instance) {
-                MeMapListPanel._instance = new MeMapListPanel();
-            }
-            MeMapListPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeMapListPanel._instance) {
-                await MeMapListPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapEditor/MeMapListPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgMeGetDataList,    callback: this._onNotifySMeGetDataList },
@@ -65,11 +44,15 @@ namespace TwnsMeMapListPanel {
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ]);
             this._listMap.setItemRenderer(MapRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
             this._labelLoading.visible = true;
 
             MeProxy.reqMeGetMapDataList();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public async setAndReviseSelectedIndex(newIndex: number | null): Promise<void> {
@@ -196,7 +179,7 @@ namespace TwnsMeMapListPanel {
             const reviewStatus  = mapData.reviewStatus;
 
             if (reviewStatus === Types.MapReviewStatus.Rejected) {
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0305),
                     content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {
@@ -204,7 +187,7 @@ namespace TwnsMeMapListPanel {
                     },
                 });
             } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0326),
                     content : mapData.reviewComment || Lang.getText(LangTextType.B0001),
                     callback: () => {

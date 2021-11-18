@@ -24,7 +24,7 @@ namespace TwnsWeActionAddUnitListPanel {
         configVersion   : string;
         dataForAddUnit  : IDataForAddUnit;
     };
-    export class WeActionAddUnitListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeActionAddUnitListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;

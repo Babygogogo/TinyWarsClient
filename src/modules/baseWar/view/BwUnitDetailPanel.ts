@@ -29,7 +29,6 @@
 namespace TwnsBwUnitDetailPanel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
     import UnitType                 = Types.UnitType;
     import TileType                 = Types.TileType;
     import BwUnit                   = TwnsBwUnit.BwUnit;
@@ -57,7 +56,7 @@ namespace TwnsBwUnitDetailPanel {
     export type OpenData = {
         unit: BwUnit;
     };
-    export class BwUnitDetailPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwUnitDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _conUnitView!          : eui.Group;
@@ -124,7 +123,7 @@ namespace TwnsBwUnitDetailPanel {
 
         private _onTouchedBtnUnitsInfo(): void {
             this.close();
-            CommonDamageChartPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -716,7 +715,7 @@ namespace TwnsBwUnitDetailPanel {
 
             const unit      = data.unit;
             const state     = unit.getActionState();
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 title       : Lang.getText(LangTextType.B0349),
                 content     : Lang.getText(LangTextType.A0113),
                 callback    : () => {
@@ -739,7 +738,7 @@ namespace TwnsBwUnitDetailPanel {
 
             const currValue = unit.getCurrentBuildMaterial();
             const minValue  = 0;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0347),
                 currentValue    : "" + currValue,
                 maxChars        : 2,
@@ -768,7 +767,7 @@ namespace TwnsBwUnitDetailPanel {
 
             const currValue     = unit.getFlareCurrentAmmo();
             const minValue      = 0;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0349),
                 currentValue    : "" + currValue,
                 maxChars        : 2,
@@ -798,7 +797,7 @@ namespace TwnsBwUnitDetailPanel {
             const currValue = unit.getCurrentFuel();
             const maxValue  = unit.getMaxFuel();
             const minValue  = 0;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0342),
                 currentValue    : "" + currValue,
                 maxChars        : 2,
@@ -827,7 +826,7 @@ namespace TwnsBwUnitDetailPanel {
 
             const unit          = data.unit;
             const hasLoadedCo   = unit.getHasLoadedCo();
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0243),
                 callback: () => {
                     unit.setHasLoadedCo(!hasLoadedCo);
@@ -849,7 +848,7 @@ namespace TwnsBwUnitDetailPanel {
             const currValue = unit.getCurrentHp();
             const maxValue  = unit.getMaxHp();
             const minValue  = 1;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0339),
                 currentValue    : "" + currValue,
                 maxChars        : 3,
@@ -877,7 +876,7 @@ namespace TwnsBwUnitDetailPanel {
 
             const unit      = data.unit;
             const isDiving  = unit.getIsDiving();
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content     : Lang.getText(LangTextType.A0114),
                 callback    : () => {
                     unit.setIsDiving(!isDiving);
@@ -900,7 +899,7 @@ namespace TwnsBwUnitDetailPanel {
 
             const currValue = unit.getPrimaryWeaponCurrentAmmo();
             const minValue  = 0;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0350),
                 currentValue    : "" + currValue,
                 maxChars        : 2,
@@ -930,7 +929,7 @@ namespace TwnsBwUnitDetailPanel {
 
             const currValue = unit.getCurrentProduceMaterial();
             const minValue  = 0;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0348),
                 currentValue    : "" + currValue,
                 maxChars        : 2,
@@ -962,7 +961,7 @@ namespace TwnsBwUnitDetailPanel {
 
             const currValue = unit.getCurrentPromotion();
             const minValue  = 0;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0370),
                 currentValue    : "" + currValue,
                 maxChars        : 1,
@@ -1009,7 +1008,7 @@ namespace TwnsBwUnitDetailPanel {
         }
 
         private _onTouchedLabelAsAiMode(): void {
-            TwnsCommonHelpPanel.CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0720),
                 content : Lang.getText(LangTextType.R0010),
             });

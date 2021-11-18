@@ -21,7 +21,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeCommandPanel {
-    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeWar                    = TwnsMeWar.MeWar;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
@@ -38,7 +37,7 @@ namespace TwnsWeCommandPanel {
         parentNodeId?   : number;
         nodeId?         : number;
     };
-    export class WeCommandPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeCommandPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
         private readonly _labelDesc!                    : TwnsUiLabel.UiLabel;
         private readonly _labelError!                   : TwnsUiLabel.UiLabel;
@@ -111,7 +110,7 @@ namespace TwnsWeCommandPanel {
                 const minValue  = 1;
                 const maxValue  = CommonConstants.WarEventMaxCallCountInPlayerTurn;
                 const eventData = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.eventArray?.find(v => v.eventId === data.eventId));
-                TwnsCommonInputPanel.CommonInputPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                     title           : Lang.getText(LangTextType.B0476),
                     charRestrict    : `0-9`,
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
@@ -136,7 +135,7 @@ namespace TwnsWeCommandPanel {
                 const minValue  = 1;
                 const maxValue  = CommonConstants.WarEventMaxCallCountTotal;
                 const eventData = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.eventArray?.find(v => v.eventId === data.eventId));
-                TwnsCommonInputPanel.CommonInputPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                     title           : Lang.getText(LangTextType.B0477),
                     charRestrict    : `0-9`,
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
@@ -172,7 +171,7 @@ namespace TwnsWeCommandPanel {
             if (nodeId == null) {
                 callback();
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0060, `N${nodeId}`),
                     callback,
                 });
@@ -181,7 +180,7 @@ namespace TwnsWeCommandPanel {
         private _onTouchedBtnDeleteEvent(): void {               // DONE
             const data      = this._getOpenData();
             const eventId   = data.eventId;
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 title   : `${Lang.getText(LangTextType.B0479)} E${eventId}`,
                 content : Lang.getText(LangTextType.A0171),
                 callback: () => {
@@ -234,7 +233,7 @@ namespace TwnsWeCommandPanel {
         private _onTouchedBtnDeleteNode(): void {                // DONE
             const data      = this._getOpenData();
             const nodeId    = data.nodeId;
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 title   : `${Lang.getText(LangTextType.B0481)} N${nodeId}`,
                 content : Lang.getText(LangTextType.A0172),
                 callback: () => {
@@ -271,7 +270,7 @@ namespace TwnsWeCommandPanel {
         private _onTouchedBtnDeleteCondition(): void {           // DONE
             const data          = this._getOpenData();
             const conditionId   = data.conditionId;
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 title   : `${Lang.getText(LangTextType.B0485)} C${conditionId}`,
                 content : Lang.getText(LangTextType.A0175),
                 callback: () => {
@@ -308,7 +307,7 @@ namespace TwnsWeCommandPanel {
         private _onTouchedBtnDeleteAction(): void {              // DONE
             const data      = this._getOpenData();
             const actionId  = data.actionId;
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 title   : `${Lang.getText(LangTextType.B0486)} A${actionId}`,
                 content : Lang.getText(LangTextType.A0176),
                 callback: () => {

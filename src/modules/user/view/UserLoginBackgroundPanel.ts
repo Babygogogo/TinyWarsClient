@@ -22,12 +22,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserLoginBackgroundPanel {
-    import CommonChangeVersionPanel = TwnsCommonChangeVersionPanel.CommonChangeVersionPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
     export type OpenData = void;
-    export class UserLoginBackgroundPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class UserLoginBackgroundPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgBackground!    : TwnsUiImage.UiImage;
 
         private readonly _groupRightButton! : eui.Group;
@@ -85,7 +84,7 @@ namespace TwnsUserLoginBackgroundPanel {
             SoundManager.init();
         }
         private _onTouchedBtnVersion(): void {
-            CommonChangeVersionPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChangeVersionPanel, void 0);
         }
         private _onTouchedBtnSound(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetSoundPanel, void 0);

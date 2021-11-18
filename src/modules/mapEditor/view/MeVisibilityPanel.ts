@@ -10,16 +10,13 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import MeModel              from "../model/MeModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeVisibilityPanel {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
 
-    export class MeVisibilityPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeVisibilityPanel;
-
+    export type OpenData = void;
+    export class MeVisibilityPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupUnit!            : eui.Group;
         private readonly _labelUnit!            : TwnsUiLabel.UiLabel;
         private readonly _imgUnit!              : TwnsUiImage.UiImage;
@@ -33,28 +30,7 @@ namespace TwnsMeVisibilityPanel {
         private readonly _imgTileDecorator!     : TwnsUiImage.UiImage;
         private readonly _labelTileDecorator!   : TwnsUiLabel.UiLabel;
 
-        public static show(): void {
-            if (!MeVisibilityPanel._instance) {
-                MeVisibilityPanel._instance = new MeVisibilityPanel();
-            }
-            MeVisibilityPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeVisibilityPanel._instance) {
-                await MeVisibilityPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeVisibilityPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -64,13 +40,19 @@ namespace TwnsMeVisibilityPanel {
                 { ui: this._groupTileObject,    callback: this._onTouchedGroupTileObject, },
                 { ui: this._groupUnit,          callback: this._onTouchedGroupUnit },
             ]);
-
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._updateGroupUnit();
             this._updateGroupTileBase();
             this._updateGroupTileDecorator();
             this._updateGroupTileObject();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _getWar(): TwnsBwWar.BwWar {

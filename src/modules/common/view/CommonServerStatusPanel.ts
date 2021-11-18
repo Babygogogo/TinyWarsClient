@@ -12,16 +12,13 @@
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonServerStatusPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    export class CommonServerStatusPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: CommonServerStatusPanel;
-
+    export type OpenData = void;
+    export class CommonServerStatusPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
@@ -36,43 +33,23 @@ namespace TwnsCommonServerStatusPanel {
         private readonly _labelActiveAccountsTitle! : TwnsUiLabel.UiLabel;
         private readonly _labelActiveAccounts!      : TwnsUiLabel.UiLabel;
 
-        public static show(): void {
-            if (!CommonServerStatusPanel._instance) {
-                CommonServerStatusPanel._instance = new CommonServerStatusPanel();
-            }
-            CommonServerStatusPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (CommonServerStatusPanel._instance) {
-                await CommonServerStatusPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/common/CommonServerStatusPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
             ]);
-
-            this._showOpenAnimation();
-
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             CommonProxy.reqCommonGetServerStatus();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onMsgCommonGetServerStatus(e: egret.Event): void {
@@ -98,7 +75,7 @@ namespace TwnsCommonServerStatusPanel {
             this._labelActiveAccountsTitle.text = `${Lang.getText(LangTextType.B0331)}:`;
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -109,21 +86,22 @@ namespace TwnsCommonServerStatusPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

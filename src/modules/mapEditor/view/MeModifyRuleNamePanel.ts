@@ -14,20 +14,16 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 // import MeModel              from "../model/MeModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeModifyRuleNamePanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
 
-    type OpenDataForModifyRuleNamePanel = {
+    export type OpenData = {
         ruleId  : number;
     };
-    export class MeModifyRuleNamePanel extends TwnsUiPanel.UiPanel<OpenDataForModifyRuleNamePanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeModifyRuleNamePanel;
-
+    export class MeModifyRuleNamePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _inputChinese! : TwnsUiTextInput.UiTextInput;
         private readonly _inputEnglish! : TwnsUiTextInput.UiTextInput;
         private readonly _labelTip!     : TwnsUiLabel.UiLabel;
@@ -37,29 +33,7 @@ namespace TwnsMeModifyRuleNamePanel {
         private readonly _btnModify!    : TwnsUiButton.UiButton;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForModifyRuleNamePanel): void {
-            if (!MeModifyRuleNamePanel._instance) {
-                MeModifyRuleNamePanel._instance = new MeModifyRuleNamePanel();
-            }
-
-            MeModifyRuleNamePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeModifyRuleNamePanel._instance) {
-                await MeModifyRuleNamePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName               = "resource/skins/mapEditor/MeModifyRuleNamePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -67,8 +41,14 @@ namespace TwnsMeModifyRuleNamePanel {
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ]);
-
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {

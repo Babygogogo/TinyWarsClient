@@ -486,7 +486,7 @@ namespace TwnsSpwActionPlanner {
                     : [{
                         actionType  : UnitActionType.UseCoSuperPower,
                         callback    : () => {
-                            CommonConfirmPanel.show({
+                            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0058),
                                 callback: () => this._setStateRequestingUnitUseCoSuperPower(),
                             });
@@ -503,7 +503,7 @@ namespace TwnsSpwActionPlanner {
                     : [{
                         actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
-                            CommonConfirmPanel.show({
+                            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0054),
                                 callback: () => this._setStateRequestingUnitUseCoPower(),
                             });
@@ -626,7 +626,7 @@ namespace TwnsSpwActionPlanner {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitDropOnChooseAction()
-                            : () => CommonConfirmPanel.show({
+                            : () => TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitDropOnChooseAction(),
                             }),
@@ -636,7 +636,7 @@ namespace TwnsSpwActionPlanner {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitWait()
-                            : () => CommonConfirmPanel.show({
+                            : () => TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitWait(),
                             }),

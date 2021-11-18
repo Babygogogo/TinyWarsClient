@@ -22,7 +22,7 @@ namespace TwnsRwReplayProgressPanel {
     export type OpenData = {
         war: TwnsRwWar.RwWar;
     };
-    export class RwReplayProgressPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class RwReplayProgressPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -117,12 +117,12 @@ namespace TwnsRwReplayProgressPanel {
             this._updateLabelTarget();
         }
         private async _onTouchedBtnConfirm(): Promise<void> {
-            TwnsCommonBlockPanel.CommonBlockPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
                 title   : Lang.getText(LangTextType.B0088),
                 content : Lang.getText(LangTextType.A0040),
             });
             await this._getOpenData().war.loadCheckpoint(this._getSelectedCheckpointId());
-            TwnsCommonBlockPanel.CommonBlockPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
             this.close();
         }
         private _onTouchedPanelMask(): void {

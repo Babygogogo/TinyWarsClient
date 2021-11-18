@@ -35,7 +35,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMrrRoomInfoPanel {
-    import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -47,7 +46,7 @@ namespace TwnsMrrRoomInfoPanel {
     export type OpenData = {
         roomId  : number;
     };
-    export class MrrRoomInfoPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MrrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!                 : eui.Group;
         private readonly _tabSettings!              : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
@@ -161,7 +160,7 @@ namespace TwnsMrrRoomInfoPanel {
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList?.find(v => v.userId === userId) : null;
             if (selfPlayerData) {
                 const configVersion = Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion);
-                TwnsCommonBanCoPanel.CommonBanCoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
                     configVersion,
                     playerIndex         : Helpers.getExisted(selfPlayerData.playerIndex),
                     maxBanCount         : ConfigManager.getSystemMaxBanCoCount(configVersion),
@@ -169,11 +168,11 @@ namespace TwnsMrrRoomInfoPanel {
                     bannedCoIdArray     : [],
                     selfCoId            : null,
                     callbackOnConfirm   : (bannedCoIdSet) => {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(bannedCoIdSet.size > 0 ? LangTextType.A0138 : LangTextType.A0139),
                             callback: () => {
                                 MrrProxy.reqMrrSetBannedCoIdList(roomId, [...bannedCoIdSet]);
-                                TwnsCommonBanCoPanel.CommonBanCoPanel.hide();
+                                TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBanCoPanel);
                             },
                         });
                     },
@@ -191,7 +190,7 @@ namespace TwnsMrrRoomInfoPanel {
                     FloatText.show(Lang.getText(LangTextType.A0207));
                 } else {
                     const currentCoId = MrrSelfSettingsModel.getCoId();
-                    TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                         currentCoId,
                         availableCoIdArray  : Helpers.getExisted(MrrSelfSettingsModel.getAvailableCoIdArray()),
                         callbackOnConfirm   : (newCoId) => {
@@ -680,7 +679,7 @@ namespace TwnsMrrRoomInfoPanel {
                 } else {
                     const coId      = Helpers.getExisted(MrrSelfSettingsModel.getCoId());
                     const callback  = () => {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0206),
                             callback: () => {
                                 MrrProxy.reqMrrSetSelfSettings(roomId, coId, Helpers.getExisted(MrrSelfSettingsModel.getUnitAndTileSkinId()));
@@ -690,7 +689,7 @@ namespace TwnsMrrRoomInfoPanel {
                     if ((coId == CommonConstants.CoEmptyId)                                                             &&
                         ((MrrSelfSettingsModel.getAvailableCoIdArray() || []).some(v => v !== CommonConstants.CoEmptyId))
                     ) {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0208),
                             callback,
                         });

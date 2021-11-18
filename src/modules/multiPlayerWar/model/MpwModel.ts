@@ -592,7 +592,7 @@ namespace MpwModel {
             const warData   = data.war;
             if (status === Types.SyncWarStatus.Defeated) {
                 war.setIsEnded(true);
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0023),
                     callback: () => {
@@ -602,7 +602,7 @@ namespace MpwModel {
 
             } else if (status === Types.SyncWarStatus.EndedOrNotExists) {
                 war.setIsEnded(true);
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0035),
                     callback: () => {
@@ -656,7 +656,7 @@ namespace MpwModel {
             } else if (status === Types.SyncWarStatus.NotJoined) {
                 // Something wrong!!
                 war.setIsEnded(true);
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0037),
                     callback: () => FlowManager.gotoLobby(),
@@ -673,7 +673,7 @@ namespace MpwModel {
             } else {
                 // Something wrong!!
                 war.setIsEnded(true);
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0037),
                     callback: () => FlowManager.gotoLobby(),
@@ -725,20 +725,20 @@ namespace MpwModel {
         };
         if (war.getIsEnded()) {
             if (remainingVotes === 0) {
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0030),
                     callback: callbackForGoBack,
                 });
             } else {
                 if (selfPlayer == null) {
-                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0035),
                         callback: callbackForGoBack,
                     });
                 } else {
-                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : selfPlayer.getAliveState() === Types.PlayerAliveState.Alive ? Lang.getText(LangTextType.A0022) : Lang.getText(LangTextType.A0023),
                         callback: callbackForGoBack,
@@ -749,7 +749,7 @@ namespace MpwModel {
             if (war.getIsRunning()) {
                 if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().size) {
                     war.setIsEnded(true);
-                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0035),
                         content : selfPlayer ? Lang.getText(LangTextType.A0023) : Lang.getText(LangTextType.A0152),
                         callback: callbackForGoBack,

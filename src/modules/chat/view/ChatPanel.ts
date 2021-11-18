@@ -28,7 +28,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsChatPanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ChatCategory         = Types.ChatMessageToCategory;
@@ -41,7 +40,7 @@ namespace TwnsChatPanel {
         toMfrRoomId?    : number;
         toCcrRoomId?    : number;
     };
-    export class ChatPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class ChatPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
 
         private readonly _groupChannel!     : eui.Group;
@@ -675,7 +674,7 @@ namespace TwnsChatPanel {
                 if (userId !== UserModel.getSelfUserId()) {
                     const info = await UserModel.getUserPublicInfo(userId);
                     if (info) {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getFormattedText(LangTextType.F0025, info.nickname),
                             callback: () => {
                                 TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: userId });

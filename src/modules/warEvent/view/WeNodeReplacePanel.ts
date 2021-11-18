@@ -27,7 +27,7 @@ namespace TwnsWeNodeReplacePanel {
         nodeId          : number | null;
         fullData        : IWarEventFullData;
     };
-    export class WeNodeReplacePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeNodeReplacePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listNode!     : TwnsUiScrollList.UiScrollList<DataForNodeRenderer>;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelNoNode!  : TwnsUiLabel.UiLabel;

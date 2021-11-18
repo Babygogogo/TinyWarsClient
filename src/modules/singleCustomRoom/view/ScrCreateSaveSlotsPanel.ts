@@ -21,7 +21,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class ScrCreateSaveSlotsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class ScrCreateSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;

@@ -24,19 +24,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrMainMenuPanel {
-    import CcrMyRoomListPanel       = TwnsCcrMyRoomListPanel.CcrMyRoomListPanel;
-    import CcrCreateMapListPanel    = TwnsCcrCreateMapListPanel.CcrCreateMapListPanel;
-    import CcrJoinRoomListPanel     = TwnsCcrJoinRoomListPanel.CcrJoinRoomListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import Tween                    = egret.Tween;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
-    export class CcrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: CcrMainMenuPanel;
-
+    export type OpenData = void;
+    export class CcrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
         private readonly _btnRanking!       : TwnsUiButton.UiButton;
@@ -51,26 +44,7 @@ namespace TwnsCcrMainMenuPanel {
         private readonly _btnNormalMode!    : TwnsUiButton.UiButton;
         private readonly _btnFreeMode!      : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!CcrMainMenuPanel._instance) {
-                CcrMainMenuPanel._instance = new CcrMainMenuPanel();
-            }
-            CcrMainMenuPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (CcrMainMenuPanel._instance) {
-                await CcrMainMenuPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/coopCustomRoom/CcrMainMenuPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
                 { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
@@ -85,14 +59,12 @@ namespace TwnsCcrMainMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
             ]);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -110,35 +82,35 @@ namespace TwnsCcrMainMenuPanel {
             this.close();
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            CcrCreateMapListPanel.show({});
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrCreateMapListPanel, {});
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            CcrJoinRoomListPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrJoinRoomListPanel, void 0);
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            CcrMyRoomListPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrMyRoomListPanel, void 0);
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsCcwMyWarListPanel.CcwMyWarListPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcwMyWarListPanel, void 0);
         }
         private _onTouchedBtnHelp(): void {
-            TwnsCommonAlertPanel.CommonAlertPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                 title   : Lang.getText(LangTextType.B0143),
                 content : Lang.getText(LangTextType.R0008),
             });
         }
         private _onTouchedBtnNormalMode(): void {
             this.close();
-            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
         }
         private _onTouchedBtnFreeMode(): void {
             this.close();
@@ -152,7 +124,7 @@ namespace TwnsCcrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             const group = this._group;
             Tween.removeTweens(group);
             group.right = 60;
@@ -222,21 +194,22 @@ namespace TwnsCcrMainMenuPanel {
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
+
+            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, right: 60 },
-                    endProps    : { alpha: 0, right: 20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupLeft,
-                    beginProps  : { alpha: 1, left: 0 },
-                    endProps    : { alpha: 0, left: -40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, right: 60 },
+                endProps    : { alpha: 0, right: 20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupLeft,
+                beginProps  : { alpha: 1, left: 0 },
+                endProps    : { alpha: 0, left: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {

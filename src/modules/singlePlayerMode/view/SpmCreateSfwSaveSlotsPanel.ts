@@ -29,7 +29,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
 
     export type OpenData = ISerialWar;
 
-    export class SpmCreateSfwSaveSlotsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class SpmCreateSfwSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
@@ -65,7 +65,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
         }
 
         private _onTouchedBtnHelp(): void {
-            CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0325),
                 content : Lang.getText(LangTextType.R0006),
             });
@@ -136,7 +136,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
         private _onTouchedImgBg(): void {
             const data      = this._getData();
             const callback  = () => {
-                TwnsCommonInputPanel.CommonInputPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                     title       : Lang.getText(LangTextType.B0088),
                     maxChars    : CommonConstants.SpmSaveSlotCommentMaxLength,
                     currentValue: ``,
@@ -155,7 +155,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
             if (!data.slotInfo) {
                 callback();
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0070),
                     callback,
                 });

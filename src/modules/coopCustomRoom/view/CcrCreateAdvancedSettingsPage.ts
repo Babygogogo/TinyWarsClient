@@ -20,10 +20,8 @@
 // import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
 // import CcrCreateModel           from "../model/CcrCreateModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrCreateAdvancedSettingsPage {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
-    import CommonChooseCoPanel  = TwnsCommonChooseCoPanel.CommonChooseCoPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;
@@ -83,7 +81,7 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
             CcrCreateModel.resetDataByWarRuleId(Helpers.getExisted(this._initialWarRuleId));
         }
         private _onTouchedBtnCustomize(): void {
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     CcrCreateModel.setCustomWarRuleId();
@@ -161,7 +159,7 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                CommonHelpPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
                 });
@@ -255,7 +253,7 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
         }
 
         private _onTouchedBtnCustom(): void {
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     CcrCreateModel.setCustomWarRuleId();
@@ -334,7 +332,7 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = () => {
                 const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
                 const selfCoId      = playerIndex === CcrCreateModel.getSelfPlayerIndex() ? CcrCreateModel.getSelfCoId() : null;
-                TwnsCommonBanCoPanel.CommonBanCoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
                     playerIndex,
                     configVersion,
                     maxBanCount         : null,
@@ -345,12 +343,12 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
                         const callback = () => {
                             CcrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
                             Notify.dispatch(NotifyType.CcrCreateBannedCoIdArrayChanged);
-                            TwnsCommonBanCoPanel.CommonBanCoPanel.hide();
+                            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBanCoPanel);
                         };
                         if ((selfCoId == null) || (!bannedCoIdSet.has(selfCoId))) {
                             callback();
                         } else {
-                            CommonConfirmPanel.show({
+                            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0057),
                                 callback: () => {
                                     CcrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);
@@ -617,7 +615,7 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
                 if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
                     FloatText.show(Lang.getText(LangTextType.A0220));
                 } else {
-                    CommonChooseCoPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                         currentCoId         : coId,
                         availableCoIdArray  : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                         callbackOnConfirm   : (newCoId) => {

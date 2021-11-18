@@ -36,10 +36,9 @@ namespace TwnsWwOngoingWarsPanel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
-    import CommonBlockPanel                         = TwnsCommonBlockPanel.CommonBlockPanel;
 
     export type OpenData = void;
-    export class WwOngoingWarsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WwOngoingWarsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForWarCommonMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
@@ -119,7 +118,7 @@ namespace TwnsWwOngoingWarsPanel {
         }
 
         private _onNotifyMsgMpwWatchContinueWarFailed(): void {
-            CommonBlockPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
             WwProxy.reqWatchGetOngoingWarInfos();
         }
 

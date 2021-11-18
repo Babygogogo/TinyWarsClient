@@ -14,43 +14,18 @@
 // import TwnsMmReviewListPanel        from "./MmReviewListPanel";
 // import TwnsMmTagListPanel           from "./MmTagListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmMainMenuPanel {
-    import MmReviewListPanel        = TwnsMmReviewListPanel.MmReviewListPanel;
-    import MmAvailabilityListPanel  = TwnsMmAvailabilityListPanel.MmAvailabilityListPanel;
-    import MmTagListPanel           = TwnsMmTagListPanel.MmTagListPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
-    export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MmMainMenuPanel;
-
+    export type OpenData = void;
+    export class MmMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
         private readonly _listCommand!      : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
 
-        public static show(): void {
-            if (!MmMainMenuPanel._instance) {
-                MmMainMenuPanel._instance = new MmMainMenuPanel();
-            }
-            MmMainMenuPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MmMainMenuPanel._instance) {
-                await MmMainMenuPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapManagement/MmMainMenuPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ]);
@@ -60,9 +35,13 @@ namespace TwnsMmMainMenuPanel {
                 { type: NotifyType.MsgMmReloadAllMaps, callback: this._onMsgMmReloadAllMaps },
             ]);
             this._listCommand.setItemRenderer(CommandRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
             this._listCommand.bindData(await this._createDataForListCommand());
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -97,21 +76,21 @@ namespace TwnsMmMainMenuPanel {
                     name    : Lang.getText(LangTextType.B0295),
                     callback: (): void => {
                         this.close();
-                        MmReviewListPanel.show();
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmReviewListPanel, void 0);
                     },
                 },
                 {
                     name    : Lang.getText(LangTextType.B0193),
                     callback: (): void => {
                         this.close();
-                        MmAvailabilityListPanel.show({});
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilityListPanel, {});
                     },
                 },
                 {
                     name    : Lang.getText(LangTextType.B0444),
                     callback: (): void => {
                         this.close();
-                        MmTagListPanel.show(null);
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmTagListPanel, null);
                     },
                 },
             ];

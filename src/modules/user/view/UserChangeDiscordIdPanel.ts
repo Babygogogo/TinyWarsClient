@@ -22,7 +22,7 @@ namespace TwnsUserChangeDiscordIdPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export type OpenData = void;
-    export class UserChangeDiscordIdPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class UserChangeDiscordIdPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -84,7 +84,7 @@ namespace TwnsUserChangeDiscordIdPanel {
 
         private _onTouchedLabelUrl(): void {
             if ((window) && (window.open)) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                     callback: () => {
                         window.open(CommonConstants.DiscordUrl);

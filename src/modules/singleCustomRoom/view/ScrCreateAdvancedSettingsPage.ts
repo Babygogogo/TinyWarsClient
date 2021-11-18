@@ -19,9 +19,8 @@
 // import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
 // import ScrCreateModel           from "../model/ScrCreateModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsScrCreateAdvancedSettingsPage {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;
@@ -81,7 +80,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             ScrCreateModel.resetDataByWarRuleId(Helpers.getExisted(this._initialWarRuleId));
         }
         private _onTouchedBtnCustomize(): void {
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     ScrCreateModel.setCustomWarRuleId();
@@ -159,7 +158,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                CommonHelpPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
                 });
@@ -250,7 +249,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
         }
 
         private _onTouchedBtnCustom(): void {
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     ScrCreateModel.setCustomWarRuleId();
@@ -324,7 +323,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             this._callbackForTouchLabelValue    = () => {
                 const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
                 const selfCoId      = ScrCreateModel.getCoId(playerIndex);
-                TwnsCommonBanCoPanel.CommonBanCoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
                     playerIndex,
                     configVersion,
                     bannedCoIdArray     : ScrCreateModel.getBannedCoIdArray(playerIndex) || [],
@@ -335,12 +334,12 @@ namespace TwnsScrCreateAdvancedSettingsPage {
                         const callback = () => {
                             ScrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
                             Notify.dispatch(NotifyType.ScrCreateBannedCoIdArrayChanged);
-                            TwnsCommonBanCoPanel.CommonBanCoPanel.hide();
+                            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBanCoPanel);
                         };
                         if (!bannedCoIdSet.has(selfCoId)) {
                             callback();
                         } else {
-                            CommonConfirmPanel.show({
+                            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0057),
                                 callback: () => {
                                     ScrCreateModel.setCoId(playerIndex, CommonConstants.CoEmptyId);

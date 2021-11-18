@@ -29,7 +29,7 @@ namespace TwnsMfrMainMenuPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export type OpenData = void;
-    export class MfrMainMenuPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MfrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
         private readonly _btnRanking!       : TwnsUiButton.UiButton;
@@ -105,18 +105,18 @@ namespace TwnsMfrMainMenuPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MfwMyWarListPanel, void 0);
         }
         private _onTouchedBtnHelp(): void {
-            TwnsCommonAlertPanel.CommonAlertPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                 title   : Lang.getText(LangTextType.B0143),
                 content : Lang.getText(LangTextType.R0007),
             });
         }
         private _onTouchedBtnNormalMode(): void {
             this.close();
-            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
         }
         private _onTouchedBtnCoopMode(): void {
             this.close();
-            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrMainMenuPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {

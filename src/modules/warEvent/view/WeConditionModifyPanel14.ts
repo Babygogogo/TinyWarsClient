@@ -28,7 +28,7 @@ namespace TwnsWeConditionModifyPanel14 {
         condition   : IWarEventCondition;
     };
     /** WecPlayerIndexInTurnEqualTo */
-    export class WeConditionModifyPanel14 extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeConditionModifyPanel14 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
@@ -90,7 +90,7 @@ namespace TwnsWeConditionModifyPanel14 {
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedBtnTileType(): void {
-            TwnsCommonHelpPanel.CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0718),
                 content : generateDescForTileTypes(),
             });

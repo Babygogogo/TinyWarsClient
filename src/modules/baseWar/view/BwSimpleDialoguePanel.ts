@@ -21,7 +21,7 @@ namespace TwnsBwSimpleDialoguePanel {
         actionData      : ProtoTypes.WarEvent.IWeaSimpleDialogue;
         callbackOnClose : () => void;
     };
-    export class BwSimpleDialoguePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwSimpleDialoguePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _groupCo1!         : eui.Group;
         private readonly _imgCo1!           : TwnsUiImage.UiImage;
@@ -59,7 +59,7 @@ namespace TwnsBwSimpleDialoguePanel {
         }
 
         private _onTouchedBtnSkip(): void {
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0226),
                 callback: () => this.close(),
             });

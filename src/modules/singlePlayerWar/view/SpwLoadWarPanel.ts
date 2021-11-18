@@ -21,13 +21,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwLoadWarPanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class SpwLoadWarPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class SpwLoadWarPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
@@ -63,7 +61,7 @@ namespace TwnsSpwLoadWarPanel {
         }
 
         private _onTouchedBtnHelp(): void {
-            CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0325),
                 content : Lang.getText(LangTextType.R0006),
             });
@@ -132,7 +130,7 @@ namespace TwnsSpwLoadWarPanel {
             const data      = this._getData();
             const slotInfo  = data.slotInfo;
             if (slotInfo) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0072),
                     callback: () => {
                         FlowManager.gotoSinglePlayerWar({

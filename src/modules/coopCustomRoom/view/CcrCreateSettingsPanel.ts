@@ -20,6 +20,7 @@
 // import TwnsCcrCreateMapListPanel            from "./CcrCreateMapListPanel";
 // import TwnsCcrCreatePlayerInfoPage          from "./CcrCreatePlayerInfoPage";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrCreateSettingsPanel {
     import CcrCreateAdvancedSettingsPage            = TwnsCcrCreateAdvancedSettingsPage.CcrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -31,12 +32,8 @@ namespace TwnsCcrCreateSettingsPanel {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class CcrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: CcrCreateSettingsPanel;
-
+    export type OpenData = void;
+    export class CcrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupNavigator!       : eui.Group;
         private readonly _labelMultiPlayer!     : TwnsUiLabel.UiLabel;
         private readonly _labelCreateRoom!      : TwnsUiLabel.UiLabel;
@@ -52,25 +49,7 @@ namespace TwnsCcrCreateSettingsPanel {
         private _timeoutIdForBtnConfirm : number | null = null;
         private _isTabInitialized       = false;
 
-        public static show(): void {
-            if (!CcrCreateSettingsPanel._instance) {
-                CcrCreateSettingsPanel._instance = new CcrCreateSettingsPanel();
-            }
-            CcrCreateSettingsPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (CcrCreateSettingsPanel._instance) {
-                await CcrCreateSettingsPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/coopCustomRoom/CcrCreateSettingsPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
@@ -80,7 +59,8 @@ namespace TwnsCcrCreateSettingsPanel {
                 { type: NotifyType.MsgCcrCreateRoom,           callback: this._onNotifyMsgCcrCreateRoom },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
@@ -106,14 +86,10 @@ namespace TwnsCcrCreateSettingsPanel {
             ]);
             this._isTabInitialized = true;
 
-            this._showOpenAnimation();
-
             this._updateComponentsForLanguage();
             this._btnConfirm.enabled = true;
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
             this._clearTimeoutForBtnConfirm();
         }
 
@@ -122,7 +98,7 @@ namespace TwnsCcrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsCcrCreateMapListPanel.CcrCreateMapListPanel.show(null);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrCreateMapListPanel, null);
         }
         private _onTouchedBtnConfirm(): void {
             const data = CcrCreateModel.getData();
@@ -315,7 +291,7 @@ namespace TwnsCcrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
@@ -336,31 +312,32 @@ namespace TwnsCcrCreateSettingsPanel {
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnConfirm,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupTab,
-                    beginProps  : { alpha: 1, },
-                    endProps    : { alpha: 0, },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
             });
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnConfirm,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 1, },
+                endProps    : { alpha: 0, },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

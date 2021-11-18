@@ -28,7 +28,7 @@ namespace TwnsWeConditionModifyPanel12 {
         condition   : IWarEventCondition;
     };
     /** WecPlayerAliveStateEqualTo */
-    export class WeConditionModifyPanel12 extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeConditionModifyPanel12 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
         private readonly _btnType!          : TwnsUiButton.UiButton;

@@ -21,7 +21,7 @@ namespace TwnsMrrMainMenuPanel {
     import Tween                            = egret.Tween;
 
     export type OpenData = void;
-    export class MrrMainMenuPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MrrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!                : eui.Group;
         private readonly _btnMultiPlayer!       : TwnsUiButton.UiButton;
         private readonly _btnRanking!           : TwnsUiButton.UiButton;
@@ -62,7 +62,7 @@ namespace TwnsMrrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnMultiPlayer(): void {
             this.close();
-            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();

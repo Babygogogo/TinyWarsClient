@@ -127,10 +127,10 @@ namespace StageManager {
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
         }
 
-        public closeAllPanels(exceptions?: (TwnsUiPanel.UiPanel<any> | TwnsUiPanel2.UiPanel2<any>)[]): void {
+        public closeAllPanels(exceptions?: (TwnsUiPanel.UiPanel<any> | TwnsUiPanel.UiPanel<any>)[]): void {
             for (let i = this.numChildren - 1; i >= 0; --i) {
                 const child = this.getChildAt(i);
-                if (((child instanceof TwnsUiPanel.UiPanel) || (child instanceof TwnsUiPanel2.UiPanel2)) &&
+                if (((child instanceof TwnsUiPanel.UiPanel) || (child instanceof TwnsUiPanel.UiPanel)) &&
                     (!exceptions?.some(v => child === v))
                 ) {
                     child.close();
@@ -143,7 +143,7 @@ namespace StageManager {
             const width     = this.width;
             for (let i = 0; i < this.numChildren; ++i) {
                 const child = this.getChildAt(i);
-                if ((child instanceof TwnsUiPanel.UiPanel) || (child instanceof TwnsUiPanel2.UiPanel2)) {
+                if ((child instanceof TwnsUiPanel.UiPanel) || (child instanceof TwnsUiPanel.UiPanel)) {
                     child.resize(width, height);
                 }
             }

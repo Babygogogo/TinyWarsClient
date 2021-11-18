@@ -26,7 +26,7 @@ namespace TwnsWeActionModifyPanel4 {
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel4 extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeActionModifyPanel4 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _btnType!              : TwnsUiButton.UiButton;
         private readonly _btnBack!              : TwnsUiButton.UiButton;

@@ -43,7 +43,7 @@ namespace TwnsMpwTopPanel {
     export type OpenData = {
         war     : TwnsMpwWar.MpwWar;
     };
-    export class MpwTopPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MpwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
         private readonly _labelWeather!         : TwnsUiLabel.UiLabel;
         private readonly _groupTimer!           : eui.Group;
@@ -178,7 +178,7 @@ namespace TwnsMpwTopPanel {
         // Callbacks for touch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedLabelWeather(): void {
-            TwnsCommonHelpPanel.CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0705),
                 content: this._getOpenData().war.getWeatherManager().getDesc(),
             });
@@ -199,7 +199,7 @@ namespace TwnsMpwTopPanel {
         }
 
         private _onTouchedGroupCo(): void {
-            CommonCoListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, {
                 war : this._getOpenData().war,
             });
             TwnsPanelManager.close(TwnsPanelConfig.Dict.MpwWarMenuPanel);
@@ -207,7 +207,7 @@ namespace TwnsMpwTopPanel {
         }
 
         private _onTouchedGroupInfo(): void {
-            CommonCoListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, {
                 war : this._getOpenData().war,
             });
             TwnsPanelManager.close(TwnsPanelConfig.Dict.MpwWarMenuPanel);

@@ -43,7 +43,7 @@ namespace TwnsMfrRoomInfoPanel {
     export type OpenData = {
         roomId  : number;
     };
-    export class MfrRoomInfoPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MfrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!                 : eui.Group;
         private readonly _tabSettings!              : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarPlayerInfoPage>;
 
@@ -157,7 +157,7 @@ namespace TwnsMfrRoomInfoPanel {
         private _onTouchedBtnDeleteRoom(): void {
             const roomId = this._getOpenData().roomId;
             if (roomId != null) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0149),
                     callback: () => {
                         MfrProxy.reqMfrDeleteRoomByPlayer(roomId);
@@ -173,7 +173,7 @@ namespace TwnsMfrRoomInfoPanel {
         }
 
         private async _onTouchedBtnExitRoom(): Promise<void> {
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0126),
                 callback: () => {
                     MfrProxy.reqMfrExitRoom(this._getOpenData().roomId);

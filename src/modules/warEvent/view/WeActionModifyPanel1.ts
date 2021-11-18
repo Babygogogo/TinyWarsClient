@@ -25,7 +25,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel1 {
-    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ColorValue               = Types.ColorValue;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
@@ -39,7 +38,7 @@ namespace TwnsWeActionModifyPanel1 {
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel1 extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeActionModifyPanel1 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _btnBack!          : TwnsUiButton.UiButton;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnAddUnit!       : TwnsUiButton.UiButton;
@@ -93,7 +92,7 @@ namespace TwnsWeActionModifyPanel1 {
         }
 
         private _onTouchedBtnClear(): void {
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
                     Helpers.getExisted(this._getOpenData().action.WeaAddUnit?.unitArray).length = 0;
@@ -246,7 +245,7 @@ namespace TwnsWeActionModifyPanel1 {
 
         private _onTouchedBtnDelete(): void {
             const data = this._getData();
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0029),
                 callback: () => {
                     Helpers.deleteElementFromArray(Helpers.getExisted(data.action.WeaAddUnit?.unitArray), data.dataForAddUnit);

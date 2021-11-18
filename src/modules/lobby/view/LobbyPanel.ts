@@ -21,13 +21,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLobbyPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import McrMainMenuPanel     = TwnsMcrMainMenuPanel.McrMainMenuPanel;
-    import SpmMainMenuPanel     = TwnsSpmMainMenuPanel.SpmMainMenuPanel;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export type OpenData = void;
-    export class LobbyPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class LobbyPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTips!        : eui.Group;
         private readonly _groupWelcome!     : eui.Group;
         private readonly _labelTips0!       : TwnsUiLabel.UiLabel;
@@ -80,7 +78,7 @@ namespace TwnsLobbyPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedGroupDiscord(): void {
             if ((window) && (window.open)) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                     callback: () => {
                         window.open(CommonConstants.DiscordUrl);
@@ -91,7 +89,7 @@ namespace TwnsLobbyPanel {
 
         private _onTouchedGroupGithub(): void {
             if ((window) && (window.open)) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `GitHub`),
                     callback: () => {
                         window.open(CommonConstants.GithubUrl);
@@ -102,7 +100,7 @@ namespace TwnsLobbyPanel {
 
         private _onTouchedBtnMultiPlayer(): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnSinglePlayer(): void {

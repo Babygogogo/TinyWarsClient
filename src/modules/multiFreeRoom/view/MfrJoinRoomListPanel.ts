@@ -37,7 +37,7 @@ namespace TwnsMfrJoinRoomListPanel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class MfrJoinRoomListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MfrJoinRoomListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!         : eui.Group;
         private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarPlayerInfoPage>;
 
@@ -202,7 +202,7 @@ namespace TwnsMfrJoinRoomListPanel {
                 if (!warPassword) {
                     callback();
                 } else {
-                    TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonJoinRoomPasswordPanel, {
                         mapId               : null,
                         warName             : settingsForMfw.warName ?? null,
                         password            : warPassword,

@@ -45,7 +45,7 @@ namespace TwnsWwMakeRequestWarsPanel {
         playersCountUnneutral?  : number | null;
     };
     export type OpenData = WarFilter | null;
-    export class WwMakeRequestWarsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WwMakeRequestWarsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForWarCommonMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 

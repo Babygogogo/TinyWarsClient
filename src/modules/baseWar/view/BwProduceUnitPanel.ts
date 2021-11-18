@@ -36,7 +36,7 @@ namespace TwnsBwProduceUnitPanel {
         gridIndex   : GridIndex;
         war         : BwWar;
     };
-    export class BwProduceUnitPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwProduceUnitPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _listUnit!     : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
@@ -287,7 +287,7 @@ namespace TwnsBwProduceUnitPanel {
                         rawMaxHp,
                         Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * data.costModifier * skillCfg[5] / 100) / normalizer) * normalizer
                     );
-                    TwnsCommonInputPanel.CommonInputPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                         title           : `${Lang.getUnitName(unitType)} HP`,
                         currentValue    : "" + maxHp,
                         maxChars        : 3,

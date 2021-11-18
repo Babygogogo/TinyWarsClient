@@ -47,19 +47,6 @@ namespace TwnsMeWarMenuPanel {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import DataForDrawUnit          = TwnsMeDrawer.DataForDrawUnit;
     import MeWar                    = TwnsMeWar.MeWar;
-    import MeModifyMapNamePanel     = TwnsMeModifyMapNamePanel.MeModifyMapNamePanel;
-    import MeResizePanel            = TwnsMeResizePanel.MeResizePanel;
-    import MeConfirmSaveMapPanel    = TwnsMeConfirmSaveMapPanel.MeConfirmSaveMapPanel;
-    import MeWarRulePanel           = TwnsMeWarRulePanel.MeWarRulePanel;
-    import MeChooseUnitPanel        = TwnsMeChooseUnitPanel.MeChooseUnitPanel;
-    import MeMapTagPanel            = TwnsMeMapTagPanel.MeMapTagPanel;
-    import MeSimSettingsPanel       = TwnsMeSimSettingsPanel.MeSimSettingsPanel;
-    import MeClearPanel             = TwnsMeClearPanel.MeClearPanel;
-    import MeImportPanel            = TwnsMeImportPanel.MeImportPanel;
-    import MeMfwSettingsPanel       = TwnsMeMfwSettingsPanel.MeMfwSettingsPanel;
-    import MeOffsetPanel            = TwnsMeOffsetPanel.MeOffsetPanel;
-    import MmAcceptMapPanel         = TwnsMmAcceptMapPanel.MmAcceptMapPanel;
-    import MmRejectMapPanel         = TwnsMmRejectMapPanel.MmRejectMapPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import UnitType                 = Types.UnitType;
     import TileBaseType             = Types.TileBaseType;
@@ -72,12 +59,8 @@ namespace TwnsMeWarMenuPanel {
         Advanced,
     }
 
-    export class MeWarMenuPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeWarMenuPanel;
-
+    export type OpenData = void;
+    export class MeWarMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!                : eui.Group;
         private readonly _listCommand!          : TwnsUiScrollList.UiScrollList<DataForCommandRenderer>;
         private readonly _labelNoCommand!       : TwnsUiLabel.UiLabel;
@@ -99,29 +82,7 @@ namespace TwnsMeWarMenuPanel {
 
         private _menuType = TwnsMeWarMenuType.Main;
 
-        public static show(): void {
-            if (!MeWarMenuPanel._instance) {
-                MeWarMenuPanel._instance = new MeWarMenuPanel();
-            }
-            MeWarMenuPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeWarMenuPanel._instance) {
-                await MeWarMenuPanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = MeWarMenuPanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = `resource/skins/mapEditor/MeWarMenuPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
@@ -140,10 +101,12 @@ namespace TwnsMeWarMenuPanel {
             this._listTile.setItemRenderer(TileRenderer);
             this._listUnit.setItemRenderer(UnitRenderer);
 
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._menuType = TwnsMeWarMenuType.Main;
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
+        protected _onClosing(): void {
             // nothing to do
         }
 
@@ -166,7 +129,7 @@ namespace TwnsMeWarMenuPanel {
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
@@ -210,20 +173,20 @@ namespace TwnsMeWarMenuPanel {
         private _onTouchedBtnModifyMapName(): void {
             const war = this._getWar();
             if (!war.getIsReviewingMap()) {
-                MeModifyMapNamePanel.show();
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeModifyMapNamePanel, void 0);
             }
         }
 
         private _onTouchedBtnModifyMapSize(): void {
             if (!this._getWar().getIsReviewingMap()) {
-                MeResizePanel.show();
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeResizePanel, void 0);
             }
         }
 
         private _onTouchedBtnModifyMapDesigner(): void {
             const war = this._getWar();
             if (!war.getIsReviewingMap()) {
-                TwnsCommonInputPanel.CommonInputPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                     title           : Lang.getText(LangTextType.B0163),
                     tips            : null,
                     currentValue    : war.getMapDesignerName(),
@@ -448,7 +411,7 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0287),
                     callback: () => {
-                        MeConfirmSaveMapPanel.show();
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeConfirmSaveMapPanel, void 0);
                     },
                 };
             }
@@ -462,7 +425,7 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0288),
                     callback: () => {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0072),
                             callback: async () => {
                                 const slotIndex = war.getMapSlotIndex();
@@ -489,11 +452,11 @@ namespace TwnsMeWarMenuPanel {
                 callback: () => {
                     const war = this._getWar();
                     if (!war.getIsReviewingMap()) {
-                        MeWarRulePanel.show();
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarRulePanel, void 0);
                         this.close();
                     } else {
                         if (war.getWarRuleArray().length) {
-                            MeWarRulePanel.show();
+                            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarRulePanel, void 0);
                             this.close();
                         } else {
                             FloatText.show(Lang.getText(LangTextType.A0100));
@@ -519,7 +482,7 @@ namespace TwnsMeWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0445),
                 callback: () => {
-                    MeMapTagPanel.show();
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapTagPanel, void 0);
                 },
             };
         }
@@ -532,7 +495,7 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0296),
                     callback: () => {
-                        MmAcceptMapPanel.show({ war });
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAcceptMapPanel, { war });
                     },
                 };
             }
@@ -546,7 +509,7 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0297),
                     callback: () => {
-                        MmRejectMapPanel.show({ war });
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmRejectMapPanel, { war });
                     },
                 };
             }
@@ -570,7 +533,7 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0650),
                     callback: () => {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             title   : Lang.getText(LangTextType.B0650),
                             content : war.getIsMapModified() ? Lang.getText(LangTextType.A0143) : Lang.getText(LangTextType.A0225),
                             callback: () => FlowManager.gotoMyWarListPanel(war.getWarType()),
@@ -584,7 +547,7 @@ namespace TwnsMeWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0054),
                 callback: () => {
-                    CommonConfirmPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                         title   : Lang.getText(LangTextType.B0054),
                         content : this._getWar().getIsMapModified() ? Lang.getText(LangTextType.A0143) : Lang.getText(LangTextType.A0025),
                         callback: () => FlowManager.gotoLobby(),
@@ -603,7 +566,7 @@ namespace TwnsMeWarMenuPanel {
                         const currValue = UserModel.getSelfMapEditorAutoSaveTime();
                         const minValue  = CommonConstants.MapEditorAutoSaveMinTime;
                         const maxValue  = CommonConstants.MapEditorAutoSaveMaxTime;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0709),
                             currentValue    : `${currValue ?? ``}`,
                             maxChars        : 4,
@@ -647,17 +610,17 @@ namespace TwnsMeWarMenuPanel {
 
                     const cb = () => {
                         MeSimModel.resetData(mapRawData, war.serializeForCreateSfw());
-                        MeSimSettingsPanel.show();
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeSimSettingsPanel, void 0);
                         this.close();
                     };
 
                     if (!war.getIsMapModified()) {
                         cb();
                     } else {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content         : Lang.getText(LangTextType.A0142),
                             callback        : () => {
-                                MeConfirmSaveMapPanel.show();
+                                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeConfirmSaveMapPanel, void 0);
                             },
                             callbackOnCancel: () => {
                                 cb();
@@ -682,17 +645,17 @@ namespace TwnsMeWarMenuPanel {
 
                     const cb = () => {
                         MeMfwModel.resetData(mapRawData, war.serializeForCreateMfr());
-                        MeMfwSettingsPanel.show();
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMfwSettingsPanel, void 0);
                         this.close();
                     };
 
                     if (!war.getIsMapModified()) {
                         cb();
                     } else {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content         : Lang.getText(LangTextType.A0142),
                             callback        : () => {
-                                MeConfirmSaveMapPanel.show();
+                                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeConfirmSaveMapPanel, void 0);
                             },
                             callbackOnCancel: () => {
                                 cb();
@@ -717,7 +680,7 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0391),
                     callback: () => {
-                        MeClearPanel.show();
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeClearPanel, void 0);
                     },
                 };
             }
@@ -729,7 +692,7 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0290),
                     callback: () => {
-                        MeResizePanel.show();
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeResizePanel, void 0);
                     },
                 };
             }
@@ -741,7 +704,7 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0293),
                     callback: () => {
-                        MeOffsetPanel.show();
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeOffsetPanel, void 0);
                     },
                 };
             }
@@ -754,7 +717,7 @@ namespace TwnsMeWarMenuPanel {
                     name    : Lang.getText(LangTextType.B0313),
                     callback: () => {
                         this.close();
-                        MeImportPanel.show();
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeImportPanel, void 0);
                     },
                 };
             }
@@ -766,7 +729,7 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0681),
                     callback: () => {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0237),
                             callback: async () => {
                                 const war = this._getWar();
@@ -921,7 +884,7 @@ namespace TwnsMeWarMenuPanel {
 
         public onItemTapEvent(): void {
             const data = this._getData();
-            MeChooseUnitPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.MeChooseUnitPanel);
             Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawUnit(data.dataForDrawUnit);
         }
     }

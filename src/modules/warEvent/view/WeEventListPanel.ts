@@ -18,7 +18,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeEventListPanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeWar                = TwnsMeWar.MeWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -28,7 +27,7 @@ namespace TwnsWeEventListPanel {
     export type OpenData = {
         war: MeWar;
     };
-    export class WeEventListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeEventListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _btnBack!      : TwnsUiButton.UiButton;
         private readonly _btnAddEvent!  : TwnsUiButton.UiButton;
         private readonly _btnClear!     : TwnsUiButton.UiButton;
@@ -80,7 +79,7 @@ namespace TwnsWeEventListPanel {
 
         private _onTouchedBtnClear(): void {
             const openData = this._getOpenData();
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0188),
                 callback: () => {
                     const result = WarEventHelper.checkAndDeleteUnusedComponents(Helpers.getExisted(openData.war.getWarEventManager().getWarEventFullData()));

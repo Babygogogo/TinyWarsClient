@@ -20,7 +20,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
     import MinCount         = CommonConstants.RankMinConcurrentCount;
 
     export type OpenData = void;
-    export class MrrSetMaxConcurrentCountPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MrrSetMaxConcurrentCountPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;

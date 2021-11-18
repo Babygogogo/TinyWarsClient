@@ -12,20 +12,16 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 // import WarMapProxy          from "../../warMap/model/WarMapProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmAcceptMapPanel {
     import MeWar        = TwnsMeWar.MeWar;
     import NotifyType   = TwnsNotifyType.NotifyType;
     import LangTextType = TwnsLangTextType.LangTextType;
 
-    type OpenData = {
+    export type OpenData = {
         war: MeWar;
     };
     export class MmAcceptMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MmAcceptMapPanel;
-
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelTips!    : TwnsUiLabel.UiLabel;
         private readonly _inputReason!  : TwnsUiTextInput.UiTextInput;
@@ -56,27 +52,7 @@ namespace TwnsMmAcceptMapPanel {
         private readonly _labelMrwFog!  : TwnsUiLabel.UiLabel;
         private readonly _imgMrwFog!    : TwnsUiImage.UiImage;
 
-        public static show(openData: OpenData): void {
-            if (!MmAcceptMapPanel._instance) {
-                MmAcceptMapPanel._instance = new MmAcceptMapPanel();
-            }
-            MmAcceptMapPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (MmAcceptMapPanel._instance) {
-                await MmAcceptMapPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapManagement/MmAcceptMapPanel.exml";
-            this._setIsTouchMaskEnabled();
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -90,7 +66,9 @@ namespace TwnsMmAcceptMapPanel {
                 { ui: this._groupMrwStd,    callback: this._onTouchedGroupMrwStd },
                 { ui: this._groupMrwFog,    callback: this._onTouchedGroupMrwFog },
             ]);
-
+            this._setIsTouchMaskEnabled();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._inputReason.maxChars  = CommonConstants.MapReviewCommentMaxLength;
@@ -100,6 +78,9 @@ namespace TwnsMmAcceptMapPanel {
             this._imgSrw.visible        = false;
             this._imgMrwStd.visible     = false;
             this._imgMrwFog.visible     = false;
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {

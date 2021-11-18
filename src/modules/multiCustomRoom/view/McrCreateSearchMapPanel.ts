@@ -12,16 +12,13 @@
 // import TwnsUiTextInput              from "../../tools/ui/UiTextInput";
 // import TwnsMcrCreateMapListPanel    from "./McrCreateMapListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMcrCreateSearchMapPanel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
-    export class McrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<void> {
-        protected _IS_EXCLUSIVE = false;
-        protected _LAYER_TYPE   = Types.LayerType.Hud2;
-
-        private static _instance: McrCreateSearchMapPanel;
-
+    export type OpenData = void;
+    export class McrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
 
         private readonly _group!                    : eui.Group;
@@ -47,27 +44,7 @@ namespace TwnsMcrCreateSearchMapPanel {
 
         private _mapTag         : ProtoTypes.Map.IDataForMapTag = {};
 
-        public static show(): void {
-            if (!McrCreateSearchMapPanel._instance) {
-                McrCreateSearchMapPanel._instance = new McrCreateSearchMapPanel();
-            }
-            McrCreateSearchMapPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (McrCreateSearchMapPanel._instance) {
-                await McrCreateSearchMapPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/multiCustomRoom/McrCreateSearchMapPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnReset,   callback: this._onTouchedBtnReset },
@@ -77,24 +54,25 @@ namespace TwnsMcrCreateSearchMapPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
-
-            this._showOpenAnimation();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnReset(): void {
-            TwnsMcrCreateMapListPanel.McrCreateMapListPanel.getInstance().setMapFilters({});
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateMapListPanel, {});
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
             const minRatingText = this._inputMinRating.text;
             const minRating     = minRatingText ? Number(minRatingText) : null;
-            TwnsMcrCreateMapListPanel.McrCreateMapListPanel.getInstance().setMapFilters({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateMapListPanel, {
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,
@@ -149,7 +127,7 @@ namespace TwnsMcrCreateSearchMapPanel {
             }
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -160,21 +138,22 @@ namespace TwnsMcrCreateSearchMapPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

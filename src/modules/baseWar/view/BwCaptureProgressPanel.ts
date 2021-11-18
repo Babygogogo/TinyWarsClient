@@ -11,7 +11,7 @@ namespace TwnsBwCaptureProgressPanel {
         newValue        : number;
         callbackOnFinish: () => void;
     };
-    export class BwCaptureProgressPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwCaptureProgressPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!        : eui.Group;
         private readonly _pbarProgress! : eui.ProgressBar;
 

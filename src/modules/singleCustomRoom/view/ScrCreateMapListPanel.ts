@@ -35,7 +35,7 @@ namespace TwnsScrCreateMapListPanel {
         mapTag?         : IDataForMapTag | null;
     };
     export type OpenData = FiltersForMapList | null;
-    export class ScrCreateMapListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class ScrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupMapView!         : eui.Group;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;

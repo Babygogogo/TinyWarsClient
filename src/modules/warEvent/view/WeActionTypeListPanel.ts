@@ -27,7 +27,7 @@ namespace TwnsWeActionTypeListPanel {
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionTypeListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeActionTypeListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;

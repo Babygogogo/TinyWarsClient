@@ -19,6 +19,7 @@
 // import MeModel                  from "../model/MeModel";
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeChooseTileBasePanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import DataForDrawTileBase  = TwnsMeDrawer.DataForDrawTileBase;
@@ -27,12 +28,8 @@ namespace TwnsMeChooseTileBasePanel {
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseTileBasePanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeChooseTileBasePanel;
-
+    export type OpenData = void;
+    export class MeChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileBaseRenderer>;
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
@@ -44,27 +41,7 @@ namespace TwnsMeChooseTileBasePanel {
         private _needFill           = false;
         private _dataListForRecent  : DataForTileBaseRenderer[] = [];
 
-        public static show(): void {
-            if (!MeChooseTileBasePanel._instance) {
-                MeChooseTileBasePanel._instance = new MeChooseTileBasePanel();
-            }
-            MeChooseTileBasePanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeChooseTileBasePanel._instance) {
-                await MeChooseTileBasePanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeChooseTileBasePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -72,15 +49,22 @@ namespace TwnsMeChooseTileBasePanel {
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._groupFill,  callback: this._onTouchedGroupFill },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listCategory.setItemRenderer(CategoryRenderer);
             this._listRecent.setItemRenderer(TileBaseRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._needFill = false;
             this._updateImgFill();
             this._updateListTileObject();
             this._updateListRecent();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public getNeedFill(): boolean {
@@ -257,7 +241,7 @@ namespace TwnsMeChooseTileBasePanel {
                 panel.close();
                 Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawTileBase(dataForDrawTileBase);
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0089),
                     callback: () => {
                         const war           = Helpers.getExisted(MeModel.getWar());

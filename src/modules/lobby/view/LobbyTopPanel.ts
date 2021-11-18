@@ -16,7 +16,7 @@ namespace TwnsLobbyTopPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class LobbyTopPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class LobbyTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
 
         private readonly _groupUserInfo!    : eui.Group;

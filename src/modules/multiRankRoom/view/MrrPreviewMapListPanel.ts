@@ -36,7 +36,7 @@ namespace TwnsMrrPreviewMapListPanel {
     export type OpenData = {
         hasFog: boolean;
     };
-    export class MrrPreviewMapListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MrrPreviewMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 

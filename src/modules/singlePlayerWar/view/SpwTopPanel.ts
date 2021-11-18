@@ -24,7 +24,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwTopPanel {
-    import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -37,7 +36,7 @@ namespace TwnsSpwTopPanel {
     export type OpenData = {
         war     : TwnsSpwWar.SpwWar;
     };
-    export class SpwTopPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class SpwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
         private readonly _labelWeather!         : TwnsUiLabel.UiLabel;
         private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
@@ -140,7 +139,7 @@ namespace TwnsSpwTopPanel {
         // Callbacks for touch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedLabelWeather(): void {
-            TwnsCommonHelpPanel.CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0705),
                 content: this._getOpenData().war.getWeatherManager().getDesc(),
             });
@@ -156,7 +155,7 @@ namespace TwnsSpwTopPanel {
         }
 
         private _onTouchedGroupCo(): void {
-            CommonCoListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, {
                 war : this._getOpenData().war,
             });
             TwnsPanelManager.close(TwnsPanelConfig.Dict.SpwWarMenuPanel);
@@ -164,7 +163,7 @@ namespace TwnsSpwTopPanel {
         }
 
         private _onTouchedGroupInfo(): void {
-            CommonCoListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, {
                 war : this._getOpenData().war,
             });
             TwnsPanelManager.close(TwnsPanelConfig.Dict.SpwWarMenuPanel);

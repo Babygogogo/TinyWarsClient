@@ -16,8 +16,8 @@
 // import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
 // import MeMfwModel               from "../model/MeMfwModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeMfwAdvancedSettingsPage {
-    import CommonChooseCoPanel  = TwnsCommonChooseCoPanel.CommonChooseCoPanel;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
@@ -155,7 +155,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoText                : ConfigManager.getCoNameAndTierText(configVersion, coId),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    CommonChooseCoPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                         currentCoId         : coId,
                         availableCoIdArray  : MeMfwModel.getIsControlledByHuman(playerIndex)
                             ? WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule: MeMfwModel.getWarRule(), playerIndex, configVersion })
@@ -191,7 +191,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                     this._confirmUseCustomRule(() => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0178),
                             currentValue    : "" + currValue,
                             maxChars        : 7,
@@ -222,7 +222,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0179),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -253,7 +253,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0180),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -284,7 +284,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0181),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -315,7 +315,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0182),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -346,7 +346,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0183),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -377,7 +377,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0184),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -408,7 +408,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0189),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -445,7 +445,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0190),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -477,7 +477,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             // if (MeMfwModel.getPresetWarRuleId() == null) {
             //     callback();
             // } else {
-            //     CommonConfirmPanel.show({
+            //     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
             //         content : Lang.getText(Lang.Type.A0129),
             //         callback: () => {
             //             MeMfwModel.setPresetWarRuleId(null);

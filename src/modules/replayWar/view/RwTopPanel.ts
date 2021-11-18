@@ -27,7 +27,7 @@ namespace TwnsRwTopPanel {
     export type OpenData = {
         war : TwnsRwWar.RwWar;
     };
-    export class RwTopPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class RwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupPlayer!      : eui.Group;
         private readonly _labelPlayer!      : TwnsUiLabel.UiLabel;
         private readonly _labelFund!        : TwnsUiLabel.UiLabel;
@@ -134,7 +134,7 @@ namespace TwnsRwTopPanel {
         }
         private _onTouchedGroupCo(): void {
             const war = this._getWar();
-            CommonCoListPanel.show({ war });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, { war });
         }
         private _onTouchedGroupProgress(): void {
             const war = this._getWar();

@@ -6,51 +6,33 @@
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonErrorPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    type OpenData = {
+    export type OpenData = {
         content     : string;
         callback?   : () => any;
     };
     export class CommonErrorPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Top;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: CommonErrorPanel;
-
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelContent! : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenData): void {
-            if (!CommonErrorPanel._instance) {
-                CommonErrorPanel._instance = new CommonErrorPanel();
-            }
-            CommonErrorPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (CommonErrorPanel._instance) {
-                await CommonErrorPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/common/CommonErrorPanel.exml";
-            this._setIsTouchMaskEnabled();
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose, callback: this._onTouchedBtnClose },
             ]);
+            this._setIsTouchMaskEnabled();
 
             this._btnClose.label    = Lang.getText(LangTextType.B0026);
             this._labelTitle.text   = Lang.getText(LangTextType.A0056);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._labelContent.text = this._getOpenData().content;
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnClose(): void {

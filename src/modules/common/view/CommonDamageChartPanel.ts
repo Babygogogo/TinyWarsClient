@@ -40,13 +40,8 @@ namespace TwnsCommonDamageChartPanel {
         IsDiver,
         LoadUnit,
     }
-
-    export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: CommonDamageChartPanel;
-
+    export type OpenData = void;
+    export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _groupList!            : eui.Group;
         private readonly _listUnit!             : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
@@ -71,31 +66,7 @@ namespace TwnsCommonDamageChartPanel {
         private _dataForListUnit?               : DataForUnitRenderer[];
         private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
 
-        public static show(): void {
-            if (!CommonDamageChartPanel._instance) {
-                CommonDamageChartPanel._instance = new CommonDamageChartPanel();
-            }
-            CommonDamageChartPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (CommonDamageChartPanel._instance) {
-                await CommonDamageChartPanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = CommonDamageChartPanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/common/CommonDamageChartPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAnimationTick,           callback: this._onNotifyUnitAnimationTick },
@@ -105,13 +76,16 @@ namespace TwnsCommonDamageChartPanel {
             this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this.close },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listUnit.setItemRenderer(UnitRenderer);
             this._listDamageChart.setItemRenderer(DamageRenderer);
             this._listInfo.setItemRenderer(InfoRenderer);
 
             this._conUnitView.addChild(this._unitView);
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             const listUnit          = this._listUnit;
             this._dataForListUnit   = this._createDataForListUnit();
             listUnit.bindData(this._dataForListUnit);
@@ -120,9 +94,8 @@ namespace TwnsCommonDamageChartPanel {
             this.setSelectedIndexAndUpdateView(0);
             this._updateListInfo();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
+        protected _onClosing(): void {
+            this._conUnitView.removeChildren();
             this._selectedIndex = null;
             delete this._dataForListUnit;
         }
@@ -163,7 +136,7 @@ namespace TwnsCommonDamageChartPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -181,28 +154,29 @@ namespace TwnsCommonDamageChartPanel {
             egret.Tween.get(groupInfo)
                 .set({ alpha: 0, right: -40 })
                 .to({ alpha: 1, right: 0 }, 200);
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-
-                const groupList = this._groupList;
-                egret.Tween.removeTweens(groupList);
-                egret.Tween.get(groupList)
-                    .set({ alpha: 1, left: 0 })
-                    .to({ alpha: 0, left: -40 }, 200);
-
-                const groupInfo = this._groupInfo;
-                egret.Tween.removeTweens(groupInfo);
-                egret.Tween.get(groupInfo)
-                    .set({ alpha: 1, right: 0 })
-                    .to({ alpha: 0, right: -40 }, 200)
-                    .call(resolve);
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+
+            const groupList = this._groupList;
+            egret.Tween.removeTweens(groupList);
+            egret.Tween.get(groupList)
+                .set({ alpha: 1, left: 0 })
+                .to({ alpha: 0, left: -40 }, 200);
+
+            const groupInfo = this._groupInfo;
+            egret.Tween.removeTweens(groupInfo);
+            egret.Tween.get(groupInfo)
+                .set({ alpha: 1, right: 0 })
+                .to({ alpha: 0, right: -40 }, 200);
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateComponentsForLanguage(): void {

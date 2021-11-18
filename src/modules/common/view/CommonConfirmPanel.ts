@@ -8,10 +8,11 @@
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonConfirmPanel {
     import LangTextType = TwnsLangTextType.LangTextType;
 
-    type OpenDataForCommonConfirmPanel = {
+    export type OpenData = {
         title?              : string;
         content             : string;
         callback            : () => any;
@@ -20,12 +21,7 @@ namespace TwnsCommonConfirmPanel {
         textForCancel?      : string;
         showButtonClose?    : boolean;
     };
-    export class CommonConfirmPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonConfirmPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: CommonConfirmPanel;
-
+    export class CommonConfirmPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
 
         private readonly _group!        : eui.Group;
@@ -36,35 +32,15 @@ namespace TwnsCommonConfirmPanel {
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForCommonConfirmPanel): void {
-            if (!CommonConfirmPanel._instance) {
-                CommonConfirmPanel._instance = new CommonConfirmPanel();
-            }
-            CommonConfirmPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (CommonConfirmPanel._instance) {
-                await CommonConfirmPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/common/CommonConfirmPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
             ]);
-
-            this._showOpenAnimation();
-
+            this._setIsTouchMaskEnabled();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             const openData          = this._getOpenData();
             this._btnClose.visible  = !!openData.showButtonClose;
             this._btnConfirm.label  = openData.textForConfirm || Lang.getText(LangTextType.B0026);
@@ -73,8 +49,8 @@ namespace TwnsCommonConfirmPanel {
             this._labelContent.setRichText(openData.content);
             this._scrContent.viewport.scrollV = 0;
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnCancel(): void {
@@ -89,7 +65,7 @@ namespace TwnsCommonConfirmPanel {
             this.close();
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -100,22 +76,22 @@ namespace TwnsCommonConfirmPanel {
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
 
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: -40 },
-                    callback    : resolve,
-                });
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

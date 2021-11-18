@@ -38,7 +38,7 @@ namespace TwnsWwHandleRequestWarsPanel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class WwHandleRequestWarsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WwHandleRequestWarsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForWarCommonMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 

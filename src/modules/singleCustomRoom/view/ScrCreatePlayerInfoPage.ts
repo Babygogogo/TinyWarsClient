@@ -20,7 +20,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsScrCreatePlayerInfoPage {
-    import CommonCoInfoPanel        = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
@@ -116,7 +115,7 @@ namespace TwnsScrCreatePlayerInfoPage {
             const playerData    = this._getPlayerData();
             const coId          = playerData ? playerData.coId : null;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                CommonCoInfoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
                     configVersion   : ScrCreateModel.getConfigVersion(),
                     coId,
                 });
@@ -134,7 +133,7 @@ namespace TwnsScrCreatePlayerInfoPage {
         private async _onTouchedBtnChangeCo(): Promise<void> {
             const playerIndex   = this._getData().playerIndex;
             const currentCoId   = ScrCreateModel.getCoId(playerIndex);
-            TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                 currentCoId,
                 availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : ScrCreateModel.getWarRule(),

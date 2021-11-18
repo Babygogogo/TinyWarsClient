@@ -102,8 +102,6 @@ namespace TwnsNotifyType {
 
         BwProduceUnitPanelOpened,
         BwProduceUnitPanelClosed,
-        BwCoListPanelOpened,
-        BwCoListPanelClosed,
 
         BwUnitBeDestroyed,
         BwUnitBeAttacked,

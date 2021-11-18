@@ -9,16 +9,13 @@
 // import TwnsUiTextInput              from "../../tools/ui/UiTextInput";
 // import TwnsMmAvailabilityListPanel  from "./MmAvailabilityListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmAvailabilitySearchPanel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
-    export class MmAvailabilitySearchPanel extends TwnsUiPanel.UiPanel<void> {
-        protected _IS_EXCLUSIVE = false;
-        protected _LAYER_TYPE   = Types.LayerType.Hud2;
-
-        private static _instance: MmAvailabilitySearchPanel;
-
+    export type OpenData = void;
+    export class MmAvailabilitySearchPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
         private readonly _btnReset!                 : TwnsUiButton.UiButton;
         private readonly _btnSearch!                : TwnsUiButton.UiButton;
@@ -35,26 +32,7 @@ namespace TwnsMmAvailabilitySearchPanel {
         private readonly _inputPlayedTimes!         : TwnsUiTextInput.UiTextInput;
         private readonly _inputMinRating!           : TwnsUiTextInput.UiTextInput;
 
-        public static show(): void {
-            if (!MmAvailabilitySearchPanel._instance) {
-                MmAvailabilitySearchPanel._instance = new MmAvailabilitySearchPanel();
-            }
-            MmAvailabilitySearchPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MmAvailabilitySearchPanel._instance) {
-                await MmAvailabilitySearchPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapManagement/MmAvailabilitySearchPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose,  callback: this._onTouchedBtnClose },
                 { ui: this._btnReset,  callback: this._onTouchedBtnReset },
@@ -63,10 +41,15 @@ namespace TwnsMmAvailabilitySearchPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
-
+            this._setIsTouchMaskEnabled();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
             this._btnReset.enabled  = true;
             this._btnSearch.enabled = true;
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnClose(): void {
@@ -74,12 +57,12 @@ namespace TwnsMmAvailabilitySearchPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            TwnsMmAvailabilityListPanel.MmAvailabilityListPanel.getInstance().setMapFilters({});
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilityListPanel, {});
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            TwnsMmAvailabilityListPanel.MmAvailabilityListPanel.getInstance().setMapFilters({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilityListPanel, {
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,

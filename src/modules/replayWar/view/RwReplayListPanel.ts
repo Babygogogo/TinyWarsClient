@@ -31,13 +31,11 @@ namespace TwnsRwReplayListPanel {
     import OpenDataForCommonWarMapInfoPage      = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage   = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import RwReplayWarInfoPage                  = TwnsRwReplayWarInfoPage.RwReplayWarInfoPage;
-    import RwSearchReplayPanel                  = TwnsRwSearchReplayPanel.RwSearchReplayPanel;
     import LangTextType                         = TwnsLangTextType.LangTextType;
     import NotifyType                           = TwnsNotifyType.NotifyType;
-    import CommonBlockPanel                     = TwnsCommonBlockPanel.CommonBlockPanel;
 
     export type OpenData = void;
-    export class RwReplayListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class RwReplayListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForRwReplayWarInfoPage>;
 
@@ -118,12 +116,12 @@ namespace TwnsRwReplayListPanel {
         }
 
         private _onNotifyMsgReplayGetDataFailed(): void {
-            CommonBlockPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
@@ -133,7 +131,7 @@ namespace TwnsRwReplayListPanel {
         private _onTouchedBtnNextStep(): void {
             const replayId = RwModel.getPreviewingReplayId();
             if (replayId != null) {
-                CommonBlockPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0040),
                 });

@@ -17,7 +17,7 @@ namespace TwnsBroadcastPanel {
     const _FLOW_SPEED = 80;
 
     export type OpenData = void;
-    export class BroadcastPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BroadcastPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupLamp!    : eui.Group;
         private readonly _labelLamp!    : TwnsUiLabel.UiLabel;
 

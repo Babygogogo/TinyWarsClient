@@ -55,7 +55,7 @@ namespace TwnsBwWarInfoPanel {
     export type OpenData = {
         war : TwnsBwWar.BwWar;
     };
-    export class BwWarInfoPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwWarInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -356,7 +356,7 @@ namespace TwnsBwWarInfoPanel {
             const { playerIndex, war }  = this._getData();
             const player                = war.getPlayer(playerIndex);
             const isHuman               = player.getUserId() != null;
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : isHuman ? Lang.getText(LangTextType.A0110) : Lang.getText(LangTextType.A0111),
                 callback: () => {
                     if (!isHuman) {
@@ -371,7 +371,7 @@ namespace TwnsBwWarInfoPanel {
         }
         private _modifyAsTeamIndex(): void {
             const { playerIndex, war } = this._getData();
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getFormattedText(LangTextType.F0072, playerIndex),
                 callback: () => {
                     const playersCountUnneutral = war.getPlayerManager().getTotalPlayersCount(false);
@@ -385,7 +385,7 @@ namespace TwnsBwWarInfoPanel {
             const { playerIndex, war, playerRenderer }  = this._getData();
             const player                                = war.getPlayer(playerIndex);
             const currentCoId                           = player.getCoId();
-            TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                 currentCoId,
                 availableCoIdArray  : ConfigManager.getEnabledCoArray(war.getConfigVersion()).map(v => v.coId),
                 callbackOnConfirm   : (newCoId) => {
@@ -405,7 +405,7 @@ namespace TwnsBwWarInfoPanel {
             const minValue              = 0;
             const maxValue              = player.getCoMaxEnergy();
             const currValue             = player.getCoCurrentEnergy();
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : `P${playerIndex} ${Lang.getText(LangTextType.B0159)}`,
                 currentValue    : "" + currValue,
                 maxChars        : 4,
@@ -429,7 +429,7 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = player.getFund();
             const maxValue              = CommonConstants.WarRuleInitialFundMaxLimit;
             const minValue              = CommonConstants.WarRuleInitialFundMinLimit;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : `P${player.getPlayerIndex()} ${Lang.getText(LangTextType.B0032)}`,
                 currentValue    : "" + currValue,
                 maxChars        : 7,
@@ -452,7 +452,7 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
             const maxValue              = CommonConstants.WarRuleInitialFundMaxLimit;
             const minValue              = CommonConstants.WarRuleInitialFundMinLimit;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0178),
                 currentValue    : "" + currValue,
                 maxChars        : 7,
@@ -475,7 +475,7 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
             const maxValue              = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue              = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0179),
                 currentValue    : "" + currValue,
                 maxChars        : 5,
@@ -498,7 +498,7 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             const minValue              = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
             const maxValue              = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0180),
                 currentValue    : "" + currValue,
                 maxChars        : 3,
@@ -521,7 +521,7 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
             const minValue              = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue              = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0181),
                 currentValue    : "" + currValue,
                 maxChars        : 5,
@@ -544,7 +544,7 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
             const minValue              = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue              = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0182),
                 currentValue    : "" + currValue,
                 maxChars        : 3,
@@ -567,7 +567,7 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
             const minValue              = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue              = CommonConstants.WarRuleOffenseBonusMaxLimit;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0183),
                 currentValue    : "" + currValue,
                 maxChars        : 5,
@@ -590,7 +590,7 @@ namespace TwnsBwWarInfoPanel {
             const currValue             = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
             const minValue              = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue              = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0184),
                 currentValue    : "" + currValue,
                 maxChars        : 3,
@@ -613,7 +613,7 @@ namespace TwnsBwWarInfoPanel {
             const currValue                             = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
             const minValue                              = CommonConstants.WarRuleLuckMinLimit;
             const maxValue                              = CommonConstants.WarRuleLuckMaxLimit;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0189),
                 currentValue    : "" + currValue,
                 maxChars        : 4,
@@ -644,7 +644,7 @@ namespace TwnsBwWarInfoPanel {
             const currValue                             = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
             const minValue                              = CommonConstants.WarRuleLuckMinLimit;
             const maxValue                              = CommonConstants.WarRuleLuckMaxLimit;
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0190),
                 currentValue    : "" + currValue,
                 maxChars        : 4,

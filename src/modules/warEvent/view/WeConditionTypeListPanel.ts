@@ -26,7 +26,7 @@ namespace TwnsWeConditionTypeListPanel {
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
-    export class WeConditionTypeListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeConditionTypeListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;

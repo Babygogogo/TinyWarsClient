@@ -25,7 +25,7 @@ namespace TwnsWeEventRenamePanel {
         war         : BwWar;
         warEventId  : number;
     };
-    export class WeEventRenamePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeEventRenamePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _inputChinese!     : TwnsUiTextInput.UiTextInput;
         private readonly _inputEnglish!     : TwnsUiTextInput.UiTextInput;
         private readonly _labelTip!         : TwnsUiLabel.UiLabel;

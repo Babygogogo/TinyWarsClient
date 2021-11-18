@@ -23,7 +23,7 @@ namespace TwnsMpwSidePanel {
     export type OpenData = {
         war     : TwnsMpwWar.MpwWar;
     };
-    export class MpwSidePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MpwSidePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupLeft!    : eui.Group;
         private readonly _btnCop!       : TwnsUiButton.UiButton;
         private readonly _btnScop!      : TwnsUiButton.UiButton;
@@ -100,7 +100,7 @@ namespace TwnsMpwSidePanel {
             if (!war.getPlayerInTurn().checkCanUseCoSkill(skillType)) {
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0142),
                     content : Lang.getText(LangTextType.A0054),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerUseCoSkill(skillType),
@@ -114,7 +114,7 @@ namespace TwnsMpwSidePanel {
             if (!war.getPlayerInTurn().checkCanUseCoSkill(skillType)) {
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0144),
                     content : Lang.getText(LangTextType.A0058),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerUseCoSkill(skillType),
@@ -165,7 +165,7 @@ namespace TwnsMpwSidePanel {
             if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
                 FloatText.show(Lang.getText(LangTextType.A0034));
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0036),
                     content : this._getHintForEndTurn(),
                     callback: () => this._getOpenData().war.getActionPlanner().setStateRequestingPlayerEndTurn(),

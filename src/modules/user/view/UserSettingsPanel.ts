@@ -39,7 +39,7 @@ namespace TwnsUserSettingsPanel {
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
     export type OpenData = void;
-    export class UserSettingsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class UserSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
@@ -256,10 +256,10 @@ namespace TwnsUserSettingsPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserChangeDiscordIdPanel, void 0);
         }
         private _onTouchedBtnChangeGameVersion(): void {
-            TwnsCommonChangeVersionPanel.CommonChangeVersionPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChangeVersionPanel, void 0);
         }
         private _onTouchedBtnRankList(): void {
-            TwnsCommonRankListPanel.CommonRankListPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonRankListPanel, void 0);
         }
         private _onTouchedBtnShowOnlineUsers(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserOnlineUsersPanel, void 0);
@@ -271,17 +271,17 @@ namespace TwnsUserSettingsPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetStageScalePanel, void 0);
         }
         private _onTouchedBtnServerStatus(): void {
-            TwnsCommonServerStatusPanel.CommonServerStatusPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonServerStatusPanel, void 0);
         }
         private _onTouchedBtnComplaint(): void {
             this.close();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: CommonConstants.AdminUserId });
         }
         private _onTouchedBtnUnitsInfo(): void {
-            TwnsCommonDamageChartPanel.CommonDamageChartPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, void 0);
         }
         private _onTouchedBtnChangeLog(): void {
-            TwnsChangeLogPanel.ChangeLogPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChangeLogPanel, void 0);
         }
         private _onTouchedBtnSetPrivilege(): void {
             const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnTouchedBtnSetPrivilege_00);
@@ -292,7 +292,7 @@ namespace TwnsUserSettingsPanel {
                 TwnsPanelConfig.Dict.LobbyBackgroundPanel,
             ]);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBackgroundPanel, void 0);
-            TwnsMmMainMenuPanel.MmMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMainMenuPanel, void 0);
         }
 
         protected async _showOpenAnimation(): Promise<void> {

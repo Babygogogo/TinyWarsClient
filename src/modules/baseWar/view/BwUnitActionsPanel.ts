@@ -28,7 +28,7 @@ namespace TwnsBwUnitActionsPanel {
         destination : Types.GridIndex;
         actionList  : TwnsBwActionPlanner.DataForUnitAction[];
     };
-    export class BwUnitActionsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwUnitActionsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!        : eui.Group;
         private readonly _listAction!   : TwnsUiScrollList.UiScrollList<DataForUnitActionRenderer>;
 

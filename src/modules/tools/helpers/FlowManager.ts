@@ -239,7 +239,7 @@ namespace FlowManager {
             TwnsPanelConfig.Dict.BroadcastPanel,
         ]);
         TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
-        TwnsHrwTopPanel.HrwTopPanel.show({ war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.HrwTopPanel, { war });
         TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
         TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
         TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
@@ -286,7 +286,7 @@ namespace FlowManager {
             TwnsPanelConfig.Dict.BroadcastPanel,
         ]);
         TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
-        TwnsMeTopPanel.MeTopPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeTopPanel, void 0);
         TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
         TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
         TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
@@ -367,7 +367,7 @@ namespace FlowManager {
         // UserModel.clearLoginInfo();
         // gotoLogin();
 
-        TwnsCommonAlertPanel.CommonAlertPanel.show({
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
             title   : Lang.getText(LangTextType.B0025),
             content : Lang.getText(LangTextType.A0020),
         });
@@ -441,7 +441,7 @@ namespace FlowManager {
     }
     function _gotoMcwMyWarListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsMcwMyWarListPanel.McwMyWarListPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.McwMyWarListPanel, void 0);
     }
     function _gotoMfwMyWarListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
@@ -449,7 +449,7 @@ namespace FlowManager {
     }
     function _gotoCcwMyWarListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsCcwMyWarListPanel.CcwMyWarListPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.CcwMyWarListPanel, void 0);
     }
     function _gotoSpmWarListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
@@ -457,7 +457,7 @@ namespace FlowManager {
     }
     function _gotoMeMapListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsMeMapListPanel.MeMapListPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapListPanel, void 0);
     }
 }
 

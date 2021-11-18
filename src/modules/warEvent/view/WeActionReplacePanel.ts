@@ -25,7 +25,7 @@ namespace TwnsWeActionReplacePanel {
         eventId     : number;
         actionId    : number;
     };
-    export class WeActionReplacePanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeActionReplacePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listAction!       : TwnsUiScrollList.UiScrollList<DataForActionRenderer>;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelNoAction!    : TwnsUiLabel.UiLabel;

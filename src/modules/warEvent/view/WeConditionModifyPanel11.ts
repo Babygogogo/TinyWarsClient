@@ -28,7 +28,7 @@ namespace TwnsWeConditionModifyPanel11 {
         condition   : IWarEventCondition;
     };
     /** WecEventCalledCountTotalLessThan */
-    export class WeConditionModifyPanel11 extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeConditionModifyPanel11 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
         private readonly _btnType!          : TwnsUiButton.UiButton;

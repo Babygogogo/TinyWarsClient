@@ -23,7 +23,7 @@ namespace TwnsUserLoginPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     export type OpenData = void;
-    export class UserLoginPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class UserLoginPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgTitle!                 : TwnsUiImage.UiImage;
 
         private readonly _groupAccount!             : eui.Group;

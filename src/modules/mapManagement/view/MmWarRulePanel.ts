@@ -15,21 +15,16 @@
 // import TwnsUiScrollList                 from "../../tools/ui/UiScrollList";
 // import TwnsMmWarRuleAvailableCoPanel    from "./MmWarRuleAvailableCoPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmWarRulePanel {
     import CommonHelpPanel              = TwnsCommonHelpPanel.CommonHelpPanel;
-    import MmWarRuleAvailableCoPanel    = TwnsMmWarRuleAvailableCoPanel.MmWarRuleAvailableCoPanel;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import IWarRule                     = ProtoTypes.WarRule.IWarRule;
     import IDataForPlayerRule           = ProtoTypes.WarRule.IDataForPlayerRule;
 
-    type OpenDataForMmWarRulePanel = ProtoTypes.Map.IMapRawData;
-    export class MmWarRulePanel extends TwnsUiPanel.UiPanel<OpenDataForMmWarRulePanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MmWarRulePanel;
-
+    export type OpenData = ProtoTypes.Map.IMapRawData;
+    export class MmWarRulePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
         private readonly _listWarRule!          : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
         private readonly _btnBack!              : TwnsUiButton.UiButton;
@@ -56,30 +51,7 @@ namespace TwnsMmWarRulePanel {
         private _selectedIndex      : number | null = null;
         private _selectedRule       : IWarRule | null = null;
 
-        public static show(openData: OpenDataForMmWarRulePanel): void {
-            if (!MmWarRulePanel._instance) {
-                MmWarRulePanel._instance = new MmWarRulePanel();
-            }
-            MmWarRulePanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (MmWarRulePanel._instance) {
-                await MmWarRulePanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = MmWarRulePanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapManagement/MmWarRulePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
             ]);
@@ -87,12 +59,18 @@ namespace TwnsMmWarRulePanel {
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
             ]);
+            this._setIsTouchMaskEnabled();
+
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._resetView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public setSelectedIndex(newIndex: number): void {
@@ -130,7 +108,7 @@ namespace TwnsMmWarRulePanel {
         }
 
         private _onTouchedBtnHelpHasFog(): void {
-            CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0020),
                 content: Lang.getText(LangTextType.R0002),
             });
@@ -320,7 +298,7 @@ namespace TwnsMmWarRulePanel {
                 infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    MmWarRuleAvailableCoPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRuleAvailableCoPanel, {
                         warRule,
                         playerRule,
                     });

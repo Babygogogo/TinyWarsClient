@@ -40,7 +40,7 @@ namespace TwnsMfrCreateSettingsPanel {
     const CONFIRM_INTERVAL_MS = 5000;
 
     export type OpenData = void;
-    export class MfrCreateSettingsPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MfrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupNavigator!           : eui.Group;
         private readonly _labelMultiPlayer!         : TwnsUiLabel.UiLabel;
         private readonly _labelFreeMode!            : TwnsUiLabel.UiLabel;

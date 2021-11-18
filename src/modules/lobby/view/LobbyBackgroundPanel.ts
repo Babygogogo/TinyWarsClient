@@ -5,7 +5,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLobbyBackgroundPanel {
     export type OpenData = void;
-    export class LobbyBackgroundPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class LobbyBackgroundPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected _onOpening(): void {
             // nothing to do
         }

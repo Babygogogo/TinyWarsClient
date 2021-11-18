@@ -25,7 +25,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel3 {
-    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import ColorValue               = Types.ColorValue;
@@ -39,7 +38,7 @@ namespace TwnsWeActionModifyPanel3 {
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel3 extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeActionModifyPanel3 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _btnBack!              : TwnsUiButton.UiButton;
         private readonly _btnType!              : TwnsUiButton.UiButton;
         private readonly _btnPlay!              : TwnsUiButton.UiButton;
@@ -100,7 +99,7 @@ namespace TwnsWeActionModifyPanel3 {
 
         private _onTouchedBtnClear(): void {
             const openData = this._getOpenData();
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
                     Helpers.getExisted(openData.action.WeaDialogue?.dataArray).length = 0;
@@ -297,7 +296,7 @@ namespace TwnsWeActionModifyPanel3 {
         private _onTouchedBtnDelete(): void {
             const data = this.data;
             if (data) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0029),
                     callback: () => {
                         Helpers.deleteElementFromArray(Helpers.getExisted(data.action.WeaDialogue?.dataArray), data.dataForDialogue);
@@ -321,7 +320,7 @@ namespace TwnsWeActionModifyPanel3 {
             const dataForCoDialogue = this._getData().dataForDialogue.dataForCoDialogue;
             if (dataForCoDialogue) {
                 const currentCoId = dataForCoDialogue.coId ?? null;
-                TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                     availableCoIdArray  : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion())),
                     currentCoId,
                     callbackOnConfirm   : coId => {
@@ -341,7 +340,7 @@ namespace TwnsWeActionModifyPanel3 {
             const textData              = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
             const currentText           = textData?.text;
 
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
@@ -381,7 +380,7 @@ namespace TwnsWeActionModifyPanel3 {
             const textData              = textArray.find(v => v.languageType === Types.LanguageType.English);
             const currentText           = textData?.text;
 
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
@@ -420,7 +419,7 @@ namespace TwnsWeActionModifyPanel3 {
             const textData          = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
             const currentText       = textData?.text;
 
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
@@ -457,7 +456,7 @@ namespace TwnsWeActionModifyPanel3 {
             const textData          = textArray.find(v => v.languageType === Types.LanguageType.English);
             const currentText       = textData?.text;
 
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,

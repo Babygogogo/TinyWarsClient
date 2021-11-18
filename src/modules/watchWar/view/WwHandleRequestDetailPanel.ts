@@ -22,7 +22,7 @@ namespace TwnsWwHandleRequestDetailPanel {
     export type OpenData = {
         watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     };
-    export class WwHandleRequestDetailPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WwHandleRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelYes!                 : TwnsUiLabel.UiLabel;
         private readonly _labelNo!                  : TwnsUiLabel.UiLabel;

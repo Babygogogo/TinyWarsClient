@@ -23,7 +23,7 @@ namespace TwnsUserSetAvatarPanel {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export type OpenData = void;
-    export class UserSetAvatarPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class UserSetAvatarPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;

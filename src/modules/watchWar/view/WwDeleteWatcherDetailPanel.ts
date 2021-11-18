@@ -22,7 +22,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
     export type OpenData = {
         watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     };
-    export class WwDeleteWatcherDetailPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WwDeleteWatcherDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelDelete!              : TwnsUiLabel.UiLabel;
         private readonly _labelKeep!                : TwnsUiLabel.UiLabel;

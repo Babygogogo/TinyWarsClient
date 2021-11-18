@@ -20,12 +20,8 @@ namespace TwnsMeConfirmSaveMapPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    export class MeConfirmSaveMapPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Notify1;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MeConfirmSaveMapPanel;
-
+    export type OpenData = void;
+    export class MeConfirmSaveMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelContent!         : TwnsUiLabel.UiLabel;
         private readonly _labelReviewDescTitle! : TwnsUiLabel.UiLabel;
@@ -39,27 +35,7 @@ namespace TwnsMeConfirmSaveMapPanel {
         private _mapRawData : ProtoTypes.Map.IMapRawData | null = null;
         private _needReview = false;
 
-        public static show(): void {
-            if (!MeConfirmSaveMapPanel._instance) {
-                MeConfirmSaveMapPanel._instance = new MeConfirmSaveMapPanel();
-            }
-            MeConfirmSaveMapPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeConfirmSaveMapPanel._instance) {
-                await MeConfirmSaveMapPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapEditor/MeConfirmSaveMapPanel.exml";
-            this._setIsTouchMaskEnabled();
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -68,7 +44,9 @@ namespace TwnsMeConfirmSaveMapPanel {
                 { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm, },
                 { ui: this._groupNeedReview,    callback: this._onTouchedGroupNeedReview },
             ]);
-
+            this._setIsTouchMaskEnabled();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
             this._needReview = false;
             this._updateImgNeedReview();
@@ -79,6 +57,9 @@ namespace TwnsMeConfirmSaveMapPanel {
             this._groupNeedReview.visible       = !errorCode;
             this._labelReviewDescTitle.visible  = !!errorCode;
             this._labelReviewDesc.text          = errorCode ? Lang.getErrorText(errorCode) : ``;
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnCancel(): void {
@@ -91,7 +72,7 @@ namespace TwnsMeConfirmSaveMapPanel {
             const mapRawData            = Helpers.getExisted(this._mapRawData);
             const reviewingSlotIndex    = MeModel.getReviewingMapSlotIndex();
             if (reviewingSlotIndex === slotIndex) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0245),
                     callback: () => {
                         MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);
@@ -100,7 +81,7 @@ namespace TwnsMeConfirmSaveMapPanel {
                 });
             } else {
                 if ((needReview) && (reviewingSlotIndex != null)) {
-                    CommonConfirmPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                         content : Lang.getText(LangTextType.A0084),
                         callback: () => {
                             MeProxy.reqMeSubmitMap(slotIndex, mapRawData, needReview);

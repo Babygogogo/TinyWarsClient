@@ -12,20 +12,15 @@
 // import WarMapProxy          from "../../warMap/model/WarMapProxy";
 // import TwnsMmWarRulePanel   from "./MmWarRulePanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmTagChangePanel {
-    import MmWarRulePanel   = TwnsMmWarRulePanel.MmWarRulePanel;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    type OpenDataForMmTagChangePanel = {
+    export type OpenData = {
         mapId   : number;
     };
-    export class MmTagChangePanel extends TwnsUiPanel.UiPanel<OpenDataForMmTagChangePanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MmTagChangePanel;
-
+    export class MmTagChangePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnWarRule!   : TwnsUiButton.UiButton;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
@@ -35,27 +30,7 @@ namespace TwnsMmTagChangePanel {
         private readonly _labelFog!     : TwnsUiLabel.UiLabel;
         private readonly _imgFog!       : TwnsUiImage.UiImage;
 
-        public static show(openData: OpenDataForMmTagChangePanel): void {
-            if (!MmTagChangePanel._instance) {
-                MmTagChangePanel._instance = new MmTagChangePanel();
-            }
-            MmTagChangePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (MmTagChangePanel._instance) {
-                await MmTagChangePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapManagement/MmTagChangePanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -65,11 +40,16 @@ namespace TwnsMmTagChangePanel {
                 { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
                 { ui: this._groupFog,       callback: this._onTouchedGroupMcw },
             ]);
-
+            this._setIsTouchMaskEnabled();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             const briefData         = Helpers.getExisted(await WarMapModel.getBriefData(this._getOpenData().mapId));
             this._imgFog.visible    = !!(briefData.mapTag || {}).fog;
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -84,7 +64,7 @@ namespace TwnsMmTagChangePanel {
         }
 
         private async _onTouchedBtnWarRule(): Promise<void> {
-            MmWarRulePanel.show(Helpers.getExisted(await WarMapModel.getRawData(this._getOpenData().mapId)));
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, Helpers.getExisted(await WarMapModel.getRawData(this._getOpenData().mapId)));
             this.close();
         }
 

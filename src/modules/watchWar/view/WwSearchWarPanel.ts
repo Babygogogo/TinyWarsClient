@@ -18,7 +18,7 @@ namespace TwnsWwSearchWarPanel {
     import NotifyType               = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class WwSearchWarPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WwSearchWarPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
 
         private readonly _group!                    : eui.Group;

@@ -31,7 +31,7 @@ namespace TwnsWeDialogueBackgroundPanel {
     export type OpenData = {
         action  : ProtoTypes.WarEvent.IWeaDialogue;
     };
-    export class WeDialogueBackgroundPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class WeDialogueBackgroundPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _listBackground!   : TwnsUiScrollList.UiScrollList<DataForBackgroundRenderer>;

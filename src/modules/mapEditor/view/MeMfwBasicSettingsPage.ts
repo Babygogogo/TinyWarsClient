@@ -78,7 +78,7 @@ namespace TwnsMeMfwBasicSettingsPage {
             if (MeMfwModel.getPresetWarRuleId() == null) {
                 callback();
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0129),
                     callback: () => {
                         MeMfwModel.setPresetWarRuleId(null);
@@ -89,7 +89,7 @@ namespace TwnsMeMfwBasicSettingsPage {
         }
 
         private _onTouchedBtnHelpHasFog(): void {
-            CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0020),
                 content: Lang.getText(LangTextType.R0002),
             });

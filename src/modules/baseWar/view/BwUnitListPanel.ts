@@ -30,7 +30,7 @@ namespace TwnsBwUnitListPanel {
     export type OpenData = {
         war : BwWar;
     };
-    export class BwUnitListPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwUnitListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
         private readonly _labelCountName!   : TwnsUiLabel.UiLabel;

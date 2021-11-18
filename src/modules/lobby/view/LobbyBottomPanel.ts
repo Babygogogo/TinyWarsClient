@@ -15,12 +15,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLobbyBottomPanel {
-    import CommonDamageChartPanel   = TwnsCommonDamageChartPanel.CommonDamageChartPanel;
-    import MeMapListPanel           = TwnsMeMapListPanel.MeMapListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class LobbyBottomPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class LobbyBottomPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupBottom!  : eui.Group;
         private readonly _btnMyInfo!    : TwnsUiButton.UiButton;
         private readonly _btnChat!      : TwnsUiButton.UiButton;
@@ -73,11 +71,11 @@ namespace TwnsLobbyBottomPanel {
         private _onTouchedBtnMapEditor(): void {
             this.close();
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
-            MeMapListPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapListPanel, void 0);
         }
 
         private _onTouchedBtnGameData(): void {
-            CommonDamageChartPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {

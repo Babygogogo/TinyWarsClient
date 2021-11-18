@@ -10,56 +10,39 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 // import WarMapProxy          from "../../warMap/model/WarMapProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmRejectMapPanel {
     import MeWar        = TwnsMeWar.MeWar;
     import LangTextType = TwnsLangTextType.LangTextType;
 
-    type OpenData = {
+    export type OpenData = {
         war: MeWar;
     };
     export class MmRejectMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MmRejectMapPanel;
-
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelTips!    : TwnsUiLabel.UiLabel;
         private readonly _inputReason!  : TwnsUiTextInput.UiTextInput;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenData): void {
-            if (!MmRejectMapPanel._instance) {
-                MmRejectMapPanel._instance = new MmRejectMapPanel();
-            }
-            MmRejectMapPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (MmRejectMapPanel._instance) {
-                await MmRejectMapPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapManagement/MmRejectMapPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
             ]);
+            this._setIsTouchMaskEnabled();
 
             this._inputReason.maxChars  = CommonConstants.MapReviewCommentMaxLength;
             this._btnConfirm.label      = Lang.getText(LangTextType.B0026);
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
             this._labelTitle.text       = Lang.getText(LangTextType.B0297);
             this._labelTips.text        = Lang.getText(LangTextType.A0094);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnCancel(): void {

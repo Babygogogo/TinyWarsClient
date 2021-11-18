@@ -30,7 +30,7 @@ namespace TwnsBwTileBriefPanel {
     export type OpenData = {
         war : TwnsBwWar.BwWar;
     };
-    export class BwTileBriefPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _conTileView!      : eui.Group;
         private readonly _tileView          = new TwnsBwTileView.BwTileView();
@@ -47,8 +47,6 @@ namespace TwnsBwTileBriefPanel {
                 // { type: NotifyType.GlobalTouchMove,             callback: this._onNotifyGlobalTouchMove },
                 { type: NotifyType.BwCursorGridIndexChanged,    callback: this._onNotifyBwCursorGridIndexChanged },
                 { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwActionPlannerStateChanged },
-                { type: NotifyType.BwCoListPanelOpened,         callback: this._onNotifyBwCoListPanelOpened },
-                { type: NotifyType.BwCoListPanelClosed,         callback: this._onNotifyBwCoListPanelClosed },
                 { type: NotifyType.MeTileChanged,               callback: this._onNotifyMeTileChanged },
                 { type: NotifyType.TileAnimationTick,           callback: this._onNotifyTileAnimationTick },
             ]);
@@ -92,12 +90,6 @@ namespace TwnsBwTileBriefPanel {
             ) {
                 this._updateView();
             }
-        }
-        private _onNotifyBwCoListPanelOpened(): void {
-            this._updateView();
-        }
-        private _onNotifyBwCoListPanelClosed(): void {
-            this._updateView();
         }
         private _onNotifyMeTileChanged(e: egret.Event): void {
             const data  = e.data as NotifyData.MeTileChanged;

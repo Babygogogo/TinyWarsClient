@@ -15,7 +15,7 @@ namespace TwnsScrCreateSearchMapPanel {
     import NotifyType               = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class ScrCreateSearchMapPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class ScrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
         private readonly _btnReset!                 : TwnsUiButton.UiButton;
         private readonly _btnSearch!                : TwnsUiButton.UiButton;

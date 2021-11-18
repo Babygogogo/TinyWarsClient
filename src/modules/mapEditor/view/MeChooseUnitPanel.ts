@@ -24,12 +24,8 @@ namespace TwnsMeChooseUnitPanel {
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseUnitPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeChooseUnitPanel;
-
+    export type OpenData = void;
+    export class MeChooseUnitPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
@@ -37,40 +33,27 @@ namespace TwnsMeChooseUnitPanel {
 
         private _dataListForRecent   : DataForUnitRenderer[] = [];
 
-        public static show(): void {
-            if (!MeChooseUnitPanel._instance) {
-                MeChooseUnitPanel._instance = new MeChooseUnitPanel();
-            }
-            MeChooseUnitPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeChooseUnitPanel._instance) {
-                await MeChooseUnitPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeChooseUnitPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listRecent.setItemRenderer(UnitRenderer);
             this._listCategory.setItemRenderer(CategoryRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._updateListCategory();
             this._updateListRecent();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public updateOnChooseUnit(data: DataForDrawUnit): void {

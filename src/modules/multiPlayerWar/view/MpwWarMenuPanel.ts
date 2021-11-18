@@ -28,7 +28,7 @@ namespace TwnsMpwWarMenuPanel {
     import NotifyType                   = TwnsNotifyType.NotifyType;
 
     export type OpenData = void;
-    export class MpwWarMenuPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class MpwWarMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -93,7 +93,7 @@ namespace TwnsMpwWarMenuPanel {
         }
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({
@@ -109,7 +109,7 @@ namespace TwnsMpwWarMenuPanel {
             FlowManager.gotoHalfwayReplayWar(Helpers.deepClone(Helpers.getExisted(data.warData)));
         }
         private _onNotifyMsgMpwGetHalfwayReplayDataFailed(): void {
-            TwnsCommonBlockPanel.CommonBlockPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,7 +155,7 @@ namespace TwnsMpwWarMenuPanel {
             } else if (unitMap.countUnitsOnMapForPlayer(playerIndex) <= 1) {
                 FloatText.show(Lang.getText(LangTextType.A0076));
             } else {
-                TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     title   : Lang.getText(LangTextType.B0081),
                     content : Lang.getText(LangTextType.A0029),
                     callback: () => war.getActionPlanner().setStateRequestingPlayerDeleteUnit(),
@@ -192,7 +192,7 @@ namespace TwnsMpwWarMenuPanel {
                 return;
             }
 
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0201),
                 callback: () => {
                     FlowManager.gotoMfrCreateSettingsPanel(warData);
@@ -202,7 +202,7 @@ namespace TwnsMpwWarMenuPanel {
 
         private _onTouchedBtnSetPath(): void {
             const isEnabled = UserModel.getSelfSettingsIsSetPathMode();
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getFormattedText(
                     LangTextType.F0033,
                     Lang.getText(isEnabled ? LangTextType.B0431 : LangTextType.B0432),
@@ -227,11 +227,11 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _onTouchedBtnReplay(): void {
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0249),
                 callback: () => {
                     MpwProxy.reqMpwGetHalfwayReplayData(Helpers.getExisted(this._getWar().getWarId()));
-                    TwnsCommonBlockPanel.CommonBlockPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0040),
                     });
@@ -257,12 +257,12 @@ namespace TwnsMpwWarMenuPanel {
 
             const actionPlanner = war.getActionPlanner();
             if (war.getDrawVoteManager().getRemainingVotes() == null) {
-                TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0031),
                     callback: () => actionPlanner.setStateRequestingPlayerVoteForDraw(true),
                 });
             } else {
-                TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content             : Lang.getText(LangTextType.A0241),
                     textForConfirm      : Lang.getText(LangTextType.B0214),
                     textForCancel       : Lang.getText(LangTextType.B0215),
@@ -291,7 +291,7 @@ namespace TwnsMpwWarMenuPanel {
                 return;
             }
 
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0055),
                 content : Lang.getText(LangTextType.A0026),
                 callback: () => {
@@ -307,7 +307,7 @@ namespace TwnsMpwWarMenuPanel {
                 return;
             }
 
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0652),
                 content : Lang.getText(LangTextType.A0225),
                 callback: () => {
@@ -327,7 +327,7 @@ namespace TwnsMpwWarMenuPanel {
                 return;
             }
 
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 title   : Lang.getText(LangTextType.B0054),
                 content : Lang.getText(LangTextType.A0025),
                 callback: () => FlowManager.gotoLobby(),

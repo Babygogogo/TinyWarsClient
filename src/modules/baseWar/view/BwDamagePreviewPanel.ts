@@ -21,7 +21,7 @@ namespace TwnsBwDamagePreviewPanel {
     export type OpenData = {
         war: BwWar;
     };
-    export class BwDamagePreviewPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class BwDamagePreviewPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!                : eui.Group;
         private readonly _labelAttackTitle!     : TwnsUiLabel.UiLabel;
         private readonly _labelAttackValue!     : TwnsUiLabel.UiLabel;

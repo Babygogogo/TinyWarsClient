@@ -31,9 +31,9 @@
 // import WarMapModel                          from "../../warMap/model/WarMapModel";
 // import TwnsMcrMyRoomListPanel               from "./McrMyRoomListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMcrRoomInfoPanel {
     import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import McrMyRoomListPanel                       = TwnsMcrMyRoomListPanel.McrMyRoomListPanel;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -42,15 +42,10 @@ namespace TwnsMcrRoomInfoPanel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import NetMessage                               = ProtoTypes.NetMessage;
 
-    type OpenDataForMcrRoomInfoPanel = {
+    export type OpenData = {
         roomId  : number;
     };
-    export class McrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrRoomInfoPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: McrRoomInfoPanel;
-
+    export class McrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!                 : eui.Group;
         private readonly _tabSettings!              : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
@@ -85,25 +80,7 @@ namespace TwnsMcrRoomInfoPanel {
 
         private _isTabInitialized = false;
 
-        public static show(openData: OpenDataForMcrRoomInfoPanel): void {
-            if (!McrRoomInfoPanel._instance) {
-                McrRoomInfoPanel._instance = new McrRoomInfoPanel();
-            }
-            McrRoomInfoPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (McrRoomInfoPanel._instance) {
-                await McrRoomInfoPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiCustomRoom/McrRoomInfoPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnChooseCo,    callback: this._onTouchedBtnChooseCo },
@@ -127,9 +104,8 @@ namespace TwnsMcrRoomInfoPanel {
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
             this._sclSkinId.setItemRenderer(SkinIdRenderer);
             this._sclReady.setItemRenderer(ReadyRenderer);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
@@ -162,9 +138,8 @@ namespace TwnsMcrRoomInfoPanel {
             this._updateBtnChooseCo();
             this._updateGroupButton();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +147,7 @@ namespace TwnsMcrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            McrMyRoomListPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
         }
 
         private async _onTouchedBtnChooseCo(): Promise<void> {
@@ -190,7 +165,7 @@ namespace TwnsMcrRoomInfoPanel {
                 } else {
                     const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
                     const playerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
-                    TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                         currentCoId         : selfPlayerData.coId ?? null,
                         availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                             warRule         : Helpers.getExisted(settingsForCommon.warRule),
@@ -222,7 +197,7 @@ namespace TwnsMcrRoomInfoPanel {
         private _onTouchedBtnDeleteRoom(): void {
             const roomId = this._getOpenData().roomId;
             if (roomId != null) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0149),
                     callback: () => {
                         McrProxy.reqMcrDeleteRoomByPlayer(roomId);
@@ -283,7 +258,7 @@ namespace TwnsMcrRoomInfoPanel {
                 } else {
                     FloatText.show(Lang.getText(LangTextType.A0016));
                     this.close();
-                    McrMyRoomListPanel.show();
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
                 }
             }
         }
@@ -293,7 +268,7 @@ namespace TwnsMcrRoomInfoPanel {
             if (data.roomId === this._getOpenData().roomId) {
                 FloatText.show(Lang.getText(LangTextType.A0019));
                 this.close();
-                McrMyRoomListPanel.show();
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
             }
         }
 
@@ -301,7 +276,7 @@ namespace TwnsMcrRoomInfoPanel {
             const data = e.data as NetMessage.MsgMcrStartWar.IS;
             if (data.roomId === this._getOpenData().roomId) {
                 this.close();
-                McrMyRoomListPanel.show();
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
             }
         }
 
@@ -314,7 +289,7 @@ namespace TwnsMcrRoomInfoPanel {
                 } else {
                     FloatText.show(Lang.getText(LangTextType.A0127));
                     this.close();
-                    McrMyRoomListPanel.show();
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
                 }
             }
         }
@@ -446,7 +421,7 @@ namespace TwnsMcrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
@@ -472,36 +447,37 @@ namespace TwnsMcrRoomInfoPanel {
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupSettings,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupButton,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupTab,
-                    beginProps  : { alpha: 1, },
-                    endProps    : { alpha: 0, },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
             });
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupSettings,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupButton,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 1, },
+                endProps    : { alpha: 0, },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

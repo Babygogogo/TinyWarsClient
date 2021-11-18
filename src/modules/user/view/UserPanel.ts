@@ -25,7 +25,7 @@ namespace TwnsUserPanel {
     export type OpenData = {
         userId  : number;
     };
-    export class UserPanel extends TwnsUiPanel2.UiPanel2<OpenData> {
+    export class UserPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
