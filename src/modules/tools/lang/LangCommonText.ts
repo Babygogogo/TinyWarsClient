@@ -1083,6 +1083,14 @@ namespace TwnsLangCommonText {
             `此动作指定的对话背景不合法`,
             `The background of the dialogues is invalid.`,
         ],
+        [LangTextType.A0259]: [
+            `已绘制的道路和桥梁的造型将被覆盖，但覆盖结果可能不会完全符合您的预期。\n建议您先保存地图再进行此操作。\n确定要调整吗？`,
+            `The drawn roads and bridges will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure to adjust them?`
+        ],
+        [LangTextType.A0260]: [
+            `已绘制的等离子、超级等离子的造型将被覆盖，但覆盖结果可能不会完全符合您的预期。\n建议您先保存地图再进行此操作。\n确定要调整吗？`,
+            `The drawn (super) plasmas will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure to adjust them?`
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4030,6 +4038,14 @@ namespace TwnsLangCommonText {
         [LangTextType.B0739]: [
             `优先级`,
             `Priority`,
+        ],
+        [LangTextType.B0740]: [
+            `调整路桥造型`,
+            `Adjust Roads & Bridges`,
+        ],
+        [LangTextType.B0741]: [
+            `调整等离子`,
+            `Adjust Plasmas`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

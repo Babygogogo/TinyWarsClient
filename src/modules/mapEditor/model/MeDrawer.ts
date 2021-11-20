@@ -14,6 +14,7 @@
 // import MeUtility                from "./MeUtility";
 // import TwnsMeWar                from "./MeWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeDrawer {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -173,6 +174,119 @@ namespace TwnsMeDrawer {
             this._symmetricalDrawType = type;
         }
 
+        public autoAdjustRoads(): void {
+            const war           = this._getWar();
+            const tileMap       = war.getTileMap();
+            const configVersion = war.getConfigVersion();
+            for (const tile of tileMap.getAllTiles()) {
+                if (tile.getType() !== Types.TileType.Road) {
+                    continue;
+                }
+
+                const gridIndex = tile.getGridIndex();
+                const shapeId   = MeUtility.getAutoRoadShapeId(tileMap, gridIndex);
+                if (shapeId !== tile.getObjectShapeId()) {
+                    tile.init({
+                        gridIndex       : tile.getGridIndex(),
+                        playerIndex     : tile.getPlayerIndex(),
+                        objectType      : tile.getObjectType(),
+                        objectShapeId   : shapeId,
+                        baseType        : tile.getBaseType(),
+                        baseShapeId     : tile.getBaseShapeId(),
+                    }, configVersion);
+                    tile.startRunning(war);
+                    tile.flushDataToView();
+
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                }
+            }
+        }
+        public autoAdjustBridges(): void {
+            const war           = this._getWar();
+            const tileMap       = war.getTileMap();
+            const configVersion = war.getConfigVersion();
+            for (const tile of tileMap.getAllTiles()) {
+                const tileType = tile.getType();
+                if ((tileType !== Types.TileType.BridgeOnBeach) &&
+                    (tileType !== Types.TileType.BridgeOnPlain) &&
+                    (tileType !== Types.TileType.BridgeOnRiver) &&
+                    (tileType !== Types.TileType.BridgeOnSea)
+                ) {
+                    continue;
+                }
+
+                const gridIndex = tile.getGridIndex();
+                const shapeId   = MeUtility.getAutoBridgeShapeId(tileMap, gridIndex);
+                if (shapeId !== tile.getObjectShapeId()) {
+                    tile.init({
+                        gridIndex       : tile.getGridIndex(),
+                        playerIndex     : tile.getPlayerIndex(),
+                        objectType      : tile.getObjectType(),
+                        objectShapeId   : shapeId,
+                        baseType        : tile.getBaseType(),
+                        baseShapeId     : tile.getBaseShapeId(),
+                    }, configVersion);
+                    tile.startRunning(war);
+                    tile.flushDataToView();
+
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                }
+            }
+        }
+        public autoAdjustPlasmas(): void {
+            const war           = this._getWar();
+            const tileMap       = war.getTileMap();
+            const configVersion = war.getConfigVersion();
+            for (const tile of tileMap.getAllTiles()) {
+                if (tile.getType() !== Types.TileType.Plasma) {
+                    continue;
+                }
+
+                const gridIndex = tile.getGridIndex();
+                const shapeId   = MeUtility.getAutoPlasmaShapeId(tileMap, gridIndex);
+                if (shapeId !== tile.getObjectShapeId()) {
+                    tile.init({
+                        gridIndex       : tile.getGridIndex(),
+                        playerIndex     : tile.getPlayerIndex(),
+                        objectType      : tile.getObjectType(),
+                        objectShapeId   : shapeId,
+                        baseType        : tile.getBaseType(),
+                        baseShapeId     : tile.getBaseShapeId(),
+                    }, configVersion);
+                    tile.startRunning(war);
+                    tile.flushDataToView();
+
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                }
+            }
+        }
+        public autoAdjustSuperPlasmas(): void {
+            const war           = this._getWar();
+            const tileMap       = war.getTileMap();
+            const configVersion = war.getConfigVersion();
+            for (const tile of tileMap.getAllTiles()) {
+                if (tile.getType() !== Types.TileType.GreenPlasma) {
+                    continue;
+                }
+
+                const gridIndex = tile.getGridIndex();
+                const shapeId   = MeUtility.getAutoSuperPlasmaShapeId(tileMap, gridIndex);
+                if (shapeId !== tile.getObjectShapeId()) {
+                    tile.init({
+                        gridIndex       : tile.getGridIndex(),
+                        playerIndex     : tile.getPlayerIndex(),
+                        objectType      : tile.getObjectType(),
+                        objectShapeId   : shapeId,
+                        baseType        : tile.getBaseType(),
+                        baseShapeId     : tile.getBaseShapeId(),
+                    }, configVersion);
+                    tile.startRunning(war);
+                    tile.flushDataToView();
+
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                }
+            }
+        }
         public autoFillTileDecorators(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();

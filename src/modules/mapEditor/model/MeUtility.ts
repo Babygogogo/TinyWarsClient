@@ -20,6 +20,7 @@
 // import WarEventHelper       from "../../warEvent/model/WarEventHelper";
 // import TwnsMeWar            from "./MeWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MeUtility {
     import BwTile               = TwnsBwTile.BwTile;
     import MeWar                = TwnsMeWar.MeWar;
@@ -80,6 +81,50 @@ namespace MeUtility {
         38,     38,     44,     44,     39,     39,     44,     44,     // 111 0 1
         40,     41,     45,     45,     40,     41,     45,     45,     // 111 1 0
         42,     42,     46,     46,     42,     42,     46,     46,     // 111 1 1
+    ];
+    const TileRoadAutoShapeIdArray = [
+    //  0   1
+        0,  1,  // 0 0  0
+        1,  1,  // 0 0  1
+        0,  4,  // 0 1  0
+        2,  8,  // 0 1  1
+        0,  5,  // 1 0  0
+        3,  9,  // 1 0  1
+        0,  7,  // 1 1  0
+        6,  10, // 1 1  1
+    ];
+    const TileBridgeAutoShapeIdArray = [
+    //  0   1
+        0,  1,  // 0 0  0
+        1,  1,  // 0 0  1
+        0,  4,  // 0 1  0
+        2,  8,  // 0 1  1
+        0,  5,  // 1 0  0
+        3,  9,  // 1 0  1
+        0,  7,  // 1 1  0
+        6,  10, // 1 1  1
+    ];
+    const TilePlasmaAutoShapeIdArray = [
+    //  0       1
+        0,      1,      // 0 0  0
+        3,      15,     // 0 0  1
+        4,      10,     // 0 1  0
+        9,      8,      // 0 1  1
+        2,      11,     // 1 0  0
+        12,     6,      // 1 0  1
+        14,     5,      // 1 1  0
+        7,      13,     // 1 1  1
+    ];
+    const TileSuperPlasmaAutoShapeIdArray = [
+    //  0       1
+        0,      1,      // 0 0  0
+        3,      15,     // 0 0  1
+        4,      10,     // 0 1  0
+        9,      8,      // 0 1  1
+        2,      11,     // 1 0  0
+        12,     6,      // 1 0  1
+        14,     5,      // 1 1  0
+        7,      13,     // 1 1  1
     ];
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -487,6 +532,62 @@ namespace MeUtility {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function getAutoRoadShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+        const { x, y }      = gridIndex;
+        const isAdjacent4   = checkIsRoadOrBridge(tileMap, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkIsRoadOrBridge(tileMap, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkIsRoadOrBridge(tileMap, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkIsRoadOrBridge(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        return TileRoadAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+    }
+    export function getAutoBridgeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+        const { x, y }      = gridIndex;
+        const isAdjacent4   = checkIsRoadOrBridge(tileMap, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkIsRoadOrBridge(tileMap, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkIsRoadOrBridge(tileMap, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkIsRoadOrBridge(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        return TileBridgeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+    }
+    function checkIsRoadOrBridge(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+            return true;
+        }
+
+        const tileType = tileMap.getTile(gridIndex).getType();
+        return (tileType === Types.TileType.BridgeOnBeach)
+            || (tileType === Types.TileType.BridgeOnPlain)
+            || (tileType === Types.TileType.BridgeOnRiver)
+            || (tileType === Types.TileType.BridgeOnSea)
+            || (tileType === Types.TileType.Road);
+    }
+
+    export function getAutoPlasmaShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+        const { x, y }      = gridIndex;
+        const isAdjacent4   = checkIsPlasmaOrMeteor(tileMap, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkIsPlasmaOrMeteor(tileMap, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkIsPlasmaOrMeteor(tileMap, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkIsPlasmaOrMeteor(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        return TilePlasmaAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+    }
+    export function getAutoSuperPlasmaShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+        const { x, y }      = gridIndex;
+        const isAdjacent4   = checkIsPlasmaOrMeteor(tileMap, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkIsPlasmaOrMeteor(tileMap, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkIsPlasmaOrMeteor(tileMap, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkIsPlasmaOrMeteor(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        return TileSuperPlasmaAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+    }
+    function checkIsPlasmaOrMeteor(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+            return true;
+        }
+
+        const tileType = tileMap.getTile(gridIndex).getType();
+        return (tileType === Types.TileType.Meteor)
+            || (tileType === Types.TileType.Plasma)
+            || (tileType === Types.TileType.GreenPlasma);
+    }
+
     export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | null, shapeId: number | null } {
         const tile = tileMap.getTile(gridIndex);
         if (tile == null) {

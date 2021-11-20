@@ -1022,6 +1022,10 @@ namespace TwnsBwTurnManager {
                                 }
                             }
                         }
+
+                        if (!isFastExecute) {
+                            unit.updateView();
+                        }
                     }
                 }
             }

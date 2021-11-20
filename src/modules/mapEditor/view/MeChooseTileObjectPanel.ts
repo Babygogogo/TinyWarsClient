@@ -28,6 +28,8 @@ namespace TwnsMeChooseTileObjectPanel {
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private readonly _btnAdjustRoad!    : TwnsUiButton.UiButton;
+        private readonly _btnAdjustPlasma!  : TwnsUiButton.UiButton;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
         private _dataListForRecent  : DataForTileObjectRenderer[] = [];
@@ -37,7 +39,9 @@ namespace TwnsMeChooseTileObjectPanel {
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnCancel,  callback: this.close },
+                { ui: this._btnAdjustRoad,      callback: this._onTouchedBtnAdjustRoad },
+                { ui: this._btnAdjustPlasma,    callback: this._onTouchedBtnAdjustPlasma },
+                { ui: this._btnCancel,          callback: this.close },
             ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
@@ -85,11 +89,36 @@ namespace TwnsMeChooseTileObjectPanel {
             this._updateComponentsForLanguage();
         }
 
+        private _onTouchedBtnAdjustRoad(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                content: Lang.getText(LangTextType.A0259),
+                callback: () => {
+                    const drawer = Helpers.getExisted(MeModel.getWar()).getDrawer();
+                    drawer.autoAdjustRoads();
+                    drawer.autoAdjustBridges();
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnAdjustPlasma(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                content: Lang.getText(LangTextType.A0260),
+                callback: () => {
+                    const drawer = Helpers.getExisted(MeModel.getWar()).getDrawer();
+                    drawer.autoAdjustPlasmas();
+                    drawer.autoAdjustSuperPlasmas();
+                    this.close();
+                },
+            });
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+            this._btnAdjustRoad.label   = Lang.getText(LangTextType.B0740);
+            this._btnAdjustPlasma.label = Lang.getText(LangTextType.B0741);
             this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
         }
 
