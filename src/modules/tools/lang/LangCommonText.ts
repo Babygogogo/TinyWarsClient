@@ -3991,6 +3991,46 @@ namespace TwnsLangCommonText {
             `显示在下侧`,
             `Show on bottom`,
         ],
+        [LangTextType.B0730]: [
+            `增加CO能量%`,
+            `Add CO Energy %`,
+        ],
+        [LangTextType.B0731]: [
+            `增加部队HP`,
+            `Add Unit's HP`,
+        ],
+        [LangTextType.B0732]: [
+            `增加部队燃料%`,
+            `Add Unit's Fuel %`,
+        ],
+        [LangTextType.B0733]: [
+            `增加部队主弹药%`,
+            `Add Unit's Pri.Ammo %`,
+        ],
+        [LangTextType.B0734]: [
+            `生效范围`,
+            `Effective Radius`,
+        ],
+        [LangTextType.B0735]: [
+            `影响自身`,
+            `Affect Self`,
+        ],
+        [LangTextType.B0736]: [
+            `影响队友`,
+            `Affect Ally`,
+        ],
+        [LangTextType.B0737]: [
+            `影响敌人`,
+            `Affect Enemy`,
+        ],
+        [LangTextType.B0738]: [
+            `增加资金`,
+            `Add Fund`,
+        ],
+        [LangTextType.B0739]: [
+            `优先级`,
+            `Priority`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4128,6 +4168,14 @@ namespace TwnsLangCommonText {
         [LangTextType.B1033]: [
             `迷雾`,
             `MistOnBeach`,
+        ],
+        [LangTextType.B1034]: [
+            `水晶`,
+            `Crystal`,
+        ],
+        [LangTextType.B1035]: [
+            `神秘水晶`,
+            `Myst.Crystal`,
         ],
 
         [LangTextType.B1200]: [

@@ -1201,6 +1201,17 @@ namespace TwnsClientErrorCode {
         BwTurnManager_SorterForRepairUnits_08,
         BwTurnManager_SorterForRepairUnits_09,
 
+        BwTurnManager_HandleMapWeaponTileCrystal_00,
+        BwTurnManager_HandleMapWeaponTileCrystal_01,
+        BwTurnManager_HandleMapWeaponTileCrystal_02,
+        BwTurnManager_HandleMapWeaponTileCrystal_03,
+        BwTurnManager_HandleMapWeaponTileCrystal_04,
+        BwTurnManager_HandleMapWeaponTileCrystal_05,
+        BwTurnManager_HandleMapWeaponTileCrystal_06,
+        BwTurnManager_HandleMapWeaponTileCrystal_07,
+        BwTurnManager_HandleMapWeaponTileCrystal_08,
+        BwTurnManager_HandleMapWeaponTileCrystal_09,
+
         MapRawDataValidation00,
         MapRawDataValidation01,
         MapRawDataValidation02,

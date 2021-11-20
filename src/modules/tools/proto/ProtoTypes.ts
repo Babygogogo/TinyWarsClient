@@ -9195,6 +9195,150 @@ export declare namespace WarSerialization {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a TileCustomCrystalData. */
+    interface ITileCustomCrystalData {
+
+        /** TileCustomCrystalData radius */
+        radius?: (number|null);
+
+        /** TileCustomCrystalData priority */
+        priority?: (number|null);
+
+        /** TileCustomCrystalData canAffectSelf */
+        canAffectSelf?: (boolean|null);
+
+        /** TileCustomCrystalData canAffectAlly */
+        canAffectAlly?: (boolean|null);
+
+        /** TileCustomCrystalData canAffectEnemy */
+        canAffectEnemy?: (boolean|null);
+
+        /** TileCustomCrystalData deltaFund */
+        deltaFund?: (number|null);
+
+        /** TileCustomCrystalData deltaEnergyPercentage */
+        deltaEnergyPercentage?: (number|null);
+
+        /** TileCustomCrystalData deltaHp */
+        deltaHp?: (number|null);
+
+        /** TileCustomCrystalData deltaFuelPercentage */
+        deltaFuelPercentage?: (number|null);
+
+        /** TileCustomCrystalData deltaPrimaryAmmoPercentage */
+        deltaPrimaryAmmoPercentage?: (number|null);
+    }
+
+    /** Represents a TileCustomCrystalData. */
+    class TileCustomCrystalData implements ITileCustomCrystalData {
+
+        /**
+         * Constructs a new TileCustomCrystalData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ITileCustomCrystalData);
+
+        /** TileCustomCrystalData radius. */
+        public radius: number;
+
+        /** TileCustomCrystalData priority. */
+        public priority: number;
+
+        /** TileCustomCrystalData canAffectSelf. */
+        public canAffectSelf: boolean;
+
+        /** TileCustomCrystalData canAffectAlly. */
+        public canAffectAlly: boolean;
+
+        /** TileCustomCrystalData canAffectEnemy. */
+        public canAffectEnemy: boolean;
+
+        /** TileCustomCrystalData deltaFund. */
+        public deltaFund: number;
+
+        /** TileCustomCrystalData deltaEnergyPercentage. */
+        public deltaEnergyPercentage: number;
+
+        /** TileCustomCrystalData deltaHp. */
+        public deltaHp: number;
+
+        /** TileCustomCrystalData deltaFuelPercentage. */
+        public deltaFuelPercentage: number;
+
+        /** TileCustomCrystalData deltaPrimaryAmmoPercentage. */
+        public deltaPrimaryAmmoPercentage: number;
+
+        /**
+         * Creates a new TileCustomCrystalData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns TileCustomCrystalData instance
+         */
+        public static create(properties?: WarSerialization.ITileCustomCrystalData): WarSerialization.TileCustomCrystalData;
+
+        /**
+         * Encodes the specified TileCustomCrystalData message. Does not implicitly {@link WarSerialization.TileCustomCrystalData.verify|verify} messages.
+         * @param message TileCustomCrystalData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ITileCustomCrystalData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified TileCustomCrystalData message, length delimited. Does not implicitly {@link WarSerialization.TileCustomCrystalData.verify|verify} messages.
+         * @param message TileCustomCrystalData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ITileCustomCrystalData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a TileCustomCrystalData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns TileCustomCrystalData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.TileCustomCrystalData;
+
+        /**
+         * Decodes a TileCustomCrystalData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns TileCustomCrystalData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.TileCustomCrystalData;
+
+        /**
+         * Verifies a TileCustomCrystalData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a TileCustomCrystalData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns TileCustomCrystalData
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.TileCustomCrystalData;
+
+        /**
+         * Creates a plain object from a TileCustomCrystalData message. Also converts values to other types if specified.
+         * @param message TileCustomCrystalData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.TileCustomCrystalData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this TileCustomCrystalData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a SerialTile. */
     interface ISerialTile {
 
@@ -9230,6 +9374,9 @@ export declare namespace WarSerialization {
 
         /** SerialTile decoratorShapeId */
         decoratorShapeId?: (number|null);
+
+        /** SerialTile customCrystalData */
+        customCrystalData?: (WarSerialization.ITileCustomCrystalData|null);
     }
 
     /** Represents a SerialTile. */
@@ -9273,6 +9420,9 @@ export declare namespace WarSerialization {
 
         /** SerialTile decoratorShapeId. */
         public decoratorShapeId: number;
+
+        /** SerialTile customCrystalData. */
+        public customCrystalData?: (WarSerialization.ITileCustomCrystalData|null);
 
         /**
          * Creates a new SerialTile instance using the specified properties.

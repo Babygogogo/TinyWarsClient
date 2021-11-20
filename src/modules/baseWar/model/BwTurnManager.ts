@@ -557,7 +557,34 @@ namespace TwnsBwTurnManager {
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseActivateMapWeaponWithoutExtraData(isFastExecute: boolean): void {
-            // nothing to do for now.
+            const war               = this.getWar();
+            const playerIndex       = war.getPlayerIndexInTurn();
+            const tileMap           = war.getTileMap();
+            const mapSize           = tileMap.getMapSize();
+            const allTileArray      = tileMap.getAllTiles().filter(v => v.getPlayerIndex() === playerIndex);
+
+            {
+                const crystalArray = allTileArray.filter(v => v.getType() === Types.TileType.Crystal)
+                    .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
+                for (const tile of crystalArray) {
+                    handleMapWeaponTileCrystal(war, tile, isFastExecute);
+                }
+            }
+            {
+                const customCrystalArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomCrystal)
+                    .sort((v1, v2) => {
+                        const priority1 = v1.getCustomCrystalData()?.priority ?? 0;
+                        const priority2 = v2.getCustomCrystalData()?.priority ?? 0;
+                        if (priority1 !== priority2) {
+                            return priority2 - priority1;
+                        } else {
+                            return GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize);
+                        }
+                    });
+                for (const tile of customCrystalArray) {
+                    handleMapWeaponTileCrystal(war, tile, isFastExecute);
+                }
+            }
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -877,6 +904,127 @@ namespace TwnsBwTurnManager {
             }
 
             return unitId1 - unitId2;
+        }
+    }
+
+    function handleMapWeaponTileCrystal(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): void {
+        const unitMap           = war.getUnitMap();
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const playerIndexInTurn = tile.getPlayerIndex();
+        const teamIndexInTurn   = tile.getTeamIndex();
+        const data              = Helpers.getExisted(tile.getCustomCrystalData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_00);
+        const { canAffectAlly, canAffectEnemy, canAffectSelf } = data;
+
+        {
+            const { deltaFund, deltaEnergyPercentage } = data;
+            if (deltaFund ?? deltaEnergyPercentage) {
+                for (const player of war.getPlayerManager().getAllPlayers()) {
+                    if (player.checkIsNeutral()) {
+                        continue;
+                    }
+
+                    const teamIndex = player.getTeamIndex();
+                    if (((canAffectSelf) && (player.getPlayerIndex() === playerIndexInTurn))    ||
+                        ((canAffectAlly) && (teamIndex === teamIndexInTurn))                    ||
+                        ((canAffectEnemy) && (teamIndex !== teamIndexInTurn))
+                    ) {
+                        if (deltaFund) {
+                            player.setFund(Math.max(0, player.getFund() + deltaFund));
+                        }
+
+                        if (deltaEnergyPercentage) {
+                            if (deltaEnergyPercentage < 0) {
+                                player.setCoCurrentEnergy(Math.max(
+                                    0,
+                                    Math.floor(player.getCoCurrentEnergy() * (100 + deltaEnergyPercentage) / 100)
+                                ));
+                            } else {
+                                const maxEnergy = player.getCoMaxEnergy();
+                                player.setCoCurrentEnergy(Math.min(
+                                    maxEnergy,
+                                    Math.floor(player.getCoCurrentEnergy() + maxEnergy * deltaEnergyPercentage / 100)
+                                ));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        {
+            const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
+            if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
+                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(tile.getGridIndex(), 0, Helpers.getExisted(data.radius, ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01), unitMap.getMapSize())) {
+                    const unit = unitMap.getUnitOnMap(gridIndex);
+                    if (unit == null) {
+                        continue;
+                    }
+
+                    const unitTeamIndex = unit.getTeamIndex();
+                    if (((canAffectSelf) && (unit.getPlayerIndex() === playerIndexInTurn))    ||
+                        ((canAffectAlly) && (unitTeamIndex === teamIndexInTurn))              ||
+                        ((canAffectEnemy) && (unitTeamIndex !== teamIndexInTurn))
+                    ) {
+                        if (deltaFuelPercentage) {
+                            if (deltaFuelPercentage < 0) {
+                                unit.setCurrentFuel(Math.max(
+                                    0,
+                                    Math.floor(unit.getCurrentFuel() * (100 + deltaFuelPercentage) / 100)
+                                ));
+                            } else {
+                                const maxFuel = unit.getMaxFuel();
+                                unit.setCurrentFuel(Math.min(
+                                    maxFuel,
+                                    Math.floor(unit.getCurrentFuel() + maxFuel * deltaFuelPercentage / 100)
+                                ));
+                                if (!isFastExecute) {
+                                    gridVisualEffect.showEffectSupply(gridIndex);
+                                }
+                            }
+                        }
+
+                        if (deltaPrimaryAmmoPercentage) {
+                            const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                            if (maxAmmo != null) {
+                                const currentAmmo = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_02);
+                                if (deltaPrimaryAmmoPercentage < 0) {
+                                    unit.setPrimaryWeaponCurrentAmmo(Math.max(
+                                        0,
+                                        Math.floor(currentAmmo * (100 + deltaPrimaryAmmoPercentage) / 100)
+                                    ));
+                                } else {
+                                    unit.setPrimaryWeaponCurrentAmmo(Math.min(
+                                        maxAmmo,
+                                        Math.floor(currentAmmo + maxAmmo * deltaPrimaryAmmoPercentage / 100)
+                                    ));
+                                    if (!isFastExecute) {
+                                        gridVisualEffect.showEffectSupply(gridIndex);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (deltaHp) {
+                            if (deltaHp < 0) {
+                                unit.setCurrentHp(Math.max(
+                                    1,
+                                    unit.getCurrentHp() - deltaHp * CommonConstants.UnitHpNormalizer
+                                ));
+                                if (!isFastExecute) {
+                                    gridVisualEffect.showEffectDamage(gridIndex);
+                                }
+                            } else {
+                                unit.setCurrentHp(Math.min(
+                                    unit.getMaxHp(),
+                                    (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer
+                                ));
+                                if (!isFastExecute) {
+                                    gridVisualEffect.showEffectRepair(gridIndex);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

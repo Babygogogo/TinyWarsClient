@@ -15,13 +15,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTile {
-    import TileType             = Types.TileType;
-    import TileObjectType       = Types.TileObjectType;
-    import TileDecoratorType    = Types.TileDecoratorType;
-    import TileBaseType         = Types.TileBaseType;
-    import TileTemplateCfg      = Types.TileTemplateCfg;
-    import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import TileType                 = Types.TileType;
+    import TileObjectType           = Types.TileObjectType;
+    import TileDecoratorType        = Types.TileDecoratorType;
+    import TileBaseType             = Types.TileBaseType;
+    import TileTemplateCfg          = Types.TileTemplateCfg;
+    import ITileCustomCrystalData   = ProtoTypes.WarSerialization.ITileCustomCrystalData;
+    import ISerialTile              = ProtoTypes.WarSerialization.ISerialTile;
+    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwTile {
         private _templateCfg?           : TileTemplateCfg;
@@ -38,6 +39,7 @@ namespace TwnsBwTile {
         private _currentHp?             : number | null;
         private _currentBuildPoint?     : number | null;
         private _currentCapturePoint?   : number | null;
+        private _customCrystalData?     : ITileCustomCrystalData | null;
 
         private readonly _view  = new TwnsBwTileView.BwTileView();
         private _hasFog         = false;
@@ -137,6 +139,15 @@ namespace TwnsBwTile {
                 throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_13);
             }
 
+            const customCrystalData = data.customCrystalData ?? null;
+            const tileType          = templateCfg.type;
+            if ((customCrystalData != null) && (tileType !== TileType.CustomCrystal)) {
+                throw Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_14);
+            }
+            if ((customCrystalData != null) && (!ConfigManager.checkIsValidCustomCrystalData(customCrystalData))) {
+                throw Helpers.newError(`Invalid customCrystalData.`, ClientErrorCode.BwTile_Deserialize_15);
+            }
+
             this._setTemplateCfg(templateCfg);
             this._setGridX(gridX);
             this._setGridY(gridY);
@@ -151,13 +162,16 @@ namespace TwnsBwTile {
             this.setCurrentHp(currentHp ?? (templateCfg.maxHp ?? null));
             this.setCurrentBuildPoint(currentBuildPoint ?? (templateCfg.maxBuildPoint ?? null));
             this.setCurrentCapturePoint(currentCapturePoint ?? (templateCfg.maxCapturePoint ?? null));
+            this._setCustomCrystalData(customCrystalData);
         }
         public serialize(): ISerialTile {
             const data: ISerialTile = {
-                gridIndex   : this.getGridIndex(),
-                baseType    : this.getBaseType(),
-                objectType  : this.getObjectType(),
-                playerIndex : this.getPlayerIndex(),
+                gridIndex           : this.getGridIndex(),
+                baseType            : this.getBaseType(),
+                objectType          : this.getObjectType(),
+                playerIndex         : this.getPlayerIndex(),
+
+                customCrystalData   : this._customCrystalData,
             };
 
             const currentHp = this.getCurrentHp();
@@ -197,7 +211,9 @@ namespace TwnsBwTile {
                     gridIndex,
                     baseType,
                     objectType,
-                    playerIndex : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex         : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+
+                    customCrystalData   : this._customCrystalData,
                 };
 
                 const currentHp = this.getCurrentHp();
@@ -827,6 +843,69 @@ namespace TwnsBwTile {
         ////////////////////////////////////////////////////////////////////////////////
         public getLoadCoUnitCategory(): Types.UnitCategory | null {
             return this._getTemplateCfg().loadCoUnitCategory ?? null;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for crystal data.
+        ////////////////////////////////////////////////////////////////////////////////
+        public getCustomCrystalData(): ITileCustomCrystalData | null {
+            const tileType = this.getType();
+            if (tileType === TileType.Crystal) {
+                return CommonConstants.TileDefaultCrystalData;
+            } else if (tileType === TileType.CustomCrystal) {
+                return this._customCrystalData ?? CommonConstants.TileDefaultCrystalData;
+            } else {
+                return null;
+            }
+        }
+        private _setCustomCrystalData(data: ITileCustomCrystalData | null): void {
+            this._customCrystalData = data;
+        }
+
+        private _initCustomCrystalData(): void {
+            if (this._customCrystalData == null) {
+                this._customCrystalData = Helpers.deepClone(CommonConstants.TileDefaultCrystalData);
+            }
+        }
+        public setCustomCrystalRadius(radius: number): void {
+            this._initCustomCrystalData();
+            Helpers.getExisted(this.getCustomCrystalData()).radius = radius;
+        }
+        public setCustomCrystalPriority(priority: number): void {
+            this._initCustomCrystalData();
+            Helpers.getExisted(this.getCustomCrystalData()).priority = priority;
+        }
+        public setCustomCrystalCanAffectSelf(canAffect: boolean): void {
+            this._initCustomCrystalData();
+            Helpers.getExisted(this.getCustomCrystalData()).canAffectSelf = canAffect;
+        }
+        public setCustomCrystalCanAffectAlly(canAffect: boolean): void {
+            this._initCustomCrystalData();
+            Helpers.getExisted(this.getCustomCrystalData()).canAffectAlly = canAffect;
+        }
+        public setCustomCrystalCanAffectEnemy(canAffect: boolean): void {
+            this._initCustomCrystalData();
+            Helpers.getExisted(this.getCustomCrystalData()).canAffectEnemy = canAffect;
+        }
+        public setCustomCrystalDeltaFund(deltaFund: number): void {
+            this._initCustomCrystalData();
+            Helpers.getExisted(this.getCustomCrystalData()).deltaFund = deltaFund;
+        }
+        public setCustomCrystalDeltaEnergyPercentage(percentage: number): void {
+            this._initCustomCrystalData();
+            Helpers.getExisted(this.getCustomCrystalData()).deltaEnergyPercentage = percentage;
+        }
+        public setCustomCrystalDeltaHp(deltaHp: number): void {
+            this._initCustomCrystalData();
+            Helpers.getExisted(this.getCustomCrystalData()).deltaHp = deltaHp;
+        }
+        public setCustomCrystalDeltaPrimaryAmmoPercentage(percentage: number): void {
+            this._initCustomCrystalData();
+            Helpers.getExisted(this.getCustomCrystalData()).deltaPrimaryAmmoPercentage = percentage;
+        }
+        public setCustomCrystalDeltaFuelPercentage(percentage: number): void {
+            this._initCustomCrystalData();
+            Helpers.getExisted(this.getCustomCrystalData()).deltaFuelPercentage = percentage;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

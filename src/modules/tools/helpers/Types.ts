@@ -360,13 +360,13 @@ namespace Types {
 
     // eslint-disable-next-line no-shadow
     export enum TileObjectType {
-        Empty,        /* 0 */             Road,         /* 1 */             Bridge,       /* 2 */             Wood,         /* 3 */
-        Mountain,     /* 4 */             Wasteland,    /* 5 */             Ruins,        /* 6 */             Fire,         /* 7 */
-        Rough,        /* 8 */             Mist,         /* 9 */             Reef,         /* 10 */            Plasma,       /* 11 */
-        Meteor,       /* 12 */            Silo,         /* 13 */            EmptySilo,    /* 14 */            Headquarters, /* 15 */
-        City,         /* 16 */            CommandTower, /* 17 */            Radar,        /* 18 */            Factory,      /* 19 */
-        Airport,      /* 20 */            Seaport,      /* 21 */            TempAirport,  /* 22 */            TempSeaport,  /* 23 */
-        GreenPlasma,  /* 24 */
+        Empty,        /* 0 */           Road,         /* 1 */       Bridge,        /* 2 */      Wood,         /* 3 */
+        Mountain,     /* 4 */           Wasteland,    /* 5 */       Ruins,         /* 6 */      Fire,         /* 7 */
+        Rough,        /* 8 */           Mist,         /* 9 */       Reef,          /* 10 */     Plasma,       /* 11 */
+        Meteor,       /* 12 */          Silo,         /* 13 */      EmptySilo,     /* 14 */     Headquarters, /* 15 */
+        City,         /* 16 */          CommandTower, /* 17 */      Radar,         /* 18 */     Factory,      /* 19 */
+        Airport,      /* 20 */          Seaport,      /* 21 */      TempAirport,   /* 22 */     TempSeaport,  /* 23 */
+        GreenPlasma,  /* 24 */          Crystal,      /* 25 */      CustomCrystal, /* 26 */
     }
 
     // eslint-disable-next-line no-shadow
@@ -379,7 +379,7 @@ namespace Types {
         Silo,          /* 20 */     EmptySilo,     /* 21 */     Headquarters,  /* 22 */     City,          /* 23 */
         CommandTower,  /* 24 */     Radar,         /* 25 */     Factory,       /* 26 */     Airport,       /* 27 */
         Seaport,       /* 28 */     TempAirport,   /* 29 */     TempSeaport,   /* 30 */     MistOnPlain,   /* 31 */
-        MistOnRiver,   /* 32 */     MistOnBeach,   /* 33 */
+        MistOnRiver,   /* 32 */     MistOnBeach,   /* 33 */     Crystal,       /* 34 */     CustomCrystal, /* 35 */
     }
 
     // eslint-disable-next-line no-shadow

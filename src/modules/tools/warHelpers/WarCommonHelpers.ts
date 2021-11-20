@@ -27,7 +27,6 @@ namespace WarCommonHelpers {
     import Visibility       = Types.Visibility;
     import CoSkillAreaType  = Types.CoSkillAreaType;
     import ISerialUnit      = WarSerialization.ISerialUnit;
-    import ISerialTile      = WarSerialization.ISerialTile;
     import ISerialWar       = WarSerialization.ISerialWar;
     import WarSerialization = ProtoTypes.WarSerialization;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;

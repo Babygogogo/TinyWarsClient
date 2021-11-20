@@ -43,6 +43,17 @@ namespace TwnsBwTileDetailPanel {
         Hp,
         CapturePoint,
         BuildPoint,
+
+        CrystalRadius,
+        CrystalPriority,
+        CrystalCanAffectSelf,
+        CrystalCanAffectAlly,
+        CrystalCanAffectEnemy,
+        CrystalDeltaFund,
+        CrystalDeltaEnergyPercentage,
+        CrystalDeltaHp,
+        CrystalDeltaFuelPercentage,
+        CrystalDeltaPrimaryAmmoPercentage,
     }
 
     export type OpenData = {
@@ -148,6 +159,16 @@ namespace TwnsBwTileDetailPanel {
                 this._createInfoHp(war, tile),
                 this._createInfoCapturePoint(war, tile),
                 this._createInfoBuildPoint(war, tile),
+                this._createInfoCrystalRadius(war, tile),
+                this._createInfoCrystalPriority(war, tile),
+                this._createInfoCrystalCanAffectSelf(war, tile),
+                this._createInfoCrystalCanAffectAlly(war, tile),
+                this._createInfoCrystalCanAffectEnemy(war, tile),
+                this._createInfoCrystalDeltaFund(war, tile),
+                this._createInfoCrystalDeltaEnergyPercentage(war, tile),
+                this._createInfoCrystalDeltaHp(war, tile),
+                this._createInfoCrystalDeltaFuelPercentage(war, tile),
+                this._createInfoCrystalDeltaPrimaryAmmoPercentage(war, tile),
             ]);
 
             let index = 0;
@@ -259,6 +280,106 @@ namespace TwnsBwTileDetailPanel {
                 : {
                     index       : 0,
                     infoType    : TileInfoType.BuildPoint,
+                    war,
+                    tile,
+                };
+        }
+        private _createInfoCrystalRadius(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+            return (tile.getCustomCrystalData() == null)
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : TileInfoType.CrystalRadius,
+                    war,
+                    tile,
+                };
+        }
+        private _createInfoCrystalPriority(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+            return (tile.getCustomCrystalData() == null)
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : TileInfoType.CrystalPriority,
+                    war,
+                    tile,
+                };
+        }
+        private _createInfoCrystalCanAffectSelf(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+            return (tile.getCustomCrystalData() == null)
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : TileInfoType.CrystalCanAffectSelf,
+                    war,
+                    tile,
+                };
+        }
+        private _createInfoCrystalCanAffectAlly(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+            return (tile.getCustomCrystalData() == null)
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : TileInfoType.CrystalCanAffectAlly,
+                    war,
+                    tile,
+                };
+        }
+        private _createInfoCrystalCanAffectEnemy(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+            return (tile.getCustomCrystalData() == null)
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : TileInfoType.CrystalCanAffectEnemy,
+                    war,
+                    tile,
+                };
+        }
+        private _createInfoCrystalDeltaFund(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+            return (tile.getCustomCrystalData() == null)
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : TileInfoType.CrystalDeltaFund,
+                    war,
+                    tile,
+                };
+        }
+        private _createInfoCrystalDeltaEnergyPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+            return (tile.getCustomCrystalData() == null)
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : TileInfoType.CrystalDeltaEnergyPercentage,
+                    war,
+                    tile,
+                };
+        }
+        private _createInfoCrystalDeltaHp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+            return (tile.getCustomCrystalData() == null)
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : TileInfoType.CrystalDeltaHp,
+                    war,
+                    tile,
+                };
+        }
+        private _createInfoCrystalDeltaFuelPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+            return (tile.getCustomCrystalData() == null)
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : TileInfoType.CrystalDeltaFuelPercentage,
+                    war,
+                    tile,
+                };
+        }
+        private _createInfoCrystalDeltaPrimaryAmmoPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+            return (tile.getCustomCrystalData() == null)
+                ? null
+                : {
+                    index       : 0,
+                    infoType    : TileInfoType.CrystalDeltaPrimaryAmmoPercentage,
                     war,
                     tile,
                 };
@@ -377,6 +498,26 @@ namespace TwnsBwTileDetailPanel {
                 this._modifyAsCapturePoint();
             } else if (infoType === TileInfoType.BuildPoint) {
                 this._modifyAsBuildPoint();
+            } else if (infoType === TileInfoType.CrystalRadius) {
+                this._modifyAsCrystalRadius();
+            } else if (infoType === TileInfoType.CrystalPriority) {
+                this._modifyAsCrystalPriority();
+            } else if (infoType === TileInfoType.CrystalCanAffectSelf) {
+                this._modifyAsCrystalCanAffectSelf();
+            } else if (infoType === TileInfoType.CrystalCanAffectAlly) {
+                this._modifyAsCrystalCanAffectAlly();
+            } else if (infoType === TileInfoType.CrystalCanAffectEnemy) {
+                this._modifyAsCrystalCanAffectEnemy();
+            } else if (infoType === TileInfoType.CrystalDeltaFund) {
+                this._modifyAsCrystalDeltaFund();
+            } else if (infoType === TileInfoType.CrystalDeltaEnergyPercentage) {
+                this._modifyAsCrystalDeltaEnergyPercentage();
+            } else if (infoType === TileInfoType.CrystalDeltaHp) {
+                this._modifyAsCrystalDeltaHp();
+            } else if (infoType === TileInfoType.CrystalDeltaFuelPercentage) {
+                this._modifyAsCrystalDeltaFuelPercentage();
+            } else if (infoType === TileInfoType.CrystalDeltaPrimaryAmmoPercentage) {
+                this._modifyAsCrystalDeltaPrimaryAmmoPercentage();
             } else {
                 throw Helpers.newError(`Invalid infoType: ${infoType}`);
             }
@@ -413,6 +554,26 @@ namespace TwnsBwTileDetailPanel {
                 this._updateViewAsCapturePoint();
             } else if (infoType === TileInfoType.BuildPoint) {
                 this._updateViewAsBuildPoint();
+            } else if (infoType === TileInfoType.CrystalRadius) {
+                this._updateViewAsCrystalRadius();
+            } else if (infoType === TileInfoType.CrystalPriority) {
+                this._updateViewAsCrystalPriority();
+            } else if (infoType === TileInfoType.CrystalCanAffectSelf) {
+                this._updateViewAsCrystalCanAffectSelf();
+            } else if (infoType === TileInfoType.CrystalCanAffectAlly) {
+                this._updateViewAsCrystalCanAffectAlly();
+            } else if (infoType === TileInfoType.CrystalCanAffectEnemy) {
+                this._updateViewAsCrystalCanAffectEnemy();
+            } else if (infoType === TileInfoType.CrystalDeltaFund) {
+                this._updateViewAsCrystalDeltaFund();
+            } else if (infoType === TileInfoType.CrystalDeltaEnergyPercentage) {
+                this._updateViewAsCrystalDeltaEnergyPercentage();
+            } else if (infoType === TileInfoType.CrystalDeltaHp) {
+                this._updateViewAsCrystalDeltaHp();
+            } else if (infoType === TileInfoType.CrystalDeltaFuelPercentage) {
+                this._updateViewAsCrystalDeltaFuelPercentage();
+            } else if (infoType === TileInfoType.CrystalDeltaPrimaryAmmoPercentage) {
+                this._updateViewAsCrystalDeltaPrimaryAmmoPercentage();
             } else {
                 throw Helpers.newError(`Invalid infoType: ${infoType}`);
             }
@@ -513,6 +674,86 @@ namespace TwnsBwTileDetailPanel {
             this._labelValue.text       = `${currentValue} / ${tile.getMaxBuildPoint()}`;
             this._groupExtra.visible    = false;
             this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (currentValue != null);
+        }
+        private _updateViewAsCrystalRadius(): void {
+            const { tile, war }         = this._getData();
+            const currentValue          = tile.getCustomCrystalData()?.radius;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0734);
+            this._labelValue.text       = `${currentValue}`;
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+        }
+        private _updateViewAsCrystalPriority(): void {
+            const { tile, war }         = this._getData();
+            const currentValue          = tile.getCustomCrystalData()?.priority;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0739);
+            this._labelValue.text       = `${currentValue}`;
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+        }
+        private _updateViewAsCrystalCanAffectSelf(): void {
+            const { tile, war }         = this._getData();
+            const currentValue          = tile.getCustomCrystalData()?.canAffectSelf;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0735);
+            this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+        }
+        private _updateViewAsCrystalCanAffectAlly(): void {
+            const { tile, war }         = this._getData();
+            const currentValue          = tile.getCustomCrystalData()?.canAffectAlly;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0736);
+            this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+        }
+        private _updateViewAsCrystalCanAffectEnemy(): void {
+            const { tile, war }         = this._getData();
+            const currentValue          = tile.getCustomCrystalData()?.canAffectEnemy;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0737);
+            this._labelValue.text       = Lang.getText(currentValue ? LangTextType.B0012 : LangTextType.B0013);
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+        }
+        private _updateViewAsCrystalDeltaFund(): void {
+            const { tile, war }         = this._getData();
+            const currentValue          = tile.getCustomCrystalData()?.deltaFund;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0738);
+            this._labelValue.text       = `${currentValue}`;
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+        }
+        private _updateViewAsCrystalDeltaEnergyPercentage(): void {
+            const { tile, war }         = this._getData();
+            const currentValue          = tile.getCustomCrystalData()?.deltaEnergyPercentage;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0730);
+            this._labelValue.text       = `${currentValue}`;
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+        }
+        private _updateViewAsCrystalDeltaHp(): void {
+            const { tile, war }         = this._getData();
+            const currentValue          = tile.getCustomCrystalData()?.deltaHp;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0731);
+            this._labelValue.text       = `${currentValue}`;
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+        }
+        private _updateViewAsCrystalDeltaFuelPercentage(): void {
+            const { tile, war }         = this._getData();
+            const currentValue          = tile.getCustomCrystalData()?.deltaFuelPercentage;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0732);
+            this._labelValue.text       = `${currentValue}`;
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
+        }
+        private _updateViewAsCrystalDeltaPrimaryAmmoPercentage(): void {
+            const { tile, war }         = this._getData();
+            const currentValue          = tile.getCustomCrystalData()?.deltaPrimaryAmmoPercentage;
+            this._labelTitle.text       = Lang.getText(LangTextType.B0733);
+            this._labelValue.text       = `${currentValue}`;
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (tile.getType() === Types.TileType.CustomCrystal);
         }
 
         private _modifyAsDefenseBonus(): void {
@@ -619,6 +860,241 @@ namespace TwnsBwTileDetailPanel {
                         FloatText.show(Lang.getText(LangTextType.A0098));
                     } else {
                         tile.setCurrentBuildPoint(value);
+                        tile.flushDataToView();
+                        this._updateView();
+                    }
+                },
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsCrystalRadius(): void {
+            const { tile, war } = this._getData();
+            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+                return;
+            }
+
+            const currValue = tile.getCustomCrystalData()?.radius;
+            const minValue  = 0;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                title           : Lang.getText(LangTextType.B0734),
+                currentValue    : "" + currValue,
+                maxChars        : 4,
+                charRestrict    : "0-9",
+                tips            : ``,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if ((isNaN(value)) || (value < minValue)) {
+                        FloatText.show(Lang.getText(LangTextType.A0098));
+                    } else {
+                        tile.setCustomCrystalRadius(value);
+                        tile.flushDataToView();
+                        this._updateView();
+                    }
+                },
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsCrystalPriority(): void {
+            const { tile, war } = this._getData();
+            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+                return;
+            }
+
+            const currValue = tile.getCustomCrystalData()?.priority;
+            const minValue  = 0;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                title           : Lang.getText(LangTextType.B0739),
+                currentValue    : "" + currValue,
+                maxChars        : 4,
+                charRestrict    : "0-9",
+                tips            : ``,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if ((isNaN(value)) || (value < minValue)) {
+                        FloatText.show(Lang.getText(LangTextType.A0098));
+                    } else {
+                        tile.setCustomCrystalPriority(value);
+                        tile.flushDataToView();
+                        this._updateView();
+                    }
+                },
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsCrystalCanAffectSelf(): void {
+            const { tile, war } = this._getData();
+            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+                return;
+            }
+
+            tile.setCustomCrystalCanAffectSelf(!tile.getCustomCrystalData()?.canAffectSelf);
+            tile.flushDataToView();
+            this._updateView();
+
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsCrystalCanAffectAlly(): void {
+            const { tile, war } = this._getData();
+            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+                return;
+            }
+
+            tile.setCustomCrystalCanAffectAlly(!tile.getCustomCrystalData()?.canAffectAlly);
+            tile.flushDataToView();
+            this._updateView();
+
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsCrystalCanAffectEnemy(): void {
+            const { tile, war } = this._getData();
+            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+                return;
+            }
+
+            tile.setCustomCrystalCanAffectEnemy(!tile.getCustomCrystalData()?.canAffectEnemy);
+            tile.flushDataToView();
+            this._updateView();
+
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsCrystalDeltaFund(): void {
+            const { tile, war } = this._getData();
+            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+                return;
+            }
+
+            const currValue = tile.getCustomCrystalData()?.deltaFund;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                title           : Lang.getText(LangTextType.B0738),
+                currentValue    : "" + currValue,
+                maxChars        : 9,
+                charRestrict    : "0-9\\-",
+                tips            : ``,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if (isNaN(value)) {
+                        FloatText.show(Lang.getText(LangTextType.A0098));
+                    } else {
+                        tile.setCustomCrystalDeltaFund(value);
+                        tile.flushDataToView();
+                        this._updateView();
+                    }
+                },
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsCrystalDeltaEnergyPercentage(): void {
+            const { tile, war } = this._getData();
+            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+                return;
+            }
+
+            const currValue = tile.getCustomCrystalData()?.deltaEnergyPercentage;
+            const minValue  = -100;
+            const maxValue  = 100;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                title           : Lang.getText(LangTextType.B0730),
+                currentValue    : "" + currValue,
+                maxChars        : 4,
+                charRestrict    : "0-9\\-",
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                        FloatText.show(Lang.getText(LangTextType.A0098));
+                    } else {
+                        tile.setCustomCrystalDeltaEnergyPercentage(value);
+                        tile.flushDataToView();
+                        this._updateView();
+                    }
+                },
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsCrystalDeltaHp(): void {
+            const { tile, war } = this._getData();
+            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+                return;
+            }
+
+            const currValue = tile.getCustomCrystalData()?.deltaHp;
+            const minValue  = -WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            const maxValue  = WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                title           : Lang.getText(LangTextType.B0731),
+                currentValue    : "" + currValue,
+                maxChars        : 3,
+                charRestrict    : "0-9\\-",
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                        FloatText.show(Lang.getText(LangTextType.A0098));
+                    } else {
+                        tile.setCustomCrystalDeltaHp(value);
+                        tile.flushDataToView();
+                        this._updateView();
+                    }
+                },
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsCrystalDeltaFuelPercentage(): void {
+            const { tile, war } = this._getData();
+            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+                return;
+            }
+
+            const currValue = tile.getCustomCrystalData()?.deltaFuelPercentage;
+            const minValue  = -100;
+            const maxValue  = 100;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                title           : Lang.getText(LangTextType.B0732),
+                currentValue    : "" + currValue,
+                maxChars        : 4,
+                charRestrict    : "0-9\\-",
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                        FloatText.show(Lang.getText(LangTextType.A0098));
+                    } else {
+                        tile.setCustomCrystalDeltaFuelPercentage(value);
+                        tile.flushDataToView();
+                        this._updateView();
+                    }
+                },
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsCrystalDeltaPrimaryAmmoPercentage(): void {
+            const { tile, war } = this._getData();
+            if ((!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) || (tile.getType() !== Types.TileType.CustomCrystal)) {
+                return;
+            }
+
+            const currValue = tile.getCustomCrystalData()?.deltaPrimaryAmmoPercentage;
+            const minValue  = -100;
+            const maxValue  = 100;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                title           : Lang.getText(LangTextType.B0733),
+                currentValue    : "" + currValue,
+                maxChars        : 4,
+                charRestrict    : "0-9\\-",
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const text  = panel.getInputText();
+                    const value = text ? Number(text) : NaN;
+                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                        FloatText.show(Lang.getText(LangTextType.A0098));
+                    } else {
+                        tile.setCustomCrystalDeltaPrimaryAmmoPercentage(value);
                         tile.flushDataToView();
                         this._updateView();
                     }

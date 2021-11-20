@@ -120,6 +120,8 @@ namespace Lang {
             case Types.TileType.MistOnPlain     : return getText(LangTextType.B1031, languageType);
             case Types.TileType.MistOnRiver     : return getText(LangTextType.B1032, languageType);
             case Types.TileType.MistOnBeach     : return getText(LangTextType.B1033, languageType);
+            case Types.TileType.Crystal         : return getText(LangTextType.B1034, languageType);
+            case Types.TileType.CustomCrystal   : return getText(LangTextType.B1035, languageType);
             default                             : return null;
         }
     }

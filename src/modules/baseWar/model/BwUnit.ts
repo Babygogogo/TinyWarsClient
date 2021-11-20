@@ -841,8 +841,9 @@ namespace TwnsBwUnit {
                     && ((!targetUnit.getIsDiving()) || (this.checkCanAttackDivingUnits()))
                     && (this.getBaseDamage(armorType) != null);
             } else {
-                const armorType = war.getTileMap().getTile(targetGridIndex).getArmorType();
-                if (armorType == null) {
+                const targetTile    = war.getTileMap().getTile(targetGridIndex);
+                const armorType     = targetTile.getArmorType();
+                if ((armorType == null) || (targetTile.getTeamIndex() === teamIndex)) {
                     return false;
                 } else {
                     return this.getBaseDamage(armorType) != null;

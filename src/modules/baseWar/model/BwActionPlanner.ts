@@ -21,6 +21,7 @@
 // import TwnsBwUnitMap            from "./BwUnitMap";
 // import TwnsBwWar                from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwActionPlanner {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import UnitState        = Types.UnitActionState;
@@ -1429,7 +1430,7 @@ namespace TwnsBwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for getting the next state when the player inputs.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getNextStateOnTap(gridIndex: GridIndex): State {
+        private _getNextStateOnTap(gridIndex: GridIndex): State {
             const currState = this.getState();
             if ((this.checkIsStateRequesting()) || (currState === State.ExecutingAction)) {
                 return currState;

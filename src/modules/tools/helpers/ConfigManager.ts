@@ -387,6 +387,10 @@ namespace ConfigManager {
             return playerIndex === neutralPlayerIndex;
         } else if (objectType === TileObjectType.Wood) {
             return playerIndex === neutralPlayerIndex;
+        } else if (objectType === TileObjectType.Crystal) {
+            return true;
+        } else if (objectType === TileObjectType.CustomCrystal) {
+            return true;
         } else {
             return false;
         }
@@ -397,6 +401,12 @@ namespace ConfigManager {
     }
     export function checkIsValidTileType(tileType: Types.TileType): boolean {
         return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.TileTemplate[tileType] != null;
+    }
+    export function checkIsValidCustomCrystalData(data: ProtoTypes.WarSerialization.ITileCustomCrystalData): boolean {
+        return (data.radius != null)
+            && (data.priority != null)
+            && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
+            && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage ?? data.deltaFund ?? data.deltaEnergyPercentage) != null);
     }
     export function checkIsValidUnitAiMode(mode: Types.UnitAiMode): boolean {
         return (mode === Types.UnitAiMode.NoMove)

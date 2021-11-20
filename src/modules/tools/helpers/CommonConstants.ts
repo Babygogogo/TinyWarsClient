@@ -167,6 +167,8 @@ namespace CommonConstants {
             [TileObjectType.TempAirport,    TileType.TempAirport],
             [TileObjectType.TempSeaport,    TileType.TempSeaport],
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
+            [TileObjectType.Crystal,        TileType.Crystal],
+            [TileObjectType.CustomCrystal,  TileType.CustomCrystal],
         ])],
         [TileBaseType.Plain, new Map([
             [TileObjectType.Empty,          TileType.Plain],
@@ -194,6 +196,8 @@ namespace CommonConstants {
             [TileObjectType.TempAirport,    TileType.TempAirport],
             [TileObjectType.TempSeaport,    TileType.TempSeaport],
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
+            [TileObjectType.Crystal,        TileType.Crystal],
+            [TileObjectType.CustomCrystal,  TileType.CustomCrystal],
         ])],
         [TileBaseType.River, new Map([
             [TileObjectType.Empty,          TileType.River],
@@ -221,6 +225,8 @@ namespace CommonConstants {
             [TileObjectType.TempAirport,    TileType.TempAirport],
             [TileObjectType.TempSeaport,    TileType.TempSeaport],
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
+            [TileObjectType.Crystal,        TileType.Crystal],
+            [TileObjectType.CustomCrystal,  TileType.CustomCrystal],
         ])],
         [TileBaseType.Sea, new Map([
             [TileObjectType.Empty,          TileType.Sea],
@@ -248,6 +254,8 @@ namespace CommonConstants {
             [TileObjectType.TempAirport,    TileType.TempAirport],
             [TileObjectType.TempSeaport,    TileType.TempSeaport],
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
+            [TileObjectType.Crystal,        TileType.Crystal],
+            [TileObjectType.CustomCrystal,  TileType.CustomCrystal],
         ])],
     ]);
 
@@ -286,6 +294,8 @@ namespace CommonConstants {
         [TileType.TempSeaport,      TileObjectType.TempSeaport],
         [TileType.Wasteland,        TileObjectType.Wasteland],
         [TileType.Wood,             TileObjectType.Wood],
+        [TileType.Crystal,          TileObjectType.Crystal],
+        [TileType.CustomCrystal,    TileObjectType.CustomCrystal],
     ]);
 
     export const TileBaseFrameConfigs = new Map([
@@ -359,6 +369,8 @@ namespace CommonConstants {
                 [ TileObjectType.TempSeaport,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Wasteland,     { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Wood,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.Crystal,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.CustomCrystal, { framesCount: 2,   ticksPerFrame: 3                }],
             ]),
         ],
         [
@@ -388,34 +400,38 @@ namespace CommonConstants {
                 [ TileObjectType.TempSeaport,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Wasteland,     { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Wood,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.Crystal,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.CustomCrystal, { framesCount: 2,   ticksPerFrame: 3                }],
             ]),
         ],
     ]);
     export const TileObjectShapeConfigs = new Map<TileObjectType, TileObjectShapeCfg>([
-        [ TileObjectType.Road,          { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 11,    }],
-        [ TileObjectType.Bridge,        { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 11,    }],
-        [ TileObjectType.Wood,          { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Mountain,      { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Ruins,         { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Wasteland,     { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Mist,          { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Fire,          { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Reef,          { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Rough,         { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Silo,          { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.EmptySilo,     { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Plasma,        { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 16,    }],
-        [ TileObjectType.GreenPlasma,   { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 16,    }],
-        [ TileObjectType.Meteor,        { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Headquarters,  { minPlayerIndex: WarFirstPlayerIndex,     maxPlayerIndex: WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.City,          { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.Factory,       { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.Airport,       { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.Seaport,       { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.CommandTower,  { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.Radar,         { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.TempAirport,   { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.TempSeaport,   { minPlayerIndex: WarNeutralPlayerIndex,   maxPlayerIndex: WarMaxPlayerIndex,     shapesCount: 1,     }],
+        [ TileObjectType.Road,          { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 11,    }],
+        [ TileObjectType.Bridge,        { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 11,    }],
+        [ TileObjectType.Wood,          { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.Mountain,      { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.Ruins,         { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.Wasteland,     { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.Mist,          { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.Fire,          { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.Reef,          { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.Rough,         { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.Silo,          { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.EmptySilo,     { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.Plasma,        { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 16,    }],
+        [ TileObjectType.GreenPlasma,   { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 16,    }],
+        [ TileObjectType.Meteor,        { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarNeutralPlayerIndex,  shapesCount: 1,     }],
+        [ TileObjectType.Headquarters,  { minPlayerIndex: WarFirstPlayerIndex,      maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.City,          { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.Factory,       { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.Airport,       { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.Seaport,       { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.CommandTower,  { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.Radar,         { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.TempAirport,   { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.TempSeaport,   { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.Crystal,       { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.CustomCrystal, { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
     ]);
 
     export const TileBaseSymmetry = new Map<TileBaseType, Map<number, number[]>>([
@@ -715,7 +731,29 @@ namespace CommonConstants {
             [   14, [   14,     15,     14,     15,     14, ]],
             [   15, [   15,     14,     15,     14,     15, ]],
         ])],
+        [TileObjectType.Crystal, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.CustomCrystal, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
     ]);
+
+    export const TileDefaultCrystalData: ProtoTypes.WarSerialization.ITileCustomCrystalData = {
+        radius                      : 2,
+        priority                    : 0,
+
+        canAffectSelf               : true,
+        canAffectAlly               : true,
+        canAffectEnemy              : false,
+
+        deltaFund                   : 0,
+        deltaEnergyPercentage       : 0,
+
+        deltaHp                     : 2,
+        deltaFuelPercentage         : 100,
+        deltaPrimaryAmmoPercentage  : 100,
+    };
 
     export const UnitImageConfigs = new Map([
         [

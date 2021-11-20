@@ -17,7 +17,7 @@
                                             <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                                                 <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="12"
                                                                      textColor="0xffffff" horizontalCenter="0" />
-                                                <e:Group id="_conUnitView" scaleX="0.6" scaleY="0.6" x="20"
+                                                <e:Group id="_conUnitView" scaleX="1.8" scaleY="1.8" x="20"
                                                          touchChildren="false" touchEnabled="false" y="20" />
                                             </e:Group>
                                         </e:Skin>

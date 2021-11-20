@@ -51,8 +51,8 @@ namespace TwnsBwGridVisualEffectView {
         public constructor() {
             super();
 
-            this.addChild(this._layerForRepair);
             this.addChild(this._layerForSupply);
+            this.addChild(this._layerForRepair);
             this.addChild(this._layerForBlock);
             this.addChild(this._layerForSurface);
             this.addChild(this._layerForDive);
@@ -127,8 +127,8 @@ namespace TwnsBwGridVisualEffectView {
 
     function createEffectBlock(gridIndex: GridIndex): egret.DisplayObject {
         const img           = new TwnsUiImage.UiImage(`c04_t08_s05_f01`);
-        img.anchorOffsetX   = 174;
-        img.anchorOffsetY   = 54;
+        img.anchorOffsetX   = 58;
+        img.anchorOffsetY   = 18;
         img.scaleX          = 2;
         img.scaleY          = 2;
 
@@ -198,8 +198,8 @@ namespace TwnsBwGridVisualEffectView {
 
     function createEffectSupply(gridIndex: GridIndex): egret.DisplayObject {
         const img           = new TwnsUiImage.UiImage("c04_t08_s03_f01");
-        img.anchorOffsetX   = 180;
-        img.anchorOffsetY   = 54;
+        img.anchorOffsetX   = 60;
+        img.anchorOffsetY   = 18;
         img.scaleX          = 2;
         img.scaleY          = 2;
 
@@ -217,8 +217,8 @@ namespace TwnsBwGridVisualEffectView {
 
     function createEffectRepair(gridIndex: GridIndex): egret.DisplayObject {
         const img           = new TwnsUiImage.UiImage("c04_t08_s04_f01");
-        img.anchorOffsetX   = 180;
-        img.anchorOffsetY   = 54;
+        img.anchorOffsetX   = 60;
+        img.anchorOffsetY   = 18;
         img.scaleX          = 2;
         img.scaleY          = 2;
 
