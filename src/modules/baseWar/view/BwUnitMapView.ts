@@ -156,15 +156,18 @@ namespace TwnsBwUnitMapView {
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 this._resetVisibleForAllUnitsOnMap();
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitAttackableArea) {
                 this._resetVisibleForAllUnitsOnMap();
                 for (const [, unit] of actionPlanner.getUnitsForPreviewingAttackableArea()) {
                     unit.setViewVisible(false);
                 }
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
                 this._resetVisibleForAllUnitsOnMap();
                 Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea()).setViewVisible(false);
+
+            } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
+                this._resetVisibleForAllUnitsOnMap();
 
             } else {
                 // Nothing to do.

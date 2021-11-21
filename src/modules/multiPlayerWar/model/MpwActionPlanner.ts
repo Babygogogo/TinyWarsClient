@@ -17,7 +17,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwActionPlanner {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;
@@ -573,16 +572,20 @@ namespace TwnsMpwActionPlanner {
                 if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                     return State.MakingMovePath;
                 } else {
                     if (unit.checkHasWeapon()) {
-                        return State.PreviewingAttackableArea;
+                        return State.PreviewingUnitAttackableArea;
                     } else {
-                        return State.PreviewingMovableArea;
+                        return State.PreviewingUnitMovableArea;
                     }
                 }
             }
@@ -668,22 +671,26 @@ namespace TwnsMpwActionPlanner {
                     if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                         return State.ChoosingProductionTarget;
                     } else {
-                        return State.Idle;
+                        if (tile.checkIsMapWeapon()) {
+                            return State.PreviewingTileAttackableArea;
+                        } else {
+                            return State.Idle;
+                        }
                     }
                 } else {
                     if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                         return State.MakingMovePath;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.PreviewingMovableArea;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
             }
         }
-        protected _getNextStateOnTapWhenPreviewingAttackableArea(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenPreviewingUnitAttackableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
             const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
@@ -693,25 +700,29 @@ namespace TwnsMpwActionPlanner {
                 if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
-                        return State.PreviewingMovableArea;
+                        return State.PreviewingUnitMovableArea;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.PreviewingMovableArea;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
             }
         }
-        protected _getNextStateOnTapWhenPreviewingMovableArea(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenPreviewingUnitMovableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
             const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
@@ -721,19 +732,55 @@ namespace TwnsMpwActionPlanner {
                 if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitForPreviewingMovableArea() !== unit) {
-                        return State.PreviewingMovableArea;
+                        return State.PreviewingUnitMovableArea;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
                             return State.Idle;
+                        }
+                    }
+                }
+            }
+        }
+        protected _getNextStateOnTapWhenPreviewingTileAttackableArea(gridIndex: GridIndex): State {
+            const turnManager       = this._getTurnManager();
+            const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
+            const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            if (!unit) {
+                const tile = this._getTileMap().getTile(gridIndex);
+                if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
+                    return State.ChoosingProductionTarget;
+                } else {
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
+                }
+            } else {
+                if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                    return State.MakingMovePath;
+                } else {
+                    if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
+                        return State.PreviewingUnitMovableArea;
+                    } else {
+                        if (unit.checkHasWeapon()) {
+                            return State.PreviewingUnitAttackableArea;
+                        } else {
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }

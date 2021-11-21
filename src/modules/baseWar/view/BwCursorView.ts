@@ -297,10 +297,13 @@ namespace TwnsBwCursorView {
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 con.visible = true;
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitAttackableArea) {
                 con.visible = true;
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
+                con.visible = true;
+
+            } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 con.visible = true;
 
             } else {
@@ -341,10 +344,13 @@ namespace TwnsBwCursorView {
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitAttackableArea) {
                 con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 con.visible = false;
 
             } else {
@@ -383,10 +389,13 @@ namespace TwnsBwCursorView {
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitAttackableArea) {
                 con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 con.visible = false;
 
             } else {

@@ -515,8 +515,9 @@ namespace Types {
         ChoosingFlareDestination,
         ChoosingSiloDestination,
         ChoosingProductionTarget,
-        PreviewingAttackableArea,
-        PreviewingMovableArea,
+        PreviewingUnitAttackableArea,
+        PreviewingUnitMovableArea,
+        PreviewingTileAttackableArea,
 
         RequestingPlayerActivateSkill,
         RequestingPlayerBeginTurn,

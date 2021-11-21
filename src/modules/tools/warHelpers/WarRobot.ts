@@ -733,7 +733,7 @@ namespace WarRobot {
                     }
                 },
             });
-            const attackableArea = WarCommonHelpers.createAttackableArea({
+            const attackableArea = WarCommonHelpers.createAttackableAreaForUnit({
                 movableArea,
                 mapSize,
                 minAttackRange,

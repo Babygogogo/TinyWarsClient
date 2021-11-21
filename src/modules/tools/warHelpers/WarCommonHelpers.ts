@@ -72,7 +72,7 @@ namespace WarCommonHelpers {
         return area;
     }
 
-    export function createAttackableArea({ movableArea, mapSize, minAttackRange, maxAttackRange, checkCanAttack }: {
+    export function createAttackableAreaForUnit({ movableArea, mapSize, minAttackRange, maxAttackRange, checkCanAttack }: {
         movableArea     : MovableArea;
         mapSize         : MapSize;
         minAttackRange  : number | null;
@@ -106,6 +106,31 @@ namespace WarCommonHelpers {
                     }
                 }
             }
+        }
+
+        return area;
+    }
+    export function createAttackableAreaForTile(tile: TwnsBwTile.BwTile, mapSize: MapSize): AttackableArea {
+        const area          : AttackableArea = [];
+        const tileType      = tile.getType();
+        const tileGridIndex = tile.getGridIndex();
+        const tileX         = tileGridIndex.x;
+        const tileY         = tileGridIndex.y;
+
+        if ((tileType === TileType.Crystal) || (tileType === TileType.CustomCrystal)) {
+            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(tileGridIndex, 0, Helpers.getExisted(tile.getCustomCrystalData()?.radius), mapSize)) {
+                const attackX = gridIndex.x;
+                const attackY = gridIndex.y;
+                if (area[attackX] == null) {
+                    area[attackX] = [];
+                }
+                area[attackX][attackY] = {
+                    movePathDestination: { x: tileX, y: tileY },
+                };
+            }
+        } else {
+            // TODO: handle other tile types
+            throw Helpers.newError(`WarCommonHelpers.createAttackableAreaForTile() invalid tileType: ${tileType}`);
         }
 
         return area;

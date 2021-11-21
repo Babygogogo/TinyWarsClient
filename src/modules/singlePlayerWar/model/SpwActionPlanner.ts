@@ -18,7 +18,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwActionPlanner {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import SpwWar               = TwnsSpwWar.SpwWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
@@ -292,16 +291,20 @@ namespace TwnsSpwActionPlanner {
                     if (tile.checkIsUnitProducerForPlayer(playerIndexInTurn)) {
                         return State.ChoosingProductionTarget;
                     } else {
-                        return State.Idle;
+                        if (tile.checkIsMapWeapon()) {
+                            return State.PreviewingTileAttackableArea;
+                        } else {
+                            return State.Idle;
+                        }
                     }
                 } else {
                     if ((unit.getActionState() === UnitState.Idle) && (playerIndexInTurn === unit.getPlayerIndex())) {
                         return State.MakingMovePath;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.PreviewingMovableArea;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
@@ -378,22 +381,26 @@ namespace TwnsSpwActionPlanner {
                     if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                         return State.ChoosingProductionTarget;
                     } else {
-                        return State.Idle;
+                        if (tile.checkIsMapWeapon()) {
+                            return State.PreviewingTileAttackableArea;
+                        } else {
+                            return State.Idle;
+                        }
                     }
                 } else {
                     if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                         return State.MakingMovePath;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.PreviewingMovableArea;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
             }
         }
-        protected _getNextStateOnTapWhenPreviewingAttackableArea(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenPreviewingUnitAttackableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
             const selfPlayerIndex   = this._getPlayerIndexInTurn();
@@ -403,25 +410,29 @@ namespace TwnsSpwActionPlanner {
                 if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
-                        return State.PreviewingMovableArea;
+                        return State.PreviewingUnitMovableArea;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.PreviewingMovableArea;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
             }
         }
-        protected _getNextStateOnTapWhenPreviewingMovableArea(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenPreviewingUnitMovableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
             const selfPlayerIndex   = this._getPlayerIndexInTurn();
@@ -431,19 +442,55 @@ namespace TwnsSpwActionPlanner {
                 if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitForPreviewingMovableArea() !== unit) {
-                        return State.PreviewingMovableArea;
+                        return State.PreviewingUnitMovableArea;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
                             return State.Idle;
+                        }
+                    }
+                }
+            }
+        }
+        protected _getNextStateOnTapWhenPreviewingTileAttackableArea(gridIndex: GridIndex): State {
+            const turnManager       = this._getTurnManager();
+            const unit              = this._getUnitMap().getVisibleUnitOnMap(gridIndex);
+            const selfPlayerIndex   = this._getPlayerIndexInTurn();
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            if (!unit) {
+                const tile = this._getTileMap().getTile(gridIndex);
+                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
+                    return State.ChoosingProductionTarget;
+                } else {
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
+                }
+            } else {
+                if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                    return State.MakingMovePath;
+                } else {
+                    if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
+                        return State.PreviewingUnitMovableArea;
+                    } else {
+                        if (unit.checkHasWeapon()) {
+                            return State.PreviewingUnitAttackableArea;
+                        } else {
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
@@ -669,7 +716,7 @@ namespace TwnsSpwActionPlanner {
             const hasAmmo               = (!!unit.getPrimaryWeaponCurrentAmmo()) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
-            const newArea               = WarCommonHelpers.createAttackableArea({
+            const newArea               = WarCommonHelpers.createAttackableAreaForUnit({
                 movableArea: WarCommonHelpers.createMovableArea({
                     origin          : unit.getGridIndex(),
                     maxMoveCost     : unit.getFinalMoveRange(),

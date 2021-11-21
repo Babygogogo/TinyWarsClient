@@ -338,7 +338,7 @@ namespace TwnsBwActionPlannerView {
             } else if (state === State.ChoosingProductionTarget) {
                 con.visible = false;
 
-            } else if (state === State.PreviewingAttackableArea) {
+            } else if (state === State.PreviewingUnitAttackableArea) {
                 con.visible = true;
                 con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
 
@@ -351,8 +351,21 @@ namespace TwnsBwActionPlannerView {
                     }
                 }
 
-            } else if (state === State.PreviewingMovableArea) {
+            } else if (state === State.PreviewingUnitMovableArea) {
                 con.visible = false;
+
+            } else if (state === State.PreviewingTileAttackableArea) {
+                con.visible = true;
+                con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
+
+                const area              = actionPlanner.getAreaForPreviewingAttack();
+                const { width, height } = actionPlanner.getMapSize();
+                const imgs              = this._getImgsForAttackableGrids();
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        imgs[x][y].visible = (!!area[x]) && (!!area[x][y]);
+                    }
+                }
 
             } else {
                 // TODO
@@ -420,10 +433,10 @@ namespace TwnsBwActionPlannerView {
             } else if (state === State.ChoosingProductionTarget) {
                 con.visible = false;
 
-            } else if (state === State.PreviewingAttackableArea) {
+            } else if (state === State.PreviewingUnitAttackableArea) {
                 con.visible = false;
 
-            } else if (state === State.PreviewingMovableArea) {
+            } else if (state === State.PreviewingUnitMovableArea) {
                 con.visible = true;
 
                 const area              = Helpers.getExisted(actionPlanner.getAreaForPreviewingMove());
@@ -434,6 +447,9 @@ namespace TwnsBwActionPlannerView {
                         imgs[x][y].visible = (!!area[x]) && (!!area[x][y]);
                     }
                 }
+
+            } else if (state === State.PreviewingTileAttackableArea) {
+                con.visible = false;
 
             } else {
                 // TODO
@@ -501,11 +517,15 @@ namespace TwnsBwActionPlannerView {
                 con.removeChildren();
                 con.visible = false;
 
-            } else if (state === State.PreviewingAttackableArea) {
+            } else if (state === State.PreviewingUnitAttackableArea) {
                 con.removeChildren();
                 con.visible = false;
 
-            } else if (state === State.PreviewingMovableArea) {
+            } else if (state === State.PreviewingUnitMovableArea) {
+                con.removeChildren();
+                con.visible = false;
+
+            } else if (state === State.PreviewingTileAttackableArea) {
                 con.removeChildren();
                 con.visible = false;
 
@@ -638,7 +658,7 @@ namespace TwnsBwActionPlannerView {
                 views.clear();
                 con.visible = false;
 
-            } else if (state === State.PreviewingAttackableArea) {
+            } else if (state === State.PreviewingUnitAttackableArea) {
                 con.removeChildren();
                 views.clear();
                 con.visible = true;
@@ -647,13 +667,18 @@ namespace TwnsBwActionPlannerView {
                     this._addUnitView(unit, unit.getGridIndex());
                 }
 
-            } else if (state === State.PreviewingMovableArea) {
+            } else if (state === State.PreviewingUnitMovableArea) {
                 con.removeChildren();
                 views.clear();
                 con.visible = true;
 
                 const unit = Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea());
                 this._addUnitView(unit, unit.getGridIndex());
+
+            } else if (state === State.PreviewingTileAttackableArea) {
+                con.removeChildren();
+                views.clear();
+                con.visible = false;
 
             } else {
                 // TODO
