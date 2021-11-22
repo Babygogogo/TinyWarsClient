@@ -9339,6 +9339,162 @@ export declare namespace WarSerialization {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a TileCustomCannonData. */
+    interface ITileCustomCannonData {
+
+        /** TileCustomCannonData radiusForUp */
+        radiusForUp?: (number|null);
+
+        /** TileCustomCannonData radiusForDown */
+        radiusForDown?: (number|null);
+
+        /** TileCustomCannonData radiusForLeft */
+        radiusForLeft?: (number|null);
+
+        /** TileCustomCannonData radiusForRight */
+        radiusForRight?: (number|null);
+
+        /** TileCustomCannonData priority */
+        priority?: (number|null);
+
+        /** TileCustomCannonData canAffectSelf */
+        canAffectSelf?: (boolean|null);
+
+        /** TileCustomCannonData canAffectAlly */
+        canAffectAlly?: (boolean|null);
+
+        /** TileCustomCannonData canAffectEnemy */
+        canAffectEnemy?: (boolean|null);
+
+        /** TileCustomCannonData maxTargetCount */
+        maxTargetCount?: (number|null);
+
+        /** TileCustomCannonData deltaHp */
+        deltaHp?: (number|null);
+
+        /** TileCustomCannonData deltaFuelPercentage */
+        deltaFuelPercentage?: (number|null);
+
+        /** TileCustomCannonData deltaPrimaryAmmoPercentage */
+        deltaPrimaryAmmoPercentage?: (number|null);
+    }
+
+    /** Represents a TileCustomCannonData. */
+    class TileCustomCannonData implements ITileCustomCannonData {
+
+        /**
+         * Constructs a new TileCustomCannonData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ITileCustomCannonData);
+
+        /** TileCustomCannonData radiusForUp. */
+        public radiusForUp: number;
+
+        /** TileCustomCannonData radiusForDown. */
+        public radiusForDown: number;
+
+        /** TileCustomCannonData radiusForLeft. */
+        public radiusForLeft: number;
+
+        /** TileCustomCannonData radiusForRight. */
+        public radiusForRight: number;
+
+        /** TileCustomCannonData priority. */
+        public priority: number;
+
+        /** TileCustomCannonData canAffectSelf. */
+        public canAffectSelf: boolean;
+
+        /** TileCustomCannonData canAffectAlly. */
+        public canAffectAlly: boolean;
+
+        /** TileCustomCannonData canAffectEnemy. */
+        public canAffectEnemy: boolean;
+
+        /** TileCustomCannonData maxTargetCount. */
+        public maxTargetCount: number;
+
+        /** TileCustomCannonData deltaHp. */
+        public deltaHp: number;
+
+        /** TileCustomCannonData deltaFuelPercentage. */
+        public deltaFuelPercentage: number;
+
+        /** TileCustomCannonData deltaPrimaryAmmoPercentage. */
+        public deltaPrimaryAmmoPercentage: number;
+
+        /**
+         * Creates a new TileCustomCannonData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns TileCustomCannonData instance
+         */
+        public static create(properties?: WarSerialization.ITileCustomCannonData): WarSerialization.TileCustomCannonData;
+
+        /**
+         * Encodes the specified TileCustomCannonData message. Does not implicitly {@link WarSerialization.TileCustomCannonData.verify|verify} messages.
+         * @param message TileCustomCannonData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ITileCustomCannonData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified TileCustomCannonData message, length delimited. Does not implicitly {@link WarSerialization.TileCustomCannonData.verify|verify} messages.
+         * @param message TileCustomCannonData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ITileCustomCannonData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a TileCustomCannonData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns TileCustomCannonData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.TileCustomCannonData;
+
+        /**
+         * Decodes a TileCustomCannonData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns TileCustomCannonData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.TileCustomCannonData;
+
+        /**
+         * Verifies a TileCustomCannonData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a TileCustomCannonData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns TileCustomCannonData
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.TileCustomCannonData;
+
+        /**
+         * Creates a plain object from a TileCustomCannonData message. Also converts values to other types if specified.
+         * @param message TileCustomCannonData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.TileCustomCannonData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this TileCustomCannonData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a SerialTile. */
     interface ISerialTile {
 
@@ -9377,6 +9533,9 @@ export declare namespace WarSerialization {
 
         /** SerialTile customCrystalData */
         customCrystalData?: (WarSerialization.ITileCustomCrystalData|null);
+
+        /** SerialTile customCannonData */
+        customCannonData?: (WarSerialization.ITileCustomCannonData|null);
     }
 
     /** Represents a SerialTile. */
@@ -9423,6 +9582,9 @@ export declare namespace WarSerialization {
 
         /** SerialTile customCrystalData. */
         public customCrystalData?: (WarSerialization.ITileCustomCrystalData|null);
+
+        /** SerialTile customCannonData. */
+        public customCannonData?: (WarSerialization.ITileCustomCannonData|null);
 
         /**
          * Creates a new SerialTile instance using the specified properties.

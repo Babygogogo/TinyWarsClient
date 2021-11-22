@@ -391,6 +391,16 @@ namespace ConfigManager {
             return true;
         } else if (objectType === TileObjectType.CustomCrystal) {
             return true;
+        } else if (objectType === TileObjectType.CannonUp) {
+            return true;
+        } else if (objectType === TileObjectType.CannonDown) {
+            return true;
+        } else if (objectType === TileObjectType.CannonLeft) {
+            return true;
+        } else if (objectType === TileObjectType.CannonRight) {
+            return true;
+        } else if (objectType === TileObjectType.CustomCannon) {
+            return true;
         } else {
             return false;
         }
@@ -407,6 +417,13 @@ namespace ConfigManager {
             && (data.priority != null)
             && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
             && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage ?? data.deltaFund ?? data.deltaEnergyPercentage) != null);
+    }
+    export function checkIsValidCustomCannonData(data: ProtoTypes.WarSerialization.ITileCustomCannonData): boolean {
+        return (!!(data.radiusForDown ?? data.radiusForLeft ?? data.radiusForRight ?? data.radiusForUp))
+            && (data.priority != null)
+            && (!!data.maxTargetCount)
+            && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
+            && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage) != null);
     }
     export function checkIsValidUnitAiMode(mode: Types.UnitAiMode): boolean {
         return (mode === Types.UnitAiMode.NoMove)

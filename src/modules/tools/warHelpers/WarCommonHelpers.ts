@@ -116,18 +116,51 @@ namespace WarCommonHelpers {
         const tileGridIndex = tile.getGridIndex();
         const tileX         = tileGridIndex.x;
         const tileY         = tileGridIndex.y;
+        const addGrid       = (x: number, y: number) => {
+            if (area[x] == null) {
+                area[x] = [];
+            }
+            area[x][y] = {
+                movePathDestination: { x: tileX, y: tileY },
+            };
+        };
 
         if ((tileType === TileType.Crystal) || (tileType === TileType.CustomCrystal)) {
             for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(tileGridIndex, 0, Helpers.getExisted(tile.getCustomCrystalData()?.radius), mapSize)) {
-                const attackX = gridIndex.x;
-                const attackY = gridIndex.y;
-                if (area[attackX] == null) {
-                    area[attackX] = [];
-                }
-                area[attackX][attackY] = {
-                    movePathDestination: { x: tileX, y: tileY },
-                };
+                addGrid(gridIndex.x, gridIndex.y);
             }
+
+        } else if ((tileType === TileType.CustomCannon) || (tile.checkIsNormalCannon())) {
+            const { radiusForDown, radiusForLeft, radiusForRight, radiusForUp } = Helpers.getExisted(tile.getCustomCannonData());
+            if (radiusForDown) {
+                for (let deltaY = 1; deltaY <= radiusForDown; ++deltaY) {
+                    for (let deltaX = 1 - deltaY; deltaX <= deltaY - 1; ++deltaX) {
+                        addGrid(tileX + deltaX, tileY + deltaY);
+                    }
+                }
+            }
+            if (radiusForUp) {
+                for (let deltaY = -1; deltaY >= -radiusForUp; --deltaY) {
+                    for (let deltaX = 1 + deltaY; deltaX <= -1 - deltaY; ++deltaX) {
+                        addGrid(tileX + deltaX, tileY + deltaY);
+                    }
+                }
+            }
+            if (radiusForRight) {
+                for (let deltaX = 1; deltaX <= radiusForRight; ++deltaX) {
+                    for (let deltaY = 1 - deltaX; deltaY <= deltaX - 1; ++deltaY) {
+                        addGrid(tileX + deltaX, tileY + deltaY);
+                    }
+                }
+            }
+            if (radiusForLeft) {
+                for (let deltaX = -1; deltaX >= -radiusForLeft; --deltaX) {
+                    for (let deltaY = 1 + deltaX; deltaY <= -1 - deltaX; ++deltaY) {
+                        addGrid(tileX + deltaX, tileY + deltaY);
+                    }
+                }
+            }
+
         } else {
             // TODO: handle other tile types
             throw Helpers.newError(`WarCommonHelpers.createAttackableAreaForTile() invalid tileType: ${tileType}`);

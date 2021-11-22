@@ -169,6 +169,11 @@ namespace CommonConstants {
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
             [TileObjectType.Crystal,        TileType.Crystal],
             [TileObjectType.CustomCrystal,  TileType.CustomCrystal],
+            [TileObjectType.CannonUp,       TileType.CannonUp],
+            [TileObjectType.CannonDown,     TileType.CannonDown],
+            [TileObjectType.CannonLeft,     TileType.CannonLeft],
+            [TileObjectType.CannonRight,    TileType.CannonRight],
+            [TileObjectType.CustomCannon,   TileType.CustomCannon],
         ])],
         [TileBaseType.Plain, new Map([
             [TileObjectType.Empty,          TileType.Plain],
@@ -198,6 +203,11 @@ namespace CommonConstants {
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
             [TileObjectType.Crystal,        TileType.Crystal],
             [TileObjectType.CustomCrystal,  TileType.CustomCrystal],
+            [TileObjectType.CannonUp,       TileType.CannonUp],
+            [TileObjectType.CannonDown,     TileType.CannonDown],
+            [TileObjectType.CannonLeft,     TileType.CannonLeft],
+            [TileObjectType.CannonRight,    TileType.CannonRight],
+            [TileObjectType.CustomCannon,   TileType.CustomCannon],
         ])],
         [TileBaseType.River, new Map([
             [TileObjectType.Empty,          TileType.River],
@@ -227,6 +237,11 @@ namespace CommonConstants {
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
             [TileObjectType.Crystal,        TileType.Crystal],
             [TileObjectType.CustomCrystal,  TileType.CustomCrystal],
+            [TileObjectType.CannonUp,       TileType.CannonUp],
+            [TileObjectType.CannonDown,     TileType.CannonDown],
+            [TileObjectType.CannonLeft,     TileType.CannonLeft],
+            [TileObjectType.CannonRight,    TileType.CannonRight],
+            [TileObjectType.CustomCannon,   TileType.CustomCannon],
         ])],
         [TileBaseType.Sea, new Map([
             [TileObjectType.Empty,          TileType.Sea],
@@ -256,6 +271,11 @@ namespace CommonConstants {
             [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
             [TileObjectType.Crystal,        TileType.Crystal],
             [TileObjectType.CustomCrystal,  TileType.CustomCrystal],
+            [TileObjectType.CannonUp,       TileType.CannonUp],
+            [TileObjectType.CannonDown,     TileType.CannonDown],
+            [TileObjectType.CannonLeft,     TileType.CannonLeft],
+            [TileObjectType.CannonRight,    TileType.CannonRight],
+            [TileObjectType.CustomCannon,   TileType.CustomCannon],
         ])],
     ]);
 
@@ -296,6 +316,11 @@ namespace CommonConstants {
         [TileType.Wood,             TileObjectType.Wood],
         [TileType.Crystal,          TileObjectType.Crystal],
         [TileType.CustomCrystal,    TileObjectType.CustomCrystal],
+        [TileType.CannonUp,         TileObjectType.CannonUp],
+        [TileType.CannonDown,       TileObjectType.CannonDown],
+        [TileType.CannonLeft,       TileObjectType.CannonLeft],
+        [TileType.CannonRight,      TileObjectType.CannonRight],
+        [TileType.CustomCannon,     TileObjectType.CustomCannon],
     ]);
 
     export const TileBaseFrameConfigs = new Map([
@@ -371,6 +396,11 @@ namespace CommonConstants {
                 [ TileObjectType.Wood,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Crystal,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.CustomCrystal, { framesCount: 2,   ticksPerFrame: 3                }],
+                [ TileObjectType.CannonUp,      { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.CannonDown,    { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.CannonLeft,    { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.CannonRight,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.CustomCannon,  { framesCount: 8,   ticksPerFrame: 1 }],
             ]),
         ],
         [
@@ -402,7 +432,12 @@ namespace CommonConstants {
                 [ TileObjectType.Wood,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.Crystal,       { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
                 [ TileObjectType.CustomCrystal, { framesCount: 2,   ticksPerFrame: 3                }],
-            ]),
+                [ TileObjectType.CannonUp,      { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.CannonDown,    { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.CannonLeft,    { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.CannonRight,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
+                [ TileObjectType.CustomCannon,  { framesCount: 8,   ticksPerFrame: 1 }],
+         ]),
         ],
     ]);
     export const TileObjectShapeConfigs = new Map<TileObjectType, TileObjectShapeCfg>([
@@ -432,6 +467,11 @@ namespace CommonConstants {
         [ TileObjectType.TempSeaport,   { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
         [ TileObjectType.Crystal,       { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
         [ TileObjectType.CustomCrystal, { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.CannonUp,      { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.CannonDown,    { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.CannonLeft,    { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.CannonRight,   { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
+        [ TileObjectType.CustomCannon,  { minPlayerIndex: WarNeutralPlayerIndex,    maxPlayerIndex: WarMaxPlayerIndex,      shapesCount: 1,     }],
     ]);
 
     export const TileBaseSymmetry = new Map<TileBaseType, Map<number, number[]>>([
@@ -737,6 +777,21 @@ namespace CommonConstants {
         [TileObjectType.CustomCrystal, new Map([
             [   0,  [   0,      0,      0,      0,      0,  ]],
         ])],
+        [TileObjectType.CannonUp, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.CannonDown, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.CannonLeft, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.CannonRight, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
+        [TileObjectType.CustomCannon, new Map([
+            [   0,  [   0,      0,      0,      0,      0,  ]],
+        ])],
     ]);
 
     export const TileDefaultCrystalData: ProtoTypes.WarSerialization.ITileCustomCrystalData = {
@@ -753,6 +808,91 @@ namespace CommonConstants {
         deltaHp                     : 2,
         deltaFuelPercentage         : 100,
         deltaPrimaryAmmoPercentage  : 100,
+    };
+    export const TileDefaultCannonUpData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
+        radiusForDown               : 0,
+        radiusForLeft               : 0,
+        radiusForRight              : 0,
+        radiusForUp                 : 4,
+
+        priority                    : 0,
+        maxTargetCount              : 1,
+
+        canAffectSelf               : false,
+        canAffectAlly               : false,
+        canAffectEnemy              : true,
+
+        deltaHp                     : -3,
+        deltaFuelPercentage         : 0,
+        deltaPrimaryAmmoPercentage  : 0,
+    };
+    export const TileDefaultCannonDownData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
+        radiusForDown               : 4,
+        radiusForLeft               : 0,
+        radiusForRight              : 0,
+        radiusForUp                 : 0,
+
+        priority                    : 0,
+        maxTargetCount              : 1,
+
+        canAffectSelf               : false,
+        canAffectAlly               : false,
+        canAffectEnemy              : true,
+
+        deltaHp                     : -3,
+        deltaFuelPercentage         : 0,
+        deltaPrimaryAmmoPercentage  : 0,
+    };
+    export const TileDefaultCannonLeftData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
+        radiusForDown               : 0,
+        radiusForLeft               : 4,
+        radiusForRight              : 0,
+        radiusForUp                 : 0,
+
+        priority                    : 0,
+        maxTargetCount              : 1,
+
+        canAffectSelf               : false,
+        canAffectAlly               : false,
+        canAffectEnemy              : true,
+
+        deltaHp                     : -3,
+        deltaFuelPercentage         : 0,
+        deltaPrimaryAmmoPercentage  : 0,
+    };
+    export const TileDefaultCannonRightData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
+        radiusForDown               : 0,
+        radiusForLeft               : 0,
+        radiusForRight              : 4,
+        radiusForUp                 : 0,
+
+        priority                    : 0,
+        maxTargetCount              : 1,
+
+        canAffectSelf               : false,
+        canAffectAlly               : false,
+        canAffectEnemy              : true,
+
+        deltaHp                     : -3,
+        deltaFuelPercentage         : 0,
+        deltaPrimaryAmmoPercentage  : 0,
+    };
+    export const TileDefaultCustomCannonData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
+        radiusForDown               : 4,
+        radiusForLeft               : 4,
+        radiusForRight              : 4,
+        radiusForUp                 : 4,
+
+        priority                    : 0,
+        maxTargetCount              : 1,
+
+        canAffectSelf               : false,
+        canAffectAlly               : false,
+        canAffectEnemy              : true,
+
+        deltaHp                     : -3,
+        deltaFuelPercentage         : 0,
+        deltaPrimaryAmmoPercentage  : 0,
     };
 
     export const UnitImageConfigs = new Map([

@@ -21,6 +21,7 @@ namespace TwnsBwTile {
     import TileBaseType             = Types.TileBaseType;
     import TileTemplateCfg          = Types.TileTemplateCfg;
     import ITileCustomCrystalData   = ProtoTypes.WarSerialization.ITileCustomCrystalData;
+    import ITileCustomCannonData    = ProtoTypes.WarSerialization.ITileCustomCannonData;
     import ISerialTile              = ProtoTypes.WarSerialization.ISerialTile;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
@@ -40,6 +41,7 @@ namespace TwnsBwTile {
         private _currentBuildPoint?     : number | null;
         private _currentCapturePoint?   : number | null;
         private _customCrystalData?     : ITileCustomCrystalData | null;
+        private _customCannonData?      : ITileCustomCannonData | null;
 
         private readonly _view  = new TwnsBwTileView.BwTileView();
         private _hasFog         = false;
@@ -139,13 +141,21 @@ namespace TwnsBwTile {
                 throw Helpers.newError(`Invalid decoratorType/shapeId: ${decoratorType}, ${decoratorShapeId}`, ClientErrorCode.BwTile_Deserialize_13);
             }
 
-            const customCrystalData = data.customCrystalData ?? null;
             const tileType          = templateCfg.type;
+            const customCrystalData = data.customCrystalData ?? null;
             if ((customCrystalData != null) && (tileType !== TileType.CustomCrystal)) {
                 throw Helpers.newError(`CustomCrystalData is present while the tile is not CustomCrystal.`, ClientErrorCode.BwTile_Deserialize_14);
             }
             if ((customCrystalData != null) && (!ConfigManager.checkIsValidCustomCrystalData(customCrystalData))) {
                 throw Helpers.newError(`Invalid customCrystalData.`, ClientErrorCode.BwTile_Deserialize_15);
+            }
+
+            const customCannonData = data.customCannonData ?? null;
+            if ((customCannonData != null) && (tileType !== TileType.CustomCannon)) {
+                throw Helpers.newError(`CustomCannonData is present while the tile is not CustomCannon.`, ClientErrorCode.BwTile_Deserialize_16);
+            }
+            if ((customCannonData != null) && (!ConfigManager.checkIsValidCustomCannonData(customCannonData))) {
+                throw Helpers.newError(`Invalid customCannonData.`, ClientErrorCode.BwTile_Deserialize_17);
             }
 
             this._setTemplateCfg(templateCfg);
@@ -163,6 +173,7 @@ namespace TwnsBwTile {
             this.setCurrentBuildPoint(currentBuildPoint ?? (templateCfg.maxBuildPoint ?? null));
             this.setCurrentCapturePoint(currentCapturePoint ?? (templateCfg.maxCapturePoint ?? null));
             this._setCustomCrystalData(customCrystalData);
+            this._setCustomCannonData(customCannonData);
         }
         public serialize(): ISerialTile {
             const data: ISerialTile = {
@@ -172,6 +183,7 @@ namespace TwnsBwTile {
                 playerIndex         : this.getPlayerIndex(),
 
                 customCrystalData   : this._customCrystalData,
+                customCannonData    : this._customCannonData,
             };
 
             const currentHp = this.getCurrentHp();
@@ -214,6 +226,7 @@ namespace TwnsBwTile {
                     playerIndex         : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
 
                     customCrystalData   : this._customCrystalData,
+                    customCannonData    : this._customCannonData,
                 };
 
                 const currentHp = this.getCurrentHp();
@@ -852,7 +865,12 @@ namespace TwnsBwTile {
             const type = this.getType();
             // TODO
             return (type === TileType.Crystal)
-                || (type === TileType.CustomCrystal);
+                || (type === TileType.CustomCrystal)
+                || (type === TileType.CannonDown)
+                || (type === TileType.CannonLeft)
+                || (type === TileType.CannonRight)
+                || (type === TileType.CannonUp)
+                || (type === TileType.CustomCannon);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -916,6 +934,94 @@ namespace TwnsBwTile {
         public setCustomCrystalDeltaFuelPercentage(percentage: number): void {
             this._initCustomCrystalData();
             Helpers.getExisted(this.getCustomCrystalData()).deltaFuelPercentage = percentage;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for cannon data.
+        ////////////////////////////////////////////////////////////////////////////////
+        public getCustomCannonData(): ITileCustomCannonData | null {
+            const tileType = this.getType();
+            if (tileType === TileType.CannonDown) {
+                return CommonConstants.TileDefaultCannonDownData;
+            } else if (tileType === TileType.CannonLeft) {
+                return CommonConstants.TileDefaultCannonLeftData;
+            } else if (tileType === TileType.CannonUp) {
+                return CommonConstants.TileDefaultCannonUpData;
+            } else if (tileType === TileType.CannonRight) {
+                return CommonConstants.TileDefaultCannonRightData;
+            } else if (tileType === TileType.CustomCannon) {
+                return this._customCannonData ?? CommonConstants.TileDefaultCustomCannonData;
+            } else {
+                return null;
+            }
+        }
+        private _setCustomCannonData(data: ITileCustomCannonData | null): void {
+            this._customCannonData = data;
+        }
+
+        public checkIsNormalCannon(): boolean {
+            const tileType = this.getType();
+            return (tileType === TileType.CannonRight)
+                || (tileType === TileType.CannonUp)
+                || (tileType === TileType.CannonLeft)
+                || (tileType === TileType.CannonDown);
+        }
+        private _initCustomCannonData(): void {
+            if (this._customCannonData == null) {
+                this._customCannonData = Helpers.deepClone(CommonConstants.TileDefaultCustomCannonData);
+            }
+        }
+
+        public setCustomCannonRadiusForUp(radius: number): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRadiusForUp_00).radiusForUp = radius;
+        }
+        public setCustomCannonRadiusForDown(radius: number): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRadiusForDown_00).radiusForDown = radius;
+        }
+        public setCustomCannonRadiusForLeft(radius: number): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRadiusForLeft_00).radiusForLeft = radius;
+        }
+        public setCustomCannonRadiusForRight(radius: number): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRadiusForRight_00).radiusForRight = radius;
+        }
+
+        public setCustomCannonPriority(priority: number): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonPriority_00).priority = priority;
+        }
+        public setCustomCannonMaxTargetCount(count: number): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonMaxTargetCount_00).maxTargetCount = count;
+        }
+
+        public setCustomCannonCanAffectSelf(canAffect: boolean): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonCanAffectSelf_00).canAffectSelf = canAffect;
+        }
+        public setCustomCannonCanAffectAlly(canAffect: boolean): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonCanAffectAlly_00).canAffectAlly = canAffect;
+        }
+        public setCustomCannonCanAffectEnemy(canAffect: boolean): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonCanAffectEnemy_00).canAffectEnemy = canAffect;
+        }
+
+        public setCustomCannonDeltaHp(deltaHp: number): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonDeltaHp_00).deltaHp = deltaHp;
+        }
+        public setCustomCannonDeltaPrimaryAmmoPercentage(percentage: number): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonDeltaPrimaryAmmoPercentage_00).deltaPrimaryAmmoPercentage = percentage;
+        }
+        public setCustomCannonDeltaFuelPercentage(percentage: number): void {
+            this._initCustomCannonData();
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonDeltaFuelPercentage_00).deltaFuelPercentage = percentage;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

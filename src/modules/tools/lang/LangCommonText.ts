@@ -4193,6 +4193,14 @@ namespace TwnsLangCommonText {
             `神秘水晶`,
             `Myst.Crystal`,
         ],
+        [LangTextType.B1036]: [
+            `加农炮`,
+            `Cannon`,
+        ],
+        [LangTextType.B1037]: [
+            `神秘加农炮`,
+            `Myst.Cannon`,
+        ],
 
         [LangTextType.B1200]: [
             `步兵`,

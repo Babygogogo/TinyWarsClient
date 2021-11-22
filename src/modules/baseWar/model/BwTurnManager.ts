@@ -585,6 +585,28 @@ namespace TwnsBwTurnManager {
                     handleMapWeaponTileCrystal(war, tile, isFastExecute);
                 }
             }
+            {
+                const cannonArray = allTileArray.filter(v => v.checkIsNormalCannon())
+                    .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
+                for (const tile of cannonArray) {
+                    handleMapWeaponTileCannon(war, tile, isFastExecute);
+                }
+            }
+            {
+                const customCannonArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomCannon)
+                    .sort((v1, v2) => {
+                        const priority1 = v1.getCustomCannonData()?.priority ?? 0;
+                        const priority2 = v2.getCustomCannonData()?.priority ?? 0;
+                        if (priority1 !== priority2) {
+                            return priority2 - priority1;
+                        } else {
+                            return GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize);
+                        }
+                    });
+                for (const tile of customCannonArray) {
+                    handleMapWeaponTileCannon(war, tile, isFastExecute);
+                }
+            }
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1030,6 +1052,135 @@ namespace TwnsBwTurnManager {
                 }
             }
         }
+    }
+
+    function handleMapWeaponTileCannon(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): void {
+        const data                  = Helpers.getExisted(tile.getCustomCannonData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCannon_00);
+        const getCandidateUnitArray = Helpers.createLazyFunc(() => generateCandidateUnitArrayForCannon(war, tile));
+        const maxTargetCount        = data.maxTargetCount ?? 0;
+        const gridVisualEffect      = war.getGridVisualEffect();
+
+        for (let i = 0; i < maxTargetCount; ++i) {
+            const unit = getCandidateUnitArray()[i];
+            if (unit == null) {
+                break;
+            }
+
+            {
+                const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
+                if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
+                    const gridIndex = unit.getGridIndex();
+
+                    if (deltaFuelPercentage) {
+                        if (deltaFuelPercentage < 0) {
+                            unit.setCurrentFuel(Math.max(
+                                0,
+                                Math.floor(unit.getCurrentFuel() * (100 + deltaFuelPercentage) / 100)
+                            ));
+                        } else {
+                            const maxFuel = unit.getMaxFuel();
+                            unit.setCurrentFuel(Math.min(
+                                maxFuel,
+                                Math.floor(unit.getCurrentFuel() + maxFuel * deltaFuelPercentage / 100)
+                            ));
+                            if (!isFastExecute) {
+                                gridVisualEffect.showEffectSupply(gridIndex);
+                            }
+                        }
+                    }
+
+                    if (deltaPrimaryAmmoPercentage) {
+                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                        if (maxAmmo != null) {
+                            const currentAmmo = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCannon_01);
+                            if (deltaPrimaryAmmoPercentage < 0) {
+                                unit.setPrimaryWeaponCurrentAmmo(Math.max(
+                                    0,
+                                    Math.floor(currentAmmo * (100 + deltaPrimaryAmmoPercentage) / 100)
+                                ));
+                            } else {
+                                unit.setPrimaryWeaponCurrentAmmo(Math.min(
+                                    maxAmmo,
+                                    Math.floor(currentAmmo + maxAmmo * deltaPrimaryAmmoPercentage / 100)
+                                ));
+                                if (!isFastExecute) {
+                                    gridVisualEffect.showEffectSupply(gridIndex);
+                                }
+                            }
+                        }
+                    }
+
+                    if (deltaHp) {
+                        if (deltaHp < 0) {
+                            unit.setCurrentHp(Math.max(
+                                1,
+                                unit.getCurrentHp() - deltaHp * CommonConstants.UnitHpNormalizer
+                            ));
+                        } else {
+                            unit.setCurrentHp(Math.min(
+                                unit.getMaxHp(),
+                                (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer
+                            ));
+                            if (!isFastExecute) {
+                                gridVisualEffect.showEffectRepair(gridIndex);
+                            }
+                        }
+                    }
+
+                    if (!isFastExecute) {
+                        unit.updateView();
+                    }
+                }
+            }
+        }
+    }
+    function generateCandidateUnitArrayForCannon(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile): TwnsBwUnit.BwUnit[] {
+        const data              = Helpers.getExisted(tile.getCustomCannonData(), ClientErrorCode.BwTurnManager_GenerateCandidateUnitArrayForCannon_00);
+        const playerIndexInTurn = tile.getPlayerIndex();
+        const teamIndexInTurn   = tile.getTeamIndex();
+        const tileX             = tile.getGridX();
+        const tileY             = tile.getGridY();
+        const { canAffectAlly, canAffectEnemy, canAffectSelf }              = data;
+        const { radiusForDown, radiusForLeft, radiusForRight, radiusForUp } = data;
+
+        const unitAndFinalCostArray: { unit: TwnsBwUnit.BwUnit, cost: number }[] = [];
+        for (const unit of [...WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, new Set([teamIndexInTurn]))].filter(u => {
+            const unitTeamIndex = u.getTeamIndex();
+            if (((canAffectSelf) && (u.getPlayerIndex() === playerIndexInTurn))    ||
+                ((canAffectAlly) && (unitTeamIndex === teamIndexInTurn))              ||
+                ((canAffectEnemy) && (unitTeamIndex !== teamIndexInTurn))
+            ) {
+                const deltaX = u.getGridX() - tileX;
+                const deltaY = u.getGridY() - tileY;
+                return ((radiusForDown) && (Math.abs(deltaX) < radiusForDown) && (deltaY > 0) && (deltaY <= radiusForDown))
+                    || ((radiusForUp) && (Math.abs(deltaX) < radiusForUp) && (deltaY < 0) && (Math.abs(deltaY) <= radiusForUp))
+                    || ((radiusForLeft) && (Math.abs(deltaY) < radiusForLeft) && (deltaX < 0) && (Math.abs(deltaX) <= radiusForLeft))
+                    || ((radiusForRight) && (Math.abs(deltaY) < radiusForRight) && (deltaX > 0) && (deltaX <= radiusForRight));
+            } else {
+                return false;
+            }
+        })) {
+            unitAndFinalCostArray.push({
+                unit,
+                cost    : unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp(),
+            });
+        }
+        unitAndFinalCostArray.sort((info1, info2) => {
+            const cost1 = info1.cost;
+            const cost2 = info2.cost;
+            if (cost1 !== cost2) {
+                return cost2 - cost1;
+            } else {
+                return info1.unit.getUnitId() - info2.unit.getUnitId();
+            }
+        });
+
+        const candidateUnitArray: TwnsBwUnit.BwUnit[] = [];
+        for (const info of unitAndFinalCostArray) {
+            candidateUnitArray.push(info.unit);
+        }
+
+        return candidateUnitArray;
     }
 }
 
