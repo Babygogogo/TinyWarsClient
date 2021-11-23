@@ -32,6 +32,7 @@ namespace TwnsCommonJoinRoomPasswordPanel {
         private readonly _labelPasswordTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelWarName!         : TwnsUiLabel.UiLabel;
         private readonly _inputWarPassword!     : TwnsUiTextInput.UiTextInput;
+        private readonly _labelTips!            : TwnsUiLabel.UiLabel;
         private readonly _btnCancel!            : TwnsUiButton.UiButton;
         private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
@@ -78,6 +79,7 @@ namespace TwnsCommonJoinRoomPasswordPanel {
             this._labelPasswordTitle.text   = `${Lang.getText(LangTextType.B0171)}:`;
             this._btnCancel.label           = Lang.getText(LangTextType.B0154);
             this._btnConfirm.label          = Lang.getText(LangTextType.B0026);
+            this._labelTips.text            = Lang.getFormattedText(LangTextType.F0068, CommonConstants.WarPasswordMaxLength);
             this._updateLabelWarName();
         }
         private async _updateLabelWarName(): Promise<void> {
