@@ -1026,19 +1026,18 @@ namespace TwnsBwTurnManager {
                         }
 
                         if (deltaHp) {
-                            if (deltaHp < 0) {
-                                unit.setCurrentHp(Math.max(
-                                    1,
+                            unit.setCurrentHp(Math.max(
+                                1,
+                                Math.min(
+                                    unit.getMaxHp(),
                                     unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
-                                ));
+                                ),
+                            ));
+                            if (deltaHp < 0) {
                                 if (!isFastExecute) {
                                     gridVisualEffect.showEffectDamage(gridIndex);
                                 }
                             } else {
-                                unit.setCurrentHp(Math.min(
-                                    unit.getMaxHp(),
-                                    (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer
-                                ));
                                 if (!isFastExecute) {
                                     gridVisualEffect.showEffectRepair(gridIndex);
                                 }
@@ -1111,16 +1110,18 @@ namespace TwnsBwTurnManager {
                     }
 
                     if (deltaHp) {
-                        if (deltaHp < 0) {
-                            unit.setCurrentHp(Math.max(
-                                1,
-                                unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
-                            ));
-                        } else {
-                            unit.setCurrentHp(Math.min(
+                        unit.setCurrentHp(Math.max(
+                            1,
+                            Math.min(
                                 unit.getMaxHp(),
-                                (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer
-                            ));
+                                unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                            ),
+                        ));
+                        if (deltaHp < 0) {
+                            if (!isFastExecute) {
+                                gridVisualEffect.showEffectDamage(gridIndex);
+                            }
+                        } else {
                             if (!isFastExecute) {
                                 gridVisualEffect.showEffectRepair(gridIndex);
                             }
