@@ -28,9 +28,9 @@
                                                      scale9Grid="1,1,2,2" left="0" top="0" bottom="0" alpha="0.9" />
                                 <TwnsUiImage:UiImage id="_imgTouchMask" right="0" left="0" top="0" bottom="0"
                                                      alpha="0.9" x="10" y="10" source="uncompressedColorTransparent0000" />
-                                <TwnsUiLabel:UiLabel id="_labelTitle" text="(Empty)" size="15" textColor="0xFFFFFF"
+                                <TwnsUiLabel:UiLabel id="_labelTitle" text="(Empty)" size="14" textColor="0xFFFFFF"
                                                      x="4" verticalCenter="1" y="16" maxTextWidth="96" />
-                                <TwnsUiLabel:UiLabel id="_labelValue" text="(Empty)" size="15" textColor="0xFFFFFF"
+                                <TwnsUiLabel:UiLabel id="_labelValue" text="(Empty)" size="14" textColor="0xFFFFFF"
                                                      x="110" verticalCenter="1" />
                                 <e:Group id="_groupExtra" x="200" verticalCenter="0" width="60" height="20">
                                     <TwnsUiImage:UiImage source="uncompressedRectangle0006" scale9Grid="2,2,1,1"
@@ -92,7 +92,8 @@
                                         <TwnsUiImage:UiImage id="_tileView" y="-24" />
                                     </e:Group>
                                     <TwnsUiImage:UiImage bottom="0" scale9Grid="1,1,2,2" x="54"
-                                                         source="uncompressedColorWhite0000" width="1" top="0" />
+                                                         source="uncompressedColorWhite0000" width="1" top="0"
+                                                         smoothing="false" alpha="0.5" />
                                     <TwnsUiLabel:UiLabel id="_labelPrimaryAttack" text="999" size="15"
                                                          textColor="0xffffff" verticalCenter="1" x="60" />
                                     <TwnsUiLabel:UiLabel id="_labelSecondaryAttack" text="999" size="15"

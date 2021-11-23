@@ -419,7 +419,7 @@ namespace ConfigManager {
             && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage ?? data.deltaFund ?? data.deltaEnergyPercentage) != null);
     }
     export function checkIsValidCustomCannonData(data: ProtoTypes.WarSerialization.ITileCustomCannonData): boolean {
-        return (!!(data.radiusForDown ?? data.radiusForLeft ?? data.radiusForRight ?? data.radiusForUp))
+        return (!!(data.rangeForDown ?? data.rangeForLeft ?? data.rangeForRight ?? data.rangeForUp))
             && (data.priority != null)
             && (!!data.maxTargetCount)
             && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)

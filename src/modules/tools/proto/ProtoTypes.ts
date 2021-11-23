@@ -9342,17 +9342,17 @@ export declare namespace WarSerialization {
     /** Properties of a TileCustomCannonData. */
     interface ITileCustomCannonData {
 
-        /** TileCustomCannonData radiusForUp */
-        radiusForUp?: (number|null);
+        /** TileCustomCannonData rangeForUp */
+        rangeForUp?: (number|null);
 
-        /** TileCustomCannonData radiusForDown */
-        radiusForDown?: (number|null);
+        /** TileCustomCannonData rangeForDown */
+        rangeForDown?: (number|null);
 
-        /** TileCustomCannonData radiusForLeft */
-        radiusForLeft?: (number|null);
+        /** TileCustomCannonData rangeForLeft */
+        rangeForLeft?: (number|null);
 
-        /** TileCustomCannonData radiusForRight */
-        radiusForRight?: (number|null);
+        /** TileCustomCannonData rangeForRight */
+        rangeForRight?: (number|null);
 
         /** TileCustomCannonData priority */
         priority?: (number|null);
@@ -9388,17 +9388,17 @@ export declare namespace WarSerialization {
          */
         constructor(properties?: WarSerialization.ITileCustomCannonData);
 
-        /** TileCustomCannonData radiusForUp. */
-        public radiusForUp: number;
+        /** TileCustomCannonData rangeForUp. */
+        public rangeForUp: number;
 
-        /** TileCustomCannonData radiusForDown. */
-        public radiusForDown: number;
+        /** TileCustomCannonData rangeForDown. */
+        public rangeForDown: number;
 
-        /** TileCustomCannonData radiusForLeft. */
-        public radiusForLeft: number;
+        /** TileCustomCannonData rangeForLeft. */
+        public rangeForLeft: number;
 
-        /** TileCustomCannonData radiusForRight. */
-        public radiusForRight: number;
+        /** TileCustomCannonData rangeForRight. */
+        public rangeForRight: number;
 
         /** TileCustomCannonData priority. */
         public priority: number;

@@ -810,10 +810,10 @@ namespace CommonConstants {
         deltaPrimaryAmmoPercentage  : 100,
     };
     export const TileDefaultCannonUpData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
-        radiusForDown               : 0,
-        radiusForLeft               : 0,
-        radiusForRight              : 0,
-        radiusForUp                 : 4,
+        rangeForDown                : 0,
+        rangeForLeft                : 0,
+        rangeForRight               : 0,
+        rangeForUp                  : 4,
 
         priority                    : 0,
         maxTargetCount              : 1,
@@ -827,10 +827,10 @@ namespace CommonConstants {
         deltaPrimaryAmmoPercentage  : 0,
     };
     export const TileDefaultCannonDownData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
-        radiusForDown               : 4,
-        radiusForLeft               : 0,
-        radiusForRight              : 0,
-        radiusForUp                 : 0,
+        rangeForDown                : 4,
+        rangeForLeft                : 0,
+        rangeForRight               : 0,
+        rangeForUp                  : 0,
 
         priority                    : 0,
         maxTargetCount              : 1,
@@ -844,10 +844,10 @@ namespace CommonConstants {
         deltaPrimaryAmmoPercentage  : 0,
     };
     export const TileDefaultCannonLeftData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
-        radiusForDown               : 0,
-        radiusForLeft               : 4,
-        radiusForRight              : 0,
-        radiusForUp                 : 0,
+        rangeForDown                : 0,
+        rangeForLeft                : 4,
+        rangeForRight               : 0,
+        rangeForUp                  : 0,
 
         priority                    : 0,
         maxTargetCount              : 1,
@@ -861,10 +861,10 @@ namespace CommonConstants {
         deltaPrimaryAmmoPercentage  : 0,
     };
     export const TileDefaultCannonRightData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
-        radiusForDown               : 0,
-        radiusForLeft               : 0,
-        radiusForRight              : 4,
-        radiusForUp                 : 0,
+        rangeForDown                : 0,
+        rangeForLeft                : 0,
+        rangeForRight               : 4,
+        rangeForUp                  : 0,
 
         priority                    : 0,
         maxTargetCount              : 1,
@@ -878,10 +878,10 @@ namespace CommonConstants {
         deltaPrimaryAmmoPercentage  : 0,
     };
     export const TileDefaultCustomCannonData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
-        radiusForDown               : 4,
-        radiusForLeft               : 4,
-        radiusForRight              : 4,
-        radiusForUp                 : 4,
+        rangeForDown                : 4,
+        rangeForLeft                : 4,
+        rangeForRight               : 4,
+        rangeForUp                  : 4,
 
         priority                    : 0,
         maxTargetCount              : 1,

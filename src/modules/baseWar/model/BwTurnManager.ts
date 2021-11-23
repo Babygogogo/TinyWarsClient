@@ -1029,7 +1029,7 @@ namespace TwnsBwTurnManager {
                             if (deltaHp < 0) {
                                 unit.setCurrentHp(Math.max(
                                     1,
-                                    unit.getCurrentHp() - deltaHp * CommonConstants.UnitHpNormalizer
+                                    unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
                                 ));
                                 if (!isFastExecute) {
                                     gridVisualEffect.showEffectDamage(gridIndex);
@@ -1114,7 +1114,7 @@ namespace TwnsBwTurnManager {
                         if (deltaHp < 0) {
                             unit.setCurrentHp(Math.max(
                                 1,
-                                unit.getCurrentHp() - deltaHp * CommonConstants.UnitHpNormalizer
+                                unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
                             ));
                         } else {
                             unit.setCurrentHp(Math.min(
@@ -1140,22 +1140,22 @@ namespace TwnsBwTurnManager {
         const teamIndexInTurn   = tile.getTeamIndex();
         const tileX             = tile.getGridX();
         const tileY             = tile.getGridY();
-        const { canAffectAlly, canAffectEnemy, canAffectSelf }              = data;
-        const { radiusForDown, radiusForLeft, radiusForRight, radiusForUp } = data;
+        const { canAffectAlly, canAffectEnemy, canAffectSelf }          = data;
+        const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = data;
 
         const unitAndFinalCostArray: { unit: TwnsBwUnit.BwUnit, cost: number }[] = [];
         for (const unit of [...WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, new Set([teamIndexInTurn]))].filter(u => {
             const unitTeamIndex = u.getTeamIndex();
-            if (((canAffectSelf) && (u.getPlayerIndex() === playerIndexInTurn))    ||
-                ((canAffectAlly) && (unitTeamIndex === teamIndexInTurn))              ||
+            if (((canAffectSelf) && (u.getPlayerIndex() === playerIndexInTurn))     ||
+                ((canAffectAlly) && (unitTeamIndex === teamIndexInTurn))            ||
                 ((canAffectEnemy) && (unitTeamIndex !== teamIndexInTurn))
             ) {
                 const deltaX = u.getGridX() - tileX;
                 const deltaY = u.getGridY() - tileY;
-                return ((radiusForDown) && (Math.abs(deltaX) < radiusForDown) && (deltaY > 0) && (deltaY <= radiusForDown))
-                    || ((radiusForUp) && (Math.abs(deltaX) < radiusForUp) && (deltaY < 0) && (Math.abs(deltaY) <= radiusForUp))
-                    || ((radiusForLeft) && (Math.abs(deltaY) < radiusForLeft) && (deltaX < 0) && (Math.abs(deltaX) <= radiusForLeft))
-                    || ((radiusForRight) && (Math.abs(deltaY) < radiusForRight) && (deltaX > 0) && (deltaX <= radiusForRight));
+                return ((rangeForDown) && (Math.abs(deltaX) < Math.abs(deltaY)) && (deltaY > 0) && (deltaY <= rangeForDown))
+                    || ((rangeForUp) && (Math.abs(deltaX) < Math.abs(deltaY)) && (deltaY < 0) && (Math.abs(deltaY) <= rangeForUp))
+                    || ((rangeForLeft) && (Math.abs(deltaY) < Math.abs(deltaX)) && (deltaX < 0) && (Math.abs(deltaX) <= rangeForLeft))
+                    || ((rangeForRight) && (Math.abs(deltaY) < Math.abs(deltaX)) && (deltaX > 0) && (deltaX <= rangeForRight));
             } else {
                 return false;
             }

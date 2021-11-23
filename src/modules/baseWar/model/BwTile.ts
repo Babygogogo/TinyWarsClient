@@ -972,21 +972,21 @@ namespace TwnsBwTile {
             }
         }
 
-        public setCustomCannonRadiusForUp(radius: number): void {
+        public setCustomCannonRangeForUp(radius: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRadiusForUp_00).radiusForUp = radius;
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForUp_00).rangeForUp = radius;
         }
-        public setCustomCannonRadiusForDown(radius: number): void {
+        public setCustomCannonRangeForDown(radius: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRadiusForDown_00).radiusForDown = radius;
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForDown_00).rangeForDown = radius;
         }
-        public setCustomCannonRadiusForLeft(radius: number): void {
+        public setCustomCannonRangeForLeft(radius: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRadiusForLeft_00).radiusForLeft = radius;
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForLeft_00).rangeForLeft = radius;
         }
-        public setCustomCannonRadiusForRight(radius: number): void {
+        public setCustomCannonRangeForRight(radius: number): void {
             this._initCustomCannonData();
-            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRadiusForRight_00).radiusForRight = radius;
+            Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonRangeForRight_00).rangeForRight = radius;
         }
 
         public setCustomCannonPriority(priority: number): void {

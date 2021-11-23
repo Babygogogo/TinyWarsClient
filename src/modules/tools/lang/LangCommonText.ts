@@ -4047,6 +4047,26 @@ namespace TwnsLangCommonText {
             `调整等离子`,
             `Adjust Plasmas`,
         ],
+        [LangTextType.B0742]: [
+            `上`,
+            `Up`,
+        ],
+        [LangTextType.B0743]: [
+            `右`,
+            `Right`,
+        ],
+        [LangTextType.B0744]: [
+            `下`,
+            `Down`,
+        ],
+        [LangTextType.B0745]: [
+            `左`,
+            `Left`,
+        ],
+        [LangTextType.B0746]: [
+            `最大攻击目标数`,
+            `Max. Targets`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
