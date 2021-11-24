@@ -114,8 +114,8 @@ namespace WarCommonHelpers {
         const area          : AttackableArea = [];
         const tileType      = tile.getType();
         const tileGridIndex = tile.getGridIndex();
-        const tileX         = tileGridIndex.x;
-        const tileY         = tileGridIndex.y;
+        const tileGridX     = tileGridIndex.x;
+        const tileGridY     = tileGridIndex.y;
         const mapWidth      = mapSize.width;
         const mapHeight     = mapSize.height;
         const addGrid       = (x: number, y: number) => {
@@ -124,7 +124,7 @@ namespace WarCommonHelpers {
                     area[x] = [];
                 }
                 area[x][y] = {
-                    movePathDestination: { x: tileX, y: tileY },
+                    movePathDestination: { x: tileGridX, y: tileGridY },
                 };
             }
         };
@@ -138,12 +138,12 @@ namespace WarCommonHelpers {
             const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomCannonData());
             if (rangeForDown) {
                 for (let deltaY = 1; deltaY <= rangeForDown; ++deltaY) {
-                    const y = tileY + deltaY;
+                    const y = tileGridY + deltaY;
                     if (y >= mapHeight) {
                         break;
                     }
                     for (let deltaX = 1 - deltaY; deltaX <= deltaY - 1; ++deltaX) {
-                        const x = tileX + deltaX;
+                        const x = tileGridX + deltaX;
                         if (x >= mapWidth) {
                             break;
                         }
@@ -153,12 +153,12 @@ namespace WarCommonHelpers {
             }
             if (rangeForUp) {
                 for (let deltaY = -rangeForUp; deltaY < 0; ++deltaY) {
-                    const y = tileY + deltaY;
+                    const y = tileGridY + deltaY;
                     if (y >= mapHeight) {
                         break;
                     }
                     for (let deltaX = 1 + deltaY; deltaX <= -1 - deltaY; ++deltaX) {
-                        const x = tileX + deltaX;
+                        const x = tileGridX + deltaX;
                         if (x >= mapWidth) {
                             break;
                         }
@@ -168,12 +168,12 @@ namespace WarCommonHelpers {
             }
             if (rangeForRight) {
                 for (let deltaX = 1; deltaX <= rangeForRight; ++deltaX) {
-                    const x = tileX + deltaX;
+                    const x = tileGridX + deltaX;
                     if (x >= mapWidth) {
                         break;
                     }
                     for (let deltaY = 1 - deltaX; deltaY <= deltaX - 1; ++deltaY) {
-                        const y = tileY + deltaY;
+                        const y = tileGridY + deltaY;
                         if (y >= mapHeight) {
                             break;
                         }
@@ -183,17 +183,56 @@ namespace WarCommonHelpers {
             }
             if (rangeForLeft) {
                 for (let deltaX = -rangeForLeft; deltaX < 0; ++deltaX) {
-                    const x = tileX + deltaX;
+                    const x = tileGridX + deltaX;
                     if (x >= mapWidth) {
                         break;
                     }
                     for (let deltaY = 1 + deltaX; deltaY <= -1 - deltaX; ++deltaY) {
-                        const y = tileY + deltaY;
+                        const y = tileGridY + deltaY;
                         if (y >= mapHeight) {
                             break;
                         }
                         addGrid(x, y);
                     }
+                }
+            }
+
+        } else if ((tileType === TileType.LaserTurret) || (tileType === TileType.CustomLaserTurret)) {
+            const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomLaserTurretData());
+            if (rangeForDown) {
+                for (let deltaY = 0; deltaY < rangeForDown; ++deltaY) {
+                    const y = tileGridY + deltaY + 1;
+                    if (y >= mapHeight) {
+                        break;
+                    }
+                    addGrid(tileGridX, y);
+                }
+            }
+            if (rangeForUp) {
+                for (let deltaY = 0; deltaY < rangeForUp; ++deltaY) {
+                    const y = tileGridY - deltaY - 1;
+                    if (y < 0) {
+                        break;
+                    }
+                    addGrid(tileGridX, y);
+                }
+            }
+            if (rangeForRight) {
+                for (let deltaX = 0; deltaX < rangeForRight; ++deltaX) {
+                    const x = tileGridX + deltaX + 1;
+                    if (x >= mapWidth) {
+                        break;
+                    }
+                    addGrid(x, tileGridY);
+                }
+            }
+            if (rangeForLeft) {
+                for (let deltaX = 0; deltaX < rangeForLeft; ++deltaX) {
+                    const x = tileGridX - deltaX - 1;
+                    if (x < 0) {
+                        break;
+                    }
+                    addGrid(x, tileGridY);
                 }
             }
 

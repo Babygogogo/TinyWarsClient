@@ -401,6 +401,10 @@ namespace ConfigManager {
             return true;
         } else if (objectType === TileObjectType.CustomCannon) {
             return true;
+        } else if (objectType === TileObjectType.LaserTurret) {
+            return true;
+        } else if (objectType === TileObjectType.CustomLaserTurret) {
+            return true;
         } else {
             return false;
         }
@@ -422,6 +426,12 @@ namespace ConfigManager {
         return (!!(data.rangeForDown ?? data.rangeForLeft ?? data.rangeForRight ?? data.rangeForUp))
             && (data.priority != null)
             && (!!data.maxTargetCount)
+            && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
+            && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage) != null);
+    }
+    export function checkIsValidCustomLaserTurretData(data: ProtoTypes.WarSerialization.ITileCustomLaserTurretData): boolean {
+        return (!!(data.rangeForDown ?? data.rangeForLeft ?? data.rangeForRight ?? data.rangeForUp))
+            && (data.priority != null)
             && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
             && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage) != null);
     }

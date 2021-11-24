@@ -607,6 +607,28 @@ namespace TwnsBwTurnManager {
                     handleMapWeaponTileCannon(war, tile, isFastExecute);
                 }
             }
+            {
+                const laserTurretArray = allTileArray.filter(v => v.getType() === Types.TileType.LaserTurret)
+                    .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
+                for (const tile of laserTurretArray) {
+                    handleMapWeaponTileLaserTurret(war, tile, isFastExecute);
+                }
+            }
+            {
+                const customLaserTurretArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomLaserTurret)
+                    .sort((v1, v2) => {
+                        const priority1 = v1.getCustomLaserTurretData()?.priority ?? 0;
+                        const priority2 = v2.getCustomLaserTurretData()?.priority ?? 0;
+                        if (priority1 !== priority2) {
+                            return priority2 - priority1;
+                        } else {
+                            return GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize);
+                        }
+                    });
+                for (const tile of customLaserTurretArray) {
+                    handleMapWeaponTileLaserTurret(war, tile, isFastExecute);
+                }
+            }
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1179,6 +1201,122 @@ namespace TwnsBwTurnManager {
         const candidateUnitArray: TwnsBwUnit.BwUnit[] = [];
         for (const info of unitAndFinalCostArray) {
             candidateUnitArray.push(info.unit);
+        }
+
+        return candidateUnitArray;
+    }
+
+    function handleMapWeaponTileLaserTurret(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): void {
+        const data                  = Helpers.getExisted(tile.getCustomLaserTurretData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileLaserTurret_00);
+        const candidateUnitArray    = generateCandidateUnitArrayForLaserTurret(war, tile);
+
+        {
+            const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
+            if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
+                for (const unit of candidateUnitArray) {
+                    if (deltaFuelPercentage) {
+                        if (deltaFuelPercentage < 0) {
+                            unit.setCurrentFuel(Math.max(
+                                0,
+                                Math.floor(unit.getCurrentFuel() * (100 + deltaFuelPercentage) / 100)
+                            ));
+                        } else {
+                            const maxFuel = unit.getMaxFuel();
+                            unit.setCurrentFuel(Math.min(
+                                maxFuel,
+                                Math.floor(unit.getCurrentFuel() + maxFuel * deltaFuelPercentage / 100)
+                            ));
+                        }
+                    }
+
+                    if (deltaPrimaryAmmoPercentage) {
+                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                        if (maxAmmo != null) {
+                            const currentAmmo = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01);
+                            if (deltaPrimaryAmmoPercentage < 0) {
+                                unit.setPrimaryWeaponCurrentAmmo(Math.max(
+                                    0,
+                                    Math.floor(currentAmmo * (100 + deltaPrimaryAmmoPercentage) / 100)
+                                ));
+                            } else {
+                                unit.setPrimaryWeaponCurrentAmmo(Math.min(
+                                    maxAmmo,
+                                    Math.floor(currentAmmo + maxAmmo * deltaPrimaryAmmoPercentage / 100)
+                                ));
+                            }
+                        }
+                    }
+
+                    if (deltaHp) {
+                        unit.setCurrentHp(Math.max(
+                            1,
+                            Math.min(
+                                unit.getMaxHp(),
+                                unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                            ),
+                        ));
+                    }
+                }
+            }
+        }
+    }
+    function generateCandidateUnitArrayForLaserTurret(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile): TwnsBwUnit.BwUnit[] {
+        const data              = Helpers.getExisted(tile.getCustomLaserTurretData(), ClientErrorCode.BwTurnManager_GenerateCandidateUnitArrayForLaserTurret_00);
+        const playerIndexInTurn = tile.getPlayerIndex();
+        const teamIndexInTurn   = tile.getTeamIndex();
+        const tileGridX         = tile.getGridX();
+        const tileGridY         = tile.getGridY();
+        const unitMap           = war.getUnitMap();
+        const mapSize           = unitMap.getMapSize();
+        const rangeForUp        = data.rangeForUp ?? 0;
+        const rangeForDown      = data.rangeForDown ?? 0;
+        const rangeForLeft      = data.rangeForLeft ?? 0;
+        const rangeForRight     = data.rangeForRight ?? 0;
+
+        const { canAffectAlly, canAffectEnemy, canAffectSelf }  = data;
+        const candidateUnitArray                                : TwnsBwUnit.BwUnit[] = [];
+        const checkAndAddUnit                                   = (gridIndex: Types.GridIndex) => {
+            const unit = unitMap.getUnitOnMap(gridIndex);
+            if (unit == null) {
+                return;
+            }
+
+            const unitTeamIndex = unit.getTeamIndex();
+            if (((canAffectSelf) && (unit.getPlayerIndex() === playerIndexInTurn))    ||
+                ((canAffectAlly) && (unitTeamIndex === teamIndexInTurn))              ||
+                ((canAffectEnemy) && (unitTeamIndex !== teamIndexInTurn))
+            ) {
+                candidateUnitArray.push(unit);
+            }
+        };
+
+        for (let deltaX = 0; deltaX < rangeForRight; ++deltaX) {
+            const gridIndex: Types.GridIndex = { x: tileGridX + deltaX + 1, y: tileGridY };
+            if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+                break;
+            }
+            checkAndAddUnit(gridIndex);
+        }
+        for (let deltaX = 0; deltaX < rangeForLeft; ++deltaX) {
+            const gridIndex: Types.GridIndex = { x: tileGridX - deltaX - 1, y: tileGridY };
+            if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+                break;
+            }
+            checkAndAddUnit(gridIndex);
+        }
+        for (let deltaY = 0; deltaY < rangeForDown; ++deltaY) {
+            const gridIndex: Types.GridIndex = { x: tileGridX, y: tileGridY + deltaY + 1 };
+            if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+                break;
+            }
+            checkAndAddUnit(gridIndex);
+        }
+        for (let deltaY = 0; deltaY < rangeForUp; ++deltaY) {
+            const gridIndex: Types.GridIndex = { x: tileGridX, y: tileGridY - deltaY - 1 };
+            if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+                break;
+            }
+            checkAndAddUnit(gridIndex);
         }
 
         return candidateUnitArray;

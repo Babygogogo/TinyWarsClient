@@ -357,7 +357,7 @@ namespace TwnsBwUnitDetailPanel {
                 });
                 ++index;
             }
-            for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable)) {
+            for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.DestroyableForDamageChart)) {
                 dataList.push({
                     configVersion,
                     index,

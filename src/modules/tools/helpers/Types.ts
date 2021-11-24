@@ -360,29 +360,30 @@ namespace Types {
 
     // eslint-disable-next-line no-shadow
     export const enum TileObjectType {
-        Empty,          /* 0 */         Road,           /* 1 */         Bridge,        /* 2 */          Wood,           /* 3 */
-        Mountain,       /* 4 */         Wasteland,      /* 5 */         Ruins,         /* 6 */          Fire,           /* 7 */
-        Rough,          /* 8 */         Mist,           /* 9 */         Reef,          /* 10 */         Plasma,         /* 11 */
-        Meteor,         /* 12 */        Silo,           /* 13 */        EmptySilo,     /* 14 */         Headquarters,   /* 15 */
-        City,           /* 16 */        CommandTower,   /* 17 */        Radar,         /* 18 */         Factory,        /* 19 */
-        Airport,        /* 20 */        Seaport,        /* 21 */        TempAirport,   /* 22 */         TempSeaport,    /* 23 */
-        GreenPlasma,    /* 24 */        Crystal,        /* 25 */        CustomCrystal, /* 26 */         CannonUp,       /* 27 */
-        CannonDown,     /* 28 */        CannonLeft,     /* 29 */        CannonRight,   /* 30 */         CustomCannon,   /* 31 */
+        Empty,          /* 0 */         Road,               /* 1 */         Bridge,        /* 2 */          Wood,           /* 3 */
+        Mountain,       /* 4 */         Wasteland,          /* 5 */         Ruins,         /* 6 */          Fire,           /* 7 */
+        Rough,          /* 8 */         Mist,               /* 9 */         Reef,          /* 10 */         Plasma,         /* 11 */
+        Meteor,         /* 12 */        Silo,               /* 13 */        EmptySilo,     /* 14 */         Headquarters,   /* 15 */
+        City,           /* 16 */        CommandTower,       /* 17 */        Radar,         /* 18 */         Factory,        /* 19 */
+        Airport,        /* 20 */        Seaport,            /* 21 */        TempAirport,   /* 22 */         TempSeaport,    /* 23 */
+        GreenPlasma,    /* 24 */        Crystal,            /* 25 */        CustomCrystal, /* 26 */         CannonUp,       /* 27 */
+        CannonDown,     /* 28 */        CannonLeft,         /* 29 */        CannonRight,   /* 30 */         CustomCannon,   /* 31 */
+        LaserTurret,    /* 32 */        CustomLaserTurret,  /* 33 */
     }
 
     // eslint-disable-next-line no-shadow
     export const enum TileType {
-        Plain,          /* 0 */         River,          /* 1 */         Sea,            /* 2 */         Beach,          /* 3 */
-        Road,           /* 4 */         BridgeOnPlain,  /* 5 */         BridgeOnRiver,  /* 6 */         BridgeOnBeach,  /* 7 */
-        BridgeOnSea,    /* 8 */         Wood,           /* 9 */         Mountain,       /* 10 */        Wasteland,      /* 11 */
-        Ruins,          /* 12 */        Fire,           /* 13 */        Rough,          /* 14 */        MistOnSea,      /* 15 */
-        Reef,           /* 16 */        Plasma,         /* 17 */        GreenPlasma,    /* 18 */        Meteor,         /* 19 */
-        Silo,           /* 20 */        EmptySilo,      /* 21 */        Headquarters,   /* 22 */        City,           /* 23 */
-        CommandTower,   /* 24 */        Radar,          /* 25 */        Factory,        /* 26 */        Airport,        /* 27 */
-        Seaport,        /* 28 */        TempAirport,    /* 29 */        TempSeaport,    /* 30 */        MistOnPlain,    /* 31 */
-        MistOnRiver,    /* 32 */        MistOnBeach,    /* 33 */        Crystal,        /* 34 */        CustomCrystal,  /* 35 */
-        CannonUp,       /* 36 */        CannonDown,     /* 37 */        CannonLeft,     /* 38 */        CannonRight,    /* 39 */
-        CustomCannon,   /* 40 */
+        Plain,          /* 0 */         River,          /* 1 */         Sea,                /* 2 */         Beach,          /* 3 */
+        Road,           /* 4 */         BridgeOnPlain,  /* 5 */         BridgeOnRiver,      /* 6 */         BridgeOnBeach,  /* 7 */
+        BridgeOnSea,    /* 8 */         Wood,           /* 9 */         Mountain,           /* 10 */        Wasteland,      /* 11 */
+        Ruins,          /* 12 */        Fire,           /* 13 */        Rough,              /* 14 */        MistOnSea,      /* 15 */
+        Reef,           /* 16 */        Plasma,         /* 17 */        GreenPlasma,        /* 18 */        Meteor,         /* 19 */
+        Silo,           /* 20 */        EmptySilo,      /* 21 */        Headquarters,       /* 22 */        City,           /* 23 */
+        CommandTower,   /* 24 */        Radar,          /* 25 */        Factory,            /* 26 */        Airport,        /* 27 */
+        Seaport,        /* 28 */        TempAirport,    /* 29 */        TempSeaport,        /* 30 */        MistOnPlain,    /* 31 */
+        MistOnRiver,    /* 32 */        MistOnBeach,    /* 33 */        Crystal,            /* 34 */        CustomCrystal,  /* 35 */
+        CannonUp,       /* 36 */        CannonDown,     /* 37 */        CannonLeft,         /* 38 */        CannonRight,    /* 39 */
+        CustomCannon,   /* 40 */        LaserTurret,    /* 41 */        CustomLaserTurret,  /* 42 */
     }
 
     // eslint-disable-next-line no-shadow
@@ -407,7 +408,9 @@ namespace Types {
 
     // eslint-disable-next-line no-shadow
     export enum TileCategory {
-        None,          /* 0 */              All,               /* 1 */          LoadableForSeaTransports, /* 2 */   Destroyable,    /* 3 */
+        None,                       /* 0 */         All,            /* 1 */         LoadableForSeaTransports,   /* 2 */     Destroyable,    /* 3 */
+        City,                       /* 4 */         PlainAndRuin,   /* 5 */         Road,                       /* 6 */     Buildings,      /* 7 */
+        DestroyableForDamageChart,  /* 8 */
     }
 
     // eslint-disable-next-line no-shadow

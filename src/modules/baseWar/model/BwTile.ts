@@ -15,15 +15,16 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTile {
-    import TileType                 = Types.TileType;
-    import TileObjectType           = Types.TileObjectType;
-    import TileDecoratorType        = Types.TileDecoratorType;
-    import TileBaseType             = Types.TileBaseType;
-    import TileTemplateCfg          = Types.TileTemplateCfg;
-    import ITileCustomCrystalData   = ProtoTypes.WarSerialization.ITileCustomCrystalData;
-    import ITileCustomCannonData    = ProtoTypes.WarSerialization.ITileCustomCannonData;
-    import ISerialTile              = ProtoTypes.WarSerialization.ISerialTile;
-    import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import TileType                     = Types.TileType;
+    import TileObjectType               = Types.TileObjectType;
+    import TileDecoratorType            = Types.TileDecoratorType;
+    import TileBaseType                 = Types.TileBaseType;
+    import TileTemplateCfg              = Types.TileTemplateCfg;
+    import ITileCustomCrystalData       = ProtoTypes.WarSerialization.ITileCustomCrystalData;
+    import ITileCustomCannonData        = ProtoTypes.WarSerialization.ITileCustomCannonData;
+    import ITileCustomLaserTurretData   = ProtoTypes.WarSerialization.ITileCustomLaserTurretData;
+    import ISerialTile                  = ProtoTypes.WarSerialization.ISerialTile;
+    import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwTile {
         private _templateCfg?           : TileTemplateCfg;
@@ -42,6 +43,7 @@ namespace TwnsBwTile {
         private _currentCapturePoint?   : number | null;
         private _customCrystalData?     : ITileCustomCrystalData | null;
         private _customCannonData?      : ITileCustomCannonData | null;
+        private _customLaserTurretData? : ITileCustomLaserTurretData | null;
 
         private readonly _view  = new TwnsBwTileView.BwTileView();
         private _hasFog         = false;
@@ -158,6 +160,14 @@ namespace TwnsBwTile {
                 throw Helpers.newError(`Invalid customCannonData.`, ClientErrorCode.BwTile_Deserialize_17);
             }
 
+            const customLaserTurretData = data.customLaserTurretData ?? null;
+            if ((customLaserTurretData != null) && (tileType !== TileType.CustomLaserTurret)) {
+                throw Helpers.newError(`CustomLaserTurretData is present while the tile is not CustomLaserTurret.`, ClientErrorCode.BwTile_Deserialize_18);
+            }
+            if ((customLaserTurretData != null) && (!ConfigManager.checkIsValidCustomLaserTurretData(customLaserTurretData))) {
+                throw Helpers.newError(`Invalid customLaserTurretData.`, ClientErrorCode.BwTile_Deserialize_19);
+            }
+
             this._setTemplateCfg(templateCfg);
             this._setGridX(gridX);
             this._setGridY(gridY);
@@ -174,16 +184,18 @@ namespace TwnsBwTile {
             this.setCurrentCapturePoint(currentCapturePoint ?? (templateCfg.maxCapturePoint ?? null));
             this._setCustomCrystalData(customCrystalData);
             this._setCustomCannonData(customCannonData);
+            this._setCustomLaserTurretData(customLaserTurretData);
         }
         public serialize(): ISerialTile {
             const data: ISerialTile = {
-                gridIndex           : this.getGridIndex(),
-                baseType            : this.getBaseType(),
-                objectType          : this.getObjectType(),
-                playerIndex         : this.getPlayerIndex(),
+                gridIndex               : this.getGridIndex(),
+                baseType                : this.getBaseType(),
+                objectType              : this.getObjectType(),
+                playerIndex             : this.getPlayerIndex(),
 
-                customCrystalData   : this._customCrystalData,
-                customCannonData    : this._customCannonData,
+                customCrystalData       : this._customCrystalData,
+                customCannonData        : this._customCannonData,
+                customLaserTurretData   : this._customLaserTurretData,
             };
 
             const currentHp = this.getCurrentHp();
@@ -223,10 +235,11 @@ namespace TwnsBwTile {
                     gridIndex,
                     baseType,
                     objectType,
-                    playerIndex         : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                    playerIndex             : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
 
-                    customCrystalData   : this._customCrystalData,
-                    customCannonData    : this._customCannonData,
+                    customCrystalData       : this._customCrystalData,
+                    customCannonData        : this._customCannonData,
+                    customLaserTurretData   : this._customLaserTurretData,
                 };
 
                 const currentHp = this.getCurrentHp();
@@ -870,7 +883,9 @@ namespace TwnsBwTile {
                 || (type === TileType.CannonLeft)
                 || (type === TileType.CannonRight)
                 || (type === TileType.CannonUp)
-                || (type === TileType.CustomCannon);
+                || (type === TileType.CustomCannon)
+                || (type === TileType.LaserTurret)
+                || (type === TileType.CustomLaserTurret);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1022,6 +1037,77 @@ namespace TwnsBwTile {
         public setCustomCannonDeltaFuelPercentage(percentage: number): void {
             this._initCustomCannonData();
             Helpers.getExisted(this.getCustomCannonData(), ClientErrorCode.BwTile_SetCustomCannonDeltaFuelPercentage_00).deltaFuelPercentage = percentage;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for cannon data.
+        ////////////////////////////////////////////////////////////////////////////////
+        public getCustomLaserTurretData(): ITileCustomLaserTurretData | null {
+            const tileType = this.getType();
+            if (tileType === TileType.LaserTurret) {
+                return CommonConstants.TileDefaultCustomLaserTurretData;
+            } else if (tileType === TileType.CustomLaserTurret) {
+                return this._customLaserTurretData ?? CommonConstants.TileDefaultCustomLaserTurretData;
+            } else {
+                return null;
+            }
+        }
+        private _setCustomLaserTurretData(data: ITileCustomLaserTurretData | null): void {
+            this._customLaserTurretData = data;
+        }
+
+        private _initCustomLaserTurretData(): void {
+            if (this._customLaserTurretData == null) {
+                this._customLaserTurretData = Helpers.deepClone(CommonConstants.TileDefaultCustomLaserTurretData);
+            }
+        }
+
+        public setCustomLaserTurretRangeForUp(radius: number): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForUp_00).rangeForUp = radius;
+        }
+        public setCustomLaserTurretRangeForDown(radius: number): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForDown_00).rangeForDown = radius;
+        }
+        public setCustomLaserTurretRangeForLeft(radius: number): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForLeft_00).rangeForLeft = radius;
+        }
+        public setCustomLaserTurretRangeForRight(radius: number): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretRangeForRight_00).rangeForRight = radius;
+        }
+
+        public setCustomLaserTurretPriority(priority: number): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretPriority_00).priority = priority;
+        }
+
+        public setCustomLaserTurretCanAffectSelf(canAffect: boolean): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretCanAffectSelf_00).canAffectSelf = canAffect;
+        }
+        public setCustomLaserTurretCanAffectAlly(canAffect: boolean): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretCanAffectAlly_00).canAffectAlly = canAffect;
+        }
+        public setCustomLaserTurretCanAffectEnemy(canAffect: boolean): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretCanAffectEnemy_00).canAffectEnemy = canAffect;
+        }
+
+        public setCustomLaserTurretDeltaHp(deltaHp: number): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretDeltaHp_00).deltaHp = deltaHp;
+        }
+        public setCustomLaserTurretDeltaPrimaryAmmoPercentage(percentage: number): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretDeltaPrimaryAmmoPercentage_00).deltaPrimaryAmmoPercentage = percentage;
+        }
+        public setCustomLaserTurretDeltaFuelPercentage(percentage: number): void {
+            this._initCustomLaserTurretData();
+            Helpers.getExisted(this.getCustomLaserTurretData(), ClientErrorCode.BwTile_SetCustomLaserTurretDeltaFuelPercentage_00).deltaFuelPercentage = percentage;
         }
 
         ////////////////////////////////////////////////////////////////////////////////

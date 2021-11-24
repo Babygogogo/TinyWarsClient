@@ -2,6 +2,7 @@
 // import TwnsClientErrorCode  from "../helpers/ClientErrorCode";
 // import TwnsServerErrorCode  from "../helpers/ServerErrorCode";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLangErrorText {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import ServerErrorCode      = TwnsServerErrorCode.ServerErrorCode;
@@ -202,11 +203,15 @@ namespace TwnsLangErrorText {
         ],
         [ClientErrorCode.WarEventFullDataValidation09]: [
             `存在未被引用的事件动作`,
-            `There is a redundant event action.`,
+            `There is a redundant event action. Please delete it via the 'Delete Redundancy' button if you don't need it.`,
+        ],
+        [ClientErrorCode.WarEventFullDataValidation09]: [
+            `存在未被引用的事件条件`,
+            `There is a redundant event condition. Please delete it via the 'Delete Redundancy' button if you don't need it.`,
         ],
         [ClientErrorCode.WarEventFullDataValidation11]: [
             `存在未被引用的事件条件节点`,
-            `There is a redundant event condition node.`,
+            `There is a redundant event condition node. Please delete it via the 'Delete Redundancy' button if you don't need it.`,
         ],
         [ClientErrorCode.WarEventFullDataValidation12]: [
             `存在未被引用的事件`,

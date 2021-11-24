@@ -98,7 +98,7 @@
                                                              alpha="0.9" locked="true" />
                                         <e:Group id="_conView" y="3" scaleX="0.81" scaleY="0.81" x="20"
                                                  touchChildren="false" touchEnabled="false">
-                                            <TwnsUiImage:UiImage id="_tileView" y="-72" />
+                                            <TwnsUiImage:UiImage id="_tileView" y="-24" />
                                         </e:Group>
                                         <TwnsUiImage:UiImage bottom="0" scale9Grid="1,1,2,2" x="54"
                                                              source="uncompressedColorWhite0000" width="1" top="0" />

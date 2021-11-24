@@ -4221,6 +4221,14 @@ namespace TwnsLangCommonText {
             `神秘加农炮`,
             `Myst.Cannon`,
         ],
+        [LangTextType.B1038]: [
+            `激光炮`,
+            `LaserTurret`,
+        ],
+        [LangTextType.B1039]: [
+            `神秘激光炮`,
+            `Myst.LaserTurret`,
+        ],
 
         [LangTextType.B1200]: [
             `步兵`,

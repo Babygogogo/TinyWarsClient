@@ -34,8 +34,8 @@
             </e:List>
         </TwnsUiScrollList:UiScrollList>
         <e:Group horizontalCenter="0" bottom="20">
-            <TwnsUiImage:UiImage id="_imgAvatar" anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,2,2" x="0" y="0"
-                                 source="userAvatar0001" scaleX="0.4" scaleY="0.4" />
+            <TwnsUiImage:UiImage id="_imgAvatar" anchorOffsetX="0" anchorOffsetY="0" x="0" y="0" source="userAvatar0001"
+                                 scaleX="0.4" scaleY="0.4" />
             <TwnsUiButton:UiButton id="_btnConfirm" label="聊天" skinName="Skins.Component.Button.ButtonYellow001"
                                    width="100" left="0" top="0" />
             <TwnsUiButton:UiButton id="_btnCancel" label="聊天" width="100" left="0" top="0"
