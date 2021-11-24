@@ -644,25 +644,25 @@ namespace WarCommonHelpers {
             throw Helpers.newError(`Empty movingPath.`, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_00);
         }
 
-        const unitId    = Helpers.getExisted(movingUnitData.unitId, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_01);
-        const unitMap   = war.getUnitMap();
-        unitMap.removeUnitById(unitId, true);
+        const unitMap           = war.getUnitMap();
+        const unitMapView       = unitMap.getView();
+        const movingUnitView    = unitMap.getUnitById(Helpers.getExisted(movingUnitData.unitId, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_01))?.getView();
+        (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
 
-        const unit = new TwnsBwUnit.BwUnit();
-        unit.init(movingUnitData, war.getConfigVersion());
-        unit.startRunning(war);
-        unit.startRunningView();
+        const virtualUnit = new TwnsBwUnit.BwUnit();
+        virtualUnit.init(movingUnitData, war.getConfigVersion());
+        virtualUnit.startRunning(war);
+        virtualUnit.startRunningView();
 
-        const unitMapView   = unitMap.getView();
-        const unitView      = unit.getView();
-        unitMapView.addUnit(unitView, true);
-        await unitView.moveAlongExtraPath({
+        const virtualUnitView = virtualUnit.getView();
+        unitMapView.addUnit(virtualUnitView, true);
+        await virtualUnitView.moveAlongExtraPath({
             path: movingPath,
             aiming,
             deleteViewAfterMoving
         });
 
-        return unitView;
+        return virtualUnitView;
     }
 
     export function checkIsUnitRepaired(oldUnitData: ISerialUnit, newUnitData: ISerialUnit): boolean {
@@ -798,10 +798,12 @@ namespace WarCommonHelpers {
         commonExtraData     : ProtoTypes.Structure.ICommonExtraDataForWarAction;
         isFastExecute       : boolean;
     }): boolean {
-        const playerIndexInTurn                     = war.getPlayerIndexInTurn();
-        const visibilityArrayFromPathsAfterAction   = commonExtraData.visibilityArrayFromPathsAfterAction;
-        if (visibilityArrayFromPathsAfterAction) {
-            war.getFogMap().updateMapFromPathsByVisibilityArray(playerIndexInTurn, visibilityArrayFromPathsAfterAction);
+        const playerIndexInTurn = war.getPlayerIndexInTurn();
+        {
+            const visibilityArrayFromPathsAfterAction = commonExtraData.visibilityArrayFromPathsAfterAction;
+            if (visibilityArrayFromPathsAfterAction) {
+                war.getFogMap().updateMapFromPathsByVisibilityArray(playerIndexInTurn, visibilityArrayFromPathsAfterAction);
+            }
         }
 
         const configVersion             = war.getConfigVersion();
@@ -815,17 +817,80 @@ namespace WarCommonHelpers {
         const unitMap = war.getUnitMap();
         unitMap.setNextUnitId(Helpers.getExisted(commonExtraData.nextUnitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_01));
 
-        const gridVisualEffect  = war.getGridVisualEffect();
-        const updatedUnits      = new Set<TwnsBwUnit.BwUnit>();
-        for (const unitData of commonExtraData.unitArrayAfterAction ?? []) {
-            const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_02);
-            const existingUnit  = unitMap.getUnitById(unitId);
-            if (existingUnit) {
-                if (existingUnit.getLoaderUnitId() == null) {
-                    unitMap.removeUnitOnMap(existingUnit.getGridIndex(), true);
-                } else {
-                    unitMap.removeUnitLoaded(unitId);
+        const unitArrayAfterAction  = commonExtraData.unitArrayAfterAction ?? [];
+        const destroyedUnitIdArray  = commonExtraData.destroyedUnitIdArray ?? [];
+        if (unitArrayAfterAction.some(v => destroyedUnitIdArray.indexOf(Helpers.getExisted(v.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_02)) >= 0)) {
+            throw Helpers.newError(`WarCommonHelpers.handleCommonExtraDataForWarActions() unitArrayAfterAction and destroyedUnitIdArray overlapped!`, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_03);
+        }
+
+        const movingUnitAndPath     = commonExtraData.movingUnitAndPath;
+        const movingUnitId          = movingUnitAndPath ? Helpers.getExisted(movingUnitAndPath.unit?.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_04) : null;
+        const movingUnit            = movingUnitId == null ? null : unitMap.getUnitById(movingUnitId);
+        const gridVisualEffect      = war.getGridVisualEffect();
+        let isShownExplosionEffect  = false;
+        {
+            const movingPath            = movingUnitAndPath?.path;
+            const movingDestination     = movingPath ? movingPath[movingPath.length - 1] : null;
+            const movingUnitPlayerIndex = movingUnit?.getPlayerIndex();
+            const destinationGridIndex  = movingDestination?.isVisible ? GridIndexHelpers.convertGridIndex(movingDestination.gridIndex) : null;
+            for (const unitId of destroyedUnitIdArray) {
+                const unit = unitMap.getUnitById(unitId);
+                if (unit == null) {
+                    continue;
                 }
+
+                if (unit.getLoaderUnitId()) {
+                    unitMap.removeUnitLoaded(unitId);
+
+                } else {
+                    const gridIndex = unit.getGridIndex();
+                    unitMap.removeUnitOnMap(gridIndex, true);
+
+                    if (!isFastExecute) {
+                        if ((destinationGridIndex == null)                                      ||
+                            (unit.getPlayerIndex() !== movingUnitPlayerIndex)                   ||
+                            (!GridIndexHelpers.checkIsEqual(destinationGridIndex, gridIndex))
+                        ) {
+                            gridVisualEffect.showEffectExplosion(gridIndex);
+                            isShownExplosionEffect = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        const tempRemovedUnits = new Map<number, TwnsBwUnit.BwUnit>();  // 此临时变量仅用于优化性能，在后续把部队加回来的过程中可以直接从这里取，而不必重新创建
+        if ((movingUnitId != null) && (movingUnit)) {
+            unitMap.removeUnitById(movingUnitId, true);
+            tempRemovedUnits.set(movingUnitId, movingUnit);
+
+            for (const loadedUnit of unitMap.getUnitsLoadedByLoader(movingUnit, true)) {
+                const loadedUnitId = loadedUnit.getUnitId();
+                unitMap.removeUnitLoaded(loadedUnitId);
+                tempRemovedUnits.set(loadedUnitId, loadedUnit);
+            }
+        }
+        for (const unitData of unitArrayAfterAction) {
+            // 先把涉及的部队全部从地图上移除，然后再加回来，否则如果遇到有部队互相交换了位置之类的复杂情况就会报错（因为尝试把A移动到B所在位置时，B仍然占着位置，A就无法移动过去）
+            const unitId    = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_05);
+            const unit      = unitMap.getUnitById(unitId);
+            if (unit) {
+                unitMap.removeUnitById(unitId, true);
+                tempRemovedUnits.set(unitId, unit);
+            }
+        }
+
+        const updatedViewUnits = new Set<TwnsBwUnit.BwUnit>();
+        for (const unitData of unitArrayAfterAction) {
+            const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_06);
+            // const existingUnit  = unitMap.getUnitById(unitId);
+            const existingUnit  = tempRemovedUnits.get(unitId);
+            if (existingUnit) {
+                // if (existingUnit.getLoaderUnitId() == null) {
+                //     unitMap.removeUnitOnMap(existingUnit.getGridIndex(), true);
+                // } else {
+                //     unitMap.removeUnitLoaded(unitId);
+                // }
 
                 const existingUnitData = existingUnit.serialize();
                 existingUnit.init(unitData, configVersion);
@@ -836,7 +901,7 @@ namespace WarCommonHelpers {
                 }
                 existingUnit.startRunning(war);
                 existingUnit.startRunningView();
-                updatedUnits.add(existingUnit);
+                updatedViewUnits.add(existingUnit);
 
                 if (!isFastExecute) {
                     const gridIndex = existingUnit.getGridIndex();
@@ -862,27 +927,13 @@ namespace WarCommonHelpers {
                 }
                 unit.startRunning(war);
                 unit.startRunningView();
-                updatedUnits.add(unit);
-            }
-        }
-
-        let isShownExplosionEffect = false;
-        for (const unitId of commonExtraData.destroyedUnitIdArray ?? []) {
-            const unit = unitMap.getUnitById(unitId);
-            if ((unit) && (unit.getLoaderUnitId() == null)) {
-                const gridIndex = unit.getGridIndex();
-                WarDestructionHelpers.removeUnitOnMap(war, gridIndex);
-
-                if (!isFastExecute) {
-                    gridVisualEffect.showEffectExplosion(gridIndex);
-                    isShownExplosionEffect = true;
-                }
+                updatedViewUnits.add(unit);
             }
         }
 
         const tileMap = war.getTileMap();
         for (const tileData of commonExtraData.tileArrayAfterAction ?? []) {
-            const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_03);
+            const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_07);
             const tile              = tileMap.getTile(gridIndex);
             const hpBeforeAction    = tile.getCurrentHp();
             tile.init(tileData, configVersion);
@@ -904,7 +955,7 @@ namespace WarCommonHelpers {
 
         if ((!isFastExecute) && (playerArrayAfterAction.some(v => v.playerIndex === playerIndexInTurn))) {
             for (const unit of unitMap.getAllUnitsOnMap()) {
-                if ((!updatedUnits.has(unit)) && (unit.getPlayerIndex() === playerIndexInTurn)) {
+                if ((!updatedViewUnits.has(unit)) && (unit.getPlayerIndex() === playerIndexInTurn)) {
                     unit.updateView();
                 }
             }
