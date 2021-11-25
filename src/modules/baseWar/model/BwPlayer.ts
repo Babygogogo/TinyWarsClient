@@ -78,16 +78,16 @@ namespace TwnsBwPlayer {
                 throw Helpers.newError(`Invalid coUsingSkillType: ${coUsingSkillType}`, ClientErrorCode.BwPlayer_Init_08);
             }
 
-            if (((coUsingSkillType === CoSkillType.Power)       && (!(coConfig.powerSkills || []).length))      ||
-                ((coUsingSkillType === CoSkillType.SuperPower)  && (!(coConfig.superPowerSkills || []).length))
-            ) {
-                throw Helpers.newError(`Invalid coUsingSkillType: ${coUsingSkillType}`, ClientErrorCode.BwPlayer_Init_09);
-            }
+            // if (((coUsingSkillType === CoSkillType.Power)       && (!(coConfig.powerSkills || []).length))      ||
+            //     ((coUsingSkillType === CoSkillType.SuperPower)  && (!(coConfig.superPowerSkills || []).length))
+            // ) {
+            //     throw Helpers.newError(`Invalid coUsingSkillType: ${coUsingSkillType}`, ClientErrorCode.BwPlayer_Init_09);
+            // }
 
             const coCurrentEnergy = data.coCurrentEnergy || 0;
-            if (coCurrentEnergy > WarCommonHelpers.getCoMaxEnergy(coConfig)) {
-                throw Helpers.newError(`Invalid coCurrentEnergy: ${coCurrentEnergy}`, ClientErrorCode.BwPlayer_Init_10);
-            }
+            // if (coCurrentEnergy > WarCommonHelpers.getCoMaxEnergy(coConfig)) {
+            //     throw Helpers.newError(`Invalid coCurrentEnergy: ${coCurrentEnergy}`, ClientErrorCode.BwPlayer_Init_10);
+            // }
 
             if ((playerIndex === CommonConstants.WarNeutralPlayerIndex) &&
                 (aliveState !== PlayerAliveState.Alive)

@@ -52768,6 +52768,9 @@ export declare namespace NetMessage {
 
             /** C selfPlayerIndex */
             selfPlayerIndex?: (number|null);
+
+            /** C selfCoId */
+            selfCoId?: (number|null);
         }
 
         /** Represents a C. */
@@ -52784,6 +52787,9 @@ export declare namespace NetMessage {
 
             /** C selfPlayerIndex. */
             public selfPlayerIndex: number;
+
+            /** C selfCoId. */
+            public selfCoId: number;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -55783,6 +55789,9 @@ export declare namespace NetMessage {
 
             /** C playerIndex */
             playerIndex?: (number|null);
+
+            /** C coId */
+            coId?: (number|null);
         }
 
         /** Represents a C. */
@@ -55799,6 +55808,9 @@ export declare namespace NetMessage {
 
             /** C playerIndex. */
             public playerIndex: number;
+
+            /** C coId. */
+            public coId: number;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -55885,6 +55897,9 @@ export declare namespace NetMessage {
 
             /** S newPlayerIndex */
             newPlayerIndex?: (number|null);
+
+            /** S coId */
+            coId?: (number|null);
         }
 
         /** Represents a S. */
@@ -55907,6 +55922,9 @@ export declare namespace NetMessage {
 
             /** S newPlayerIndex. */
             public newPlayerIndex: number;
+
+            /** S coId. */
+            public coId: number;
 
             /**
              * Creates a new S instance using the specified properties.

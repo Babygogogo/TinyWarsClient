@@ -31,7 +31,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMfrRoomInfoPanel {
-    import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -81,6 +80,7 @@ namespace TwnsMfrRoomInfoPanel {
         protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
+                { ui: this._btnChooseCo,    callback: this._onTouchedBtnChooseCo },
                 { ui: this._btnStartGame,   callback: this._onTouchedBtnStartGame },
                 { ui: this._btnDeleteRoom,  callback: this._onTouchedBtnDeleteRoom },
                 { ui: this._btnChat,        callback: this._onTouchedBtnChat },
@@ -145,6 +145,42 @@ namespace TwnsMfrRoomInfoPanel {
         private _onTouchedBtnBack(): void {
             this.close();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMyRoomListPanel, void 0);
+        }
+
+        private async _onTouchedBtnChooseCo(): Promise<void> {
+            const roomId    = this._getOpenData().roomId;
+            const roomInfo  = await MfrModel.getRoomInfo(roomId);
+            if (roomInfo == null) {
+                return;
+            }
+
+            const selfUserId        = UserModel.getSelfUserId();
+            const selfPlayerData    = roomInfo.playerDataList?.find(v => v.userId === selfUserId);
+            if (selfPlayerData != null) {
+                if (selfPlayerData.isReady) {
+                    FloatText.show(Lang.getText(LangTextType.A0128));
+                } else {
+                    const settingsForCommon = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon);
+                    const playerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                        currentCoId         : selfPlayerData.coId ?? null,
+                        availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                            warRule         : Helpers.getExisted(settingsForCommon.warRule),
+                            playerIndex,
+                            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                        }),
+                        callbackOnConfirm   : (newCoId) => {
+                            if (newCoId !== selfPlayerData.coId) {
+                                MfrProxy.reqMfrSetSelfSettings({
+                                    roomId,
+                                    playerIndex,
+                                    coId                : newCoId,
+                                });
+                            }
+                        },
+                    });
+                }
+            }
         }
 
         private _onTouchedBtnStartGame(): void {
@@ -522,9 +558,17 @@ namespace TwnsMfrRoomInfoPanel {
                     FloatText.show(Lang.getText(LangTextType.A0202));
                 }
             } else {
+                const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon);
+                const currCoId              = Helpers.getExisted(selfPlayerData.coId);
+                const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    warRule         : Helpers.getExisted(settingsForCommon.warRule),
+                    playerIndex     : newPlayerIndex,
+                    configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                });
                 MfrProxy.reqMfrSetSelfSettings({
                     roomId,
                     playerIndex : newPlayerIndex,
+                    coId        : availableCoIdArray.indexOf(currCoId) >= 0 ? currCoId : WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray),
                 });
             }
         }

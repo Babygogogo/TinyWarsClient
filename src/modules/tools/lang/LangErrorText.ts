@@ -168,7 +168,7 @@ namespace TwnsLangErrorText {
             `观战请求已被接受`,
             `The request has already been accepted.`,
         ],
-        [ServerErrorCode.MsgMfrCreateRoom0016]: [
+        [ServerErrorCode.ExeMfrCreateRoom_DoExecute_0018]: [
             `您已创建了许多未开始的房间，请删除部分后重试`,
             `You have created too many rooms simultaneously.`,
         ],

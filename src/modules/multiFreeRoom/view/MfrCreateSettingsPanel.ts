@@ -32,7 +32,6 @@ namespace TwnsMfrCreateSettingsPanel {
     import MfrCreateAdvancedSettingsPage            = TwnsMfrCreateAdvancedSettingsPage.MfrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import MfrCreatePlayerInfoPage                  = TwnsMfrCreatePlayerInfoPage.MfrCreatePlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
@@ -48,6 +47,10 @@ namespace TwnsMfrCreateSettingsPanel {
         private readonly _labelRoomSettings!        : TwnsUiLabel.UiLabel;
 
         private readonly _groupSettings!            : eui.Group;
+        private readonly _groupChooseCo!            : eui.Group;
+        private readonly _labelChooseCo!            : TwnsUiLabel.UiLabel;
+        private readonly _btnChooseCo!              : TwnsUiButton.UiButton;
+
         private readonly _groupChoosePlayerIndex!   : eui.Group;
         private readonly _labelChoosePlayerIndex!   : TwnsUiLabel.UiLabel;
         private readonly _sclPlayerIndex!           : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
@@ -69,9 +72,11 @@ namespace TwnsMfrCreateSettingsPanel {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
+                { ui: this._btnChooseCo,    callback: this._onTouchedBtnChooseCo },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MfrCreateSelfCoIdChanged,   callback: this._onNotifyMfrCreateSelfCoIdChanged },
                 { type: NotifyType.MsgMfrCreateRoom,           callback: this._onNotifyMsgMfrCreateRoom },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
@@ -91,11 +96,11 @@ namespace TwnsMfrCreateSettingsPanel {
                     pageClass   : MfrCreateAdvancedSettingsPage,
                     pageData    : null,
                 },
-                {
-                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : MfrCreatePlayerInfoPage,
-                    pageData    : null,
-                },
+                // {
+                //     tabItemData : { name: Lang.getText(LangTextType.B0224) },
+                //     pageClass   : TwnsMfrCreatePlayerInfoPage.MfrCreatePlayerInfoPage,
+                //     pageData    : null,
+                // },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
@@ -107,6 +112,7 @@ namespace TwnsMfrCreateSettingsPanel {
             this._updateComponentsForLanguage();
             this._initSclPlayerIndex();
             this._initSclSkinId();
+            this._updateBtnChooseCo();
             this._btnConfirm.enabled = true;
         }
         protected _onClosing(): void {
@@ -124,15 +130,33 @@ namespace TwnsMfrCreateSettingsPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
         private _onTouchedBtnConfirm(): void {
-            const data = MfrCreateModel.getData();
-            MfrProxy.reqCreateRoom(data);
+            MfrProxy.reqCreateRoom(MfrCreateModel.getData());
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
         }
+        private _onTouchedBtnChooseCo(): void {
+            const currentCoId = MfrCreateModel.getSelfCoId();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                currentCoId,
+                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    warRule         : MfrCreateModel.getWarRule(),
+                    playerIndex     : MfrCreateModel.getSelfPlayerIndex(),
+                    configVersion   : MfrCreateModel.getConfigVersion(),
+                }),
+                callbackOnConfirm   : (newCoId) => {
+                    if (newCoId !== currentCoId) {
+                        MfrCreateModel.setSelfCoId(newCoId);
+                    }
+                },
+            });
+        }
 
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
+        }
+        private _onNotifyMfrCreateSelfCoIdChanged(): void {
+            this._updateBtnChooseCo();
         }
         private _onNotifyMsgMfrCreateRoom(): void {
             FloatText.show(Lang.getText(LangTextType.A0015));
@@ -162,10 +186,16 @@ namespace TwnsMfrCreateSettingsPanel {
             this._labelFreeMode.text            = Lang.getText(LangTextType.B0557);
             this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
             this._labelRoomSettings.text        = Lang.getText(LangTextType.B0571);
+            this._labelChooseCo.text            = Lang.getText(LangTextType.B0145);
             this._labelChoosePlayerIndex.text   = Lang.getText(LangTextType.B0572);
             this._labelChooseSkinId.text        = Lang.getText(LangTextType.B0586);
             this._btnBack.label                 = Lang.getText(LangTextType.B0146);
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        }
+
+        private _updateBtnChooseCo(): void {
+            const cfg               = ConfigManager.getCoBasicCfg(MfrCreateModel.getConfigVersion(), MfrCreateModel.getSelfCoId());
+            this._btnChooseCo.label = cfg.name;
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
@@ -423,6 +453,15 @@ namespace TwnsMfrCreateSettingsPanel {
                     FloatText.show(Lang.getText(LangTextType.A0204));
                 } else {
                     creator.setSelfPlayerIndex(playerIndex);
+
+                    const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                        warRule         : creator.getWarRule(),
+                        playerIndex,
+                        configVersion   : MfrCreateModel.getConfigVersion(),
+                    });
+                    if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
+                        creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
+                    }
                 }
             }
         }
