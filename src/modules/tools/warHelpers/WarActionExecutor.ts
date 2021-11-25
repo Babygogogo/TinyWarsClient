@@ -521,7 +521,7 @@ namespace WarActionExecutor {
             : await normalExeSystemBeginTurn(war, action);
     }
     async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
-        war.getTurnManager().endPhaseWaitBeginTurn(action, true);
+        await war.getTurnManager().endPhaseWaitBeginTurn(action, true);
     }
     async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemBeginTurn(action);
@@ -545,7 +545,7 @@ namespace WarActionExecutor {
             });
         }
 
-        war.getTurnManager().endPhaseWaitBeginTurn(action, false);
+        await war.getTurnManager().endPhaseWaitBeginTurn(action, false);
         war.updateTilesAndUnitsOnVisibilityChanged();
     }
 

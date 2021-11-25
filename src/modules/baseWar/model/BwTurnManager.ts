@@ -93,10 +93,10 @@ namespace TwnsBwTurnManager {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public endPhaseWaitBeginTurn(action: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
+        public async endPhaseWaitBeginTurn(action: IWarActionSystemBeginTurn, isFastExecute: boolean): Promise<void> {
             this.getWar().getIsExecuteActionsWithExtraData()
-                ? this._endPhaseWaitBeginTurnWithExtraData(action, isFastExecute)
-                : this._endPhaseWaitBeginTurnWithoutExtraData(isFastExecute);
+                ? await this._endPhaseWaitBeginTurnWithExtraData(action, isFastExecute)
+                : await this._endPhaseWaitBeginTurnWithoutExtraData(isFastExecute);
         }
         public endPhaseMain(action: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
             this.getWar().getIsExecuteActionsWithExtraData()
@@ -104,7 +104,7 @@ namespace TwnsBwTurnManager {
                 : this._endPhaseMainWithoutExtraData(isFastExecute);
         }
 
-        private _endPhaseWaitBeginTurnWithExtraData(action: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
+        private async _endPhaseWaitBeginTurnWithExtraData(action: IWarActionSystemBeginTurn, isFastExecute: boolean): Promise<void> {
             const phaseCode = this.getPhaseCode();
             if (phaseCode !== TurnPhaseCode.WaitBeginTurn) {
                 throw Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_00);
@@ -116,7 +116,7 @@ namespace TwnsBwTurnManager {
             this._runPhaseDestroyUnitsOutOfFuelWithExtraData(action, isFastExecute);
             this._runPhaseRepairUnitByUnitWithExtraData(action, isFastExecute);
             this._runPhaseRecoverUnitByCoWithExtraData(action, isFastExecute);
-            this._runPhaseActivateMapWeaponWithExtraData(action, isFastExecute);
+            await this._runPhaseActivateMapWeaponWithExtraData(action, isFastExecute);
             this._runPhaseCheckAndUpdateUnitAiModeWithExtraData(action, isFastExecute);
             this._runPhaseMainWithExtraData(action, isFastExecute);
 
@@ -129,7 +129,7 @@ namespace TwnsBwTurnManager {
                 isFastExecute,
             });
         }
-        private _endPhaseWaitBeginTurnWithoutExtraData(isFastExecute: boolean): void {
+        private async _endPhaseWaitBeginTurnWithoutExtraData(isFastExecute: boolean): Promise<void> {
             const phaseCode = this.getPhaseCode();
             if (phaseCode !== TurnPhaseCode.WaitBeginTurn) {
                 throw Helpers.newError(`Invalid phaseCode: ${phaseCode}`, ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithoutExtraData_00);
@@ -141,7 +141,7 @@ namespace TwnsBwTurnManager {
             this._runPhaseDestroyUnitsOutOfFuelWithoutExtraData(isFastExecute);
             this._runPhaseRepairUnitByUnitWithoutExtraData(isFastExecute);
             this._runPhaseRecoverUnitByCoWithoutExtraData(isFastExecute);
-            this._runPhaseActivateMapWeaponWithoutExtraData(isFastExecute);
+            await this._runPhaseActivateMapWeaponWithoutExtraData(isFastExecute);
             this._runPhaseCheckAndUpdateUnitAiModeWithoutExtraData(isFastExecute);
             this._runPhaseMainWithoutExtraData(isFastExecute);
 
@@ -278,6 +278,7 @@ namespace TwnsBwTurnManager {
                             } else if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
                                 gridVisionEffect.showEffectSupply(gridIndex);
                             }
+                            unit.updateView();
                         }
                     }
                 }
@@ -552,22 +553,17 @@ namespace TwnsBwTurnManager {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private _runPhaseActivateMapWeaponWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): void {
-            // nothing to do for now.
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private _runPhaseActivateMapWeaponWithoutExtraData(isFastExecute: boolean): void {
+        private async _runPhaseActivateMapWeaponWithExtraData(data: IWarActionSystemBeginTurn, isFastExecute: boolean): Promise<void> {
             const war               = this.getWar();
             const playerIndex       = war.getPlayerIndexInTurn();
             const tileMap           = war.getTileMap();
             const mapSize           = tileMap.getMapSize();
             const allTileArray      = tileMap.getAllTiles().filter(v => v.getPlayerIndex() === playerIndex);
-
             {
-                const crystalArray = allTileArray.filter(v => v.getType() === Types.TileType.Crystal)
+                const crystalArray = allTileArray.filter(v => (v.getType() === Types.TileType.Crystal))
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of crystalArray) {
-                    handleMapWeaponTileCrystal(war, tile, isFastExecute);
+                    await handleMapWeaponTileCrystalWithExtraData(data, war, tile, isFastExecute);
                 }
             }
             {
@@ -582,14 +578,14 @@ namespace TwnsBwTurnManager {
                         }
                     });
                 for (const tile of customCrystalArray) {
-                    handleMapWeaponTileCrystal(war, tile, isFastExecute);
+                    await handleMapWeaponTileCrystalWithExtraData(data, war, tile, isFastExecute);
                 }
             }
             {
                 const cannonArray = allTileArray.filter(v => v.checkIsNormalCannon())
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of cannonArray) {
-                    handleMapWeaponTileCannon(war, tile, isFastExecute);
+                    await handleMapWeaponTileCannonWithExtraData(data, war, tile, isFastExecute);
                 }
             }
             {
@@ -604,14 +600,14 @@ namespace TwnsBwTurnManager {
                         }
                     });
                 for (const tile of customCannonArray) {
-                    handleMapWeaponTileCannon(war, tile, isFastExecute);
+                    await handleMapWeaponTileCannonWithExtraData(data, war, tile, isFastExecute);
                 }
             }
             {
                 const laserTurretArray = allTileArray.filter(v => v.getType() === Types.TileType.LaserTurret)
                     .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
                 for (const tile of laserTurretArray) {
-                    handleMapWeaponTileLaserTurret(war, tile, isFastExecute);
+                    await handleMapWeaponTileLaserTurretWithExtraData(data, war, tile, isFastExecute);
                 }
             }
             {
@@ -626,7 +622,82 @@ namespace TwnsBwTurnManager {
                         }
                     });
                 for (const tile of customLaserTurretArray) {
-                    handleMapWeaponTileLaserTurret(war, tile, isFastExecute);
+                    await handleMapWeaponTileLaserTurretWithExtraData(data, war, tile, isFastExecute);
+                }
+            }
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _runPhaseActivateMapWeaponWithoutExtraData(isFastExecute: boolean): Promise<void> {
+            const war               = this.getWar();
+            const playerIndex       = war.getPlayerIndexInTurn();
+            const tileMap           = war.getTileMap();
+            const mapSize           = tileMap.getMapSize();
+            const allTileArray      = tileMap.getAllTiles().filter(v => v.getPlayerIndex() === playerIndex);
+
+            {
+                const crystalArray = allTileArray.filter(v => v.getType() === Types.TileType.Crystal)
+                    .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
+                for (const tile of crystalArray) {
+                    await handleMapWeaponTileCrystalWithoutExtraData(war, tile, isFastExecute);
+                }
+            }
+            {
+                const customCrystalArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomCrystal)
+                    .sort((v1, v2) => {
+                        const priority1 = v1.getCustomCrystalData()?.priority ?? 0;
+                        const priority2 = v2.getCustomCrystalData()?.priority ?? 0;
+                        if (priority1 !== priority2) {
+                            return priority2 - priority1;
+                        } else {
+                            return GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize);
+                        }
+                    });
+                for (const tile of customCrystalArray) {
+                    await handleMapWeaponTileCrystalWithoutExtraData(war, tile, isFastExecute);
+                }
+            }
+            {
+                const cannonArray = allTileArray.filter(v => v.checkIsNormalCannon())
+                    .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
+                for (const tile of cannonArray) {
+                    await handleMapWeaponTileCannonWithoutExtraData(war, tile, isFastExecute);
+                }
+            }
+            {
+                const customCannonArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomCannon)
+                    .sort((v1, v2) => {
+                        const priority1 = v1.getCustomCannonData()?.priority ?? 0;
+                        const priority2 = v2.getCustomCannonData()?.priority ?? 0;
+                        if (priority1 !== priority2) {
+                            return priority2 - priority1;
+                        } else {
+                            return GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize);
+                        }
+                    });
+                for (const tile of customCannonArray) {
+                    await handleMapWeaponTileCannonWithoutExtraData(war, tile, isFastExecute);
+                }
+            }
+            {
+                const laserTurretArray = allTileArray.filter(v => v.getType() === Types.TileType.LaserTurret)
+                    .sort((v1, v2) => GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize));
+                for (const tile of laserTurretArray) {
+                    await handleMapWeaponTileLaserTurretWithoutExtraData(war, tile, isFastExecute);
+                }
+            }
+            {
+                const customLaserTurretArray = allTileArray.filter(v => v.getType() === Types.TileType.CustomLaserTurret)
+                    .sort((v1, v2) => {
+                        const priority1 = v1.getCustomLaserTurretData()?.priority ?? 0;
+                        const priority2 = v2.getCustomLaserTurretData()?.priority ?? 0;
+                        if (priority1 !== priority2) {
+                            return priority2 - priority1;
+                        } else {
+                            return GridIndexHelpers.getGridId(v1.getGridIndex(), mapSize) - GridIndexHelpers.getGridId(v2.getGridIndex(), mapSize);
+                        }
+                    });
+                for (const tile of customLaserTurretArray) {
+                    await handleMapWeaponTileLaserTurretWithoutExtraData(war, tile, isFastExecute);
                 }
             }
         }
@@ -951,12 +1022,50 @@ namespace TwnsBwTurnManager {
         }
     }
 
-    function handleMapWeaponTileCrystal(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): void {
-        const unitMap           = war.getUnitMap();
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    async function handleMapWeaponTileCrystalWithExtraData(data: IWarActionSystemBeginTurn, war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
         const gridVisualEffect  = war.getGridVisualEffect();
+        const tileGridIndex     = tile.getGridIndex();
+        if (!isFastExecute) {
+            war.getView().moveGridToCenter(tileGridIndex);
+            gridVisualEffect.showEffectCharge(tileGridIndex);
+            await Helpers.wait(400);
+        }
+
+        if (!isFastExecute) {
+            const mapSize           = war.getTileMap().getMapSize();
+            const attackableArea    = WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
+            for (let x = 0; x < mapSize.width; ++x) {
+                const column = attackableArea[x];
+                if (column == null) {
+                    continue;
+                }
+
+                for (let y = 0; y < mapSize.height; ++y) {
+                    if (column[y]) {
+                        gridVisualEffect.showEffectDamage({ x, y });
+                    }
+                }
+            }
+            await Helpers.wait(200);
+
+            await Helpers.wait(400);
+        }
+    }
+    async function handleMapWeaponTileCrystalWithoutExtraData(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const tileGridIndex     = tile.getGridIndex();
+        if (!isFastExecute) {
+            war.getView().moveGridToCenter(tileGridIndex);
+            gridVisualEffect.showEffectCharge(tileGridIndex);
+            await Helpers.wait(400);
+        }
+
+        const unitMap           = war.getUnitMap();
         const playerIndexInTurn = tile.getPlayerIndex();
         const teamIndexInTurn   = tile.getTeamIndex();
         const data              = Helpers.getExisted(tile.getCustomCrystalData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_00);
+        const affectedUnits     = new Set<TwnsBwUnit.BwUnit>();
         const { canAffectAlly, canAffectEnemy, canAffectSelf } = data;
 
         {
@@ -1020,9 +1129,6 @@ namespace TwnsBwTurnManager {
                                     maxFuel,
                                     Math.floor(unit.getCurrentFuel() + maxFuel * deltaFuelPercentage / 100)
                                 ));
-                                if (!isFastExecute) {
-                                    gridVisualEffect.showEffectSupply(gridIndex);
-                                }
                             }
                         }
 
@@ -1040,9 +1146,6 @@ namespace TwnsBwTurnManager {
                                         maxAmmo,
                                         Math.floor(currentAmmo + maxAmmo * deltaPrimaryAmmoPercentage / 100)
                                     ));
-                                    if (!isFastExecute) {
-                                        gridVisualEffect.showEffectSupply(gridIndex);
-                                    }
                                 }
                             }
                         }
@@ -1055,32 +1158,60 @@ namespace TwnsBwTurnManager {
                                     unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
                                 ),
                             ));
-                            if (deltaHp < 0) {
-                                if (!isFastExecute) {
-                                    gridVisualEffect.showEffectDamage(gridIndex);
-                                }
-                            } else {
-                                if (!isFastExecute) {
-                                    gridVisualEffect.showEffectRepair(gridIndex);
-                                }
-                            }
                         }
 
-                        if (!isFastExecute) {
-                            unit.updateView();
-                        }
+                        affectedUnits.add(unit);
                     }
                 }
             }
         }
+
+        if (!isFastExecute) {
+            const mapSize           = war.getTileMap().getMapSize();
+            const attackableArea    = WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
+            for (let x = 0; x < mapSize.width; ++x) {
+                const column = attackableArea[x];
+                if (column == null) {
+                    continue;
+                }
+
+                for (let y = 0; y < mapSize.height; ++y) {
+                    if (column[y]) {
+                        gridVisualEffect.showEffectDamage({ x, y });
+                    }
+                }
+            }
+            await Helpers.wait(200);
+
+            for (const unit of affectedUnits) {
+                unit.updateView();
+            }
+            await Helpers.wait(400);
+        }
     }
 
-    function handleMapWeaponTileCannon(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): void {
+    async function handleMapWeaponTileCannonWithExtraData(data: IWarActionSystemBeginTurn, war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const tileGridIndex     = tile.getGridIndex();
+        if (!isFastExecute) {
+            war.getView().moveGridToCenter(tileGridIndex);
+            gridVisualEffect.showEffectCharge(tileGridIndex);
+            await Helpers.wait(400);
+        }
+    }
+    async function handleMapWeaponTileCannonWithoutExtraData(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const tileGridIndex     = tile.getGridIndex();
+        if (!isFastExecute) {
+            war.getView().moveGridToCenter(tileGridIndex);
+            gridVisualEffect.showEffectCharge(tileGridIndex);
+            await Helpers.wait(400);
+        }
+
         const data                  = Helpers.getExisted(tile.getCustomCannonData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCannon_00);
         const getCandidateUnitArray = Helpers.createLazyFunc(() => generateCandidateUnitArrayForCannon(war, tile));
         const maxTargetCount        = data.maxTargetCount ?? 0;
-        const gridVisualEffect      = war.getGridVisualEffect();
-
+        const affectedUnits         = new Set<TwnsBwUnit.BwUnit>();
         for (let i = 0; i < maxTargetCount; ++i) {
             const unit = getCandidateUnitArray()[i];
             if (unit == null) {
@@ -1090,8 +1221,6 @@ namespace TwnsBwTurnManager {
             {
                 const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
                 if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
-                    const gridIndex = unit.getGridIndex();
-
                     if (deltaFuelPercentage) {
                         if (deltaFuelPercentage < 0) {
                             unit.setCurrentFuel(Math.max(
@@ -1104,9 +1233,6 @@ namespace TwnsBwTurnManager {
                                 maxFuel,
                                 Math.floor(unit.getCurrentFuel() + maxFuel * deltaFuelPercentage / 100)
                             ));
-                            if (!isFastExecute) {
-                                gridVisualEffect.showEffectSupply(gridIndex);
-                            }
                         }
                     }
 
@@ -1124,9 +1250,6 @@ namespace TwnsBwTurnManager {
                                     maxAmmo,
                                     Math.floor(currentAmmo + maxAmmo * deltaPrimaryAmmoPercentage / 100)
                                 ));
-                                if (!isFastExecute) {
-                                    gridVisualEffect.showEffectSupply(gridIndex);
-                                }
                             }
                         }
                     }
@@ -1139,21 +1262,24 @@ namespace TwnsBwTurnManager {
                                 unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
                             ),
                         ));
-                        if (deltaHp < 0) {
-                            if (!isFastExecute) {
-                                gridVisualEffect.showEffectDamage(gridIndex);
-                            }
-                        } else {
-                            if (!isFastExecute) {
-                                gridVisualEffect.showEffectRepair(gridIndex);
-                            }
-                        }
                     }
 
-                    if (!isFastExecute) {
-                        unit.updateView();
-                    }
+                    affectedUnits.add(unit);
                 }
+            }
+        }
+
+        if (!isFastExecute) {
+            if (affectedUnits.size) {
+                for (const unit of affectedUnits) {
+                    gridVisualEffect.showEffectDamage(unit.getGridIndex());
+                }
+                await Helpers.wait(200);
+
+                for (const unit of affectedUnits) {
+                    unit.updateView();
+                }
+                await Helpers.wait(400);
             }
         }
     }
@@ -1206,10 +1332,47 @@ namespace TwnsBwTurnManager {
         return candidateUnitArray;
     }
 
-    function handleMapWeaponTileLaserTurret(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): void {
+    async function handleMapWeaponTileLaserTurretWithExtraData(data: IWarActionSystemBeginTurn, war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const tileGridIndex     = tile.getGridIndex();
+        if (!isFastExecute) {
+            war.getView().moveGridToCenter(tileGridIndex);
+            gridVisualEffect.showEffectCharge(tileGridIndex);
+            await Helpers.wait(400);
+        }
+
+        if (!isFastExecute) {
+            const mapSize           = war.getTileMap().getMapSize();
+            const attackableArea    = WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
+            for (let x = 0; x < mapSize.width; ++x) {
+                const column = attackableArea[x];
+                if (column == null) {
+                    continue;
+                }
+
+                for (let y = 0; y < mapSize.height; ++y) {
+                    if (column[y]) {
+                        gridVisualEffect.showEffectDamage({ x, y });
+                    }
+                }
+            }
+            await Helpers.wait(200);
+
+            await Helpers.wait(400);
+        }
+    }
+    async function handleMapWeaponTileLaserTurretWithoutExtraData(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const tileGridIndex     = tile.getGridIndex();
+        if (!isFastExecute) {
+            war.getView().moveGridToCenter(tileGridIndex);
+            gridVisualEffect.showEffectCharge(tileGridIndex);
+            await Helpers.wait(400);
+        }
+
         const data                  = Helpers.getExisted(tile.getCustomLaserTurretData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileLaserTurret_00);
         const candidateUnitArray    = generateCandidateUnitArrayForLaserTurret(war, tile);
-
+        const affectedUnits         = new Set<TwnsBwUnit.BwUnit>();
         {
             const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
             if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
@@ -1256,8 +1419,33 @@ namespace TwnsBwTurnManager {
                             ),
                         ));
                     }
+
+                    affectedUnits.add(unit);
                 }
             }
+        }
+
+        if (!isFastExecute) {
+            const mapSize           = war.getTileMap().getMapSize();
+            const attackableArea    = WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
+            for (let x = 0; x < mapSize.width; ++x) {
+                const column = attackableArea[x];
+                if (column == null) {
+                    continue;
+                }
+
+                for (let y = 0; y < mapSize.height; ++y) {
+                    if (column[y]) {
+                        gridVisualEffect.showEffectDamage({ x, y });
+                    }
+                }
+            }
+            await Helpers.wait(200);
+
+            for (const unit of affectedUnits) {
+                unit.updateView();
+            }
+            await Helpers.wait(400);
         }
     }
     function generateCandidateUnitArrayForLaserTurret(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile): TwnsBwUnit.BwUnit[] {

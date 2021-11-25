@@ -24,8 +24,8 @@ namespace TwnsBwGridVisualEffectView {
     const SUPPLY_OFFSET_Y                               = Math.floor(_GRID_HEIGHT * 0.3);
     const REPAIR_OFFSET_X                               = Math.floor(_GRID_WIDTH * 0.3);
     const REPAIR_OFFSET_Y                               = Math.floor(_GRID_HEIGHT * 0.3);
-    const SKILL_ACTIVATION_OFFSET_X                     = - (336 -_GRID_WIDTH) / 2;
-    const SKILL_ACTIVATION_OFFSET_Y                     = - (336 -_GRID_HEIGHT) / 2;
+    const SKILL_ACTIVATION_OFFSET_X                     = - _GRID_WIDTH / 6 * 11;
+    const SKILL_ACTIVATION_OFFSET_Y                     = - _GRID_HEIGHT / 6 * 11;
     const _AIMING_FRAME_DURATION                        = 100;
     const _IMG_SOURCES_FOR_AIMING                       = [
         `c04_t03_s02_f01`,
@@ -46,6 +46,7 @@ namespace TwnsBwGridVisualEffectView {
         private _layerForSupply             = new egret.DisplayObjectContainer();
         private _layerForRepair             = new egret.DisplayObjectContainer();
         private _layerForSkillActivation    = new egret.DisplayObjectContainer();
+        private _layerForCharge             = new egret.DisplayObjectContainer();
         private _layerForAiming             = new egret.DisplayObjectContainer();
 
         public constructor() {
@@ -60,6 +61,7 @@ namespace TwnsBwGridVisualEffectView {
             this.addChild(this._layerForDamage);
             this.addChild(this._layerForFlare);
             this.addChild(this._layerForSkillActivation);
+            this.addChild(this._layerForCharge);
             this.addChild(this._layerForAiming);
         }
 
@@ -114,6 +116,10 @@ namespace TwnsBwGridVisualEffectView {
 
         public showEffectSkillActivation(gridIndex: GridIndex): void {
             this._layerForSkillActivation.addChild(createEffectSkillActivation(gridIndex));
+        }
+
+        public showEffectCharge(gridIndex: GridIndex): void {
+            this._layerForCharge.addChild(createEffectCharge(gridIndex));
         }
 
         public showEffectSurface(gridIndex: GridIndex): void {
@@ -265,6 +271,22 @@ namespace TwnsBwGridVisualEffectView {
 
         const tween = egret.Tween.get(img);
         for (let i = 2; i <= 34; ++i) {
+            tween.wait(34).set({ source: `c04_t08_s06_f${Helpers.getNumText(i, 2)}` });
+        }
+        tween.call(() => (img.parent) && (img.parent.removeChild(img)));
+
+        return img;
+    }
+
+    function createEffectCharge(gridIndex: GridIndex): egret.DisplayObject {
+        const img       = new TwnsUiImage.UiImage(`c04_t08_s06_f11`);
+        const pos       = GridIndexHelpers.createPointByGridIndex(gridIndex);
+        img.smoothing   = false;
+        img.x           = SKILL_ACTIVATION_OFFSET_X + pos.x;
+        img.y           = SKILL_ACTIVATION_OFFSET_Y + pos.y;
+
+        const tween = egret.Tween.get(img);
+        for (let i = 12; i <= 25; ++i) {
             tween.wait(34).set({ source: `c04_t08_s06_f${Helpers.getNumText(i, 2)}` });
         }
         tween.call(() => (img.parent) && (img.parent.removeChild(img)));
