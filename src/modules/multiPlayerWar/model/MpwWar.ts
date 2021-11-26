@@ -16,6 +16,7 @@
 // import TwnsMpwPlayerManager         from "./MpwPlayerManager";
 // import MpwUtility                   from "./MpwUtility";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarAction                = ProtoTypes.WarAction;
@@ -39,12 +40,14 @@ namespace TwnsMpwWar {
             return this._warEventManager;
         }
 
-        public updateTilesAndUnitsOnVisibilityChanged(): void {
+        public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
             const watcherTeamIndexes    = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const visibleUnitsOnMap     = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (visibleUnitsOnMap.has(unit)) {
-                    unit.setViewVisible(true);
+                    if (!isFastExecute) {
+                        unit.setViewVisible(true);
+                    }
                 } else {
                     WarDestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
                 }
@@ -61,9 +64,15 @@ namespace TwnsMpwWar {
                         MpwUtility.resetTileDataAsHasFog(tile);
                     }
                 }
-                tile.flushDataToView();
+
+                if (!isFastExecute) {
+                    tile.flushDataToView();
+                }
             }
-            tileMap.getView().updateCoZone();
+
+            if (!isFastExecute) {
+                tileMap.getView().updateCoZone();
+            }
         }
 
         public async getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | null> {

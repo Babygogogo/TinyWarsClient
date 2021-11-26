@@ -151,6 +151,7 @@ namespace WarActionExecutor {
                 WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
         const desc = await war.getDescForExePlayerDeleteUnit(action);
@@ -181,7 +182,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,13 +193,14 @@ namespace WarActionExecutor {
     }
     async function fastExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
         war.getTurnManager().endPhaseMain(action, true);
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
         // const desc = await war.getDescForExePlayerEndTurn(action);
         // (desc) && (FloatText.show(desc));
 
         war.getTurnManager().endPhaseMain(action, false);
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,13 +211,14 @@ namespace WarActionExecutor {
     }
     async function fastExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
         handlePlayerProduceUnit(war, action);
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
         const desc = await war.getDescForExePlayerProduceUnit(action);
         (desc) && (FloatText.show(desc));
 
         handlePlayerProduceUnit(war, action);
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     function handlePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): void {
@@ -444,6 +447,7 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<void> {
         const gridVisualEffect  = war.getGridVisualEffect();
@@ -511,7 +515,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -522,6 +526,7 @@ namespace WarActionExecutor {
     }
     async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
         await war.getTurnManager().endPhaseWaitBeginTurn(action, true);
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemBeginTurn(action);
@@ -546,7 +551,7 @@ namespace WarActionExecutor {
         }
 
         await war.getTurnManager().endPhaseWaitBeginTurn(action, false);
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -565,6 +570,7 @@ namespace WarActionExecutor {
             warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(action.warEventId, ClientErrorCode.WarActionExecutor_FastExeSystemCallWarEvent_02));
             await warEventManager.callWarEvent(action, true);
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
         const desc = await war.getDescForExeSystemCallWarEvent(action);
@@ -580,7 +586,7 @@ namespace WarActionExecutor {
             await warEventManager.callWarEvent(action, false);
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -601,6 +607,7 @@ namespace WarActionExecutor {
         } else {
             WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), false);
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
         const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
@@ -627,7 +634,7 @@ namespace WarActionExecutor {
             WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), true);
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -654,13 +661,14 @@ namespace WarActionExecutor {
     }
     async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
         war.getTurnManager().endPhaseMain(action, true);
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemEndTurn(action);
         // (desc) && (FloatText.show(desc));
 
         war.getTurnManager().endPhaseMain(action, false);
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -897,6 +905,7 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<void> {
         const desc = await war.getDescForExeUnitAttackTile(action);
@@ -1093,7 +1102,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1231,6 +1240,7 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<void> {
         const desc = await war.getDescForExeUnitAttackUnit(action);
@@ -1444,7 +1454,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1477,6 +1487,7 @@ namespace WarActionExecutor {
                 focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<void> {
         const desc = await war.getDescForExeUnitBeLoaded(action);
@@ -1545,7 +1556,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1594,6 +1605,7 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<void> {
         const desc = await war.getDescForExeUnitBuildTile(action);
@@ -1656,7 +1668,7 @@ namespace WarActionExecutor {
             focusUnit.updateView();
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1708,6 +1720,7 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<void> {
         const desc = await war.getDescForExeUnitCaptureTile(action);
@@ -1821,7 +1834,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1850,6 +1863,7 @@ namespace WarActionExecutor {
             focusUnit.setActionState(UnitActionState.Acted);
             (isSuccessful) && (focusUnit.setIsDiving(true));
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<void> {
         const desc = await war.getDescForExeUnitDive(action);
@@ -1913,7 +1927,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1961,6 +1975,7 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<void> {
         const desc = await war.getDescForExeUnitDropUnit(action);
@@ -2062,7 +2077,7 @@ namespace WarActionExecutor {
             await Promise.all(promises);
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2162,6 +2177,7 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<void> {
         const desc = await war.getDescForExeUnitJoinUnit(action);
@@ -2294,7 +2310,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2334,6 +2350,7 @@ namespace WarActionExecutor {
                 fogMap.updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<void> {
         const desc = await war.getDescForExeUnitLaunchFlare(action);
@@ -2408,7 +2425,7 @@ namespace WarActionExecutor {
             focusUnit.updateView();
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2457,6 +2474,7 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<void> {
         const desc = await war.getDescForExeUnitLaunchSilo(action);
@@ -2543,7 +2561,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2586,6 +2604,7 @@ namespace WarActionExecutor {
                 );
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<void> {
         const desc = await war.getDescForExeUnitLoadCo(action);
@@ -2642,7 +2661,7 @@ namespace WarActionExecutor {
             focusUnit.updateView();
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2694,6 +2713,7 @@ namespace WarActionExecutor {
                 focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<void> {
         const desc = await war.getDescForExeUnitProduceUnit(action);
@@ -2767,7 +2787,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     function getPromotionForUnitProduceUnit(war: BwWar, producerUnit: BwUnit, targetUnitType: Types.UnitType): number {
@@ -2841,6 +2861,7 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<void> {
         const desc = await war.getDescForExeUnitSupplyUnit(action);
@@ -2915,7 +2936,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2944,6 +2965,7 @@ namespace WarActionExecutor {
             focusUnit.setActionState(UnitActionState.Acted);
             (isSuccessful) && (focusUnit.setIsDiving(false));
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<void> {
         const desc = await war.getDescForExeUnitSurface(action);
@@ -3007,7 +3029,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3078,6 +3100,7 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill): Promise<void> {
         const unitMap           = war.getUnitMap();
@@ -3174,7 +3197,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3201,6 +3224,7 @@ namespace WarActionExecutor {
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<void> {
         const desc = await war.getDescForExeUnitWait(action);
@@ -3241,7 +3265,7 @@ namespace WarActionExecutor {
             focusUnit.updateView();
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
