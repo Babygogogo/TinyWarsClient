@@ -109,7 +109,7 @@ namespace StageManager {
         _mouseY = e.stageY;
     }
     function _onMouseWheel(e: egret.Event): void {
-        Notify.dispatch(NotifyType.MouseWheel, e.data * (egret.Capabilities.os === `Unknown` ? 40 : 1));
+        Notify.dispatch(NotifyType.MouseWheel, e.data * ((egret.Capabilities.os === `Unknown` || navigator?.userAgent?.toLowerCase()?.includes(`firefox`)) ? 40 : 1));
     }
 
     function _onTouchBegin(e: egret.TouchEvent): void {

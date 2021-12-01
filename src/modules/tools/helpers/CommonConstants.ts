@@ -357,24 +357,24 @@ namespace CommonConstants {
         [ TileBaseType.Beach,   { shapesCount: 37,  }],
         [ TileBaseType.Plain,   { shapesCount: 1,   }],
         [ TileBaseType.River,   { shapesCount: 16,  }],
-        [ TileBaseType.Sea,     { shapesCount: 47,  }],
+        [ TileBaseType.Sea,     { shapesCount: 1,   }],
     ]);
     export const TileDecoratorFrameConfigs = new Map([
         [
             Types.UnitAndTileTextureVersion.V0,
             new Map<TileDecoratorType, FrameCfg>([
-                [ TileDecoratorType.Corner, { framesCount: 6, ticksPerFrame: 1 } ],
+                [ TileDecoratorType.Shore, { framesCount: 6, ticksPerFrame: 1 } ],
             ]),
         ],
         [
             Types.UnitAndTileTextureVersion.V1,
             new Map<TileDecoratorType, FrameCfg>([
-                [ TileDecoratorType.Corner, { framesCount: 6, ticksPerFrame: 1 } ],
+                [ TileDecoratorType.Shore, { framesCount: 6, ticksPerFrame: 1 } ],
             ]),
         ],
     ]);
     export const TileDecoratorShapeConfigs = new Map<TileDecoratorType, TileDecoratorShapeCfg>([
-        [ TileDecoratorType.Corner, { shapesCount: 47 } ],
+        [ TileDecoratorType.Shore, { shapesCount: 47 } ],
     ]);
     export const TileObjectFrameConfigs = new Map([
         [
@@ -610,7 +610,7 @@ namespace CommonConstants {
         [TileDecoratorType.Empty, new Map([
             [   0,  [   0,      0,      0,      0,      0,  ]],
         ])],
-        [TileDecoratorType.Corner, new Map([
+        [TileDecoratorType.Shore, new Map([
             [   0,  [   0,      0,      0,      0,      0,  ]],
             [   1,  [   2,      1,      4,      8,      8,  ]],
             [   2,  [   1,      4,      8,      2,      4,  ]],

@@ -273,7 +273,7 @@ namespace SoundManager {
     function _updateBgmVolumeForNormal(): void {
         const gain = _bgmGain;
         if (gain) {
-            gain.gain.value = _getRevisedBgmVolume();
+            gain.gain.setValueAtTime(_getRevisedBgmVolume(), _audioContext.currentTime);
         }
     }
 
@@ -402,7 +402,7 @@ namespace SoundManager {
         const volume        = _getRevisedSfxVolume();
         const shortSfxGain  = _shortSfxGain;
         if (shortSfxGain) {
-            shortSfxGain.gain.value = volume;
+            shortSfxGain.gain.setValueAtTime(volume, _audioContext.currentTime);
         }
     }
 
@@ -495,10 +495,19 @@ namespace SoundManager {
         playLongSfx(Helpers.getExisted(_UNIT_MOVE_SFX_CODES.get(unitType), ClientErrorCode.SoundManager_PlayLongSfxForMoveUnit_00));
     }
     export function fadeoutLongSfxForMoveUnit(): void {
-        const longSfxGain = _longSfxGain;
-        if (longSfxGain) {
-            longSfxGain.gain.setValueAtTime(_getRevisedSfxVolume(), _audioContext.currentTime);
-            longSfxGain.gain.exponentialRampToValueAtTime(0.01, _audioContext.currentTime + _UNIT_MOVE_FADEOUT_TIME);
+        const gain = _longSfxGain?.gain;
+        if (gain == null) {
+            return;
+        }
+
+        const volume        = _getRevisedSfxVolume();
+        const currentTime   = _audioContext.currentTime;
+        gain.cancelScheduledValues(currentTime);
+        gain.setValueAtTime(volume, currentTime);
+        if (volume <= 0) {
+            playLongSfx(LongSfxCode.None);
+        } else {
+            gain.exponentialRampToValueAtTime(0.01, currentTime + _UNIT_MOVE_FADEOUT_TIME);
             _timeoutIdForStopLongSfx = egret.setTimeout(() => playLongSfx(LongSfxCode.None), null, _UNIT_MOVE_FADEOUT_TIME * 1000);
         }
     }
@@ -507,7 +516,7 @@ namespace SoundManager {
         const volume        = _getRevisedSfxVolume();
         const longSfxGain   = _longSfxGain;
         if (longSfxGain) {
-            longSfxGain.gain.value = volume;
+            longSfxGain.gain.setValueAtTime(volume, _audioContext.currentTime);
         }
     }
 

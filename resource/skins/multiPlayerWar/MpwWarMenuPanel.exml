@@ -32,6 +32,8 @@
                                        width="140" height="30" id="_btnSync" />
                 <TwnsUiButton:UiButton label="Button" x="-210" y="10" skinName="Skins.Component.Button.ButtonBlack002"
                                        width="140" height="30" id="_btnReplay" />
+                <TwnsUiButton:UiButton label="Button" x="-200" y="20" skinName="Skins.Component.Button.ButtonBlack002"
+                                       width="140" height="30" id="_btnUnitOpacity" />
                 <e:layout>
                     <e:TileLayout requestedColumnCount="2" orientation="rows" horizontalGap="30" verticalGap="12" />
                 </e:layout>

@@ -4,7 +4,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="370" horizontalCenter="0" height="320" verticalCenter="0">
+    <e:Group id="_group" width="370" horizontalCenter="0" height="360" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                  scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
@@ -33,16 +33,23 @@
                                    width="140" height="30" id="_btnSetPath" />
             <TwnsUiButton:UiButton label="Button" x="40" y="40" skinName="Skins.Component.Button.ButtonBlack002"
                                    width="140" height="30" id="_btnDeleteGame" />
-            <TwnsUiButton:UiButton label="Button" x="50" y="50" width="140" height="30" id="_btnSetDraw"
-                                   skinName="Skins.Component.Button.ButtonBlue002" />
-            <TwnsUiButton:UiButton label="Button" x="60" y="60" width="140" height="30" id="_btnSurrender"
-                                   skinName="Skins.Component.Button.ButtonRed001" />
-            <TwnsUiButton:UiButton label="Button" x="80" y="80" width="140" height="30" id="_btnGotoWarList"
-                                   skinName="Skins.Component.Button.ButtonYellow003" />
-            <TwnsUiButton:UiButton label="Button" x="70" y="70" width="140" height="30" id="_btnGotoLobby"
-                                   skinName="Skins.Component.Button.ButtonYellow003" />
+            <TwnsUiButton:UiButton label="Button" x="50" y="50" skinName="Skins.Component.Button.ButtonBlack002"
+                                   width="140" height="30" id="_btnUnitOpacity" />
             <e:layout>
                 <e:TileLayout orientation="rows" verticalGap="12" horizontalGap="30" requestedColumnCount="2" />
+            </e:layout>
+        </e:Group>
+        <e:Group y="272" horizontalCenter="0">
+            <TwnsUiButton:UiButton label="Button" x="0" y="-84" width="140" height="30" id="_btnSetDraw"
+                                   skinName="Skins.Component.Button.ButtonBlue002" />
+            <TwnsUiButton:UiButton label="Button" x="340" y="-420" width="140" height="30" id="_btnSurrender"
+                                   skinName="Skins.Component.Button.ButtonRed001" />
+            <TwnsUiButton:UiButton label="Button" x="0" y="-882" width="140" height="30" id="_btnGotoWarList"
+                                   skinName="Skins.Component.Button.ButtonYellow003" />
+            <TwnsUiButton:UiButton label="Button" x="680" y="-3570" width="140" height="30" id="_btnGotoLobby"
+                                   skinName="Skins.Component.Button.ButtonYellow003" />
+            <e:layout>
+                <e:TileLayout orientation="rows" horizontalGap="30" verticalGap="12" requestedColumnCount="2" />
             </e:layout>
         </e:Group>
     </e:Group>

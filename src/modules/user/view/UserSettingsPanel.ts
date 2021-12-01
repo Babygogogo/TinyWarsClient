@@ -51,7 +51,6 @@ namespace TwnsUserSettingsPanel {
         private readonly _uiRadioUnitAnimation!     : TwnsUiRadioButton.UiRadioButton;
         private readonly _uiRadioTileAnimation!     : TwnsUiRadioButton.UiRadioButton;
         private readonly _uiRadioShowGridBorder!    : TwnsUiRadioButton.UiRadioButton;
-        private readonly _uiRadioUnitOpacity!       : TwnsUiRadioButton.UiRadioButton;
 
         private readonly _groupButtons!             : eui.Group;
         private readonly _btnChangeNickname!        : TwnsUiButton.UiButton;
@@ -74,7 +73,6 @@ namespace TwnsUserSettingsPanel {
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyUserSettingsIsShowGridBorderChanged },
-                { type: NotifyType.UserSettingsUnitOpacityChanged,      callback: this._onNotifyUserSettingsUnitOpacityChanged },
                 { type: NotifyType.MsgUserGetPublicInfo,                callback: this._onMsgUserGetPublicInfo },
                 { type: NotifyType.MsgUserSetNickname,                  callback: this._onMsgUserSetNickname },
                 { type: NotifyType.MsgUserSetDiscordId,                 callback: this._onMsgUserSetDiscordId },
@@ -191,24 +189,6 @@ namespace TwnsUserSettingsPanel {
                     return UserModel.getSelfSettingsIsShowGridBorder();
                 },
             });
-            this._uiRadioUnitOpacity.setData({
-                titleTextType   : LangTextType.B0356,
-                leftTextType    : LangTextType.B0561,
-                rightTextType   : LangTextType.B0562,
-                callbackOnLeft  : () => {
-                    UserProxy.reqUserSetSettings({
-                        unitOpacity : 0,
-                    });
-                },
-                callbackOnRight : () => {
-                    UserProxy.reqUserSetSettings({
-                        unitOpacity : 100,
-                    });
-                },
-                checkerForLeftOn: () => {
-                    return UserModel.getSelfSettingsUnitOpacity() != 100;
-                },
-            });
 
             const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnOpened_00);
             UserProxy.reqUserGetPublicInfo(selfUserId);
@@ -231,9 +211,6 @@ namespace TwnsUserSettingsPanel {
         }
         private _onNotifyUserSettingsIsShowGridBorderChanged(): void {
             this._uiRadioShowGridBorder.updateView();
-        }
-        private _onNotifyUserSettingsUnitOpacityChanged(): void {
-            this._uiRadioUnitOpacity.updateView();
         }
         private _onMsgUserGetPublicInfo(): void {
             this._updateView();

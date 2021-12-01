@@ -36,8 +36,6 @@
                                                          skinName="Skins.Component.RadioButton.RadioButton001" />
                         <TwnsUiRadioButton:UiRadioButton id="_uiRadioTileAnimation" x="90" y="17"
                                                          skinName="Skins.Component.RadioButton.RadioButton001" />
-                        <TwnsUiRadioButton:UiRadioButton id="_uiRadioUnitOpacity" x="100" y="27"
-                                                         skinName="Skins.Component.RadioButton.RadioButton001" />
                         <e:layout>
                             <e:HorizontalLayout gap="50" />
                         </e:layout>

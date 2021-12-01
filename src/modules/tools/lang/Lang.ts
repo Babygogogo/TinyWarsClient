@@ -135,7 +135,7 @@ namespace Lang {
 
     export function getTileDecoratorName(decoratorType: Types.TileDecoratorType): string | null {
         switch (decoratorType) {
-            case Types.TileDecoratorType.Corner : return getText(LangTextType.B0663);
+            case Types.TileDecoratorType.Shore : return getText(LangTextType.B0663);
             case Types.TileDecoratorType.Empty  : return getText(LangTextType.B0001);
             default                             : return null;
         }

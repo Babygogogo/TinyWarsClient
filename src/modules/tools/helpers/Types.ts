@@ -355,7 +355,7 @@ namespace Types {
 
     // eslint-disable-next-line no-shadow
     export enum TileDecoratorType {
-        Empty,  /* 0 */             Corner,  /* 1 */
+        Empty,  /* 0 */             Shore,  /* 1 */
     }
 
     // eslint-disable-next-line no-shadow

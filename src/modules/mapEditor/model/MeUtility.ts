@@ -621,7 +621,7 @@ namespace MeUtility {
             }
 
             return {
-                decoratorType   : TileDecoratorType.Corner,
+                decoratorType   : TileDecoratorType.Shore,
                 shapeId         : TileDecoratorAutoShapeIdArray[index],
             };
 
@@ -633,11 +633,11 @@ namespace MeUtility {
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 4 }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 5 };
+                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 4 }
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 5 };
                 }
 
             } else if ((shapeId === 1) || (shapeId === 5) || (shapeId === 9) || (shapeId === 13)) {
@@ -646,11 +646,11 @@ namespace MeUtility {
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 2 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 8 }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 10 };
+                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 8 }
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 10 };
                 }
 
             } else if ((shapeId === 2) || (shapeId === 6) || (shapeId === 10) || (shapeId === 14)) {
@@ -659,11 +659,11 @@ namespace MeUtility {
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 2 }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 3 };
+                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 2 }
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 3 };
                 }
 
             } else if ((shapeId === 3) || (shapeId === 7) || (shapeId === 11) || (shapeId === 15)) {
@@ -672,32 +672,32 @@ namespace MeUtility {
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 4 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 8 }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 12 };
+                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 8 }
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 12 };
                 }
 
             } else if ((shapeId === 16) || (shapeId === 20) || (shapeId === 24) || (shapeId === 28)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
                     ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
 
             } else if ((shapeId === 17) || (shapeId === 21) || (shapeId === 25) || (shapeId === 29)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
                     ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
+                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 4 };
 
             } else if ((shapeId === 18) || (shapeId === 22) || (shapeId === 26) || (shapeId === 30)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
                     ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 8 };
+                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 8 };
 
             } else if ((shapeId === 19) || (shapeId === 23) || (shapeId === 27) || (shapeId === 31)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
                     ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
+                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 2 };
 
             } else {
                 return {

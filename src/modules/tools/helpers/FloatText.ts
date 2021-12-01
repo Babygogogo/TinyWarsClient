@@ -10,7 +10,7 @@ namespace FloatText {
     const LOCK_TIME_MS      = 480;
     const START_Y           = 120;
     const END_Y             = 0;
-    const MAX_CACHE_COUNT   = 6;
+    const MAX_CACHE_COUNT   = 4;
 
     const _dataArray        : string[] = [];
     let   _timeoutIdForLock : number | null = null;

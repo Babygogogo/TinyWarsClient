@@ -41,6 +41,7 @@ namespace TwnsMpwWarMenuPanel {
         private readonly _btnFreeMode!          : TwnsUiButton.UiButton;
         private readonly _btnSetPath!           : TwnsUiButton.UiButton;
         private readonly _btnReplay!            : TwnsUiButton.UiButton;
+        private readonly _btnUnitOpacity!       : TwnsUiButton.UiButton;
         private readonly _btnSetDraw!           : TwnsUiButton.UiButton;
         private readonly _btnSurrender!         : TwnsUiButton.UiButton;
         private readonly _btnGotoWarList!       : TwnsUiButton.UiButton;
@@ -50,6 +51,7 @@ namespace TwnsMpwWarMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: NotifyType.UserSettingsUnitOpacityChanged,      callback: this._onNotifyUserSettingsUnitOpacityChanged },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onNotifyMsgSpmCreateSfw },
                 { type: NotifyType.MsgMpwGetHalfwayReplayData,          callback: this._onNotifyMsgMpwGetHalfwayReplayData },
                 { type: NotifyType.MsgMpwGetHalfwayReplayDataFailed,    callback: this._onNotifyMsgMpwGetHalfwayReplayDataFailed },
@@ -63,6 +65,7 @@ namespace TwnsMpwWarMenuPanel {
                 { ui: this._btnFreeMode,                                callback: this._onTouchedBtnFreeMode },
                 { ui: this._btnSetPath,                                 callback: this._onTouchedBtnSetPath },
                 { ui: this._btnReplay,                                  callback: this._onTouchedBtnReplay },
+                { ui: this._btnUnitOpacity,                             callback: this._onTouchedBtnUnitOpacity },
                 { ui: this._btnSetDraw,                                 callback: this._onTouchedBtnSetDraw },
                 { ui: this._btnSurrender,                               callback: this._onTouchedBtnSurrender },
                 { ui: this._btnGotoWarList,                             callback: this._onTouchedBtnGotoWarList },
@@ -90,6 +93,9 @@ namespace TwnsMpwWarMenuPanel {
         }
         private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._updateView();
+        }
+        private _onNotifyUserSettingsUnitOpacityChanged(): void {
+            this._updateBtnUnitOpacity();
         }
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
@@ -239,6 +245,10 @@ namespace TwnsMpwWarMenuPanel {
             });
         }
 
+        private _onTouchedBtnUnitOpacity(): void {
+            UserModel.tickSelfSettingsUnitOpacity();
+        }
+
         private _onTouchedBtnSetDraw(): void {
             if (!this._checkCanDoAction()) {
                 FloatText.show(Lang.getText(LangTextType.A0239));
@@ -383,6 +393,11 @@ namespace TwnsMpwWarMenuPanel {
             this._btnSurrender.label    = Lang.getText(LangTextType.B0055);
             this._btnGotoWarList.label  = Lang.getText(LangTextType.B0652);
             this._btnGotoLobby.label    = Lang.getText(LangTextType.B0054);
+            this._updateBtnUnitOpacity();
+        }
+
+        private _updateBtnUnitOpacity(): void {
+            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${UserModel.getSelfSettingsUnitOpacity()}%`;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

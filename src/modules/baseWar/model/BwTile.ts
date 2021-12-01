@@ -127,6 +127,13 @@ namespace TwnsBwTile {
                 }
             }
 
+            // 处理海岸独立的残留数据
+            if ((baseType === Types.TileBaseType.Sea) && (data.baseShapeId)) {
+                data.decoratorType      = Types.TileDecoratorType.Shore;
+                data.decoratorShapeId   = data.baseShapeId;
+                data.baseShapeId        = 0;
+            }
+
             const baseShapeId = data.baseShapeId;
             if (!ConfigManager.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
                 throw Helpers.newError(`Invalid baseShapeId: ${baseShapeId}`, ClientErrorCode.BwTile_Deserialize_11);

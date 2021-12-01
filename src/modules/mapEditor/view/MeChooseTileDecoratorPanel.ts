@@ -114,7 +114,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
 
                 const list = Helpers.getExisted(typeMap.get(decoratorType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((decoratorType === Types.TileDecoratorType.Corner) && (shapeId === 0)) {
+                    if ((decoratorType === Types.TileDecoratorType.Shore) && (shapeId === 0)) {
                         continue;
                     }
 
