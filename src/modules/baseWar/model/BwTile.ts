@@ -306,6 +306,7 @@ namespace TwnsBwTile {
                 tileData    : this.serialize(),
                 hasFog      : this.getHasFog(),
                 skinId      : this.getSkinId(),
+                themeType   : this.getTileThemeType(),
             });
             view.updateView();
         }
@@ -1125,6 +1126,20 @@ namespace TwnsBwTile {
         }
         public getHasFog(): boolean {
             return this._hasFog;
+        }
+
+        public getTileThemeType(): Types.TileThemeType {
+            const war           = this.getWar();
+            const weatherType   = war.getWeatherManager().getCurrentWeatherType();
+            if (weatherType === Types.WeatherType.Rainy) {
+                return Types.TileThemeType.Rainy;
+            } else if (weatherType === Types.WeatherType.Sandstorm) {
+                return Types.TileThemeType.Sandstorm;
+            } else if (weatherType === Types.WeatherType.Snowy) {
+                return Types.TileThemeType.Snowy;
+            } else {
+                return Types.TileThemeType.Clear;
+            }
         }
     }
 }

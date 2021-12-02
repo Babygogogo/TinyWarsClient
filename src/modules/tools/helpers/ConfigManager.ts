@@ -513,8 +513,9 @@ namespace ConfigManager {
         return Helpers.getExisted(CommonConstants.TileTypeToTileObjectType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }
 
-    export function getTileBaseImageSource({version, skinId, baseType, isDark, shapeId, tickCount}: {
+    export function getTileBaseImageSource({version, themeType, skinId, baseType, isDark, shapeId, tickCount}: {
         version     : Types.UnitAndTileTextureVersion;
+        themeType   : Types.TileThemeType;
         skinId      : number;
         baseType    : TileBaseType;
         isDark      : boolean;
@@ -528,6 +529,7 @@ namespace ConfigManager {
         const cfgForFrame       = Helpers.getExisted(CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType), ClientErrorCode.ConfigManager_GetTileBaseImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
+        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
         const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
         const textForVersion    = `ver${Helpers.getNumText(version)}`;
         const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
@@ -535,10 +537,11 @@ namespace ConfigManager {
         const textForFrame      = ticksPerFrame < Number.MAX_VALUE
             ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
             : `frame00`;
-        return `tileBase_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+        return `tileBase_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
-    export function getTileDecoratorImageSource({version, skinId, decoratorType, isDark, shapeId, tickCount}: {
+    export function getTileDecoratorImageSource({version, themeType, skinId, decoratorType, isDark, shapeId, tickCount}: {
         version         : Types.UnitAndTileTextureVersion;
+        themeType       : Types.TileThemeType;
         skinId          : number;
         decoratorType   : TileDecoratorType | null;
         isDark          : boolean;
@@ -552,6 +555,7 @@ namespace ConfigManager {
         const cfgForFrame       = Helpers.getExisted(CommonConstants.TileDecoratorFrameConfigs.get(version)?.get(decoratorType), ClientErrorCode.ConfigManager_GetTileDecoratorImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
+        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
         const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
         const textForVersion    = `ver${Helpers.getNumText(version)}`;
         const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
@@ -559,10 +563,11 @@ namespace ConfigManager {
         const textForFrame      = ticksPerFrame < Number.MAX_VALUE
             ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
             : `frame00`;
-        return `tileDecorator_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+        return `tileDecorator_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
-    export function getTileObjectImageSource({version, skinId, objectType, isDark, shapeId, tickCount}: {
+    export function getTileObjectImageSource({version, themeType, skinId, objectType, isDark, shapeId, tickCount}: {
         version     : Types.UnitAndTileTextureVersion;
+        themeType   : Types.TileThemeType;
         skinId      : number;
         objectType  : TileObjectType;
         isDark      : boolean;
@@ -576,6 +581,7 @@ namespace ConfigManager {
         const cfgForFrame       = Helpers.getExisted(CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType), ClientErrorCode.ConfigManager_GetTileObjectImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
+        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
         const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
         const textForVersion    = `ver${Helpers.getNumText(version)}`;
         const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
@@ -583,7 +589,7 @@ namespace ConfigManager {
         const textForFrame      = ticksPerFrame < Number.MAX_VALUE
             ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
             : `frame00`;
-        return `tileObject_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+        return `tileObject_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
 
     export function getUnitAndTileDefaultSkinId(playerIndex: number): number {

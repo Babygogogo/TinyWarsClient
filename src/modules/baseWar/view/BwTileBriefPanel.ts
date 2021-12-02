@@ -121,6 +121,7 @@ namespace TwnsBwTileBriefPanel {
                 tileData    : tile.serialize(),
                 hasFog      : tile.getHasFog(),
                 skinId      : tile.getSkinId(),
+                themeType   : tile.getTileThemeType(),
             });
             tileView.updateView();
             this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;

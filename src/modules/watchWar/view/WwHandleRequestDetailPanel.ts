@@ -72,6 +72,12 @@ namespace TwnsWwHandleRequestDetailPanel {
         }
 
         private _onTouchedBtnConfirm(): void {
+            const warId = this._getOpenData().watchInfo.warInfo?.warId;
+            if (warId == null) {
+                this.close();
+                return;
+            }
+
             const acceptUserIds : number[] = [];
             const declineUserIds: number[] = [];
             for (const data of this._dataForListPlayer || []) {
@@ -81,9 +87,13 @@ namespace TwnsWwHandleRequestDetailPanel {
                     declineUserIds.push(data.userId);
                 }
             }
-            const warId = this._getOpenData().watchInfo.warInfo?.warId;
-            (warId != null) && (WwProxy.reqWatchHandleRequest(warId, acceptUserIds, declineUserIds));
-            this.close();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                content : Lang.getFormattedText(LangTextType.F0082, acceptUserIds.length, declineUserIds.length),
+                callback: () => {
+                    WwProxy.reqWatchHandleRequest(warId, acceptUserIds, declineUserIds);
+                    this.close();
+                },
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,7 +126,7 @@ namespace TwnsWwHandleRequestDetailPanel {
                         userId,
                         isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
                         isOpponent      : playerInfoList.some(v => v.userId === userId),
-                        isAccept        : false,
+                        isAccept        : true,
                     });
                 }
             }

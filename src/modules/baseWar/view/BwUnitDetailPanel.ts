@@ -1103,6 +1103,7 @@ namespace TwnsBwUnitDetailPanel {
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
                 this._tileView.source           = CommonModel.getCachedTileObjectImageSource({
                     version     : UserModel.getSelfSettingsTextureVersion(),
+                    themeType   : Types.TileThemeType.Clear,
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                     objectType  : ConfigManager.getTileObjectTypeByTileType(targetTileType),
                     isDark      : false,

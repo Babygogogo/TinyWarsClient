@@ -73,6 +73,12 @@ namespace TwnsWwMakeRequestDetailPanel {
         }
 
         private _onTouchedBtnConfirm(): void {
+            const warId = this._getOpenData().watchInfo.warInfo?.warId;
+            if (warId == null) {
+                this.close();
+                return;
+            }
+
             const userIds: number[] = [];
             for (const data of this._dataForListPlayer || []) {
                 if (data.isRequesting) {
@@ -80,11 +86,17 @@ namespace TwnsWwMakeRequestDetailPanel {
                     (userId != null) && (userIds.push(userId));
                 }
             }
-            if (userIds.length > 0) {
-                const warId = this._getOpenData().watchInfo.warInfo?.warId;
-                (warId != null) && (WwProxy.reqWatchMakeRequest(warId, userIds));
+            if (userIds.length <= 0) {
+                this.close();
+            } else {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    content : Lang.getFormattedText(LangTextType.F0083, userIds.length),
+                    callback: () => {
+                        WwProxy.reqWatchMakeRequest(warId, userIds);
+                        this.close();
+                    }
+                });
             }
-            this.close();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,6 +123,7 @@ namespace TwnsWwMakeRequestDetailPanel {
                 return [];
             }
 
+            const selfUserId        = Helpers.getExisted(UserModel.getSelfUserId());
             const ongoingDstUserIds = openData.ongoingDstUserIds || [];
             const requestDstUserIds = openData.requestDstUserIds || [];
             const playerInfoList    = warInfo?.playerInfoList || [];
@@ -127,13 +140,15 @@ namespace TwnsWwMakeRequestDetailPanel {
                     continue;
                 }
 
+                const isRequested   = requestDstUserIds.indexOf(userId) >= 0;
+                const isWatching    = ongoingDstUserIds.indexOf(userId) >= 0;
                 dataList.push({
                     panel           : this,
                     configVersion,
                     playerInfo,
-                    isRequested     : requestDstUserIds.indexOf(userId) >= 0,
-                    isWatching      : ongoingDstUserIds.indexOf(userId) >= 0,
-                    isRequesting    : false,
+                    isRequested,
+                    isWatching,
+                    isRequesting    : (!isRequested) && (!isWatching) && (userId !== selfUserId) && (!!playerInfo.isAlive),
                 });
             }
 

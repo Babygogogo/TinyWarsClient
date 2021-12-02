@@ -103,6 +103,7 @@ namespace TwnsMeTileSimpleView {
                     imgObject.visible = true;
                     imgObject.source  = CommonModel.getCachedTileObjectImageSource({
                         version,
+                        themeType   : Types.TileThemeType.Clear,
                         skinId      : Helpers.getExisted(this._playerIndex),
                         objectType,
                         isDark      : false,
@@ -121,6 +122,7 @@ namespace TwnsMeTileSimpleView {
                     imgBase.visible = true;
                     imgBase.source  = CommonModel.getCachedTileBaseImageSource({
                         version,
+                        themeType   : Types.TileThemeType.Clear,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         baseType,
                         isDark      : false,
@@ -139,6 +141,7 @@ namespace TwnsMeTileSimpleView {
                     imgDecorator.visible = true;
                     imgDecorator.source  = CommonModel.getCachedTileDecoratorImageSource({
                         version,
+                        themeType   : Types.TileThemeType.Clear,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         decoratorType,
                         isDark      : false,

@@ -164,6 +164,7 @@ namespace TwnsBwTileDetailPanel {
                 tileData    : tile.serialize(),
                 hasFog      : tile.getHasFog(),
                 skinId      : tile.getSkinId(),
+                themeType   : tile.getTileThemeType(),
             });
             tileView.updateView();
         }

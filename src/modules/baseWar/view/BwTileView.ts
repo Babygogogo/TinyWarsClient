@@ -19,6 +19,7 @@ namespace TwnsBwTileView {
 
     export type DataForTileView = {
         tileData    : ISerialTile;
+        themeType   : Types.TileThemeType;
         hasFog      : boolean;
         skinId      : number;
     };
@@ -52,9 +53,10 @@ namespace TwnsBwTileView {
 
         public updateView(): void {
             const data      = Helpers.getExisted(this.getData());
-            const skinId    = Helpers.getExisted(data.skinId);
-            const hasFog    = Helpers.getExisted(data.hasFog);
-            const tileData  = Helpers.getExisted(data.tileData);
+            const skinId    = data.skinId;
+            const hasFog    = data.hasFog;
+            const tileData  = data.tileData;
+            const themeType = data.themeType;
             const version   = UserModel.getSelfSettingsTextureVersion();
             const tickCount = Timer.getTileAnimationTickCount();
 
@@ -69,6 +71,7 @@ namespace TwnsBwTileView {
                     imgObject.visible   = true;
                     imgObject.source    = CommonModel.getCachedTileObjectImageSource({
                         version,
+                        themeType,
                         skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
                         shapeId     : tileData.objectShapeId || 0,
                         objectType,
@@ -89,6 +92,7 @@ namespace TwnsBwTileView {
                     imgBase.visible = true;
                     imgBase.source  = CommonModel.getCachedTileBaseImageSource({
                         version,
+                        themeType,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         shapeId     : tileData.baseShapeId || 0,
                         baseType,
@@ -107,6 +111,7 @@ namespace TwnsBwTileView {
                     imgDecorator.visible    = true;
                     imgDecorator.source     = CommonModel.getCachedTileDecoratorImageSource({
                         version,
+                        themeType,
                         skinId          : CommonConstants.UnitAndTileNeutralSkinId,
                         decoratorType,
                         shapeId         : tileData.decoratorShapeId ?? null,

@@ -242,6 +242,7 @@ namespace TwnsWarMapView {
                 ? ``
                 : CommonModel.getCachedTileBaseImageSource({
                     version     : UserModel.getSelfSettingsTextureVersion(),
+                    themeType   : Types.TileThemeType.Clear,
                     baseType    : Helpers.getExisted(tileData.baseType),
                     shapeId     : tileData.baseShapeId || 0,
                     isDark      : false,
@@ -261,6 +262,7 @@ namespace TwnsWarMapView {
                 ? ``
                 : CommonModel.getCachedTileDecoratorImageSource({
                     version         : UserModel.getSelfSettingsTextureVersion(),
+                    themeType       : Types.TileThemeType.Clear,
                     decoratorType   : tileData.decoratorType ?? null,
                     shapeId         : tileData.decoratorShapeId ?? null,
                     isDark          : false,
@@ -280,6 +282,7 @@ namespace TwnsWarMapView {
                 ? ``
                 : CommonModel.getCachedTileObjectImageSource({
                     version     : UserModel.getSelfSettingsTextureVersion(),
+                    themeType   : Types.TileThemeType.Clear,
                     objectType  : tileData.objectType || Types.TileObjectType.Empty,
                     shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,

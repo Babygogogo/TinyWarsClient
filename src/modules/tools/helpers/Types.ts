@@ -348,6 +348,14 @@ namespace Types {
     }
 
     // eslint-disable-next-line no-shadow
+    export enum TileThemeType {
+        Clear,
+        Sandstorm,
+        Snowy,
+        Rainy,
+    }
+
+    // eslint-disable-next-line no-shadow
     export enum TileBaseType {
         Empty,  /* 0 */            Plain,  /* 1 */            River,  /* 2 */            Sea,    /* 3 */
         Beach,  /* 4 */

@@ -4670,6 +4670,14 @@ namespace TwnsLangCommonText {
             `地块(%d, %d)的类型不是%s`,
             `The type of the tile (%d, %d) is not %s.`,
         ],
+        [LangTextType.F0082]: [
+            `您将同意%d人的观战请求，同时拒绝%d人的观战请求。\n您确定要继续吗？`,
+            `You are going to accept %d players' requests while declining %d players' ones.\nAre you sure to continue?`,
+        ],
+        [LangTextType.F0083]: [
+            `您将向%d个玩家发起观战请求。\n您确定要继续吗？`,
+            `You are going to send requests to %d players.\nAre you sure to continue?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.
