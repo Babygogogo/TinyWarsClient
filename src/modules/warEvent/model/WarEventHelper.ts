@@ -2154,6 +2154,39 @@ namespace WarEventHelper {
             }
         }
     }
+    export function cloneEvent(fullData: IWarEventFullData, srcEventId: number, isShallowClone: boolean): number {
+        const eventArray    = Helpers.getExisted(fullData.eventArray);
+        const srcEvent      = Helpers.getExisted(eventArray.find(v => v.eventId === srcEventId));
+        for (let eventId = 1; ; ++eventId) {
+            if (eventArray.some(v => v.eventId === eventId)) {
+                continue;
+            }
+
+            const srcConditionNodeId = srcEvent.conditionNodeId;
+            if (isShallowClone) {
+                eventArray.push({
+                    eventId,
+                    eventNameArray          : Helpers.deepClone(srcEvent.eventNameArray),
+                    maxCallCountInPlayerTurn: srcEvent.maxCallCountInPlayerTurn,
+                    maxCallCountTotal       : srcEvent.maxCallCountTotal,
+                    actionIdArray           : Helpers.deepClone(srcEvent.actionIdArray),
+                    conditionNodeId         : srcConditionNodeId,
+                });
+            } else {
+                eventArray.push({
+                    eventId,
+                    eventNameArray          : Helpers.deepClone(srcEvent.eventNameArray),
+                    maxCallCountInPlayerTurn: srcEvent.maxCallCountInPlayerTurn,
+                    maxCallCountTotal       : srcEvent.maxCallCountTotal,
+                    actionIdArray           : (srcEvent.actionIdArray ?? []).map(v => cloneAction(fullData, v)),
+                    conditionNodeId         : srcConditionNodeId == null ? null : cloneNode(fullData, srcConditionNodeId, isShallowClone),
+                });
+            }
+
+            eventArray.sort((v1, v2) => Helpers.getExisted(v1.eventId) - Helpers.getExisted(v2.eventId));
+            return eventId;
+        }
+    }
 
     export function createSubNodeInParentNode({ fullData, parentNodeId, isAnd = true, conditionIdArray = [], subNodeIdArray = [] }: {   // DONE
         fullData            : IWarEventFullData;
@@ -2187,6 +2220,33 @@ namespace WarEventHelper {
 
                 return nodeId;
             }
+        }
+    }
+    export function cloneNode(fullData: IWarEventFullData, srcNodeId: number, isShallowClone: boolean): number {
+        const nodeArray = Helpers.getExisted(fullData.conditionNodeArray);
+        const srcNode   = Helpers.getExisted(nodeArray.find(v => v.nodeId === srcNodeId));
+        for (let nodeId = 1; ; ++nodeId) {
+            if (nodeArray.some(v => v.nodeId === nodeId)) {
+                continue;
+            }
+
+            const newNode   = Helpers.deepClone(srcNode);
+            newNode.nodeId  = nodeId;
+            nodeArray.push(newNode);
+            if (!isShallowClone) {
+                const conditionIdArray = srcNode.conditionIdArray;
+                if (conditionIdArray) {
+                    newNode.conditionIdArray = conditionIdArray.map(v => cloneCondition(fullData, v));
+                }
+
+                const subNodeIdArray = srcNode.subNodeIdArray;
+                if (subNodeIdArray) {
+                    newNode.subNodeIdArray = subNodeIdArray.map(v => cloneNode(fullData, v, isShallowClone));
+                }
+            }
+
+            nodeArray.sort((v1, v2) => Helpers.getExisted(v1.nodeId) - Helpers.getExisted(v2.nodeId));
+            return nodeId;
         }
     }
     export function cloneAndReplaceNodeInParentNode({ fullData, parentNodeId, nodeIdForDelete, nodeIdForClone }: {   // DONE
@@ -2357,6 +2417,21 @@ namespace WarEventHelper {
             }
         }
     }
+    export function cloneCondition(fullData: IWarEventFullData, srcConditionId: number): number {
+        const conditionArray    = Helpers.getExisted(fullData.conditionArray);
+        const newCondition      = Helpers.deepClone(Helpers.getExisted(conditionArray.find(v => v.WecCommonData?.conditionId === srcConditionId)));
+        conditionArray.push(newCondition);
+
+        for (let conditionId = 1; ; ++conditionId) {
+            if (conditionArray.some(v => v.WecCommonData?.conditionId === conditionId)) {
+                continue;
+            }
+
+            Helpers.getExisted(newCondition.WecCommonData).conditionId = conditionId;
+            conditionArray.sort((v1, v2) => Helpers.getExisted(v1.WecCommonData?.conditionId) - Helpers.getExisted(v2.WecCommonData?.conditionId));
+            return conditionId;
+        }
+    }
     export function cloneAndReplaceConditionInParentNode({ fullData, parentNodeId, conditionIdForDelete, conditionIdForClone }: {
         fullData            : IWarEventFullData;
         parentNodeId        : number;
@@ -2503,6 +2578,21 @@ namespace WarEventHelper {
         };
     }
 
+    export function cloneAction(fullData: IWarEventFullData, srcActionId: number): number {
+        const actionArray   = Helpers.getExisted(fullData.actionArray);
+        const newAction     = Helpers.deepClone(Helpers.getExisted(actionArray.find(v => v.WeaCommonData?.actionId === srcActionId)));
+        actionArray.push(newAction);
+
+        for (let actionId = 1; ; ++actionId) {
+            if (actionArray.some(v => v.WeaCommonData?.actionId === actionId)) {
+                continue;
+            }
+
+            Helpers.getExisted(newAction.WeaCommonData).actionId = actionId;
+            actionArray.sort((v1, v2) => Helpers.getExisted(v1.WeaCommonData?.actionId) - Helpers.getExisted(v2.WeaCommonData?.actionId));
+            return actionId;
+        }
+    }
     export function cloneAndReplaceActionInEvent({ fullData, eventId, actionIdForDelete, actionIdForClone }: {
         fullData            : IWarEventFullData;
         eventId             : number;
@@ -2554,21 +2644,8 @@ namespace WarEventHelper {
             return false;
         }
 
-        const eventData = getEvent(fullData, eventId);
-        if (eventData == null) {
-            return false;
-        }
-
-        if (eventData.actionIdArray == null) {
-            eventData.actionIdArray = [];
-        }
-
-        const actionIdArray = eventData.actionIdArray;
-        Helpers.deleteElementFromArray(actionIdArray, oldActionId);
-        if (actionIdArray.indexOf(newActionId) < 0) {
-            actionIdArray.push(newActionId);
-            actionIdArray.sort((v1, v2) => v1 - v2);
-        }
+        const actionIdArray = Helpers.getExisted(getEvent(fullData, eventId)?.actionIdArray);
+        actionIdArray[actionIdArray.indexOf(oldActionId)] = newActionId;
 
         return true;
     }

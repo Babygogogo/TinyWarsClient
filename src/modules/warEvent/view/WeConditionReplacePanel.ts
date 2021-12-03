@@ -108,6 +108,7 @@ namespace TwnsWeConditionReplacePanel {
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
+            this._btnCopy.visible = false;
             this._updateComponentsForLanguage();
         }
 
@@ -155,7 +156,9 @@ namespace TwnsWeConditionReplacePanel {
 
         private _updateLabelConditionId(): void {
             const data                  = this._getData();
-            this._labelConditionId.text = `${Lang.getText(LangTextType.B0502)}: C${data.candidateConditionId}`;
+            const conditionId           = data.candidateConditionId;
+            const nodeNameArray         = data.fullData.conditionNodeArray?.filter(node => node.conditionIdArray?.some(v => v === conditionId)).map(v => `N${v.nodeId}`);
+            this._labelConditionId.text = `C${conditionId} (${Lang.getText(LangTextType.B0749)}: ${nodeNameArray?.length ? nodeNameArray.join(`, `) : Lang.getText(LangTextType.B0001)})`;
         }
         private _updateLabelCondition(): void {
             const data      = this._getData();

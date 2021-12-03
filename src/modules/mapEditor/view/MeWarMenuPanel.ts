@@ -44,7 +44,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWarMenuPanel {
-    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import DataForDrawUnit          = TwnsMeDrawer.DataForDrawUnit;
     import MeWar                    = TwnsMeWar.MeWar;
     import NotifyType               = TwnsNotifyType.NotifyType;
@@ -372,6 +371,7 @@ namespace TwnsMeWarMenuPanel {
                 this._createCommandMapTag(),
                 this._createCommandReviewAccept(),
                 this._createCommandReviewReject(),
+                this._createCommandUserSettings(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandChat(),
                 this._createCommandGotoMapListPanel(),
@@ -384,7 +384,6 @@ namespace TwnsMeWarMenuPanel {
                 this._createCommandAutoSaveMap(),
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
-                this._createCommandUserSettings(),
                 this._createCommandClear(),
                 this._createCommandResize(),
                 this._createCommandOffset(),

@@ -374,7 +374,7 @@ namespace Types {
         Meteor,         /* 12 */        Silo,               /* 13 */        EmptySilo,     /* 14 */         Headquarters,   /* 15 */
         City,           /* 16 */        CommandTower,       /* 17 */        Radar,         /* 18 */         Factory,        /* 19 */
         Airport,        /* 20 */        Seaport,            /* 21 */        TempAirport,   /* 22 */         TempSeaport,    /* 23 */
-        GreenPlasma,    /* 24 */        Crystal,            /* 25 */        CustomCrystal, /* 26 */         CannonUp,       /* 27 */
+        Pipe,           /* 24 */        Crystal,            /* 25 */        CustomCrystal, /* 26 */         CannonUp,       /* 27 */
         CannonDown,     /* 28 */        CannonLeft,         /* 29 */        CannonRight,   /* 30 */         CustomCannon,   /* 31 */
         LaserTurret,    /* 32 */        CustomLaserTurret,  /* 33 */
     }
@@ -385,7 +385,7 @@ namespace Types {
         Road,           /* 4 */         BridgeOnPlain,  /* 5 */         BridgeOnRiver,      /* 6 */         BridgeOnBeach,  /* 7 */
         BridgeOnSea,    /* 8 */         Wood,           /* 9 */         Mountain,           /* 10 */        Wasteland,      /* 11 */
         Ruins,          /* 12 */        Fire,           /* 13 */        Rough,              /* 14 */        MistOnSea,      /* 15 */
-        Reef,           /* 16 */        Plasma,         /* 17 */        GreenPlasma,        /* 18 */        Meteor,         /* 19 */
+        Reef,           /* 16 */        Plasma,         /* 17 */        Pipe,               /* 18 */        Meteor,         /* 19 */
         Silo,           /* 20 */        EmptySilo,      /* 21 */        Headquarters,       /* 22 */        City,           /* 23 */
         CommandTower,   /* 24 */        Radar,          /* 25 */        Factory,            /* 26 */        Airport,        /* 27 */
         Seaport,        /* 28 */        TempAirport,    /* 29 */        TempSeaport,        /* 30 */        MistOnPlain,    /* 31 */

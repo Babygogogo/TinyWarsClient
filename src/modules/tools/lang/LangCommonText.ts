@@ -3028,8 +3028,8 @@ namespace TwnsLangCommonText {
             `Delete Action`,
         ],
         [LangTextType.B0487]: [
-            `克隆`,
-            `Clone`,
+            `浅克隆`,
+            `Shallow Clone`,
         ],
         [LangTextType.B0488]: [
             `条件节点`,
@@ -4071,6 +4071,14 @@ namespace TwnsLangCommonText {
             `部队不透明度`,
             `Unit Opacity`,
         ],
+        [LangTextType.B0748]: [
+            `深克隆`,
+            `Deep Clone`,
+        ],
+        [LangTextType.B0749]: [
+            `已被引用`,
+            `Referenced`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4677,6 +4685,10 @@ namespace TwnsLangCommonText {
         [LangTextType.F0083]: [
             `您将向%d个玩家发起观战请求。\n您确定要继续吗？`,
             `You are going to send requests to %d players.\nAre you sure to continue?`,
+        ],
+        [LangTextType.F0084]: [
+            `%s 已成功创建`,
+            `%s is created successfully.`
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

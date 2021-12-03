@@ -104,7 +104,7 @@ namespace Lang {
             case Types.TileType.MistOnSea           : return getText(LangTextType.B1015, languageType);
             case Types.TileType.Reef                : return getText(LangTextType.B1016, languageType);
             case Types.TileType.Plasma              : return getText(LangTextType.B1017, languageType);
-            case Types.TileType.GreenPlasma         : return getText(LangTextType.B1018, languageType);
+            case Types.TileType.Pipe                : return getText(LangTextType.B1018, languageType);
             case Types.TileType.Meteor              : return getText(LangTextType.B1019, languageType);
             case Types.TileType.Silo                : return getText(LangTextType.B1020, languageType);
             case Types.TileType.EmptySilo           : return getText(LangTextType.B1021, languageType);

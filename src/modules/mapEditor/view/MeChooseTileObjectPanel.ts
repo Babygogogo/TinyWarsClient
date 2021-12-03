@@ -106,7 +106,7 @@ namespace TwnsMeChooseTileObjectPanel {
                 callback: () => {
                     const drawer = Helpers.getExisted(MeModel.getWar()).getDrawer();
                     drawer.autoAdjustPlasmas();
-                    drawer.autoAdjustSuperPlasmas();
+                    drawer.autoAdjustPipes();
                     this.close();
                 },
             });
@@ -131,7 +131,8 @@ namespace TwnsMeChooseTileObjectPanel {
                     }
 
                     const dataListForDrawTileObject = Helpers.getExisted(mapping.get(playerIndex));
-                    for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
+                    const shapesCount               = UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount;
+                    for (let shapeId = 0; shapeId < shapesCount; ++shapeId) {
                         dataListForDrawTileObject.push({
                             objectType,
                             playerIndex,

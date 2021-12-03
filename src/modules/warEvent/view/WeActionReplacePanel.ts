@@ -108,6 +108,7 @@ namespace TwnsWeActionReplacePanel {
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
+            this._btnCopy.visible = false;
             this._updateComponentsForLanguage();
         }
 
@@ -155,8 +156,10 @@ namespace TwnsWeActionReplacePanel {
 
         private _updateLabelActionId(): void {
             if (this._checkHasData()) {
-                const data = this._getData();
-                this._labelActionId.text  = `${Lang.getText(LangTextType.B0616)}: A${data.candidateActionId}`;
+                const data                  = this._getData();
+                const actionId              = data.candidateActionId;
+                const eventNameArray        = data.fullData.eventArray?.filter(event => event.actionIdArray?.some(v => v === actionId)).map(v => `E${v.eventId}`);
+                this._labelActionId.text    = `A${actionId} (${Lang.getText(LangTextType.B0749)}: ${eventNameArray?.length ? eventNameArray.join(`, `) : Lang.getText(LangTextType.B0001)})`;
             }
         }
         private _updateLabelAction(): void {

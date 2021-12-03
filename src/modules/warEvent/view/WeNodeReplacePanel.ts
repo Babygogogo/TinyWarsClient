@@ -113,6 +113,7 @@ namespace TwnsWeNodeReplacePanel {
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
+            this._btnCopy.visible = false;
             this._updateComponentsForLanguage();
         }
 
@@ -210,7 +211,11 @@ namespace TwnsWeNodeReplacePanel {
         private _updateLabelNodeId(): void {
             const data = this.data;
             if (data) {
-                this._labelNodeId.text  = `${Lang.getText(LangTextType.B0488)}: N${data.candidateNodeId}`;
+                const nodeId            = data.candidateNodeId;
+                const fullData          = data.fullData;
+                const obtainerNameArray = (fullData.conditionNodeArray?.filter(node => node.subNodeIdArray?.some(v => v === nodeId)).map(v => `N${v.nodeId}`) ?? [])
+                    .concat(fullData.eventArray?.filter(event => event.conditionNodeId === nodeId).map(v => `E${v.eventId}`) ?? []);
+                this._labelNodeId.text  = `N${nodeId} (${Lang.getText(LangTextType.B0749)}: ${obtainerNameArray.length ? obtainerNameArray.join(`, `) : Lang.getText(LangTextType.B0001)})`;
             }
         }
         private _updateLabelSubNode(): void {

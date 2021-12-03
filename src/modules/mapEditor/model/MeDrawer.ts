@@ -260,17 +260,17 @@ namespace TwnsMeDrawer {
                 }
             }
         }
-        public autoAdjustSuperPlasmas(): void {
+        public autoAdjustPipes(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
             const configVersion = war.getConfigVersion();
             for (const tile of tileMap.getAllTiles()) {
-                if (tile.getType() !== Types.TileType.GreenPlasma) {
+                if (tile.getType() !== Types.TileType.Pipe) {
                     continue;
                 }
 
                 const gridIndex = tile.getGridIndex();
-                const shapeId   = MeUtility.getAutoSuperPlasmaShapeId(tileMap, gridIndex);
+                const shapeId   = MeUtility.getAutoPipeShapeId(tileMap, gridIndex);
                 if (shapeId !== tile.getObjectShapeId()) {
                     tile.init({
                         gridIndex       : tile.getGridIndex(),

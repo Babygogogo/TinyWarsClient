@@ -104,17 +104,31 @@ namespace MeUtility {
         0,  7,  // 1 1  0
         6,  10, // 1 1  1
     ];
-    const TilePlasmaAutoShapeIdArray = [
-    //  0       1
-        0,      1,      // 0 0  0
-        3,      15,     // 0 0  1
-        4,      10,     // 0 1  0
-        9,      8,      // 0 1  1
-        2,      11,     // 1 0  0
-        12,     6,      // 1 0  1
-        14,     5,      // 1 1  0
-        7,      13,     // 1 1  1
-    ];
+    const TilePlasmaAutoShapeIdMap = new Map<boolean, number[]>([
+        // boolean表示是否与陨石/激光发射器邻接
+        [ false, [
+        //  0       1
+            0,      1,      // 0 0  0
+            3,      15,     // 0 0  1
+            4,      10,     // 0 1  0
+            9,      8,      // 0 1  1
+            2,      11,     // 1 0  0
+            12,     6,      // 1 0  1
+            14,     5,      // 1 1  0
+            7,      13,     // 1 1  1
+        ]],
+        [ true, [
+        //  0       1
+            0,      16,     // 0 0  0
+            18,     24,     // 0 0  1
+            17,     20,     // 0 1  0
+            21,     26,     // 0 1  1
+            19,     22,     // 1 0  0
+            23,     28,     // 1 0  1
+            25,     29,     // 1 1  0
+            27,     13,     // 1 1  1
+        ]],
+    ]);
     const TileSuperPlasmaAutoShapeIdArray = [
     //  0       1
         0,      1,      // 0 0  0
@@ -562,22 +576,32 @@ namespace MeUtility {
     }
 
     export function getAutoPlasmaShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
-        const { x, y }      = gridIndex;
-        const isAdjacent4   = checkIsPlasmaOrMeteor(tileMap, { x: x - 1, y }) ? 1 : 0;
-        const isAdjacent3   = checkIsPlasmaOrMeteor(tileMap, { x: x + 1, y }) ? 1 : 0;
-        const isAdjacent2   = checkIsPlasmaOrMeteor(tileMap, { x, y: y + 1 }) ? 1 : 0;
-        const isAdjacent1   = checkIsPlasmaOrMeteor(tileMap, { x, y: y - 1 }) ? 1 : 0;
-        return TilePlasmaAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+        const { x, y }              = gridIndex;
+        const isAdjacent4           = checkIsPlasma(tileMap, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3           = checkIsPlasma(tileMap, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2           = checkIsPlasma(tileMap, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1           = checkIsPlasma(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === Types.TileType.Meteor);
+        return Helpers.getExisted(TilePlasmaAutoShapeIdMap.get(isAdjacentToMeteor))[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    export function getAutoSuperPlasmaShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+    function checkIsPlasma(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+            return true;
+        }
+
+        const tileType = tileMap.getTile(gridIndex).getType();
+        return (tileType === Types.TileType.Plasma);
+    }
+
+    export function getAutoPipeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
         const { x, y }      = gridIndex;
-        const isAdjacent4   = checkIsPlasmaOrMeteor(tileMap, { x: x - 1, y }) ? 1 : 0;
-        const isAdjacent3   = checkIsPlasmaOrMeteor(tileMap, { x: x + 1, y }) ? 1 : 0;
-        const isAdjacent2   = checkIsPlasmaOrMeteor(tileMap, { x, y: y + 1 }) ? 1 : 0;
-        const isAdjacent1   = checkIsPlasmaOrMeteor(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        const isAdjacent4   = checkIsPlasmaOrMeteorOrPipe(tileMap, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkIsPlasmaOrMeteorOrPipe(tileMap, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkIsPlasmaOrMeteorOrPipe(tileMap, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkIsPlasmaOrMeteorOrPipe(tileMap, { x, y: y - 1 }) ? 1 : 0;
         return TileSuperPlasmaAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    function checkIsPlasmaOrMeteor(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
+    function checkIsPlasmaOrMeteorOrPipe(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         }
@@ -585,7 +609,7 @@ namespace MeUtility {
         const tileType = tileMap.getTile(gridIndex).getType();
         return (tileType === Types.TileType.Meteor)
             || (tileType === Types.TileType.Plasma)
-            || (tileType === Types.TileType.GreenPlasma);
+            || (tileType === Types.TileType.Pipe);
     }
 
     export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | null, shapeId: number | null } {

@@ -353,7 +353,7 @@ namespace ConfigManager {
             return true;
         } else if (objectType === TileObjectType.Fire) {
             return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.GreenPlasma) {
+        } else if (objectType === TileObjectType.Pipe) {
             return playerIndex === neutralPlayerIndex;
         } else if (objectType === TileObjectType.Headquarters) {
             return playerIndex !== neutralPlayerIndex;

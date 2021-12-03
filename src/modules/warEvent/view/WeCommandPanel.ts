@@ -48,18 +48,24 @@ namespace TwnsWeCommandPanel {
         private readonly _btnModifyMaxCallCountPerTurn! : TwnsUiButton.UiButton;
         private readonly _btnModifyMaxCallCountTotal!   : TwnsUiButton.UiButton;
         private readonly _btnInitSubNodeToEvent!        : TwnsUiButton.UiButton;
+        private readonly _btnShallowCloneEvent!         : TwnsUiButton.UiButton;
+        private readonly _btnDeepCloneEvent!            : TwnsUiButton.UiButton;
         private readonly _btnDeleteEvent!               : TwnsUiButton.UiButton;
         private readonly _btnSwitchNodeAndOr!           : TwnsUiButton.UiButton;
         private readonly _btnReplaceNode!               : TwnsUiButton.UiButton;
         private readonly _btnAddSubNodeToNode!          : TwnsUiButton.UiButton;
         private readonly _btnAddSubCondition!           : TwnsUiButton.UiButton;
+        private readonly _btnShallowCloneNode!          : TwnsUiButton.UiButton;
+        private readonly _btnDeepCloneNode!             : TwnsUiButton.UiButton;
         private readonly _btnDeleteNode!                : TwnsUiButton.UiButton;
         private readonly _btnModifyCondition!           : TwnsUiButton.UiButton;
         private readonly _btnReplaceCondition!          : TwnsUiButton.UiButton;
+        private readonly _btnDeepCloneCondition!        : TwnsUiButton.UiButton;
         private readonly _btnDeleteCondition!           : TwnsUiButton.UiButton;
         private readonly _btnModifyAction!              : TwnsUiButton.UiButton;
         private readonly _btnReplaceAction!             : TwnsUiButton.UiButton;
         private readonly _btnAddAction!                 : TwnsUiButton.UiButton;
+        private readonly _btnDeepCloneAction!           : TwnsUiButton.UiButton;
         private readonly _btnDeleteAction!              : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
@@ -69,18 +75,24 @@ namespace TwnsWeCommandPanel {
                 { ui: this._btnModifyMaxCallCountPerTurn,   callback: this._onTouchedBtnModifyMaxCallCountPerTurn },
                 { ui: this._btnModifyMaxCallCountTotal,     callback: this._onTouchedBtnModifyMaxCallCountTotal },
                 { ui: this._btnInitSubNodeToEvent,          callback: this._onTouchedBtnInitSubNodeToEvent },
+                { ui: this._btnShallowCloneEvent,           callback: this._onTouchedBtnShallowCloneEvent },
+                { ui: this._btnDeepCloneEvent,              callback: this._onTouchedBtnDeepCloneEvent },
                 { ui: this._btnDeleteEvent,                 callback: this._onTouchedBtnDeleteEvent },
                 { ui: this._btnSwitchNodeAndOr,             callback: this._onTouchedBtnSwitchNodeAndOr },
                 { ui: this._btnReplaceNode,                 callback: this._onTouchedBtnReplaceNode },
                 { ui: this._btnAddSubNodeToNode,            callback: this._onTouchedBtnAddSubNodeToNode },
                 { ui: this._btnAddSubCondition,             callback: this._onTouchedBtnAddSubCondition },
+                { ui: this._btnShallowCloneNode,            callback: this._onTouchedBtnShallowCloneNode },
+                { ui: this._btnDeepCloneNode,               callback: this._onTouchedBtnDeepCloneNode },
                 { ui: this._btnDeleteNode,                  callback: this._onTouchedBtnDeleteNode },
                 { ui: this._btnModifyCondition,             callback: this._onTouchedBtnModifyCondition },
                 { ui: this._btnReplaceCondition,            callback: this._onTouchedBtnReplaceCondition },
+                { ui: this._btnDeepCloneCondition,          callback: this._onTouchedBtnDeepCloneCondition },
                 { ui: this._btnDeleteCondition,             callback: this._onTouchedBtnDeleteCondition },
                 { ui: this._btnModifyAction,                callback: this._onTouchedBtnModifyAction },
                 { ui: this._btnReplaceAction,               callback: this._onTouchedBtnReplaceAction },
                 { ui: this._btnAddAction,                   callback: this._onTouchedBtnAddAction },
+                { ui: this._btnDeepCloneAction,             callback: this._onTouchedBtnDeepCloneAction },
                 { ui: this._btnDeleteAction,                callback: this._onTouchedBtnDeleteAction },
             ]);
             this._setNotifyListenerArray([
@@ -177,6 +189,36 @@ namespace TwnsWeCommandPanel {
                 });
             }
         }
+        private _onTouchedBtnShallowCloneEvent(): void {
+            const data      = this._getOpenData();
+            const eventId   = data.eventId;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : `${Lang.getText(LangTextType.B0487)} E${eventId}`,
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const newEventId = WarEventHelper.cloneEvent(Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()), eventId, true);
+                    FloatText.show(Lang.getFormattedText(LangTextType.F0084, `E${newEventId}`));
+
+                    this.close();
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+        private _onTouchedBtnDeepCloneEvent(): void {
+            const data      = this._getOpenData();
+            const eventId   = data.eventId;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : `${Lang.getText(LangTextType.B0748)} E${eventId}`,
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const newEventId = WarEventHelper.cloneEvent(Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()), eventId, false);
+                    FloatText.show(Lang.getFormattedText(LangTextType.F0084, `E${newEventId}`));
+
+                    this.close();
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
         private _onTouchedBtnDeleteEvent(): void {               // DONE
             const data      = this._getOpenData();
             const eventId   = data.eventId;
@@ -230,6 +272,50 @@ namespace TwnsWeCommandPanel {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
+        private _onTouchedBtnShallowCloneNode(): void {
+            const data      = this._getOpenData();
+            const nodeId    = Helpers.getExisted(data.nodeId);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : `${Lang.getText(LangTextType.B0487)} N${nodeId}`,
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const fullData      = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
+                    const newNodeId     = WarEventHelper.cloneNode(fullData, nodeId, true);
+                    const parentNodeId  = data.parentNodeId;
+                    if (parentNodeId != null) {
+                        Helpers.getExisted(WarEventHelper.getNode(fullData, parentNodeId)?.subNodeIdArray).push(newNodeId);
+                    } else {
+                        Helpers.getExisted(WarEventHelper.getEvent(fullData, data.eventId)).conditionNodeId = newNodeId;
+                    }
+                    FloatText.show(Lang.getFormattedText(LangTextType.F0084, `N${newNodeId}`));
+
+                    this.close();
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+        private _onTouchedBtnDeepCloneNode(): void {
+            const data      = this._getOpenData();
+            const nodeId    = Helpers.getExisted(data.nodeId);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : `${Lang.getText(LangTextType.B0748)} N${nodeId}`,
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const fullData      = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
+                    const newNodeId     = WarEventHelper.cloneNode(fullData, nodeId, false);
+                    const parentNodeId  = data.parentNodeId;
+                    if (parentNodeId != null) {
+                        Helpers.getExisted(WarEventHelper.getNode(fullData, parentNodeId)?.subNodeIdArray).push(newNodeId);
+                    } else {
+                        Helpers.getExisted(WarEventHelper.getEvent(fullData, data.eventId)).conditionNodeId = newNodeId;
+                    }
+                    FloatText.show(Lang.getFormattedText(LangTextType.F0084, `N${newNodeId}`));
+
+                    this.close();
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
         private _onTouchedBtnDeleteNode(): void {                // DONE
             const data      = this._getOpenData();
             const nodeId    = data.nodeId;
@@ -266,6 +352,25 @@ namespace TwnsWeCommandPanel {
                 conditionId : Helpers.getExisted(openData.conditionId),
             });
             this.close();
+        }
+        private _onTouchedBtnDeepCloneCondition(): void {
+            const data          = this._getOpenData();
+            const conditionId   = Helpers.getExisted(data.conditionId);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : `${Lang.getText(LangTextType.B0748)} C${conditionId}`,
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const fullData          = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
+                    const conditionIdArray  = Helpers.getExisted(fullData.conditionNodeArray?.find(v => v.nodeId === data.parentNodeId)?.conditionIdArray);
+                    const newConditionId    = WarEventHelper.cloneCondition(fullData, conditionId);
+                    conditionIdArray.push(newConditionId);
+                    conditionIdArray.sort((v1, v2) => v1 - v2);
+                    FloatText.show(Lang.getFormattedText(LangTextType.F0084, `C${newConditionId}`));
+
+                    this.close();
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
         }
         private _onTouchedBtnDeleteCondition(): void {           // DONE
             const data          = this._getOpenData();
@@ -304,6 +409,23 @@ namespace TwnsWeCommandPanel {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
+        private _onTouchedBtnDeepCloneAction(): void {
+            const data      = this._getOpenData();
+            const actionId  = Helpers.getExisted(data.actionId);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : `${Lang.getText(LangTextType.B0748)} A${actionId}`,
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const fullData      = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
+                    const newActionId   = WarEventHelper.cloneAction(fullData, actionId);
+                    Helpers.getExisted(WarEventHelper.getEvent(fullData, data.eventId)?.actionIdArray).push(newActionId);
+                    FloatText.show(Lang.getFormattedText(LangTextType.F0084, `A${newActionId}`));
+
+                    this.close();
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
         private _onTouchedBtnDeleteAction(): void {              // DONE
             const data      = this._getOpenData();
             const actionId  = data.actionId;
@@ -330,6 +452,8 @@ namespace TwnsWeCommandPanel {
 
         private _updateComponentsForLanguage(): void {                              // DONE
             this._btnClose.label                        = Lang.getText(LangTextType.B0146);
+            this._btnShallowCloneEvent.label            = Lang.getText(LangTextType.B0487);
+            this._btnDeepCloneEvent.label               = Lang.getText(LangTextType.B0748);
             this._btnDeleteEvent.label                  = Lang.getText(LangTextType.B0479);
             this._btnModifyEventName.label              = Lang.getText(LangTextType.B0495);
             this._btnModifyMaxCallCountPerTurn.label    = Lang.getText(LangTextType.B0317);
@@ -339,13 +463,17 @@ namespace TwnsWeCommandPanel {
             this._btnReplaceNode.label                  = Lang.getText(LangTextType.B0491);
             this._btnAddSubCondition.label              = Lang.getText(LangTextType.B0483);
             this._btnAddSubNodeToNode.label             = Lang.getText(LangTextType.B0484);
+            this._btnShallowCloneNode.label             = Lang.getText(LangTextType.B0487);
+            this._btnDeepCloneNode.label                = Lang.getText(LangTextType.B0748);
             this._btnDeleteNode.label                   = Lang.getText(LangTextType.B0499);
             this._btnModifyCondition.label              = Lang.getText(LangTextType.B0501);
             this._btnReplaceCondition.label             = Lang.getText(LangTextType.B0500);
+            this._btnDeepCloneCondition.label           = Lang.getText(LangTextType.B0748);
             this._btnDeleteCondition.label              = Lang.getText(LangTextType.B0485);
             this._btnModifyAction.label                 = Lang.getText(LangTextType.B0317);
             this._btnReplaceAction.label                = Lang.getText(LangTextType.B0480);
             this._btnAddAction.label                    = Lang.getText(LangTextType.B0496);
+            this._btnDeepCloneAction.label              = Lang.getText(LangTextType.B0748);
             this._btnDeleteAction.label                 = Lang.getText(LangTextType.B0220);
 
             this._updateLabelTitle();
@@ -407,6 +535,8 @@ namespace TwnsWeCommandPanel {
             group.addChild(this._btnModifyEventName);
             group.addChild(this._btnInitSubNodeToEvent);
             group.addChild(this._btnAddAction);
+            group.addChild(this._btnShallowCloneEvent);
+            group.addChild(this._btnDeepCloneEvent);
             group.addChild(this._btnDeleteEvent);
         }
         private _updateForEventCallCountInPlayerTurn(data: OpenData): void { // DONE
@@ -453,6 +583,8 @@ namespace TwnsWeCommandPanel {
             group.addChild(this._btnAddSubCondition);
             group.addChild(this._btnAddSubNodeToNode);
             group.addChild(this._btnReplaceNode);
+            group.addChild(this._btnShallowCloneNode);
+            group.addChild(this._btnDeepCloneNode);
             group.addChild(this._btnDeleteNode);
         }
         private _updateForCondition(data: OpenData): void {                  // DONE
@@ -469,6 +601,7 @@ namespace TwnsWeCommandPanel {
             group.removeChildren();
             group.addChild(this._btnModifyCondition);
             group.addChild(this._btnReplaceCondition);
+            group.addChild(this._btnDeepCloneCondition);
             group.addChild(this._btnDeleteCondition);
         }
         private _updateForAction(data: OpenData): void {                     // DONE
@@ -486,6 +619,7 @@ namespace TwnsWeCommandPanel {
             group.addChild(this._btnModifyAction);
             group.addChild(this._btnReplaceAction);
             group.addChild(this._btnAddAction);
+            group.addChild(this._btnDeepCloneAction);
             group.addChild(this._btnDeleteAction);
         }
     }
