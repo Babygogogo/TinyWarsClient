@@ -281,6 +281,9 @@ namespace TwnsBwWar {
             return this.getCommonSettingManager().getWarRule();
         }
 
+        public getPlayersCountUnneutral(): number {
+            return this.getPlayerManager().getTotalPlayersCount(false);
+        }
         public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer {
             return this.getPlayerManager().getPlayer(playerIndex);
         }

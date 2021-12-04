@@ -129,6 +129,7 @@ namespace Lang {
             case Types.TileType.CustomCannon        : return getText(LangTextType.B1037, languageType);
             case Types.TileType.LaserTurret         : return getText(LangTextType.B1038, languageType);
             case Types.TileType.CustomLaserTurret   : return getText(LangTextType.B1039, languageType);
+            case Types.TileType.PipeJoint           : return getText(LangTextType.B1040, languageType);
             default                                 : return null;
         }
     }

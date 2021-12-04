@@ -523,12 +523,18 @@ namespace TwnsBwTile {
             this._setDecoratorType(null);
             this._setDecoratorShapeId(null);
         }
-        public destroyTileObject(): void {
-            this.resetByTypeAndPlayerIndex({
-                baseType    : this.getBaseType(),
-                objectType  : TileObjectType.Empty,
-                playerIndex : CommonConstants.WarNeutralPlayerIndex
-            });
+        public deleteTileObject(): void {
+            this.init({
+                gridIndex       : this.getGridIndex(),
+                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                baseType        : this.getBaseType(),
+                baseShapeId     : this.getBaseShapeId(),
+                objectType      : TileObjectType.Empty,
+                objectShapeId   : null,
+                decoratorType   : this.getDecoratorType(),
+                decoratorShapeId: this.getDecoratorShapeId(),
+            }, this.getConfigVersion());
+            this.startRunning(this.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////

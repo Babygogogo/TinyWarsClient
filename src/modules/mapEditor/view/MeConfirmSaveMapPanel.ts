@@ -16,7 +16,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeConfirmSaveMapPanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -51,12 +50,25 @@ namespace TwnsMeConfirmSaveMapPanel {
             this._needReview = false;
             this._updateImgNeedReview();
 
-            const mapRawData                    = Helpers.getExisted(MeModel.getWar()).serializeForMap();
-            const errorCode                     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
-            this._mapRawData                    = mapRawData;
-            this._groupNeedReview.visible       = !errorCode;
-            this._labelReviewDescTitle.visible  = !!errorCode;
-            this._labelReviewDesc.text          = errorCode ? Lang.getErrorText(errorCode) : ``;
+            const btnConfirm            = this._btnConfirm;
+            const groupNeedReview       = this._groupNeedReview;
+            const labelReviewDescTitle  = this._labelReviewDescTitle;
+            const labelReviewDesc       = this._labelReviewDesc;
+            const mapRawData            = Helpers.getExisted(MeModel.getWar()).serializeForMap();
+            if (ProtoManager.encodeAsMapRawData(mapRawData).byteLength > CommonConstants.MapMaxFileSize) {
+                btnConfirm.visible              = false;
+                groupNeedReview.visible         = false;
+                labelReviewDescTitle.visible    = false;
+                labelReviewDesc.text            = Lang.getText(LangTextType.A0261);
+
+            } else {
+                const errorCode                 = await MeUtility.getErrorCodeForMapRawData(mapRawData);
+                this._mapRawData                = mapRawData;
+                btnConfirm.visible              = true;
+                groupNeedReview.visible         = !errorCode;
+                labelReviewDescTitle.visible    = !!errorCode;
+                labelReviewDesc.text            = errorCode ? Lang.getErrorText(errorCode) : ``;
+            }
         }
         protected _onClosing(): void {
             // nothing to do

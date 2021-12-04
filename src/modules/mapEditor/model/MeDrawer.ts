@@ -524,7 +524,7 @@ namespace TwnsMeDrawer {
         private _handleDeleteTileObject(gridIndex: GridIndex): void {
             const tileMap   = this._getWar().getTileMap();
             const tile      = tileMap.getTile(gridIndex);
-            tile.destroyTileObject();
+            tile.deleteTileObject();
             tile.flushDataToView();
 
             Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
@@ -533,7 +533,7 @@ namespace TwnsMeDrawer {
             const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
             if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
-                t2.destroyTileObject();
+                t2.deleteTileObject();
                 t2.flushDataToView();
 
                 Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);

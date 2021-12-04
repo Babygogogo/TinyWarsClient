@@ -31,10 +31,9 @@ namespace TwnsWeActionModifyPanel1 {
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
     import FocusEvent               = egret.FocusEvent;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import BwWar                    = TwnsBwWar.BwWar;
 
     export type OpenData = {
-        war         : BwWar;
+        war         : TwnsMeWar.MeWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
@@ -151,7 +150,7 @@ namespace TwnsWeActionModifyPanel1 {
     }
 
     type DataForUnitRenderer = {
-        war             : BwWar;
+        war             : TwnsMeWar.MeWar;
         action          : IWarEventAction;
         dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
     };
@@ -606,7 +605,7 @@ namespace TwnsWeActionModifyPanel1 {
 
     function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
         dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
-        war             : BwWar;
+        war             : TwnsMeWar.MeWar;
     }): string | null {
         if (dataForAddUnit.canBeBlockedByUnit == null) {
             return Lang.getText(LangTextType.A0192);
@@ -630,7 +629,7 @@ namespace TwnsWeActionModifyPanel1 {
         {
             const playerIndex = unitData.playerIndex;
             if ((playerIndex == null)                               ||
-                (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
+                (playerIndex > war.getPlayersCountUnneutral())      ||
                 (playerIndex < CommonConstants.WarFirstPlayerIndex)
             ) {
                 return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0521));

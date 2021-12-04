@@ -129,7 +129,7 @@ namespace MeUtility {
             27,     13,     // 1 1  1
         ]],
     ]);
-    const TileSuperPlasmaAutoShapeIdArray = [
+    const TilePipeAutoShapeIdArray = [
     //  0       1
         0,      1,      // 0 0  0
         3,      15,     // 0 0  1
@@ -595,21 +595,20 @@ namespace MeUtility {
 
     export function getAutoPipeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
         const { x, y }      = gridIndex;
-        const isAdjacent4   = checkIsPlasmaOrMeteorOrPipe(tileMap, { x: x - 1, y }) ? 1 : 0;
-        const isAdjacent3   = checkIsPlasmaOrMeteorOrPipe(tileMap, { x: x + 1, y }) ? 1 : 0;
-        const isAdjacent2   = checkIsPlasmaOrMeteorOrPipe(tileMap, { x, y: y + 1 }) ? 1 : 0;
-        const isAdjacent1   = checkIsPlasmaOrMeteorOrPipe(tileMap, { x, y: y - 1 }) ? 1 : 0;
-        return TileSuperPlasmaAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+        const isAdjacent4   = checkIsPipeOrJoint(tileMap, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkIsPipeOrJoint(tileMap, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkIsPipeOrJoint(tileMap, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkIsPipeOrJoint(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        return TilePipeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    function checkIsPlasmaOrMeteorOrPipe(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
+    function checkIsPipeOrJoint(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         }
 
         const tileType = tileMap.getTile(gridIndex).getType();
-        return (tileType === Types.TileType.Meteor)
-            || (tileType === Types.TileType.Plasma)
-            || (tileType === Types.TileType.Pipe);
+        return (tileType === Types.TileType.Pipe)
+            || (tileType === Types.TileType.PipeJoint);
     }
 
     export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | null, shapeId: number | null } {

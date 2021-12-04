@@ -97,7 +97,7 @@ namespace TwnsMeTileSimpleView {
             {
                 const objectType    = this._objectType;
                 const imgObject     = this.getImgObject();
-                if ((objectType == null) || (objectType === TileObjectType.Empty)) {
+                if (objectType == null) {
                     imgObject.visible = false;
                 } else {
                     imgObject.visible = true;
@@ -107,7 +107,7 @@ namespace TwnsMeTileSimpleView {
                         skinId      : Helpers.getExisted(this._playerIndex),
                         objectType,
                         isDark      : false,
-                        shapeId     : Helpers.getExisted(this._objectShapeId),
+                        shapeId     : this._objectShapeId ?? 0,
                         tickCount,
                     });
                 }

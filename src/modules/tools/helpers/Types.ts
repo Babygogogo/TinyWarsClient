@@ -368,15 +368,15 @@ namespace Types {
 
     // eslint-disable-next-line no-shadow
     export const enum TileObjectType {
-        Empty,          /* 0 */         Road,               /* 1 */         Bridge,        /* 2 */          Wood,           /* 3 */
-        Mountain,       /* 4 */         Wasteland,          /* 5 */         Ruins,         /* 6 */          Fire,           /* 7 */
-        Rough,          /* 8 */         Mist,               /* 9 */         Reef,          /* 10 */         Plasma,         /* 11 */
-        Meteor,         /* 12 */        Silo,               /* 13 */        EmptySilo,     /* 14 */         Headquarters,   /* 15 */
-        City,           /* 16 */        CommandTower,       /* 17 */        Radar,         /* 18 */         Factory,        /* 19 */
-        Airport,        /* 20 */        Seaport,            /* 21 */        TempAirport,   /* 22 */         TempSeaport,    /* 23 */
-        Pipe,           /* 24 */        Crystal,            /* 25 */        CustomCrystal, /* 26 */         CannonUp,       /* 27 */
-        CannonDown,     /* 28 */        CannonLeft,         /* 29 */        CannonRight,   /* 30 */         CustomCannon,   /* 31 */
-        LaserTurret,    /* 32 */        CustomLaserTurret,  /* 33 */
+        Empty,          /* 0 */         Road,               /* 1 */         Bridge,         /* 2 */         Wood,           /* 3 */
+        Mountain,       /* 4 */         Wasteland,          /* 5 */         Ruins,          /* 6 */         Fire,           /* 7 */
+        Rough,          /* 8 */         Mist,               /* 9 */         Reef,           /* 10 */        Plasma,         /* 11 */
+        Meteor,         /* 12 */        Silo,               /* 13 */        EmptySilo,      /* 14 */        Headquarters,   /* 15 */
+        City,           /* 16 */        CommandTower,       /* 17 */        Radar,          /* 18 */        Factory,        /* 19 */
+        Airport,        /* 20 */        Seaport,            /* 21 */        TempAirport,    /* 22 */        TempSeaport,    /* 23 */
+        Pipe,           /* 24 */        Crystal,            /* 25 */        CustomCrystal,  /* 26 */        CannonUp,       /* 27 */
+        CannonDown,     /* 28 */        CannonLeft,         /* 29 */        CannonRight,    /* 30 */        CustomCannon,   /* 31 */
+        LaserTurret,    /* 32 */        CustomLaserTurret,  /* 33 */        PipeJoint,      /* 34 */
     }
 
     // eslint-disable-next-line no-shadow
@@ -391,7 +391,7 @@ namespace Types {
         Seaport,        /* 28 */        TempAirport,    /* 29 */        TempSeaport,        /* 30 */        MistOnPlain,    /* 31 */
         MistOnRiver,    /* 32 */        MistOnBeach,    /* 33 */        Crystal,            /* 34 */        CustomCrystal,  /* 35 */
         CannonUp,       /* 36 */        CannonDown,     /* 37 */        CannonLeft,         /* 38 */        CannonRight,    /* 39 */
-        CustomCannon,   /* 40 */        LaserTurret,    /* 41 */        CustomLaserTurret,  /* 42 */
+        CustomCannon,   /* 40 */        LaserTurret,    /* 41 */        CustomLaserTurret,  /* 42 */        PipeJoint,      /* 43 */
     }
 
     // eslint-disable-next-line no-shadow

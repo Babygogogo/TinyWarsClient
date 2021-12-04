@@ -61,24 +61,18 @@ namespace TwnsBwTileView {
             const tickCount = Timer.getTileAnimationTickCount();
 
             {
-                const objectType    = tileData.objectType;
+                const objectType    = Helpers.getExisted(tileData.objectType);
                 const imgObject     = this.getImgObject();
-                if (objectType == null) {
-                    throw Helpers.newError(`BwTileView.updateView() empty objectType.`);
-                } else if (objectType === TileObjectType.Empty) {
-                    imgObject.visible = false;
-                } else {
-                    imgObject.visible   = true;
-                    imgObject.source    = CommonModel.getCachedTileObjectImageSource({
-                        version,
-                        themeType,
-                        skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
-                        shapeId     : tileData.objectShapeId || 0,
-                        objectType,
-                        isDark      : hasFog,
-                        tickCount,
-                    });
-                }
+                imgObject.visible   = true;
+                imgObject.source    = CommonModel.getCachedTileObjectImageSource({
+                    version,
+                    themeType,
+                    skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
+                    shapeId     : tileData.objectShapeId || 0,
+                    objectType,
+                    isDark      : hasFog,
+                    tickCount,
+                });
             }
 
             {

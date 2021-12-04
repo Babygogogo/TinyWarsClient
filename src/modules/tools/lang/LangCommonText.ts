@@ -1091,6 +1091,10 @@ namespace TwnsLangCommonText {
             `已绘制的等离子、超级等离子的造型将被覆盖，但覆盖结果可能不会完全符合您的预期。\n建议您先保存地图再进行此操作。\n确定要调整吗？`,
             `The drawn (super) plasmas will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure to adjust them?`
         ],
+        [LangTextType.A0261]: [
+            `地图文件体积太大，无法保存`,
+            `This map is too large to be saved.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4240,6 +4244,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B1039]: [
             `神秘激光炮`,
             `Myst.LaserTurret`,
+        ],
+        [LangTextType.B1040]: [
+            `管道接口`,
+            `Joint`,
         ],
 
         [LangTextType.B1200]: [

@@ -474,10 +474,15 @@ namespace WarEventHelper {
         }
         const mapSize: Types.MapSize = { width: mapWidth, height: mapHeight };
 
+        const playersCountUnneutral = mapRawData.playersCountUnneutral;
+        if (playersCountUnneutral == null) {
+            return false;
+        }
+
         {
             const actionData = action.WeaAddUnit;
             if (actionData) {
-                return checkIsValidWeaAddUnit(actionData, configVersion, mapSize);
+                return checkIsValidWeaAddUnit({ action: actionData, configVersion, mapSize, playersCountUnneutral });
             }
         }
 
@@ -520,7 +525,12 @@ namespace WarEventHelper {
 
         return false;
     }
-    function checkIsValidWeaAddUnit(action: ProtoTypes.WarEvent.IWeaAddUnit, configVersion: string, mapSize: Types.MapSize): boolean {
+    function checkIsValidWeaAddUnit({ action, configVersion, mapSize, playersCountUnneutral }: {
+        action                  : ProtoTypes.WarEvent.IWeaAddUnit;
+        configVersion           : string;
+        mapSize                 : Types.MapSize;
+        playersCountUnneutral   : number;
+    }): boolean {
         const { unitArray } = action;
         if ((unitArray == null)                                              ||
             (unitArray.length <= 0)                                          ||
@@ -545,7 +555,7 @@ namespace WarEventHelper {
 
             if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                 unitData,
-                playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
+                playersCountUnneutral,
                 configVersion,
                 mapSize,
             })) {
@@ -1439,9 +1449,10 @@ namespace WarEventHelper {
             return `${Lang.getText(LangTextType.A0191)} (${unitsCount} / ${CommonConstants.WarEventActionAddUnitMaxCount})`;
         }
 
-        const mapSize       = war.getTileMap().getMapSize();
-        const configVersion = war.getConfigVersion();
-        const validator     = (v: ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit) => {
+        const mapSize               = war.getTileMap().getMapSize();
+        const configVersion         = war.getConfigVersion();
+        const playersCountUnneutral = war.getPlayersCountUnneutral();
+        const validator             = (v: ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit) => {
             const unitData = Helpers.getExisted(v.unitData);
             return (v.canBeBlockedByUnit != null)
                 && (v.needMovableTile != null)
@@ -1449,7 +1460,7 @@ namespace WarEventHelper {
                 && (!WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
-                    playersCountUnneutral: CommonConstants.WarMaxPlayerIndex,
+                    playersCountUnneutral,
                     configVersion,
                 }));
         };

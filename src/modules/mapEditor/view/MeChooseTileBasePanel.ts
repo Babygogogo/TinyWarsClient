@@ -21,7 +21,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeChooseTileBasePanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import DataForDrawTileBase  = TwnsMeDrawer.DataForDrawTileBase;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;

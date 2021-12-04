@@ -405,6 +405,8 @@ namespace ConfigManager {
             return true;
         } else if (objectType === TileObjectType.CustomLaserTurret) {
             return true;
+        } else if (objectType === TileObjectType.PipeJoint) {
+            return playerIndex === neutralPlayerIndex;
         } else {
             return false;
         }
@@ -574,10 +576,6 @@ namespace ConfigManager {
         shapeId     : number;
         tickCount   : number;
     }): string {
-        if (objectType === TileObjectType.Empty) {
-            return ``;
-        }
-
         const cfgForFrame       = Helpers.getExisted(CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType), ClientErrorCode.ConfigManager_GetTileObjectImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
@@ -848,13 +846,9 @@ namespace ConfigManager {
     }
 
     export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: Types.Undefinable<number>): boolean {
-        if (tileObjectType === TileObjectType.Empty) {
-            return !shapeId;
-        } else {
-            const cfg = CommonConstants.TileObjectShapeConfigs.get(tileObjectType);
-            return (!!cfg)
-                && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
-        }
+        const cfg = CommonConstants.TileObjectShapeConfigs.get(tileObjectType);
+        return (!!cfg)
+            && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
     export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: Types.Undefinable<number>): boolean {
         const cfg = CommonConstants.TileBaseShapeConfigs.get(tileBaseType);

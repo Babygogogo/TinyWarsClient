@@ -3302,12 +3302,12 @@ namespace WarActionExecutor {
             const tileMap = war.getTileMap();
             for (const g of WarCommonHelpers.getAdjacentPlasmas(tileMap, gridIndex)) {
                 const plasmaTile = tileMap.getTile(g);
-                plasmaTile.destroyTileObject();
+                plasmaTile.deleteTileObject();
                 destroyedTileSet.add(plasmaTile);
             }
         }
 
-        tile.destroyTileObject();
+        tile.deleteTileObject();
 
         return {
             damagedTileSet  : new Set(),
