@@ -2300,6 +2300,17 @@ export const enum ServerErrorCode {
     BwTile_SetCustomLaserTurretDeltaFuelPercentage_0008,
     BwTile_SetCustomLaserTurretDeltaFuelPercentage_0009,
 
+    BwTile_GetNewObjectShapeIdOnObjectDestroyed_0000,
+    BwTile_GetNewObjectShapeIdOnObjectDestroyed_0001,
+    BwTile_GetNewObjectShapeIdOnObjectDestroyed_0002,
+    BwTile_GetNewObjectShapeIdOnObjectDestroyed_0003,
+    BwTile_GetNewObjectShapeIdOnObjectDestroyed_0004,
+    BwTile_GetNewObjectShapeIdOnObjectDestroyed_0005,
+    BwTile_GetNewObjectShapeIdOnObjectDestroyed_0006,
+    BwTile_GetNewObjectShapeIdOnObjectDestroyed_0007,
+    BwTile_GetNewObjectShapeIdOnObjectDestroyed_0008,
+    BwTile_GetNewObjectShapeIdOnObjectDestroyed_0009,
+
     BwTileMap_Init_0000,
     BwTileMap_Init_0001,
     BwTileMap_Init_0002,

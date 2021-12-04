@@ -105,6 +105,9 @@ namespace GridIndexHelpers {
         }
         return grids;
     }
+    export function getAdjacentGrid(g: GridIndex, direction: Direction): GridIndex {
+        return add(g, Helpers.getExisted(_ADJACENT_OFFSETS.find(v => v.direction === direction)?.offset));
+    }
 
     /**
      * If g1 is not adjacent to g2, Direction.Undefined is returned.

@@ -519,6 +519,21 @@ namespace TwnsBwTile {
             }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }
+
+        public resetOnTileObjectDestroyed(): void {
+            this.init({
+                gridIndex       : this.getGridIndex(),
+                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                baseType        : this.getBaseType(),
+                baseShapeId     : this.getBaseShapeId(),
+                objectType      : TileObjectType.Empty,
+                objectShapeId   : getNewObjectShapeIdOnObjectDestroyed(this.getObjectType(), this.getObjectShapeId()),
+                decoratorType   : this.getDecoratorType(),
+                decoratorShapeId: this.getDecoratorShapeId(),
+            }, this.getConfigVersion());
+            this.startRunning(this.getWar());
+        }
+
         public deleteTileDecorator(): void {
             this._setDecoratorType(null);
             this._setDecoratorShapeId(null);
@@ -1146,6 +1161,33 @@ namespace TwnsBwTile {
             } else {
                 return Types.TileThemeType.Clear;
             }
+        }
+    }
+
+    function getNewObjectShapeIdOnObjectDestroyed(oldType: TileObjectType, oldShapeId: number): number {
+        if ((oldType === TileObjectType.CannonDown)         ||
+            (oldType === TileObjectType.CannonLeft)         ||
+            (oldType === TileObjectType.CannonRight)        ||
+            (oldType === TileObjectType.CannonUp)           ||
+            (oldType === TileObjectType.CustomCannon)       ||
+            (oldType === TileObjectType.CustomCrystal)      ||
+            (oldType === TileObjectType.CustomLaserTurret)  ||
+            (oldType === TileObjectType.Meteor)             ||
+            (oldType === TileObjectType.Crystal)            ||
+            (oldType === TileObjectType.LaserTurret)
+        ) {
+            return 3;
+        } else if (oldType === TileObjectType.PipeJoint) {
+            if (oldShapeId === 0) {
+                return 1;
+            } else if (oldShapeId === 1) {
+                return 2;
+            } else {
+                // throw Helpers.newError(`Invalid oldType and oldShapeId: ${oldType}, ${oldShapeId}`, ServerErrorCode.BwTile_GetNewObjectShapeIdOnObjectDestroyed_0000);
+                return 0;
+            }
+        } else {
+            return 0;
         }
     }
 }

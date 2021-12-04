@@ -594,21 +594,32 @@ namespace MeUtility {
     }
 
     export function getAutoPipeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
-        const { x, y }      = gridIndex;
-        const isAdjacent4   = checkIsPipeOrJoint(tileMap, { x: x - 1, y }) ? 1 : 0;
-        const isAdjacent3   = checkIsPipeOrJoint(tileMap, { x: x + 1, y }) ? 1 : 0;
-        const isAdjacent2   = checkIsPipeOrJoint(tileMap, { x, y: y + 1 }) ? 1 : 0;
-        const isAdjacent1   = checkIsPipeOrJoint(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        const isAdjacent4   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Left) ? 1 : 0;
+        const isAdjacent3   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Right) ? 1 : 0;
+        const isAdjacent2   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Down) ? 1 : 0;
+        const isAdjacent1   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Up) ? 1 : 0;
         return TilePipeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    function checkIsPipeOrJoint(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
+    function checkCanLinkToPipe(tileMap: TwnsBwTileMap.BwTileMap, origin: GridIndex, direction: Types.Direction): boolean {
+        const gridIndex = GridIndexHelpers.getAdjacentGrid(origin, direction);
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         }
 
-        const tileType = tileMap.getTile(gridIndex).getType();
-        return (tileType === Types.TileType.Pipe)
-            || (tileType === Types.TileType.PipeJoint);
+        const tile          = tileMap.getTile(gridIndex);
+        const objectType    = tile.getObjectType();
+        const objectShapeId = tile.getObjectShapeId();
+        if (objectType === Types.TileObjectType.Empty) {
+            return ((objectShapeId === 1) && ((direction === Types.Direction.Left) || (direction === Types.Direction.Right)))
+                || ((objectShapeId === 2) && ((direction === Types.Direction.Up) || (direction === Types.Direction.Down)));
+        } else if (objectType === Types.TileObjectType.Pipe) {
+            return true;
+        } else if (objectType === Types.TileObjectType.PipeJoint) {
+            return ((objectShapeId === 0) && ((direction === Types.Direction.Left) || (direction === Types.Direction.Right)))
+                || ((objectShapeId === 1) && ((direction === Types.Direction.Up) || (direction === Types.Direction.Down)));
+        } else {
+            return false;
+        }
     }
 
     export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | null, shapeId: number | null } {
