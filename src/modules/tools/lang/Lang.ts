@@ -442,6 +442,7 @@ namespace Lang {
             case WarEventActionType.SetViewpoint            : return getText(LangTextType.B0713);
             case WarEventActionType.SetWeather              : return getText(LangTextType.B0715);
             case WarEventActionType.SimpleDialogue          : return getText(LangTextType.B0728);
+            case WarEventActionType.PlayBgm                 : return getText(LangTextType.B0750);
             default                                         : return null;
         }
     }

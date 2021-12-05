@@ -748,6 +748,7 @@ namespace Types {
         SetViewpoint,
         SetWeather,
         SimpleDialogue,
+        PlayBgm,
     }
 
     // eslint-disable-next-line no-shadow

@@ -180,6 +180,7 @@ namespace TwnsPanelConfig {
         WeActionModifyPanel4            : PanelConfig<TwnsWeActionModifyPanel4.OpenData>;
         WeActionModifyPanel5            : PanelConfig<TwnsWeActionModifyPanel5.OpenData>;
         WeActionModifyPanel6            : PanelConfig<TwnsWeActionModifyPanel6.OpenData>;
+        WeActionModifyPanel7            : PanelConfig<TwnsWeActionModifyPanel7.OpenData>;
         WeActionReplacePanel            : PanelConfig<TwnsWeActionReplacePanel.OpenData>;
         WeActionTypeListPanel           : PanelConfig<TwnsWeActionTypeListPanel.OpenData>;
         WeCommandPanel                  : PanelConfig<TwnsWeCommandPanel.OpenData>;
@@ -1176,6 +1177,12 @@ namespace TwnsPanelConfig {
             WeActionModifyPanel6: {
                 cls         : TwnsWeActionModifyPanel6?.WeActionModifyPanel6,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel6.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            WeActionModifyPanel7: {
+                cls         : TwnsWeActionModifyPanel7?.WeActionModifyPanel7,
+                skinName    : `resource/skins/warEvent/WeActionModifyPanel7.exml`,
                 layer       : LayerType.Hud0,
             },
 

@@ -123,6 +123,8 @@ namespace TwnsBwWarEventManager {
                 await this._callActionSetWeatherWithExtraData(action.WeaSetWeather, isFastExecute);
             } else if (action.WeaSimpleDialogue) {
                 await this._callActionSimpleDialogueWithExtraData(action.WeaSimpleDialogue, isFastExecute);
+            } else if (action.WeaPlayBgm) {
+                await this._callActionPlayBgmWithExtraData(action.WeaPlayBgm, isFastExecute);
             } else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -143,6 +145,8 @@ namespace TwnsBwWarEventManager {
                 await this._callActionSetWeatherWithoutExtraData(action.WeaSetWeather, isFastExecute);
             } else if (action.WeaSimpleDialogue) {
                 await this._callActionSimpleDialogueWithoutExtraData(action.WeaSimpleDialogue, isFastExecute);
+            } else if (action.WeaPlayBgm) {
+                await this._callActionPlayBgmWithoutExtraData(action.WeaPlayBgm, isFastExecute);
             } else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -365,6 +369,29 @@ namespace TwnsBwWarEventManager {
                     callbackOnClose : () => resolve(),
                 });
             });
+        }
+
+        private async _callActionPlayBgmWithExtraData(action: WarEvent.IWeaPlayBgm, isFast: boolean): Promise<void> {
+            if (isFast) {
+                return;
+            }
+
+            if (action.useCoBgm) {
+                SoundManager.playCoBgmWithWar(this._getWar(), false);
+            } else {
+                SoundManager.playBgm(Helpers.getExisted(action.bgmCode));
+            }
+        }
+        private async _callActionPlayBgmWithoutExtraData(action: WarEvent.IWeaPlayBgm, isFast: boolean): Promise<void> {
+            if (isFast) {
+                return;
+            }
+
+            if (action.useCoBgm) {
+                SoundManager.playCoBgmWithWar(this._getWar(), false);
+            } else {
+                SoundManager.playBgm(Helpers.getExisted(action.bgmCode));
+            }
         }
 
         public updateWarEventCalledCountOnCall(eventId: number): void {                     // DONE

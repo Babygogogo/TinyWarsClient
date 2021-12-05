@@ -72,6 +72,7 @@ namespace WarEventHelper {
         ActionType.SimpleDialogue,
         ActionType.SetViewpoint,
         ActionType.SetWeather,
+        ActionType.PlayBgm,
     ];
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -521,6 +522,13 @@ namespace WarEventHelper {
             }
         }
 
+        {
+            const actionData = action.WeaPlayBgm;
+            if (actionData) {
+                return checkIsValidWeaPlayBgm(actionData);
+            }
+        }
+
         // TODO add more checkers when the action types grow.
 
         return false;
@@ -717,6 +725,14 @@ namespace WarEventHelper {
         }
 
         return true;
+    }
+    function checkIsValidWeaPlayBgm(action: ProtoTypes.WarEvent.IWeaPlayBgm): boolean {
+        if (action.useCoBgm) {
+            return true;
+        }
+
+        const bgmCode = action.bgmCode;
+        return (bgmCode != null) && (bgmCode <= Types.BgmCode.Co9999);
     }
 
     function checkIsValidWarEventCondition({ condition, mapRawData }: {  // DONE
@@ -1100,7 +1116,8 @@ namespace WarEventHelper {
             || (getDescForWeaDialogue(action.WeaDialogue))
             || (getDescForWeaSetViewpoint(action.WeaSetViewpoint))
             || (getDescForWeaSetWeather(action.WeaSetWeather))
-            || (getDescForWeaSimpleDialogue(action.WeaSimpleDialogue));
+            || (getDescForWeaSimpleDialogue(action.WeaSimpleDialogue))
+            || (getDescForWeaPlayBgm(action.WeaPlayBgm));
     }
     function getDescForWeaAddUnit(data: Types.Undefinable<WarEvent.IWeaAddUnit>): string | null {
         if (!data) {
@@ -1183,6 +1200,18 @@ namespace WarEventHelper {
             }
 
             return Lang.getFormattedText(LangTextType.F0085, coNameArray.join(`, `));
+        }
+    }
+    function getDescForWeaPlayBgm(data: Types.Undefinable<WarEvent.IWeaPlayBgm>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        if (data.useCoBgm) {
+            return Lang.getText(LangTextType.A0262);
+        } else {
+            const bgmCode = data.bgmCode;
+            return `${Lang.getText(LangTextType.B0750)}: ${bgmCode == null ? CommonConstants.ErrorTextForUndefined : Lang.getBgmName(bgmCode)}`;
         }
     }
 
@@ -1438,6 +1467,8 @@ namespace WarEventHelper {
             return getErrorTipForWeaSetWeather(action.WeaSetWeather);
         } else if (action.WeaSimpleDialogue) {
             return getErrorTipForWeaSimpleDialogue(action.WeaSimpleDialogue);
+        } else if (action.WeaPlayBgm) {
+            return getErrorTipForWeaPlayBgm(action.WeaPlayBgm);
         } else {
             return Lang.getText(LangTextType.A0177);
         }
@@ -1603,6 +1634,16 @@ namespace WarEventHelper {
         }
 
         return null;
+    }
+    function getErrorTipForWeaPlayBgm(data: WarEvent.IWeaPlayBgm): string | null {
+        if (data.useCoBgm) {
+            return null;
+        }
+
+        const bgmCode = data.bgmCode;
+        return ((bgmCode == null) || (!SoundManager.checkIsValidBgmCode(bgmCode)))
+            ? Lang.getText(LangTextType.A0263)
+            : null;
     }
     export function getErrorTipForWeaSimpleDialogueData(dialogueData: WarEvent.WeaSimpleDialogue.IDataForDialogue): string | null {
         if (Object.keys(dialogueData).length !== 1) {
@@ -2068,6 +2109,8 @@ namespace WarEventHelper {
             return ActionType.SetWeather;
         } else if (action.WeaSimpleDialogue) {
             return ActionType.SimpleDialogue;
+        } else if (action.WeaPlayBgm) {
+            return ActionType.PlayBgm;
         } else {
             return null;
         }
@@ -2108,6 +2151,11 @@ namespace WarEventHelper {
             action.WeaSimpleDialogue = {
                 dataArray       : [],
             };
+        } else if (actionType === ActionType.PlayBgm) {
+            action.WeaPlayBgm = {
+                useCoBgm        : false,
+                bgmCode         : Types.BgmCode.None,
+            };
         } else {
             throw Helpers.newError(`Invalid actionType: ${actionType}.`, ClientErrorCode.WarEventHelper_ResetAction_00);
         }
@@ -2121,6 +2169,7 @@ namespace WarEventHelper {
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel4);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel5);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel6);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel7);
 
         if (action.WeaAddUnit) {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel1, { war, fullData, action });
@@ -2134,6 +2183,8 @@ namespace WarEventHelper {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel5, { war, fullData, action });
         } else if (action.WeaSimpleDialogue) {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel6, { war, fullData, action });
+        } else if (action.WeaPlayBgm) {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel7, { war, fullData, action });
         } else {
             throw Helpers.newError(`Invalid action.`, ClientErrorCode.WarEventHelper_OpenActionModifyPanel_00);
         }

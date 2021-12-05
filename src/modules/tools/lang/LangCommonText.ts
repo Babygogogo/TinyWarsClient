@@ -1095,6 +1095,14 @@ namespace TwnsLangCommonText {
             `地图文件体积太大，无法保存`,
             `This map is too large to be saved.`,
         ],
+        [LangTextType.A0262]: [
+            `播放当前回合中的CO专属BGM`,
+            `Play the theme of the CO who is in turn.`,
+        ],
+        [LangTextType.A0263]: [
+            `选择的BGM无效`,
+            `The chosen BGM is invalid.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3612,36 +3620,36 @@ namespace TwnsLangCommonText {
             `Switch BGM`,
         ],
         [LangTextType.B0632]: [
-            `Wandering Path`,
-            `Wandering Path`,
+            `Wandering Path (Lobby)`,
+            `Wandering Path (Lobby)`,
         ],
         [LangTextType.B0633]: [
-            `Design Time`,
-            `Design Time`,
+            `Design Time (Map Editor)`,
+            `Design Time (Map Editor)`,
         ],
         [LangTextType.B0634]: [
-            `We Will Prevail`,
-            `We Will Prevail`,
+            `We Will Prevail (Will)`,
+            `We Will Prevail (Will)`,
         ],
         [LangTextType.B0635]: [
-            `Hope Never Dies`,
-            `Hope Never Dies`,
+            `Hope Never Dies (Brenner)`,
+            `Hope Never Dies (Brenner)`,
         ],
         [LangTextType.B0636]: [
-            `Lost Memories`,
-            `Lost Memories`,
+            `Lost Memories (Isabella)`,
+            `Lost Memories (Isabella)`,
         ],
         [LangTextType.B0637]: [
-            `Proud Soldier`,
-            `Proud Soldier`,
+            `Proud Soldier (Gage)`,
+            `Proud Soldier (Gage)`,
         ],
         [LangTextType.B0638]: [
-            `Days of Ruin`,
-            `Days of Ruin`,
+            `Days of Ruin (No CO)`,
+            `Days of Ruin (No CO)`,
         ],
         [LangTextType.B0639]: [
-            `Rutty`,
-            `Rutty`,
+            `Rutty (??)`,
+            `Rutty (??)`,
         ],
         [LangTextType.B0640]: [
             `用户ID`,
@@ -3696,36 +3704,36 @@ namespace TwnsLangCommonText {
             `Go to War List`,
         ],
         [LangTextType.B0653]: [
-            `Supreme Logician`,
-            `Supreme Logician`,
+            `Supreme Logician (Lin)`,
+            `Supreme Logician (Lin)`,
         ],
         [LangTextType.B0654]: [
-            `Goddess of Revenge`,
-            `Goddess of Revenge`,
+            `Goddess of Revenge (Tasha)`,
+            `Goddess of Revenge (Tasha)`,
         ],
         [LangTextType.B0655]: [
-            `Hero of Legend`,
-            `Hero of Legend`,
+            `Hero of Legend (Forsythe)`,
+            `Hero of Legend (Forsythe)`,
         ],
         [LangTextType.B0656]: [
-            `Flight of the Coward`,
-            `Flight of the Coward`,
+            `Flight of the Coward (Waylon)`,
+            `Flight of the Coward (Waylon)`,
         ],
         [LangTextType.B0657]: [
-            `Madman's Reign`,
-            `Madman's Reign`,
+            `Madman's Reign (Greyfield)`,
+            `Madman's Reign (Greyfield)`,
         ],
         [LangTextType.B0658]: [
-            `Cruel Rose`,
-            `Cruel Rose`,
+            `Cruel Rose (Tabitha)`,
+            `Cruel Rose (Tabitha)`,
         ],
         [LangTextType.B0659]: [
-            `Puppet Master`,
-            `Puppet Master`,
+            `Puppet Master (Caulder)`,
+            `Puppet Master (Caulder)`,
         ],
         [LangTextType.B0660]: [
-            `Power Up`,
-            `Power Up`,
+            `Power Up (Power)`,
+            `Power Up (Power)`,
         ],
         [LangTextType.B0661]: [
             `删除地形装饰物`,
@@ -3908,8 +3916,8 @@ namespace TwnsLangCommonText {
             `Weather`,
         ],
         [LangTextType.B0706]: [
-            `Mr. Bear`,
-            `Mr. Bear`,
+            `Mr. Bear (Penny)`,
+            `Mr. Bear (Penny)`,
         ],
         [LangTextType.B0707]: [
             `头像`,
@@ -4082,6 +4090,14 @@ namespace TwnsLangCommonText {
         [LangTextType.B0749]: [
             `已被引用`,
             `Referenced`,
+        ],
+        [LangTextType.B0750]: [
+            `播放BGM`,
+            `Play BGM`,
+        ],
+        [LangTextType.B0751]: [
+            `指定BGM`,
+            `Specific BGM`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
