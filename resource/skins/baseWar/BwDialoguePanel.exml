@@ -13,12 +13,14 @@
             <e:Group id="_groupName1" width="220" visible="true" y="310" x="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="42"
                                      source="uncompressedColorGrey0001" y="0" left="0" right="0" />
-                <TwnsUiLabel:UiLabel id="_labelName1" text="Will" x="20" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiLabel:UiLabel id="_labelName1" text="Will" x="20" size="22" bold="true" verticalCenter="2"
+                                     maxTextWidth="180" />
             </e:Group>
             <e:Group width="220" id="_groupName2" y="310" right="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="42"
                                      source="uncompressedColorGrey0001" y="0" left="0" right="0" />
-                <TwnsUiLabel:UiLabel id="_labelName2" text="Caulder" size="22" bold="true" verticalCenter="2" right="20" />
+                <TwnsUiLabel:UiLabel id="_labelName2" text="Caulder" size="22" bold="true" verticalCenter="2" right="20"
+                                     maxTextWidth="180" />
             </e:Group>
             <e:Group height="100" left="0" right="0" bottom="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"

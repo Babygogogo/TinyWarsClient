@@ -58,7 +58,7 @@ namespace SoundManager {
         [ BgmCode.Co0010,       { name: "co0010.mp3",       start: 4.95,    end: 62     } ],
         [ BgmCode.Co0011,       { name: "co0011.mp3",       start: 7.45,    end: 61.2   } ],
         [ BgmCode.Co0042,       { name: "co0042.mp3",       start: 7.6,     end: 60.1   } ],
-        [ BgmCode.Co9999,       { name: "co9999.mp3",       start: 1.52,    end: 2.61   } ],
+        [ BgmCode.Co9999,       { name: "co9999.mp3",       start: 4.7,     end: 115.44 } ],
         // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
     ]);
     const _SHORT_SFX_PARAM = new Map<ShortSfxCode, ShortSfxParams>([

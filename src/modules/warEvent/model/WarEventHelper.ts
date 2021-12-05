@@ -1182,7 +1182,7 @@ namespace WarEventHelper {
                 (coName != null) && (coNameArray.push(coName));
             }
 
-            return Lang.getFormattedText(LangTextType.F0070, coNameArray.join(`, `));
+            return Lang.getFormattedText(LangTextType.F0085, coNameArray.join(`, `));
         }
     }
 

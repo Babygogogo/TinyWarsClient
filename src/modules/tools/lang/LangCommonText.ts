@@ -4698,6 +4698,10 @@ namespace TwnsLangCommonText {
             `%s 已成功创建`,
             `%s is created successfully.`
         ],
+        [LangTextType.F0085]: [
+            `发生简易剧情对话，参与CO: %s`,
+            `Start a simple dialogue, COs: %s`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.

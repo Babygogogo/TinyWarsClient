@@ -26,6 +26,7 @@
 // import WarMapModel                          from "../../warMap/model/WarMapModel";
 // import TwnsMpwWar                           from "./MpwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MpwModel {
     import MpwWar                                   = TwnsMpwWar.MpwWar;
     import CcwWar                                   = TwnsCcwWar.CcwWar;
@@ -34,7 +35,6 @@ namespace MpwModel {
     import MrwWar                                   = TwnsMrwWar.MrwWar;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
-    import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import IMpwWarInfo                              = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarActionContainer                      = ProtoTypes.WarAction.IWarActionContainer;
@@ -43,6 +43,7 @@ namespace MpwModel {
     import ISettingsForCcw                          = ProtoTypes.WarSettings.ISettingsForCcw;
     import ISettingsForMrw                          = ProtoTypes.WarSettings.ISettingsForMrw;
     import ISettingsForMfw                          = ProtoTypes.WarSettings.ISettingsForMfw;
+    import ISerialWar                               = ProtoTypes.WarSerialization.ISerialWar;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -53,6 +54,7 @@ namespace MpwModel {
     let _mfwPreviewingWarId     : number | null = null;
     let _ccwPreviewingWarId     : number | null = null;
     let _war                    : MpwWar | null = null;
+    let _cachedSyncWarData      : ProtoTypes.NetMessage.MsgMpwCommonSyncWar.IS | null = null;
     const _cachedActions        : IWarActionContainer[] = [];
 
     export function init(): void {
@@ -553,7 +555,7 @@ namespace MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<MpwWar> {
+    export async function loadWar(data: ISerialWar): Promise<MpwWar> {
         if (getWar()) {
             Logger.warn(`MpwModel.loadWar() another war has been loaded already!`);
             unloadWar();
@@ -585,11 +587,46 @@ namespace MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCommonSyncWar.IS): Promise<void> {
+    export function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCommonSyncWar.IS): void {
         const war = getWar();
         if ((war) && (war.getWarId() === data.warId)) {
-            const status    = data.status as Types.SyncWarStatus;
-            const warData   = data.war;
+            _cachedSyncWarData = data;
+            checkAndSyncWarOrRunCachedAction(war, _cachedActions);
+        }
+    }
+
+    export function updateOnMsgMpwExecuteWarAction(container: IWarActionContainer, warId: number): void {
+        const war = getWar();
+        if ((war) && (war.getWarId() === warId)) {
+            if (container.actionId !== war.getExecutedActionManager().getExecutedActionsCount() + _cachedActions.length) {
+                MpwProxy.reqMpwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
+            } else {
+                _cachedActions.push(container);
+                checkAndSyncWarOrRunCachedAction(war, _cachedActions);
+            }
+        }
+    }
+
+    async function checkAndSyncWarOrRunCachedAction(war: MpwWar, actionList: IWarActionContainer[]): Promise<void> {
+        if ((!war.getIsRunning()) || (war.getIsEnded()) || (war.getIsExecutingAction())) {
+            return;
+        }
+
+        for (;;) {
+            const syncWarData = _cachedSyncWarData;
+            if (syncWarData == null) {
+                break;
+            }
+
+            const cachedActionsCount    = _cachedActions.length;
+            const executedActionsCount  = war.getExecutedActionManager().getExecutedActionsCount();
+            if ((war.getWarId() !== syncWarData.warId) || (Helpers.getExisted(syncWarData.executedActionsCount) < executedActionsCount + cachedActionsCount)) {
+                _cachedSyncWarData = null;
+                break;
+            }
+
+            const status    = syncWarData.status as Types.SyncWarStatus;
+            const warData   = syncWarData.war;
             if (status === Types.SyncWarStatus.Defeated) {
                 war.setIsEnded(true);
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
@@ -599,6 +636,7 @@ namespace MpwModel {
                         FlowManager.gotoMyWarListPanel(war.getWarType());
                     },
                 });
+                return;
 
             } else if (status === Types.SyncWarStatus.EndedOrNotExists) {
                 war.setIsEnded(true);
@@ -609,9 +647,10 @@ namespace MpwModel {
                         FlowManager.gotoMyWarListPanel(war.getWarType());
                     },
                 });
+                return;
 
             } else if (status === Types.SyncWarStatus.NoError) {
-                const requestType = data.requestType as Types.SyncWarRequestType;
+                const requestType = syncWarData.requestType as Types.SyncWarRequestType;
                 if (requestType === Types.SyncWarRequestType.PlayerForce) {
                     war.setIsEnded(true);
                     if (warData == null) {
@@ -620,36 +659,26 @@ namespace MpwModel {
                         await FlowManager.gotoMultiPlayerWar(warData);
                         FloatText.show(Lang.getText(LangTextType.A0038));
                     }
+                    return;
 
                 } else {
-                    const cachedActionsCount    = _cachedActions.length;
-                    const executedActionsCount  = war.getExecutedActionManager().getExecutedActionsCount();
-                    if (executedActionsCount == null) {
-                        throw Helpers.newError(`MpwModel.updateOnPlayerSyncWar() empty executedActionsCount.`);
-                    } else {
-                        if (data.executedActionsCount !== executedActionsCount + cachedActionsCount) {
-                            war.setIsEnded(true);
-                            if (warData == null) {
-                                throw Helpers.newError(`MpwModel.updateOnPlayerSyncWar() empty warData 2.`);
-                            } else {
-                                await FlowManager.gotoMultiPlayerWar(warData);
-                                FloatText.show(Lang.getText(LangTextType.A0036));
-                            }
-
+                    if (syncWarData.executedActionsCount !== executedActionsCount + cachedActionsCount) {
+                        war.setIsEnded(true);
+                        if (warData == null) {
+                            throw Helpers.newError(`MpwModel.updateOnPlayerSyncWar() empty warData 2.`);
                         } else {
-                            if (requestType === Types.SyncWarRequestType.PlayerRequest) {
-                                FloatText.show(Lang.getText(LangTextType.A0038));
-                            } else {
-                                // Nothing to do.
-                            }
-                            if (!war.getIsExecutingAction()) {
-                                if (cachedActionsCount) {
-                                    checkAndRunFirstCachedAction(war, _cachedActions);
-                                } else {
-                                    // Nothing to do.
-                                }
-                            }
+                            await FlowManager.gotoMultiPlayerWar(warData);
+                            FloatText.show(Lang.getText(LangTextType.A0036));
                         }
+                        return;
+
+                    } else {
+                        if (requestType === Types.SyncWarRequestType.PlayerRequest) {
+                            FloatText.show(Lang.getText(LangTextType.A0038));
+                        } else {
+                            // Nothing to do.
+                        }
+                        break;
                     }
                 }
 
@@ -661,14 +690,16 @@ namespace MpwModel {
                     content : Lang.getText(LangTextType.A0037),
                     callback: () => FlowManager.gotoLobby(),
                 });
+                return;
 
             } else if (status === Types.SyncWarStatus.Synchronized) {
-                const requestType = data.requestType as Types.SyncWarRequestType;
+                const requestType = syncWarData.requestType as Types.SyncWarRequestType;
                 if (requestType === Types.SyncWarRequestType.PlayerRequest) {
                     FloatText.show(Lang.getText(LangTextType.A0038));
                 } else {
                     // Nothing to do.
                 }
+                break;
 
             } else {
                 // Something wrong!!
@@ -678,30 +709,8 @@ namespace MpwModel {
                     content : Lang.getText(LangTextType.A0037),
                     callback: () => FlowManager.gotoLobby(),
                 });
+                return;
             }
-        }
-    }
-
-    export function updateByActionContainer(container: IWarActionContainer, warId: number): void {
-        const war = getWar();
-        if ((war) && (war.getWarId() === warId)) {
-            const executedActionsCount = war.getExecutedActionManager().getExecutedActionsCount();
-            if (executedActionsCount == null) {
-                throw Helpers.newError(`MpwModel.updateByActionContainer() empty executedActionsCount.`);
-            } else {
-                if (container.actionId !== executedActionsCount + _cachedActions.length) {
-                    MpwProxy.reqMpwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
-                } else {
-                    _cachedActions.push(container);
-                    checkAndRunFirstCachedAction(war, _cachedActions);
-                }
-            }
-        }
-    }
-
-    async function checkAndRunFirstCachedAction(war: MpwWar, actionList: IWarActionContainer[]): Promise<void> {
-        if ((!war.getIsRunning()) || (war.getIsEnded()) || (war.getIsExecutingAction())) {
-            return;
         }
 
         const container = actionList.shift();
@@ -709,22 +718,16 @@ namespace MpwModel {
             return;
         }
 
-        const selfUserId = UserModel.getSelfUserId();
-        if (selfUserId == null) {
-            throw Helpers.newError(`MpwModel.checkAndRunFirstCachedAction() empty selfUserId.`);
-        }
-
+        const selfUserId = Helpers.getExisted(UserModel.getSelfUserId());
         war.getExecutedActionManager().addExecutedAction(container);
         await WarActionExecutor.checkAndExecute(war, container, false);
 
-        const playerManager     = war.getPlayerManager();
-        const remainingVotes    = war.getDrawVoteManager().getRemainingVotes();
-        const selfPlayer        = playerManager.getPlayerByUserId(selfUserId);
+        const selfPlayer        = war.getPlayerManager().getPlayerByUserId(selfUserId);
         const callbackForGoBack = () => {
             FlowManager.gotoMyWarListPanel(war.getWarType());
         };
         if (war.getIsEnded()) {
-            if (remainingVotes === 0) {
+            if (war.getDrawVoteManager().getRemainingVotes() === 0) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0030),
@@ -755,7 +758,7 @@ namespace MpwModel {
                         callback: callbackForGoBack,
                     });
                 } else {
-                    checkAndRunFirstCachedAction(war, actionList);
+                    checkAndSyncWarOrRunCachedAction(war, actionList);
                 }
             }
         }

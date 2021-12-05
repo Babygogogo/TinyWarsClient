@@ -6,7 +6,7 @@
         <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                              scale9Grid="1,1,2,2" x="10" y="10" locked="true" />
         <e:Group left="0" right="0" top="0" bottom="0">
-            <e:Group height="100" left="0" right="0" bottom="0">
+            <e:Group id="_groupDialogue1" height="100" left="0" right="0" bottom="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                      scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0" />
                 <e:Group id="_groupCo1" left="10" verticalCenter="0" width="80" height="80">
@@ -18,7 +18,7 @@
                 <TwnsUiLabel:UiLabel id="_labelContent1" text="你，你不要过来啊！！" textColor="0xFFFFFF" size="18" left="100"
                                      right="20" textAlign="left" wordWrap="true" lineSpacing="2" top="10" />
             </e:Group>
-            <e:Group height="100" left="0" right="0" x="10" top="0">
+            <e:Group id="_groupDialogue2" height="100" left="0" right="0" x="10" top="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                      scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0" />
                 <e:Group id="_groupCo2" verticalCenter="0" width="80" height="80" y="20" right="10">

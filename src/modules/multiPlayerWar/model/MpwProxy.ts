@@ -130,7 +130,7 @@ namespace MpwProxy {
     function _onMsgMpwExecuteWarAction(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwExecuteWarAction.IS;
         if (!data.errorCode) {
-            MpwModel.updateByActionContainer(Helpers.getExisted(data.actionContainer), Helpers.getExisted(data.warId));
+            MpwModel.updateOnMsgMpwExecuteWarAction(Helpers.getExisted(data.actionContainer), Helpers.getExisted(data.warId));
             Notify.dispatch(NotifyType.MsgMpwExecuteWarAction, data);
         }
     }
