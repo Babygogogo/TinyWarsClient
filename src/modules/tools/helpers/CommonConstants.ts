@@ -46,18 +46,22 @@ namespace CommonConstants {
     export const MapMinRating                           = 0;
     export const MapMaxFileSize                         = 50000;
 
-    export const WarEventNameMaxLength                  = 150;
-    export const WarEventMaxEventsPerMap                = 30;
-    export const WarEventMaxConditionNodesPerMap        = 50;
-    export const WarEventMaxConditionsPerMap            = 100;
-    export const WarEventMaxActionsPerMap               = 100;
-    export const WarEventMaxActionsPerEvent             = 10;
-    export const WarEventMaxCallCountTotal              = 100;
-    export const WarEventMaxCallCountInPlayerTurn       = 10;
-    export const WarEventActionAddUnitMaxCount          = 50;
-    export const WarEventActionDialogueTextMaxLength    = 300;
-    export const WarEventActionDialogueMaxCount         = 100;
-    export const WarEventActionDialogueNameMaxLength    = 30;
+    export const WarEventNameMaxLength                                  = 150;
+    export const WarEventMaxEventsPerMap                                = 30;
+    export const WarEventMaxConditionNodesPerMap                        = 50;
+    export const WarEventMaxConditionsPerMap                            = 100;
+    export const WarEventMaxActionsPerMap                               = 100;
+    export const WarEventMaxActionsPerEvent                             = 10;
+    export const WarEventMaxCallCountTotal                              = 100;
+    export const WarEventMaxCallCountInPlayerTurn                       = 10;
+    export const WarEventActionAddUnitMaxCount                          = 50;
+    export const WarEventActionDialogueTextMaxLength                    = 300;
+    export const WarEventActionDialogueMaxCount                         = 100;
+    export const WarEventActionDialogueNameMaxLength                    = 30;
+    export const WarEventActionSetPlayerFundMaxDeltaValue               = 10000000;
+    export const WarEventActionSetPlayerFundMaxMultiplierPercentage     = 10000;
+    export const WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage = 10000;
+    export const WarEventActionSetPlayerCoEnergyMaxDeltaPercentage      = 100;
 
     export const MapEditorSlotMaxCountForNormal         = 3;
     export const MapEditorSlotMaxCountForCommittee      = 100;
@@ -93,6 +97,7 @@ namespace CommonConstants {
     export const WarNeutralTeamIndex                    = 0;
     export const WarFirstTeamIndex                      = 1;
     export const WarFirstTurnIndex                      = 1;
+    export const WarPlayerMaxFund                       = 100_000_000;
 
     export const ReplayMaxRating                        = 10;
     export const ReplayMinRating                        = 0;

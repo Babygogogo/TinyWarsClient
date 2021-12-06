@@ -75,8 +75,9 @@ namespace TwnsWeActionModifyPanel2 {
         }
 
         private _onTouchedBtnSwitchPlayerIndex(): void {
-            const action        = Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState);
-            action.playerIndex  = ((action.playerIndex || 0) % CommonConstants.WarMaxPlayerIndex) + 1;
+            const openData      = this._getOpenData();
+            const action        = Helpers.getExisted(openData.action.WeaSetPlayerAliveState);
+            action.playerIndex  = ((action.playerIndex || 0) % openData.war.getPlayersCountUnneutral()) + 1;
 
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }

@@ -1515,7 +1515,7 @@ namespace TwnsBwUnit {
                 const normalizedRepairHp    = Math.min(
                     normalizedMaxHp - normalizedCurrentHp,
                     repairAmount + this.getNormalizedRepairHpModifier(),
-                    Math.floor(unit.getPlayer().getFund() * normalizedMaxHp / productionCost)
+                    Math.floor(Math.max(0, unit.getPlayer().getFund()) * normalizedMaxHp / productionCost)
                 );
                 return {
                     hp  : (normalizedRepairHp + normalizedCurrentHp) * CommonConstants.UnitHpNormalizer - unit.getCurrentHp(),

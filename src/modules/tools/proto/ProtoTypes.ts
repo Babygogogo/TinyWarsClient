@@ -6012,6 +6012,210 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WeaSetPlayerFund. */
+    interface IWeaSetPlayerFund {
+
+        /** WeaSetPlayerFund playerIndex */
+        playerIndex?: (number|null);
+
+        /** WeaSetPlayerFund multiplierPercentage */
+        multiplierPercentage?: (number|null);
+
+        /** WeaSetPlayerFund deltaValue */
+        deltaValue?: (number|null);
+    }
+
+    /** Represents a WeaSetPlayerFund. */
+    class WeaSetPlayerFund implements IWeaSetPlayerFund {
+
+        /**
+         * Constructs a new WeaSetPlayerFund.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetPlayerFund);
+
+        /** WeaSetPlayerFund playerIndex. */
+        public playerIndex: number;
+
+        /** WeaSetPlayerFund multiplierPercentage. */
+        public multiplierPercentage: number;
+
+        /** WeaSetPlayerFund deltaValue. */
+        public deltaValue: number;
+
+        /**
+         * Creates a new WeaSetPlayerFund instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetPlayerFund instance
+         */
+        public static create(properties?: WarEvent.IWeaSetPlayerFund): WarEvent.WeaSetPlayerFund;
+
+        /**
+         * Encodes the specified WeaSetPlayerFund message. Does not implicitly {@link WarEvent.WeaSetPlayerFund.verify|verify} messages.
+         * @param message WeaSetPlayerFund message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetPlayerFund, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetPlayerFund message, length delimited. Does not implicitly {@link WarEvent.WeaSetPlayerFund.verify|verify} messages.
+         * @param message WeaSetPlayerFund message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetPlayerFund, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetPlayerFund message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetPlayerFund
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetPlayerFund;
+
+        /**
+         * Decodes a WeaSetPlayerFund message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetPlayerFund
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetPlayerFund;
+
+        /**
+         * Verifies a WeaSetPlayerFund message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetPlayerFund message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetPlayerFund
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetPlayerFund;
+
+        /**
+         * Creates a plain object from a WeaSetPlayerFund message. Also converts values to other types if specified.
+         * @param message WeaSetPlayerFund
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetPlayerFund, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetPlayerFund to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaSetPlayerCoEnergy. */
+    interface IWeaSetPlayerCoEnergy {
+
+        /** WeaSetPlayerCoEnergy playerIndex */
+        playerIndex?: (number|null);
+
+        /** WeaSetPlayerCoEnergy multiplierPercentage */
+        multiplierPercentage?: (number|null);
+
+        /** WeaSetPlayerCoEnergy deltaPercentage */
+        deltaPercentage?: (number|null);
+    }
+
+    /** Represents a WeaSetPlayerCoEnergy. */
+    class WeaSetPlayerCoEnergy implements IWeaSetPlayerCoEnergy {
+
+        /**
+         * Constructs a new WeaSetPlayerCoEnergy.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetPlayerCoEnergy);
+
+        /** WeaSetPlayerCoEnergy playerIndex. */
+        public playerIndex: number;
+
+        /** WeaSetPlayerCoEnergy multiplierPercentage. */
+        public multiplierPercentage: number;
+
+        /** WeaSetPlayerCoEnergy deltaPercentage. */
+        public deltaPercentage: number;
+
+        /**
+         * Creates a new WeaSetPlayerCoEnergy instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetPlayerCoEnergy instance
+         */
+        public static create(properties?: WarEvent.IWeaSetPlayerCoEnergy): WarEvent.WeaSetPlayerCoEnergy;
+
+        /**
+         * Encodes the specified WeaSetPlayerCoEnergy message. Does not implicitly {@link WarEvent.WeaSetPlayerCoEnergy.verify|verify} messages.
+         * @param message WeaSetPlayerCoEnergy message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetPlayerCoEnergy, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetPlayerCoEnergy message, length delimited. Does not implicitly {@link WarEvent.WeaSetPlayerCoEnergy.verify|verify} messages.
+         * @param message WeaSetPlayerCoEnergy message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetPlayerCoEnergy, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetPlayerCoEnergy message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetPlayerCoEnergy
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetPlayerCoEnergy;
+
+        /**
+         * Decodes a WeaSetPlayerCoEnergy message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetPlayerCoEnergy
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetPlayerCoEnergy;
+
+        /**
+         * Verifies a WeaSetPlayerCoEnergy message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetPlayerCoEnergy message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetPlayerCoEnergy
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetPlayerCoEnergy;
+
+        /**
+         * Creates a plain object from a WeaSetPlayerCoEnergy message. Also converts values to other types if specified.
+         * @param message WeaSetPlayerCoEnergy
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetPlayerCoEnergy, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetPlayerCoEnergy to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WeaDialogue. */
     interface IWeaDialogue {
 
@@ -7010,6 +7214,12 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSimpleDialogue */
         WeaSimpleDialogue?: (WarEvent.IWeaSimpleDialogue|null);
+
+        /** WarEventAction WeaSetPlayerFund */
+        WeaSetPlayerFund?: (WarEvent.IWeaSetPlayerFund|null);
+
+        /** WarEventAction WeaSetPlayerCoEnergy */
+        WeaSetPlayerCoEnergy?: (WarEvent.IWeaSetPlayerCoEnergy|null);
     }
 
     /** Represents a WarEventAction. */
@@ -7044,6 +7254,12 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSimpleDialogue. */
         public WeaSimpleDialogue?: (WarEvent.IWeaSimpleDialogue|null);
+
+        /** WarEventAction WeaSetPlayerFund. */
+        public WeaSetPlayerFund?: (WarEvent.IWeaSetPlayerFund|null);
+
+        /** WarEventAction WeaSetPlayerCoEnergy. */
+        public WeaSetPlayerCoEnergy?: (WarEvent.IWeaSetPlayerCoEnergy|null);
 
         /**
          * Creates a new WarEventAction instance using the specified properties.

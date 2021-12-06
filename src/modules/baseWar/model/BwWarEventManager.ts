@@ -125,6 +125,10 @@ namespace TwnsBwWarEventManager {
                 await this._callActionSimpleDialogueWithExtraData(action.WeaSimpleDialogue, isFastExecute);
             } else if (action.WeaPlayBgm) {
                 await this._callActionPlayBgmWithExtraData(action.WeaPlayBgm, isFastExecute);
+            } else if (action.WeaSetPlayerFund) {
+                await this._callActionSetPlayerFundWithExtraData(action.WeaSetPlayerFund, isFastExecute);
+            } else if (action.WeaSetPlayerCoEnergy) {
+                await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute);
             } else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -147,6 +151,10 @@ namespace TwnsBwWarEventManager {
                 await this._callActionSimpleDialogueWithoutExtraData(action.WeaSimpleDialogue, isFastExecute);
             } else if (action.WeaPlayBgm) {
                 await this._callActionPlayBgmWithoutExtraData(action.WeaPlayBgm, isFastExecute);
+            } else if (action.WeaSetPlayerFund) {
+                await this._callActionSetPlayerFundWithoutExtraData(action.WeaSetPlayerFund, isFastExecute);
+            } else if (action.WeaSetPlayerCoEnergy) {
+                await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute);
             } else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -391,6 +399,40 @@ namespace TwnsBwWarEventManager {
                 SoundManager.playCoBgmWithWar(this._getWar(), false);
             } else {
                 SoundManager.playBgm(Helpers.getExisted(action.bgmCode));
+            }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetPlayerFundWithExtraData(action: WarEvent.IWeaSetPlayerFund, isFastExecute: boolean): Promise<void> {
+            // nothing to do
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetPlayerFundWithoutExtraData(action: WarEvent.IWeaSetPlayerFund, isFastExecute: boolean): Promise<void> {
+            const player                = this._getWar().getPlayer(Helpers.getExisted(action.playerIndex));
+            const multiplierPercentage  = action.multiplierPercentage ?? 100;
+            const deltaValue            = action.deltaValue ?? 0;
+            const maxValue              = CommonConstants.WarPlayerMaxFund;
+            player.setFund(Math.min(
+                maxValue,
+                Math.max(-maxValue, Math.floor(player.getFund() * multiplierPercentage / 100 + deltaValue)))
+            );
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetPlayerCoEnergyWithExtraData(action: WarEvent.IWeaSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
+            // nothing to do
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetPlayerCoEnergyWithoutExtraData(action: WarEvent.IWeaSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
+            const player                = this._getWar().getPlayer(Helpers.getExisted(action.playerIndex));
+            const multiplierPercentage  = action.multiplierPercentage ?? 100;
+            const deltaPercentage       = action.deltaPercentage ?? 0;
+            const maxEnergy             = player.getCoMaxEnergy();
+            if (maxEnergy > 0) {
+                player.setCoCurrentEnergy(Math.max(
+                    0,
+                    Math.min(maxEnergy, Math.floor(player.getCoCurrentEnergy() * multiplierPercentage / 100 + maxEnergy * deltaPercentage / 100))
+                ));
             }
         }
 

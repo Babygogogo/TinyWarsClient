@@ -1103,6 +1103,14 @@ namespace TwnsLangCommonText {
             `选择的BGM无效`,
             `The chosen BGM is invalid.`,
         ],
+        [LangTextType.A0264]: [
+            `参数未设置`,
+            `The parameters are not specified.`,
+        ],
+        [LangTextType.A0265]: [
+            `参数不合法`,
+            `The parameters are invalid.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4099,6 +4107,26 @@ namespace TwnsLangCommonText {
             `指定BGM`,
             `Specific BGM`,
         ],
+        [LangTextType.B0752]: [
+            `修改玩家的资金`,
+            `Modify a Player's Fund`,
+        ],
+        [LangTextType.B0753]: [
+            `最终值`,
+            `Final Value`,
+        ],
+        [LangTextType.B0754]: [
+            `增减值`,
+            `Delta Value`,
+        ],
+        [LangTextType.B0755]: [
+            `倍率`,
+            `Multiplier`,
+        ],
+        [LangTextType.B0756]: [
+            `修改玩家的CO能量`,
+            `Modify a Player's CO Energy`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4717,6 +4745,22 @@ namespace TwnsLangCommonText {
         [LangTextType.F0085]: [
             `发生简易剧情对话，参与CO: %s`,
             `Start a simple dialogue, COs: %s`,
+        ],
+        [LangTextType.F0086]: [
+            `修改P%d的CO能量，公式为：当前能量 * %d%% + 最大能量 * %d%%`,
+            `Set P%d's CO energy to: current energy * %d%% + max energy * %d%%.`,
+        ],
+        [LangTextType.F0087]: [
+            `修改P%d的资金，公式为：当前资金 * %d%% + %d`,
+            `Set P%d's fund to: current fund * %d%% + %d.`,
+        ],
+        [LangTextType.F0088]: [
+            `假设玩家当前资金10000，则动作执行后资金为%d`,
+            `Assume the player's current fund is 10000, then the fund will become %d after this action is executed.`,
+        ],
+        [LangTextType.F0089]: [
+            `假设玩家当前CO能量是40%，则动作执行后为%d%%`,
+            `Assume the player's current CO energy is 40%%, then the energy will become %d%% after this action is executed.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -749,6 +749,8 @@ namespace Types {
         SetWeather,
         SimpleDialogue,
         PlayBgm,
+        SetPlayerFund,
+        SetPlayerCoEnergy,
     }
 
     // eslint-disable-next-line no-shadow

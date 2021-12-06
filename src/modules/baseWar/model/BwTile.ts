@@ -724,8 +724,6 @@ namespace TwnsBwTile {
                 throw Helpers.newError(`Empty cfgNormalizedRepairHp`);
             }
 
-            const unitPlayer            = unit.getPlayer();
-            const fund                  = unitPlayer.getFund();
             const productionCost        = unit.getProductionFinalCost();
             const currentHp             = unit.getCurrentHp();
             const normalizedMaxHp       = unit.getNormalizedMaxHp();
@@ -733,7 +731,7 @@ namespace TwnsBwTile {
             const normalizedRepairHp    = Math.min(
                 normalizedMaxHp - normalizedCurrentHp,
                 cfgNormalizedRepairHp + this.getNormalizedRepairHpModifier(),
-                Math.floor(fund * normalizedMaxHp / productionCost)
+                Math.floor(Math.max(0, unit.getPlayer().getFund()) * normalizedMaxHp / productionCost)
             );
             return {
                 hp  : (normalizedRepairHp + normalizedCurrentHp) * CommonConstants.UnitHpNormalizer - currentHp,

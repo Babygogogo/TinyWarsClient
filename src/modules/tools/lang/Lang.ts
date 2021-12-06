@@ -443,6 +443,8 @@ namespace Lang {
             case WarEventActionType.SetWeather              : return getText(LangTextType.B0715);
             case WarEventActionType.SimpleDialogue          : return getText(LangTextType.B0728);
             case WarEventActionType.PlayBgm                 : return getText(LangTextType.B0750);
+            case WarEventActionType.SetPlayerFund           : return getText(LangTextType.B0752);
+            case WarEventActionType.SetPlayerCoEnergy       : return getText(LangTextType.B0756);
             default                                         : return null;
         }
     }
