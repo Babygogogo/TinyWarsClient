@@ -37,14 +37,27 @@ namespace TwnsMeTopPanel {
         private readonly _conUnitView!                  : eui.Group;
         private readonly _conTileView!                  : eui.Group;
 
-        private readonly _btnModePreview!               : TwnsUiButton.UiButton;
-        private readonly _btnModeDrawTileBase!          : TwnsUiButton.UiButton;
-        private readonly _btnModeDrawTileDecorator!     : TwnsUiButton.UiButton;
-        private readonly _btnModeDrawTileObject!        : TwnsUiButton.UiButton;
-        private readonly _btnModeDrawUnit!              : TwnsUiButton.UiButton;
-        private readonly _btnModeDeleteTileDecorator!   : TwnsUiButton.UiButton;
-        private readonly _btnModeDeleteTileObject!      : TwnsUiButton.UiButton;
-        private readonly _btnModeDeleteUnit!            : TwnsUiButton.UiButton;
+        private readonly _groupModePreview!             : eui.Group;
+        private readonly _labelModePreview!             : TwnsUiLabel.UiLabel;
+        private readonly _groupModeDrawTileBase!        : eui.Group;
+        private readonly _labelModeDrawTileBase!        : TwnsUiLabel.UiLabel;
+        private readonly _groupModeDrawTileDecorator!   : eui.Group;
+        private readonly _labelModeDrawTileDecorator!   : TwnsUiLabel.UiLabel;
+        private readonly _groupModeDeleteTileDecorator! : eui.Group;
+        private readonly _labelModeDeleteTileDecorator! : TwnsUiLabel.UiLabel;
+        private readonly _groupModeDrawTileObject!      : eui.Group;
+        private readonly _labelModeDrawTileObject!      : TwnsUiLabel.UiLabel;
+        private readonly _groupModeDeleteTileObject!    : eui.Group;
+        private readonly _labelModeDeleteTileObject!    : TwnsUiLabel.UiLabel;
+        private readonly _groupModeDrawUnit!            : eui.Group;
+        private readonly _labelModeDrawUnit!            : TwnsUiLabel.UiLabel;
+        private readonly _groupModeDeleteUnit!          : eui.Group;
+        private readonly _labelModeDeleteUnit!          : TwnsUiLabel.UiLabel;
+        private readonly _groupModeDrawLocation!        : eui.Group;
+        private readonly _labelModeDrawLocation!        : TwnsUiLabel.UiLabel;
+        private readonly _groupModeDeleteLocation!      : eui.Group;
+        private readonly _labelModeDeleteLocation!      : TwnsUiLabel.UiLabel;
+
         private readonly _btnVisibility!                : TwnsUiButton.UiButton;
         private readonly _btnSymmetry!                  : TwnsUiButton.UiButton;
         private readonly _btnMenu!                      : TwnsUiButton.UiButton;
@@ -69,17 +82,19 @@ namespace TwnsMeTopPanel {
                 { type: NotifyType.MsgMeSubmitMap,                  callback: this._onMsgMeSubmitMap },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnModePreview,             callback: this._onTouchedBtnModePreview },
-                { ui: this._btnModeDrawTileBase,        callback: this._onTouchedBtnModeDrawTileBase },
-                { ui: this._btnModeDrawTileDecorator,   callback: this._onTouchedBtnModeDrawTileDecorator },
-                { ui: this._btnModeDrawTileObject,      callback: this._onTouchedBtnModeDrawTileObject },
-                { ui: this._btnModeDrawUnit,            callback: this._onTouchedBtnModeDrawUnit },
-                { ui: this._btnModeDeleteTileObject,    callback: this._onTouchedBtnModeDeleteTileObject },
-                { ui: this._btnModeDeleteTileDecorator, callback: this._onTouchedBtnModeDeleteTileDecorator },
-                { ui: this._btnModeDeleteUnit,          callback: this._onTouchedBtnModeDeleteUnit },
-                { ui: this._btnVisibility,              callback: this._onTouchedBtnVisibility },
-                { ui: this._btnSymmetry,                callback: this._onTouchedBtnSymmetry },
-                { ui: this._btnMenu,                    callback: this._onTouchedBtnMenu, },
+                { ui: this._groupModePreview,               callback: this._onTouchedGroupModePreview },
+                { ui: this._groupModeDrawTileBase,          callback: this._onTouchedGroupModeDrawTileBase },
+                { ui: this._groupModeDrawTileDecorator,     callback: this._onTouchedGroupModeDrawTileDecorator },
+                { ui: this._groupModeDeleteTileDecorator,   callback: this._onTouchedGroupModeDeleteTileDecorator },
+                { ui: this._groupModeDrawTileObject,        callback: this._onTouchedGroupModeDrawTileObject },
+                { ui: this._groupModeDeleteTileObject,      callback: this._onTouchedGroupModeDeleteTileObject },
+                { ui: this._groupModeDrawUnit,              callback: this._onTouchedGroupModeDrawUnit },
+                { ui: this._groupModeDeleteUnit,            callback: this._onTouchedGroupModeDeleteUnit },
+                { ui: this._groupModeDrawLocation,          callback: this._onTouchedGroupModeDrawLocation },
+                { ui: this._groupModeDeleteLocation,        callback: this._onTouchedGroupModeDeleteLocation },
+                { ui: this._btnVisibility,                  callback: this._onTouchedBtnVisibility },
+                { ui: this._btnSymmetry,                    callback: this._onTouchedBtnSymmetry },
+                { ui: this._btnMenu,                        callback: this._onTouchedBtnMenu, },
             ]);
 
             const tileView      = this._tileView;
@@ -182,37 +197,53 @@ namespace TwnsMeTopPanel {
             this._getWar().setIsMapModified(false);
         }
 
-        private _onTouchedBtnModePreview(): void {
+        private _onTouchedGroupModePreview(): void {
             this._getDrawer().setModePreview();
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
-        private _onTouchedBtnModeDrawTileBase(): void {
+        private _onTouchedGroupModeDrawTileBase(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseTileBasePanel, void 0);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
-        private _onTouchedBtnModeDrawTileDecorator(): void {
+        private _onTouchedGroupModeDrawTileDecorator(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseTileDecoratorPanel, void 0);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
-        private _onTouchedBtnModeDrawTileObject(): void {
+        private _onTouchedGroupModeDrawTileObject(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseTileObjectPanel, void 0);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
-        private _onTouchedBtnModeDrawUnit(): void {
+        private _onTouchedGroupModeDrawUnit(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseUnitPanel, void 0);
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
-        private _onTouchedBtnModeDeleteTileObject(): void {
+        private _onTouchedGroupModeDeleteTileObject(): void {
             this._getDrawer().setModeDeleteTileObject();
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
-        private _onTouchedBtnModeDeleteTileDecorator(): void {
+        private _onTouchedGroupModeDrawLocation(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseLocationPanel, { isAdd: true });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _onTouchedGroupModeDeleteLocation(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseLocationPanel, { isAdd: false });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _onTouchedGroupModeDeleteTileDecorator(): void {
             this._getDrawer().setModeDeleteTileDecorator();
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
-        private _onTouchedBtnModeDeleteUnit(): void {
+        private _onTouchedGroupModeDeleteUnit(): void {
             this._getDrawer().setModeDeleteUnit();
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
+
         private _onTouchedBtnVisibility(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeVisibilityPanel, void 0);
         }
         private _onTouchedBtnSymmetry(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeSymmetryPanel, void 0);
         }
-
         private _onTouchedBtnMenu(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
         }
@@ -237,29 +268,53 @@ namespace TwnsMeTopPanel {
 
         private _updateComponentsForLanguage(): void {
             this._updateLabelMode();
-            this._btnModePreview.label              = Lang.getText(LangTextType.B0286);
-            this._btnModeDrawUnit.label             = Lang.getText(LangTextType.B0281);
-            this._btnModeDrawTileBase.label         = Lang.getText(LangTextType.B0282);
-            this._btnModeDrawTileDecorator.label    = Lang.getText(LangTextType.B0662);
-            this._btnModeDrawTileObject.label       = Lang.getText(LangTextType.B0283);
-            this._btnModeDeleteUnit.label           = Lang.getText(LangTextType.B0284);
-            this._btnModeDeleteTileDecorator.label  = Lang.getText(LangTextType.B0661);
-            this._btnModeDeleteTileObject.label     = Lang.getText(LangTextType.B0285);
+            this._labelModePreview.text             = Lang.getText(LangTextType.B0286);
+            this._labelModeDrawTileBase.text        = Lang.getText(LangTextType.B0282);
+            this._labelModeDeleteTileDecorator.text = Lang.getText(LangTextType.B0661);
+            this._labelModeDrawUnit.text            = Lang.getText(LangTextType.B0281);
+            this._labelModeDrawTileDecorator.text   = Lang.getText(LangTextType.B0662);
+            this._labelModeDrawTileObject.text      = Lang.getText(LangTextType.B0283);
+            this._labelModeDeleteUnit.text          = Lang.getText(LangTextType.B0284);
+            this._labelModeDeleteTileObject.text    = Lang.getText(LangTextType.B0285);
+            this._labelModeDrawLocation.text        = Lang.getText(LangTextType.B0759);
+            this._labelModeDeleteLocation.text      = Lang.getText(LangTextType.B0760);
             this._btnVisibility.label               = Lang.getText(LangTextType.B0301);
             this._btnSymmetry.label                 = Lang.getText(LangTextType.B0306);
+            this._btnMenu.label                     = Lang.getText(LangTextType.B0155);
         }
 
         private _updateGroupMode(): void {
             this._updateLabelMode();
             this._updateTileView();
             this._updateUnitView();
+
+            const mode = this._getDrawer().getMode();
+            Helpers.changeColor(this._groupModePreview,             mode === Types.MapEditorDrawerMode.Preview ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDrawTileBase,        mode === Types.MapEditorDrawerMode.DrawTileBase ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDrawTileDecorator,   mode === Types.MapEditorDrawerMode.DrawTileDecorator ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDeleteTileDecorator, mode === Types.MapEditorDrawerMode.DeleteTileDecorator ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDrawTileObject,      mode === Types.MapEditorDrawerMode.DrawTileObject ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDeleteTileObject,    mode === Types.MapEditorDrawerMode.DeleteTileObject ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDrawUnit,            mode === Types.MapEditorDrawerMode.DrawUnit ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDeleteUnit,          mode === Types.MapEditorDrawerMode.DeleteUnit ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDrawLocation,        mode === Types.MapEditorDrawerMode.AddTileToLocation ? Types.ColorType.White : Types.ColorType.Origin);
+            Helpers.changeColor(this._groupModeDeleteLocation,      mode === Types.MapEditorDrawerMode.DeleteTileFromLocation ? Types.ColorType.White : Types.ColorType.Origin);
         }
 
         private _updateLabelMode(): void {
             const label     = this._labelMode;
-            const mode      = this._getDrawer().getMode();
-            label.text      = `${Lang.getText(LangTextType.B0280)}: ${Lang.getMapEditorDrawerModeText(mode)}`;
+            const drawer    = this._getDrawer();
+            const mode      = drawer.getMode();
             label.textColor = getTextColorForDrawerMode(mode);
+
+            const rawText = `${Lang.getText(LangTextType.B0280)}: ${Lang.getMapEditorDrawerModeText(mode)}`;
+            if (mode === DrawerMode.AddTileToLocation) {
+                label.text = `${rawText} ${drawer.getDataForAddTileToLocation()?.locationIdArray.join(`,`)}`;
+            } else if (mode === DrawerMode.DeleteTileFromLocation) {
+                label.text = `${rawText} ${drawer.getDataForDeleteTileFromLocation()?.locationIdArray.join(`,`)}`;
+            } else {
+                label.text = rawText;
+            }
         }
 
         private _updateTileView(): void {
@@ -332,35 +387,35 @@ namespace TwnsMeTopPanel {
         }
 
         private _updateBtnModeDrawUnit(): void {
-            this._btnModeDrawUnit.visible = !this._getWar().getIsReviewingMap();
+            this._groupModeDrawUnit.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnModeDrawTileDecorator(): void {
-            this._btnModeDrawTileDecorator.visible = !this._getWar().getIsReviewingMap();
+            this._groupModeDrawTileDecorator.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnModeDrawTileObject(): void {
-            this._btnModeDrawTileObject.visible = !this._getWar().getIsReviewingMap();
+            this._groupModeDrawTileObject.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnModePreview(): void {
-            this._btnModePreview.visible = !this._getWar().getIsReviewingMap();
+            this._groupModePreview.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnModeDrawTileBase(): void {
-            this._btnModeDrawTileBase.visible = !this._getWar().getIsReviewingMap();
+            this._groupModeDrawTileBase.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnDeleteUnit(): void {
-            this._btnModeDeleteUnit.visible = !this._getWar().getIsReviewingMap();
+            this._groupModeDeleteUnit.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnDeleteTileObject(): void {
-            this._btnModeDeleteTileObject.visible = !this._getWar().getIsReviewingMap();
+            this._groupModeDeleteTileObject.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnDeleteTileDecorator(): void {
-            this._btnModeDeleteTileDecorator.visible = !this._getWar().getIsReviewingMap();
+            this._groupModeDeleteTileDecorator.visible = !this._getWar().getIsReviewingMap();
         }
 
         private _updateBtnMenu(): void {
@@ -400,15 +455,17 @@ namespace TwnsMeTopPanel {
 
     function getTextColorForDrawerMode(mode: DrawerMode): number {
         switch (mode) {
-            case DrawerMode.Preview             : return 0xffffff;
-            case DrawerMode.DrawUnit            : return 0x00ff00;
-            case DrawerMode.DrawTileBase        : return 0x00ff00;
-            case DrawerMode.DrawTileObject      : return 0x00ff00;
-            case DrawerMode.DrawTileDecorator   : return 0x00ff00;
-            case DrawerMode.DeleteUnit          : return 0xff0000;
-            case DrawerMode.DeleteTileDecorator : return 0xff0000;
-            case DrawerMode.DeleteTileObject    : return 0xff0000;
-            default                             : return 0xffffff;
+            case DrawerMode.Preview                 : return 0xffffff;
+            case DrawerMode.DrawUnit                : return 0x00ff00;
+            case DrawerMode.DrawTileBase            : return 0x00ff00;
+            case DrawerMode.DrawTileObject          : return 0x00ff00;
+            case DrawerMode.DrawTileDecorator       : return 0x00ff00;
+            case DrawerMode.DeleteUnit              : return 0xff0000;
+            case DrawerMode.DeleteTileDecorator     : return 0xff0000;
+            case DrawerMode.DeleteTileObject        : return 0xff0000;
+            case DrawerMode.AddTileToLocation       : return 0x00ff00;
+            case DrawerMode.DeleteTileFromLocation  : return 0xff0000;
+            default                                 : return 0xffffff;
         }
     }
 }

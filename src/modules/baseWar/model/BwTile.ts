@@ -41,6 +41,8 @@ namespace TwnsBwTile {
         private _currentHp?             : number | null;
         private _currentBuildPoint?     : number | null;
         private _currentCapturePoint?   : number | null;
+        private _locationFlags?         : number;
+
         private _customCrystalData?     : ITileCustomCrystalData | null;
         private _customCannonData?      : ITileCustomCannonData | null;
         private _customLaserTurretData? : ITileCustomLaserTurretData | null;
@@ -189,6 +191,8 @@ namespace TwnsBwTile {
             this.setCurrentHp(currentHp ?? (templateCfg.maxHp ?? null));
             this.setCurrentBuildPoint(currentBuildPoint ?? (templateCfg.maxBuildPoint ?? null));
             this.setCurrentCapturePoint(currentCapturePoint ?? (templateCfg.maxCapturePoint ?? null));
+            this._setLocationFlags(data.locationFlags ?? 0);
+
             this._setCustomCrystalData(customCrystalData);
             this._setCustomCannonData(customCannonData);
             this._setCustomLaserTurretData(customLaserTurretData);
@@ -225,6 +229,9 @@ namespace TwnsBwTile {
 
             const decoratorShapeId = this.getDecoratorShapeId();
             (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
+
+            const locationFlags = this._getLocationFlags();
+            (locationFlags !== 0) && (data.locationFlags = locationFlags);
 
             return data;
         }
@@ -263,6 +270,9 @@ namespace TwnsBwTile {
 
                 const decoratorShapeId = this.getDecoratorShapeId();
                 (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
+
+                const locationFlags = this._getLocationFlags();
+                (locationFlags !== 0) && (data.locationFlags = locationFlags);
 
                 return data;
             }
@@ -443,6 +453,40 @@ namespace TwnsBwTile {
         public checkIsDefeatOnCapture(): boolean {
             const cfg = this._getTemplateCfg();
             return cfg.isDefeatedOnCapture === 1;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for location flags.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _setLocationFlags(flags: number): void {
+            this._locationFlags = flags;
+        }
+        private _getLocationFlags(): number {
+            return Helpers.getExisted(this._locationFlags, ClientErrorCode.BwTile_GetLocationFlags_00);
+        }
+
+        /** @param locationId range: [1-30] */
+        public getHasLocationFlag(locationId: number): boolean {
+            return !!((this._getLocationFlags() >> (locationId - 1)) & 1);
+        }
+        /** @param locationId range: [1-30] */
+        public setHasLocationFlag(locationId: number, hasFlag: boolean): void {
+            if (hasFlag) {
+                this._setLocationFlags(this._getLocationFlags() | (1 << (locationId - 1)));
+            } else {
+                this._setLocationFlags(this._getLocationFlags() & ~(1 << (locationId - 1)));
+            }
+            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileLocationFlagSet, this as NotifyData.BwTileLocationFlagSet);
+        }
+        public setHasLocationFlagArray(locationIdArray: number[], hasFlag: boolean): void {
+            for (const locationId of locationIdArray) {
+                if (hasFlag) {
+                    this._setLocationFlags(this._getLocationFlags() | (1 << (locationId - 1)));
+                } else {
+                    this._setLocationFlags(this._getLocationFlags() & ~(1 << (locationId - 1)));
+                }
+            }
+            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileLocationFlagSet, this as NotifyData.BwTileLocationFlagSet);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

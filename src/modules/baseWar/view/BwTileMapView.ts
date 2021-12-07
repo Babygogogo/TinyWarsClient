@@ -22,12 +22,14 @@ namespace TwnsBwTileMapView {
         private readonly _decoratorLayer    = new egret.DisplayObjectContainer();
         private readonly _gridBorderLayer   = new egret.DisplayObjectContainer();
         private readonly _objectLayer       = new egret.DisplayObjectContainer();
+        private readonly _locationLayer     = new egret.DisplayObjectContainer();
         private readonly _coZoneContainer   = new egret.DisplayObjectContainer();
         private readonly _coZoneImageDict   = new Map<number, TwnsUiImage.UiImage[][]>();
 
         private readonly _notifyListeners   = [
             { type: NotifyType.TileAnimationTick,                   callback: this._onNotifyTileAnimationTick },
             { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyIsShowGridBorderChanged },
+            { type: NotifyType.BwTileLocationFlagSet,               callback: this._onNotifyBwTileLocationFlagSet },
         ];
 
         private _tileMap?: TwnsBwTileMap.BwTileMap;
@@ -39,66 +41,95 @@ namespace TwnsBwTileMapView {
             this.addChild(this._decoratorLayer);
             this.addChild(this._gridBorderLayer);
             this.addChild(this._objectLayer);
+            this.addChild(this._locationLayer);
             this.addChild(this._coZoneContainer);
+            this._locationLayer.alpha   = 0.6;
             this._gridBorderLayer.alpha = 0.3;
         }
 
         public init(tileMap: TwnsBwTileMap.BwTileMap): void {
             this._tileMap = tileMap;
 
-            const tileViewArray     = this._tileViewArray;
-            const baseLayer         = this._baseLayer;
-            const decoratorLayer    = this._decoratorLayer;
-            const objectLayer       = this._objectLayer;
-            tileViewArray.length    = 0;
-            baseLayer.removeChildren();
-            decoratorLayer.removeChildren();
-            objectLayer.removeChildren();
+            {
+                const tileViewArray     = this._tileViewArray;
+                const baseLayer         = this._baseLayer;
+                const decoratorLayer    = this._decoratorLayer;
+                const objectLayer       = this._objectLayer;
+                tileViewArray.length    = 0;
+                baseLayer.removeChildren();
+                decoratorLayer.removeChildren();
+                objectLayer.removeChildren();
 
-            for (const tile of tileMap.getAllTiles()) {
-                const view  = tile.getView();
-                const x     = GRID_WIDTH * tile.getGridX();
-                const y     = GRID_HEIGHT * (tile.getGridY() + 1);
-                tileViewArray.push(view);
+                for (const tile of tileMap.getAllTiles()) {
+                    const view  = tile.getView();
+                    const x     = GRID_WIDTH * tile.getGridX();
+                    const y     = GRID_HEIGHT * (tile.getGridY() + 1);
+                    tileViewArray.push(view);
 
-                const imgBase   = view.getImgBase();
-                imgBase.x       = x;
-                imgBase.y       = y;
-                baseLayer.addChild(imgBase);
+                    {
+                        const imgBase   = view.getImgBase();
+                        imgBase.x       = x;
+                        imgBase.y       = y;
+                        baseLayer.addChild(imgBase);
+                    }
 
-                const imgDecorator  = view.getImgDecorator();
-                imgDecorator.x      = x;
-                imgDecorator.y      = y;
-                decoratorLayer.addChild(imgDecorator);
+                    {
+                        const imgDecorator  = view.getImgDecorator();
+                        imgDecorator.x      = x;
+                        imgDecorator.y      = y;
+                        decoratorLayer.addChild(imgDecorator);
+                    }
 
-                const imgObject = view.getImgObject();
-                imgObject.x     = x;
-                imgObject.y     = y;
-                objectLayer.addChild(imgObject);
+                    {
+                        const imgObject = view.getImgObject();
+                        imgObject.x     = x;
+                        imgObject.y     = y;
+                        objectLayer.addChild(imgObject);
+                    }
+                }
             }
 
-            const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
-            const borderWidth                               = mapWidth * GRID_WIDTH;
-            const borderHeight                              = mapHeight * GRID_HEIGHT;
-            const gridBorderLayer                           = this._gridBorderLayer;
-            gridBorderLayer.removeChildren();
-            for (let x = 0; x <= mapWidth; ++x) {
-                const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
-                img.smoothing   = false;
-                img.width       = 1;
-                img.height      = borderHeight;
-                img.x           = (x * GRID_WIDTH) - 0.5;
-                gridBorderLayer.addChild(img);
+            const { width: mapWidth, height: mapHeight } = tileMap.getMapSize();
+            {
+                const borderWidth       = mapWidth * GRID_WIDTH;
+                const borderHeight      = mapHeight * GRID_HEIGHT;
+                const gridBorderLayer   = this._gridBorderLayer;
+                gridBorderLayer.removeChildren();
+                for (let x = 0; x <= mapWidth; ++x) {
+                    const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
+                    img.smoothing   = false;
+                    img.width       = 1;
+                    img.height      = borderHeight;
+                    img.x           = (x * GRID_WIDTH) - 0.5;
+                    gridBorderLayer.addChild(img);
+                }
+                for (let y = 0; y <= mapHeight; ++y) {
+                    const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
+                    img.smoothing   = false;
+                    img.width       = borderWidth;
+                    img.height      = 1;
+                    img.y           = (y * GRID_HEIGHT) - 0.5;
+                    gridBorderLayer.addChild(img);
+                }
+                this._updateGridBorderLayerVisible();
             }
-            for (let y = 0; y <= mapHeight; ++y) {
-                const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
-                img.smoothing   = false;
-                img.width       = borderWidth;
-                img.height      = 1;
-                img.y           = (y * GRID_HEIGHT) - 0.5;
-                gridBorderLayer.addChild(img);
+
+            {
+                const locationLayer = this._locationLayer;
+                locationLayer.removeChildren();
+
+                for (let y = 0; y < mapHeight; ++y) {
+                    for (let x = 0; x < mapWidth; ++x) {
+                        const imgLocation       = new TwnsUiImage.UiImage(`uncompressedColorWhite0000`);
+                        imgLocation.smoothing   = false;
+                        imgLocation.x           = x * GRID_WIDTH;
+                        imgLocation.y           = y * GRID_HEIGHT;
+                        imgLocation.width       = GRID_WIDTH;
+                        imgLocation.height      = GRID_HEIGHT;
+                        locationLayer.addChild(imgLocation);
+                    }
+                }
             }
-            this._updateGridBorderLayerVisible();
         }
         public fastInit(tileMap: TwnsBwTileMap.BwTileMap): void {
             this._tileMap = tileMap;
@@ -107,9 +138,9 @@ namespace TwnsBwTileMapView {
         public startRunningView(): void {
             Notify.addEventListeners(this._notifyListeners, this);
 
+            this.resetLocationLayer();
             this._initCoZoneContainer();
             this._startCoZoneAnimation();
-
             this.updateCoZone();
         }
         public stopRunningView(): void {
@@ -137,6 +168,28 @@ namespace TwnsBwTileMapView {
         }
         public getObjectLayerVisible(): boolean {
             return this._objectLayer.visible;
+        }
+
+        public resetLocationLayer(): void {
+            const locationIdArray   : number[] = [];
+            const tileMap           = Helpers.getExisted(this._tileMap);
+            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+                if (tileMap.getIsLocationVisible(locationId)) {
+                    locationIdArray.push(locationId);
+                }
+            }
+
+            const mapSize   = tileMap.getMapSize();
+            const width     = mapSize.width;
+            const height    = mapSize.height;
+            const layer     = this._locationLayer;
+            for (let y = 0; y < height; ++y) {
+                for (let x = 0; x < width; ++x) {
+                    const gridIndex : Types.GridIndex = { x, y };
+                    const tile      = tileMap.getTile(gridIndex);
+                    layer.getChildAt(GridIndexHelpers.getGridId(gridIndex, mapSize)).visible = locationIdArray.some(v => tile.getHasLocationFlag(v));
+                }
+            }
         }
 
         private _initCoZoneContainer(): void {
@@ -252,6 +305,20 @@ namespace TwnsBwTileMapView {
 
         private _onNotifyIsShowGridBorderChanged(): void {
             this._updateGridBorderLayerVisible();
+        }
+
+        private _onNotifyBwTileLocationFlagSet(e: egret.Event): void {
+            const tileMap   = Helpers.getExisted(this._tileMap);
+            const tile      = e.data as NotifyData.BwTileLocationFlagSet;
+            const img       = this._locationLayer.getChildAt(GridIndexHelpers.getGridId(tile.getGridIndex(), tileMap.getMapSize()));
+            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+                if ((tileMap.getIsLocationVisible(locationId)) && (tile.getHasLocationFlag(locationId))) {
+                    img.visible = true;
+                    return;
+                }
+            }
+
+            img.visible = false;
         }
 
         private _updateGridBorderLayerVisible(): void {

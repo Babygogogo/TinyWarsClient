@@ -630,6 +630,17 @@ namespace TwnsClientErrorCode {
         BwTile_GetCurrentCapturePoint_08,
         BwTile_GetCurrentCapturePoint_09,
 
+        BwTile_GetLocationFlags_00,
+        BwTile_GetLocationFlags_01,
+        BwTile_GetLocationFlags_02,
+        BwTile_GetLocationFlags_03,
+        BwTile_GetLocationFlags_04,
+        BwTile_GetLocationFlags_05,
+        BwTile_GetLocationFlags_06,
+        BwTile_GetLocationFlags_07,
+        BwTile_GetLocationFlags_08,
+        BwTile_GetLocationFlags_09,
+
         BwTile_SetCustomCannonMaxTargetCount_00,
         BwTile_SetCustomCannonMaxTargetCount_01,
         BwTile_SetCustomCannonMaxTargetCount_02,

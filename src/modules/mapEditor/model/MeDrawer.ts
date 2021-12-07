@@ -43,6 +43,12 @@ namespace TwnsMeDrawer {
         unitType    : UnitType;
         playerIndex : number;
     };
+    export type DataForAddTileToLocation = {
+        locationIdArray: number[];
+    };
+    export type DataForDeleteTileFromLocation = {
+        locationIdArray: number[];
+    };
 
     export class MeDrawer {
         private _war?                           : TwnsMeWar.MeWar;
@@ -51,6 +57,8 @@ namespace TwnsMeDrawer {
         private _drawTargetTileBaseData         : DataForDrawTileBase | null = null;
         private _drawTargetTileDecoratorData    : DataForDrawTileDecorator | null = null;
         private _drawTargetUnit                 : TwnsBwUnit.BwUnit | null = null;
+        private _dataForAddTileToLocation       : DataForAddTileToLocation | null = null;
+        private _dataForDeleteTileFromLocation  : DataForDeleteTileFromLocation | null = null;
         private _symmetricalDrawType            = SymmetryType.None;
 
         private _notifyListeners: Notify.Listener[] = [
@@ -165,6 +173,28 @@ namespace TwnsMeDrawer {
         }
         public getDrawTargetUnit(): TwnsBwUnit.BwUnit | null {
             return this._drawTargetUnit;
+        }
+
+        public setModeAddTileToLocation(data: DataForAddTileToLocation): void {
+            this._setDataForAddTileToLocation(data);
+            this._setMode(DrawerMode.AddTileToLocation);
+        }
+        private _setDataForAddTileToLocation(data: DataForAddTileToLocation): void {
+            this._dataForAddTileToLocation = data;
+        }
+        public getDataForAddTileToLocation(): DataForAddTileToLocation | null {
+            return this._dataForAddTileToLocation;
+        }
+
+        public setModeDeleteTileFromLocation(data: DataForDeleteTileFromLocation): void {
+            this._setDataForDeleteTileFromLocation(data);
+            this._setMode(DrawerMode.DeleteTileFromLocation);
+        }
+        private _setDataForDeleteTileFromLocation(data: DataForDeleteTileFromLocation): void {
+            this._dataForDeleteTileFromLocation = data;
+        }
+        public getDataForDeleteTileFromLocation(): DataForDeleteTileFromLocation | null {
+            return this._dataForDeleteTileFromLocation;
         }
 
         public getSymmetricalDrawType(): SymmetryType {
@@ -335,6 +365,12 @@ namespace TwnsMeDrawer {
 
             } else if (mode === DrawerMode.DeleteUnit) {
                 this._handleDeleteUnit(gridIndex);
+
+            } else if (mode === DrawerMode.AddTileToLocation) {
+                this._handleAddTileToLocation(gridIndex);
+
+            } else if (mode === DrawerMode.DeleteTileFromLocation) {
+                this._handleDeleteTileFromLocation(gridIndex);
 
             } else if (mode === DrawerMode.Preview) {
                 // nothing to do
@@ -544,6 +580,12 @@ namespace TwnsMeDrawer {
                 WarDestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
                 Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as NotifyData.MeUnitChanged);
             }
+        }
+        private _handleAddTileToLocation(gridIndex: GridIndex): void {
+            this._getWar().getTileMap().getTile(gridIndex).setHasLocationFlagArray(this.getDataForAddTileToLocation()?.locationIdArray ?? [], true);
+        }
+        private _handleDeleteTileFromLocation(gridIndex: GridIndex): void {
+            this._getWar().getTileMap().getTile(gridIndex).setHasLocationFlagArray(this.getDataForDeleteTileFromLocation()?.locationIdArray ?? [], false);
         }
     }
 }

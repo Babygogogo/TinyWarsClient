@@ -110,6 +110,10 @@ namespace TwnsNotifyType {
 
         BwTileBeDestroyed,
         BwTileBeAttacked,
+        BwTileLocationFlagSet,
+
+        BwTileMapLocationVisibleSet,
+
         WarActionNormalExecuted,
 
         BwSiloExploded,

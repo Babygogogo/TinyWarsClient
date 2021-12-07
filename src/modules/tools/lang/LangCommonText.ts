@@ -1111,6 +1111,14 @@ namespace TwnsLangCommonText {
             `参数不合法`,
             `The parameters are invalid.`,
         ],
+        [LangTextType.A0266]: [
+            `请最少选择一个区域`,
+            `Please select at least one location.`,
+        ],
+        [LangTextType.A0267]: [
+            `正在编辑该区域，无法将其隐藏`,
+            `The location is being edited thus can't be hidden.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4126,6 +4134,30 @@ namespace TwnsLangCommonText {
         [LangTextType.B0756]: [
             `修改玩家的CO能量`,
             `Modify a Player's CO Energy`,
+        ],
+        [LangTextType.B0757]: [
+            `显示所有区域`,
+            `Show All Locations`,
+        ],
+        [LangTextType.B0758]: [
+            `隐藏所有区域`,
+            `Hide All Locations`,
+        ],
+        [LangTextType.B0759]: [
+            `添加区域地块`,
+            `Add To Location`,
+        ],
+        [LangTextType.B0760]: [
+            `删除区域地块`,
+            `Del From Location`,
+        ],
+        [LangTextType.B0761]: [
+            `全选所有区域`,
+            `Select All Locations`,
+        ],
+        [LangTextType.B0762]: [
+            `不选所有区域`,
+            `Unselect All Locations`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

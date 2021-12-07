@@ -648,6 +648,8 @@ namespace Types {
         DeleteUnit,
         DeleteTileDecorator,
         DeleteTileObject,
+        AddTileToLocation,
+        DeleteTileFromLocation,
     }
 
     // eslint-disable-next-line no-shadow

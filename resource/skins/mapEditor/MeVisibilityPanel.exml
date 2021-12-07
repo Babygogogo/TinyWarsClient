@@ -2,10 +2,10 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <e:Group width="200" height="190" y="40" right="80">
+    <e:Group width="640" height="360" horizontalCenter="0" verticalCenter="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                             alpha="0.8" right="0" top="0" bottom="0" width="200" />
-        <e:Group x="20" verticalCenter="0">
+                             alpha="0.8" right="0" top="0" bottom="0" left="0" />
+        <e:Group horizontalCenter="0" y="10">
             <e:Group id="_groupTileBase" x="0" y="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
                                      source="common0005" />
@@ -39,8 +39,42 @@
                                      verticalCenter="0" />
             </e:Group>
             <e:layout>
-                <e:VerticalLayout gap="12" />
+                <e:HorizontalLayout gap="20" />
             </e:layout>
+        </e:Group>
+        <TwnsUiImage:UiImage height="1" y="44" source="uncompressedColorWhite0000" left="0" right="0" />
+        <e:Group y="50" horizontalCenter="0">
+            <e:Group y="0" horizontalCenter="0">
+                <TwnsUiButton:UiButton id="_btnShowAllLocations" label="ShowAllLocations" x="0" y="0"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                <TwnsUiButton:UiButton label="ShowAllLocations" x="10" y="10"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" id="_btnHideAllLocations"
+                                       width="140" />
+                <e:layout>
+                    <e:HorizontalLayout gap="20" />
+                </e:layout>
+            </e:Group>
+            <TwnsUiScrollList:UiScrollList id="_listLocation" width="620" height="200" x="0" y="34">
+                <e:List>
+                    <e:itemRendererSkinName>
+                        <e:Skin width="60" height="30">
+                            <e:Group left="0" right="0" top="0" bottom="0">
+                                <e:Group id="_groupShow" verticalCenter="0" left="0">
+                                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6"
+                                                         verticalCenter="0" y="10" source="common0005" />
+                                    <TwnsUiImage:UiImage id="_imgShow" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                                                         x="0" verticalCenter="0" source="common0006" />
+                                    <TwnsUiLabel:UiLabel id="_labelLocationId" text="30" textColor="0xFFFFFF" size="20"
+                                                         x="32" verticalCenter="0" />
+                                </e:Group>
+                            </e:Group>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:TileLayout orientation="rows" requestedColumnCount="8" columnAlign="justifyUsingGap" />
+                    </e:layout>
+                </e:List>
+            </TwnsUiScrollList:UiScrollList>
         </e:Group>
     </e:Group>
 </e:Skin>

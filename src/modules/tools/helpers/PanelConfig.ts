@@ -104,6 +104,7 @@ namespace TwnsPanelConfig {
         MeVisibilityPanel               : PanelConfig<TwnsMeVisibilityPanel.OpenData>;
         MeWarMenuPanel                  : PanelConfig<TwnsMeWarMenuPanel.OpenData>;
         MeWarRulePanel                  : PanelConfig<TwnsMeWarRulePanel.OpenData>;
+        MeChooseLocationPanel           : PanelConfig<TwnsMeChooseLocationPanel.OpenData>;
 
         MfrCreateSettingsPanel          : PanelConfig<TwnsMfrCreateSettingsPanel.OpenData>;
         MfrJoinRoomListPanel            : PanelConfig<TwnsMfrJoinRoomListPanel.OpenData>;
@@ -759,6 +760,12 @@ namespace TwnsPanelConfig {
             MeWarRulePanel: {
                 cls         : TwnsMeWarRulePanel?.MeWarRulePanel,
                 skinName    : `resource/skins/mapEditor/MeWarRulePanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            MeChooseLocationPanel: {
+                cls         : TwnsMeChooseLocationPanel?.MeChooseLocationPanel,
+                skinName    : `resource/skins/mapEditor/MeChooseLocationPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

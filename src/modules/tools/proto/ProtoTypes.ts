@@ -9999,6 +9999,9 @@ export declare namespace WarSerialization {
         /** SerialTile decoratorShapeId */
         decoratorShapeId?: (number|null);
 
+        /** SerialTile locationFlags */
+        locationFlags?: (number|null);
+
         /** SerialTile customCrystalData */
         customCrystalData?: (WarSerialization.ITileCustomCrystalData|null);
 
@@ -10050,6 +10053,9 @@ export declare namespace WarSerialization {
 
         /** SerialTile decoratorShapeId. */
         public decoratorShapeId: number;
+
+        /** SerialTile locationFlags. */
+        public locationFlags: number;
 
         /** SerialTile customCrystalData. */
         public customCrystalData?: (WarSerialization.ITileCustomCrystalData|null);

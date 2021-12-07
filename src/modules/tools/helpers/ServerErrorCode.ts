@@ -1992,6 +1992,17 @@ export const enum ServerErrorCode {
     BwTile_GetRepairHpAndCostForUnit_0008,
     BwTile_GetRepairHpAndCostForUnit_0009,
 
+    BwTile_GetLocationFlags_0000,
+    BwTile_GetLocationFlags_0001,
+    BwTile_GetLocationFlags_0002,
+    BwTile_GetLocationFlags_0003,
+    BwTile_GetLocationFlags_0004,
+    BwTile_GetLocationFlags_0005,
+    BwTile_GetLocationFlags_0006,
+    BwTile_GetLocationFlags_0007,
+    BwTile_GetLocationFlags_0008,
+    BwTile_GetLocationFlags_0009,
+
     BwTile_SetCustomCrystalRadius_0000,
     BwTile_SetCustomCrystalRadius_0001,
     BwTile_SetCustomCrystalRadius_0002,

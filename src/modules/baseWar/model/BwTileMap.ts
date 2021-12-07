@@ -10,6 +10,7 @@
 // import TwnsBwTile           from "./BwTile";
 // import TwnsBwWar            from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTileMap {
     import MapSize          = Types.MapSize;
     import WarSerialization = ProtoTypes.WarSerialization;
@@ -18,9 +19,10 @@ namespace TwnsBwTileMap {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwTileMap {
-        private _map?        : TwnsBwTile.BwTile[][];
-        private _mapSize?    : MapSize;
-        private _war?        : TwnsBwWar.BwWar;
+        private _map?                   : TwnsBwTile.BwTile[][];
+        private _mapSize?               : MapSize;
+        private _locationVisibleFlags   = 0;
+        private _war?                   : TwnsBwWar.BwWar;
 
         private readonly _view  = new TwnsBwTileMapView.BwTileMapView();
 
@@ -75,6 +77,7 @@ namespace TwnsBwTileMap {
 
             this.getView().init(this);
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         public fastInit({ data, configVersion, mapSize, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialTileMap>;
             configVersion           : string;
@@ -201,6 +204,45 @@ namespace TwnsBwTileMap {
             }
 
             return totalIncome;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for locations.
+        ////////////////////////////////////////////////////////////////////////////////
+        private _setLocationVisibleFlags(flags: number): void {
+            this._locationVisibleFlags = flags;
+        }
+        public setLocationVisibleFlags(flags: number): void {
+            this._setLocationVisibleFlags(flags);
+            this.getView().resetLocationLayer();
+            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileMapLocationVisibleSet);
+        }
+        public getLocationVisibleFlags(): number {
+            return this._locationVisibleFlags;
+        }
+
+        /** @param locationId range: [1-30] */
+        public getIsLocationVisible(locationId: number): boolean {
+            return !!((this.getLocationVisibleFlags() >> (locationId - 1)) & 1);
+        }
+        /** @param locationId range: [1-30] */
+        public setIsLocationVisible(locationId: number, isVisible: boolean): void {
+            if (isVisible) {
+                this.setLocationVisibleFlags(this.getLocationVisibleFlags() | (1 << (locationId - 1)));
+            } else {
+                this.setLocationVisibleFlags(this.getLocationVisibleFlags() & ~(1 << (locationId - 1)));
+            }
+        }
+        public setAllLocationVisible(isVisible: boolean): void {
+            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+                if (isVisible) {
+                    this._setLocationVisibleFlags(this.getLocationVisibleFlags() | (1 << (locationId - 1)));
+                } else {
+                    this._setLocationVisibleFlags(this.getLocationVisibleFlags() & ~(1 << (locationId - 1)));
+                }
+            }
+            this.getView().resetLocationLayer();
+            Notify.dispatch(TwnsNotifyType.NotifyType.BwTileMapLocationVisibleSet);
         }
     }
 }

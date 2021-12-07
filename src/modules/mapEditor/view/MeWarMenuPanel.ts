@@ -96,10 +96,12 @@ namespace TwnsMeWarMenuPanel {
                 { ui: this._btnModifyMapName,       callback: this._onTouchedBtnModifyMapName },
                 { ui: this._btnModifyMapSize,       callback: this._onTouchedBtnModifyMapSize },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listTile.setItemRenderer(TileRenderer);
             this._listUnit.setItemRenderer(UnitRenderer);
-
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._menuType = TwnsMeWarMenuType.Main;

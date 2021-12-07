@@ -3,6 +3,7 @@
 // import TwnsBwPlayer     from "../../baseWar/model/BwPlayer";
 // import Types            from "../helpers/Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace NotifyData {
     import GridIndex        = Types.GridIndex;
     import TouchPoints      = Types.TouchPoints;
@@ -13,6 +14,7 @@ namespace NotifyData {
     export type McwPlayerEnergyChanged      = TwnsBwPlayer.BwPlayer;
     export type BwCoIdChanged               = TwnsBwPlayer.BwPlayer;
     export type BwCursorGridIndexChanged    = TwnsBwCursor.BwCursor;
+    export type BwTileLocationFlagSet       = TwnsBwTile.BwTile;
     export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
     export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
     export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };
