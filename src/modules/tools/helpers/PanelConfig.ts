@@ -51,6 +51,11 @@ namespace TwnsPanelConfig {
         CommonBlockPanel                : PanelConfig<TwnsCommonBlockPanel.OpenData>;
         CommonChangeVersionPanel        : PanelConfig<TwnsCommonChangeVersionPanel.OpenData>;
         CommonChooseCoPanel             : PanelConfig<TwnsCommonChooseCoPanel.OpenData>;
+        CommonChooseGridIndexPanel      : PanelConfig<TwnsCommonChooseGridIndexPanel.OpenData>;
+        CommonChooseLocationPanel       : PanelConfig<TwnsCommonChooseLocationPanel.OpenData>;
+        CommonChoosePlayerIndexPanel    : PanelConfig<TwnsCommonChoosePlayerIndexPanel.OpenData>;
+        CommonChooseTeamIndexPanel      : PanelConfig<TwnsCommonChooseTeamIndexPanel.OpenData>;
+        CommonChooseUnitTypePanel       : PanelConfig<TwnsCommonChooseUnitTypePanel.OpenData>;
         CommonCoInfoPanel               : PanelConfig<TwnsCommonCoInfoPanel.OpenData>;
         CommonCoListPanel               : PanelConfig<TwnsCommonCoListPanel.OpenData>;
         CommonConfirmPanel              : PanelConfig<TwnsCommonConfirmPanel.OpenData>;
@@ -201,6 +206,7 @@ namespace TwnsPanelConfig {
         WeConditionModifyPanel12        : PanelConfig<TwnsWeConditionModifyPanel12.OpenData>;
         WeConditionModifyPanel13        : PanelConfig<TwnsWeConditionModifyPanel13.OpenData>;
         WeConditionModifyPanel14        : PanelConfig<TwnsWeConditionModifyPanel14.OpenData>;
+        WeConditionModifyPanel15        : PanelConfig<TwnsWeConditionModifyPanel15.OpenData>;
         WeConditionReplacePanel         : PanelConfig<TwnsWeConditionReplacePanel.OpenData>;
         WeConditionTypeListPanel        : PanelConfig<TwnsWeConditionTypeListPanel.OpenData>;
         WeDialogueBackgroundPanel       : PanelConfig<TwnsWeDialogueBackgroundPanel.OpenData>;
@@ -448,6 +454,36 @@ namespace TwnsPanelConfig {
             CommonChooseCoPanel: {
                 cls         : TwnsCommonChooseCoPanel?.CommonChooseCoPanel,
                 skinName    : `resource/skins/common/CommonChooseCoPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseGridIndexPanel: {
+                cls         : TwnsCommonChooseGridIndexPanel?.CommonChooseGridIndexPanel,
+                skinName    : `resource/skins/common/CommonChooseGridIndexPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseLocationPanel: {
+                cls         : TwnsCommonChooseLocationPanel?.CommonChooseLocationPanel,
+                skinName    : `resource/skins/common/CommonChooseLocationPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChoosePlayerIndexPanel: {
+                cls         : TwnsCommonChoosePlayerIndexPanel?.CommonChoosePlayerIndexPanel,
+                skinName    : `resource/skins/common/CommonChoosePlayerIndexPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseTeamIndexPanel: {
+                cls         : TwnsCommonChooseTeamIndexPanel?.CommonChooseTeamIndexPanel,
+                skinName    : `resource/skins/common/CommonChooseTeamIndexPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseUnitTypePanel: {
+                cls         : TwnsCommonChooseUnitTypePanel?.CommonChooseUnitTypePanel,
+                skinName    : `resource/skins/common/CommonChooseUnitTypePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -1306,6 +1342,12 @@ namespace TwnsPanelConfig {
             WeConditionModifyPanel14: {
                 cls         : TwnsWeConditionModifyPanel14?.WeConditionModifyPanel14,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel14.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            WeConditionModifyPanel15: {
+                cls         : TwnsWeConditionModifyPanel15?.WeConditionModifyPanel15,
+                skinName    : `resource/skins/warEvent/WeConditionModifyPanel15.exml`,
                 layer       : LayerType.Hud0,
             },
 

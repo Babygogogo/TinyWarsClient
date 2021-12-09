@@ -1119,6 +1119,10 @@ namespace TwnsLangCommonText {
             `正在编辑该区域，无法将其隐藏`,
             `The location is being edited thus can't be hidden.`,
         ],
+        [LangTextType.A0268]: [
+            `指定坐标已存在`,
+            `The coordinate exists already.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2616,7 +2620,7 @@ namespace TwnsLangCommonText {
             `Channel`,
         ],
         [LangTextType.B0377]: [
-            `组队`,
+            `队伍`,
             `Team`,
         ],
         [LangTextType.B0378]: [
@@ -4152,12 +4156,68 @@ namespace TwnsLangCommonText {
             `Del From Location`,
         ],
         [LangTextType.B0761]: [
-            `全选所有区域`,
-            `Select All Locations`,
+            `全选`,
+            `Select All`,
         ],
         [LangTextType.B0762]: [
-            `不选所有区域`,
-            `Unselect All Locations`,
+            `全不选`,
+            `Unselect All`,
+        ],
+        [LangTextType.B0763]: [
+            `任意部队`,
+            `Any Unit`,
+        ],
+        [LangTextType.B0764]: [
+            `区域`,
+            `Location`,
+        ],
+        [LangTextType.B0765]: [
+            `任意坐标`,
+            `Any Coordinate`,
+        ],
+        [LangTextType.B0766]: [
+            `任意玩家`,
+            `Any Player`
+        ],
+        [LangTextType.B0767]: [
+            `等于`,
+            `Equal To`,
+        ],
+        [LangTextType.B0768]: [
+            `不等于`,
+            `Not Equal To`,
+        ],
+        [LangTextType.B0769]: [
+            `大于`,
+            `Greater Than`
+        ],
+        [LangTextType.B0770]: [
+            `小于等于`,
+            `Not Greater Than`,
+        ],
+        [LangTextType.B0771]: [
+            `小于`,
+            `Less Than`,
+        ],
+        [LangTextType.B0772]: [
+            `大于等于`,
+            `Not Less Than`,
+        ],
+        [LangTextType.B0773]: [
+            `部队数量`,
+            `Units Count`,
+        ],
+        [LangTextType.B0774]: [
+            `比较符`,
+            `Comparator`,
+        ],
+        [LangTextType.B0775]: [
+            `特定部队数量统计...`,
+            `Unit Presence ...`,
+        ],
+        [LangTextType.B0776]: [
+            `任意`,
+            `Any`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4793,6 +4853,18 @@ namespace TwnsLangCommonText {
         [LangTextType.F0089]: [
             `假设玩家当前CO能量是40%，则动作执行后为%d%%`,
             `Assume the player's current CO energy is 40%%, then the energy will become %d%% after this action is executed.`,
+        ],
+        [LangTextType.F0090]: [
+            `类型为 %s、且位于 %s、且归属于 %s 的部队的数量 %s %s`,
+            `The number of %s at %s that owned by %s is %s %s.`,
+        ],
+        [LangTextType.F0091]: [
+            `%s无效`,
+            `Invalid %s.`,
+        ],
+        [LangTextType.F0092]: [
+            `选择%s`,
+            `Select %s`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

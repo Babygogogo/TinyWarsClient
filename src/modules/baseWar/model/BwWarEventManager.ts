@@ -556,6 +556,7 @@ namespace TwnsBwWarEventManager {
             else if (condition.WecTurnPhaseEqualTo)                 { return this._checkIsMeetConTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo); }
             else if (condition.WecTilePlayerIndexEqualTo)           { return this._checkIsMeetConTilePlayerIndexEqualTo(condition.WecTilePlayerIndexEqualTo); }
             else if (condition.WecTileTypeEqualTo)                  { return this._checkIsMeetConTileTypeEqualTo(condition.WecTileTypeEqualTo); }
+            else if (condition.WecUnitPresence)                     { return this._checkIsMeetConUnitPresence(condition.WecUnitPresence); }
 
             throw Helpers.newError(`Invalid condition!`);
         }
@@ -676,6 +677,44 @@ namespace TwnsBwWarEventManager {
             return (tile.getType() === Helpers.getExisted(condition.tileType, ClientErrorCode.BwWarEventManager_CheckIsMeetConTileTypeEqualTo_01))
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
+        }
+        private _checkIsMeetConUnitPresence(condition: WarEvent.IWecUnitPresence): boolean {
+            const playerIndexArray      = condition.playerIndexArray ?? [];
+            const teamIndexArray        = condition.teamIndexArray ?? [];
+            const locationIdArray       = condition.locationIdArray ?? [];
+            const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_00)) ?? [];
+            const unitTypeArray         = condition.unitTypeArray ?? [];
+            const war                   = this._getWar();
+            const unitMap               = war.getUnitMap();
+            const tileMap               = war.getTileMap();
+            const mapSize               = tileMap.getMapSize();
+            const mapWidth              = mapSize.width;
+            const mapHeight             = mapSize.height;
+            let unitsCount              = 0;
+            for (let x = 0; x < mapWidth; ++x) {
+                for (let y = 0; y < mapHeight; ++y) {
+                    const gridIndex : Types.GridIndex = { x, y };
+                    const unit      = unitMap.getUnitOnMap(gridIndex);
+                    const tile      = tileMap.getTile(gridIndex);
+                    if ((unit == null)                                                                                          ||
+                        ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
+                        ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
+                        ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
+                        ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
+                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))
+                    ) {
+                        continue;
+                    }
+
+                    ++unitsCount;
+                }
+            }
+
+            return Helpers.checkIsMeetValueComparator({
+                comparator  : Helpers.getExisted(condition.unitsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01),
+                actualValue : unitsCount,
+                targetValue : Helpers.getExisted(condition.unitsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_02)
+            });
         }
 
         public getWarEvent(warEventId: number): WarEvent.IWarEvent {                    // DONE

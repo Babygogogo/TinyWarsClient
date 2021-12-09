@@ -75,6 +75,7 @@ namespace Lang {
 
     export function getPlayerTeamName(teamIndex: number): string | null {
         switch (teamIndex) {
+            case 0  : return getText(LangTextType.B0030);
             case 1  : return getText(LangTextType.B0008);
             case 2  : return getText(LangTextType.B0009);
             case 3  : return getText(LangTextType.B0010);
@@ -432,6 +433,7 @@ namespace Lang {
             case WarEventConditionType.WecPlayerAliveStateEqualTo           : return getText(LangTextType.B0515);
             case WarEventConditionType.WecTilePlayerIndexEqualTo            : return getText(LangTextType.B0716);
             case WarEventConditionType.WecTileTypeEqualTo                   : return getText(LangTextType.B0717);
+            case WarEventConditionType.WecUnitPresence                      : return getText(LangTextType.B0775);
             default                                                         : return null;
         }
     }
@@ -477,6 +479,18 @@ namespace Lang {
             case WeatherType.Snowy      : return getText(LangTextType.B0703);
             case WeatherType.Rainy      : return getText(LangTextType.B0704);
             default                     : throw Helpers.newError(`Invalid weatherType: ${weatherType}`, ClientErrorCode.Lang_GetWeatherName_00);
+        }
+    }
+
+    export function getValueComparatorName(comparator: Types.ValueComparator): string | null {
+        switch (comparator) {
+            case Types.ValueComparator.EqualTo          : return getText(LangTextType.B0767);
+            case Types.ValueComparator.NotEqualTo       : return getText(LangTextType.B0768);
+            case Types.ValueComparator.GreaterThan      : return getText(LangTextType.B0769);
+            case Types.ValueComparator.NotGreaterThan   : return getText(LangTextType.B0770);
+            case Types.ValueComparator.LessThan         : return getText(LangTextType.B0771);
+            case Types.ValueComparator.NotLessThan      : return getText(LangTextType.B0772);
+            default                                     : return null;
         }
     }
 

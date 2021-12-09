@@ -5349,6 +5349,132 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WecUnitPresence. */
+    interface IWecUnitPresence {
+
+        /** WecUnitPresence playerIndexArray */
+        playerIndexArray?: (number[]|null);
+
+        /** WecUnitPresence teamIndexArray */
+        teamIndexArray?: (number[]|null);
+
+        /** WecUnitPresence unitsCount */
+        unitsCount?: (number|null);
+
+        /** WecUnitPresence unitsCountComparator */
+        unitsCountComparator?: (number|null);
+
+        /** WecUnitPresence unitTypeArray */
+        unitTypeArray?: (number[]|null);
+
+        /** WecUnitPresence locationIdArray */
+        locationIdArray?: (number[]|null);
+
+        /** WecUnitPresence gridIndexArray */
+        gridIndexArray?: (Structure.IGridIndex[]|null);
+    }
+
+    /** Represents a WecUnitPresence. */
+    class WecUnitPresence implements IWecUnitPresence {
+
+        /**
+         * Constructs a new WecUnitPresence.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecUnitPresence);
+
+        /** WecUnitPresence playerIndexArray. */
+        public playerIndexArray: number[];
+
+        /** WecUnitPresence teamIndexArray. */
+        public teamIndexArray: number[];
+
+        /** WecUnitPresence unitsCount. */
+        public unitsCount: number;
+
+        /** WecUnitPresence unitsCountComparator. */
+        public unitsCountComparator: number;
+
+        /** WecUnitPresence unitTypeArray. */
+        public unitTypeArray: number[];
+
+        /** WecUnitPresence locationIdArray. */
+        public locationIdArray: number[];
+
+        /** WecUnitPresence gridIndexArray. */
+        public gridIndexArray: Structure.IGridIndex[];
+
+        /**
+         * Creates a new WecUnitPresence instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecUnitPresence instance
+         */
+        public static create(properties?: WarEvent.IWecUnitPresence): WarEvent.WecUnitPresence;
+
+        /**
+         * Encodes the specified WecUnitPresence message. Does not implicitly {@link WarEvent.WecUnitPresence.verify|verify} messages.
+         * @param message WecUnitPresence message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecUnitPresence, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecUnitPresence message, length delimited. Does not implicitly {@link WarEvent.WecUnitPresence.verify|verify} messages.
+         * @param message WecUnitPresence message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecUnitPresence, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecUnitPresence message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecUnitPresence
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecUnitPresence;
+
+        /**
+         * Decodes a WecUnitPresence message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecUnitPresence
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecUnitPresence;
+
+        /**
+         * Verifies a WecUnitPresence message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecUnitPresence message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecUnitPresence
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecUnitPresence;
+
+        /**
+         * Creates a plain object from a WecUnitPresence message. Also converts values to other types if specified.
+         * @param message WecUnitPresence
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecUnitPresence, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecUnitPresence to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarEventCondition. */
     interface IWarEventCondition {
 
@@ -5396,6 +5522,9 @@ export declare namespace WarEvent {
 
         /** WarEventCondition WecTileTypeEqualTo */
         WecTileTypeEqualTo?: (WarEvent.IWecTileTypeEqualTo|null);
+
+        /** WarEventCondition WecUnitPresence */
+        WecUnitPresence?: (WarEvent.IWecUnitPresence|null);
     }
 
     /** Represents a WarEventCondition. */
@@ -5451,6 +5580,9 @@ export declare namespace WarEvent {
 
         /** WarEventCondition WecTileTypeEqualTo. */
         public WecTileTypeEqualTo?: (WarEvent.IWecTileTypeEqualTo|null);
+
+        /** WarEventCondition WecUnitPresence. */
+        public WecUnitPresence?: (WarEvent.IWecUnitPresence|null);
 
         /**
          * Creates a new WarEventCondition instance using the specified properties.

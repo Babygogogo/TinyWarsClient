@@ -65,7 +65,7 @@ namespace TwnsMeChooseLocationPanel {
 
             const indexArray        : number[] = [];
             const list              = this._listLocation;
-            const dataArrayLength   = list.getDataArrayLength() ?? 0;
+            const dataArrayLength   = list.getBoundDataArrayLength() ?? 0;
             for (let i = 0; i < dataArrayLength; ++i) {
                 indexArray.push(i);
             }

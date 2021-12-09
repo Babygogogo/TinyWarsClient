@@ -1707,6 +1707,17 @@ export const enum ServerErrorCode {
     BwWarEventManager_CheckIsMeetConTileTypeEqualTo_0008,
     BwWarEventManager_CheckIsMeetConTileTypeEqualTo_0009,
 
+    BwWarEventManager_CheckIsMeetConUnitPresence_0000,
+    BwWarEventManager_CheckIsMeetConUnitPresence_0001,
+    BwWarEventManager_CheckIsMeetConUnitPresence_0002,
+    BwWarEventManager_CheckIsMeetConUnitPresence_0003,
+    BwWarEventManager_CheckIsMeetConUnitPresence_0004,
+    BwWarEventManager_CheckIsMeetConUnitPresence_0005,
+    BwWarEventManager_CheckIsMeetConUnitPresence_0006,
+    BwWarEventManager_CheckIsMeetConUnitPresence_0007,
+    BwWarEventManager_CheckIsMeetConUnitPresence_0008,
+    BwWarEventManager_CheckIsMeetConUnitPresence_0009,
+
     BwWarEventManager_GetWarEvent_0000,
     BwWarEventManager_GetWarEvent_0001,
     BwWarEventManager_GetWarEvent_0002,

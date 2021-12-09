@@ -286,6 +286,12 @@ namespace TwnsUiScrollList {
                 dataProvider.refresh();
             }
         }
+        public getBoundDataArrayLength(): number | null {
+            return this._getDataProvider()?.length ?? null;
+        }
+        public getBoundDataArray(): DataForRenderer[] | null {
+            return this._getDataProvider()?.source ?? null;
+        }
 
         public clear() : void {
             this._cachedItemRenderer        = null;
@@ -322,9 +328,6 @@ namespace TwnsUiScrollList {
             return this.getIsOpening() ? this._getList().selectedItems : null;
         }
 
-        public getDataArrayLength(): number | null {
-            return this._getDataProvider()?.length ?? null;
-        }
         public findIndex(predicate: (v: DataForRenderer) => boolean): number | null {
             return this.getIsOpening()
                 ? Helpers.getExisted(this._getDataProvider()).source.findIndex(predicate)

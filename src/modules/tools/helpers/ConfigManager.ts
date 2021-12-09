@@ -418,6 +418,9 @@ namespace ConfigManager {
     export function checkIsValidTileType(tileType: Types.TileType): boolean {
         return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.TileTemplate[tileType] != null;
     }
+    export function checkIsValidUnitType(unitType: UnitType): boolean {
+        return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.UnitTemplate[unitType] != null;
+    }
     export function checkIsValidCustomCrystalData(data: ProtoTypes.WarSerialization.ITileCustomCrystalData): boolean {
         return (data.radius != null)
             && (data.priority != null)
@@ -441,6 +444,14 @@ namespace ConfigManager {
         return (mode === Types.UnitAiMode.NoMove)
             || (mode === Types.UnitAiMode.Normal)
             || (mode === Types.UnitAiMode.WaitUntilCanAttack);
+    }
+    export function checkIsValidValueComparator(comparator: Types.ValueComparator): boolean {
+        return (comparator === Types.ValueComparator.EqualTo)
+            || (comparator === Types.ValueComparator.NotEqualTo)
+            || (comparator === Types.ValueComparator.GreaterThan)
+            || (comparator === Types.ValueComparator.NotGreaterThan)
+            || (comparator === Types.ValueComparator.LessThan)
+            || (comparator === Types.ValueComparator.NotLessThan);
     }
 
     export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {

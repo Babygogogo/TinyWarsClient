@@ -740,6 +740,8 @@ namespace Types {
 
         WecTilePlayerIndexEqualTo,
         WecTileTypeEqualTo,
+
+        WecUnitPresence,
     }
 
     // eslint-disable-next-line no-shadow
@@ -807,6 +809,16 @@ namespace Types {
     export enum WarEventActionSimpleDialogueSide {
         Bottom  = 1,
         Top     = 2,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export const enum ValueComparator {
+        EqualTo           = 1,
+        NotEqualTo,
+        GreaterThan,
+        NotGreaterThan,
+        LessThan,
+        NotLessThan,
     }
 }
 

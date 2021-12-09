@@ -282,6 +282,29 @@ namespace Helpers {
         return arr.filter(v => v != null) as T[];
     }
 
+    export function checkIsMeetValueComparator({ comparator, actualValue, targetValue }: {
+        comparator  : Types.ValueComparator;
+        actualValue : number;
+        targetValue : number;
+    }): boolean {
+        return ((comparator === Types.ValueComparator.EqualTo)          && (actualValue === targetValue))
+            || ((comparator === Types.ValueComparator.NotEqualTo)       && (actualValue !== targetValue))
+            || ((comparator === Types.ValueComparator.GreaterThan)      && (actualValue > targetValue))
+            || ((comparator === Types.ValueComparator.NotGreaterThan)   && (actualValue <= targetValue))
+            || ((comparator === Types.ValueComparator.LessThan)         && (actualValue < targetValue))
+            || ((comparator === Types.ValueComparator.NotLessThan)      && (actualValue >= targetValue));
+    }
+    export function getNextValueComparator(comparator: Types.Undefinable<Types.ValueComparator>): Types.ValueComparator {
+        switch (comparator) {
+            case Types.ValueComparator.EqualTo          : return Types.ValueComparator.NotEqualTo;
+            case Types.ValueComparator.NotEqualTo       : return Types.ValueComparator.GreaterThan;
+            case Types.ValueComparator.GreaterThan      : return Types.ValueComparator.NotGreaterThan;
+            case Types.ValueComparator.NotGreaterThan   : return Types.ValueComparator.LessThan;
+            case Types.ValueComparator.LessThan         : return Types.ValueComparator.NotLessThan;
+            default                                     : return Types.ValueComparator.EqualTo;
+        }
+    }
+
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */
     export function getDigitsCount(num: number): number {
         num = Math.abs(num);
