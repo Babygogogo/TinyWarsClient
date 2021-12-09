@@ -16,7 +16,7 @@
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionModifyPanel15 {
+namespace TwnsWeConditionModifyPanel16 {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
@@ -28,7 +28,7 @@ namespace TwnsWeConditionModifyPanel15 {
         condition   : IWarEventCondition;
     };
     /** WecPlayerIndexInTurnEqualTo */
-    export class WeConditionModifyPanel15 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeConditionModifyPanel16 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
@@ -39,16 +39,16 @@ namespace TwnsWeConditionModifyPanel15 {
         private readonly _labelPlayerIndex!             : TwnsUiLabel.UiLabel;
         private readonly _btnTeamIndex!                 : TwnsUiButton.UiButton;
         private readonly _labelTeamIndex!               : TwnsUiLabel.UiLabel;
-        private readonly _btnTileType!                  : TwnsUiButton.UiButton;
-        private readonly _labelTileType!                : TwnsUiLabel.UiLabel;
+        private readonly _btnUnitType!                  : TwnsUiButton.UiButton;
+        private readonly _labelUnitType!                : TwnsUiLabel.UiLabel;
         private readonly _btnLocation!                  : TwnsUiButton.UiButton;
         private readonly _labelLocation!                : TwnsUiLabel.UiLabel;
         private readonly _btnGridIndex!                 : TwnsUiButton.UiButton;
         private readonly _labelGridIndex!               : TwnsUiLabel.UiLabel;
-        private readonly _btnTilesCountComparator!      : TwnsUiButton.UiButton;
-        private readonly _labelTilesCountComparator!    : TwnsUiLabel.UiLabel;
-        private readonly _labelTilesCount!              : TwnsUiLabel.UiLabel;
-        private readonly _inputTilesCount!              : TwnsUiTextInput.UiTextInput;
+        private readonly _btnUnitsCountComparator!      : TwnsUiButton.UiButton;
+        private readonly _labelUnitsCountComparator!    : TwnsUiLabel.UiLabel;
+        private readonly _labelUnitsCount!              : TwnsUiLabel.UiLabel;
+        private readonly _inputUnitsCount!              : TwnsUiTextInput.UiTextInput;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -60,11 +60,11 @@ namespace TwnsWeConditionModifyPanel15 {
                 { ui: this._btnType,                    callback: this._onTouchedBtnType },
                 { ui: this._btnPlayerIndex,             callback: this._onTouchedBtnPlayerIndex },
                 { ui: this._btnTeamIndex,               callback: this._onTouchedBtnTeamIndex },
-                { ui: this._btnTileType,                callback: this._onTouchedBtnTileType },
+                { ui: this._btnUnitType,                callback: this._onTouchedBtnUnitType },
                 { ui: this._btnLocation,                callback: this._onTouchedBtnLocation },
                 { ui: this._btnGridIndex,               callback: this._onTouchedBtnGridIndex },
-                { ui: this._btnTilesCountComparator,    callback: this._onTouchedBtnTilesCountComparator },
-                { ui: this._inputTilesCount,            callback: this._onFocusOutInputTilesCount,          eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnUnitsCountComparator,    callback: this._onTouchedBtnUnitsCountComparator },
+                { ui: this._inputUnitsCount,            callback: this._onFocusOutInputUnitsCount,          eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
@@ -112,12 +112,12 @@ namespace TwnsWeConditionModifyPanel15 {
                 },
             });
         }
-        private _onTouchedBtnTileType(): void {
+        private _onTouchedBtnUnitType(): void {
             const condition = this._getCondition();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileTypePanel, {
-                currentTileTypeArray    : condition.tileTypeArray ?? [],
-                callbackOnConfirm       : tileTypeArray => {
-                    condition.tileTypeArray = tileTypeArray;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitTypePanel, {
+                currentUnitTypeArray    : condition.unitTypeArray ?? [],
+                callbackOnConfirm       : unitTypeArray => {
+                    condition.unitTypeArray = unitTypeArray;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
@@ -143,17 +143,17 @@ namespace TwnsWeConditionModifyPanel15 {
                 },
             });
         }
-        private _onTouchedBtnTilesCountComparator(): void {
+        private _onTouchedBtnUnitsCountComparator(): void {
             const condition                 = this._getCondition();
-            condition.tilesCountComparator  = Helpers.getNextValueComparator(condition.tilesCountComparator);
+            condition.unitsCountComparator  = Helpers.getNextValueComparator(condition.unitsCountComparator);
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onFocusOutInputTilesCount(): void {
-            const value = parseInt(this._inputTilesCount.text);
+        private _onFocusOutInputUnitsCount(): void {
+            const value = parseInt(this._inputUnitsCount.text);
             if (isNaN(value)) {
-                this._updateInputTilesCount();
+                this._updateInputUnitsCount();
             } else {
-                this._getCondition().tilesCount = value;
+                this._getCondition().unitsCount = value;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -164,11 +164,11 @@ namespace TwnsWeConditionModifyPanel15 {
             this._updateLabelDescAndLabelError();
             this._updateLabelPlayerIndex();
             this._updateLabelTeamIndex();
-            this._updateLabelTileType();
+            this._updateLabelUnitType();
             this._updateLabelLocation();
             this._updateLabelGridIndex();
-            this._updateLabelTilesCountComparator();
-            this._updateInputTilesCount();
+            this._updateLabelUnitsCountComparator();
+            this._updateInputUnitsCount();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -177,11 +177,11 @@ namespace TwnsWeConditionModifyPanel15 {
             this._btnType.label                 = Lang.getText(LangTextType.B0516);
             this._btnPlayerIndex.label          = Lang.getText(LangTextType.B0031);
             this._btnTeamIndex.label            = Lang.getText(LangTextType.B0377);
-            this._btnTileType.label             = Lang.getText(LangTextType.B0718);
+            this._btnUnitType.label             = Lang.getText(LangTextType.B0525);
             this._btnLocation.label             = Lang.getText(LangTextType.B0764);
             this._btnGridIndex.label            = Lang.getText(LangTextType.B0531);
-            this._btnTilesCountComparator.label = Lang.getText(LangTextType.B0774);
-            this._labelTilesCount.text          = Lang.getText(LangTextType.B0778);
+            this._btnUnitsCountComparator.label = Lang.getText(LangTextType.B0774);
+            this._labelUnitsCount.text          = Lang.getText(LangTextType.B0773);
             // this._labelGridIndex.text   = Lang.getText(LangTextType.B0531);
 
             this._updateLabelDescAndLabelError();
@@ -204,9 +204,9 @@ namespace TwnsWeConditionModifyPanel15 {
             const teamIndexArray        = this._getCondition().teamIndexArray;
             this._labelTeamIndex.text   = teamIndexArray?.length ? teamIndexArray.map(v => Lang.getPlayerTeamName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
-        private _updateLabelTileType(): void {
-            const tileTypeArray         = this._getCondition().tileTypeArray;
-            this._labelTileType.text    = tileTypeArray?.length ? tileTypeArray.map(v => Lang.getTileName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+        private _updateLabelUnitType(): void {
+            const unitTypeArray         = this._getCondition().unitTypeArray;
+            this._labelUnitType.text    = unitTypeArray?.length ? unitTypeArray.map(v => Lang.getUnitName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelLocation(): void {
             const locationIdArray       = this._getCondition().locationIdArray;
@@ -216,18 +216,18 @@ namespace TwnsWeConditionModifyPanel15 {
             const gridIndexArray        = this._getCondition().gridIndexArray;
             this._labelGridIndex.text   = gridIndexArray?.length ? gridIndexArray.map(v => `(${v.x},${v.y})`).join(`, `) : Lang.getText(LangTextType.B0776);
         }
-        private _updateLabelTilesCountComparator(): void {
-            const comparator                        = Helpers.getExisted(this._getCondition().tilesCountComparator);
-            this._labelTilesCountComparator.text    = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+        private _updateLabelUnitsCountComparator(): void {
+            const comparator                        = Helpers.getExisted(this._getCondition().unitsCountComparator);
+            this._labelUnitsCountComparator.text    = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
         }
-        private _updateInputTilesCount(): void {
-            this._inputTilesCount.text = `${this._getCondition().tilesCount}`;
+        private _updateInputUnitsCount(): void {
+            this._inputUnitsCount.text = `${this._getCondition().unitsCount}`;
         }
 
-        private _getCondition(): ProtoTypes.WarEvent.IWecTilePresence {
-            return Helpers.getExisted(this._getOpenData().condition.WecTilePresence);
+        private _getCondition(): ProtoTypes.WarEvent.IWecUnitPresence {
+            return Helpers.getExisted(this._getOpenData().condition.WecUnitPresence);
         }
     }
 }
 
-// export default TwnsWeConditionModifyPanel15;
+// export default TwnsWeConditionModifyPanel16;

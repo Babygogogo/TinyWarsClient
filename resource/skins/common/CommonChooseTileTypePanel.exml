@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group width="640" height="380" horizontalCenter="0" verticalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" right="0" top="0" bottom="0" left="0" />
+        <e:Group horizontalCenter="0" top="10" bottom="10">
+            <TwnsUiLabel:UiLabel id="_labelTitle" text="Add Tiles To Locations" horizontalCenter="0" size="20"
+                                 bold="true" top="0" />
+            <e:Group y="28" horizontalCenter="0">
+                <TwnsUiButton:UiButton id="_btnSelectAll" label="ShowAllLocations" x="0" y="0"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                <TwnsUiButton:UiButton label="ShowAllLocations" x="10" y="10"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                       id="_btnUnselectAll" width="140" />
+                <e:layout>
+                    <e:HorizontalLayout gap="20" />
+                </e:layout>
+            </e:Group>
+            <TwnsUiScrollList:UiScrollList id="_listTileType" width="620" height="260" x="0" y="60">
+                <e:List allowMultipleSelection="true">
+                    <e:itemRendererSkinName>
+                        <e:Skin width="140" height="30" currentState="up" states="up,down">
+                            <e:Group left="0" right="0" top="0" bottom="0">
+                                <e:Group id="_groupShow" verticalCenter="0" left="0">
+                                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6"
+                                                         verticalCenter="0" y="10" source="common0005" />
+                                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                                                         verticalCenter="0" source="common0006" visible.up="false" />
+                                    <TwnsUiLabel:UiLabel id="_labelTileName" text="TransportCopter" textColor="0xFFFFFF"
+                                                         size="14" x="32" verticalCenter="0" maxTextWidth="100" />
+                                </e:Group>
+                            </e:Group>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:TileLayout orientation="rows" requestedColumnCount="4" columnAlign="justifyUsingGap" />
+                    </e:layout>
+                </e:List>
+            </TwnsUiScrollList:UiScrollList>
+            <e:Group horizontalCenter="0" x="170" bottom="0">
+                <TwnsUiButton:UiButton id="_btnConfirm" label="ShowAllLocations" x="0" y="0"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                <TwnsUiButton:UiButton label="ShowAllLocations" x="10" y="10"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" id="_btnCancel"
+                                       width="140" />
+                <e:layout>
+                    <e:HorizontalLayout gap="20" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
+    </e:Group>
+</e:Skin>

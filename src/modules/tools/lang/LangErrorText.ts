@@ -205,7 +205,7 @@ namespace TwnsLangErrorText {
             `存在未被引用的事件动作`,
             `There is a redundant event action. Please delete it via the 'Delete Redundancy' button if you don't need it.`,
         ],
-        [ClientErrorCode.WarEventFullDataValidation09]: [
+        [ClientErrorCode.WarEventFullDataValidation10]: [
             `存在未被引用的事件条件`,
             `There is a redundant event condition. Please delete it via the 'Delete Redundancy' button if you don't need it.`,
         ],

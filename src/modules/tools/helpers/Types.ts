@@ -740,6 +740,7 @@ namespace Types {
 
         WecTilePlayerIndexEqualTo,
         WecTileTypeEqualTo,
+        WecTilePresence,
 
         WecUnitPresence,
     }

@@ -3985,7 +3985,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0718]: [
             `地形类型`,
-            `Tile Type`,
+            `Terrain Type`,
         ],
         [LangTextType.B0719]: [
             `战局`,
@@ -4219,6 +4219,18 @@ namespace TwnsLangCommonText {
             `任意`,
             `Any`,
         ],
+        [LangTextType.B0777]: [
+            `任意地形`,
+            `Any Terrain`,
+        ],
+        [LangTextType.B0778]: [
+            `地形数量`,
+            `Terrains Count`,
+        ],
+        [LangTextType.B0779]: [
+            `特定地形数量统计...`,
+            `Terrain Presence ...`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4242,19 +4254,19 @@ namespace TwnsLangCommonText {
             `Road`,
         ],
         [LangTextType.B1005]: [
-            `桥梁`,
+            `桥梁(平原)`,
             `BridgeOnPlain`,
         ],
         [LangTextType.B1006]: [
-            `桥梁`,
+            `桥梁(河)`,
             `BridgeOnRiver`,
         ],
         [LangTextType.B1007]: [
-            `桥梁`,
+            `桥梁(沙滩)`,
             `BridgeOnBeach`,
         ],
         [LangTextType.B1008]: [
-            `桥梁`,
+            `桥梁(海)`,
             `BridgeOnSea`,
         ],
         [LangTextType.B1009]: [
@@ -4282,7 +4294,7 @@ namespace TwnsLangCommonText {
             `Rough`,
         ],
         [LangTextType.B1015]: [
-            `迷雾`,
+            `迷雾(海)`,
             `MistOnSea`,
         ],
         [LangTextType.B1016]: [
@@ -4346,15 +4358,15 @@ namespace TwnsLangCommonText {
             `TempSeaport`,
         ],
         [LangTextType.B1031]: [
-            `迷雾`,
+            `迷雾(平原)`,
             `MistOnPlain`,
         ],
         [LangTextType.B1032]: [
-            `迷雾`,
+            `迷雾(河)`,
             `MistOnRiver`,
         ],
         [LangTextType.B1033]: [
-            `迷雾`,
+            `迷雾(沙滩)`,
             `MistOnBeach`,
         ],
         [LangTextType.B1034]: [
@@ -4366,8 +4378,8 @@ namespace TwnsLangCommonText {
             `Myst.Crystal`,
         ],
         [LangTextType.B1036]: [
-            `加农炮`,
-            `Cannon`,
+            `加农炮(下)`,
+            `Cannon(Down)`,
         ],
         [LangTextType.B1037]: [
             `神秘加农炮`,
@@ -4384,6 +4396,18 @@ namespace TwnsLangCommonText {
         [LangTextType.B1040]: [
             `管道接口`,
             `Joint`,
+        ],
+        [LangTextType.B1041]: [
+            `加农炮(左)`,
+            `Cannon(Left)`,
+        ],
+        [LangTextType.B1042]: [
+            `加农炮(右)`,
+            `Cannon(Right)`,
+        ],
+        [LangTextType.B1043]: [
+            `加农炮(上)`,
+            `Cannon(Up)`,
         ],
 
         [LangTextType.B1200]: [
@@ -4865,6 +4889,10 @@ namespace TwnsLangCommonText {
         [LangTextType.F0092]: [
             `选择%s`,
             `Select %s`,
+        ],
+        [LangTextType.F0093]: [
+            `类型为 %s、且位于 %s、且归属于 %s 的地形的数量 %s %s`,
+            `The number of %s at %s that owned by %s is %s %s.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

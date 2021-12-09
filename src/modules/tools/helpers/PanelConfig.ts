@@ -55,6 +55,7 @@ namespace TwnsPanelConfig {
         CommonChooseLocationPanel       : PanelConfig<TwnsCommonChooseLocationPanel.OpenData>;
         CommonChoosePlayerIndexPanel    : PanelConfig<TwnsCommonChoosePlayerIndexPanel.OpenData>;
         CommonChooseTeamIndexPanel      : PanelConfig<TwnsCommonChooseTeamIndexPanel.OpenData>;
+        CommonChooseTileTypePanel       : PanelConfig<TwnsCommonChooseTileTypePanel.OpenData>;
         CommonChooseUnitTypePanel       : PanelConfig<TwnsCommonChooseUnitTypePanel.OpenData>;
         CommonCoInfoPanel               : PanelConfig<TwnsCommonCoInfoPanel.OpenData>;
         CommonCoListPanel               : PanelConfig<TwnsCommonCoListPanel.OpenData>;
@@ -207,6 +208,7 @@ namespace TwnsPanelConfig {
         WeConditionModifyPanel13        : PanelConfig<TwnsWeConditionModifyPanel13.OpenData>;
         WeConditionModifyPanel14        : PanelConfig<TwnsWeConditionModifyPanel14.OpenData>;
         WeConditionModifyPanel15        : PanelConfig<TwnsWeConditionModifyPanel15.OpenData>;
+        WeConditionModifyPanel16        : PanelConfig<TwnsWeConditionModifyPanel16.OpenData>;
         WeConditionReplacePanel         : PanelConfig<TwnsWeConditionReplacePanel.OpenData>;
         WeConditionTypeListPanel        : PanelConfig<TwnsWeConditionTypeListPanel.OpenData>;
         WeDialogueBackgroundPanel       : PanelConfig<TwnsWeDialogueBackgroundPanel.OpenData>;
@@ -478,6 +480,12 @@ namespace TwnsPanelConfig {
             CommonChooseTeamIndexPanel: {
                 cls         : TwnsCommonChooseTeamIndexPanel?.CommonChooseTeamIndexPanel,
                 skinName    : `resource/skins/common/CommonChooseTeamIndexPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseTileTypePanel: {
+                cls         : TwnsCommonChooseTileTypePanel?.CommonChooseTileTypePanel,
+                skinName    : `resource/skins/common/CommonChooseTileTypePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -1348,6 +1356,12 @@ namespace TwnsPanelConfig {
             WeConditionModifyPanel15: {
                 cls         : TwnsWeConditionModifyPanel15?.WeConditionModifyPanel15,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel15.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            WeConditionModifyPanel16: {
+                cls         : TwnsWeConditionModifyPanel16?.WeConditionModifyPanel16,
+                skinName    : `resource/skins/warEvent/WeConditionModifyPanel16.exml`,
                 layer       : LayerType.Hud0,
             },
 

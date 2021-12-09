@@ -1212,6 +1212,17 @@ namespace TwnsClientErrorCode {
         BwWarEventManager_CheckIsMeetConTileTypeEqualTo_08,
         BwWarEventManager_CheckIsMeetConTileTypeEqualTo_09,
 
+        BwWarEventManager_CheckIsMeetConTilePresence_00,
+        BwWarEventManager_CheckIsMeetConTilePresence_01,
+        BwWarEventManager_CheckIsMeetConTilePresence_02,
+        BwWarEventManager_CheckIsMeetConTilePresence_03,
+        BwWarEventManager_CheckIsMeetConTilePresence_04,
+        BwWarEventManager_CheckIsMeetConTilePresence_05,
+        BwWarEventManager_CheckIsMeetConTilePresence_06,
+        BwWarEventManager_CheckIsMeetConTilePresence_07,
+        BwWarEventManager_CheckIsMeetConTilePresence_08,
+        BwWarEventManager_CheckIsMeetConTilePresence_09,
+
         BwWarEventManager_CheckIsMeetConUnitPresence_00,
         BwWarEventManager_CheckIsMeetConUnitPresence_01,
         BwWarEventManager_CheckIsMeetConUnitPresence_02,

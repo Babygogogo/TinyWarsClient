@@ -124,9 +124,9 @@ namespace Lang {
             case Types.TileType.Crystal             : return getText(LangTextType.B1034, languageType);
             case Types.TileType.CustomCrystal       : return getText(LangTextType.B1035, languageType);
             case Types.TileType.CannonDown          : return getText(LangTextType.B1036, languageType);
-            case Types.TileType.CannonLeft          : return getText(LangTextType.B1036, languageType);
-            case Types.TileType.CannonRight         : return getText(LangTextType.B1036, languageType);
-            case Types.TileType.CannonUp            : return getText(LangTextType.B1036, languageType);
+            case Types.TileType.CannonLeft          : return getText(LangTextType.B1041, languageType);
+            case Types.TileType.CannonRight         : return getText(LangTextType.B1042, languageType);
+            case Types.TileType.CannonUp            : return getText(LangTextType.B1043, languageType);
             case Types.TileType.CustomCannon        : return getText(LangTextType.B1037, languageType);
             case Types.TileType.LaserTurret         : return getText(LangTextType.B1038, languageType);
             case Types.TileType.CustomLaserTurret   : return getText(LangTextType.B1039, languageType);
@@ -433,6 +433,7 @@ namespace Lang {
             case WarEventConditionType.WecPlayerAliveStateEqualTo           : return getText(LangTextType.B0515);
             case WarEventConditionType.WecTilePlayerIndexEqualTo            : return getText(LangTextType.B0716);
             case WarEventConditionType.WecTileTypeEqualTo                   : return getText(LangTextType.B0717);
+            case WarEventConditionType.WecTilePresence                      : return getText(LangTextType.B0779);
             case WarEventConditionType.WecUnitPresence                      : return getText(LangTextType.B0775);
             default                                                         : return null;
         }
