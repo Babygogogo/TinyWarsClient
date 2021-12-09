@@ -47,7 +47,7 @@ namespace TwnsCommonChooseGridIndexPanel {
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
 
-            this._listLocation.setItemRenderer(LocationRenderer);
+            this._listLocation.setItemRenderer(GridIndexRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
@@ -160,7 +160,7 @@ namespace TwnsCommonChooseGridIndexPanel {
         gridIndex   : GridIndex;
         panel       : CommonChooseGridIndexPanel;
     };
-    class LocationRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLocationRenderer> {
+    class GridIndexRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLocationRenderer> {
         private readonly _btnDelete!    : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
@@ -168,6 +168,11 @@ namespace TwnsCommonChooseGridIndexPanel {
             this._setUiListenerArray([
                 { ui: this._btnDelete, callback: this._onTouchedBtnDelete },
             ]);
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+
+            this._updateComponentsForLanguage();
         }
 
         private _onTouchedBtnDelete(): void {
@@ -179,10 +184,17 @@ namespace TwnsCommonChooseGridIndexPanel {
                 },
             });
         }
+        private _onNotifyLanguageChanged(): void {
+            this._updateComponentsForLanguage();
+        }
 
         protected _onDataChanged(): void {
             const gridIndex         = this._getData().gridIndex;
             this._labelName.text    = `${gridIndex.x}, ${gridIndex.y}`;
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._btnDelete.label = Lang.getText(LangTextType.B0220);
         }
     }
 

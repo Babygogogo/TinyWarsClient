@@ -25,7 +25,6 @@ namespace UserModel {
     let _selfInfo                   : IUserSelfInfo | null = null;
     let _selfAccount                : string;
     let _selfPassword               : string | null = null;
-    let _unitOpacity                = 100;
     const _userPublicInfoDict       = new Map<number, IUserPublicInfo | null>();
     const _userPublicInfoRequests   = new Map<number, ((info: NetMessage.MsgUserGetPublicInfo.IS) => void)[]>();
 
@@ -222,23 +221,19 @@ namespace UserModel {
         return getSelfSettings()?.isShowGridBorder ?? false;
     }
 
-    export function setSelfSettingsUnitOpacity(opacity: number): void {
-        if (getSelfSettingsUnitOpacity() !== opacity) {
-            _unitOpacity = opacity;
-            Notify.dispatch(NotifyType.UserSettingsUnitOpacityChanged);
-        }
-    }
     export function getSelfSettingsUnitOpacity(): number {
-        return _unitOpacity;
+        return getSelfSettings()?.unitOpacity ?? 100;
     }
-    export function tickSelfSettingsUnitOpacity(): void {
+    export function reqTickSelfSettingsUnitOpacity(): void {
         const opacity = getSelfSettingsUnitOpacity();
         if (opacity === 100) {
-            setSelfSettingsUnitOpacity(75);
+            UserProxy.reqUserSetSettings({ unitOpacity: 75 });
         } else if (opacity === 75) {
-            setSelfSettingsUnitOpacity(0);
+            UserProxy.reqUserSetSettings({ unitOpacity: 50 });
+        } else if (opacity === 50) {
+            UserProxy.reqUserSetSettings({ unitOpacity: 0 });
         } else {
-            setSelfSettingsUnitOpacity(100);
+            UserProxy.reqUserSetSettings({ unitOpacity: 100 });
         }
     }
 
@@ -273,11 +268,13 @@ namespace UserModel {
             return;
         }
 
-        const oldVersion            = getSelfSettingsTextureVersion();
         const oldIsShowGridBorder   = getSelfSettingsIsShowGridBorder();
+        const oldVersion            = getSelfSettingsTextureVersion();
+        const oldUnitOpacity        = getSelfSettingsUnitOpacity();
         (newSettings.isSetPathMode != null)             && (selfSettings.isSetPathMode = newSettings.isSetPathMode);
         (newSettings.isShowGridBorder != null)          && (selfSettings.isShowGridBorder = newSettings.isShowGridBorder);
         (newSettings.unitAndTileTextureVersion != null) && (selfSettings.unitAndTileTextureVersion = newSettings.unitAndTileTextureVersion);
+        (newSettings.unitOpacity != null)               && (selfSettings.unitOpacity = newSettings.unitOpacity);
 
         if (oldVersion !== getSelfSettingsTextureVersion()) {
             CommonModel.updateOnUnitAndTileTextureVersionChanged();
@@ -285,6 +282,9 @@ namespace UserModel {
         }
         if (oldIsShowGridBorder !== getSelfSettingsIsShowGridBorder()) {
             Notify.dispatch(NotifyType.UserSettingsIsShowGridBorderChanged);
+        }
+        if (oldUnitOpacity !== getSelfSettingsUnitOpacity()) {
+            Notify.dispatch(NotifyType.UserSettingsUnitOpacityChanged);
         }
     }
     export function updateOnMsgUserSetMapRating(data: NetMessage.MsgUserSetMapRating.IS): void {

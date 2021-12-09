@@ -288,7 +288,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _onTouchedBtnUnitOpacity(): void {
-            UserModel.tickSelfSettingsUnitOpacity();
+            UserModel.reqTickSelfSettingsUnitOpacity();
         }
 
         private _onTouchedBtnSetDraw(): void {
