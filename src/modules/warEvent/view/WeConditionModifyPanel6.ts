@@ -30,30 +30,44 @@ namespace TwnsWeConditionModifyPanel6 {
     /** WecPlayerIndexInTurnEqualTo */
     export class WeConditionModifyPanel6 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
-        private readonly _btnClose!         : TwnsUiButton.UiButton;
         private readonly _btnType!          : TwnsUiButton.UiButton;
+        private readonly _btnClose!         : TwnsUiButton.UiButton;
         private readonly _labelDesc!        : TwnsUiLabel.UiLabel;
         private readonly _labelError!       : TwnsUiLabel.UiLabel;
-        private readonly _groupIsNot!       : eui.Group;
-        private readonly _labelIsNot!       : TwnsUiLabel.UiLabel;
-        private readonly _imgIsNot!         : TwnsUiImage.UiImage;
-        private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
-        private readonly _inputPlayerIndex! : TwnsUiTextInput.UiTextInput;
+
+        private readonly _labelTurnIndex!               : TwnsUiLabel.UiLabel;
+        private readonly _inputTurnIndex!               : TwnsUiTextInput.UiTextInput;
+        private readonly _btnTurnIndexComparator!       : TwnsUiButton.UiButton;
+        private readonly _labelTurnIndexComparator!     : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnDivider!             : TwnsUiLabel.UiLabel;
+        private readonly _inputTurnDivider!             : TwnsUiTextInput.UiTextInput;
+        private readonly _labelTurnRemainder!           : TwnsUiLabel.UiLabel;
+        private readonly _inputTurnRemainder!           : TwnsUiTextInput.UiTextInput;
+        private readonly _btnTurnRemainderComparator!   : TwnsUiButton.UiButton;
+        private readonly _labelTurnRemainderComparator! : TwnsUiLabel.UiLabel;
+        private readonly _btnTurnPhase!                 : TwnsUiButton.UiButton;
+        private readonly _labelTurnPhase!               : TwnsUiLabel.UiLabel;
+        private readonly _btnPlayerIndex!               : TwnsUiButton.UiButton;
+        private readonly _labelPlayerIndex!             : TwnsUiLabel.UiLabel;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.WarEventFullDataChanged, callback: this._onNotifyWarEventFullDataChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnClose,           callback: this.close },
-                { ui: this._btnType,            callback: this._onTouchedBtnType },
-                { ui: this._groupIsNot,         callback: this._onTouchedGroupIsNot },
-                { ui: this._inputPlayerIndex,   callback: this._onFocusOutInputPlayerIndex, eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnClose,                       callback: this.close },
+                { ui: this._btnType,                        callback: this._onTouchedBtnType },
+                { ui: this._btnTurnIndexComparator,         callback: this._onTouchedBtnTurnIndexComparator },
+                { ui: this._btnTurnRemainderComparator,     callback: this._onTouchedBtnTurnRemainderComparator },
+                { ui: this._btnTurnPhase,                   callback: this._onTouchedBtnTurnPhase },
+                { ui: this._btnPlayerIndex,                 callback: this._onTouchedBtnPlayerIndex },
+                { ui: this._inputTurnIndex,                 callback: this._onFocusOutInputTurnIndex,           eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputTurnDivider,               callback: this._onFocusOutInputTurnDivider,         eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputTurnRemainder,             callback: this._onFocusOutInputTurnRemainder,       eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
-
-            this._inputPlayerIndex.restrict = `0-9`;
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -65,6 +79,9 @@ namespace TwnsWeConditionModifyPanel6 {
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
+        private _onNotifyWarEventFullDataChanged(): void {
+            this._updateView();
+        }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
@@ -73,22 +90,67 @@ namespace TwnsWeConditionModifyPanel6 {
                 war         : openData.war,
             });
         }
-        private _onTouchedGroupIsNot(): void {
-            const data  = Helpers.getExisted(this._getCondition().WecPlayerIndexInTurnEqualTo);
-            data.isNot  = !data.isNot;
-            this._updateImgIsNot();
-            this._updateLabelDescAndLabelError();
+        private _onTouchedBtnTurnIndexComparator(): void {
+            const condition                 = this._getCondition();
+            condition.turnIndexComparator   = Helpers.getNextValueComparator(condition.turnIndexComparator);
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onFocusOutInputPlayerIndex(): void {
-            const value = parseInt(this._inputPlayerIndex.text);
-            if (isNaN(value)) {
-                this._updateInputPlayerIndex();
+        private _onTouchedBtnTurnRemainderComparator(): void {
+            const condition                         = this._getCondition();
+            condition.turnIndexRemainderComparator  = Helpers.getNextValueComparator(condition.turnIndexRemainderComparator);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onTouchedBtnTurnPhase(): void {
+            const condition = this._getCondition();
+            const turnPhase = condition.turnPhase;
+            if (turnPhase === Types.TurnPhaseCode.WaitBeginTurn) {
+                condition.turnPhase = Types.TurnPhaseCode.Main;
+            } else if (turnPhase === Types.TurnPhaseCode.Main) {
+                condition.turnPhase = null;
             } else {
-                Helpers.getExisted(this._getCondition().WecPlayerIndexInTurnEqualTo).valueEqualTo = value;
-                this._updateLabelDescAndLabelError();
-                this._updateInputPlayerIndex();
+                condition.turnPhase = Types.TurnPhaseCode.WaitBeginTurn;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onTouchedBtnPlayerIndex(): void {
+            const condition = this._getCondition();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
+                currentPlayerIndexArray : condition.playerIndexArray ?? [],
+                maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
+                callbackOnConfirm       : playerIndexArray => {
+                    condition.playerIndexArray = playerIndexArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+        private _onFocusOutInputTurnIndex(): void {
+            const text  = this._inputTurnIndex.text;
+            const value = !text ? null : parseInt(text);
+            if ((value == null) || (!isNaN(value))) {
+                this._getCondition().turnIndex = value;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            } else {
+                this._updateInputTurnIndex();
+            }
+        }
+        private _onFocusOutInputTurnDivider(): void {
+            const text  = this._inputTurnDivider.text;
+            const value = !text ? null : parseInt(text);
+            if ((value == null) || (value >= 2)) {
+                this._getCondition().turnIndexDivider = value;
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            } else {
+                this._updateInputTurnDivider();
+            }
+        }
+        private _onFocusOutInputTurnRemainder(): void {
+            const text  = this._inputTurnRemainder.text;
+            const value = !text ? null : parseInt(text);
+            if ((value == null) || (!isNaN(value))) {
+                this._getCondition().turnIndexRemainder = value;
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            } else {
+                this._updateInputTurnRemainder();
             }
         }
 
@@ -96,16 +158,26 @@ namespace TwnsWeConditionModifyPanel6 {
             this._updateComponentsForLanguage();
 
             this._updateLabelDescAndLabelError();
-            this._updateImgIsNot();
-            this._updateInputPlayerIndex();
+            this._updateInputTurnIndex();
+            this._updateLabelTurnIndexComparator();
+            this._updateInputTurnDivider();
+            this._updateInputTurnRemainder();
+            this._updateLabelTurnRemainderComparator();
+            this._updateLabelTurnPhase();
+            this._updateLabelPlayerIndex();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = `${Lang.getText(LangTextType.B0501)} C${this._getCondition().WecCommonData?.conditionId}`;
-            this._btnClose.label        = Lang.getText(LangTextType.B0146);
-            this._btnType.label         = Lang.getText(LangTextType.B0516);
-            this._labelIsNot.text       = Lang.getText(LangTextType.B0517);
-            this._labelPlayerIndex.text = Lang.getText(LangTextType.B0521);
+            this._labelTitle.text                   = `${Lang.getText(LangTextType.B0501)} C${this._getOpenData().condition.WecCommonData?.conditionId}`;
+            this._btnClose.label                    = Lang.getText(LangTextType.B0146);
+            this._btnType.label                     = Lang.getText(LangTextType.B0516);
+            this._labelTurnIndex.text               = Lang.getText(LangTextType.B0091);
+            this._btnTurnIndexComparator.label      = Lang.getText(LangTextType.B0774);
+            this._labelTurnDivider.text             = Lang.getText(LangTextType.B0518);
+            this._labelTurnRemainder.text           = Lang.getText(LangTextType.B0519);
+            this._btnTurnRemainderComparator.label  = Lang.getText(LangTextType.B0774);
+            this._btnTurnPhase.label                = Lang.getText(LangTextType.B0782);
+            this._btnPlayerIndex.label              = Lang.getText(LangTextType.B0031);
 
             this._updateLabelDescAndLabelError();
         }
@@ -119,17 +191,39 @@ namespace TwnsWeConditionModifyPanel6 {
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
             this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
         }
-        private _updateImgIsNot(): void {
-            this._imgIsNot.visible = !!this._getCondition().WecPlayerIndexInTurnEqualTo?.isNot;
+        private _updateInputTurnIndex(): void {
+            const turnIndex             = this._getCondition().turnIndex;
+            this._inputTurnIndex.text   = turnIndex == null ? `` : `${turnIndex}`;
         }
-        private _updateInputPlayerIndex(): void {
-            this._inputPlayerIndex.text = `${this._getCondition().WecPlayerIndexInTurnEqualTo?.valueEqualTo}`;
+        private _updateLabelTurnIndexComparator(): void {
+            const comparator                    = Helpers.getExisted(this._getCondition().turnIndexComparator);
+            this._labelTurnIndexComparator.text = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+        }
+        private _updateInputTurnDivider(): void {
+            const turnDivider           = this._getCondition().turnIndexDivider;
+            this._inputTurnDivider.text = turnDivider == null ? `` : `${turnDivider}`;
+        }
+        private _updateInputTurnRemainder(): void {
+            const turnRemainder             = this._getCondition().turnIndexRemainder;
+            this._inputTurnRemainder.text   = turnRemainder == null ? `` : `${turnRemainder}`;
+        }
+        private _updateLabelTurnRemainderComparator(): void {
+            const playerIndexArray      = this._getCondition().playerIndexArray;
+            this._labelTurnRemainderComparator.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelTurnPhase(): void {
+            const turnPhase             = this._getCondition().turnPhase;
+            this._labelTurnPhase.text   = turnPhase == null ? Lang.getText(LangTextType.B0776) : (Lang.getTurnPhaseName(turnPhase) ?? CommonConstants.ErrorTextForUndefined);
+        }
+        private _updateLabelPlayerIndex(): void {
+            const playerIndexArray      = this._getCondition().playerIndexArray;
+            this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
         }
 
-        private _getCondition(): IWarEventCondition {
-            return this._getOpenData().condition;
+        private _getCondition(): ProtoTypes.WarEvent.IWecTurnAndPlayer {
+            return Helpers.getExisted(this._getOpenData().condition.WecTurnAndPlayer);
         }
     }
 }
 
-// export default TwnsWeConditionModifyPanel6;
+// export default TwnsWeConditionModifyPanel15;

@@ -366,14 +366,7 @@ namespace TwnsMeWarMenuPanel {
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return Helpers.getNonNullElements([
-                this._createCommandSubmitMap(),
-                this._createCommandLoadMap(),
-                this._createCommandWarRule(),
-                this._createCommandWarEvent(),
                 this._createCommandMapTag(),
-                this._createCommandReviewAccept(),
-                this._createCommandReviewReject(),
-                this._createCommandUserSettings(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandChat(),
                 this._createCommandGotoMapListPanel(),
@@ -405,80 +398,6 @@ namespace TwnsMeWarMenuPanel {
             };
         }
 
-        private _createCommandSubmitMap(): DataForCommandRenderer | null {
-            if (this._getWar().getIsReviewingMap()) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0287),
-                    callback: () => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeConfirmSaveMapPanel, void 0);
-                    },
-                };
-            }
-        }
-
-        private _createCommandLoadMap(): DataForCommandRenderer | null {
-            const war = this._getWar();
-            if (war.getIsReviewingMap()) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0288),
-                    callback: () => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
-                            content : Lang.getText(LangTextType.A0072),
-                            callback: async () => {
-                                const slotIndex = war.getMapSlotIndex();
-                                const data      = MeModel.getData(slotIndex);
-                                war.stopRunning();
-                                await war.initWithMapEditorData({
-                                    mapRawData: (data ? data.mapRawData : null) || await MeUtility.createDefaultMapRawData(slotIndex),
-                                    slotIndex,
-                                });
-                                war.setIsMapModified(false);
-                                war.startRunning()
-                                    .startRunningView();
-                                this.close();
-                            },
-                        });
-                    },
-                };
-            }
-        }
-
-        private _createCommandWarRule(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0314),
-                callback: () => {
-                    const war = this._getWar();
-                    if (!war.getIsReviewingMap()) {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarRulePanel, void 0);
-                        this.close();
-                    } else {
-                        if (war.getWarRuleArray().length) {
-                            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarRulePanel, void 0);
-                            this.close();
-                        } else {
-                            FloatText.show(Lang.getText(LangTextType.A0100));
-                        }
-                    }
-                },
-            };
-        }
-
-        private _createCommandWarEvent(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0469),
-                callback: () => {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.WeEventListPanel, {
-                        war: this._getWar(),
-                    });
-                    this.close();
-                },
-            };
-        }
-
         private _createCommandMapTag(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0445),
@@ -486,34 +405,6 @@ namespace TwnsMeWarMenuPanel {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapTagPanel, void 0);
                 },
             };
-        }
-
-        private _createCommandReviewAccept(): DataForCommandRenderer | null {
-            const war = this._getWar();
-            if (!war.getIsReviewingMap()) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0296),
-                    callback: () => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAcceptMapPanel, { war });
-                    },
-                };
-            }
-        }
-
-        private _createCommandReviewReject(): DataForCommandRenderer | null {
-            const war = this._getWar();
-            if (!war.getIsReviewingMap()) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0297),
-                    callback: () => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmRejectMapPanel, { war });
-                    },
-                };
-            }
         }
 
         private _createCommandChat(): DataForCommandRenderer | null {
@@ -663,14 +554,6 @@ namespace TwnsMeWarMenuPanel {
                             },
                         });
                     }
-                }
-            };
-        }
-        private _createCommandUserSettings(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0560),
-                callback: () => {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel, void 0);
                 }
             };
         }

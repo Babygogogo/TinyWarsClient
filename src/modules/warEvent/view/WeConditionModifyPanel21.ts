@@ -16,33 +16,31 @@
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionModifyPanel14 {
-    import LangTextType             = TwnsLangTextType.LangTextType;
+namespace TwnsWeConditionModifyPanel21 {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+    import LangTextType             = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
         war         : TwnsBwWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
-    /** WecPlayerIndexInTurnEqualTo */
-    export class WeConditionModifyPanel14 extends TwnsUiPanel.UiPanel<OpenData> {
+    /** WecEventCalledCountTotalGreaterThan */
+    export class WeConditionModifyPanel21 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
-        private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
+        private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _labelDesc!        : TwnsUiLabel.UiLabel;
         private readonly _labelError!       : TwnsUiLabel.UiLabel;
-        private readonly _labelGridIndex!   : TwnsUiLabel.UiLabel;
-        private readonly _inputGridX!       : TwnsUiTextInput.UiTextInput;
-        private readonly _inputGridY!       : TwnsUiTextInput.UiTextInput;
-        private readonly _btnTileType!      : TwnsUiButton.UiButton;
-        private readonly _inputTileType!    : TwnsUiTextInput.UiTextInput;
-        private readonly _labelTileType!    : TwnsUiLabel.UiLabel;
         private readonly _groupIsNot!       : eui.Group;
-        private readonly _imgIsNot!         : TwnsUiImage.UiImage;
         private readonly _labelIsNot!       : TwnsUiLabel.UiLabel;
+        private readonly _imgIsNot!         : TwnsUiImage.UiImage;
+        private readonly _labelEvent!       : TwnsUiLabel.UiLabel;
+        private readonly _btnEvent!         : TwnsUiButton.UiButton;
+        private readonly _labelCalledCount! : TwnsUiLabel.UiLabel;
+        private readonly _inputCalledCount! : TwnsUiTextInput.UiTextInput;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -52,17 +50,13 @@ namespace TwnsWeConditionModifyPanel14 {
                 { ui: this._btnClose,           callback: this.close },
                 { ui: this._btnType,            callback: this._onTouchedBtnType },
                 { ui: this._groupIsNot,         callback: this._onTouchedGroupIsNot },
-                { ui: this._btnTileType,        callback: this._onTouchedBtnTileType },
-                { ui: this._inputTileType,      callback: this._onFocusOutInputTileType,    eventType: egret.FocusEvent.FOCUS_OUT },
-                { ui: this._inputGridX,         callback: this._onFocusOutInputGridX,       eventType: egret.FocusEvent.FOCUS_OUT },
-                { ui: this._inputGridY,         callback: this._onFocusOutInputGridY,       eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnEvent,           callback: this._onTouchedBtnTurnEvent },
+                { ui: this._inputCalledCount,   callback: this._onFocusOutInputCalledCount, eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
 
-            this._inputTileType.restrict    = `0-9`;
-            this._inputGridX.restrict       = `0-9`;
-            this._inputGridY.restrict       = `0-9`;
+            this._inputCalledCount.restrict = `0-9`;
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -77,56 +71,37 @@ namespace TwnsWeConditionModifyPanel14 {
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
+                war         : openData.war,
                 fullData    : openData.fullData,
                 condition   : openData.condition,
-                war         : openData.war,
             });
         }
         private _onTouchedGroupIsNot(): void {
-            const data  = Helpers.getExisted(this._getCondition().WecTileTypeEqualTo);
+            const data  = Helpers.getExisted(this._getCondition().WecEventCalledCountTotalGreaterThan);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onTouchedBtnTileType(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
-                title   : Lang.getText(LangTextType.B0718),
-                content : generateDescForTileTypes(),
-            });
+        private _onTouchedBtnTurnEvent(): void {
+            const openData              = this._getOpenData();
+            const eventArray            = Helpers.getExisted(openData.fullData.eventArray);
+            const condition             = Helpers.getExisted(openData.condition.WecEventCalledCountTotalGreaterThan);
+            const newIndex              = (eventArray.findIndex(v => v.eventId === condition.eventIdEqualTo) + 1) % eventArray.length;
+            condition.eventIdEqualTo    = eventArray[newIndex].eventId;
+
+            this._updateLabelDescAndLabelError();
+            this._updateLabelEvent();
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onFocusOutInputTileType(): void {
-            const value = parseInt(this._inputTileType.text);
-            if ((isNaN(value)) || (!ConfigManager.checkIsValidTileType(value))) {
-                this._updateComponentsForTileType();
-            } else {
-                Helpers.getExisted(this._getCondition().WecTileTypeEqualTo).tileType = value;
-                this._updateLabelDescAndLabelError();
-                this._updateComponentsForTileType();
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
-            }
-        }
-        private _onFocusOutInputGridX(): void {
-            const value = parseInt(this._inputGridX.text);
+        private _onFocusOutInputCalledCount(): void {
+            const value = parseInt(this._inputCalledCount.text);
             if (isNaN(value)) {
-                this._updateInputGridX();
+                this._updateInputCalledCount();
             } else {
-                const mapSize = this._getOpenData().war.getTileMap().getMapSize();
-                Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.gridIndex).x = Math.max(0, Math.min(mapSize.width - 1, value));
+                Helpers.getExisted(this._getCondition().WecEventCalledCountTotalGreaterThan).countGreaterThan = value;
                 this._updateLabelDescAndLabelError();
-                this._updateInputGridX();
-                Notify.dispatch(NotifyType.WarEventFullDataChanged);
-            }
-        }
-        private _onFocusOutInputGridY(): void {
-            const value = parseInt(this._inputGridY.text);
-            if (isNaN(value)) {
-                this._updateInputGridY();
-            } else {
-                const mapSize = this._getOpenData().war.getTileMap().getMapSize();
-                Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.gridIndex).y = Math.max(0, Math.min(mapSize.height - 1, value));
-                this._updateLabelDescAndLabelError();
-                this._updateInputGridY();
+                this._updateInputCalledCount();
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -136,9 +111,8 @@ namespace TwnsWeConditionModifyPanel14 {
 
             this._updateLabelDescAndLabelError();
             this._updateImgIsNot();
-            this._updateComponentsForTileType();
-            this._updateInputGridX();
-            this._updateInputGridY();
+            this._updateLabelEvent();
+            this._updateInputCalledCount();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -146,10 +120,12 @@ namespace TwnsWeConditionModifyPanel14 {
             this._btnClose.label        = Lang.getText(LangTextType.B0146);
             this._btnType.label         = Lang.getText(LangTextType.B0516);
             this._labelIsNot.text       = Lang.getText(LangTextType.B0517);
-            this._btnTileType.label     = Lang.getText(LangTextType.B0718);
-            this._labelGridIndex.text   = Lang.getText(LangTextType.B0531);
+            this._btnEvent.label        = Lang.getText(LangTextType.B0469);
+            this._labelCalledCount.text = Lang.getText(LangTextType.B0522);
 
             this._updateLabelDescAndLabelError();
+            this._updateLabelEvent();
+            this._updateInputCalledCount();
         }
 
         private _updateLabelDescAndLabelError(): void {
@@ -162,37 +138,22 @@ namespace TwnsWeConditionModifyPanel14 {
             this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
-            this._imgIsNot.visible = !!this._getCondition().WecTileTypeEqualTo?.isNot;
+            this._imgIsNot.visible = !!this._getCondition().WecEventCalledCountTotalGreaterThan?.isNot;
         }
-        private _updateComponentsForTileType(): void {
-            const tileType              = Helpers.getExisted(this._getCondition().WecTileTypeEqualTo?.tileType);
-            this._inputTileType.text    = `${tileType}`;
-            this._labelTileType.text    = Lang.getTileName(tileType) ?? CommonConstants.ErrorTextForUndefined;
+        private _updateLabelEvent(): void {
+            const openData          = this._getOpenData();
+            const eventId           = Helpers.getExisted(openData.condition.WecEventCalledCountTotalGreaterThan?.eventIdEqualTo);
+            const event             = WarEventHelper.getEvent(openData.fullData, eventId);
+            this._labelEvent.text   = `#${eventId} (${event ? Lang.getLanguageText({ textArray: event.eventNameArray }) : `---`})`;
         }
-        private _updateInputGridX(): void {
-            this._inputGridX.text = `${this._getCondition().WecTileTypeEqualTo?.gridIndex?.x}`;
-        }
-        private _updateInputGridY(): void {
-            this._inputGridY.text = `${this._getCondition().WecTileTypeEqualTo?.gridIndex?.y}`;
+        private _updateInputCalledCount(): void {
+            this._inputCalledCount.text = `${this._getCondition().WecEventCalledCountTotalGreaterThan?.eventIdEqualTo}`;
         }
 
         private _getCondition(): IWarEventCondition {
             return this._getOpenData().condition;
         }
     }
-
-    function generateDescForTileTypes(): string {
-        const textArray: string[] = [];
-        for (let tileType = 0; ; ++tileType) {
-            if (ConfigManager.checkIsValidTileType(tileType)) {
-                textArray.push(`${tileType}: ${Lang.getTileName(tileType)}`);
-            } else {
-                break;
-            }
-        }
-
-        return textArray.join(`\n`);
-    }
 }
 
-// export default TwnsWeConditionModifyPanel14;
+// export default TwnsWeConditionModifyPanel10;

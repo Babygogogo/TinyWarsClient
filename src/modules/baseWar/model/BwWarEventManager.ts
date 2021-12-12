@@ -35,10 +35,10 @@ namespace TwnsBwWarEventManager {
                 this._setCalledCountList(null);
             } else {
                 // TODO: validate the data.
-                const warEventFullData = data.warEventFullData ?? null;
+                const warEventFullData = Helpers.deepClone(data.warEventFullData) ?? null;
 
                 this._setWarEventFullData(warEventFullData);
-                this._setCalledCountList(data.calledCountList ?? null);
+                this._setCalledCountList(Helpers.deepClone(data.calledCountList) ?? null);
             }
         }
         public fastInit(data: ISerialWarEventManager): void {
@@ -133,7 +133,7 @@ namespace TwnsBwWarEventManager {
                 throw Helpers.newError(`Invalid action.`);
             }
 
-            // TODO add more actions.
+            // todo: add more actions.
         }
         private async _callWarActionWithoutExtraData(warEventActionId: number, isFastExecute: boolean): Promise<void> {
             const action = this.getWarEventAction(warEventActionId);
@@ -159,7 +159,7 @@ namespace TwnsBwWarEventManager {
                 throw Helpers.newError(`Invalid action.`);
             }
 
-            // TODO add more actions.
+            // todo: add more actions.
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -553,6 +553,7 @@ namespace TwnsBwWarEventManager {
             else if (condition.WecTurnIndexGreaterThan)             { return this._checkIsMeetConTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan); }
             else if (condition.WecTurnIndexLessThan)                { return this._checkIsMeetConTurnIndexLessThan(condition.WecTurnIndexLessThan); }
             else if (condition.WecTurnIndexRemainderEqualTo)        { return this._checkIsMeetConTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo); }
+            else if (condition.WecTurnAndPlayer)                    { return this._checkIsMeetConTurnAndPlayer(condition.WecTurnAndPlayer); }
             else if (condition.WecTurnPhaseEqualTo)                 { return this._checkIsMeetConTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo); }
             else if (condition.WecTilePlayerIndexEqualTo)           { return this._checkIsMeetConTilePlayerIndexEqualTo(condition.WecTilePlayerIndexEqualTo); }
             else if (condition.WecTileTypeEqualTo)                  { return this._checkIsMeetConTileTypeEqualTo(condition.WecTileTypeEqualTo); }
@@ -654,6 +655,51 @@ namespace TwnsBwWarEventManager {
             return (turnIndex % divider === remainderEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
+        }
+        private _checkIsMeetConTurnAndPlayer(condition: WarEvent.IWecTurnAndPlayer): boolean {
+            const turnManager   = this._getWar().getTurnManager();
+            const turnIndex     = turnManager.getTurnIndex();
+            {
+                const targetTurnIndex       = condition.turnIndex;
+                const turnIndexComparator   = condition.turnIndexComparator;
+                if ((targetTurnIndex != null) && (turnIndexComparator != null)) {
+                    if (!Helpers.checkIsMeetValueComparator({
+                        comparator  : turnIndexComparator,
+                        actualValue : turnIndex,
+                        targetValue : targetTurnIndex,
+                    })) {
+                        return false;
+                    }
+                }
+            }
+            {
+                const turnIndexDivider      = condition.turnIndexDivider;
+                const targetRemainder       = condition.turnIndexRemainder;
+                const remainderComparator   = condition.turnIndexRemainderComparator;
+                if ((turnIndexDivider != null) && (targetRemainder != null) && (remainderComparator != null)) {
+                    if (!Helpers.checkIsMeetValueComparator({
+                        comparator  : remainderComparator,
+                        actualValue : turnIndex % turnIndexDivider,
+                        targetValue : targetRemainder,
+                    })) {
+                        return false;
+                    }
+                }
+            }
+            {
+                const turnPhase = condition.turnPhase;
+                if ((turnPhase != null) && (turnManager.getPhaseCode() !== turnPhase)) {
+                    return false;
+                }
+            }
+            {
+                const playerIndexArray = condition.playerIndexArray;
+                if ((playerIndexArray?.length) && (playerIndexArray.indexOf(turnManager.getPlayerIndexInTurn()) < 0)) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private _checkIsMeetConTurnPhaseEqualTo(condition: WarEvent.IWecTurnPhaseEqualTo): boolean {

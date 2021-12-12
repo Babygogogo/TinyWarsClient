@@ -412,6 +412,10 @@ namespace ConfigManager {
         }
     }
 
+    export function checkIsValidTurnPhaseCode(turnPhaseCode: Types.TurnPhaseCode): boolean {
+        return (turnPhaseCode === Types.TurnPhaseCode.Main)
+            || (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn);
+    }
     export function checkIsValidWeatherType(weatherType: Types.WeatherType): boolean {
         return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.Weather[weatherType] != null;
     }

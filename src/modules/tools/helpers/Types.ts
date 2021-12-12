@@ -725,6 +725,7 @@ namespace Types {
         WecTurnIndexGreaterThan,
         WecTurnIndexLessThan,
         WecTurnIndexRemainderEqualTo,
+        WecTurnAndPlayer,
 
         WecTurnPhaseEqualTo,
 

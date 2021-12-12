@@ -43,22 +43,21 @@ namespace WarEventHelper {
     import BwWar                    = TwnsBwWar.BwWar;
 
     const CONDITION_TYPE_ARRAY = [
-        ConditionType.WecTurnIndexEqualTo,
-        ConditionType.WecTurnIndexGreaterThan,
-        ConditionType.WecTurnIndexLessThan,
-        ConditionType.WecTurnIndexRemainderEqualTo,
+        // ConditionType.WecTurnIndexEqualTo,
+        // ConditionType.WecTurnIndexGreaterThan,
+        // ConditionType.WecTurnIndexLessThan,
+        // ConditionType.WecTurnIndexRemainderEqualTo,
+        // ConditionType.WecTurnPhaseEqualTo,
+        ConditionType.WecTurnAndPlayer,
 
-        ConditionType.WecTurnPhaseEqualTo,
-
-        ConditionType.WecPlayerIndexInTurnEqualTo,
-        ConditionType.WecPlayerIndexInTurnGreaterThan,
-        ConditionType.WecPlayerIndexInTurnLessThan,
+        // ConditionType.WecPlayerIndexInTurnEqualTo,
+        // ConditionType.WecPlayerIndexInTurnGreaterThan,
+        // ConditionType.WecPlayerIndexInTurnLessThan,
+        ConditionType.WecPlayerAliveStateEqualTo,
 
         ConditionType.WecEventCalledCountTotalEqualTo,
         ConditionType.WecEventCalledCountTotalGreaterThan,
         ConditionType.WecEventCalledCountTotalLessThan,
-
-        ConditionType.WecPlayerAliveStateEqualTo,
 
         // ConditionType.WecTilePlayerIndexEqualTo,
         // ConditionType.WecTileTypeEqualTo,
@@ -829,6 +828,7 @@ namespace WarEventHelper {
             || (checkIsValidWecTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan))
             || (checkIsValidWecTurnIndexLessThan(condition.WecTurnIndexLessThan))
             || (checkIsValidWecTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo))
+            || (checkIsValidWecTurnAndPlayer(condition.WecTurnAndPlayer, playersCountUnneutral))
             || (checkIsValidWecPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo, playersCountUnneutral))
             || (checkIsValidWecPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan, playersCountUnneutral))
             || (checkIsValidWecPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan, playersCountUnneutral))
@@ -896,6 +896,64 @@ namespace WarEventHelper {
             && (divider > 1)
             && (remainderEqualTo != null)
             && (remainderEqualTo < divider);
+    }
+    function checkIsValidWecTurnAndPlayer(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnAndPlayer>, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        {
+            const comparator = condition.turnIndexComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+            // no need to check turnIndex
+        }
+
+        {
+            const comparator = condition.turnIndexRemainderComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+
+            const divider   = condition.turnIndexDivider;
+            const remainder = condition.turnIndexRemainder;
+            if (divider == null) {
+                if (remainder != null) {
+                    return false;
+                }
+            } else {
+                if ((divider <= 1) || (remainder == null)) {
+                    return false;
+                }
+            }
+        }
+
+        {
+            const turnPhase = condition.turnPhase;
+            if ((turnPhase != null) && (!ConfigManager.checkIsValidTurnPhaseCode(turnPhase))) {
+                return false;
+            }
+        }
+
+        {
+            const playerIndexArray = condition.playerIndexArray;
+            if (playerIndexArray) {
+                const playerIndexSet = new Set<number>();
+                for (const playerIndex of playerIndexArray) {
+                    if ((playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                        (playerIndex > playersCountUnneutral)                   ||
+                        (playerIndexSet.has(playerIndex))
+                    ) {
+                        return false;
+                    }
+
+                    playerIndexSet.add(playerIndex);
+                }
+            }
+        }
+
+        return true;
     }
     function checkIsValidWecPlayerIndexInTurnEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerIndexInTurnEqualTo>, playersCountUnneutral: number): boolean {
         if (condition == null) {
@@ -1262,6 +1320,7 @@ namespace WarEventHelper {
             || (getDescForWecTurnIndexGreaterThan(con.WecTurnIndexGreaterThan))
             || (getDescForWecTurnIndexLessThan(con.WecTurnIndexLessThan))
             || (getDescForWecTurnIndexRemainderEqualTo(con.WecTurnIndexRemainderEqualTo))
+            || (getDescForWecTurnAndPlayer(con.WecTurnAndPlayer))
             || (getDescForWecTurnPhaseEqualTo(con.WecTurnPhaseEqualTo))
             || (getDescForWecTilePlayerIndexEqualTo(con.WecTilePlayerIndexEqualTo))
             || (getDescForWecTileTypeEqualTo(con.WecTileTypeEqualTo))
@@ -1322,6 +1381,68 @@ namespace WarEventHelper {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0055 : LangTextType.F0056, data.divider, data.remainderEqualTo)
             : null;
+    }
+    function getDescForWecTurnAndPlayer(data: Types.Undefinable<WarEvent.IWecTurnAndPlayer>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const turnIndex                     = data.turnIndex;
+        const turnIndexComparator           = data.turnIndexComparator;
+        const turnIndexDivider              = data.turnIndexDivider;
+        const turnIndexRemainder            = data.turnIndexRemainder;
+        const turnIndexRemainderComparator  = data.turnIndexRemainderComparator;
+        const playerIndexArray              = data.playerIndexArray;
+        const turnPhase                     = data.turnPhase;
+        const shouldShowTextForTurnDivider  = (turnIndexDivider ?? turnIndexRemainder) != null;
+        const textForTurnIndex              = turnIndex == null
+            ? Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0191))
+            : `${turnIndexComparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(turnIndexComparator)} ${turnIndex}`;
+        const textForTurnPhase              = turnPhase == null
+            ? Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0780))
+            : (Lang.getTurnPhaseName(turnPhase) ?? CommonConstants.ErrorTextForUndefined);
+        const textForPlayerIndexArray       = playerIndexArray?.length
+            ? playerIndexArray.map(v => `P${v}`).join(`/`)
+            : Lang.getText(LangTextType.B0766);
+
+        if (turnIndex == null) {
+            if (shouldShowTextForTurnDivider) {
+                return Lang.getFormattedText(
+                    LangTextType.F0096,
+                    turnIndexDivider ?? CommonConstants.ErrorTextForUndefined,
+                    turnIndexRemainderComparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(turnIndexRemainderComparator),
+                    turnIndexRemainder ?? CommonConstants.ErrorTextForUndefined,
+                    textForTurnPhase,
+                    textForPlayerIndexArray,
+                );
+            } else {
+                return Lang.getFormattedText(
+                    LangTextType.F0094,
+                    textForTurnIndex,
+                    textForTurnPhase,
+                    textForPlayerIndexArray,
+                );
+            }
+        } else {
+            if (shouldShowTextForTurnDivider) {
+                return Lang.getFormattedText(
+                    LangTextType.F0095,
+                    textForTurnIndex,
+                    turnIndexDivider ?? CommonConstants.ErrorTextForUndefined,
+                    turnIndexRemainderComparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(turnIndexRemainderComparator),
+                    turnIndexRemainder ?? CommonConstants.ErrorTextForUndefined,
+                    textForTurnPhase,
+                    textForPlayerIndexArray,
+                );
+            } else {
+                return Lang.getFormattedText(
+                    LangTextType.F0094,
+                    textForTurnIndex,
+                    textForTurnPhase,
+                    textForPlayerIndexArray,
+                );
+            }
+        }
     }
     function getDescForWecTurnPhaseEqualTo(data: Types.Undefinable<WarEvent.IWecTurnPhaseEqualTo>): string | null {
         return (data)
@@ -1634,6 +1755,7 @@ namespace WarEventHelper {
         else if (condition.WecTurnIndexGreaterThan)             { return getErrorTipForWecTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan); }
         else if (condition.WecTurnIndexLessThan)                { return getErrorTipForWecTurnIndexLessThan(condition.WecTurnIndexLessThan); }
         else if (condition.WecTurnIndexRemainderEqualTo)        { return getErrorTipForWecTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo); }
+        else if (condition.WecTurnAndPlayer)                    { return getErrorTipForWecTurnAndPlayer(condition.WecTurnAndPlayer, war); }
         else if (condition.WecTurnPhaseEqualTo)                 { return getErrorTipForWecTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo); }
         else if (condition.WecTilePlayerIndexEqualTo)           { return getErrorTipForWecTilePlayerIndexEqualTo(condition.WecTilePlayerIndexEqualTo, war); }
         else if (condition.WecTileTypeEqualTo)                  { return getErrorTipForWecTileTypeEqualTo(condition.WecTileTypeEqualTo, war); }
@@ -1728,6 +1850,49 @@ namespace WarEventHelper {
             (remainder >= divider)
         ) {
             return Lang.getText(LangTextType.A0165);
+        }
+
+        return null;
+    }
+    function getErrorTipForWecTurnAndPlayer(data: WarEvent.IWecTurnAndPlayer, war: BwWar): string | null {
+        {
+            const comparator = data.turnIndexComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const divider   = data.turnIndexDivider;
+            const remainder = data.turnIndexRemainder;
+            if (divider == null) {
+                if (remainder != null) {
+                    return Lang.getText(LangTextType.A0265);
+                }
+            } else {
+                if ((divider <= 1) || (remainder == null)) {
+                    return Lang.getText(LangTextType.A0265);
+                }
+            }
+
+            const comparator = data.turnIndexRemainderComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const turnPhase = data.turnPhase;
+            if ((turnPhase != null) && (!ConfigManager.checkIsValidTurnPhaseCode(turnPhase))) {
+                return Lang.getText(LangTextType.A0265);
+            }
+        }
+
+        {
+            const playersCountUnneutral = war.getPlayersCountUnneutral();
+            if (data.playerIndexArray?.some(v => (v < CommonConstants.WarNeutralPlayerIndex) || (v > playersCountUnneutral))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
+            }
         }
 
         return null;
@@ -2402,6 +2567,7 @@ namespace WarEventHelper {
         else if (condition.WecTurnIndexGreaterThan)             { return ConditionType.WecTurnIndexGreaterThan; }
         else if (condition.WecTurnIndexLessThan)                { return ConditionType.WecTurnIndexLessThan; }
         else if (condition.WecTurnIndexRemainderEqualTo)        { return ConditionType.WecTurnIndexRemainderEqualTo; }
+        else if (condition.WecTurnAndPlayer)                    { return ConditionType.WecTurnAndPlayer; }
         else if (condition.WecPlayerIndexInTurnEqualTo)         { return ConditionType.WecPlayerIndexInTurnEqualTo; }
         else if (condition.WecPlayerIndexInTurnGreaterThan)     { return ConditionType.WecPlayerIndexInTurnGreaterThan; }
         else if (condition.WecPlayerIndexInTurnLessThan)        { return ConditionType.WecPlayerIndexInTurnLessThan; }
@@ -2443,6 +2609,16 @@ namespace WarEventHelper {
                 isNot           : false,
                 divider         : 2,
                 remainderEqualTo: 0,
+            };
+        } else if (conditionType === ConditionType.WecTurnAndPlayer) {
+            condition.WecTurnAndPlayer = {
+                turnIndex                       : null,
+                turnIndexComparator             : Types.ValueComparator.EqualTo,
+                turnIndexDivider                : null,
+                turnIndexRemainder              : null,
+                turnIndexRemainderComparator    : Types.ValueComparator.EqualTo,
+                turnPhase                       : null,
+                playerIndexArray                : null,
             };
         } else if (conditionType === ConditionType.WecTurnPhaseEqualTo) {
             condition.WecTurnPhaseEqualTo = {
@@ -2538,33 +2714,40 @@ namespace WarEventHelper {
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel4);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel5);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel6);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel7);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel8);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel9);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel10);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel11);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel12);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel20);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel21);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel22);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel13);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel14);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel15);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel16);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel30);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel31);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel32);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel40);
 
         if      (condition.WecTurnIndexEqualTo)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel1, { fullData, condition, war }); }
         else if (condition.WecTurnIndexGreaterThan)             { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel2, { fullData, condition, war }); }
         else if (condition.WecTurnIndexLessThan)                { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel3, { fullData, condition, war }); }
         else if (condition.WecTurnIndexRemainderEqualTo)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel4, { fullData, condition, war }); }
         else if (condition.WecTurnPhaseEqualTo)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel5, { fullData, condition, war }); }
-        else if (condition.WecPlayerIndexInTurnEqualTo)         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel6, { fullData, condition, war }); }
-        else if (condition.WecPlayerIndexInTurnGreaterThan)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel7, { fullData, condition, war }); }
-        else if (condition.WecPlayerIndexInTurnLessThan)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel8, { fullData, condition, war }); }
-        else if (condition.WecEventCalledCountTotalEqualTo)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel9, { fullData, condition, war }); }
-        else if (condition.WecEventCalledCountTotalGreaterThan) { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel10, { fullData, condition, war }); }
-        else if (condition.WecEventCalledCountTotalLessThan)    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel11, { fullData, condition, war }); }
-        else if (condition.WecPlayerAliveStateEqualTo)          { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel12, { fullData, condition, war }); }
-        else if (condition.WecTilePlayerIndexEqualTo)           { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel13, { fullData, condition, war }); }
-        else if (condition.WecTileTypeEqualTo)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel14, { fullData, condition, war }); }
-        else if (condition.WecTilePresence)                     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel15, { fullData, condition, war }); }
-        else if (condition.WecUnitPresence)                     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel16, { fullData, condition, war }); }
+        else if (condition.WecTurnAndPlayer)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel6, { fullData, condition, war }); }
+
+        else if (condition.WecPlayerIndexInTurnEqualTo)         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel10, { fullData, condition, war }); }
+        else if (condition.WecPlayerIndexInTurnGreaterThan)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel11, { fullData, condition, war }); }
+        else if (condition.WecPlayerIndexInTurnLessThan)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel12, { fullData, condition, war }); }
+        else if (condition.WecPlayerAliveStateEqualTo)          { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel13, { fullData, condition, war }); }
+
+        else if (condition.WecEventCalledCountTotalEqualTo)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel20, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCountTotalGreaterThan) { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel21, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCountTotalLessThan)    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel22, { fullData, condition, war }); }
+
+        else if (condition.WecTilePlayerIndexEqualTo)           { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel30, { fullData, condition, war }); }
+        else if (condition.WecTileTypeEqualTo)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel31, { fullData, condition, war }); }
+        else if (condition.WecTilePresence)                     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel32, { fullData, condition, war }); }
+
+        else if (condition.WecUnitPresence)                     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel40, { fullData, condition, war }); }
+
         else                                                    { throw Helpers.newError(`Invalid condition.`, ClientErrorCode.WarEventHelper_OpenConditionModifyPanel_00); }
     }
 

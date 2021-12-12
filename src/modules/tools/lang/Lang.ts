@@ -57,6 +57,10 @@ namespace Lang {
     }
 
     export function getFormattedText(t: LangTextType, ...params: (Types.Undefinable<number | string>)[]): string {
+        if ((t < LangTextType.F0000) || (t >= LangTextType.R0000)) {
+            throw Helpers.newError(`Lang.getFormattedText() invalid t:${t}`);
+        }
+
         const data = getText(t);
         return data === CommonConstants.ErrorTextForLang
             ? CommonConstants.ErrorTextForLang
@@ -424,6 +428,7 @@ namespace Lang {
             case WarEventConditionType.WecTurnIndexLessThan                 : return getText(LangTextType.B0506);
             case WarEventConditionType.WecTurnIndexRemainderEqualTo         : return getText(LangTextType.B0507);
             case WarEventConditionType.WecTurnPhaseEqualTo                  : return getText(LangTextType.B0508);
+            case WarEventConditionType.WecTurnAndPlayer                     : return getText(LangTextType.B0781);
             case WarEventConditionType.WecPlayerIndexInTurnEqualTo          : return getText(LangTextType.B0509);
             case WarEventConditionType.WecPlayerIndexInTurnGreaterThan      : return getText(LangTextType.B0510);
             case WarEventConditionType.WecPlayerIndexInTurnLessThan         : return getText(LangTextType.B0511);

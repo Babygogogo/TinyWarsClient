@@ -4231,6 +4231,18 @@ namespace TwnsLangCommonText {
             `特定地形数量统计...`,
             `Terrain Presence ...`,
         ],
+        [LangTextType.B0780]: [
+            `阶段`,
+            `Phase`,
+        ],
+        [LangTextType.B0781]: [
+            `当前回合与玩家是...`,
+            `The Current Turn and Player ...`,
+        ],
+        [LangTextType.B0782]: [
+            `回合阶段`,
+            `Turn Phase`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4893,6 +4905,22 @@ namespace TwnsLangCommonText {
         [LangTextType.F0093]: [
             `类型为 %s、且位于 %s、且归属于 %s 的地形的数量 %s %s`,
             `The number of %s at %s that owned by %s is %s %s.`,
+        ],
+        [LangTextType.F0094]: [
+            `当前回合数是 %s、且回合阶段为 %s、且是 %s 的回合`,
+            `The Current Turn is %s, and the Turn Phase is %s, and the Current Player is %s.`,
+        ],
+        [LangTextType.F0095]: [
+            `当前回合数是 %s、且当前回合数除以 %s 的余数 %s %s、且回合阶段为 %s、且是 %s 的回合`,
+            `The Current Turn is %s, and the Current Turn mod %s is %s %s, and the Turn Phase is %s, and the Current Player is %s.`,
+        ],
+        [LangTextType.F0096]: [
+            `当前回合数除以 %s 的余数 %s %s、且回合阶段为 %s、且是 %s 的回合`,
+            `The Current Turn mod %s is %s %s, and the Turn Phase is %s, and the Current Player is %s.`,
+        ],
+        [LangTextType.F0097]: [
+            `任意%s`,
+            `Any %s`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

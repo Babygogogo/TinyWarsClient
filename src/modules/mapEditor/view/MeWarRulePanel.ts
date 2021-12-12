@@ -107,6 +107,7 @@ namespace TwnsMeWarRulePanel {
                 { ui: this._btnTestWarEvent,        callback: this._onTouchedBtnTestWarEvent },
             ]);
             this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listWarEvent.setItemRenderer(WarEventRenderer);
@@ -166,7 +167,6 @@ namespace TwnsMeWarRulePanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
         }
 
         private _onTouchedBtnDelete(): void {

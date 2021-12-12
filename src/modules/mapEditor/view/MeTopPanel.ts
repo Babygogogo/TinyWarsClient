@@ -33,7 +33,7 @@ namespace TwnsMeTopPanel {
     export type OpenData = void;
     export class MeTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupMode!                    : eui.Group;
-        private readonly _labelMode!                    : TwnsUiLabel.UiLabel;
+        // private readonly _labelMode!                    : TwnsUiLabel.UiLabel;
         private readonly _conUnitView!                  : eui.Group;
         private readonly _conTileView!                  : eui.Group;
 
@@ -58,8 +58,16 @@ namespace TwnsMeTopPanel {
         private readonly _groupModeDeleteLocation!      : eui.Group;
         private readonly _labelModeDeleteLocation!      : TwnsUiLabel.UiLabel;
 
+        private readonly _groupLeftButtons!             : eui.Group;
+        private readonly _btnSaveMap!                   : TwnsUiButton.UiButton;
+        private readonly _btnLoadMap!                   : TwnsUiButton.UiButton;
+        private readonly _btnReviewAccept!              : TwnsUiButton.UiButton;
+        private readonly _btnReviewReject!              : TwnsUiButton.UiButton;
+        private readonly _btnWarRule!                   : TwnsUiButton.UiButton;
+        private readonly _btnWarEvent!                  : TwnsUiButton.UiButton;
         private readonly _btnVisibility!                : TwnsUiButton.UiButton;
         private readonly _btnSymmetry!                  : TwnsUiButton.UiButton;
+        private readonly _btnSettings!                  : TwnsUiButton.UiButton;
         private readonly _btnMenu!                      : TwnsUiButton.UiButton;
 
         private _unitView   = new TwnsBwUnitView.BwUnitView();
@@ -75,7 +83,6 @@ namespace TwnsMeTopPanel {
                 { type: NotifyType.MeDrawerModeChanged,             callback: this._onNotifyMeDrawerModeChanged },
                 { type: NotifyType.BwTurnPhaseCodeChanged,          callback: this._onNotifyBwTurnPhaseCodeChanged },
                 { type: NotifyType.BwPlayerFundChanged,             callback: this._onNotifyBwPlayerFundChanged },
-                { type: NotifyType.BwPlayerIndexInTurnChanged,      callback: this._onNotifyBwPlayerIndexInTurnChanged },
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
@@ -92,8 +99,15 @@ namespace TwnsMeTopPanel {
                 { ui: this._groupModeDeleteUnit,            callback: this._onTouchedGroupModeDeleteUnit },
                 { ui: this._groupModeDrawLocation,          callback: this._onTouchedGroupModeDrawLocation },
                 { ui: this._groupModeDeleteLocation,        callback: this._onTouchedGroupModeDeleteLocation },
+                { ui: this._btnSaveMap,                     callback: this._onTouchedBtnSaveMap },
+                { ui: this._btnLoadMap,                     callback: this._onTouchedBtnLoadMap },
+                { ui: this._btnReviewAccept,                callback: this._onTouchedBtnReviewAccept },
+                { ui: this._btnReviewReject,                callback: this._onTouchedBtnReviewReject },
+                { ui: this._btnWarRule,                     callback: this._onTouchedBtnWarRule },
+                { ui: this._btnWarEvent,                    callback: this._onTouchedBtnWarEvent },
                 { ui: this._btnVisibility,                  callback: this._onTouchedBtnVisibility },
                 { ui: this._btnSymmetry,                    callback: this._onTouchedBtnSymmetry },
+                { ui: this._btnSettings,                    callback: this._onTouchedBtnSettings },
                 { ui: this._btnMenu,                        callback: this._onTouchedBtnMenu, },
             ]);
 
@@ -159,26 +173,23 @@ namespace TwnsMeTopPanel {
             this._updateGroupMode();
         }
         private _onNotifyBwTurnPhaseCodeChanged(): void {
-            this._updateBtnModePreview();
-            this._updateBtnModeDrawTileBase();
-            this._updateBtnDeleteUnit();
-            this._updateBtnDeleteTileObject();
+            this._updateGroupModePreview();
+            this._updateGroupModeDrawTileBase();
+            this._updateGroupModeDeleteUnit();
+            this._updateGroupModeDeleteTileObject();
         }
         private _onNotifyBwPlayerFundChanged(): void {
-            this._updateBtnModeDrawUnit();
-        }
-        private _onNotifyBwPlayerIndexInTurnChanged(): void {
-            this._updateView();
+            this._updateGroupModeDrawUnit();
         }
         private _onNotifyBwCoEnergyChanged(): void {
-            this._updateBtnModeDrawTileObject();
+            this._updateGroupModeDrawTileObject();
         }
         private _onNotifyBwCoUsingSkillChanged(): void {
-            this._updateBtnModeDrawTileObject();
+            this._updateGroupModeDrawTileObject();
         }
         private _onNotifyBwActionPlannerStateChanged(): void {
-            this._updateBtnModePreview();
-            this._updateBtnDeleteTileObject();
+            this._updateGroupModePreview();
+            this._updateGroupModeDeleteTileObject();
         }
         private _onMsgMeSubmitMap(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMeSubmitMap.IS;
@@ -229,6 +240,50 @@ namespace TwnsMeTopPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeChooseLocationPanel, { isAdd: false });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
+        private _onTouchedBtnSaveMap(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeConfirmSaveMapPanel, void 0);
+        }
+        private _onTouchedBtnLoadMap(): void {
+            const war = this._getWar();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                content : Lang.getText(LangTextType.A0072),
+                callback: async () => {
+                    const slotIndex = war.getMapSlotIndex();
+                    const data      = MeModel.getData(slotIndex);
+                    war.stopRunning();
+                    await war.initWithMapEditorData({
+                        mapRawData: (data ? data.mapRawData : null) || await MeUtility.createDefaultMapRawData(slotIndex),
+                        slotIndex,
+                    });
+                    war.setIsMapModified(false);
+                    war.startRunning()
+                        .startRunningView();
+                },
+            });
+        }
+        private _onTouchedBtnReviewAccept(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAcceptMapPanel, { war: this._getWar() });
+        }
+        private _onTouchedBtnReviewReject(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmRejectMapPanel, { war: this._getWar() });
+        }
+        private _onTouchedBtnWarRule(): void {
+            const war = this._getWar();
+            if (!war.getIsReviewingMap()) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarRulePanel, void 0);
+            } else {
+                if (war.getWarRuleArray().length) {
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarRulePanel, void 0);
+                } else {
+                    FloatText.show(Lang.getText(LangTextType.A0100));
+                }
+            }
+        }
+        private _onTouchedBtnWarEvent(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeEventListPanel, {
+                war: this._getWar(),
+            });
+        }
         private _onTouchedGroupModeDeleteTileDecorator(): void {
             this._getDrawer().setModeDeleteTileDecorator();
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -244,6 +299,9 @@ namespace TwnsMeTopPanel {
         private _onTouchedBtnSymmetry(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeSymmetryPanel, void 0);
         }
+        private _onTouchedBtnSettings(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSettingsPanel,  void 0);
+        }
         private _onTouchedBtnMenu(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
         }
@@ -254,20 +312,22 @@ namespace TwnsMeTopPanel {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
+            this._resetGroupLeftButtons();
             this._updateGroupMode();
-            this._updateBtnModePreview();
-            this._updateBtnModeDrawUnit();
-            this._updateBtnModeDrawTileBase();
-            this._updateBtnModeDrawTileDecorator();
-            this._updateBtnModeDrawTileObject();
-            this._updateBtnDeleteUnit();
-            this._updateBtnDeleteTileDecorator();
-            this._updateBtnDeleteTileObject();
-            this._updateBtnMenu();
+            this._updateGroupModePreview();
+            this._updateGroupModeDrawUnit();
+            this._updateGroupModeDrawTileBase();
+            this._updateGroupModeDrawTileDecorator();
+            this._updateGroupModeDrawTileObject();
+            this._updateGroupModeDeleteUnit();
+            this._updateGroupModeDeleteTileDecorator();
+            this._updateGroupModeDeleteTileObject();
+            this._updateGroupModeDrawLocation();
+            this._updateGroupModeDeleteLocation();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._updateLabelMode();
+            // this._updateLabelMode();
             this._labelModePreview.text             = Lang.getText(LangTextType.B0286);
             this._labelModeDrawTileBase.text        = Lang.getText(LangTextType.B0282);
             this._labelModeDeleteTileDecorator.text = Lang.getText(LangTextType.B0661);
@@ -278,13 +338,39 @@ namespace TwnsMeTopPanel {
             this._labelModeDeleteTileObject.text    = Lang.getText(LangTextType.B0285);
             this._labelModeDrawLocation.text        = Lang.getText(LangTextType.B0759);
             this._labelModeDeleteLocation.text      = Lang.getText(LangTextType.B0760);
+            this._btnSaveMap.label                  = Lang.getText(LangTextType.B0287);
+            this._btnLoadMap.label                  = Lang.getText(LangTextType.B0288);
+            this._btnReviewAccept.label             = Lang.getText(LangTextType.B0296);
+            this._btnReviewReject.label             = Lang.getText(LangTextType.B0297);
+            this._btnWarRule.label                  = Lang.getText(LangTextType.B0314);
+            this._btnWarEvent.label                 = Lang.getText(LangTextType.B0461);
             this._btnVisibility.label               = Lang.getText(LangTextType.B0301);
             this._btnSymmetry.label                 = Lang.getText(LangTextType.B0306);
+            this._btnSettings.label                 = Lang.getText(LangTextType.B0560);
             this._btnMenu.label                     = Lang.getText(LangTextType.B0155);
         }
 
+        private _resetGroupLeftButtons(): void {
+            const group = this._groupLeftButtons;
+            group.removeChildren();
+
+            if (this._getWar().getIsReviewingMap()) {
+                group.addChild(this._btnReviewAccept);
+                group.addChild(this._btnReviewReject);
+            } else {
+                group.addChild(this._btnSaveMap);
+                group.addChild(this._btnLoadMap);
+            }
+            group.addChild(this._btnWarRule);
+            group.addChild(this._btnWarEvent);
+            group.addChild(this._btnVisibility);
+            group.addChild(this._btnSymmetry);
+            group.addChild(this._btnSettings);
+            group.addChild(this._btnMenu);
+        }
+
         private _updateGroupMode(): void {
-            this._updateLabelMode();
+            // this._updateLabelMode();
             this._updateTileView();
             this._updateUnitView();
 
@@ -301,21 +387,21 @@ namespace TwnsMeTopPanel {
             Helpers.changeColor(this._groupModeDeleteLocation,      mode === Types.MapEditorDrawerMode.DeleteTileFromLocation ? Types.ColorType.White : Types.ColorType.Origin);
         }
 
-        private _updateLabelMode(): void {
-            const label     = this._labelMode;
-            const drawer    = this._getDrawer();
-            const mode      = drawer.getMode();
-            label.textColor = getTextColorForDrawerMode(mode);
+        // private _updateLabelMode(): void {
+        //     const label     = this._labelMode;
+        //     const drawer    = this._getDrawer();
+        //     const mode      = drawer.getMode();
+        //     label.textColor = getTextColorForDrawerMode(mode);
 
-            const rawText = `${Lang.getText(LangTextType.B0280)}: ${Lang.getMapEditorDrawerModeText(mode)}`;
-            if (mode === DrawerMode.AddTileToLocation) {
-                label.text = `${rawText} ${drawer.getDataForAddTileToLocation()?.locationIdArray.join(`,`)}`;
-            } else if (mode === DrawerMode.DeleteTileFromLocation) {
-                label.text = `${rawText} ${drawer.getDataForDeleteTileFromLocation()?.locationIdArray.join(`,`)}`;
-            } else {
-                label.text = rawText;
-            }
-        }
+        //     const rawText = `${Lang.getText(LangTextType.B0280)}: ${Lang.getMapEditorDrawerModeText(mode)}`;
+        //     if (mode === DrawerMode.AddTileToLocation) {
+        //         label.text = `${rawText} ${drawer.getDataForAddTileToLocation()?.locationIdArray.join(`,`)}`;
+        //     } else if (mode === DrawerMode.DeleteTileFromLocation) {
+        //         label.text = `${rawText} ${drawer.getDataForDeleteTileFromLocation()?.locationIdArray.join(`,`)}`;
+        //     } else {
+        //         label.text = rawText;
+        //     }
+        // }
 
         private _updateTileView(): void {
             const drawer    = this._getDrawer();
@@ -386,40 +472,44 @@ namespace TwnsMeTopPanel {
             }
         }
 
-        private _updateBtnModeDrawUnit(): void {
+        private _updateGroupModeDrawUnit(): void {
             this._groupModeDrawUnit.visible = !this._getWar().getIsReviewingMap();
         }
 
-        private _updateBtnModeDrawTileDecorator(): void {
+        private _updateGroupModeDrawTileDecorator(): void {
             this._groupModeDrawTileDecorator.visible = !this._getWar().getIsReviewingMap();
         }
 
-        private _updateBtnModeDrawTileObject(): void {
+        private _updateGroupModeDrawTileObject(): void {
             this._groupModeDrawTileObject.visible = !this._getWar().getIsReviewingMap();
         }
 
-        private _updateBtnModePreview(): void {
+        private _updateGroupModePreview(): void {
             this._groupModePreview.visible = !this._getWar().getIsReviewingMap();
         }
 
-        private _updateBtnModeDrawTileBase(): void {
+        private _updateGroupModeDrawTileBase(): void {
             this._groupModeDrawTileBase.visible = !this._getWar().getIsReviewingMap();
         }
 
-        private _updateBtnDeleteUnit(): void {
+        private _updateGroupModeDeleteUnit(): void {
             this._groupModeDeleteUnit.visible = !this._getWar().getIsReviewingMap();
         }
 
-        private _updateBtnDeleteTileObject(): void {
+        private _updateGroupModeDeleteTileObject(): void {
             this._groupModeDeleteTileObject.visible = !this._getWar().getIsReviewingMap();
         }
 
-        private _updateBtnDeleteTileDecorator(): void {
+        private _updateGroupModeDeleteTileDecorator(): void {
             this._groupModeDeleteTileDecorator.visible = !this._getWar().getIsReviewingMap();
         }
 
-        private _updateBtnMenu(): void {
-            this._btnMenu.label = Lang.getText(LangTextType.B0155);
+        private _updateGroupModeDrawLocation(): void {
+            this._groupModeDrawLocation.visible = !this._getWar().getIsReviewingMap();
+        }
+
+        private _updateGroupModeDeleteLocation(): void {
+            this._groupModeDeleteLocation.visible = !this._getWar().getIsReviewingMap();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

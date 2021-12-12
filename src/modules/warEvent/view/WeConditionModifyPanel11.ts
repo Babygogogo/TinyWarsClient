@@ -17,17 +17,17 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeConditionModifyPanel11 {
+    import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
-    import LangTextType             = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
         war         : TwnsBwWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
-    /** WecEventCalledCountTotalLessThan */
+    /** WecPlayerIndexInTurnGreaterThan */
     export class WeConditionModifyPanel11 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
@@ -37,10 +37,8 @@ namespace TwnsWeConditionModifyPanel11 {
         private readonly _groupIsNot!       : eui.Group;
         private readonly _labelIsNot!       : TwnsUiLabel.UiLabel;
         private readonly _imgIsNot!         : TwnsUiImage.UiImage;
-        private readonly _labelEvent!       : TwnsUiLabel.UiLabel;
-        private readonly _btnEvent!         : TwnsUiButton.UiButton;
-        private readonly _labelCalledCount! : TwnsUiLabel.UiLabel;
-        private readonly _inputCalledCount! : TwnsUiTextInput.UiTextInput;
+        private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
+        private readonly _inputPlayerIndex! : TwnsUiTextInput.UiTextInput;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -50,13 +48,12 @@ namespace TwnsWeConditionModifyPanel11 {
                 { ui: this._btnClose,           callback: this.close },
                 { ui: this._btnType,            callback: this._onTouchedBtnType },
                 { ui: this._groupIsNot,         callback: this._onTouchedGroupIsNot },
-                { ui: this._btnEvent,           callback: this._onTouchedBtnTurnEvent },
-                { ui: this._inputCalledCount,   callback: this._onFocusOutInputCalledCount, eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputPlayerIndex,   callback: this._onFocusOutInputPlayerIndex, eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
 
-            this._inputCalledCount.restrict = `0-9`;
+            this._inputPlayerIndex.restrict = `0-9`;
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -77,31 +74,20 @@ namespace TwnsWeConditionModifyPanel11 {
             });
         }
         private _onTouchedGroupIsNot(): void {
-            const data  = Helpers.getExisted(this._getCondition().WecEventCalledCountTotalLessThan);
+            const data  = Helpers.getExisted(this._getCondition().WecPlayerIndexInTurnGreaterThan);
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
-        private _onTouchedBtnTurnEvent(): void {
-            const openData              = this._getOpenData();
-            const eventArray            = Helpers.getExisted(openData.fullData.eventArray);
-            const condition             = Helpers.getExisted(openData.condition.WecEventCalledCountTotalLessThan);
-            const newIndex              = (eventArray.findIndex(v => v.eventId === condition.eventIdEqualTo) + 1) % eventArray.length;
-            condition.eventIdEqualTo    = eventArray[newIndex].eventId;
-
-            this._updateLabelDescAndLabelError();
-            this._updateLabelEvent();
-            Notify.dispatch(NotifyType.WarEventFullDataChanged);
-        }
-        private _onFocusOutInputCalledCount(): void {
-            const value = parseInt(this._inputCalledCount.text);
+        private _onFocusOutInputPlayerIndex(): void {
+            const value = parseInt(this._inputPlayerIndex.text);
             if (isNaN(value)) {
-                this._updateInputCalledCount();
+                this._updateInputPlayerIndex();
             } else {
-                Helpers.getExisted(this._getCondition().WecEventCalledCountTotalLessThan).countLessThan = value;
+                Helpers.getExisted(this._getCondition().WecPlayerIndexInTurnGreaterThan).valueGreaterThan = value;
                 this._updateLabelDescAndLabelError();
-                this._updateInputCalledCount();
+                this._updateInputPlayerIndex();
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -111,8 +97,7 @@ namespace TwnsWeConditionModifyPanel11 {
 
             this._updateLabelDescAndLabelError();
             this._updateImgIsNot();
-            this._updateLabelEvent();
-            this._updateInputCalledCount();
+            this._updateInputPlayerIndex();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -120,12 +105,9 @@ namespace TwnsWeConditionModifyPanel11 {
             this._btnClose.label        = Lang.getText(LangTextType.B0146);
             this._btnType.label         = Lang.getText(LangTextType.B0516);
             this._labelIsNot.text       = Lang.getText(LangTextType.B0517);
-            this._btnEvent.label        = Lang.getText(LangTextType.B0469);
-            this._labelCalledCount.text = Lang.getText(LangTextType.B0522);
+            this._labelPlayerIndex.text = Lang.getText(LangTextType.B0521);
 
             this._updateLabelDescAndLabelError();
-            this._updateLabelEvent();
-            this._updateInputCalledCount();
         }
 
         private _updateLabelDescAndLabelError(): void {
@@ -138,16 +120,10 @@ namespace TwnsWeConditionModifyPanel11 {
             this._labelDesc.text    = WarEventHelper.getDescForCondition(condition) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateImgIsNot(): void {
-            this._imgIsNot.visible = !!this._getCondition().WecEventCalledCountTotalLessThan?.isNot;
+            this._imgIsNot.visible = !!this._getCondition().WecPlayerIndexInTurnGreaterThan?.isNot;
         }
-        private _updateLabelEvent(): void {
-            const openData          = this._getOpenData();
-            const eventId           = Helpers.getExisted(openData.condition.WecEventCalledCountTotalLessThan?.eventIdEqualTo);
-            const event             = WarEventHelper.getEvent(openData.fullData, eventId);
-            this._labelEvent.text   = `#${eventId} (${event ? Lang.getLanguageText({ textArray: event.eventNameArray }) : `---`})`;
-        }
-        private _updateInputCalledCount(): void {
-            this._inputCalledCount.text = `${this._getCondition().WecEventCalledCountTotalLessThan?.eventIdEqualTo}`;
+        private _updateInputPlayerIndex(): void {
+            this._inputPlayerIndex.text = `${this._getCondition().WecPlayerIndexInTurnGreaterThan?.valueGreaterThan}`;
         }
 
         private _getCondition(): IWarEventCondition {
@@ -156,4 +132,4 @@ namespace TwnsWeConditionModifyPanel11 {
     }
 }
 
-// export default TwnsWeConditionModifyPanel11;
+// export default TwnsWeConditionModifyPanel7;
