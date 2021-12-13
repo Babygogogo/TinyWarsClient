@@ -12,222 +12,225 @@ namespace TwnsPanelConfig {
     };
 
     export let Dict: {
-        BwBackgroundPanel               : PanelConfig<TwnsBwBackgroundPanel.OpenData>;
-        BwBeginTurnPanel                : PanelConfig<TwnsBwBeginTurnPanel.OpenData>;
-        BwCaptureProgressPanel          : PanelConfig<TwnsBwCaptureProgressPanel.OpenData>;
-        BwDamagePreviewPanel            : PanelConfig<TwnsBwDamagePreviewPanel.OpenData>;
-        BwDialoguePanel                 : PanelConfig<TwnsBwDialoguePanel.OpenData>;
-        BwProduceUnitPanel              : PanelConfig<TwnsBwProduceUnitPanel.OpenData>;
-        BwSimpleDialoguePanel           : PanelConfig<TwnsBwSimpleDialoguePanel.OpenData>;
-        BwTileBriefPanel                : PanelConfig<TwnsBwTileBriefPanel.OpenData>;
-        BwTileDetailPanel               : PanelConfig<TwnsBwTileDetailPanel.OpenData>;
-        BwUnitActionsPanel              : PanelConfig<TwnsBwUnitActionsPanel.OpenData>;
-        BwUnitBriefPanel                : PanelConfig<TwnsBwUnitBriefPanel.OpenData>;
-        BwUnitDetailPanel               : PanelConfig<TwnsBwUnitDetailPanel.OpenData>;
-        BwUnitListPanel                 : PanelConfig<TwnsBwUnitListPanel.OpenData>;
-        BwWarInfoPanel                  : PanelConfig<TwnsBwWarInfoPanel.OpenData>;
-        BwWarPanel                      : PanelConfig<TwnsBwWarPanel.OpenData>;
+        BwBackgroundPanel                   : PanelConfig<TwnsBwBackgroundPanel.OpenData>;
+        BwBeginTurnPanel                    : PanelConfig<TwnsBwBeginTurnPanel.OpenData>;
+        BwCaptureProgressPanel              : PanelConfig<TwnsBwCaptureProgressPanel.OpenData>;
+        BwDamagePreviewPanel                : PanelConfig<TwnsBwDamagePreviewPanel.OpenData>;
+        BwDialoguePanel                     : PanelConfig<TwnsBwDialoguePanel.OpenData>;
+        BwProduceUnitPanel                  : PanelConfig<TwnsBwProduceUnitPanel.OpenData>;
+        BwSimpleDialoguePanel               : PanelConfig<TwnsBwSimpleDialoguePanel.OpenData>;
+        BwTileBriefPanel                    : PanelConfig<TwnsBwTileBriefPanel.OpenData>;
+        BwTileDetailPanel                   : PanelConfig<TwnsBwTileDetailPanel.OpenData>;
+        BwUnitActionsPanel                  : PanelConfig<TwnsBwUnitActionsPanel.OpenData>;
+        BwUnitBriefPanel                    : PanelConfig<TwnsBwUnitBriefPanel.OpenData>;
+        BwUnitDetailPanel                   : PanelConfig<TwnsBwUnitDetailPanel.OpenData>;
+        BwUnitListPanel                     : PanelConfig<TwnsBwUnitListPanel.OpenData>;
+        BwWarInfoPanel                      : PanelConfig<TwnsBwWarInfoPanel.OpenData>;
+        BwWarPanel                          : PanelConfig<TwnsBwWarPanel.OpenData>;
 
-        BroadcastPanel                  : PanelConfig<TwnsBroadcastPanel.OpenData>;
+        BroadcastPanel                      : PanelConfig<TwnsBroadcastPanel.OpenData>;
 
-        ChangeLogAddPanel               : PanelConfig<TwnsChangeLogAddPanel.OpenData>;
-        ChangeLogModifyPanel            : PanelConfig<TwnsChangeLogModifyPanel.OpenData>;
-        ChangeLogPanel                  : PanelConfig<TwnsChangeLogPanel.OpenData>;
+        ChangeLogAddPanel                   : PanelConfig<TwnsChangeLogAddPanel.OpenData>;
+        ChangeLogModifyPanel                : PanelConfig<TwnsChangeLogModifyPanel.OpenData>;
+        ChangeLogPanel                      : PanelConfig<TwnsChangeLogPanel.OpenData>;
 
-        CcrCreateMapListPanel           : PanelConfig<TwnsCcrCreateMapListPanel.OpenData>;
-        CcrCreateSearchMapPanel         : PanelConfig<TwnsCcrCreateSearchMapPanel.OpenData>;
-        CcrCreateSettingsPanel          : PanelConfig<TwnsCcrCreateSettingsPanel.OpenData>;
-        CcrJoinRoomListPanel            : PanelConfig<TwnsCcrJoinRoomListPanel.OpenData>;
-        CcrMainMenuPanel                : PanelConfig<TwnsCcrMainMenuPanel.OpenData>;
-        CcrMyRoomListPanel              : PanelConfig<TwnsCcrMyRoomListPanel.OpenData>;
-        CcrRoomInfoPanel                : PanelConfig<TwnsCcrRoomInfoPanel.OpenData>;
+        CcrCreateMapListPanel               : PanelConfig<TwnsCcrCreateMapListPanel.OpenData>;
+        CcrCreateSearchMapPanel             : PanelConfig<TwnsCcrCreateSearchMapPanel.OpenData>;
+        CcrCreateSettingsPanel              : PanelConfig<TwnsCcrCreateSettingsPanel.OpenData>;
+        CcrJoinRoomListPanel                : PanelConfig<TwnsCcrJoinRoomListPanel.OpenData>;
+        CcrMainMenuPanel                    : PanelConfig<TwnsCcrMainMenuPanel.OpenData>;
+        CcrMyRoomListPanel                  : PanelConfig<TwnsCcrMyRoomListPanel.OpenData>;
+        CcrRoomInfoPanel                    : PanelConfig<TwnsCcrRoomInfoPanel.OpenData>;
 
-        CcwMyWarListPanel               : PanelConfig<TwnsCcwMyWarListPanel.OpenData>;
+        CcwMyWarListPanel                   : PanelConfig<TwnsCcwMyWarListPanel.OpenData>;
 
-        ChatPanel                       : PanelConfig<TwnsChatPanel.OpenData>;
+        ChatPanel                           : PanelConfig<TwnsChatPanel.OpenData>;
 
-        CommonAlertPanel                : PanelConfig<TwnsCommonAlertPanel.OpenData>;
-        CommonBanCoPanel                : PanelConfig<TwnsCommonBanCoPanel.OpenData>;
-        CommonBlockPanel                : PanelConfig<TwnsCommonBlockPanel.OpenData>;
-        CommonChangeVersionPanel        : PanelConfig<TwnsCommonChangeVersionPanel.OpenData>;
-        CommonChooseCoPanel             : PanelConfig<TwnsCommonChooseCoPanel.OpenData>;
-        CommonChooseGridIndexPanel      : PanelConfig<TwnsCommonChooseGridIndexPanel.OpenData>;
-        CommonChooseLocationPanel       : PanelConfig<TwnsCommonChooseLocationPanel.OpenData>;
-        CommonChoosePlayerIndexPanel    : PanelConfig<TwnsCommonChoosePlayerIndexPanel.OpenData>;
-        CommonChooseTeamIndexPanel      : PanelConfig<TwnsCommonChooseTeamIndexPanel.OpenData>;
-        CommonChooseTileTypePanel       : PanelConfig<TwnsCommonChooseTileTypePanel.OpenData>;
-        CommonChooseUnitTypePanel       : PanelConfig<TwnsCommonChooseUnitTypePanel.OpenData>;
-        CommonCoInfoPanel               : PanelConfig<TwnsCommonCoInfoPanel.OpenData>;
-        CommonCoListPanel               : PanelConfig<TwnsCommonCoListPanel.OpenData>;
-        CommonConfirmPanel              : PanelConfig<TwnsCommonConfirmPanel.OpenData>;
-        CommonDamageChartPanel          : PanelConfig<TwnsCommonDamageChartPanel.OpenData>;
-        CommonErrorPanel                : PanelConfig<TwnsCommonErrorPanel.OpenData>;
-        CommonHelpPanel                 : PanelConfig<TwnsCommonHelpPanel.OpenData>;
-        CommonInputPanel                : PanelConfig<TwnsCommonInputPanel.OpenData>;
-        CommonJoinRoomPasswordPanel     : PanelConfig<TwnsCommonJoinRoomPasswordPanel.OpenData>;
-        CommonRankListPanel             : PanelConfig<TwnsCommonRankListPanel.OpenData>;
-        CommonServerStatusPanel         : PanelConfig<TwnsCommonServerStatusPanel.OpenData>;
+        CommonAlertPanel                    : PanelConfig<TwnsCommonAlertPanel.OpenData>;
+        CommonBanCoPanel                    : PanelConfig<TwnsCommonBanCoPanel.OpenData>;
+        CommonBlockPanel                    : PanelConfig<TwnsCommonBlockPanel.OpenData>;
+        CommonChangeVersionPanel            : PanelConfig<TwnsCommonChangeVersionPanel.OpenData>;
+        CommonChooseCoPanel                 : PanelConfig<TwnsCommonChooseCoPanel.OpenData>;
+        CommonChooseCoSkillTypePanel        : PanelConfig<TwnsCommonChooseCoSkillTypePanel.OpenData>;
+        CommonChooseGridIndexPanel          : PanelConfig<TwnsCommonChooseGridIndexPanel.OpenData>;
+        CommonChooseLocationPanel           : PanelConfig<TwnsCommonChooseLocationPanel.OpenData>;
+        CommonChoosePlayerAliveStatePanel   : PanelConfig<TwnsCommonChoosePlayerAliveStatePanel.OpenData>;
+        CommonChoosePlayerIndexPanel        : PanelConfig<TwnsCommonChoosePlayerIndexPanel.OpenData>;
+        CommonChooseTeamIndexPanel          : PanelConfig<TwnsCommonChooseTeamIndexPanel.OpenData>;
+        CommonChooseTileTypePanel           : PanelConfig<TwnsCommonChooseTileTypePanel.OpenData>;
+        CommonChooseUnitTypePanel           : PanelConfig<TwnsCommonChooseUnitTypePanel.OpenData>;
+        CommonCoInfoPanel                   : PanelConfig<TwnsCommonCoInfoPanel.OpenData>;
+        CommonCoListPanel                   : PanelConfig<TwnsCommonCoListPanel.OpenData>;
+        CommonConfirmPanel                  : PanelConfig<TwnsCommonConfirmPanel.OpenData>;
+        CommonDamageChartPanel              : PanelConfig<TwnsCommonDamageChartPanel.OpenData>;
+        CommonErrorPanel                    : PanelConfig<TwnsCommonErrorPanel.OpenData>;
+        CommonHelpPanel                     : PanelConfig<TwnsCommonHelpPanel.OpenData>;
+        CommonInputPanel                    : PanelConfig<TwnsCommonInputPanel.OpenData>;
+        CommonJoinRoomPasswordPanel         : PanelConfig<TwnsCommonJoinRoomPasswordPanel.OpenData>;
+        CommonRankListPanel                 : PanelConfig<TwnsCommonRankListPanel.OpenData>;
+        CommonServerStatusPanel             : PanelConfig<TwnsCommonServerStatusPanel.OpenData>;
 
-        HrwReplayProgressPanel          : PanelConfig<TwnsHrwReplayProgressPanel.OpenData>;
-        HrwTopPanel                     : PanelConfig<TwnsHrwTopPanel.OpenData>;
-        HrwWarMenuPanel                 : PanelConfig<TwnsHrwWarMenuPanel.OpenData>;
+        HrwReplayProgressPanel              : PanelConfig<TwnsHrwReplayProgressPanel.OpenData>;
+        HrwTopPanel                         : PanelConfig<TwnsHrwTopPanel.OpenData>;
+        HrwWarMenuPanel                     : PanelConfig<TwnsHrwWarMenuPanel.OpenData>;
 
-        LobbyBackgroundPanel            : PanelConfig<TwnsLobbyBackgroundPanel.OpenData>;
-        LobbyBottomPanel                : PanelConfig<TwnsLobbyBottomPanel.OpenData>;
-        LobbyPanel                      : PanelConfig<TwnsLobbyPanel.OpenData>;
-        LobbyTopPanel                   : PanelConfig<TwnsLobbyTopPanel.OpenData>;
-        LobbyTopRightPanel              : PanelConfig<TwnsLobbyTopRightPanel.OpenData>;
+        LobbyBackgroundPanel                : PanelConfig<TwnsLobbyBackgroundPanel.OpenData>;
+        LobbyBottomPanel                    : PanelConfig<TwnsLobbyBottomPanel.OpenData>;
+        LobbyPanel                          : PanelConfig<TwnsLobbyPanel.OpenData>;
+        LobbyTopPanel                       : PanelConfig<TwnsLobbyTopPanel.OpenData>;
+        LobbyTopRightPanel                  : PanelConfig<TwnsLobbyTopRightPanel.OpenData>;
 
-        McrCreateMapListPanel           : PanelConfig<TwnsMcrCreateMapListPanel.OpenData>;
-        McrCreateSearchMapPanel         : PanelConfig<TwnsMcrCreateSearchMapPanel.OpenData>;
-        McrCreateSettingsPanel          : PanelConfig<TwnsMcrCreateSettingsPanel.OpenData>;
-        McrJoinRoomListPanel            : PanelConfig<TwnsMcrJoinRoomListPanel.OpenData>;
-        McrMainMenuPanel                : PanelConfig<TwnsMcrMainMenuPanel.OpenData>;
-        McrMyRoomListPanel              : PanelConfig<TwnsMcrMyRoomListPanel.OpenData>;
-        McrRoomInfoPanel                : PanelConfig<TwnsMcrRoomInfoPanel.OpenData>;
+        McrCreateMapListPanel               : PanelConfig<TwnsMcrCreateMapListPanel.OpenData>;
+        McrCreateSearchMapPanel             : PanelConfig<TwnsMcrCreateSearchMapPanel.OpenData>;
+        McrCreateSettingsPanel              : PanelConfig<TwnsMcrCreateSettingsPanel.OpenData>;
+        McrJoinRoomListPanel                : PanelConfig<TwnsMcrJoinRoomListPanel.OpenData>;
+        McrMainMenuPanel                    : PanelConfig<TwnsMcrMainMenuPanel.OpenData>;
+        McrMyRoomListPanel                  : PanelConfig<TwnsMcrMyRoomListPanel.OpenData>;
+        McrRoomInfoPanel                    : PanelConfig<TwnsMcrRoomInfoPanel.OpenData>;
 
-        McwMyWarListPanel               : PanelConfig<TwnsMcwMyWarListPanel.OpenData>;
+        McwMyWarListPanel                   : PanelConfig<TwnsMcwMyWarListPanel.OpenData>;
 
-        MeAddWarEventToRulePanel        : PanelConfig<TwnsMeAddWarEventToRulePanel.OpenData>;
-        MeAvailableCoPanel              : PanelConfig<TwnsMeAvailableCoPanel.OpenData>;
-        MeChooseTileBasePanel           : PanelConfig<TwnsMeChooseTileBasePanel.OpenData>;
-        MeChooseTileDecoratorPanel      : PanelConfig<TwnsMeChooseTileDecoratorPanel.OpenData>;
-        MeChooseTileObjectPanel         : PanelConfig<TwnsMeChooseTileObjectPanel.OpenData>;
-        MeChooseUnitPanel               : PanelConfig<TwnsMeChooseUnitPanel.OpenData>;
-        MeClearPanel                    : PanelConfig<TwnsMeClearPanel.OpenData>;
-        MeConfirmSaveMapPanel           : PanelConfig<TwnsMeConfirmSaveMapPanel.OpenData>;
-        MeImportPanel                   : PanelConfig<TwnsMeImportPanel.OpenData>;
-        MeMapListPanel                  : PanelConfig<TwnsMeMapListPanel.OpenData>;
-        MeMapTagPanel                   : PanelConfig<TwnsMeMapTagPanel.OpenData>;
-        MeMfwSettingsPanel              : PanelConfig<TwnsMeMfwSettingsPanel.OpenData>;
-        MeModifyMapNamePanel            : PanelConfig<TwnsMeModifyMapNamePanel.OpenData>;
-        MeModifyRuleNamePanel           : PanelConfig<TwnsMeModifyRuleNamePanel.OpenData>;
-        MeOffsetPanel                   : PanelConfig<TwnsMeOffsetPanel.OpenData>;
-        MeResizePanel                   : PanelConfig<TwnsMeResizePanel.OpenData>;
-        MeSimSettingsPanel              : PanelConfig<TwnsMeSimSettingsPanel.OpenData>;
-        MeSymmetryPanel                 : PanelConfig<TwnsMeSymmetryPanel.OpenData>;
-        MeTopPanel                      : PanelConfig<TwnsMeTopPanel.OpenData>;
-        MeVisibilityPanel               : PanelConfig<TwnsMeVisibilityPanel.OpenData>;
-        MeWarMenuPanel                  : PanelConfig<TwnsMeWarMenuPanel.OpenData>;
-        MeWarRulePanel                  : PanelConfig<TwnsMeWarRulePanel.OpenData>;
-        MeChooseLocationPanel           : PanelConfig<TwnsMeChooseLocationPanel.OpenData>;
+        MeAddWarEventToRulePanel            : PanelConfig<TwnsMeAddWarEventToRulePanel.OpenData>;
+        MeAvailableCoPanel                  : PanelConfig<TwnsMeAvailableCoPanel.OpenData>;
+        MeChooseTileBasePanel               : PanelConfig<TwnsMeChooseTileBasePanel.OpenData>;
+        MeChooseTileDecoratorPanel          : PanelConfig<TwnsMeChooseTileDecoratorPanel.OpenData>;
+        MeChooseTileObjectPanel             : PanelConfig<TwnsMeChooseTileObjectPanel.OpenData>;
+        MeChooseUnitPanel                   : PanelConfig<TwnsMeChooseUnitPanel.OpenData>;
+        MeClearPanel                        : PanelConfig<TwnsMeClearPanel.OpenData>;
+        MeConfirmSaveMapPanel               : PanelConfig<TwnsMeConfirmSaveMapPanel.OpenData>;
+        MeImportPanel                       : PanelConfig<TwnsMeImportPanel.OpenData>;
+        MeMapListPanel                      : PanelConfig<TwnsMeMapListPanel.OpenData>;
+        MeMapTagPanel                       : PanelConfig<TwnsMeMapTagPanel.OpenData>;
+        MeMfwSettingsPanel                  : PanelConfig<TwnsMeMfwSettingsPanel.OpenData>;
+        MeModifyMapNamePanel                : PanelConfig<TwnsMeModifyMapNamePanel.OpenData>;
+        MeModifyRuleNamePanel               : PanelConfig<TwnsMeModifyRuleNamePanel.OpenData>;
+        MeOffsetPanel                       : PanelConfig<TwnsMeOffsetPanel.OpenData>;
+        MeResizePanel                       : PanelConfig<TwnsMeResizePanel.OpenData>;
+        MeSimSettingsPanel                  : PanelConfig<TwnsMeSimSettingsPanel.OpenData>;
+        MeSymmetryPanel                     : PanelConfig<TwnsMeSymmetryPanel.OpenData>;
+        MeTopPanel                          : PanelConfig<TwnsMeTopPanel.OpenData>;
+        MeVisibilityPanel                   : PanelConfig<TwnsMeVisibilityPanel.OpenData>;
+        MeWarMenuPanel                      : PanelConfig<TwnsMeWarMenuPanel.OpenData>;
+        MeWarRulePanel                      : PanelConfig<TwnsMeWarRulePanel.OpenData>;
+        MeChooseLocationPanel               : PanelConfig<TwnsMeChooseLocationPanel.OpenData>;
 
-        MfrCreateSettingsPanel          : PanelConfig<TwnsMfrCreateSettingsPanel.OpenData>;
-        MfrJoinRoomListPanel            : PanelConfig<TwnsMfrJoinRoomListPanel.OpenData>;
-        MfrMainMenuPanel                : PanelConfig<TwnsMfrMainMenuPanel.OpenData>;
-        MfrMyRoomListPanel              : PanelConfig<TwnsMfrMyRoomListPanel.OpenData>;
-        MfrRoomInfoPanel                : PanelConfig<TwnsMfrRoomInfoPanel.OpenData>;
+        MfrCreateSettingsPanel              : PanelConfig<TwnsMfrCreateSettingsPanel.OpenData>;
+        MfrJoinRoomListPanel                : PanelConfig<TwnsMfrJoinRoomListPanel.OpenData>;
+        MfrMainMenuPanel                    : PanelConfig<TwnsMfrMainMenuPanel.OpenData>;
+        MfrMyRoomListPanel                  : PanelConfig<TwnsMfrMyRoomListPanel.OpenData>;
+        MfrRoomInfoPanel                    : PanelConfig<TwnsMfrRoomInfoPanel.OpenData>;
 
-        MfwMyWarListPanel               : PanelConfig<TwnsMfwMyWarListPanel.OpenData>;
+        MfwMyWarListPanel                   : PanelConfig<TwnsMfwMyWarListPanel.OpenData>;
 
-        MmAcceptMapPanel                : PanelConfig<TwnsMmAcceptMapPanel.OpenData>;
-        MmAvailabilityChangePanel       : PanelConfig<TwnsMmAvailabilityChangePanel.OpenData>;
-        MmAvailabilityListPanel         : PanelConfig<TwnsMmAvailabilityListPanel.OpenData>;
-        MmAvailabilitySearchPanel       : PanelConfig<TwnsMmAvailabilitySearchPanel.OpenData>;
-        MmMainMenuPanel                 : PanelConfig<TwnsMmMainMenuPanel.OpenData>;
-        MmMapRenamePanel                : PanelConfig<TwnsMmMapRenamePanel.OpenData>;
-        MmRejectMapPanel                : PanelConfig<TwnsMmRejectMapPanel.OpenData>;
-        MmReviewListPanel               : PanelConfig<TwnsMmReviewListPanel.OpenData>;
-        MmTagChangePanel                : PanelConfig<TwnsMmTagChangePanel.OpenData>;
-        MmTagListPanel                  : PanelConfig<TwnsMmTagListPanel.OpenData>;
-        MmTagSearchPanel                : PanelConfig<TwnsMmTagSearchPanel.OpenData>;
-        MmWarRuleAvailableCoPanel       : PanelConfig<TwnsMmWarRuleAvailableCoPanel.OpenData>;
-        MmWarRulePanel                  : PanelConfig<TwnsMmWarRulePanel.OpenData>;
+        MmAcceptMapPanel                    : PanelConfig<TwnsMmAcceptMapPanel.OpenData>;
+        MmAvailabilityChangePanel           : PanelConfig<TwnsMmAvailabilityChangePanel.OpenData>;
+        MmAvailabilityListPanel             : PanelConfig<TwnsMmAvailabilityListPanel.OpenData>;
+        MmAvailabilitySearchPanel           : PanelConfig<TwnsMmAvailabilitySearchPanel.OpenData>;
+        MmMainMenuPanel                     : PanelConfig<TwnsMmMainMenuPanel.OpenData>;
+        MmMapRenamePanel                    : PanelConfig<TwnsMmMapRenamePanel.OpenData>;
+        MmRejectMapPanel                    : PanelConfig<TwnsMmRejectMapPanel.OpenData>;
+        MmReviewListPanel                   : PanelConfig<TwnsMmReviewListPanel.OpenData>;
+        MmTagChangePanel                    : PanelConfig<TwnsMmTagChangePanel.OpenData>;
+        MmTagListPanel                      : PanelConfig<TwnsMmTagListPanel.OpenData>;
+        MmTagSearchPanel                    : PanelConfig<TwnsMmTagSearchPanel.OpenData>;
+        MmWarRuleAvailableCoPanel           : PanelConfig<TwnsMmWarRuleAvailableCoPanel.OpenData>;
+        MmWarRulePanel                      : PanelConfig<TwnsMmWarRulePanel.OpenData>;
 
-        MpwSidePanel                    : PanelConfig<TwnsMpwSidePanel.OpenData>;
-        MpwTopPanel                     : PanelConfig<TwnsMpwTopPanel.OpenData>;
-        MpwWarMenuPanel                 : PanelConfig<TwnsMpwWarMenuPanel.OpenData>;
+        MpwSidePanel                        : PanelConfig<TwnsMpwSidePanel.OpenData>;
+        MpwTopPanel                         : PanelConfig<TwnsMpwTopPanel.OpenData>;
+        MpwWarMenuPanel                     : PanelConfig<TwnsMpwWarMenuPanel.OpenData>;
 
-        MrrMainMenuPanel                : PanelConfig<TwnsMrrMainMenuPanel.OpenData>;
-        MrrMyRoomListPanel              : PanelConfig<TwnsMrrMyRoomListPanel.OpenData>;
-        MrrPreviewMapListPanel          : PanelConfig<TwnsMrrPreviewMapListPanel.OpenData>;
-        MrrRoomInfoPanel                : PanelConfig<TwnsMrrRoomInfoPanel.OpenData>;
-        MrrSetMaxConcurrentCountPanel   : PanelConfig<TwnsMrrSetMaxConcurrentCountPanel.OpenData>;
+        MrrMainMenuPanel                    : PanelConfig<TwnsMrrMainMenuPanel.OpenData>;
+        MrrMyRoomListPanel                  : PanelConfig<TwnsMrrMyRoomListPanel.OpenData>;
+        MrrPreviewMapListPanel              : PanelConfig<TwnsMrrPreviewMapListPanel.OpenData>;
+        MrrRoomInfoPanel                    : PanelConfig<TwnsMrrRoomInfoPanel.OpenData>;
+        MrrSetMaxConcurrentCountPanel       : PanelConfig<TwnsMrrSetMaxConcurrentCountPanel.OpenData>;
 
-        MrwMyWarListPanel               : PanelConfig<TwnsMrwMyWarListPanel.OpenData>;
+        MrwMyWarListPanel                   : PanelConfig<TwnsMrwMyWarListPanel.OpenData>;
 
-        RwReplayListPanel               : PanelConfig<TwnsRwReplayListPanel.OpenData>;
-        RwReplayProgressPanel           : PanelConfig<TwnsRwReplayProgressPanel.OpenData>;
-        RwSearchReplayPanel             : PanelConfig<TwnsRwSearchReplayPanel.OpenData>;
-        RwTopPanel                      : PanelConfig<TwnsRwTopPanel.OpenData>;
-        RwWarMenuPanel                  : PanelConfig<TwnsRwWarMenuPanel.OpenData>;
+        RwReplayListPanel                   : PanelConfig<TwnsRwReplayListPanel.OpenData>;
+        RwReplayProgressPanel               : PanelConfig<TwnsRwReplayProgressPanel.OpenData>;
+        RwSearchReplayPanel                 : PanelConfig<TwnsRwSearchReplayPanel.OpenData>;
+        RwTopPanel                          : PanelConfig<TwnsRwTopPanel.OpenData>;
+        RwWarMenuPanel                      : PanelConfig<TwnsRwWarMenuPanel.OpenData>;
 
-        ScrCreateMapListPanel           : PanelConfig<TwnsScrCreateMapListPanel.OpenData>;
-        ScrCreateSaveSlotsPanel         : PanelConfig<TwnsScrCreateSaveSlotsPanel.OpenData>;
-        ScrCreateSearchMapPanel         : PanelConfig<TwnsScrCreateSearchMapPanel.OpenData>;
-        ScrCreateSettingsPanel          : PanelConfig<TwnsScrCreateSettingsPanel.OpenData>;
+        ScrCreateMapListPanel               : PanelConfig<TwnsScrCreateMapListPanel.OpenData>;
+        ScrCreateSaveSlotsPanel             : PanelConfig<TwnsScrCreateSaveSlotsPanel.OpenData>;
+        ScrCreateSearchMapPanel             : PanelConfig<TwnsScrCreateSearchMapPanel.OpenData>;
+        ScrCreateSettingsPanel              : PanelConfig<TwnsScrCreateSettingsPanel.OpenData>;
 
-        SpmCreateSfwSaveSlotsPanel      : PanelConfig<TwnsSpmCreateSfwSaveSlotsPanel.OpenData>;
-        SpmMainMenuPanel                : PanelConfig<TwnsSpmMainMenuPanel.OpenData>;
-        SpmWarListPanel                 : PanelConfig<TwnsSpmWarListPanel.OpenData>;
+        SpmCreateSfwSaveSlotsPanel          : PanelConfig<TwnsSpmCreateSfwSaveSlotsPanel.OpenData>;
+        SpmMainMenuPanel                    : PanelConfig<TwnsSpmMainMenuPanel.OpenData>;
+        SpmWarListPanel                     : PanelConfig<TwnsSpmWarListPanel.OpenData>;
 
-        SpwLoadWarPanel                 : PanelConfig<TwnsSpwLoadWarPanel.OpenData>;
-        SpwSidePanel                    : PanelConfig<TwnsSpwSidePanel.OpenData>;
-        SpwTopPanel                     : PanelConfig<TwnsSpwTopPanel.OpenData>;
-        SpwWarMenuPanel                 : PanelConfig<TwnsSpwWarMenuPanel.OpenData>;
+        SpwLoadWarPanel                     : PanelConfig<TwnsSpwLoadWarPanel.OpenData>;
+        SpwSidePanel                        : PanelConfig<TwnsSpwSidePanel.OpenData>;
+        SpwTopPanel                         : PanelConfig<TwnsSpwTopPanel.OpenData>;
+        SpwWarMenuPanel                     : PanelConfig<TwnsSpwWarMenuPanel.OpenData>;
 
-        UserChangeDiscordIdPanel        : PanelConfig<TwnsUserChangeDiscordIdPanel.OpenData>;
-        UserChangeNicknamePanel         : PanelConfig<TwnsUserChangeNicknamePanel.OpenData>;
-        UserLoginBackgroundPanel        : PanelConfig<TwnsUserLoginBackgroundPanel.OpenData>;
-        UserLoginPanel                  : PanelConfig<TwnsUserLoginPanel.OpenData>;
-        UserOnlineUsersPanel            : PanelConfig<TwnsUserOnlineUsersPanel.OpenData>;
-        UserPanel                       : PanelConfig<TwnsUserPanel.OpenData>;
-        UserRegisterPanel               : PanelConfig<TwnsUserRegisterPanel.OpenData>;
-        UserSetAvatarPanel              : PanelConfig<TwnsUserSetAvatarPanel.OpenData>;
-        UserSetPasswordPanel            : PanelConfig<TwnsUserSetPasswordPanel.OpenData>;
-        UserSetPrivilegePanel           : PanelConfig<TwnsUserSetPrivilegePanel.OpenData>;
-        UserSetSoundPanel               : PanelConfig<TwnsUserSetSoundPanel.OpenData>;
-        UserSetStageScalePanel          : PanelConfig<TwnsUserSetStageScalePanel.OpenData>;
-        UserSettingsPanel               : PanelConfig<TwnsUserSettingsPanel.OpenData>;
+        UserChangeDiscordIdPanel            : PanelConfig<TwnsUserChangeDiscordIdPanel.OpenData>;
+        UserChangeNicknamePanel             : PanelConfig<TwnsUserChangeNicknamePanel.OpenData>;
+        UserLoginBackgroundPanel            : PanelConfig<TwnsUserLoginBackgroundPanel.OpenData>;
+        UserLoginPanel                      : PanelConfig<TwnsUserLoginPanel.OpenData>;
+        UserOnlineUsersPanel                : PanelConfig<TwnsUserOnlineUsersPanel.OpenData>;
+        UserPanel                           : PanelConfig<TwnsUserPanel.OpenData>;
+        UserRegisterPanel                   : PanelConfig<TwnsUserRegisterPanel.OpenData>;
+        UserSetAvatarPanel                  : PanelConfig<TwnsUserSetAvatarPanel.OpenData>;
+        UserSetPasswordPanel                : PanelConfig<TwnsUserSetPasswordPanel.OpenData>;
+        UserSetPrivilegePanel               : PanelConfig<TwnsUserSetPrivilegePanel.OpenData>;
+        UserSetSoundPanel                   : PanelConfig<TwnsUserSetSoundPanel.OpenData>;
+        UserSetStageScalePanel              : PanelConfig<TwnsUserSetStageScalePanel.OpenData>;
+        UserSettingsPanel                   : PanelConfig<TwnsUserSettingsPanel.OpenData>;
 
-        WeActionAddUnitListPanel        : PanelConfig<TwnsWeActionAddUnitListPanel.OpenData>;
-        WeActionModifyPanel1            : PanelConfig<TwnsWeActionModifyPanel1.OpenData>;
-        WeActionModifyPanel2            : PanelConfig<TwnsWeActionModifyPanel2.OpenData>;
-        WeActionModifyPanel3            : PanelConfig<TwnsWeActionModifyPanel3.OpenData>;
-        WeActionModifyPanel4            : PanelConfig<TwnsWeActionModifyPanel4.OpenData>;
-        WeActionModifyPanel5            : PanelConfig<TwnsWeActionModifyPanel5.OpenData>;
-        WeActionModifyPanel6            : PanelConfig<TwnsWeActionModifyPanel6.OpenData>;
-        WeActionModifyPanel7            : PanelConfig<TwnsWeActionModifyPanel7.OpenData>;
-        WeActionModifyPanel8            : PanelConfig<TwnsWeActionModifyPanel8.OpenData>;
-        WeActionModifyPanel9            : PanelConfig<TwnsWeActionModifyPanel9.OpenData>;
-        WeActionReplacePanel            : PanelConfig<TwnsWeActionReplacePanel.OpenData>;
-        WeActionTypeListPanel           : PanelConfig<TwnsWeActionTypeListPanel.OpenData>;
-        WeCommandPanel                  : PanelConfig<TwnsWeCommandPanel.OpenData>;
-        WeConditionModifyPanel1         : PanelConfig<TwnsWeConditionModifyPanel1.OpenData>;
-        WeConditionModifyPanel2         : PanelConfig<TwnsWeConditionModifyPanel2.OpenData>;
-        WeConditionModifyPanel3         : PanelConfig<TwnsWeConditionModifyPanel3.OpenData>;
-        WeConditionModifyPanel4         : PanelConfig<TwnsWeConditionModifyPanel4.OpenData>;
-        WeConditionModifyPanel5         : PanelConfig<TwnsWeConditionModifyPanel5.OpenData>;
-        WeConditionModifyPanel6         : PanelConfig<TwnsWeConditionModifyPanel6.OpenData>;
-        WeConditionModifyPanel10        : PanelConfig<TwnsWeConditionModifyPanel10.OpenData>;
-        WeConditionModifyPanel11        : PanelConfig<TwnsWeConditionModifyPanel11.OpenData>;
-        WeConditionModifyPanel12        : PanelConfig<TwnsWeConditionModifyPanel12.OpenData>;
-        WeConditionModifyPanel13        : PanelConfig<TwnsWeConditionModifyPanel13.OpenData>;
-        WeConditionModifyPanel20        : PanelConfig<TwnsWeConditionModifyPanel20.OpenData>;
-        WeConditionModifyPanel21        : PanelConfig<TwnsWeConditionModifyPanel21.OpenData>;
-        WeConditionModifyPanel22        : PanelConfig<TwnsWeConditionModifyPanel22.OpenData>;
-        WeConditionModifyPanel30        : PanelConfig<TwnsWeConditionModifyPanel30.OpenData>;
-        WeConditionModifyPanel31        : PanelConfig<TwnsWeConditionModifyPanel31.OpenData>;
-        WeConditionModifyPanel32        : PanelConfig<TwnsWeConditionModifyPanel32.OpenData>;
-        WeConditionModifyPanel40        : PanelConfig<TwnsWeConditionModifyPanel40.OpenData>;
-        WeConditionReplacePanel         : PanelConfig<TwnsWeConditionReplacePanel.OpenData>;
-        WeConditionTypeListPanel        : PanelConfig<TwnsWeConditionTypeListPanel.OpenData>;
-        WeDialogueBackgroundPanel       : PanelConfig<TwnsWeDialogueBackgroundPanel.OpenData>;
-        WeEventListPanel                : PanelConfig<TwnsWeEventListPanel.OpenData>;
-        WeEventRenamePanel              : PanelConfig<TwnsWeEventRenamePanel.OpenData>;
-        WeNodeReplacePanel              : PanelConfig<TwnsWeNodeReplacePanel.OpenData>;
+        WeActionAddUnitListPanel            : PanelConfig<TwnsWeActionAddUnitListPanel.OpenData>;
+        WeActionModifyPanel1                : PanelConfig<TwnsWeActionModifyPanel1.OpenData>;
+        WeActionModifyPanel2                : PanelConfig<TwnsWeActionModifyPanel2.OpenData>;
+        WeActionModifyPanel3                : PanelConfig<TwnsWeActionModifyPanel3.OpenData>;
+        WeActionModifyPanel4                : PanelConfig<TwnsWeActionModifyPanel4.OpenData>;
+        WeActionModifyPanel5                : PanelConfig<TwnsWeActionModifyPanel5.OpenData>;
+        WeActionModifyPanel6                : PanelConfig<TwnsWeActionModifyPanel6.OpenData>;
+        WeActionModifyPanel7                : PanelConfig<TwnsWeActionModifyPanel7.OpenData>;
+        WeActionModifyPanel8                : PanelConfig<TwnsWeActionModifyPanel8.OpenData>;
+        WeActionModifyPanel9                : PanelConfig<TwnsWeActionModifyPanel9.OpenData>;
+        WeActionReplacePanel                : PanelConfig<TwnsWeActionReplacePanel.OpenData>;
+        WeActionTypeListPanel               : PanelConfig<TwnsWeActionTypeListPanel.OpenData>;
+        WeCommandPanel                      : PanelConfig<TwnsWeCommandPanel.OpenData>;
+        WeConditionModifyPanel1             : PanelConfig<TwnsWeConditionModifyPanel1.OpenData>;
+        WeConditionModifyPanel2             : PanelConfig<TwnsWeConditionModifyPanel2.OpenData>;
+        WeConditionModifyPanel3             : PanelConfig<TwnsWeConditionModifyPanel3.OpenData>;
+        WeConditionModifyPanel4             : PanelConfig<TwnsWeConditionModifyPanel4.OpenData>;
+        WeConditionModifyPanel5             : PanelConfig<TwnsWeConditionModifyPanel5.OpenData>;
+        WeConditionModifyPanel6             : PanelConfig<TwnsWeConditionModifyPanel6.OpenData>;
+        WeConditionModifyPanel10            : PanelConfig<TwnsWeConditionModifyPanel10.OpenData>;
+        WeConditionModifyPanel11            : PanelConfig<TwnsWeConditionModifyPanel11.OpenData>;
+        WeConditionModifyPanel12            : PanelConfig<TwnsWeConditionModifyPanel12.OpenData>;
+        WeConditionModifyPanel13            : PanelConfig<TwnsWeConditionModifyPanel13.OpenData>;
+        WeConditionModifyPanel14            : PanelConfig<TwnsWeConditionModifyPanel14.OpenData>;
+        WeConditionModifyPanel20            : PanelConfig<TwnsWeConditionModifyPanel20.OpenData>;
+        WeConditionModifyPanel21            : PanelConfig<TwnsWeConditionModifyPanel21.OpenData>;
+        WeConditionModifyPanel22            : PanelConfig<TwnsWeConditionModifyPanel22.OpenData>;
+        WeConditionModifyPanel30            : PanelConfig<TwnsWeConditionModifyPanel30.OpenData>;
+        WeConditionModifyPanel31            : PanelConfig<TwnsWeConditionModifyPanel31.OpenData>;
+        WeConditionModifyPanel32            : PanelConfig<TwnsWeConditionModifyPanel32.OpenData>;
+        WeConditionModifyPanel40            : PanelConfig<TwnsWeConditionModifyPanel40.OpenData>;
+        WeConditionReplacePanel             : PanelConfig<TwnsWeConditionReplacePanel.OpenData>;
+        WeConditionTypeListPanel            : PanelConfig<TwnsWeConditionTypeListPanel.OpenData>;
+        WeDialogueBackgroundPanel           : PanelConfig<TwnsWeDialogueBackgroundPanel.OpenData>;
+        WeEventListPanel                    : PanelConfig<TwnsWeEventListPanel.OpenData>;
+        WeEventRenamePanel                  : PanelConfig<TwnsWeEventRenamePanel.OpenData>;
+        WeNodeReplacePanel                  : PanelConfig<TwnsWeNodeReplacePanel.OpenData>;
 
-        WarMapBuildingListPanel         : PanelConfig<TwnsWarMapBuildingListPanel.OpenData>;
+        WarMapBuildingListPanel             : PanelConfig<TwnsWarMapBuildingListPanel.OpenData>;
 
-        WwDeleteWatcherDetailPanel      : PanelConfig<TwnsWwDeleteWatcherDetailPanel.OpenData>;
-        WwDeleteWatcherWarsPanel        : PanelConfig<TwnsWwDeleteWatcherWarsPanel.OpenData>;
-        WwHandleRequestDetailPanel      : PanelConfig<TwnsWwHandleRequestDetailPanel.OpenData>;
-        WwHandleRequestWarsPanel        : PanelConfig<TwnsWwHandleRequestWarsPanel.OpenData>;
-        WwMainMenuPanel                 : PanelConfig<TwnsWwMainMenuPanel.OpenData>;
-        WwMakeRequestDetailPanel        : PanelConfig<TwnsWwMakeRequestDetailPanel.OpenData>;
-        WwMakeRequestWarsPanel          : PanelConfig<TwnsWwMakeRequestWarsPanel.OpenData>;
-        WwOngoingWarsPanel              : PanelConfig<TwnsWwOngoingWarsPanel.OpenData>;
-        WwSearchWarPanel                : PanelConfig<TwnsWwSearchWarPanel.OpenData>;
+        WwDeleteWatcherDetailPanel          : PanelConfig<TwnsWwDeleteWatcherDetailPanel.OpenData>;
+        WwDeleteWatcherWarsPanel            : PanelConfig<TwnsWwDeleteWatcherWarsPanel.OpenData>;
+        WwHandleRequestDetailPanel          : PanelConfig<TwnsWwHandleRequestDetailPanel.OpenData>;
+        WwHandleRequestWarsPanel            : PanelConfig<TwnsWwHandleRequestWarsPanel.OpenData>;
+        WwMainMenuPanel                     : PanelConfig<TwnsWwMainMenuPanel.OpenData>;
+        WwMakeRequestDetailPanel            : PanelConfig<TwnsWwMakeRequestDetailPanel.OpenData>;
+        WwMakeRequestWarsPanel              : PanelConfig<TwnsWwMakeRequestWarsPanel.OpenData>;
+        WwOngoingWarsPanel                  : PanelConfig<TwnsWwOngoingWarsPanel.OpenData>;
+        WwSearchWarPanel                    : PanelConfig<TwnsWwSearchWarPanel.OpenData>;
     };
 
     export function init(): void {
@@ -460,6 +463,12 @@ namespace TwnsPanelConfig {
                 layer       : LayerType.Hud0,
             },
 
+            CommonChooseCoSkillTypePanel: {
+                cls         : TwnsCommonChooseCoSkillTypePanel?.CommonChooseCoSkillTypePanel,
+                skinName    : `resource/skins/common/CommonChooseCoSkillTypePanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             CommonChooseGridIndexPanel: {
                 cls         : TwnsCommonChooseGridIndexPanel?.CommonChooseGridIndexPanel,
                 skinName    : `resource/skins/common/CommonChooseGridIndexPanel.exml`,
@@ -469,6 +478,12 @@ namespace TwnsPanelConfig {
             CommonChooseLocationPanel: {
                 cls         : TwnsCommonChooseLocationPanel?.CommonChooseLocationPanel,
                 skinName    : `resource/skins/common/CommonChooseLocationPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChoosePlayerAliveStatePanel: {
+                cls         : TwnsCommonChoosePlayerAliveStatePanel?.CommonChoosePlayerAliveStatePanel,
+                skinName    : `resource/skins/common/CommonChoosePlayerAliveStatePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -1327,6 +1342,12 @@ namespace TwnsPanelConfig {
             WeConditionModifyPanel13: {
                 cls         : TwnsWeConditionModifyPanel13?.WeConditionModifyPanel13,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel13.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            WeConditionModifyPanel14: {
+                cls         : TwnsWeConditionModifyPanel14?.WeConditionModifyPanel14,
+                skinName    : `resource/skins/warEvent/WeConditionModifyPanel14.exml`,
                 layer       : LayerType.Hud0,
             },
 

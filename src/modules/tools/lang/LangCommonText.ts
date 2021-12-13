@@ -4180,28 +4180,28 @@ namespace TwnsLangCommonText {
             `Any Player`
         ],
         [LangTextType.B0767]: [
-            `等于`,
-            `Equal To`,
+            `==`,
+            `==`,
         ],
         [LangTextType.B0768]: [
-            `不等于`,
-            `Not Equal To`,
+            `!=`,
+            `!=`,
         ],
         [LangTextType.B0769]: [
-            `大于`,
-            `Greater Than`
+            `>`,
+            `>`
         ],
         [LangTextType.B0770]: [
-            `小于等于`,
-            `Not Greater Than`,
+            `<=`,
+            `<=`,
         ],
         [LangTextType.B0771]: [
-            `小于`,
-            `Less Than`,
+            `<`,
+            `<`,
         ],
         [LangTextType.B0772]: [
-            `大于等于`,
-            `Not Less Than`,
+            `>=`,
+            `>=`,
         ],
         [LangTextType.B0773]: [
             `部队数量`,
@@ -4242,6 +4242,26 @@ namespace TwnsLangCommonText {
         [LangTextType.B0782]: [
             `回合阶段`,
             `Turn Phase`,
+        ],
+        [LangTextType.B0783]: [
+            `、且`,
+            `, and `,
+        ],
+        [LangTextType.B0784]: [
+            `存活状态`,
+            `Alive State`,
+        ],
+        [LangTextType.B0785]: [
+            `激活中的CO技能类型`,
+            `Activating CO Skill Type`,
+        ],
+        [LangTextType.B0786]: [
+            `玩家状态...`,
+            `Players' State ...`
+        ],
+        [LangTextType.B0787]: [
+            `CO能量百分比`,
+            `CO Energy %`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4921,6 +4941,26 @@ namespace TwnsLangCommonText {
         [LangTextType.F0097]: [
             `任意%s`,
             `Any %s`,
+        ],
+        [LangTextType.F0098]: [
+            `玩家序号为 %s%s 的玩家的数量 %s %s`,
+            `The number of players who is %s%s %s %s.`,
+        ],
+        [LangTextType.F0099]: [
+            `存活状态是 %s`,
+            `the Alive State is %s`,
+        ],
+        [LangTextType.F0100]: [
+            `资金 %s %s`,
+            `the Fund %s %s`,
+        ],
+        [LangTextType.F0101]: [
+            `CO能量值百分比 %s %s`,
+            `the CO Energy %% %s %s`,
+        ],
+        [LangTextType.F0102]: [
+            `激活中的CO技能类型是 %s`,
+            `the activating CO Skill Type is %s`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

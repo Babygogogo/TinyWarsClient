@@ -738,6 +738,7 @@ namespace Types {
         WecEventCalledCountTotalLessThan,
 
         WecPlayerAliveStateEqualTo,
+        WecPlayerState,
 
         WecTilePlayerIndexEqualTo,
         WecTileTypeEqualTo,

@@ -436,6 +436,7 @@ namespace Lang {
             case WarEventConditionType.WecEventCalledCountTotalGreaterThan  : return getText(LangTextType.B0513);
             case WarEventConditionType.WecEventCalledCountTotalLessThan     : return getText(LangTextType.B0514);
             case WarEventConditionType.WecPlayerAliveStateEqualTo           : return getText(LangTextType.B0515);
+            case WarEventConditionType.WecPlayerState                       : return getText(LangTextType.B0786);
             case WarEventConditionType.WecTilePlayerIndexEqualTo            : return getText(LangTextType.B0716);
             case WarEventConditionType.WecTileTypeEqualTo                   : return getText(LangTextType.B0717);
             case WarEventConditionType.WecTilePresence                      : return getText(LangTextType.B0779);

@@ -457,6 +457,16 @@ namespace ConfigManager {
             || (comparator === Types.ValueComparator.LessThan)
             || (comparator === Types.ValueComparator.NotLessThan);
     }
+    export function checkIsValidPlayerAliveState(aliveState: Types.PlayerAliveState): boolean {
+        return (aliveState === Types.PlayerAliveState.Alive)
+            || (aliveState === Types.PlayerAliveState.Dead)
+            || (aliveState === Types.PlayerAliveState.Dying);
+    }
+    export function checkIsValidCoSkillType(skillType: Types.CoSkillType): boolean {
+        return (skillType === Types.CoSkillType.Passive)
+            || (skillType === Types.CoSkillType.Power)
+            || (skillType === Types.CoSkillType.SuperPower);
+    }
 
     export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {
         const templateCfgDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.UnitTemplate, ClientErrorCode.ConfigManager_GetUnitTemplateCfg_00);

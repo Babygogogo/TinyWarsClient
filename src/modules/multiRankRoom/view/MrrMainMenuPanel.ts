@@ -45,9 +45,12 @@ namespace TwnsMrrMainMenuPanel {
                 { ui: this._btnPreviewFogMaps,  callback: this._onTouchedBtnPreviewFogMaps },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
-                { type: NotifyType.MsgMrrGetRoomPublicInfo,        callback: this._onMsgMrrGetRoomPublicInfo },
-                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgUserLogout,                   callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMrrGetRoomPublicInfo,         callback: this._onMsgMrrGetRoomPublicInfo },
+                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,   callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,     callback: this._onMsgMcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,     callback: this._onMsgMfrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,     callback: this._onMsgCcrGetJoinedRoomInfoList },
             ]);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -105,6 +108,15 @@ namespace TwnsMrrMainMenuPanel {
         private _onMsgMrrGetMyRoomPublicInfoList(): void {
             this._updateComponentsForRed();
         }
+        private _onMsgMcrGetJoinedRoomInfoList(): void {
+            this._updateBtnMultiPlayer();
+        }
+        private _onMsgMfrGetJoinedRoomInfoList(): void {
+            this._updateBtnMultiPlayer();
+        }
+        private _onMsgCcrGetJoinedRoomInfoList(): void {
+            this._updateBtnMultiPlayer();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
@@ -114,8 +126,29 @@ namespace TwnsMrrMainMenuPanel {
         }
 
         private async _updateComponentsForRed(): Promise<void> {
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
+
             this._btnMyRoom.setRedVisible(await MrrModel.checkIsRed());
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMrwWars());
+        }
+
+        private async _updateBtnMultiPlayer(): Promise<void> {
+            this._btnMultiPlayer.setRedVisible(
+                (MpwModel.checkIsRedForMyMcwWars()) ||
+                (MpwModel.checkIsRedForMyMfwWars()) ||
+                (MpwModel.checkIsRedForMyCcwWars()) ||
+                (await McrModel.checkIsRed())       ||
+                (await MfrModel.checkIsRed())       ||
+                (await CcrModel.checkIsRed())
+            );
+        }
+
+        private async _updateBtnRanking(): Promise<void> {
+            this._btnRanking.setRedVisible(
+                (MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MrrModel.checkIsRed())
+            );
         }
 
         protected async _showOpenAnimation(): Promise<void> {

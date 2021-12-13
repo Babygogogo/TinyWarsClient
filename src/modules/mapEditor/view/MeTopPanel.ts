@@ -87,6 +87,7 @@ namespace TwnsMeTopPanel {
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
                 { type: NotifyType.MsgMeSubmitMap,                  callback: this._onMsgMeSubmitMap },
+                { type: NotifyType.MsgMmReviewMap,                  callback: this._onMsgMmReviewMap },
             ]);
             this._setUiListenerArray([
                 { ui: this._groupModePreview,               callback: this._onTouchedGroupModePreview },
@@ -206,6 +207,15 @@ namespace TwnsMeTopPanel {
             }
 
             this._getWar().setIsMapModified(false);
+        }
+        private _onMsgMmReviewMap(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMmReviewMap.IS;
+            if (data.isAccept) {
+                FloatText.show(Lang.getText(LangTextType.A0092));
+            } else {
+                FloatText.show(Lang.getText(LangTextType.A0093));
+            }
+            FlowManager.gotoLobby();
         }
 
         private _onTouchedGroupModePreview(): void {

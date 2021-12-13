@@ -1597,6 +1597,17 @@ export const enum ServerErrorCode {
     BwWarEventManager_CheckIsMeetPlayerAliveStateEqualTo_0008,
     BwWarEventManager_CheckIsMeetPlayerAliveStateEqualTo_0009,
 
+    BwWarEventManager_CheckIsMeetPlayerState_0000,
+    BwWarEventManager_CheckIsMeetPlayerState_0001,
+    BwWarEventManager_CheckIsMeetPlayerState_0002,
+    BwWarEventManager_CheckIsMeetPlayerState_0003,
+    BwWarEventManager_CheckIsMeetPlayerState_0004,
+    BwWarEventManager_CheckIsMeetPlayerState_0005,
+    BwWarEventManager_CheckIsMeetPlayerState_0006,
+    BwWarEventManager_CheckIsMeetPlayerState_0007,
+    BwWarEventManager_CheckIsMeetPlayerState_0008,
+    BwWarEventManager_CheckIsMeetPlayerState_0009,
+
     BwWarEventManager_CheckIsMeetConPlayerIndexInTurnEqualTo_0000,
     BwWarEventManager_CheckIsMeetConPlayerIndexInTurnEqualTo_0001,
     BwWarEventManager_CheckIsMeetConPlayerIndexInTurnEqualTo_0002,

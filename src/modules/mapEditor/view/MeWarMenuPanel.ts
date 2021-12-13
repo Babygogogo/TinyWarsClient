@@ -86,7 +86,6 @@ namespace TwnsMeWarMenuPanel {
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.MeMapNameChanged,                    callback: this._onNotifyMeMapNameChanged },
-                { type: NotifyType.MsgMmReviewMap,                      callback: this._onMsgMmReviewMap },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onMsgSpmCreateSfw },
                 { type: NotifyType.MsgUserSetMapEditorAutoSaveTime,     callback: this._onNotifyMsgUserSetMapEditorAutoSaveTime },
             ]);
@@ -118,16 +117,6 @@ namespace TwnsMeWarMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onMsgMmReviewMap(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMmReviewMap.IS;
-            if (data.isAccept) {
-                FloatText.show(Lang.getText(LangTextType.A0092));
-            } else {
-                FloatText.show(Lang.getText(LangTextType.A0093));
-            }
-            FlowManager.gotoLobby();
-        }
-
         private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {

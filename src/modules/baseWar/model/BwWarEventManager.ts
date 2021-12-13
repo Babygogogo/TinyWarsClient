@@ -546,6 +546,7 @@ namespace TwnsBwWarEventManager {
             else if (condition.WecEventCalledCountTotalGreaterThan) { return this._checkIsMeetConEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan); }
             else if (condition.WecEventCalledCountTotalLessThan)    { return this._checkIsMeetConEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan); }
             else if (condition.WecPlayerAliveStateEqualTo)          { return this._checkIsMeetConPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo); }
+            else if (condition.WecPlayerState)                      { return this._checkIsMeetConPlayerState(condition.WecPlayerState); }
             else if (condition.WecPlayerIndexInTurnEqualTo)         { return this._checkIsMeetConPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo); }
             else if (condition.WecPlayerIndexInTurnGreaterThan)     { return this._checkIsMeetConPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan); }
             else if (condition.WecPlayerIndexInTurnLessThan)        { return this._checkIsMeetConPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan); }
@@ -596,6 +597,51 @@ namespace TwnsBwWarEventManager {
             return (player.getAliveState() === aliveStateEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
+        }
+        private _checkIsMeetConPlayerState(condition: WarEvent.IWecPlayerState): boolean {
+            const playerIndexArray              = condition.playerIndexArray ?? [];
+            const aliveStateArray               = condition.aliveStateArray ?? [];
+            const coUsingSkillTypeArray         = condition.coUsingSkillTypeArray ?? [];
+            const targetFund                    = condition.fund;
+            const fundComparator                = Helpers.getExisted(condition.fundComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_00);
+            const targetEnergyPercentage        = condition.energyPercentage;
+            const energyPercentageComparator    = Helpers.getExisted(condition.energyPercentageComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_01);
+            let playersCount                    = 0;
+            for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
+                if (((playerIndexArray.length) && (playerIndexArray.indexOf(playerIndex) < 0))                              ||
+                    ((aliveStateArray.length) && (aliveStateArray.indexOf(player.getAliveState()) < 0))                     ||
+                    ((coUsingSkillTypeArray.length) && (coUsingSkillTypeArray.indexOf(player.getCoUsingSkillType()) < 0))
+                ) {
+                    continue;
+                }
+
+                if ((targetFund != null) && (!Helpers.checkIsMeetValueComparator({
+                    comparator  : fundComparator,
+                    targetValue : targetFund,
+                    actualValue : player.getFund(),
+                }))) {
+                    continue;
+                }
+
+                if (targetEnergyPercentage != null) {
+                    const maxEnergy = player.getCoMaxEnergy();
+                    if ((maxEnergy <= 0) || (!Helpers.checkIsMeetValueComparator({
+                        comparator  : energyPercentageComparator,
+                        targetValue : targetEnergyPercentage,
+                        actualValue : player.getCoCurrentEnergy() * 100 / maxEnergy,
+                    }))) {
+                        continue;
+                    }
+                }
+
+                ++playersCount;
+            }
+
+            return Helpers.checkIsMeetValueComparator({
+                comparator  : Helpers.getExisted(condition.playersCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_02),
+                actualValue : playersCount,
+                targetValue : Helpers.getExisted(condition.playersCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConPlayerState_03),
+            });
         }
 
         private _checkIsMeetConPlayerIndexInTurnEqualTo(condition: WarEvent.IWecPlayerIndexInTurnEqualTo): boolean {

@@ -5271,6 +5271,144 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WecPlayerState. */
+    interface IWecPlayerState {
+
+        /** WecPlayerState playersCount */
+        playersCount?: (number|null);
+
+        /** WecPlayerState playersCountComparator */
+        playersCountComparator?: (number|null);
+
+        /** WecPlayerState playerIndexArray */
+        playerIndexArray?: (number[]|null);
+
+        /** WecPlayerState aliveStateArray */
+        aliveStateArray?: (number[]|null);
+
+        /** WecPlayerState fund */
+        fund?: (number|null);
+
+        /** WecPlayerState fundComparator */
+        fundComparator?: (number|null);
+
+        /** WecPlayerState energyPercentage */
+        energyPercentage?: (number|null);
+
+        /** WecPlayerState energyPercentageComparator */
+        energyPercentageComparator?: (number|null);
+
+        /** WecPlayerState coUsingSkillTypeArray */
+        coUsingSkillTypeArray?: (number[]|null);
+    }
+
+    /** Represents a WecPlayerState. */
+    class WecPlayerState implements IWecPlayerState {
+
+        /**
+         * Constructs a new WecPlayerState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecPlayerState);
+
+        /** WecPlayerState playersCount. */
+        public playersCount: number;
+
+        /** WecPlayerState playersCountComparator. */
+        public playersCountComparator: number;
+
+        /** WecPlayerState playerIndexArray. */
+        public playerIndexArray: number[];
+
+        /** WecPlayerState aliveStateArray. */
+        public aliveStateArray: number[];
+
+        /** WecPlayerState fund. */
+        public fund: number;
+
+        /** WecPlayerState fundComparator. */
+        public fundComparator: number;
+
+        /** WecPlayerState energyPercentage. */
+        public energyPercentage: number;
+
+        /** WecPlayerState energyPercentageComparator. */
+        public energyPercentageComparator: number;
+
+        /** WecPlayerState coUsingSkillTypeArray. */
+        public coUsingSkillTypeArray: number[];
+
+        /**
+         * Creates a new WecPlayerState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecPlayerState instance
+         */
+        public static create(properties?: WarEvent.IWecPlayerState): WarEvent.WecPlayerState;
+
+        /**
+         * Encodes the specified WecPlayerState message. Does not implicitly {@link WarEvent.WecPlayerState.verify|verify} messages.
+         * @param message WecPlayerState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecPlayerState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecPlayerState message, length delimited. Does not implicitly {@link WarEvent.WecPlayerState.verify|verify} messages.
+         * @param message WecPlayerState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecPlayerState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecPlayerState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecPlayerState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecPlayerState;
+
+        /**
+         * Decodes a WecPlayerState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecPlayerState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecPlayerState;
+
+        /**
+         * Verifies a WecPlayerState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecPlayerState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecPlayerState
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecPlayerState;
+
+        /**
+         * Creates a plain object from a WecPlayerState message. Also converts values to other types if specified.
+         * @param message WecPlayerState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecPlayerState, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecPlayerState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WecTilePlayerIndexEqualTo. */
     interface IWecTilePlayerIndexEqualTo {
 
@@ -5772,6 +5910,9 @@ export declare namespace WarEvent {
         /** WarEventCondition WecPlayerAliveStateEqualTo */
         WecPlayerAliveStateEqualTo?: (WarEvent.IWecPlayerAliveStateEqualTo|null);
 
+        /** WarEventCondition WecPlayerState */
+        WecPlayerState?: (WarEvent.IWecPlayerState|null);
+
         /** WarEventCondition WecTilePlayerIndexEqualTo */
         WecTilePlayerIndexEqualTo?: (WarEvent.IWecTilePlayerIndexEqualTo|null);
 
@@ -5835,6 +5976,9 @@ export declare namespace WarEvent {
 
         /** WarEventCondition WecPlayerAliveStateEqualTo. */
         public WecPlayerAliveStateEqualTo?: (WarEvent.IWecPlayerAliveStateEqualTo|null);
+
+        /** WarEventCondition WecPlayerState. */
+        public WecPlayerState?: (WarEvent.IWecPlayerState|null);
 
         /** WarEventCondition WecTilePlayerIndexEqualTo. */
         public WecTilePlayerIndexEqualTo?: (WarEvent.IWecTilePlayerIndexEqualTo|null);
