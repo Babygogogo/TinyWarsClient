@@ -1190,6 +1190,17 @@ namespace TwnsClientErrorCode {
         BwWarEventManager_CallActionSetWeatherWithoutExtraData_08,
         BwWarEventManager_CallActionSetWeatherWithoutExtraData_09,
 
+        BwWarEventManager_CheckIsMeetConEventCalledCount_00,
+        BwWarEventManager_CheckIsMeetConEventCalledCount_01,
+        BwWarEventManager_CheckIsMeetConEventCalledCount_02,
+        BwWarEventManager_CheckIsMeetConEventCalledCount_03,
+        BwWarEventManager_CheckIsMeetConEventCalledCount_04,
+        BwWarEventManager_CheckIsMeetConEventCalledCount_05,
+        BwWarEventManager_CheckIsMeetConEventCalledCount_06,
+        BwWarEventManager_CheckIsMeetConEventCalledCount_07,
+        BwWarEventManager_CheckIsMeetConEventCalledCount_08,
+        BwWarEventManager_CheckIsMeetConEventCalledCount_09,
+
         BwWarEventManager_CheckIsMeetConPlayerState_00,
         BwWarEventManager_CheckIsMeetConPlayerState_01,
         BwWarEventManager_CheckIsMeetConPlayerState_02,

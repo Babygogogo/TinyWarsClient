@@ -545,6 +545,7 @@ namespace TwnsBwWarEventManager {
             if      (condition.WecEventCalledCountTotalEqualTo)     { return this._checkIsMeetConEventCalledCountTotalEqualTo(condition.WecEventCalledCountTotalEqualTo); }
             else if (condition.WecEventCalledCountTotalGreaterThan) { return this._checkIsMeetConEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan); }
             else if (condition.WecEventCalledCountTotalLessThan)    { return this._checkIsMeetConEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan); }
+            else if (condition.WecEventCalledCount)                 { return this._checkIsMeetConEventCalledCount(condition.WecEventCalledCount); }
             else if (condition.WecPlayerAliveStateEqualTo)          { return this._checkIsMeetConPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo); }
             else if (condition.WecPlayerState)                      { return this._checkIsMeetConPlayerState(condition.WecPlayerState); }
             else if (condition.WecPlayerIndexInTurnEqualTo)         { return this._checkIsMeetConPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo); }
@@ -587,6 +588,48 @@ namespace TwnsBwWarEventManager {
             return (this.getWarEventCalledCountTotal(eventIdEqualTo) < countLessThan)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
+        }
+        private _checkIsMeetConEventCalledCount(condition: WarEvent.IWecEventCalledCount): boolean {
+            const eventIdArray          = condition.eventIdArray ?? [];
+            const timesInTurn           = condition.timesInTurn;
+            const timesTotal            = condition.timesTotal;
+            const timesInTurnComparator = Helpers.getExisted(condition.timesInTurnComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_00);
+            const timesTotalComparator  = Helpers.getExisted(condition.timesTotalComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_01);
+
+            let eventsCount = 0;
+            for (const eventId of this._getWar().getCommonSettingManager().getWarRule().warEventIdArray ?? []) {
+                if ((eventIdArray.length) && (eventIdArray.indexOf(eventId) < 0)) {
+                    continue;
+                }
+
+                if ((timesInTurn != null)                   &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : timesInTurnComparator,
+                        targetValue : timesInTurn,
+                        actualValue : this.getWarEventCalledCountInPlayerTurn(eventId),
+                    }))
+                ) {
+                    continue;
+                }
+
+                if ((timesTotal != null)                    &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : timesTotalComparator,
+                        targetValue : timesTotal,
+                        actualValue : this.getWarEventCalledCountTotal(eventId),
+                    }))
+                ) {
+                    continue;
+                }
+
+                ++eventsCount;
+            }
+
+            return Helpers.checkIsMeetValueComparator({
+                comparator  : Helpers.getExisted(condition.eventsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_02),
+                targetValue : Helpers.getExisted(condition.eventsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConEventCalledCount_03),
+                actualValue : eventsCount,
+            });
         }
 
         private _checkIsMeetConPlayerAliveStateEqualTo(condition: WarEvent.IWecPlayerAliveStateEqualTo): boolean {

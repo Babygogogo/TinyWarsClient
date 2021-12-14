@@ -133,7 +133,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _onNotifyMsgSpmDeleteWarSaveSlot(): void {
-            FloatText.show(Lang.getFormattedText(LangTextType.A0141));
+            FloatText.show(Lang.getText(LangTextType.A0141));
         }
 
         private _onNotifyLanguageChanged(): void {

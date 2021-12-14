@@ -1586,6 +1586,17 @@ export const enum ServerErrorCode {
     BwWarEventManager_CheckIsMeetConEventCalledCountTotalLessThan_0008,
     BwWarEventManager_CheckIsMeetConEventCalledCountTotalLessThan_0009,
 
+    BwWarEventManager_CheckIsMeetConEventCalledCount_0000,
+    BwWarEventManager_CheckIsMeetConEventCalledCount_0001,
+    BwWarEventManager_CheckIsMeetConEventCalledCount_0002,
+    BwWarEventManager_CheckIsMeetConEventCalledCount_0003,
+    BwWarEventManager_CheckIsMeetConEventCalledCount_0004,
+    BwWarEventManager_CheckIsMeetConEventCalledCount_0005,
+    BwWarEventManager_CheckIsMeetConEventCalledCount_0006,
+    BwWarEventManager_CheckIsMeetConEventCalledCount_0007,
+    BwWarEventManager_CheckIsMeetConEventCalledCount_0008,
+    BwWarEventManager_CheckIsMeetConEventCalledCount_0009,
+
     BwWarEventManager_CheckIsMeetPlayerAliveStateEqualTo_0000,
     BwWarEventManager_CheckIsMeetPlayerAliveStateEqualTo_0001,
     BwWarEventManager_CheckIsMeetPlayerAliveStateEqualTo_0002,

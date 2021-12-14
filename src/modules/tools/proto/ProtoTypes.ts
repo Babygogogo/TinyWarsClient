@@ -5169,6 +5169,132 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WecEventCalledCount. */
+    interface IWecEventCalledCount {
+
+        /** WecEventCalledCount eventIdArray */
+        eventIdArray?: (number[]|null);
+
+        /** WecEventCalledCount eventsCount */
+        eventsCount?: (number|null);
+
+        /** WecEventCalledCount eventsCountComparator */
+        eventsCountComparator?: (number|null);
+
+        /** WecEventCalledCount timesTotal */
+        timesTotal?: (number|null);
+
+        /** WecEventCalledCount timesTotalComparator */
+        timesTotalComparator?: (number|null);
+
+        /** WecEventCalledCount timesInTurn */
+        timesInTurn?: (number|null);
+
+        /** WecEventCalledCount timesInTurnComparator */
+        timesInTurnComparator?: (number|null);
+    }
+
+    /** Represents a WecEventCalledCount. */
+    class WecEventCalledCount implements IWecEventCalledCount {
+
+        /**
+         * Constructs a new WecEventCalledCount.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecEventCalledCount);
+
+        /** WecEventCalledCount eventIdArray. */
+        public eventIdArray: number[];
+
+        /** WecEventCalledCount eventsCount. */
+        public eventsCount: number;
+
+        /** WecEventCalledCount eventsCountComparator. */
+        public eventsCountComparator: number;
+
+        /** WecEventCalledCount timesTotal. */
+        public timesTotal: number;
+
+        /** WecEventCalledCount timesTotalComparator. */
+        public timesTotalComparator: number;
+
+        /** WecEventCalledCount timesInTurn. */
+        public timesInTurn: number;
+
+        /** WecEventCalledCount timesInTurnComparator. */
+        public timesInTurnComparator: number;
+
+        /**
+         * Creates a new WecEventCalledCount instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecEventCalledCount instance
+         */
+        public static create(properties?: WarEvent.IWecEventCalledCount): WarEvent.WecEventCalledCount;
+
+        /**
+         * Encodes the specified WecEventCalledCount message. Does not implicitly {@link WarEvent.WecEventCalledCount.verify|verify} messages.
+         * @param message WecEventCalledCount message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecEventCalledCount, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecEventCalledCount message, length delimited. Does not implicitly {@link WarEvent.WecEventCalledCount.verify|verify} messages.
+         * @param message WecEventCalledCount message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecEventCalledCount, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecEventCalledCount message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecEventCalledCount
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecEventCalledCount;
+
+        /**
+         * Decodes a WecEventCalledCount message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecEventCalledCount
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecEventCalledCount;
+
+        /**
+         * Verifies a WecEventCalledCount message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecEventCalledCount message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecEventCalledCount
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecEventCalledCount;
+
+        /**
+         * Creates a plain object from a WecEventCalledCount message. Also converts values to other types if specified.
+         * @param message WecEventCalledCount
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecEventCalledCount, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecEventCalledCount to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WecPlayerAliveStateEqualTo. */
     interface IWecPlayerAliveStateEqualTo {
 
@@ -5907,6 +6033,9 @@ export declare namespace WarEvent {
         /** WarEventCondition WecEventCalledCountTotalLessThan */
         WecEventCalledCountTotalLessThan?: (WarEvent.IWecEventCalledCountTotalLessThan|null);
 
+        /** WarEventCondition WecEventCalledCount */
+        WecEventCalledCount?: (WarEvent.IWecEventCalledCount|null);
+
         /** WarEventCondition WecPlayerAliveStateEqualTo */
         WecPlayerAliveStateEqualTo?: (WarEvent.IWecPlayerAliveStateEqualTo|null);
 
@@ -5973,6 +6102,9 @@ export declare namespace WarEvent {
 
         /** WarEventCondition WecEventCalledCountTotalLessThan. */
         public WecEventCalledCountTotalLessThan?: (WarEvent.IWecEventCalledCountTotalLessThan|null);
+
+        /** WarEventCondition WecEventCalledCount. */
+        public WecEventCalledCount?: (WarEvent.IWecEventCalledCount|null);
 
         /** WarEventCondition WecPlayerAliveStateEqualTo. */
         public WecPlayerAliveStateEqualTo?: (WarEvent.IWecPlayerAliveStateEqualTo|null);

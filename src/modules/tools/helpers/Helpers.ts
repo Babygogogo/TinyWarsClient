@@ -298,9 +298,9 @@ namespace Helpers {
         switch (comparator) {
             case Types.ValueComparator.EqualTo          : return Types.ValueComparator.NotEqualTo;
             case Types.ValueComparator.NotEqualTo       : return Types.ValueComparator.GreaterThan;
-            case Types.ValueComparator.GreaterThan      : return Types.ValueComparator.NotGreaterThan;
-            case Types.ValueComparator.NotGreaterThan   : return Types.ValueComparator.LessThan;
-            case Types.ValueComparator.LessThan         : return Types.ValueComparator.NotLessThan;
+            case Types.ValueComparator.GreaterThan      : return Types.ValueComparator.NotLessThan;
+            case Types.ValueComparator.NotLessThan      : return Types.ValueComparator.LessThan;
+            case Types.ValueComparator.LessThan         : return Types.ValueComparator.NotGreaterThan;
             default                                     : return Types.ValueComparator.EqualTo;
         }
     }

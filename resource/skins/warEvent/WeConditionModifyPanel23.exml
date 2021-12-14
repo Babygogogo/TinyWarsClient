@@ -21,46 +21,28 @@
             </e:layout>
         </e:Group>
         <e:Group left="10" bottom="10">
+            <e:Group x="301" y="40">
+                <TwnsUiButton:UiButton id="_btnEventId" label="切换类型"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                       left="0" x="10" y="10" />
+                <TwnsUiLabel:UiLabel id="_labelEventId" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
+                                     width="650" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
             <e:Group x="188" y="43" height="28">
                 <e:Group x="0" y="0">
-                    <TwnsUiLabel:UiLabel id="_labelTurnIndex" text="Turn Index" size="18" textColor="0xFFFFFF"
+                    <TwnsUiLabel:UiLabel id="_labelTimesInTurn" text="Players Count" size="18" textColor="0xFFFFFF"
                                          scaleX="1" scaleY="1" maxTextWidth="120" y="5" x="0" />
-                    <TwnsUiTextInput:UiTextInput id="_inputTurnIndex" width="80" x="126" anchorOffsetX="0" anchorOffsetY="0" maxChars="4"
+                    <TwnsUiTextInput:UiTextInput id="_inputTimesInTurn" width="80" x="126" anchorOffsetX="0" anchorOffsetY="0" maxChars="4"
                                                  restrict="0-9" y="0" skinName="Skins.Component.TextInput.TextInput003"></TwnsUiTextInput:UiTextInput>
                 </e:Group>
                 <e:Group x="261" y="0">
-                    <TwnsUiButton:UiButton id="_btnTurnIndexComparator" label="切换类型"
+                    <TwnsUiButton:UiButton id="_btnTimesInTurnComparator" label="切换类型"
                                            skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
                                            left="0" x="10" y="10" />
-                    <TwnsUiLabel:UiLabel id="_labelTurnIndexComparator" text="取反" size="14" textColor="0xFFFFFF" x="20"
-                                         y="20" />
-                    <e:layout>
-                        <e:HorizontalLayout verticalAlign="middle" />
-                    </e:layout>
-                </e:Group>
-                <e:layout>
-                    <e:HorizontalLayout gap="50" />
-                </e:layout>
-            </e:Group>
-            <e:Group x="0" y="34">
-                <e:Group x="0" y="-70">
-                    <TwnsUiLabel:UiLabel id="_labelTurnDivider" text="Turn Index" size="18" textColor="0xFFFFFF"
-                                         scaleX="1" scaleY="1" maxTextWidth="120" y="5" x="0" />
-                    <TwnsUiTextInput:UiTextInput id="_inputTurnDivider" width="80" x="126" anchorOffsetX="0" anchorOffsetY="0" maxChars="4"
-                                                 restrict="0-9" y="0" skinName="Skins.Component.TextInput.TextInput003"></TwnsUiTextInput:UiTextInput>
-                </e:Group>
-                <e:Group x="0" y="-70">
-                    <TwnsUiLabel:UiLabel id="_labelTurnRemainder" text="Turn Index" size="18" textColor="0xFFFFFF"
-                                         scaleX="1" scaleY="1" maxTextWidth="120" y="5" x="0" />
-                    <TwnsUiTextInput:UiTextInput id="_inputTurnRemainder" width="80" x="126" anchorOffsetX="0" anchorOffsetY="0"
-                                                 maxChars="4" restrict="0-9" y="0"
-                                                 skinName="Skins.Component.TextInput.TextInput003"></TwnsUiTextInput:UiTextInput>
-                </e:Group>
-                <e:Group x="0" y="-34">
-                    <TwnsUiButton:UiButton id="_btnTurnRemainderComparator" label="切换类型"
-                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
-                                           left="0" x="10" y="10" />
-                    <TwnsUiLabel:UiLabel id="_labelTurnRemainderComparator" text="取反" size="14" textColor="0xFFFFFF"
+                    <TwnsUiLabel:UiLabel id="_labelTimesInTurnComparator" text="取反" size="14" textColor="0xFFFFFF"
                                          x="20" y="20" />
                     <e:layout>
                         <e:HorizontalLayout verticalAlign="middle" />
@@ -70,24 +52,46 @@
                     <e:HorizontalLayout gap="50" />
                 </e:layout>
             </e:Group>
-            <e:Group x="281" y="20">
-                <TwnsUiButton:UiButton id="_btnTurnPhase" label="回合阶段"
-                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
-                                       left="0" x="10" y="10" />
-                <TwnsUiLabel:UiLabel id="_labelTurnPhase" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
-                                     width="650" />
+            <e:Group x="188" y="43" height="28">
+                <e:Group x="0" y="0">
+                    <TwnsUiLabel:UiLabel id="_labelTimesTotal" text="Players Count" size="18" textColor="0xFFFFFF"
+                                         scaleX="1" scaleY="1" maxTextWidth="120" y="5" x="0" />
+                    <TwnsUiTextInput:UiTextInput id="_inputTimesTotal" width="80" x="126" anchorOffsetX="0" anchorOffsetY="0" maxChars="4"
+                                                 restrict="0-9" y="0" skinName="Skins.Component.TextInput.TextInput003"></TwnsUiTextInput:UiTextInput>
+                </e:Group>
+                <e:Group x="261" y="0">
+                    <TwnsUiButton:UiButton id="_btnTimesTotalComparator" label="切换类型"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                           left="0" x="10" y="10" />
+                    <TwnsUiLabel:UiLabel id="_labelTimesTotalComparator" text="取反" size="14" textColor="0xFFFFFF" x="20"
+                                         y="20" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
                 <e:layout>
-                    <e:HorizontalLayout verticalAlign="middle" />
+                    <e:HorizontalLayout gap="50" />
                 </e:layout>
             </e:Group>
-            <e:Group x="301" y="40">
-                <TwnsUiButton:UiButton id="_btnPlayerIndex" label="切换类型"
-                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
-                                       left="0" x="10" y="10" />
-                <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
-                                     width="650" />
+            <e:Group x="188" y="43" height="28">
+                <e:Group x="0" y="0">
+                    <TwnsUiLabel:UiLabel id="_labelEventsCount" text="Players Count" size="18" textColor="0xFFFFFF"
+                                         scaleX="1" scaleY="1" maxTextWidth="120" y="5" x="0" />
+                    <TwnsUiTextInput:UiTextInput id="_inputEventsCount" width="80" x="126" anchorOffsetX="0" anchorOffsetY="0" maxChars="4"
+                                                 restrict="0-9" y="0" skinName="Skins.Component.TextInput.TextInput003"></TwnsUiTextInput:UiTextInput>
+                </e:Group>
+                <e:Group x="261" y="0">
+                    <TwnsUiButton:UiButton id="_btnEventsCountComparator" label="切换类型"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                           left="0" x="10" y="10" />
+                    <TwnsUiLabel:UiLabel id="_labelEventsCountComparator" text="取反" size="14" textColor="0xFFFFFF"
+                                         x="20" y="20" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
                 <e:layout>
-                    <e:HorizontalLayout verticalAlign="middle" />
+                    <e:HorizontalLayout gap="50" />
                 </e:layout>
             </e:Group>
             <e:layout>

@@ -29,11 +29,12 @@ namespace TwnsWeConditionModifyPanel14 {
     };
     /** WecPlayerIndexInTurnEqualTo */
     export class WeConditionModifyPanel14 extends TwnsUiPanel.UiPanel<OpenData> {
-        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
-        private readonly _btnType!          : TwnsUiButton.UiButton;
-        private readonly _btnClose!         : TwnsUiButton.UiButton;
-        private readonly _labelDesc!        : TwnsUiLabel.UiLabel;
-        private readonly _labelError!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTitle!                       : TwnsUiLabel.UiLabel;
+        private readonly _btnType!                          : TwnsUiButton.UiButton;
+        private readonly _btnClose!                         : TwnsUiButton.UiButton;
+        private readonly _labelDesc!                        : TwnsUiLabel.UiLabel;
+        private readonly _labelError!                       : TwnsUiLabel.UiLabel;
+        private readonly _imgInnerTouchMask!                : TwnsUiImage.UiImage;
 
         private readonly _btnPlayerIndex!                   : TwnsUiButton.UiButton;
         private readonly _labelPlayerIndex!                 : TwnsUiLabel.UiLabel;
@@ -62,18 +63,25 @@ namespace TwnsWeConditionModifyPanel14 {
             this._setUiListenerArray([
                 { ui: this._btnClose,                       callback: this.close },
                 { ui: this._btnType,                        callback: this._onTouchedBtnType },
+                { ui: this._imgInnerTouchMask,              callback: this._onTouchedImgInnerTouchMask },
                 { ui: this._btnPlayerIndex,                 callback: this._onTouchedBtnPlayerIndex },
                 { ui: this._btnAliveState,                  callback: this._onTouchedBtnAliveState },
                 { ui: this._btnUsingSkillType,              callback: this._onTouchedBtnUsingSkillType },
+                { ui: this._inputFund,                      callback: this._onFocusInInputFund,                     eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputFund,                      callback: this._onFocusOutInputFund,                    eventType: egret.FocusEvent.FOCUS_OUT },
                 { ui: this._btnFundComparator,              callback: this._onTouchedBtnFundComparator },
+                { ui: this._inputEnergyPercentage,          callback: this._onFocusInInputEnergyPercentage,         eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputEnergyPercentage,          callback: this._onFocusOutInputEnergyPercentage,        eventType: egret.FocusEvent.FOCUS_OUT },
                 { ui: this._btnEnergyPercentageComparator,  callback: this._onTouchedBtnEnergyPercentageComparator },
+                { ui: this._inputPlayersCount,              callback: this._onFocusInInputPlayersCount,             eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputPlayersCount,              callback: this._onFocusOutInputPlayersCount,            eventType: egret.FocusEvent.FOCUS_OUT },
                 { ui: this._btnPlayersCountComparator,      callback: this._onTouchedBtnPlayersCountComparator },
             ]);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
+
+            this._imgInnerTouchMask.touchEnabled = true;
+            this._setInnerTouchMaskEnabled(false);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -95,6 +103,9 @@ namespace TwnsWeConditionModifyPanel14 {
                 condition   : openData.condition,
                 war         : openData.war,
             });
+        }
+        private _onTouchedImgInnerTouchMask(): void {
+            this._setInnerTouchMaskEnabled(false);
         }
         private _onTouchedBtnPlayerIndex(): void {
             const condition = this._getCondition();
@@ -127,6 +138,9 @@ namespace TwnsWeConditionModifyPanel14 {
                 },
             });
         }
+        private _onFocusInInputFund(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
         private _onFocusOutInputFund(): void {
             const text  = this._inputFund.text;
             const value = !text ? null : parseInt(text);
@@ -142,6 +156,9 @@ namespace TwnsWeConditionModifyPanel14 {
             condition.fundComparator    = Helpers.getNextValueComparator(condition.fundComparator);
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
+        private _onFocusInInputEnergyPercentage(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
         private _onFocusOutInputEnergyPercentage(): void {
             const text  = this._inputEnergyPercentage.text;
             const value = !text ? null : parseInt(text);
@@ -156,6 +173,9 @@ namespace TwnsWeConditionModifyPanel14 {
             const condition                         = this._getCondition();
             condition.energyPercentageComparator    = Helpers.getNextValueComparator(condition.energyPercentageComparator);
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onFocusInInputPlayersCount(): void {
+            this._setInnerTouchMaskEnabled(true);
         }
         private _onFocusOutInputPlayersCount(): void {
             const text  = this._inputPlayersCount.text;
@@ -253,6 +273,9 @@ namespace TwnsWeConditionModifyPanel14 {
 
         private _getCondition(): ProtoTypes.WarEvent.IWecPlayerState {
             return Helpers.getExisted(this._getOpenData().condition.WecPlayerState);
+        }
+        private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
+            this._imgInnerTouchMask.visible = isEnabled;
         }
     }
 }

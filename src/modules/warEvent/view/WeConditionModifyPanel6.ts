@@ -29,11 +29,12 @@ namespace TwnsWeConditionModifyPanel6 {
     };
     /** WecPlayerIndexInTurnEqualTo */
     export class WeConditionModifyPanel6 extends TwnsUiPanel.UiPanel<OpenData> {
-        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
-        private readonly _btnType!          : TwnsUiButton.UiButton;
-        private readonly _btnClose!         : TwnsUiButton.UiButton;
-        private readonly _labelDesc!        : TwnsUiLabel.UiLabel;
-        private readonly _labelError!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
+        private readonly _btnType!                      : TwnsUiButton.UiButton;
+        private readonly _btnClose!                     : TwnsUiButton.UiButton;
+        private readonly _labelDesc!                    : TwnsUiLabel.UiLabel;
+        private readonly _labelError!                   : TwnsUiLabel.UiLabel;
+        private readonly _imgInnerTouchMask!            : TwnsUiImage.UiImage;
 
         private readonly _labelTurnIndex!               : TwnsUiLabel.UiLabel;
         private readonly _inputTurnIndex!               : TwnsUiTextInput.UiTextInput;
@@ -58,16 +59,23 @@ namespace TwnsWeConditionModifyPanel6 {
             this._setUiListenerArray([
                 { ui: this._btnClose,                       callback: this.close },
                 { ui: this._btnType,                        callback: this._onTouchedBtnType },
+                { ui: this._imgInnerTouchMask,              callback: this._onTouchedImgInnerTouchMask },
                 { ui: this._btnTurnIndexComparator,         callback: this._onTouchedBtnTurnIndexComparator },
                 { ui: this._btnTurnRemainderComparator,     callback: this._onTouchedBtnTurnRemainderComparator },
                 { ui: this._btnTurnPhase,                   callback: this._onTouchedBtnTurnPhase },
                 { ui: this._btnPlayerIndex,                 callback: this._onTouchedBtnPlayerIndex },
+                { ui: this._inputTurnIndex,                 callback: this._onFocusInInputTurnIndex,            eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputTurnIndex,                 callback: this._onFocusOutInputTurnIndex,           eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputTurnDivider,               callback: this._onFocusInInputTurnDivider,          eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputTurnDivider,               callback: this._onFocusOutInputTurnDivider,         eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputTurnRemainder,             callback: this._onFocusInInputTurnRemainder,        eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputTurnRemainder,             callback: this._onFocusOutInputTurnRemainder,       eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
+
+            this._imgInnerTouchMask.touchEnabled = true;
+            this._setInnerTouchMaskEnabled(false);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -89,6 +97,9 @@ namespace TwnsWeConditionModifyPanel6 {
                 condition   : openData.condition,
                 war         : openData.war,
             });
+        }
+        private _onTouchedImgInnerTouchMask(): void {
+            this._setInnerTouchMaskEnabled(false);
         }
         private _onTouchedBtnTurnIndexComparator(): void {
             const condition                 = this._getCondition();
@@ -123,6 +134,9 @@ namespace TwnsWeConditionModifyPanel6 {
                 },
             });
         }
+        private _onFocusInInputTurnIndex(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
         private _onFocusOutInputTurnIndex(): void {
             const text  = this._inputTurnIndex.text;
             const value = !text ? null : parseInt(text);
@@ -133,6 +147,9 @@ namespace TwnsWeConditionModifyPanel6 {
                 this._updateInputTurnIndex();
             }
         }
+        private _onFocusInInputTurnDivider(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
         private _onFocusOutInputTurnDivider(): void {
             const text  = this._inputTurnDivider.text;
             const value = !text ? null : parseInt(text);
@@ -142,6 +159,9 @@ namespace TwnsWeConditionModifyPanel6 {
             } else {
                 this._updateInputTurnDivider();
             }
+        }
+        private _onFocusInInputTurnRemainder(): void {
+            this._setInnerTouchMaskEnabled(true);
         }
         private _onFocusOutInputTurnRemainder(): void {
             const text  = this._inputTurnRemainder.text;
@@ -173,7 +193,7 @@ namespace TwnsWeConditionModifyPanel6 {
             this._btnType.label                     = Lang.getText(LangTextType.B0516);
             this._labelTurnIndex.text               = Lang.getText(LangTextType.B0091);
             this._btnTurnIndexComparator.label      = Lang.getText(LangTextType.B0774);
-            this._labelTurnDivider.text             = Lang.getText(LangTextType.B0518);
+            this._labelTurnDivider.text             = `${Lang.getText(LangTextType.B0518)}(>=2)`;
             this._labelTurnRemainder.text           = Lang.getText(LangTextType.B0519);
             this._btnTurnRemainderComparator.label  = Lang.getText(LangTextType.B0774);
             this._btnTurnPhase.label                = Lang.getText(LangTextType.B0782);
@@ -208,8 +228,8 @@ namespace TwnsWeConditionModifyPanel6 {
             this._inputTurnRemainder.text   = turnRemainder == null ? `` : `${turnRemainder}`;
         }
         private _updateLabelTurnRemainderComparator(): void {
-            const playerIndexArray      = this._getCondition().playerIndexArray;
-            this._labelTurnRemainderComparator.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
+            const comparator                        = Helpers.getExisted(this._getCondition().turnIndexRemainderComparator);
+            this._labelTurnRemainderComparator.text = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelTurnPhase(): void {
             const turnPhase             = this._getCondition().turnPhase;
@@ -222,6 +242,9 @@ namespace TwnsWeConditionModifyPanel6 {
 
         private _getCondition(): ProtoTypes.WarEvent.IWecTurnAndPlayer {
             return Helpers.getExisted(this._getOpenData().condition.WecTurnAndPlayer);
+        }
+        private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
+            this._imgInnerTouchMask.visible = isEnabled;
         }
     }
 }

@@ -913,7 +913,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0216]: [
             `"已战败"状态下，玩家无法行动。如果玩家是直接从存活状态切换到已战败状态，则其部队和建筑所有权都会残留。`,
-            `In the Being Defeated state, players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
+            `In the Defeated state, players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
         ],
         [LangTextType.A0217]: [
             `所有数值设定与《高级战争：毁灭之日》保持一致。`,
@@ -4263,6 +4263,26 @@ namespace TwnsLangCommonText {
             `CO能量百分比`,
             `CO Energy %`,
         ],
+        [LangTextType.B0788]: [
+            `事件数量`,
+            `Number of Events`,
+        ],
+        [LangTextType.B0789]: [
+            `事件触发次数...`,
+            `War Event Triggered Times ...`,
+        ],
+        [LangTextType.B0790]: [
+            `当前玩家回合内的触发次数`,
+            `Triggered Times in turn`,
+        ],
+        [LangTextType.B0791]: [
+            `合计触发次数`,
+            `Total Triggered Times`,
+        ],
+        [LangTextType.B0792]: [
+            `ID`,
+            `ID`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4961,6 +4981,18 @@ namespace TwnsLangCommonText {
         [LangTextType.F0102]: [
             `激活中的CO技能类型是 %s`,
             `the activating CO Skill Type is %s`,
+        ],
+        [LangTextType.F0103]: [
+            `ID为 %s%s 的事件的数量 %s %s`,
+            `The number of events whose ID is %s%s %s %s.`,
+        ],
+        [LangTextType.F0104]: [
+            `当前玩家回合内的触发次数 %s %s`,
+            `the Triggered Times in the current player's turn %s %s`,
+        ],
+        [LangTextType.F0105]: [
+            `合计触发次数 %s %s`,
+            `the Total Triggered Times %s %s`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
