@@ -215,6 +215,7 @@ namespace TwnsBwUnitListPanel {
                 cursor.setGridIndex(gridIndex);
                 cursor.updateView();
                 war.getView().tweenGridToCentralArea(gridIndex);
+                war.getGridVisualEffect().showEffectAiming(gridIndex, 800);
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             }
         }

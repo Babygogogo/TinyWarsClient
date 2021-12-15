@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLangTextType {
     // eslint-disable-next-line no-shadow
     export const enum LangTextType {

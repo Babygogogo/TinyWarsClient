@@ -159,7 +159,7 @@ namespace TwnsBwTurnManager {
             this._runPhaseTickTurnAndPlayerIndexWithExtraData(action, isFastExecute);
             this._runPhaseResetSkillStateWithExtraData(action, isFastExecute);
             this._runPhaseResetVotesForDrawWithExtraData(action, isFastExecute);
-            this._runPhaseUpdateWeatherWithExtraData(action, isFastExecute);
+            this._runPhaseUpdateWeatherAndForceFogWithExtraData(action, isFastExecute);
             this._runPhaseResetVisionForNextPlayerWithExtraData(action, isFastExecute);
             this._runPhaseWaitBeginTurnWithExtraData(action, isFastExecute);
 
@@ -183,7 +183,7 @@ namespace TwnsBwTurnManager {
             this._runPhaseTickTurnAndPlayerIndexWithoutExtraData(isFastExecute);
             this._runPhaseResetSkillStateWithoutExtraData(isFastExecute);
             this._runPhaseResetVotesForDrawWithoutExtraData(isFastExecute);
-            this._runPhaseUpdateWeatherWithoutExtraData(isFastExecute);
+            this._runPhaseUpdateWeatherAndForceFogWithoutExtraData(isFastExecute);
             this._runPhaseResetVisionForNextPlayerWithoutExtraData(isFastExecute);
             this._runPhaseWaitBeginTurnWithoutExtraData(isFastExecute);
 
@@ -852,18 +852,22 @@ namespace TwnsBwTurnManager {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private _runPhaseUpdateWeatherWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
-            const weatherManager = this.getWar().getWeatherManager();
+        private _runPhaseUpdateWeatherAndForceFogWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
+            const war               = this.getWar();
+            const weatherManager    = war.getWeatherManager();
             weatherManager.updateOnPlayerTurnSwitched();
+            war.getFogMap().updateOnPlayerTurnSwitched();
 
             if (!isFastExecute) {
                 weatherManager.getView().resetView(false);
             }
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private _runPhaseUpdateWeatherWithoutExtraData(isFastExecute: boolean): void {
-            const weatherManager = this.getWar().getWeatherManager();
+        private _runPhaseUpdateWeatherAndForceFogWithoutExtraData(isFastExecute: boolean): void {
+            const war               = this.getWar();
+            const weatherManager    = war.getWeatherManager();
             weatherManager.updateOnPlayerTurnSwitched();
+            war.getFogMap().updateOnPlayerTurnSwitched();
 
             if (!isFastExecute) {
                 weatherManager.getView().resetView(false);

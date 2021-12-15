@@ -111,25 +111,17 @@ namespace TwnsBwWarEventManager {
 
         private async _callWarActionWithExtraData(warEventActionId: number, isFastExecute: boolean): Promise<void> {
             const action = this.getWarEventAction(warEventActionId);
-            if (action.WeaAddUnit) {
-                await this._callActionAddUnitWithExtraData(action.WeaAddUnit, isFastExecute);
-            } else if (action.WeaSetPlayerAliveState) {
-                await this._callActionSetPlayerAliveStateWithExtraData(action.WeaSetPlayerAliveState, isFastExecute);
-            } else if (action.WeaDialogue) {
-                await this._callActionDialogueWithExtraData(action.WeaDialogue, isFastExecute);
-            } else if (action.WeaSetViewpoint) {
-                await this._callActionSetViewpointWithExtraData(action.WeaSetViewpoint, isFastExecute);
-            } else if (action.WeaSetWeather) {
-                await this._callActionSetWeatherWithExtraData(action.WeaSetWeather, isFastExecute);
-            } else if (action.WeaSimpleDialogue) {
-                await this._callActionSimpleDialogueWithExtraData(action.WeaSimpleDialogue, isFastExecute);
-            } else if (action.WeaPlayBgm) {
-                await this._callActionPlayBgmWithExtraData(action.WeaPlayBgm, isFastExecute);
-            } else if (action.WeaSetPlayerFund) {
-                await this._callActionSetPlayerFundWithExtraData(action.WeaSetPlayerFund, isFastExecute);
-            } else if (action.WeaSetPlayerCoEnergy) {
-                await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute);
-            } else {
+            if      (action.WeaAddUnit)             { await this._callActionAddUnitWithExtraData(action.WeaAddUnit, isFastExecute); }
+            else if (action.WeaSetPlayerAliveState) { await this._callActionSetPlayerAliveStateWithExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
+            else if (action.WeaDialogue)            { await this._callActionDialogueWithExtraData(action.WeaDialogue, isFastExecute); }
+            else if (action.WeaSetViewpoint)        { await this._callActionSetViewpointWithExtraData(action.WeaSetViewpoint, isFastExecute); }
+            else if (action.WeaSetWeather)          { await this._callActionSetWeatherWithExtraData(action.WeaSetWeather, isFastExecute); }
+            else if (action.WeaSimpleDialogue)      { await this._callActionSimpleDialogueWithExtraData(action.WeaSimpleDialogue, isFastExecute); }
+            else if (action.WeaPlayBgm)             { await this._callActionPlayBgmWithExtraData(action.WeaPlayBgm, isFastExecute); }
+            else if (action.WeaSetPlayerFund)       { await this._callActionSetPlayerFundWithExtraData(action.WeaSetPlayerFund, isFastExecute); }
+            else if (action.WeaSetPlayerCoEnergy)   { await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
+            else if (action.WeaSetForceFogCode)     { await this._callActionSetForceFogCodeWithExtraData(action.WeaSetForceFogCode, isFastExecute); }
+            else {
                 throw Helpers.newError(`Invalid action.`);
             }
 
@@ -137,25 +129,17 @@ namespace TwnsBwWarEventManager {
         }
         private async _callWarActionWithoutExtraData(warEventActionId: number, isFastExecute: boolean): Promise<void> {
             const action = this.getWarEventAction(warEventActionId);
-            if (action.WeaAddUnit) {
-                await this._callActionAddUnitWithoutExtraData(action.WeaAddUnit, isFastExecute);
-            } else if (action.WeaSetPlayerAliveState) {
-                await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState, isFastExecute);
-            } else if (action.WeaDialogue) {
-                await this._callActionDialogueWithoutExtraData(action.WeaDialogue, isFastExecute);
-            } else if (action.WeaSetViewpoint) {
-                await this._callActionSetViewpointWithoutExtraData(action.WeaSetViewpoint, isFastExecute);
-            } else if (action.WeaSetWeather) {
-                await this._callActionSetWeatherWithoutExtraData(action.WeaSetWeather, isFastExecute);
-            } else if (action.WeaSimpleDialogue) {
-                await this._callActionSimpleDialogueWithoutExtraData(action.WeaSimpleDialogue, isFastExecute);
-            } else if (action.WeaPlayBgm) {
-                await this._callActionPlayBgmWithoutExtraData(action.WeaPlayBgm, isFastExecute);
-            } else if (action.WeaSetPlayerFund) {
-                await this._callActionSetPlayerFundWithoutExtraData(action.WeaSetPlayerFund, isFastExecute);
-            } else if (action.WeaSetPlayerCoEnergy) {
-                await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute);
-            } else {
+            if      (action.WeaAddUnit)             { await this._callActionAddUnitWithoutExtraData(action.WeaAddUnit, isFastExecute); }
+            else if (action.WeaSetPlayerAliveState) { await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
+            else if (action.WeaDialogue)            { await this._callActionDialogueWithoutExtraData(action.WeaDialogue, isFastExecute); }
+            else if (action.WeaSetViewpoint)        { await this._callActionSetViewpointWithoutExtraData(action.WeaSetViewpoint, isFastExecute); }
+            else if (action.WeaSetWeather)          { await this._callActionSetWeatherWithoutExtraData(action.WeaSetWeather, isFastExecute); }
+            else if (action.WeaSimpleDialogue)      { await this._callActionSimpleDialogueWithoutExtraData(action.WeaSimpleDialogue, isFastExecute); }
+            else if (action.WeaPlayBgm)             { await this._callActionPlayBgmWithoutExtraData(action.WeaPlayBgm, isFastExecute); }
+            else if (action.WeaSetPlayerFund)       { await this._callActionSetPlayerFundWithoutExtraData(action.WeaSetPlayerFund, isFastExecute); }
+            else if (action.WeaSetPlayerCoEnergy)   { await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
+            else if (action.WeaSetForceFogCode)     { await this._callActionSetForceFogCodeWithoutExtraData(action.WeaSetForceFogCode, isFastExecute); }
+            else {
                 throw Helpers.newError(`Invalid action.`);
             }
 
@@ -322,7 +306,7 @@ namespace TwnsBwWarEventManager {
             const weatherManager    = war.getWeatherManager();
             weatherManager.setForceWeatherType(Helpers.getExisted(action.weatherType, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithExtraData_00));
 
-            const turnsCount = Helpers.getExisted(action.turnsCount, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithExtraData_01);
+            const turnsCount = Helpers.getExisted(action.weatherTurnsCount, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithExtraData_01);
             if (turnsCount == 0) {
                 weatherManager.setExpirePlayerIndex(null);
                 weatherManager.setExpireTurnIndex(null);
@@ -340,13 +324,13 @@ namespace TwnsBwWarEventManager {
             const weatherManager    = war.getWeatherManager();
             weatherManager.setForceWeatherType(Helpers.getExisted(action.weatherType, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithoutExtraData_00));
 
-            const turnsCount = Helpers.getExisted(action.turnsCount, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithoutExtraData_01);
-            if (turnsCount == 0) {
+            const weatherTurnsCount = Helpers.getExisted(action.weatherTurnsCount, ClientErrorCode.BwWarEventManager_CallActionSetWeatherWithoutExtraData_01);
+            if (weatherTurnsCount == 0) {
                 weatherManager.setExpirePlayerIndex(null);
                 weatherManager.setExpireTurnIndex(null);
             } else {
                 weatherManager.setExpirePlayerIndex(war.getPlayerIndexInTurn());
-                weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + turnsCount);
+                weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + weatherTurnsCount);
             }
 
             if (!isFast) {
@@ -433,6 +417,37 @@ namespace TwnsBwWarEventManager {
                     0,
                     Math.min(maxEnergy, Math.floor(player.getCoCurrentEnergy() * multiplierPercentage / 100 + maxEnergy * deltaPercentage / 100))
                 ));
+            }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetForceFogCodeWithExtraData(action: WarEvent.IWeaSetForceFogCode, isFast: boolean): Promise<void> {
+            const war       = this._getWar();
+            const fogMap    = war.getFogMap();
+            fogMap.setForceFogCode(Helpers.getExisted(action.forceFogCode, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithExtraData_00));
+
+            const turnsCount = Helpers.getExisted(action.turnsCount, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithExtraData_01);
+            if (turnsCount == 0) {
+                fogMap.setForceExpirePlayerIndex(null);
+                fogMap.setForceExpireTurnIndex(null);
+            } else {
+                fogMap.setForceExpirePlayerIndex(war.getPlayerIndexInTurn());
+                fogMap.setForceExpireTurnIndex(war.getTurnManager().getTurnIndex() + turnsCount);
+            }
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetForceFogCodeWithoutExtraData(action: WarEvent.IWeaSetForceFogCode, isFast: boolean): Promise<void> {
+            const war       = this._getWar();
+            const fogMap    = war.getFogMap();
+            fogMap.setForceFogCode(Helpers.getExisted(action.forceFogCode, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithoutExtraData_00));
+
+            const turnsCount = Helpers.getExisted(action.turnsCount, ClientErrorCode.BwWarEventManager_CallActionSetHasFogWithoutExtraData_01);
+            if (turnsCount == 0) {
+                fogMap.setForceExpirePlayerIndex(null);
+                fogMap.setForceExpireTurnIndex(null);
+            } else {
+                fogMap.setForceExpirePlayerIndex(war.getPlayerIndexInTurn());
+                fogMap.setForceExpireTurnIndex(war.getTurnManager().getTurnIndex() + turnsCount);
             }
         }
 
@@ -557,6 +572,7 @@ namespace TwnsBwWarEventManager {
             else if (condition.WecTurnIndexRemainderEqualTo)        { return this._checkIsMeetConTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo); }
             else if (condition.WecTurnAndPlayer)                    { return this._checkIsMeetConTurnAndPlayer(condition.WecTurnAndPlayer); }
             else if (condition.WecTurnPhaseEqualTo)                 { return this._checkIsMeetConTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo); }
+            else if (condition.WecWeatherAndFog)                    { return this._checkIsMeetConWeatherAndFog(condition.WecWeatherAndFog); }
             else if (condition.WecTilePlayerIndexEqualTo)           { return this._checkIsMeetConTilePlayerIndexEqualTo(condition.WecTilePlayerIndexEqualTo); }
             else if (condition.WecTileTypeEqualTo)                  { return this._checkIsMeetConTileTypeEqualTo(condition.WecTileTypeEqualTo); }
             else if (condition.WecTilePresence)                     { return this._checkIsMeetConTilePresence(condition.WecTilePresence); }
@@ -798,6 +814,21 @@ namespace TwnsBwWarEventManager {
             return (phaseCode === valueEqualTo)
                 ? (isNot ? false : true)
                 : (isNot ? true : false);
+        }
+
+        private _checkIsMeetConWeatherAndFog(condition: WarEvent.IWecWeatherAndFog): boolean {
+            const war               = this._getWar();
+            const weatherTypeArray  = condition.weatherTypeArray;
+            if ((weatherTypeArray?.length) && (weatherTypeArray.indexOf(war.getWeatherManager().getCurrentWeatherType()) < 0)) {
+                return false;
+            }
+
+            const hasFogCurrently = condition.hasFogCurrently;
+            if ((hasFogCurrently != null) && (war.getFogMap().checkHasFogCurrently() != hasFogCurrently)) {
+                return false;
+            }
+
+            return true;
         }
 
         private _checkIsMeetConTilePlayerIndexEqualTo(condition: WarEvent.IWecTilePlayerIndexEqualTo): boolean {

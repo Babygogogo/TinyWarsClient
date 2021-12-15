@@ -235,8 +235,8 @@ namespace TwnsWeEventListPanel {
         nodeId?         : number;
     };
     class WarEventDescRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventDescRenderer> {
-        private readonly _groupPlaceholder! : eui.Group;
         private readonly _btnModify!        : TwnsUiButton.UiButton;
+        private readonly _groupDesc!        : eui.Group;
         private readonly _labelDesc!        : TwnsUiLabel.UiLabel;
         private readonly _labelError!       : TwnsUiLabel.UiLabel;
 
@@ -297,10 +297,10 @@ namespace TwnsWeEventListPanel {
                     const labelDesc                 = this._labelDesc;
                     const prefixArray               = data.prefixArray;
                     // const prefix        = prefixArray.join(`.`);
-                    this._groupPlaceholder.width    = (prefixArray.length - 1) * 16;
                     this._btnModify.label           = prefixArray[prefixArray.length - 1];
                     labelDesc.textColor             = ColorValue.Red;
                     labelDesc.text                  = `${Lang.getText(LangTextType.A0166)}`;
+                    this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
                 }
             }
         }
@@ -313,9 +313,9 @@ namespace TwnsWeEventListPanel {
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._groupPlaceholder.width    = (prefixArray.length - 1) * 16;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
-        this._labelDesc.text                = `${Lang.getLanguageText({ textArray: event.eventNameArray })}`;
+            this._labelDesc.text                = `${Lang.getLanguageText({ textArray: event.eventNameArray })}`;
+            this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
         }
         private _updateForEventCallCountInPlayerTurn(data: DataForWarEventDescRenderer): void { // DONE
             const eventId                   = data.eventId;
@@ -325,9 +325,9 @@ namespace TwnsWeEventListPanel {
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._groupPlaceholder.width    = (prefixArray.length - 1) * 16;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text            = `${Lang.getText(LangTextType.B0476)}: ${event.maxCallCountInPlayerTurn}`;
+            this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
         }
         private _updateForEventCallCountTotal(data: DataForWarEventDescRenderer): void {        // DONE
             const eventId                   = data.eventId;
@@ -337,9 +337,9 @@ namespace TwnsWeEventListPanel {
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._groupPlaceholder.width    = (prefixArray.length - 1) * 16;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text            = `${Lang.getText(LangTextType.B0477)}: ${event.maxCallCountTotal}`;
+            this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
         }
         private _updateForConditionNode(data: DataForWarEventDescRenderer): void {              // DONE
             const fullData                  = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
@@ -350,9 +350,9 @@ namespace TwnsWeEventListPanel {
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._groupPlaceholder.width    = (prefixArray.length - 1) * 16;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text            = `${node.isAnd ? Lang.getText(LangTextType.A0162) : Lang.getText(LangTextType.A0163)}`;
+            this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
         }
         private _updateForCondition(data: DataForWarEventDescRenderer): void {                  // DONE
             const war                       = data.war;
@@ -364,9 +364,9 @@ namespace TwnsWeEventListPanel {
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._groupPlaceholder.width    = (prefixArray.length - 1) * 16;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text            = `${WarEventHelper.getDescForCondition(condition)}`;
+            this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
         }
         private _updateForAction(data: DataForWarEventDescRenderer): void {                     // DONE
             const fullData                  = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
@@ -377,9 +377,14 @@ namespace TwnsWeEventListPanel {
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._groupPlaceholder.width    = (prefixArray.length - 1) * 16;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
             this._labelDesc.text            = `${WarEventHelper.getDescForAction(action)}`;
+            this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
+        }
+        private _updatePositionForBtnModifyAndGroupDesc(prefixArrayLength: number): void {
+            const placeholderWidth  = (prefixArrayLength - 1) * 16;
+            this._btnModify.x       = placeholderWidth;
+            this._groupDesc.left    = placeholderWidth + 60;
         }
     }
 }

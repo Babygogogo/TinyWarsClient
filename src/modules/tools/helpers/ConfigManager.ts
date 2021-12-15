@@ -467,6 +467,11 @@ namespace ConfigManager {
             || (skillType === Types.CoSkillType.Power)
             || (skillType === Types.CoSkillType.SuperPower);
     }
+    export function checkIsValidForceFogCode(forceFogCode: Types.ForceFogCode): boolean {
+        return (forceFogCode === Types.ForceFogCode.None)
+            || (forceFogCode === Types.ForceFogCode.Fog)
+            || (forceFogCode === Types.ForceFogCode.Clear);
+    }
 
     export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {
         const templateCfgDict = Helpers.getExisted(_ALL_CONFIGS.get(version)?.UnitTemplate, ClientErrorCode.ConfigManager_GetUnitTemplateCfg_00);

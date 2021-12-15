@@ -14,6 +14,7 @@ namespace TwnsNotifyType {
         UnitAndTileTextureVersionChanged,
         UserSettingsIsShowGridBorderChanged,
         UserSettingsUnitOpacityChanged,
+        UserSettingsIsAutoScrollMapChanged,
 
         MouseWheel,
         GlobalTouchBegin,

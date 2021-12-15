@@ -22,9 +22,8 @@
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin>
-                        <e:Group>
-                            <e:Group id="_groupPlaceholder" width="0" height="0" />
-                            <TwnsUiButton:UiButton id="_btnModify" label="A00" width="60" height="24">
+                        <e:Group left="0" right="0">
+                            <TwnsUiButton:UiButton id="_btnModify" label="A00" width="60" height="24" verticalCenter="0">
                                 <TwnsUiButton:skinName>
                                     <e:Skin>
                                         <e:Group left="0" right="0" top="0" bottom="0">
@@ -41,23 +40,20 @@
                                     </e:Skin>
                                 </TwnsUiButton:skinName>
                             </TwnsUiButton:UiButton>
-                            <e:Group x="22" y="5">
+                            <e:Group id="_groupDesc" verticalCenter="0" left="60" right="0">
                                 <TwnsUiLabel:UiLabel id="_labelError" text="日期" size="10" textColor="0xffffff" x="-150"
                                                      y="94" />
                                 <TwnsUiLabel:UiLabel id="_labelDesc" text="日期" size="13" textColor="0xffffff" x="-120"
                                                      y="93" />
                                 <e:layout>
-                                    <e:VerticalLayout gap="1" />
+                                    <e:VerticalLayout gap="1" horizontalAlign="justify" />
                                 </e:layout>
                             </e:Group>
-                            <e:layout>
-                                <e:HorizontalLayout verticalAlign="middle" gap="2" />
-                            </e:layout>
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:layout>
-                    <e:VerticalLayout paddingTop="4" gap="2" />
+                    <e:VerticalLayout paddingTop="4" gap="2" horizontalAlign="justify" />
                 </e:layout>
             </e:List>
         </TwnsUiScrollList:UiScrollList>

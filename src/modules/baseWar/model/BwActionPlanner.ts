@@ -127,7 +127,9 @@ namespace TwnsBwActionPlanner {
         private _onNotifyBwCursorTapped(): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnTap(gridIndex);
-            this._getWar().getView().tweenGridToCentralArea(gridIndex);
+            if (UserModel.getSelfSettingsIsAutoScrollMap()) {
+                this._getWar().getView().tweenGridToCentralArea(gridIndex);
+            }
 
             const currentState = this.getState();
             if ((nextState === currentState)                                                                &&
@@ -219,7 +221,9 @@ namespace TwnsBwActionPlanner {
         private _onNotifyBwCursorDragged(e: egret.Event): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnDrag(gridIndex);
-            this._getWar().getView().tweenGridToCentralArea((e.data as NotifyData.BwCursorDragged).draggedTo);
+            if (UserModel.getSelfSettingsIsAutoScrollMap()) {
+                this._getWar().getView().tweenGridToCentralArea((e.data as NotifyData.BwCursorDragged).draggedTo);
+            }
 
             if ((nextState === this.getState())                                                                 &&
                 ((nextState === State.ExecutingAction) || (WarCommonHelpers.checkIsStateRequesting(nextState)))

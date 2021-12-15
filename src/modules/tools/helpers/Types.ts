@@ -733,6 +733,8 @@ namespace Types {
         WecPlayerIndexInTurnGreaterThan,
         WecPlayerIndexInTurnLessThan,
 
+        WecWeatherAndFog,
+
         WecEventCalledCountTotalEqualTo,
         WecEventCalledCountTotalGreaterThan,
         WecEventCalledCountTotalLessThan,
@@ -759,6 +761,7 @@ namespace Types {
         PlayBgm,
         SetPlayerFund,
         SetPlayerCoEnergy,
+        SetForceFogCode,
     }
 
     // eslint-disable-next-line no-shadow

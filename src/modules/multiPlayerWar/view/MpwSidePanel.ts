@@ -16,7 +16,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwSidePanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -137,6 +136,7 @@ namespace TwnsMpwSidePanel {
                     cursor.setGridIndex(gridIndex);
                     cursor.updateView();
                     war.getView().tweenGridToCentralArea(gridIndex);
+                    war.getGridVisualEffect().showEffectAiming(gridIndex, 800);
                     SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
                 }
             }
@@ -156,6 +156,7 @@ namespace TwnsMpwSidePanel {
                     cursor.setGridIndex(gridIndex);
                     cursor.updateView();
                     war.getView().tweenGridToCentralArea(gridIndex);
+                    war.getGridVisualEffect().showEffectAiming(gridIndex, 800);
                     SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
                 }
             }

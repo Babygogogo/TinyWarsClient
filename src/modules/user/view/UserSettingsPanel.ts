@@ -51,6 +51,7 @@ namespace TwnsUserSettingsPanel {
         private readonly _uiRadioUnitAnimation!     : TwnsUiRadioButton.UiRadioButton;
         private readonly _uiRadioTileAnimation!     : TwnsUiRadioButton.UiRadioButton;
         private readonly _uiRadioShowGridBorder!    : TwnsUiRadioButton.UiRadioButton;
+        private readonly _uiRadioAutoScrollMap!     : TwnsUiRadioButton.UiRadioButton;
 
         private readonly _groupButtons!             : eui.Group;
         private readonly _btnChangeNickname!        : TwnsUiButton.UiButton;
@@ -73,6 +74,7 @@ namespace TwnsUserSettingsPanel {
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyUserSettingsIsShowGridBorderChanged },
+                { type: NotifyType.UserSettingsIsAutoScrollMapChanged,  callback: this._onNotifyUserSettingsIsAutoScrollMapChanged },
                 { type: NotifyType.MsgUserGetPublicInfo,                callback: this._onMsgUserGetPublicInfo },
                 { type: NotifyType.MsgUserSetNickname,                  callback: this._onMsgUserSetNickname },
                 { type: NotifyType.MsgUserSetDiscordId,                 callback: this._onMsgUserSetDiscordId },
@@ -189,6 +191,24 @@ namespace TwnsUserSettingsPanel {
                     return UserModel.getSelfSettingsIsShowGridBorder();
                 },
             });
+            this._uiRadioAutoScrollMap.setData({
+                titleTextType   : LangTextType.B0793,
+                leftTextType    : LangTextType.B0561,
+                rightTextType   : LangTextType.B0562,
+                callbackOnLeft  : () => {
+                    UserProxy.reqUserSetSettings({
+                        isAutoScrollMap: true,
+                    });
+                },
+                callbackOnRight : () => {
+                    UserProxy.reqUserSetSettings({
+                        isAutoScrollMap: false,
+                    });
+                },
+                checkerForLeftOn: () => {
+                    return UserModel.getSelfSettingsIsAutoScrollMap();
+                },
+            });
 
             const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnOpened_00);
             UserProxy.reqUserGetPublicInfo(selfUserId);
@@ -211,6 +231,9 @@ namespace TwnsUserSettingsPanel {
         }
         private _onNotifyUserSettingsIsShowGridBorderChanged(): void {
             this._uiRadioShowGridBorder.updateView();
+        }
+        private _onNotifyUserSettingsIsAutoScrollMapChanged(): void {
+            this._uiRadioAutoScrollMap.updateView();
         }
         private _onMsgUserGetPublicInfo(): void {
             this._updateView();

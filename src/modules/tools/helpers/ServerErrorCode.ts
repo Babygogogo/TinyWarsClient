@@ -1509,6 +1509,17 @@ export const enum ServerErrorCode {
     BwWarEventManager_CallActionSetPlayerCoEnergy_0008,
     BwWarEventManager_CallActionSetPlayerCoEnergy_0009,
 
+    BwWarEventManager_CallActionSetForceFogCode_0000,
+    BwWarEventManager_CallActionSetForceFogCode_0001,
+    BwWarEventManager_CallActionSetForceFogCode_0002,
+    BwWarEventManager_CallActionSetForceFogCode_0003,
+    BwWarEventManager_CallActionSetForceFogCode_0004,
+    BwWarEventManager_CallActionSetForceFogCode_0005,
+    BwWarEventManager_CallActionSetForceFogCode_0006,
+    BwWarEventManager_CallActionSetForceFogCode_0007,
+    BwWarEventManager_CallActionSetForceFogCode_0008,
+    BwWarEventManager_CallActionSetForceFogCode_0009,
+
     BwWarEventManager_UpdateWarEventCalledCountOnCall_0000,
     BwWarEventManager_UpdateWarEventCalledCountOnCall_0001,
     BwWarEventManager_UpdateWarEventCalledCountOnCall_0002,

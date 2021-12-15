@@ -1064,8 +1064,8 @@ namespace TwnsLangCommonText {
             `The duration is not valid.`,
         ],
         [LangTextType.A0254]: [
-            `设置为0回合可使天气永久持续`,
-            `Set 0 turns to make the weather last forever.`,
+            `设置为0回合可使指定状态永久持续`,
+            `Set 0 turns to make the state last forever.`,
         ],
         [LangTextType.A0255]: [
             `指定玩家不合法`,
@@ -4283,6 +4283,30 @@ namespace TwnsLangCommonText {
             `ID`,
             `ID`,
         ],
+        [LangTextType.B0793]: [
+            `地图自动滚动`,
+            `Auto Scroll Map`,
+        ],
+        [LangTextType.B0794]: [
+            `天气与战争迷雾...`,
+            `Weather Condition and Fog of War ...`,
+        ],
+        [LangTextType.B0795]: [
+            `设置战争迷雾`,
+            `Set Fog of War`,
+        ],
+        [LangTextType.B0796]: [
+            `强制起雾`,
+            `Force FoW`,
+        ],
+        [LangTextType.B0797]: [
+            `强制无雾`,
+            `Force No FoW`,
+        ],
+        [LangTextType.B0798]: [
+            `不强制`,
+            `No Force`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4993,6 +5017,22 @@ namespace TwnsLangCommonText {
         [LangTextType.F0105]: [
             `合计触发次数 %s %s`,
             `the Total Triggered Times %s %s`,
+        ],
+        [LangTextType.F0106]: [
+            `当前天气是 %s%s`,
+            `The Weather Condition is %s%s.`,
+        ],
+        [LangTextType.F0107]: [
+            `战争迷雾%s`,
+            `the Fog of War is %s`,
+        ],
+        [LangTextType.F0108]: [
+            `把战争迷雾改为%s，持续%d回合`,
+            `Set the Fog of War to %s for %d turns.`,
+        ],
+        [LangTextType.F0109]: [
+            `把战争迷雾永久改为%s`,
+            `Set the Fog of War to %s forever.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

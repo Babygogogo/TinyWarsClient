@@ -219,6 +219,24 @@ namespace TwnsBwFogMap {
             return Helpers.getDefined(this._forceExpirePlayerIndex, ClientErrorCode.BwFogMap_GetForceExpirePlayerIndex_00);
         }
 
+        public updateOnPlayerTurnSwitched(): void {
+            const expireTurnIndex   = this.getForceExpireTurnIndex();
+            const expirePlayerIndex = this.getForceExpirePlayerIndex();
+            if ((expireTurnIndex == null) || (expirePlayerIndex == null)) {
+                return;
+            }
+
+            const turnManager       = this._getWar().getTurnManager();
+            const currentTurnIndex  = turnManager.getTurnIndex();
+            if ((expireTurnIndex < currentTurnIndex)                                                                ||
+                (expireTurnIndex === currentTurnIndex) && (expirePlayerIndex <= turnManager.getPlayerIndexInTurn())
+            ) {
+                this.setForceFogCode(Types.ForceFogCode.None);
+                this.setForceExpireTurnIndex(null);
+                this.setForceExpirePlayerIndex(null);
+            }
+        }
+
         public resetAllMapsForPlayer(playerIndex: number): void {
             this.resetMapFromPathsForPlayer(playerIndex);
         }

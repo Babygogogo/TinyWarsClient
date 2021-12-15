@@ -436,6 +436,7 @@ namespace Lang {
             case WarEventConditionType.WecEventCalledCountTotalGreaterThan  : return getText(LangTextType.B0513);
             case WarEventConditionType.WecEventCalledCountTotalLessThan     : return getText(LangTextType.B0514);
             case WarEventConditionType.WecEventCalledCount                  : return getText(LangTextType.B0789);
+            case WarEventConditionType.WecWeatherAndFog                     : return getText(LangTextType.B0794);
             case WarEventConditionType.WecPlayerAliveStateEqualTo           : return getText(LangTextType.B0515);
             case WarEventConditionType.WecPlayerState                       : return getText(LangTextType.B0786);
             case WarEventConditionType.WecTilePlayerIndexEqualTo            : return getText(LangTextType.B0716);
@@ -453,6 +454,7 @@ namespace Lang {
             case WarEventActionType.Dialogue                : return getText(LangTextType.B0674);
             case WarEventActionType.SetViewpoint            : return getText(LangTextType.B0713);
             case WarEventActionType.SetWeather              : return getText(LangTextType.B0715);
+            case WarEventActionType.SetForceFogCode         : return getText(LangTextType.B0795);
             case WarEventActionType.SimpleDialogue          : return getText(LangTextType.B0728);
             case WarEventActionType.PlayBgm                 : return getText(LangTextType.B0750);
             case WarEventActionType.SetPlayerFund           : return getText(LangTextType.B0752);
@@ -499,6 +501,15 @@ namespace Lang {
             case Types.ValueComparator.LessThan         : return getText(LangTextType.B0771);
             case Types.ValueComparator.NotLessThan      : return getText(LangTextType.B0772);
             default                                     : return null;
+        }
+    }
+
+    export function getForceFogCodeName(code: Types.ForceFogCode): string | null {
+        switch (code) {
+            case Types.ForceFogCode.Fog         : return getText(LangTextType.B0796);
+            case Types.ForceFogCode.Clear       : return getText(LangTextType.B0797);
+            case Types.ForceFogCode.None        : return getText(LangTextType.B0798);
+            default                             : return null;
         }
     }
 

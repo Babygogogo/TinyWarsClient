@@ -4575,6 +4575,102 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WecWeatherAndFog. */
+    interface IWecWeatherAndFog {
+
+        /** WecWeatherAndFog weatherTypeArray */
+        weatherTypeArray?: (number[]|null);
+
+        /** WecWeatherAndFog hasFogCurrently */
+        hasFogCurrently?: (boolean|null);
+    }
+
+    /** Represents a WecWeatherAndFog. */
+    class WecWeatherAndFog implements IWecWeatherAndFog {
+
+        /**
+         * Constructs a new WecWeatherAndFog.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecWeatherAndFog);
+
+        /** WecWeatherAndFog weatherTypeArray. */
+        public weatherTypeArray: number[];
+
+        /** WecWeatherAndFog hasFogCurrently. */
+        public hasFogCurrently: boolean;
+
+        /**
+         * Creates a new WecWeatherAndFog instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecWeatherAndFog instance
+         */
+        public static create(properties?: WarEvent.IWecWeatherAndFog): WarEvent.WecWeatherAndFog;
+
+        /**
+         * Encodes the specified WecWeatherAndFog message. Does not implicitly {@link WarEvent.WecWeatherAndFog.verify|verify} messages.
+         * @param message WecWeatherAndFog message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecWeatherAndFog, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecWeatherAndFog message, length delimited. Does not implicitly {@link WarEvent.WecWeatherAndFog.verify|verify} messages.
+         * @param message WecWeatherAndFog message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecWeatherAndFog, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecWeatherAndFog message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecWeatherAndFog
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecWeatherAndFog;
+
+        /**
+         * Decodes a WecWeatherAndFog message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecWeatherAndFog
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecWeatherAndFog;
+
+        /**
+         * Verifies a WecWeatherAndFog message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecWeatherAndFog message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecWeatherAndFog
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecWeatherAndFog;
+
+        /**
+         * Creates a plain object from a WecWeatherAndFog message. Also converts values to other types if specified.
+         * @param message WecWeatherAndFog
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecWeatherAndFog, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecWeatherAndFog to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WecPlayerIndexInTurnEqualTo. */
     interface IWecPlayerIndexInTurnEqualTo {
 
@@ -6015,6 +6111,9 @@ export declare namespace WarEvent {
         /** WarEventCondition WecTurnPhaseEqualTo */
         WecTurnPhaseEqualTo?: (WarEvent.IWecTurnPhaseEqualTo|null);
 
+        /** WarEventCondition WecWeatherAndFog */
+        WecWeatherAndFog?: (WarEvent.IWecWeatherAndFog|null);
+
         /** WarEventCondition WecPlayerIndexInTurnEqualTo */
         WecPlayerIndexInTurnEqualTo?: (WarEvent.IWecPlayerIndexInTurnEqualTo|null);
 
@@ -6084,6 +6183,9 @@ export declare namespace WarEvent {
 
         /** WarEventCondition WecTurnPhaseEqualTo. */
         public WecTurnPhaseEqualTo?: (WarEvent.IWecTurnPhaseEqualTo|null);
+
+        /** WarEventCondition WecWeatherAndFog. */
+        public WecWeatherAndFog?: (WarEvent.IWecWeatherAndFog|null);
 
         /** WarEventCondition WecPlayerIndexInTurnEqualTo. */
         public WecPlayerIndexInTurnEqualTo?: (WarEvent.IWecPlayerIndexInTurnEqualTo|null);
@@ -7674,8 +7776,8 @@ export declare namespace WarEvent {
         /** WeaSetWeather weatherType */
         weatherType?: (number|null);
 
-        /** WeaSetWeather turnsCount */
-        turnsCount?: (number|null);
+        /** WeaSetWeather weatherTurnsCount */
+        weatherTurnsCount?: (number|null);
     }
 
     /** Represents a WeaSetWeather. */
@@ -7690,8 +7792,8 @@ export declare namespace WarEvent {
         /** WeaSetWeather weatherType. */
         public weatherType: number;
 
-        /** WeaSetWeather turnsCount. */
-        public turnsCount: number;
+        /** WeaSetWeather weatherTurnsCount. */
+        public weatherTurnsCount: number;
 
         /**
          * Creates a new WeaSetWeather instance using the specified properties.
@@ -7860,6 +7962,102 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WeaSetForceFogCode. */
+    interface IWeaSetForceFogCode {
+
+        /** WeaSetForceFogCode forceFogCode */
+        forceFogCode?: (number|null);
+
+        /** WeaSetForceFogCode turnsCount */
+        turnsCount?: (number|null);
+    }
+
+    /** Represents a WeaSetForceFogCode. */
+    class WeaSetForceFogCode implements IWeaSetForceFogCode {
+
+        /**
+         * Constructs a new WeaSetForceFogCode.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetForceFogCode);
+
+        /** WeaSetForceFogCode forceFogCode. */
+        public forceFogCode: number;
+
+        /** WeaSetForceFogCode turnsCount. */
+        public turnsCount: number;
+
+        /**
+         * Creates a new WeaSetForceFogCode instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetForceFogCode instance
+         */
+        public static create(properties?: WarEvent.IWeaSetForceFogCode): WarEvent.WeaSetForceFogCode;
+
+        /**
+         * Encodes the specified WeaSetForceFogCode message. Does not implicitly {@link WarEvent.WeaSetForceFogCode.verify|verify} messages.
+         * @param message WeaSetForceFogCode message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetForceFogCode, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetForceFogCode message, length delimited. Does not implicitly {@link WarEvent.WeaSetForceFogCode.verify|verify} messages.
+         * @param message WeaSetForceFogCode message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetForceFogCode, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetForceFogCode message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetForceFogCode
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetForceFogCode;
+
+        /**
+         * Decodes a WeaSetForceFogCode message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetForceFogCode
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetForceFogCode;
+
+        /**
+         * Verifies a WeaSetForceFogCode message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetForceFogCode message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetForceFogCode
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetForceFogCode;
+
+        /**
+         * Creates a plain object from a WeaSetForceFogCode message. Also converts values to other types if specified.
+         * @param message WeaSetForceFogCode
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetForceFogCode, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetForceFogCode to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarEventAction. */
     interface IWarEventAction {
 
@@ -7892,6 +8090,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetPlayerCoEnergy */
         WeaSetPlayerCoEnergy?: (WarEvent.IWeaSetPlayerCoEnergy|null);
+
+        /** WarEventAction WeaSetForceFogCode */
+        WeaSetForceFogCode?: (WarEvent.IWeaSetForceFogCode|null);
     }
 
     /** Represents a WarEventAction. */
@@ -7932,6 +8133,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetPlayerCoEnergy. */
         public WeaSetPlayerCoEnergy?: (WarEvent.IWeaSetPlayerCoEnergy|null);
+
+        /** WarEventAction WeaSetForceFogCode. */
+        public WeaSetForceFogCode?: (WarEvent.IWeaSetForceFogCode|null);
 
         /**
          * Creates a new WarEventAction instance using the specified properties.
@@ -23909,6 +24113,9 @@ export declare namespace User {
 
         /** UserSettings unitOpacity */
         unitOpacity?: (number|null);
+
+        /** UserSettings isAutoScrollMap */
+        isAutoScrollMap?: (boolean|null);
     }
 
     /** Represents a UserSettings. */
@@ -23931,6 +24138,9 @@ export declare namespace User {
 
         /** UserSettings unitOpacity. */
         public unitOpacity: number;
+
+        /** UserSettings isAutoScrollMap. */
+        public isAutoScrollMap: boolean;
 
         /**
          * Creates a new UserSettings instance using the specified properties.

@@ -14,32 +14,31 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel5 {
+namespace TwnsWeActionModifyPanel10 {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import BwWar                    = TwnsBwWar.BwWar;
-    import WeatherType              = Types.WeatherType;
 
     export type OpenData = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel5 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel10 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
-        private readonly _btnWeather!       : TwnsUiButton.UiButton;
-        private readonly _labelWeather!     : TwnsUiLabel.UiLabel;
+        private readonly _btnHasFog!        : TwnsUiButton.UiButton;
+        private readonly _labelHasFog!      : TwnsUiLabel.UiLabel;
         private readonly _labelTurns!       : TwnsUiLabel.UiLabel;
         private readonly _inputTurns!       : TwnsUiTextInput.UiTextInput;
         private readonly _labelTurnsTips!   : TwnsUiLabel.UiLabel;
 
         protected _onOpening(): void {
             this._setUiListenerArray([
-                { ui: this._btnWeather,             callback: this._onTouchedBtnWeather },
+                { ui: this._btnHasFog,              callback: this._onTouchedBtnHasFog },
                 { ui: this._btnType,                callback: this._onTouchedBtnType },
                 { ui: this._btnBack,                callback: this.close },
                 { ui: this._inputTurns,             callback: this._onFocusOutInputTurns,               eventType: egret.FocusEvent.FOCUS_OUT },
@@ -67,22 +66,19 @@ namespace TwnsWeActionModifyPanel5 {
 
         private _onNotifyWarEventFullDataChanged(): void {
             this._updateInputTurns();
-            this._updateLabelWeather();
+            this._updateLabelHasFog();
         }
 
-        private _onTouchedBtnWeather(): void {
-            const action            = Helpers.getExisted(this._getOpenData().action.WeaSetWeather);
-            const weatherType = action.weatherType;
-            if (weatherType === WeatherType.Clear) {
-                action.weatherType = WeatherType.Rainy;
-            } else if (weatherType === WeatherType.Rainy) {
-                action.weatherType = WeatherType.Sandstorm;
-            } else if (weatherType === WeatherType.Sandstorm) {
-                action.weatherType = WeatherType.Snowy;
+        private _onTouchedBtnHasFog(): void {
+            const action        = this.getAction();
+            const forceFogCode  = action.forceFogCode;
+            if (forceFogCode === Types.ForceFogCode.Fog) {
+                action.forceFogCode = Types.ForceFogCode.Clear;
+            } else if (forceFogCode === Types.ForceFogCode.Clear) {
+                action.forceFogCode = Types.ForceFogCode.None;
             } else {
-                action.weatherType = WeatherType.Clear;
+                action.forceFogCode = Types.ForceFogCode.Fog;
             }
-
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
@@ -96,10 +92,10 @@ namespace TwnsWeActionModifyPanel5 {
         }
 
         private _onFocusOutInputTurns(): void {
-            const data = Helpers.getExisted(this._getOpenData().action.WeaSetWeather);
+            const action    = this.getAction();
             const newTurns  = Math.min(parseInt(this._inputTurns.text)) || 0;
-            if (newTurns !== data.weatherTurnsCount) {
-                data.weatherTurnsCount = newTurns;
+            if (newTurns !== action.turnsCount) {
+                action.turnsCount = newTurns;
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -110,7 +106,7 @@ namespace TwnsWeActionModifyPanel5 {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            this._updateLabelWeather();
+            this._updateLabelHasFog();
             this._updateInputTurns();
         }
 
@@ -119,20 +115,24 @@ namespace TwnsWeActionModifyPanel5 {
             this._btnType.label             = Lang.getText(LangTextType.B0516);
             this._btnBack.label             = Lang.getText(LangTextType.B0146);
             this._labelTurnsTips.text       = `(${Lang.getText(LangTextType.A0254)})`;
-            this._btnWeather.label          = Lang.getText(LangTextType.B0705);
+            this._btnHasFog.label           = Lang.getText(LangTextType.B0020);
             this._labelTurns.text           = Lang.getText(LangTextType.B0091);
 
-            this._updateLabelWeather();
+            this._updateLabelHasFog();
         }
 
-        private _updateLabelWeather(): void {
-            this._labelWeather.text = Lang.getWeatherName(Helpers.getExisted(this._getOpenData().action.WeaSetWeather?.weatherType));
+        private _updateLabelHasFog(): void {
+            this._labelHasFog.text = Lang.getForceFogCodeName(Helpers.getExisted(this.getAction().forceFogCode)) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateInputTurns(): void {
-            this._inputTurns.text = `${this._getOpenData().action.WeaSetWeather?.weatherTurnsCount}`;
+            this._inputTurns.text = `${this.getAction().turnsCount}`;
+        }
+
+        private getAction(): ProtoTypes.WarEvent.IWeaSetForceFogCode {
+            return Helpers.getExisted(this._getOpenData().action.WeaSetForceFogCode);
         }
     }
 }
 
-// export default TwnsWeActionModifyPanel5;
+// export default TwnsWeActionModifyPanel10;
