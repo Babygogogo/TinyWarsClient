@@ -73,6 +73,9 @@ namespace WarEventHelper {
     const ACTION_TYPE_ARRAY = [
         // todo: add future types
         ActionType.AddUnit,
+        // ActionType.DeprecatedSetPlayerFund,
+        // ActionType.DeprecatedSetPlayerCoEnergy,
+        // ActionType.DeprecatedSetPlayerAliveState,
         ActionType.SetPlayerFund,
         ActionType.SetPlayerCoEnergy,
         ActionType.SetPlayerAliveState,
@@ -495,15 +498,18 @@ namespace WarEventHelper {
 
         // todo: add more checkers when the action types grow.
         return (checkIsValidWeaAddUnit({ action: action.WeaAddUnit, configVersion, mapSize, playersCountUnneutral }))
-            || (checkIsValidWeaSetPlayerAliveState(action.WeaSetPlayerAliveState, playersCountUnneutral))
             || (checkIsValidWeaDialogue(action.WeaDialogue))
             || (checkIsValidWeaSetViewpoint(action.WeaSetViewpoint, mapSize))
             || (checkIsValidWeaSetWeather(action.WeaSetWeather))
             || (checkIsValidWeaSimpleDialogue(action.WeaSimpleDialogue))
             || (checkIsValidWeaPlayBgm(action.WeaPlayBgm))
+            || (checkIsValidWeaSetForceFogCode(action.WeaSetForceFogCode))
+            || (checkIsValidWeaDeprecatedSetPlayerAliveState(action.WeaDeprecatedSetPlayerAliveState, playersCountUnneutral))
+            || (checkIsValidWeaDeprecatedSetPlayerFund(action.WeaDeprecatedSetPlayerFund, playersCountUnneutral))
+            || (checkIsValidWeaDeprecatedSetPlayerCoEnergy(action.WeaDeprecatedSetPlayerCoEnergy, playersCountUnneutral))
+            || (checkIsValidWeaSetPlayerAliveState(action.WeaSetPlayerAliveState, playersCountUnneutral))
             || (checkIsValidWeaSetPlayerFund(action.WeaSetPlayerFund, playersCountUnneutral))
-            || (checkIsValidWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral))
-            || (checkIsValidWeaSetForceFogCode(action.WeaSetForceFogCode));
+            || (checkIsValidWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral));
     }
     function checkIsValidWeaAddUnit({ action, configVersion, mapSize, playersCountUnneutral }: {
         action                  : Types.Undefinable<ProtoTypes.WarEvent.IWeaAddUnit>;
@@ -545,32 +551,6 @@ namespace WarEventHelper {
             })) {
                 return false;
             }
-        }
-
-        return true;
-    }
-    function checkIsValidWeaSetPlayerAliveState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerAliveState>, playersCountUnneutral: number): boolean {
-        if (action == null) {
-            return false;
-        }
-
-        const playerIndex   = action.playerIndex;
-        if ((playerIndex == null)                                   ||
-            (playerIndex <= CommonConstants.WarNeutralPlayerIndex)  ||
-            (playerIndex > playersCountUnneutral)
-        ) {
-            return false;
-        }
-
-        const playerAliveState: Types.Undefinable<Types.PlayerAliveState> = action.playerAliveState;
-        if (playerAliveState == null) {
-            return false;
-        }
-        if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
-            (playerAliveState !== Types.PlayerAliveState.Dying) &&
-            (playerAliveState !== Types.PlayerAliveState.Dead)
-        ) {
-            return false;
         }
 
         return true;
@@ -734,7 +714,43 @@ namespace WarEventHelper {
         const bgmCode = action.bgmCode;
         return (bgmCode != null) && (bgmCode <= Types.BgmCode.Co9999);
     }
-    function checkIsValidWeaSetPlayerFund(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerFund>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetForceFogCode(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetForceFogCode>): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const forceFogCode = action.forceFogCode;
+        return (forceFogCode != null)
+            && (ConfigManager.checkIsValidForceFogCode(forceFogCode))
+            && (action.turnsCount != null);
+    }
+    function checkIsValidWeaDeprecatedSetPlayerAliveState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerAliveState>, playersCountUnneutral: number): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const playerIndex   = action.playerIndex;
+        if ((playerIndex == null)                                   ||
+            (playerIndex <= CommonConstants.WarNeutralPlayerIndex)  ||
+            (playerIndex > playersCountUnneutral)
+        ) {
+            return false;
+        }
+
+        const playerAliveState: Types.Undefinable<Types.PlayerAliveState> = action.playerAliveState;
+        if (playerAliveState == null) {
+            return false;
+        }
+        if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
+            (playerAliveState !== Types.PlayerAliveState.Dying) &&
+            (playerAliveState !== Types.PlayerAliveState.Dead)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaDeprecatedSetPlayerFund(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerFund>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -760,7 +776,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetPlayerCoEnergy(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaDeprecatedSetPlayerCoEnergy(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -786,15 +802,74 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetForceFogCode(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetForceFogCode>): boolean {
+    function checkIsValidWeaSetPlayerAliveState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerAliveState>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
 
-        const forceFogCode = action.forceFogCode;
-        return (forceFogCode != null)
-            && (ConfigManager.checkIsValidForceFogCode(forceFogCode))
-            && (action.turnsCount != null);
+        const playerIndexArray = action.playerIndexArray;
+        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            return false;
+        }
+
+        const playerAliveState: Types.Undefinable<Types.PlayerAliveState> = action.playerAliveState;
+        if (playerAliveState == null) {
+            return false;
+        }
+        if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
+            (playerAliveState !== Types.PlayerAliveState.Dying) &&
+            (playerAliveState !== Types.PlayerAliveState.Dead)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaSetPlayerFund(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerFund>, playersCountUnneutral: number): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const playerIndexArray = action.playerIndexArray;
+        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            return false;
+        }
+
+        const { deltaValue, multiplierPercentage } = action;
+        if ((deltaValue ?? multiplierPercentage) == null) {
+            return false;
+        }
+        if ((deltaValue != null) && (Math.abs(deltaValue) > CommonConstants.WarEventActionSetPlayerFundMaxDeltaValue)) {
+            return false;
+        }
+        if ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerFundMaxMultiplierPercentage)) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaSetPlayerCoEnergy(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const playerIndexArray = action.playerIndexArray;
+        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            return false;
+        }
+
+        const { deltaPercentage, multiplierPercentage } = action;
+        if ((deltaPercentage ?? multiplierPercentage) == null) {
+            return false;
+        }
+        if ((deltaPercentage != null) && (Math.abs(deltaPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage)) {
+            return false;
+        }
+        if ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage)) {
+            return false;
+        }
+
+        return true;
     }
 
     function checkIsValidWarEventCondition({ condition, mapRawData }: {  // DONE
@@ -1794,15 +1869,18 @@ namespace WarEventHelper {
     export function getDescForAction(action: IWarEventAction): string | null {
         // todo: add functions for other actions
         return (getDescForWeaAddUnit(action.WeaAddUnit))
-            || (getDescForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState))
             || (getDescForWeaDialogue(action.WeaDialogue))
             || (getDescForWeaSetViewpoint(action.WeaSetViewpoint))
             || (getDescForWeaSetWeather(action.WeaSetWeather))
             || (getDescForWeaSimpleDialogue(action.WeaSimpleDialogue))
             || (getDescForWeaPlayBgm(action.WeaPlayBgm))
+            || (getDescForWeaSetForceFogCode(action.WeaSetForceFogCode))
+            || (getDescForWeaDeprecatedSetPlayerAliveState(action.WeaDeprecatedSetPlayerAliveState))
+            || (getDescForWeaDeprecatedSetPlayerFund(action.WeaDeprecatedSetPlayerFund))
+            || (getDescForWeaDeprecatedSetPlayerCoEnergy(action.WeaDeprecatedSetPlayerCoEnergy))
+            || (getDescForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState))
             || (getDescForWeaSetPlayerFund(action.WeaSetPlayerFund))
-            || (getDescForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy))
-            || (getDescForWeaSetForceFogCode(action.WeaSetForceFogCode));
+            || (getDescForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy));
     }
     function getDescForWeaAddUnit(data: Types.Undefinable<WarEvent.IWeaAddUnit>): string | null {
         if (!data) {
@@ -1819,13 +1897,6 @@ namespace WarEventHelper {
                 unitNameArray.push(`${Lang.getUnitName(unitType)} * ${count}`);
             }
             return Lang.getFormattedText(LangTextType.F0059, unitNameArray.join(", "));
-        }
-    }
-    function getDescForWeaSetPlayerAliveState(data: Types.Undefinable<WarEvent.IWeaSetPlayerAliveState>): string | null {
-        if (!data) {
-            return null;
-        } else {
-            return Lang.getFormattedText(LangTextType.F0066, data.playerIndex, Lang.getPlayerAliveStateName(Helpers.getExisted(data.playerAliveState)));
         }
     }
     function getDescForWeaDialogue(data: Types.Undefinable<WarEvent.IWeaDialogue>): string | null {
@@ -1899,20 +1970,6 @@ namespace WarEventHelper {
             return `${Lang.getText(LangTextType.B0750)}: ${bgmCode == null ? CommonConstants.ErrorTextForUndefined : Lang.getBgmName(bgmCode)}`;
         }
     }
-    function getDescForWeaSetPlayerFund(data: Types.Undefinable<WarEvent.IWeaSetPlayerFund>): string | null {
-        if (data == null) {
-            return null;
-        }
-
-        return Lang.getFormattedText(LangTextType.F0087, data.playerIndex, data.multiplierPercentage ?? 100, data.deltaValue ?? 0);
-    }
-    function getDescForWeaSetPlayerCoEnergy(data: Types.Undefinable<WarEvent.IWeaSetPlayerCoEnergy>): string | null {
-        if (data == null) {
-            return null;
-        }
-
-        return Lang.getFormattedText(LangTextType.F0086, data.playerIndex, data.multiplierPercentage ?? 100, data.deltaPercentage ?? 0);
-    }
     function getDescForWeaSetForceFogCode(data: Types.Undefinable<WarEvent.IWeaSetForceFogCode>): string | null {
         if (data == null) {
             return null;
@@ -1923,6 +1980,65 @@ namespace WarEventHelper {
         return (turnsCount == 0)
             ? Lang.getFormattedText(LangTextType.F0109, textForForceFogCode)
             : Lang.getFormattedText(LangTextType.F0108, textForForceFogCode, turnsCount);
+    }
+    function getDescForWeaDeprecatedSetPlayerAliveState(data: Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerAliveState>): string | null {
+        if (!data) {
+            return null;
+        } else {
+            return Lang.getFormattedText(LangTextType.F0066, data.playerIndex, Lang.getPlayerAliveStateName(Helpers.getExisted(data.playerAliveState)));
+        }
+    }
+    function getDescForWeaDeprecatedSetPlayerFund(data: Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerFund>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        return Lang.getFormattedText(LangTextType.F0087, data.playerIndex, data.multiplierPercentage ?? 100, data.deltaValue ?? 0);
+    }
+    function getDescForWeaDeprecatedSetPlayerCoEnergy(data: Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerCoEnergy>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        return Lang.getFormattedText(LangTextType.F0086, data.playerIndex, data.multiplierPercentage ?? 100, data.deltaPercentage ?? 0);
+    }
+    function getDescForWeaSetPlayerAliveState(data: Types.Undefinable<WarEvent.IWeaSetPlayerAliveState>): string | null {
+        if (!data) {
+            return null;
+        }
+
+        const playerIndexArray = data.playerIndexArray;
+        return Lang.getFormattedText(
+            LangTextType.F0066,
+            playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`/`) : Lang.getText(LangTextType.B0766),
+            Lang.getPlayerAliveStateName(Helpers.getExisted(data.playerAliveState))
+        );
+    }
+    function getDescForWeaSetPlayerFund(data: Types.Undefinable<WarEvent.IWeaSetPlayerFund>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const playerIndexArray = data.playerIndexArray;
+        return Lang.getFormattedText(
+            LangTextType.F0087,
+            playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`/`) : Lang.getText(LangTextType.B0766),
+            data.multiplierPercentage ?? 100,
+            data.deltaValue ?? 0
+        );
+    }
+    function getDescForWeaSetPlayerCoEnergy(data: Types.Undefinable<WarEvent.IWeaSetPlayerCoEnergy>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const playerIndexArray = data.playerIndexArray;
+        return Lang.getFormattedText(
+            LangTextType.F0086,
+            playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`/`) : Lang.getText(LangTextType.B0766),
+            data.multiplierPercentage ?? 100,
+            data.deltaPercentage ?? 0
+        );
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2370,16 +2486,19 @@ namespace WarEventHelper {
 
         // todo: add more tips for the future actions.
         const playersCountUnneutral = war.getPlayersCountUnneutral();
-        if      (action.WeaAddUnit)             { return getErrorTipForWeaAddUnit(action.WeaAddUnit, war); }
-        else if (action.WeaSetPlayerAliveState) { return getErrorTipForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState, playersCountUnneutral); }
-        else if (action.WeaDialogue)            { return getErrorTipForWeaDialogue(action.WeaDialogue); }
-        else if (action.WeaSetViewpoint)        { return getErrorTipForWeaSetViewpoint(action.WeaSetViewpoint, war); }
-        else if (action.WeaSetWeather)          { return getErrorTipForWeaSetWeather(action.WeaSetWeather); }
-        else if (action.WeaSimpleDialogue)      { return getErrorTipForWeaSimpleDialogue(action.WeaSimpleDialogue); }
-        else if (action.WeaPlayBgm)             { return getErrorTipForWeaPlayBgm(action.WeaPlayBgm); }
-        else if (action.WeaSetPlayerFund)       { return getErrorTipForWeaSetPlayerFund(action.WeaSetPlayerFund, playersCountUnneutral); }
-        else if (action.WeaSetPlayerCoEnergy)   { return getErrorTipForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral); }
-        else if (action.WeaSetForceFogCode)     { return getErrorTipForWeaSetForceFogCode(action.WeaSetForceFogCode); }
+        if      (action.WeaAddUnit)                         { return getErrorTipForWeaAddUnit(action.WeaAddUnit, war); }
+        else if (action.WeaDialogue)                        { return getErrorTipForWeaDialogue(action.WeaDialogue); }
+        else if (action.WeaSetViewpoint)                    { return getErrorTipForWeaSetViewpoint(action.WeaSetViewpoint, war); }
+        else if (action.WeaSetWeather)                      { return getErrorTipForWeaSetWeather(action.WeaSetWeather); }
+        else if (action.WeaSimpleDialogue)                  { return getErrorTipForWeaSimpleDialogue(action.WeaSimpleDialogue); }
+        else if (action.WeaPlayBgm)                         { return getErrorTipForWeaPlayBgm(action.WeaPlayBgm); }
+        else if (action.WeaSetForceFogCode)                 { return getErrorTipForWeaSetForceFogCode(action.WeaSetForceFogCode); }
+        else if (action.WeaDeprecatedSetPlayerAliveState)   { return getErrorTipForWeaDeprecatedSetPlayerAliveState(action.WeaDeprecatedSetPlayerAliveState, playersCountUnneutral); }
+        else if (action.WeaDeprecatedSetPlayerFund)         { return getErrorTipForWeaDeprecatedSetPlayerFund(action.WeaDeprecatedSetPlayerFund, playersCountUnneutral); }
+        else if (action.WeaDeprecatedSetPlayerCoEnergy)     { return getErrorTipForWeaDeprecatedSetPlayerCoEnergy(action.WeaDeprecatedSetPlayerCoEnergy, playersCountUnneutral); }
+        else if (action.WeaSetPlayerAliveState)             { return getErrorTipForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState, playersCountUnneutral); }
+        else if (action.WeaSetPlayerFund)                   { return getErrorTipForWeaSetPlayerFund(action.WeaSetPlayerFund, playersCountUnneutral); }
+        else if (action.WeaSetPlayerCoEnergy)               { return getErrorTipForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral); }
         else {
             return Lang.getText(LangTextType.A0177);
         }
@@ -2408,29 +2527,6 @@ namespace WarEventHelper {
         };
         if (!unitArray.every(validator)) {
             return Lang.getText(LangTextType.A0169);
-        }
-
-        return null;
-    }
-    function getErrorTipForWeaSetPlayerAliveState(data: WarEvent.IWeaSetPlayerAliveState, playersCountUnneutral: number): string | null {
-        const playerIndex = data.playerIndex;
-        if ((playerIndex == null)                               ||
-            (playerIndex > playersCountUnneutral)               ||
-            (playerIndex < CommonConstants.WarFirstPlayerIndex)
-        ) {
-            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${playersCountUnneutral})`;
-        }
-
-        const playerAliveState: Types.Undefinable<PlayerAliveState> = data.playerAliveState;
-        if (playerAliveState == null) {
-            return Lang.getText(LangTextType.A0213);
-        }
-
-        if ((playerAliveState !== PlayerAliveState.Alive)   &&
-            (playerAliveState !== PlayerAliveState.Dead)    &&
-            (playerAliveState !== PlayerAliveState.Dying)
-        ) {
-            return Lang.getText(LangTextType.A0213);
         }
 
         return null;
@@ -2556,7 +2652,42 @@ namespace WarEventHelper {
             ? Lang.getText(LangTextType.A0263)
             : null;
     }
-    function getErrorTipForWeaSetPlayerFund(data: WarEvent.IWeaSetPlayerFund, playersCountUnneutral: number): string | null {
+    function getErrorTipForWeaSetForceFogCode(data: WarEvent.IWeaSetForceFogCode): string | null {
+        const forceFogCode = data.forceFogCode;
+        if ((forceFogCode == null) || (!ConfigManager.checkIsValidForceFogCode(forceFogCode))) {
+            return Lang.getText(LangTextType.A0264);
+        }
+
+        if (data.turnsCount == null) {
+            return Lang.getText(LangTextType.A0253);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaDeprecatedSetPlayerAliveState(data: WarEvent.IWeaDeprecatedSetPlayerAliveState, playersCountUnneutral: number): string | null {
+        const playerIndex = data.playerIndex;
+        if ((playerIndex == null)                               ||
+            (playerIndex > playersCountUnneutral)               ||
+            (playerIndex < CommonConstants.WarFirstPlayerIndex)
+        ) {
+            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${playersCountUnneutral})`;
+        }
+
+        const playerAliveState: Types.Undefinable<PlayerAliveState> = data.playerAliveState;
+        if (playerAliveState == null) {
+            return Lang.getText(LangTextType.A0213);
+        }
+
+        if ((playerAliveState !== PlayerAliveState.Alive)   &&
+            (playerAliveState !== PlayerAliveState.Dead)    &&
+            (playerAliveState !== PlayerAliveState.Dying)
+        ) {
+            return Lang.getText(LangTextType.A0213);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaDeprecatedSetPlayerFund(data: WarEvent.IWeaDeprecatedSetPlayerFund, playersCountUnneutral: number): string | null {
         const playerIndex = data.playerIndex;
         if ((playerIndex == null)                               ||
             (playerIndex > playersCountUnneutral)               ||
@@ -2578,7 +2709,7 @@ namespace WarEventHelper {
 
         return null;
     }
-    function getErrorTipForWeaSetPlayerCoEnergy(data: WarEvent.IWeaSetPlayerCoEnergy, playersCountUnneutral: number): string | null {
+    function getErrorTipForWeaDeprecatedSetPlayerCoEnergy(data: WarEvent.IWeaDeprecatedSetPlayerCoEnergy, playersCountUnneutral: number): string | null {
         const playerIndex = data.playerIndex;
         if ((playerIndex == null)                               ||
             (playerIndex > playersCountUnneutral)               ||
@@ -2600,14 +2731,60 @@ namespace WarEventHelper {
 
         return null;
     }
-    function getErrorTipForWeaSetForceFogCode(data: WarEvent.IWeaSetForceFogCode): string | null {
-        const forceFogCode = data.forceFogCode;
-        if ((forceFogCode == null) || (!ConfigManager.checkIsValidForceFogCode(forceFogCode))) {
+    function getErrorTipForWeaSetPlayerAliveState(data: WarEvent.IWeaSetPlayerAliveState, playersCountUnneutral: number): string | null {
+        const playerIndexArray = data.playerIndexArray;
+        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            return `${Lang.getText(LangTextType.A0212)}`;
+        }
+
+        const playerAliveState: Types.Undefinable<PlayerAliveState> = data.playerAliveState;
+        if (playerAliveState == null) {
+            return Lang.getText(LangTextType.A0213);
+        }
+
+        if ((playerAliveState !== PlayerAliveState.Alive)   &&
+            (playerAliveState !== PlayerAliveState.Dead)    &&
+            (playerAliveState !== PlayerAliveState.Dying)
+        ) {
+            return Lang.getText(LangTextType.A0213);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaSetPlayerFund(data: WarEvent.IWeaSetPlayerFund, playersCountUnneutral: number): string | null {
+        const playerIndexArray = data.playerIndexArray;
+        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            return `${Lang.getText(LangTextType.A0212)}`;
+        }
+
+        const { deltaValue, multiplierPercentage } = data;
+        if ((deltaValue ?? multiplierPercentage) == null) {
             return Lang.getText(LangTextType.A0264);
         }
 
-        if (data.turnsCount == null) {
-            return Lang.getText(LangTextType.A0253);
+        if (((deltaValue != null) && (Math.abs(deltaValue) > CommonConstants.WarEventActionSetPlayerFundMaxDeltaValue))                             ||
+            ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerFundMaxMultiplierPercentage))
+        ) {
+            return Lang.getText(LangTextType.A0265);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaSetPlayerCoEnergy(data: WarEvent.IWeaSetPlayerCoEnergy, playersCountUnneutral: number): string | null {
+        const playerIndexArray = data.playerIndexArray;
+        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            return `${Lang.getText(LangTextType.A0212)}`;
+        }
+
+        const { deltaPercentage, multiplierPercentage } = data;
+        if ((deltaPercentage ?? multiplierPercentage) == null) {
+            return Lang.getText(LangTextType.A0264);
+        }
+
+        if (((deltaPercentage != null) && (Math.abs(deltaPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage))              ||
+            ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage))
+        ) {
+            return Lang.getText(LangTextType.A0265);
         }
 
         return null;
@@ -3145,16 +3322,19 @@ namespace WarEventHelper {
     }
     export function getActionType(action: IWarEventAction): ActionType | null {
         // todo: handle future actions.
-        if      (action.WeaAddUnit)             { return ActionType.AddUnit; }
-        else if (action.WeaSetPlayerAliveState) { return ActionType.SetPlayerAliveState; }
-        else if (action.WeaDialogue)            { return ActionType.Dialogue; }
-        else if (action.WeaSetViewpoint)        { return ActionType.SetViewpoint; }
-        else if (action.WeaSetWeather)          { return ActionType.SetWeather; }
-        else if (action.WeaSimpleDialogue)      { return ActionType.SimpleDialogue; }
-        else if (action.WeaPlayBgm)             { return ActionType.PlayBgm; }
-        else if (action.WeaSetPlayerFund)       { return ActionType.SetPlayerFund; }
-        else if (action.WeaSetPlayerCoEnergy)   { return ActionType.SetPlayerCoEnergy; }
-        else if (action.WeaSetForceFogCode)     { return ActionType.SetForceFogCode; }
+        if      (action.WeaAddUnit)                         { return ActionType.AddUnit; }
+        else if (action.WeaDialogue)                        { return ActionType.Dialogue; }
+        else if (action.WeaSetViewpoint)                    { return ActionType.SetViewpoint; }
+        else if (action.WeaSetWeather)                      { return ActionType.SetWeather; }
+        else if (action.WeaSimpleDialogue)                  { return ActionType.SimpleDialogue; }
+        else if (action.WeaPlayBgm)                         { return ActionType.PlayBgm; }
+        else if (action.WeaSetForceFogCode)                 { return ActionType.SetForceFogCode; }
+        else if (action.WeaDeprecatedSetPlayerAliveState)   { return ActionType.DeprecatedSetPlayerAliveState; }
+        else if (action.WeaDeprecatedSetPlayerFund)         { return ActionType.DeprecatedSetPlayerFund; }
+        else if (action.WeaDeprecatedSetPlayerCoEnergy)     { return ActionType.DeprecatedSetPlayerCoEnergy; }
+        else if (action.WeaSetPlayerAliveState)             { return ActionType.SetPlayerAliveState; }
+        else if (action.WeaSetPlayerFund)                   { return ActionType.SetPlayerFund; }
+        else if (action.WeaSetPlayerCoEnergy)               { return ActionType.SetPlayerCoEnergy; }
         else {
             return null;
         }
@@ -3170,11 +3350,6 @@ namespace WarEventHelper {
         if (actionType === ActionType.AddUnit) {
             action.WeaAddUnit = {
                 unitArray   : [],
-            };
-        } else if (actionType === ActionType.SetPlayerAliveState) {
-            action.WeaSetPlayerAliveState = {
-                playerIndex     : 1,
-                playerAliveState: PlayerAliveState.Alive,
             };
         } else if (actionType === ActionType.Dialogue) {
             action.WeaDialogue = {
@@ -3200,22 +3375,44 @@ namespace WarEventHelper {
                 useCoBgm        : false,
                 bgmCode         : Types.BgmCode.None,
             };
+        } else if (actionType === ActionType.SetForceFogCode) {
+            action.WeaSetForceFogCode = {
+                forceFogCode    : Types.ForceFogCode.Fog,
+                turnsCount      : 0,
+            };
+        } else if (actionType === ActionType.DeprecatedSetPlayerAliveState) {
+            action.WeaDeprecatedSetPlayerAliveState = {
+                playerIndex     : 1,
+                playerAliveState: PlayerAliveState.Alive,
+            };
+        } else if (actionType === ActionType.DeprecatedSetPlayerFund) {
+            action.WeaDeprecatedSetPlayerFund = {
+                playerIndex             : 1,
+                deltaValue              : 0,
+                multiplierPercentage    : 100,
+            };
+        } else if (actionType === ActionType.DeprecatedSetPlayerCoEnergy) {
+            action.WeaDeprecatedSetPlayerCoEnergy = {
+                playerIndex             : 1,
+                deltaPercentage         : 0,
+                multiplierPercentage    : 100,
+            };
+        } else if (actionType === ActionType.SetPlayerAliveState) {
+            action.WeaSetPlayerAliveState = {
+                playerIndexArray    : null,
+                playerAliveState    : PlayerAliveState.Alive,
+            };
         } else if (actionType === ActionType.SetPlayerFund) {
             action.WeaSetPlayerFund = {
-                playerIndex             : 1,
+                playerIndexArray        : null,
                 deltaValue              : 0,
                 multiplierPercentage    : 100,
             };
         } else if (actionType === ActionType.SetPlayerCoEnergy) {
             action.WeaSetPlayerCoEnergy = {
-                playerIndex             : 1,
+                playerIndexArray        : null,
                 deltaPercentage         : 0,
                 multiplierPercentage    : 100,
-            };
-        } else if (actionType === ActionType.SetForceFogCode) {
-            action.WeaSetForceFogCode = {
-                forceFogCode    : Types.ForceFogCode.Fog,
-                turnsCount      : 0,
             };
         } else {
             throw Helpers.newError(`Invalid actionType: ${actionType}.`, ClientErrorCode.WarEventHelper_ResetAction_00);
@@ -3225,26 +3422,35 @@ namespace WarEventHelper {
     export function openActionModifyPanel(war: BwWar, fullData: IWarEventFullData, action: IWarEventAction): void {
         // todo: handle more action types.
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel1);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel2);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel3);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel4);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel5);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel6);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel7);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel8);
-        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel9);
         TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel10);
 
-        if      (action.WeaAddUnit)             { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel1, { war, fullData, action }); }
-        else if (action.WeaSetPlayerAliveState) { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel2, { war, fullData, action }); }
-        else if (action.WeaDialogue)            { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel3, { war, fullData, action }); }
-        else if (action.WeaSetViewpoint)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel4, { war, fullData, action }); }
-        else if (action.WeaSetWeather)          { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel5, { war, fullData, action }); }
-        else if (action.WeaSimpleDialogue)      { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel6, { war, fullData, action }); }
-        else if (action.WeaPlayBgm)             { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel7, { war, fullData, action }); }
-        else if (action.WeaSetPlayerFund)       { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel8, { war, fullData, action }); }
-        else if (action.WeaSetPlayerCoEnergy)   { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel9, { war, fullData, action }); }
-        else if (action.WeaSetForceFogCode)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel10, { war, fullData, action }); }
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel20);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel21);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel22);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel23);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel24);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel25);
+
+        if      (action.WeaAddUnit)                         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel1, { war, fullData, action }); }
+        else if (action.WeaDialogue)                        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel3, { war, fullData, action }); }
+        else if (action.WeaSetViewpoint)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel4, { war, fullData, action }); }
+        else if (action.WeaSetWeather)                      { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel5, { war, fullData, action }); }
+        else if (action.WeaSimpleDialogue)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel6, { war, fullData, action }); }
+        else if (action.WeaPlayBgm)                         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel7, { war, fullData, action }); }
+        else if (action.WeaSetForceFogCode)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel10, { war, fullData, action }); }
+
+        else if (action.WeaDeprecatedSetPlayerAliveState)   { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel20, { war, fullData, action }); }
+        else if (action.WeaDeprecatedSetPlayerFund)         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel21, { war, fullData, action }); }
+        else if (action.WeaDeprecatedSetPlayerCoEnergy)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel22, { war, fullData, action }); }
+        else if (action.WeaSetPlayerAliveState)             { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel23, { war, fullData, action }); }
+        else if (action.WeaSetPlayerFund)                   { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel24, { war, fullData, action }); }
+        else if (action.WeaSetPlayerCoEnergy)               { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel25, { war, fullData, action }); }
+
         else {
             throw Helpers.newError(`Invalid action.`, ClientErrorCode.WarEventHelper_OpenActionModifyPanel_00);
         }

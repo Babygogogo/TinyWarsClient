@@ -603,9 +603,7 @@ namespace TwnsBwTile {
             return this._getTemplateCfg().incomePerTurn ?? 0;
         }
         public getIncomeForPlayer(playerIndex: number): number {
-            if ((this.getPlayerIndex() !== playerIndex)                 ||
-                (playerIndex === CommonConstants.WarNeutralPlayerIndex)
-            ) {
+            if (this.getPlayerIndex() !== playerIndex) {
                 return 0;
             }
 

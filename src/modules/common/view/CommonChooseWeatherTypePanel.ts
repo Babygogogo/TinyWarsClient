@@ -74,7 +74,7 @@ namespace TwnsCommonChooseWeatherTypePanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getFormattedText(LangTextType.F0092, Lang.getText(LangTextType.B0784));
+            this._labelTitle.text       = Lang.getFormattedText(LangTextType.F0092, Lang.getText(LangTextType.B0705));
             this._btnSelectAll.label    = Lang.getText(LangTextType.B0761);
             this._btnUnselectAll.label  = Lang.getText(LangTextType.B0762);
             this._btnConfirm.label      = Lang.getText(LangTextType.B0026);

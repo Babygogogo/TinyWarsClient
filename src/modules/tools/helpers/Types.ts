@@ -753,15 +753,19 @@ namespace Types {
     // eslint-disable-next-line no-shadow
     export enum WarEventActionType {
         AddUnit,
-        SetPlayerAliveState,
         Dialogue,
         SetViewpoint,
         SetWeather,
         SimpleDialogue,
         PlayBgm,
+        SetForceFogCode,
+
+        DeprecatedSetPlayerAliveState,
+        DeprecatedSetPlayerFund,
+        DeprecatedSetPlayerCoEnergy,
+        SetPlayerAliveState,
         SetPlayerFund,
         SetPlayerCoEnergy,
-        SetForceFogCode,
     }
 
     // eslint-disable-next-line no-shadow

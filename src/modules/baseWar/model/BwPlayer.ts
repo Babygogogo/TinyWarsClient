@@ -89,11 +89,11 @@ namespace TwnsBwPlayer {
             //     throw Helpers.newError(`Invalid coCurrentEnergy: ${coCurrentEnergy}`, ClientErrorCode.BwPlayer_Init_10);
             // }
 
-            if ((playerIndex === CommonConstants.WarNeutralPlayerIndex) &&
-                (aliveState !== PlayerAliveState.Alive)
-            ) {
-                throw Helpers.newError(`The neutral player is not alive.`, ClientErrorCode.BwPlayer_Init_11);
-            }
+            // if ((playerIndex === CommonConstants.WarNeutralPlayerIndex) &&
+            //     (aliveState !== PlayerAliveState.Alive)
+            // ) {
+            //     throw Helpers.newError(`The neutral player is not alive.`, ClientErrorCode.BwPlayer_Init_11);
+            // }
 
             this.setFund(fund);
             this.setHasVotedForDraw(hasVotedForDraw);
@@ -193,7 +193,7 @@ namespace TwnsBwPlayer {
             return Helpers.getExisted(this._playerIndex);
         }
         public checkIsNeutral(): boolean {
-            return this.getPlayerIndex() === 0;
+            return this.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex;
         }
 
         public getTeamIndex(): number {

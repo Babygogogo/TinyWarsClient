@@ -444,6 +444,14 @@ namespace ConfigManager {
             && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
             && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage) != null);
     }
+    export function checkIsValidPlayerIndex(playerIndex: number, playersCountUnneutral: number): boolean {
+        return (playerIndex >= CommonConstants.WarNeutralPlayerIndex)
+            && (playerIndex <= playersCountUnneutral);
+    }
+    export function checkIsValidPlayerIndexSubset(playerIndexArray: number[], playersCountUnneutral: number): boolean {
+        return ((new Set(playerIndexArray)).size === playerIndexArray.length)
+            && (playerIndexArray.every(v => checkIsValidPlayerIndex(v, playersCountUnneutral)));
+    }
     export function checkIsValidUnitAiMode(mode: Types.UnitAiMode): boolean {
         return (mode === Types.UnitAiMode.NoMove)
             || (mode === Types.UnitAiMode.Normal)

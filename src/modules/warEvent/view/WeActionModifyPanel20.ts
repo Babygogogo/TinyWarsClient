@@ -14,7 +14,7 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel2 {
+namespace TwnsWeActionModifyPanel20 {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import PlayerAliveState         = Types.PlayerAliveState;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
@@ -28,7 +28,7 @@ namespace TwnsWeActionModifyPanel2 {
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel2 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel20 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnType!                  : TwnsUiButton.UiButton;
         private readonly _btnBack!                  : TwnsUiButton.UiButton;
@@ -76,14 +76,14 @@ namespace TwnsWeActionModifyPanel2 {
 
         private _onTouchedBtnSwitchPlayerIndex(): void {
             const openData      = this._getOpenData();
-            const action        = Helpers.getExisted(openData.action.WeaSetPlayerAliveState);
+            const action        =this._getAction();
             action.playerIndex  = ((action.playerIndex || 0) % openData.war.getPlayersCountUnneutral()) + 1;
 
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnSwitchPlayerState(): void {
-            const action    = Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState);
+            const action    = this._getAction();
             const state     = action.playerAliveState;
             if (state === PlayerAliveState.Alive) {
                 action.playerAliveState = PlayerAliveState.Dying;
@@ -130,15 +130,19 @@ namespace TwnsWeActionModifyPanel2 {
         }
 
         private _updateLabelPlayerIndex(): void {
-            this._labelPlayerIndex.text = `P${this._getOpenData().action.WeaSetPlayerAliveState?.playerIndex || `??`}`;
+            this._labelPlayerIndex.text = `P${this._getAction().playerIndex || `??`}`;
         }
 
         private _updateLabelPlayerState(): void {
-            this._labelPlayerState.text = Lang.getPlayerAliveStateName(Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState?.playerAliveState)) || CommonConstants.ErrorTextForUndefined;
+            this._labelPlayerState.text = Lang.getPlayerAliveStateName(Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelTips(): void {
-            this._labelTips.text = getTipsForPlayerAliveState(Helpers.getExisted(this._getOpenData().action.WeaSetPlayerAliveState?.playerAliveState)) || CommonConstants.ErrorTextForUndefined;
+            this._labelTips.text = getTipsForPlayerAliveState(Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
+        }
+
+        private _getAction(): ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerAliveState {
+            return Helpers.getExisted(this._getOpenData().action.WeaDeprecatedSetPlayerAliveState);
         }
     }
 

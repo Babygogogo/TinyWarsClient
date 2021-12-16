@@ -449,17 +449,20 @@ namespace Lang {
 
     export function getWarEventActionTypeName(type: WarEventActionType): string | null {
         switch (type) {
-            case WarEventActionType.AddUnit                 : return getText(LangTextType.B0617);
-            case WarEventActionType.SetPlayerAliveState     : return getText(LangTextType.B0618);
-            case WarEventActionType.Dialogue                : return getText(LangTextType.B0674);
-            case WarEventActionType.SetViewpoint            : return getText(LangTextType.B0713);
-            case WarEventActionType.SetWeather              : return getText(LangTextType.B0715);
-            case WarEventActionType.SetForceFogCode         : return getText(LangTextType.B0795);
-            case WarEventActionType.SimpleDialogue          : return getText(LangTextType.B0728);
-            case WarEventActionType.PlayBgm                 : return getText(LangTextType.B0750);
-            case WarEventActionType.SetPlayerFund           : return getText(LangTextType.B0752);
-            case WarEventActionType.SetPlayerCoEnergy       : return getText(LangTextType.B0756);
-            default                                         : return null;
+            case WarEventActionType.AddUnit                         : return getText(LangTextType.B0617);
+            case WarEventActionType.Dialogue                        : return getText(LangTextType.B0674);
+            case WarEventActionType.SetViewpoint                    : return getText(LangTextType.B0713);
+            case WarEventActionType.SetWeather                      : return getText(LangTextType.B0715);
+            case WarEventActionType.SetForceFogCode                 : return getText(LangTextType.B0795);
+            case WarEventActionType.SimpleDialogue                  : return getText(LangTextType.B0728);
+            case WarEventActionType.PlayBgm                         : return getText(LangTextType.B0750);
+            case WarEventActionType.DeprecatedSetPlayerAliveState   : return getText(LangTextType.B0618);
+            case WarEventActionType.DeprecatedSetPlayerFund         : return getText(LangTextType.B0752);
+            case WarEventActionType.DeprecatedSetPlayerCoEnergy     : return getText(LangTextType.B0756);
+            case WarEventActionType.SetPlayerAliveState             : return getText(LangTextType.B0618);
+            case WarEventActionType.SetPlayerFund                   : return getText(LangTextType.B0752);
+            case WarEventActionType.SetPlayerCoEnergy               : return getText(LangTextType.B0756);
+            default                                                 : return null;
         }
     }
 

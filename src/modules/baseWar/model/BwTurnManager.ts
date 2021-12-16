@@ -200,19 +200,15 @@ namespace TwnsBwTurnManager {
             const playerIndex = this.getPlayerIndexInTurn();
             const player = war.getPlayer(playerIndex);
             const currentFund = player.getFund();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
-                this._setHasUnitOnBeginningTurn(false);
-            } else {
-                this._setHasUnitOnBeginningTurn(war.getUnitMap().checkHasUnit(playerIndex));
+            this._setHasUnitOnBeginningTurn(war.getUnitMap().checkHasUnit(playerIndex));
 
-                let totalIncome = war.getTileMap().getTotalIncomeForPlayer(playerIndex);
-                if (this.getTurnIndex() === CommonConstants.WarFirstTurnIndex) {
-                    const initialFund = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
-                    totalIncome += initialFund;
-                }
-
-                player.setFund(currentFund + totalIncome);
+            let totalIncome = war.getTileMap().getTotalIncomeForPlayer(playerIndex);
+            if (this.getTurnIndex() === CommonConstants.WarFirstTurnIndex) {
+                const initialFund = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
+                totalIncome += initialFund;
             }
+
+            player.setFund(currentFund + totalIncome);
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -224,7 +220,7 @@ namespace TwnsBwTurnManager {
             const playerIndex = this.getPlayerIndexInTurn();
             const turnIndex = this.getTurnIndex();
             const war = this.getWar();
-            if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex) && (turnIndex > CommonConstants.WarFirstTurnIndex)) {
+            if (turnIndex > CommonConstants.WarFirstTurnIndex) {
                 for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
                     if (unit.getPlayerIndex() === playerIndex) {
                         const currentFuel = unit.getCurrentFuel();
@@ -240,46 +236,44 @@ namespace TwnsBwTurnManager {
             // nothing to do
         }
         private _runPhaseRepairUnitByTileWithoutExtraData(isFastExecute: boolean): void {
-            const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
-                const war           = this.getWar();
-                const player        = war.getPlayer(playerIndex);
-                const allUnitsOnMap : TwnsBwUnit.BwUnit[] = [];
-                for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
-                    (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
-                }
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const war           = this.getWar();
+            const player        = war.getPlayer(playerIndex);
+            const allUnitsOnMap : TwnsBwUnit.BwUnit[] = [];
+            for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
+                (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
+            }
 
-                const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-                const tileMap           = war.getTileMap();
-                const gridVisionEffect  = war.getGridVisualEffect();
-                for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
-                    const gridIndex     = unit.getGridIndex();
-                    const tile          = tileMap.getTile(gridIndex);
-                    const repairData    = tile.getRepairHpAndCostForUnit(unit);
-                    if (repairData) {
-                        const fund                      = player.getFund();
-                        const deltaFuel                 = unit.getUsedFuel();
-                        const deltaHp                   = repairData.hp > 0 ? repairData.hp : null;
-                        const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
-                        const deltaFlareAmmo            = unit.getFlareUsedAmmo();
-                        unit.updateByRepairData({
-                            gridIndex,
-                            unitId                  : unit.getUnitId(),
-                            deltaHp,
-                            deltaFuel,
-                            deltaPrimaryWeaponAmmo,
-                            deltaFlareAmmo,
-                        });
-                        player.setFund(fund - repairData.cost);
+            const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const tileMap           = war.getTileMap();
+            const gridVisionEffect  = war.getGridVisualEffect();
+            for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
+                const gridIndex     = unit.getGridIndex();
+                const tile          = tileMap.getTile(gridIndex);
+                const repairData    = tile.getRepairHpAndCostForUnit(unit);
+                if (repairData) {
+                    const fund                      = player.getFund();
+                    const deltaFuel                 = unit.getUsedFuel();
+                    const deltaHp                   = repairData.hp > 0 ? repairData.hp : null;
+                    const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
+                    const deltaFlareAmmo            = unit.getFlareUsedAmmo();
+                    unit.updateByRepairData({
+                        gridIndex,
+                        unitId                  : unit.getUnitId(),
+                        deltaHp,
+                        deltaFuel,
+                        deltaPrimaryWeaponAmmo,
+                        deltaFlareAmmo,
+                    });
+                    player.setFund(fund - repairData.cost);
 
-                        if ((!isFastExecute) && (visibleUnits.has(unit))) {
-                            if (deltaHp) {
-                                gridVisionEffect.showEffectRepair(gridIndex);
-                            } else if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
-                                gridVisionEffect.showEffectSupply(gridIndex);
-                            }
-                            unit.updateView();
+                    if ((!isFastExecute) && (visibleUnits.has(unit))) {
+                        if (deltaHp) {
+                            gridVisionEffect.showEffectRepair(gridIndex);
+                        } else if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
+                            gridVisionEffect.showEffectSupply(gridIndex);
                         }
+                        unit.updateView();
                     }
                 }
             }
@@ -290,20 +284,18 @@ namespace TwnsBwTurnManager {
             // nothing to do
         }
         private _runPhaseDestroyUnitsOutOfFuelWithoutExtraData(isFastExecute: boolean): void {
-            const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
-                const war       = this.getWar();
-                const fogMap    = war.getFogMap();
-                for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
-                    const currentFuel = unit.getCurrentFuel();
-                    if ((unit.checkIsDestroyedOnOutOfFuel())    &&
-                        (currentFuel <= 0)                      &&
-                        (unit.getPlayerIndex() === playerIndex)
-                    ) {
-                        const gridIndex = unit.getGridIndex();
-                        fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
-                        WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
-                    }
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const war           = this.getWar();
+            const fogMap        = war.getFogMap();
+            for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
+                const currentFuel = unit.getCurrentFuel();
+                if ((unit.checkIsDestroyedOnOutOfFuel())    &&
+                    (currentFuel <= 0)                      &&
+                    (unit.getPlayerIndex() === playerIndex)
+                ) {
+                    const gridIndex = unit.getGridIndex();
+                    fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
+                    WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
                 }
             }
         }
@@ -313,93 +305,91 @@ namespace TwnsBwTurnManager {
             // nothing to do
         }
         private _runPhaseRepairUnitByUnitWithoutExtraData(isFastExecute: boolean): void {
-            const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
-                const war               = this.getWar();
-                const player            = war.getPlayer(playerIndex);
-                const unitMap           = war.getUnitMap();
-                const mapSize           = unitMap.getMapSize();
-                const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-                const gridVisionEffect  = war.getGridVisualEffect();
-                const allUnitsLoaded    : TwnsBwUnit.BwUnit[] = [];
-                for (const unit of unitMap.getAllUnitsLoaded()) {
-                    (unit.getPlayerIndex() === playerIndex) && (allUnitsLoaded.push(unit));
-                }
+            const playerIndex       = this.getPlayerIndexInTurn();
+            const war               = this.getWar();
+            const player            = war.getPlayer(playerIndex);
+            const unitMap           = war.getUnitMap();
+            const mapSize           = unitMap.getMapSize();
+            const visibleUnits      = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            const gridVisionEffect  = war.getGridVisualEffect();
+            const allUnitsLoaded    : TwnsBwUnit.BwUnit[] = [];
+            for (const unit of unitMap.getAllUnitsLoaded()) {
+                (unit.getPlayerIndex() === playerIndex) && (allUnitsLoaded.push(unit));
+            }
 
-                for (const unit of allUnitsLoaded.sort(sorterForRepairUnits)) {
-                    const loader        = Helpers.getExisted(unit.getLoaderUnit(), ClientErrorCode.BwTurnManager_RunPhaseRepairUnitByUnitWithoutExtraData_00);
-                    const gridIndex     = loader.getGridIndex();
-                    const repairData    = loader.getRepairHpAndCostForLoadedUnit(unit);
-                    if (repairData) {
-                        const deltaFuel                 = unit.getUsedFuel();
-                        const fund                      = player.getFund();
-                        const deltaHp                   = repairData.hp > 0 ? repairData.hp : null;
-                        const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
-                        const deltaFlareAmmo            = unit.getFlareUsedAmmo();
-                        unit.updateByRepairData({
-                            gridIndex               : unit.getGridIndex(),
-                            unitId                  : unit.getUnitId(),
-                            deltaHp,
-                            deltaFuel,
-                            deltaPrimaryWeaponAmmo,
-                            deltaFlareAmmo,
-                        });
-                        player.setFund(fund - repairData.cost);
+            for (const unit of allUnitsLoaded.sort(sorterForRepairUnits)) {
+                const loader        = Helpers.getExisted(unit.getLoaderUnit(), ClientErrorCode.BwTurnManager_RunPhaseRepairUnitByUnitWithoutExtraData_00);
+                const gridIndex     = loader.getGridIndex();
+                const repairData    = loader.getRepairHpAndCostForLoadedUnit(unit);
+                if (repairData) {
+                    const deltaFuel                 = unit.getUsedFuel();
+                    const fund                      = player.getFund();
+                    const deltaHp                   = repairData.hp > 0 ? repairData.hp : null;
+                    const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
+                    const deltaFlareAmmo            = unit.getFlareUsedAmmo();
+                    unit.updateByRepairData({
+                        gridIndex               : unit.getGridIndex(),
+                        unitId                  : unit.getUnitId(),
+                        deltaHp,
+                        deltaFuel,
+                        deltaPrimaryWeaponAmmo,
+                        deltaFlareAmmo,
+                    });
+                    player.setFund(fund - repairData.cost);
 
-                        if ((!isFastExecute) && (visibleUnits.has(loader))) {
-                            if (deltaHp) {
-                                gridVisionEffect.showEffectRepair(gridIndex);
-                            } else if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
-                                gridVisionEffect.showEffectSupply(gridIndex);
-                            }
+                    if ((!isFastExecute) && (visibleUnits.has(loader))) {
+                        if (deltaHp) {
+                            gridVisionEffect.showEffectRepair(gridIndex);
+                        } else if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
+                            gridVisionEffect.showEffectSupply(gridIndex);
                         }
+                    }
 
-                    } else if (loader.checkCanSupplyLoadedUnit()) {
-                        const deltaFuel                 = unit.getUsedFuel();
-                        const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
-                        const deltaFlareAmmo            = unit.getFlareUsedAmmo();
-                        unit.updateByRepairData({
-                            gridIndex               : unit.getGridIndex(),
-                            unitId                  : unit.getUnitId(),
-                            deltaHp                 : null,
-                            deltaFuel,
-                            deltaPrimaryWeaponAmmo,
-                            deltaFlareAmmo,
-                        });
+                } else if (loader.checkCanSupplyLoadedUnit()) {
+                    const deltaFuel                 = unit.getUsedFuel();
+                    const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
+                    const deltaFlareAmmo            = unit.getFlareUsedAmmo();
+                    unit.updateByRepairData({
+                        gridIndex               : unit.getGridIndex(),
+                        unitId                  : unit.getUnitId(),
+                        deltaHp                 : null,
+                        deltaFuel,
+                        deltaPrimaryWeaponAmmo,
+                        deltaFlareAmmo,
+                    });
 
-                        if ((!isFastExecute) && (visibleUnits.has(loader))) {
-                            if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
-                                gridVisionEffect.showEffectSupply(gridIndex);
-                            }
+                    if ((!isFastExecute) && (visibleUnits.has(loader))) {
+                        if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
+                            gridVisionEffect.showEffectSupply(gridIndex);
                         }
                     }
                 }
+            }
 
-                const suppliedUnitIds = new Set<number>();
-                for (const supplier of unitMap.getAllUnitsOnMap()) {
-                    if ((supplier.getPlayerIndex() === playerIndex) && (supplier.checkIsAdjacentUnitSupplier())) {
-                        const supplierGridIndex = supplier.getGridIndex();
-                        for (const gridIndex of GridIndexHelpers.getAdjacentGrids(supplierGridIndex, mapSize)) {
-                            const unit      = unitMap.getUnitOnMap(gridIndex);
-                            const unitId    = unit ? unit.getUnitId() : null;
-                            if ((unitId != null) && (unit) && (!suppliedUnitIds.has(unitId)) && (supplier.checkCanSupplyAdjacentUnit(unit))) {
-                                const deltaFuel                 = unit.getUsedFuel();
-                                const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
-                                const deltaFlareAmmo            = unit.getFlareUsedAmmo();
-                                unit.updateByRepairData({
-                                    gridIndex,
-                                    unitId,
-                                    deltaHp                 : null,
-                                    deltaFuel,
-                                    deltaPrimaryWeaponAmmo,
-                                    deltaFlareAmmo,
-                                });
-                                suppliedUnitIds.add(unitId);
+            const suppliedUnitIds = new Set<number>();
+            for (const supplier of unitMap.getAllUnitsOnMap()) {
+                if ((supplier.getPlayerIndex() === playerIndex) && (supplier.checkIsAdjacentUnitSupplier())) {
+                    const supplierGridIndex = supplier.getGridIndex();
+                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(supplierGridIndex, mapSize)) {
+                        const unit      = unitMap.getUnitOnMap(gridIndex);
+                        const unitId    = unit ? unit.getUnitId() : null;
+                        if ((unitId != null) && (unit) && (!suppliedUnitIds.has(unitId)) && (supplier.checkCanSupplyAdjacentUnit(unit))) {
+                            const deltaFuel                 = unit.getUsedFuel();
+                            const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
+                            const deltaFlareAmmo            = unit.getFlareUsedAmmo();
+                            unit.updateByRepairData({
+                                gridIndex,
+                                unitId,
+                                deltaHp                 : null,
+                                deltaFuel,
+                                deltaPrimaryWeaponAmmo,
+                                deltaFlareAmmo,
+                            });
+                            suppliedUnitIds.add(unitId);
 
-                                if ((!isFastExecute) && (visibleUnits.has(unit))) {
-                                    if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
-                                        gridVisionEffect.showEffectSupply(gridIndex);
-                                    }
+                            if ((!isFastExecute) && (visibleUnits.has(unit))) {
+                                if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
+                                    gridVisionEffect.showEffectSupply(gridIndex);
                                 }
                             }
                         }
@@ -731,8 +721,7 @@ namespace TwnsBwTurnManager {
             const player        = war.getPlayer(playerIndex);
             const unitMap       = war.getUnitMap();
             const hasUnit       = unitMap.checkHasUnit(playerIndex);
-            if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex) &&
-                (this._getHasUnitOnBeginningTurn())                     &&
+            if ((this._getHasUnitOnBeginningTurn())                     &&
                 (!hasUnit)
             ) {
                 player.setAliveState(Types.PlayerAliveState.Dying);
@@ -751,14 +740,12 @@ namespace TwnsBwTurnManager {
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseResetUnitStateWithoutExtraData(isFastExecute: boolean): void {
-            const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
-                const war = this.getWar();
-                for (const unit of war.getUnitMap().getAllUnits()) {
-                    if (unit.getPlayerIndex() === playerIndex) {
-                        unit.setActionState(Types.UnitActionState.Idle);
-                        unit.updateView();
-                    }
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const war           = this.getWar();
+            for (const unit of war.getUnitMap().getAllUnits()) {
+                if (unit.getPlayerIndex() === playerIndex) {
+                    unit.setActionState(Types.UnitActionState.Idle);
+                    unit.updateView();
                 }
             }
         }
@@ -784,37 +771,33 @@ namespace TwnsBwTurnManager {
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseTickTurnAndPlayerIndexWithoutExtraData(isFastExecute: boolean): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this.getWar();
-            const currTime      = Timer.getServerTimestamp();
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
-                // nothing to do
+            const playerIndex       = this.getPlayerIndexInTurn();
+            const war               = this.getWar();
+            const currTime          = Timer.getServerTimestamp();
+            const player            = war.getPlayer(playerIndex);
+            const bootTimerParams   = war.getSettingsBootTimerParams();
+            const timerType         : Types.BootTimerType = bootTimerParams[0];
+            if (timerType === Types.BootTimerType.NoBoot) {
+                player.setRestTimeToBoot(0);
+
+            } else if (timerType === Types.BootTimerType.Regular) {
+                player.setRestTimeToBoot(Helpers.getExisted(bootTimerParams[1], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_00));
+
+            } else if (timerType === Types.BootTimerType.Incremental) {
+                const oldRestTimeToBoot = player.getRestTimeToBoot();
+                const enterTurnTime     = this.getEnterTurnTime();
+                const incrementalTime   = Helpers.getExisted(bootTimerParams[2], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_01);
+                const restTimeToBoot    = Math.max(
+                    0,
+                    Math.min(
+                        CommonConstants.WarBootTimerIncrementalMaxLimit,
+                        oldRestTimeToBoot - (currTime - enterTurnTime) + incrementalTime * war.getUnitMap().countAllUnitsForPlayer(playerIndex),
+                    ),
+                );
+                player.setRestTimeToBoot(restTimeToBoot);
+
             } else {
-                const player            = war.getPlayer(playerIndex);
-                const bootTimerParams   = war.getSettingsBootTimerParams();
-                const timerType         : Types.BootTimerType = bootTimerParams[0];
-                if (timerType === Types.BootTimerType.NoBoot) {
-                    player.setRestTimeToBoot(0);
-
-                } else if (timerType === Types.BootTimerType.Regular) {
-                    player.setRestTimeToBoot(Helpers.getExisted(bootTimerParams[1], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_00));
-
-                } else if (timerType === Types.BootTimerType.Incremental) {
-                    const oldRestTimeToBoot = player.getRestTimeToBoot();
-                    const enterTurnTime     = this.getEnterTurnTime();
-                    const incrementalTime   = Helpers.getExisted(bootTimerParams[2], ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_01);
-                    const restTimeToBoot    = Math.max(
-                        0,
-                        Math.min(
-                            CommonConstants.WarBootTimerIncrementalMaxLimit,
-                            oldRestTimeToBoot - (currTime - enterTurnTime) + incrementalTime * war.getUnitMap().countAllUnitsForPlayer(playerIndex),
-                        ),
-                    );
-                    player.setRestTimeToBoot(restTimeToBoot);
-
-                } else {
-                    throw Helpers.newError(`Invalid timerType: ${timerType}`, ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_02);
-                }
+                throw Helpers.newError(`Invalid timerType: ${timerType}`, ClientErrorCode.BwTurnManager_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_02);
             }
 
             const info = this._getNextTurnAndPlayerIndex();
@@ -1076,10 +1059,6 @@ namespace TwnsBwTurnManager {
             const { deltaFund, deltaEnergyPercentage } = data;
             if (deltaFund ?? deltaEnergyPercentage) {
                 for (const player of war.getPlayerManager().getAllPlayers()) {
-                    if (player.checkIsNeutral()) {
-                        continue;
-                    }
-
                     const teamIndex = player.getTeamIndex();
                     if (((canAffectSelf) && (player.getPlayerIndex() === playerIndexInTurn))    ||
                         ((canAffectAlly) && (teamIndex === teamIndexInTurn))                    ||

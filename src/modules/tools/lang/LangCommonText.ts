@@ -3585,7 +3585,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0618]: [
             `修改玩家状态`,
-            `Modify a Player's State`,
+            `Modify Players' State`,
         ],
         [LangTextType.B0619]: [
             `多人合作自定义游戏`,
@@ -4121,7 +4121,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0752]: [
             `修改玩家的资金`,
-            `Modify a Player's Fund`,
+            `Modify Players' Fund`,
         ],
         [LangTextType.B0753]: [
             `最终值`,
@@ -4137,7 +4137,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0756]: [
             `修改玩家的CO能量`,
-            `Modify a Player's CO Energy`,
+            `Modify Players' CO Energy`,
         ],
         [LangTextType.B0757]: [
             `显示所有区域`,
@@ -4859,8 +4859,8 @@ namespace TwnsLangCommonText {
             `Do you want to go to the %s website?`,
         ],
         [LangTextType.F0066]: [
-            `设置玩家 P%d 的状态为 %s`,
-            `Set P%d's state as %s.`,
+            `设置玩家 %s 的状态为 %s`,
+            `Set %s's state as %s.`,
         ],
         [LangTextType.F0067]: [
             `无法在 %s 上放置部队。`,
@@ -4939,12 +4939,12 @@ namespace TwnsLangCommonText {
             `Start a simple dialogue, COs: %s`,
         ],
         [LangTextType.F0086]: [
-            `修改P%d的CO能量，公式为：当前能量 * %d%% + 最大能量 * %d%%`,
-            `Set P%d's CO energy to: current energy * %d%% + max energy * %d%%.`,
+            `修改 %s 的CO能量，公式为：当前能量 * %d%% + 最大能量 * %d%%`,
+            `Set %s's CO energy to: current energy * %d%% + max energy * %d%%.`,
         ],
         [LangTextType.F0087]: [
-            `修改P%d的资金，公式为：当前资金 * %d%% + %d`,
-            `Set P%d's fund to: current fund * %d%% + %d.`,
+            `修改 %s 的资金，公式为：当前资金 * %d%% + %d`,
+            `Set %s's fund to: current fund * %d%% + %d.`,
         ],
         [LangTextType.F0088]: [
             `假设玩家当前资金10000，则动作执行后资金为%d`,

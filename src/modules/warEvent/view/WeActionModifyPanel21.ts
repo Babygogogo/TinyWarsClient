@@ -14,7 +14,7 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel8 {
+namespace TwnsWeActionModifyPanel21 {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
@@ -26,7 +26,7 @@ namespace TwnsWeActionModifyPanel8 {
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel8 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel21 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
         private readonly _btnType!                      : TwnsUiButton.UiButton;
         private readonly _btnBack!                      : TwnsUiButton.UiButton;
@@ -77,7 +77,7 @@ namespace TwnsWeActionModifyPanel8 {
 
         private _onTouchedBtnSwitchPlayerIndex(): void {
             const openData      = this._getOpenData();
-            const action        = Helpers.getExisted(openData.action.WeaSetPlayerFund);
+            const action        = this._getAction();
             action.playerIndex  = ((action.playerIndex || 0) % openData.war.getPlayersCountUnneutral()) + 1;
 
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
@@ -93,7 +93,7 @@ namespace TwnsWeActionModifyPanel8 {
         }
 
         private _onFocusOutInputDeltaValue(): void {
-            const action    = Helpers.getExisted(this._getOpenData().action.WeaSetPlayerFund);
+            const action    = this._getAction();
             const text      = this._inputDeltaValue.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
@@ -109,7 +109,7 @@ namespace TwnsWeActionModifyPanel8 {
         }
 
         private _onFocusOutInputMultiplierPercentage(): void {
-            const action    = Helpers.getExisted(this._getOpenData().action.WeaSetPlayerFund);
+            const action    = this._getAction();
             const text      = this._inputMultiplierPercentage.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
@@ -149,22 +149,26 @@ namespace TwnsWeActionModifyPanel8 {
         }
 
         private _updateLabelPlayerIndex(): void {
-            this._labelPlayerIndex.text = `P${this._getOpenData().action.WeaSetPlayerFund?.playerIndex || `??`}`;
+            this._labelPlayerIndex.text = `P${this._getAction().playerIndex || `??`}`;
         }
 
         private _updateInputDeltaValue(): void {
-            const value                 = this._getOpenData().action.WeaSetPlayerFund?.deltaValue;
+            const value                 = this._getAction().deltaValue;
             this._inputDeltaValue.text  = `${value == null ? `` : value}`;
         }
 
         private _updateInputMultiplierPercentage(): void {
-            const value                             = this._getOpenData().action.WeaSetPlayerFund?.multiplierPercentage;
+            const value                             = this._getAction().multiplierPercentage;
             this._inputMultiplierPercentage.text    = `${value == null ? `` : value}`;
         }
 
         private _updateLabelTips(): void {
-            const action            = Helpers.getExisted(this._getOpenData().action.WeaSetPlayerFund);
+            const action            = this._getAction();
             this._labelTips.text    = Lang.getFormattedText(LangTextType.F0088, Math.floor(10000 * (action.multiplierPercentage ?? 100) / 100 + (action.deltaValue ?? 0)));
+        }
+
+        private _getAction(): ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerFund {
+            return Helpers.getExisted(this._getOpenData().action.WeaDeprecatedSetPlayerFund);
         }
     }
 }
