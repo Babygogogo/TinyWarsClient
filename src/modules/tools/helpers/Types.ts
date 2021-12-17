@@ -748,6 +748,8 @@ namespace Types {
         WecTilePresence,
 
         WecUnitPresence,
+
+        WecCustomCounter,
     }
 
     // eslint-disable-next-line no-shadow
@@ -759,6 +761,7 @@ namespace Types {
         SimpleDialogue,
         PlayBgm,
         SetForceFogCode,
+        SetCustomCounter,
 
         DeprecatedSetPlayerAliveState,
         DeprecatedSetPlayerFund,

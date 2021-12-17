@@ -60,6 +60,8 @@ namespace CommonConstants {
     export const WarEventActionDialogueTextMaxLength                    = 300;
     export const WarEventActionDialogueMaxCount                         = 100;
     export const WarEventActionDialogueNameMaxLength                    = 30;
+    export const WarEventActionSetCustomCounterMaxDeltaValue            = 10000000;
+    export const WarEventActionSetCustomCounterMaxMultiplierPercentage  = 10000;
     export const WarEventActionSetPlayerFundMaxDeltaValue               = 10000000;
     export const WarEventActionSetPlayerFundMaxMultiplierPercentage     = 10000;
     export const WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage = 10000;
@@ -99,7 +101,8 @@ namespace CommonConstants {
     export const WarNeutralTeamIndex                    = 0;
     export const WarFirstTeamIndex                      = 1;
     export const WarFirstTurnIndex                      = 1;
-    export const WarPlayerMaxFund                       = 100_000_000;
+    export const WarPlayerMaxFund                       = 1_000_000_000;
+    export const WarCustomCounterMaxValue               = 1_000_000_000;
 
     export const ReplayMaxRating                        = 10;
     export const ReplayMinRating                        = 0;
@@ -107,6 +110,8 @@ namespace CommonConstants {
     export const WarNameMaxLength                       = 20;
     export const WarCommentMaxLength                    = 50;
     export const WarPasswordMaxLength                   = 4;
+    export const WarCustomCounterMinId                  = 1;
+    export const WarCustomCounterMaxId                  = 30;
     export const WarBootTimerRegularMaxLimit            = 3600 * 24 * 7;
     export const WarBootTimerRegularDefaultValue        = 3600 * 24 * 3;
     export const WarBootTimerIncrementalMaxLimit        = 3600 * 24;

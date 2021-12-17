@@ -1123,6 +1123,10 @@ namespace TwnsLangCommonText {
             `指定坐标已存在`,
             `The coordinate exists already.`,
         ],
+        [LangTextType.A0269]: [
+            `该地块已有部队占据，不能绘制可攻击的地形`,
+            `Can't draw an attackable terrain on a tile that occupied by a unit.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4307,6 +4311,26 @@ namespace TwnsLangCommonText {
             `不强制`,
             `No Force`,
         ],
+        [LangTextType.B0799]: [
+            `自定义计数器ID`,
+            `Custom Counter ID`,
+        ],
+        [LangTextType.B0800]: [
+            `设置自定义计数器`,
+            `Set Custom Counters`,
+        ],
+        [LangTextType.B0801]: [
+            `计数器数量`,
+            `Number of Counters`,
+        ],
+        [LangTextType.B0802]: [
+            `自定义计数器...`,
+            `Custom Counters ...`,
+        ],
+        [LangTextType.B0803]: [
+            `值`,
+            `Value`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4947,8 +4971,8 @@ namespace TwnsLangCommonText {
             `Set %s's fund to: current fund * %d%% + %d.`,
         ],
         [LangTextType.F0088]: [
-            `假设玩家当前资金10000，则动作执行后资金为%d`,
-            `Assume the player's current fund is 10000, then the fund will become %d after this action is executed.`,
+            `假设当前值是10000，则动作执行后将变为%d`,
+            `Assume the current value is 10000, then the value will become %d after this action is executed.`,
         ],
         [LangTextType.F0089]: [
             `假设玩家当前CO能量是40%，则动作执行后为%d%%`,
@@ -5033,6 +5057,22 @@ namespace TwnsLangCommonText {
         [LangTextType.F0109]: [
             `把战争迷雾永久改为%s`,
             `Set the Fog of War to %s forever.`,
+        ],
+        [LangTextType.F0110]: [
+            `修改ID为 %s 的自定义计数器的值，公式为：当前值 * %d%% + %d`,
+            `Set the value of the Custom Counters whose ID is %s to: current value * %d%% + %d.`,
+        ],
+        [LangTextType.F0111]: [
+            `ID为 %s%s 的自定义计数器的数量 %s %s`,
+            `The number of Custom Counters whose ID is %s%s %s %s.`,
+        ],
+        [LangTextType.F0112]: [
+            `值 %s %s`,
+            `the Value %s %s`,
+        ],
+        [LangTextType.F0113]: [
+            `值除以 %s 的余数 %s %s`,
+            `the Value mod %s %s %s`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

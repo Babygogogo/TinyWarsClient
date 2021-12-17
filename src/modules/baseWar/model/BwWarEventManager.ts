@@ -20,25 +20,34 @@ namespace TwnsBwWarEventManager {
     import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
     import WarEvent                         = ProtoTypes.WarEvent;
     import IWarActionSystemCallWarEvent     = ProtoTypes.WarAction.IWarActionSystemCallWarEvent;
+    import ICustomCounter                   = ProtoTypes.WarSerialization.ICustomCounter;
     import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
     import BwUnitMap                        = TwnsBwUnitMap.BwUnitMap;
     import BwWar                            = TwnsBwWar.BwWar;
 
     export class BwWarEventManager {
-        private _war?               : BwWar;
-        private _warEventFullData?  : IWarEventFullData | null;
-        private _calledCountList?   : IDataForWarEventCalledCount[] | null;
+        private _war?                   : BwWar;
+        private _warEventFullData?      : IWarEventFullData | null;
+        private _calledCountList?       : IDataForWarEventCalledCount[] | null;
+        private _customCounterArray?    : ICustomCounter[] | null;
 
         public init(data: Types.Undefinable<ISerialWarEventManager>): void {
             if (!data) {
                 this._setWarEventFullData(null);
                 this._setCalledCountList(null);
+                this._setCustomCounterArray(null);
             } else {
+                const customCounterArray = data.customCounterArray ?? null;
+                if ((customCounterArray) && (!ConfigManager.checkIsValidCustomCounterArray(customCounterArray))) {
+                    throw Helpers.newError(`BwWarEventManager.init() invalid customCounterArray.`, ClientErrorCode.BwWarEventManager_Init_00);
+                }
+
                 // TODO: validate the data.
                 const warEventFullData = Helpers.deepClone(data.warEventFullData) ?? null;
 
                 this._setWarEventFullData(warEventFullData);
                 this._setCalledCountList(Helpers.deepClone(data.calledCountList) ?? null);
+                this._setCustomCounterArray(Helpers.deepClone(customCounterArray));
             }
         }
         public fastInit(data: ISerialWarEventManager): void {
@@ -49,12 +58,14 @@ namespace TwnsBwWarEventManager {
             return {
                 warEventFullData    : this.getWarEventFullData(),
                 calledCountList     : this._getCalledCountList(),
-            };
+                customCounterArray  : this._getCustomCounterArray(),
+        };
         }
         public serializeForCreateSfw(): ISerialWarEventManager {
             return Helpers.deepClone({
                 warEventFullData    : this.getWarEventFullData(),
                 calledCountList     : this._getCalledCountList(),
+                customCounterArray  : this._getCustomCounterArray(),
             });
         }
         public serializeForCreateMfr(): ISerialWarEventManager {
@@ -79,6 +90,9 @@ namespace TwnsBwWarEventManager {
             return Helpers.getDefined(this._warEventFullData, ClientErrorCode.BwWarEventManager_GetWarEventFullData_00);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for called counts.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _setCalledCountList(list: IDataForWarEventCalledCount[] | null): void {
             this._calledCountList = list;
         }
@@ -86,6 +100,101 @@ namespace TwnsBwWarEventManager {
             return Helpers.getDefined(this._calledCountList, ClientErrorCode.BwWarEventManager_GetCalledCountList_00);
         }
 
+        public updateWarEventCalledCountOnCall(eventId: number): void {                     // DONE
+            const calledCountList = this._getCalledCountList();
+            if (calledCountList == null) {
+                this._setCalledCountList([{
+                    eventId,
+                    calledCountTotal        : 1,
+                    calledCountInPlayerTurn : 1,
+                }]);
+            } else {
+                const data = calledCountList.find(v => v.eventId === eventId);
+                if (data) {
+                    if (data.calledCountInPlayerTurn == null) {
+                        throw Helpers.newError(`Empty data.calledCountInPlayerTurn.`);
+                    }
+                    if (data.calledCountTotal == null) {
+                        throw Helpers.newError(`Empty data.calledCountTotal`);
+                    }
+                    ++data.calledCountInPlayerTurn;
+                    ++data.calledCountTotal;
+                } else {
+                    calledCountList.push({
+                        eventId,
+                        calledCountTotal        : 1,
+                        calledCountInPlayerTurn : 1,
+                    });
+                }
+            }
+        }
+        public updateWarEventCalledCountOnPlayerTurnSwitched(): void {                      // DONE
+            const list = this._getCalledCountList();
+            if (list) {
+                list.forEach(v => {
+                    v.calledCountInPlayerTurn = 0;
+                });
+            }
+        }
+        public getWarEventCalledCountTotal(eventId: number): number {                       // DONE
+            const list = this._getCalledCountList();
+            const data = list ? list.find(v => v.eventId === eventId) : null;
+            return data ? data.calledCountTotal || 0 : 0;
+        }
+        public getWarEventCalledCountInPlayerTurn(eventId: number): number {                // DONE
+            const list = this._getCalledCountList();
+            const data = list ? list.find(v => v.eventId === eventId) : null;
+            return data ? data.calledCountInPlayerTurn || 0 : 0;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for custom counters.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        protected _setCustomCounterArray(counterArray: ICustomCounter[] | null): void {
+            this._customCounterArray = counterArray;
+        }
+        private _getCustomCounterArray(): ICustomCounter[] | null {
+            return Helpers.getDefined(this._customCounterArray, ClientErrorCode.BwWarEventManager_GetCustomCounterArray_00);
+        }
+
+        private _setCustomCounter(counterId: number, counterValue: number): void {
+            if (!ConfigManager.checkIsValidCustomCounterId(counterId)) {
+                throw Helpers.newError(`BwWarEventManager._setCustomCounter() invalid counterId: ${counterId}`, ClientErrorCode.BwWarEventManager_SetCustomCounter_00);
+            }
+
+            if (!ConfigManager.checkIsValidCustomCounterValue(counterValue)) {
+                throw Helpers.newError(`BwWarEventManager._setCustomCounter() invalid counterValue: ${counterValue}`, ClientErrorCode.BwWarEventManager_SetCustomCounter_01);
+            }
+
+            const array = this._getCustomCounterArray();
+            if (array == null) {
+                this._setCustomCounterArray([{
+                    customCounterId     : counterId,
+                    customCounterValue  : counterValue,
+                }]);
+            } else {
+                const data = array.find(v => v.customCounterId === counterId);
+                if (data) {
+                    data.customCounterValue = counterValue;
+                } else {
+                    array.push({
+                        customCounterId     : counterId,
+                        customCounterValue  : counterValue,
+                    });
+                }
+            }
+        }
+        private _getCustomCounter(counterId: number): number {
+            if (!ConfigManager.checkIsValidCustomCounterId(counterId)) {
+                throw Helpers.newError(`BwWarEventManager._getCustomCounter() invalid counterId: ${counterId}`, ClientErrorCode.BwWarEventManager_GetCustomCounter_00);
+            }
+
+            return this._getCustomCounterArray()?.find(v => v.customCounterId === counterId)?.customCounterValue ?? 0;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for calling events.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public async callWarEvent(action: IWarActionSystemCallWarEvent, isFastExecute: boolean): Promise<void> {
             this._getWar().getIsExecuteActionsWithExtraData()
                 ? await this._callWarEventWithExtraData(action, isFastExecute)
@@ -118,6 +227,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSimpleDialogue)                  { await this._callActionSimpleDialogueWithExtraData(action.WeaSimpleDialogue, isFastExecute); }
             else if (action.WeaPlayBgm)                         { await this._callActionPlayBgmWithExtraData(action.WeaPlayBgm, isFastExecute); }
             else if (action.WeaSetForceFogCode)                 { await this._callActionSetForceFogCodeWithExtraData(action.WeaSetForceFogCode, isFastExecute); }
+            else if (action.WeaSetCustomCounter)                { await this._callActionSetCustomCounterWithExtraData(action.WeaSetCustomCounter, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerAliveState)   { await this._callActionDeprecatedSetPlayerAliveStateWithExtraData(action.WeaDeprecatedSetPlayerAliveState, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerFund)         { await this._callActionDeprecatedSetPlayerFundWithExtraData(action.WeaDeprecatedSetPlayerFund, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerCoEnergy)     { await this._callActionDeprecatedSetPlayerCoEnergyWithExtraData(action.WeaDeprecatedSetPlayerCoEnergy, isFastExecute); }
@@ -139,6 +249,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSimpleDialogue)                  { await this._callActionSimpleDialogueWithoutExtraData(action.WeaSimpleDialogue, isFastExecute); }
             else if (action.WeaPlayBgm)                         { await this._callActionPlayBgmWithoutExtraData(action.WeaPlayBgm, isFastExecute); }
             else if (action.WeaSetForceFogCode)                 { await this._callActionSetForceFogCodeWithoutExtraData(action.WeaSetForceFogCode, isFastExecute); }
+            else if (action.WeaSetCustomCounter)                { await this._callActionSetCustomCounterWithoutExtraData(action.WeaSetCustomCounter, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerAliveState)   { await this._callActionDeprecatedSetPlayerAliveStateWithoutExtraData(action.WeaDeprecatedSetPlayerAliveState, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerFund)         { await this._callActionDeprecatedSetPlayerFundWithoutExtraData(action.WeaDeprecatedSetPlayerFund, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerCoEnergy)     { await this._callActionDeprecatedSetPlayerCoEnergyWithoutExtraData(action.WeaDeprecatedSetPlayerCoEnergy, isFastExecute); }
@@ -398,6 +509,47 @@ namespace TwnsBwWarEventManager {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetCustomCounterWithExtraData(action: WarEvent.IWeaSetCustomCounter, isFast: boolean): Promise<void> {
+            const multiplierPercentage  = action.multiplierPercentage ?? 100;
+            const deltaValue            = action.deltaValue ?? 0;
+            const maxValue              = CommonConstants.WarCustomCounterMaxValue;
+            const customCounterIdArray  = action.customCounterIdArray;
+            for (let counterId = CommonConstants.WarCustomCounterMinId; counterId <= CommonConstants.WarCustomCounterMaxId; ++counterId) {
+                if ((customCounterIdArray?.length) && (customCounterIdArray.indexOf(counterId) < 0)) {
+                    continue;
+                }
+
+                this._setCustomCounter(
+                    counterId,
+                    Math.min(
+                        maxValue,
+                        Math.max(-maxValue, Math.floor(this._getCustomCounter(counterId) * multiplierPercentage / 100 + deltaValue))
+                    )
+                );
+            }
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetCustomCounterWithoutExtraData(action: WarEvent.IWeaSetCustomCounter, isFast: boolean): Promise<void> {
+            const multiplierPercentage  = action.multiplierPercentage ?? 100;
+            const deltaValue            = action.deltaValue ?? 0;
+            const maxValue              = CommonConstants.WarCustomCounterMaxValue;
+            const customCounterIdArray  = action.customCounterIdArray;
+            for (let counterId = CommonConstants.WarCustomCounterMinId; counterId <= CommonConstants.WarCustomCounterMaxId; ++counterId) {
+                if ((customCounterIdArray?.length) && (customCounterIdArray.indexOf(counterId) < 0)) {
+                    continue;
+                }
+
+                this._setCustomCounter(
+                    counterId,
+                    Math.min(
+                        maxValue,
+                        Math.max(-maxValue, Math.floor(this._getCustomCounter(counterId) * multiplierPercentage / 100 + deltaValue))
+                    )
+                );
+            }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionDeprecatedSetPlayerAliveStateWithExtraData(action: WarEvent.IWeaDeprecatedSetPlayerAliveState, isFastExecute: boolean): Promise<void> {
             // nothing to do
         }
@@ -521,53 +673,6 @@ namespace TwnsBwWarEventManager {
             }
         }
 
-        public updateWarEventCalledCountOnCall(eventId: number): void {                     // DONE
-            const calledCountList = this._getCalledCountList();
-            if (calledCountList == null) {
-                this._setCalledCountList([{
-                    eventId,
-                    calledCountTotal        : 1,
-                    calledCountInPlayerTurn : 1,
-                }]);
-            } else {
-                const data = calledCountList.find(v => v.eventId === eventId);
-                if (data) {
-                    if (data.calledCountInPlayerTurn == null) {
-                        throw Helpers.newError(`Empty data.calledCountInPlayerTurn.`);
-                    }
-                    if (data.calledCountTotal == null) {
-                        throw Helpers.newError(`Empty data.calledCountTotal`);
-                    }
-                    ++data.calledCountInPlayerTurn;
-                    ++data.calledCountTotal;
-                } else {
-                    calledCountList.push({
-                        eventId,
-                        calledCountTotal        : 1,
-                        calledCountInPlayerTurn : 1,
-                    });
-                }
-            }
-        }
-        public updateWarEventCalledCountOnPlayerTurnSwitched(): void {                      // DONE
-            const list = this._getCalledCountList();
-            if (list) {
-                list.forEach(v => {
-                    v.calledCountInPlayerTurn = 0;
-                });
-            }
-        }
-        public getWarEventCalledCountTotal(eventId: number): number {                       // DONE
-            const list = this._getCalledCountList();
-            const data = list ? list.find(v => v.eventId === eventId) : null;
-            return data ? data.calledCountTotal || 0 : 0;
-        }
-        public getWarEventCalledCountInPlayerTurn(eventId: number): number {                // DONE
-            const list = this._getCalledCountList();
-            const data = list ? list.find(v => v.eventId === eventId) : null;
-            return data ? data.calledCountInPlayerTurn || 0 : 0;
-        }
-
         public getCallableWarEventId(): number | null {                                // DONE
             for (const warEventId of this._getWar().getCommonSettingManager().getWarRule().warEventIdArray || []) {
                 if (this._checkCanCallWarEvent(warEventId)) {
@@ -647,6 +752,7 @@ namespace TwnsBwWarEventManager {
             else if (condition.WecTileTypeEqualTo)                  { return this._checkIsMeetConTileTypeEqualTo(condition.WecTileTypeEqualTo); }
             else if (condition.WecTilePresence)                     { return this._checkIsMeetConTilePresence(condition.WecTilePresence); }
             else if (condition.WecUnitPresence)                     { return this._checkIsMeetConUnitPresence(condition.WecUnitPresence); }
+            else if (condition.WecCustomCounter)                    { return this._checkIsMeetConCustomCounter(condition.WecCustomCounter); }
 
             throw Helpers.newError(`Invalid condition!`);
         }
@@ -986,6 +1092,51 @@ namespace TwnsBwWarEventManager {
                 comparator  : Helpers.getExisted(condition.unitsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01),
                 actualValue : unitsCount,
                 targetValue : Helpers.getExisted(condition.unitsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_02)
+            });
+        }
+
+        private _checkIsMeetConCustomCounter(condition: WarEvent.IWecCustomCounter): boolean {
+            const counterIdArray        = condition.counterIdArray ?? [];
+            const targetValue           = condition.value;
+            const valueComparator       = Helpers.getExisted(condition.valueComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_00);
+            const valueDivider          = condition.valueDivider;
+            const valueRemainder        = condition.valueRemainder;
+            const remainderComparator   = Helpers.getExisted(condition.valueRemainderComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_01);
+            let counter                 = 0;
+            for (let counterId = CommonConstants.WarCustomCounterMinId; counterId <= CommonConstants.WarCustomCounterMaxId; ++counterId) {
+                if ((counterIdArray.length) && (counterIdArray.indexOf(counterId) < 0)) {
+                    continue;
+                }
+
+                const value = this._getCustomCounter(counterId);
+                if ((targetValue != null)                   &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : valueComparator,
+                        targetValue,
+                        actualValue : value,
+                    }))
+                ) {
+                    continue;
+                }
+
+                if ((valueDivider != null)                  &&
+                    (valueRemainder != null)                &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : remainderComparator,
+                        targetValue : valueRemainder,
+                        actualValue : value % valueDivider,
+                    }))
+                ) {
+                    continue;
+                }
+
+                ++counter;
+            }
+
+            return Helpers.checkIsMeetValueComparator({
+                comparator  : Helpers.getExisted(condition.counterCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_02),
+                targetValue : Helpers.getExisted(condition.counterCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConCustomCounter_03),
+                actualValue : counter,
             });
         }
 

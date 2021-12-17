@@ -620,7 +620,9 @@ namespace MpwModel {
 
             const cachedActionsCount    = _cachedActions.length;
             const executedActionsCount  = war.getExecutedActionManager().getExecutedActionsCount();
-            if ((war.getWarId() !== syncWarData.warId) || (Helpers.getExisted(syncWarData.executedActionsCount) < executedActionsCount + cachedActionsCount)) {
+            if ((war.getWarId() !== syncWarData.warId)                                                                                          ||
+                ((syncWarData.executedActionsCount != null) && (syncWarData.executedActionsCount < executedActionsCount + cachedActionsCount))
+            ) {
                 _cachedSyncWarData = null;
                 break;
             }

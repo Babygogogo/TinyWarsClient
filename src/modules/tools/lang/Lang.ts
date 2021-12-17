@@ -443,6 +443,7 @@ namespace Lang {
             case WarEventConditionType.WecTileTypeEqualTo                   : return getText(LangTextType.B0717);
             case WarEventConditionType.WecTilePresence                      : return getText(LangTextType.B0779);
             case WarEventConditionType.WecUnitPresence                      : return getText(LangTextType.B0775);
+            case WarEventConditionType.WecCustomCounter                     : return getText(LangTextType.B0802);
             default                                                         : return null;
         }
     }
@@ -454,6 +455,7 @@ namespace Lang {
             case WarEventActionType.SetViewpoint                    : return getText(LangTextType.B0713);
             case WarEventActionType.SetWeather                      : return getText(LangTextType.B0715);
             case WarEventActionType.SetForceFogCode                 : return getText(LangTextType.B0795);
+            case WarEventActionType.SetCustomCounter                : return getText(LangTextType.B0800);
             case WarEventActionType.SimpleDialogue                  : return getText(LangTextType.B0728);
             case WarEventActionType.PlayBgm                         : return getText(LangTextType.B0750);
             case WarEventActionType.DeprecatedSetPlayerAliveState   : return getText(LangTextType.B0618);

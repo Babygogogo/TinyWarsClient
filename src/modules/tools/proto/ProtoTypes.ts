@@ -6087,6 +6087,138 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WecCustomCounter. */
+    interface IWecCustomCounter {
+
+        /** WecCustomCounter counterIdArray */
+        counterIdArray?: (number[]|null);
+
+        /** WecCustomCounter counterCount */
+        counterCount?: (number|null);
+
+        /** WecCustomCounter counterCountComparator */
+        counterCountComparator?: (number|null);
+
+        /** WecCustomCounter value */
+        value?: (number|null);
+
+        /** WecCustomCounter valueComparator */
+        valueComparator?: (number|null);
+
+        /** WecCustomCounter valueDivider */
+        valueDivider?: (number|null);
+
+        /** WecCustomCounter valueRemainder */
+        valueRemainder?: (number|null);
+
+        /** WecCustomCounter valueRemainderComparator */
+        valueRemainderComparator?: (number|null);
+    }
+
+    /** Represents a WecCustomCounter. */
+    class WecCustomCounter implements IWecCustomCounter {
+
+        /**
+         * Constructs a new WecCustomCounter.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecCustomCounter);
+
+        /** WecCustomCounter counterIdArray. */
+        public counterIdArray: number[];
+
+        /** WecCustomCounter counterCount. */
+        public counterCount: number;
+
+        /** WecCustomCounter counterCountComparator. */
+        public counterCountComparator: number;
+
+        /** WecCustomCounter value. */
+        public value: number;
+
+        /** WecCustomCounter valueComparator. */
+        public valueComparator: number;
+
+        /** WecCustomCounter valueDivider. */
+        public valueDivider: number;
+
+        /** WecCustomCounter valueRemainder. */
+        public valueRemainder: number;
+
+        /** WecCustomCounter valueRemainderComparator. */
+        public valueRemainderComparator: number;
+
+        /**
+         * Creates a new WecCustomCounter instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecCustomCounter instance
+         */
+        public static create(properties?: WarEvent.IWecCustomCounter): WarEvent.WecCustomCounter;
+
+        /**
+         * Encodes the specified WecCustomCounter message. Does not implicitly {@link WarEvent.WecCustomCounter.verify|verify} messages.
+         * @param message WecCustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecCustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecCustomCounter message, length delimited. Does not implicitly {@link WarEvent.WecCustomCounter.verify|verify} messages.
+         * @param message WecCustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecCustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecCustomCounter message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecCustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecCustomCounter;
+
+        /**
+         * Decodes a WecCustomCounter message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecCustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecCustomCounter;
+
+        /**
+         * Verifies a WecCustomCounter message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecCustomCounter message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecCustomCounter
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecCustomCounter;
+
+        /**
+         * Creates a plain object from a WecCustomCounter message. Also converts values to other types if specified.
+         * @param message WecCustomCounter
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecCustomCounter, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecCustomCounter to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarEventCondition. */
     interface IWarEventCondition {
 
@@ -6152,6 +6284,9 @@ export declare namespace WarEvent {
 
         /** WarEventCondition WecUnitPresence */
         WecUnitPresence?: (WarEvent.IWecUnitPresence|null);
+
+        /** WarEventCondition WecCustomCounter */
+        WecCustomCounter?: (WarEvent.IWecCustomCounter|null);
     }
 
     /** Represents a WarEventCondition. */
@@ -6225,6 +6360,9 @@ export declare namespace WarEvent {
 
         /** WarEventCondition WecUnitPresence. */
         public WecUnitPresence?: (WarEvent.IWecUnitPresence|null);
+
+        /** WarEventCondition WecCustomCounter. */
+        public WecCustomCounter?: (WarEvent.IWecCustomCounter|null);
 
         /**
          * Creates a new WarEventCondition instance using the specified properties.
@@ -7758,6 +7896,108 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WeaSetCustomCounter. */
+    interface IWeaSetCustomCounter {
+
+        /** WeaSetCustomCounter customCounterIdArray */
+        customCounterIdArray?: (number[]|null);
+
+        /** WeaSetCustomCounter multiplierPercentage */
+        multiplierPercentage?: (number|null);
+
+        /** WeaSetCustomCounter deltaValue */
+        deltaValue?: (number|null);
+    }
+
+    /** Represents a WeaSetCustomCounter. */
+    class WeaSetCustomCounter implements IWeaSetCustomCounter {
+
+        /**
+         * Constructs a new WeaSetCustomCounter.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetCustomCounter);
+
+        /** WeaSetCustomCounter customCounterIdArray. */
+        public customCounterIdArray: number[];
+
+        /** WeaSetCustomCounter multiplierPercentage. */
+        public multiplierPercentage: number;
+
+        /** WeaSetCustomCounter deltaValue. */
+        public deltaValue: number;
+
+        /**
+         * Creates a new WeaSetCustomCounter instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetCustomCounter instance
+         */
+        public static create(properties?: WarEvent.IWeaSetCustomCounter): WarEvent.WeaSetCustomCounter;
+
+        /**
+         * Encodes the specified WeaSetCustomCounter message. Does not implicitly {@link WarEvent.WeaSetCustomCounter.verify|verify} messages.
+         * @param message WeaSetCustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetCustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetCustomCounter message, length delimited. Does not implicitly {@link WarEvent.WeaSetCustomCounter.verify|verify} messages.
+         * @param message WeaSetCustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetCustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetCustomCounter message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetCustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetCustomCounter;
+
+        /**
+         * Decodes a WeaSetCustomCounter message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetCustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetCustomCounter;
+
+        /**
+         * Verifies a WeaSetCustomCounter message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetCustomCounter message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetCustomCounter
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetCustomCounter;
+
+        /**
+         * Creates a plain object from a WeaSetCustomCounter message. Also converts values to other types if specified.
+         * @param message WeaSetCustomCounter
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetCustomCounter, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetCustomCounter to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WeaDeprecatedSetPlayerAliveState. */
     interface IWeaDeprecatedSetPlayerAliveState {
 
@@ -8394,6 +8634,9 @@ export declare namespace WarEvent {
         /** WarEventAction WeaSetForceFogCode */
         WeaSetForceFogCode?: (WarEvent.IWeaSetForceFogCode|null);
 
+        /** WarEventAction WeaSetCustomCounter */
+        WeaSetCustomCounter?: (WarEvent.IWeaSetCustomCounter|null);
+
         /** WarEventAction WeaSetPlayerAliveState */
         WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
 
@@ -8445,6 +8688,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetForceFogCode. */
         public WeaSetForceFogCode?: (WarEvent.IWeaSetForceFogCode|null);
+
+        /** WarEventAction WeaSetCustomCounter. */
+        public WeaSetCustomCounter?: (WarEvent.IWeaSetCustomCounter|null);
 
         /** WarEventAction WeaSetPlayerAliveState. */
         public WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
@@ -10611,6 +10857,102 @@ export declare namespace WarSerialization {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a CustomCounter. */
+    interface ICustomCounter {
+
+        /** CustomCounter customCounterId */
+        customCounterId?: (number|null);
+
+        /** CustomCounter customCounterValue */
+        customCounterValue?: (number|null);
+    }
+
+    /** Represents a CustomCounter. */
+    class CustomCounter implements ICustomCounter {
+
+        /**
+         * Constructs a new CustomCounter.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ICustomCounter);
+
+        /** CustomCounter customCounterId. */
+        public customCounterId: number;
+
+        /** CustomCounter customCounterValue. */
+        public customCounterValue: number;
+
+        /**
+         * Creates a new CustomCounter instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns CustomCounter instance
+         */
+        public static create(properties?: WarSerialization.ICustomCounter): WarSerialization.CustomCounter;
+
+        /**
+         * Encodes the specified CustomCounter message. Does not implicitly {@link WarSerialization.CustomCounter.verify|verify} messages.
+         * @param message CustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ICustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified CustomCounter message, length delimited. Does not implicitly {@link WarSerialization.CustomCounter.verify|verify} messages.
+         * @param message CustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ICustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a CustomCounter message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns CustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.CustomCounter;
+
+        /**
+         * Decodes a CustomCounter message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns CustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.CustomCounter;
+
+        /**
+         * Verifies a CustomCounter message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a CustomCounter message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns CustomCounter
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.CustomCounter;
+
+        /**
+         * Creates a plain object from a CustomCounter message. Also converts values to other types if specified.
+         * @param message CustomCounter
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.CustomCounter, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this CustomCounter to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a HalfwayReplayAction. */
     interface IHalfwayReplayAction {
 
@@ -12293,6 +12635,9 @@ export declare namespace WarSerialization {
 
         /** SerialWarEventManager calledCountList */
         calledCountList?: (WarSerialization.IDataForWarEventCalledCount[]|null);
+
+        /** SerialWarEventManager customCounterArray */
+        customCounterArray?: (WarSerialization.ICustomCounter[]|null);
     }
 
     /** Represents a SerialWarEventManager. */
@@ -12309,6 +12654,9 @@ export declare namespace WarSerialization {
 
         /** SerialWarEventManager calledCountList. */
         public calledCountList: WarSerialization.IDataForWarEventCalledCount[];
+
+        /** SerialWarEventManager customCounterArray. */
+        public customCounterArray: WarSerialization.ICustomCounter[];
 
         /**
          * Creates a new SerialWarEventManager instance using the specified properties.

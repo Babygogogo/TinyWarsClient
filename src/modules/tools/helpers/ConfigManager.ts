@@ -452,6 +452,37 @@ namespace ConfigManager {
         return ((new Set(playerIndexArray)).size === playerIndexArray.length)
             && (playerIndexArray.every(v => checkIsValidPlayerIndex(v, playersCountUnneutral)));
     }
+    export function checkIsValidCustomCounterId(customCounterId: number): boolean {
+        return (customCounterId >= CommonConstants.WarCustomCounterMinId)
+            && (customCounterId <= CommonConstants.WarCustomCounterMaxId);
+    }
+    export function checkIsValidCustomCounterValue(customCounterValue: number): boolean {
+        return (customCounterValue <= CommonConstants.WarCustomCounterMaxValue)
+            && (customCounterValue >= -CommonConstants.WarCustomCounterMaxValue);
+    }
+    export function checkIsValidCustomCounterIdArray(idArray: number[]): boolean {
+        return (idArray.every(v => checkIsValidCustomCounterId(v)))
+            && (new Set(idArray).size === idArray.length);
+    }
+    export function checkIsValidCustomCounterArray(customCounterArray: ProtoTypes.WarSerialization.ICustomCounter[]): boolean {
+        const counterIdSet = new Set<number>();
+        for (const data of customCounterArray) {
+            const counterId     = data.customCounterId;
+            const counterValue  = data.customCounterValue;
+            if ((counterId == null)                                 ||
+                (!checkIsValidCustomCounterId(counterId))           ||
+                (counterValue == null)                              ||
+                (!checkIsValidCustomCounterValue(counterValue))     ||
+                (counterIdSet.has(counterId))
+            ) {
+                return false;
+            }
+
+            counterIdSet.add(counterId);
+        }
+
+        return true;
+    }
     export function checkIsValidUnitAiMode(mode: Types.UnitAiMode): boolean {
         return (mode === Types.UnitAiMode.NoMove)
             || (mode === Types.UnitAiMode.Normal)

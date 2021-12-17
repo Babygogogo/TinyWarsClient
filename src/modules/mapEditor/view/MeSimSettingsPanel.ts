@@ -21,7 +21,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeSimSettingsPanel {
-    import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeSimAdvancedSettingsPage    = TwnsMeSimAdvancedSettingsPage.MeSimAdvancedSettingsPage;
     import MeSimBasicSettingsPage       = TwnsMeSimBasicSettingsPage.MeSimBasicSettingsPage;
     import LangTextType                 = TwnsLangTextType.LangTextType;
@@ -71,11 +70,13 @@ namespace TwnsMeSimSettingsPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
         }
 
-        private _onTouchedBtnConfirm(): void {
-            if (MeSimModel.checkIsValidWarData()) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel, MeSimModel.getWarData());
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            const warData   = MeSimModel.getWarData();
+            const errorCode = await (new TwnsTwWar.TwWar()).getErrorCodeForInit(warData);
+            if (errorCode) {
+                FloatText.show(Lang.getErrorText(errorCode));
             } else {
-                FloatText.show(Lang.getText(LangTextType.A0146));
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel, warData);
             }
         }
 

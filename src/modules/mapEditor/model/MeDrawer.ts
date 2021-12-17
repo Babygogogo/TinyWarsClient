@@ -471,14 +471,22 @@ namespace TwnsMeDrawer {
             const war               = this._getWar();
             const configVersion     = war.getConfigVersion();
             const tileMap           = war.getTileMap();
+            const unitMap           = war.getUnitMap();
             const tile              = tileMap.getTile(gridIndex);
             const targetObjectData  = Helpers.getExisted(this.getDrawTargetTileObjectData());
+            const baseType          = tile.getBaseType();
             const objectType        = targetObjectData.objectType;
+            const isAttackableTile  = !!ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType).maxHp;
+            if ((isAttackableTile) && (unitMap.getUnitOnMap(gridIndex))) {
+                FloatText.show(Lang.getText(LangTextType.A0269));
+                return;
+            }
+
             const objectShapeId     = targetObjectData.shapeId;
             const playerIndex       = targetObjectData.playerIndex;
             tile.init({
                 gridIndex       : tile.getGridIndex(),
-                baseType        : tile.getBaseType(),
+                baseType,
                 baseShapeId     : tile.getBaseShapeId(),
                 decoratorType   : tile.getDecoratorType(),
                 decoratorShapeId: tile.getDecoratorShapeId(),
@@ -494,6 +502,10 @@ namespace TwnsMeDrawer {
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
             if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+                if ((isAttackableTile) && (unitMap.getUnitOnMap(symGridIndex))) {
+                    return;
+                }
+
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.init({
                     gridIndex       : t2.getGridIndex(),
