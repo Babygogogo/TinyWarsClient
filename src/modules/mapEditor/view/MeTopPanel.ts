@@ -65,6 +65,7 @@ namespace TwnsMeTopPanel {
         private readonly _btnReviewReject!              : TwnsUiButton.UiButton;
         private readonly _btnWarRule!                   : TwnsUiButton.UiButton;
         private readonly _btnWarEvent!                  : TwnsUiButton.UiButton;
+        private readonly _btnMapTag!                    : TwnsUiButton.UiButton;
         private readonly _btnVisibility!                : TwnsUiButton.UiButton;
         private readonly _btnSymmetry!                  : TwnsUiButton.UiButton;
         private readonly _btnSettings!                  : TwnsUiButton.UiButton;
@@ -106,6 +107,7 @@ namespace TwnsMeTopPanel {
                 { ui: this._btnReviewReject,                callback: this._onTouchedBtnReviewReject },
                 { ui: this._btnWarRule,                     callback: this._onTouchedBtnWarRule },
                 { ui: this._btnWarEvent,                    callback: this._onTouchedBtnWarEvent },
+                { ui: this._btnMapTag,                      callback: this._onTouchedBtnMapTag },
                 { ui: this._btnVisibility,                  callback: this._onTouchedBtnVisibility },
                 { ui: this._btnSymmetry,                    callback: this._onTouchedBtnSymmetry },
                 { ui: this._btnSettings,                    callback: this._onTouchedBtnSettings },
@@ -294,6 +296,9 @@ namespace TwnsMeTopPanel {
                 war: this._getWar(),
             });
         }
+        private _onTouchedBtnMapTag(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapTagPanel, void 0);
+        }
         private _onTouchedGroupModeDeleteTileDecorator(): void {
             this._getDrawer().setModeDeleteTileDecorator();
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -354,6 +359,7 @@ namespace TwnsMeTopPanel {
             this._btnReviewReject.label             = Lang.getText(LangTextType.B0297);
             this._btnWarRule.label                  = Lang.getText(LangTextType.B0314);
             this._btnWarEvent.label                 = Lang.getText(LangTextType.B0461);
+            this._btnMapTag.label                   = Lang.getText(LangTextType.B0445);
             this._btnVisibility.label               = Lang.getText(LangTextType.B0301);
             this._btnSymmetry.label                 = Lang.getText(LangTextType.B0306);
             this._btnSettings.label                 = Lang.getText(LangTextType.B0560);
@@ -373,6 +379,7 @@ namespace TwnsMeTopPanel {
             }
             group.addChild(this._btnWarRule);
             group.addChild(this._btnWarEvent);
+            group.addChild(this._btnMapTag);
             group.addChild(this._btnVisibility);
             group.addChild(this._btnSymmetry);
             group.addChild(this._btnSettings);

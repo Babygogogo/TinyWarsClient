@@ -200,6 +200,7 @@ namespace TwnsPanelConfig {
         WeActionModifyPanel23               : PanelConfig<TwnsWeActionModifyPanel23.OpenData>;
         WeActionModifyPanel24               : PanelConfig<TwnsWeActionModifyPanel24.OpenData>;
         WeActionModifyPanel25               : PanelConfig<TwnsWeActionModifyPanel25.OpenData>;
+        WeActionModifyPanel30               : PanelConfig<TwnsWeActionModifyPanel30.OpenData>;
         WeActionReplacePanel                : PanelConfig<TwnsWeActionReplacePanel.OpenData>;
         WeActionTypeListPanel               : PanelConfig<TwnsWeActionTypeListPanel.OpenData>;
         WeCommandPanel                      : PanelConfig<TwnsWeCommandPanel.OpenData>;
@@ -1323,6 +1324,12 @@ namespace TwnsPanelConfig {
             WeActionModifyPanel25: {
                 cls         : TwnsWeActionModifyPanel25?.WeActionModifyPanel25,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel25.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            WeActionModifyPanel30: {
+                cls         : TwnsWeActionModifyPanel30?.WeActionModifyPanel30,
+                skinName    : `resource/skins/warEvent/WeActionModifyPanel30.exml`,
                 layer       : LayerType.Hud0,
             },
 

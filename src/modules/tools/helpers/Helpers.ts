@@ -305,6 +305,24 @@ namespace Helpers {
         }
     }
 
+    export function getValueInRange({ minValue, maxValue, rawValue }: {
+        minValue    : number;
+        maxValue    : number;
+        rawValue    : number;
+    }): number {
+        if (minValue > maxValue) {
+            throw newError(`Helpers.getValueInRange() invalid minValue and maxValue: ${minValue}, ${maxValue}`, ClientErrorCode.Helpers_GetValueInRange_00);
+        }
+
+        if (rawValue > maxValue) {
+            return maxValue;
+        }
+        if (rawValue < minValue) {
+            return minValue;
+        }
+        return rawValue;
+    }
+
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */
     export function getDigitsCount(num: number): number {
         num = Math.abs(num);

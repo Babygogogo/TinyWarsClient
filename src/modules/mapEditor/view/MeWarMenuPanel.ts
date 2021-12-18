@@ -355,9 +355,11 @@ namespace TwnsMeWarMenuPanel {
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return Helpers.getNonNullElements([
-                this._createCommandMapTag(),
-                this._createCommandOpenAdvancedMenu(),
+                this._createCommandClear(),
+                this._createCommandResize(),
+                this._createCommandOffset(),
                 this._createCommandChat(),
+                this._createCommandOpenAdvancedMenu(),
                 this._createCommandGotoMapListPanel(),
                 this._createCommandGotoLobby(),
             ]);
@@ -368,9 +370,6 @@ namespace TwnsMeWarMenuPanel {
                 this._createCommandAutoSaveMap(),
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
-                this._createCommandClear(),
-                this._createCommandResize(),
-                this._createCommandOffset(),
                 this._createCommandImport(),
                 this._createCommandImportFromClipboard(),
                 this._createCommandExportToClipboard(),
@@ -383,15 +382,6 @@ namespace TwnsMeWarMenuPanel {
                 callback: () => {
                     this._menuType = TwnsMeWarMenuType.Advanced;
                     this._updateListCommand();
-                },
-            };
-        }
-
-        private _createCommandMapTag(): DataForCommandRenderer | null {
-            return {
-                name    : Lang.getText(LangTextType.B0445),
-                callback: () => {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapTagPanel, void 0);
                 },
             };
         }

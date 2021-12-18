@@ -8598,6 +8598,132 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WeaSetUnitHp. */
+    interface IWeaSetUnitHp {
+
+        /** WeaSetUnitHp playerIndexArray */
+        playerIndexArray?: (number[]|null);
+
+        /** WeaSetUnitHp teamIndexArray */
+        teamIndexArray?: (number[]|null);
+
+        /** WeaSetUnitHp unitTypeArray */
+        unitTypeArray?: (number[]|null);
+
+        /** WeaSetUnitHp locationIdArray */
+        locationIdArray?: (number[]|null);
+
+        /** WeaSetUnitHp gridIndexArray */
+        gridIndexArray?: (Structure.IGridIndex[]|null);
+
+        /** WeaSetUnitHp multiplierPercentage */
+        multiplierPercentage?: (number|null);
+
+        /** WeaSetUnitHp deltaValue */
+        deltaValue?: (number|null);
+    }
+
+    /** Represents a WeaSetUnitHp. */
+    class WeaSetUnitHp implements IWeaSetUnitHp {
+
+        /**
+         * Constructs a new WeaSetUnitHp.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetUnitHp);
+
+        /** WeaSetUnitHp playerIndexArray. */
+        public playerIndexArray: number[];
+
+        /** WeaSetUnitHp teamIndexArray. */
+        public teamIndexArray: number[];
+
+        /** WeaSetUnitHp unitTypeArray. */
+        public unitTypeArray: number[];
+
+        /** WeaSetUnitHp locationIdArray. */
+        public locationIdArray: number[];
+
+        /** WeaSetUnitHp gridIndexArray. */
+        public gridIndexArray: Structure.IGridIndex[];
+
+        /** WeaSetUnitHp multiplierPercentage. */
+        public multiplierPercentage: number;
+
+        /** WeaSetUnitHp deltaValue. */
+        public deltaValue: number;
+
+        /**
+         * Creates a new WeaSetUnitHp instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetUnitHp instance
+         */
+        public static create(properties?: WarEvent.IWeaSetUnitHp): WarEvent.WeaSetUnitHp;
+
+        /**
+         * Encodes the specified WeaSetUnitHp message. Does not implicitly {@link WarEvent.WeaSetUnitHp.verify|verify} messages.
+         * @param message WeaSetUnitHp message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetUnitHp, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetUnitHp message, length delimited. Does not implicitly {@link WarEvent.WeaSetUnitHp.verify|verify} messages.
+         * @param message WeaSetUnitHp message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetUnitHp, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetUnitHp message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetUnitHp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetUnitHp;
+
+        /**
+         * Decodes a WeaSetUnitHp message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetUnitHp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetUnitHp;
+
+        /**
+         * Verifies a WeaSetUnitHp message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetUnitHp message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetUnitHp
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetUnitHp;
+
+        /**
+         * Creates a plain object from a WeaSetUnitHp message. Also converts values to other types if specified.
+         * @param message WeaSetUnitHp
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetUnitHp, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetUnitHp to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarEventAction. */
     interface IWarEventAction {
 
@@ -8645,6 +8771,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetPlayerCoEnergy */
         WeaSetPlayerCoEnergy?: (WarEvent.IWeaSetPlayerCoEnergy|null);
+
+        /** WarEventAction WeaSetUnitHp */
+        WeaSetUnitHp?: (WarEvent.IWeaSetUnitHp|null);
     }
 
     /** Represents a WarEventAction. */
@@ -8700,6 +8829,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetPlayerCoEnergy. */
         public WeaSetPlayerCoEnergy?: (WarEvent.IWeaSetPlayerCoEnergy|null);
+
+        /** WarEventAction WeaSetUnitHp. */
+        public WeaSetUnitHp?: (WarEvent.IWeaSetUnitHp|null);
 
         /**
          * Creates a new WarEventAction instance using the specified properties.

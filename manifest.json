@@ -213,8 +213,8 @@
 		"bin-debug/modules/multiFreeRoom/view/MfrRoomInfoPanel.js",
 		"bin-debug/modules/baseWar/view/BwUnitActionsPanel.js",
 		"bin-debug/modules/multiFreeWar/view/MfwMyWarListPanel.js",
+		"bin-debug/modules/multiPlayerWar/model/MpwActionPlanner.js",
 		"bin-debug/modules/baseWar/view/BwUnitBriefPanel.js",
-		"bin-debug/modules/multiPlayerWar/model/MpwField.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwFogMap.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwModel.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwPlayerManager.js",
@@ -364,6 +364,7 @@
 		"bin-debug/modules/warEvent/view/WeActionModifyPanel24.js",
 		"bin-debug/modules/warEvent/view/WeActionModifyPanel25.js",
 		"bin-debug/modules/warEvent/view/WeActionModifyPanel3.js",
+		"bin-debug/modules/warEvent/view/WeActionModifyPanel30.js",
 		"bin-debug/modules/warEvent/view/WeActionModifyPanel4.js",
 		"bin-debug/modules/warEvent/view/WeActionModifyPanel5.js",
 		"bin-debug/modules/warEvent/view/WeActionModifyPanel6.js",
@@ -413,6 +414,6 @@
 		"bin-debug/modules/watchWar/view/WwMakeRequestDetailPanel.js",
 		"bin-debug/modules/watchWar/view/WwMakeRequestWarsPanel.js",
 		"bin-debug/modules/watchWar/view/WwOngoingWarsPanel.js",
-		"bin-debug/modules/multiPlayerWar/model/MpwActionPlanner.js"
+		"bin-debug/modules/multiPlayerWar/model/MpwField.js"
 	]
 }

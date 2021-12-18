@@ -451,6 +451,7 @@ namespace Lang {
     export function getWarEventActionTypeName(type: WarEventActionType): string | null {
         switch (type) {
             case WarEventActionType.AddUnit                         : return getText(LangTextType.B0617);
+            case WarEventActionType.SetUnitHp                       : return getText(LangTextType.B0806);
             case WarEventActionType.Dialogue                        : return getText(LangTextType.B0674);
             case WarEventActionType.SetViewpoint                    : return getText(LangTextType.B0713);
             case WarEventActionType.SetWeather                      : return getText(LangTextType.B0715);

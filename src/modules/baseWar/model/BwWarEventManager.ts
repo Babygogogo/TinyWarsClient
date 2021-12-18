@@ -234,6 +234,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
             else if (action.WeaSetPlayerFund)                   { await this._callActionSetPlayerFundWithExtraData(action.WeaSetPlayerFund, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
+            else if (action.WeaSetUnitHp)                       { await this._callActionSetUnitHpWithExtraData(action.WeaSetUnitHp, isFastExecute); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -256,6 +257,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
             else if (action.WeaSetPlayerFund)                   { await this._callActionSetPlayerFundWithoutExtraData(action.WeaSetPlayerFund, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
+            else if (action.WeaSetUnitHp)                       { await this._callActionSetUnitHpWithoutExtraData(action.WeaSetUnitHp, isFastExecute); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -669,6 +671,55 @@ namespace TwnsBwWarEventManager {
                         0,
                         Math.min(maxEnergy, Math.floor(player.getCoCurrentEnergy() * multiplierPercentage / 100 + maxEnergy * deltaPercentage / 100))
                     ));
+                }
+            }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetUnitHpWithExtraData(action: WarEvent.IWeaSetUnitHp, isFastExecute: boolean): Promise<void> {
+            // nothing to do
+        }
+        private async _callActionSetUnitHpWithoutExtraData(action: WarEvent.IWeaSetUnitHp, isFastExecute: boolean): Promise<void> {
+            const playerIndexArray      = action.playerIndexArray ?? [];
+            const teamIndexArray        = action.teamIndexArray ?? [];
+            const locationIdArray       = action.locationIdArray ?? [];
+            const gridIndexArray        = action.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
+            const unitTypeArray         = action.unitTypeArray ?? [];
+            const multiplierPercentage  = action.multiplierPercentage ?? 100;
+            const deltaValue            = action.deltaValue ?? 0;
+            const war                   = this._getWar();
+            const unitMap               = war.getUnitMap();
+            const tileMap               = war.getTileMap();
+            const mapSize               = tileMap.getMapSize();
+            const mapWidth              = mapSize.width;
+            const mapHeight             = mapSize.height;
+            const minHp                 = 1;
+            const affectedUnits         = new Set<TwnsBwUnit.BwUnit>();
+            for (let x = 0; x < mapWidth; ++x) {
+                for (let y = 0; y < mapHeight; ++y) {
+                    const gridIndex : Types.GridIndex = { x, y };
+                    const unit      = unitMap.getUnitOnMap(gridIndex);
+                    const tile      = tileMap.getTile(gridIndex);
+                    if ((unit == null)                                                                                          ||
+                        ((unitTypeArray.length) && (unitTypeArray.indexOf(unit.getUnitType()) < 0))                             ||
+                        ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
+                        ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
+                        ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
+                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))
+                    ) {
+                        continue;
+                    }
+
+                    unit.setCurrentHp(Helpers.getValueInRange({
+                        maxValue    : unit.getMaxHp(),
+                        minValue    : minHp,
+                        rawValue    : Math.floor(unit.getCurrentHp() * multiplierPercentage / 100 + deltaValue),
+                    }));
+                    affectedUnits.add(unit);
+
+                    if (!isFastExecute) {
+                        unit.updateView();
+                    }
                 }
             }
         }

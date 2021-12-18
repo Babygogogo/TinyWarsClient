@@ -100,7 +100,6 @@ namespace TwnsWarMapUnitView {
             const normalizedHp  = hp == null ? null : WarCommonHelpers.getNormalizedHp(hp);
             const imgHp         = this._imgHp;
             if ((normalizedHp == null)                                                      ||
-                (normalizedHp <= 0)                                                         ||
                 (normalizedHp >= WarCommonHelpers.getNormalizedHp(this._getUnitTemplateCfg().maxHp))
             ) {
                 imgHp.visible = false;

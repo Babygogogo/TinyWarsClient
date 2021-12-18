@@ -452,6 +452,39 @@ namespace ConfigManager {
         return ((new Set(playerIndexArray)).size === playerIndexArray.length)
             && (playerIndexArray.every(v => checkIsValidPlayerIndex(v, playersCountUnneutral)));
     }
+    export function checkIsValidTeamIndex(teamIndex: number, playersCountUnneutral: number): boolean {
+        return (teamIndex >= CommonConstants.WarNeutralTeamIndex)
+            && (teamIndex <= playersCountUnneutral);
+    }
+    export function checkIsValidTeamIndexSubset(teamIndexArray: number[], playersCountUnneutral: number): boolean {
+        return ((new Set(teamIndexArray)).size === teamIndexArray.length)
+            && (teamIndexArray.every(v => checkIsValidTeamIndex(v, playersCountUnneutral)));
+    }
+    export function checkIsValidGridIndexSubset(gridIndexArray: ProtoTypes.Structure.IGridIndex[], mapSize: Types.MapSize): boolean {
+        const gridIdSet = new Set<number>();
+        for (const g of gridIndexArray) {
+            const gridIndex = GridIndexHelpers.convertGridIndex(g);
+            if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                return false;
+            }
+
+            const gridId = GridIndexHelpers.getGridId(gridIndex, mapSize);
+            if (gridIdSet.has(gridId)) {
+                return false;
+            }
+            gridIdSet.add(gridId);
+        }
+
+        return true;
+    }
+    export function checkIsValidLocationId(locationId: number): boolean {
+        return (locationId >= CommonConstants.MapMinLocationId)
+            && (locationId <= CommonConstants.MapMaxLocationId);
+    }
+    export function checkIsValidLocationIdSubset(locationIdArray: number[]): boolean {
+        return ((new Set(locationIdArray)).size === locationIdArray.length)
+            && (locationIdArray.every(v => checkIsValidLocationId(v)));
+    }
     export function checkIsValidCustomCounterId(customCounterId: number): boolean {
         return (customCounterId >= CommonConstants.WarCustomCounterMinId)
             && (customCounterId <= CommonConstants.WarCustomCounterMaxId);

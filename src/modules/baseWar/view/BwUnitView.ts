@@ -105,7 +105,7 @@ namespace TwnsBwUnitView {
         public updateImageHp(): void {
             const unit          = Helpers.getExisted(this.getUnit());
             const normalizedHp  = unit.getNormalizedCurrentHp();
-            if ((normalizedHp >= unit.getNormalizedMaxHp()) || (normalizedHp <= 0)) {
+            if (normalizedHp >= unit.getNormalizedMaxHp()) {
                 this._imgHp.visible = false;
             } else {
                 this._imgHp.visible = true;

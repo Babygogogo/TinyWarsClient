@@ -4331,6 +4331,18 @@ namespace TwnsLangCommonText {
             `值`,
             `Value`,
         ],
+        [LangTextType.B0804]: [
+            `地图评分`,
+            `Map Rating`,
+        ],
+        [LangTextType.B0805]: [
+            `类型`,
+            `Type`,
+        ],
+        [LangTextType.B0806]: [
+            `设置部队HP`,
+            `Set Units' HP`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5073,6 +5085,22 @@ namespace TwnsLangCommonText {
         [LangTextType.F0113]: [
             `值除以 %s 的余数 %s %s`,
             `the Value mod %s %s %s`,
+        ],
+        [LangTextType.F0114]: [
+            `修改类型为 %s%s 的所有部队的真实HP，公式为：当前值 * %d%% + %d`,
+            `Get all units that is %s%s, then modify their real HP to: current value * %d%% + %d.`,
+        ],
+        [LangTextType.F0115]: [
+            `归属于 %s`,
+            `is owned by %s`,
+        ],
+        [LangTextType.F0116]: [
+            `位于区域 %s`,
+            `is in the location %s`,
+        ],
+        [LangTextType.F0117]: [
+            `坐标为 %s`,
+            `the coordinate is %s`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
