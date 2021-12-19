@@ -770,7 +770,7 @@ namespace Types {
         SetPlayerFund,
         SetPlayerCoEnergy,
 
-        SetUnitHp,
+        SetUnitState,
     }
 
     // eslint-disable-next-line no-shadow

@@ -29,11 +29,12 @@ namespace TwnsWeConditionModifyPanel40 {
     };
     /** WecPlayerIndexInTurnEqualTo */
     export class WeConditionModifyPanel40 extends TwnsUiPanel.UiPanel<OpenData> {
-        private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
-        private readonly _btnType!          : TwnsUiButton.UiButton;
-        private readonly _btnClose!         : TwnsUiButton.UiButton;
-        private readonly _labelDesc!        : TwnsUiLabel.UiLabel;
-        private readonly _labelError!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTitle!                   : TwnsUiLabel.UiLabel;
+        private readonly _btnType!                      : TwnsUiButton.UiButton;
+        private readonly _btnClose!                     : TwnsUiButton.UiButton;
+        private readonly _labelDesc!                    : TwnsUiLabel.UiLabel;
+        private readonly _labelError!                   : TwnsUiLabel.UiLabel;
+        private readonly _imgInnerTouchMask!            : TwnsUiImage.UiImage;
 
         private readonly _btnPlayerIndex!               : TwnsUiButton.UiButton;
         private readonly _labelPlayerIndex!             : TwnsUiLabel.UiLabel;
@@ -45,6 +46,10 @@ namespace TwnsWeConditionModifyPanel40 {
         private readonly _labelLocation!                : TwnsUiLabel.UiLabel;
         private readonly _btnGridIndex!                 : TwnsUiButton.UiButton;
         private readonly _labelGridIndex!               : TwnsUiLabel.UiLabel;
+        private readonly _btnActionState!               : TwnsUiButton.UiButton;
+        private readonly _labelActionState!             : TwnsUiLabel.UiLabel;
+        private readonly _btnHasLoadedCo!               : TwnsUiButton.UiButton;
+        private readonly _labelHasLoadedCo!             : TwnsUiLabel.UiLabel;
         private readonly _btnUnitsCountComparator!      : TwnsUiButton.UiButton;
         private readonly _labelUnitsCountComparator!    : TwnsUiLabel.UiLabel;
         private readonly _labelUnitsCount!              : TwnsUiLabel.UiLabel;
@@ -58,16 +63,23 @@ namespace TwnsWeConditionModifyPanel40 {
             this._setUiListenerArray([
                 { ui: this._btnClose,                   callback: this.close },
                 { ui: this._btnType,                    callback: this._onTouchedBtnType },
+                { ui: this._imgInnerTouchMask,          callback: this._onTouchedImgInnerTouchMask },
                 { ui: this._btnPlayerIndex,             callback: this._onTouchedBtnPlayerIndex },
                 { ui: this._btnTeamIndex,               callback: this._onTouchedBtnTeamIndex },
                 { ui: this._btnUnitType,                callback: this._onTouchedBtnUnitType },
                 { ui: this._btnLocation,                callback: this._onTouchedBtnLocation },
                 { ui: this._btnGridIndex,               callback: this._onTouchedBtnGridIndex },
+                { ui: this._btnActionState,             callback: this._onTouchedBtnActionState },
+                { ui: this._btnHasLoadedCo,             callback: this._onTouchedBtnHasLoadedCo },
                 { ui: this._btnUnitsCountComparator,    callback: this._onTouchedBtnUnitsCountComparator },
+                { ui: this._inputUnitsCount,            callback: this._onFocusInInputUnitsCount,           eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputUnitsCount,            callback: this._onFocusOutInputUnitsCount,          eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
+
+            this._imgInnerTouchMask.touchEnabled = true;
+            this._setInnerTouchMaskEnabled(false);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -89,6 +101,9 @@ namespace TwnsWeConditionModifyPanel40 {
                 condition   : openData.condition,
                 war         : openData.war,
             });
+        }
+        private _onTouchedImgInnerTouchMask(): void {
+            this._setInnerTouchMaskEnabled(false);
         }
         private _onTouchedBtnPlayerIndex(): void {
             const condition = this._getCondition();
@@ -143,10 +158,35 @@ namespace TwnsWeConditionModifyPanel40 {
                 },
             });
         }
+        private _onTouchedBtnActionState(): void {
+            const condition = this._getCondition();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitActionStatePanel, {
+                currentActionStateArray : condition.actionStateArray ?? [],
+                callbackOnConfirm       : actionStateArray => {
+                    condition.actionStateArray = actionStateArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+        private _onTouchedBtnHasLoadedCo(): void {
+            const condition     = this._getCondition();
+            const hasLoadedCo   = condition.hasLoadedCo;
+            if (hasLoadedCo) {
+                condition.hasLoadedCo = false;
+            } else if (hasLoadedCo == false) {
+                condition.hasLoadedCo = null;
+            } else {
+                condition.hasLoadedCo = true;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
         private _onTouchedBtnUnitsCountComparator(): void {
             const condition                 = this._getCondition();
             condition.unitsCountComparator  = Helpers.getNextValueComparator(condition.unitsCountComparator);
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onFocusInInputUnitsCount(): void {
+            this._setInnerTouchMaskEnabled(true);
         }
         private _onFocusOutInputUnitsCount(): void {
             const value = parseInt(this._inputUnitsCount.text);
@@ -167,6 +207,8 @@ namespace TwnsWeConditionModifyPanel40 {
             this._updateLabelUnitType();
             this._updateLabelLocation();
             this._updateLabelGridIndex();
+            this._updateLabelActionState();
+            this._updateLabelHasLoadedCo();
             this._updateLabelUnitsCountComparator();
             this._updateInputUnitsCount();
         }
@@ -182,6 +224,8 @@ namespace TwnsWeConditionModifyPanel40 {
             this._btnGridIndex.label            = Lang.getText(LangTextType.B0531);
             this._btnUnitsCountComparator.label = Lang.getText(LangTextType.B0774);
             this._labelUnitsCount.text          = Lang.getText(LangTextType.B0773);
+            this._btnActionState.label          = Lang.getText(LangTextType.B0526);
+            this._btnHasLoadedCo.label          = Lang.getText(LangTextType.B0421);
             // this._labelGridIndex.text   = Lang.getText(LangTextType.B0531);
 
             this._updateLabelDescAndLabelError();
@@ -216,6 +260,14 @@ namespace TwnsWeConditionModifyPanel40 {
             const gridIndexArray        = this._getCondition().gridIndexArray;
             this._labelGridIndex.text   = gridIndexArray?.length ? gridIndexArray.map(v => `(${v.x},${v.y})`).join(`, `) : Lang.getText(LangTextType.B0776);
         }
+        private _updateLabelActionState(): void {
+            const actionStateArray      = this._getCondition().actionStateArray;
+            this._labelActionState.text = actionStateArray?.length ? actionStateArray.map(v => Lang.getUnitActionStateText(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelHasLoadedCo(): void {
+            const hasLoadedCo           = this._getCondition().hasLoadedCo;
+            this._labelHasLoadedCo.text = hasLoadedCo != null ? (Lang.getText(hasLoadedCo ? LangTextType.B0012 : LangTextType.B0013)) : Lang.getText(LangTextType.B0776);
+        }
         private _updateLabelUnitsCountComparator(): void {
             const comparator                        = Helpers.getExisted(this._getCondition().unitsCountComparator);
             this._labelUnitsCountComparator.text    = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
@@ -226,6 +278,9 @@ namespace TwnsWeConditionModifyPanel40 {
 
         private _getCondition(): ProtoTypes.WarEvent.IWecUnitPresence {
             return Helpers.getExisted(this._getOpenData().condition.WecUnitPresence);
+        }
+        private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
+            this._imgInnerTouchMask.visible = isEnabled;
         }
     }
 }

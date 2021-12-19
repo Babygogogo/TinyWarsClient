@@ -45,6 +45,7 @@
 		"resource/skins/common/CommonChoosePlayerIndexPanel.exml",
 		"resource/skins/common/CommonChooseTeamIndexPanel.exml",
 		"resource/skins/common/CommonChooseTileTypePanel.exml",
+		"resource/skins/common/CommonChooseUnitActionStatePanel.exml",
 		"resource/skins/common/CommonChooseUnitTypePanel.exml",
 		"resource/skins/common/CommonChooseWarEventIdPanel.exml",
 		"resource/skins/common/CommonChooseWeatherTypePanel.exml",

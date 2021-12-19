@@ -425,6 +425,10 @@ namespace ConfigManager {
     export function checkIsValidUnitType(unitType: UnitType): boolean {
         return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.UnitTemplate[unitType] != null;
     }
+    export function checkIsValidUnitTypeSubset(unitTypeArray: UnitType[]): boolean {
+        return ((new Set(unitTypeArray)).size === unitTypeArray.length)
+            && (unitTypeArray.every(v => checkIsValidUnitType(v)));
+    }
     export function checkIsValidCustomCrystalData(data: ProtoTypes.WarSerialization.ITileCustomCrystalData): boolean {
         return (data.radius != null)
             && (data.priority != null)
@@ -543,6 +547,14 @@ namespace ConfigManager {
         return (forceFogCode === Types.ForceFogCode.None)
             || (forceFogCode === Types.ForceFogCode.Fog)
             || (forceFogCode === Types.ForceFogCode.Clear);
+    }
+    export function checkIsValidUnitActionState(actionState: Types.UnitActionState): boolean {
+        return (actionState === Types.UnitActionState.Acted)
+            || (actionState === Types.UnitActionState.Idle);
+    }
+    export function checkIsValidUnitActionStateSubset(actionStateArray: Types.UnitActionState[]): boolean {
+        return ((new Set(actionStateArray)).size === actionStateArray.length)
+            && (actionStateArray.every(v => checkIsValidUnitActionState(v)));
     }
 
     export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {

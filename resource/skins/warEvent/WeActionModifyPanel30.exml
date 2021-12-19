@@ -4,7 +4,7 @@
         xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group height="450" verticalCenter="0" width="800" horizontalCenter="0">
+    <e:Group height="540" verticalCenter="0" width="880" horizontalCenter="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
         <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
@@ -14,8 +14,8 @@
         <TwnsUiButton:UiButton id="_btnClose" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                width="120" right="0" top="0" locked="true" />
         <e:Group y="40" left="10" right="10">
-            <TwnsUiLabel:UiLabel id="_labelDesc" text="创建战局" size="18" textColor="0xFFFFFF" y="0" width="780" x="274" />
-            <TwnsUiLabel:UiLabel id="_labelError" text="创建战局" size="18" textColor="0xFFFFFF" y="0" width="780" x="274" />
+            <TwnsUiLabel:UiLabel id="_labelDesc" text="创建战局" size="16" textColor="0xFFFFFF" y="0" width="860" x="274" />
+            <TwnsUiLabel:UiLabel id="_labelError" text="创建战局" size="16" textColor="0xFFFFFF" y="0" width="860" x="274" />
             <e:layout>
                 <e:VerticalLayout horizontalAlign="center" />
             </e:layout>
@@ -26,7 +26,7 @@
                                        skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
                                        left="0" x="10" y="10" />
                 <TwnsUiLabel:UiLabel id="_labelUnitType" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
-                                     width="650" />
+                                     width="690" />
                 <e:layout>
                     <e:HorizontalLayout verticalAlign="middle" />
                 </e:layout>
@@ -36,7 +36,7 @@
                                        skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
                                        left="0" x="10" y="10" />
                 <TwnsUiLabel:UiLabel id="_labelTeamIndex" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
-                                     width="650" />
+                                     width="690" />
                 <e:layout>
                     <e:HorizontalLayout verticalAlign="middle" />
                 </e:layout>
@@ -46,7 +46,7 @@
                                        skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
                                        left="0" x="10" y="10" />
                 <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
-                                     width="650" />
+                                     width="690" />
                 <e:layout>
                     <e:HorizontalLayout verticalAlign="middle" />
                 </e:layout>
@@ -56,7 +56,7 @@
                                        skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
                                        left="0" x="10" y="10" />
                 <TwnsUiLabel:UiLabel id="_labelLocation" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
-                                     width="650" />
+                                     width="690" />
                 <e:layout>
                     <e:HorizontalLayout verticalAlign="middle" />
                 </e:layout>
@@ -66,38 +66,151 @@
                                        skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
                                        left="0" x="10" y="10" />
                 <TwnsUiLabel:UiLabel id="_labelGridIndex" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
-                                     width="650" />
+                                     width="690" />
                 <e:layout>
                     <e:HorizontalLayout verticalAlign="middle" />
                 </e:layout>
             </e:Group>
-            <e:Group x="0" y="170">
-                <e:Group x="0" y="-72">
-                    <TwnsUiLabel:UiLabel id="_labelMultiplierPercentage" text="FinalValue" size="18"
-                                         textColor="0xFFFFFF" x="0" y="12" />
-                    <TwnsUiTextInput:UiTextInput id="_inputMultiplierPercentage" width="100" x="58" y="0"
-                                                 anchorOffsetX="0" anchorOffsetY="0" maxChars="9" restrict="0-9\\-"
-                                                 skinName="Skins.Component.TextInput.TextInput003" />
+            <e:Group x="0" y="-68">
+                <TwnsUiButton:UiButton id="_btnActionState" label="切换类型"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                       left="0" x="10" y="10" />
+                <TwnsUiLabel:UiLabel id="_labelActionState" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
+                                     width="690" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="0" y="-34">
+                <TwnsUiButton:UiButton id="_btnHasLoadedCo" label="切换类型"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                       left="0" x="10" y="10" />
+                <TwnsUiLabel:UiLabel id="_labelHasLoadedCo" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
+                                     width="690" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="0" y="224">
+                <e:Group x="0" y="-68">
+                    <TwnsUiLabel:UiLabel id="_labelHp" text="FinalValue" size="16" textColor="0xFFFFFF" x="10" y="22"
+                                         width="120" />
+                    <e:Group x="0" y="-72">
+                        <TwnsUiLabel:UiLabel id="_labelHpMultiplierPercentage" text="FinalValue" size="14"
+                                             textColor="0xFFFFFF" x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputHpMultiplierPercentage" width="40" x="58" y="0"
+                                                     anchorOffsetX="0" anchorOffsetY="0" maxChars="9" restrict="0-9\\-"
+                                                     skinName="Skins.Component.TextInput.TextInput003" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="0" y="-36">
+                        <TwnsUiLabel:UiLabel id="_labelHpDeltaValue" text="FinalValue" size="14" textColor="0xFFFFFF"
+                                             x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputHpDeltaValue" width="40" x="58" y="0" anchorOffsetX="0"
+                                                     anchorOffsetY="0" maxChars="9" restrict="0-9\\-"
+                                                     skinName="Skins.Component.TextInput.TextInput003" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        </e:layout>
+                    </e:Group>
                     <e:layout>
-                        <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        <e:HorizontalLayout gap="20" verticalAlign="middle" />
                     </e:layout>
                 </e:Group>
-                <e:Group x="0" y="-36">
-                    <TwnsUiLabel:UiLabel id="_labelDeltaValue" text="FinalValue" size="18" textColor="0xFFFFFF" x="0"
-                                         y="12" />
-                    <TwnsUiTextInput:UiTextInput id="_inputDeltaValue" width="100" x="58" y="0" anchorOffsetX="0"
-                                                 anchorOffsetY="0" maxChars="9" restrict="0-9\\-"
-                                                 skinName="Skins.Component.TextInput.TextInput003" />
+                <e:Group x="0" y="-34">
+                    <TwnsUiLabel:UiLabel id="_labelFuel" text="FinalValue" size="16" textColor="0xFFFFFF" x="10" y="22"
+                                         width="120" />
+                    <e:Group x="0" y="-72">
+                        <TwnsUiLabel:UiLabel id="_labelFuelMultiplierPercentage" text="FinalValue" size="14"
+                                             textColor="0xFFFFFF" x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputFuelMultiplierPercentage" width="40" x="58" y="0"
+                                                     anchorOffsetX="0" anchorOffsetY="0" maxChars="9" restrict="0-9\\-"
+                                                     skinName="Skins.Component.TextInput.TextInput003" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="0" y="-36">
+                        <TwnsUiLabel:UiLabel id="_labelFuelDeltaValue" text="FinalValue" size="14" textColor="0xFFFFFF"
+                                             x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputFuelDeltaValue" width="40" x="58" y="0" anchorOffsetX="0"
+                                                     anchorOffsetY="0" maxChars="9" restrict="0-9\\-"
+                                                     skinName="Skins.Component.TextInput.TextInput003" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        </e:layout>
+                    </e:Group>
                     <e:layout>
-                        <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        <e:HorizontalLayout gap="20" verticalAlign="middle" />
                     </e:layout>
                 </e:Group>
                 <e:layout>
-                    <e:HorizontalLayout gap="60" />
+                    <e:HorizontalLayout gap="30" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="0" y="258">
+                <e:Group x="0" y="-68">
+                    <TwnsUiLabel:UiLabel id="_labelPriAmmo" text="FinalValue" size="16" textColor="0xFFFFFF" x="10"
+                                         y="22" width="120" />
+                    <e:Group x="0" y="-72">
+                        <TwnsUiLabel:UiLabel id="_labelPriAmmoMultiplierPercentage" text="FinalValue" size="14"
+                                             textColor="0xFFFFFF" x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputPriAmmoMultiplierPercentage" width="40" x="58" y="0"
+                                                     anchorOffsetX="0" anchorOffsetY="0" maxChars="9" restrict="0-9\\-"
+                                                     skinName="Skins.Component.TextInput.TextInput003" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="0" y="-36">
+                        <TwnsUiLabel:UiLabel id="_labelPriAmmoDeltaValue" text="FinalValue" size="14"
+                                             textColor="0xFFFFFF" x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputPriAmmoDeltaValue" width="40" x="58" y="0"
+                                                     anchorOffsetX="0" anchorOffsetY="0" maxChars="9" restrict="0-9\\-"
+                                                     skinName="Skins.Component.TextInput.TextInput003" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        </e:layout>
+                    </e:Group>
+                    <e:layout>
+                        <e:HorizontalLayout gap="20" verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
+                <e:Group x="0" y="-34">
+                    <TwnsUiLabel:UiLabel id="_labelPromotion" text="FinalValue" size="16" textColor="0xFFFFFF" x="10"
+                                         y="22" width="120" />
+                    <e:Group x="0" y="-72">
+                        <TwnsUiLabel:UiLabel id="_labelPromotionMultiplierPercentage" text="FinalValue" size="14"
+                                             textColor="0xFFFFFF" x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputPromotionMultiplierPercentage" width="40" x="58" y="0"
+                                                     anchorOffsetX="0" anchorOffsetY="0" maxChars="9" restrict="0-9\\-"
+                                                     skinName="Skins.Component.TextInput.TextInput003" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="0" y="-36">
+                        <TwnsUiLabel:UiLabel id="_labelPromotionDeltaValue" text="FinalValue" size="14"
+                                             textColor="0xFFFFFF" x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputPromotionDeltaValue" width="40" x="58" y="0"
+                                                     anchorOffsetX="0" anchorOffsetY="0" maxChars="9" restrict="0-9\\-"
+                                                     skinName="Skins.Component.TextInput.TextInput003" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                        </e:layout>
+                    </e:Group>
+                    <e:layout>
+                        <e:HorizontalLayout gap="20" verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:HorizontalLayout gap="30" />
                 </e:layout>
             </e:Group>
             <e:layout>
-                <e:VerticalLayout/>
+                <e:VerticalLayout gap="4" />
             </e:layout>
         </e:Group>
         <TwnsUiImage:UiImage id="_imgInnerTouchMask" anchorOffsetX="0" anchorOffsetY="0" left="0" top="0" bottom="0"

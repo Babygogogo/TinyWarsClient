@@ -59,6 +59,7 @@ namespace TwnsPanelConfig {
         CommonChoosePlayerIndexPanel        : PanelConfig<TwnsCommonChoosePlayerIndexPanel.OpenData>;
         CommonChooseTeamIndexPanel          : PanelConfig<TwnsCommonChooseTeamIndexPanel.OpenData>;
         CommonChooseTileTypePanel           : PanelConfig<TwnsCommonChooseTileTypePanel.OpenData>;
+        CommonChooseUnitActionStatePanel    : PanelConfig<TwnsCommonChooseUnitActionStatePanel.OpenData>;
         CommonChooseUnitTypePanel           : PanelConfig<TwnsCommonChooseUnitTypePanel.OpenData>;
         CommonChooseWarEventIdPanel         : PanelConfig<TwnsCommonChooseWarEventIdPanel.OpenData>;
         CommonChooseWeatherTypePanel        : PanelConfig<TwnsCommonChooseWeatherTypePanel.OpenData>;
@@ -520,6 +521,12 @@ namespace TwnsPanelConfig {
             CommonChooseTileTypePanel: {
                 cls         : TwnsCommonChooseTileTypePanel?.CommonChooseTileTypePanel,
                 skinName    : `resource/skins/common/CommonChooseTileTypePanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseUnitActionStatePanel: {
+                cls         : TwnsCommonChooseUnitActionStatePanel?.CommonChooseUnitActionStatePanel,
+                skinName    : `resource/skins/common/CommonChooseUnitActionStatePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

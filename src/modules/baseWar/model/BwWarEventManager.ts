@@ -234,7 +234,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
             else if (action.WeaSetPlayerFund)                   { await this._callActionSetPlayerFundWithExtraData(action.WeaSetPlayerFund, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
-            else if (action.WeaSetUnitHp)                       { await this._callActionSetUnitHpWithExtraData(action.WeaSetUnitHp, isFastExecute); }
+            else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithExtraData(action.WeaSetUnitState, isFastExecute); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -257,7 +257,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
             else if (action.WeaSetPlayerFund)                   { await this._callActionSetPlayerFundWithoutExtraData(action.WeaSetPlayerFund, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
-            else if (action.WeaSetUnitHp)                       { await this._callActionSetUnitHpWithoutExtraData(action.WeaSetUnitHp, isFastExecute); }
+            else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithoutExtraData(action.WeaSetUnitState, isFastExecute); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -676,25 +676,35 @@ namespace TwnsBwWarEventManager {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetUnitHpWithExtraData(action: WarEvent.IWeaSetUnitHp, isFastExecute: boolean): Promise<void> {
+        private async _callActionSetUnitStateWithExtraData(action: WarEvent.IWeaSetUnitState, isFastExecute: boolean): Promise<void> {
             // nothing to do
         }
-        private async _callActionSetUnitHpWithoutExtraData(action: WarEvent.IWeaSetUnitHp, isFastExecute: boolean): Promise<void> {
-            const playerIndexArray      = action.playerIndexArray ?? [];
-            const teamIndexArray        = action.teamIndexArray ?? [];
-            const locationIdArray       = action.locationIdArray ?? [];
-            const gridIndexArray        = action.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
-            const unitTypeArray         = action.unitTypeArray ?? [];
-            const multiplierPercentage  = action.multiplierPercentage ?? 100;
-            const deltaValue            = action.deltaValue ?? 0;
-            const war                   = this._getWar();
-            const unitMap               = war.getUnitMap();
-            const tileMap               = war.getTileMap();
-            const mapSize               = tileMap.getMapSize();
-            const mapWidth              = mapSize.width;
-            const mapHeight             = mapSize.height;
-            const minHp                 = 1;
-            const affectedUnits         = new Set<TwnsBwUnit.BwUnit>();
+        private async _callActionSetUnitStateWithoutExtraData(action: WarEvent.IWeaSetUnitState, isFastExecute: boolean): Promise<void> {
+            const playerIndexArray              = action.playerIndexArray ?? [];
+            const teamIndexArray                = action.teamIndexArray ?? [];
+            const locationIdArray               = action.locationIdArray ?? [];
+            const gridIndexArray                = action.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
+            const unitTypeArray                 = action.unitTypeArray ?? [];
+            const actionStateArray              = action.actionStateArray ?? [];
+            const hasLoadedCo                   = action.hasLoadedCo;
+            const hpDeltaValue                  = action.hpDeltaValue ?? 0;
+            const hpMultiplierPercentage        = action.hpMultiplierPercentage ?? 100;
+            const fuelDeltaValue                = action.fuelDeltaValue ?? 0;
+            const fuelMultiplierPercentage      = action.fuelMultiplierPercentage ?? 100;
+            const priAmmoDeltaValue             = action.priAmmoDeltaValue ?? 0;
+            const priAmmoMultiplierPercentage   = action.priAmmoMultiplierPercentage ?? 100;
+            const promotionDeltaValue           = action.promotionDeltaValue ?? 0;
+            const promotionMultiplierPercentage = action.promotionMultiplierPercentage ?? 100;
+            const war                           = this._getWar();
+            const unitMap                       = war.getUnitMap();
+            const tileMap                       = war.getTileMap();
+            const mapSize                       = tileMap.getMapSize();
+            const mapWidth                      = mapSize.width;
+            const mapHeight                     = mapSize.height;
+            const minHp                         = 1;
+            const minFuel                       = 0;
+            const minPromotion                  = 0;
+            const minPriAmmo                    = 0;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
                     const gridIndex : Types.GridIndex = { x, y };
@@ -705,7 +715,9 @@ namespace TwnsBwWarEventManager {
                         ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
                         ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
                         ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
-                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))
+                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
+                        ((actionStateArray.length) && (actionStateArray.indexOf(unit.getActionState()) < 0))                    ||
+                        ((hasLoadedCo != null) && (unit.getHasLoadedCo() !== hasLoadedCo))
                     ) {
                         continue;
                     }
@@ -713,9 +725,31 @@ namespace TwnsBwWarEventManager {
                     unit.setCurrentHp(Helpers.getValueInRange({
                         maxValue    : unit.getMaxHp(),
                         minValue    : minHp,
-                        rawValue    : Math.floor(unit.getCurrentHp() * multiplierPercentage / 100 + deltaValue),
+                        rawValue    : Math.floor(unit.getCurrentHp() * hpMultiplierPercentage / 100 + hpDeltaValue),
                     }));
-                    affectedUnits.add(unit);
+
+                    unit.setCurrentFuel(Helpers.getValueInRange({
+                        maxValue    : unit.getMaxFuel(),
+                        minValue    : minFuel,
+                        rawValue    : Math.floor(unit.getCurrentFuel() * fuelMultiplierPercentage / 100 + fuelDeltaValue),
+                    }));
+
+                    unit.setCurrentPromotion(Helpers.getValueInRange({
+                        maxValue    : unit.getMaxPromotion(),
+                        minValue    : minPromotion,
+                        rawValue    : Math.floor(unit.getCurrentPromotion() * promotionMultiplierPercentage / 100 + promotionDeltaValue),
+                    }));
+
+                    {
+                        const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
+                        if (currentAmmo != null) {
+                            unit.setPrimaryWeaponCurrentAmmo(Helpers.getValueInRange({
+                                maxValue    : Helpers.getExisted(unit.getPrimaryWeaponMaxAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_01),
+                                minValue    : minPriAmmo,
+                                rawValue    : Math.floor(currentAmmo * priAmmoMultiplierPercentage / 100 + priAmmoDeltaValue),
+                            }));
+                        }
+                    }
 
                     if (!isFastExecute) {
                         unit.updateView();
@@ -1113,6 +1147,8 @@ namespace TwnsBwWarEventManager {
             const locationIdArray       = condition.locationIdArray ?? [];
             const gridIndexArray        = condition.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_00)) ?? [];
             const unitTypeArray         = condition.unitTypeArray ?? [];
+            const actionStateArray      = condition.actionStateArray ?? [];
+            const hasLoadedCo           = condition.hasLoadedCo;
             const war                   = this._getWar();
             const unitMap               = war.getUnitMap();
             const tileMap               = war.getTileMap();
@@ -1130,7 +1166,9 @@ namespace TwnsBwWarEventManager {
                         ((playerIndexArray.length) && (playerIndexArray.indexOf(unit.getPlayerIndex()) < 0))                    ||
                         ((teamIndexArray.length) && (teamIndexArray.indexOf(unit.getTeamIndex()) < 0))                          ||
                         ((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
-                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))
+                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))                  ||
+                        ((actionStateArray.length) && (actionStateArray.indexOf(unit.getActionState()) < 0))                    ||
+                        ((hasLoadedCo != null) && (unit.getHasLoadedCo() !== hasLoadedCo))
                     ) {
                         continue;
                     }

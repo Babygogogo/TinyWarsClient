@@ -34,20 +34,40 @@ namespace TwnsWeActionModifyPanel30 {
         private readonly _labelError!                   : TwnsUiLabel.UiLabel;
         private readonly _imgInnerTouchMask!            : TwnsUiImage.UiImage;
 
-        private readonly _btnPlayerIndex!               : TwnsUiButton.UiButton;
-        private readonly _labelPlayerIndex!             : TwnsUiLabel.UiLabel;
-        private readonly _btnTeamIndex!                 : TwnsUiButton.UiButton;
-        private readonly _labelTeamIndex!               : TwnsUiLabel.UiLabel;
-        private readonly _btnUnitType!                  : TwnsUiButton.UiButton;
-        private readonly _labelUnitType!                : TwnsUiLabel.UiLabel;
-        private readonly _btnLocation!                  : TwnsUiButton.UiButton;
-        private readonly _labelLocation!                : TwnsUiLabel.UiLabel;
-        private readonly _btnGridIndex!                 : TwnsUiButton.UiButton;
-        private readonly _labelGridIndex!               : TwnsUiLabel.UiLabel;
-        private readonly _labelMultiplierPercentage!    : TwnsUiLabel.UiLabel;
-        private readonly _inputMultiplierPercentage!    : TwnsUiTextInput.UiTextInput;
-        private readonly _labelDeltaValue!              : TwnsUiLabel.UiLabel;
-        private readonly _inputDeltaValue!              : TwnsUiTextInput.UiTextInput;
+        private readonly _btnPlayerIndex!                       : TwnsUiButton.UiButton;
+        private readonly _labelPlayerIndex!                     : TwnsUiLabel.UiLabel;
+        private readonly _btnTeamIndex!                         : TwnsUiButton.UiButton;
+        private readonly _labelTeamIndex!                       : TwnsUiLabel.UiLabel;
+        private readonly _btnUnitType!                          : TwnsUiButton.UiButton;
+        private readonly _labelUnitType!                        : TwnsUiLabel.UiLabel;
+        private readonly _btnLocation!                          : TwnsUiButton.UiButton;
+        private readonly _labelLocation!                        : TwnsUiLabel.UiLabel;
+        private readonly _btnGridIndex!                         : TwnsUiButton.UiButton;
+        private readonly _labelGridIndex!                       : TwnsUiLabel.UiLabel;
+        private readonly _btnActionState!                       : TwnsUiButton.UiButton;
+        private readonly _labelActionState!                     : TwnsUiLabel.UiLabel;
+        private readonly _btnHasLoadedCo!                       : TwnsUiButton.UiButton;
+        private readonly _labelHasLoadedCo!                     : TwnsUiLabel.UiLabel;
+        private readonly _labelHp!                              : TwnsUiLabel.UiLabel;
+        private readonly _labelHpMultiplierPercentage!          : TwnsUiLabel.UiLabel;
+        private readonly _inputHpMultiplierPercentage!          : TwnsUiTextInput.UiTextInput;
+        private readonly _labelHpDeltaValue!                    : TwnsUiLabel.UiLabel;
+        private readonly _inputHpDeltaValue!                    : TwnsUiTextInput.UiTextInput;
+        private readonly _labelFuel!                            : TwnsUiLabel.UiLabel;
+        private readonly _labelFuelMultiplierPercentage!        : TwnsUiLabel.UiLabel;
+        private readonly _inputFuelMultiplierPercentage!        : TwnsUiTextInput.UiTextInput;
+        private readonly _labelFuelDeltaValue!                  : TwnsUiLabel.UiLabel;
+        private readonly _inputFuelDeltaValue!                  : TwnsUiTextInput.UiTextInput;
+        private readonly _labelPriAmmo!                         : TwnsUiLabel.UiLabel;
+        private readonly _labelPriAmmoMultiplierPercentage!     : TwnsUiLabel.UiLabel;
+        private readonly _inputPriAmmoMultiplierPercentage!     : TwnsUiTextInput.UiTextInput;
+        private readonly _labelPriAmmoDeltaValue!               : TwnsUiLabel.UiLabel;
+        private readonly _inputPriAmmoDeltaValue!               : TwnsUiTextInput.UiTextInput;
+        private readonly _labelPromotion!                       : TwnsUiLabel.UiLabel;
+        private readonly _labelPromotionMultiplierPercentage!   : TwnsUiLabel.UiLabel;
+        private readonly _inputPromotionMultiplierPercentage!   : TwnsUiTextInput.UiTextInput;
+        private readonly _labelPromotionDeltaValue!             : TwnsUiLabel.UiLabel;
+        private readonly _inputPromotionDeltaValue!             : TwnsUiTextInput.UiTextInput;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -55,18 +75,32 @@ namespace TwnsWeActionModifyPanel30 {
                 { type: NotifyType.WarEventFullDataChanged, callback: this._onNotifyWarEventFullDataChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnClose,                   callback: this.close },
-                { ui: this._btnType,                    callback: this._onTouchedBtnType },
-                { ui: this._imgInnerTouchMask,          callback: this._onTouchedImgInnerTouchMask },
-                { ui: this._btnPlayerIndex,             callback: this._onTouchedBtnPlayerIndex },
-                { ui: this._btnTeamIndex,               callback: this._onTouchedBtnTeamIndex },
-                { ui: this._btnUnitType,                callback: this._onTouchedBtnUnitType },
-                { ui: this._btnLocation,                callback: this._onTouchedBtnLocation },
-                { ui: this._btnGridIndex,               callback: this._onTouchedBtnGridIndex },
-                { ui: this._inputDeltaValue,            callback: this._onFocusInInputDeltaValue,               eventType: egret.FocusEvent.FOCUS_IN },
-                { ui: this._inputDeltaValue,            callback: this._onFocusOutInputDeltaValue,              eventType: egret.FocusEvent.FOCUS_OUT },
-                { ui: this._inputMultiplierPercentage,  callback: this._onFocusInInputMultiplierPercentage,     eventType: egret.FocusEvent.FOCUS_IN },
-                { ui: this._inputMultiplierPercentage,  callback: this._onFocusOutInputMultiplierPercentage,    eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnClose,                           callback: this.close },
+                { ui: this._btnType,                            callback: this._onTouchedBtnType },
+                { ui: this._imgInnerTouchMask,                  callback: this._onTouchedImgInnerTouchMask },
+                { ui: this._btnPlayerIndex,                     callback: this._onTouchedBtnPlayerIndex },
+                { ui: this._btnTeamIndex,                       callback: this._onTouchedBtnTeamIndex },
+                { ui: this._btnUnitType,                        callback: this._onTouchedBtnUnitType },
+                { ui: this._btnLocation,                        callback: this._onTouchedBtnLocation },
+                { ui: this._btnGridIndex,                       callback: this._onTouchedBtnGridIndex },
+                { ui: this._btnActionState,                     callback: this._onTouchedBtnActionState },
+                { ui: this._btnHasLoadedCo,                     callback: this._onTouchedBtnHasLoadedCo },
+                { ui: this._inputHpDeltaValue,                  callback: this._onFocusInInputHpDeltaValue,                     eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputHpDeltaValue,                  callback: this._onFocusOutInputHpDeltaValue,                    eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputHpMultiplierPercentage,        callback: this._onFocusInInputHpMultiplierPercentage,           eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputHpMultiplierPercentage,        callback: this._onFocusOutInputHpMultiplierPercentage,          eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputFuelDeltaValue,                callback: this._onFocusInInputFuelDeltaValue,                   eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputFuelDeltaValue,                callback: this._onFocusOutInputFuelDeltaValue,                  eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputFuelMultiplierPercentage,      callback: this._onFocusInInputFuelMultiplierPercentage,         eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputFuelMultiplierPercentage,      callback: this._onFocusOutInputFuelMultiplierPercentage,        eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputPriAmmoDeltaValue,             callback: this._onFocusInInputPriAmmoDeltaValue,                eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputPriAmmoDeltaValue,             callback: this._onFocusOutInputPriAmmoDeltaValue,               eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputPriAmmoMultiplierPercentage,   callback: this._onFocusInInputPriAmmoMultiplierPercentage,      eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputPriAmmoMultiplierPercentage,   callback: this._onFocusOutInputPriAmmoMultiplierPercentage,     eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputPromotionDeltaValue,           callback: this._onFocusInInputPromotionDeltaValue,              eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputPromotionDeltaValue,           callback: this._onFocusOutInputPromotionDeltaValue,             eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputPromotionMultiplierPercentage, callback: this._onFocusInInputPromotionMultiplierPercentage,    eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputPromotionMultiplierPercentage, callback: this._onFocusOutInputPromotionMultiplierPercentage,   eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
@@ -151,19 +185,41 @@ namespace TwnsWeActionModifyPanel30 {
                 },
             });
         }
+        private _onTouchedBtnActionState(): void {
+            const condition = this._getAction();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitActionStatePanel, {
+                currentActionStateArray : condition.actionStateArray ?? [],
+                callbackOnConfirm       : actionStateArray => {
+                    condition.actionStateArray = actionStateArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+        private _onTouchedBtnHasLoadedCo(): void {
+            const condition     = this._getAction();
+            const hasLoadedCo   = condition.hasLoadedCo;
+            if (hasLoadedCo) {
+                condition.hasLoadedCo = false;
+            } else if (hasLoadedCo == false) {
+                condition.hasLoadedCo = null;
+            } else {
+                condition.hasLoadedCo = true;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
 
-        private _onFocusInInputDeltaValue(): void {
+        private _onFocusInInputHpDeltaValue(): void {
             this._setInnerTouchMaskEnabled(true);
         }
-        private _onFocusOutInputDeltaValue(): void {
+        private _onFocusOutInputHpDeltaValue(): void {
             const action    = this._getAction();
-            const text      = this._inputDeltaValue.text;
+            const text      = this._inputHpDeltaValue.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.deltaValue = null;
+                action.hpDeltaValue = null;
             } else {
                 const maxValue      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
-                action.deltaValue   = Math.min(
+                action.hpDeltaValue = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -171,18 +227,132 @@ namespace TwnsWeActionModifyPanel30 {
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
-        private _onFocusInInputMultiplierPercentage(): void {
+        private _onFocusInInputHpMultiplierPercentage(): void {
             this._setInnerTouchMaskEnabled(true);
         }
-        private _onFocusOutInputMultiplierPercentage(): void {
+        private _onFocusOutInputHpMultiplierPercentage(): void {
             const action    = this._getAction();
-            const text      = this._inputMultiplierPercentage.text;
+            const text      = this._inputHpMultiplierPercentage.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.multiplierPercentage = null;
+                action.hpMultiplierPercentage = null;
             } else {
-                const maxValue              = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
-                action.multiplierPercentage = Math.min(
+                const maxValue                  = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                action.hpMultiplierPercentage   = Math.min(
+                    maxValue,
+                    Math.max(-maxValue, rawValue)
+                );
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onFocusInInputFuelDeltaValue(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputFuelDeltaValue(): void {
+            const action    = this._getAction();
+            const text      = this._inputFuelDeltaValue.text;
+            const rawValue  = text ? parseInt(text) : null;
+            if ((rawValue == null) || (isNaN(rawValue))) {
+                action.fuelDeltaValue = null;
+            } else {
+                const maxValue      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                action.fuelDeltaValue = Math.min(
+                    maxValue,
+                    Math.max(-maxValue, rawValue)
+                );
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onFocusInInputFuelMultiplierPercentage(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputFuelMultiplierPercentage(): void {
+            const action    = this._getAction();
+            const text      = this._inputFuelMultiplierPercentage.text;
+            const rawValue  = text ? parseInt(text) : null;
+            if ((rawValue == null) || (isNaN(rawValue))) {
+                action.fuelMultiplierPercentage = null;
+            } else {
+                const maxValue                  = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                action.fuelMultiplierPercentage   = Math.min(
+                    maxValue,
+                    Math.max(-maxValue, rawValue)
+                );
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onFocusInInputPriAmmoDeltaValue(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputPriAmmoDeltaValue(): void {
+            const action    = this._getAction();
+            const text      = this._inputPriAmmoDeltaValue.text;
+            const rawValue  = text ? parseInt(text) : null;
+            if ((rawValue == null) || (isNaN(rawValue))) {
+                action.priAmmoDeltaValue = null;
+            } else {
+                const maxValue      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                action.priAmmoDeltaValue = Math.min(
+                    maxValue,
+                    Math.max(-maxValue, rawValue)
+                );
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onFocusInInputPriAmmoMultiplierPercentage(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputPriAmmoMultiplierPercentage(): void {
+            const action    = this._getAction();
+            const text      = this._inputPriAmmoMultiplierPercentage.text;
+            const rawValue  = text ? parseInt(text) : null;
+            if ((rawValue == null) || (isNaN(rawValue))) {
+                action.priAmmoMultiplierPercentage = null;
+            } else {
+                const maxValue                  = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                action.priAmmoMultiplierPercentage   = Math.min(
+                    maxValue,
+                    Math.max(-maxValue, rawValue)
+                );
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onFocusInInputPromotionDeltaValue(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputPromotionDeltaValue(): void {
+            const action    = this._getAction();
+            const text      = this._inputPromotionDeltaValue.text;
+            const rawValue  = text ? parseInt(text) : null;
+            if ((rawValue == null) || (isNaN(rawValue))) {
+                action.promotionDeltaValue = null;
+            } else {
+                const maxValue      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                action.promotionDeltaValue = Math.min(
+                    maxValue,
+                    Math.max(-maxValue, rawValue)
+                );
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onFocusInInputPromotionMultiplierPercentage(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputPromotionMultiplierPercentage(): void {
+            const action    = this._getAction();
+            const text      = this._inputPromotionMultiplierPercentage.text;
+            const rawValue  = text ? parseInt(text) : null;
+            if ((rawValue == null) || (isNaN(rawValue))) {
+                action.promotionMultiplierPercentage = null;
+            } else {
+                const maxValue                  = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                action.promotionMultiplierPercentage   = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -199,21 +369,41 @@ namespace TwnsWeActionModifyPanel30 {
             this._updateLabelUnitType();
             this._updateLabelLocation();
             this._updateLabelGridIndex();
-            this._updateInputDeltaValue();
-            this._updateInputMultiplierPercentage();
+            this._updateLabelActionState();
+            this._updateLabelHasLoadedCo();
+            this._updateInputHpDeltaValue();
+            this._updateInputHpMultiplierPercentage();
+            this._updateInputFuelDeltaValue();
+            this._updateInputFuelMultiplierPercentage();
+            this._updateInputPriAmmoDeltaValue();
+            this._updateInputPriAmmoMultiplierPercentage();
+            this._updateInputPromotionDeltaValue();
+            this._updateInputPromotionMultiplierPercentage();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text                   = `${Lang.getText(LangTextType.B0501)} A${this._getOpenData().action.WeaCommonData?.actionId}`;
-            this._btnClose.label                    = Lang.getText(LangTextType.B0146);
-            this._btnType.label                     = Lang.getText(LangTextType.B0516);
-            this._btnPlayerIndex.label              = Lang.getText(LangTextType.B0031);
-            this._btnTeamIndex.label                = Lang.getText(LangTextType.B0377);
-            this._btnUnitType.label                 = Lang.getText(LangTextType.B0525);
-            this._btnLocation.label                 = Lang.getText(LangTextType.B0764);
-            this._btnGridIndex.label                = Lang.getText(LangTextType.B0531);
-            this._labelDeltaValue.text              = Lang.getText(LangTextType.B0754);
-            this._labelMultiplierPercentage.text    = `${Lang.getText(LangTextType.B0755)}%`;
+            this._labelTitle.text                           = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData?.actionId}`;
+            this._btnClose.label                            = Lang.getText(LangTextType.B0146);
+            this._btnType.label                             = Lang.getText(LangTextType.B0516);
+            this._btnPlayerIndex.label                      = Lang.getText(LangTextType.B0031);
+            this._btnTeamIndex.label                        = Lang.getText(LangTextType.B0377);
+            this._btnUnitType.label                         = Lang.getText(LangTextType.B0525);
+            this._btnLocation.label                         = Lang.getText(LangTextType.B0764);
+            this._btnGridIndex.label                        = Lang.getText(LangTextType.B0531);
+            this._btnActionState.label                      = Lang.getText(LangTextType.B0526);
+            this._btnHasLoadedCo.label                      = Lang.getText(LangTextType.B0421);
+            this._labelHp.text                              = Lang.getText(LangTextType.B0807);
+            this._labelHpDeltaValue.text                    = Lang.getText(LangTextType.B0754);
+            this._labelHpMultiplierPercentage.text          = `${Lang.getText(LangTextType.B0755)}%`;
+            this._labelFuel.text                            = Lang.getText(LangTextType.B0342);
+            this._labelFuelDeltaValue.text                  = Lang.getText(LangTextType.B0754);
+            this._labelFuelMultiplierPercentage.text        = `${Lang.getText(LangTextType.B0755)}%`;
+            this._labelPriAmmo.text                         = Lang.getText(LangTextType.B0350);
+            this._labelPriAmmoDeltaValue.text               = Lang.getText(LangTextType.B0754);
+            this._labelPriAmmoMultiplierPercentage.text     = `${Lang.getText(LangTextType.B0755)}%`;
+            this._labelPromotion.text                       = Lang.getText(LangTextType.B0370);
+            this._labelPromotionDeltaValue.text             = Lang.getText(LangTextType.B0754);
+            this._labelPromotionMultiplierPercentage.text   = `${Lang.getText(LangTextType.B0755)}%`;
             // this._labelGridIndex.text   = Lang.getText(LangTextType.B0531);
 
             this._updateLabelDescAndLabelError();
@@ -248,17 +438,49 @@ namespace TwnsWeActionModifyPanel30 {
             const gridIndexArray        = this._getAction().gridIndexArray;
             this._labelGridIndex.text   = gridIndexArray?.length ? gridIndexArray.map(v => `(${v.x},${v.y})`).join(`, `) : Lang.getText(LangTextType.B0776);
         }
-        private _updateInputDeltaValue(): void {
-            const value                 = this._getAction().deltaValue;
-            this._inputDeltaValue.text  = `${value == null ? `` : value}`;
+        private _updateLabelActionState(): void {
+            const actionStateArray      = this._getAction().actionStateArray;
+            this._labelActionState.text = actionStateArray?.length ? actionStateArray.map(v => Lang.getUnitActionStateText(v)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
-        private _updateInputMultiplierPercentage(): void {
-            const value                             = this._getAction().multiplierPercentage;
-            this._inputMultiplierPercentage.text    = `${value == null ? `` : value}`;
+        private _updateLabelHasLoadedCo(): void {
+            const hasLoadedCo           = this._getAction().hasLoadedCo;
+            this._labelHasLoadedCo.text = hasLoadedCo != null ? (Lang.getText(hasLoadedCo ? LangTextType.B0012 : LangTextType.B0013)) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateInputHpDeltaValue(): void {
+            const value                     = this._getAction().hpDeltaValue;
+            this._inputHpDeltaValue.text    = `${value == null ? `` : value}`;
+        }
+        private _updateInputHpMultiplierPercentage(): void {
+            const value                             = this._getAction().hpMultiplierPercentage;
+            this._inputHpMultiplierPercentage.text  = `${value == null ? `` : value}`;
+        }
+        private _updateInputFuelDeltaValue(): void {
+            const value                     = this._getAction().fuelDeltaValue;
+            this._inputFuelDeltaValue.text  = `${value == null ? `` : value}`;
+        }
+        private _updateInputFuelMultiplierPercentage(): void {
+            const value                                 = this._getAction().fuelMultiplierPercentage;
+            this._inputFuelMultiplierPercentage.text    = `${value == null ? `` : value}`;
+        }
+        private _updateInputPriAmmoDeltaValue(): void {
+            const value                         = this._getAction().priAmmoDeltaValue;
+            this._inputPriAmmoDeltaValue.text   = `${value == null ? `` : value}`;
+        }
+        private _updateInputPriAmmoMultiplierPercentage(): void {
+            const value                                 = this._getAction().priAmmoMultiplierPercentage;
+            this._inputPriAmmoMultiplierPercentage.text = `${value == null ? `` : value}`;
+        }
+        private _updateInputPromotionDeltaValue(): void {
+            const value                         = this._getAction().promotionDeltaValue;
+            this._inputPromotionDeltaValue.text = `${value == null ? `` : value}`;
+        }
+        private _updateInputPromotionMultiplierPercentage(): void {
+            const value                                     = this._getAction().promotionMultiplierPercentage;
+            this._inputPromotionMultiplierPercentage.text   = `${value == null ? `` : value}`;
         }
 
-        private _getAction(): ProtoTypes.WarEvent.IWeaSetUnitHp {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetUnitHp);
+        private _getAction(): ProtoTypes.WarEvent.IWeaSetUnitState {
+            return Helpers.getExisted(this._getOpenData().action.WeaSetUnitState);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

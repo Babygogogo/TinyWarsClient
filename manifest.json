@@ -86,6 +86,7 @@
 		"bin-debug/modules/mapEditor/model/MeWar.js",
 		"bin-debug/modules/tools/ui/UiTabItemRenderer.js",
 		"bin-debug/modules/multiFreeWar/model/MfwWar.js",
+		"bin-debug/modules/common/view/CommonChooseUnitTypePanel.js",
 		"bin-debug/modules/common/view/CommonChooseWarEventIdPanel.js",
 		"bin-debug/modules/common/view/CommonChooseWeatherTypePanel.js",
 		"bin-debug/modules/common/view/CommonCoInfoPanel.js",
@@ -213,8 +214,8 @@
 		"bin-debug/modules/multiFreeRoom/view/MfrRoomInfoPanel.js",
 		"bin-debug/modules/baseWar/view/BwUnitActionsPanel.js",
 		"bin-debug/modules/multiFreeWar/view/MfwMyWarListPanel.js",
-		"bin-debug/modules/multiPlayerWar/model/MpwActionPlanner.js",
 		"bin-debug/modules/baseWar/view/BwUnitBriefPanel.js",
+		"bin-debug/modules/multiPlayerWar/model/MpwField.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwFogMap.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwModel.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwPlayerManager.js",
@@ -324,7 +325,7 @@
 		"bin-debug/modules/tools/ui/UiScrollList.js",
 		"bin-debug/modules/tools/ui/UiTab.js",
 		"bin-debug/modules/common/view/CommonChooseTileTypePanel.js",
-		"bin-debug/modules/common/view/CommonChooseUnitTypePanel.js",
+		"bin-debug/modules/common/view/CommonChooseUnitActionStatePanel.js",
 		"bin-debug/modules/tools/ui/UiTextInput.js",
 		"bin-debug/modules/tools/ui/UiZoomableComponent.js",
 		"bin-debug/modules/tools/ui/UiZoomableMap.js",
@@ -414,6 +415,6 @@
 		"bin-debug/modules/watchWar/view/WwMakeRequestDetailPanel.js",
 		"bin-debug/modules/watchWar/view/WwMakeRequestWarsPanel.js",
 		"bin-debug/modules/watchWar/view/WwOngoingWarsPanel.js",
-		"bin-debug/modules/multiPlayerWar/model/MpwField.js"
+		"bin-debug/modules/multiPlayerWar/model/MpwActionPlanner.js"
 	]
 }

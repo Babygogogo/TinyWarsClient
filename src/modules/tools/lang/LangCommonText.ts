@@ -1127,6 +1127,14 @@ namespace TwnsLangCommonText {
             `该地块已有部队占据，不能绘制可攻击的地形`,
             `Can't draw an attackable terrain on a tile that occupied by a unit.`,
         ],
+        [LangTextType.A0270]: [
+            `已搭载CO`,
+            `the CO is onboard`,
+        ],
+        [LangTextType.A0271]: [
+            `未搭载CO`,
+            `the CO is Not onboard`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2589,7 +2597,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0368]: [
             `已行动`,
-            `Waiting`,
+            `Waited`,
         ],
         [LangTextType.B0369]: [
             `空闲`,
@@ -2801,7 +2809,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0421]: [
             `已搭载CO`,
-            `CO on board`,
+            `CO onboard`,
         ],
         [LangTextType.B0422]: [
             `战斗`,
@@ -4340,8 +4348,12 @@ namespace TwnsLangCommonText {
             `Type`,
         ],
         [LangTextType.B0806]: [
-            `设置部队HP`,
-            `Set Units' HP`,
+            `设置部队状态`,
+            `Set Units' State`,
+        ],
+        [LangTextType.B0807]: [
+            `真实HP`,
+            `Real HP`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4991,8 +5003,8 @@ namespace TwnsLangCommonText {
             `Assume the player's current CO energy is 40%%, then the energy will become %d%% after this action is executed.`,
         ],
         [LangTextType.F0090]: [
-            `类型为 %s、且位于 %s、且归属于 %s 的部队的数量 %s %s`,
-            `The number of %s at %s that owned by %s is %s %s.`,
+            `类型为 %s%s 的部队的数量 %s %s`,
+            `Get all units that is %s%s. The number of the units %s %s.`,
         ],
         [LangTextType.F0091]: [
             `%s无效`,
@@ -5087,8 +5099,8 @@ namespace TwnsLangCommonText {
             `the Value mod %s %s %s`,
         ],
         [LangTextType.F0114]: [
-            `修改类型为 %s%s 的所有部队的真实HP，公式为：当前值 * %d%% + %d`,
-            `Get all units that is %s%s, then modify their real HP to: current value * %d%% + %d.`,
+            `修改类型为 %s%s 的所有部队的属性。`,
+            `Get all units that is %s%s, then modify their states.`,
         ],
         [LangTextType.F0115]: [
             `归属于 %s`,
@@ -5101,6 +5113,14 @@ namespace TwnsLangCommonText {
         [LangTextType.F0117]: [
             `坐标为 %s`,
             `the coordinate is %s`,
+        ],
+        [LangTextType.F0118]: [
+            `行动状态为 %s`,
+            `the action state is %s`,
+        ],
+        [LangTextType.F0119]: [
+            `%s: 当前值 * %d%% + %d。`,
+            `%s: current value * %d%% + %d.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
