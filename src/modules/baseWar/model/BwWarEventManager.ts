@@ -687,6 +687,15 @@ namespace TwnsBwWarEventManager {
             const unitTypeArray                 = action.unitTypeArray ?? [];
             const actionStateArray              = action.actionStateArray ?? [];
             const hasLoadedCo                   = action.hasLoadedCo;
+            const conHp                         = action.conHp;
+            const conHpComparator               = action.conHpComparator ?? Types.ValueComparator.EqualTo;
+            const conFuelPct                    = action.conFuelPct;
+            const conFuelPctComparator          = action.conFuelPctComparator ?? Types.ValueComparator.EqualTo;
+            const conPriAmmoPct                 = action.conPriAmmoPct;
+            const conPriAmmoPctComparator       = action.conPriAmmoPctComparator ?? Types.ValueComparator.EqualTo;
+            const conPromotion                  = action.conPromotion;
+            const conPromotionComparator        = action.conPromotionComparator ?? Types.ValueComparator.EqualTo;
+            const destroyUnit                   = action.destroyUnit;
             const hpDeltaValue                  = action.hpDeltaValue ?? 0;
             const hpMultiplierPercentage        = action.hpMultiplierPercentage ?? 100;
             const fuelDeltaValue                = action.fuelDeltaValue ?? 0;
@@ -722,37 +731,85 @@ namespace TwnsBwWarEventManager {
                         continue;
                     }
 
-                    unit.setCurrentHp(Helpers.getValueInRange({
-                        maxValue    : unit.getMaxHp(),
-                        minValue    : minHp,
-                        rawValue    : Math.floor(unit.getCurrentHp() * hpMultiplierPercentage / 100 + hpDeltaValue),
-                    }));
+                    if ((conHp != null)                         &&
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : conHpComparator,
+                            targetValue : conHp,
+                            actualValue : unit.getCurrentHp(),
+                        }))
+                    ) {
+                        continue;
+                    }
 
-                    unit.setCurrentFuel(Helpers.getValueInRange({
-                        maxValue    : unit.getMaxFuel(),
-                        minValue    : minFuel,
-                        rawValue    : Math.floor(unit.getCurrentFuel() * fuelMultiplierPercentage / 100 + fuelDeltaValue),
-                    }));
+                    if ((conPromotion != null)                  &&
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : conPromotionComparator,
+                            targetValue : conPromotion,
+                            actualValue : unit.getCurrentPromotion(),
+                        }))
+                    ) {
+                        continue;
+                    }
 
-                    unit.setCurrentPromotion(Helpers.getValueInRange({
-                        maxValue    : unit.getMaxPromotion(),
-                        minValue    : minPromotion,
-                        rawValue    : Math.floor(unit.getCurrentPromotion() * promotionMultiplierPercentage / 100 + promotionDeltaValue),
-                    }));
+                    if ((conFuelPct != null)                    &&
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : conFuelPctComparator,
+                            targetValue : conFuelPct * 100,
+                            actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
+                        }))
+                    ) {
+                        continue;
+                    }
 
-                    {
-                        const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
-                        if (currentAmmo != null) {
-                            unit.setPrimaryWeaponCurrentAmmo(Helpers.getValueInRange({
-                                maxValue    : Helpers.getExisted(unit.getPrimaryWeaponMaxAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_01),
-                                minValue    : minPriAmmo,
-                                rawValue    : Math.floor(currentAmmo * priAmmoMultiplierPercentage / 100 + priAmmoDeltaValue),
-                            }));
+                    if (conPriAmmoPct != null) {
+                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                        if ((maxAmmo == null)                       ||
+                            (!Helpers.checkIsMeetValueComparator({
+                                comparator  : conPriAmmoPctComparator,
+                                targetValue : conPriAmmoPct * 100,
+                                actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_01) * 100 / maxAmmo,
+                            }))
+                        ) {
+                            continue;
                         }
                     }
 
-                    if (!isFastExecute) {
-                        unit.updateView();
+                    if (destroyUnit) {
+                        WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
+
+                    } else {
+                        unit.setCurrentHp(Helpers.getValueInRange({
+                            maxValue    : unit.getMaxHp(),
+                            minValue    : minHp,
+                            rawValue    : Math.floor(unit.getCurrentHp() * hpMultiplierPercentage / 100 + hpDeltaValue),
+                        }));
+
+                        unit.setCurrentFuel(Helpers.getValueInRange({
+                            maxValue    : unit.getMaxFuel(),
+                            minValue    : minFuel,
+                            rawValue    : Math.floor(unit.getCurrentFuel() * fuelMultiplierPercentage / 100 + fuelDeltaValue),
+                        }));
+
+                        unit.setCurrentPromotion(Helpers.getValueInRange({
+                            maxValue    : unit.getMaxPromotion(),
+                            minValue    : minPromotion,
+                            rawValue    : Math.floor(unit.getCurrentPromotion() * promotionMultiplierPercentage / 100 + promotionDeltaValue),
+                        }));
+
+                        {
+                            const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
+                            if (currentAmmo != null) {
+                                unit.setPrimaryWeaponCurrentAmmo(Helpers.getValueInRange({
+                                    maxValue    : Helpers.getExisted(unit.getPrimaryWeaponMaxAmmo(), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_02),
+                                    minValue    : minPriAmmo,
+                                    rawValue    : Math.floor(currentAmmo * priAmmoMultiplierPercentage / 100 + priAmmoDeltaValue),
+                                }));
+                            }
+                        }
+
+                        if (!isFastExecute) {
+                            unit.updateView();
+                        }
                     }
                 }
             }
@@ -1149,6 +1206,14 @@ namespace TwnsBwWarEventManager {
             const unitTypeArray         = condition.unitTypeArray ?? [];
             const actionStateArray      = condition.actionStateArray ?? [];
             const hasLoadedCo           = condition.hasLoadedCo;
+            const hp                    = condition.hp;
+            const hpComparator          = condition.hpComparator ?? Types.ValueComparator.EqualTo;
+            const fuelPct               = condition.fuelPct;
+            const fuelPctComparator     = condition.fuelPctComparator ?? Types.ValueComparator.EqualTo;
+            const priAmmoPct            = condition.priAmmoPct;
+            const priAmmoPctComparator  = condition.priAmmoPctComparator ?? Types.ValueComparator.EqualTo;
+            const promotion             = condition.promotion;
+            const promotionComparator   = condition.promotionComparator ?? Types.ValueComparator.EqualTo;
             const war                   = this._getWar();
             const unitMap               = war.getUnitMap();
             const tileMap               = war.getTileMap();
@@ -1173,14 +1238,57 @@ namespace TwnsBwWarEventManager {
                         continue;
                     }
 
+                    if ((hp != null)                            &&
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : hpComparator,
+                            targetValue : hp,
+                            actualValue : unit.getCurrentHp(),
+                        }))
+                    ) {
+                        continue;
+                    }
+
+                    if ((promotion != null)                     &&
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : promotionComparator,
+                            targetValue : promotion,
+                            actualValue : unit.getCurrentPromotion(),
+                        }))
+                    ) {
+                        continue;
+                    }
+
+                    if ((fuelPct != null)                       &&
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : fuelPctComparator,
+                            targetValue : fuelPct * 100,
+                            actualValue : unit.getCurrentFuel() * 100 / unit.getMaxFuel(),
+                        }))
+                    ) {
+                        continue;
+                    }
+
+                    if (priAmmoPct != null) {
+                        const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                        if ((maxAmmo == null)   ||
+                            (!Helpers.checkIsMeetValueComparator({
+                                comparator  : priAmmoPctComparator,
+                                targetValue : priAmmoPct * 100,
+                                actualValue : Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01) * 100 / maxAmmo
+                            }))
+                        ) {
+                            continue;
+                        }
+                    }
+
                     ++unitsCount;
                 }
             }
 
             return Helpers.checkIsMeetValueComparator({
-                comparator  : Helpers.getExisted(condition.unitsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_01),
+                comparator  : Helpers.getExisted(condition.unitsCountComparator, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_02),
                 actualValue : unitsCount,
-                targetValue : Helpers.getExisted(condition.unitsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_02)
+                targetValue : Helpers.getExisted(condition.unitsCount, ClientErrorCode.BwWarEventManager_CheckIsMeetConUnitPresence_03),
             });
         }
 

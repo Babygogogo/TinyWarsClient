@@ -37,6 +37,7 @@ namespace TwnsMeMapTagPanel {
                 { ui: this._groupFog,       callback: this._onTouchedGroupMcw },
             ]);
             this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();

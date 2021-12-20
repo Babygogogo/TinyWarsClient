@@ -4355,6 +4355,10 @@ namespace TwnsLangCommonText {
             `真实HP`,
             `Real HP`,
         ],
+        [LangTextType.B0808]: [
+            `摧毁`,
+            `Destroy`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5121,6 +5125,26 @@ namespace TwnsLangCommonText {
         [LangTextType.F0119]: [
             `%s: 当前值 * %d%% + %d。`,
             `%s: current value * %d%% + %d.`,
+        ],
+        [LangTextType.F0120]: [
+            `真实HP %s %s`,
+            `the real HP %s %s`,
+        ],
+        [LangTextType.F0121]: [
+            `燃料%% %s %s`,
+            `the fuel%% %s %s`,
+        ],
+        [LangTextType.F0122]: [
+            `主武器弹药%% %s %s`,
+            `the primary weapon ammo%% %s %s`,
+        ],
+        [LangTextType.F0123]: [
+            `晋升等级 %s %s`,
+            `the promotion %s %s`,
+        ],
+        [LangTextType.F0124]: [
+            `找到类型为 %s%s 的所有部队，并摧毁它们。`,
+            `Get all units that is %s%s, then destroy them all.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

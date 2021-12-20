@@ -420,7 +420,7 @@ namespace TwnsMcrMyRoomListPanel {
             const settingsForMcw    = (await McrModel.getRoomInfo(roomId))?.settingsForMcw;
             this._labelName.text    = (settingsForMcw == null)
                 ? ``
-                : settingsForMcw.warName ?? await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                : (settingsForMcw.warName || (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)))) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _onNotifyMcrJoinedPreviewingRoomIdChanged(): void {

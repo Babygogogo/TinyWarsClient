@@ -50,6 +50,22 @@ namespace TwnsWeConditionModifyPanel40 {
         private readonly _labelActionState!             : TwnsUiLabel.UiLabel;
         private readonly _btnHasLoadedCo!               : TwnsUiButton.UiButton;
         private readonly _labelHasLoadedCo!             : TwnsUiLabel.UiLabel;
+        private readonly _btnHpComparator!              : TwnsUiButton.UiButton;
+        private readonly _labelHpComparator!            : TwnsUiLabel.UiLabel;
+        private readonly _labelHp!                      : TwnsUiLabel.UiLabel;
+        private readonly _inputHp!                      : TwnsUiTextInput.UiTextInput;
+        private readonly _btnFuelPctComparator!         : TwnsUiButton.UiButton;
+        private readonly _labelFuelPctComparator!       : TwnsUiLabel.UiLabel;
+        private readonly _labelFuelPct!                 : TwnsUiLabel.UiLabel;
+        private readonly _inputFuelPct!                 : TwnsUiTextInput.UiTextInput;
+        private readonly _btnPriAmmoPctComparator!      : TwnsUiButton.UiButton;
+        private readonly _labelPriAmmoPctComparator!    : TwnsUiLabel.UiLabel;
+        private readonly _labelPriAmmoPct!              : TwnsUiLabel.UiLabel;
+        private readonly _inputPriAmmoPct!              : TwnsUiTextInput.UiTextInput;
+        private readonly _btnPromotionComparator!       : TwnsUiButton.UiButton;
+        private readonly _labelPromotionComparator!     : TwnsUiLabel.UiLabel;
+        private readonly _labelPromotion!               : TwnsUiLabel.UiLabel;
+        private readonly _inputPromotion!               : TwnsUiTextInput.UiTextInput;
         private readonly _btnUnitsCountComparator!      : TwnsUiButton.UiButton;
         private readonly _labelUnitsCountComparator!    : TwnsUiLabel.UiLabel;
         private readonly _labelUnitsCount!              : TwnsUiLabel.UiLabel;
@@ -71,6 +87,18 @@ namespace TwnsWeConditionModifyPanel40 {
                 { ui: this._btnGridIndex,               callback: this._onTouchedBtnGridIndex },
                 { ui: this._btnActionState,             callback: this._onTouchedBtnActionState },
                 { ui: this._btnHasLoadedCo,             callback: this._onTouchedBtnHasLoadedCo },
+                { ui: this._btnHpComparator,            callback: this._onTouchedBtnHpComparator },
+                { ui: this._inputHp,                    callback: this._onFocusInInputHp,                   eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputHp,                    callback: this._onFocusOutInputHp,                  eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnFuelPctComparator,       callback: this._onTouchedBtnFuelPctComparator },
+                { ui: this._inputFuelPct,               callback: this._onFocusInInputFuelPct,              eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputFuelPct,               callback: this._onFocusOutInputFuelPct,             eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnPriAmmoPctComparator,    callback: this._onTouchedBtnPriAmmoPctComparator },
+                { ui: this._inputPriAmmoPct,            callback: this._onFocusInInputPriAmmoPct,           eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputPriAmmoPct,            callback: this._onFocusOutInputPriAmmoPct,          eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnPromotionComparator,     callback: this._onTouchedBtnPromotionComparator },
+                { ui: this._inputPromotion,             callback: this._onFocusInInputPromotion,            eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputPromotion,             callback: this._onFocusOutInputPromotion,           eventType: egret.FocusEvent.FOCUS_OUT },
                 { ui: this._btnUnitsCountComparator,    callback: this._onTouchedBtnUnitsCountComparator },
                 { ui: this._inputUnitsCount,            callback: this._onFocusInInputUnitsCount,           eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputUnitsCount,            callback: this._onFocusOutInputUnitsCount,          eventType: egret.FocusEvent.FOCUS_OUT },
@@ -180,6 +208,78 @@ namespace TwnsWeConditionModifyPanel40 {
             }
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
+        private _onTouchedBtnHpComparator(): void {
+            const condition         = this._getCondition();
+            condition.hpComparator  = Helpers.getNextValueComparator(condition.hpComparator);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onFocusInInputHp(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputHp(): void {
+            const text  = this._inputHp.text;
+            const value = text ? parseInt(text) : null;
+            if ((value == null) || (!isNaN(value))) {
+                this._getCondition().hp = value;
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            } else {
+                this._updateInputHp();
+            }
+        }
+        private _onTouchedBtnFuelPctComparator(): void {
+            const condition             = this._getCondition();
+            condition.fuelPctComparator = Helpers.getNextValueComparator(condition.fuelPctComparator);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onFocusInInputFuelPct(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputFuelPct(): void {
+            const text  = this._inputFuelPct.text;
+            const value = text ? parseInt(text) : null;
+            if ((value == null) || (!isNaN(value))) {
+                this._getCondition().fuelPct = value;
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            } else {
+                this._updateInputFuelPct();
+            }
+        }
+        private _onTouchedBtnPriAmmoPctComparator(): void {
+            const condition                 = this._getCondition();
+            condition.priAmmoPctComparator  = Helpers.getNextValueComparator(condition.priAmmoPctComparator);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onFocusInInputPriAmmoPct(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputPriAmmoPct(): void {
+            const text  = this._inputPriAmmoPct.text;
+            const value = text ? parseInt(text) : null;
+            if ((value == null) || (!isNaN(value))) {
+                this._getCondition().priAmmoPct = value;
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            } else {
+                this._updateInputPriAmmoPct();
+            }
+        }
+        private _onTouchedBtnPromotionComparator(): void {
+            const condition                 = this._getCondition();
+            condition.promotionComparator   = Helpers.getNextValueComparator(condition.promotionComparator);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onFocusInInputPromotion(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputPromotion(): void {
+            const text  = this._inputPromotion.text;
+            const value = text ? parseInt(text) : null;
+            if ((value == null) || (!isNaN(value))) {
+                this._getCondition().promotion = value;
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            } else {
+                this._updateInputPromotion();
+            }
+        }
         private _onTouchedBtnUnitsCountComparator(): void {
             const condition                 = this._getCondition();
             condition.unitsCountComparator  = Helpers.getNextValueComparator(condition.unitsCountComparator);
@@ -209,6 +309,14 @@ namespace TwnsWeConditionModifyPanel40 {
             this._updateLabelGridIndex();
             this._updateLabelActionState();
             this._updateLabelHasLoadedCo();
+            this._updateLabelHpComparator();
+            this._updateInputHp();
+            this._updateLabelFuelPctComparator();
+            this._updateInputFuelPct();
+            this._updateLabelPriAmmoPctComparator();
+            this._updateInputPriAmmoPct();
+            this._updateLabelPromotionComparator();
+            this._updateInputPromotion();
             this._updateLabelUnitsCountComparator();
             this._updateInputUnitsCount();
         }
@@ -222,10 +330,18 @@ namespace TwnsWeConditionModifyPanel40 {
             this._btnUnitType.label             = Lang.getText(LangTextType.B0525);
             this._btnLocation.label             = Lang.getText(LangTextType.B0764);
             this._btnGridIndex.label            = Lang.getText(LangTextType.B0531);
-            this._btnUnitsCountComparator.label = Lang.getText(LangTextType.B0774);
-            this._labelUnitsCount.text          = Lang.getText(LangTextType.B0773);
             this._btnActionState.label          = Lang.getText(LangTextType.B0526);
             this._btnHasLoadedCo.label          = Lang.getText(LangTextType.B0421);
+            this._btnHpComparator.label         = Lang.getText(LangTextType.B0774);
+            this._labelHp.text                  = Lang.getText(LangTextType.B0807);
+            this._btnFuelPctComparator.label    = Lang.getText(LangTextType.B0774);
+            this._labelFuelPct.text             = `${Lang.getText(LangTextType.B0342)}%`;
+            this._btnPriAmmoPctComparator.label = Lang.getText(LangTextType.B0774);
+            this._labelPriAmmoPct.text          = `${Lang.getText(LangTextType.B0350)}%`;
+            this._btnPromotionComparator.label  = Lang.getText(LangTextType.B0774);
+            this._labelPromotion.text           = Lang.getText(LangTextType.B0370);
+            this._btnUnitsCountComparator.label = Lang.getText(LangTextType.B0774);
+            this._labelUnitsCount.text          = Lang.getText(LangTextType.B0773);
             // this._labelGridIndex.text   = Lang.getText(LangTextType.B0531);
 
             this._updateLabelDescAndLabelError();
@@ -267,6 +383,34 @@ namespace TwnsWeConditionModifyPanel40 {
         private _updateLabelHasLoadedCo(): void {
             const hasLoadedCo           = this._getCondition().hasLoadedCo;
             this._labelHasLoadedCo.text = hasLoadedCo != null ? (Lang.getText(hasLoadedCo ? LangTextType.B0012 : LangTextType.B0013)) : Lang.getText(LangTextType.B0776);
+        }
+        private _updateLabelHpComparator(): void {
+            const comparator                = this._getCondition().hpComparator;
+            this._labelHpComparator.text    = comparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+        }
+        private _updateInputHp(): void {
+            this._inputHp.text = `${this._getCondition().hp ?? ``}`;
+        }
+        private _updateLabelFuelPctComparator(): void {
+            const comparator                    = this._getCondition().fuelPctComparator;
+            this._labelFuelPctComparator.text   = comparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+        }
+        private _updateInputFuelPct(): void {
+            this._inputFuelPct.text = `${this._getCondition().fuelPct ?? ``}`;
+        }
+        private _updateLabelPriAmmoPctComparator(): void {
+            const comparator                        = this._getCondition().priAmmoPctComparator;
+            this._labelPriAmmoPctComparator.text    = comparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+        }
+        private _updateInputPriAmmoPct(): void {
+            this._inputPriAmmoPct.text = `${this._getCondition().priAmmoPct ?? ``}`;
+        }
+        private _updateLabelPromotionComparator(): void {
+            const comparator                    = this._getCondition().promotionComparator;
+            this._labelPromotionComparator.text = comparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
+        }
+        private _updateInputPromotion(): void {
+            this._inputPromotion.text = `${this._getCondition().promotion ?? ``}`;
         }
         private _updateLabelUnitsCountComparator(): void {
             const comparator                        = Helpers.getExisted(this._getCondition().unitsCountComparator);

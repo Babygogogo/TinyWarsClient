@@ -5990,6 +5990,30 @@ export declare namespace WarEvent {
 
         /** WecUnitPresence hasLoadedCo */
         hasLoadedCo?: (boolean|null);
+
+        /** WecUnitPresence hp */
+        hp?: (number|null);
+
+        /** WecUnitPresence hpComparator */
+        hpComparator?: (number|null);
+
+        /** WecUnitPresence fuelPct */
+        fuelPct?: (number|null);
+
+        /** WecUnitPresence fuelPctComparator */
+        fuelPctComparator?: (number|null);
+
+        /** WecUnitPresence priAmmoPct */
+        priAmmoPct?: (number|null);
+
+        /** WecUnitPresence priAmmoPctComparator */
+        priAmmoPctComparator?: (number|null);
+
+        /** WecUnitPresence promotion */
+        promotion?: (number|null);
+
+        /** WecUnitPresence promotionComparator */
+        promotionComparator?: (number|null);
     }
 
     /** Represents a WecUnitPresence. */
@@ -6027,6 +6051,30 @@ export declare namespace WarEvent {
 
         /** WecUnitPresence hasLoadedCo. */
         public hasLoadedCo: boolean;
+
+        /** WecUnitPresence hp. */
+        public hp: number;
+
+        /** WecUnitPresence hpComparator. */
+        public hpComparator: number;
+
+        /** WecUnitPresence fuelPct. */
+        public fuelPct: number;
+
+        /** WecUnitPresence fuelPctComparator. */
+        public fuelPctComparator: number;
+
+        /** WecUnitPresence priAmmoPct. */
+        public priAmmoPct: number;
+
+        /** WecUnitPresence priAmmoPctComparator. */
+        public priAmmoPctComparator: number;
+
+        /** WecUnitPresence promotion. */
+        public promotion: number;
+
+        /** WecUnitPresence promotionComparator. */
+        public promotionComparator: number;
 
         /**
          * Creates a new WecUnitPresence instance using the specified properties.
@@ -8634,6 +8682,30 @@ export declare namespace WarEvent {
         /** WeaSetUnitState hasLoadedCo */
         hasLoadedCo?: (boolean|null);
 
+        /** WeaSetUnitState conHp */
+        conHp?: (number|null);
+
+        /** WeaSetUnitState conHpComparator */
+        conHpComparator?: (number|null);
+
+        /** WeaSetUnitState conFuelPct */
+        conFuelPct?: (number|null);
+
+        /** WeaSetUnitState conFuelPctComparator */
+        conFuelPctComparator?: (number|null);
+
+        /** WeaSetUnitState conPriAmmoPct */
+        conPriAmmoPct?: (number|null);
+
+        /** WeaSetUnitState conPriAmmoPctComparator */
+        conPriAmmoPctComparator?: (number|null);
+
+        /** WeaSetUnitState conPromotion */
+        conPromotion?: (number|null);
+
+        /** WeaSetUnitState conPromotionComparator */
+        conPromotionComparator?: (number|null);
+
         /** WeaSetUnitState hpMultiplierPercentage */
         hpMultiplierPercentage?: (number|null);
 
@@ -8657,6 +8729,9 @@ export declare namespace WarEvent {
 
         /** WeaSetUnitState promotionDeltaValue */
         promotionDeltaValue?: (number|null);
+
+        /** WeaSetUnitState destroyUnit */
+        destroyUnit?: (boolean|null);
     }
 
     /** Represents a WeaSetUnitState. */
@@ -8689,6 +8764,30 @@ export declare namespace WarEvent {
         /** WeaSetUnitState hasLoadedCo. */
         public hasLoadedCo: boolean;
 
+        /** WeaSetUnitState conHp. */
+        public conHp: number;
+
+        /** WeaSetUnitState conHpComparator. */
+        public conHpComparator: number;
+
+        /** WeaSetUnitState conFuelPct. */
+        public conFuelPct: number;
+
+        /** WeaSetUnitState conFuelPctComparator. */
+        public conFuelPctComparator: number;
+
+        /** WeaSetUnitState conPriAmmoPct. */
+        public conPriAmmoPct: number;
+
+        /** WeaSetUnitState conPriAmmoPctComparator. */
+        public conPriAmmoPctComparator: number;
+
+        /** WeaSetUnitState conPromotion. */
+        public conPromotion: number;
+
+        /** WeaSetUnitState conPromotionComparator. */
+        public conPromotionComparator: number;
+
         /** WeaSetUnitState hpMultiplierPercentage. */
         public hpMultiplierPercentage: number;
 
@@ -8712,6 +8811,9 @@ export declare namespace WarEvent {
 
         /** WeaSetUnitState promotionDeltaValue. */
         public promotionDeltaValue: number;
+
+        /** WeaSetUnitState destroyUnit. */
+        public destroyUnit: boolean;
 
         /**
          * Creates a new WeaSetUnitState instance using the specified properties.

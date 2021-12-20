@@ -960,6 +960,34 @@ namespace WarEventHelper {
             }
         }
 
+        {
+            const comparator = action.conHpComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conFuelPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conPriAmmoPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conPromotionComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
         if ((action.hpMultiplierPercentage ??
                 action.hpDeltaValue ??
                 action.fuelDeltaValue ??
@@ -1481,10 +1509,36 @@ namespace WarEventHelper {
         }
 
         {
-            const unitsCountComparator = condition.unitsCountComparator;
-            if ((unitsCountComparator == null)                                      ||
-                (!ConfigManager.checkIsValidValueComparator(unitsCountComparator))
-            ) {
+            const comparator = condition.unitsCountComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.hpComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.fuelPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.priAmmoPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.promotionComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
                 return false;
             }
         }
@@ -2005,6 +2059,30 @@ namespace WarEventHelper {
             ? Lang.getText(hasLoadedCo ? LangTextType.A0270 : LangTextType.A0271)
             : null;
 
+        const hp                    = data.hp;
+        const hpComparator          = data.hpComparator;
+        const textForHp             = hp != null
+            ? Lang.getFormattedText(LangTextType.F0120, hpComparator != null ? Lang.getValueComparatorName(hpComparator) : CommonConstants.ErrorTextForUndefined, hp)
+            : null;
+
+        const fuelPct               = data.fuelPct;
+        const fuelPctComparator     = data.fuelPctComparator;
+        const textForFuelPct        = fuelPct != null
+            ? Lang.getFormattedText(LangTextType.F0121, fuelPctComparator != null ? Lang.getValueComparatorName(fuelPctComparator) : CommonConstants.ErrorTextForUndefined, fuelPct)
+            : null;
+
+        const priAmmoPct            = data.priAmmoPct;
+        const priAmmoPctComparator  = data.priAmmoPctComparator;
+        const textForPriAmmoPct     = priAmmoPct != null
+            ? Lang.getFormattedText(LangTextType.F0122, priAmmoPctComparator != null ? Lang.getValueComparatorName(priAmmoPctComparator) : CommonConstants.ErrorTextForUndefined, priAmmoPct)
+            : null;
+
+        const promotion             = data.promotion;
+        const promotionComparator   = data.promotionComparator;
+        const textForPromotion      = promotion != null
+            ? Lang.getFormattedText(LangTextType.F0123, promotionComparator != null ? Lang.getValueComparatorName(promotionComparator) : CommonConstants.ErrorTextForUndefined, promotion)
+            : null;
+
         const unitsCount                = data.unitsCount;
         const comparator                = data.unitsCountComparator;
         const textArrayForSubConditions = Helpers.getNonNullElements([
@@ -2014,9 +2092,11 @@ namespace WarEventHelper {
             textForGridIndex,
             textForActionState,
             textForHasLoadedCo,
+            textForHp,
+            textForFuelPct,
+            textForPriAmmoPct,
+            textForPromotion,
         ]);
-
-        // `The number of %unit type% at %location/grid% owned by %team/player% is %comparator% %count%`;
         return Lang.getFormattedText(
             LangTextType.F0090,
             textForUnitTypeArray,
@@ -2288,6 +2368,50 @@ namespace WarEventHelper {
             ? Lang.getText(hasLoadedCo ? LangTextType.A0270 : LangTextType.A0271)
             : null;
 
+        const conHp                 = data.conHp;
+        const conHpComparator       = data.conHpComparator;
+        const textForConHp          = conHp != null
+            ? Lang.getFormattedText(LangTextType.F0120, conHpComparator != null ? Lang.getValueComparatorName(conHpComparator) : CommonConstants.ErrorTextForUndefined, conHp)
+            : null;
+
+        const conFuelPct            = data.conFuelPct;
+        const conFuelPctComparator  = data.conFuelPctComparator;
+        const textForConFuelPct     = conFuelPct != null
+            ? Lang.getFormattedText(LangTextType.F0121, conFuelPctComparator != null ? Lang.getValueComparatorName(conFuelPctComparator) : CommonConstants.ErrorTextForUndefined, conFuelPct)
+            : null;
+
+        const conPriAmmoPct             = data.conPriAmmoPct;
+        const conPriAmmoPctComparator   = data.conPriAmmoPctComparator;
+        const textForConPriAmmoPct      = conPriAmmoPct != null
+            ? Lang.getFormattedText(LangTextType.F0122, conPriAmmoPctComparator != null ? Lang.getValueComparatorName(conPriAmmoPctComparator) : CommonConstants.ErrorTextForUndefined, conPriAmmoPct)
+            : null;
+
+        const conPromotion              = data.conPromotion;
+        const conPromotionComparator    = data.conPromotionComparator;
+        const textForConPromotion       = conPromotion != null
+            ? Lang.getFormattedText(LangTextType.F0123, conPromotionComparator != null ? Lang.getValueComparatorName(conPromotionComparator) : CommonConstants.ErrorTextForUndefined, conPromotion)
+            : null;
+
+        const textArrayForSubConditions = Helpers.getNonNullElements([
+            textForTeamIndex,
+            textForPlayerIndex,
+            textForLocation,
+            textForGridIndex,
+            textForActionState,
+            textForHasLoadedCo,
+            textForConHp,
+            textForConFuelPct,
+            textForConPriAmmoPct,
+            textForConPromotion,
+        ]);
+        if (data.destroyUnit) {
+            return Lang.getFormattedText(
+                LangTextType.F0124,
+                textForUnitType,
+                textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+            );
+        }
+
         const hpMultiplierPercentage    = data.hpMultiplierPercentage ?? 100;
         const hpDeltaValue              = data.hpDeltaValue ?? 0;
         const textForHp                 = ((hpMultiplierPercentage !== 100) || (hpDeltaValue !== 0))
@@ -2312,14 +2436,6 @@ namespace WarEventHelper {
             ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0370), promotionMultiplierPercentage, promotionDeltaValue)
             : null;
 
-        const textArrayForSubConditions = Helpers.getNonNullElements([
-            textForTeamIndex,
-            textForPlayerIndex,
-            textForLocation,
-            textForGridIndex,
-            textForActionState,
-            textForHasLoadedCo,
-        ]);
         const textArrayForModifiers = Helpers.getNonNullElements([
             textForHp,
             textForFuel,
@@ -2330,8 +2446,6 @@ namespace WarEventHelper {
             LangTextType.F0114,
             textForUnitType,
             textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
-            data.hpMultiplierPercentage ?? 100,
-            data.hpDeltaValue ?? 0,
         )} ${textArrayForModifiers.join(` `)}`;
     }
 
@@ -2737,9 +2851,11 @@ namespace WarEventHelper {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0773));
         }
 
-        const comparator = data.unitsCountComparator;
-        if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
-            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+        {
+            const comparator = data.unitsCountComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
         }
 
         if (data.locationIdArray?.some(v => (v > CommonConstants.MapMaxLocationId) || (v < CommonConstants.MapMinLocationId))) {
@@ -2770,6 +2886,34 @@ namespace WarEventHelper {
             const actionStateArray = data.actionStateArray;
             if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0526));
+            }
+        }
+
+        {
+            const comparator = data.hpComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.fuelPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.priAmmoPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.promotionComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
@@ -3194,6 +3338,34 @@ namespace WarEventHelper {
             const actionStateArray = data.actionStateArray;
             if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0526));
+            }
+        }
+
+        {
+            const comparator = data.conHpComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.conFuelPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.conPriAmmoPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.conPromotionComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
             }
         }
 
@@ -3668,15 +3840,23 @@ namespace WarEventHelper {
             };
         } else if (conditionType === ConditionType.WecUnitPresence) {
             condition.WecUnitPresence = {
-                teamIndexArray      : null,
-                playerIndexArray    : null,
-                locationIdArray     : null,
-                gridIndexArray      : null,
-                unitTypeArray       : null,
-                actionStateArray    : null,
-                hasLoadedCo         : null,
-                unitsCount          : 0,
-                unitsCountComparator: Types.ValueComparator.EqualTo,
+                teamIndexArray          : null,
+                playerIndexArray        : null,
+                locationIdArray         : null,
+                gridIndexArray          : null,
+                unitTypeArray           : null,
+                actionStateArray        : null,
+                hasLoadedCo             : null,
+                hp                      : null,
+                hpComparator            : Types.ValueComparator.EqualTo,
+                fuelPct                 : null,
+                fuelPctComparator       : Types.ValueComparator.EqualTo,
+                priAmmoPct              : null,
+                priAmmoPctComparator    : Types.ValueComparator.EqualTo,
+                promotion               : null,
+                promotionComparator     : Types.ValueComparator.EqualTo,
+                unitsCount              : 0,
+                unitsCountComparator    : Types.ValueComparator.EqualTo,
             };
         } else if (conditionType === ConditionType.WecCustomCounter) {
             condition.WecCustomCounter = {
@@ -3869,6 +4049,15 @@ namespace WarEventHelper {
                 gridIndexArray                  : null,
                 actionStateArray                : null,
                 hasLoadedCo                     : null,
+                conHp                           : null,
+                conHpComparator                 : Types.ValueComparator.EqualTo,
+                conFuelPct                      : null,
+                conFuelPctComparator            : Types.ValueComparator.EqualTo,
+                conPriAmmoPct                   : null,
+                conPriAmmoPctComparator         : Types.ValueComparator.EqualTo,
+                conPromotion                    : null,
+                conPromotionComparator          : Types.ValueComparator.EqualTo,
+                destroyUnit                     : null,
                 hpDeltaValue                    : 0,
                 hpMultiplierPercentage          : 100,
                 fuelDeltaValue                  : 0,
