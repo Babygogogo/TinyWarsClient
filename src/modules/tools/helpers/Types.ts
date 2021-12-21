@@ -767,7 +767,7 @@ namespace Types {
         DeprecatedSetPlayerFund,
         DeprecatedSetPlayerCoEnergy,
         SetPlayerAliveState,
-        SetPlayerFund,
+        SetPlayerState,
         SetPlayerCoEnergy,
 
         SetUnitState,

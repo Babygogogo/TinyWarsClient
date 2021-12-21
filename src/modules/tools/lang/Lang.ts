@@ -463,7 +463,7 @@ namespace Lang {
             case WarEventActionType.DeprecatedSetPlayerFund         : return getText(LangTextType.B0752);
             case WarEventActionType.DeprecatedSetPlayerCoEnergy     : return getText(LangTextType.B0756);
             case WarEventActionType.SetPlayerAliveState             : return getText(LangTextType.B0618);
-            case WarEventActionType.SetPlayerFund                   : return getText(LangTextType.B0752);
+            case WarEventActionType.SetPlayerState                  : return getText(LangTextType.B0810);
             case WarEventActionType.SetPlayerCoEnergy               : return getText(LangTextType.B0756);
             default                                                 : return null;
         }

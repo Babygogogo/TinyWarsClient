@@ -1135,6 +1135,22 @@ namespace TwnsLangCommonText {
             `未搭载CO`,
             `the CO is Not onboard`,
         ],
+        [LangTextType.A0272]: [
+            [
+                `"存活"状态下，玩家可以正常行动。可以从其他状态切换到本状态（死而复生）。`,
+                ``,
+                `"即将战败"状态下，玩家无法行动。除非有其他事件把玩家状态改为"存活"，否则系统将自动清除所有该玩家的部队，建筑将变为中立，且状态将变为已战败。`,
+                ``,
+                `"已战败"状态下，玩家无法行动。如果玩家是直接从存活状态切换到已战败状态，则其部队和建筑所有权都会残留。`,
+            ].join(`\n`),
+            [
+                `Alive: players can do anything as usual. It's possible to make a (Being) Defeated player Alive again.`,
+                ``,
+                `Being Defeated: players can not do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
+                ``,
+                `Defeated: players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
+            ].join(`\n`),
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4359,6 +4375,14 @@ namespace TwnsLangCommonText {
             `摧毁`,
             `Destroy`,
         ],
+        [LangTextType.B0809]: [
+            `CO能量值`,
+            `CO Energy`,
+        ],
+        [LangTextType.B0810]: [
+            `修改玩家状态`,
+            `Set Players' State`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5123,8 +5147,8 @@ namespace TwnsLangCommonText {
             `the action state is %s`,
         ],
         [LangTextType.F0119]: [
-            `%s: 当前值 * %d%% + %d。`,
-            `%s: current value * %d%% + %d.`,
+            `%s: 当前值 * %s%% + %s。`,
+            `%s: current value * %s%% + %s.`,
         ],
         [LangTextType.F0120]: [
             `真实HP %s %s`,
@@ -5145,6 +5169,14 @@ namespace TwnsLangCommonText {
         [LangTextType.F0124]: [
             `找到类型为 %s%s 的所有部队，并摧毁它们。`,
             `Get all units that is %s%s, then destroy them all.`,
+        ],
+        [LangTextType.F0125]: [
+            `%s: %s。`,
+            `%s: %s.`,
+        ],
+        [LangTextType.F0126]: [
+            `找到玩家序号为 %s%s 的所有玩家，并修改他们的属性。`,
+            `Get all players that is %s%s, then modify their states.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

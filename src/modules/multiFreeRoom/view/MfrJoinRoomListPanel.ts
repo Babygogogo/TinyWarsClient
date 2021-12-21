@@ -441,14 +441,15 @@ namespace TwnsMfrJoinRoomListPanel {
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const roomInfo = await MfrModel.getRoomInfo(this._getData().roomId);
+            const roomId    = this._getData().roomId;
+            const roomInfo  = await MfrModel.getRoomInfo(roomId);
             if (roomInfo == null) {
                 return;
             }
 
             const settingsForMfw        = Helpers.getExisted(roomInfo.settingsForMfw);
             this._imgPassword.visible   = !!settingsForMfw.warPassword;
-            this._labelName.text        = settingsForMfw.warName || `--`;
+            this._labelName.text        = settingsForMfw.warName || `#${roomId}`;
         }
 
         private _onTouchTapBtnChoose(): void {

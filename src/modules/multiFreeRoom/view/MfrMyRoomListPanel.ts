@@ -425,9 +425,8 @@ namespace TwnsMfrMyRoomListPanel {
             this._updateState();
 
             const roomId            = this._getData().roomId;
-            const roomInfo          = await MfrModel.getRoomInfo(roomId);
             this._imgRed.visible    = await MfrModel.checkIsRedForRoom(roomId);
-            this._labelName.text    = roomInfo ? roomInfo.settingsForMfw?.warName || `--` : `--`;
+            this._labelName.text    = (await MfrModel.getRoomInfo(roomId))?.settingsForMfw?.warName || `#${roomId}`;
         }
 
         private _onNotifyMfrJoinedPreviewingRoomIdChanged(): void {

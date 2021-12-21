@@ -101,10 +101,10 @@ namespace TwnsWeActionModifyPanel25 {
             const text      = this._inputDeltaPercentage.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.deltaPercentage = null;
+                action.actCoEnergyDeltaPct = null;
             } else {
-                const maxValue          = CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage;
-                action.deltaPercentage  = Math.min(
+                const maxValue              = CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage;
+                action.actCoEnergyDeltaPct  = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -117,10 +117,10 @@ namespace TwnsWeActionModifyPanel25 {
             const text      = this._inputMultiplierPercentage.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.multiplierPercentage = null;
+                action.actCoEnergyMultiplierPct = null;
             } else {
-                const maxValue              = CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage;
-                action.multiplierPercentage = Math.min(
+                const maxValue                  = CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage;
+                action.actCoEnergyMultiplierPct = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -157,12 +157,12 @@ namespace TwnsWeActionModifyPanel25 {
         }
 
         private _updateInputDeltaPercentage(): void {
-            const value                     = this._getAction().deltaPercentage;
+            const value                     = this._getAction().actCoEnergyDeltaPct;
             this._inputDeltaPercentage.text = `${value == null ? `` : value}`;
         }
 
         private _updateInputMultiplierPercentage(): void {
-            const value                             = this._getAction().multiplierPercentage;
+            const value                             = this._getAction().actCoEnergyMultiplierPct;
             this._inputMultiplierPercentage.text    = `${value == null ? `` : value}`;
         }
 
@@ -170,7 +170,7 @@ namespace TwnsWeActionModifyPanel25 {
             const action            = this._getAction();
             this._labelTips.text    = Lang.getFormattedText(
                 LangTextType.F0089,
-                Math.max(0, Math.min(100, Math.floor(40 * (action.multiplierPercentage ?? 100) / 100 + (action.deltaPercentage ?? 0))))
+                Math.max(0, Math.min(100, Math.floor(40 * (action.actCoEnergyMultiplierPct ?? 100) / 100 + (action.actCoEnergyDeltaPct ?? 0))))
             );
         }
 

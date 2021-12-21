@@ -77,9 +77,9 @@ namespace WarEventHelper {
         // ActionType.DeprecatedSetPlayerFund,
         // ActionType.DeprecatedSetPlayerCoEnergy,
         // ActionType.DeprecatedSetPlayerAliveState,
-        ActionType.SetPlayerFund,
-        ActionType.SetPlayerCoEnergy,
-        ActionType.SetPlayerAliveState,
+        ActionType.SetPlayerState,
+        // ActionType.SetPlayerCoEnergy,
+        // ActionType.SetPlayerAliveState,
 
         ActionType.AddUnit,
         ActionType.SetUnitState,
@@ -515,7 +515,7 @@ namespace WarEventHelper {
             || (checkIsValidWeaDeprecatedSetPlayerFund(action.WeaDeprecatedSetPlayerFund, playersCountUnneutral))
             || (checkIsValidWeaDeprecatedSetPlayerCoEnergy(action.WeaDeprecatedSetPlayerCoEnergy, playersCountUnneutral))
             || (checkIsValidWeaSetPlayerAliveState(action.WeaSetPlayerAliveState, playersCountUnneutral))
-            || (checkIsValidWeaSetPlayerFund(action.WeaSetPlayerFund, playersCountUnneutral))
+            || (checkIsValidWeaSetPlayerState(action.WeaSetPlayerState, playersCountUnneutral))
             || (checkIsValidWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral))
             || (checkIsValidWeaSetUnitState(action.WeaSetUnitState, mapSize, playersCountUnneutral));
         }
@@ -867,24 +867,32 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetPlayerFund(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerFund>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetPlayerState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerState>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
 
-        const playerIndexArray = action.playerIndexArray;
-        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
-            return false;
+        {
+            const playerIndexArray = action.conPlayerIndexArray;
+            if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+                return false;
+            }
         }
 
-        const { deltaValue, multiplierPercentage } = action;
-        if ((deltaValue ?? multiplierPercentage) == null) {
-            return false;
+        {
+            const aliveState = action.actAliveState;
+            if ((aliveState != null) && (!ConfigManager.checkIsValidPlayerAliveState(aliveState))) {
+                return false;
+            }
         }
-        if ((deltaValue != null) && (Math.abs(deltaValue) > CommonConstants.WarEventActionSetPlayerFundMaxDeltaValue)) {
-            return false;
-        }
-        if ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerFundMaxMultiplierPercentage)) {
+
+        if ((action.actFundDeltaValue               ??
+                action.actFundMultiplierPercentage  ??
+                action.actCoEnergyDeltaPct          ??
+                action.actCoEnergyMultiplierPct     ??
+                action.actAliveState
+            ) == null
+        ) {
             return false;
         }
 
@@ -900,14 +908,7 @@ namespace WarEventHelper {
             return false;
         }
 
-        const { deltaPercentage, multiplierPercentage } = action;
-        if ((deltaPercentage ?? multiplierPercentage) == null) {
-            return false;
-        }
-        if ((deltaPercentage != null) && (Math.abs(deltaPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage)) {
-            return false;
-        }
-        if ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage)) {
+        if ((action.actCoEnergyDeltaPct ?? action.actCoEnergyMultiplierPct) == null) {
             return false;
         }
 
@@ -919,42 +920,42 @@ namespace WarEventHelper {
         }
 
         {
-            const playerIndexArray = action.playerIndexArray;
+            const playerIndexArray = action.conPlayerIndexArray;
             if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
 
         {
-            const teamIndexArray = action.teamIndexArray;
+            const teamIndexArray = action.conTeamIndexArray;
             if ((teamIndexArray) && (!ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
 
         {
-            const unitTypeArray = action.unitTypeArray;
+            const unitTypeArray = action.conUnitTypeArray;
             if ((unitTypeArray) && (unitTypeArray.some(v => !ConfigManager.checkIsValidUnitType(v)))) {
                 return false;
             }
         }
 
         {
-            const locationIdArray = action.locationIdArray;
+            const locationIdArray = action.conLocationIdArray;
             if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
                 return false;
             }
         }
 
         {
-            const gridIndexArray = action.gridIndexArray;
+            const gridIndexArray = action.conGridIndexArray;
             if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
                 return false;
             }
         }
 
         {
-            const actionStateArray = action.actionStateArray;
+            const actionStateArray = action.conActionStateArray;
             if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
                 return false;
             }
@@ -988,14 +989,24 @@ namespace WarEventHelper {
             }
         }
 
-        if ((action.hpMultiplierPercentage ??
-                action.hpDeltaValue ??
-                action.fuelDeltaValue ??
-                action.fuelMultiplierPercentage ??
-                action.priAmmoDeltaValue ??
-                action.priAmmoMultiplierPercentage ??
-                action.promotionDeltaValue ??
-                action.promotionMultiplierPercentage
+        {
+            const actActionState = action.actActionState;
+            if ((actActionState != null) && (!ConfigManager.checkIsValidUnitActionState(actActionState))) {
+                return false;
+            }
+        }
+
+        if ((action.actHpMultiplierPercentage           ??
+                action.actHpDeltaValue                  ??
+                action.actFuelDeltaValue                ??
+                action.actFuelMultiplierPercentage      ??
+                action.actPriAmmoDeltaValue             ??
+                action.actPriAmmoMultiplierPercentage   ??
+                action.actPromotionDeltaValue           ??
+                action.actPromotionMultiplierPercentage ??
+                action.actActionState                   ??
+                action.actHasLoadedCo                   ??
+                (action.actDestroyUnit || null)
             ) == null
         ) {
             return false;
@@ -2153,7 +2164,7 @@ namespace WarEventHelper {
             || (getDescForWeaDeprecatedSetPlayerFund(action.WeaDeprecatedSetPlayerFund))
             || (getDescForWeaDeprecatedSetPlayerCoEnergy(action.WeaDeprecatedSetPlayerCoEnergy))
             || (getDescForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState))
-            || (getDescForWeaSetPlayerFund(action.WeaSetPlayerFund))
+            || (getDescForWeaSetPlayerState(action.WeaSetPlayerState))
             || (getDescForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy))
             || (getDescForWeaSetUnitState(action.WeaSetUnitState));
     }
@@ -2302,18 +2313,47 @@ namespace WarEventHelper {
             Lang.getPlayerAliveStateName(Helpers.getExisted(data.playerAliveState))
         );
     }
-    function getDescForWeaSetPlayerFund(data: Types.Undefinable<WarEvent.IWeaSetPlayerFund>): string | null {
+    function getDescForWeaSetPlayerState(data: Types.Undefinable<WarEvent.IWeaSetPlayerState>): string | null {
         if (data == null) {
             return null;
         }
 
-        const playerIndexArray = data.playerIndexArray;
-        return Lang.getFormattedText(
-            LangTextType.F0087,
-            playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`/`) : Lang.getText(LangTextType.B0766),
-            data.multiplierPercentage ?? 100,
-            data.deltaValue ?? 0
-        );
+        const conPlayerIndexArray           = data.conPlayerIndexArray;
+        const textForConPlayerIndexArray    = conPlayerIndexArray?.length
+            ? conPlayerIndexArray.map(v => `P${v}`).join(`/`)
+            : Lang.getText(LangTextType.B0766);
+
+        const textArrayForSubConditions = Helpers.getNonNullElements([
+        ]);
+
+        const actFundDeltaValue             = data.actFundDeltaValue ?? 0;
+        const actFundMultiplierPercentage   = data.actFundMultiplierPercentage ?? 100;
+        const textForActFund                = ((actFundDeltaValue !== 0) || (actFundMultiplierPercentage !== 100))
+            ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0032), actFundMultiplierPercentage, actFundDeltaValue)
+            : null;
+
+        const actCoEnergyDeltaPct           = data.actCoEnergyDeltaPct ?? 0;
+        const actCoEnergyMultiplierPct      = data.actCoEnergyMultiplierPct ?? 100;
+        const textForActCoEnergy            = ((actCoEnergyDeltaPct !== 0) || (actCoEnergyMultiplierPct !== 100))
+            ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0809), actCoEnergyMultiplierPct, `${actCoEnergyDeltaPct}%`)
+            : null;
+
+        const actAliveState         = data.actAliveState;
+        const textForActAliveState  = actAliveState != null
+            ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0784), Lang.getPlayerAliveStateName(actAliveState))
+            : null;
+
+        const textArrayForModifiers = Helpers.getNonNullElements([
+            textForActFund,
+            textForActCoEnergy,
+            textForActAliveState,
+        ]);
+
+        return `${Lang.getFormattedText(
+            LangTextType.F0126,
+            textForConPlayerIndexArray,
+            textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+        )} ${textArrayForModifiers.join(` `)}`;
     }
     function getDescForWeaSetPlayerCoEnergy(data: Types.Undefinable<WarEvent.IWeaSetPlayerCoEnergy>): string | null {
         if (data == null) {
@@ -2324,8 +2364,8 @@ namespace WarEventHelper {
         return Lang.getFormattedText(
             LangTextType.F0086,
             playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`/`) : Lang.getText(LangTextType.B0766),
-            data.multiplierPercentage ?? 100,
-            data.deltaPercentage ?? 0
+            data.actCoEnergyMultiplierPct ?? 100,
+            data.actCoEnergyDeltaPct ?? 0
         );
     }
     function getDescForWeaSetUnitState(data: Types.Undefinable<WarEvent.IWeaSetUnitState>): string | null {
@@ -2333,37 +2373,37 @@ namespace WarEventHelper {
             return null;
         }
 
-        const unitTypeArray         = data.unitTypeArray;
+        const unitTypeArray         = data.conUnitTypeArray;
         const textForUnitType       = unitTypeArray?.length
             ? unitTypeArray.map(v => Lang.getUnitName(v)).join(`/`)
             : Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0805));
 
-        const teamIndexArray        = data.teamIndexArray;
+        const teamIndexArray        = data.conTeamIndexArray;
         const textForTeamIndex      = teamIndexArray?.length
             ? Lang.getFormattedText(LangTextType.F0115, teamIndexArray.map(v => Lang.getPlayerTeamName(v)).join(`/`))
             : null;
 
-        const playerIndexArray      = data.playerIndexArray;
+        const playerIndexArray      = data.conPlayerIndexArray;
         const textForPlayerIndex    = playerIndexArray?.length
             ? Lang.getFormattedText(LangTextType.F0115, playerIndexArray.map(v => `P${v}`).join(`/`))
             : null;
 
-        const locationIdArray       = data.locationIdArray;
+        const locationIdArray       = data.conLocationIdArray;
         const textForLocation       = locationIdArray?.length
             ? Lang.getFormattedText(LangTextType.F0116, locationIdArray.join(`/`))
             : null;
 
-        const gridIndexArray        = data.gridIndexArray;
+        const gridIndexArray        = data.conGridIndexArray;
         const textForGridIndex      = gridIndexArray?.length
             ? Lang.getFormattedText(LangTextType.F0117, gridIndexArray.map(v => `(${v.x},${v.y})`).join(`/`))
             : null;
 
-        const actionStateArray      = data.actionStateArray;
+        const actionStateArray      = data.conActionStateArray;
         const textForActionState    = actionStateArray?.length
             ? Lang.getFormattedText(LangTextType.F0118, actionStateArray.map(v => Lang.getUnitActionStateText(v)).join(`/`))
             : null;
 
-        const hasLoadedCo           = data.hasLoadedCo;
+        const hasLoadedCo           = data.conHasLoadedCo;
         const textForHasLoadedCo    = hasLoadedCo != null
             ? Lang.getText(hasLoadedCo ? LangTextType.A0270 : LangTextType.A0271)
             : null;
@@ -2404,7 +2444,7 @@ namespace WarEventHelper {
             textForConPriAmmoPct,
             textForConPromotion,
         ]);
-        if (data.destroyUnit) {
+        if (data.actDestroyUnit) {
             return Lang.getFormattedText(
                 LangTextType.F0124,
                 textForUnitType,
@@ -2412,31 +2452,43 @@ namespace WarEventHelper {
             );
         }
 
-        const hpMultiplierPercentage    = data.hpMultiplierPercentage ?? 100;
-        const hpDeltaValue              = data.hpDeltaValue ?? 0;
+        const actActionState        = data.actActionState;
+        const textForActActionState = actActionState != null
+            ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0526), Lang.getUnitActionStateText(actActionState))
+            : null;
+
+        const actHasLoadedCo        = data.actHasLoadedCo;
+        const textForActHasLoadedCo = actHasLoadedCo != null
+            ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0421), Lang.getText(actHasLoadedCo ? LangTextType.B0012 : LangTextType.B0013))
+            : null;
+
+        const hpMultiplierPercentage    = data.actHpMultiplierPercentage ?? 100;
+        const hpDeltaValue              = data.actHpDeltaValue ?? 0;
         const textForHp                 = ((hpMultiplierPercentage !== 100) || (hpDeltaValue !== 0))
             ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0807), hpMultiplierPercentage, hpDeltaValue)
             : null;
 
-        const fuelMultiplierPercentage  = data.fuelMultiplierPercentage ?? 100;
-        const fuelDeltaValue            = data.fuelDeltaValue ?? 0;
+        const fuelMultiplierPercentage  = data.actFuelMultiplierPercentage ?? 100;
+        const fuelDeltaValue            = data.actFuelDeltaValue ?? 0;
         const textForFuel               = ((fuelMultiplierPercentage !== 100) || (fuelDeltaValue !== 0))
             ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0342), fuelMultiplierPercentage, fuelDeltaValue)
             : null;
 
-        const priAmmoMultiplierPercentage   = data.priAmmoMultiplierPercentage ?? 100;
-        const priAmmoDeltaValue             = data.priAmmoDeltaValue ?? 0;
+        const priAmmoMultiplierPercentage   = data.actPriAmmoMultiplierPercentage ?? 100;
+        const priAmmoDeltaValue             = data.actPriAmmoDeltaValue ?? 0;
         const textForPriAmmo                = ((priAmmoMultiplierPercentage !== 100) || (priAmmoDeltaValue !== 0))
             ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0350), priAmmoMultiplierPercentage, priAmmoDeltaValue)
             : null;
 
-        const promotionMultiplierPercentage = data.promotionMultiplierPercentage ?? 100;
-        const promotionDeltaValue           = data.promotionDeltaValue ?? 0;
+        const promotionMultiplierPercentage = data.actPromotionMultiplierPercentage ?? 100;
+        const promotionDeltaValue           = data.actPromotionDeltaValue ?? 0;
         const textForPromotion              = ((promotionMultiplierPercentage !== 100) || (promotionDeltaValue !== 0))
             ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0370), promotionMultiplierPercentage, promotionDeltaValue)
             : null;
 
         const textArrayForModifiers = Helpers.getNonNullElements([
+            textForActActionState,
+            textForActHasLoadedCo,
             textForHp,
             textForFuel,
             textForPriAmmo,
@@ -2986,7 +3038,7 @@ namespace WarEventHelper {
         else if (action.WeaDeprecatedSetPlayerFund)         { return getErrorTipForWeaDeprecatedSetPlayerFund(action.WeaDeprecatedSetPlayerFund, playersCountUnneutral); }
         else if (action.WeaDeprecatedSetPlayerCoEnergy)     { return getErrorTipForWeaDeprecatedSetPlayerCoEnergy(action.WeaDeprecatedSetPlayerCoEnergy, playersCountUnneutral); }
         else if (action.WeaSetPlayerAliveState)             { return getErrorTipForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState, playersCountUnneutral); }
-        else if (action.WeaSetPlayerFund)                   { return getErrorTipForWeaSetPlayerFund(action.WeaSetPlayerFund, playersCountUnneutral); }
+        else if (action.WeaSetPlayerState)                  { return getErrorTipForWeaSetPlayerFund(action.WeaSetPlayerState, playersCountUnneutral); }
         else if (action.WeaSetPlayerCoEnergy)               { return getErrorTipForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral); }
         else if (action.WeaSetUnitState)                    { return getErrorTipForWeaSetUnitState(action.WeaSetUnitState, war); }
         else {
@@ -3262,21 +3314,27 @@ namespace WarEventHelper {
 
         return null;
     }
-    function getErrorTipForWeaSetPlayerFund(data: WarEvent.IWeaSetPlayerFund, playersCountUnneutral: number): string | null {
-        const playerIndexArray = data.playerIndexArray;
+    function getErrorTipForWeaSetPlayerFund(data: WarEvent.IWeaSetPlayerState, playersCountUnneutral: number): string | null {
+        const playerIndexArray = data.conPlayerIndexArray;
         if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
             return `${Lang.getText(LangTextType.A0212)}`;
         }
 
-        const { deltaValue, multiplierPercentage } = data;
-        if ((deltaValue ?? multiplierPercentage) == null) {
-            return Lang.getText(LangTextType.A0264);
+        {
+            const aliveState = data.actAliveState;
+            if ((aliveState != null) && (!ConfigManager.checkIsValidPlayerAliveState(aliveState))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0784));
+            }
         }
 
-        if (((deltaValue != null) && (Math.abs(deltaValue) > CommonConstants.WarEventActionSetPlayerFundMaxDeltaValue))                             ||
-            ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerFundMaxMultiplierPercentage))
+        if ((data.actFundDeltaValue                 ??
+                data.actFundMultiplierPercentage    ??
+                data.actCoEnergyDeltaPct            ??
+                data.actCoEnergyMultiplierPct       ??
+                data.actAliveState
+            ) == null
         ) {
-            return Lang.getText(LangTextType.A0265);
+            return Lang.getText(LangTextType.A0264);
         }
 
         return null;
@@ -3287,55 +3345,48 @@ namespace WarEventHelper {
             return `${Lang.getText(LangTextType.A0212)}`;
         }
 
-        const { deltaPercentage, multiplierPercentage } = data;
-        if ((deltaPercentage ?? multiplierPercentage) == null) {
+        if ((data.actCoEnergyDeltaPct ?? data.actCoEnergyMultiplierPct) == null) {
             return Lang.getText(LangTextType.A0264);
-        }
-
-        if (((deltaPercentage != null) && (Math.abs(deltaPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage))              ||
-            ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage))
-        ) {
-            return Lang.getText(LangTextType.A0265);
         }
 
         return null;
     }
     function getErrorTipForWeaSetUnitState(data: WarEvent.IWeaSetUnitState, war: BwWar): string | null {
         {
-            const locationIdArray = data.locationIdArray;
+            const locationIdArray = data.conLocationIdArray;
             if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0764));
             }
         }
 
         {
-            const gridIndexArray = data.gridIndexArray;
+            const gridIndexArray = data.conGridIndexArray;
             if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0531));
             }
         }
 
-        if (data.unitTypeArray?.some(v => !ConfigManager.checkIsValidUnitType(v))) {
+        if (data.conUnitTypeArray?.some(v => !ConfigManager.checkIsValidUnitType(v))) {
             return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0525));
         }
 
         const playersCountUnneutral = war.getPlayersCountUnneutral();
         {
-            const playerIndexArray = data.playerIndexArray;
+            const playerIndexArray = data.conPlayerIndexArray;
             if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
             }
         }
 
         {
-            const teamIndexArray = data.teamIndexArray;
+            const teamIndexArray = data.conTeamIndexArray;
             if ((teamIndexArray) && (!ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0377));
             }
         }
 
         {
-            const actionStateArray = data.actionStateArray;
+            const actionStateArray = data.conActionStateArray;
             if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0526));
             }
@@ -3369,14 +3420,24 @@ namespace WarEventHelper {
             }
         }
 
-        if ((data.hpMultiplierPercentage            ??
-                data.hpDeltaValue                   ??
-                data.fuelDeltaValue                 ??
-                data.fuelMultiplierPercentage       ??
-                data.priAmmoDeltaValue              ??
-                data.priAmmoMultiplierPercentage    ??
-                data.promotionDeltaValue            ??
-                data.promotionMultiplierPercentage
+        {
+            const actActionState = data.actActionState;
+            if ((actActionState != null) && (!ConfigManager.checkIsValidUnitActionState(actActionState))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0526));
+            }
+        }
+
+        if ((data.actHpMultiplierPercentage             ??
+                data.actHpDeltaValue                    ??
+                data.actFuelDeltaValue                  ??
+                data.actFuelMultiplierPercentage        ??
+                data.actPriAmmoDeltaValue               ??
+                data.actPriAmmoMultiplierPercentage     ??
+                data.actPromotionDeltaValue             ??
+                data.actPromotionMultiplierPercentage   ??
+                data.actActionState                     ??
+                data.actHasLoadedCo                     ??
+                (data.actDestroyUnit || null)
             ) == null
         ) {
             return Lang.getText(LangTextType.A0264);
@@ -3954,7 +4015,7 @@ namespace WarEventHelper {
         else if (action.WeaDeprecatedSetPlayerFund)         { return ActionType.DeprecatedSetPlayerFund; }
         else if (action.WeaDeprecatedSetPlayerCoEnergy)     { return ActionType.DeprecatedSetPlayerCoEnergy; }
         else if (action.WeaSetPlayerAliveState)             { return ActionType.SetPlayerAliveState; }
-        else if (action.WeaSetPlayerFund)                   { return ActionType.SetPlayerFund; }
+        else if (action.WeaSetPlayerState)                  { return ActionType.SetPlayerState; }
         else if (action.WeaSetPlayerCoEnergy)               { return ActionType.SetPlayerCoEnergy; }
         else if (action.WeaSetUnitState)                    { return ActionType.SetUnitState; }
         else                                                { return null; }
@@ -4028,44 +4089,49 @@ namespace WarEventHelper {
                 playerIndexArray    : null,
                 playerAliveState    : PlayerAliveState.Alive,
             };
-        } else if (actionType === ActionType.SetPlayerFund) {
-            action.WeaSetPlayerFund = {
-                playerIndexArray        : null,
-                deltaValue              : 0,
-                multiplierPercentage    : 100,
+        } else if (actionType === ActionType.SetPlayerState) {
+            action.WeaSetPlayerState = {
+                conPlayerIndexArray         : null,
+                actFundDeltaValue           : 0,
+                actFundMultiplierPercentage : 100,
+                actCoEnergyDeltaPct         : 0,
+                actCoEnergyMultiplierPct    : 100,
+                actAliveState               : null,
             };
         } else if (actionType === ActionType.SetPlayerCoEnergy) {
             action.WeaSetPlayerCoEnergy = {
-                playerIndexArray        : null,
-                deltaPercentage         : 0,
-                multiplierPercentage    : 100,
+                playerIndexArray            : null,
+                actCoEnergyDeltaPct         : 0,
+                actCoEnergyMultiplierPct    : 100,
             };
         } else if (actionType === ActionType.SetUnitState) {
             action.WeaSetUnitState = {
-                unitTypeArray                   : null,
-                teamIndexArray                  : null,
-                playerIndexArray                : null,
-                locationIdArray                 : null,
-                gridIndexArray                  : null,
-                actionStateArray                : null,
-                hasLoadedCo                     : null,
-                conHp                           : null,
-                conHpComparator                 : Types.ValueComparator.EqualTo,
-                conFuelPct                      : null,
-                conFuelPctComparator            : Types.ValueComparator.EqualTo,
-                conPriAmmoPct                   : null,
-                conPriAmmoPctComparator         : Types.ValueComparator.EqualTo,
-                conPromotion                    : null,
-                conPromotionComparator          : Types.ValueComparator.EqualTo,
-                destroyUnit                     : null,
-                hpDeltaValue                    : 0,
-                hpMultiplierPercentage          : 100,
-                fuelDeltaValue                  : 0,
-                fuelMultiplierPercentage        : 100,
-                priAmmoDeltaValue               : 0,
-                priAmmoMultiplierPercentage     : 100,
-                promotionDeltaValue             : 0,
-                promotionMultiplierPercentage   : 100,
+                conUnitTypeArray                    : null,
+                conTeamIndexArray                   : null,
+                conPlayerIndexArray                 : null,
+                conLocationIdArray                  : null,
+                conGridIndexArray                   : null,
+                conActionStateArray                 : null,
+                conHasLoadedCo                      : null,
+                conHp                               : null,
+                conHpComparator                     : Types.ValueComparator.EqualTo,
+                conFuelPct                          : null,
+                conFuelPctComparator                : Types.ValueComparator.EqualTo,
+                conPriAmmoPct                       : null,
+                conPriAmmoPctComparator             : Types.ValueComparator.EqualTo,
+                conPromotion                        : null,
+                conPromotionComparator              : Types.ValueComparator.EqualTo,
+                actDestroyUnit                      : null,
+                actActionState                      : null,
+                actHasLoadedCo                      : null,
+                actHpDeltaValue                     : 0,
+                actHpMultiplierPercentage           : 100,
+                actFuelDeltaValue                   : 0,
+                actFuelMultiplierPercentage         : 100,
+                actPriAmmoDeltaValue                : 0,
+                actPriAmmoMultiplierPercentage      : 100,
+                actPromotionDeltaValue              : 0,
+                actPromotionMultiplierPercentage    : 100,
             };
         } else {
             throw Helpers.newError(`Invalid actionType: ${actionType}.`, ClientErrorCode.WarEventHelper_ResetAction_00);
@@ -4105,7 +4171,7 @@ namespace WarEventHelper {
         else if (action.WeaDeprecatedSetPlayerFund)         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel21, { war, fullData, action }); }
         else if (action.WeaDeprecatedSetPlayerCoEnergy)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel22, { war, fullData, action }); }
         else if (action.WeaSetPlayerAliveState)             { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel23, { war, fullData, action }); }
-        else if (action.WeaSetPlayerFund)                   { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel24, { war, fullData, action }); }
+        else if (action.WeaSetPlayerState)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel24, { war, fullData, action }); }
         else if (action.WeaSetPlayerCoEnergy)               { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel25, { war, fullData, action }); }
 
         else if (action.WeaSetUnitState)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel30, { war, fullData, action }); }

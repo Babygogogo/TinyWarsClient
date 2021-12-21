@@ -8454,103 +8454,121 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WeaSetPlayerFund. */
-    interface IWeaSetPlayerFund {
+    /** Properties of a WeaSetPlayerState. */
+    interface IWeaSetPlayerState {
 
-        /** WeaSetPlayerFund playerIndexArray */
-        playerIndexArray?: (number[]|null);
+        /** WeaSetPlayerState conPlayerIndexArray */
+        conPlayerIndexArray?: (number[]|null);
 
-        /** WeaSetPlayerFund multiplierPercentage */
-        multiplierPercentage?: (number|null);
+        /** WeaSetPlayerState actFundMultiplierPercentage */
+        actFundMultiplierPercentage?: (number|null);
 
-        /** WeaSetPlayerFund deltaValue */
-        deltaValue?: (number|null);
+        /** WeaSetPlayerState actFundDeltaValue */
+        actFundDeltaValue?: (number|null);
+
+        /** WeaSetPlayerState actCoEnergyMultiplierPct */
+        actCoEnergyMultiplierPct?: (number|null);
+
+        /** WeaSetPlayerState actCoEnergyDeltaPct */
+        actCoEnergyDeltaPct?: (number|null);
+
+        /** WeaSetPlayerState actAliveState */
+        actAliveState?: (number|null);
     }
 
-    /** Represents a WeaSetPlayerFund. */
-    class WeaSetPlayerFund implements IWeaSetPlayerFund {
+    /** Represents a WeaSetPlayerState. */
+    class WeaSetPlayerState implements IWeaSetPlayerState {
 
         /**
-         * Constructs a new WeaSetPlayerFund.
+         * Constructs a new WeaSetPlayerState.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWeaSetPlayerFund);
+        constructor(properties?: WarEvent.IWeaSetPlayerState);
 
-        /** WeaSetPlayerFund playerIndexArray. */
-        public playerIndexArray: number[];
+        /** WeaSetPlayerState conPlayerIndexArray. */
+        public conPlayerIndexArray: number[];
 
-        /** WeaSetPlayerFund multiplierPercentage. */
-        public multiplierPercentage: number;
+        /** WeaSetPlayerState actFundMultiplierPercentage. */
+        public actFundMultiplierPercentage: number;
 
-        /** WeaSetPlayerFund deltaValue. */
-        public deltaValue: number;
+        /** WeaSetPlayerState actFundDeltaValue. */
+        public actFundDeltaValue: number;
+
+        /** WeaSetPlayerState actCoEnergyMultiplierPct. */
+        public actCoEnergyMultiplierPct: number;
+
+        /** WeaSetPlayerState actCoEnergyDeltaPct. */
+        public actCoEnergyDeltaPct: number;
+
+        /** WeaSetPlayerState actAliveState. */
+        public actAliveState: number;
 
         /**
-         * Creates a new WeaSetPlayerFund instance using the specified properties.
+         * Creates a new WeaSetPlayerState instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WeaSetPlayerFund instance
+         * @returns WeaSetPlayerState instance
          */
-        public static create(properties?: WarEvent.IWeaSetPlayerFund): WarEvent.WeaSetPlayerFund;
+        public static create(properties?: WarEvent.IWeaSetPlayerState): WarEvent.WeaSetPlayerState;
 
         /**
-         * Encodes the specified WeaSetPlayerFund message. Does not implicitly {@link WarEvent.WeaSetPlayerFund.verify|verify} messages.
-         * @param message WeaSetPlayerFund message or plain object to encode
+         * Encodes the specified WeaSetPlayerState message. Does not implicitly {@link WarEvent.WeaSetPlayerState.verify|verify} messages.
+         * @param message WeaSetPlayerState message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWeaSetPlayerFund, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWeaSetPlayerState, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WeaSetPlayerFund message, length delimited. Does not implicitly {@link WarEvent.WeaSetPlayerFund.verify|verify} messages.
-         * @param message WeaSetPlayerFund message or plain object to encode
+         * Encodes the specified WeaSetPlayerState message, length delimited. Does not implicitly {@link WarEvent.WeaSetPlayerState.verify|verify} messages.
+         * @param message WeaSetPlayerState message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWeaSetPlayerFund, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWeaSetPlayerState, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WeaSetPlayerFund message from the specified reader or buffer.
+         * Decodes a WeaSetPlayerState message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WeaSetPlayerFund
+         * @returns WeaSetPlayerState
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetPlayerFund;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetPlayerState;
 
         /**
-         * Decodes a WeaSetPlayerFund message from the specified reader or buffer, length delimited.
+         * Decodes a WeaSetPlayerState message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WeaSetPlayerFund
+         * @returns WeaSetPlayerState
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetPlayerFund;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetPlayerState;
 
         /**
-         * Verifies a WeaSetPlayerFund message.
+         * Verifies a WeaSetPlayerState message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WeaSetPlayerFund message from a plain object. Also converts values to their respective internal types.
+         * Creates a WeaSetPlayerState message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WeaSetPlayerFund
+         * @returns WeaSetPlayerState
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetPlayerFund;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetPlayerState;
 
         /**
-         * Creates a plain object from a WeaSetPlayerFund message. Also converts values to other types if specified.
-         * @param message WeaSetPlayerFund
+         * Creates a plain object from a WeaSetPlayerState message. Also converts values to other types if specified.
+         * @param message WeaSetPlayerState
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WeaSetPlayerFund, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WeaSetPlayerState, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WeaSetPlayerFund to JSON.
+         * Converts this WeaSetPlayerState to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -8562,11 +8580,11 @@ export declare namespace WarEvent {
         /** WeaSetPlayerCoEnergy playerIndexArray */
         playerIndexArray?: (number[]|null);
 
-        /** WeaSetPlayerCoEnergy multiplierPercentage */
-        multiplierPercentage?: (number|null);
+        /** WeaSetPlayerCoEnergy actCoEnergyMultiplierPct */
+        actCoEnergyMultiplierPct?: (number|null);
 
-        /** WeaSetPlayerCoEnergy deltaPercentage */
-        deltaPercentage?: (number|null);
+        /** WeaSetPlayerCoEnergy actCoEnergyDeltaPct */
+        actCoEnergyDeltaPct?: (number|null);
     }
 
     /** Represents a WeaSetPlayerCoEnergy. */
@@ -8581,11 +8599,11 @@ export declare namespace WarEvent {
         /** WeaSetPlayerCoEnergy playerIndexArray. */
         public playerIndexArray: number[];
 
-        /** WeaSetPlayerCoEnergy multiplierPercentage. */
-        public multiplierPercentage: number;
+        /** WeaSetPlayerCoEnergy actCoEnergyMultiplierPct. */
+        public actCoEnergyMultiplierPct: number;
 
-        /** WeaSetPlayerCoEnergy deltaPercentage. */
-        public deltaPercentage: number;
+        /** WeaSetPlayerCoEnergy actCoEnergyDeltaPct. */
+        public actCoEnergyDeltaPct: number;
 
         /**
          * Creates a new WeaSetPlayerCoEnergy instance using the specified properties.
@@ -8661,26 +8679,26 @@ export declare namespace WarEvent {
     /** Properties of a WeaSetUnitState. */
     interface IWeaSetUnitState {
 
-        /** WeaSetUnitState playerIndexArray */
-        playerIndexArray?: (number[]|null);
+        /** WeaSetUnitState conPlayerIndexArray */
+        conPlayerIndexArray?: (number[]|null);
 
-        /** WeaSetUnitState teamIndexArray */
-        teamIndexArray?: (number[]|null);
+        /** WeaSetUnitState conTeamIndexArray */
+        conTeamIndexArray?: (number[]|null);
 
-        /** WeaSetUnitState unitTypeArray */
-        unitTypeArray?: (number[]|null);
+        /** WeaSetUnitState conUnitTypeArray */
+        conUnitTypeArray?: (number[]|null);
 
-        /** WeaSetUnitState locationIdArray */
-        locationIdArray?: (number[]|null);
+        /** WeaSetUnitState conLocationIdArray */
+        conLocationIdArray?: (number[]|null);
 
-        /** WeaSetUnitState gridIndexArray */
-        gridIndexArray?: (Structure.IGridIndex[]|null);
+        /** WeaSetUnitState conGridIndexArray */
+        conGridIndexArray?: (Structure.IGridIndex[]|null);
 
-        /** WeaSetUnitState actionStateArray */
-        actionStateArray?: (number[]|null);
+        /** WeaSetUnitState conActionStateArray */
+        conActionStateArray?: (number[]|null);
 
-        /** WeaSetUnitState hasLoadedCo */
-        hasLoadedCo?: (boolean|null);
+        /** WeaSetUnitState conHasLoadedCo */
+        conHasLoadedCo?: (boolean|null);
 
         /** WeaSetUnitState conHp */
         conHp?: (number|null);
@@ -8706,32 +8724,38 @@ export declare namespace WarEvent {
         /** WeaSetUnitState conPromotionComparator */
         conPromotionComparator?: (number|null);
 
-        /** WeaSetUnitState hpMultiplierPercentage */
-        hpMultiplierPercentage?: (number|null);
+        /** WeaSetUnitState actHpMultiplierPercentage */
+        actHpMultiplierPercentage?: (number|null);
 
-        /** WeaSetUnitState hpDeltaValue */
-        hpDeltaValue?: (number|null);
+        /** WeaSetUnitState actHpDeltaValue */
+        actHpDeltaValue?: (number|null);
 
-        /** WeaSetUnitState fuelMultiplierPercentage */
-        fuelMultiplierPercentage?: (number|null);
+        /** WeaSetUnitState actFuelMultiplierPercentage */
+        actFuelMultiplierPercentage?: (number|null);
 
-        /** WeaSetUnitState fuelDeltaValue */
-        fuelDeltaValue?: (number|null);
+        /** WeaSetUnitState actFuelDeltaValue */
+        actFuelDeltaValue?: (number|null);
 
-        /** WeaSetUnitState priAmmoMultiplierPercentage */
-        priAmmoMultiplierPercentage?: (number|null);
+        /** WeaSetUnitState actPriAmmoMultiplierPercentage */
+        actPriAmmoMultiplierPercentage?: (number|null);
 
-        /** WeaSetUnitState priAmmoDeltaValue */
-        priAmmoDeltaValue?: (number|null);
+        /** WeaSetUnitState actPriAmmoDeltaValue */
+        actPriAmmoDeltaValue?: (number|null);
 
-        /** WeaSetUnitState promotionMultiplierPercentage */
-        promotionMultiplierPercentage?: (number|null);
+        /** WeaSetUnitState actPromotionMultiplierPercentage */
+        actPromotionMultiplierPercentage?: (number|null);
 
-        /** WeaSetUnitState promotionDeltaValue */
-        promotionDeltaValue?: (number|null);
+        /** WeaSetUnitState actPromotionDeltaValue */
+        actPromotionDeltaValue?: (number|null);
 
-        /** WeaSetUnitState destroyUnit */
-        destroyUnit?: (boolean|null);
+        /** WeaSetUnitState actDestroyUnit */
+        actDestroyUnit?: (boolean|null);
+
+        /** WeaSetUnitState actActionState */
+        actActionState?: (number|null);
+
+        /** WeaSetUnitState actHasLoadedCo */
+        actHasLoadedCo?: (boolean|null);
     }
 
     /** Represents a WeaSetUnitState. */
@@ -8743,26 +8767,26 @@ export declare namespace WarEvent {
          */
         constructor(properties?: WarEvent.IWeaSetUnitState);
 
-        /** WeaSetUnitState playerIndexArray. */
-        public playerIndexArray: number[];
+        /** WeaSetUnitState conPlayerIndexArray. */
+        public conPlayerIndexArray: number[];
 
-        /** WeaSetUnitState teamIndexArray. */
-        public teamIndexArray: number[];
+        /** WeaSetUnitState conTeamIndexArray. */
+        public conTeamIndexArray: number[];
 
-        /** WeaSetUnitState unitTypeArray. */
-        public unitTypeArray: number[];
+        /** WeaSetUnitState conUnitTypeArray. */
+        public conUnitTypeArray: number[];
 
-        /** WeaSetUnitState locationIdArray. */
-        public locationIdArray: number[];
+        /** WeaSetUnitState conLocationIdArray. */
+        public conLocationIdArray: number[];
 
-        /** WeaSetUnitState gridIndexArray. */
-        public gridIndexArray: Structure.IGridIndex[];
+        /** WeaSetUnitState conGridIndexArray. */
+        public conGridIndexArray: Structure.IGridIndex[];
 
-        /** WeaSetUnitState actionStateArray. */
-        public actionStateArray: number[];
+        /** WeaSetUnitState conActionStateArray. */
+        public conActionStateArray: number[];
 
-        /** WeaSetUnitState hasLoadedCo. */
-        public hasLoadedCo: boolean;
+        /** WeaSetUnitState conHasLoadedCo. */
+        public conHasLoadedCo: boolean;
 
         /** WeaSetUnitState conHp. */
         public conHp: number;
@@ -8788,32 +8812,38 @@ export declare namespace WarEvent {
         /** WeaSetUnitState conPromotionComparator. */
         public conPromotionComparator: number;
 
-        /** WeaSetUnitState hpMultiplierPercentage. */
-        public hpMultiplierPercentage: number;
+        /** WeaSetUnitState actHpMultiplierPercentage. */
+        public actHpMultiplierPercentage: number;
 
-        /** WeaSetUnitState hpDeltaValue. */
-        public hpDeltaValue: number;
+        /** WeaSetUnitState actHpDeltaValue. */
+        public actHpDeltaValue: number;
 
-        /** WeaSetUnitState fuelMultiplierPercentage. */
-        public fuelMultiplierPercentage: number;
+        /** WeaSetUnitState actFuelMultiplierPercentage. */
+        public actFuelMultiplierPercentage: number;
 
-        /** WeaSetUnitState fuelDeltaValue. */
-        public fuelDeltaValue: number;
+        /** WeaSetUnitState actFuelDeltaValue. */
+        public actFuelDeltaValue: number;
 
-        /** WeaSetUnitState priAmmoMultiplierPercentage. */
-        public priAmmoMultiplierPercentage: number;
+        /** WeaSetUnitState actPriAmmoMultiplierPercentage. */
+        public actPriAmmoMultiplierPercentage: number;
 
-        /** WeaSetUnitState priAmmoDeltaValue. */
-        public priAmmoDeltaValue: number;
+        /** WeaSetUnitState actPriAmmoDeltaValue. */
+        public actPriAmmoDeltaValue: number;
 
-        /** WeaSetUnitState promotionMultiplierPercentage. */
-        public promotionMultiplierPercentage: number;
+        /** WeaSetUnitState actPromotionMultiplierPercentage. */
+        public actPromotionMultiplierPercentage: number;
 
-        /** WeaSetUnitState promotionDeltaValue. */
-        public promotionDeltaValue: number;
+        /** WeaSetUnitState actPromotionDeltaValue. */
+        public actPromotionDeltaValue: number;
 
-        /** WeaSetUnitState destroyUnit. */
-        public destroyUnit: boolean;
+        /** WeaSetUnitState actDestroyUnit. */
+        public actDestroyUnit: boolean;
+
+        /** WeaSetUnitState actActionState. */
+        public actActionState: number;
+
+        /** WeaSetUnitState actHasLoadedCo. */
+        public actHasLoadedCo: boolean;
 
         /**
          * Creates a new WeaSetUnitState instance using the specified properties.
@@ -8928,8 +8958,8 @@ export declare namespace WarEvent {
         /** WarEventAction WeaSetPlayerAliveState */
         WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
 
-        /** WarEventAction WeaSetPlayerFund */
-        WeaSetPlayerFund?: (WarEvent.IWeaSetPlayerFund|null);
+        /** WarEventAction WeaSetPlayerState */
+        WeaSetPlayerState?: (WarEvent.IWeaSetPlayerState|null);
 
         /** WarEventAction WeaSetPlayerCoEnergy */
         WeaSetPlayerCoEnergy?: (WarEvent.IWeaSetPlayerCoEnergy|null);
@@ -8986,8 +9016,8 @@ export declare namespace WarEvent {
         /** WarEventAction WeaSetPlayerAliveState. */
         public WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
 
-        /** WarEventAction WeaSetPlayerFund. */
-        public WeaSetPlayerFund?: (WarEvent.IWeaSetPlayerFund|null);
+        /** WarEventAction WeaSetPlayerState. */
+        public WeaSetPlayerState?: (WarEvent.IWeaSetPlayerState|null);
 
         /** WarEventAction WeaSetPlayerCoEnergy. */
         public WeaSetPlayerCoEnergy?: (WarEvent.IWeaSetPlayerCoEnergy|null);

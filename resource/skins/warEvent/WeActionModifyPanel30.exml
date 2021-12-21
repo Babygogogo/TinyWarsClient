@@ -207,6 +207,22 @@
                             <TwnsUiLabel:UiLabel id="_labelDestroyUnit" text="取反" size="14" textColor="0xFFFFFF"
                                                  left="126" right="10" verticalCenter="0" />
                         </e:Group>
+                        <e:Group x="0" y="38">
+                            <e:Group width="430" left="0" verticalCenter="0">
+                                <TwnsUiButton:UiButton id="_btnActActionState" label="切换类型"
+                                                       skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                       width="120" top="0" left="0" x="10" y="10" />
+                                <TwnsUiLabel:UiLabel id="_labelActActionState" text="取反" size="14" textColor="0xFFFFFF"
+                                                     left="126" right="10" verticalCenter="0" />
+                            </e:Group>
+                            <e:Group x="430" width="430" verticalCenter="0">
+                                <TwnsUiButton:UiButton id="_btnActHasLoadedCo" label="切换类型"
+                                                       skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                       width="120" top="0" left="0" x="10" y="10" />
+                                <TwnsUiLabel:UiLabel id="_labelActHasLoadedCo" text="取反" size="14" textColor="0xFFFFFF"
+                                                     left="126" right="10" verticalCenter="0" />
+                            </e:Group>
+                        </e:Group>
                         <e:Group x="0" y="0">
                             <e:Group verticalCenter="0" left="10">
                                 <TwnsUiLabel:UiLabel id="_labelHp" text="FinalValue" size="16" textColor="0xFFFFFF"

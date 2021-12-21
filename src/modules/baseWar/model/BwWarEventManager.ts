@@ -232,7 +232,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaDeprecatedSetPlayerFund)         { await this._callActionDeprecatedSetPlayerFundWithExtraData(action.WeaDeprecatedSetPlayerFund, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerCoEnergy)     { await this._callActionDeprecatedSetPlayerCoEnergyWithExtraData(action.WeaDeprecatedSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
-            else if (action.WeaSetPlayerFund)                   { await this._callActionSetPlayerFundWithExtraData(action.WeaSetPlayerFund, isFastExecute); }
+            else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithExtraData(action.WeaSetPlayerState, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithExtraData(action.WeaSetUnitState, isFastExecute); }
             else {
@@ -255,7 +255,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaDeprecatedSetPlayerFund)         { await this._callActionDeprecatedSetPlayerFundWithoutExtraData(action.WeaDeprecatedSetPlayerFund, isFastExecute); }
             else if (action.WeaDeprecatedSetPlayerCoEnergy)     { await this._callActionDeprecatedSetPlayerCoEnergyWithoutExtraData(action.WeaDeprecatedSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetPlayerAliveState)             { await this._callActionSetPlayerAliveStateWithoutExtraData(action.WeaSetPlayerAliveState, isFastExecute); }
-            else if (action.WeaSetPlayerFund)                   { await this._callActionSetPlayerFundWithoutExtraData(action.WeaSetPlayerFund, isFastExecute); }
+            else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithoutExtraData(action.WeaSetPlayerState, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithoutExtraData(action.WeaSetUnitState, isFastExecute); }
             else {
@@ -630,24 +630,41 @@ namespace TwnsBwWarEventManager {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetPlayerFundWithExtraData(action: WarEvent.IWeaSetPlayerFund, isFastExecute: boolean): Promise<void> {
+        private async _callActionSetPlayerStateWithExtraData(action: WarEvent.IWeaSetPlayerState, isFastExecute: boolean): Promise<void> {
             // nothing to do
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetPlayerFundWithoutExtraData(action: WarEvent.IWeaSetPlayerFund, isFastExecute: boolean): Promise<void> {
-            const multiplierPercentage  = action.multiplierPercentage ?? 100;
-            const deltaValue            = action.deltaValue ?? 0;
-            const maxValue              = CommonConstants.WarPlayerMaxFund;
-            const playerIndexArray      = action.playerIndexArray;
+        private async _callActionSetPlayerStateWithoutExtraData(action: WarEvent.IWeaSetPlayerState, isFastExecute: boolean): Promise<void> {
+            const conPlayerIndexArray           = action.conPlayerIndexArray;
+            const actFundMultiplierPercentage   = action.actFundMultiplierPercentage ?? 100;
+            const actFundDeltaValue             = action.actFundDeltaValue ?? 0;
+            const actCoEnergyMultiplierPct      = action.actCoEnergyMultiplierPct ?? 100;
+            const actCoEnergyDeltaPct           = action.actCoEnergyDeltaPct ?? 0;
+            const maxFund                       = CommonConstants.WarPlayerMaxFund;
+            const actAliveState                 = action.actAliveState;
+
             for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
-                if ((playerIndexArray?.length) && (playerIndexArray.indexOf(playerIndex) < 0)) {
+                if ((conPlayerIndexArray?.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0)) {
                     continue;
                 }
 
                 player.setFund(Math.min(
-                    maxValue,
-                    Math.max(-maxValue, Math.floor(player.getFund() * multiplierPercentage / 100 + deltaValue)))
+                    maxFund,
+                    Math.max(-maxFund, Math.floor(player.getFund() * actFundMultiplierPercentage / 100 + actFundDeltaValue)))
                 );
+
+                {
+                    const maxEnergy = player.getCoMaxEnergy();
+                    player.setCoCurrentEnergy(Helpers.getValueInRange({
+                        maxValue    : maxEnergy,
+                        minValue    : 0,
+                        rawValue    : Math.floor(player.getCoCurrentEnergy() * actCoEnergyMultiplierPct / 100 + maxEnergy * actCoEnergyDeltaPct / 100),
+                    }));
+                }
+
+                if (actAliveState != null) {
+                    player.setAliveState(actAliveState);
+                }
             }
         }
 
@@ -657,8 +674,8 @@ namespace TwnsBwWarEventManager {
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionSetPlayerCoEnergyWithoutExtraData(action: WarEvent.IWeaSetPlayerCoEnergy, isFastExecute: boolean): Promise<void> {
-            const multiplierPercentage  = action.multiplierPercentage ?? 100;
-            const deltaPercentage       = action.deltaPercentage ?? 0;
+            const multiplierPercentage  = action.actCoEnergyMultiplierPct ?? 100;
+            const deltaPercentage       = action.actCoEnergyDeltaPct ?? 0;
             const playerIndexArray      = action.playerIndexArray;
             for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
                 if ((playerIndexArray?.length) && (playerIndexArray.indexOf(playerIndex) < 0)) {
@@ -680,13 +697,13 @@ namespace TwnsBwWarEventManager {
             // nothing to do
         }
         private async _callActionSetUnitStateWithoutExtraData(action: WarEvent.IWeaSetUnitState, isFastExecute: boolean): Promise<void> {
-            const playerIndexArray              = action.playerIndexArray ?? [];
-            const teamIndexArray                = action.teamIndexArray ?? [];
-            const locationIdArray               = action.locationIdArray ?? [];
-            const gridIndexArray                = action.gridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
-            const unitTypeArray                 = action.unitTypeArray ?? [];
-            const actionStateArray              = action.actionStateArray ?? [];
-            const hasLoadedCo                   = action.hasLoadedCo;
+            const playerIndexArray              = action.conPlayerIndexArray ?? [];
+            const teamIndexArray                = action.conTeamIndexArray ?? [];
+            const locationIdArray               = action.conLocationIdArray ?? [];
+            const gridIndexArray                = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetUnitHpWithoutExtraData_00)) ?? [];
+            const unitTypeArray                 = action.conUnitTypeArray ?? [];
+            const actionStateArray              = action.conActionStateArray ?? [];
+            const hasLoadedCo                   = action.conHasLoadedCo;
             const conHp                         = action.conHp;
             const conHpComparator               = action.conHpComparator ?? Types.ValueComparator.EqualTo;
             const conFuelPct                    = action.conFuelPct;
@@ -695,15 +712,17 @@ namespace TwnsBwWarEventManager {
             const conPriAmmoPctComparator       = action.conPriAmmoPctComparator ?? Types.ValueComparator.EqualTo;
             const conPromotion                  = action.conPromotion;
             const conPromotionComparator        = action.conPromotionComparator ?? Types.ValueComparator.EqualTo;
-            const destroyUnit                   = action.destroyUnit;
-            const hpDeltaValue                  = action.hpDeltaValue ?? 0;
-            const hpMultiplierPercentage        = action.hpMultiplierPercentage ?? 100;
-            const fuelDeltaValue                = action.fuelDeltaValue ?? 0;
-            const fuelMultiplierPercentage      = action.fuelMultiplierPercentage ?? 100;
-            const priAmmoDeltaValue             = action.priAmmoDeltaValue ?? 0;
-            const priAmmoMultiplierPercentage   = action.priAmmoMultiplierPercentage ?? 100;
-            const promotionDeltaValue           = action.promotionDeltaValue ?? 0;
-            const promotionMultiplierPercentage = action.promotionMultiplierPercentage ?? 100;
+            const destroyUnit                   = action.actDestroyUnit;
+            const actActionState                = action.actActionState;
+            const actHasLoadedCo                = action.actHasLoadedCo;
+            const hpDeltaValue                  = action.actHpDeltaValue ?? 0;
+            const hpMultiplierPercentage        = action.actHpMultiplierPercentage ?? 100;
+            const fuelDeltaValue                = action.actFuelDeltaValue ?? 0;
+            const fuelMultiplierPercentage      = action.actFuelMultiplierPercentage ?? 100;
+            const priAmmoDeltaValue             = action.actPriAmmoDeltaValue ?? 0;
+            const priAmmoMultiplierPercentage   = action.actPriAmmoMultiplierPercentage ?? 100;
+            const promotionDeltaValue           = action.actPromotionDeltaValue ?? 0;
+            const promotionMultiplierPercentage = action.actPromotionMultiplierPercentage ?? 100;
             const war                           = this._getWar();
             const unitMap                       = war.getUnitMap();
             const tileMap                       = war.getTileMap();
@@ -805,6 +824,14 @@ namespace TwnsBwWarEventManager {
                                     rawValue    : Math.floor(currentAmmo * priAmmoMultiplierPercentage / 100 + priAmmoDeltaValue),
                                 }));
                             }
+                        }
+
+                        if (actActionState != null) {
+                            unit.setActionState(actActionState);
+                        }
+
+                        if (actHasLoadedCo != null) {
+                            unit.setHasLoadedCo(actHasLoadedCo);
                         }
 
                         if (!isFastExecute) {

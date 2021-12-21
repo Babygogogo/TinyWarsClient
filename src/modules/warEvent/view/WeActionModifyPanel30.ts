@@ -67,6 +67,10 @@ namespace TwnsWeActionModifyPanel30 {
 
         private readonly _btnDestroyUnit!                       : TwnsUiButton.UiButton;
         private readonly _labelDestroyUnit!                     : TwnsUiLabel.UiLabel;
+        private readonly _btnActActionState!                    : TwnsUiButton.UiButton;
+        private readonly _labelActActionState!                  : TwnsUiLabel.UiLabel;
+        private readonly _btnActHasLoadedCo!                    : TwnsUiButton.UiButton;
+        private readonly _labelActHasLoadedCo!                  : TwnsUiLabel.UiLabel;
         private readonly _labelHp!                              : TwnsUiLabel.UiLabel;
         private readonly _labelHpMultiplierPercentage!          : TwnsUiLabel.UiLabel;
         private readonly _inputHpMultiplierPercentage!          : TwnsUiTextInput.UiTextInput;
@@ -118,6 +122,8 @@ namespace TwnsWeActionModifyPanel30 {
                 { ui: this._inputConPromotion,                  callback: this._onFocusOutInputConPromotion,                    eventType: egret.FocusEvent.FOCUS_OUT },
 
                 { ui: this._btnDestroyUnit,                     callback: this._onTouchedBtnDestroyUnit },
+                { ui: this._btnActActionState,                  callback: this._onTouchedBtnActActionState },
+                { ui: this._btnActHasLoadedCo,                  callback: this._onTouchedBtnActHasLoadedCo },
                 { ui: this._inputHpDeltaValue,                  callback: this._onFocusInInputHpDeltaValue,                     eventType: egret.FocusEvent.FOCUS_IN },
                 { ui: this._inputHpDeltaValue,                  callback: this._onFocusOutInputHpDeltaValue,                    eventType: egret.FocusEvent.FOCUS_OUT },
                 { ui: this._inputHpMultiplierPercentage,        callback: this._onFocusInInputHpMultiplierPercentage,           eventType: egret.FocusEvent.FOCUS_IN },
@@ -168,10 +174,10 @@ namespace TwnsWeActionModifyPanel30 {
         private _onTouchedBtnPlayerIndex(): void {
             const action = this._getAction();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerIndexPanel, {
-                currentPlayerIndexArray : action.playerIndexArray ?? [],
+                currentPlayerIndexArray : action.conPlayerIndexArray ?? [],
                 maxPlayerIndex          : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : playerIndexArray => {
-                    action.playerIndexArray = playerIndexArray;
+                    action.conPlayerIndexArray = playerIndexArray;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
@@ -179,10 +185,10 @@ namespace TwnsWeActionModifyPanel30 {
         private _onTouchedBtnTeamIndex(): void {
             const action = this._getAction();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTeamIndexPanel, {
-                currentTeamIndexArray   : action.teamIndexArray ?? [],
+                currentTeamIndexArray   : action.conTeamIndexArray ?? [],
                 maxTeamIndex            : this._getOpenData().war.getPlayersCountUnneutral(),
                 callbackOnConfirm       : teamIndexArray => {
-                    action.teamIndexArray = teamIndexArray;
+                    action.conTeamIndexArray = teamIndexArray;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
@@ -190,9 +196,9 @@ namespace TwnsWeActionModifyPanel30 {
         private _onTouchedBtnUnitType(): void {
             const action = this._getAction();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitTypePanel, {
-                currentUnitTypeArray    : action.unitTypeArray ?? [],
+                currentUnitTypeArray    : action.conUnitTypeArray ?? [],
                 callbackOnConfirm       : unitTypeArray => {
-                    action.unitTypeArray = unitTypeArray;
+                    action.conUnitTypeArray = unitTypeArray;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
@@ -200,9 +206,9 @@ namespace TwnsWeActionModifyPanel30 {
         private _onTouchedBtnLocation(): void {
             const action = this._getAction();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseLocationPanel, {
-                currentLocationIdArray  : action.locationIdArray ?? [],
+                currentLocationIdArray  : action.conLocationIdArray ?? [],
                 callbackOnConfirm       : locationIdArray => {
-                    action.locationIdArray = locationIdArray;
+                    action.conLocationIdArray = locationIdArray;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
@@ -210,10 +216,10 @@ namespace TwnsWeActionModifyPanel30 {
         private _onTouchedBtnGridIndex(): void {
             const action = this._getAction();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseGridIndexPanel, {
-                currentGridIndexArray   : Helpers.getNonNullElements(action.gridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
+                currentGridIndexArray   : Helpers.getNonNullElements(action.conGridIndexArray?.map(v => GridIndexHelpers.convertGridIndex(v)) ?? []),
                 mapSize                 : this._getOpenData().war.getTileMap().getMapSize(),
                 callbackOnConfirm       : gridIndexArray => {
-                    action.gridIndexArray = gridIndexArray;
+                    action.conGridIndexArray = gridIndexArray;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
@@ -221,22 +227,22 @@ namespace TwnsWeActionModifyPanel30 {
         private _onTouchedBtnActionState(): void {
             const condition = this._getAction();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitActionStatePanel, {
-                currentActionStateArray : condition.actionStateArray ?? [],
+                currentActionStateArray : condition.conActionStateArray ?? [],
                 callbackOnConfirm       : actionStateArray => {
-                    condition.actionStateArray = actionStateArray;
+                    condition.conActionStateArray = actionStateArray;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
         }
         private _onTouchedBtnHasLoadedCo(): void {
             const condition     = this._getAction();
-            const hasLoadedCo   = condition.hasLoadedCo;
+            const hasLoadedCo   = condition.conHasLoadedCo;
             if (hasLoadedCo) {
-                condition.hasLoadedCo = false;
+                condition.conHasLoadedCo = false;
             } else if (hasLoadedCo == false) {
-                condition.hasLoadedCo = null;
+                condition.conHasLoadedCo = null;
             } else {
-                condition.hasLoadedCo = true;
+                condition.conHasLoadedCo = true;
             }
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
@@ -315,8 +321,34 @@ namespace TwnsWeActionModifyPanel30 {
         }
 
         private _onTouchedBtnDestroyUnit(): void {
-            const condition          = this._getAction();
-            condition.destroyUnit    = !condition.destroyUnit;
+            const action          = this._getAction();
+            action.actDestroyUnit = !action.actDestroyUnit;
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onTouchedBtnActActionState(): void {
+            const action        = this._getAction();
+            const actionState   = action.actActionState;
+            if (actionState == Types.UnitActionState.Idle) {
+                action.actActionState = Types.UnitActionState.Acted;
+            } else if (actionState === Types.UnitActionState.Acted) {
+                action.actActionState = null;
+            } else {
+                action.actActionState = Types.UnitActionState.Idle;
+            }
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+
+        private _onTouchedBtnActHasLoadedCo(): void {
+            const action        = this._getAction();
+            const hasLoadedCo   = action.actHasLoadedCo;
+            if (hasLoadedCo === true) {
+                action.actHasLoadedCo = false;
+            } else if (hasLoadedCo === false) {
+                action.actHasLoadedCo = null;
+            } else {
+                action.actHasLoadedCo = true;
+            }
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
@@ -328,10 +360,10 @@ namespace TwnsWeActionModifyPanel30 {
             const text      = this._inputHpDeltaValue.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.hpDeltaValue = null;
+                action.actHpDeltaValue = null;
             } else {
-                const maxValue      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
-                action.hpDeltaValue = Math.min(
+                const maxValue          = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                action.actHpDeltaValue  = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -347,10 +379,10 @@ namespace TwnsWeActionModifyPanel30 {
             const text      = this._inputHpMultiplierPercentage.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.hpMultiplierPercentage = null;
+                action.actHpMultiplierPercentage = null;
             } else {
-                const maxValue                  = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
-                action.hpMultiplierPercentage   = Math.min(
+                const maxValue                      = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                action.actHpMultiplierPercentage    = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -366,10 +398,10 @@ namespace TwnsWeActionModifyPanel30 {
             const text      = this._inputFuelDeltaValue.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.fuelDeltaValue = null;
+                action.actFuelDeltaValue = null;
             } else {
-                const maxValue      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
-                action.fuelDeltaValue = Math.min(
+                const maxValue              = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                action.actFuelDeltaValue    = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -385,10 +417,10 @@ namespace TwnsWeActionModifyPanel30 {
             const text      = this._inputFuelMultiplierPercentage.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.fuelMultiplierPercentage = null;
+                action.actFuelMultiplierPercentage = null;
             } else {
-                const maxValue                  = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
-                action.fuelMultiplierPercentage   = Math.min(
+                const maxValue                      = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                action.actFuelMultiplierPercentage  = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -404,10 +436,10 @@ namespace TwnsWeActionModifyPanel30 {
             const text      = this._inputPriAmmoDeltaValue.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.priAmmoDeltaValue = null;
+                action.actPriAmmoDeltaValue = null;
             } else {
-                const maxValue      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
-                action.priAmmoDeltaValue = Math.min(
+                const maxValue              = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                action.actPriAmmoDeltaValue = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -423,10 +455,10 @@ namespace TwnsWeActionModifyPanel30 {
             const text      = this._inputPriAmmoMultiplierPercentage.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.priAmmoMultiplierPercentage = null;
+                action.actPriAmmoMultiplierPercentage = null;
             } else {
-                const maxValue                  = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
-                action.priAmmoMultiplierPercentage   = Math.min(
+                const maxValue                          = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                action.actPriAmmoMultiplierPercentage   = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -442,10 +474,10 @@ namespace TwnsWeActionModifyPanel30 {
             const text      = this._inputPromotionDeltaValue.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.promotionDeltaValue = null;
+                action.actPromotionDeltaValue = null;
             } else {
-                const maxValue      = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
-                action.promotionDeltaValue = Math.min(
+                const maxValue                  = CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue;
+                action.actPromotionDeltaValue   = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -461,10 +493,10 @@ namespace TwnsWeActionModifyPanel30 {
             const text      = this._inputPromotionMultiplierPercentage.text;
             const rawValue  = text ? parseInt(text) : null;
             if ((rawValue == null) || (isNaN(rawValue))) {
-                action.promotionMultiplierPercentage = null;
+                action.actPromotionMultiplierPercentage = null;
             } else {
-                const maxValue                  = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
-                action.promotionMultiplierPercentage   = Math.min(
+                const maxValue                          = CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage;
+                action.actPromotionMultiplierPercentage = Math.min(
                     maxValue,
                     Math.max(-maxValue, rawValue)
                 );
@@ -493,6 +525,8 @@ namespace TwnsWeActionModifyPanel30 {
             this._updateInputConPromotion();
 
             this._updateLabelDestroyUnit();
+            this._updateLabelActActionState();
+            this._updateLabelActHasLoadedCo();
             this._updateInputHpDeltaValue();
             this._updateInputHpMultiplierPercentage();
             this._updateInputFuelDeltaValue();
@@ -524,6 +558,8 @@ namespace TwnsWeActionModifyPanel30 {
             this._labelConPromotion.text                    = Lang.getText(LangTextType.B0370);
 
             this._btnDestroyUnit.label                      = Lang.getText(LangTextType.B0808);
+            this._btnActActionState.label                   = Lang.getText(LangTextType.B0526);
+            this._btnActHasLoadedCo.label                   = Lang.getText(LangTextType.B0421);
             this._labelHp.text                              = Lang.getText(LangTextType.B0807);
             this._labelHpDeltaValue.text                    = Lang.getText(LangTextType.B0754);
             this._labelHpMultiplierPercentage.text          = `${Lang.getText(LangTextType.B0755)}%`;
@@ -551,31 +587,31 @@ namespace TwnsWeActionModifyPanel30 {
             this._labelDesc.text    = WarEventHelper.getDescForAction(action) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelPlayerIndex(): void {
-            const playerIndexArray      = this._getAction().playerIndexArray;
+            const playerIndexArray      = this._getAction().conPlayerIndexArray;
             this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelTeamIndex(): void {
-            const teamIndexArray        = this._getAction().teamIndexArray;
+            const teamIndexArray        = this._getAction().conTeamIndexArray;
             this._labelTeamIndex.text   = teamIndexArray?.length ? teamIndexArray.map(v => Lang.getPlayerTeamName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelUnitType(): void {
-            const unitTypeArray         = this._getAction().unitTypeArray;
+            const unitTypeArray         = this._getAction().conUnitTypeArray;
             this._labelUnitType.text    = unitTypeArray?.length ? unitTypeArray.map(v => Lang.getUnitName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelLocation(): void {
-            const locationIdArray       = this._getAction().locationIdArray;
+            const locationIdArray       = this._getAction().conLocationIdArray;
             this._labelLocation.text    = locationIdArray?.length ? locationIdArray.join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelGridIndex(): void {
-            const gridIndexArray        = this._getAction().gridIndexArray;
+            const gridIndexArray        = this._getAction().conGridIndexArray;
             this._labelGridIndex.text   = gridIndexArray?.length ? gridIndexArray.map(v => `(${v.x},${v.y})`).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelActionState(): void {
-            const actionStateArray      = this._getAction().actionStateArray;
+            const actionStateArray      = this._getAction().conActionStateArray;
             this._labelActionState.text = actionStateArray?.length ? actionStateArray.map(v => Lang.getUnitActionStateText(v)).join(`, `) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelHasLoadedCo(): void {
-            const hasLoadedCo           = this._getAction().hasLoadedCo;
+            const hasLoadedCo           = this._getAction().conHasLoadedCo;
             this._labelHasLoadedCo.text = hasLoadedCo != null ? (Lang.getText(hasLoadedCo ? LangTextType.B0012 : LangTextType.B0013)) : Lang.getText(LangTextType.B0776);
         }
         private _updateLabelConHpComparator(): void {
@@ -608,38 +644,50 @@ namespace TwnsWeActionModifyPanel30 {
         }
 
         private _updateLabelDestroyUnit(): void {
-            this._labelDestroyUnit.text = Lang.getText(this._getAction().destroyUnit ? LangTextType.B0012 : LangTextType.B0013);
+            this._labelDestroyUnit.text = Lang.getText(this._getAction().actDestroyUnit ? LangTextType.B0012 : LangTextType.B0013);
+        }
+        private _updateLabelActActionState(): void {
+            const actionState               = this._getAction().actActionState;
+            this._labelActActionState.text  = actionState == null
+                ? `--`
+                : (Lang.getUnitActionStateText(actionState) ?? CommonConstants.ErrorTextForUndefined);
+        }
+        private _updateLabelActHasLoadedCo(): void {
+            const hasLoadedCo               = this._getAction().actHasLoadedCo;
+            this._labelActHasLoadedCo.text  = hasLoadedCo == null
+                ? `--`
+                : Lang.getText(hasLoadedCo ? LangTextType.B0012 : LangTextType.B0013);
         }
         private _updateInputHpDeltaValue(): void {
-            const value                     = this._getAction().hpDeltaValue;
+            const value                     = this._getAction().actHpDeltaValue;
             this._inputHpDeltaValue.text    = `${value == null ? `` : value}`;
         }
         private _updateInputHpMultiplierPercentage(): void {
-            const value                             = this._getAction().hpMultiplierPercentage;
+            const value                             = this._getAction().actHpMultiplierPercentage;
             this._inputHpMultiplierPercentage.text  = `${value == null ? `` : value}`;
         }
         private _updateInputFuelDeltaValue(): void {
-            const value                     = this._getAction().fuelDeltaValue;
+            const value                     = this._getAction().actFuelDeltaValue;
             this._inputFuelDeltaValue.text  = `${value == null ? `` : value}`;
         }
         private _updateInputFuelMultiplierPercentage(): void {
-            const value                                 = this._getAction().fuelMultiplierPercentage;
+            const value                                 = this._getAction().actFuelMultiplierPercentage;
             this._inputFuelMultiplierPercentage.text    = `${value == null ? `` : value}`;
         }
         private _updateInputPriAmmoDeltaValue(): void {
-            const value                         = this._getAction().priAmmoDeltaValue;
+            const value                         = this._getAction().actPriAmmoDeltaValue;
             this._inputPriAmmoDeltaValue.text   = `${value == null ? `` : value}`;
         }
         private _updateInputPriAmmoMultiplierPercentage(): void {
-            const value                                 = this._getAction().priAmmoMultiplierPercentage;
+            const value                                 = this._getAction().actPriAmmoMultiplierPercentage;
             this._inputPriAmmoMultiplierPercentage.text = `${value == null ? `` : value}`;
         }
         private _updateInputPromotionDeltaValue(): void {
-            const value                         = this._getAction().promotionDeltaValue;
+            const value                         = this._getAction().actPromotionDeltaValue;
             this._inputPromotionDeltaValue.text = `${value == null ? `` : value}`;
         }
         private _updateInputPromotionMultiplierPercentage(): void {
-            const value                                     = this._getAction().promotionMultiplierPercentage;
+            const value                                     = this._getAction().actPromotionMultiplierPercentage;
             this._inputPromotionMultiplierPercentage.text   = `${value == null ? `` : value}`;
         }
 
