@@ -34,8 +34,21 @@ namespace TwnsWeActionModifyPanel24 {
         private readonly _labelError!                   : TwnsUiLabel.UiLabel;
         private readonly _imgInnerTouchMask!            : TwnsUiImage.UiImage;
 
-        private readonly _btnSwitchPlayerIndex!             : TwnsUiButton.UiButton;
-        private readonly _labelPlayerIndex!                 : TwnsUiLabel.UiLabel;
+        private readonly _btnSwitchPlayerIndex!                 : TwnsUiButton.UiButton;
+        private readonly _labelPlayerIndex!                     : TwnsUiLabel.UiLabel;
+        private readonly _btnConCoUsingSkillType!               : TwnsUiButton.UiButton;
+        private readonly _labelConCoUsingSkillType!             : TwnsUiLabel.UiLabel;
+        private readonly _btnConAliveState!                     : TwnsUiButton.UiButton;
+        private readonly _labelConAliveState!                   : TwnsUiLabel.UiLabel;
+        private readonly _labelConFund!                         : TwnsUiLabel.UiLabel;
+        private readonly _inputConFund!                         : TwnsUiTextInput.UiTextInput;
+        private readonly _btnConFundComparator!                 : TwnsUiButton.UiButton;
+        private readonly _labelConFundComparator!               : TwnsUiLabel.UiLabel;
+        private readonly _labelConEnergyPercentage!             : TwnsUiLabel.UiLabel;
+        private readonly _inputConEnergyPercentage!             : TwnsUiTextInput.UiTextInput;
+        private readonly _btnConEnergyPercentageComparator!     : TwnsUiButton.UiButton;
+        private readonly _labelConEnergyPercentageComparator!   : TwnsUiLabel.UiLabel;
+
         private readonly _btnActAliveState!                 : TwnsUiButton.UiButton;
         private readonly _labelActAliveState!               : TwnsUiLabel.UiLabel;
         private readonly _btnActAliveStateHelp!             : TwnsUiButton.UiButton;
@@ -52,25 +65,34 @@ namespace TwnsWeActionModifyPanel24 {
 
         protected _onOpening(): void {
             this._setUiListenerArray([
-                { ui: this._btnType,                    callback: this._onTouchedBtnType },
-                { ui: this._btnBack,                    callback: this.close },
-                { ui: this._imgInnerTouchMask,          callback: this._onTouchedImgInnerTouchMask },
+                { ui: this._btnType,                            callback: this._onTouchedBtnType },
+                { ui: this._btnBack,                            callback: this.close },
+                { ui: this._imgInnerTouchMask,                  callback: this._onTouchedImgInnerTouchMask },
 
-                { ui: this._btnSwitchPlayerIndex,           callback: this._onTouchedBtnSwitchPlayerIndex },
-                { ui: this._btnActAliveState,               callback: this._onTouchedBtnActAliveState },
-                { ui: this._btnActAliveStateHelp,           callback: this._onTouchedBtnActAliveStateHelp },
-                { ui: this._inputActFundDeltaValue,         callback: this._onFocusInInputActFundDeltaValue,            eventType: egret.FocusEvent.FOCUS_IN },
-                { ui: this._inputActFundDeltaValue,         callback: this._onFocusOutInputActFundDeltaValue,           eventType: egret.FocusEvent.FOCUS_OUT },
-                { ui: this._inputActFundMultiplierPct,      callback: this._onFocusInInputActFundMultiplierPct,         eventType: egret.FocusEvent.FOCUS_IN },
-                { ui: this._inputActFundMultiplierPct,      callback: this._onFocusOutInputActFundMultiplierPct,        eventType: egret.FocusEvent.FOCUS_OUT },
-                { ui: this._inputActCoEnergyDeltaPct,       callback: this._onFocusInInputActCoEnergyDeltaPct,          eventType: egret.FocusEvent.FOCUS_IN },
-                { ui: this._inputActCoEnergyDeltaPct,       callback: this._onFocusOutInputActCoEnergyDeltaPct,         eventType: egret.FocusEvent.FOCUS_OUT },
-                { ui: this._inputActCoEnergyMultiplierPct,  callback: this._onFocusInInputActCoEnergyMultiplierPct,     eventType: egret.FocusEvent.FOCUS_IN },
-                { ui: this._inputActCoEnergyMultiplierPct,  callback: this._onFocusOutInputActCoEnergyMultiplierPct,    eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnSwitchPlayerIndex,               callback: this._onTouchedBtnSwitchPlayerIndex },
+                { ui: this._btnConCoUsingSkillType,             callback: this._onTouchedBtnConCoUsingSkillType },
+                { ui: this._btnConAliveState,                   callback: this._onTouchedBtnConAliveState },
+                { ui: this._inputConFund,                       callback: this._onFocusInInputConFund,                      eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputConFund,                       callback: this._onFocusOutInputConFund,                     eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnConFundComparator,               callback: this._onTouchedBtnConFundComparator },
+                { ui: this._inputConEnergyPercentage,           callback: this._onFocusInInputConEnergyPercentage,          eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputConEnergyPercentage,           callback: this._onFocusOutInputConEnergyPercentage,         eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnConEnergyPercentageComparator,   callback: this._onTouchedBtnConEnergyPercentageComparator },
+
+                { ui: this._btnActAliveState,                   callback: this._onTouchedBtnActAliveState },
+                { ui: this._btnActAliveStateHelp,               callback: this._onTouchedBtnActAliveStateHelp },
+                { ui: this._inputActFundDeltaValue,             callback: this._onFocusInInputActFundDeltaValue,            eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputActFundDeltaValue,             callback: this._onFocusOutInputActFundDeltaValue,           eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputActFundMultiplierPct,          callback: this._onFocusInInputActFundMultiplierPct,         eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputActFundMultiplierPct,          callback: this._onFocusOutInputActFundMultiplierPct,        eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputActCoEnergyDeltaPct,           callback: this._onFocusInInputActCoEnergyDeltaPct,          eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputActCoEnergyDeltaPct,           callback: this._onFocusOutInputActCoEnergyDeltaPct,         eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputActCoEnergyMultiplierPct,      callback: this._onFocusInInputActCoEnergyMultiplierPct,     eventType: egret.FocusEvent.FOCUS_IN },
+                { ui: this._inputActCoEnergyMultiplierPct,      callback: this._onFocusOutInputActCoEnergyMultiplierPct,    eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.WarEventFullDataChanged,     callback: this._onNotifyWarEventFullDataChanged },
             ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
@@ -120,6 +142,65 @@ namespace TwnsWeActionModifyPanel24 {
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 },
             });
+        }
+
+        private _onTouchedBtnConCoUsingSkillType(): void {
+            const action = this._getAction();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoSkillTypePanel, {
+                currentSkillTypeArray   : action.conCoUsingSkillTypeArray ?? [],
+                callbackOnConfirm       : skillTypeArray => {
+                    action.conCoUsingSkillTypeArray = skillTypeArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+
+        private _onTouchedBtnConAliveState(): void {
+            const action = this._getAction();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChoosePlayerAliveStatePanel, {
+                currentAliveStateArray  : action.conAliveStateArray ?? [],
+                callbackOnConfirm       : aliveStateArray => {
+                    action.conAliveStateArray = aliveStateArray;
+                    Notify.dispatch(NotifyType.WarEventFullDataChanged);
+                },
+            });
+        }
+
+        private _onFocusInInputConFund(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputConFund(): void {
+            const text  = this._inputConFund.text;
+            const value = !text ? null : parseInt(text);
+            if ((value == null) || (!isNaN(value))) {
+                this._getAction().conFund = value;
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            } else {
+                this._updateInputConFund();
+            }
+        }
+        private _onTouchedBtnConFundComparator(): void {
+            const condition             = this._getAction();
+            condition.conFundComparator = Helpers.getNextValueComparator(condition.conFundComparator);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onFocusInInputConEnergyPercentage(): void {
+            this._setInnerTouchMaskEnabled(true);
+        }
+        private _onFocusOutInputConEnergyPercentage(): void {
+            const text  = this._inputConEnergyPercentage.text;
+            const value = !text ? null : parseInt(text);
+            if ((value == null) || (!isNaN(value))) {
+                this._getAction().conEnergyPercentage = value;
+                Notify.dispatch(NotifyType.WarEventFullDataChanged);
+            } else {
+                this._updateInputConEnergyPercentage();
+            }
+        }
+        private _onTouchedBtnConEnergyPercentageComparator(): void {
+            const condition                         = this._getAction();
+            condition.conEnergyPercentageComparator = Helpers.getNextValueComparator(condition.conEnergyPercentageComparator);
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
 
         private _onTouchedBtnActAliveState(): void {
@@ -227,6 +308,13 @@ namespace TwnsWeActionModifyPanel24 {
             this._updateComponentsForLanguage();
 
             this._updateLabelPlayerIndex();
+            this._updateLabelConCoUsingSkillType();
+            this._updateConLabelAliveState();
+            this._updateInputConFund();
+            this._updateLabelConFundComparator();
+            this._updateInputConEnergyPercentage();
+            this._updateLabelConEnergyPercentageComparator();
+
             this._updateLabelActAliveState();
             this._updateInputActFundDeltaValue();
             this._updateInputActFundMultiplierPercentage();
@@ -235,17 +323,24 @@ namespace TwnsWeActionModifyPanel24 {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text                       = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData?.actionId}`;
-            this._btnType.label                         = Lang.getText(LangTextType.B0516);
-            this._btnBack.label                         = Lang.getText(LangTextType.B0146);
-            this._btnSwitchPlayerIndex.label            = Lang.getText(LangTextType.B0521);
-            this._btnActAliveState.label                = Lang.getText(LangTextType.B0784);
-            this._labelActFund.text                     = Lang.getText(LangTextType.B0032);
-            this._labelActFundDeltaValue.text           = Lang.getText(LangTextType.B0754);
-            this._labelActFundMultiplierPct.text        = `${Lang.getText(LangTextType.B0755)}%`;
-            this._labelActCoEnergy.text                 = Lang.getText(LangTextType.B0809);
-            this._labelActCoEnergyDeltaPct.text         = `${Lang.getText(LangTextType.B0754)}%`;
-            this._labelActCoEnergyMultiplierPct.text    = `${Lang.getText(LangTextType.B0755)}%`;
+            this._labelTitle.text                           = `${Lang.getText(LangTextType.B0533)} A${this._getOpenData().action.WeaCommonData?.actionId}`;
+            this._btnType.label                             = Lang.getText(LangTextType.B0516);
+            this._btnBack.label                             = Lang.getText(LangTextType.B0146);
+            this._btnSwitchPlayerIndex.label                = Lang.getText(LangTextType.B0521);
+            this._btnConCoUsingSkillType.label              = Lang.getText(LangTextType.B0785);
+            this._btnConAliveState.label                    = Lang.getText(LangTextType.B0784);
+            this._btnActAliveState.label                    = Lang.getText(LangTextType.B0784);
+            this._labelConFund.text                         = Lang.getText(LangTextType.B0032);
+            this._btnConFundComparator.label                = Lang.getText(LangTextType.B0774);
+            this._labelConEnergyPercentage.text             = Lang.getText(LangTextType.B0787);
+            this._btnConEnergyPercentageComparator.label    = Lang.getText(LangTextType.B0774);
+
+            this._labelActFund.text                         = Lang.getText(LangTextType.B0032);
+            this._labelActFundDeltaValue.text               = Lang.getText(LangTextType.B0754);
+            this._labelActFundMultiplierPct.text            = `${Lang.getText(LangTextType.B0755)}%`;
+            this._labelActCoEnergy.text                     = Lang.getText(LangTextType.B0809);
+            this._labelActCoEnergyDeltaPct.text             = `${Lang.getText(LangTextType.B0754)}%`;
+            this._labelActCoEnergyMultiplierPct.text        = `${Lang.getText(LangTextType.B0755)}%`;
 
             this._updateLabelDescAndLabelError();
         }
@@ -263,6 +358,36 @@ namespace TwnsWeActionModifyPanel24 {
         private _updateLabelPlayerIndex(): void {
             const playerIndexArray      = this._getAction().conPlayerIndexArray;
             this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`/`) : Lang.getText(LangTextType.B0766);
+        }
+
+        private _updateLabelConCoUsingSkillType(): void {
+            const usingSkillTypeArray           = this._getAction().conCoUsingSkillTypeArray;
+            this._labelConCoUsingSkillType.text = usingSkillTypeArray?.length ? usingSkillTypeArray.map(v => Lang.getCoSkillTypeName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+
+        private _updateConLabelAliveState(): void {
+            const aliveStateArray           = this._getAction().conAliveStateArray;
+            this._labelConAliveState.text   = aliveStateArray?.length ? aliveStateArray.map(v => Lang.getPlayerAliveStateName(v)).join(`, `) : Lang.getText(LangTextType.B0776);
+        }
+
+        private _updateInputConFund(): void {
+            const fund              = this._getAction().conFund;
+            this._inputConFund.text    = fund == null ? `` : `${fund}`;
+        }
+
+        private _updateLabelConFundComparator(): void {
+            const comparator                    = this._getAction().conFundComparator;
+            this._labelConFundComparator.text   = comparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined);
+        }
+
+        private _updateInputConEnergyPercentage(): void {
+            const energyPercentage              = this._getAction().conEnergyPercentage;
+            this._inputConEnergyPercentage.text    = energyPercentage == null ? `` : `${energyPercentage}`;
+        }
+
+        private _updateLabelConEnergyPercentageComparator(): void {
+            const comparator                                = this._getAction().conEnergyPercentageComparator;
+            this._labelConEnergyPercentageComparator.text   = comparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined);
         }
 
         private _updateLabelActAliveState(): void {

@@ -873,15 +873,43 @@ namespace WarEventHelper {
         }
 
         {
-            const playerIndexArray = action.conPlayerIndexArray;
-            if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            const conPlayerIndexArray = action.conPlayerIndexArray;
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
                 return false;
             }
         }
 
         {
-            const aliveState = action.actAliveState;
-            if ((aliveState != null) && (!ConfigManager.checkIsValidPlayerAliveState(aliveState))) {
+            const conAliveStateArray = action.conAliveStateArray;
+            if ((conAliveStateArray) && (!ConfigManager.checkIsValidPlayerAliveStateSubset(conAliveStateArray))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conFundComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conEnergyPercentageComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const conSkillTypeArray = action.conCoUsingSkillTypeArray;
+            if ((conSkillTypeArray) && (!ConfigManager.checkIsValidCoSkillTypeSubset(conSkillTypeArray))) {
+                return false;
+            }
+        }
+
+        {
+            const actAliveState = action.actAliveState;
+            if ((actAliveState != null) && (!ConfigManager.checkIsValidPlayerAliveState(actAliveState))) {
                 return false;
             }
         }
@@ -2323,8 +2351,47 @@ namespace WarEventHelper {
             ? conPlayerIndexArray.map(v => `P${v}`).join(`/`)
             : Lang.getText(LangTextType.B0766);
 
+        const conAliveStateArray        = data.conAliveStateArray;
+        const textForConAliveStateArray = conAliveStateArray?.length
+            ? Lang.getFormattedText(LangTextType.F0099, conAliveStateArray.map(v => Lang.getPlayerAliveStateName(v)).join(`/`))
+            : null;
+
+        const conCoUsingSkillTypeArray          = data.conCoUsingSkillTypeArray;
+        const textForConCoUsingSkillTypeArray   = conCoUsingSkillTypeArray?.length
+            ? Lang.getFormattedText(LangTextType.F0102, conCoUsingSkillTypeArray.map(v => Lang.getCoSkillTypeName(v)).join(`/`))
+            : null;
+
+        const conFund           = data.conFund;
+        const conFundComparator = data.conFundComparator;
+        const textForConFund    = conFund != null
+            ? Lang.getFormattedText(
+                LangTextType.F0100,
+                conFundComparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(conFundComparator) ?? CommonConstants.ErrorTextForUndefined),
+                conFund
+            )
+            : null;
+
+        const conEnergyPercentage           = data.conEnergyPercentage;
+        const conEnergyPercentageComparator = data.conEnergyPercentageComparator;
+        const textForConEnergyPercentage    = conEnergyPercentage != null
+            ? Lang.getFormattedText(
+                LangTextType.F0101,
+                conEnergyPercentageComparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(conEnergyPercentageComparator) ?? CommonConstants.ErrorTextForUndefined),
+                conEnergyPercentage
+            )
+            : null;
+
         const textArrayForSubConditions = Helpers.getNonNullElements([
+            textForConAliveStateArray,
+            textForConCoUsingSkillTypeArray,
+            textForConFund,
+            textForConEnergyPercentage,
         ]);
+
+        const actAliveState         = data.actAliveState;
+        const textForActAliveState  = actAliveState != null
+            ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0784), Lang.getPlayerAliveStateName(actAliveState))
+            : null;
 
         const actFundDeltaValue             = data.actFundDeltaValue ?? 0;
         const actFundMultiplierPercentage   = data.actFundMultiplierPercentage ?? 100;
@@ -2338,15 +2405,10 @@ namespace WarEventHelper {
             ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0809), actCoEnergyMultiplierPct, `${actCoEnergyDeltaPct}%`)
             : null;
 
-        const actAliveState         = data.actAliveState;
-        const textForActAliveState  = actAliveState != null
-            ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0784), Lang.getPlayerAliveStateName(actAliveState))
-            : null;
-
         const textArrayForModifiers = Helpers.getNonNullElements([
+            textForActAliveState,
             textForActFund,
             textForActCoEnergy,
-            textForActAliveState,
         ]);
 
         return `${Lang.getFormattedText(
@@ -3038,7 +3100,7 @@ namespace WarEventHelper {
         else if (action.WeaDeprecatedSetPlayerFund)         { return getErrorTipForWeaDeprecatedSetPlayerFund(action.WeaDeprecatedSetPlayerFund, playersCountUnneutral); }
         else if (action.WeaDeprecatedSetPlayerCoEnergy)     { return getErrorTipForWeaDeprecatedSetPlayerCoEnergy(action.WeaDeprecatedSetPlayerCoEnergy, playersCountUnneutral); }
         else if (action.WeaSetPlayerAliveState)             { return getErrorTipForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState, playersCountUnneutral); }
-        else if (action.WeaSetPlayerState)                  { return getErrorTipForWeaSetPlayerFund(action.WeaSetPlayerState, playersCountUnneutral); }
+        else if (action.WeaSetPlayerState)                  { return getErrorTipForWeaSetPlayerState(action.WeaSetPlayerState, playersCountUnneutral); }
         else if (action.WeaSetPlayerCoEnergy)               { return getErrorTipForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral); }
         else if (action.WeaSetUnitState)                    { return getErrorTipForWeaSetUnitState(action.WeaSetUnitState, war); }
         else {
@@ -3314,15 +3376,45 @@ namespace WarEventHelper {
 
         return null;
     }
-    function getErrorTipForWeaSetPlayerFund(data: WarEvent.IWeaSetPlayerState, playersCountUnneutral: number): string | null {
-        const playerIndexArray = data.conPlayerIndexArray;
-        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
-            return `${Lang.getText(LangTextType.A0212)}`;
+    function getErrorTipForWeaSetPlayerState(data: WarEvent.IWeaSetPlayerState, playersCountUnneutral: number): string | null {
+        {
+            const conPlayerIndexArray = data.conPlayerIndexArray;
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+                return `${Lang.getText(LangTextType.A0212)}`;
+            }
         }
 
         {
-            const aliveState = data.actAliveState;
-            if ((aliveState != null) && (!ConfigManager.checkIsValidPlayerAliveState(aliveState))) {
+            const conAliveStateArray = data.conAliveStateArray;
+            if ((conAliveStateArray) && (!ConfigManager.checkIsValidPlayerAliveStateSubset(conAliveStateArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0784));
+            }
+        }
+
+        {
+            const conCoUsingSkillTypeArray = data.conCoUsingSkillTypeArray;
+            if ((conCoUsingSkillTypeArray) && (!ConfigManager.checkIsValidCoSkillTypeSubset(conCoUsingSkillTypeArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0785));
+            }
+        }
+
+        {
+            const comparator = data.conFundComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.conEnergyPercentageComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const actAliveState = data.actAliveState;
+            if ((actAliveState != null) && (!ConfigManager.checkIsValidPlayerAliveState(actAliveState))) {
                 return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0784));
             }
         }
@@ -4091,12 +4183,18 @@ namespace WarEventHelper {
             };
         } else if (actionType === ActionType.SetPlayerState) {
             action.WeaSetPlayerState = {
-                conPlayerIndexArray         : null,
-                actFundDeltaValue           : 0,
-                actFundMultiplierPercentage : 100,
-                actCoEnergyDeltaPct         : 0,
-                actCoEnergyMultiplierPct    : 100,
-                actAliveState               : null,
+                conPlayerIndexArray             : null,
+                conAliveStateArray              : null,
+                conCoUsingSkillTypeArray        : null,
+                conEnergyPercentage             : null,
+                conEnergyPercentageComparator   : Types.ValueComparator.EqualTo,
+                conFund                         : null,
+                conFundComparator               : Types.ValueComparator.EqualTo,
+                actFundDeltaValue               : 0,
+                actFundMultiplierPercentage     : 100,
+                actCoEnergyDeltaPct             : 0,
+                actCoEnergyMultiplierPct        : 100,
+                actAliveState                   : null,
             };
         } else if (actionType === ActionType.SetPlayerCoEnergy) {
             action.WeaSetPlayerCoEnergy = {

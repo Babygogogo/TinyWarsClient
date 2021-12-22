@@ -8474,6 +8474,24 @@ export declare namespace WarEvent {
 
         /** WeaSetPlayerState actAliveState */
         actAliveState?: (number|null);
+
+        /** WeaSetPlayerState conAliveStateArray */
+        conAliveStateArray?: (number[]|null);
+
+        /** WeaSetPlayerState conFund */
+        conFund?: (number|null);
+
+        /** WeaSetPlayerState conFundComparator */
+        conFundComparator?: (number|null);
+
+        /** WeaSetPlayerState conEnergyPercentage */
+        conEnergyPercentage?: (number|null);
+
+        /** WeaSetPlayerState conEnergyPercentageComparator */
+        conEnergyPercentageComparator?: (number|null);
+
+        /** WeaSetPlayerState conCoUsingSkillTypeArray */
+        conCoUsingSkillTypeArray?: (number[]|null);
     }
 
     /** Represents a WeaSetPlayerState. */
@@ -8502,6 +8520,24 @@ export declare namespace WarEvent {
 
         /** WeaSetPlayerState actAliveState. */
         public actAliveState: number;
+
+        /** WeaSetPlayerState conAliveStateArray. */
+        public conAliveStateArray: number[];
+
+        /** WeaSetPlayerState conFund. */
+        public conFund: number;
+
+        /** WeaSetPlayerState conFundComparator. */
+        public conFundComparator: number;
+
+        /** WeaSetPlayerState conEnergyPercentage. */
+        public conEnergyPercentage: number;
+
+        /** WeaSetPlayerState conEnergyPercentageComparator. */
+        public conEnergyPercentageComparator: number;
+
+        /** WeaSetPlayerState conCoUsingSkillTypeArray. */
+        public conCoUsingSkillTypeArray: number[];
 
         /**
          * Creates a new WeaSetPlayerState instance using the specified properties.

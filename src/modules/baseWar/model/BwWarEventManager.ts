@@ -636,6 +636,12 @@ namespace TwnsBwWarEventManager {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private async _callActionSetPlayerStateWithoutExtraData(action: WarEvent.IWeaSetPlayerState, isFastExecute: boolean): Promise<void> {
             const conPlayerIndexArray           = action.conPlayerIndexArray;
+            const conAliveStateArray            = action.conAliveStateArray;
+            const conCoUsingSkillTypeArray      = action.conCoUsingSkillTypeArray;
+            const conFund                       = action.conFund;
+            const conFundComparator             = action.conFundComparator ?? Types.ValueComparator.EqualTo;
+            const conEnergyPercentage           = action.conEnergyPercentage;
+            const conEnergyPercentageComparator = action.conEnergyPercentageComparator ?? Types.ValueComparator.EqualTo;
             const actFundMultiplierPercentage   = action.actFundMultiplierPercentage ?? 100;
             const actFundDeltaValue             = action.actFundDeltaValue ?? 0;
             const actCoEnergyMultiplierPct      = action.actCoEnergyMultiplierPct ?? 100;
@@ -644,23 +650,48 @@ namespace TwnsBwWarEventManager {
             const actAliveState                 = action.actAliveState;
 
             for (const [playerIndex, player] of this._getWar().getPlayerManager().getAllPlayersDict()) {
-                if ((conPlayerIndexArray?.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0)) {
+                if (((conPlayerIndexArray?.length) && (conPlayerIndexArray.indexOf(playerIndex) < 0))                           ||
+                    ((conAliveStateArray?.length) && (conAliveStateArray.indexOf(player.getAliveState()) < 0))                  ||
+                    ((conCoUsingSkillTypeArray?.length) && (conCoUsingSkillTypeArray.indexOf(player.getCoUsingSkillType()) < 0))
+                ) {
                     continue;
+                }
+
+                const fund = player.getFund();
+                if ((conFund != null)                       &&
+                    (!Helpers.checkIsMeetValueComparator({
+                        comparator  : conFundComparator,
+                        targetValue : conFund,
+                        actualValue : fund,
+                    }))
+                ) {
+                    continue;
+                }
+
+                const coMaxEnergy       = player.getCoMaxEnergy();
+                const coCurrentEnergy   = player.getCoCurrentEnergy();
+                if (conEnergyPercentage != null) {
+                    if ((coMaxEnergy == 0)                      ||
+                        (!Helpers.checkIsMeetValueComparator({
+                            comparator  : conEnergyPercentageComparator,
+                            targetValue : conEnergyPercentage,
+                            actualValue : coCurrentEnergy * 100 / coMaxEnergy,
+                        }))
+                    ) {
+                        continue;
+                    }
                 }
 
                 player.setFund(Math.min(
                     maxFund,
-                    Math.max(-maxFund, Math.floor(player.getFund() * actFundMultiplierPercentage / 100 + actFundDeltaValue)))
+                    Math.max(-maxFund, Math.floor(fund * actFundMultiplierPercentage / 100 + actFundDeltaValue)))
                 );
 
-                {
-                    const maxEnergy = player.getCoMaxEnergy();
-                    player.setCoCurrentEnergy(Helpers.getValueInRange({
-                        maxValue    : maxEnergy,
-                        minValue    : 0,
-                        rawValue    : Math.floor(player.getCoCurrentEnergy() * actCoEnergyMultiplierPct / 100 + maxEnergy * actCoEnergyDeltaPct / 100),
-                    }));
-                }
+                player.setCoCurrentEnergy(Helpers.getValueInRange({
+                    maxValue    : coMaxEnergy,
+                    minValue    : 0,
+                    rawValue    : Math.floor(coCurrentEnergy * actCoEnergyMultiplierPct / 100 + coMaxEnergy * actCoEnergyDeltaPct / 100),
+                }));
 
                 if (actAliveState != null) {
                     player.setAliveState(actAliveState);

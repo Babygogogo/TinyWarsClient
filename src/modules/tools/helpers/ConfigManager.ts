@@ -538,10 +538,18 @@ namespace ConfigManager {
             || (aliveState === Types.PlayerAliveState.Dead)
             || (aliveState === Types.PlayerAliveState.Dying);
     }
+    export function checkIsValidPlayerAliveStateSubset(aliveStateArray: Types.PlayerAliveState[]): boolean {
+        return ((new Set(aliveStateArray)).size === aliveStateArray.length)
+            && (aliveStateArray.every(v => checkIsValidPlayerAliveState(v)));
+    }
     export function checkIsValidCoSkillType(skillType: Types.CoSkillType): boolean {
         return (skillType === Types.CoSkillType.Passive)
             || (skillType === Types.CoSkillType.Power)
             || (skillType === Types.CoSkillType.SuperPower);
+    }
+    export function checkIsValidCoSkillTypeSubset(skillTypeArray: Types.CoSkillType[]): boolean {
+        return ((new Set(skillTypeArray)).size === skillTypeArray.length)
+            && (skillTypeArray.every(v => checkIsValidCoSkillType(v)));
     }
     export function checkIsValidForceFogCode(forceFogCode: Types.ForceFogCode): boolean {
         return (forceFogCode === Types.ForceFogCode.None)
