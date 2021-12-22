@@ -12,49 +12,23 @@
 // import WarDamageCalculator      from "../../tools/warHelpers/WarDamageCalculator";
 // import TwnsBwWar                from "../model/BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwDamagePreviewPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import BwWar            = TwnsBwWar.BwWar;
 
-    export type OpenDataForBwDamagePreviewPanel = {
+    export type OpenData = {
         war: BwWar;
     };
-    export class BwDamagePreviewPanel extends TwnsUiPanel.UiPanel<OpenDataForBwDamagePreviewPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: BwDamagePreviewPanel;
-
+    export class BwDamagePreviewPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!                : eui.Group;
         private readonly _labelAttackTitle!     : TwnsUiLabel.UiLabel;
         private readonly _labelAttackValue!     : TwnsUiLabel.UiLabel;
         private readonly _labelCounterTitle!    : TwnsUiLabel.UiLabel;
         private readonly _labelCounterValue!    : TwnsUiLabel.UiLabel;
 
-        public static show(openData: OpenDataForBwDamagePreviewPanel): void {
-            if (!BwDamagePreviewPanel._instance) {
-                BwDamagePreviewPanel._instance = new BwDamagePreviewPanel();
-            }
-
-            const instance = BwDamagePreviewPanel._instance;
-            if (!instance.getIsOpening()) {
-                instance.open(openData);
-            }
-        }
-        public static async hide(): Promise<void> {
-            if (BwDamagePreviewPanel._instance) {
-                await BwDamagePreviewPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = `resource/skins/baseWar/BwDamagePreviewPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 // { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
                 // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
@@ -66,6 +40,12 @@ namespace TwnsBwDamagePreviewPanel {
             ]);
 
             this._updateView();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

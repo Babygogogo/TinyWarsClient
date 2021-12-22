@@ -12,6 +12,7 @@
 // import TwnsSpwField                 from "./SpwField";
 // import TwnsSpwPlayerManager         from "./SpwPlayerManager";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarAction                = ProtoTypes.WarAction;
@@ -29,20 +30,28 @@ namespace TwnsSpwWar {
 
         public abstract serialize(): ProtoTypes.WarSerialization.ISerialWar;
 
-        public updateTilesAndUnitsOnVisibilityChanged(): void {
+        public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
             const teamIndexes   = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const visibleUnits  = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
-                unit.setViewVisible(visibleUnits.has(unit));
+                if (!isFastExecute) {
+                    unit.setViewVisible(visibleUnits.has(unit));
+                }
             }
 
             const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
             const tileMap       = this.getTileMap();
             for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
-                tile.flushDataToView();
+
+                if (!isFastExecute) {
+                    tile.flushDataToView();
+                }
             }
-            tileMap.getView().updateCoZone();
+
+            if (!isFastExecute) {
+                tileMap.getView().updateCoZone();
+            }
         }
 
         public async getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | null> {
@@ -156,7 +165,7 @@ namespace TwnsSpwWar {
             return this._warEventManager;
         }
 
-        public getIsRunTurnPhaseWithExtraData(): boolean {
+        public getIsExecuteActionsWithExtraData(): boolean {
             return false;
         }
 

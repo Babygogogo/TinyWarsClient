@@ -220,8 +220,24 @@ namespace UserModel {
     export function getSelfSettingsIsShowGridBorder(): boolean {
         return getSelfSettings()?.isShowGridBorder ?? false;
     }
+    export function getSelfSettingsIsAutoScrollMap(): boolean {
+        return getSelfSettings()?.isAutoScrollMap ?? true;
+    }
+
     export function getSelfSettingsUnitOpacity(): number {
         return getSelfSettings()?.unitOpacity ?? 100;
+    }
+    export function reqTickSelfSettingsUnitOpacity(): void {
+        const opacity = getSelfSettingsUnitOpacity();
+        if (opacity === 100) {
+            UserProxy.reqUserSetSettings({ unitOpacity: 75 });
+        } else if (opacity === 75) {
+            UserProxy.reqUserSetSettings({ unitOpacity: 50 });
+        } else if (opacity === 50) {
+            UserProxy.reqUserSetSettings({ unitOpacity: 0 });
+        } else {
+            UserProxy.reqUserSetSettings({ unitOpacity: 100 });
+        }
     }
 
     export function updateOnMsgUserLogin(data: NetMessage.MsgUserLogin.IS): void {
@@ -255,13 +271,15 @@ namespace UserModel {
             return;
         }
 
-        const oldVersion            = getSelfSettingsTextureVersion();
         const oldIsShowGridBorder   = getSelfSettingsIsShowGridBorder();
+        const oldVersion            = getSelfSettingsTextureVersion();
         const oldUnitOpacity        = getSelfSettingsUnitOpacity();
+        const oldIsAutoScrollMap    = getSelfSettingsIsAutoScrollMap();
         (newSettings.isSetPathMode != null)             && (selfSettings.isSetPathMode = newSettings.isSetPathMode);
         (newSettings.isShowGridBorder != null)          && (selfSettings.isShowGridBorder = newSettings.isShowGridBorder);
         (newSettings.unitAndTileTextureVersion != null) && (selfSettings.unitAndTileTextureVersion = newSettings.unitAndTileTextureVersion);
         (newSettings.unitOpacity != null)               && (selfSettings.unitOpacity = newSettings.unitOpacity);
+        (newSettings.isAutoScrollMap != null)           && (selfSettings.isAutoScrollMap = newSettings.isAutoScrollMap);
 
         if (oldVersion !== getSelfSettingsTextureVersion()) {
             CommonModel.updateOnUnitAndTileTextureVersionChanged();
@@ -272,6 +290,9 @@ namespace UserModel {
         }
         if (oldUnitOpacity !== getSelfSettingsUnitOpacity()) {
             Notify.dispatch(NotifyType.UserSettingsUnitOpacityChanged);
+        }
+        if (oldIsAutoScrollMap !== getSelfSettingsIsAutoScrollMap()) {
+            Notify.dispatch(NotifyType.UserSettingsIsAutoScrollMapChanged);
         }
     }
     export function updateOnMsgUserSetMapRating(data: NetMessage.MsgUserSetMapRating.IS): void {

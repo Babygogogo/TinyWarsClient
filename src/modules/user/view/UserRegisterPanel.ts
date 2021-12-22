@@ -21,10 +21,8 @@ namespace TwnsUserRegisterPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
-    export class UserRegisterPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
+    export type OpenData = void;
+    export class UserRegisterPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -38,30 +36,7 @@ namespace TwnsUserRegisterPanel {
         private readonly _btnClose!         : TwnsUiButton.UiButton;
         private readonly _labelTips!        : TwnsUiLabel.UiLabel;
 
-        private static _instance: UserRegisterPanel;
-
-        public static show(): void {
-            if (!UserRegisterPanel._instance) {
-                UserRegisterPanel._instance = new UserRegisterPanel();
-            }
-            UserRegisterPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (UserRegisterPanel._instance) {
-                await UserRegisterPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/user/UserRegisterPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserRegister, callback: this._onMsgUserRegister },
@@ -70,15 +45,18 @@ namespace TwnsUserRegisterPanel {
                 { ui: this._btnClose,    callback: this.close },
                 { ui: this._btnRegister, callback: this._onTouchedBtnRegister },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
-            this._btnClose.setShortSfxCode(Types.ShortSfxCode.ButtonCancel01);
             this._btnRegister.setShortSfxCode(Types.ShortSfxCode.ButtonConfirm01);
 
-            this._showOpenAnimation();
             this._updateComponentsForLanguage();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onMsgUserRegister(e: egret.Event): void {
@@ -122,7 +100,7 @@ namespace TwnsUserRegisterPanel {
             this._labelTips.setRichText(Lang.getText(LangTextType.R0005));
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -133,22 +111,23 @@ namespace TwnsUserRegisterPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
 
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

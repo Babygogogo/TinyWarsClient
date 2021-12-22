@@ -8,6 +8,7 @@
 // import TwnsUiImage      from "../../tools/ui/UiImage";
 // import UserModel        from "../../user/model/UserModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTileView {
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
@@ -18,6 +19,7 @@ namespace TwnsBwTileView {
 
     export type DataForTileView = {
         tileData    : ISerialTile;
+        themeType   : Types.TileThemeType;
         hasFog      : boolean;
         skinId      : number;
     };
@@ -29,9 +31,17 @@ namespace TwnsBwTileView {
         private _data   : DataForTileView | null = null;
 
         public constructor() {
-            this._imgBase.anchorOffsetY         = GRID_HEIGHT;
-            this._imgDecorator.anchorOffsetY    = GRID_HEIGHT;
-            this._imgObject.anchorOffsetY       = GRID_HEIGHT * 2;
+            const imgBase               = this._imgBase;
+            imgBase.smoothing           = false;
+            imgBase.anchorOffsetY       = GRID_HEIGHT;
+
+            const imgDecorator          = this._imgDecorator;
+            imgDecorator.smoothing      = false;
+            imgDecorator.anchorOffsetY  = GRID_HEIGHT;
+
+            const imgObject             = this._imgObject;
+            imgObject.smoothing         = false;
+            imgObject.anchorOffsetY     = GRID_HEIGHT * 2;
         }
 
         public setData(data: DataForTileView): void {
@@ -43,30 +53,26 @@ namespace TwnsBwTileView {
 
         public updateView(): void {
             const data      = Helpers.getExisted(this.getData());
-            const skinId    = Helpers.getExisted(data.skinId);
-            const hasFog    = Helpers.getExisted(data.hasFog);
-            const tileData  = Helpers.getExisted(data.tileData);
+            const skinId    = data.skinId;
+            const hasFog    = data.hasFog;
+            const tileData  = data.tileData;
+            const themeType = data.themeType;
             const version   = UserModel.getSelfSettingsTextureVersion();
             const tickCount = Timer.getTileAnimationTickCount();
 
             {
-                const objectType    = tileData.objectType;
+                const objectType    = Helpers.getExisted(tileData.objectType);
                 const imgObject     = this.getImgObject();
-                if (objectType == null) {
-                    throw Helpers.newError(`BwTileView.updateView() empty objectType.`);
-                } else if (objectType === TileObjectType.Empty) {
-                    imgObject.visible = false;
-                } else {
-                    imgObject.visible   = true;
-                    imgObject.source    = CommonModel.getCachedTileObjectImageSource({
-                        version,
-                        skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
-                        shapeId     : tileData.objectShapeId || 0,
-                        objectType,
-                        isDark      : hasFog,
-                        tickCount,
-                    });
-                }
+                imgObject.visible   = true;
+                imgObject.source    = CommonModel.getCachedTileObjectImageSource({
+                    version,
+                    themeType,
+                    skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
+                    shapeId     : tileData.objectShapeId || 0,
+                    objectType,
+                    isDark      : hasFog,
+                    tickCount,
+                });
             }
 
             {
@@ -80,6 +86,7 @@ namespace TwnsBwTileView {
                     imgBase.visible = true;
                     imgBase.source  = CommonModel.getCachedTileBaseImageSource({
                         version,
+                        themeType,
                         skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                         shapeId     : tileData.baseShapeId || 0,
                         baseType,
@@ -98,6 +105,7 @@ namespace TwnsBwTileView {
                     imgDecorator.visible    = true;
                     imgDecorator.source     = CommonModel.getCachedTileDecoratorImageSource({
                         version,
+                        themeType,
                         skinId          : CommonConstants.UnitAndTileNeutralSkinId,
                         decoratorType,
                         shapeId         : tileData.decoratorShapeId ?? null,

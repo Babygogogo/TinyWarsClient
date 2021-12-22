@@ -25,8 +25,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel3 {
-    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import ColorValue               = Types.ColorValue;
@@ -35,17 +33,12 @@ namespace TwnsWeActionModifyPanel3 {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import BwWar                    = TwnsBwWar.BwWar;
 
-    type OpenDataForWeActionModifyPanel3 = {
+    export type OpenData = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel3 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel3> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeActionModifyPanel3;
-
+    export class WeActionModifyPanel3 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _btnBack!              : TwnsUiButton.UiButton;
         private readonly _btnType!              : TwnsUiButton.UiButton;
         private readonly _btnPlay!              : TwnsUiButton.UiButton;
@@ -53,43 +46,33 @@ namespace TwnsWeActionModifyPanel3 {
         private readonly _btnClear!             : TwnsUiButton.UiButton;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelDialoguesCount!  : TwnsUiLabel.UiLabel;
+        private readonly _btnBackground!        : TwnsUiButton.UiButton;
+        private readonly _labelBackground!      : TwnsUiLabel.UiLabel;
         private readonly _listDialogue!         : TwnsUiScrollList.UiScrollList<DataForDialogueRenderer>;
 
-        public static show(openData: OpenDataForWeActionModifyPanel3): void {
-            if (!WeActionModifyPanel3._instance) {
-                WeActionModifyPanel3._instance = new WeActionModifyPanel3();
-            }
-            WeActionModifyPanel3._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WeActionModifyPanel3._instance) {
-                await WeActionModifyPanel3._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeActionModifyPanel3.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnAddDialogue,     callback: this._onTouchedBtnAddDialogue },
                 { ui: this._btnClear,           callback: this._onTouchedBtnClear },
                 { ui: this._btnType,            callback: this._onTouchedBtnType },
                 { ui: this._btnPlay,            callback: this._onTouchedBtnPlay },
                 { ui: this._btnBack,            callback: this.close },
+                { ui: this._btnBackground,      callback: this._onTouchedBtnBackground },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
             ]);
-            this._listDialogue.setItemRenderer(DialogueRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._listDialogue.setItemRenderer(DialogueRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -100,6 +83,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onNotifyWarEventFullDataChanged(): void {
+            this._updateComponentsForBackground();
             this._updateComponentsForDialogues();
         }
 
@@ -115,7 +99,7 @@ namespace TwnsWeActionModifyPanel3 {
 
         private _onTouchedBtnClear(): void {
             const openData = this._getOpenData();
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
                     Helpers.getExisted(openData.action.WeaDialogue?.dataArray).length = 0;
@@ -126,7 +110,7 @@ namespace TwnsWeActionModifyPanel3 {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            WeActionTypeListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -143,11 +127,17 @@ namespace TwnsWeActionModifyPanel3 {
                 return;
             }
 
-            TwnsBwDialoguePanel.BwDialoguePanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
                 actionData      : dialogueAction,
                 callbackOnClose : () => {
                     // nothing to do
                 },
+            });
+        }
+
+        private _onTouchedBtnBackground(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeDialogueBackgroundPanel, {
+                action: Helpers.getExisted(this._getOpenData().action.WeaDialogue),
             });
         }
 
@@ -157,6 +147,7 @@ namespace TwnsWeActionModifyPanel3 {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
+            this._updateComponentsForBackground();
             this._updateComponentsForDialogues();
         }
 
@@ -167,6 +158,11 @@ namespace TwnsWeActionModifyPanel3 {
             this._btnAddDialogue.label  = Lang.getText(LangTextType.B0666);
             this._btnClear.label        = Lang.getText(LangTextType.B0391);
             this._btnBack.label         = Lang.getText(LangTextType.B0146);
+            this._btnBackground.label   = Lang.getText(LangTextType.B0727);
+        }
+
+        private _updateComponentsForBackground(): void {
+            this._labelBackground.text = `${this._getOpenData().action.WeaDialogue?.backgroundId}`;
         }
 
         private _updateComponentsForDialogues(): void {
@@ -300,7 +296,7 @@ namespace TwnsWeActionModifyPanel3 {
         private _onTouchedBtnDelete(): void {
             const data = this.data;
             if (data) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0029),
                     callback: () => {
                         Helpers.deleteElementFromArray(Helpers.getExisted(data.action.WeaDialogue?.dataArray), data.dataForDialogue);
@@ -324,7 +320,7 @@ namespace TwnsWeActionModifyPanel3 {
             const dataForCoDialogue = this._getData().dataForDialogue.dataForCoDialogue;
             if (dataForCoDialogue) {
                 const currentCoId = dataForCoDialogue.coId ?? null;
-                TwnsCommonChooseCoPanel.CommonChooseCoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                     availableCoIdArray  : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion())),
                     currentCoId,
                     callbackOnConfirm   : coId => {
@@ -344,7 +340,7 @@ namespace TwnsWeActionModifyPanel3 {
             const textData              = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
             const currentText           = textData?.text;
 
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
@@ -384,8 +380,8 @@ namespace TwnsWeActionModifyPanel3 {
             const textData              = textArray.find(v => v.languageType === Types.LanguageType.English);
             const currentText           = textData?.text;
 
-            TwnsCommonInputPanel.CommonInputPanel.show({
-                title           : Lang.getText(LangTextType.B0455),
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
                 maxChars        : CommonConstants.WarEventActionDialogueNameMaxLength,
@@ -423,7 +419,7 @@ namespace TwnsWeActionModifyPanel3 {
             const textData          = textArray.find(v => v.languageType === Types.LanguageType.Chinese);
             const currentText       = textData?.text;
 
-            TwnsCommonInputPanel.CommonInputPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                 title           : Lang.getText(LangTextType.B0455),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
@@ -460,8 +456,8 @@ namespace TwnsWeActionModifyPanel3 {
             const textData          = textArray.find(v => v.languageType === Types.LanguageType.English);
             const currentText       = textData?.text;
 
-            TwnsCommonInputPanel.CommonInputPanel.show({
-                title           : Lang.getText(LangTextType.B0455),
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                title           : Lang.getText(LangTextType.B0456),
                 currentValue    : currentText || ``,
                 charRestrict    : null,
                 maxChars        : CommonConstants.WarEventActionDialogueTextMaxLength,

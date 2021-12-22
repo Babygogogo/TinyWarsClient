@@ -27,7 +27,6 @@ namespace WarCommonHelpers {
     import Visibility       = Types.Visibility;
     import CoSkillAreaType  = Types.CoSkillAreaType;
     import ISerialUnit      = WarSerialization.ISerialUnit;
-    import ISerialTile      = WarSerialization.ISerialTile;
     import ISerialWar       = WarSerialization.ISerialWar;
     import WarSerialization = ProtoTypes.WarSerialization;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
@@ -73,7 +72,7 @@ namespace WarCommonHelpers {
         return area;
     }
 
-    export function createAttackableArea({ movableArea, mapSize, minAttackRange, maxAttackRange, checkCanAttack }: {
+    export function createAttackableAreaForUnit({ movableArea, mapSize, minAttackRange, maxAttackRange, checkCanAttack }: {
         movableArea     : MovableArea;
         mapSize         : MapSize;
         minAttackRange  : number | null;
@@ -107,6 +106,139 @@ namespace WarCommonHelpers {
                     }
                 }
             }
+        }
+
+        return area;
+    }
+    export function createAttackableAreaForTile(tile: TwnsBwTile.BwTile, mapSize: MapSize): AttackableArea {
+        const area          : AttackableArea = [];
+        const tileType      = tile.getType();
+        const tileGridIndex = tile.getGridIndex();
+        const tileGridX     = tileGridIndex.x;
+        const tileGridY     = tileGridIndex.y;
+        const mapWidth      = mapSize.width;
+        const mapHeight     = mapSize.height;
+        const addGrid       = (x: number, y: number) => {
+            if (GridIndexHelpers.checkIsInsideMap({ x, y }, mapSize)) {
+                if (area[x] == null) {
+                    area[x] = [];
+                }
+                area[x][y] = {
+                    movePathDestination: { x: tileGridX, y: tileGridY },
+                };
+            }
+        };
+
+        if ((tileType === TileType.Crystal) || (tileType === TileType.CustomCrystal)) {
+            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(tileGridIndex, 0, Helpers.getExisted(tile.getCustomCrystalData()?.radius), mapSize)) {
+                addGrid(gridIndex.x, gridIndex.y);
+            }
+
+        } else if ((tileType === TileType.CustomCannon) || (tile.checkIsNormalCannon())) {
+            const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomCannonData());
+            if (rangeForDown) {
+                for (let deltaY = 1; deltaY <= rangeForDown; ++deltaY) {
+                    const y = tileGridY + deltaY;
+                    if (y >= mapHeight) {
+                        break;
+                    }
+                    for (let deltaX = 1 - deltaY; deltaX <= deltaY - 1; ++deltaX) {
+                        const x = tileGridX + deltaX;
+                        if (x >= mapWidth) {
+                            break;
+                        }
+                        addGrid(x, y);
+                    }
+                }
+            }
+            if (rangeForUp) {
+                for (let deltaY = -rangeForUp; deltaY < 0; ++deltaY) {
+                    const y = tileGridY + deltaY;
+                    if (y >= mapHeight) {
+                        break;
+                    }
+                    for (let deltaX = 1 + deltaY; deltaX <= -1 - deltaY; ++deltaX) {
+                        const x = tileGridX + deltaX;
+                        if (x >= mapWidth) {
+                            break;
+                        }
+                        addGrid(x, y);
+                    }
+                }
+            }
+            if (rangeForRight) {
+                for (let deltaX = 1; deltaX <= rangeForRight; ++deltaX) {
+                    const x = tileGridX + deltaX;
+                    if (x >= mapWidth) {
+                        break;
+                    }
+                    for (let deltaY = 1 - deltaX; deltaY <= deltaX - 1; ++deltaY) {
+                        const y = tileGridY + deltaY;
+                        if (y >= mapHeight) {
+                            break;
+                        }
+                        addGrid(x, y);
+                    }
+                }
+            }
+            if (rangeForLeft) {
+                for (let deltaX = -rangeForLeft; deltaX < 0; ++deltaX) {
+                    const x = tileGridX + deltaX;
+                    if (x >= mapWidth) {
+                        break;
+                    }
+                    for (let deltaY = 1 + deltaX; deltaY <= -1 - deltaX; ++deltaY) {
+                        const y = tileGridY + deltaY;
+                        if (y >= mapHeight) {
+                            break;
+                        }
+                        addGrid(x, y);
+                    }
+                }
+            }
+
+        } else if ((tileType === TileType.LaserTurret) || (tileType === TileType.CustomLaserTurret)) {
+            const { rangeForDown, rangeForLeft, rangeForRight, rangeForUp } = Helpers.getExisted(tile.getCustomLaserTurretData());
+            if (rangeForDown) {
+                for (let deltaY = 0; deltaY < rangeForDown; ++deltaY) {
+                    const y = tileGridY + deltaY + 1;
+                    if (y >= mapHeight) {
+                        break;
+                    }
+                    addGrid(tileGridX, y);
+                }
+            }
+            if (rangeForUp) {
+                for (let deltaY = 0; deltaY < rangeForUp; ++deltaY) {
+                    const y = tileGridY - deltaY - 1;
+                    if (y < 0) {
+                        break;
+                    }
+                    addGrid(tileGridX, y);
+                }
+            }
+            if (rangeForRight) {
+                for (let deltaX = 0; deltaX < rangeForRight; ++deltaX) {
+                    const x = tileGridX + deltaX + 1;
+                    if (x >= mapWidth) {
+                        break;
+                    }
+                    addGrid(x, tileGridY);
+                }
+            }
+            if (rangeForLeft) {
+                for (let deltaX = 0; deltaX < rangeForLeft; ++deltaX) {
+                    const x = tileGridX - deltaX - 1;
+                    if (x < 0) {
+                        break;
+                    }
+                    addGrid(x, tileGridY);
+                }
+            }
+
+        } else {
+            // TODO: handle other tile types
+            throw Helpers.newError(`WarCommonHelpers.createAttackableAreaForTile() invalid tileType: ${tileType}`);
         }
 
         return area;
@@ -441,7 +573,7 @@ namespace WarCommonHelpers {
             && (mapWidth * mapHeight <= CommonConstants.MapMaxGridsCount);
     }
 
-    export function checkIsUnitIdCompact(unitArray: Types.Undefinable<WarSerialization.ISerialUnit[]>): boolean {
+    export function checkIsUnitIdCompact(unitArray: Types.Undefinable<ISerialUnit[]>): boolean {
         if ((unitArray == null) || (unitArray.length <= 0)) {
             return true;
         }
@@ -506,14 +638,10 @@ namespace WarCommonHelpers {
         fuelConsumption : number;
     }): void {
         const unitMap               = war.getUnitMap();
-        const tileMap               = war.getTileMap();
-        const fogMap                = war.getFogMap();
         const beginningGridIndex    = pathNodes[0];
         const focusUnit             = Helpers.getExisted(unitMap.getUnit(beginningGridIndex, launchUnitId));
-        const currentFuel           = focusUnit.getCurrentFuel();
-        const tile                  = tileMap.getTile(beginningGridIndex);
-        fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
-        focusUnit.setCurrentFuel(currentFuel - fuelConsumption);
+        war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
+        focusUnit.setCurrentFuel(focusUnit.getCurrentFuel() - fuelConsumption);
         if (launchUnitId == null) {
             unitMap.removeUnitOnMap(beginningGridIndex, false);
         } else {
@@ -531,66 +659,353 @@ namespace WarCommonHelpers {
             }
 
             if (launchUnitId == null) {
-                tile.updateOnUnitLeave();
+                war.getTileMap().getTile(beginningGridIndex).updateOnUnitLeave();
             }
         }
     }
-
-    export function updateTilesAndUnits(
-        war         : TwnsBwWar.BwWar,
-        extraData   : Types.Undefinable<{
-            actingTiles?        : ISerialTile[] | null;
-            actingUnits?        : ISerialUnit[] | null;
-            discoveredTiles?    : ISerialTile[] | null;
-            discoveredUnits?    : ISerialUnit[] | null;
-        }>,
-    ): void {
-        if (extraData) {
-            addUnitsBeforeExecutingAction(war, extraData.actingUnits, false);
-            addUnitsBeforeExecutingAction(war, extraData.discoveredUnits, false);
-            updateTilesBeforeExecutingAction(war, extraData.actingTiles);
-            updateTilesBeforeExecutingAction(war, extraData.discoveredTiles);
+    export async function moveExtraUnit({ war, movingUnitAndPath, aiming, deleteViewAfterMoving }: {
+        war                     : TwnsBwWar.BwWar;
+        movingUnitAndPath       : Types.Undefinable<ProtoTypes.Structure.IMovingUnitAndPath>;
+        aiming                  : GridIndex | null;
+        deleteViewAfterMoving   : boolean;
+    }): Promise<TwnsBwUnitView.BwUnitView | null> {
+        if (movingUnitAndPath == null) {
+            return null;
         }
-    }
-    function addUnitsBeforeExecutingAction(
-        war             : TwnsBwWar.BwWar,
-        unitsData       : Types.Undefinable<ISerialUnit[]>,
-        isViewVisible   : boolean
-    ): void {
-        if ((unitsData) && (unitsData.length)) {
-            const configVersion = war.getConfigVersion();
-            const unitMap       = war.getUnitMap();
-            for (const unitData of unitsData) {
-                const unitId = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_AddUnitsBeforeExecutingAction_00);
-                if (!unitMap.getUnitById(unitId)) {
-                    const unit = new TwnsBwUnit.BwUnit();
-                    unit.init(unitData, configVersion);
 
-                    const isOnMap = unit.getLoaderUnitId() == null;
-                    if (isOnMap) {
-                        unitMap.setUnitOnMap(unit);
-                    } else {
-                        unitMap.setUnitLoaded(unit);
+        const movingUnitData = movingUnitAndPath.unit;
+        if (movingUnitData == null) {
+            return null;
+        }
+
+        const movingPath = movingUnitAndPath.path;
+        if (movingPath == null) {
+            throw Helpers.newError(`Empty movingPath.`, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_00);
+        }
+
+        const unitMap           = war.getUnitMap();
+        const unitMapView       = unitMap.getView();
+        const movingUnitView    = unitMap.getUnitById(Helpers.getExisted(movingUnitData.unitId, ClientErrorCode.WarCommonHelpers_MoveExtraUnit_01))?.getView();
+        (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
+
+        const virtualUnit = new TwnsBwUnit.BwUnit();
+        virtualUnit.init(movingUnitData, war.getConfigVersion());
+        virtualUnit.startRunning(war);
+        virtualUnit.startRunningView();
+
+        const virtualUnitView = virtualUnit.getView();
+        unitMapView.addUnit(virtualUnitView, true);
+        await virtualUnitView.moveAlongExtraPath({
+            path: movingPath,
+            aiming,
+            deleteViewAfterMoving
+        });
+
+        return virtualUnitView;
+    }
+
+    export function checkIsUnitRepaired(oldUnitData: ISerialUnit, newUnitData: ISerialUnit): boolean {
+        if (oldUnitData.unitType != newUnitData.unitType) {
+            return false;
+        }
+
+        return (newUnitData.currentHp ?? CommonConstants.UnitMaxHp) > (oldUnitData.currentHp ?? CommonConstants.UnitMaxHp);
+    }
+    export function checkIsUnitSupplied(oldUnitData: ISerialUnit, newUnitData: ISerialUnit, configVersion: string): boolean {
+        const unitType = newUnitData.unitType;
+        if ((unitType == null) || (oldUnitData.unitType != newUnitData.unitType)) {
+            return false;
+        }
+
+        const unitCfg = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(configVersion, unitType), ClientErrorCode.WarCommonHelpers_CheckIsUnitSupplied_00);
+        {
+            const maxFuel = unitCfg.maxFuel;
+            if ((newUnitData.currentFuel ?? maxFuel) > (oldUnitData.currentFuel ?? maxFuel)) {
+                return true;
+            }
+        }
+
+        {
+            const maxAmmo = unitCfg.primaryWeaponMaxAmmo;
+            if ((maxAmmo != null)                                                                                       &&
+                ((newUnitData.primaryWeaponCurrentAmmo ?? maxAmmo) > (oldUnitData.primaryWeaponCurrentAmmo ?? maxAmmo))
+            ) {
+                return true;
+            }
+        }
+
+        {
+            const maxAmmo = unitCfg.flareMaxAmmo;
+            if ((maxAmmo != null)                                                                       &&
+                ((newUnitData.flareCurrentAmmo ?? maxAmmo) > (oldUnitData.flareCurrentAmmo ?? maxAmmo))
+            ) {
+                return true;
+            }
+        }
+
+        {
+            const maxMaterial = unitCfg.maxProduceMaterial;
+            if ((maxMaterial != null)                                                                                       &&
+                ((newUnitData.currentProduceMaterial ?? maxMaterial) > (oldUnitData.currentProduceMaterial ?? maxMaterial))
+            ) {
+                return true;
+            }
+        }
+
+        {
+            const maxMaterial = unitCfg.maxBuildMaterial;
+            if ((maxMaterial != null)                                                                                   &&
+                ((newUnitData.currentBuildMaterial ?? maxMaterial) > (oldUnitData.currentBuildMaterial ?? maxMaterial))
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    export function checkIsUnitDamaged(oldUnitData: ISerialUnit, newUnitData: ISerialUnit): boolean {
+        if (oldUnitData.unitType != newUnitData.unitType) {
+            return false;
+        }
+
+        return (newUnitData.currentHp ?? CommonConstants.UnitMaxHp) < (oldUnitData.currentHp ?? CommonConstants.UnitMaxHp);
+    }
+
+    // export function updateTilesAndUnits(
+    //     war         : TwnsBwWar.BwWar,
+    //     extraData   : Types.Undefinable<{
+    //         actingTiles?        : ISerialTile[] | null;
+    //         actingUnits?        : ISerialUnit[] | null;
+    //         discoveredTiles?    : ISerialTile[] | null;
+    //         discoveredUnits?    : ISerialUnit[] | null;
+    //     }>,
+    // ): void {
+    //     if (extraData) {
+    //         addUnitsBeforeExecutingAction(war, extraData.actingUnits, false);
+    //         addUnitsBeforeExecutingAction(war, extraData.discoveredUnits, false);
+    //         updateTilesBeforeExecutingAction(war, extraData.actingTiles);
+    //         updateTilesBeforeExecutingAction(war, extraData.discoveredTiles);
+    //     }
+    // }
+    // function addUnitsBeforeExecutingAction(
+    //     war             : TwnsBwWar.BwWar,
+    //     unitsData       : Types.Undefinable<ISerialUnit[]>,
+    //     isViewVisible   : boolean
+    // ): void {
+    //     if ((unitsData) && (unitsData.length)) {
+    //         const configVersion = war.getConfigVersion();
+    //         const unitMap       = war.getUnitMap();
+    //         for (const unitData of unitsData) {
+    //             const unitId = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_AddUnitsBeforeExecutingAction_00);
+    //             if (!unitMap.getUnitById(unitId)) {
+    //                 const unit = new TwnsBwUnit.BwUnit();
+    //                 unit.init(unitData, configVersion);
+
+    //                 const isOnMap = unit.getLoaderUnitId() == null;
+    //                 if (isOnMap) {
+    //                     unitMap.setUnitOnMap(unit);
+    //                 } else {
+    //                     unitMap.setUnitLoaded(unit);
+    //                 }
+    //                 unit.startRunning(war);
+    //                 unit.startRunningView();
+    //                 unit.setViewVisible(isViewVisible);
+    //             }
+    //         }
+    //     }
+    // }
+    // function updateTilesBeforeExecutingAction(war: TwnsBwWar.BwWar, tilesData: Types.Undefinable<ISerialTile[]>): void {
+    //     if ((tilesData) && (tilesData.length)) {
+    //         const tileMap   = war.getTileMap();
+    //         for (const tileData of tilesData) {
+    //             const gridIndex     = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
+    //             const tile          = tileMap.getTile(gridIndex);
+    //             const configVersion = tile.getConfigVersion();
+    //             if (tile.getHasFog()) {
+    //                 tile.setHasFog(false);
+    //                 tile.deserialize(tileData, configVersion);
+    //             }
+    //         }
+    //     }
+    // }
+
+    /**
+     * @return the war view is vibrated or not
+     */
+    export function handleCommonExtraDataForWarActions({ war, commonExtraData, isFastExecute }: {
+        war                 : TwnsBwWar.BwWar;
+        commonExtraData     : ProtoTypes.Structure.ICommonExtraDataForWarAction;
+        isFastExecute       : boolean;
+    }): boolean {
+        const playerIndexInTurn = war.getPlayerIndexInTurn();
+        {
+            const visibilityArrayFromPathsAfterAction = commonExtraData.visibilityArrayFromPathsAfterAction;
+            if (visibilityArrayFromPathsAfterAction) {
+                war.getFogMap().updateMapFromPathsByVisibilityArray(playerIndexInTurn, visibilityArrayFromPathsAfterAction);
+            }
+        }
+
+        const configVersion             = war.getConfigVersion();
+        const playerArrayAfterAction    = commonExtraData.playerArrayAfterAction ?? [];
+        for (const playerData of playerArrayAfterAction) {
+            const player = war.getPlayer(Helpers.getExisted(playerData.playerIndex, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_00));
+            player.init(playerData, configVersion);
+            player.startRunning(war);
+        }
+
+        const unitMap = war.getUnitMap();
+        unitMap.setNextUnitId(Helpers.getExisted(commonExtraData.nextUnitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_01));
+
+        const unitArrayAfterAction  = commonExtraData.unitArrayAfterAction ?? [];
+        const destroyedUnitIdArray  = commonExtraData.destroyedUnitIdArray ?? [];
+        if (unitArrayAfterAction.some(v => destroyedUnitIdArray.indexOf(Helpers.getExisted(v.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_02)) >= 0)) {
+            throw Helpers.newError(`WarCommonHelpers.handleCommonExtraDataForWarActions() unitArrayAfterAction and destroyedUnitIdArray overlapped!`, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_03);
+        }
+
+        const movingUnitAndPath     = commonExtraData.movingUnitAndPath;
+        const movingUnitId          = movingUnitAndPath ? Helpers.getExisted(movingUnitAndPath.unit?.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_04) : null;
+        const movingUnit            = movingUnitId == null ? null : unitMap.getUnitById(movingUnitId);
+        const gridVisualEffect      = war.getGridVisualEffect();
+        let isShownExplosionEffect  = false;
+        {
+            const movingPath            = movingUnitAndPath?.path;
+            const movingDestination     = movingPath ? movingPath[movingPath.length - 1] : null;
+            const movingUnitPlayerIndex = movingUnit?.getPlayerIndex();
+            const destinationGridIndex  = movingDestination?.isVisible ? GridIndexHelpers.convertGridIndex(movingDestination.gridIndex) : null;
+            for (const unitId of destroyedUnitIdArray) {
+                const unit = unitMap.getUnitById(unitId);
+                if (unit == null) {
+                    continue;
+                }
+
+                if (unit.getLoaderUnitId()) {
+                    unitMap.removeUnitLoaded(unitId);
+
+                } else {
+                    const gridIndex = unit.getGridIndex();
+                    unitMap.removeUnitOnMap(gridIndex, true);
+
+                    if (!isFastExecute) {
+                        if ((destinationGridIndex == null)                                      ||
+                            (unit.getPlayerIndex() !== movingUnitPlayerIndex)                   ||
+                            (!GridIndexHelpers.checkIsEqual(destinationGridIndex, gridIndex))
+                        ) {
+                            gridVisualEffect.showEffectExplosion(gridIndex);
+                            isShownExplosionEffect = true;
+                        }
                     }
-                    unit.startRunning(war);
-                    unit.startRunningView();
-                    unit.setViewVisible(isViewVisible);
                 }
             }
         }
-    }
-    function updateTilesBeforeExecutingAction(war: TwnsBwWar.BwWar, tilesData: Types.Undefinable<ISerialTile[]>): void {
-        if ((tilesData) && (tilesData.length)) {
-            const tileMap   = war.getTileMap();
-            for (const tileData of tilesData) {
-                const gridIndex     = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
-                const tile          = tileMap.getTile(gridIndex);
-                const configVersion = tile.getConfigVersion();
-                if (tile.getHasFog()) {
-                    tile.setHasFog(false);
-                    tile.deserialize(tileData, configVersion);
+
+        const tempRemovedUnits = new Map<number, TwnsBwUnit.BwUnit>();  // 此临时变量仅用于优化性能，在后续把部队加回来的过程中可以直接从这里取，而不必重新创建
+        if ((movingUnitId != null) && (movingUnit)) {
+            unitMap.removeUnitById(movingUnitId, true);
+            tempRemovedUnits.set(movingUnitId, movingUnit);
+
+            for (const loadedUnit of unitMap.getUnitsLoadedByLoader(movingUnit, true)) {
+                const loadedUnitId = loadedUnit.getUnitId();
+                unitMap.removeUnitLoaded(loadedUnitId);
+                tempRemovedUnits.set(loadedUnitId, loadedUnit);
+            }
+        }
+        for (const unitData of unitArrayAfterAction) {
+            // 先把涉及的部队全部从地图上移除，然后再加回来，否则如果遇到有部队互相交换了位置之类的复杂情况就会报错（因为尝试把A移动到B所在位置时，B仍然占着位置，A就无法移动过去）
+            const unitId    = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_05);
+            const unit      = unitMap.getUnitById(unitId);
+            if (unit) {
+                unitMap.removeUnitById(unitId, true);
+                tempRemovedUnits.set(unitId, unit);
+            }
+        }
+
+        const updatedViewUnits = new Set<TwnsBwUnit.BwUnit>();
+        for (const unitData of unitArrayAfterAction) {
+            const unitId        = Helpers.getExisted(unitData.unitId, ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_06);
+            // const existingUnit  = unitMap.getUnitById(unitId);
+            const existingUnit  = tempRemovedUnits.get(unitId);
+            if (existingUnit) {
+                // if (existingUnit.getLoaderUnitId() == null) {
+                //     unitMap.removeUnitOnMap(existingUnit.getGridIndex(), true);
+                // } else {
+                //     unitMap.removeUnitLoaded(unitId);
+                // }
+
+                const existingUnitData = existingUnit.serialize();
+                existingUnit.init(unitData, configVersion);
+                if (existingUnit.getLoaderUnitId() == null) {
+                    unitMap.setUnitOnMap(existingUnit);
+                } else {
+                    unitMap.setUnitLoaded(existingUnit);
+                }
+                existingUnit.startRunning(war);
+                existingUnit.startRunningView();
+                updatedViewUnits.add(existingUnit);
+
+                if (!isFastExecute) {
+                    const gridIndex = existingUnit.getGridIndex();
+                    if (checkIsUnitRepaired(existingUnitData, unitData)) {
+                        gridVisualEffect.showEffectRepair(gridIndex);
+                    } else if (checkIsUnitSupplied(existingUnitData, unitData, configVersion)) {
+                        gridVisualEffect.showEffectSupply(gridIndex);
+                    }
+
+                    if (checkIsUnitDamaged(existingUnitData, unitData)) {
+                        gridVisualEffect.showEffectDamage(gridIndex);
+                    }
+                }
+
+            } else {
+                const unit = new TwnsBwUnit.BwUnit();
+                unit.init(unitData, configVersion);
+
+                if (unit.getLoaderUnitId() == null) {
+                    unitMap.setUnitOnMap(unit);
+                } else {
+                    unitMap.setUnitLoaded(unit);
+                }
+                unit.startRunning(war);
+                unit.startRunningView();
+                updatedViewUnits.add(unit);
+            }
+        }
+
+        const tileMap = war.getTileMap();
+        for (const tileData of commonExtraData.tileArrayAfterAction ?? []) {
+            const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.WarCommonHelpers_HandleCommonExtraDataForWarAction_07);
+            const tile              = tileMap.getTile(gridIndex);
+            const hpBeforeAction    = tile.getCurrentHp();
+            tile.init(tileData, configVersion);
+            tile.startRunning(war);
+            tile.startRunningView();
+
+            if (!isFastExecute) {
+                if (hpBeforeAction != null) {
+                    const hpAfterAction = tile.getCurrentHp();
+                    if (hpAfterAction == null) {
+                        gridVisualEffect.showEffectExplosion(gridIndex);
+                        isShownExplosionEffect = true;
+                    } else if (hpAfterAction < hpBeforeAction) {
+                        gridVisualEffect.showEffectDamage(gridIndex);
+                    }
                 }
             }
+        }
+
+        if ((!isFastExecute) && (playerArrayAfterAction.some(v => v.playerIndex === playerIndexInTurn))) {
+            for (const unit of unitMap.getAllUnitsOnMap()) {
+                if ((!updatedViewUnits.has(unit)) && (unit.getPlayerIndex() === playerIndexInTurn)) {
+                    unit.updateView();
+                }
+            }
+        }
+
+        if ((!isFastExecute) && (isShownExplosionEffect)) {
+            war.getView().showVibration();
+            SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -782,7 +1197,8 @@ namespace WarCommonHelpers {
         return (warType === Types.WarType.ScwFog)
             || (warType === Types.WarType.ScwStd)
             || (warType === Types.WarType.SfwFog)
-            || (warType === Types.WarType.SfwStd);
+            || (warType === Types.WarType.SfwStd)
+            || (warType === Types.WarType.Me);
     }
 
     export function getPlayersCountUnneutral(playerManagerData: Types.Undefinable<WarSerialization.ISerialPlayerManager>): number {

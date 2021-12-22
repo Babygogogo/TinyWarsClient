@@ -14,58 +14,40 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 // import WarEventHelper           from "../model/WarEventHelper";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeConditionReplacePanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
 
-    type OpenDataForWeConditionReplacePanel = {
+    export type OpenData = {
         fullData        : IWarEventFullData;
         parentNodeId    : number;
         conditionId     : number;
     };
-    export class WeConditionReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeConditionReplacePanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeConditionReplacePanel;
-
+    export class WeConditionReplacePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listCondition!    : TwnsUiScrollList.UiScrollList<DataForConditionRenderer>;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelNoCondition! : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForWeConditionReplacePanel): void {
-            if (!WeConditionReplacePanel._instance) {
-                WeConditionReplacePanel._instance = new WeConditionReplacePanel();
-            }
-            WeConditionReplacePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (WeConditionReplacePanel._instance) {
-                await WeConditionReplacePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeConditionReplacePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
             ]);
-            this._listCondition.setItemRenderer(ConditionRenderer);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
+            this._listCondition.setItemRenderer(ConditionRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -126,6 +108,7 @@ namespace TwnsWeConditionReplacePanel {
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
+            this._btnCopy.visible = false;
             this._updateComponentsForLanguage();
         }
 
@@ -144,7 +127,7 @@ namespace TwnsWeConditionReplacePanel {
                 conditionIdForClone     : data.candidateConditionId,
             }) != null) {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                WeConditionReplacePanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionReplacePanel);
             }
         }
         private _onTouchedBtnSelect(): void {        // DONE
@@ -156,7 +139,7 @@ namespace TwnsWeConditionReplacePanel {
                 newConditionId  : data.candidateConditionId,
             })) {
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                WeConditionReplacePanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionReplacePanel);
             }
         }
         private _onNotifyLanguageChanged(): void {        // DONE
@@ -173,7 +156,9 @@ namespace TwnsWeConditionReplacePanel {
 
         private _updateLabelConditionId(): void {
             const data                  = this._getData();
-            this._labelConditionId.text = `${Lang.getText(LangTextType.B0502)}: C${data.candidateConditionId}`;
+            const conditionId           = data.candidateConditionId;
+            const nodeNameArray         = data.fullData.conditionNodeArray?.filter(node => node.conditionIdArray?.some(v => v === conditionId)).map(v => `N${v.nodeId}`);
+            this._labelConditionId.text = `C${conditionId} (${Lang.getText(LangTextType.B0749)}: ${nodeNameArray?.length ? nodeNameArray.join(`, `) : Lang.getText(LangTextType.B0001)})`;
         }
         private _updateLabelCondition(): void {
             const data      = this._getData();

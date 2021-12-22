@@ -16,6 +16,7 @@
 // import TwnsMpwPlayerManager         from "./MpwPlayerManager";
 // import MpwUtility                   from "./MpwUtility";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarAction                = ProtoTypes.WarAction;
@@ -35,19 +36,18 @@ namespace TwnsMpwWar {
         public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
             return this._commonSettingManager;
         }
-        public getIsWarMenuPanelOpening(): boolean {
-            return TwnsMpwWarMenuPanel.MpwWarMenuPanel.getIsOpening();
-        }
         public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
             return this._warEventManager;
         }
 
-        public updateTilesAndUnitsOnVisibilityChanged(): void {
+        public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
             const watcherTeamIndexes    = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const visibleUnitsOnMap     = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
             for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (visibleUnitsOnMap.has(unit)) {
-                    unit.setViewVisible(true);
+                    if (!isFastExecute) {
+                        unit.setViewVisible(true);
+                    }
                 } else {
                     WarDestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
                 }
@@ -64,9 +64,15 @@ namespace TwnsMpwWar {
                         MpwUtility.resetTileDataAsHasFog(tile);
                     }
                 }
-                tile.flushDataToView();
+
+                if (!isFastExecute) {
+                    tile.flushDataToView();
+                }
             }
-            tileMap.getView().updateCoZone();
+
+            if (!isFastExecute) {
+                tileMap.getView().updateCoZone();
+            }
         }
 
         public async getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | null> {
@@ -106,7 +112,7 @@ namespace TwnsMpwWar {
             return `${Lang.getText(LangTextType.B0451)}`;
         }
         public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | null> {
-            const playerIndex = Helpers.getExisted(action.targetPlayerIndex);
+            const playerIndex = Helpers.getExisted(action.extraData?.targetPlayerIndex);
             return `p${playerIndex} ${await this.getPlayer(playerIndex).getNickname()} ${Lang.getText(LangTextType.B0450)}`;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | null> {
@@ -179,7 +185,7 @@ namespace TwnsMpwWar {
             }
         }
 
-        public getIsRunTurnPhaseWithExtraData(): boolean {
+        public getIsExecuteActionsWithExtraData(): boolean {
             return true;
         }
 

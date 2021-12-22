@@ -12,17 +12,14 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonChangeVersionPanel {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
     import GameVersion  = Types.GameVersion;
 
-    export class CommonChangeVersionPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: CommonChangeVersionPanel;
-
+    export type OpenData = void;
+    export class CommonChangeVersionPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!        : eui.Group;
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
@@ -31,31 +28,7 @@ namespace TwnsCommonChangeVersionPanel {
         private readonly _listVersion!  : TwnsUiScrollList.UiScrollList<DataForVersionRenderer>;
         private readonly _labelTips!    : TwnsUiLabel.UiLabel;
 
-        public static show(): void {
-            if (!CommonChangeVersionPanel._instance) {
-                CommonChangeVersionPanel._instance = new CommonChangeVersionPanel();
-            }
-
-            CommonChangeVersionPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (CommonChangeVersionPanel._instance) {
-                await CommonChangeVersionPanel._instance.close();
-            }
-        }
-        public static getInstance(): CommonChangeVersionPanel {
-            return CommonChangeVersionPanel._instance;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/common/CommonChangeVersionPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
@@ -63,14 +36,18 @@ namespace TwnsCommonChangeVersionPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listVersion.setItemRenderer(VersionRenderer);
 
-            this._showOpenAnimation();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
             this._initListVersion();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _getSelectedGameVersion(): GameVersion | null {
@@ -136,7 +113,7 @@ namespace TwnsCommonChangeVersionPanel {
             ];
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -147,21 +124,22 @@ namespace TwnsCommonChangeVersionPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

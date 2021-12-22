@@ -22,19 +22,14 @@
 // import TwnsMfrJoinRoomListPanel from "./MfrJoinRoomListPanel";
 // import TwnsMfrMyRoomListPanel   from "./MfrMyRoomListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMfrMainMenuPanel {
-    import MfrJoinRoomListPanel = TwnsMfrJoinRoomListPanel.MfrJoinRoomListPanel;
-    import MfrMyRoomListPanel   = TwnsMfrMyRoomListPanel.MfrMyRoomListPanel;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import Tween                = egret.Tween;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    export class MfrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MfrMainMenuPanel;
-
+    export type OpenData = void;
+    export class MfrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
         private readonly _btnRanking!       : TwnsUiButton.UiButton;
@@ -49,26 +44,7 @@ namespace TwnsMfrMainMenuPanel {
         private readonly _btnNormalMode!    : TwnsUiButton.UiButton;
         private readonly _btnCoopMode!      : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!MfrMainMenuPanel._instance) {
-                MfrMainMenuPanel._instance = new MfrMainMenuPanel();
-            }
-            MfrMainMenuPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MfrMainMenuPanel._instance) {
-                await MfrMainMenuPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiFreeRoom/MfrMainMenuPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
                 { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
@@ -83,14 +59,12 @@ namespace TwnsMfrMainMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
             ]);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -98,11 +72,11 @@ namespace TwnsMfrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnRanking(): void {
             this.close();
-            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            TwnsSpmMainMenuPanel.SpmMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
         }
         private _onTouchedBtnCreateRoom(): void {
             FloatText.show(Lang.getText(LangTextType.A0053));
@@ -114,35 +88,35 @@ namespace TwnsMfrMainMenuPanel {
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            MfrJoinRoomListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrJoinRoomListPanel, void 0);
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            MfrMyRoomListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMyRoomListPanel, void 0);
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            TwnsMfwMyWarListPanel.MfwMyWarListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfwMyWarListPanel, void 0);
         }
         private _onTouchedBtnHelp(): void {
-            TwnsCommonAlertPanel.CommonAlertPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                 title   : Lang.getText(LangTextType.B0143),
                 content : Lang.getText(LangTextType.R0007),
             });
         }
         private _onTouchedBtnNormalMode(): void {
             this.close();
-            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
         }
         private _onTouchedBtnCoopMode(): void {
             this.close();
-            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrMainMenuPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {
@@ -152,7 +126,7 @@ namespace TwnsMfrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             const group = this._group;
             Tween.removeTweens(group);
             group.right = 60;
@@ -222,21 +196,22 @@ namespace TwnsMfrMainMenuPanel {
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
+
+            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, right: 60 },
-                    endProps    : { alpha: 0, right: 20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupLeft,
-                    beginProps  : { alpha: 1, left: 0 },
-                    endProps    : { alpha: 0, left: -40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, right: 60 },
+                endProps    : { alpha: 0, right: 20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupLeft,
+                beginProps  : { alpha: 1, left: 0 },
+                endProps    : { alpha: 0, left: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {

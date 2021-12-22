@@ -14,54 +14,38 @@
 // import WarMapModel              from "../../warMap/model/WarMapModel";
 // import MeModel                  from "../model/MeModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeImportPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    export class MeImportPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeImportPanel;
-
+    export type OpenData = void;
+    export class MeImportPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!        : eui.Group;
         private readonly _listMap!      : TwnsUiScrollList.UiScrollList<DataForMapRenderer>;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!MeImportPanel._instance) {
-                MeImportPanel._instance = new MeImportPanel();
-            }
-            MeImportPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeImportPanel._instance) {
-                await MeImportPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeImportPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listMap.setItemRenderer(MapRenderer);
             this._listMap.setScrollPolicyH(eui.ScrollPolicy.OFF);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._updateListMap();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +96,7 @@ namespace TwnsMeImportPanel {
 
         public onItemTapEvent(): void {
             const data = this._getData();
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0095) + `\n"${data.mapName}"`,
                 callback: async () => {
                     const war = Helpers.getExisted(MeModel.getWar());

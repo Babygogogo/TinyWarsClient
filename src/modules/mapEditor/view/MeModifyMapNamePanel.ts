@@ -14,17 +14,14 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 // import MeModel              from "../model/MeModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeModifyMapNamePanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
 
-    export class MeModifyMapNamePanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeModifyMapNamePanel;
-
+    export type OpenData = void;
+    export class MeModifyMapNamePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _inputChinese! : TwnsUiTextInput.UiTextInput;
         private readonly _inputEnglish! : TwnsUiTextInput.UiTextInput;
         private readonly _labelTip!     : TwnsUiLabel.UiLabel;
@@ -34,29 +31,7 @@ namespace TwnsMeModifyMapNamePanel {
         private readonly _btnModify!    : TwnsUiButton.UiButton;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!MeModifyMapNamePanel._instance) {
-                MeModifyMapNamePanel._instance = new MeModifyMapNamePanel();
-            }
-
-            MeModifyMapNamePanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeModifyMapNamePanel._instance) {
-                await MeModifyMapNamePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName               = "resource/skins/mapEditor/MeModifyMapNamePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -64,11 +39,17 @@ namespace TwnsMeModifyMapNamePanel {
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ]);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
             this._inputChinese.maxChars = CommonConstants.MapMaxNameLength;
             this._inputEnglish.maxChars = CommonConstants.MapMaxNameLength;
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {

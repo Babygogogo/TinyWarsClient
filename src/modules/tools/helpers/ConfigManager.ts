@@ -33,6 +33,7 @@ namespace ConfigManager {
     import PlayerRankCfg        = Types.PlayerRankCfg;
     import CoSkillCfg           = Types.CoSkillCfg;
     import WeatherCfg           = Types.WeatherCfg;
+    import WeatherCategoryCfg   = Types.WeatherCategoryCfg;
     import UserAvatarCfg        = Types.UserAvatarCfg;
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -53,6 +54,7 @@ namespace ConfigManager {
         CoBasic                 : { [coId: number]: CoBasicCfg };
         CoSkill                 : { [skillId: number]: CoSkillCfg };
         Weather                 : { [weatherType: number]: WeatherCfg };
+        WeatherCategory         : { [category: number]: WeatherCategoryCfg };
         UserAvatar              : { [avatarId: number]: UserAvatarCfg };
         maxUnitPromotion?       : number;
         secondaryWeaponFlag?    : { [unitType: number]: boolean };
@@ -171,6 +173,13 @@ namespace ConfigManager {
         }
         return dst;
     }
+    function _destructWeatherCategoryCfg(data: WeatherCategoryCfg[]): { [category: number]: WeatherCategoryCfg } {
+        const dst: { [category: number]: WeatherCategoryCfg } = {};
+        for (const d of data) {
+            dst[d.category] = d;
+        }
+        return dst;
+    }
     function _destructUserAvatarCfg(data: UserAvatarCfg[]): { [avatarId: number]: UserAvatarCfg } {
         const dst: { [avatarId: number]: UserAvatarCfg } = {};
         for (const d of data) {
@@ -267,6 +276,7 @@ namespace ConfigManager {
             CoBasic             : _destructCoBasicCfg(rawConfig.CoBasic),
             CoSkill             : _destructCoSkillCfg(rawConfig.CoSkill),
             Weather             : _destructWeatherCfg(rawConfig.Weather),
+            WeatherCategory     : _destructWeatherCategoryCfg(rawConfig.WeatherCategory),
             UserAvatar          : _destructUserAvatarCfg(rawConfig.UserAvatar),
             DamageChart         : damageChartCfg,
             UnitPromotion       : unitPromotionCfg,
@@ -297,6 +307,9 @@ namespace ConfigManager {
 
     export function getSystemMaxBanCoCount(version: string): number {
         return Helpers.getExisted(getSystemCfg(version).maxBanCount, ClientErrorCode.ConfigManager_GetSystemMaxBanCoCount_00);
+    }
+    export function getSystemDialogueBackgroundMaxId(version: string): number {
+        return Helpers.getExisted(getSystemCfg(version).dialogueBackgroundMaxId, ClientErrorCode.ConfigManager_GetSystemDialogueBackgroundMaxId_00);
     }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
@@ -340,7 +353,7 @@ namespace ConfigManager {
             return true;
         } else if (objectType === TileObjectType.Fire) {
             return playerIndex === neutralPlayerIndex;
-        } else if (objectType === TileObjectType.GreenPlasma) {
+        } else if (objectType === TileObjectType.Pipe) {
             return playerIndex === neutralPlayerIndex;
         } else if (objectType === TileObjectType.Headquarters) {
             return playerIndex !== neutralPlayerIndex;
@@ -374,9 +387,182 @@ namespace ConfigManager {
             return playerIndex === neutralPlayerIndex;
         } else if (objectType === TileObjectType.Wood) {
             return playerIndex === neutralPlayerIndex;
+        } else if (objectType === TileObjectType.Crystal) {
+            return true;
+        } else if (objectType === TileObjectType.CustomCrystal) {
+            return true;
+        } else if (objectType === TileObjectType.CannonUp) {
+            return true;
+        } else if (objectType === TileObjectType.CannonDown) {
+            return true;
+        } else if (objectType === TileObjectType.CannonLeft) {
+            return true;
+        } else if (objectType === TileObjectType.CannonRight) {
+            return true;
+        } else if (objectType === TileObjectType.CustomCannon) {
+            return true;
+        } else if (objectType === TileObjectType.LaserTurret) {
+            return true;
+        } else if (objectType === TileObjectType.CustomLaserTurret) {
+            return true;
+        } else if (objectType === TileObjectType.PipeJoint) {
+            return playerIndex === neutralPlayerIndex;
         } else {
             return false;
         }
+    }
+
+    export function checkIsValidTurnPhaseCode(turnPhaseCode: Types.TurnPhaseCode): boolean {
+        return (turnPhaseCode === Types.TurnPhaseCode.Main)
+            || (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn);
+    }
+    export function checkIsValidWeatherType(weatherType: Types.WeatherType): boolean {
+        return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.Weather[weatherType] != null;
+    }
+    export function checkIsValidTileType(tileType: Types.TileType): boolean {
+        return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.TileTemplate[tileType] != null;
+    }
+    export function checkIsValidUnitType(unitType: UnitType): boolean {
+        return _ALL_CONFIGS.get(Helpers.getExisted(getLatestConfigVersion()))?.UnitTemplate[unitType] != null;
+    }
+    export function checkIsValidUnitTypeSubset(unitTypeArray: UnitType[]): boolean {
+        return ((new Set(unitTypeArray)).size === unitTypeArray.length)
+            && (unitTypeArray.every(v => checkIsValidUnitType(v)));
+    }
+    export function checkIsValidCustomCrystalData(data: ProtoTypes.WarSerialization.ITileCustomCrystalData): boolean {
+        return (data.radius != null)
+            && (data.priority != null)
+            && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
+            && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage ?? data.deltaFund ?? data.deltaEnergyPercentage) != null);
+    }
+    export function checkIsValidCustomCannonData(data: ProtoTypes.WarSerialization.ITileCustomCannonData): boolean {
+        return (!!(data.rangeForDown ?? data.rangeForLeft ?? data.rangeForRight ?? data.rangeForUp))
+            && (data.priority != null)
+            && (!!data.maxTargetCount)
+            && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
+            && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage) != null);
+    }
+    export function checkIsValidCustomLaserTurretData(data: ProtoTypes.WarSerialization.ITileCustomLaserTurretData): boolean {
+        return (!!(data.rangeForDown ?? data.rangeForLeft ?? data.rangeForRight ?? data.rangeForUp))
+            && (data.priority != null)
+            && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
+            && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage) != null);
+    }
+    export function checkIsValidPlayerIndex(playerIndex: number, playersCountUnneutral: number): boolean {
+        return (playerIndex >= CommonConstants.WarNeutralPlayerIndex)
+            && (playerIndex <= playersCountUnneutral);
+    }
+    export function checkIsValidPlayerIndexSubset(playerIndexArray: number[], playersCountUnneutral: number): boolean {
+        return ((new Set(playerIndexArray)).size === playerIndexArray.length)
+            && (playerIndexArray.every(v => checkIsValidPlayerIndex(v, playersCountUnneutral)));
+    }
+    export function checkIsValidTeamIndex(teamIndex: number, playersCountUnneutral: number): boolean {
+        return (teamIndex >= CommonConstants.WarNeutralTeamIndex)
+            && (teamIndex <= playersCountUnneutral);
+    }
+    export function checkIsValidTeamIndexSubset(teamIndexArray: number[], playersCountUnneutral: number): boolean {
+        return ((new Set(teamIndexArray)).size === teamIndexArray.length)
+            && (teamIndexArray.every(v => checkIsValidTeamIndex(v, playersCountUnneutral)));
+    }
+    export function checkIsValidGridIndexSubset(gridIndexArray: ProtoTypes.Structure.IGridIndex[], mapSize: Types.MapSize): boolean {
+        const gridIdSet = new Set<number>();
+        for (const g of gridIndexArray) {
+            const gridIndex = GridIndexHelpers.convertGridIndex(g);
+            if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                return false;
+            }
+
+            const gridId = GridIndexHelpers.getGridId(gridIndex, mapSize);
+            if (gridIdSet.has(gridId)) {
+                return false;
+            }
+            gridIdSet.add(gridId);
+        }
+
+        return true;
+    }
+    export function checkIsValidLocationId(locationId: number): boolean {
+        return (locationId >= CommonConstants.MapMinLocationId)
+            && (locationId <= CommonConstants.MapMaxLocationId);
+    }
+    export function checkIsValidLocationIdSubset(locationIdArray: number[]): boolean {
+        return ((new Set(locationIdArray)).size === locationIdArray.length)
+            && (locationIdArray.every(v => checkIsValidLocationId(v)));
+    }
+    export function checkIsValidCustomCounterId(customCounterId: number): boolean {
+        return (customCounterId >= CommonConstants.WarCustomCounterMinId)
+            && (customCounterId <= CommonConstants.WarCustomCounterMaxId);
+    }
+    export function checkIsValidCustomCounterValue(customCounterValue: number): boolean {
+        return (customCounterValue <= CommonConstants.WarCustomCounterMaxValue)
+            && (customCounterValue >= -CommonConstants.WarCustomCounterMaxValue);
+    }
+    export function checkIsValidCustomCounterIdArray(idArray: number[]): boolean {
+        return (idArray.every(v => checkIsValidCustomCounterId(v)))
+            && (new Set(idArray).size === idArray.length);
+    }
+    export function checkIsValidCustomCounterArray(customCounterArray: ProtoTypes.WarSerialization.ICustomCounter[]): boolean {
+        const counterIdSet = new Set<number>();
+        for (const data of customCounterArray) {
+            const counterId     = data.customCounterId;
+            const counterValue  = data.customCounterValue;
+            if ((counterId == null)                                 ||
+                (!checkIsValidCustomCounterId(counterId))           ||
+                (counterValue == null)                              ||
+                (!checkIsValidCustomCounterValue(counterValue))     ||
+                (counterIdSet.has(counterId))
+            ) {
+                return false;
+            }
+
+            counterIdSet.add(counterId);
+        }
+
+        return true;
+    }
+    export function checkIsValidUnitAiMode(mode: Types.UnitAiMode): boolean {
+        return (mode === Types.UnitAiMode.NoMove)
+            || (mode === Types.UnitAiMode.Normal)
+            || (mode === Types.UnitAiMode.WaitUntilCanAttack);
+    }
+    export function checkIsValidValueComparator(comparator: Types.ValueComparator): boolean {
+        return (comparator === Types.ValueComparator.EqualTo)
+            || (comparator === Types.ValueComparator.NotEqualTo)
+            || (comparator === Types.ValueComparator.GreaterThan)
+            || (comparator === Types.ValueComparator.NotGreaterThan)
+            || (comparator === Types.ValueComparator.LessThan)
+            || (comparator === Types.ValueComparator.NotLessThan);
+    }
+    export function checkIsValidPlayerAliveState(aliveState: Types.PlayerAliveState): boolean {
+        return (aliveState === Types.PlayerAliveState.Alive)
+            || (aliveState === Types.PlayerAliveState.Dead)
+            || (aliveState === Types.PlayerAliveState.Dying);
+    }
+    export function checkIsValidPlayerAliveStateSubset(aliveStateArray: Types.PlayerAliveState[]): boolean {
+        return ((new Set(aliveStateArray)).size === aliveStateArray.length)
+            && (aliveStateArray.every(v => checkIsValidPlayerAliveState(v)));
+    }
+    export function checkIsValidCoSkillType(skillType: Types.CoSkillType): boolean {
+        return (skillType === Types.CoSkillType.Passive)
+            || (skillType === Types.CoSkillType.Power)
+            || (skillType === Types.CoSkillType.SuperPower);
+    }
+    export function checkIsValidCoSkillTypeSubset(skillTypeArray: Types.CoSkillType[]): boolean {
+        return ((new Set(skillTypeArray)).size === skillTypeArray.length)
+            && (skillTypeArray.every(v => checkIsValidCoSkillType(v)));
+    }
+    export function checkIsValidForceFogCode(forceFogCode: Types.ForceFogCode): boolean {
+        return (forceFogCode === Types.ForceFogCode.None)
+            || (forceFogCode === Types.ForceFogCode.Fog)
+            || (forceFogCode === Types.ForceFogCode.Clear);
+    }
+    export function checkIsValidUnitActionState(actionState: Types.UnitActionState): boolean {
+        return (actionState === Types.UnitActionState.Acted)
+            || (actionState === Types.UnitActionState.Idle);
+    }
+    export function checkIsValidUnitActionStateSubset(actionStateArray: Types.UnitActionState[]): boolean {
+        return ((new Set(actionStateArray)).size === actionStateArray.length)
+            && (actionStateArray.every(v => checkIsValidUnitActionState(v)));
     }
 
     export function getUnitTemplateCfg(version: string, unitType: UnitType): UnitTemplateCfg {
@@ -451,8 +637,9 @@ namespace ConfigManager {
         return Helpers.getExisted(CommonConstants.TileTypeToTileObjectType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }
 
-    export function getTileBaseImageSource({version, skinId, baseType, isDark, shapeId, tickCount}: {
+    export function getTileBaseImageSource({version, themeType, skinId, baseType, isDark, shapeId, tickCount}: {
         version     : Types.UnitAndTileTextureVersion;
+        themeType   : Types.TileThemeType;
         skinId      : number;
         baseType    : TileBaseType;
         isDark      : boolean;
@@ -466,6 +653,7 @@ namespace ConfigManager {
         const cfgForFrame       = Helpers.getExisted(CommonConstants.TileBaseFrameConfigs.get(version)?.get(baseType), ClientErrorCode.ConfigManager_GetTileBaseImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
+        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
         const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
         const textForVersion    = `ver${Helpers.getNumText(version)}`;
         const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
@@ -473,10 +661,11 @@ namespace ConfigManager {
         const textForFrame      = ticksPerFrame < Number.MAX_VALUE
             ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
             : `frame00`;
-        return `tileBase_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+        return `tileBase_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
-    export function getTileDecoratorImageSource({version, skinId, decoratorType, isDark, shapeId, tickCount}: {
+    export function getTileDecoratorImageSource({version, themeType, skinId, decoratorType, isDark, shapeId, tickCount}: {
         version         : Types.UnitAndTileTextureVersion;
+        themeType       : Types.TileThemeType;
         skinId          : number;
         decoratorType   : TileDecoratorType | null;
         isDark          : boolean;
@@ -490,6 +679,7 @@ namespace ConfigManager {
         const cfgForFrame       = Helpers.getExisted(CommonConstants.TileDecoratorFrameConfigs.get(version)?.get(decoratorType), ClientErrorCode.ConfigManager_GetTileDecoratorImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
+        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
         const textForShapeId    = `shape${Helpers.getNumText(shapeId || 0)}`;
         const textForVersion    = `ver${Helpers.getNumText(version)}`;
         const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
@@ -497,23 +687,21 @@ namespace ConfigManager {
         const textForFrame      = ticksPerFrame < Number.MAX_VALUE
             ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
             : `frame00`;
-        return `tileDecorator_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+        return `tileDecorator_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
-    export function getTileObjectImageSource({version, skinId, objectType, isDark, shapeId, tickCount}: {
+    export function getTileObjectImageSource({version, themeType, skinId, objectType, isDark, shapeId, tickCount}: {
         version     : Types.UnitAndTileTextureVersion;
+        themeType   : Types.TileThemeType;
         skinId      : number;
         objectType  : TileObjectType;
         isDark      : boolean;
         shapeId     : number;
         tickCount   : number;
     }): string {
-        if (objectType === TileObjectType.Empty) {
-            return ``;
-        }
-
         const cfgForFrame       = Helpers.getExisted(CommonConstants.TileObjectFrameConfigs.get(version)?.get(objectType), ClientErrorCode.ConfigManager_GetTileObjectImageSource_00);
         const ticksPerFrame     = cfgForFrame.ticksPerFrame;
         const textForDark       = isDark ? `state01` : `state00`;
+        const textForTheme      = `theme${Helpers.getNumText(themeType)}`;
         const textForShapeId    = `shape${Helpers.getNumText(shapeId)}`;
         const textForVersion    = `ver${Helpers.getNumText(version)}`;
         const textForSkin       = `skin${Helpers.getNumText(skinId)}`;
@@ -521,7 +709,7 @@ namespace ConfigManager {
         const textForFrame      = ticksPerFrame < Number.MAX_VALUE
             ? `frame${Helpers.getNumText(Math.floor((tickCount % (cfgForFrame.framesCount * ticksPerFrame)) / ticksPerFrame))}`
             : `frame00`;
-        return `tileObject_${textForVersion}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
+        return `tileObject_${textForVersion}_${textForTheme}_${textForType}_${textForDark}_${textForShapeId}_${textForSkin}_${textForFrame}`;
     }
 
     export function getUnitAndTileDefaultSkinId(playerIndex: number): number {
@@ -612,6 +800,16 @@ namespace ConfigManager {
 
     export function getWeatherCfg(version: string, weatherType: Types.WeatherType): WeatherCfg {
         return Helpers.getExisted(_ALL_CONFIGS.get(version)?.Weather[weatherType], ClientErrorCode.ConfigManager_GetWeatherCfg_00);
+    }
+    export function getWeatherTypesByCategory(version: string, category: Types.WeatherCategory): Types.WeatherType[] {
+        return Helpers.getExisted(_ALL_CONFIGS.get(version)?.WeatherCategory[category], ClientErrorCode.ConfigManager_GetWeatherTypesByCategory_00).weatherTypes ?? [];
+    }
+    export function checkIsWeatherTypeInCategory(
+        version     : string,
+        weatherType : Types.WeatherType,
+        category    : Types.WeatherCategory,
+    ): boolean {
+        return getWeatherTypesByCategory(version, category).indexOf(weatherType) >= 0;
     }
     export function getAvailableWeatherTypes(version: string): Types.WeatherType[] {
         const cfgDict   = Helpers.getExisted(_ALL_CONFIGS.get(version)?.Weather, ClientErrorCode.ConfigManager_GetAvailableWeatherTypes_00);
@@ -738,6 +936,9 @@ namespace ConfigManager {
     export function getCoEyeImageSource(coId: number, isAlive: boolean): string {
         return `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
     }
+    export function getDialogueBackgroundImage(backgroundId: number): string {
+        return `resource/assets/texture/background/dialogueBackground${Helpers.getNumText(backgroundId, 4)}.jpg`;
+    }
 
     export function getUserAvatarImageSource(avatarId: number): string {
         return `userAvatar${Helpers.getNumText(avatarId, 4)}`;
@@ -767,13 +968,9 @@ namespace ConfigManager {
     }
 
     export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: Types.Undefinable<number>): boolean {
-        if (tileObjectType === TileObjectType.Empty) {
-            return !shapeId;
-        } else {
-            const cfg = CommonConstants.TileObjectShapeConfigs.get(tileObjectType);
-            return (!!cfg)
-                && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
-        }
+        const cfg = CommonConstants.TileObjectShapeConfigs.get(tileObjectType);
+        return (!!cfg)
+            && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
     export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: Types.Undefinable<number>): boolean {
         const cfg = CommonConstants.TileBaseShapeConfigs.get(tileBaseType);

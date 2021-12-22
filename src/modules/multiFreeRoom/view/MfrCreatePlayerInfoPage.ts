@@ -18,7 +18,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMfrCreatePlayerInfoPage {
-    import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -102,7 +101,7 @@ namespace TwnsMfrCreatePlayerInfoPage {
             const initialWarData    = MfrCreateModel.getInitialWarData();
             const coId              = initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex)?.coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                CommonCoInfoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
                     configVersion   : Helpers.getExisted(initialWarData.settingsForCommon?.configVersion),
                     coId,
                 });

@@ -28,7 +28,7 @@ namespace TwnsRwWar {
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
-    type CheckPointData = {
+    type CheckpointData = {
         warData     : ISerialWar;
         nextActionId: number;
     };
@@ -47,8 +47,8 @@ namespace TwnsRwWar {
         private _replayId?                          : number;
         private _isAutoReplay                       = false;
         private _nextActionId                       = 0;
-        private _checkPointIdsForNextActionId       = new Map<number, number>();
-        private _checkPointDataListForCheckPointId  = new Map<number, CheckPointData>();
+        private _checkpointIdsForNextActionId       = new Map<number, number>();
+        private _checkpointDataListForCheckpointId  = new Map<number, CheckpointData>();
 
         public async init(warData: ISerialWar): Promise<void> {
             await this._baseInit(warData);
@@ -58,8 +58,8 @@ namespace TwnsRwWar {
             this._setSettingsForCcw(warData.settingsForCcw ?? null);
             this.setNextActionId(0);
 
-            this.setCheckPointId(0, 0);
-            this.setCheckPointData(0, {
+            this._setCheckpointId(0, 0);
+            this._setCheckpointData(0, {
                 nextActionId    : 0,
                 warData         : Helpers.deepClone(warData),
             });
@@ -85,16 +85,22 @@ namespace TwnsRwWar {
             return this._warEventManager;
         }
 
-        public updateTilesAndUnitsOnVisibilityChanged(): void {
+        public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
             // No need to update units.
 
             const tileMap       = this.getTileMap();
             const visibleTiles  = WarVisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
             for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
-                tile.flushDataToView();
+
+                if (!isFastExecute) {
+                    tile.flushDataToView();
+                }
             }
-            tileMap.getView().updateCoZone();
+
+            if (!isFastExecute) {
+                tileMap.getView().updateCoZone();
+            }
         }
 
         public async getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | null> {
@@ -194,7 +200,7 @@ namespace TwnsRwWar {
             return `(${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`;
         }
 
-        public serializeForCheckPoint(): CheckPointData {
+        public serializeForCheckpoint(): CheckpointData {
             const randomNumberManager = this.getRandomNumberManager();
             return {
                 nextActionId    : this.getNextActionId(),
@@ -260,15 +266,12 @@ namespace TwnsRwWar {
 
             throw Helpers.newError(`Invalid war data.`, ClientErrorCode.RwWar_GetMapId_00);
         }
-        public getIsWarMenuPanelOpening(): boolean {
-            return TwnsRwWarMenuPanel.RwWarMenuPanel.getIsOpening();
-        }
 
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }
 
-        public getIsRunTurnPhaseWithExtraData(): boolean {
+        public getIsExecuteActionsWithExtraData(): boolean {
             return false;
         }
 
@@ -329,18 +332,54 @@ namespace TwnsRwWar {
             }
         }
 
-        public getCheckPointId(nextActionId: number): number | null {
-            return this._checkPointIdsForNextActionId.get(nextActionId) ?? null;
+        private _getCheckpointId(nextActionId: number): number | null {
+            return this._checkpointIdsForNextActionId.get(nextActionId) ?? null;
         }
-        public setCheckPointId(nextActionId: number, checkPointId: number): void {
-            this._checkPointIdsForNextActionId.set(nextActionId, checkPointId);
+        private _setCheckpointId(nextActionId: number, checkpointId: number): void {
+            this._checkpointIdsForNextActionId.set(nextActionId, checkpointId);
         }
 
-        public getCheckPointData(checkPointId: number): CheckPointData | null {
-            return this._checkPointDataListForCheckPointId.get(checkPointId) ?? null;
+        private _getCheckpointData(checkpointId: number): CheckpointData | null {
+            return this._checkpointDataListForCheckpointId.get(checkpointId) ?? null;
         }
-        public setCheckPointData(checkPointId: number, data: CheckPointData): void {
-            this._checkPointDataListForCheckPointId.set(checkPointId, data);
+        private _setCheckpointData(checkpointId: number, data: CheckpointData): void {
+            this._checkpointDataListForCheckpointId.set(checkpointId, data);
+        }
+
+        public getAllCheckpointInfoArray(): Types.ReplayCheckpointInfo[] {
+            const turnManager   = Helpers.getExisted(this._getCheckpointData(0)?.warData.turnManager, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_00);
+            let checkpointId    = 0;
+            let turnIndex       = Helpers.getExisted(turnManager.turnIndex, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_01);
+            let playerIndex     = Helpers.getExisted(turnManager.playerIndex, ClientErrorCode.HrwWar_GetAllCheckpointInfoArray_02);
+            const infoArray     : Types.ReplayCheckpointInfo[] = [{
+                checkpointId,
+                nextActionId    : 0,
+                turnIndex,
+                playerIndex,
+            }];
+
+            const allActionArray    = this.getExecutedActionManager().getAllExecutedActions();
+            const maxPlayerIndex    = this.getPlayerManager().getTotalPlayersCount(false);
+            const actionsCount      = allActionArray.length;
+            for (let i = 1; i < actionsCount; ++i) {
+                const action = allActionArray[i];
+                if ((action.WarActionPlayerEndTurn) || (action.WarActionSystemEndTurn) || (i === actionsCount - 1)) {
+                    ++checkpointId;
+                    if (playerIndex < maxPlayerIndex) {
+                        ++playerIndex;
+                    } else {
+                        playerIndex = 0;
+                        ++turnIndex;
+                    }
+                    infoArray.push({
+                        checkpointId,
+                        nextActionId: i + 1,
+                        turnIndex,
+                        playerIndex,
+                    });
+                }
+            }
+            return infoArray;
         }
 
         public checkIsInBeginning(): boolean {
@@ -350,48 +389,48 @@ namespace TwnsRwWar {
             return this.getNextActionId() >= this.getTotalActionsCount();
         }
 
-        public async loadNextCheckPoint(): Promise<void> {
+        public async loadNextCheckpoint(): Promise<void> {
             if ((this.checkIsInEnd()) || (this.getIsExecutingAction()) || (!this.getIsRunning())) {
                 return;
             }
 
-            const checkPointId = Helpers.getExisted(this.getCheckPointId(this.getNextActionId())) + 1;
-            this.setIsAutoReplay(false);
-
-            while (!this.getCheckPointData(checkPointId)) {
-                await Helpers.checkAndCallLater();
-                await this._executeNextAction(true);
-            }
-            this.stopRunning();
-            await Helpers.checkAndCallLater();
-            await this._loadCheckPoint(checkPointId);
-            await Helpers.checkAndCallLater();
-            this.startRunning().startRunningView();
-            FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            await this.loadCheckpoint(Helpers.getExisted(this._getCheckpointId(this.getNextActionId())) + 1);
         }
-        public async loadPreviousCheckPoint(): Promise<void> {
-            if (this.checkIsInBeginning()) {
+        public async loadPreviousCheckpoint(): Promise<void> {
+            if ((this.checkIsInBeginning()) || (this.getIsExecutingAction()) || (!this.getIsRunning())) {
                 return;
             }
 
             const nextActionId = this.getNextActionId();
-            const checkPointId = Math.min(Helpers.getExisted(this.getCheckPointId(nextActionId)), Helpers.getExisted(this.getCheckPointId(nextActionId - 1)));
-            this.setIsAutoReplay(false);
-
-            this.stopRunning();
-            await Helpers.checkAndCallLater();
-            await this._loadCheckPoint(checkPointId);
-            await Helpers.checkAndCallLater();
-            this.startRunning().startRunningView();
-            FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+            const checkpointId = Math.min(Helpers.getExisted(this._getCheckpointId(nextActionId)), Helpers.getExisted(this._getCheckpointId(nextActionId - 1)));
+            await this.loadCheckpoint(checkpointId);
         }
-        private async _loadCheckPoint(checkPointId: number): Promise<void> {
-            const checkPointData        = Helpers.getExisted(this.getCheckPointData(checkPointId));
-            const warData               = checkPointData.warData;
+        public async loadCheckpoint(checkpointId: number): Promise<void> {
+            if ((this.getIsExecutingAction()) || (!this.getIsRunning())) {
+                return;
+            }
+
+            this.setIsAutoReplay(false);
+            while (!this._getCheckpointData(checkpointId)) {
+                await Helpers.checkAndCallLater();
+                await this._executeNextAction(true);
+            }
+
+            await this._loadExistingCheckpoint(checkpointId);
+        }
+        private async _loadExistingCheckpoint(checkpointId: number): Promise<void> {
+            if ((this.getIsExecutingAction()) || (!this.getIsRunning())) {
+                throw Helpers.newError(`RwWar._loadExistingCheckpoint() can't load!`);
+            }
+
+            this.setIsAutoReplay(false);
+            this.stopRunning();
+
+            const checkpointData        = Helpers.getExisted(this._getCheckpointData(checkpointId));
+            const warData               = checkpointData.warData;
             const configVersion         = this.getConfigVersion();
             const playersCountUnneutral = this.getPlayerManager().getTotalPlayersCount(false);
-
-            this.setNextActionId(checkPointData.nextActionId);
+            this.setNextActionId(checkpointData.nextActionId);
             this.getWeatherManager().fastInit(warData.weatherManager);
             this.getPlayerManager().fastInit(Helpers.getExisted(warData.playerManager), configVersion);
             this.getTurnManager().fastInit(Helpers.getExisted(warData.turnManager), playersCountUnneutral);
@@ -411,7 +450,11 @@ namespace TwnsRwWar {
 
             await Helpers.checkAndCallLater();
             this._fastInitView();
+            this.startRunning().startRunningView();
+            this.updateTilesAndUnitsOnVisibilityChanged(false);
             SoundManager.playCoBgmWithWar(this, false);
+
+            FloatText.show(`${Lang.getText(LangTextType.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(LangTextType.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
 
         public getTotalActionsCount(): number {
@@ -444,15 +487,15 @@ namespace TwnsRwWar {
 
             const actionId          = this.getNextActionId();
             const turnManager       = this.getTurnManager();
-            const prevCheckPointId  = Helpers.getExisted(this.getCheckPointId(actionId - 1));
-            const prevTurnData      = Helpers.getExisted(Helpers.getExisted(this.getCheckPointData(prevCheckPointId)).warData.turnManager);
-            const isNewCheckPoint   = (isInEnd) || (turnManager.getTurnIndex() !== prevTurnData.turnIndex) || (turnManager.getPlayerIndexInTurn() !== prevTurnData.playerIndex);
-            const checkPointId      = isNewCheckPoint ? prevCheckPointId + 1 : prevCheckPointId;
-            if (this.getCheckPointId(actionId) == null) {
-                this.setCheckPointId(actionId, checkPointId);
+            const prevCheckpointId  = Helpers.getExisted(this._getCheckpointId(actionId - 1));
+            const prevTurnData      = Helpers.getExisted(Helpers.getExisted(this._getCheckpointData(prevCheckpointId)).warData.turnManager);
+            const isNewCheckpoint   = (isInEnd) || (turnManager.getTurnIndex() !== prevTurnData.turnIndex) || (turnManager.getPlayerIndexInTurn() !== prevTurnData.playerIndex);
+            const checkpointId      = isNewCheckpoint ? prevCheckpointId + 1 : prevCheckpointId;
+            if (this._getCheckpointId(actionId) == null) {
+                this._setCheckpointId(actionId, checkpointId);
             }
-            if (this.getCheckPointData(checkPointId) == null) {
-                this.setCheckPointData(checkPointId, this.serializeForCheckPoint());
+            if (this._getCheckpointData(checkpointId) == null) {
+                this._setCheckpointData(checkpointId, this.serializeForCheckpoint());
             }
 
             if ((!isInEnd) && (this.getIsAutoReplay()) && (!this.getIsExecutingAction()) && (this.getIsRunning())) {

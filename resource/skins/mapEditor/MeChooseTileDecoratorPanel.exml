@@ -19,7 +19,7 @@
                                             <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                                                 <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="12"
                                                                      textColor="0xffffff" horizontalCenter="0" />
-                                                <e:Group id="_conTileView" scaleX="0.6" scaleY="0.6" x="20"
+                                                <e:Group id="_conTileView" scaleX="1.8" scaleY="1.8" x="20"
                                                          touchChildren="false" touchEnabled="false" bottom="20" />
                                             </e:Group>
                                         </e:Skin>
@@ -47,7 +47,7 @@
                             <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                                 <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="12" textColor="0xffffff"
                                                      horizontalCenter="0" />
-                                <e:Group id="_conTileView" scaleX="0.6" scaleY="0.6" x="20" touchChildren="false"
+                                <e:Group id="_conTileView" scaleX="1.8" scaleY="1.8" x="20" touchChildren="false"
                                          touchEnabled="false" bottom="20" />
                             </e:Group>
                         </e:Skin>
@@ -66,13 +66,13 @@
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" top="0" bottom="0">
-                            <e:Image source="uncompressedRectangle0007" scale9Grid="9,9,2,2" left="0" right="0" top="0" bottom="0"
-                                     locked="true" />
+                            <e:Image source="uncompressedRectangle0007" scale9Grid="9,9,2,2" left="0" right="0" top="0"
+                                     bottom="0" locked="true" />
                             <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="asdf"
                                                  textAlign="center" verticalAlign="middle" left="8" right="8" top="8"
                                                  bottom="8" wordWrap="true" />
-                            <TwnsUiImage:UiImage id="_imgRed" width="14" height="14" source="uncompressedCircle0009" right="0"
-                                                 top="0" locked="true" />
+                            <TwnsUiImage:UiImage id="_imgRed" width="14" height="14" source="uncompressedCircle0009"
+                                                 right="0" top="0" locked="true" />
                         </e:Group>
                     </e:Skin>
                 </TwnsUiButton:skinName>
@@ -81,13 +81,13 @@
                 <TwnsUiButton:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" top="0" bottom="0">
-                            <e:Image source="uncompressedRectangle0007" scale9Grid="9,9,2,2" left="0" right="0" top="0" bottom="0"
-                                     locked="true" />
+                            <e:Image source="uncompressedRectangle0007" scale9Grid="9,9,2,2" left="0" right="0" top="0"
+                                     bottom="0" locked="true" />
                             <TwnsUiLabel:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="asdf"
                                                  textAlign="center" verticalAlign="middle" left="8" right="8" top="8"
                                                  bottom="8" wordWrap="true" />
-                            <TwnsUiImage:UiImage id="_imgRed" width="14" height="14" source="uncompressedCircle0009" right="0"
-                                                 top="0" locked="true" />
+                            <TwnsUiImage:UiImage id="_imgRed" width="14" height="14" source="uncompressedCircle0009"
+                                                 right="0" top="0" locked="true" />
                         </e:Group>
                     </e:Skin>
                 </TwnsUiButton:skinName>

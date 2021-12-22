@@ -23,46 +23,78 @@ namespace WarCoSkillHelpers {
     import ICoSkillCfg          = ProtoTypes.Config.ICoSkillCfg;
 
     type DamageMaps = {
-        hpMap   : number[][];
-        fundMap : number[][];
+        hpMap               : number[][];
+        fundMap             : number[][];
+        capturerValueMap    : number[][];
     };
     type ValueMaps = {
         hpMap       : number[][];
         fundMap     : number[][];
+        capturerMap : boolean[][];
         sameTeamMap : boolean[][];
     };
 
-    export function exeInstantSkill({ war, player, skillId, extraData }: {
-        war         : BwWar;
-        player      : BwPlayer;
-        skillId     : number;
-        extraData   : IDataForUseCoSkill;
+    export function exeInstantSkill({ war, player, skillId, skillData, hasExtraData, isFastExecute }: {
+        war             : BwWar;
+        player          : BwPlayer;
+        skillId         : number;
+        skillData       : IDataForUseCoSkill;
+        hasExtraData    : boolean;
+        isFastExecute   : boolean;
     }): void {
         const configVersion     = war.getConfigVersion();
         const skillCfg          = ConfigManager.getCoSkillCfg(configVersion, skillId);
         const coGridIndexList   = player.getCoGridIndexListOnMap();
         const unitMap           = war.getUnitMap();
-        exeSelfFund({ skillCfg, player });
-        exeEnemyEnergy({ skillCfg, player, war });
-        exeSelfAddUnit({ skillCfg, player, war, coGridIndexList });
-        exeSelfHpGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeEnemyHpGain({ configVersion, skillCfg, war, player, coGridIndexList });
-        exeSelfFuelGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeEnemyFuelGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeSelfMaterialGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeEnemyMaterialGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeSelfPrimaryAmmoGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeEnemyPrimaryAmmoGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeIndiscriminateAreaDamage(configVersion, skillCfg, unitMap, player, coGridIndexList, extraData);
-        exeSelfPromotionGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeSelfUnitActionState(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeSelfFlareAmmoGain(configVersion, skillCfg, unitMap, player, coGridIndexList);
-        exeChangeWeather({ skillCfg, war, player, extraData });
+
+        if (hasExtraData) {
+            exeSelfFundWithExtraData({ isFastExecute });
+            exeEnemyEnergyWithExtraData({ isFastExecute });
+            exeSelfAddUnitWithExtraData({ isFastExecute });
+            exeSelfHpGainWithExtraData({ isFastExecute });
+            exeEnemyHpGainWithExtraData({ isFastExecute });
+            exeSelfFuelGainWithExtraData({ isFastExecute });
+            exeEnemyFuelGainWithExtraData({ isFastExecute });
+            exeSelfMaterialGainWithExtraData({ isFastExecute });
+            exeEnemyMaterialGainWithExtraData({ isFastExecute });
+            exeSelfPrimaryAmmoGainWithExtraData({ isFastExecute });
+            exeEnemyPrimaryAmmoGainWithExtraData({ isFastExecute });
+            exeFixedAreaDamageWithExtraData({ war, skillCfg, unitMap, skillData, isFastExecute });
+            exeSelfPromotionGainWithExtraData({ isFastExecute });
+            exeSelfUnitActionStateWithExtraData({ isFastExecute });
+            exeSelfFlareAmmoGainWithExtraData({ isFastExecute });
+            exeChangeWeatherWithExtraData({ skillCfg, war, player, skillData, isFastExecute });
+        } else {
+            exeSelfFundWithoutExtraData({ skillCfg, player, isFastExecute });
+            exeEnemyEnergyWithoutExtraData({ skillCfg, player, war, isFastExecute });
+            exeSelfAddUnitWithoutExtraData({ skillCfg, player, war, coGridIndexList, isFastExecute });
+            exeSelfHpGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
+            exeEnemyHpGainWithoutExtraData({ configVersion, skillCfg, war, player, coGridIndexList, isFastExecute });
+            exeSelfFuelGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
+            exeEnemyFuelGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
+            exeSelfMaterialGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
+            exeEnemyMaterialGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
+            exeSelfPrimaryAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
+            exeEnemyPrimaryAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
+            exeFixedAreaDamageWithoutExtraData({ war, skillCfg, unitMap, player, skillData, isFastExecute });
+            exeSelfPromotionGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
+            exeSelfUnitActionStateWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
+            exeSelfFlareAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute });
+            exeChangeWeatherWithoutExtraData({ skillCfg, war, player, skillData, isFastExecute });
+        }
     }
 
-    function exeSelfFund({ skillCfg, player }: {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfFundWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfFundWithoutExtraData({ skillCfg, player, isFastExecute }: {
         skillCfg        : ICoSkillCfg;
         player          : BwPlayer;
+        isFastExecute   : boolean;
     }): void {
         const cfg = skillCfg.selfFund;
         if (cfg == null) {
@@ -73,10 +105,18 @@ namespace WarCoSkillHelpers {
         player.setFund(Math.floor(currFund * cfg[0] / 100 + cfg[1]));
     }
 
-    function exeEnemyEnergy({ skillCfg, player, war }: {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeEnemyEnergyWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeEnemyEnergyWithoutExtraData({ skillCfg, player, war, isFastExecute }: {
         skillCfg        : ICoSkillCfg;
         player          : BwPlayer;
         war             : BwWar;
+        isFastExecute   : boolean;
     }): void {
         const cfg = skillCfg.enemyEnergy;
         if (cfg == null) {
@@ -104,11 +144,19 @@ namespace WarCoSkillHelpers {
         }
     }
 
-    function exeSelfAddUnit({ skillCfg, player, war, coGridIndexList }: {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfAddUnitWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfAddUnitWithoutExtraData({ skillCfg, player, war, coGridIndexList, isFastExecute }: {
         skillCfg        : Types.CoSkillCfg;
         player          : BwPlayer;
         war             : BwWar;
         coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
     }): void {
         const cfg = skillCfg.selfAddUnit;
         if (cfg == null) {
@@ -163,13 +211,20 @@ namespace WarCoSkillHelpers {
         }
     }
 
-    function exeSelfHpGain(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfHpGainWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeSelfHpGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
+    }): void {
         const cfg = skillCfg.selfHpGain;
         if (cfg) {
             const playerIndex   = player.getPlayerIndex();
@@ -197,17 +252,25 @@ namespace WarCoSkillHelpers {
                             currentHp + modifier
                         ),
                     ));
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
     }
 
-    function exeEnemyHpGain({ configVersion, skillCfg, war, player, coGridIndexList }: {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeEnemyHpGainWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeEnemyHpGainWithoutExtraData({ configVersion, skillCfg, war, player, coGridIndexList, isFastExecute }: {
         configVersion   : string;
         skillCfg        : Types.CoSkillCfg;
         war             : BwWar;
         player          : BwPlayer;
         coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
     }): void {
         const cfg = skillCfg.enemyHpGain;
         if (cfg) {
@@ -240,18 +303,26 @@ namespace WarCoSkillHelpers {
                             currentHp + modifier
                         ),
                     ));
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
     }
 
-    function exeSelfFuelGain(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfFuelGainWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeSelfFuelGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
+    }): void {
         const cfg = skillCfg.selfFuelGain;
         if (cfg) {
             const playerIndex   = player.getPlayerIndex();
@@ -283,18 +354,26 @@ namespace WarCoSkillHelpers {
                             Math.floor(currentFuel * (100 + modifier) / 100)
                         ));
                     }
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
     }
 
-    function exeEnemyFuelGain(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeEnemyFuelGainWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeEnemyFuelGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
+    }): void {
         const cfg = skillCfg.enemyFuelGain;
         if (cfg) {
             const playerIndex   = player.getPlayerIndex();
@@ -326,18 +405,26 @@ namespace WarCoSkillHelpers {
                             Math.floor(currentFuel * (100 + modifier) / 100)
                         ));
                     }
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
     }
 
-    function exeSelfMaterialGain(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfMaterialGainWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeSelfMaterialGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
+    }): void {
         const cfg = skillCfg.selfMaterialGain;
         if (cfg) {
             const playerIndex   = player.getPlayerIndex();
@@ -375,6 +462,7 @@ namespace WarCoSkillHelpers {
                                 Math.floor(currentBuildMaterial * (100 + modifier) / 100)
                             ));
                         }
+                        (!isFastExecute) && (unit.updateView());
                     }
 
                     if (maxProduceMaterial != null) {
@@ -390,19 +478,27 @@ namespace WarCoSkillHelpers {
                                 Math.floor(currentProduceMaterial * (100 + modifier) / 100)
                             ));
                         }
+                        (!isFastExecute) && (unit.updateView());
                     }
                 }
             }
         }
     }
 
-    function exeEnemyMaterialGain(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeEnemyMaterialGainWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeEnemyMaterialGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
+    }): void {
         const cfg = skillCfg.enemyMaterialGain;
         if (cfg) {
             const playerIndex   = player.getPlayerIndex();
@@ -440,6 +536,7 @@ namespace WarCoSkillHelpers {
                                 Math.floor(currentBuildMaterial * (100 + modifier) / 100)
                             ));
                         }
+                        (!isFastExecute) && (unit.updateView());
                     }
 
                     if (maxProduceMaterial != null) {
@@ -455,19 +552,27 @@ namespace WarCoSkillHelpers {
                                 Math.floor(currentProduceMaterial * (100 + modifier) / 100)
                             ));
                         }
+                        (!isFastExecute) && (unit.updateView());
                     }
                 }
             }
         }
     }
 
-    function exeSelfPrimaryAmmoGain(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfPrimaryAmmoGainWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeSelfPrimaryAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
+    }): void {
         const cfg = skillCfg.selfPrimaryAmmoGain;
         if (cfg) {
             const playerIndex   = player.getPlayerIndex();
@@ -503,18 +608,26 @@ namespace WarCoSkillHelpers {
                             Math.floor(currentAmmo * (100 + modifier) / 100)
                         ));
                     }
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
     }
 
-    function exeEnemyPrimaryAmmoGain(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeEnemyPrimaryAmmoGainWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeEnemyPrimaryAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
+    }): void {
         const cfg = skillCfg.enemyPrimaryAmmoGain;
         if (cfg) {
             const playerIndex   = player.getPlayerIndex();
@@ -550,41 +663,87 @@ namespace WarCoSkillHelpers {
                             Math.floor(currentAmmo * (100 + modifier) / 100)
                         ));
                     }
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
     }
 
-    function exeIndiscriminateAreaDamage(
-        configVersion   : string,
-        skillCfg        : ICoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-        extraData       : IDataForUseCoSkill,
-    ): void {
-        const cfg = skillCfg.indiscriminateAreaDamage;
-        if (cfg) {
-            const center    = Helpers.getExisted(extraData.indiscriminateAreaDamageCenter);
-            const mapSize   = unitMap.getMapSize();
-            const hpDamage  = cfg[2] * CommonConstants.UnitHpNormalizer;
-            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, cfg[1], mapSize)) {
-                const unit = unitMap.getUnitOnMap(gridIndex);
-                if (unit) {
-                    const currentHp = unit.getCurrentHp();
-                    unit.setCurrentHp(Math.max(1, currentHp - hpDamage));
+    function exeFixedAreaDamageWithExtraData({ war, skillCfg, unitMap, skillData, isFastExecute }: {
+        war             : BwWar;
+        skillCfg        : ICoSkillCfg;
+        unitMap         : BwUnitMap;
+        skillData       : IDataForUseCoSkill;
+        isFastExecute   : boolean;
+    }): void {
+        const cfg = skillCfg.fixedAreaDamage;
+        if (cfg == null) {
+            return;
+        }
+
+        if (isFastExecute) {
+            return;
+        }
+
+        const center            = Helpers.getExisted(skillData.fixedAreaDamageCenter);
+        const gridVisualEffect  = war.getGridVisualEffect();
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, cfg[1], unitMap.getMapSize())) {
+            gridVisualEffect.showEffectExplosion(gridIndex);
+        }
+    }
+    function exeFixedAreaDamageWithoutExtraData({ war, skillCfg, unitMap, player, skillData, isFastExecute }: {
+        war             : BwWar;
+        skillCfg        : ICoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        skillData       : IDataForUseCoSkill;
+        isFastExecute   : boolean;
+    }): void {
+        const cfg = skillCfg.fixedAreaDamage;
+        if (cfg == null) {
+            return;
+        }
+
+        const center            = Helpers.getExisted(skillData.fixedAreaDamageCenter);
+        const mapSize           = unitMap.getMapSize();
+        const hpDamage          = cfg[2] * CommonConstants.UnitHpNormalizer;
+        const isIndiscriminate  = !!cfg[3];
+        const actionState       = cfg[4];
+        const teamIndex         = player.getTeamIndex();
+        const gridVisualEffect  = war.getGridVisualEffect();
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, cfg[1], mapSize)) {
+            const unit = unitMap.getUnitOnMap(gridIndex);
+            if ((unit)                                                      &&
+                ((isIndiscriminate) || (unit.getTeamIndex() !== teamIndex))
+            ) {
+                unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - hpDamage));
+                if (actionState !== -1) {
+                    unit.setActionState(actionState);
                 }
+
+                (!isFastExecute) && (unit.updateView());
+            }
+
+            if (!isFastExecute) {
+                gridVisualEffect.showEffectExplosion(gridIndex);
             }
         }
     }
 
-    function exeSelfPromotionGain(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfPromotionGainWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeSelfPromotionGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
+    }): void {
         const cfg = skillCfg.selfPromotionGain;
         if (cfg) {
             const playerIndex   = player.getPlayerIndex();
@@ -612,18 +771,26 @@ namespace WarCoSkillHelpers {
                             currentPromotion + modifier
                         ),
                     ));
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
     }
 
-    function exeSelfUnitActionState(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfUnitActionStateWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeSelfUnitActionStateWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
+    }): void {
         const cfg = skillCfg.selfUnitActionState;
         if (cfg) {
             const playerIndex   = player.getPlayerIndex();
@@ -647,18 +814,26 @@ namespace WarCoSkillHelpers {
                     }))
                 ) {
                     unit.setActionState(actionState);
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
     }
 
-    function exeSelfFlareAmmoGain(
-        configVersion   : string,
-        skillCfg        : Types.CoSkillCfg,
-        unitMap         : BwUnitMap,
-        player          : BwPlayer,
-        coGridIndexList : GridIndex[],
-    ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeSelfFlareAmmoGainWithExtraData({ isFastExecute }: {
+        isFastExecute   : boolean;
+    }): void {
+        // nothing to do
+    }
+    function exeSelfFlareAmmoGainWithoutExtraData({ configVersion, skillCfg, unitMap, player, coGridIndexList, isFastExecute }: {
+        configVersion   : string;
+        skillCfg        : Types.CoSkillCfg;
+        unitMap         : BwUnitMap;
+        player          : BwPlayer;
+        coGridIndexList : GridIndex[];
+        isFastExecute   : boolean;
+    }): void {
         const cfg = skillCfg.selfFlareAmmoGain;
         if (cfg) {
             const playerIndex   = player.getPlayerIndex();
@@ -694,25 +869,54 @@ namespace WarCoSkillHelpers {
                             Math.floor(currentAmmo * (100 + modifier) / 100)
                         ));
                     }
+                    (!isFastExecute) && (unit.updateView());
                 }
             }
         }
     }
 
-    function exeChangeWeather({ skillCfg, war, player, extraData }: {
-        skillCfg    : Types.CoSkillCfg;
-        war         : BwWar;
-        player      : BwPlayer;
-        extraData   : IDataForUseCoSkill;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeChangeWeatherWithExtraData({ skillCfg, war, player, skillData, isFastExecute }: {
+        skillCfg        : Types.CoSkillCfg;
+        war             : BwWar;
+        player          : BwPlayer;
+        skillData       : IDataForUseCoSkill;
+        isFastExecute   : boolean;
     }): void {
         const cfg = skillCfg.changeWeather;
         if (cfg) {
             const weatherManager    = war.getWeatherManager();
             const playerIndex       = player.getPlayerIndex();
-            weatherManager.setForceWeatherType(Helpers.getExisted(extraData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeather_00));
+            weatherManager.setForceWeatherType(Helpers.getExisted(skillData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeatherWithExtraData_00));
             weatherManager.setExpirePlayerIndex(playerIndex);
             weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + cfg[0]);
             // war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+
+            if (!isFastExecute) {
+                weatherManager.getView().resetView(false);
+            }
+        }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function exeChangeWeatherWithoutExtraData({ skillCfg, war, player, skillData, isFastExecute }: {
+        skillCfg        : Types.CoSkillCfg;
+        war             : BwWar;
+        player          : BwPlayer;
+        skillData       : IDataForUseCoSkill;
+        isFastExecute   : boolean;
+    }): void {
+        const cfg = skillCfg.changeWeather;
+        if (cfg) {
+            const weatherManager    = war.getWeatherManager();
+            const playerIndex       = player.getPlayerIndex();
+            weatherManager.setForceWeatherType(Helpers.getExisted(skillData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeatherWithoutExtraData_00));
+            weatherManager.setExpirePlayerIndex(playerIndex);
+            weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + cfg[0]);
+            // war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+
+            if (!isFastExecute) {
+                weatherManager.getView().resetView(false);
+            }
         }
     }
 
@@ -729,13 +933,13 @@ namespace WarCoSkillHelpers {
         };
 
         {
-            const cfg = skillCfg.indiscriminateAreaDamage;
+            const cfg = skillCfg.fixedAreaDamage;
             if (cfg) {
                 const unitMap   = war.getUnitMap();
                 const teamIndex = player.getTeamIndex();
                 const valueMap  = Helpers.getExisted(getValueMap(unitMap, teamIndex));
-                const center    = Helpers.getExisted(getIndiscriminateAreaDamageCenter(war, valueMap, cfg));
-                dataForUseCoSkill.indiscriminateAreaDamageCenter = center;
+                const center    = Helpers.getExisted(getFixedAreaDamageCenter(war, valueMap, cfg));
+                dataForUseCoSkill.fixedAreaDamageCenter = center;
             }
         }
 
@@ -749,44 +953,85 @@ namespace WarCoSkillHelpers {
         return dataForUseCoSkill;
     }
 
-    function getIndiscriminateAreaDamageCenter(war: BwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex {
-        const targetType    = indiscriminateCfg[0];
-        const radius        = indiscriminateCfg[1];
-        const hpDamage      = indiscriminateCfg[2];
+    function getFixedAreaDamageCenter(war: BwWar, valueMaps: ValueMaps, cfg: number[]): GridIndex {
+        const targetType        = cfg[0];
+        const radius            = cfg[1];
+        const hpDamage          = cfg[2];
+        const isIndiscriminate  = !!cfg[3];
         if (targetType === 1) { // HP
-            return getIndiscriminateAreaDamageCenterForType1(valueMaps, radius, hpDamage);
+            return getFixedAreaDamageCenterForType1({ war, valueMaps, radius, hpDamage, isIndiscriminate });
 
         } else if (targetType === 2) {  // fund
-            return getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
+            return getFixedAreaDamageCenterForType2({ war, valueMaps, radius, hpDamage, isIndiscriminate });
 
         } else if (targetType === 3) {  // random: HP or fund
-            const randomNumber = war.getRandomNumberManager().getRandomNumber();
-            return randomNumber < 0.5
-                ? getIndiscriminateAreaDamageCenterForType1(valueMaps, radius, hpDamage)
-                : getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
+            return getFixedAreaDamageCenterForType3({ war, valueMaps, radius, hpDamage, isIndiscriminate });
+
+        } else if (targetType === 4) {
+            return getFixedAreaDamageCenterForType4({ war, valueMaps, radius, hpDamage, isIndiscriminate });
 
         } else {
-            throw Helpers.newError(`Invalid targetType: ${targetType}`, ClientErrorCode.WarCoSkillHelpers_GetIndiscriminateAreaDamageCenter_00);
+            throw Helpers.newError(`Invalid targetType: ${targetType}`, ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenter_00);
         }
     }
 
-    function getIndiscriminateAreaDamageCenterForType1(valueMaps: ValueMaps, radius: number, hpDamage: number): GridIndex {
-        const damageMap = getDamageMap(valueMaps, hpDamage);
+    function getFixedAreaDamageCenterForType1({ war, valueMaps, radius, hpDamage, isIndiscriminate }: {
+        war                 : BwWar;
+        valueMaps           : ValueMaps;
+        radius              : number;
+        hpDamage            : number;
+        isIndiscriminate    : boolean;
+    }): GridIndex {
+        const damageMap = getDamageMap({ valueMaps, hpDamage, isIndiscriminate });
         const centers   = getCentersOfHighestDamage(damageMap.hpMap, radius);
         if (centers.length === 1) {
             return centers[0];
         } else {
-            return getCentersOfHighestDamageForCandidates(damageMap.fundMap, radius, centers);
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType1_00);
         }
     }
 
-    function getIndiscriminateAreaDamageCenterForType2(valueMaps: ValueMaps, radius: number, hpDamage: number): GridIndex {
-        const damageMap = getDamageMap(valueMaps, hpDamage);
+    function getFixedAreaDamageCenterForType2({ war, valueMaps, radius, hpDamage, isIndiscriminate }: {
+        war                 : BwWar;
+        valueMaps           : ValueMaps;
+        radius              : number;
+        hpDamage            : number;
+        isIndiscriminate    : boolean;
+    }): GridIndex {
+        const damageMap = getDamageMap({ valueMaps, hpDamage, isIndiscriminate });
         const centers   = getCentersOfHighestDamage(damageMap.fundMap, radius);
         if (centers.length === 1) {
             return centers[0];
         } else {
-            return getCentersOfHighestDamageForCandidates(damageMap.hpMap, radius, centers);
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType2_00);
+        }
+    }
+
+    function getFixedAreaDamageCenterForType3({ war, valueMaps, radius, hpDamage, isIndiscriminate }: {
+        war                 : BwWar;
+        valueMaps           : ValueMaps;
+        radius              : number;
+        hpDamage            : number;
+        isIndiscriminate    : boolean;
+    }): GridIndex {
+        return war.getRandomNumberManager().getRandomNumber() < 0.5
+            ? getFixedAreaDamageCenterForType1({ war, valueMaps, radius, hpDamage, isIndiscriminate })
+            : getFixedAreaDamageCenterForType2({ war, valueMaps, radius, hpDamage, isIndiscriminate });
+    }
+
+    function getFixedAreaDamageCenterForType4({ war, valueMaps, radius, hpDamage, isIndiscriminate }: {
+        war                 : BwWar;
+        valueMaps           : ValueMaps;
+        radius              : number;
+        hpDamage            : number;
+        isIndiscriminate    : boolean;
+    }): GridIndex {
+        const damageMap = getDamageMap({ valueMaps, hpDamage, isIndiscriminate });
+        const centers   = getCentersOfHighestDamage(damageMap.capturerValueMap, radius);
+        if (centers.length === 1) {
+            return centers[0];
+        } else {
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType4_00);
         }
     }
 
@@ -794,45 +1039,61 @@ namespace WarCoSkillHelpers {
         const { width, height } = unitMap.getMapSize();
         const hpMap             = Helpers.createEmptyMap(width, height, 0);
         const fundMap           = Helpers.createEmptyMap(width, height, 0);
+        const capturerMap       = Helpers.createEmptyMap(width, height, false);
         const sameTeamMap       = Helpers.createEmptyMap(width, height, false);
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
                 const unit = unitMap.getUnitOnMap({ x, y });
                 if (unit) {
-                    const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
-                    const productionFinalCost   = unit.getProductionFinalCost();
-                    const unitTeamIndex         = unit.getTeamIndex();
-                    hpMap[x][y]                 = normalizedCurrentHp;
-                    fundMap[x][y]               = productionFinalCost;
-                    sameTeamMap[x][y]           = unitTeamIndex === teamIndex;
+                    hpMap[x][y]         = unit.getNormalizedCurrentHp();
+                    fundMap[x][y]       = unit.getProductionFinalCost();
+                    capturerMap[x][y]   = unit.checkIsCapturer();
+                    sameTeamMap[x][y]   = unit.getTeamIndex() === teamIndex;
                 }
             }
         }
 
-        return { hpMap, fundMap, sameTeamMap };
+        return { hpMap, fundMap, capturerMap, sameTeamMap };
     }
 
-    function getDamageMap(valueMaps: ValueMaps, hpDamage: number): DamageMaps {
+    function getDamageMap({ valueMaps, hpDamage, isIndiscriminate }: {
+        valueMaps       : ValueMaps;
+        hpDamage        : number;
+        isIndiscriminate: boolean;
+    }): DamageMaps {
         const srcHpMap          = valueMaps.hpMap;
         const srcFundMap        = valueMaps.fundMap;
         const srcSameTeamMap    = valueMaps.sameTeamMap;
+        const srcCapturerMap    = valueMaps.capturerMap;
         const width             = srcHpMap.length;
         const height            = srcHpMap[0].length;
 
-        const hpMap     = Helpers.createEmptyMap(width, height, 0);
-        const fundMap   = Helpers.createEmptyMap(width, height, 0);
+        const hpMap             = Helpers.createEmptyMap(width, height, 0);
+        const fundMap           = Helpers.createEmptyMap(width, height, 0);
+        const capturerValueMap  = Helpers.createEmptyMap(width, height, 0);
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
                 if (srcHpMap[x][y] > 0) {
                     const realHpDamage      = Math.min(hpDamage, srcHpMap[x][y] - 1);
                     const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / CommonConstants.UnitHpNormalizer);
                     const isSameTeam        = srcSameTeamMap[x][y];
-                    hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;
-                    fundMap[x][y]           = isSameTeam ? -realFundDamage * 2 : realFundDamage;
+                    if (isIndiscriminate) {
+                        hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;
+                        fundMap[x][y]           = isSameTeam ? -realFundDamage * 2 : realFundDamage;
+                        capturerValueMap[x][y]  = isSameTeam
+                            ? (-realHpDamage * 2)
+                            : (srcCapturerMap[x][y] ? realHpDamage * 100000 : realHpDamage);
+                    } else {
+                        hpMap[x][y]             = isSameTeam ? 0 : realHpDamage;
+                        fundMap[x][y]           = isSameTeam ? 0 : realFundDamage;
+                        capturerValueMap[x][y]  = isSameTeam
+                            ? (0)
+                            : (srcCapturerMap[x][y] ? realHpDamage * 100000 : realHpDamage);
+                    }
                 }
             }
         }
-        return { hpMap, fundMap };
+        return { hpMap, fundMap, capturerValueMap };
     }
 
     function getCentersOfHighestDamage(map: number[][], radius: number): GridIndex[] {
@@ -840,7 +1101,6 @@ namespace WarCoSkillHelpers {
         const width     = map.length;
         const height    = map[0].length;
         const mapSize   = { width, height };
-        const sumMap    = Helpers.createEmptyMap(width, height, 0);
 
         let maxDamage: number | null = null;
         for (let x = 0; x < width; ++x) {
@@ -850,7 +1110,6 @@ namespace WarCoSkillHelpers {
                 for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center, 0, radius, mapSize)) {
                     totalDamage += map[gridIndex.x][gridIndex.y];
                 }
-                sumMap[x][y] = totalDamage;
 
                 if ((maxDamage == null) || (totalDamage > maxDamage)) {
                     maxDamage = totalDamage;
@@ -863,28 +1122,6 @@ namespace WarCoSkillHelpers {
         }
 
         return centers;
-    }
-
-    function getCentersOfHighestDamageForCandidates(map: number[][], radius: number, candidates: GridIndex[]): GridIndex {
-        const mapSize   = { width: map.length, height: map[0].length };
-        const centers   : GridIndex[] = [];
-        let maxDamage   : number | null = null;
-
-        for (const candidate of candidates) {
-            let totalDamage = 0;
-            for (const g of GridIndexHelpers.getGridsWithinDistance(candidate, 0, radius, mapSize)) {
-                totalDamage += map[g.x][g.y];
-            }
-            if ((maxDamage == null) || (totalDamage > maxDamage)) {
-                maxDamage       = totalDamage;
-                centers.length  = 0;
-                centers.push(candidate);
-            } else if (totalDamage === maxDamage) {
-                centers.push(candidate);
-            }
-        }
-
-        return centers[0];
     }
 }
 

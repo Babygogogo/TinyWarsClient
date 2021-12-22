@@ -14,6 +14,7 @@
 // import MeUtility                    from "./MeUtility";
 // import TwnsMeWarEventManager        from "./MeWarEventManager";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWar {
     import WarAction                = ProtoTypes.WarAction;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
@@ -77,7 +78,7 @@ namespace TwnsMeWar {
         public serializeForMap(): IMapRawData {
             const unitMap               = this.getUnitMap();
             const mapSize               = unitMap.getMapSize();
-            const playersCountUnneutral = (this.getField() as TwnsMeField.MeField).getMaxPlayerIndex();
+            const playersCountUnneutral = this.getPlayersCountUnneutral();
             MeUtility.reviseAllUnitIds(unitMap);
 
             return {
@@ -111,9 +112,6 @@ namespace TwnsMeWar {
         public getMapId(): number | null {
             return null;
         }
-        public getIsWarMenuPanelOpening(): boolean {
-            return TwnsMeWarMenuPanel.MeWarMenuPanel.getIsOpening();
-        }
 
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
@@ -132,7 +130,7 @@ namespace TwnsMeWar {
             return this._warEventManager;
         }
 
-        public getIsRunTurnPhaseWithExtraData(): boolean {
+        public getIsExecuteActionsWithExtraData(): boolean {
             return false;
         }
 
@@ -327,6 +325,10 @@ namespace TwnsMeWar {
         }
         public setMapTag(mapTag: IDataForMapTag): void {
             this._mapTag = mapTag;
+        }
+
+        public getPlayersCountUnneutral(): number {
+            return (this.getField() as TwnsMeField.MeField).getMaxPlayerIndex();
         }
     }
 }

@@ -29,7 +29,6 @@ namespace WarActionExecutor {
     import MovePath                             = Types.MovePath;
     import TileType                             = Types.TileType;
     import WarAction                            = ProtoTypes.WarAction;
-    import IDataForUseCoSkill                   = ProtoTypes.Structure.IDataForUseCoSkill;
     import IWarActionContainer                  = WarAction.IWarActionContainer;
     import IWarActionPlayerDeleteUnit           = WarAction.IWarActionPlayerDeleteUnit;
     import IWarActionPlayerEndTurn              = WarAction.IWarActionPlayerEndTurn;
@@ -124,6 +123,10 @@ namespace WarActionExecutor {
         else if (action.WarActionUnitUseCoSkill)            { await exeUnitUseCoSkill(war, action.WarActionUnitUseCoSkill, isFast); }
         else if (action.WarActionUnitWait)                  { await exeUnitWait(war, action.WarActionUnitWait, isFast); }
         else                                                { await exeUnknownAction(); }
+
+        if (!isFast) {
+            Notify.dispatch(NotifyType.WarActionNormalExecuted);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,25 +136,53 @@ namespace WarActionExecutor {
             : await normalExePlayerDeleteUnit(war, action);
     }
     async function fastExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
-        const gridIndex = action.gridIndex as GridIndex;
-        const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
-        if (focusUnit) {
-            war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerDeleteUnit_00),
+                isFastExecute   : true,
+            });
+        } else {
+            const gridIndex = action.gridIndex as GridIndex;
+            const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
+            if (focusUnit) {
+                war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
+                WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+            }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
         const desc = await war.getDescForExePlayerDeleteUnit(action);
         (desc) && (FloatText.show(desc));
 
-        const gridIndex = action.gridIndex as GridIndex;
-        const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
-        if (focusUnit) {
-            war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
-            WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExePlayerDeleteUnit_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute   : false,
+            });
+
+        } else {
+            const gridIndex = action.gridIndex as GridIndex;
+            const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
+            if (focusUnit) {
+                war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
+                WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
+            }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,13 +192,15 @@ namespace WarActionExecutor {
             : await normalExePlayerEndTurn(war, action);
     }
     async function fastExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
-        war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action, true);
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<void> {
         // const desc = await war.getDescForExePlayerEndTurn(action);
         // (desc) && (FloatText.show(desc));
 
-        war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action, false);
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,67 +210,33 @@ namespace WarActionExecutor {
             : await normalExePlayerProduceUnit(war, action);
     }
     async function fastExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
-        const unitType      = action.unitType as Types.UnitType;
-        const gridIndex     = action.gridIndex as GridIndex;
-        const unitHp        = Helpers.getExisted(action.unitHp, ClientErrorCode.WarActionExecutor_FastExePlayerProduceUnit_00);
-        const configVersion = war.getConfigVersion();
-        const unitMap       = war.getUnitMap();
-        const unitId        = unitMap.getNextUnitId();
-        const playerInTurn  = war.getPlayerInTurn();
-        const playerIndex   = playerInTurn.getPlayerIndex();
-        const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
-        const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
-        const costModifier  = playerInTurn.getUnitCostModifier(gridIndex, false, unitType);
-        const cost          = Math.floor(
-            cfgCost
-            * (skillCfg ? skillCfg[5] : 100)
-            * WarCommonHelpers.getNormalizedHp(unitHp)
-            * costModifier
-            / 100
-            / CommonConstants.UnitHpNormalizer
-        );
-        const unit          = new BwUnit();
-        unit.init({
-            gridIndex,
-            playerIndex,
-            unitType,
-            unitId,
-            actionState : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
-            currentHp   : unitHp != null ? unitHp : CommonConstants.UnitMaxHp,
-        }, configVersion);
-        unit.startRunning(war);
-        unit.startRunningView();
-        unitMap.setUnitOnMap(unit);
-        unitMap.setNextUnitId(unitId + 1);
-        playerInTurn.setFund(playerInTurn.getFund() - cost);
+        handlePlayerProduceUnit(war, action);
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
         const desc = await war.getDescForExePlayerProduceUnit(action);
         (desc) && (FloatText.show(desc));
 
+        handlePlayerProduceUnit(war, action);
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
+    }
+
+    function handlePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): void {
         const extraData = action.extraData;
         if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-
-            const unitMap       = war.getUnitMap();
-            const unitId        = unitMap.getNextUnitId();
-            const playerInTurn  = war.getPlayerInTurn();
-            const unitData      = Helpers.getExisted(extraData.unitData, ClientErrorCode.BwWarActionExecutor_NormalExePlayerProduceUnit_00);
-            const unit          = new BwUnit();
-            unit.init(unitData, war.getConfigVersion());
-            unit.startRunning(war);
-            unit.startRunningView();
-            unitMap.setUnitOnMap(unit);
-            unitMap.setNextUnitId(unitId + 1);
-            playerInTurn.setFund(playerInTurn.getFund() - Helpers.getExisted(extraData.cost));
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(extraData.commonExtraData, ClientErrorCode.WarActionExecutor_HandlePlayerProduceUnit_00),
+                isFastExecute   : true,
+            });
 
         } else {
+            const unitMap       = war.getUnitMap();
+            const unitId        = unitMap.getNextUnitId();
             const gridIndex     = action.gridIndex as GridIndex;
             const unitType      = Helpers.getExisted(action.unitType);
             const unitHp        = Helpers.getExisted(action.unitHp);
             const configVersion = war.getConfigVersion();
-            const unitMap       = war.getUnitMap();
-            const unitId        = unitMap.getNextUnitId();
             const playerInTurn  = war.getPlayerInTurn();
             const playerIndex   = playerInTurn.getPlayerIndex();
             const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
@@ -256,8 +255,9 @@ namespace WarActionExecutor {
                 playerIndex,
                 unitType,
                 unitId,
-                actionState : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
-                currentHp   : unitHp,
+                actionState     : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
+                currentHp       : unitHp,
+                currentPromotion: getPromotionForPlayerProduceUnit(war, gridIndex, unitType),
             }, configVersion);
             unit.startRunning(war);
             unit.startRunningView();
@@ -265,24 +265,72 @@ namespace WarActionExecutor {
             unitMap.setNextUnitId(unitId + 1);
             playerInTurn.setFund(playerInTurn.getFund() - cost);
         }
+    }
+    function getPromotionForPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: Types.UnitType): number {
+        const player                    = war.getPlayerInTurn();
+        const coZoneRadius              = player.getCoZoneRadius();
+        const configVersion             = war.getConfigVersion();
+        const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+        let promotion                   = 0;
+        for (const skillId of war.getPlayerInTurn().getCoCurrentSkills()) {
+            const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfPromotionBonusByProduce;
+            if ((cfg)                                                                           &&
+                (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    gridIndex,
+                    coSkillAreaType         : cfg[0],
+                    getCoGridIndexArrayOnMap,
+                    coZoneRadius,
+                }))
+            ) {
+                promotion += cfg[2];
+            }
+        }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        return promotion;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExePlayerSurrender(war)
+            ? await fastExePlayerSurrender(war, action)
             : await normalExePlayerSurrender(war, action);
     }
-    async function fastExePlayerSurrender(war: BwWar): Promise<void> {
-        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+    async function fastExePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender): Promise<void> {
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerSurrender_00),
+                isFastExecute   : true,
+            });
+        } else {
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        }
     }
     async function normalExePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender): Promise<void> {
         const desc = await war.getDescForExePlayerSurrender(action);
         (desc) && (FloatText.show(desc));
 
-        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExePlayerSurrender_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute   : false,
+            });
+
+        } else {
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,8 +340,17 @@ namespace WarActionExecutor {
             : await normalExePlayerVoteForDraw(war, action);
     }
     async function fastExePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw): Promise<void> {
-        const playerInTurn = war.getPlayerInTurn();
-        playerInTurn.setHasVotedForDraw(true);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerVoteForDraw_00),
+                isFastExecute   : true,
+            });
+        } else {
+            const playerInTurn = war.getPlayerInTurn();
+            playerInTurn.setHasVotedForDraw(true);
+        }
 
         const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
@@ -306,8 +363,26 @@ namespace WarActionExecutor {
         const desc = await war.getDescForExePlayerVoteForDraw(action);
         (desc) && (FloatText.show(desc));
 
-        const playerInTurn = war.getPlayerInTurn();
-        playerInTurn.setHasVotedForDraw(true);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExePlayerVoteForDraw_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute                       : false,
+            });
+
+        } else {
+            const playerInTurn = war.getPlayerInTurn();
+            playerInTurn.setHasVotedForDraw(true);
+        }
 
         const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
@@ -324,160 +399,123 @@ namespace WarActionExecutor {
             : await normalExePlayerUseCoSkill(war, action);
     }
     async function fastExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<void> {
-        const skillType         = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_00);
         const playerInTurn      = war.getPlayerInTurn();
-        const currentEnergy     = playerInTurn.getCoCurrentEnergy();
-        playerInTurn.setCoUsingSkillType(skillType);
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const skillType         = Helpers.getExisted(actionExtraData.skillType, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_00);
+            const skillIdArray      = playerInTurn.getCoSkills(skillType);
+            const skillDataArray    = Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_01);
+            for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
+                WarCoSkillHelpers.exeInstantSkill({
+                    war,
+                    player          : playerInTurn,
+                    skillId         : skillIdArray[skillIndex],
+                    skillData       : Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_02),
+                    hasExtraData    : true,
+                    isFastExecute   : true,
+                });
+            }
 
-        if (skillType === Types.CoSkillType.Power) {
-            const powerEnergy = Helpers.getExisted(playerInTurn.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_01);
-            playerInTurn.setCoCurrentEnergy(currentEnergy - powerEnergy);
-
-        } else if (skillType === Types.CoSkillType.SuperPower) {
-            const superPowerEnergy = Helpers.getExisted(playerInTurn.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_02);
-            playerInTurn.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_03),
+                isFastExecute   : true,
+            });
 
         } else {
-            throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_03);
-        }
+            const skillType     = Helpers.getExisted(action.skillType, ClientErrorCode.WarActionExecutor_FastExePlayerUseCoSkill_04);
+            const skillIdArray  = playerInTurn.getCoSkills(skillType);
+            playerInTurn.updateOnUseCoSkill(skillType);
 
-        const skillDataList : IDataForUseCoSkill[] = [];
-        const skillIdList   = playerInTurn.getCoCurrentSkills() || [];
-        for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-            const dataForUseCoSkill = Helpers.getExisted(WarCoSkillHelpers.getDataForUseCoSkill(war, playerInTurn, skillIndex), ClientErrorCode.BwWarActionExecutor_FastExePlayerUseCoSkill_04);
-            WarCoSkillHelpers.exeInstantSkill({
-                war,
-                player      : playerInTurn,
-                skillId     : skillIdList[skillIndex],
-                extraData   : dataForUseCoSkill,
-            });
-            skillDataList.push(dataForUseCoSkill);
+            for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
+                WarCoSkillHelpers.exeInstantSkill({
+                    war,
+                    player          : playerInTurn,
+                    skillId         : skillIdArray[skillIndex],
+                    skillData       : WarCoSkillHelpers.getDataForUseCoSkill(war, playerInTurn, skillIndex),
+                    hasExtraData    : false,
+                    isFastExecute   : true,
+                });
+            }
+
+            if (playerInTurn.getUserId() == null) {
+                const playerIndex = playerInTurn.getPlayerIndex();
+                for (const unit of war.getUnitMap().getAllUnits()) {
+                    if (unit.getPlayerIndex() === playerIndex) {
+                        unit.checkAndUpdateAiMode();
+                    }
+                }
+            }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill): Promise<void> {
-        const unitMap   = war.getUnitMap();
-        const skillType = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_00);
-        const extraData = action.extraData;
-        if (extraData) {
-            // WarCommonHelpers.updateTilesAndUnits(war, extraData);
-
-            const player        = war.getPlayerInTurn();
-            const currentEnergy = player.getCoCurrentEnergy();
-            player.setCoUsingSkillType(skillType);
-
-            if (skillType === Types.CoSkillType.Power) {
-                const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_01);
-                player.setCoCurrentEnergy(currentEnergy - powerEnergy);
-
-            } else if (skillType === Types.CoSkillType.SuperPower) {
-                const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_02);
-                player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
-
-            } else {
-                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_03);
-            }
-
-            const skillDataArray    = Helpers.getExisted(extraData.skillDataArray);
-            const skillIdList       = player.getCoCurrentSkills() || [];
-            for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                const dataForUseCoSkill = Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_04);
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const unitMap           = war.getUnitMap();
+        const playerInTurn      = war.getPlayerInTurn();
+        const actionExtraData   = action.extraData;
+        const playerIndex       = playerInTurn.getPlayerIndex();
+        if (actionExtraData) {
+            const skillType         = Helpers.getExisted(actionExtraData.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_00);
+            const skillDataArray    = Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_01);
+            const skillIdArray      = playerInTurn.getCoSkills(skillType);
+            for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
                 WarCoSkillHelpers.exeInstantSkill({
                     war,
-                    player,
-                    skillId     : skillIdList[skillIndex],
-                    extraData   : dataForUseCoSkill,
+                    player          : playerInTurn,
+                    skillId         : skillIdArray[skillIndex],
+                    skillData       : Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_02),
+                    hasExtraData    : true,
+                    isFastExecute   : false,
                 });
             }
 
-            const gridVisionEffect  = war.getGridVisionEffect();
-            const playerIndex       = player.getPlayerIndex();
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_03),
+                isFastExecute   : false,
+            });
+
             for (const unit of unitMap.getAllUnitsOnMap()) {
-                unit.updateView();
                 if (unit.getPlayerIndex() === playerIndex) {
-                    gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
-                }
-            }
-
-            const configVersion = war.getConfigVersion();
-            const mapSize       = unitMap.getMapSize();
-            for (let i = 0; i < skillIdList.length; ++i) {
-                const skillCfg          = ConfigManager.getCoSkillCfg(configVersion, skillIdList[i]);
-                const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
-                if (indiscriminateCfg) {
-                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(
-                        skillDataArray.find(v => v.skillIndex === i)?.indiscriminateAreaDamageCenter as GridIndex,
-                        0,
-                        indiscriminateCfg[1],
-                        mapSize)
-                    ) {
-                        const unit = unitMap.getUnitOnMap(gridIndex);
-                        (unit) && (unit.updateView());
-
-                        gridVisionEffect.showEffectExplosion(gridIndex);
-                    }
+                    unit.updateView();
+                    gridVisualEffect.showEffectSkillActivation(unit.getGridIndex());
                 }
             }
 
         } else {
-            const player            = war.getPlayerInTurn();
-            const currentEnergy     = player.getCoCurrentEnergy();
-            player.setCoUsingSkillType(skillType);
+            const skillType = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_04);
+            playerInTurn.updateOnUseCoSkill(skillType);
 
-            if (skillType === Types.CoSkillType.Power) {
-                const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_05);
-                player.setCoCurrentEnergy(currentEnergy - powerEnergy);
-
-            } else if (skillType === Types.CoSkillType.SuperPower) {
-                const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_06);
-                player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
-
-            } else {
-                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_07);
-            }
-
-            const skillDataList : IDataForUseCoSkill[] = [];
-            const skillIdList   = player.getCoCurrentSkills() || [];
-            for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                const dataForUseCoSkill = Helpers.getExisted(WarCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExePlayerUseCoSkill_08);
+            const skillIdArray = playerInTurn.getCoSkills(skillType);
+            for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
                 WarCoSkillHelpers.exeInstantSkill({
                     war,
-                    player,
-                    skillId     : skillIdList[skillIndex],
-                    extraData   : dataForUseCoSkill,
+                    player          : playerInTurn,
+                    skillId         : skillIdArray[skillIndex],
+                    skillData       : WarCoSkillHelpers.getDataForUseCoSkill(war, playerInTurn, skillIndex),
+                    hasExtraData    : false,
+                    isFastExecute   : false,
                 });
-                skillDataList.push(dataForUseCoSkill);
             }
 
-            const gridVisionEffect  = war.getGridVisionEffect();
-            const playerIndex       = player.getPlayerIndex();
-            for (const unit of unitMap.getAllUnitsOnMap()) {
-                unit.updateView();
-                if (unit.getPlayerIndex() === playerIndex) {
-                    gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
+            if (playerInTurn.getUserId() == null) {
+                for (const unit of war.getUnitMap().getAllUnits()) {
+                    if (unit.getPlayerIndex() === playerIndex) {
+                        unit.checkAndUpdateAiMode();
+                    }
                 }
             }
 
-            const configVersion = war.getConfigVersion();
-            const mapSize       = unitMap.getMapSize();
-            for (let i = 0; i < skillIdList.length; ++i) {
-                const skillCfg          = ConfigManager.getCoSkillCfg(configVersion, skillIdList[i]);
-                const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
-                if (indiscriminateCfg) {
-                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(skillDataList[i].indiscriminateAreaDamageCenter as GridIndex, 0, indiscriminateCfg[1], mapSize)) {
-                        const unit = unitMap.getUnitOnMap(gridIndex);
-                        (unit) && (unit.updateView());
-
-                        gridVisionEffect.showEffectExplosion(gridIndex);
-                    }
+            for (const unit of unitMap.getAllUnitsOnMap()) {
+                if (unit.getPlayerIndex() === playerIndex) {
+                    unit.updateView();
+                    gridVisualEffect.showEffectSkillActivation(unit.getGridIndex());
                 }
             }
         }
 
-        WarCommonHelpers.updateTilesAndUnits(war, {
-            discoveredTiles: extraData?.discoveredTilesAfterAction,
-            discoveredUnits: extraData?.discoveredUnitsAfterAction,
-        });
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -487,7 +525,8 @@ namespace WarActionExecutor {
             : await normalExeSystemBeginTurn(war, action);
     }
     async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
-        war.getTurnManager().endPhaseWaitBeginTurn(action);
+        await war.getTurnManager().endPhaseWaitBeginTurn(action, true);
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemBeginTurn(action);
@@ -502,7 +541,7 @@ namespace WarActionExecutor {
         ) {
             const nickname = await playerInTurn.getNickname();
             await new Promise<void>(resolve => {
-                TwnsBwBeginTurnPanel.BwBeginTurnPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBeginTurnPanel, {
                     playerIndex,
                     teamIndex           : playerInTurn.getTeamIndex(),
                     nickname,
@@ -511,7 +550,8 @@ namespace WarActionExecutor {
             });
         }
 
-        war.getTurnManager().endPhaseWaitBeginTurn(action);
+        await war.getTurnManager().endPhaseWaitBeginTurn(action, false);
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -522,51 +562,31 @@ namespace WarActionExecutor {
     }
     async function fastExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
         const warEventManager   = war.getWarEventManager();
-        const warEventId        = Helpers.getExisted(action.warEventId);
-        warEventManager.updateWarEventCalledCountOnCall(warEventId);
-        await warEventManager.callWarEvent(warEventId, true);
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(actionExtraData.warEventId, ClientErrorCode.WarActionExecutor_FastExeSystemCallWarEvent_00));
+            await warEventManager.callWarEvent(action, true);
+        } else {
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(action.warEventId, ClientErrorCode.WarActionExecutor_FastExeSystemCallWarEvent_02));
+            await warEventManager.callWarEvent(action, true);
+        }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
         const desc = await war.getDescForExeSystemCallWarEvent(action);
         (desc) && (FloatText.show(desc));
 
         const warEventManager   = war.getWarEventManager();
-        const warEventId        = Helpers.getExisted(action.warEventId);
-        warEventManager.updateWarEventCalledCountOnCall(warEventId);
-
-        const extraDataList = action.extraDataList;
-        if (extraDataList == null) {
-            await warEventManager.callWarEvent(warEventId, false);
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(actionExtraData.warEventId, ClientErrorCode.WarActionExecutor_NormalExeSystemCallWarEvent_00));
+            await warEventManager.callWarEvent(action, false);
         } else {
-            const unitMap       = war.getUnitMap();
-            const configVersion = war.getConfigVersion();
-            const actionIdArray = Helpers.getExisted(warEventManager.getWarEvent(warEventId).actionIdArray);
-            for (let index = 0; index < actionIdArray.length; ++index) {
-                const warEventAction = warEventManager.getWarEventAction(actionIdArray[index]);
-                if (warEventAction.WeaAddUnit) {
-                    for (const unitData of extraDataList.find(v => v.indexForActionIdList === index)?.ExtraDataForWeaAddUnit?.unitList || []) {
-                        const unit = new BwUnit();
-                        unit.init(unitData, configVersion);
-                        unit.startRunning(war);
-                        unit.startRunningView();
-                        unitMap.setUnitOnMap(unit);
-                        unitMap.setNextUnitId(Math.max(Helpers.getExisted(unitData.unitId) + 1, unitMap.getNextUnitId()));
-                    }
-
-                } else if (warEventAction.WeaSetPlayerAliveState) {
-                    const actionData    = warEventAction.WeaSetPlayerAliveState;
-                    const player        = war.getPlayer(Helpers.getExisted(actionData.playerIndex));
-                    if (player != null) {
-                        player.setAliveState(Helpers.getExisted(actionData.playerAliveState));
-                    }
-
-                } else {
-                    // TODO add executors for other actions.
-                }
-            }
+            warEventManager.updateWarEventCalledCountOnCall(Helpers.getExisted(action.warEventId, ClientErrorCode.WarActionExecutor_NormalExeSystemCallWarEvent_01));
+            await warEventManager.callWarEvent(action, false);
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -576,15 +596,45 @@ namespace WarActionExecutor {
             : await normalExeSystemDestroyPlayerForce(war, action);
     }
     async function fastExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
-        WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), false);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeSystemDestroyPlayerForce_00),
+                isFastExecute   : true,
+            });
+            war.getDrawVoteManager().setRemainingVotes(null);
+        } else {
+            WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), false);
+        }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
         const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
         (desc) && (FloatText.show(desc));
 
-        WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), true);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeSystemDestroyPlayerForce_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute                       : false,
+            });
+            war.getDrawVoteManager().setRemainingVotes(null);
+
+        } else {
+            WarDestructionHelpers.destroyPlayerForce(war, Helpers.getExisted(action.targetPlayerIndex), true);
+        }
+
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -610,39 +660,114 @@ namespace WarActionExecutor {
             : await normalExeSystemEndTurn(war, action);
     }
     async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
-        war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action, true);
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<void> {
         // const desc = await war.getDescForExeSystemEndTurn(action);
         // (desc) && (FloatText.show(desc));
 
-        war.getTurnManager().endPhaseMain(action);
+        war.getTurnManager().endPhaseMain(action, false);
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer, isFast: boolean): Promise<void> {
         isFast
-            ? await fastExeSystemHandleBootPlayer(war)
+            ? await fastExeSystemHandleBootPlayer(war, action)
             : await normalExeSystemHandleBootPlayer(war, action);
     }
-    async function fastExeSystemHandleBootPlayer(war: BwWar): Promise<void> {
-        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+    async function fastExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<void> {
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeSystemHandleBootPlayer_00),
+                isFastExecute   : true,
+            });
+        } else {
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        }
     }
     async function normalExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<void> {
         const desc = await war.getDescForExeSystemHandleBootPlayer(action);
         (desc) && (FloatText.show(desc));
 
-        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeSystemHandleBootPlayer_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute                       : false,
+            });
+
+        } else {
+            war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemVoteForDraw(war: BwWar, action: IWarActionSystemVoteForDraw, isFast: boolean): Promise<void> {
+        isFast
+            ? await fastExeSystemVoteForDraw(war, action)
+            : await normalExeSystemVoteForDraw(war, action);
+    }
+    async function fastExeSystemVoteForDraw(war: BwWar, action: IWarActionSystemVoteForDraw): Promise<void> {
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeSystemVoteForDraw_00),
+                isFastExecute   : true,
+            });
+        } else {
+            const playerInTurn = war.getPlayerInTurn();
+            playerInTurn.setHasVotedForDraw(true);
+        }
+
         const drawVoteManager = war.getDrawVoteManager();
-        drawVoteManager.setRemainingVotes(action.isAgree
-            ? Helpers.getExisted(drawVoteManager.getRemainingVotes(), ClientErrorCode.WarActionExecutor_ExeSystemVoteForDraw_00) - 1
-            : null
-        );
-        war.getPlayerInTurn().setHasVotedForDraw(true);
+        if (!action.isAgree) {
+            drawVoteManager.setRemainingVotes(null);
+        } else {
+            drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || drawVoteManager.getMaxVotes()) - 1);
+        }
+    }
+    async function normalExeSystemVoteForDraw(war: BwWar, action: IWarActionSystemVoteForDraw): Promise<void> {
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeSystemVoteForDraw_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute   : false,
+            });
+
+        } else {
+            const playerInTurn = war.getPlayerInTurn();
+            playerInTurn.setHasVotedForDraw(true);
+        }
+
+        const drawVoteManager = war.getDrawVoteManager();
+        if (!action.isAgree) {
+            drawVoteManager.setRemainingVotes(null);
+        } else {
+            drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || drawVoteManager.getMaxVotes()) - 1);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -652,67 +777,20 @@ namespace WarActionExecutor {
             : await normalExeUnitAttackTile(war, action);
     }
     async function fastExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<void> {
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-
-            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-            if (path.isBlocked) {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
-
-            } else {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
-
-                const tileMap           = war.getTileMap();
-                const damagedTileSet    = new Set<BwTile>();
-                const destroyedTileSet  = new Set<BwTile>();
-                const damagedUnitSet    = new Set<BwUnit>();
-                for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
-                    const targetUnitId = battleDamageInfo.targetUnitId;
-                    if (targetUnitId != null) {
-                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
-                        continue;
-                    }
-
-                    const targetTileGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_00);
-                    const tile                  = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
-
-                    const result = handleDestructionForTile(war, tile);
-                    for (const t of Helpers.getExisted(result.damagedTileSet)) {
-                        damagedTileSet.add(t);
-                    }
-                    for (const t of Helpers.getExisted(result.destroyedTileSet)) {
-                        destroyedTileSet.add(t);
-                    }
-                }
-
-                const configVersion = war.getConfigVersion();
-                for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
-                    unit.init(affectedUnitData, configVersion);
-                    unit.startRunning(war);
-                    if (unit.getCurrentHp() <= 0) {
-                        WarDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
-                    }
-                }
-
-                for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
-                }
-            }
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_00),
+                isFastExecute   : true,
+            });
 
         } else {
-            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -818,8 +896,8 @@ namespace WarActionExecutor {
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
-                    const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
-                    if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
+                    if ((!affectedPlayer.checkIsNeutral())                              &&
+                        (!unitMap.checkHasUnit(affectedPlayer.getPlayerIndex()))        &&
                         (affectedPlayer.getAliveState() !== Types.PlayerAliveState.Dead)
                     ) {
                         affectedPlayer.setAliveState(Types.PlayerAliveState.Dying);
@@ -827,123 +905,37 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<void> {
         const desc = await war.getDescForExeUnitAttackTile(action);
         (desc) && (FloatText.show(desc));
 
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_00);
+            const targetGridIndex = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : targetGridIndex,
+                deleteViewAfterMoving   : true,
+            });
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-
-            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-            if (path.isBlocked) {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
-
-                await focusUnit.moveViewAlongPath({
-                    pathNodes,
-                    isDiving    : focusUnit.getIsDiving(),
-                    isBlocked   : true,
-                    aiming      : null,
-                });
-                focusUnit.updateView();
-
-            } else {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
-
-                const allVisibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-                await focusUnit.moveViewAlongPath({
-                    pathNodes,
-                    isDiving    : focusUnit.getIsDiving(),
-                    isBlocked   : false,
-                    aiming      : action.targetGridIndex as GridIndex,
-                });
-
-                const tileMap           = war.getTileMap();
-                const damagedTileSet    = new Set<BwTile>();
-                const destroyedTileSet  = new Set<BwTile>();
-                const damagedUnitSet    = new Set<BwUnit>();
-                for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
-                    const targetUnitId = battleDamageInfo.targetUnitId;
-                    if (targetUnitId != null) {
-                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
-                        continue;
-                    }
-
-                    const targetTileGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_00);
-                    const tile                  = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
-
-                    const result = handleDestructionForTile(war, tile);
-                    for (const t of Helpers.getExisted(result.damagedTileSet)) {
-                        damagedTileSet.add(t);
-                    }
-                    for (const t of Helpers.getExisted(result.destroyedTileSet)) {
-                        destroyedTileSet.add(t);
-                    }
-                }
-
-                const configVersion     = war.getConfigVersion();
-                const affectedUnitSet   = new Set<BwUnit>();
-                for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
-                    unit.init(affectedUnitData, configVersion);
-                    unit.startRunning(war);
-                    if (unit.getCurrentHp() <= 0) {
-                        WarDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
-                    }
-
-                    affectedUnitSet.add(unit);
-                }
-
-                for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
-                }
-
-                const gridVisionEffect      = war.getGridVisionEffect();
-                let isVisibleUnitDestroyed  = false;
-                for (const unit of affectedUnitSet) {
-                    if (allVisibleUnits.has(unit)) {
-                        const gridIndex = unit.getGridIndex();
-                        if (unit.getCurrentHp() <= 0) {
-                            isVisibleUnitDestroyed = true;
-                            gridVisionEffect.showEffectExplosion(gridIndex);
-
-                        } else {
-                            unit.updateView();
-                            if (damagedUnitSet.has(unit)) {
-                                gridVisionEffect.showEffectDamage(gridIndex);
-                            }
-                        }
-                    }
-                }
-                for (const tile of damagedTileSet) {
-                    if (!destroyedTileSet.has(tile)) {
-                        tile.flushDataToView();
-                        gridVisionEffect.showEffectDamage(tile.getGridIndex());
-                    }
-                }
-                for (const tile of destroyedTileSet) {
-                    tile.flushDataToView();
-                    gridVisionEffect.showEffectExplosion(tile.getGridIndex());
-                }
-                if ((isVisibleUnitDestroyed) || (destroyedTileSet.size)) {
-                    war.getView().showVibration();
-                    SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
-                }
-            }
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute                       : false,
+            });
 
         } else {
-            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const path              = action.path as MovePath;
+            const launchUnitId      = action.launchUnitId;
+            const pathNodes         = path.nodes;
+            const unitMap           = war.getUnitMap();
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
+
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -958,7 +950,9 @@ namespace WarActionExecutor {
                 focusUnit.updateView();
 
             } else {
-                const targetGridIndex       = action.targetGridIndex as GridIndex;
+                if (targetGridIndex == null) {
+                    throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_01);
+                }
                 const battleDamageInfoArray = WarDamageCalculator.getFinalBattleDamage({
                     war,
                     attackerMovePath: pathNodes,
@@ -986,17 +980,17 @@ namespace WarActionExecutor {
                 const damagedTileSet    = new Set<BwTile>();
 
                 for (const battleDamageInfo of battleDamageInfoArray) {
-                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_01);
-                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_02);
+                    const unitId1   = Helpers.getExisted(battleDamageInfo.attackerUnitId, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_02);
+                    const unit1     = Helpers.getExisted(unitMap.getUnitById(unitId1), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_03);
                     const player1   = unit1.getPlayer();
-                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_03);
+                    const damage    = Helpers.getExisted(battleDamageInfo.damage, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_04);
                     affectedPlayerSet.add(player1);
                     affectedUnitSet.add(unit1);
 
                     const unitId2 = battleDamageInfo.targetUnitId;
                     if (unitId2 != null) {
                         const unitGridIndex1        = unit1.getGridIndex();
-                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_04);
+                        const unit2                 = Helpers.getExisted(unitMap.getUnitById(unitId2), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_05);
                         const unitGridIndex2        = unit2.getGridIndex();
                         const playerIndex1          = unit1.getPlayerIndex();
                         const playerIndex2          = unit2.getPlayerIndex();
@@ -1047,7 +1041,7 @@ namespace WarActionExecutor {
                     const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2         = tileMap.getTile(gridIndex2);
-                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_05);
+                        const tileOldHp2    = Helpers.getExisted(tile2.getCurrentHp(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_06);
                         handlePrimaryWeaponAmmoForUnitAttackTile(unit1, tile2);
                         handleHpForTile(tile2, Math.max(0, tileOldHp2 - damage));
 
@@ -1062,7 +1056,7 @@ namespace WarActionExecutor {
                         continue;
                     }
 
-                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_06);
+                    throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_07);
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
@@ -1074,7 +1068,7 @@ namespace WarActionExecutor {
                     }
                 }
 
-                const gridVisionEffect      = war.getGridVisionEffect();
+                const gridVisionEffect      = war.getGridVisualEffect();
                 let isVisibleUnitDestroyed  = false;
                 for (const unit of affectedUnitSet) {
                     if (allVisibleUnits.has(unit)) {
@@ -1108,7 +1102,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1118,67 +1112,20 @@ namespace WarActionExecutor {
             : await normalExeUnitAttackUnit(war, action);
     }
     async function fastExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<void> {
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-
-            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-            if (path.isBlocked) {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
-
-            } else {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
-
-                const tileMap           = war.getTileMap();
-                const damagedTileSet    = new Set<BwTile>();
-                const destroyedTileSet  = new Set<BwTile>();
-                const damagedUnitSet    = new Set<BwUnit>();
-                for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
-                    const targetUnitId = battleDamageInfo.targetUnitId;
-                    if (targetUnitId != null) {
-                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
-                        continue;
-                    }
-
-                    const targetTileGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex), ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_00);
-                    const tile                  = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
-
-                    const result = handleDestructionForTile(war, tile);
-                    for (const t of Helpers.getExisted(result.damagedTileSet)) {
-                        damagedTileSet.add(t);
-                    }
-                    for (const t of Helpers.getExisted(result.destroyedTileSet)) {
-                        destroyedTileSet.add(t);
-                    }
-                }
-
-                const configVersion = war.getConfigVersion();
-                for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
-                    unit.init(affectedUnitData, configVersion);
-                    unit.startRunning(war);
-                    if (unit.getCurrentHp() <= 0) {
-                        WarDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
-                    }
-                }
-
-                for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
-                }
-            }
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_00),
+                isFastExecute   : true,
+            });
 
         } else {
-            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1284,8 +1231,8 @@ namespace WarActionExecutor {
                 }
 
                 for (const affectedPlayer of affectedPlayerSet) {
-                    const affectedPlayerIndex = affectedPlayer.getPlayerIndex();
-                    if ((!unitMap.checkHasUnit(affectedPlayerIndex))                    &&
+                    if ((!affectedPlayer.checkIsNeutral())                              &&
+                        (!unitMap.checkHasUnit(affectedPlayer.getPlayerIndex()))        &&
                         (affectedPlayer.getAliveState() !== Types.PlayerAliveState.Dead)
                     ) {
                         affectedPlayer.setAliveState(Types.PlayerAliveState.Dying);
@@ -1293,126 +1240,54 @@ namespace WarActionExecutor {
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<void> {
         const desc = await war.getDescForExeUnitAttackUnit(action);
         (desc) && (FloatText.show(desc));
 
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
+        const warView           = war.getView();
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_00);
+            const targetGridIndex   = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
+            const movingUnitAndPath = commonExtraData.movingUnitAndPath;
+            const movingUnitData    = movingUnitAndPath?.unit;
+            const movingPath        = movingUnitAndPath?.path;
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath,
+                aiming                  : targetGridIndex,
+                deleteViewAfterMoving   : true,
+            });
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
+            const destroyedUnitIdArray  = commonExtraData.destroyedUnitIdArray;
+            const isWarViewVibrated     = WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute       : false,
+            });
 
-            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-            if (path.isBlocked) {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
-
-                await focusUnit.moveViewAlongPath({
-                    pathNodes,
-                    isDiving    : focusUnit.getIsDiving(),
-                    isBlocked   : true,
-                    aiming      : null,
-                });
-                focusUnit.updateView();
-
-            } else {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
-
-                const allVisibleUnits = WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-                {
-                    const targetGridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(action.targetGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_00);
-                    await focusUnit.moveViewAlongPath({
-                        pathNodes,
-                        isDiving    : focusUnit.getIsDiving(),
-                        isBlocked   : false,
-                        aiming      : allVisibleUnits.has(Helpers.getExisted(unitMap.getUnitOnMap(targetGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_01)) ? targetGridIndex : null,
-                    });
-                }
-
-                const tileMap           = war.getTileMap();
-                const damagedTileSet    = new Set<BwTile>();
-                const destroyedTileSet  = new Set<BwTile>();
-                const damagedUnitSet    = new Set<BwUnit>();
-                for (const battleDamageInfo of extraData.battleDamageInfoArray || []) {
-                    const targetUnitId = battleDamageInfo.targetUnitId;
-                    if (targetUnitId != null) {
-                        damagedUnitSet.add(Helpers.getExisted(unitMap.getUnitById(targetUnitId)));
-                        continue;
-                    }
-
-                    const targetTileGridIndex   = Helpers.getExisted(GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_02);
-                    const tile                  = tileMap.getTile(targetTileGridIndex);
-                    tile.setCurrentHp(Math.max(0, Helpers.getExisted(tile.getCurrentHp()) - Helpers.getExisted(battleDamageInfo.damage)));
-
-                    const tileDestructionsData = handleDestructionForTile(war, tile);
-                    for (const t of Helpers.getExisted(tileDestructionsData.damagedTileSet)) {
-                        damagedTileSet.add(t);
-                    }
-                    for (const t of Helpers.getExisted(tileDestructionsData.destroyedTileSet)) {
-                        destroyedTileSet.add(t);
-                    }
-                }
-
-                const configVersion     = war.getConfigVersion();
-                const affectedUnitSet   = new Set<BwUnit>();
-                for (const affectedUnitData of extraData.affectedUnitsAfterAction || []) {
-                    const unit = Helpers.getExisted(unitMap.getUnitById(Helpers.getExisted(affectedUnitData.unitId)));
-                    unit.init(affectedUnitData, configVersion);
-                    unit.startRunning(war);
-                    if (unit.getCurrentHp() <= 0) {
-                        WarDestructionHelpers.destroyUnitOnMap(war, unit.getGridIndex(), false);
-                    }
-
-                    affectedUnitSet.add(unit);
-                }
-
-                for (const affectedPlayerData of extraData.affectedPlayersAfterAction || []) {
-                    war.getPlayer(Helpers.getExisted(affectedPlayerData.playerIndex)).init(affectedPlayerData, configVersion);
-                }
-
-                const gridVisionEffect      = war.getGridVisionEffect();
-                let isVisibleUnitDestroyed  = false;
-                for (const unit of affectedUnitSet) {
-                    if (allVisibleUnits.has(unit)) {
-                        const gridIndex = unit.getGridIndex();
-                        if (unit.getCurrentHp() <= 0) {
-                            isVisibleUnitDestroyed = true;
-                            gridVisionEffect.showEffectExplosion(gridIndex);
-
-                        } else {
-                            unit.updateView();
-                            if (damagedUnitSet.has(unit)) {
-                                gridVisionEffect.showEffectDamage(gridIndex);
-                            }
-                        }
-                    }
-                }
-                for (const tile of damagedTileSet) {
-                    if (!destroyedTileSet.has(tile)) {
-                        tile.flushDataToView();
-                        gridVisionEffect.showEffectDamage(tile.getGridIndex());
-                    }
-                }
-                for (const tile of destroyedTileSet) {
-                    tile.flushDataToView();
-                    gridVisionEffect.showEffectExplosion(tile.getGridIndex());
-                }
-                if ((isVisibleUnitDestroyed) || (destroyedTileSet.size)) {
-                    war.getView().showVibration();
+            const movingUnitId  = movingUnitData?.unitId;
+            const lastNode      = movingPath ? movingPath[movingPath.length - 1] : null;
+            if ((movingUnitId != null)                                      &&
+                ((destroyedUnitIdArray?? []).indexOf(movingUnitId) >= 0)    &&
+                (lastNode?.isVisible)
+            ) {
+                gridVisualEffect.showEffectExplosion(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_01));
+                if (!isWarViewVibrated) {
+                    warView.showVibration();
                     SoundManager.playShortSfx(Types.ShortSfxCode.Explode);
                 }
             }
 
         } else {
-            const focusUnit = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             if (path.isBlocked) {
                 WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
                 unitMap.setUnitOnMap(focusUnit);
@@ -1427,7 +1302,11 @@ namespace WarActionExecutor {
                 focusUnit.updateView();
 
             } else {
-                const targetGridIndex       = action.targetGridIndex as GridIndex;
+                const targetGridIndex = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
+                if (targetGridIndex == null) {
+                    throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_02);
+                }
+
                 const battleDamageInfoArray = WarDamageCalculator.getFinalBattleDamage({
                     war,
                     attackerMovePath: pathNodes,
@@ -1542,19 +1421,18 @@ namespace WarActionExecutor {
                     }
                 }
 
-                const gridVisionEffect      = war.getGridVisionEffect();
                 let isVisibleUnitDestroyed  = false;
                 for (const unit of affectedUnitSet) {
                     if (allVisibleUnits.has(unit)) {
                         const gridIndex = unit.getGridIndex();
                         if (unit.getCurrentHp() <= 0) {
                             isVisibleUnitDestroyed = true;
-                            gridVisionEffect.showEffectExplosion(gridIndex);
+                            gridVisualEffect.showEffectExplosion(gridIndex);
 
                         } else {
                             unit.updateView();
                             if (damagedUnitSet.has(unit)) {
-                                gridVisionEffect.showEffectDamage(gridIndex);
+                                gridVisualEffect.showEffectDamage(gridIndex);
                             }
                         }
                     }
@@ -1562,12 +1440,12 @@ namespace WarActionExecutor {
                 for (const tile of damagedTileSet) {
                     if (!destroyedTileSet.has(tile)) {
                         tile.flushDataToView();
-                        gridVisionEffect.showEffectDamage(tile.getGridIndex());
+                        gridVisualEffect.showEffectDamage(tile.getGridIndex());
                     }
                 }
                 for (const tile of destroyedTileSet) {
                     tile.flushDataToView();
-                    gridVisionEffect.showEffectExplosion(tile.getGridIndex());
+                    gridVisualEffect.showEffectExplosion(tile.getGridIndex());
                 }
                 if ((isVisibleUnitDestroyed) || (destroyedTileSet.size)) {
                     war.getView().showVibration();
@@ -1576,7 +1454,7 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1586,66 +1464,99 @@ namespace WarActionExecutor {
             : await normalExeUnitBeLoaded(war, action);
     }
     async function fastExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<void> {
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        focusUnit.setActionState(UnitActionState.Acted);
-        if (path.isBlocked) {
-            unitMap.setUnitOnMap(focusUnit);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitBeLoaded_00),
+                isFastExecute   : true,
+            });
         } else {
-            const loaderUnit = Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
-            unitMap.setUnitLoaded(focusUnit);
-            focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            focusUnit.setActionState(UnitActionState.Acted);
+            if (path.isBlocked) {
+                unitMap.setUnitOnMap(focusUnit);
+            } else {
+                const loaderUnit = Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
+                unitMap.setUnitLoaded(focusUnit);
+                focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
+            }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<void> {
         const desc = await war.getDescForExeUnitBeLoaded(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
-
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        focusUnit.setActionState(UnitActionState.Acted);
-
-        if (path.isBlocked) {
-            unitMap.setUnitOnMap(focusUnit);
-
-            await focusUnit.moveViewAlongPath({
-                pathNodes,
-                isDiving    : focusUnit.getIsDiving(),
-                isBlocked   : path.isBlocked,
-                aiming      : null,
+        const unitMap           = war.getUnitMap();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData       = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitBeLoaded_00);
+            const movingUnitAndPath     = commonExtraData.movingUnitAndPath;
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
             });
-            focusUnit.updateView();
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute       : false,
+            });
+
+            {
+                const movingPath    = movingUnitAndPath?.path;
+                const lastNode      = movingPath ? movingPath[movingPath.length - 1] : null;
+                if ((lastNode) && (lastNode.isVisible) && (!lastNode.isBlocked)) {
+                    const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitBeLoaded_01);
+                    unitMap.getUnitOnMap(gridIndex)?.updateView();
+                }
+            }
 
         } else {
-            const loaderUnit = Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
-            unitMap.setUnitLoaded(focusUnit);
-            focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
+            const revisedPath   = action.path as MovePath;
+            const pathNodes     = revisedPath.nodes;
+            const launchUnitId  = action.launchUnitId;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            focusUnit.setActionState(UnitActionState.Acted);
 
-            await focusUnit.moveViewAlongPath({
-                pathNodes,
-                isDiving    : focusUnit.getIsDiving(),
-                isBlocked   : path.isBlocked,
-                aiming      : null,
-            });
-            focusUnit.updateView();
-            focusUnit.setViewVisible(false);
-            loaderUnit.updateView();
+            if (revisedPath.isBlocked) {
+                unitMap.setUnitOnMap(focusUnit);
+
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : revisedPath.isBlocked,
+                    aiming      : null,
+                });
+                focusUnit.updateView();
+
+            } else {
+                const loaderUnit = Helpers.getExisted(unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]));
+                unitMap.setUnitLoaded(focusUnit);
+                focusUnit.setLoaderUnitId(loaderUnit.getUnitId());
+
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : revisedPath.isBlocked,
+                    aiming      : null,
+                });
+                focusUnit.updateView();
+                focusUnit.setViewVisible(false);
+                loaderUnit.updateView();
+            }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1655,85 +1566,109 @@ namespace WarActionExecutor {
             : await normalExeUnitBuildTile(war, action);
     }
     async function fastExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<void> {
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitBuildTile_00),
+                isFastExecute   : true,
+            });
+        } else {
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
 
-        if (!path.isBlocked) {
-            const endingGridIndex   = pathNodes[pathNodes.length - 1];
-            const tile              = war.getTileMap().getTile(endingGridIndex);
-            const buildPoint        = Helpers.getExisted(tile.getCurrentBuildPoint()) - Helpers.getExisted(focusUnit.getBuildAmount());
-            // if (tile.getIsFogEnabled()) {
-            //     tile.setFogDisabled();
-            // }
-            if (buildPoint > 0) {
-                focusUnit.setIsBuildingTile(true);
-                tile.setCurrentBuildPoint(buildPoint);
-            } else {
-                const targetTileCfg = Helpers.getExisted(focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType()), ClientErrorCode.BwWarActionExecutor_FastExeUnitBuildTile_00);
-                focusUnit.setIsBuildingTile(false);
-                focusUnit.setCurrentBuildMaterial(Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
-                tile.resetByTypeAndPlayerIndex({
-                    baseType        : Helpers.getExisted(targetTileCfg.dstBaseType),
-                    objectType      : Helpers.getExisted(targetTileCfg.dstObjectType),
-                    playerIndex     : focusUnit.getPlayerIndex(),
-                });
+            if (!path.isBlocked) {
+                const endingGridIndex   = pathNodes[pathNodes.length - 1];
+                const tile              = war.getTileMap().getTile(endingGridIndex);
+                const buildPoint        = Helpers.getExisted(tile.getCurrentBuildPoint()) - Helpers.getExisted(focusUnit.getBuildAmount());
+                // if (tile.getIsFogEnabled()) {
+                //     tile.setFogDisabled();
+                // }
+                if (buildPoint > 0) {
+                    focusUnit.setIsBuildingTile(true);
+                    tile.setCurrentBuildPoint(buildPoint);
+                } else {
+                    const targetTileCfg = Helpers.getExisted(focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType()), ClientErrorCode.BwWarActionExecutor_FastExeUnitBuildTile_01);
+                    focusUnit.setIsBuildingTile(false);
+                    focusUnit.setCurrentBuildMaterial(Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
+                    tile.resetByTypeAndPlayerIndex({
+                        baseType        : Helpers.getExisted(targetTileCfg.dstBaseType),
+                        objectType      : Helpers.getExisted(targetTileCfg.dstObjectType),
+                        playerIndex     : focusUnit.getPlayerIndex(),
+                    });
+                }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<void> {
         const desc = await war.getDescForExeUnitBuildTile(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
+        const unitMap           = war.getUnitMap();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitBuildTile_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
 
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute   : false,
+            });
 
-        if (!path.isBlocked) {
-            const endingGridIndex   = pathNodes[pathNodes.length - 1];
-            const tile              = war.getTileMap().getTile(endingGridIndex);
-            const buildPoint        = Helpers.getExisted(tile.getCurrentBuildPoint()) - Helpers.getExisted(focusUnit.getBuildAmount());
-            // if (tile.getIsFogEnabled()) {
-            //     tile.setFogDisabled();
-            // }
-            if (buildPoint > 0) {
-                focusUnit.setIsBuildingTile(true);
-                tile.setCurrentBuildPoint(buildPoint);
-            } else {
-                const targetTileCfg = Helpers.getExisted(focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType()), ClientErrorCode.BwWarActionExecutor_NormalExeUnitBuildTile_00);
-                focusUnit.setIsBuildingTile(false);
-                focusUnit.setCurrentBuildMaterial(Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
-                tile.resetByTypeAndPlayerIndex({
-                    baseType        : Helpers.getExisted(targetTileCfg.dstBaseType),
-                    objectType      : Helpers.getExisted(targetTileCfg.dstObjectType),
-                    playerIndex     : focusUnit.getPlayerIndex(),
-                });
+        } else {
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            if (!path.isBlocked) {
+                const endingGridIndex   = pathNodes[pathNodes.length - 1];
+                const tile              = war.getTileMap().getTile(endingGridIndex);
+                const buildPoint        = Helpers.getExisted(tile.getCurrentBuildPoint()) - Helpers.getExisted(focusUnit.getBuildAmount());
+                // if (tile.getIsFogEnabled()) {
+                //     tile.setFogDisabled();
+                // }
+                if (buildPoint > 0) {
+                    focusUnit.setIsBuildingTile(true);
+                    tile.setCurrentBuildPoint(buildPoint);
+                } else {
+                    const targetTileCfg = Helpers.getExisted(focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType()), ClientErrorCode.BwWarActionExecutor_NormalExeUnitBuildTile_01);
+                    focusUnit.setIsBuildingTile(false);
+                    focusUnit.setCurrentBuildMaterial(Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) - 1);
+                    tile.resetByTypeAndPlayerIndex({
+                        baseType        : Helpers.getExisted(targetTileCfg.dstBaseType),
+                        objectType      : Helpers.getExisted(targetTileCfg.dstObjectType),
+                        playerIndex     : focusUnit.getPlayerIndex(),
+                    });
+                }
             }
+
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
+            focusUnit.updateView();
         }
 
-        await focusUnit.moveViewAlongPath({
-            pathNodes,
-            isDiving    : focusUnit.getIsDiving(),
-            isBlocked   : path.isBlocked,
-            aiming      : null,
-        });
-        focusUnit.updateView();
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1743,116 +1678,163 @@ namespace WarActionExecutor {
             : await normalExeUnitCaptureTile(war, action);
     }
     async function fastExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<void> {
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-
-        if (path.isBlocked) {
-            // nothing to do.
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitCaptureTile_00),
+                isFastExecute   : true,
+            });
         } else {
-            // TODO: capture amount is incorrect if the co has zoned capture skill and is invisible!
-            const destination       = pathNodes[pathNodes.length - 1];
-            const tile              = war.getTileMap().getTile(destination);
-            const restCapturePoint  = Helpers.getExisted(tile.getCurrentCapturePoint()) - Helpers.getExisted(focusUnit.getCaptureAmount(destination));
-            if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
-                tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
-            }
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
 
-            if (restCapturePoint > 0) {
-                focusUnit.setIsCapturingTile(true);
-                tile.setCurrentCapturePoint(restCapturePoint);
+            if (path.isBlocked) {
+                // nothing to do.
             } else {
-                const tileObjectType = tile.getObjectType();
-                focusUnit.setIsCapturingTile(false);
-                tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
-                tile.resetByTypeAndPlayerIndex({
-                    baseType        : tile.getBaseType(),
-                    objectType      : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
-                    playerIndex     : focusUnit.getPlayerIndex(),
-                });
-                Notify.dispatch(NotifyType.BwTileBeCaptured);
+                const destination       = pathNodes[pathNodes.length - 1];
+                const tile              = war.getTileMap().getTile(destination);
+                const restCapturePoint  = Helpers.getExisted(tile.getCurrentCapturePoint()) - Helpers.getExisted(focusUnit.getCaptureAmount(destination));
+                if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
+                    tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
+                }
+
+                if (restCapturePoint > 0) {
+                    focusUnit.setIsCapturingTile(true);
+                    tile.setCurrentCapturePoint(restCapturePoint);
+                } else {
+                    const tileObjectType = tile.getObjectType();
+                    focusUnit.setIsCapturingTile(false);
+                    tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
+                    tile.resetByTypeAndPlayerIndex({
+                        baseType        : tile.getBaseType(),
+                        objectType      : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
+                        playerIndex     : focusUnit.getPlayerIndex(),
+                    });
+                }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<void> {
         const desc = await war.getDescForExeUnitCaptureTile(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
-
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-
-        if (path.isBlocked) {
-            await focusUnit.moveViewAlongPath({
-                pathNodes,
-                isDiving    : focusUnit.getIsDiving(),
-                isBlocked   : true,
-                aiming      : null,
+        const actionExtraData   = action.extraData;
+        const unitMap           = war.getUnitMap();
+        const tileMap           = war.getTileMap();
+        const playerInTurn      = war.getPlayerInTurn();
+        const isSelfInTurn      = playerInTurn.getUserId() === UserModel.getSelfUserId();
+        if (actionExtraData) {
+            const commonExtraData       = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_00);
+            const movingUnitAndPath     = commonExtraData.movingUnitAndPath;
+            const movingPath            = movingUnitAndPath?.path;
+            const tileArrayAfterAction  = commonExtraData.tileArrayAfterAction;
+            const extraUnitView         = await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : false,
             });
-            focusUnit.updateView();
+
+            {
+                const lastNode = movingPath ? movingPath[movingPath.length - 1] : null;
+                if ((isSelfInTurn) && (lastNode) && (!lastNode.isBlocked)) {
+                    const gridIndex             = Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_01);
+                    const tile                  = tileMap.getTile(gridIndex);
+                    const maxCapturePoint       = Helpers.getExisted(tile.getMaxCapturePoint(), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_02);
+                    const tileDataAfterAction   = Helpers.getExisted(tileArrayAfterAction?.find(v => {
+                        return GridIndexHelpers.checkIsEqual(gridIndex, Helpers.getExisted(GridIndexHelpers.convertGridIndex(v.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_03));
+                    }), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_04);
+                    await new Promise<void>(resolve => {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwCaptureProgressPanel, {
+                            maxValue            : maxCapturePoint,
+                            newValue            : maxCapturePoint - (tileDataAfterAction.currentCapturePoint ?? 0),
+                            currentValue        : maxCapturePoint - Helpers.getExisted(tile.getCurrentCapturePoint(), ClientErrorCode.WarActionExecutor_NormalExeUnitCaptureTile_05),
+                            callbackOnFinish    : () => resolve(),
+                        });
+                    });
+                }
+            }
+
+            (extraUnitView) && (unitMap.getView().removeUnit(extraUnitView));
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute       : false,
+            });
 
         } else {
-            // TODO: capture amount is incorrect if the co has zoned capture skill and is invisible!
-            const destination           = pathNodes[pathNodes.length - 1];
-            const tile                  = war.getTileMap().getTile(destination);
-            const maxCapturePoint       = Helpers.getExisted(tile.getMaxCapturePoint());
-            const currentCapturePoint   = Helpers.getExisted(tile.getCurrentCapturePoint());
-            const restCapturePoint      = currentCapturePoint - Helpers.getExisted(focusUnit.getCaptureAmount(destination));
-            if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
-                tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
-            }
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
 
-            if (restCapturePoint > 0) {
-                focusUnit.setIsCapturingTile(true);
-                tile.setCurrentCapturePoint(restCapturePoint);
+            if (path.isBlocked) {
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : true,
+                    aiming      : null,
+                });
+                focusUnit.updateView();
+
             } else {
-                const tileObjectType = tile.getObjectType();
-                focusUnit.setIsCapturingTile(false);
-                tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
-                tile.resetByTypeAndPlayerIndex({
-                    baseType    : tile.getBaseType(),
-                    objectType  : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
-                    playerIndex : focusUnit.getPlayerIndex(),
-                });
-            }
+                const destination           = pathNodes[pathNodes.length - 1];
+                const tile                  = war.getTileMap().getTile(destination);
+                const maxCapturePoint       = Helpers.getExisted(tile.getMaxCapturePoint());
+                const currentCapturePoint   = Helpers.getExisted(tile.getCurrentCapturePoint());
+                const restCapturePoint      = currentCapturePoint - Helpers.getExisted(focusUnit.getCaptureAmount(destination));
+                if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
+                    tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
+                }
 
-            await focusUnit.moveViewAlongPath({
-                pathNodes,
-                isDiving    : focusUnit.getIsDiving(),
-                isBlocked   : false,
-                aiming      : null,
-            });
-            if (war.getPlayerInTurn().getUserId() === UserModel.getSelfUserId()) {
-                await new Promise<void>(resolve => {
-                    TwnsBwCaptureProgressPanel.BwCaptureProgressPanel.show({
-                        maxValue            : maxCapturePoint,
-                        newValue            : maxCapturePoint - restCapturePoint,
-                        currentValue        : maxCapturePoint - currentCapturePoint,
-                        callbackOnFinish    : () => resolve(),
+                if (restCapturePoint > 0) {
+                    focusUnit.setIsCapturingTile(true);
+                    tile.setCurrentCapturePoint(restCapturePoint);
+                } else {
+                    const tileObjectType = tile.getObjectType();
+                    focusUnit.setIsCapturingTile(false);
+                    tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
+                    tile.resetByTypeAndPlayerIndex({
+                        baseType    : tile.getBaseType(),
+                        objectType  : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
+                        playerIndex : focusUnit.getPlayerIndex(),
                     });
+                }
+
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : false,
+                    aiming      : null,
                 });
+                if (isSelfInTurn) {
+                    await new Promise<void>(resolve => {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwCaptureProgressPanel, {
+                            maxValue            : maxCapturePoint,
+                            newValue            : maxCapturePoint - restCapturePoint,
+                            currentValue        : maxCapturePoint - currentCapturePoint,
+                            callbackOnFinish    : () => resolve(),
+                        });
+                    });
+                }
+                focusUnit.updateView();
+                tile.flushDataToView();
             }
-            focusUnit.updateView();
-            tile.flushDataToView();
-            Notify.dispatch(NotifyType.BwTileBeCaptured);
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1862,59 +1844,90 @@ namespace WarActionExecutor {
             : await normalExeUnitDive(war, action);
     }
     async function fastExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<void> {
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        const isSuccessful  = !path.isBlocked;
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-        (isSuccessful) && (focusUnit.setIsDiving(true));
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitDive_00),
+                isFastExecute   : true,
+            });
+        } else {
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const isSuccessful  = !path.isBlocked;
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+            (isSuccessful) && (focusUnit.setIsDiving(true));
+        }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<void> {
         const desc = await war.getDescForExeUnitDive(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
-
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        const isSuccessful  = !path.isBlocked;
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-        (isSuccessful) && (focusUnit.setIsDiving(true));
-
-        await focusUnit.moveViewAlongPath({
-            pathNodes,
-            isDiving    : false,
-            isBlocked   : path.isBlocked,
-            aiming      : null,
-        });
-        focusUnit.updateView();
-        if (isSuccessful) {
-            const endingGridIndex = pathNodes[pathNodes.length - 1];
-            if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitDive_00);
+            const movingUnitAndPath = commonExtraData.movingUnitAndPath;
+            await WarCommonHelpers.moveExtraUnit({
                 war,
-                unitType            : focusUnit.getUnitType(),
-                unitPlayerIndex     : focusUnit.getPlayerIndex(),
-                gridIndex           : endingGridIndex,
-                observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
-                isDiving            : false,
-            })) {
-                war.getGridVisionEffect().showEffectDive(endingGridIndex);
+                movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            const movingPath    = movingUnitAndPath?.path;
+            const lastNode      = movingPath ? movingPath[movingPath?.length - 1] : null;
+            if ((lastNode?.isVisible) && (!lastNode.isBlocked)) {
+                gridVisualEffect.showEffectDive(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitDive_01));
+            }
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute       : false,
+            });
+
+        } else {
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const isSuccessful  = !path.isBlocked;
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+            (isSuccessful) && (focusUnit.setIsDiving(true));
+
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : false,
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
+            focusUnit.updateView();
+            if (isSuccessful) {
+                const endingGridIndex = pathNodes[pathNodes.length - 1];
+                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                    war,
+                    unitType            : focusUnit.getUnitType(),
+                    unitPlayerIndex     : focusUnit.getPlayerIndex(),
+                    gridIndex           : endingGridIndex,
+                    observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
+                    isDiving            : false,
+                })) {
+                    gridVisualEffect.showEffectDive(endingGridIndex);
+                }
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1924,100 +1937,147 @@ namespace WarActionExecutor {
             : await normalExeUnitDropUnit(war, action);
     }
     async function fastExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<void> {
-        const path              = action.path as MovePath;
-        const launchUnitId      = action.launchUnitId;
-        const pathNodes         = path.nodes;
-        const unitMap           = war.getUnitMap();
-        const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
+        const fogMap            = war.getFogMap();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitWait_00),
+                isFastExecute   : true,
+            });
+        } else {
+            const path              = action.path as MovePath;
+            const launchUnitId      = action.launchUnitId;
+            const pathNodes         = path.nodes;
+            const unitMap           = war.getUnitMap();
+            const endingGridIndex   = pathNodes[pathNodes.length - 1];
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
 
-        const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
-        const fogMap                = war.getFogMap();
-        const unitsForDrop          : BwUnit[] = [];
-        for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
-            unitMap.setUnitUnloaded(unitId, gridIndex);
-            for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
-                unit.setGridIndex(gridIndex);
-            }
+            const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
+            const unitsForDrop          : BwUnit[] = [];
+            for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
+                const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
+                unitMap.setUnitUnloaded(unitId, gridIndex);
+                for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
+                    unit.setGridIndex(gridIndex);
+                }
 
-            unitForDrop.setLoaderUnitId(null);
-            unitForDrop.setGridIndex(gridIndex);
-            unitForDrop.setActionState(UnitActionState.Acted);
-            unitsForDrop.push(unitForDrop);
+                unitForDrop.setLoaderUnitId(null);
+                unitForDrop.setGridIndex(gridIndex);
+                unitForDrop.setActionState(UnitActionState.Acted);
+                unitsForDrop.push(unitForDrop);
 
-            if (shouldUpdateFogMap) {
-                fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                if (shouldUpdateFogMap) {
+                    fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<void> {
         const desc = await war.getDescForExeUnitDropUnit(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
-
-        const path              = action.path as MovePath;
-        const launchUnitId      = action.launchUnitId;
-        const pathNodes         = path.nodes;
+        const actionExtraData   = action.extraData;
+        const gridVisualEffect  = war.getGridVisualEffect();
         const unitMap           = war.getUnitMap();
-        const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
+        if (actionExtraData) {
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitWait_00);
+            const movingUnitAndPath = commonExtraData.movingUnitAndPath;
+            const movingUnitView    = await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : false,
+            });
 
-        const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
-        const fogMap                = war.getFogMap();
-        const unitsForDrop          : BwUnit[] = [];
-        for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
-            unitMap.setUnitUnloaded(unitId, gridIndex);
-            for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
-                unit.setGridIndex(gridIndex);
+            const movingPath    = movingUnitAndPath?.path;
+            const lastNode      = movingPath ? movingPath[movingPath?.length - 1] : null;
+            const unitMapView   = unitMap.getView();
+            if (lastNode) {
+                if (lastNode.isVisible) {
+                    if (actionExtraData.isDropBlocked) {
+                        gridVisualEffect.showEffectBlock(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitWait_01));
+                    }
+                } else {
+                    (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
+                }
             }
 
-            unitForDrop.setLoaderUnitId(null);
-            unitForDrop.setGridIndex(gridIndex);
-            unitForDrop.setActionState(UnitActionState.Acted);
-            unitsForDrop.push(unitForDrop);
+            await Promise.all((actionExtraData.droppingUnitAndPathArray ?? []).map(v => WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : v,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            })));
+            (movingUnitView) && (unitMapView.removeUnit(movingUnitView));
 
-            if (shouldUpdateFogMap) {
-                fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute       : false,
+            });
+
+        } else {
+            const path              = action.path as MovePath;
+            const launchUnitId      = action.launchUnitId;
+            const pathNodes         = path.nodes;
+            const endingGridIndex   = pathNodes[pathNodes.length - 1];
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
+            const fogMap                = war.getFogMap();
+            const unitsForDrop          : BwUnit[] = [];
+            for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
+                const unitForDrop = Helpers.getExisted(unitMap.getUnitLoadedById(unitId));
+                unitMap.setUnitUnloaded(unitId, gridIndex);
+                for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
+                    unit.setGridIndex(gridIndex);
+                }
+
+                unitForDrop.setLoaderUnitId(null);
+                unitForDrop.setGridIndex(gridIndex);
+                unitForDrop.setActionState(UnitActionState.Acted);
+                unitsForDrop.push(unitForDrop);
+
+                if (shouldUpdateFogMap) {
+                    fogMap.updateMapFromPathsByUnitAndPath(unitForDrop, [endingGridIndex, gridIndex]);
+                }
             }
+
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
+            if (action.isDropBlocked) {
+                gridVisualEffect.showEffectBlock(endingGridIndex);
+            }
+            focusUnit.updateView();
+
+            const promises: Promise<void>[] = [];
+            for (const unitForDrop of unitsForDrop) {
+                promises.push((async () => {
+                    await unitForDrop.moveViewAlongPath({
+                        pathNodes   : [endingGridIndex, unitForDrop.getGridIndex()],
+                        isDiving    : unitForDrop.getIsDiving(),
+                        isBlocked   : false,
+                        aiming      : null,
+                    });
+                    unitForDrop.updateView();
+                })());
+            }
+            await Promise.all(promises);
         }
 
-        await focusUnit.moveViewAlongPath({
-            pathNodes,
-            isDiving    : focusUnit.getIsDiving(),
-            isBlocked   : path.isBlocked,
-            aiming      : null,
-        });
-        if (action.isDropBlocked) {
-            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
-        }
-        focusUnit.updateView();
-
-        const promises: Promise<void>[] = [];
-        for (const unitForDrop of unitsForDrop) {
-            promises.push((async () => {
-                await unitForDrop.moveViewAlongPath({
-                    pathNodes   : [endingGridIndex, unitForDrop.getGridIndex()],
-                    isDiving    : unitForDrop.getIsDiving(),
-                    isBlocked   : false,
-                    aiming      : null,
-                });
-                unitForDrop.updateView();
-            })());
-        }
-        await Promise.all(promises);
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2027,197 +2087,230 @@ namespace WarActionExecutor {
             : await normalExeUnitJoinUnit(war, action);
     }
     async function fastExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<void> {
-        const path              = action.path as MovePath;
-        const launchUnitId      = action.launchUnitId;
-        const pathNodes         = path.nodes;
-        const endingGridIndex   = pathNodes[pathNodes.length - 1];
-        const unitMap           = war.getUnitMap();
-        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-
-        if (path.isBlocked) {
-            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-            unitMap.setUnitOnMap(focusUnit);
-            focusUnit.setActionState(UnitActionState.Acted);
-
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitJoinUnit_00),
+                isFastExecute   : true,
+            });
         } else {
-            const targetUnit    = Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
-            const player        = war.getPlayer(focusUnit.getPlayerIndex());
-            unitMap.removeUnitOnMap(endingGridIndex, true);
-            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-            unitMap.setUnitOnMap(focusUnit);
-            focusUnit.setActionState(UnitActionState.Acted);
+            const path              = action.path as MovePath;
+            const launchUnitId      = action.launchUnitId;
+            const pathNodes         = path.nodes;
+            const endingGridIndex   = pathNodes[pathNodes.length - 1];
+            const unitMap           = war.getUnitMap();
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
 
-            focusUnit.setHasLoadedCo(focusUnit.getHasLoadedCo() || targetUnit.getHasLoadedCo());
+            if (path.isBlocked) {
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                unitMap.setUnitOnMap(focusUnit);
+                focusUnit.setActionState(UnitActionState.Acted);
 
-            if (focusUnit.checkHasPrimaryWeapon()) {
-                focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
-                    Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
-                    Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo()),
-                ));
-            }
+            } else {
+                const targetUnit    = Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
+                const player        = war.getPlayer(focusUnit.getPlayerIndex());
+                unitMap.removeUnitOnMap(endingGridIndex, true);
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                unitMap.setUnitOnMap(focusUnit);
+                focusUnit.setActionState(UnitActionState.Acted);
 
-            const joinIncome = focusUnit.getJoinIncome(targetUnit);
-            if (joinIncome !== 0) {
-                player.setFund(player.getFund() + joinIncome);
-            }
+                focusUnit.setHasLoadedCo(focusUnit.getHasLoadedCo() || targetUnit.getHasLoadedCo());
 
-            const joinedNormalizedHp = Math.min(
-                focusUnit.getNormalizedMaxHp(),
-                focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
-            );
-            focusUnit.setCurrentHp(Math.max(
-                (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
-                Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
-            ));
-
-            focusUnit.setCurrentFuel(Math.min(
-                focusUnit.getMaxFuel(),
-                focusUnit.getCurrentFuel() + targetUnit.getCurrentFuel()
-            ));
-
-            const maxBuildMaterial = focusUnit.getMaxBuildMaterial();
-            if (maxBuildMaterial != null) {
-                focusUnit.setCurrentBuildMaterial(Math.min(
-                    maxBuildMaterial,
-                    Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Helpers.getExisted(targetUnit.getCurrentBuildMaterial()),
-                ));
-            }
-
-            const maxProduceMaterial = focusUnit.getMaxProduceMaterial();
-            if (maxProduceMaterial != null) {
-                focusUnit.setCurrentProduceMaterial(Math.min(
-                    maxProduceMaterial,
-                    Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Helpers.getExisted(targetUnit.getCurrentProduceMaterial()),
-                ));
-            }
-
-            focusUnit.setCurrentPromotion(Math.max(focusUnit.getCurrentPromotion(), targetUnit.getCurrentPromotion()));
-
-            focusUnit.setIsCapturingTile(targetUnit.getIsCapturingTile());
-
-            focusUnit.setIsBuildingTile(targetUnit.getIsBuildingTile());
-
-            // flare ammo
-            {
-                const maxAmmo = focusUnit.getFlareMaxAmmo();
-                if (maxAmmo != null) {
-                    focusUnit.setFlareCurrentAmmo(Math.min(
-                        maxAmmo,
-                        Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Helpers.getExisted(targetUnit.getFlareCurrentAmmo()),
+                if (focusUnit.checkHasPrimaryWeapon()) {
+                    focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
+                        Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
+                        Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo()),
                     ));
+                }
+
+                const joinIncome = focusUnit.getJoinIncome(targetUnit);
+                if (joinIncome !== 0) {
+                    player.setFund(player.getFund() + joinIncome);
+                }
+
+                const joinedNormalizedHp = Math.min(
+                    focusUnit.getNormalizedMaxHp(),
+                    focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
+                );
+                focusUnit.setCurrentHp(Math.max(
+                    (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
+                    Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
+                ));
+
+                focusUnit.setCurrentFuel(Math.min(
+                    focusUnit.getMaxFuel(),
+                    focusUnit.getCurrentFuel() + targetUnit.getCurrentFuel()
+                ));
+
+                const maxBuildMaterial = focusUnit.getMaxBuildMaterial();
+                if (maxBuildMaterial != null) {
+                    focusUnit.setCurrentBuildMaterial(Math.min(
+                        maxBuildMaterial,
+                        Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Helpers.getExisted(targetUnit.getCurrentBuildMaterial()),
+                    ));
+                }
+
+                const maxProduceMaterial = focusUnit.getMaxProduceMaterial();
+                if (maxProduceMaterial != null) {
+                    focusUnit.setCurrentProduceMaterial(Math.min(
+                        maxProduceMaterial,
+                        Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Helpers.getExisted(targetUnit.getCurrentProduceMaterial()),
+                    ));
+                }
+
+                focusUnit.setCurrentPromotion(Math.max(focusUnit.getCurrentPromotion(), targetUnit.getCurrentPromotion()));
+
+                focusUnit.setIsCapturingTile(targetUnit.getIsCapturingTile());
+
+                focusUnit.setIsBuildingTile(targetUnit.getIsBuildingTile());
+
+                // flare ammo
+                {
+                    const maxAmmo = focusUnit.getFlareMaxAmmo();
+                    if (maxAmmo != null) {
+                        focusUnit.setFlareCurrentAmmo(Math.min(
+                            maxAmmo,
+                            Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Helpers.getExisted(targetUnit.getFlareCurrentAmmo()),
+                        ));
+                    }
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<void> {
         const desc = await war.getDescForExeUnitJoinUnit(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
-
-        const path              = action.path as MovePath;
-        const launchUnitId      = action.launchUnitId;
-        const pathNodes         = path.nodes;
-        const endingGridIndex   = pathNodes[pathNodes.length - 1];
         const unitMap           = war.getUnitMap();
-        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-
-        if (path.isBlocked) {
-            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-            unitMap.setUnitOnMap(focusUnit);
-            focusUnit.setActionState(UnitActionState.Acted);
-
-            await focusUnit.moveViewAlongPath({
-                pathNodes,
-                isDiving    : focusUnit.getIsDiving(),
-                isBlocked   : path.isBlocked,
-                aiming      : null,
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitJoinUnit_00);
+            const movingUnitAndPath = commonExtraData.movingUnitAndPath;
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
             });
-            focusUnit.updateView();
 
-        } else {
-            const targetUnit    = Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
-            const player        = war.getPlayer(focusUnit.getPlayerIndex());
-            unitMap.removeUnitOnMap(endingGridIndex, false);
-            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-            unitMap.setUnitOnMap(focusUnit);
-            focusUnit.setActionState(UnitActionState.Acted);
-
-            focusUnit.setHasLoadedCo(focusUnit.getHasLoadedCo() || targetUnit.getHasLoadedCo());
-
-            if (focusUnit.checkHasPrimaryWeapon()) {
-                focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
-                    Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
-                    Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo())
-                ));
-            }
-
-            const joinIncome = focusUnit.getJoinIncome(targetUnit);
-            if (joinIncome !== 0) {
-                player.setFund(player.getFund() + joinIncome);
-            }
-
-            const joinedNormalizedHp = Math.min(
-                focusUnit.getNormalizedMaxHp(),
-                focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
-            );
-            focusUnit.setCurrentHp(Math.max(
-                (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
-                Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
-            ));
-
-            focusUnit.setCurrentFuel(Math.min(
-                focusUnit.getMaxFuel(),
-                focusUnit.getCurrentFuel() + targetUnit.getCurrentFuel()
-            ));
-
-            const maxBuildMaterial = focusUnit.getMaxBuildMaterial();
-            if (maxBuildMaterial != null) {
-                focusUnit.setCurrentBuildMaterial(Math.min(
-                    maxBuildMaterial,
-                    Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Helpers.getExisted(targetUnit.getCurrentBuildMaterial())
-                ));
-            }
-
-            const maxProduceMaterial = focusUnit.getMaxProduceMaterial();
-            if (maxProduceMaterial != null) {
-                focusUnit.setCurrentProduceMaterial(Math.min(
-                    maxProduceMaterial,
-                    Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Helpers.getExisted(targetUnit.getCurrentProduceMaterial())
-                ));
-            }
-
-            focusUnit.setCurrentPromotion(Math.max(focusUnit.getCurrentPromotion(), targetUnit.getCurrentPromotion()));
-
-            focusUnit.setIsCapturingTile(targetUnit.getIsCapturingTile());
-
-            focusUnit.setIsBuildingTile(targetUnit.getIsBuildingTile());
-
-            // flare ammo
-            {
-                const maxAmmo = focusUnit.getFlareMaxAmmo();
-                if (maxAmmo != null) {
-                    focusUnit.setFlareCurrentAmmo(Math.min(
-                        maxAmmo,
-                        Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Helpers.getExisted(targetUnit.getFlareCurrentAmmo())
-                    ));
+            const movingPath    = movingUnitAndPath?.path;
+            const lastNode      = movingPath ? movingPath[movingPath?.length - 1] : null;
+            if ((lastNode?.isVisible) && (!lastNode.isBlocked)) {
+                const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitJoinUnit_01);
+                if (unitMap.getUnitOnMap(gridIndex)) {
+                    unitMap.removeUnitOnMap(gridIndex, true);
                 }
             }
 
-            await focusUnit.moveViewAlongPath({
-                pathNodes,
-                isDiving    : focusUnit.getIsDiving(),
-                isBlocked   : path.isBlocked,
-                aiming      : null,
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute       : false,
             });
-            focusUnit.updateView();
-            unitMap.getView().removeUnit(targetUnit.getView());
+
+        } else {
+            const path              = action.path as MovePath;
+            const launchUnitId      = action.launchUnitId;
+            const pathNodes         = path.nodes;
+            const endingGridIndex   = pathNodes[pathNodes.length - 1];
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+
+            if (path.isBlocked) {
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                unitMap.setUnitOnMap(focusUnit);
+                focusUnit.setActionState(UnitActionState.Acted);
+
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : path.isBlocked,
+                    aiming      : null,
+                });
+                focusUnit.updateView();
+
+            } else {
+                const targetUnit    = Helpers.getExisted(unitMap.getUnitOnMap(endingGridIndex));
+                const player        = war.getPlayer(focusUnit.getPlayerIndex());
+                unitMap.removeUnitOnMap(endingGridIndex, false);
+                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+                unitMap.setUnitOnMap(focusUnit);
+                focusUnit.setActionState(UnitActionState.Acted);
+
+                focusUnit.setHasLoadedCo(focusUnit.getHasLoadedCo() || targetUnit.getHasLoadedCo());
+
+                if (focusUnit.checkHasPrimaryWeapon()) {
+                    focusUnit.setPrimaryWeaponCurrentAmmo(Math.min(
+                        Helpers.getExisted(focusUnit.getPrimaryWeaponMaxAmmo()),
+                        Helpers.getExisted(focusUnit.getPrimaryWeaponCurrentAmmo()) + Helpers.getExisted(targetUnit.getPrimaryWeaponCurrentAmmo())
+                    ));
+                }
+
+                const joinIncome = focusUnit.getJoinIncome(targetUnit);
+                if (joinIncome !== 0) {
+                    player.setFund(player.getFund() + joinIncome);
+                }
+
+                const joinedNormalizedHp = Math.min(
+                    focusUnit.getNormalizedMaxHp(),
+                    focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
+                );
+                focusUnit.setCurrentHp(Math.max(
+                    (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
+                    Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
+                ));
+
+                focusUnit.setCurrentFuel(Math.min(
+                    focusUnit.getMaxFuel(),
+                    focusUnit.getCurrentFuel() + targetUnit.getCurrentFuel()
+                ));
+
+                const maxBuildMaterial = focusUnit.getMaxBuildMaterial();
+                if (maxBuildMaterial != null) {
+                    focusUnit.setCurrentBuildMaterial(Math.min(
+                        maxBuildMaterial,
+                        Helpers.getExisted(focusUnit.getCurrentBuildMaterial()) + Helpers.getExisted(targetUnit.getCurrentBuildMaterial())
+                    ));
+                }
+
+                const maxProduceMaterial = focusUnit.getMaxProduceMaterial();
+                if (maxProduceMaterial != null) {
+                    focusUnit.setCurrentProduceMaterial(Math.min(
+                        maxProduceMaterial,
+                        Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) + Helpers.getExisted(targetUnit.getCurrentProduceMaterial())
+                    ));
+                }
+
+                focusUnit.setCurrentPromotion(Math.max(focusUnit.getCurrentPromotion(), targetUnit.getCurrentPromotion()));
+
+                focusUnit.setIsCapturingTile(targetUnit.getIsCapturingTile());
+
+                focusUnit.setIsBuildingTile(targetUnit.getIsBuildingTile());
+
+                // flare ammo
+                {
+                    const maxAmmo = focusUnit.getFlareMaxAmmo();
+                    if (maxAmmo != null) {
+                        focusUnit.setFlareCurrentAmmo(Math.min(
+                            maxAmmo,
+                            Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) + Helpers.getExisted(targetUnit.getFlareCurrentAmmo())
+                        ));
+                    }
+                }
+
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : path.isBlocked,
+                    aiming      : null,
+                });
+                focusUnit.updateView();
+                unitMap.getView().removeUnit(targetUnit.getView());
+            }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2227,64 +2320,112 @@ namespace WarActionExecutor {
             : await normalExeUnitLaunchFlare(war, action);
     }
     async function fastExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<void> {
-        const path          = action.path as MovePath;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const launchUnitId  = action.launchUnitId;
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
+        const fogMap            = war.getFogMap();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitLaunchFlare_01),
+                isFastExecute   : true,
+            });
+        } else {
+            const path          = action.path as MovePath;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const launchUnitId  = action.launchUnitId;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
 
-        const isFlareSucceeded  = !path.isBlocked;
-        const targetGridIndex   = action.targetGridIndex as GridIndex;
-        const flareRadius       = Helpers.getExisted(focusUnit.getFlareRadius());
-        if (isFlareSucceeded) {
-            focusUnit.setFlareCurrentAmmo(Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
-            war.getFogMap().updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
+            const isFlareSucceeded  = !path.isBlocked;
+            const flareRadius       = Helpers.getExisted(focusUnit.getFlareRadius());
+            const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
+            if (isFlareSucceeded) {
+                if (targetGridIndex == null) {
+                    throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_FastExeUnitLaunchFlare_02);
+                }
+
+                focusUnit.setFlareCurrentAmmo(Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
+                fogMap.updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
+            }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<void> {
         const desc = await war.getDescForExeUnitLaunchFlare(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const mapSize           = war.getTileMap().getMapSize();
+        const fogMap            = war.getFogMap();
+        const playerIndexInTurn = war.getPlayerIndexInTurn();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
 
-        const path          = action.path as MovePath;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const launchUnitId  = action.launchUnitId;
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-
-        const isFlareSucceeded  = !path.isBlocked;
-        const targetGridIndex   = action.targetGridIndex as GridIndex;
-        const flareRadius       = Helpers.getExisted(focusUnit.getFlareRadius());
-        if (isFlareSucceeded) {
-            focusUnit.setFlareCurrentAmmo(Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
-            war.getFogMap().updateMapFromPathsByFlare(focusUnit.getPlayerIndex(), targetGridIndex, flareRadius);
-        }
-
-        await focusUnit.moveViewAlongPath({
-            pathNodes,
-            isDiving    : focusUnit.getIsDiving(),
-            isBlocked   : path.isBlocked,
-            aiming      : null,
-        });
-        if ((isFlareSucceeded) && (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex()))) {
-            const effect = war.getGridVisionEffect();
-            for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, war.getTileMap().getMapSize())) {
-                effect.showEffectFlare(grid);
+            const targetGridIndex   = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
+            if (targetGridIndex) {
+                const flareRadius = Helpers.getExisted(actionExtraData.flareRadius, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_01);
+                for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, mapSize)) {
+                    gridVisualEffect.showEffectFlare(grid);
+                }
             }
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute       : false,
+            });
+
+        } else {
+            const path          = action.path as MovePath;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const launchUnitId  = action.launchUnitId;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            const isFlareSucceeded  = !path.isBlocked;
+            const flareRadius       = Helpers.getExisted(focusUnit.getFlareRadius());
+            const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
+            if (isFlareSucceeded) {
+                if (targetGridIndex == null) {
+                    throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_02);
+                }
+
+                focusUnit.setFlareCurrentAmmo(Helpers.getExisted(focusUnit.getFlareCurrentAmmo()) - 1);
+                fogMap.updateMapFromPathsByFlare(playerIndexInTurn, targetGridIndex, flareRadius);
+            }
+
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
+            if ((isFlareSucceeded) && (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex()))) {
+                if (targetGridIndex == null) {
+                    throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_03);
+                }
+
+                for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, mapSize)) {
+                    gridVisualEffect.showEffectFlare(grid);
+                }
+            }
+
+            focusUnit.updateView();
         }
 
-        focusUnit.updateView();
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2294,102 +2435,133 @@ namespace WarActionExecutor {
             : await normalExeUnitLaunchSilo(war, action);
     }
     async function fastExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<void> {
-        const path          = action.path as MovePath;
-        const pathNodes     = path.nodes;
-        const launchUnitId  = action.launchUnitId;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-
-        if (path.isBlocked) {
-            // nothing to do.
-        } else {
-            const targetGridIndex   = action.targetGridIndex as GridIndex;
-            const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
-            tile.resetByTypeAndPlayerIndex({
-                baseType        : tile.getBaseType(),
-                objectType      : Types.TileObjectType.EmptySilo,
-                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitLaunchFlare_00),
+                isFastExecute   : true,
             });
+        } else {
+            const path          = action.path as MovePath;
+            const pathNodes     = path.nodes;
+            const launchUnitId  = action.launchUnitId;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
 
-            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, unitMap.getMapSize());
-            const targetUnits   : BwUnit[] = [];
-            for (const grid of targetGrids) {
-                const unit = unitMap.getUnitOnMap(grid);
-                if (unit) {
-                    targetUnits.push(unit);
-                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
+            if (path.isBlocked) {
+                // nothing to do.
+            } else {
+                const targetGridIndex   = action.targetGridIndex as GridIndex;
+                const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
+                tile.resetByTypeAndPlayerIndex({
+                    baseType        : tile.getBaseType(),
+                    objectType      : Types.TileObjectType.EmptySilo,
+                    playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                });
+
+                const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, unitMap.getMapSize());
+                const targetUnits   : BwUnit[] = [];
+                for (const grid of targetGrids) {
+                    const unit = unitMap.getUnitOnMap(grid);
+                    if (unit) {
+                        targetUnits.push(unit);
+                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
+                    }
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<void> {
         const desc = await war.getDescForExeUnitLaunchSilo(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
-
-        const path          = action.path as MovePath;
-        const pathNodes     = path.nodes;
-        const launchUnitId  = action.launchUnitId;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-
-        if (path.isBlocked) {
-            await focusUnit.moveViewAlongPath({
-                pathNodes,
-                isDiving    : focusUnit.getIsDiving(),
-                isBlocked   : path.isBlocked,
-                aiming      : null,
-            });
-            focusUnit.updateView();
-
-        } else {
-            const targetGridIndex   = action.targetGridIndex as GridIndex;
-            const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
-            tile.resetByTypeAndPlayerIndex({
-                baseType    : tile.getBaseType(),
-                objectType  : Types.TileObjectType.EmptySilo,
-                playerIndex : CommonConstants.WarNeutralPlayerIndex,
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const unitMap           = war.getUnitMap();
+        const mapSize           = unitMap.getMapSize();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
             });
 
-            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, unitMap.getMapSize());
-            const targetUnits   : BwUnit[] = [];
-            for (const grid of targetGrids) {
-                const unit = unitMap.getUnitOnMap(grid);
-                if (unit) {
-                    targetUnits.push(unit);
-                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
+            const targetGridIndex = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
+            if (targetGridIndex) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, mapSize)) {
+                    gridVisualEffect.showEffectSiloExplosion(grid);
                 }
             }
 
-            await focusUnit.moveViewAlongPath({
-                pathNodes,
-                isDiving    : focusUnit.getIsDiving(),
-                isBlocked   : path.isBlocked,
-                aiming      : null,
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute   : false,
             });
-            const effect = war.getGridVisionEffect();
-            for (const grid of targetGrids) {
-                effect.showEffectSiloExplosion(grid);
-            }
-            for (const unit of targetUnits) {
-                unit.updateView();
-            }
 
-            focusUnit.updateView();
-            tile.flushDataToView();
+        } else {
+            const path          = action.path as MovePath;
+            const pathNodes     = path.nodes;
+            const launchUnitId  = action.launchUnitId;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            if (path.isBlocked) {
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : path.isBlocked,
+                    aiming      : null,
+                });
+                focusUnit.updateView();
+
+            } else {
+                const tile = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
+                tile.resetByTypeAndPlayerIndex({
+                    baseType    : tile.getBaseType(),
+                    objectType  : Types.TileObjectType.EmptySilo,
+                    playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                });
+
+                const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
+                const targetGrids       = GridIndexHelpers.getGridsWithinDistance(Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), 0, CommonConstants.SiloRadius, mapSize);
+                const targetUnits       : BwUnit[] = [];
+                for (const grid of targetGrids) {
+                    const unit = unitMap.getUnitOnMap(grid);
+                    if (unit) {
+                        targetUnits.push(unit);
+                        unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
+                    }
+                }
+
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked   : path.isBlocked,
+                    aiming      : null,
+                });
+                for (const grid of targetGrids) {
+                    gridVisualEffect.showEffectSiloExplosion(grid);
+                }
+                for (const unit of targetUnits) {
+                    unit.updateView();
+                }
+
+                focusUnit.updateView();
+                tile.flushDataToView();
+            }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2399,73 +2571,97 @@ namespace WarActionExecutor {
             : await normalExeUnitLoadCo(war, action);
     }
     async function fastExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<void> {
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-
-        if (path.isBlocked) {
-            focusUnit.setActionState(UnitActionState.Acted);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_FastExeUnitLoadCo_00),
+                isFastExecute   : true,
+            });
         } else {
-            const playerIndex           = focusUnit.getPlayerIndex();
-            const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
-            focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
-            focusUnit.setHasLoadedCo(true);
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
 
-            const player        = war.getPlayer(playerIndex);
-            const coMaxEnergy   = player.getCoMaxEnergy();
-            player.setFund(player.getFund() - focusUnit.getLoadCoCost());
-            player.setCoCurrentEnergy(Math.min(
-                coMaxEnergy,
-                player.getCoCurrentEnergy() + Math.floor(coMaxEnergy * energyAddPctOnLoadCo / 100))
-            );
+            if (path.isBlocked) {
+                focusUnit.setActionState(UnitActionState.Acted);
+            } else {
+                const playerIndex           = focusUnit.getPlayerIndex();
+                const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
+                focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
+                focusUnit.setHasLoadedCo(true);
+
+                const player        = war.getPlayer(playerIndex);
+                const coMaxEnergy   = player.getCoMaxEnergy();
+                player.setFund(player.getFund() - focusUnit.getLoadCoCost());
+                player.setCoCurrentEnergy(Math.min(
+                    coMaxEnergy,
+                    player.getCoCurrentEnergy() + Math.floor(coMaxEnergy * energyAddPctOnLoadCo / 100))
+                );
+            }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<void> {
         const desc = await war.getDescForExeUnitLoadCo(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.BwWarActionExecutor_NormalExeUnitLoadCo_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
 
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute   : false,
+            });
 
-        if (path.isBlocked) {
-            focusUnit.setActionState(UnitActionState.Acted);
         } else {
-            const playerIndex           = focusUnit.getPlayerIndex();
-            const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
-            focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
-            focusUnit.setHasLoadedCo(true);
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], action.launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
 
-            const player        = war.getPlayer(playerIndex);
-            const coMaxEnergy   = player.getCoMaxEnergy();
-            player.setFund(player.getFund() - focusUnit.getLoadCoCost());
-            player.setCoCurrentEnergy(Math.min(
-                coMaxEnergy,
-                player.getCoCurrentEnergy() + Math.floor(coMaxEnergy * energyAddPctOnLoadCo / 100))
-            );
+            if (path.isBlocked) {
+                focusUnit.setActionState(UnitActionState.Acted);
+            } else {
+                const playerIndex           = focusUnit.getPlayerIndex();
+                const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
+                focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
+                focusUnit.setHasLoadedCo(true);
+
+                const player        = war.getPlayer(playerIndex);
+                const coMaxEnergy   = player.getCoMaxEnergy();
+                player.setFund(player.getFund() - focusUnit.getLoadCoCost());
+                player.setCoCurrentEnergy(Math.min(
+                    coMaxEnergy,
+                    player.getCoCurrentEnergy() + Math.floor(coMaxEnergy * energyAddPctOnLoadCo / 100))
+                );
+            }
+
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : path.isBlocked,
+                aiming      : null,
+            });
+            focusUnit.updateView();
         }
 
-        await focusUnit.moveViewAlongPath({
-            pathNodes,
-            isDiving    : focusUnit.getIsDiving(),
-            isBlocked   : path.isBlocked,
-            aiming      : null,
-        });
-        focusUnit.updateView();
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2475,94 +2671,77 @@ namespace WarActionExecutor {
             : await normalExeUnitProduceUnit(war, action);
     }
     async function fastExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<void> {
-        const path          = action.path as MovePath;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const launchUnitId  = action.launchUnitId;
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-
-        if (path.isBlocked) {
-            // nothing to do.
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitProduceUnit_00),
+                isFastExecute   : true,
+            });
         } else {
-            const gridIndex         = focusUnit.getGridIndex();
-            const producedUnitId    = unitMap.getNextUnitId();
-            const producedUnit      = new BwUnit();
-            producedUnit.init({
-                gridIndex,
-                playerIndex : focusUnit.getPlayerIndex(),
-                unitType    : focusUnit.getProduceUnitType(),
-                unitId      : producedUnitId,
-                loaderUnitId: focusUnit.getUnitId(),
-            }, war.getConfigVersion());
-            producedUnit.startRunning(war);
-            producedUnit.setActionState(UnitActionState.Acted);
-
-            const player = war.getPlayerInTurn();
-            player.setFund(player.getFund() - focusUnit.getProduceUnitCost());
-            unitMap.setNextUnitId(producedUnitId + 1);
-            unitMap.setUnitLoaded(producedUnit);
-            focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
-        }
-    }
-    async function normalExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitProduceUnit(action);
-        (desc) && (FloatText.show(desc));
-
-        const path          = action.path as MovePath;
-        const pathNodes     = path.nodes;
-        const unitMap       = war.getUnitMap();
-        const launchUnitId  = action.launchUnitId;
-        const extraData     = action.extraData;
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-
+            const path          = action.path as MovePath;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const launchUnitId  = action.launchUnitId;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
             if (path.isBlocked) {
-                await focusUnit.moveViewAlongPath({
-                    pathNodes,
-                    isDiving    : focusUnit.getIsDiving(),
-                    isBlocked   : path.isBlocked,
-                    aiming      : null,
-                });
-                focusUnit.updateView();
-
+                // nothing to do.
             } else {
                 const gridIndex         = focusUnit.getGridIndex();
                 const producedUnitId    = unitMap.getNextUnitId();
                 const producedUnit      = new BwUnit();
+                const unitType          = Helpers.getExisted(focusUnit.getProduceUnitType(), ClientErrorCode.WarActionExecutor_FastExeUnitProduceUnit_01);
                 producedUnit.init({
                     gridIndex,
-                    playerIndex : focusUnit.getPlayerIndex(),
-                    unitType    : focusUnit.getProduceUnitType(),
-                    unitId      : producedUnitId,
-                    loaderUnitId: focusUnit.getUnitId(),
+                    playerIndex     : focusUnit.getPlayerIndex(),
+                    unitType,
+                    unitId          : producedUnitId,
+                    loaderUnitId    : focusUnit.getUnitId(),
+                    currentPromotion: getPromotionForUnitProduceUnit(war, focusUnit, unitType),
                 }, war.getConfigVersion());
                 producedUnit.startRunning(war);
                 producedUnit.setActionState(UnitActionState.Acted);
 
                 const player = war.getPlayerInTurn();
-                player.setFund(player.getFund() - Helpers.getExisted(extraData.cost));
+                player.setFund(player.getFund() - focusUnit.getProduceUnitCost());
                 unitMap.setNextUnitId(producedUnitId + 1);
                 unitMap.setUnitLoaded(producedUnit);
                 focusUnit.setCurrentProduceMaterial(Helpers.getExisted(focusUnit.getCurrentProduceMaterial()) - 1);
-
-                await focusUnit.moveViewAlongPath({
-                    pathNodes,
-                    isDiving    : focusUnit.getIsDiving(),
-                    isBlocked   : path.isBlocked,
-                    aiming      : null,
-                });
-                focusUnit.updateView();
             }
+        }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
+    }
+    async function normalExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<void> {
+        const desc = await war.getDescForExeUnitProduceUnit(action);
+        (desc) && (FloatText.show(desc));
+
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitWait_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute   : false,
+            });
 
         } else {
+            const path          = action.path as MovePath;
+            const pathNodes     = path.nodes;
+            const unitMap       = war.getUnitMap();
+            const launchUnitId  = action.launchUnitId;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
@@ -2580,12 +2759,14 @@ namespace WarActionExecutor {
                 const gridIndex         = focusUnit.getGridIndex();
                 const producedUnitId    = unitMap.getNextUnitId();
                 const producedUnit      = new BwUnit();
+                const unitType          = Helpers.getExisted(focusUnit.getProduceUnitType(), ClientErrorCode.WarActionExecutor_NormalExeUnitProduceUnit_00);
                 producedUnit.init({
                     gridIndex,
-                    playerIndex : focusUnit.getPlayerIndex(),
-                    unitType    : focusUnit.getProduceUnitType(),
-                    unitId      : producedUnitId,
-                    loaderUnitId: focusUnit.getUnitId(),
+                    playerIndex     : focusUnit.getPlayerIndex(),
+                    unitType,
+                    unitId          : producedUnitId,
+                    loaderUnitId    : focusUnit.getUnitId(),
+                    currentPromotion: getPromotionForUnitProduceUnit(war, focusUnit, unitType),
                 }, war.getConfigVersion());
                 producedUnit.startRunning(war);
                 producedUnit.setActionState(UnitActionState.Acted);
@@ -2606,7 +2787,33 @@ namespace WarActionExecutor {
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
+    }
+
+    function getPromotionForUnitProduceUnit(war: BwWar, producerUnit: BwUnit, targetUnitType: Types.UnitType): number {
+        const player                    = producerUnit.getPlayer();
+        const coZoneRadius              = player.getCoZoneRadius();
+        const gridIndex                 = producerUnit.getGridIndex();
+        const configVersion             = war.getConfigVersion();
+        const hasLoadedCo               = producerUnit.getHasLoadedCo();
+        const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+        let promotion                   = 0;
+        for (const skillId of war.getPlayerInTurn().getCoCurrentSkills()) {
+            const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfPromotionBonusByProduce;
+            if ((cfg)                                                                               &&
+                (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))    &&
+                ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                    gridIndex,
+                    coSkillAreaType         : cfg[0],
+                    getCoGridIndexArrayOnMap,
+                    coZoneRadius,
+                })))
+            ) {
+                promotion += cfg[2];
+            }
+        }
+
+        return promotion;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2616,97 +2823,120 @@ namespace WarActionExecutor {
             : await normalExeUnitSupplyUnit(war, action);
     }
     async function fastExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<void> {
-        const revisedPath   = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = revisedPath.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-
-        const isBlocked = revisedPath.isBlocked;
-        if (isBlocked) {
-            // nothing to do.
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitSupplyUnit_00),
+                isFastExecute   : true,
+            });
         } else {
-            const suppliedUnits : BwUnit[] = [];
-            const playerIndex   = focusUnit.getPlayerIndex();
-            for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
-                const unit = unitMap.getUnitOnMap(gridIndex);
-                if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
-                    const maxFlareAmmo          = unit.getFlareMaxAmmo();
-                    const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
-                    unit.updateByRepairData({
-                        deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
-                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
-                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
-                    });
-                    suppliedUnits.push(unit);
+            const revisedPath   = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = revisedPath.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            const isBlocked = revisedPath.isBlocked;
+            if (isBlocked) {
+                // nothing to do.
+            } else {
+                const suppliedUnits : BwUnit[] = [];
+                const playerIndex   = focusUnit.getPlayerIndex();
+                for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
+                    const unit = unitMap.getUnitOnMap(gridIndex);
+                    if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
+                        const maxFlareAmmo          = unit.getFlareMaxAmmo();
+                        const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
+                        unit.updateByRepairData({
+                            deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
+                            deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
+                            deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
+                        });
+                        suppliedUnits.push(unit);
+                    }
                 }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<void> {
         const desc = await war.getDescForExeUnitSupplyUnit(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitSupplyUnit_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
 
-        const revisedPath   = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = revisedPath.nodes;
-        const unitMap       = war.getUnitMap();
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-
-        const isBlocked = revisedPath.isBlocked;
-        if (isBlocked) {
-            await focusUnit.moveViewAlongPath({
-                pathNodes,
-                isDiving    : focusUnit.getIsDiving(),
-                isBlocked,
-                aiming      : null,
-             });
-            focusUnit.updateView();
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute   : false,
+            });
 
         } else {
-            const suppliedUnits : BwUnit[] = [];
-            const playerIndex   = focusUnit.getPlayerIndex();
-            for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
-                const unit = unitMap.getUnitOnMap(gridIndex);
-                if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
-                    const maxFlareAmmo          = unit.getFlareMaxAmmo();
-                    const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
-                    unit.updateByRepairData({
-                        deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
-                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
-                        deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
-                    });
-                    suppliedUnits.push(unit);
+            const revisedPath   = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = revisedPath.nodes;
+            const unitMap       = war.getUnitMap();
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            const isBlocked = revisedPath.isBlocked;
+            if (isBlocked) {
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked,
+                    aiming      : null,
+                 });
+                focusUnit.updateView();
+
+            } else {
+                const suppliedUnits : BwUnit[] = [];
+                const playerIndex   = focusUnit.getPlayerIndex();
+                for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
+                    const unit = unitMap.getUnitOnMap(gridIndex);
+                    if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
+                        const maxFlareAmmo          = unit.getFlareMaxAmmo();
+                        const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();
+                        unit.updateByRepairData({
+                            deltaFuel               : unit.getMaxFuel() - unit.getCurrentFuel(),
+                            deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - Helpers.getExisted(unit.getFlareCurrentAmmo()) : null,
+                            deltaPrimaryWeaponAmmo  : maxPrimaryWeaponAmmo ? maxPrimaryWeaponAmmo - Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo()) : null,
+                        });
+                        suppliedUnits.push(unit);
+                    }
                 }
-            }
 
-            await focusUnit.moveViewAlongPath({
-                pathNodes,
-                isDiving    : focusUnit.getIsDiving(),
-                isBlocked,
-                aiming      : null,
-            });
-            focusUnit.updateView();
+                await focusUnit.moveViewAlongPath({
+                    pathNodes,
+                    isDiving    : focusUnit.getIsDiving(),
+                    isBlocked,
+                    aiming      : null,
+                });
+                focusUnit.updateView();
 
-            const gridVisionEffect = war.getGridVisionEffect();
-            for (const unit of suppliedUnits) {
-                unit.updateView();
-                gridVisionEffect.showEffectSupply(unit.getGridIndex());
+                const gridVisionEffect = war.getGridVisualEffect();
+                for (const unit of suppliedUnits) {
+                    unit.updateView();
+                    gridVisionEffect.showEffectSupply(unit.getGridIndex());
+                }
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2716,59 +2946,90 @@ namespace WarActionExecutor {
             : await normalExeUnitSurface(war, action);
     }
     async function fastExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<void> {
-        const unitMap       = war.getUnitMap();
-        const revisedPath   = action.path as MovePath;
-        const pathNodes     = revisedPath.nodes;
-        const launchUnitId  = action.launchUnitId;
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        const isSuccessful  = !revisedPath.isBlocked;
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-        (isSuccessful) && (focusUnit.setIsDiving(false));
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitSurface_00),
+                isFastExecute   : true,
+            });
+        } else {
+            const unitMap       = war.getUnitMap();
+            const revisedPath   = action.path as MovePath;
+            const pathNodes     = revisedPath.nodes;
+            const launchUnitId  = action.launchUnitId;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const isSuccessful  = !revisedPath.isBlocked;
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+            (isSuccessful) && (focusUnit.setIsDiving(false));
+        }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<void> {
         const desc = await war.getDescForExeUnitSurface(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
-        }
-
-        const unitMap       = war.getUnitMap();
-        const revisedPath   = action.path as MovePath;
-        const pathNodes     = revisedPath.nodes;
-        const launchUnitId  = action.launchUnitId;
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        const isSuccessful  = !revisedPath.isBlocked;
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-        (isSuccessful) && (focusUnit.setIsDiving(false));
-
-        await focusUnit.moveViewAlongPath({
-            pathNodes,
-            isDiving    : true,
-            isBlocked   : revisedPath.isBlocked,
-            aiming      : null,
-        });
-        focusUnit.updateView();
-        if (isSuccessful) {
-            const endingGridIndex = pathNodes[pathNodes.length - 1];
-            if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData   = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitSurface_00);
+            const movingUnitAndPath = commonExtraData.movingUnitAndPath;
+            await WarCommonHelpers.moveExtraUnit({
                 war,
-                unitType            : focusUnit.getUnitType(),
-                unitPlayerIndex     : focusUnit.getPlayerIndex(),
-                gridIndex           : endingGridIndex,
-                observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
-                isDiving            : false,
-            })) {
-                war.getGridVisionEffect().showEffectSurface(endingGridIndex);
+                movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            const movingPath    = movingUnitAndPath?.path;
+            const lastNode      = movingPath ? movingPath[movingPath?.length - 1] : null;
+            if ((lastNode?.isVisible) && (!lastNode.isBlocked)) {
+                gridVisualEffect.showEffectSurface(Helpers.getExisted(GridIndexHelpers.convertGridIndex(lastNode.gridIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitSurface_01));
+            }
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute                       : false,
+            });
+
+        } else {
+            const unitMap       = war.getUnitMap();
+            const revisedPath   = action.path as MovePath;
+            const pathNodes     = revisedPath.nodes;
+            const launchUnitId  = action.launchUnitId;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            const isSuccessful  = !revisedPath.isBlocked;
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+            (isSuccessful) && (focusUnit.setIsDiving(false));
+
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : true,
+                isBlocked   : revisedPath.isBlocked,
+                aiming      : null,
+            });
+            focusUnit.updateView();
+            if (isSuccessful) {
+                const endingGridIndex = pathNodes[pathNodes.length - 1];
+                if (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                    war,
+                    unitType            : focusUnit.getUnitType(),
+                    unitPlayerIndex     : focusUnit.getPlayerIndex(),
+                    gridIndex           : endingGridIndex,
+                    observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
+                    isDiving            : false,
+                })) {
+                    gridVisualEffect.showEffectSurface(endingGridIndex);
+                }
             }
         }
 
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2778,237 +3039,165 @@ namespace WarActionExecutor {
             : await normalExeUnitUseCoSkill(war, action);
     }
     async function fastExeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill): Promise<void> {
-        const skillType         = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_00);
-        const unitMap           = war.getUnitMap();
-        const revisedPath       = action.path as MovePath;
-        const pathNodes         = revisedPath.nodes;
-        const launchUnitId      = action.launchUnitId;
-        const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_01);
-        const player            = focusUnit.getPlayer();
-        const currentEnergy     = player.getCoCurrentEnergy();
-        if (revisedPath.isBlocked) {
-            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
-            unitMap.setUnitOnMap(focusUnit);
-            focusUnit.setActionState(UnitActionState.Acted);
+        const playerInTurn      = war.getPlayerInTurn();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const skillType: Types.Undefinable<Types.CoSkillType> = actionExtraData.skillType;
+            if (skillType != null) {
+                const skillIdArray      = playerInTurn.getCoSkills(skillType);
+                const skillDataArray    = Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_00);
+                for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
+                    WarCoSkillHelpers.exeInstantSkill({
+                        war,
+                        player          : playerInTurn,
+                        skillId         : skillIdArray[skillIndex],
+                        skillData       : Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_01),
+                        hasExtraData    : true,
+                        isFastExecute   : true,
+                    });
+                }
+            }
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_02),
+                isFastExecute   : true,
+            });
 
         } else {
+            const unitMap           = war.getUnitMap();
+            const revisedPath       = action.path as MovePath;
+            const pathNodes         = revisedPath.nodes;
+            const launchUnitId      = action.launchUnitId;
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_03);
             WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
             unitMap.setUnitOnMap(focusUnit);
             focusUnit.setActionState(UnitActionState.Acted);
 
-            player.setCoUsingSkillType(skillType);
+            if (!revisedPath.isBlocked) {
+                playerInTurn.updateOnUseCoSkill(Helpers.getExisted(action.skillType, ClientErrorCode.WarActionExecutor_FastExeUnitUseCoSkill_04));
 
-            if (skillType === Types.CoSkillType.Power) {
-                const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_02);
-                player.setCoCurrentEnergy(currentEnergy - powerEnergy);
+                const skillIdArray = playerInTurn.getCoCurrentSkills();
+                for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
+                    const dataForUseCoSkill = WarCoSkillHelpers.getDataForUseCoSkill(war, playerInTurn, skillIndex);
+                    WarCoSkillHelpers.exeInstantSkill({
+                        war,
+                        player          : playerInTurn,
+                        skillId         : skillIdArray[skillIndex],
+                        skillData       : dataForUseCoSkill,
+                        hasExtraData    : false,
+                        isFastExecute   : true,
+                    });
+                }
 
-            } else if (skillType === Types.CoSkillType.SuperPower) {
-                const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_03);
-                player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
-
-            } else {
-                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_FastExeUnitUseCoSkill_04);
-            }
-
-            const skillDataList : IDataForUseCoSkill[] = [];
-            const skillIdList   = player.getCoCurrentSkills() || [];
-            for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                const dataForUseCoSkill = WarCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex);
-                WarCoSkillHelpers.exeInstantSkill({
-                    war,
-                    player,
-                    skillId     : skillIdList[skillIndex],
-                    extraData   : dataForUseCoSkill,
-                });
-                skillDataList.push(dataForUseCoSkill);
+                if (playerInTurn.getUserId() == null) {
+                    const playerIndex = playerInTurn.getPlayerIndex();
+                    for (const unit of war.getUnitMap().getAllUnits()) {
+                        if (unit.getPlayerIndex() === playerIndex) {
+                            unit.checkAndUpdateAiMode();
+                        }
+                    }
+                }
             }
         }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill): Promise<void> {
-        const unitMap       = war.getUnitMap();
-        const revisedPath   = action.path as MovePath;
-        const pathNodes     = revisedPath.nodes;
-        const launchUnitId  = action.launchUnitId;
-        const skillType     = Helpers.getExisted(action.skillType, ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_00);
-        const extraData     = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
+        const unitMap           = war.getUnitMap();
+        const gridVisualEffect  = war.getGridVisualEffect();
+        const playerInTurn      = war.getPlayerInTurn();
+        const playerIndex       = playerInTurn.getPlayerIndex();
+        const actionExtraData   = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
 
-            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-            const player        = focusUnit.getPlayer();
-            const currentEnergy = player.getCoCurrentEnergy();
-
-            if (revisedPath.isBlocked) {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
-
-                await focusUnit.moveViewAlongPath({
-                    pathNodes,
-                    isDiving    : focusUnit.getIsDiving(),
-                    isBlocked   : revisedPath.isBlocked,
-                    aiming      : null,
-                });
-                focusUnit.updateView();
-
-            } else {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
-
-                player.setCoUsingSkillType(skillType);
-
-                if (skillType === Types.CoSkillType.Power) {
-                    const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_01);
-                    player.setCoCurrentEnergy(currentEnergy - powerEnergy);
-
-                } else if (skillType === Types.CoSkillType.SuperPower) {
-                    const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_02);
-                    player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
-
-                } else {
-                    throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_03);
-                }
-
-                const skillDataList = Helpers.getExisted(extraData.skillDataList);
-                const skillIdList   = player.getCoCurrentSkills() || [];
-                for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                    const dataForUseCoSkill = Helpers.getExisted(skillDataList.find(v => v.skillIndex === skillIndex), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_04);
+            const skillType: Types.Undefinable<Types.CoSkillType> = actionExtraData.skillType;
+            if (skillType != null) {
+                const skillIdArray      = playerInTurn.getCoSkills(skillType);
+                const skillDataArray    = Helpers.getExisted(actionExtraData.skillDataArray, ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_01);
+                for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
                     WarCoSkillHelpers.exeInstantSkill({
                         war,
-                        player,
-                        skillId     : skillIdList[skillIndex],
-                        extraData   : dataForUseCoSkill,
+                        player          : playerInTurn,
+                        skillId         : skillIdArray[skillIndex],
+                        skillData       : Helpers.getExisted(skillDataArray.find(v => v.skillIndex === skillIndex), ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_02),
+                        hasExtraData    : true,
+                        isFastExecute   : false,
                     });
                 }
+            }
 
-                await focusUnit.moveViewAlongPath({
-                    pathNodes,
-                    isDiving    : focusUnit.getIsDiving(),
-                    isBlocked   : revisedPath.isBlocked,
-                    aiming      : null,
-                });
-                focusUnit.updateView();
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute   : false,
+            });
 
-                const gridVisionEffect  = war.getGridVisionEffect();
-                const playerIndex       = focusUnit.getPlayerIndex();
+            if (skillType != null) {
                 for (const unit of unitMap.getAllUnitsOnMap()) {
-                    unit.updateView();
                     if (unit.getPlayerIndex() === playerIndex) {
-                        gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
-                    }
-                }
-
-                const configVersion = war.getConfigVersion();
-                const mapSize       = unitMap.getMapSize();
-                for (let i = 0; i < skillIdList.length; ++i) {
-                    const skillCfg          = ConfigManager.getCoSkillCfg(configVersion, skillIdList[i]);
-                    const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
-                    if (indiscriminateCfg) {
-                        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(
-                            Helpers.getExisted(GridIndexHelpers.convertGridIndex(skillDataList.find(v => v.skillIndex === i)?.indiscriminateAreaDamageCenter)),
-                            0,
-                            indiscriminateCfg[1],
-                            mapSize)
-                        ) {
-                            const unit = unitMap.getUnitOnMap(gridIndex);
-                            (unit) && (unit.updateView());
-
-                            gridVisionEffect.showEffectExplosion(gridIndex);
-                        }
+                        unit.updateView();
+                        gridVisualEffect.showEffectSkillActivation(unit.getGridIndex());
                     }
                 }
             }
 
         } else {
-            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_05);
-            const player        = focusUnit.getPlayer();
-            const currentEnergy = player.getCoCurrentEnergy();
-            if (revisedPath.isBlocked) {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
+            const revisedPath       = action.path as MovePath;
+            const pathNodes         = revisedPath.nodes;
+            const launchUnitId      = action.launchUnitId;
+            const focusUnit         = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_03);
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
 
-                await focusUnit.moveViewAlongPath({
-                    pathNodes,
-                    isDiving    : focusUnit.getIsDiving(),
-                    isBlocked   : revisedPath.isBlocked,
-                    aiming      : null,
-                });
-                focusUnit.updateView();
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : revisedPath.isBlocked,
+                aiming      : null,
+            });
+            focusUnit.updateView();
 
-            } else {
-                WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
-                unitMap.setUnitOnMap(focusUnit);
-                focusUnit.setActionState(UnitActionState.Acted);
+            if (!revisedPath.isBlocked) {
+                playerInTurn.updateOnUseCoSkill(Helpers.getExisted(action.skillType, ClientErrorCode.WarActionExecutor_NormalExeUnitUseCoSkill_04));
 
-                player.setCoUsingSkillType(skillType);
-
-                if (skillType === Types.CoSkillType.Power) {
-                    const powerEnergy = Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_06);
-                    player.setCoCurrentEnergy(currentEnergy - powerEnergy);
-
-                } else if (skillType === Types.CoSkillType.SuperPower) {
-                    const superPowerEnergy = Helpers.getExisted(player.getCoSuperPowerEnergy(), ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_07);
-                    player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
-
-                } else {
-                    throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwWarActionExecutor_NormalExeUnitUseCoSkill_08);
-                }
-
-                const skillDataList : IDataForUseCoSkill[] = [];
-                const skillIdList   = player.getCoCurrentSkills() || [];
-                for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
-                    const dataForUseCoSkill = WarCoSkillHelpers.getDataForUseCoSkill(war, player, skillIndex);
+                const skillIdArray = playerInTurn.getCoCurrentSkills();
+                for (let skillIndex = 0; skillIndex < skillIdArray.length; ++skillIndex) {
                     WarCoSkillHelpers.exeInstantSkill({
                         war,
-                        player,
-                        skillId     : skillIdList[skillIndex],
-                        extraData   : dataForUseCoSkill,
+                        player          : playerInTurn,
+                        skillId         : skillIdArray[skillIndex],
+                        skillData       : WarCoSkillHelpers.getDataForUseCoSkill(war, playerInTurn, skillIndex),
+                        hasExtraData    : false,
+                        isFastExecute   : false,
                     });
-                    skillDataList.push(dataForUseCoSkill);
                 }
 
-                await focusUnit.moveViewAlongPath({
-                    pathNodes,
-                    isDiving    : focusUnit.getIsDiving(),
-                    isBlocked   : revisedPath.isBlocked,
-                    aiming      : null,
-                });
-                focusUnit.updateView();
-
-                const gridVisionEffect  = war.getGridVisionEffect();
-                const playerIndex       = focusUnit.getPlayerIndex();
-                for (const unit of unitMap.getAllUnitsOnMap()) {
-                    unit.updateView();
-                    if (unit.getPlayerIndex() === playerIndex) {
-                        gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
+                if (playerInTurn.getUserId() == null) {
+                    for (const unit of war.getUnitMap().getAllUnits()) {
+                        if (unit.getPlayerIndex() === playerIndex) {
+                            unit.checkAndUpdateAiMode();
+                        }
                     }
                 }
 
-                const configVersion = war.getConfigVersion();
-                const mapSize       = unitMap.getMapSize();
-                for (let i = 0; i < skillIdList.length; ++i) {
-                    const skillCfg          = ConfigManager.getCoSkillCfg(configVersion, skillIdList[i]);
-                    const indiscriminateCfg = skillCfg ? skillCfg.indiscriminateAreaDamage : null;
-                    if (indiscriminateCfg) {
-                        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(skillDataList[i].indiscriminateAreaDamageCenter as GridIndex, 0, indiscriminateCfg[1], mapSize)) {
-                            const unit = unitMap.getUnitOnMap(gridIndex);
-                            (unit) && (unit.updateView());
-
-                            gridVisionEffect.showEffectExplosion(gridIndex);
-                        }
+                for (const unit of unitMap.getAllUnitsOnMap()) {
+                    if (unit.getPlayerIndex() === playerIndex) {
+                        unit.updateView();
+                        gridVisualEffect.showEffectSkillActivation(unit.getGridIndex());
                     }
                 }
             }
         }
 
-
-        WarCommonHelpers.updateTilesAndUnits(war, {
-            discoveredTiles : extraData?.discoveredTilesAfterAction,
-            discoveredUnits : extraData?.discoveredUnitsAfterAction,
-        });
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3018,41 +3207,65 @@ namespace WarActionExecutor {
             : await normalExeUnitWait(war, action);
     }
     async function fastExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<void> {
-        const unitMap       = war.getUnitMap();
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData : Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_FastExeUnitWait_00),
+                isFastExecute   : true,
+            });
+        } else {
+            const unitMap       = war.getUnitMap();
+            const path          = action.path as MovePath;
+            const launchUnitId  = action.launchUnitId;
+            const pathNodes     = path.nodes;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+        }
+        war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<void> {
         const desc = await war.getDescForExeUnitWait(action);
         (desc) && (FloatText.show(desc));
 
-        const extraData = action.extraData;
-        if (extraData) {
-            WarCommonHelpers.updateTilesAndUnits(war, extraData);
+        const actionExtraData = action.extraData;
+        if (actionExtraData) {
+            const commonExtraData = Helpers.getExisted(actionExtraData.commonExtraData, ClientErrorCode.WarActionExecutor_NormalExeUnitWait_00);
+            await WarCommonHelpers.moveExtraUnit({
+                war,
+                movingUnitAndPath       : commonExtraData.movingUnitAndPath,
+                aiming                  : null,
+                deleteViewAfterMoving   : true,
+            });
+
+            WarCommonHelpers.handleCommonExtraDataForWarActions({
+                war,
+                commonExtraData,
+                isFastExecute   : false,
+            });
+
+        } else {
+            const unitMap       = war.getUnitMap();
+            const revisedPath   = action.path as MovePath;
+            const pathNodes     = revisedPath.nodes;
+            const launchUnitId  = action.launchUnitId;
+            const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId), ClientErrorCode.WarActionExecutor_NormalExeUnitWait_01);
+            WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: revisedPath.fuelConsumption });
+            unitMap.setUnitOnMap(focusUnit);
+            focusUnit.setActionState(UnitActionState.Acted);
+
+            await focusUnit.moveViewAlongPath({
+                pathNodes,
+                isDiving    : focusUnit.getIsDiving(),
+                isBlocked   : revisedPath.isBlocked,
+                aiming      : null,
+            });
+            focusUnit.updateView();
         }
 
-        const unitMap       = war.getUnitMap();
-        const path          = action.path as MovePath;
-        const launchUnitId  = action.launchUnitId;
-        const pathNodes     = path.nodes;
-        const focusUnit     = Helpers.getExisted(unitMap.getUnit(pathNodes[0], launchUnitId));
-        WarCommonHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption, });
-        unitMap.setUnitOnMap(focusUnit);
-        focusUnit.setActionState(UnitActionState.Acted);
-
-        await focusUnit.moveViewAlongPath({
-            pathNodes,
-            isDiving    : focusUnit.getIsDiving(),
-            isBlocked   : path.isBlocked,
-            aiming      : null,
-        });
-        focusUnit.updateView();
-        war.updateTilesAndUnitsOnVisibilityChanged();
+        war.updateTilesAndUnitsOnVisibilityChanged(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3089,12 +3302,12 @@ namespace WarActionExecutor {
             const tileMap = war.getTileMap();
             for (const g of WarCommonHelpers.getAdjacentPlasmas(tileMap, gridIndex)) {
                 const plasmaTile = tileMap.getTile(g);
-                plasmaTile.destroyTileObject();
+                plasmaTile.resetOnTileObjectDestroyed();
                 destroyedTileSet.add(plasmaTile);
             }
         }
 
-        tile.destroyTileObject();
+        tile.resetOnTileObjectDestroyed();
 
         return {
             damagedTileSet  : new Set(),

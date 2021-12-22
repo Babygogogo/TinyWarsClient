@@ -16,17 +16,13 @@
 // import UserModel                from "../../user/model/UserModel";
 // import TwnsUserPanel            from "../../user/view/UserPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonRankListPanel {
-    import UserPanel    = TwnsUserPanel.UserPanel;
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
 
-    export class CommonRankListPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: CommonRankListPanel;
-
+    export type OpenData = void;
+    export class CommonRankListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -44,27 +40,7 @@ namespace TwnsCommonRankListPanel {
         private readonly _labelFogScore!    : TwnsUiLabel.UiLabel;
         private readonly _listFog!          : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
 
-        public static show(): void {
-            if (!CommonRankListPanel._instance) {
-                CommonRankListPanel._instance = new CommonRankListPanel();
-            }
-            CommonRankListPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (CommonRankListPanel._instance) {
-                await CommonRankListPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/common/CommonRankListPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgCommonGetRankList,   callback: this._onMsgCommonGetRankList },
@@ -72,18 +48,20 @@ namespace TwnsCommonRankListPanel {
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listStd.setItemRenderer(UserRenderer);
             this._listFog.setItemRenderer(UserRenderer);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             CommonProxy.reqGetRankList();
 
             this._updateView();
             this._updateComponentsForLanguage();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +143,7 @@ namespace TwnsCommonRankListPanel {
             this._listFog.bindData(dataList);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -176,21 +154,22 @@ namespace TwnsCommonRankListPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -221,7 +200,7 @@ namespace TwnsCommonRankListPanel {
         private _onTouchedImgBg(): void {
             const data = this.data;
             if (data) {
-                UserPanel.show({ userId: data.userId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId: data.userId });
             }
         }
 

@@ -14,16 +14,13 @@
 // import MeUtility            from "../model/MeUtility";
 // import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeResizePanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    export class MeResizePanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeResizePanel;
-
+    export type OpenData = void;
+    export class MeResizePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelCurrSizeTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelCurrWidth!       : TwnsUiLabel.UiLabel;
@@ -39,27 +36,7 @@ namespace TwnsMeResizePanel {
         private _newWidth   : number | null = null;
         private _newHeight  : number | null = null;
 
-        public static show(): void {
-            if (!MeResizePanel._instance) {
-                MeResizePanel._instance = new MeResizePanel();
-            }
-            MeResizePanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeResizePanel._instance) {
-                await MeResizePanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapEditor/MeResizePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -69,7 +46,9 @@ namespace TwnsMeResizePanel {
                 { ui: this._inputNewWidth,      callback: this._onFocusOutInputNewWidth,    eventType: egret.Event.FOCUS_OUT },
                 { ui: this._inputNewHeight,     callback: this._onFocusOutInputNewHeight,   eventType: egret.Event.FOCUS_OUT },
             ]);
-
+            this._setIsTouchMaskEnabled();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             const war                   = Helpers.getExisted(MeModel.getWar());
@@ -81,6 +60,9 @@ namespace TwnsMeResizePanel {
             this._newWidth              = width;
             this._newHeight             = height;
         }
+        protected _onClosing(): void {
+            // nothing to do
+        }
 
         private _onTouchedBtnCancel(): void {
             this.close();
@@ -90,8 +72,10 @@ namespace TwnsMeResizePanel {
             const width         = Helpers.getExisted(this._newWidth);
             const height        = Helpers.getExisted(this._newHeight);
             const gridsCount    = width * height;
-            if ((!gridsCount) || (gridsCount <= 0)) {
+            if (gridsCount <= 0) {
                 FloatText.show(Lang.getText(LangTextType.A0087));
+            } else if (gridsCount > CommonConstants.MapMaxGridsCount) {
+                FloatText.show(Lang.getFormattedText(LangTextType.F0023, CommonConstants.MapMaxGridsCount));
             } else {
                 const war       = Helpers.getExisted(MeModel.getWar());
                 const currSize  = war.getTileMap().getMapSize();
@@ -107,7 +91,7 @@ namespace TwnsMeResizePanel {
                 }
 
                 this.close();
-                TwnsMeWarMenuPanel.MeWarMenuPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.MeWarMenuPanel);
             }
         }
 

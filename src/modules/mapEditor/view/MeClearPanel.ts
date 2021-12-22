@@ -14,16 +14,13 @@
 // import MeUtility            from "../model/MeUtility";
 // import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeClearPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    export class MeClearPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeClearPanel;
-
+    export type OpenData = void;
+    export class MeClearPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelCurrSizeTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelCurrWidth!       : TwnsUiLabel.UiLabel;
@@ -39,27 +36,7 @@ namespace TwnsMeClearPanel {
         private _newWidth   : number | null = null;
         private _newHeight  : number | null = null;
 
-        public static show(): void {
-            if (!MeClearPanel._instance) {
-                MeClearPanel._instance = new MeClearPanel();
-            }
-            MeClearPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeClearPanel._instance) {
-                await MeClearPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapEditor/MeClearPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -69,7 +46,9 @@ namespace TwnsMeClearPanel {
                 { ui: this._inputNewWidth,      callback: this._onFocusOutInputNewWidth,    eventType: egret.Event.FOCUS_OUT },
                 { ui: this._inputNewHeight,     callback: this._onFocusOutInputNewHeight,   eventType: egret.Event.FOCUS_OUT },
             ]);
-
+            this._setIsTouchMaskEnabled();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             const { width, height }     = Helpers.getExisted(MeModel.getWar()).getTileMap().getMapSize();
@@ -79,6 +58,9 @@ namespace TwnsMeClearPanel {
             this._inputNewWidth.text    = "" + width;
             this._newWidth              = width;
             this._newHeight             = height;
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnCancel(): void {
@@ -103,7 +85,7 @@ namespace TwnsMeClearPanel {
                     .startRunningView();
 
                 this.close();
-                TwnsMeWarMenuPanel.MeWarMenuPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.MeWarMenuPanel);
             }
         }
 

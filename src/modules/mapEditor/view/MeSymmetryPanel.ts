@@ -11,18 +11,15 @@
 // import MeUtility            from "../model/MeUtility";
 // import TwnsMeWar            from "../model/MeWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeSymmetryPanel {
     import MeWar        = TwnsMeWar.MeWar;
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
     import SymmetryType = Types.SymmetryType;
 
-    export class MeSymmetryPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud3;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeSymmetryPanel;
-
+    export type OpenData = void;
+    export class MeSymmetryPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupLeftRight!               : eui.Group;
         private readonly _labelLeftRightTitle!          : TwnsUiLabel.UiLabel;
         private readonly _labelLeftRightRate!           : TwnsUiLabel.UiLabel;
@@ -60,28 +57,7 @@ namespace TwnsMeSymmetryPanel {
 
         private _asymmetricalCounters   : MeUtility.AsymmetricalCounters | null = null;
 
-        public static show(): void {
-            if (!MeSymmetryPanel._instance) {
-                MeSymmetryPanel._instance = new MeSymmetryPanel();
-            }
-            MeSymmetryPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeSymmetryPanel._instance) {
-                await MeSymmetryPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeSymmetryPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -92,7 +68,10 @@ namespace TwnsMeSymmetryPanel {
                 { ui: this._groupUpLeftDownRightBox,    callback: this._onTouchedGroupUpLeftDownRightBox },
                 { ui: this._groupUpRightDownLeftBox,    callback: this._onTouchedGroupUpRightDownLeftBox },
             ]);
-
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._asymmetricalCounters  = MeUtility.getAsymmetricalCounters(this._getWar());
@@ -102,6 +81,9 @@ namespace TwnsMeSymmetryPanel {
             this._updateGroupRotational();
             this._updateGroupUpLeftDownRight();
             this._updateGroupUpRightDownLeft();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _getWar(): MeWar {

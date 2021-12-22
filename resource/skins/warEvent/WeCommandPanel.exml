@@ -24,6 +24,10 @@
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <TwnsUiButton:UiButton id="_btnInitSubNodeToEvent" label="Modify" width="120"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <TwnsUiButton:UiButton id="_btnShallowCloneEvent" label="Delete" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <TwnsUiButton:UiButton id="_btnDeepCloneEvent" label="Delete" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <TwnsUiButton:UiButton id="_btnDeleteEvent" label="Delete" width="120"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <TwnsUiButton:UiButton id="_btnSwitchNodeAndOr" label="Modify" width="120"
@@ -34,11 +38,17 @@
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <TwnsUiButton:UiButton id="_btnAddSubCondition" label="Modify" width="120"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <TwnsUiButton:UiButton id="_btnShallowCloneNode" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <TwnsUiButton:UiButton id="_btnDeepCloneNode" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <TwnsUiButton:UiButton id="_btnDeleteNode" label="Modify" width="120"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <TwnsUiButton:UiButton id="_btnReplaceCondition" label="Modify" width="120"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <TwnsUiButton:UiButton id="_btnModifyCondition" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <TwnsUiButton:UiButton id="_btnDeepCloneCondition" label="Modify" width="120"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <TwnsUiButton:UiButton id="_btnDeleteCondition" label="Modify" width="120"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
@@ -47,6 +57,8 @@
             <TwnsUiButton:UiButton id="_btnReplaceAction" label="Modify" width="120"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <TwnsUiButton:UiButton id="_btnAddAction" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <TwnsUiButton:UiButton id="_btnDeepCloneAction" label="Modify" width="120"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <TwnsUiButton:UiButton id="_btnDeleteAction" label="Modify" width="120"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />

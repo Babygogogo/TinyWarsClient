@@ -7,6 +7,7 @@
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 // import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MfrCreateModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import BootTimerType    = Types.BootTimerType;
@@ -21,15 +22,13 @@ namespace MfrCreateModel {
         60 * 60 * 24 * 7,   // 7 days
     ];
 
-    type DataForCreateRoom      = {
-        settingsForMfw  : ProtoTypes.WarSettings.ISettingsForMfw;
-        selfPlayerIndex : number | null;
-    };
+    type DataForCreateRoom  = ProtoTypes.NetMessage.MsgMfrCreateRoom.IC;
 
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForMfw          : {},
 
         selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
+        selfCoId                : CommonConstants.CoEmptyId,
     };
 
     export async function resetDataByInitialWarData(warData: ISerialWar): Promise<void> {
@@ -38,11 +37,14 @@ namespace MfrCreateModel {
         setWarPassword("");
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
-        setSelfPlayerIndex(Helpers.getExisted(warData.playerManager?.players?.find(v => {
+
+        const playerData = Helpers.getExisted(warData.playerManager?.players?.find(v => {
             return (v.aliveState !== Types.PlayerAliveState.Dead)
                 && (v.playerIndex !== CommonConstants.WarNeutralPlayerIndex)
                 && (v.userId != null);
-        })?.playerIndex));
+        }));
+        setSelfPlayerIndex(Helpers.getExisted(playerData.playerIndex));
+        setSelfCoId(Helpers.getExisted(playerData.coId));
     }
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
@@ -51,7 +53,7 @@ namespace MfrCreateModel {
         return Helpers.getExisted(getInitialWarData().settingsForCommon?.warRule);
     }
     function getSettingsForMfw(): ProtoTypes.WarSettings.ISettingsForMfw {
-        return getData().settingsForMfw;
+        return Helpers.getExisted(getData().settingsForMfw);
     }
 
     export function getInitialWarData(): ISerialWar {
@@ -59,6 +61,10 @@ namespace MfrCreateModel {
     }
     function setInitialWarData(warData: ISerialWar): void {
         getSettingsForMfw().initialWarData = warData;
+    }
+
+    export function getConfigVersion(): string {
+        return Helpers.getExisted(getInitialWarData().settingsForCommon?.configVersion);
     }
 
     export function setWarName(name: string | null): void {
@@ -88,15 +94,22 @@ namespace MfrCreateModel {
             Notify.dispatch(NotifyType.MfrCreateSelfPlayerIndexChanged);
         }
     }
-    export function tickSelfPlayerIndex(): void {
-        setSelfPlayerIndex(getSelfPlayerIndex() % WarRuleHelpers.getPlayersCountUnneutral(getWarRule()) + 1);
-    }
     export function getSelfPlayerIndex(): number {
         return Helpers.getExisted(getData().selfPlayerIndex);
     }
     export function getSelfPlayerData(): ProtoTypes.WarSerialization.ISerialPlayer {
         const playerIndex = getSelfPlayerIndex();
         return Helpers.getExisted(getInitialWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex));
+    }
+
+    export function setSelfCoId(coId: number): void {
+        if (getSelfCoId() !== coId) {
+            getData().selfCoId = coId;
+            Notify.dispatch(NotifyType.MfrCreateSelfCoIdChanged);
+        }
+    }
+    export function getSelfCoId(): number {
+        return Helpers.getExisted(getData().selfCoId);
     }
 
     export function setHasFog(hasFog: boolean): void {

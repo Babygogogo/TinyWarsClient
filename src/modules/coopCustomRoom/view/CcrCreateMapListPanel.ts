@@ -21,9 +21,8 @@
 // import TwnsCcrCreateSettingsPanel   from "./CcrCreateSettingsPanel";
 // import TwnsCcrMainMenuPanel         from "./CcrMainMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrCreateMapListPanel {
-    import CcrCreateSearchMapPanel  = TwnsCcrCreateSearchMapPanel.CcrCreateSearchMapPanel;
-    import CcrCreateSettingsPanel   = TwnsCcrCreateSettingsPanel.CcrCreateSettingsPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
@@ -36,13 +35,8 @@ namespace TwnsCcrCreateMapListPanel {
         minRating?      : number | null;
         mapTag?         : IDataForMapTag | null;
     };
-    type OpenData = FiltersForMapList | null;
+    export type OpenData = FiltersForMapList | null;
     export class CcrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: CcrCreateMapListPanel;
-
         private readonly _groupMapView!         : eui.Group;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
@@ -67,29 +61,7 @@ namespace TwnsCcrCreateMapListPanel {
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedMapId      : number | null = null;
 
-        public static show(openData: OpenData): void {
-            if (!CcrCreateMapListPanel._instance) {
-                CcrCreateMapListPanel._instance = new CcrCreateMapListPanel();
-            }
-
-            CcrCreateMapListPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (CcrCreateMapListPanel._instance) {
-                await CcrCreateMapListPanel._instance.close();
-            }
-        }
-        public static getInstance(): CcrCreateMapListPanel {
-            return CcrCreateMapListPanel._instance;
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/coopCustomRoom/CcrCreateMapListPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnSearch,      callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -99,15 +71,14 @@ namespace TwnsCcrCreateMapListPanel {
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listMap.setItemRenderer(MapNameRenderer);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public async setAndReviseSelectedMapId(newMapId: number | null): Promise<void> {
@@ -150,14 +121,14 @@ namespace TwnsCcrCreateMapListPanel {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchTapBtnSearch(): void {
-            CcrCreateSearchMapPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrCreateSearchMapPanel, void 0);
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
-            TwnsLobbyTopPanel.LobbyTopPanel.show();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrMainMenuPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
@@ -165,7 +136,7 @@ namespace TwnsCcrCreateMapListPanel {
             if (selectedMapId != null) {
                 this.close();
                 await CcrCreateModel.resetDataByMapId(selectedMapId);
-                CcrCreateSettingsPanel.show();
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrCreateSettingsPanel, void 0);
             }
         }
 
@@ -234,7 +205,7 @@ namespace TwnsCcrCreateMapListPanel {
             });
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._groupMapView,
                 beginProps  : { alpha: 0 },
@@ -275,51 +246,52 @@ namespace TwnsCcrCreateMapListPanel {
                 beginProps  : { alpha: 0, right: -40 },
                 endProps    : { alpha: 1, right: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._groupMapView,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnSearch,
-                    beginProps  : { alpha: 1, y: 80 },
-                    endProps    : { alpha: 0, y: 40 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnMapInfo,
-                    beginProps  : { alpha: 1, y: 80 },
-                    endProps    : { alpha: 0, y: 40 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnNextStep,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupMapList,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._uiMapInfo,
-                    beginProps  : { alpha: 1, right: 0 },
-                    endProps    : { alpha: 0, right: -40 },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._groupMapView,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnSearch,
+                beginProps  : { alpha: 1, y: 80 },
+                endProps    : { alpha: 0, y: 40 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnMapInfo,
+                beginProps  : { alpha: 1, y: 80 },
+                endProps    : { alpha: 0, y: 40 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnNextStep,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupMapList,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._uiMapInfo,
+                beginProps  : { alpha: 1, right: 0 },
+                endProps    : { alpha: 0, right: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -330,13 +302,11 @@ namespace TwnsCcrCreateMapListPanel {
     };
     class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
         }
 
@@ -349,13 +319,6 @@ namespace TwnsCcrCreateMapListPanel {
         private _onTouchTapBtnChoose(): void {
             const data = this._getData();
             data.panel.setAndReviseSelectedMapId(data.mapId);
-        }
-
-        private async _onTouchTapBtnNext(): Promise<void> {
-            const data = this._getData();
-            data.panel.close();
-            await CcrCreateModel.resetDataByMapId(data.mapId);
-            CcrCreateSettingsPanel.show();
         }
     }
 }

@@ -121,6 +121,7 @@ namespace FlowManager {
         WwProxy.init();
         RwProxy.init();
         RwModel.init();
+        HrwModel.init();
         SpmProxy.init();
         SpmModel.init();
         ScrCreateModel.init();
@@ -132,6 +133,7 @@ namespace FlowManager {
         CommonModel.init();
         BroadcastProxy.init();
         ChangeLogProxy.init();
+        TwnsPanelConfig.init();
 
         _removeLoadingDom();
         gotoLogin();
@@ -143,16 +145,18 @@ namespace FlowManager {
     export function gotoLogin(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        StageManager.closeAllPanels(Helpers.getNonNullElements([
-            TwnsUserLoginBackgroundPanel.UserLoginBackgroundPanel.getInstance(),
-            TwnsUserLoginPanel.UserLoginPanel.getInstance(),
-            TwnsBroadcastPanel.BroadcastPanel.getInstance(),
-        ]));
-        TwnsUserLoginBackgroundPanel.UserLoginBackgroundPanel.show();
-        TwnsUserLoginPanel.UserLoginPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
+
+        TwnsPanelManager.closeAllPanelsExcept([
+            TwnsPanelConfig.Dict.UserLoginBackgroundPanel,
+            TwnsPanelConfig.Dict.UserLoginPanel,
+            TwnsPanelConfig.Dict.BroadcastPanel,
+        ]);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.UserLoginBackgroundPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.UserLoginPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastPanel, void 0);
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
@@ -161,22 +165,23 @@ namespace FlowManager {
 
         MpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        StageManager.closeAllPanels(Helpers.getNonNullElements([
-            TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.getInstance(),
-            TwnsLobbyPanel.LobbyPanel.getInstance(),
-            TwnsLobbyTopPanel.LobbyTopPanel.getInstance(),
-            TwnsLobbyTopRightPanel.LobbyTopRightPanel.getInstance(),
-            TwnsLobbyBottomPanel.LobbyBottomPanel.getInstance(),
-            TwnsBroadcastPanel.BroadcastPanel.getInstance(),
-        ]));
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-        TwnsLobbyPanel.LobbyPanel.show();
-        TwnsLobbyTopPanel.LobbyTopPanel.show();
-        TwnsLobbyTopRightPanel.LobbyTopRightPanel.show();
-        TwnsLobbyBottomPanel.LobbyBottomPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
+        TwnsPanelManager.closeAllPanelsExcept([
+            TwnsPanelConfig.Dict.BroadcastPanel,
+            TwnsPanelConfig.Dict.LobbyBackgroundPanel,
+            TwnsPanelConfig.Dict.LobbyBottomPanel,
+            TwnsPanelConfig.Dict.LobbyTopPanel,
+            TwnsPanelConfig.Dict.LobbyTopRightPanel,
+            TwnsPanelConfig.Dict.LobbyPanel,
+        ]);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBackgroundPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopRightPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyPanel, void 0);
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
@@ -184,33 +189,61 @@ namespace FlowManager {
     export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         const war = await MpwModel.loadWar(data);
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
 
-        StageManager.closeAllPanels();
-        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
-        TwnsMpwTopPanel.MpwTopPanel.show({ war });
-        TwnsMpwSidePanel.MpwSidePanel.show({ war });
-        TwnsBwWarPanel.BwWarPanel.show({ war });
-        TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
-        TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
-        TwnsBroadcastPanel.BroadcastPanel.show();
+        TwnsPanelManager.closeAllPanelsExcept([
+            TwnsPanelConfig.Dict.BwBackgroundPanel,
+            TwnsPanelConfig.Dict.BroadcastPanel,
+        ]);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.MpwTopPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.MpwSidePanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastPanel, void 0);
 
         SoundManager.playCoBgmWithWar(war, true);
     }
     export async function gotoReplayWar(warData: Uint8Array, replayId: number): Promise<void> {
         const war = await RwModel.loadWar(warData, replayId);
+        HrwModel.unloadWar();
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
 
-        StageManager.closeAllPanels();
-        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
-        TwnsRwTopPanel.RwTopPanel.show({ war });
-        TwnsBwWarPanel.BwWarPanel.show({ war });
-        TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
-        TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
-        TwnsBroadcastPanel.BroadcastPanel.show();
+        TwnsPanelManager.closeAllPanelsExcept([
+            TwnsPanelConfig.Dict.BwBackgroundPanel,
+            TwnsPanelConfig.Dict.BroadcastPanel,
+        ]);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.RwTopPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastPanel, void 0);
+
+        SoundManager.playCoBgmWithWar(war, true);
+    }
+    export async function gotoHalfwayReplayWar(warData: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
+        const war = await HrwModel.loadWar(warData);
+        RwModel.unloadWar();
+        MpwModel.unloadWar();
+        SpwModel.unloadWar();
+        MeModel.unloadWar();
+
+        TwnsPanelManager.closeAllPanelsExcept([
+            TwnsPanelConfig.Dict.BwBackgroundPanel,
+            TwnsPanelConfig.Dict.BroadcastPanel,
+        ]);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.HrwTopPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastPanel, void 0);
 
         SoundManager.playCoBgmWithWar(war, true);
     }
@@ -222,16 +255,20 @@ namespace FlowManager {
         const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData });
         MpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         MeModel.unloadWar();
 
-        StageManager.closeAllPanels();
-        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
-        TwnsSpwTopPanel.SpwTopPanel.show({ war });
-        TwnsSpwSidePanel.SpwSidePanel.show({ war });
-        TwnsBwWarPanel.BwWarPanel.show({ war });
-        TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
-        TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
-        TwnsBroadcastPanel.BroadcastPanel.show();
+        TwnsPanelManager.closeAllPanelsExcept([
+            TwnsPanelConfig.Dict.BwBackgroundPanel,
+            TwnsPanelConfig.Dict.BroadcastPanel,
+        ]);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.SpwTopPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.SpwSidePanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastPanel, void 0);
 
         SoundManager.playCoBgmWithWar(war, true);
 
@@ -242,14 +279,18 @@ namespace FlowManager {
         MpwModel.unloadWar();
         SpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
 
-        StageManager.closeAllPanels();
-        TwnsBwBackgroundPanel.BwBackgroundPanel.show();
-        TwnsMeTopPanel.MeTopPanel.show();
-        TwnsBwWarPanel.BwWarPanel.show({ war });
-        TwnsBwTileBriefPanel.BwTileBriefPanel.show({ war });
-        TwnsBwUnitBriefPanel.BwUnitBriefPanel.show({ war });
-        TwnsBroadcastPanel.BroadcastPanel.show();
+        TwnsPanelManager.closeAllPanelsExcept([
+            TwnsPanelConfig.Dict.BwBackgroundPanel,
+            TwnsPanelConfig.Dict.BroadcastPanel,
+        ]);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBackgroundPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeTopPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwWarPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwTileBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitBriefPanel, { war });
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastPanel, void 0);
 
         SoundManager.playBgm(Types.BgmCode.MapEditor01);
     }
@@ -273,26 +314,29 @@ namespace FlowManager {
     }
     export function gotoRwReplayListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsRwReplayListPanel.RwReplayListPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.RwReplayListPanel, void 0);
     }
     export function gotoWatchWarListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsWwOngoingWarsPanel.McrWatchOngoingWarsPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.WwOngoingWarsPanel, void 0);
     }
 
     export function gotoMfrCreateSettingsPanel(warData: ProtoTypes.WarSerialization.ISerialWar): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
         MfrCreateModel.resetDataByInitialWarData(warData);
-        StageManager.closeAllPanels(Helpers.getNonNullElements([
-            TwnsLobbyTopRightPanel.LobbyTopRightPanel.getInstance(),
-        ]));
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-        TwnsLobbyTopRightPanel.LobbyTopRightPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
-        TwnsMfrCreateSettingsPanel.MfrCreateSettingsPanel.show();
+        TwnsPanelManager.closeAllPanelsExcept([
+            TwnsPanelConfig.Dict.BroadcastPanel,
+            TwnsPanelConfig.Dict.LobbyTopRightPanel,
+            TwnsPanelConfig.Dict.LobbyBackgroundPanel,
+        ]);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopRightPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBackgroundPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrCreateSettingsPanel, void 0);
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
@@ -323,7 +367,7 @@ namespace FlowManager {
         // UserModel.clearLoginInfo();
         // gotoLogin();
 
-        TwnsCommonAlertPanel.CommonAlertPanel.show({
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
             title   : Lang.getText(LangTextType.B0025),
             content : Lang.getText(LangTextType.A0020),
         });
@@ -375,42 +419,45 @@ namespace FlowManager {
     function _unloadAllWarsAndOpenCommonPanels(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
+        HrwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        StageManager.closeAllPanels(Helpers.getNonNullElements([
-            TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.getInstance(),
-            TwnsLobbyTopRightPanel.LobbyTopRightPanel.getInstance(),
-            TwnsBroadcastPanel.BroadcastPanel.getInstance(),
-        ]));
-        TwnsLobbyBackgroundPanel.LobbyBackgroundPanel.show();
-        TwnsLobbyTopRightPanel.LobbyTopRightPanel.show();
-        TwnsBroadcastPanel.BroadcastPanel.show();
+
+        TwnsPanelManager.closeAllPanelsExcept([
+            TwnsPanelConfig.Dict.BroadcastPanel,
+            TwnsPanelConfig.Dict.LobbyBackgroundPanel,
+            TwnsPanelConfig.Dict.LobbyTopRightPanel,
+        ]);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.BroadcastPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBackgroundPanel, void 0);
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopRightPanel, void 0);
+
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     function _gotoMrwMyWarListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsMrwMyWarListPanel.MrwMyWarListPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.MrwMyWarListPanel, void 0);
     }
     function _gotoMcwMyWarListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsMcwMyWarListPanel.McwMyWarListPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.McwMyWarListPanel, void 0);
     }
     function _gotoMfwMyWarListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsMfwMyWarListPanel.MfwMyWarListPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.MfwMyWarListPanel, void 0);
     }
     function _gotoCcwMyWarListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsCcwMyWarListPanel.CcwMyWarListPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.CcwMyWarListPanel, void 0);
     }
     function _gotoSpmWarListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsSpmWarListPanel.SpmWarListPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmWarListPanel, void 0);
     }
     function _gotoMeMapListPanel(): void {
         _unloadAllWarsAndOpenCommonPanels();
-        TwnsMeMapListPanel.MeMapListPanel.show();
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapListPanel, void 0);
     }
 }
 

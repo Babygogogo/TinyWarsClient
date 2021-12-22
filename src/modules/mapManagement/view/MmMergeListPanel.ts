@@ -276,7 +276,7 @@
 //                 if (!srcData) {
 //                     FloatText.show(Lang.getText(Lang.Type.B0269));
 //                 } else {
-//                     CommonConfirmPanel.show({
+//                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
 //                         title   : Lang.getText(Lang.Type.B0088),
 //                         content : Lang.getText(Lang.Type.A0079),
 //                         callback: () => {

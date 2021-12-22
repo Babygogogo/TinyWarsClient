@@ -14,17 +14,13 @@
 // import UserProxy                from "../../user/model/UserProxy";
 // import TwnsUserPanel            from "../../user/view/UserPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserOnlineUsersPanel {
-    import UserPanel    = TwnsUserPanel.UserPanel;
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
 
-    export class UserOnlineUsersPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: UserOnlineUsersPanel;
-
+    export type OpenData = void;
+    export class UserOnlineUsersPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -41,31 +37,7 @@ namespace TwnsUserOnlineUsersPanel {
         private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS | null = null;
         private _dataForList: DataForUserRenderer[] | null = null;
 
-        public static show(): void {
-            if (!UserOnlineUsersPanel._instance) {
-                UserOnlineUsersPanel._instance = new UserOnlineUsersPanel();
-            }
-            UserOnlineUsersPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (UserOnlineUsersPanel._instance) {
-                await UserOnlineUsersPanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = UserOnlineUsersPanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/user/UserOnlineUsersPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserGetOnlineUsers,  callback: this._onNotifySUserGetOnlineUsers },
@@ -73,18 +45,20 @@ namespace TwnsUserOnlineUsersPanel {
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
             ]);
-            this._listUser.setItemRenderer(UserRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
-            this._showOpenAnimation();
+            this._listUser.setItemRenderer(UserRenderer);
 
             UserProxy.reqUserGetOnlineUsers();
 
             this._updateView();
             this._updateComponentsForLanguage();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
             this._msg           = null;
             this._dataForList   = null;
         }
@@ -165,7 +139,7 @@ namespace TwnsUserOnlineUsersPanel {
             this._labelNameTitle2.text      = Lang.getText(LangTextType.B0175);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -176,21 +150,22 @@ namespace TwnsUserOnlineUsersPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -225,7 +200,7 @@ namespace TwnsUserOnlineUsersPanel {
             if (data) {
                 const userId = data.userId;
                 if (userId != null) {
-                    UserPanel.show({ userId });
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
                 }
             }
         }

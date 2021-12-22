@@ -22,16 +22,13 @@
 // import TwnsMcrJoinRoomListPanel     from "./McrJoinRoomListPanel";
 // import TwnsMcrMyRoomListPanel       from "./McrMyRoomListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMcrMainMenuPanel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import Tween                    = egret.Tween;
 
-    export class McrMainMenuPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: McrMainMenuPanel;
-
+    export type OpenData = void;
+    export class McrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
         private readonly _btnRanking!       : TwnsUiButton.UiButton;
@@ -47,26 +44,7 @@ namespace TwnsMcrMainMenuPanel {
         private readonly _btnCoopMode!      : TwnsUiButton.UiButton;
         private readonly _btnFreeMode!      : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!McrMainMenuPanel._instance) {
-                McrMainMenuPanel._instance = new McrMainMenuPanel();
-            }
-            McrMainMenuPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (McrMainMenuPanel._instance) {
-                await McrMainMenuPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiCustomRoom/McrMainMenuPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
                 { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
@@ -80,16 +58,18 @@ namespace TwnsMcrMainMenuPanel {
                 { ui: this._btnFreeMode,        callback: this._onTouchedBtnFreeMode },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgUserLogout,                   callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,     callback: this._onMsgMcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,     callback: this._onMsgMfrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,     callback: this._onMsgCcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,   callback: this._onMsgMrrGetMyRoomPublicInfoList },
             ]);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -97,63 +77,75 @@ namespace TwnsMcrMainMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnRanking(): void {
             this.close();
-            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
         }
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            TwnsSpmMainMenuPanel.SpmMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
         }
         private _onTouchedBtnCreateRoom(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            TwnsMcrCreateMapListPanel.McrCreateMapListPanel.show({});
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrCreateMapListPanel, {});
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            TwnsMcrJoinRoomListPanel.McrJoinRoomListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrJoinRoomListPanel, void 0);
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            TwnsMcrMyRoomListPanel.McrMyRoomListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMyRoomListPanel, void 0);
         }
         private _onTouchedBtnContinueWar(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            TwnsMcwMyWarListPanel.McwMyWarListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McwMyWarListPanel, void 0);
         }
         private _onTouchedBtnWatchWar(): void {
             this.close();
-            TwnsWwMainMenuPanel.WwMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMainMenuPanel, void 0);
         }
         private _onTouchedBtnReplayWar(): void {
             this.close();
-            TwnsLobbyTopPanel.LobbyTopPanel.hide();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.hide();
-            TwnsRwReplayListPanel.RwReplayListPanel.show();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.RwReplayListPanel, void 0);
         }
         private _onTouchedBtnCoopMode(): void {
             this.close();
-            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrMainMenuPanel, void 0);
         }
         private _onTouchedBtnFreeMode(): void {
             this.close();
-            TwnsMfrMainMenuPanel.MfrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMainMenuPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {
             this.close();
         }
+        private _onMsgMcrGetJoinedRoomInfoList(): void {
+            this._updateBtnMultiPlayer();
+        }
+        private _onMsgMfrGetJoinedRoomInfoList(): void {
+            this._updateBtnMultiPlayer();
+        }
+        private _onMsgCcrGetJoinedRoomInfoList(): void {
+            this._updateBtnMultiPlayer();
+        }
+        private _onMsgMrrGetMyRoomPublicInfoList(): void {
+            this._updateBtnRanking();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             const group = this._group;
             Tween.removeTweens(group);
             group.right = 60;
@@ -229,30 +221,52 @@ namespace TwnsMcrMainMenuPanel {
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
+
+            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, right: 60 },
-                    endProps    : { alpha: 0, right: 20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupLeft,
-                    beginProps  : { alpha: 1, left: 0 },
-                    endProps    : { alpha: 0, left: -40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, right: 60 },
+                endProps    : { alpha: 0, right: 20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupLeft,
+                beginProps  : { alpha: 1, left: 0 },
+                endProps    : { alpha: 0, left: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
+
             const watchInfos = WwModel.getWatchRequestedWarInfos();
             this._btnMyRoom.setRedVisible(await McrModel.checkIsRed());
             this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMcwWars());
             this._btnWatchWar.setRedVisible((!!watchInfos) && (watchInfos.length > 0));
             this._btnCoopMode.setRedVisible(MpwModel.checkIsRedForMyCcwWars() || await CcrModel.checkIsRed());
             this._btnFreeMode.setRedVisible(MpwModel.checkIsRedForMyMfwWars() || await MfrModel.checkIsRed());
+        }
+
+        private async _updateBtnMultiPlayer(): Promise<void> {
+            this._btnMultiPlayer.setRedVisible(
+                (MpwModel.checkIsRedForMyMcwWars()) ||
+                (MpwModel.checkIsRedForMyMfwWars()) ||
+                (MpwModel.checkIsRedForMyCcwWars()) ||
+                (await McrModel.checkIsRed())       ||
+                (await MfrModel.checkIsRed())       ||
+                (await CcrModel.checkIsRed())
+            );
+        }
+
+        private async _updateBtnRanking(): Promise<void> {
+            this._btnRanking.setRedVisible(
+                (MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MrrModel.checkIsRed())
+            );
         }
     }
 }

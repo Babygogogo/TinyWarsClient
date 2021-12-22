@@ -14,6 +14,7 @@ namespace TwnsNotifyType {
         UnitAndTileTextureVersionChanged,
         UserSettingsIsShowGridBorderChanged,
         UserSettingsUnitOpacityChanged,
+        UserSettingsIsAutoScrollMapChanged,
 
         MouseWheel,
         GlobalTouchBegin,
@@ -100,12 +101,8 @@ namespace TwnsNotifyType {
         BwActionPlannerStateChanged,
         BwActionPlannerMovePathChanged,
 
-        BwWarMenuPanelOpened,
-        BwWarMenuPanelClosed,
         BwProduceUnitPanelOpened,
         BwProduceUnitPanelClosed,
-        BwCoListPanelOpened,
-        BwCoListPanelClosed,
 
         BwUnitBeDestroyed,
         BwUnitBeAttacked,
@@ -114,7 +111,11 @@ namespace TwnsNotifyType {
 
         BwTileBeDestroyed,
         BwTileBeAttacked,
-        BwTileBeCaptured,
+        BwTileLocationFlagSet,
+
+        BwTileMapLocationVisibleSet,
+
+        WarActionNormalExecuted,
 
         BwSiloExploded,
 
@@ -259,6 +260,8 @@ namespace TwnsNotifyType {
         MsgMpwCommonContinueWar,
         MsgMpwCommonSyncWar,
         MsgMpwCommonHandleBoot,
+        MsgMpwGetHalfwayReplayDataFailed,
+        MsgMpwGetHalfwayReplayData,
 
         MsgMpwWatchGetUnwatchedWarInfos,
         MsgMpwWatchGetOngoingWarInfos,

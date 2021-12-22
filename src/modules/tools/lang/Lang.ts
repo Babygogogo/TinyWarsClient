@@ -57,6 +57,10 @@ namespace Lang {
     }
 
     export function getFormattedText(t: LangTextType, ...params: (Types.Undefinable<number | string>)[]): string {
+        if ((t < LangTextType.F0000) || (t >= LangTextType.R0000)) {
+            throw Helpers.newError(`Lang.getFormattedText() invalid t:${t}`);
+        }
+
         const data = getText(t);
         return data === CommonConstants.ErrorTextForLang
             ? CommonConstants.ErrorTextForLang
@@ -75,6 +79,7 @@ namespace Lang {
 
     export function getPlayerTeamName(teamIndex: number): string | null {
         switch (teamIndex) {
+            case 0  : return getText(LangTextType.B0030);
             case 1  : return getText(LangTextType.B0008);
             case 2  : return getText(LangTextType.B0009);
             case 3  : return getText(LangTextType.B0010);
@@ -86,47 +91,57 @@ namespace Lang {
 
     export function getTileName(tileType: Types.TileType, languageType?: LanguageType): string | null {
         switch (tileType) {
-            case Types.TileType.Plain           : return getText(LangTextType.B1000, languageType);
-            case Types.TileType.River           : return getText(LangTextType.B1001, languageType);
-            case Types.TileType.Sea             : return getText(LangTextType.B1002, languageType);
-            case Types.TileType.Beach           : return getText(LangTextType.B1003, languageType);
-            case Types.TileType.Road            : return getText(LangTextType.B1004, languageType);
-            case Types.TileType.BridgeOnPlain   : return getText(LangTextType.B1005, languageType);
-            case Types.TileType.BridgeOnRiver   : return getText(LangTextType.B1006, languageType);
-            case Types.TileType.BridgeOnBeach   : return getText(LangTextType.B1007, languageType);
-            case Types.TileType.BridgeOnSea     : return getText(LangTextType.B1008, languageType);
-            case Types.TileType.Wood            : return getText(LangTextType.B1009, languageType);
-            case Types.TileType.Mountain        : return getText(LangTextType.B1010, languageType);
-            case Types.TileType.Wasteland       : return getText(LangTextType.B1011, languageType);
-            case Types.TileType.Ruins           : return getText(LangTextType.B1012, languageType);
-            case Types.TileType.Fire            : return getText(LangTextType.B1013, languageType);
-            case Types.TileType.Rough           : return getText(LangTextType.B1014, languageType);
-            case Types.TileType.MistOnSea       : return getText(LangTextType.B1015, languageType);
-            case Types.TileType.Reef            : return getText(LangTextType.B1016, languageType);
-            case Types.TileType.Plasma          : return getText(LangTextType.B1017, languageType);
-            case Types.TileType.GreenPlasma     : return getText(LangTextType.B1018, languageType);
-            case Types.TileType.Meteor          : return getText(LangTextType.B1019, languageType);
-            case Types.TileType.Silo            : return getText(LangTextType.B1020, languageType);
-            case Types.TileType.EmptySilo       : return getText(LangTextType.B1021, languageType);
-            case Types.TileType.Headquarters    : return getText(LangTextType.B1022, languageType);
-            case Types.TileType.City            : return getText(LangTextType.B1023, languageType);
-            case Types.TileType.CommandTower    : return getText(LangTextType.B1024, languageType);
-            case Types.TileType.Radar           : return getText(LangTextType.B1025, languageType);
-            case Types.TileType.Factory         : return getText(LangTextType.B1026, languageType);
-            case Types.TileType.Airport         : return getText(LangTextType.B1027, languageType);
-            case Types.TileType.Seaport         : return getText(LangTextType.B1028, languageType);
-            case Types.TileType.TempAirport     : return getText(LangTextType.B1029, languageType);
-            case Types.TileType.TempSeaport     : return getText(LangTextType.B1030, languageType);
-            case Types.TileType.MistOnPlain     : return getText(LangTextType.B1031, languageType);
-            case Types.TileType.MistOnRiver     : return getText(LangTextType.B1032, languageType);
-            case Types.TileType.MistOnBeach     : return getText(LangTextType.B1033, languageType);
-            default                             : return null;
+            case Types.TileType.Plain               : return getText(LangTextType.B1000, languageType);
+            case Types.TileType.River               : return getText(LangTextType.B1001, languageType);
+            case Types.TileType.Sea                 : return getText(LangTextType.B1002, languageType);
+            case Types.TileType.Beach               : return getText(LangTextType.B1003, languageType);
+            case Types.TileType.Road                : return getText(LangTextType.B1004, languageType);
+            case Types.TileType.BridgeOnPlain       : return getText(LangTextType.B1005, languageType);
+            case Types.TileType.BridgeOnRiver       : return getText(LangTextType.B1006, languageType);
+            case Types.TileType.BridgeOnBeach       : return getText(LangTextType.B1007, languageType);
+            case Types.TileType.BridgeOnSea         : return getText(LangTextType.B1008, languageType);
+            case Types.TileType.Wood                : return getText(LangTextType.B1009, languageType);
+            case Types.TileType.Mountain            : return getText(LangTextType.B1010, languageType);
+            case Types.TileType.Wasteland           : return getText(LangTextType.B1011, languageType);
+            case Types.TileType.Ruins               : return getText(LangTextType.B1012, languageType);
+            case Types.TileType.Fire                : return getText(LangTextType.B1013, languageType);
+            case Types.TileType.Rough               : return getText(LangTextType.B1014, languageType);
+            case Types.TileType.MistOnSea           : return getText(LangTextType.B1015, languageType);
+            case Types.TileType.Reef                : return getText(LangTextType.B1016, languageType);
+            case Types.TileType.Plasma              : return getText(LangTextType.B1017, languageType);
+            case Types.TileType.Pipe                : return getText(LangTextType.B1018, languageType);
+            case Types.TileType.Meteor              : return getText(LangTextType.B1019, languageType);
+            case Types.TileType.Silo                : return getText(LangTextType.B1020, languageType);
+            case Types.TileType.EmptySilo           : return getText(LangTextType.B1021, languageType);
+            case Types.TileType.Headquarters        : return getText(LangTextType.B1022, languageType);
+            case Types.TileType.City                : return getText(LangTextType.B1023, languageType);
+            case Types.TileType.CommandTower        : return getText(LangTextType.B1024, languageType);
+            case Types.TileType.Radar               : return getText(LangTextType.B1025, languageType);
+            case Types.TileType.Factory             : return getText(LangTextType.B1026, languageType);
+            case Types.TileType.Airport             : return getText(LangTextType.B1027, languageType);
+            case Types.TileType.Seaport             : return getText(LangTextType.B1028, languageType);
+            case Types.TileType.TempAirport         : return getText(LangTextType.B1029, languageType);
+            case Types.TileType.TempSeaport         : return getText(LangTextType.B1030, languageType);
+            case Types.TileType.MistOnPlain         : return getText(LangTextType.B1031, languageType);
+            case Types.TileType.MistOnRiver         : return getText(LangTextType.B1032, languageType);
+            case Types.TileType.MistOnBeach         : return getText(LangTextType.B1033, languageType);
+            case Types.TileType.Crystal             : return getText(LangTextType.B1034, languageType);
+            case Types.TileType.CustomCrystal       : return getText(LangTextType.B1035, languageType);
+            case Types.TileType.CannonDown          : return getText(LangTextType.B1036, languageType);
+            case Types.TileType.CannonLeft          : return getText(LangTextType.B1041, languageType);
+            case Types.TileType.CannonRight         : return getText(LangTextType.B1042, languageType);
+            case Types.TileType.CannonUp            : return getText(LangTextType.B1043, languageType);
+            case Types.TileType.CustomCannon        : return getText(LangTextType.B1037, languageType);
+            case Types.TileType.LaserTurret         : return getText(LangTextType.B1038, languageType);
+            case Types.TileType.CustomLaserTurret   : return getText(LangTextType.B1039, languageType);
+            case Types.TileType.PipeJoint           : return getText(LangTextType.B1040, languageType);
+            default                                 : return null;
         }
     }
 
     export function getTileDecoratorName(decoratorType: Types.TileDecoratorType): string | null {
         switch (decoratorType) {
-            case Types.TileDecoratorType.Corner : return getText(LangTextType.B0663);
+            case Types.TileDecoratorType.Shore : return getText(LangTextType.B0663);
             case Types.TileDecoratorType.Empty  : return getText(LangTextType.B0001);
             default                             : return null;
         }
@@ -183,6 +198,15 @@ namespace Lang {
             case Types.UnitActionType.LoadCo            : return getText(LangTextType.B0139);
             case Types.UnitActionType.ProduceUnit       : return getText(LangTextType.B0049);
             case Types.UnitActionType.Wait              : return getText(LangTextType.B0050);
+            default                                     : return null;
+        }
+    }
+
+    export function getUnitAiModeName(mode: Types.UnitAiMode): string | null {
+        switch (mode) {
+            case Types.UnitAiMode.NoMove                : return getText(LangTextType.B0721);
+            case Types.UnitAiMode.Normal                : return getText(LangTextType.B0723);
+            case Types.UnitAiMode.WaitUntilCanAttack    : return getText(LangTextType.B0722);
             default                                     : return null;
         }
     }
@@ -258,6 +282,8 @@ namespace Lang {
             case Types.WarType.ScwFog   : return getText(LangTextType.B0611);
             case Types.WarType.SfwStd   : return getText(LangTextType.B0612);
             case Types.WarType.SfwFog   : return getText(LangTextType.B0613);
+            case Types.WarType.CcwStd   : return getText(LangTextType.B0725);
+            case Types.WarType.CcwFog   : return getText(LangTextType.B0726);
             default                     : return null;
         }
     }
@@ -293,15 +319,17 @@ namespace Lang {
 
     export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string | null{
         switch (mode) {
-            case Types.MapEditorDrawerMode.Preview              : return getText(LangTextType.B0286);
-            case Types.MapEditorDrawerMode.DrawUnit             : return getText(LangTextType.B0281);
-            case Types.MapEditorDrawerMode.DrawTileBase         : return getText(LangTextType.B0282);
-            case Types.MapEditorDrawerMode.DrawTileDecorator    : return getText(LangTextType.B0662);
-            case Types.MapEditorDrawerMode.DrawTileObject       : return getText(LangTextType.B0283);
-            case Types.MapEditorDrawerMode.DeleteUnit           : return getText(LangTextType.B0284);
-            case Types.MapEditorDrawerMode.DeleteTileDecorator  : return getText(LangTextType.B0661);
-            case Types.MapEditorDrawerMode.DeleteTileObject     : return getText(LangTextType.B0285);
-            default                                             : return null;
+            case Types.MapEditorDrawerMode.Preview                  : return getText(LangTextType.B0286);
+            case Types.MapEditorDrawerMode.DrawUnit                 : return getText(LangTextType.B0281);
+            case Types.MapEditorDrawerMode.DrawTileBase             : return getText(LangTextType.B0282);
+            case Types.MapEditorDrawerMode.DrawTileDecorator        : return getText(LangTextType.B0662);
+            case Types.MapEditorDrawerMode.DrawTileObject           : return getText(LangTextType.B0283);
+            case Types.MapEditorDrawerMode.DeleteUnit               : return getText(LangTextType.B0284);
+            case Types.MapEditorDrawerMode.DeleteTileDecorator      : return getText(LangTextType.B0661);
+            case Types.MapEditorDrawerMode.DeleteTileObject         : return getText(LangTextType.B0285);
+            case Types.MapEditorDrawerMode.AddTileToLocation        : return getText(LangTextType.B0759);
+            case Types.MapEditorDrawerMode.DeleteTileFromLocation   : return getText(LangTextType.B0760);
+            default                                                 : return null;
         }
     }
 
@@ -400,23 +428,44 @@ namespace Lang {
             case WarEventConditionType.WecTurnIndexLessThan                 : return getText(LangTextType.B0506);
             case WarEventConditionType.WecTurnIndexRemainderEqualTo         : return getText(LangTextType.B0507);
             case WarEventConditionType.WecTurnPhaseEqualTo                  : return getText(LangTextType.B0508);
+            case WarEventConditionType.WecTurnAndPlayer                     : return getText(LangTextType.B0781);
             case WarEventConditionType.WecPlayerIndexInTurnEqualTo          : return getText(LangTextType.B0509);
             case WarEventConditionType.WecPlayerIndexInTurnGreaterThan      : return getText(LangTextType.B0510);
             case WarEventConditionType.WecPlayerIndexInTurnLessThan         : return getText(LangTextType.B0511);
             case WarEventConditionType.WecEventCalledCountTotalEqualTo      : return getText(LangTextType.B0512);
             case WarEventConditionType.WecEventCalledCountTotalGreaterThan  : return getText(LangTextType.B0513);
             case WarEventConditionType.WecEventCalledCountTotalLessThan     : return getText(LangTextType.B0514);
+            case WarEventConditionType.WecEventCalledCount                  : return getText(LangTextType.B0789);
+            case WarEventConditionType.WecWeatherAndFog                     : return getText(LangTextType.B0794);
             case WarEventConditionType.WecPlayerAliveStateEqualTo           : return getText(LangTextType.B0515);
+            case WarEventConditionType.WecPlayerState                       : return getText(LangTextType.B0786);
+            case WarEventConditionType.WecTilePlayerIndexEqualTo            : return getText(LangTextType.B0716);
+            case WarEventConditionType.WecTileTypeEqualTo                   : return getText(LangTextType.B0717);
+            case WarEventConditionType.WecTilePresence                      : return getText(LangTextType.B0779);
+            case WarEventConditionType.WecUnitPresence                      : return getText(LangTextType.B0775);
+            case WarEventConditionType.WecCustomCounter                     : return getText(LangTextType.B0802);
             default                                                         : return null;
         }
     }
 
     export function getWarEventActionTypeName(type: WarEventActionType): string | null {
         switch (type) {
-            case WarEventActionType.AddUnit                 : return getText(LangTextType.B0617);
-            case WarEventActionType.SetPlayerAliveState     : return getText(LangTextType.B0618);
-            case WarEventActionType.Dialogue                : return getText(LangTextType.B0674);
-            default                                         : return null;
+            case WarEventActionType.AddUnit                         : return getText(LangTextType.B0617);
+            case WarEventActionType.SetUnitState                    : return getText(LangTextType.B0806);
+            case WarEventActionType.Dialogue                        : return getText(LangTextType.B0674);
+            case WarEventActionType.SetViewpoint                    : return getText(LangTextType.B0713);
+            case WarEventActionType.SetWeather                      : return getText(LangTextType.B0715);
+            case WarEventActionType.SetForceFogCode                 : return getText(LangTextType.B0795);
+            case WarEventActionType.SetCustomCounter                : return getText(LangTextType.B0800);
+            case WarEventActionType.SimpleDialogue                  : return getText(LangTextType.B0728);
+            case WarEventActionType.PlayBgm                         : return getText(LangTextType.B0750);
+            case WarEventActionType.DeprecatedSetPlayerAliveState   : return getText(LangTextType.B0618);
+            case WarEventActionType.DeprecatedSetPlayerFund         : return getText(LangTextType.B0752);
+            case WarEventActionType.DeprecatedSetPlayerCoEnergy     : return getText(LangTextType.B0756);
+            case WarEventActionType.SetPlayerAliveState             : return getText(LangTextType.B0618);
+            case WarEventActionType.SetPlayerState                  : return getText(LangTextType.B0810);
+            case WarEventActionType.SetPlayerCoEnergy               : return getText(LangTextType.B0756);
+            default                                                 : return null;
         }
     }
 
@@ -446,6 +495,27 @@ namespace Lang {
             case WeatherType.Snowy      : return getText(LangTextType.B0703);
             case WeatherType.Rainy      : return getText(LangTextType.B0704);
             default                     : throw Helpers.newError(`Invalid weatherType: ${weatherType}`, ClientErrorCode.Lang_GetWeatherName_00);
+        }
+    }
+
+    export function getValueComparatorName(comparator: Types.ValueComparator): string | null {
+        switch (comparator) {
+            case Types.ValueComparator.EqualTo          : return getText(LangTextType.B0767);
+            case Types.ValueComparator.NotEqualTo       : return getText(LangTextType.B0768);
+            case Types.ValueComparator.GreaterThan      : return getText(LangTextType.B0769);
+            case Types.ValueComparator.NotGreaterThan   : return getText(LangTextType.B0770);
+            case Types.ValueComparator.LessThan         : return getText(LangTextType.B0771);
+            case Types.ValueComparator.NotLessThan      : return getText(LangTextType.B0772);
+            default                                     : return null;
+        }
+    }
+
+    export function getForceFogCodeName(code: Types.ForceFogCode): string | null {
+        switch (code) {
+            case Types.ForceFogCode.Fog         : return getText(LangTextType.B0796);
+            case Types.ForceFogCode.Clear       : return getText(LangTextType.B0797);
+            case Types.ForceFogCode.None        : return getText(LangTextType.B0798);
+            default                             : return null;
         }
     }
 

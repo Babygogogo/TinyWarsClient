@@ -20,9 +20,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonWarPlayerInfoPage {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonCoInfoPanel    = TwnsCommonCoInfoPanel.CommonCoInfoPanel;
-    import UserPanel            = TwnsUserPanel.UserPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -149,7 +146,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             const data  = this._getData();
             const coId  = data.playerInfo.coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
-                CommonCoInfoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
                     configVersion   : data.configVersion,
                     coId,
                 });
@@ -159,14 +156,14 @@ namespace TwnsCommonWarPlayerInfoPage {
         private _onTouchedBtnChat(): void {
             const userId = this._getData().playerInfo.userId;
             if (userId != null) {
-                TwnsChatPanel.ChatPanel.show({ toUserId: userId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: userId });
             }
         }
 
         private _onTouchedBtnInfo(): void {
             const userId = this._getData().playerInfo.userId;
             if (userId != null) {
-                UserPanel.show({ userId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId });
             }
         }
 
@@ -181,7 +178,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             if (userId === UserModel.getSelfUserId()) {
                 const callback = data.callbackOnExitRoom;
                 if (callback) {
-                    CommonConfirmPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                         content : Lang.getText(LangTextType.A0126),
                         callback,
                     });
@@ -190,7 +187,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             } else {
                 const callback = data.callbackOnDeletePlayer;
                 if ((callback) && (data.isRoomOwnedBySelf)) {
-                    CommonConfirmPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                         content : Lang.getFormattedText(LangTextType.F0029, await UserModel.getUserNickname(userId)),
                         callback: () => {
                             callback(playerInfo.playerIndex);

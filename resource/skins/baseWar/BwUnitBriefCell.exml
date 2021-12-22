@@ -12,7 +12,7 @@
             </e:Group>
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="19" bottom="0"
                                  x="10" y="10" visible="true" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" />
-            <e:Group id="_conUnitView" y="38" scaleX="0.5" scaleY="0.5" x="16" touchChildren="false"
+            <e:Group id="_conUnitView" y="38" scaleX="1.5" scaleY="1.5" x="16" touchChildren="false"
                      touchEnabled="false" />
             <e:Group y="74" horizontalCenter="0">
                 <e:Group x="0" y="0">

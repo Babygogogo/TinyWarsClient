@@ -10,9 +10,9 @@
 // import TwnsBwUnitMap        from "../model/BwUnitMap";
 // import TwnsBwUnitView       from "./BwUnitView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitMapView {
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import BwUnitView           = TwnsBwUnitView.BwUnitView;
     import UnitCategory         = Types.UnitCategory;
     import ActionPlannerState   = Types.ActionPlannerState;
 
@@ -72,7 +72,7 @@ namespace TwnsBwUnitMapView {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public addUnit(view: BwUnitView, needResetZOrder: boolean): void {
+        public addUnit(view: TwnsBwUnitView.BwUnitView, needResetZOrder: boolean): void {
             const model = Helpers.getExisted(view.getUnit());
 
             view.x = _GRID_WIDTH * model.getGridX();
@@ -84,8 +84,8 @@ namespace TwnsBwUnitMapView {
             (needResetZOrder) && (this._resetZOrderForLayer(layer));
         }
 
-        public removeUnit(view: BwUnitView): void {
-            view.parent.removeChild(view);
+        public removeUnit(view: TwnsBwUnitView.BwUnitView): void {
+            (view.parent) && (view.parent.removeChild(view));
         }
 
         public resetZOrder(unitType: Types.UnitType): void {
@@ -156,15 +156,18 @@ namespace TwnsBwUnitMapView {
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 this._resetVisibleForAllUnitsOnMap();
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitAttackableArea) {
                 this._resetVisibleForAllUnitsOnMap();
                 for (const [, unit] of actionPlanner.getUnitsForPreviewingAttackableArea()) {
                     unit.setViewVisible(false);
                 }
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
                 this._resetVisibleForAllUnitsOnMap();
                 Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea()).setViewVisible(false);
+
+            } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
+                this._resetVisibleForAllUnitsOnMap();
 
             } else {
                 // Nothing to do.
@@ -186,7 +189,7 @@ namespace TwnsBwUnitMapView {
 
         private _resetZOrderForLayer(layer: egret.DisplayObjectContainer): void {
             const viewsCount    = layer.numChildren;
-            const views         = new Array<BwUnitView>(viewsCount);
+            const views         = new Array<TwnsBwUnitView.BwUnitView>(viewsCount);
             for (let i = 0; i < viewsCount; ++i) {
                 views[i] = layer.getChildAt(i) as any;
             }
@@ -204,7 +207,7 @@ namespace TwnsBwUnitMapView {
         private _updateAnimationsOnTick(layer: egret.DisplayObjectContainer): void {
             const viewsCount = layer.numChildren;
             for (let i = 0; i < viewsCount; ++i) {
-                const view = layer.getChildAt(i) as BwUnitView;
+                const view = layer.getChildAt(i) as TwnsBwUnitView.BwUnitView;
                 view.tickUnitAnimationFrame();
             }
         }
@@ -212,7 +215,7 @@ namespace TwnsBwUnitMapView {
         private _updateIndicatorOnTick(layer: egret.DisplayObjectContainer): void {
             const viewsCount = layer.numChildren;
             for (let i = 0; i < viewsCount; ++i) {
-                const view = layer.getChildAt(i) as BwUnitView;
+                const view = layer.getChildAt(i) as TwnsBwUnitView.BwUnitView;
                 view.tickStateAnimationFrame();
             }
         }

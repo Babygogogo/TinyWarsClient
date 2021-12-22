@@ -27,6 +27,7 @@ namespace TwnsUiScrollList {
         private _cachedItemRenderer         : (new () => TwnsUiListItemRenderer.UiListItemRenderer<DataForRenderer>) | null = null;
         private _cachedListDataArray        : DataForRenderer[] | null = null;
         private _cachedSelectedIndex        : number | null = null;
+        private _cachedSelectedIndexArray   : number[] | null = null;
         private _cachedScrollVerPercentage  : number | null = null;
         private _cachedScrollHorPercentage  : number | null = null;
 
@@ -117,6 +118,11 @@ namespace TwnsUiScrollList {
             if (this._cachedSelectedIndex != null) {
                 this.setSelectedIndex(this._cachedSelectedIndex);
                 this._cachedSelectedIndex = null;
+            }
+
+            if (this._cachedSelectedIndexArray != null) {
+                this.setSelectedIndexArray(this._cachedSelectedIndexArray);
+                this._cachedSelectedIndexArray = null;
             }
         }
         private _onClosed(): void {
@@ -280,22 +286,22 @@ namespace TwnsUiScrollList {
                 dataProvider.refresh();
             }
         }
+        public getBoundDataArrayLength(): number | null {
+            return this._getDataProvider()?.length ?? null;
+        }
+        public getBoundDataArray(): DataForRenderer[] | null {
+            return this._getDataProvider()?.source ?? null;
+        }
 
         public clear() : void {
             this._cachedItemRenderer        = null;
             this._cachedListDataArray       = null;
             this._cachedSelectedIndex       = null;
+            this._cachedSelectedIndexArray  = null;
             this._cachedScrollHorPercentage = null;
             this._cachedScrollVerPercentage = null;
 
-            if (this.getIsOpening()) {
-                const dataProvider = this._getDataProvider();
-                if (dataProvider == null) {
-                    throw Helpers.newError(`UiScrollList.clear() empty dataProvider.`, ClientErrorCode.UiScrollList_Clear_00);
-                }
-
-                dataProvider.removeAll();
-            }
+            this._getDataProvider()?.removeAll();
         }
 
         public setSelectedIndex(index: number): void {
@@ -308,8 +314,18 @@ namespace TwnsUiScrollList {
         public getSelectedIndex(): number | null {
             return this.getIsOpening() ? this._getList().selectedIndex : null;
         }
+        public setSelectedIndexArray(indexArray: number[]): void {
+            if (this.getIsOpening()) {
+                this._getList().selectedIndices = indexArray;
+            } else {
+                this._cachedSelectedIndexArray = indexArray;
+            }
+        }
         public getSelectedData(): DataForRenderer | null {
             return this.getIsOpening() ? this._getList().selectedItem : null;
+        }
+        public getSelectedDataArray(): DataForRenderer[] | null {
+            return this.getIsOpening() ? this._getList().selectedItems : null;
         }
 
         public findIndex(predicate: (v: DataForRenderer) => boolean): number | null {

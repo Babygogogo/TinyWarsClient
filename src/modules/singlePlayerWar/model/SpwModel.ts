@@ -143,7 +143,7 @@ namespace SpwModel {
             // TODO: show panels for srw.
             const callback = () => FlowManager.gotoLobby();
             if (war.getDrawVoteManager().checkIsDraw()) {
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0030),
                     callback,
@@ -151,13 +151,13 @@ namespace SpwModel {
             } else {
                 const humanPlayerList = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
                 if (humanPlayerList.length <= 0) {
-                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0035),
                         callback,
                     });
                 } else {
-                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : humanPlayerList.some(v => v.getAliveState() === Types.PlayerAliveState.Alive)
                             ? Lang.getText(LangTextType.A0022)

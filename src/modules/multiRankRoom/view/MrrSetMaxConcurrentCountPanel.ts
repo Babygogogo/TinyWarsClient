@@ -12,18 +12,15 @@
 // import MrrModel             from "../model/MrrModel";
 // import MrrProxy             from "../model/MrrProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMrrSetMaxConcurrentCountPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import MaxCount         = CommonConstants.RankMaxConcurrentCount;
     import MinCount         = CommonConstants.RankMinConcurrentCount;
 
-    export class MrrSetMaxConcurrentCountPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MrrSetMaxConcurrentCountPanel;
-
+    export type OpenData = void;
+    export class MrrSetMaxConcurrentCountPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -48,28 +45,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
         private _selectedCountForStd?       : number;
         private _selectedCountForFog?       : number;
 
-        public static show(): void {
-            if (!MrrSetMaxConcurrentCountPanel._instance) {
-                MrrSetMaxConcurrentCountPanel._instance = new MrrSetMaxConcurrentCountPanel();
-            }
-            MrrSetMaxConcurrentCountPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MrrSetMaxConcurrentCountPanel._instance) {
-                await MrrSetMaxConcurrentCountPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/multiRankRoom/MrrSetMaxConcurrentCountPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgMrrGetMaxConcurrentCount,    callback: this._onMsgMrrGetMaxConcurrentCount },
@@ -89,17 +65,18 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
             ]);
-
-            this._showOpenAnimation();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
             this._labelStdMaxCount.text = ` / ${MaxCount}`;
             this._labelFogMaxCount.text = ` / ${MaxCount}`;
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
             this._loadMaxCountAndUpdateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +185,7 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
             this._labelFogCount.text    = `${count}`;
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -219,21 +196,22 @@ namespace TwnsMrrSetMaxConcurrentCountPanel {
                 beginProps  : { verticalCenter: 40, alpha: 0 },
                 endProps    : { verticalCenter: 0, alpha: 1 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { verticalCenter: 0, alpha: 1 },
-                    endProps    : { verticalCenter: 40, alpha: 0 },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { verticalCenter: 0, alpha: 1 },
+                endProps    : { verticalCenter: 40, alpha: 0 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

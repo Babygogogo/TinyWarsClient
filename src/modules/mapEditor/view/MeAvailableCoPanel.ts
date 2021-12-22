@@ -16,17 +16,18 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeAvailableCoPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import WarRule          = ProtoTypes.WarRule;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    type OpenDataForMeAvailableCoPanel = {
+    export type OpenData = {
         playerRule      : WarRule.IDataForPlayerRule;
         warRule         : WarRule.IWarRule;
         isReviewing     : boolean;
     };
-    export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenDataForMeAvailableCoPanel> {
+    export class MeAvailableCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -43,27 +44,7 @@ namespace TwnsMeAvailableCoPanel {
 
         private _bannedCoIdSet          = new Set<number>();
 
-        public static show(openData: OpenDataForMeAvailableCoPanel): void {
-            if (!MeAvailableCoPanel._instance) {
-                MeAvailableCoPanel._instance = new MeAvailableCoPanel();
-            }
-            MeAvailableCoPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeAvailableCoPanel._instance) {
-                await MeAvailableCoPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapEditor/MeAvailableCoPanel.exml";
-            this._setIsTouchMaskEnabled();
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -71,7 +52,9 @@ namespace TwnsMeAvailableCoPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-
+            this._setIsTouchMaskEnabled();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             const bannedCoIdSet = this._bannedCoIdSet;
             const openData      = this._getOpenData();
             bannedCoIdSet.clear();
@@ -83,6 +66,9 @@ namespace TwnsMeAvailableCoPanel {
             this._updateComponentsForLanguage();
             this._initGroupCoTiers();
             this._initGroupCoNames();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         protected async _onClosed(): Promise<void> {
@@ -104,7 +90,7 @@ namespace TwnsMeAvailableCoPanel {
         private _onTouchedBtnConfirm(): void {
             const bannedCoIdSet = this._bannedCoIdSet;
             if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
                 });

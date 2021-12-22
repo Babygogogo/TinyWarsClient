@@ -15,7 +15,7 @@
                     <e:Skin width="320" height="32">
                         <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                             <e:Group id="_conTileView" touchChildren="false" touchEnabled="false" left="0" bottom="0"
-                                     scaleX="0.4" scaleY="0.4" width="0" height="0" />
+                                     scaleX="1.2" scaleY="1.2" width="0" height="0" />
                             <TwnsUiLabel:UiLabel id="_labelNum1" text="20" size="16" verticalCenter="0" x="40"
                                                  textColor="0xff0000" stroke="1" strokeColor="0xffffff" />
                             <TwnsUiLabel:UiLabel id="_labelNum2" text="20" size="16" verticalCenter="0" x="80"

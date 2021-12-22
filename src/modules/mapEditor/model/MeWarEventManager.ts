@@ -4,6 +4,7 @@
 // import Types                    from "../../tools/helpers/Types";
 // import ProtoTypes               from "../../tools/proto/ProtoTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWarEventManager {
     import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
     import ISerialWarEventManager   = ProtoTypes.WarSerialization.ISerialWarEventManager;
@@ -13,6 +14,7 @@ namespace TwnsMeWarEventManager {
         public init(data: ISerialWarEventManager): void {
             this._setWarEventFullData(getRevisedWarEventFullData(data.warEventFullData));
             this._setCalledCountList(null);
+            this._setCustomCounterArray(null);
         }
     }
 

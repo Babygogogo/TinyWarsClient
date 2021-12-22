@@ -18,22 +18,13 @@
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLobbyPanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import McrMainMenuPanel     = TwnsMcrMainMenuPanel.McrMainMenuPanel;
-    import MrrMainMenuPanel     = TwnsMrrMainMenuPanel.MrrMainMenuPanel;
-    import SpmMainMenuPanel     = TwnsSpmMainMenuPanel.SpmMainMenuPanel;
-    import Tween                = egret.Tween;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    // eslint-disable-next-line no-shadow
-    export class LobbyPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance            : LobbyPanel | null = null;
-
+    export type OpenData = void;
+    export class LobbyPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTips!        : eui.Group;
         private readonly _groupWelcome!     : eui.Group;
         private readonly _labelTips0!       : TwnsUiLabel.UiLabel;
@@ -53,28 +44,7 @@ namespace TwnsLobbyPanel {
         private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
         private readonly _btnRanking!       : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!LobbyPanel._instance) {
-                LobbyPanel._instance = new LobbyPanel();
-            }
-            LobbyPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (LobbyPanel._instance) {
-                await LobbyPanel._instance.close();
-            }
-        }
-        public static getInstance(): LobbyPanel | null {
-            return LobbyPanel._instance;
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/lobby/LobbyPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._groupDiscord,       callback: this._onTouchedGroupDiscord },
                 { ui: this._groupGithub,        callback: this._onTouchedGroupGithub },
@@ -91,15 +61,15 @@ namespace TwnsLobbyPanel {
                 { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
             ]);
 
-            this._showOpenAnimation();
-
             this._updateComponentsForLanguage();
             this._updateBtnMultiPlayer();
             this._updateBtnRanking();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +77,7 @@ namespace TwnsLobbyPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedGroupDiscord(): void {
             if ((window) && (window.open)) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `Discord`),
                     callback: () => {
                         window.open(CommonConstants.DiscordUrl);
@@ -118,7 +88,7 @@ namespace TwnsLobbyPanel {
 
         private _onTouchedGroupGithub(): void {
             if ((window) && (window.open)) {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, `GitHub`),
                     callback: () => {
                         window.open(CommonConstants.GithubUrl);
@@ -129,17 +99,17 @@ namespace TwnsLobbyPanel {
 
         private _onTouchedBtnMultiPlayer(): void {
             this.close();
-            McrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnSinglePlayer(): void {
             this.close();
-            SpmMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
         }
 
         private _onTouchedBtnRanking(): void {
             this.close();
-            MrrMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
         }
 
         private _onMsgUserLogout(): void {
@@ -169,7 +139,7 @@ namespace TwnsLobbyPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             // const group = this._group;
             // Tween.removeTweens(group);
             // Tween.get(group)
@@ -229,22 +199,22 @@ namespace TwnsLobbyPanel {
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                const group = this._group;
-                Tween.removeTweens(group);
-                Tween.get(group)
-                    .set({ alpha: 1, right: 60 })
-                    .to({ alpha: 0, right: 20 }, 200);
 
-                const groupTips = this._groupTips;
-                Tween.removeTweens(groupTips);
-                Tween.get(groupTips)
-                    .set({ alpha: 1, left: 60 })
-                    .to({ alpha: 0, left: 20 }, 200)
-                    .call(resolve);
+            await Helpers.wait(200 + CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, right: 60 },
+                endProps    : { alpha: 0, right: 20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupTips,
+                beginProps  : { alpha: 1, left: 60 },
+                endProps    : { alpha: 0, left: 20 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateComponentsForLanguage(): Promise<void> {
@@ -260,18 +230,18 @@ namespace TwnsLobbyPanel {
 
         private async _updateBtnMultiPlayer(): Promise<void> {
             this._btnMultiPlayer.setRedVisible(
-                (MpwModel.checkIsRedForMyMcwWars())                                                             ||
-                (MpwModel.checkIsRedForMyMfwWars())                                                             ||
-                (MpwModel.checkIsRedForMyCcwWars())                                                             ||
-                (await McrModel.checkIsRed()) ||
-                (await MfrModel.checkIsRed()) ||
+                (MpwModel.checkIsRedForMyMcwWars()) ||
+                (MpwModel.checkIsRedForMyMfwWars()) ||
+                (MpwModel.checkIsRedForMyCcwWars()) ||
+                (await McrModel.checkIsRed())       ||
+                (await MfrModel.checkIsRed())       ||
                 (await CcrModel.checkIsRed())
             );
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (MpwModel.checkIsRedForMyMrwWars())                                                             ||
+                (MpwModel.checkIsRedForMyMrwWars()) ||
                 (await MrrModel.checkIsRed())
             );
         }

@@ -41,7 +41,7 @@ namespace WarDestructionHelpers {
         }
 
         if (showExplosionEffect) {
-            const gridVisionEffect = war.getGridVisionEffect();
+            const gridVisionEffect = war.getGridVisualEffect();
             (gridVisionEffect) && (gridVisionEffect.showEffectExplosion(gridIndex));
 
             const warView = war.getView();
@@ -53,7 +53,7 @@ namespace WarDestructionHelpers {
     export function destroyPlayerForce(war: BwWar, playerIndex: number, showExplosionEffect: boolean): void {
         const unitMap           = war.getUnitMap();
         const tileMap           = war.getTileMap();
-        const gridVisionEffect  = showExplosionEffect ? war.getGridVisionEffect() : null;
+        const gridVisionEffect  = showExplosionEffect ? war.getGridVisualEffect() : null;
         let hasRemovedUnit      = false;
         for (const unit of unitMap.getAllUnitsOnMap()) {
             if (unit.getPlayerIndex() === playerIndex) {

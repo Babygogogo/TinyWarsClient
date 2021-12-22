@@ -12,6 +12,7 @@
 // import UserModel            from "../../user/model/UserModel";
 // import TwnsBwWar            from "./BwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwPlayer {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import GridIndex        = Types.GridIndex;
@@ -77,22 +78,22 @@ namespace TwnsBwPlayer {
                 throw Helpers.newError(`Invalid coUsingSkillType: ${coUsingSkillType}`, ClientErrorCode.BwPlayer_Init_08);
             }
 
-            if (((coUsingSkillType === CoSkillType.Power)       && (!(coConfig.powerSkills || []).length))      ||
-                ((coUsingSkillType === CoSkillType.SuperPower)  && (!(coConfig.superPowerSkills || []).length))
-            ) {
-                throw Helpers.newError(`Invalid coUsingSkillType: ${coUsingSkillType}`, ClientErrorCode.BwPlayer_Init_09);
-            }
+            // if (((coUsingSkillType === CoSkillType.Power)       && (!(coConfig.powerSkills || []).length))      ||
+            //     ((coUsingSkillType === CoSkillType.SuperPower)  && (!(coConfig.superPowerSkills || []).length))
+            // ) {
+            //     throw Helpers.newError(`Invalid coUsingSkillType: ${coUsingSkillType}`, ClientErrorCode.BwPlayer_Init_09);
+            // }
 
             const coCurrentEnergy = data.coCurrentEnergy || 0;
-            if (coCurrentEnergy > WarCommonHelpers.getCoMaxEnergy(coConfig)) {
-                throw Helpers.newError(`Invalid coCurrentEnergy: ${coCurrentEnergy}`, ClientErrorCode.BwPlayer_Init_10);
-            }
+            // if (coCurrentEnergy > WarCommonHelpers.getCoMaxEnergy(coConfig)) {
+            //     throw Helpers.newError(`Invalid coCurrentEnergy: ${coCurrentEnergy}`, ClientErrorCode.BwPlayer_Init_10);
+            // }
 
-            if ((playerIndex === CommonConstants.WarNeutralPlayerIndex) &&
-                (aliveState !== PlayerAliveState.Alive)
-            ) {
-                throw Helpers.newError(`The neutral player is not alive.`, ClientErrorCode.BwPlayer_Init_11);
-            }
+            // if ((playerIndex === CommonConstants.WarNeutralPlayerIndex) &&
+            //     (aliveState !== PlayerAliveState.Alive)
+            // ) {
+            //     throw Helpers.newError(`The neutral player is not alive.`, ClientErrorCode.BwPlayer_Init_11);
+            // }
 
             this.setFund(fund);
             this.setHasVotedForDraw(hasVotedForDraw);
@@ -192,7 +193,7 @@ namespace TwnsBwPlayer {
             return Helpers.getExisted(this._playerIndex);
         }
         public checkIsNeutral(): boolean {
-            return this.getPlayerIndex() === 0;
+            return this.getPlayerIndex() === CommonConstants.WarNeutralPlayerIndex;
         }
 
         public getTeamIndex(): number {
@@ -371,6 +372,23 @@ namespace TwnsBwPlayer {
             } else {
                 return false;
             }
+        }
+
+        public updateOnUseCoSkill(skillType: Types.CoSkillType): void {
+            const currentEnergy = this.getCoCurrentEnergy();
+            if (skillType === Types.CoSkillType.Power) {
+                const powerEnergy = Helpers.getExisted(this.getCoPowerEnergy(), ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_00);
+                this.setCoCurrentEnergy(currentEnergy - powerEnergy);
+
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                const superPowerEnergy = Helpers.getExisted(this.getCoSuperPowerEnergy(), ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_01);
+                this.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
+
+            } else {
+                throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_02);
+            }
+
+            this.setCoUsingSkillType(skillType);
         }
 
         public getCoIsDestroyedInTurn(): boolean {

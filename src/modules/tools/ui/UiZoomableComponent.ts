@@ -7,10 +7,13 @@
 // import StageManager         from "../helpers/StageManager";
 // import Types                from "../helpers/Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiZoomableComponent {
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import Point                    = Types.Point;
-    import TouchPoints              = Types.TouchPoints;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import Point                = Types.Point;
+    import TouchPoints          = Types.TouchPoints;
+
+    const MAX_CONTENT_SCALE     = 6;
 
     export class UiZoomableComponent extends TwnsUiComponent.UiComponent {
         private _maskForContents                : TwnsUiImage.UiImage | null = null;
@@ -22,7 +25,6 @@ namespace TwnsUiZoomableComponent {
         private _spacingForBottom               = 0;
         private _spacingForLeft                 = 0;
         private _spacingForRight                = 0;
-        private _isMouseWheelListenerEnabled    = false;
         private _isTouchListenerEnabled         = false;
         private _currGlobalTouchPoints          = new Map<number, Point>();
         private _prevGlobalTouchPoints          = new Map<number, Point>();
@@ -68,9 +70,9 @@ namespace TwnsUiZoomableComponent {
         }
 
         public setMouseWheelListenerEnabled(enabled: boolean): void {
-            if ((enabled) && (!this._isMouseWheelListenerEnabled)) {
+            if (enabled) {
                 Notify.addEventListener(NotifyType.MouseWheel, this._onNotifyMouseWheel, this);
-            } else if ((!enabled) && (this._isMouseWheelListenerEnabled)) {
+            } else {
                 Notify.removeEventListener(NotifyType.MouseWheel, this._onNotifyMouseWheel, this);
             }
         }
@@ -342,7 +344,7 @@ namespace TwnsUiZoomableComponent {
         }
 
         private _getMaxContentScale(): number {
-            return Math.max(2, this._getMinContentScale());
+            return Math.max(MAX_CONTENT_SCALE, this._getMinContentScale());
         }
         private _getMinContentScale(): number {
             const boundaryWidth  = this._getBoundaryWidth();

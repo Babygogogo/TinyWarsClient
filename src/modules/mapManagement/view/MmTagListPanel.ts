@@ -18,20 +18,14 @@
 // import TwnsMmTagChangePanel         from "./MmTagChangePanel";
 // import TwnsMmTagSearchPanel         from "./MmTagSearchPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmTagListPanel {
     import FiltersForMapList    = TwnsMmAvailabilityListPanel.FiltersForMapList;
-    import MmTagSearchPanel     = TwnsMmTagSearchPanel.MmTagSearchPanel;
-    import MmTagChangePanel     = TwnsMmTagChangePanel.MmTagChangePanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    type OpenData = FiltersForMapList | null;
+    export type OpenData = FiltersForMapList | null;
     export class MmTagListPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MmTagListPanel;
-
         private readonly _listMap!              : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
@@ -50,29 +44,7 @@ namespace TwnsMmTagListPanel {
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedMapId      : number | null = null;
 
-        public static show(openData: OpenData): void {
-            if (!MmTagListPanel._instance) {
-                MmTagListPanel._instance = new MmTagListPanel();
-            }
-
-            MmTagListPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (MmTagListPanel._instance) {
-                await MmTagListPanel._instance.close();
-            }
-        }
-        public static getInstance(): MmTagListPanel {
-            return MmTagListPanel._instance;
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapManagement/MmTagListPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgMmSetMapTag,     callback: this._onMsgMmSetMapTag },
@@ -82,13 +54,14 @@ namespace TwnsMmTagListPanel {
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ]);
             this._listMap.setItemRenderer(MapNameRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._groupInfo.visible = false;
             this._updateComponentsForLanguage();
 
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
-        protected async _onClosed(): Promise<void> {
+        protected _onClosing(): void {
             egret.Tween.removeTweens(this._groupInfo);
         }
 
@@ -132,12 +105,12 @@ namespace TwnsMmTagListPanel {
         }
 
         private _onTouchTapBtnSearch(): void {
-            MmTagSearchPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmTagSearchPanel, void 0);
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsMmMainMenuPanel.MmMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMainMenuPanel, void 0);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -234,7 +207,7 @@ namespace TwnsMmTagListPanel {
         }
 
         private _onTouchTapBtnNext(): void {
-            MmTagChangePanel.show({ mapId: this._getData().mapId });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmTagChangePanel, { mapId: this._getData().mapId });
         }
     }
 }

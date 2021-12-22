@@ -27,20 +27,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarEventHelper {
-    import WeConditionModifyPanel1  = TwnsWeConditionModifyPanel1.WeConditionModifyPanel1;
-    import WeConditionModifyPanel10 = TwnsWeConditionModifyPanel10.WeConditionModifyPanel10;
-    import WeConditionModifyPanel11 = TwnsWeConditionModifyPanel11.WeConditionModifyPanel11;
-    import WeConditionModifyPanel12 = TwnsWeConditionModifyPanel12.WeConditionModifyPanel12;
-    import WeConditionModifyPanel2  = TwnsWeConditionModifyPanel2.WeConditionModifyPanel2;
-    import WeConditionModifyPanel3  = TwnsWeConditionModifyPanel3.WeConditionModifyPanel3;
-    import WeConditionModifyPanel4  = TwnsWeConditionModifyPanel4.WeConditionModifyPanel4;
-    import WeConditionModifyPanel5  = TwnsWeConditionModifyPanel5.WeConditionModifyPanel5;
-    import WeConditionModifyPanel6  = TwnsWeConditionModifyPanel6.WeConditionModifyPanel6;
-    import WeConditionModifyPanel7  = TwnsWeConditionModifyPanel7.WeConditionModifyPanel7;
-    import WeConditionModifyPanel8  = TwnsWeConditionModifyPanel8.WeConditionModifyPanel8;
-    import WeConditionModifyPanel9  = TwnsWeConditionModifyPanel9.WeConditionModifyPanel9;
-    import WeActionModifyPanel1     = TwnsWeActionModifyPanel1.WeActionModifyPanel1;
-    import WeActionModifyPanel2     = TwnsWeActionModifyPanel2.WeActionModifyPanel2;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import LanguageType             = Types.LanguageType;
     import ConditionType            = Types.WarEventConditionType;
@@ -57,29 +43,54 @@ namespace WarEventHelper {
     import BwWar                    = TwnsBwWar.BwWar;
 
     const CONDITION_TYPE_ARRAY = [
-        ConditionType.WecTurnIndexEqualTo,
-        ConditionType.WecTurnIndexGreaterThan,
-        ConditionType.WecTurnIndexLessThan,
-        ConditionType.WecTurnIndexRemainderEqualTo,
+        // ConditionType.WecTurnIndexEqualTo,
+        // ConditionType.WecTurnIndexGreaterThan,
+        // ConditionType.WecTurnIndexLessThan,
+        // ConditionType.WecTurnIndexRemainderEqualTo,
+        // ConditionType.WecTurnPhaseEqualTo,
+        ConditionType.WecTurnAndPlayer,
 
-        ConditionType.WecTurnPhaseEqualTo,
+        // ConditionType.WecPlayerIndexInTurnEqualTo,
+        // ConditionType.WecPlayerIndexInTurnGreaterThan,
+        // ConditionType.WecPlayerIndexInTurnLessThan,
+        // ConditionType.WecPlayerAliveStateEqualTo,
+        ConditionType.WecPlayerState,
 
-        ConditionType.WecPlayerIndexInTurnEqualTo,
-        ConditionType.WecPlayerIndexInTurnGreaterThan,
-        ConditionType.WecPlayerIndexInTurnLessThan,
+        // ConditionType.WecEventCalledCountTotalEqualTo,
+        // ConditionType.WecEventCalledCountTotalGreaterThan,
+        // ConditionType.WecEventCalledCountTotalLessThan,
+        ConditionType.WecEventCalledCount,
 
-        ConditionType.WecEventCalledCountTotalEqualTo,
-        ConditionType.WecEventCalledCountTotalGreaterThan,
-        ConditionType.WecEventCalledCountTotalLessThan,
+        ConditionType.WecWeatherAndFog,
 
-        ConditionType.WecPlayerAliveStateEqualTo,
+        // ConditionType.WecTilePlayerIndexEqualTo,
+        // ConditionType.WecTileTypeEqualTo,
+        ConditionType.WecTilePresence,
+
+        ConditionType.WecUnitPresence,
+
+        ConditionType.WecCustomCounter,
     ];
 
     const ACTION_TYPE_ARRAY = [
-        // TODO: add future types
+        // todo: add future types
+        // ActionType.DeprecatedSetPlayerFund,
+        // ActionType.DeprecatedSetPlayerCoEnergy,
+        // ActionType.DeprecatedSetPlayerAliveState,
+        ActionType.SetPlayerState,
+        // ActionType.SetPlayerCoEnergy,
+        // ActionType.SetPlayerAliveState,
+
         ActionType.AddUnit,
-        ActionType.SetPlayerAliveState,
+        ActionType.SetUnitState,
+
+        ActionType.SetWeather,
+        ActionType.SetForceFogCode,
+        ActionType.SetCustomCounter,
         ActionType.Dialogue,
+        ActionType.SimpleDialogue,
+        ActionType.SetViewpoint,
+        ActionType.PlayBgm,
     ];
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -271,7 +282,7 @@ namespace WarEventHelper {
             }
         }
         for (const [, condition] of conditionDict) {
-            if (!checkIsValidWarEventCondition({ condition, eventDict })) {
+            if (!checkIsValidWarEventCondition({ condition, mapRawData })) {
                 return false;
             }
         }
@@ -368,7 +379,7 @@ namespace WarEventHelper {
             }
         }
         for (const [, condition] of conditionDict) {
-            if (!checkIsValidWarEventCondition({ condition, eventDict })) {
+            if (!checkIsValidWarEventCondition({ condition, mapRawData })) {
                 return ClientErrorCode.WarEventFullDataValidation14;
             }
         }
@@ -470,6 +481,10 @@ namespace WarEventHelper {
             return false;
         }
 
+        if (action.WeaCommonData?.actionId == null) {
+            return false;
+        }
+
         const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             return false;
@@ -482,32 +497,38 @@ namespace WarEventHelper {
         }
         const mapSize: Types.MapSize = { width: mapWidth, height: mapHeight };
 
-        {
-            const actionData = action.WeaAddUnit;
-            if (actionData) {
-                return checkIsValidWeaAddUnit(actionData, configVersion, mapSize);
-            }
+        const playersCountUnneutral = mapRawData.playersCountUnneutral;
+        if (playersCountUnneutral == null) {
+            return false;
         }
 
-        {
-            const actionData = action.WeaSetPlayerAliveState;
-            if (actionData) {
-                return checkIsValidWeaSetPlayerAliveState(actionData);
-            }
+        // todo: add more checkers when the action types grow.
+        return (checkIsValidWeaAddUnit({ action: action.WeaAddUnit, configVersion, mapSize, playersCountUnneutral }))
+            || (checkIsValidWeaDialogue(action.WeaDialogue))
+            || (checkIsValidWeaSetViewpoint(action.WeaSetViewpoint, mapSize))
+            || (checkIsValidWeaSetWeather(action.WeaSetWeather))
+            || (checkIsValidWeaSimpleDialogue(action.WeaSimpleDialogue))
+            || (checkIsValidWeaPlayBgm(action.WeaPlayBgm))
+            || (checkIsValidWeaSetForceFogCode(action.WeaSetForceFogCode))
+            || (checkIsValidWeaSetCustomCounter(action.WeaSetCustomCounter))
+            || (checkIsValidWeaDeprecatedSetPlayerAliveState(action.WeaDeprecatedSetPlayerAliveState, playersCountUnneutral))
+            || (checkIsValidWeaDeprecatedSetPlayerFund(action.WeaDeprecatedSetPlayerFund, playersCountUnneutral))
+            || (checkIsValidWeaDeprecatedSetPlayerCoEnergy(action.WeaDeprecatedSetPlayerCoEnergy, playersCountUnneutral))
+            || (checkIsValidWeaSetPlayerAliveState(action.WeaSetPlayerAliveState, playersCountUnneutral))
+            || (checkIsValidWeaSetPlayerState(action.WeaSetPlayerState, playersCountUnneutral))
+            || (checkIsValidWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral))
+            || (checkIsValidWeaSetUnitState(action.WeaSetUnitState, mapSize, playersCountUnneutral));
+        }
+    function checkIsValidWeaAddUnit({ action, configVersion, mapSize, playersCountUnneutral }: {
+        action                  : Types.Undefinable<ProtoTypes.WarEvent.IWeaAddUnit>;
+        configVersion           : string;
+        mapSize                 : Types.MapSize;
+        playersCountUnneutral   : number;
+    }): boolean {
+        if (action == null) {
+            return false;
         }
 
-        {
-            const actionData = action.WeaDialogue;
-            if (actionData) {
-                return checkIsValidWeaDialogue(actionData);
-            }
-        }
-
-        // TODO add more checkers when the action types grow.
-
-        return false;
-    }
-    function checkIsValidWeaAddUnit(action: ProtoTypes.WarEvent.IWeaAddUnit, configVersion: string, mapSize: Types.MapSize): boolean {
         const { unitArray } = action;
         if ((unitArray == null)                                              ||
             (unitArray.length <= 0)                                          ||
@@ -532,7 +553,7 @@ namespace WarEventHelper {
 
             if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                 unitData,
-                playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
+                playersCountUnneutral,
                 configVersion,
                 mapSize,
             })) {
@@ -542,29 +563,16 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetPlayerAliveState(actionData: ProtoTypes.WarEvent.IWeaSetPlayerAliveState): boolean {
-        const playerIndex   = actionData.playerIndex;
-        if ((playerIndex == null)                                   ||
-            (playerIndex === CommonConstants.WarNeutralPlayerIndex) ||
-            (playerIndex > CommonConstants.WarMaxPlayerIndex)
-        ) {
+    function checkIsValidWeaDialogue(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDialogue>): boolean {
+        if (action == null) {
             return false;
         }
 
-        const playerAliveState: Types.Undefinable<Types.PlayerAliveState> = actionData.playerAliveState;
-        if (playerAliveState == null) {
-            return false;
-        }
-        if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
-            (playerAliveState !== Types.PlayerAliveState.Dying) &&
-            (playerAliveState !== Types.PlayerAliveState.Dead)
-        ) {
+        const backgroundId = action.backgroundId;
+        if ((backgroundId != null) && (backgroundId > ConfigManager.getSystemDialogueBackgroundMaxId(Helpers.getExisted(ConfigManager.getLatestConfigVersion())))) {
             return false;
         }
 
-        return true;
-    }
-    function checkIsValidWeaDialogue(action: ProtoTypes.WarEvent.IWeaDialogue): boolean {
         const dataArray = action.dataArray;
         if (dataArray == null) {
             return false;
@@ -653,103 +661,983 @@ namespace WarEventHelper {
 
         return true;
     }
+    function checkIsValidWeaSetViewpoint(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetViewpoint>, mapSize: Types.MapSize): boolean {
+        if (action == null) {
+            return false;
+        }
 
-    function checkIsValidWarEventCondition({ condition, eventDict }: {  // DONE
+        const gridIndex = GridIndexHelpers.convertGridIndex(action.gridIndex);
+        return (gridIndex != null)
+            && (GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize));
+    }
+    function checkIsValidWeaSetWeather(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetWeather>): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const weatherType = action.weatherType;
+        return (weatherType != null)
+            && (ConfigManager.checkIsValidWeatherType(weatherType))
+            && (action.weatherTurnsCount != null);
+    }
+    function checkIsValidWeaSimpleDialogue(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSimpleDialogue>): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const dataArray = action.dataArray;
+        if (dataArray == null) {
+            return false;
+        }
+
+        const dialogueCount = dataArray.length;
+        if ((dialogueCount <= 0) || (dialogueCount > CommonConstants.WarEventActionDialogueMaxCount)) {
+            return false;
+        }
+
+        for (const data of dataArray) {
+            if (Object.keys(data).length !== 1) {
+                return false;
+            }
+
+            {
+                const subData = data.dataForCoDialogue;
+                if ((subData) && (!checkIsValidDataForCoDialogue(subData))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    function checkIsValidWeaPlayBgm(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaPlayBgm>): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        if (action.useCoBgm) {
+            return true;
+        }
+
+        const bgmCode = action.bgmCode;
+        return (bgmCode != null) && (bgmCode <= Types.BgmCode.Co9999);
+    }
+    function checkIsValidWeaSetForceFogCode(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetForceFogCode>): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const forceFogCode = action.forceFogCode;
+        return (forceFogCode != null)
+            && (ConfigManager.checkIsValidForceFogCode(forceFogCode))
+            && (action.turnsCount != null);
+    }
+    function checkIsValidWeaSetCustomCounter(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetCustomCounter>): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        {
+            const counterIdArray = action.customCounterIdArray;
+            if (counterIdArray?.length) {
+                const counterIdSet = new Set<number>();
+                for (const counterId of counterIdArray) {
+                    if ((!ConfigManager.checkIsValidCustomCounterId(counterId)) ||
+                        (counterIdSet.has(counterId))
+                    ) {
+                        return false;
+                    }
+
+                    counterIdSet.add(counterId);
+                }
+            }
+        }
+
+        const { deltaValue, multiplierPercentage } = action;
+        if ((deltaValue ?? multiplierPercentage) == null) {
+            return false;
+        }
+        if ((deltaValue != null) && (Math.abs(deltaValue) > CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue)) {
+            return false;
+        }
+        if ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage)) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaDeprecatedSetPlayerAliveState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerAliveState>, playersCountUnneutral: number): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const playerIndex   = action.playerIndex;
+        if ((playerIndex == null)                                   ||
+            (playerIndex <= CommonConstants.WarNeutralPlayerIndex)  ||
+            (playerIndex > playersCountUnneutral)
+        ) {
+            return false;
+        }
+
+        const playerAliveState: Types.Undefinable<Types.PlayerAliveState> = action.playerAliveState;
+        if (playerAliveState == null) {
+            return false;
+        }
+        if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
+            (playerAliveState !== Types.PlayerAliveState.Dying) &&
+            (playerAliveState !== Types.PlayerAliveState.Dead)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaDeprecatedSetPlayerFund(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerFund>, playersCountUnneutral: number): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const playerIndex   = action.playerIndex;
+        if ((playerIndex == null)                                   ||
+            (playerIndex <= CommonConstants.WarNeutralPlayerIndex)  ||
+            (playerIndex > playersCountUnneutral)
+        ) {
+            return false;
+        }
+
+        const { deltaValue, multiplierPercentage } = action;
+        if ((deltaValue ?? multiplierPercentage) == null) {
+            return false;
+        }
+        if ((deltaValue != null) && (Math.abs(deltaValue) > CommonConstants.WarEventActionSetPlayerFundMaxDeltaValue)) {
+            return false;
+        }
+        if ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerFundMaxMultiplierPercentage)) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaDeprecatedSetPlayerCoEnergy(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const playerIndex   = action.playerIndex;
+        if ((playerIndex == null)                                   ||
+            (playerIndex <= CommonConstants.WarNeutralPlayerIndex)  ||
+            (playerIndex > playersCountUnneutral)
+        ) {
+            return false;
+        }
+
+        const { deltaPercentage, multiplierPercentage } = action;
+        if ((deltaPercentage ?? multiplierPercentage) == null) {
+            return false;
+        }
+        if ((deltaPercentage != null) && (Math.abs(deltaPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage)) {
+            return false;
+        }
+        if ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage)) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaSetPlayerAliveState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerAliveState>, playersCountUnneutral: number): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const playerIndexArray = action.playerIndexArray;
+        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            return false;
+        }
+
+        const playerAliveState: Types.Undefinable<Types.PlayerAliveState> = action.playerAliveState;
+        if (playerAliveState == null) {
+            return false;
+        }
+        if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
+            (playerAliveState !== Types.PlayerAliveState.Dying) &&
+            (playerAliveState !== Types.PlayerAliveState.Dead)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaSetPlayerState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerState>, playersCountUnneutral: number): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        {
+            const conPlayerIndexArray = action.conPlayerIndexArray;
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+                return false;
+            }
+        }
+
+        {
+            const conAliveStateArray = action.conAliveStateArray;
+            if ((conAliveStateArray) && (!ConfigManager.checkIsValidPlayerAliveStateSubset(conAliveStateArray))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conFundComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conEnergyPercentageComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const conSkillTypeArray = action.conCoUsingSkillTypeArray;
+            if ((conSkillTypeArray) && (!ConfigManager.checkIsValidCoSkillTypeSubset(conSkillTypeArray))) {
+                return false;
+            }
+        }
+
+        {
+            const actAliveState = action.actAliveState;
+            if ((actAliveState != null) && (!ConfigManager.checkIsValidPlayerAliveState(actAliveState))) {
+                return false;
+            }
+        }
+
+        if ((action.actFundDeltaValue               ??
+                action.actFundMultiplierPercentage  ??
+                action.actCoEnergyDeltaPct          ??
+                action.actCoEnergyMultiplierPct     ??
+                action.actAliveState
+            ) == null
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaSetPlayerCoEnergy(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        const playerIndexArray = action.playerIndexArray;
+        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            return false;
+        }
+
+        if ((action.actCoEnergyDeltaPct ?? action.actCoEnergyMultiplierPct) == null) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWeaSetUnitState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetUnitState>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+        if (action == null) {
+            return false;
+        }
+
+        {
+            const playerIndexArray = action.conPlayerIndexArray;
+            if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+                return false;
+            }
+        }
+
+        {
+            const teamIndexArray = action.conTeamIndexArray;
+            if ((teamIndexArray) && (!ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
+                return false;
+            }
+        }
+
+        {
+            const unitTypeArray = action.conUnitTypeArray;
+            if ((unitTypeArray) && (unitTypeArray.some(v => !ConfigManager.checkIsValidUnitType(v)))) {
+                return false;
+            }
+        }
+
+        {
+            const locationIdArray = action.conLocationIdArray;
+            if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
+                return false;
+            }
+        }
+
+        {
+            const gridIndexArray = action.conGridIndexArray;
+            if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
+                return false;
+            }
+        }
+
+        {
+            const actionStateArray = action.conActionStateArray;
+            if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conHpComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conFuelPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conPriAmmoPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = action.conPromotionComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const actActionState = action.actActionState;
+            if ((actActionState != null) && (!ConfigManager.checkIsValidUnitActionState(actActionState))) {
+                return false;
+            }
+        }
+
+        if ((action.actHpMultiplierPercentage           ??
+                action.actHpDeltaValue                  ??
+                action.actFuelDeltaValue                ??
+                action.actFuelMultiplierPercentage      ??
+                action.actPriAmmoDeltaValue             ??
+                action.actPriAmmoMultiplierPercentage   ??
+                action.actPromotionDeltaValue           ??
+                action.actPromotionMultiplierPercentage ??
+                action.actActionState                   ??
+                action.actHasLoadedCo                   ??
+                (action.actDestroyUnit || null)
+            ) == null
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function checkIsValidWarEventCondition({ condition, mapRawData }: {  // DONE
         condition   : IWarEventCondition;
-        eventDict   : WarEventDict;
+        mapRawData  : ProtoTypes.Map.IMapRawData;
     }): boolean {
         if (Object.keys(condition).length !== 2) {
             return false;
         }
 
-        const commonData = condition.WecCommonData;
-        if (commonData == null) {
+        if (condition.WecCommonData?.conditionId == null) {
             return false;
         }
 
-        const conEventCalledCountTotalEqualTo = condition.WecEventCalledCountTotalEqualTo;
-        if (conEventCalledCountTotalEqualTo) {
-            return (conEventCalledCountTotalEqualTo.countEqualTo != null)
-                && (conEventCalledCountTotalEqualTo.eventIdEqualTo != null);
+        const playersCountUnneutral = mapRawData.playersCountUnneutral;
+        if (playersCountUnneutral == null) {
+            return false;
         }
 
-        const conEventCalledCountTotalGreaterThan = condition.WecEventCalledCountTotalGreaterThan;
-        if (conEventCalledCountTotalGreaterThan) {
-            return (conEventCalledCountTotalGreaterThan.countGreaterThan != null)
-                && (conEventCalledCountTotalGreaterThan.eventIdEqualTo != null);
-        }
-
-        const conEventCalledCountTotalLessThan = condition.WecEventCalledCountTotalLessThan;
-        if (conEventCalledCountTotalLessThan) {
-            return (conEventCalledCountTotalLessThan.countLessThan != null)
-                && (conEventCalledCountTotalLessThan.eventIdEqualTo != null);
-        }
-
-        const conPlayerAliveStateEqualTo = condition.WecPlayerAliveStateEqualTo;
-        if (conPlayerAliveStateEqualTo) {
-            const { playerIndexEqualTo, aliveStateEqualTo } = conPlayerAliveStateEqualTo;
-
-            if ((aliveStateEqualTo !== PlayerAliveState.Alive)    &&
-                (aliveStateEqualTo !== PlayerAliveState.Dead)     &&
-                (aliveStateEqualTo !== PlayerAliveState.Dying)
-            ) {
-                return false;
-            }
-
-            if (playerIndexEqualTo == null) {
-                return false;
-            }
-
-            return true;
-        }
-
-        const conTurnIndexEqualTo = condition.WecTurnIndexEqualTo;
-        if (conTurnIndexEqualTo) {
-            return conTurnIndexEqualTo.valueEqualTo != null;
-        }
-
-        const conTurnIndexGreaterThan = condition.WecTurnIndexGreaterThan;
-        if (conTurnIndexGreaterThan) {
-            return conTurnIndexGreaterThan.valueGreaterThan != null;
-        }
-
-        const conTurnIndexLessThan = condition.WecTurnIndexLessThan;
-        if (conTurnIndexLessThan) {
-            return conTurnIndexLessThan.valueLessThan != null;
-        }
-
-        const conTurnIndexRemainderEqualTo = condition.WecTurnIndexRemainderEqualTo;
-        if (conTurnIndexRemainderEqualTo) {
-            const { divider, remainderEqualTo } = conTurnIndexRemainderEqualTo;
-            return (!!divider) && (remainderEqualTo != null);
-        }
-
-        const conPlayerIndexInTurnEqualTo = condition.WecPlayerIndexInTurnEqualTo;
-        if (conPlayerIndexInTurnEqualTo) {
-            return conPlayerIndexInTurnEqualTo.valueEqualTo != null;
-        }
-
-        const conPlayerIndexInTurnGreaterThan = condition.WecPlayerIndexInTurnGreaterThan;
-        if (conPlayerIndexInTurnGreaterThan) {
-            return conPlayerIndexInTurnGreaterThan.valueGreaterThan != null;
-        }
-
-        const conPlayerIndexInTurnLessThan = condition.WecPlayerIndexInTurnLessThan;
-        if (conPlayerIndexInTurnLessThan) {
-            return conPlayerIndexInTurnLessThan.valueLessThan != null;
-        }
-
-        const conTurnPhaseEqualTo = condition.WecTurnPhaseEqualTo;
-        if (conTurnPhaseEqualTo) {
-            const value = conTurnPhaseEqualTo.valueEqualTo;
-            return (value === Types.TurnPhaseCode.Main)
-                || (value === Types.TurnPhaseCode.WaitBeginTurn);
+        const mapSize = WarMapModel.getMapSize(mapRawData);
+        if (mapSize == null) {
+            return false;
         }
 
         // TODO add more checkers when the condition types grow.
-
-        return false;
+        return (checkIsValidWecEventCalledCountTotalEqualTo(condition.WecEventCalledCountTotalEqualTo))
+            || (checkIsValidWecEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan))
+            || (checkIsValidWecEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan))
+            || (checkIsValidWecEventCalledCount(condition.WecEventCalledCount, mapRawData.warEventFullData))
+            || (checkIsValidWecPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo, playersCountUnneutral))
+            || (checkIsValidWecPlayerState(condition.WecPlayerState, playersCountUnneutral))
+            || (checkIsValidWecTurnIndexEqualTo(condition.WecTurnIndexEqualTo))
+            || (checkIsValidWecTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan))
+            || (checkIsValidWecTurnIndexLessThan(condition.WecTurnIndexLessThan))
+            || (checkIsValidWecTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo))
+            || (checkIsValidWecTurnAndPlayer(condition.WecTurnAndPlayer, playersCountUnneutral))
+            || (checkIsValidWecPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo, playersCountUnneutral))
+            || (checkIsValidWecPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan, playersCountUnneutral))
+            || (checkIsValidWecPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan, playersCountUnneutral))
+            || (checkIsValidWecTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo))
+            || (checkIsValidWecWeatherAndFog(condition.WecWeatherAndFog))
+            || (checkIsValidWecTilePlayerIndexEqualTo(condition.WecTilePlayerIndexEqualTo, mapSize, playersCountUnneutral))
+            || (checkIsValidWecTileTypeEqualTo(condition.WecTileTypeEqualTo, mapSize))
+            || (checkIsValidWecTilePresence(condition.WecTilePresence, mapSize, playersCountUnneutral))
+            || (checkIsValidWecUnitPresence(condition.WecUnitPresence, mapSize, playersCountUnneutral))
+            || (checkIsValidWecCustomCounter(condition.WecCustomCounter));
     }
+    function checkIsValidWecEventCalledCountTotalEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecEventCalledCountTotalEqualTo>): boolean {
+        return (condition != null)
+            && (condition.countEqualTo != null)
+            && (condition.eventIdEqualTo != null);
+    }
+    function checkIsValidWecEventCalledCountTotalGreaterThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecEventCalledCountTotalGreaterThan>): boolean {
+        return (condition != null)
+            && (condition.countGreaterThan != null)
+            && (condition.eventIdEqualTo != null);
+    }
+    function checkIsValidWecEventCalledCountTotalLessThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecEventCalledCountTotalLessThan>): boolean {
+        return (condition != null)
+            && (condition.countLessThan != null)
+            && (condition.eventIdEqualTo != null);
+    }
+    function checkIsValidWecEventCalledCount(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecEventCalledCount>, fullData: Types.Undefinable<IWarEventFullData>): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        {
+            const eventIdArray = condition.eventIdArray;
+            if (eventIdArray) {
+                const eventArray    = fullData?.eventArray ?? [];
+                const eventIdSet    = new Set<number>();
+                for (const eventId of eventIdArray) {
+                    if ((eventIdSet.has(eventId))                       ||
+                        (eventArray.every(v => v.eventId !== eventId))
+                    ) {
+                        return false;
+                    }
+
+                    eventIdSet.add(eventId);
+                }
+            }
+        }
+
+        if (condition.eventsCount == null) {
+            return false;
+        }
+
+        {
+            const comparator = condition.eventsCountComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.timesInTurnComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.timesTotalComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    function checkIsValidWecPlayerAliveStateEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerAliveStateEqualTo>, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        const { playerIndexEqualTo, aliveStateEqualTo } = condition;
+        if ((aliveStateEqualTo !== Types.PlayerAliveState.Alive)    &&
+            (aliveStateEqualTo !== Types.PlayerAliveState.Dead)     &&
+            (aliveStateEqualTo !== Types.PlayerAliveState.Dying)
+        ) {
+            return false;
+        }
+        if ((playerIndexEqualTo == null)                                ||
+            (playerIndexEqualTo < CommonConstants.WarFirstPlayerIndex)  ||
+            (playerIndexEqualTo > playersCountUnneutral)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWecPlayerState(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerState>, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        if (condition.playersCount == null) {
+            return false;
+        }
+
+        {
+            const comparator = condition.playersCountComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const playerIndexArray = condition.playerIndexArray;
+            if (playerIndexArray) {
+                const playerIndexSet = new Set<number>();
+                for (const playerIndex of playerIndexArray) {
+                    if ((playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                        (playerIndex > playersCountUnneutral)                   ||
+                        (playerIndexSet.has(playerIndex))
+                    ) {
+                        return false;
+                    }
+
+                    playerIndexSet.add(playerIndex);
+                }
+            }
+        }
+
+        {
+            const aliveStateArray = condition.aliveStateArray;
+            if (aliveStateArray) {
+                const aliveStateSet = new Set<number>();
+                for (const aliveState of aliveStateArray) {
+                    if ((!ConfigManager.checkIsValidPlayerAliveState(aliveState))   ||
+                        (aliveStateSet.has(aliveState))
+                    ) {
+                        return false;
+                    }
+
+                    aliveStateSet.add(aliveState);
+                }
+            }
+        }
+
+        {
+            const comparator = condition.fundComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.energyPercentageComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const skillTypeArray = condition.coUsingSkillTypeArray;
+            if (skillTypeArray) {
+                const skillTypeSet = new Set<number>();
+                for (const skillType of skillTypeArray) {
+                    if ((!ConfigManager.checkIsValidCoSkillType(skillType)) ||
+                        (skillTypeSet.has(skillType))
+                    ) {
+                        return false;
+                    }
+
+                    skillTypeSet.add(skillType);
+                }
+            }
+        }
+
+        return true;
+    }
+    function checkIsValidWecTurnIndexEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnIndexEqualTo>): boolean {
+        return (condition != null)
+            && (condition.valueEqualTo != null);
+    }
+    function checkIsValidWecTurnIndexGreaterThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnIndexGreaterThan>): boolean {
+        return (condition != null)
+            && (condition.valueGreaterThan != null);
+    }
+    function checkIsValidWecTurnIndexLessThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnIndexLessThan>): boolean {
+        return (condition != null)
+            && (condition.valueLessThan != null);
+    }
+    function checkIsValidWecTurnIndexRemainderEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnIndexRemainderEqualTo>): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        const { divider, remainderEqualTo } = condition;
+        return (divider != null)
+            && (divider > 1)
+            && (remainderEqualTo != null)
+            && (remainderEqualTo < divider);
+    }
+    function checkIsValidWecTurnAndPlayer(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnAndPlayer>, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        {
+            const comparator = condition.turnIndexComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+            // no need to check turnIndex
+        }
+
+        {
+            const comparator = condition.turnIndexRemainderComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+
+            const divider   = condition.turnIndexDivider;
+            const remainder = condition.turnIndexRemainder;
+            if (divider == null) {
+                if (remainder != null) {
+                    return false;
+                }
+            } else {
+                if ((divider <= 1) || (remainder == null)) {
+                    return false;
+                }
+            }
+        }
+
+        {
+            const turnPhase = condition.turnPhase;
+            if ((turnPhase != null) && (!ConfigManager.checkIsValidTurnPhaseCode(turnPhase))) {
+                return false;
+            }
+        }
+
+        {
+            const playerIndexArray = condition.playerIndexArray;
+            if (playerIndexArray) {
+                const playerIndexSet = new Set<number>();
+                for (const playerIndex of playerIndexArray) {
+                    if ((playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                        (playerIndex > playersCountUnneutral)                   ||
+                        (playerIndexSet.has(playerIndex))
+                    ) {
+                        return false;
+                    }
+
+                    playerIndexSet.add(playerIndex);
+                }
+            }
+        }
+
+        return true;
+    }
+    function checkIsValidWecPlayerIndexInTurnEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerIndexInTurnEqualTo>, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        const valueEqualTo = condition.valueEqualTo;
+        return (valueEqualTo != null)
+            && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
+            && (valueEqualTo <= playersCountUnneutral);
+    }
+    function checkIsValidWecPlayerIndexInTurnGreaterThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerIndexInTurnGreaterThan>, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        const valueEqualTo = condition.valueGreaterThan;
+        return (valueEqualTo != null)
+            && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
+            && (valueEqualTo <= playersCountUnneutral);
+    }
+    function checkIsValidWecPlayerIndexInTurnLessThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerIndexInTurnLessThan>, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        const valueEqualTo = condition.valueLessThan;
+        return (valueEqualTo != null)
+            && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
+            && (valueEqualTo <= playersCountUnneutral);
+    }
+    function checkIsValidWecTurnPhaseEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnPhaseEqualTo>): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        const value = condition.valueEqualTo;
+        return (value === Types.TurnPhaseCode.Main)
+            || (value === Types.TurnPhaseCode.WaitBeginTurn);
+    }
+    function checkIsValidWecWeatherAndFog(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecWeatherAndFog>): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        if (condition.weatherTypeArray?.some(v => !ConfigManager.checkIsValidWeatherType(v))) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWecTilePlayerIndexEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTilePlayerIndexEqualTo>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        const playerIndex   = condition.playerIndex;
+        const gridIndex     = GridIndexHelpers.convertGridIndex(condition.gridIndex);
+        return (playerIndex != null)
+            && (playerIndex <= playersCountUnneutral)
+            && (gridIndex != null)
+            && (GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize));
+    }
+    function checkIsValidWecTileTypeEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTileTypeEqualTo>, mapSize: Types.MapSize): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        const tileType = condition.tileType;
+        const gridIndex     = GridIndexHelpers.convertGridIndex(condition.gridIndex);
+        return (tileType != null)
+            && (ConfigManager.checkIsValidTileType(tileType))
+            && (gridIndex != null)
+            && (GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize));
+    }
+    function checkIsValidWecTilePresence(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTilePresence>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        const gridIndexArray = condition.gridIndexArray;
+        if (gridIndexArray) {
+            const gridIdSet = new Set<number>();
+            for (const g of gridIndexArray) {
+                const gridIndex = GridIndexHelpers.convertGridIndex(g);
+                if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                    return false;
+                }
+
+                const gridId = GridIndexHelpers.getGridId(gridIndex, mapSize);
+                if (gridIdSet.has(gridId)) {
+                    return false;
+                }
+                gridIdSet.add(gridId);
+            }
+        }
+
+        const locationIdArray = condition.locationIdArray;
+        if (locationIdArray) {
+            const locationIdSet = new Set<number>();
+            for (const locationId of locationIdArray) {
+                if ((locationId > CommonConstants.MapMaxLocationId) ||
+                    (locationId < CommonConstants.MapMinLocationId) ||
+                    (locationIdSet.has(locationId))
+                ) {
+                    return false;
+                }
+                locationIdSet.add(locationId);
+            }
+        }
+
+        const playerIndexArray = condition.playerIndexArray;
+        if (playerIndexArray) {
+            const playerIndexSet = new Set<number>();
+            for (const playerIndex of playerIndexArray) {
+                if ((playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                    (playerIndex > playersCountUnneutral)                   ||
+                    (playerIndexSet.has(playerIndex))
+                ) {
+                    return false;
+                }
+                playerIndexSet.add(playerIndex);
+            }
+        }
+
+        const teamIndexArray = condition.teamIndexArray;
+        if (teamIndexArray) {
+            const teamIndexSet = new Set<number>();
+            for (const teamIndex of teamIndexArray) {
+                if ((teamIndex < CommonConstants.WarNeutralTeamIndex)   ||
+                    (teamIndex > playersCountUnneutral)                 ||
+                    (teamIndexSet.has(teamIndex))
+                ) {
+                    return false;
+                }
+                teamIndexSet.add(teamIndex);
+            }
+        }
+
+        const tileTypeArray = condition.tileTypeArray;
+        if (tileTypeArray) {
+            for (const tileType of tileTypeArray) {
+                if (!ConfigManager.checkIsValidTileType(tileType)) {
+                    return false;
+                }
+            }
+        }
+
+        const tilesCount = condition.tilesCount;
+        if (tilesCount == null) {
+            return false;
+        }
+
+        const tilesCountComparator = condition.tilesCountComparator;
+        if ((tilesCountComparator == null)                                      ||
+            (!ConfigManager.checkIsValidValueComparator(tilesCountComparator))
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+    function checkIsValidWecUnitPresence(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecUnitPresence>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        {
+            const gridIndexArray = condition.gridIndexArray;
+            if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, mapSize))) {
+                return false;
+            }
+        }
+
+        {
+            const locationIdArray = condition.locationIdArray;
+            if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
+                return false;
+            }
+        }
+
+        {
+            const playerIndexArray = condition.playerIndexArray;
+            if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+                return false;
+            }
+        }
+
+        {
+            const teamIndexArray = condition.teamIndexArray;
+            if ((teamIndexArray) && (!ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
+                return false;
+            }
+        }
+
+        {
+            const unitTypeArray = condition.unitTypeArray;
+            if ((unitTypeArray) && (!ConfigManager.checkIsValidUnitTypeSubset(unitTypeArray))) {
+                return false;
+            }
+        }
+
+        {
+            const actionStateArray = condition.actionStateArray;
+            if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
+                return false;
+            }
+        }
+
+        if (condition.unitsCount == null) {
+            return false;
+        }
+
+        {
+            const comparator = condition.unitsCountComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.hpComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.fuelPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.priAmmoPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.promotionComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    function checkIsValidWecCustomCounter(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecCustomCounter>): boolean {
+        if (condition == null) {
+            return false;
+        }
+
+        {
+            const counterIdArray = condition.counterIdArray;
+            if ((counterIdArray?.length) && (!ConfigManager.checkIsValidCustomCounterIdArray(counterIdArray))) {
+                return false;
+            }
+        }
+
+        if (condition.counterCount == null) {
+            return false;
+        }
+
+        {
+            const comparator = condition.counterCountComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const comparator = condition.valueComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        {
+            const divider   = condition.valueDivider;
+            const remainder = condition.valueRemainder;
+            if (divider == null) {
+                if (remainder != null) {
+                    return false;
+                }
+            } else {
+                if ((divider <= 1) || (remainder == null)) {
+                    return false;
+                }
+            }
+        }
+
+        {
+            const comparator = condition.valueRemainderComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     function checkIsValidWarEventConditionNode({ conditionNode, conditionDict, nodeDict }: {    // DONE
         conditionNode   : IWarEventConditionNode;
         conditionDict   : WarEventConditionDict;
@@ -869,7 +1757,9 @@ namespace WarEventHelper {
         return (getDescForWecEventCalledCountTotalEqualTo(con.WecEventCalledCountTotalEqualTo))
             || (getDescForWecEventCalledCountTotalGreaterThan(con.WecEventCalledCountTotalGreaterThan))
             || (getDescForWecEventCalledCountTotalLessThan(con.WecEventCalledCountTotalLessThan))
+            || (getDescForWecEventCalledCount(con.WecEventCalledCount))
             || (getDescForWecPlayerAliveStateEqualTo(con.WecPlayerAliveStateEqualTo))
+            || (getDescForWecPlayerState(con.WecPlayerState))
             || (getDescForWecPlayerIndexInTurnEqualTo(con.WecPlayerIndexInTurnEqualTo))
             || (getDescForWecPlayerIndexInTurnGreaterThan(con.WecPlayerIndexInTurnGreaterThan))
             || (getDescForWecPlayerIndexInTurnLessThan(con.WecPlayerIndexInTurnLessThan))
@@ -877,7 +1767,14 @@ namespace WarEventHelper {
             || (getDescForWecTurnIndexGreaterThan(con.WecTurnIndexGreaterThan))
             || (getDescForWecTurnIndexLessThan(con.WecTurnIndexLessThan))
             || (getDescForWecTurnIndexRemainderEqualTo(con.WecTurnIndexRemainderEqualTo))
-            || (getDescForWecTurnPhaseEqualTo(con.WecTurnPhaseEqualTo));
+            || (getDescForWecTurnAndPlayer(con.WecTurnAndPlayer))
+            || (getDescForWecTurnPhaseEqualTo(con.WecTurnPhaseEqualTo))
+            || (getDescForWecWeatherAndFog(con.WecWeatherAndFog))
+            || (getDescForWecTilePlayerIndexEqualTo(con.WecTilePlayerIndexEqualTo))
+            || (getDescForWecTileTypeEqualTo(con.WecTileTypeEqualTo))
+            || (getDescForWecTilePresence(con.WecTilePresence))
+            || (getDescForWecUnitPresence(con.WecUnitPresence))
+            || (getDescForWecCustomCounter(con.WecCustomCounter));
     }
     function getDescForWecEventCalledCountTotalEqualTo(data: Types.Undefinable<WarEvent.IWecEventCalledCountTotalEqualTo>): string | null {
         return (data)
@@ -894,10 +1791,86 @@ namespace WarEventHelper {
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0039 : LangTextType.F0040, data.eventIdEqualTo, data.countLessThan)
             : null;
     }
+    function getDescForWecEventCalledCount(data: Types.Undefinable<WarEvent.IWecEventCalledCount>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const eventIdArray          = data.eventIdArray;
+        const textForEventIdArray   = eventIdArray?.length
+            ? eventIdArray.join(`/`)
+            : Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0792));
+
+        const timesInTurn           = data.timesInTurn;
+        const textForTimesInTurn    = timesInTurn != null
+            ? Lang.getFormattedText(LangTextType.F0104, Lang.getValueComparatorName(Helpers.getExisted(data.timesInTurnComparator)), timesInTurn)
+            : null;
+
+        const timesTotal            = data.timesTotal;
+        const textForTimesTotal     = timesTotal != null
+            ? Lang.getFormattedText(LangTextType.F0105, Lang.getValueComparatorName(Helpers.getExisted(data.timesTotalComparator)), timesTotal)
+            : null;
+
+        const textArrayForSubConditions = Helpers.getNonNullElements([
+            textForTimesInTurn,
+            textForTimesTotal,
+        ]);
+        return Lang.getFormattedText(
+            LangTextType.F0103,
+            textForEventIdArray,
+            textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+            Lang.getValueComparatorName(Helpers.getExisted(data.eventsCountComparator)),
+            data.eventsCount ?? CommonConstants.ErrorTextForUndefined,
+        );
+    }
     function getDescForWecPlayerAliveStateEqualTo(data: Types.Undefinable<WarEvent.IWecPlayerAliveStateEqualTo>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0041 : LangTextType.F0042, data.playerIndexEqualTo, Lang.getPlayerAliveStateName(Helpers.getExisted(data.aliveStateEqualTo)))
             : null;
+    }
+    function getDescForWecPlayerState(data: Types.Undefinable<WarEvent.IWecPlayerState>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const playerIndexArray          = data.playerIndexArray;
+        const textForPlayerIndexArray   = playerIndexArray?.length
+            ? playerIndexArray.map(v => `P${v}`).join(`/`)
+            : Lang.getText(LangTextType.B0766);
+
+        const aliveStateArray           = data.aliveStateArray;
+        const textForAliveStateArray    = aliveStateArray?.length
+            ? Lang.getFormattedText(LangTextType.F0099, aliveStateArray.map(v => Lang.getPlayerAliveStateName(v)).join(`/`))
+            : null;
+
+        const fund          = data.fund;
+        const textForFund   = fund != null
+            ? Lang.getFormattedText(LangTextType.F0100, Lang.getValueComparatorName(Helpers.getExisted(data.fundComparator)), fund)
+            : null;
+
+        const energyPercentage          = data.energyPercentage;
+        const textForEnergyPercentage   = energyPercentage != null
+            ? Lang.getFormattedText(LangTextType.F0101, Lang.getValueComparatorName(Helpers.getExisted(data.energyPercentageComparator)), energyPercentage)
+            : null;
+
+        const coUsingSkillTypeArray         = data.coUsingSkillTypeArray;
+        const textForCoUsingSkillTypeArray  = coUsingSkillTypeArray?.length
+            ? Lang.getFormattedText(LangTextType.F0102, coUsingSkillTypeArray.map(v => Lang.getCoSkillTypeName(v)).join(`/`))
+            : null;
+
+        const textArrayForSubCondition = Helpers.getNonNullElements([
+            textForAliveStateArray,
+            textForFund,
+            textForEnergyPercentage,
+            textForCoUsingSkillTypeArray,
+        ]);
+        return Lang.getFormattedText(
+            LangTextType.F0098,
+            textForPlayerIndexArray,
+            textArrayForSubCondition.length ? textArrayForSubCondition.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+            Lang.getValueComparatorName(Helpers.getExisted(data.playersCountComparator)),
+            data.playersCount ?? CommonConstants.ErrorTextForUndefined
+        );
     }
     function getDescForWecPlayerIndexInTurnEqualTo(data: Types.Undefinable<WarEvent.IWecPlayerIndexInTurnEqualTo>): string | null {
         return (data)
@@ -934,17 +1907,294 @@ namespace WarEventHelper {
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0055 : LangTextType.F0056, data.divider, data.remainderEqualTo)
             : null;
     }
+    function getDescForWecTurnAndPlayer(data: Types.Undefinable<WarEvent.IWecTurnAndPlayer>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const turnIndex                     = data.turnIndex;
+        const turnIndexComparator           = data.turnIndexComparator;
+        const turnIndexDivider              = data.turnIndexDivider;
+        const turnIndexRemainder            = data.turnIndexRemainder;
+        const turnIndexRemainderComparator  = data.turnIndexRemainderComparator;
+        const playerIndexArray              = data.playerIndexArray;
+        const turnPhase                     = data.turnPhase;
+        const shouldShowTextForTurnDivider  = (turnIndexDivider ?? turnIndexRemainder) != null;
+        const textForTurnIndex              = turnIndex == null
+            ? Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0191))
+            : `${turnIndexComparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(turnIndexComparator)} ${turnIndex}`;
+        const textForTurnPhase              = turnPhase == null
+            ? Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0780))
+            : (Lang.getTurnPhaseName(turnPhase) ?? CommonConstants.ErrorTextForUndefined);
+        const textForPlayerIndexArray       = playerIndexArray?.length
+            ? playerIndexArray.map(v => `P${v}`).join(`/`)
+            : Lang.getText(LangTextType.B0766);
+
+        if (turnIndex == null) {
+            if (shouldShowTextForTurnDivider) {
+                return Lang.getFormattedText(
+                    LangTextType.F0096,
+                    turnIndexDivider ?? CommonConstants.ErrorTextForUndefined,
+                    turnIndexRemainderComparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(turnIndexRemainderComparator),
+                    turnIndexRemainder ?? CommonConstants.ErrorTextForUndefined,
+                    textForTurnPhase,
+                    textForPlayerIndexArray,
+                );
+            } else {
+                return Lang.getFormattedText(
+                    LangTextType.F0094,
+                    textForTurnIndex,
+                    textForTurnPhase,
+                    textForPlayerIndexArray,
+                );
+            }
+        } else {
+            if (shouldShowTextForTurnDivider) {
+                return Lang.getFormattedText(
+                    LangTextType.F0095,
+                    textForTurnIndex,
+                    turnIndexDivider ?? CommonConstants.ErrorTextForUndefined,
+                    turnIndexRemainderComparator == null ? CommonConstants.ErrorTextForUndefined : Lang.getValueComparatorName(turnIndexRemainderComparator),
+                    turnIndexRemainder ?? CommonConstants.ErrorTextForUndefined,
+                    textForTurnPhase,
+                    textForPlayerIndexArray,
+                );
+            } else {
+                return Lang.getFormattedText(
+                    LangTextType.F0094,
+                    textForTurnIndex,
+                    textForTurnPhase,
+                    textForPlayerIndexArray,
+                );
+            }
+        }
+    }
     function getDescForWecTurnPhaseEqualTo(data: Types.Undefinable<WarEvent.IWecTurnPhaseEqualTo>): string | null {
         return (data)
             ? Lang.getFormattedText(!data.isNot ? LangTextType.F0057 : LangTextType.F0058, Lang.getTurnPhaseName(Helpers.getExisted(data.valueEqualTo)))
             : null;
     }
+    function getDescForWecWeatherAndFog(data: Types.Undefinable<WarEvent.IWecWeatherAndFog>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const weatherTypeArray          = data.weatherTypeArray;
+        const textForWeatherTypeArray   = weatherTypeArray?.length
+            ? weatherTypeArray.map(v => Lang.getWeatherName(v)).join(`/`)
+            : Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0705));
+
+        const hasFogCurrently           = data.hasFogCurrently;
+        const textForHasFogCurrently    = hasFogCurrently != null
+            ? Lang.getFormattedText(LangTextType.F0107, Lang.getText(hasFogCurrently ? LangTextType.B0431 : LangTextType.B0432))
+            : null;
+
+        const textArrayForSubCondition = Helpers.getNonNullElements([
+            textForHasFogCurrently
+        ]);
+        return Lang.getFormattedText(
+            LangTextType.F0106,
+            textForWeatherTypeArray,
+            textArrayForSubCondition.length ? textArrayForSubCondition.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+        );
+    }
+    function getDescForWecTilePlayerIndexEqualTo(data: Types.Undefinable<WarEvent.IWecTilePlayerIndexEqualTo>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.WarEventHelper_GetDescForWecTilePlayerIndexEqualTo_00);
+        return Lang.getFormattedText(
+            data.isNot ? LangTextType.F0079 : LangTextType.F0078,
+            gridIndex.x,
+            gridIndex.y,
+            data.playerIndex
+        );
+    }
+    function getDescForWecTileTypeEqualTo(data: Types.Undefinable<WarEvent.IWecTileTypeEqualTo>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.WarEventHelper_GetDescForWecTileTypeEqualTo_00);
+        return Lang.getFormattedText(
+            data.isNot ? LangTextType.F0081 : LangTextType.F0080,
+            gridIndex.x,
+            gridIndex.y,
+            Lang.getTileName(Helpers.getExisted(data.tileType, ClientErrorCode.WarEventHelper_GetDescForWecTileTypeEqualTo_01))
+        );
+    }
+    function getDescForWecTilePresence(data: Types.Undefinable<WarEvent.IWecTilePresence>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const gridIndexArray        = data.gridIndexArray ?? [];
+        const locationIdArray       = data.locationIdArray ?? [];
+        const tileTypeArray         = data.tileTypeArray ?? [];
+        const playerIndexArray      = data.playerIndexArray ?? [];
+        const teamIndexArray        = data.teamIndexArray ?? [];
+        const tilesCount            = data.tilesCount;
+        const comparator            = data.tilesCountComparator;
+        const textForTileType       = tileTypeArray.length ? tileTypeArray.map(v => Lang.getTileName(v)).join(`/`) : Lang.getText(LangTextType.B0777);
+        const textForLocation       = locationIdArray.length ? `${Lang.getText(LangTextType.B0764)} ${locationIdArray.join(`/`)}` : null;
+        const textForGridIndex      = gridIndexArray.length ? `${Lang.getText(LangTextType.B0531)} ${gridIndexArray.map(v => `(${v.x},${v.y})`).join(`/`)}` : null;
+        const textForPlayerIndex    = playerIndexArray.length ? `${Lang.getText(LangTextType.B0031)} ${playerIndexArray.join(`/`)}` : null;
+        const textForTeamIndex      = teamIndexArray.length ? `${Lang.getText(LangTextType.B0377)} ${teamIndexArray.join(`/`)}` : null;
+        const textForPosition       = textForLocation
+            ? (textForGridIndex ? `${textForLocation} / ${textForGridIndex}` : textForLocation)
+            : (textForGridIndex ?? Lang.getText(LangTextType.B0765));
+        const textForOwner          = textForTeamIndex
+            ? (textForPlayerIndex ? `${textForTeamIndex} / ${textForPlayerIndex}` : textForTeamIndex)
+            : (textForPlayerIndex ?? Lang.getText(LangTextType.B0766));
+
+        // `The number of %tile type% at %location/grid% owned by %team/player% is %comparator% %count%`;
+        return Lang.getFormattedText(
+            LangTextType.F0093,
+            textForTileType,
+            textForPosition,
+            textForOwner,
+            comparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined),
+            tilesCount ?? CommonConstants.ErrorTextForUndefined
+        );
+    }
+    function getDescForWecUnitPresence(data: Types.Undefinable<WarEvent.IWecUnitPresence>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const unitTypeArray         = data.unitTypeArray;
+        const textForUnitTypeArray  = unitTypeArray?.length
+            ? unitTypeArray.map(v => Lang.getUnitName(v)).join(`/`)
+            : Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0805));
+
+        const teamIndexArray        = data.teamIndexArray;
+        const textForTeamIndex      = teamIndexArray?.length
+            ? Lang.getFormattedText(LangTextType.F0115, teamIndexArray.map(v => Lang.getPlayerTeamName(v)).join(`/`))
+            : null;
+
+        const playerIndexArray      = data.playerIndexArray;
+        const textForPlayerIndex    = playerIndexArray?.length
+            ? Lang.getFormattedText(LangTextType.F0115, playerIndexArray.map(v => `P${v}`).join(`/`))
+            : null;
+
+        const locationIdArray       = data.locationIdArray;
+        const textForLocation       = locationIdArray?.length
+            ? Lang.getFormattedText(LangTextType.F0116, locationIdArray.join(`/`))
+            : null;
+
+        const gridIndexArray        = data.gridIndexArray;
+        const textForGridIndex      = gridIndexArray?.length
+            ? Lang.getFormattedText(LangTextType.F0117, gridIndexArray.map(v => `(${v.x},${v.y})`).join(`/`))
+            : null;
+
+        const actionStateArray      = data.actionStateArray;
+        const textForActionState    = actionStateArray?.length
+            ? Lang.getFormattedText(LangTextType.F0118, actionStateArray.map(v => Lang.getUnitActionStateText(v)).join(`/`))
+            : null;
+
+        const hasLoadedCo           = data.hasLoadedCo;
+        const textForHasLoadedCo    = hasLoadedCo != null
+            ? Lang.getText(hasLoadedCo ? LangTextType.A0270 : LangTextType.A0271)
+            : null;
+
+        const hp                    = data.hp;
+        const hpComparator          = data.hpComparator;
+        const textForHp             = hp != null
+            ? Lang.getFormattedText(LangTextType.F0120, hpComparator != null ? Lang.getValueComparatorName(hpComparator) : CommonConstants.ErrorTextForUndefined, hp)
+            : null;
+
+        const fuelPct               = data.fuelPct;
+        const fuelPctComparator     = data.fuelPctComparator;
+        const textForFuelPct        = fuelPct != null
+            ? Lang.getFormattedText(LangTextType.F0121, fuelPctComparator != null ? Lang.getValueComparatorName(fuelPctComparator) : CommonConstants.ErrorTextForUndefined, fuelPct)
+            : null;
+
+        const priAmmoPct            = data.priAmmoPct;
+        const priAmmoPctComparator  = data.priAmmoPctComparator;
+        const textForPriAmmoPct     = priAmmoPct != null
+            ? Lang.getFormattedText(LangTextType.F0122, priAmmoPctComparator != null ? Lang.getValueComparatorName(priAmmoPctComparator) : CommonConstants.ErrorTextForUndefined, priAmmoPct)
+            : null;
+
+        const promotion             = data.promotion;
+        const promotionComparator   = data.promotionComparator;
+        const textForPromotion      = promotion != null
+            ? Lang.getFormattedText(LangTextType.F0123, promotionComparator != null ? Lang.getValueComparatorName(promotionComparator) : CommonConstants.ErrorTextForUndefined, promotion)
+            : null;
+
+        const unitsCount                = data.unitsCount;
+        const comparator                = data.unitsCountComparator;
+        const textArrayForSubConditions = Helpers.getNonNullElements([
+            textForTeamIndex,
+            textForPlayerIndex,
+            textForLocation,
+            textForGridIndex,
+            textForActionState,
+            textForHasLoadedCo,
+            textForHp,
+            textForFuelPct,
+            textForPriAmmoPct,
+            textForPromotion,
+        ]);
+        return Lang.getFormattedText(
+            LangTextType.F0090,
+            textForUnitTypeArray,
+            textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+            comparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined),
+            unitsCount ?? CommonConstants.ErrorTextForUndefined
+        );
+    }
+    function getDescForWecCustomCounter(data: Types.Undefinable<WarEvent.IWecCustomCounter>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const counterIdArray        = data.counterIdArray;
+        const textForCounterIdArray = counterIdArray?.length
+            ? counterIdArray.join(`/`)
+            : Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0792));
+
+        const targetValue           = data.value;
+        const textForTargetValue    = targetValue != null
+            ? Lang.getFormattedText(LangTextType.F0112, Lang.getValueComparatorName(Helpers.getExisted(data.valueComparator)), targetValue)
+            : null;
+
+        const valueDivider      = data.valueDivider;
+        const valueRemainder    = data.valueRemainder;
+        const textForRemainder  = (valueDivider ?? valueRemainder != null)
+            ? Lang.getFormattedText(LangTextType.F0113, valueDivider ?? CommonConstants.ErrorTextForUndefined, Lang.getValueComparatorName(Helpers.getExisted(data.valueRemainderComparator)), valueRemainder ?? CommonConstants.ErrorTextForUndefined)
+            : null;
+
+        const textArrayForSubConditions = Helpers.getNonNullElements([
+            textForTargetValue,
+            textForRemainder,
+        ]);
+        return Lang.getFormattedText(
+            LangTextType.F0111,
+            textForCounterIdArray,
+            textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+            Lang.getValueComparatorName(Helpers.getExisted(data.counterCountComparator)),
+            data.counterCount ?? CommonConstants.ErrorTextForUndefined,
+        );
+    }
 
     export function getDescForAction(action: IWarEventAction): string | null {
-        // TODO: add functions for other actions
+        // todo: add functions for other actions
         return (getDescForWeaAddUnit(action.WeaAddUnit))
+            || (getDescForWeaDialogue(action.WeaDialogue))
+            || (getDescForWeaSetViewpoint(action.WeaSetViewpoint))
+            || (getDescForWeaSetWeather(action.WeaSetWeather))
+            || (getDescForWeaSimpleDialogue(action.WeaSimpleDialogue))
+            || (getDescForWeaPlayBgm(action.WeaPlayBgm))
+            || (getDescForWeaSetForceFogCode(action.WeaSetForceFogCode))
+            || (getDescForWeaSetCustomCounter(action.WeaSetCustomCounter))
+            || (getDescForWeaDeprecatedSetPlayerAliveState(action.WeaDeprecatedSetPlayerAliveState))
+            || (getDescForWeaDeprecatedSetPlayerFund(action.WeaDeprecatedSetPlayerFund))
+            || (getDescForWeaDeprecatedSetPlayerCoEnergy(action.WeaDeprecatedSetPlayerCoEnergy))
             || (getDescForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState))
-            || (getDescForWeaDialogue(action.WeaDialogue));
+            || (getDescForWeaSetPlayerState(action.WeaSetPlayerState))
+            || (getDescForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy))
+            || (getDescForWeaSetUnitState(action.WeaSetUnitState));
     }
     function getDescForWeaAddUnit(data: Types.Undefinable<WarEvent.IWeaAddUnit>): string | null {
         if (!data) {
@@ -961,13 +2211,6 @@ namespace WarEventHelper {
                 unitNameArray.push(`${Lang.getUnitName(unitType)} * ${count}`);
             }
             return Lang.getFormattedText(LangTextType.F0059, unitNameArray.join(", "));
-        }
-    }
-    function getDescForWeaSetPlayerAliveState(data: Types.Undefinable<WarEvent.IWeaSetPlayerAliveState>): string | null {
-        if (!data) {
-            return null;
-        } else {
-            return Lang.getFormattedText(LangTextType.F0066, data.playerIndex, Lang.getPlayerAliveStateName(Helpers.getExisted(data.playerAliveState)));
         }
     }
     function getDescForWeaDialogue(data: Types.Undefinable<WarEvent.IWeaDialogue>): string | null {
@@ -989,6 +2232,335 @@ namespace WarEventHelper {
 
             return Lang.getFormattedText(LangTextType.F0070, coNameArray.join(`, `));
         }
+    }
+    function getDescForWeaSetViewpoint(data: Types.Undefinable<WarEvent.IWeaSetViewpoint>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const gridIndex = data.gridIndex;
+        return Lang.getFormattedText(LangTextType.F0075, gridIndex?.x, gridIndex?.y);
+    }
+    function getDescForWeaSetWeather(data: Types.Undefinable<WarEvent.IWeaSetWeather>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const weatherTurnsCount = Helpers.getExisted(data.weatherTurnsCount, ClientErrorCode.WarEventHelper_GetDescForWeaSetWeather_00);
+        const weatherName       = Lang.getWeatherName(Helpers.getExisted(data.weatherType, ClientErrorCode.WarEventHelper_GetDescForWeaSetWeather_01));
+        return (weatherTurnsCount == 0)
+            ? Lang.getFormattedText(LangTextType.F0077, weatherName)
+            : Lang.getFormattedText(LangTextType.F0076, weatherName, weatherTurnsCount);
+    }
+    function getDescForWeaSimpleDialogue(data: Types.Undefinable<WarEvent.IWeaSimpleDialogue>): string | null {
+        if (data == null) {
+            return null;
+        } else {
+            const coIdSet = new Set<number>();
+            for (const dialogueData of data.dataArray || []) {
+                const coId = dialogueData.dataForCoDialogue?.coId;
+                (coId != null) && (coIdSet.add(coId));
+            }
+
+            const coNameArray   : string[] = [];
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            for (const coId of coIdSet) {
+                const coName = ConfigManager.getCoNameAndTierText(configVersion, coId);
+                (coName != null) && (coNameArray.push(coName));
+            }
+
+            return Lang.getFormattedText(LangTextType.F0085, coNameArray.join(`, `));
+        }
+    }
+    function getDescForWeaPlayBgm(data: Types.Undefinable<WarEvent.IWeaPlayBgm>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        if (data.useCoBgm) {
+            return Lang.getText(LangTextType.A0262);
+        } else {
+            const bgmCode = data.bgmCode;
+            return `${Lang.getText(LangTextType.B0750)}: ${bgmCode == null ? CommonConstants.ErrorTextForUndefined : Lang.getBgmName(bgmCode)}`;
+        }
+    }
+    function getDescForWeaSetForceFogCode(data: Types.Undefinable<WarEvent.IWeaSetForceFogCode>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const turnsCount            = Helpers.getExisted(data.turnsCount, ClientErrorCode.WarEventHelper_GetDescForWeaSetHasFog_00);
+        const textForForceFogCode   = Lang.getForceFogCodeName(Helpers.getExisted(data.forceFogCode, ClientErrorCode.WarEventHelper_GetDescForWeaSetHasFog_01)) ?? CommonConstants.ErrorTextForUndefined;
+        return (turnsCount == 0)
+            ? Lang.getFormattedText(LangTextType.F0109, textForForceFogCode)
+            : Lang.getFormattedText(LangTextType.F0108, textForForceFogCode, turnsCount);
+    }
+    function getDescForWeaSetCustomCounter(data: Types.Undefinable<WarEvent.IWeaSetCustomCounter>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const counterIdArray = data.customCounterIdArray;
+        return Lang.getFormattedText(
+            LangTextType.F0110,
+            counterIdArray?.length ? counterIdArray.join(`/`) : Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0792)),
+            data.multiplierPercentage ?? 100,
+            data.deltaValue ?? 0
+        );
+    }
+    function getDescForWeaDeprecatedSetPlayerAliveState(data: Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerAliveState>): string | null {
+        if (!data) {
+            return null;
+        } else {
+            return Lang.getFormattedText(LangTextType.F0066, data.playerIndex, Lang.getPlayerAliveStateName(Helpers.getExisted(data.playerAliveState)));
+        }
+    }
+    function getDescForWeaDeprecatedSetPlayerFund(data: Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerFund>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        return Lang.getFormattedText(LangTextType.F0087, data.playerIndex, data.multiplierPercentage ?? 100, data.deltaValue ?? 0);
+    }
+    function getDescForWeaDeprecatedSetPlayerCoEnergy(data: Types.Undefinable<WarEvent.IWeaDeprecatedSetPlayerCoEnergy>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        return Lang.getFormattedText(LangTextType.F0086, data.playerIndex, data.multiplierPercentage ?? 100, data.deltaPercentage ?? 0);
+    }
+    function getDescForWeaSetPlayerAliveState(data: Types.Undefinable<WarEvent.IWeaSetPlayerAliveState>): string | null {
+        if (!data) {
+            return null;
+        }
+
+        const playerIndexArray = data.playerIndexArray;
+        return Lang.getFormattedText(
+            LangTextType.F0066,
+            playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`/`) : Lang.getText(LangTextType.B0766),
+            Lang.getPlayerAliveStateName(Helpers.getExisted(data.playerAliveState))
+        );
+    }
+    function getDescForWeaSetPlayerState(data: Types.Undefinable<WarEvent.IWeaSetPlayerState>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const conPlayerIndexArray           = data.conPlayerIndexArray;
+        const textForConPlayerIndexArray    = conPlayerIndexArray?.length
+            ? conPlayerIndexArray.map(v => `P${v}`).join(`/`)
+            : Lang.getText(LangTextType.B0766);
+
+        const conAliveStateArray        = data.conAliveStateArray;
+        const textForConAliveStateArray = conAliveStateArray?.length
+            ? Lang.getFormattedText(LangTextType.F0099, conAliveStateArray.map(v => Lang.getPlayerAliveStateName(v)).join(`/`))
+            : null;
+
+        const conCoUsingSkillTypeArray          = data.conCoUsingSkillTypeArray;
+        const textForConCoUsingSkillTypeArray   = conCoUsingSkillTypeArray?.length
+            ? Lang.getFormattedText(LangTextType.F0102, conCoUsingSkillTypeArray.map(v => Lang.getCoSkillTypeName(v)).join(`/`))
+            : null;
+
+        const conFund           = data.conFund;
+        const conFundComparator = data.conFundComparator;
+        const textForConFund    = conFund != null
+            ? Lang.getFormattedText(
+                LangTextType.F0100,
+                conFundComparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(conFundComparator) ?? CommonConstants.ErrorTextForUndefined),
+                conFund
+            )
+            : null;
+
+        const conEnergyPercentage           = data.conEnergyPercentage;
+        const conEnergyPercentageComparator = data.conEnergyPercentageComparator;
+        const textForConEnergyPercentage    = conEnergyPercentage != null
+            ? Lang.getFormattedText(
+                LangTextType.F0101,
+                conEnergyPercentageComparator == null ? CommonConstants.ErrorTextForUndefined : (Lang.getValueComparatorName(conEnergyPercentageComparator) ?? CommonConstants.ErrorTextForUndefined),
+                conEnergyPercentage
+            )
+            : null;
+
+        const textArrayForSubConditions = Helpers.getNonNullElements([
+            textForConAliveStateArray,
+            textForConCoUsingSkillTypeArray,
+            textForConFund,
+            textForConEnergyPercentage,
+        ]);
+
+        const actAliveState         = data.actAliveState;
+        const textForActAliveState  = actAliveState != null
+            ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0784), Lang.getPlayerAliveStateName(actAliveState))
+            : null;
+
+        const actFundDeltaValue             = data.actFundDeltaValue ?? 0;
+        const actFundMultiplierPercentage   = data.actFundMultiplierPercentage ?? 100;
+        const textForActFund                = ((actFundDeltaValue !== 0) || (actFundMultiplierPercentage !== 100))
+            ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0032), actFundMultiplierPercentage, actFundDeltaValue)
+            : null;
+
+        const actCoEnergyDeltaPct           = data.actCoEnergyDeltaPct ?? 0;
+        const actCoEnergyMultiplierPct      = data.actCoEnergyMultiplierPct ?? 100;
+        const textForActCoEnergy            = ((actCoEnergyDeltaPct !== 0) || (actCoEnergyMultiplierPct !== 100))
+            ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0809), actCoEnergyMultiplierPct, `${actCoEnergyDeltaPct}%`)
+            : null;
+
+        const textArrayForModifiers = Helpers.getNonNullElements([
+            textForActAliveState,
+            textForActFund,
+            textForActCoEnergy,
+        ]);
+
+        return `${Lang.getFormattedText(
+            LangTextType.F0126,
+            textForConPlayerIndexArray,
+            textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+        )} ${textArrayForModifiers.join(` `)}`;
+    }
+    function getDescForWeaSetPlayerCoEnergy(data: Types.Undefinable<WarEvent.IWeaSetPlayerCoEnergy>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const playerIndexArray = data.playerIndexArray;
+        return Lang.getFormattedText(
+            LangTextType.F0086,
+            playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`/`) : Lang.getText(LangTextType.B0766),
+            data.actCoEnergyMultiplierPct ?? 100,
+            data.actCoEnergyDeltaPct ?? 0
+        );
+    }
+    function getDescForWeaSetUnitState(data: Types.Undefinable<WarEvent.IWeaSetUnitState>): string | null {
+        if (data == null) {
+            return null;
+        }
+
+        const unitTypeArray         = data.conUnitTypeArray;
+        const textForUnitType       = unitTypeArray?.length
+            ? unitTypeArray.map(v => Lang.getUnitName(v)).join(`/`)
+            : Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0805));
+
+        const teamIndexArray        = data.conTeamIndexArray;
+        const textForTeamIndex      = teamIndexArray?.length
+            ? Lang.getFormattedText(LangTextType.F0115, teamIndexArray.map(v => Lang.getPlayerTeamName(v)).join(`/`))
+            : null;
+
+        const playerIndexArray      = data.conPlayerIndexArray;
+        const textForPlayerIndex    = playerIndexArray?.length
+            ? Lang.getFormattedText(LangTextType.F0115, playerIndexArray.map(v => `P${v}`).join(`/`))
+            : null;
+
+        const locationIdArray       = data.conLocationIdArray;
+        const textForLocation       = locationIdArray?.length
+            ? Lang.getFormattedText(LangTextType.F0116, locationIdArray.join(`/`))
+            : null;
+
+        const gridIndexArray        = data.conGridIndexArray;
+        const textForGridIndex      = gridIndexArray?.length
+            ? Lang.getFormattedText(LangTextType.F0117, gridIndexArray.map(v => `(${v.x},${v.y})`).join(`/`))
+            : null;
+
+        const actionStateArray      = data.conActionStateArray;
+        const textForActionState    = actionStateArray?.length
+            ? Lang.getFormattedText(LangTextType.F0118, actionStateArray.map(v => Lang.getUnitActionStateText(v)).join(`/`))
+            : null;
+
+        const hasLoadedCo           = data.conHasLoadedCo;
+        const textForHasLoadedCo    = hasLoadedCo != null
+            ? Lang.getText(hasLoadedCo ? LangTextType.A0270 : LangTextType.A0271)
+            : null;
+
+        const conHp                 = data.conHp;
+        const conHpComparator       = data.conHpComparator;
+        const textForConHp          = conHp != null
+            ? Lang.getFormattedText(LangTextType.F0120, conHpComparator != null ? Lang.getValueComparatorName(conHpComparator) : CommonConstants.ErrorTextForUndefined, conHp)
+            : null;
+
+        const conFuelPct            = data.conFuelPct;
+        const conFuelPctComparator  = data.conFuelPctComparator;
+        const textForConFuelPct     = conFuelPct != null
+            ? Lang.getFormattedText(LangTextType.F0121, conFuelPctComparator != null ? Lang.getValueComparatorName(conFuelPctComparator) : CommonConstants.ErrorTextForUndefined, conFuelPct)
+            : null;
+
+        const conPriAmmoPct             = data.conPriAmmoPct;
+        const conPriAmmoPctComparator   = data.conPriAmmoPctComparator;
+        const textForConPriAmmoPct      = conPriAmmoPct != null
+            ? Lang.getFormattedText(LangTextType.F0122, conPriAmmoPctComparator != null ? Lang.getValueComparatorName(conPriAmmoPctComparator) : CommonConstants.ErrorTextForUndefined, conPriAmmoPct)
+            : null;
+
+        const conPromotion              = data.conPromotion;
+        const conPromotionComparator    = data.conPromotionComparator;
+        const textForConPromotion       = conPromotion != null
+            ? Lang.getFormattedText(LangTextType.F0123, conPromotionComparator != null ? Lang.getValueComparatorName(conPromotionComparator) : CommonConstants.ErrorTextForUndefined, conPromotion)
+            : null;
+
+        const textArrayForSubConditions = Helpers.getNonNullElements([
+            textForTeamIndex,
+            textForPlayerIndex,
+            textForLocation,
+            textForGridIndex,
+            textForActionState,
+            textForHasLoadedCo,
+            textForConHp,
+            textForConFuelPct,
+            textForConPriAmmoPct,
+            textForConPromotion,
+        ]);
+        if (data.actDestroyUnit) {
+            return Lang.getFormattedText(
+                LangTextType.F0124,
+                textForUnitType,
+                textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+            );
+        }
+
+        const actActionState        = data.actActionState;
+        const textForActActionState = actActionState != null
+            ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0526), Lang.getUnitActionStateText(actActionState))
+            : null;
+
+        const actHasLoadedCo        = data.actHasLoadedCo;
+        const textForActHasLoadedCo = actHasLoadedCo != null
+            ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0421), Lang.getText(actHasLoadedCo ? LangTextType.B0012 : LangTextType.B0013))
+            : null;
+
+        const hpMultiplierPercentage    = data.actHpMultiplierPercentage ?? 100;
+        const hpDeltaValue              = data.actHpDeltaValue ?? 0;
+        const textForHp                 = ((hpMultiplierPercentage !== 100) || (hpDeltaValue !== 0))
+            ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0807), hpMultiplierPercentage, hpDeltaValue)
+            : null;
+
+        const fuelMultiplierPercentage  = data.actFuelMultiplierPercentage ?? 100;
+        const fuelDeltaValue            = data.actFuelDeltaValue ?? 0;
+        const textForFuel               = ((fuelMultiplierPercentage !== 100) || (fuelDeltaValue !== 0))
+            ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0342), fuelMultiplierPercentage, fuelDeltaValue)
+            : null;
+
+        const priAmmoMultiplierPercentage   = data.actPriAmmoMultiplierPercentage ?? 100;
+        const priAmmoDeltaValue             = data.actPriAmmoDeltaValue ?? 0;
+        const textForPriAmmo                = ((priAmmoMultiplierPercentage !== 100) || (priAmmoDeltaValue !== 0))
+            ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0350), priAmmoMultiplierPercentage, priAmmoDeltaValue)
+            : null;
+
+        const promotionMultiplierPercentage = data.actPromotionMultiplierPercentage ?? 100;
+        const promotionDeltaValue           = data.actPromotionDeltaValue ?? 0;
+        const textForPromotion              = ((promotionMultiplierPercentage !== 100) || (promotionDeltaValue !== 0))
+            ? Lang.getFormattedText(LangTextType.F0119, Lang.getText(LangTextType.B0370), promotionMultiplierPercentage, promotionDeltaValue)
+            : null;
+
+        const textArrayForModifiers = Helpers.getNonNullElements([
+            textForActActionState,
+            textForActHasLoadedCo,
+            textForHp,
+            textForFuel,
+            textForPriAmmo,
+            textForPromotion,
+        ]);
+        return `${Lang.getFormattedText(
+            LangTextType.F0114,
+            textForUnitType,
+            textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
+        )} ${textArrayForModifiers.join(` `)}`;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1058,7 +2630,7 @@ namespace WarEventHelper {
         return null;
     }
 
-    export function getErrorTipForCondition(fullData: IWarEventFullData, condition: IWarEventCondition): string | null {
+    export function getErrorTipForCondition(fullData: IWarEventFullData, condition: IWarEventCondition, war: BwWar): string | null {
         const conditionsCount = (fullData.conditionArray || []).length;
         if (conditionsCount > CommonConstants.WarEventMaxConditionsPerMap) {
             return `${Lang.getText(LangTextType.A0185)} (${conditionsCount}/${CommonConstants.WarEventMaxConditionsPerMap})`;
@@ -1068,34 +2640,29 @@ namespace WarEventHelper {
             return Lang.getText(LangTextType.A0187);
         }
 
-        // TODO add more tips for the future conditions.
-        if (condition.WecEventCalledCountTotalEqualTo) {
-            return getErrorTipForWecEventCalledCountTotalEqualTo(condition.WecEventCalledCountTotalEqualTo);
-        } else if (condition.WecEventCalledCountTotalGreaterThan) {
-            return getErrorTipForWecEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan);
-        } else if (condition.WecEventCalledCountTotalLessThan) {
-            return getErrorTipForWecEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan);
-        } else if (condition.WecPlayerAliveStateEqualTo) {
-            return getErrorTipForWecPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo);
-        } else if (condition.WecPlayerIndexInTurnEqualTo) {
-            return getErrorTipForWecPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo);
-        } else if (condition.WecPlayerIndexInTurnGreaterThan) {
-            return getErrorTipForWecPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan);
-        } else if (condition.WecPlayerIndexInTurnLessThan) {
-            return getErrorTipForWecPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan);
-        } else if (condition.WecTurnIndexEqualTo) {
-            return getErrorTipForWecTurnIndexEqualTo(condition.WecTurnIndexEqualTo);
-        } else if (condition.WecTurnIndexGreaterThan) {
-            return getErrorTipForWecTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan);
-        } else if (condition.WecTurnIndexLessThan) {
-            return getErrorTipForWecTurnIndexLessThan(condition.WecTurnIndexLessThan);
-        } else if (condition.WecTurnIndexRemainderEqualTo) {
-            return getErrorTipForWecTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo);
-        } else if (condition.WecTurnPhaseEqualTo) {
-            return getErrorTipForWecTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo);
-        } else {
-            return Lang.getText(LangTextType.A0187);
-        }
+        // todo add more tips for the future conditions.
+        if      (condition.WecEventCalledCountTotalEqualTo)     { return getErrorTipForWecEventCalledCountTotalEqualTo(condition.WecEventCalledCountTotalEqualTo); }
+        else if (condition.WecEventCalledCountTotalGreaterThan) { return getErrorTipForWecEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan); }
+        else if (condition.WecEventCalledCountTotalLessThan)    { return getErrorTipForWecEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan); }
+        else if (condition.WecEventCalledCount)                 { return getErrorTipForWecEventCalledCount(condition.WecEventCalledCount, fullData); }
+        else if (condition.WecPlayerAliveStateEqualTo)          { return getErrorTipForWecPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo); }
+        else if (condition.WecPlayerState)                      { return getErrorTipForWecPlayerState(condition.WecPlayerState, war); }
+        else if (condition.WecPlayerIndexInTurnEqualTo)         { return getErrorTipForWecPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo); }
+        else if (condition.WecPlayerIndexInTurnGreaterThan)     { return getErrorTipForWecPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan); }
+        else if (condition.WecPlayerIndexInTurnLessThan)        { return getErrorTipForWecPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan); }
+        else if (condition.WecTurnIndexEqualTo)                 { return getErrorTipForWecTurnIndexEqualTo(condition.WecTurnIndexEqualTo); }
+        else if (condition.WecTurnIndexGreaterThan)             { return getErrorTipForWecTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan); }
+        else if (condition.WecTurnIndexLessThan)                { return getErrorTipForWecTurnIndexLessThan(condition.WecTurnIndexLessThan); }
+        else if (condition.WecTurnIndexRemainderEqualTo)        { return getErrorTipForWecTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo); }
+        else if (condition.WecTurnAndPlayer)                    { return getErrorTipForWecTurnAndPlayer(condition.WecTurnAndPlayer, war); }
+        else if (condition.WecTurnPhaseEqualTo)                 { return getErrorTipForWecTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo); }
+        else if (condition.WecWeatherAndFog)                    { return getErrorTipForWecWeatherAndFog(condition.WecWeatherAndFog); }
+        else if (condition.WecTilePlayerIndexEqualTo)           { return getErrorTipForWecTilePlayerIndexEqualTo(condition.WecTilePlayerIndexEqualTo, war); }
+        else if (condition.WecTileTypeEqualTo)                  { return getErrorTipForWecTileTypeEqualTo(condition.WecTileTypeEqualTo, war); }
+        else if (condition.WecTilePresence)                     { return getErrorTipForWecTilePresence(condition.WecTilePresence, war); }
+        else if (condition.WecUnitPresence)                     { return getErrorTipForWecUnitPresence(condition.WecUnitPresence, war); }
+        else if (condition.WecCustomCounter)                    { return getErrorTipForWecCustomCounter(condition.WecCustomCounter); }
+        else                                                    { return Lang.getText(LangTextType.A0187); }
     }
     function getErrorTipForWecEventCalledCountTotalEqualTo(data: WarEvent.IWecEventCalledCountTotalEqualTo): string | null {
         if ((data.countEqualTo == null) || (data.eventIdEqualTo == null) || (data.isNot == null)) {
@@ -1118,6 +2685,38 @@ namespace WarEventHelper {
 
         return null;
     }
+    function getErrorTipForWecEventCalledCount(data: WarEvent.IWecEventCalledCount, fullData: IWarEventFullData): string | null {
+        if (data.eventsCount == null) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0788));
+        }
+
+        {
+            const comparator = data.eventsCountComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        if (data.eventIdArray?.some(eventId => !fullData.eventArray?.some(v => eventId === v.eventId))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0462));
+        }
+
+        {
+            const comparator = data.timesTotalComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.timesInTurnComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        return null;
+    }
     function getErrorTipForWecPlayerAliveStateEqualTo(data: WarEvent.IWecPlayerAliveStateEqualTo): string | null {
         const aliveState = data.aliveStateEqualTo;
         if ((aliveState == null) || (data.playerIndexEqualTo == null) || (data.isNot == null)) {
@@ -1128,6 +2727,47 @@ namespace WarEventHelper {
             (aliveState !== PlayerAliveState.Dying)
         ) {
             return Lang.getText(LangTextType.A0165);
+        }
+
+        return null;
+    }
+    function getErrorTipForWecPlayerState(data: WarEvent.IWecPlayerState, war: BwWar): string | null {
+        if (data.playersCount == null) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0229));
+        }
+
+        {
+            const comparator = data.playersCountComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        const playersCountUnneutral = war.getPlayersCountUnneutral();
+        if (data.playerIndexArray?.some(v => (v < CommonConstants.WarNeutralPlayerIndex) || (v > playersCountUnneutral))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
+        }
+
+        if (data.aliveStateArray?.some(v => !ConfigManager.checkIsValidPlayerAliveState(v))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0784));
+        }
+
+        {
+            const comparator = data.fundComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.energyPercentageComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        if (data.coUsingSkillTypeArray?.some(v => !ConfigManager.checkIsValidCoSkillType(v))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0785));
         }
 
         return null;
@@ -1188,6 +2828,49 @@ namespace WarEventHelper {
 
         return null;
     }
+    function getErrorTipForWecTurnAndPlayer(data: WarEvent.IWecTurnAndPlayer, war: BwWar): string | null {
+        {
+            const comparator = data.turnIndexComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const divider   = data.turnIndexDivider;
+            const remainder = data.turnIndexRemainder;
+            if (divider == null) {
+                if (remainder != null) {
+                    return Lang.getText(LangTextType.A0265);
+                }
+            } else {
+                if ((divider <= 1) || (remainder == null)) {
+                    return Lang.getText(LangTextType.A0265);
+                }
+            }
+
+            const comparator = data.turnIndexRemainderComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const turnPhase = data.turnPhase;
+            if ((turnPhase != null) && (!ConfigManager.checkIsValidTurnPhaseCode(turnPhase))) {
+                return Lang.getText(LangTextType.A0265);
+            }
+        }
+
+        {
+            const playersCountUnneutral = war.getPlayersCountUnneutral();
+            if (data.playerIndexArray?.some(v => (v < CommonConstants.WarNeutralPlayerIndex) || (v > playersCountUnneutral))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
+            }
+        }
+
+        return null;
+    }
     function getErrorTipForWecTurnPhaseEqualTo(data: WarEvent.IWecTurnPhaseEqualTo): string | null {
         const turnPhase = data.valueEqualTo;
         if ((turnPhase == null) || (data.isNot == null)) {
@@ -1198,6 +2881,196 @@ namespace WarEventHelper {
             (turnPhase !== Types.TurnPhaseCode.Main)
         ) {
             return Lang.getText(LangTextType.A0165);
+        }
+
+        return null;
+    }
+    function getErrorTipForWecWeatherAndFog(data: WarEvent.IWecWeatherAndFog): string | null {
+        {
+            const weatherTypeArray = data.weatherTypeArray;
+            if ((weatherTypeArray?.length) && (weatherTypeArray.some(v => !ConfigManager.checkIsValidWeatherType(v)))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0705));
+            }
+        }
+
+        return null;
+    }
+    function getErrorTipForWecTilePlayerIndexEqualTo(data: WarEvent.IWecTilePlayerIndexEqualTo, war: BwWar): string | null {
+        const gridIndex = GridIndexHelpers.convertGridIndex(data.gridIndex);
+        if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, war.getTileMap().getMapSize()))) {
+            return Lang.getText(LangTextType.A0250);
+        }
+
+        const playerIndex = data.playerIndex;
+        if ((playerIndex == null)                                               ||
+            (playerIndex < CommonConstants.WarNeutralPlayerIndex)               ||
+            (playerIndex > war.getPlayerManager().getTotalPlayersCount(true))
+        ) {
+            return Lang.getText(LangTextType.A0255);
+        }
+
+        return null;
+    }
+    function getErrorTipForWecTileTypeEqualTo(data: WarEvent.IWecTileTypeEqualTo, war: BwWar): string | null {
+        const gridIndex = GridIndexHelpers.convertGridIndex(data.gridIndex);
+        if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, war.getTileMap().getMapSize()))) {
+            return Lang.getText(LangTextType.A0250);
+        }
+
+        const tileType = data.tileType;
+        if ((tileType == null) || (!ConfigManager.checkIsValidTileType(tileType))) {
+            return Lang.getText(LangTextType.A0256);
+        }
+
+        return null;
+    }
+    function getErrorTipForWecTilePresence(data: WarEvent.IWecTilePresence, war: BwWar): string | null {
+        if (data.tilesCount == null) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0778));
+        }
+
+        const comparator = data.tilesCountComparator;
+        if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+        }
+
+        if (data.locationIdArray?.some(v => (v > CommonConstants.MapMaxLocationId) || (v < CommonConstants.MapMinLocationId))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0764));
+        }
+
+        const mapSize = war.getTileMap().getMapSize();
+        for (const g of data.gridIndexArray ?? []) {
+            const gridIndex = GridIndexHelpers.convertGridIndex(g);
+            if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0531));
+            }
+        }
+
+        if (data.tileTypeArray?.some(v => !ConfigManager.checkIsValidTileType(v))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0718));
+        }
+
+        const playersCountUnneutral = war.getPlayersCountUnneutral();
+        if (data.playerIndexArray?.some(v => (v < CommonConstants.WarNeutralPlayerIndex) || (v > playersCountUnneutral))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
+        }
+        if (data.teamIndexArray?.some(v => (v < CommonConstants.WarNeutralTeamIndex) || (v > playersCountUnneutral))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0377));
+        }
+
+        return null;
+    }
+    function getErrorTipForWecUnitPresence(data: WarEvent.IWecUnitPresence, war: BwWar): string | null {
+        if (data.unitsCount == null) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0773));
+        }
+
+        {
+            const comparator = data.unitsCountComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        if (data.locationIdArray?.some(v => (v > CommonConstants.MapMaxLocationId) || (v < CommonConstants.MapMinLocationId))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0764));
+        }
+
+        const mapSize = war.getTileMap().getMapSize();
+        for (const g of data.gridIndexArray ?? []) {
+            const gridIndex = GridIndexHelpers.convertGridIndex(g);
+            if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0531));
+            }
+        }
+
+        if (data.unitTypeArray?.some(v => !ConfigManager.checkIsValidUnitType(v))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0525));
+        }
+
+        const playersCountUnneutral = war.getPlayersCountUnneutral();
+        if (data.playerIndexArray?.some(v => (v < CommonConstants.WarNeutralPlayerIndex) || (v > playersCountUnneutral))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
+        }
+        if (data.teamIndexArray?.some(v => (v < CommonConstants.WarNeutralTeamIndex) || (v > playersCountUnneutral))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0377));
+        }
+
+        {
+            const actionStateArray = data.actionStateArray;
+            if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0526));
+            }
+        }
+
+        {
+            const comparator = data.hpComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.fuelPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.priAmmoPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.promotionComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        return null;
+    }
+    function getErrorTipForWecCustomCounter(data: WarEvent.IWecCustomCounter): string | null {
+        if (data.counterCount == null) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0801));
+        }
+
+        {
+            const comparator = data.counterCountComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.valueComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const divider   = data.valueDivider;
+            const remainder = data.valueRemainder;
+            if (divider == null) {
+                if (remainder != null) {
+                    return Lang.getText(LangTextType.A0265);
+                }
+            } else {
+                if ((divider <= 1) || (remainder == null)) {
+                    return Lang.getText(LangTextType.A0265);
+                }
+            }
+        }
+
+        {
+            const comparator = data.valueRemainderComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
         }
 
         return null;
@@ -1213,14 +3086,24 @@ namespace WarEventHelper {
             return Lang.getText(LangTextType.A0177);
         }
 
-        // TODO add more tips for the future actions.
-        if (action.WeaAddUnit) {
-            return getErrorTipForWeaAddUnit(action.WeaAddUnit, war);
-        } else if (action.WeaSetPlayerAliveState) {
-            return getErrorTipForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState);
-        } else if (action.WeaDialogue) {
-            return getErrorTipForWeaDialogue(action.WeaDialogue);
-        } else {
+        // todo: add more tips for the future actions.
+        const playersCountUnneutral = war.getPlayersCountUnneutral();
+        if      (action.WeaAddUnit)                         { return getErrorTipForWeaAddUnit(action.WeaAddUnit, war); }
+        else if (action.WeaDialogue)                        { return getErrorTipForWeaDialogue(action.WeaDialogue); }
+        else if (action.WeaSetViewpoint)                    { return getErrorTipForWeaSetViewpoint(action.WeaSetViewpoint, war); }
+        else if (action.WeaSetWeather)                      { return getErrorTipForWeaSetWeather(action.WeaSetWeather); }
+        else if (action.WeaSimpleDialogue)                  { return getErrorTipForWeaSimpleDialogue(action.WeaSimpleDialogue); }
+        else if (action.WeaPlayBgm)                         { return getErrorTipForWeaPlayBgm(action.WeaPlayBgm); }
+        else if (action.WeaSetForceFogCode)                 { return getErrorTipForWeaSetForceFogCode(action.WeaSetForceFogCode); }
+        else if (action.WeaSetCustomCounter)                { return getErrorTipForWeaSetCustomCounter(action.WeaSetCustomCounter); }
+        else if (action.WeaDeprecatedSetPlayerAliveState)   { return getErrorTipForWeaDeprecatedSetPlayerAliveState(action.WeaDeprecatedSetPlayerAliveState, playersCountUnneutral); }
+        else if (action.WeaDeprecatedSetPlayerFund)         { return getErrorTipForWeaDeprecatedSetPlayerFund(action.WeaDeprecatedSetPlayerFund, playersCountUnneutral); }
+        else if (action.WeaDeprecatedSetPlayerCoEnergy)     { return getErrorTipForWeaDeprecatedSetPlayerCoEnergy(action.WeaDeprecatedSetPlayerCoEnergy, playersCountUnneutral); }
+        else if (action.WeaSetPlayerAliveState)             { return getErrorTipForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState, playersCountUnneutral); }
+        else if (action.WeaSetPlayerState)                  { return getErrorTipForWeaSetPlayerState(action.WeaSetPlayerState, playersCountUnneutral); }
+        else if (action.WeaSetPlayerCoEnergy)               { return getErrorTipForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral); }
+        else if (action.WeaSetUnitState)                    { return getErrorTipForWeaSetUnitState(action.WeaSetUnitState, war); }
+        else {
             return Lang.getText(LangTextType.A0177);
         }
     }
@@ -1231,9 +3114,10 @@ namespace WarEventHelper {
             return `${Lang.getText(LangTextType.A0191)} (${unitsCount} / ${CommonConstants.WarEventActionAddUnitMaxCount})`;
         }
 
-        const mapSize       = war.getTileMap().getMapSize();
-        const configVersion = war.getConfigVersion();
-        const validator     = (v: ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit) => {
+        const mapSize               = war.getTileMap().getMapSize();
+        const configVersion         = war.getConfigVersion();
+        const playersCountUnneutral = war.getPlayersCountUnneutral();
+        const validator             = (v: ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit) => {
             const unitData = Helpers.getExisted(v.unitData);
             return (v.canBeBlockedByUnit != null)
                 && (v.needMovableTile != null)
@@ -1241,7 +3125,7 @@ namespace WarEventHelper {
                 && (!WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
-                    playersCountUnneutral: CommonConstants.WarMaxPlayerIndex,
+                    playersCountUnneutral,
                     configVersion,
                 }));
         };
@@ -1251,30 +3135,12 @@ namespace WarEventHelper {
 
         return null;
     }
-    function getErrorTipForWeaSetPlayerAliveState(data: WarEvent.IWeaSetPlayerAliveState): string | null {
-        const playerIndex = data.playerIndex;
-        if ((playerIndex == null)                               ||
-            (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
-            (playerIndex < CommonConstants.WarFirstPlayerIndex)
-        ) {
-            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${CommonConstants.WarMaxPlayerIndex})`;
-        }
-
-        const playerAliveState: Types.Undefinable<PlayerAliveState> = data.playerAliveState;
-        if (playerAliveState == null) {
-            return Lang.getText(LangTextType.A0213);
-        }
-
-        if ((playerAliveState !== PlayerAliveState.Alive)   &&
-            (playerAliveState !== PlayerAliveState.Dead)    &&
-            (playerAliveState !== PlayerAliveState.Dying)
-        ) {
-            return Lang.getText(LangTextType.A0213);
-        }
-
-        return null;
-    }
     function getErrorTipForWeaDialogue(data: WarEvent.IWeaDialogue): string | null {
+        const backgroundId = data.backgroundId;
+        if ((backgroundId != null) && (backgroundId > ConfigManager.getSystemDialogueBackgroundMaxId(Helpers.getExisted(ConfigManager.getLatestConfigVersion())))) {
+            return Lang.getText(LangTextType.A0258);
+        }
+
         const dialoguesArray    = data.dataArray || [];
         const dialoguesCount    = dialoguesArray.length;
         if ((dialoguesCount <= 0) || (dialoguesCount > CommonConstants.WarEventActionDialogueMaxCount)) {
@@ -1285,6 +3151,30 @@ namespace WarEventHelper {
             if (getErrorTipForWeaDialogueData(dialoguesArray[i])) {
                 return Lang.getFormattedText(LangTextType.F0071, i);
             }
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaSetViewpoint(data: WarEvent.IWeaSetViewpoint, war: BwWar): string | null {
+        const gridIndex = GridIndexHelpers.convertGridIndex(data.gridIndex);
+        if (gridIndex == null) {
+            return Lang.getText(LangTextType.A0250);
+        }
+
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, war.getTileMap().getMapSize())) {
+            return Lang.getText(LangTextType.A0251);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaSetWeather(data: WarEvent.IWeaSetWeather): string | null {
+        const weatherType = data.weatherType;
+        if ((weatherType == null) || (!ConfigManager.checkIsValidWeatherType(weatherType))) {
+            return Lang.getText(LangTextType.A0252);
+        }
+
+        if (data.weatherTurnsCount == null) {
+            return Lang.getText(LangTextType.A0253);
         }
 
         return null;
@@ -1333,6 +3223,348 @@ namespace WarEventHelper {
                     maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
                 })) {
                     return Lang.getText(LangTextType.A0232);
+                }
+
+                return null;
+            }
+        }
+
+        return Lang.getText(LangTextType.A0230);
+    }
+    function getErrorTipForWeaSimpleDialogue(data: WarEvent.IWeaSimpleDialogue): string | null {
+        const dialoguesArray    = data.dataArray || [];
+        const dialoguesCount    = dialoguesArray.length;
+        if ((dialoguesCount <= 0) || (dialoguesCount > CommonConstants.WarEventActionDialogueMaxCount)) {
+            return `${Lang.getText(LangTextType.A0227)} (${dialoguesCount} / ${CommonConstants.WarEventActionDialogueMaxCount})`;
+        }
+
+        for (let i = 0; i < dialoguesCount; ++i) {
+            if (getErrorTipForWeaSimpleDialogueData(dialoguesArray[i])) {
+                return Lang.getFormattedText(LangTextType.F0071, i);
+            }
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaPlayBgm(data: WarEvent.IWeaPlayBgm): string | null {
+        if (data.useCoBgm) {
+            return null;
+        }
+
+        const bgmCode = data.bgmCode;
+        return ((bgmCode == null) || (!SoundManager.checkIsValidBgmCode(bgmCode)))
+            ? Lang.getText(LangTextType.A0263)
+            : null;
+    }
+    function getErrorTipForWeaSetForceFogCode(data: WarEvent.IWeaSetForceFogCode): string | null {
+        const forceFogCode = data.forceFogCode;
+        if ((forceFogCode == null) || (!ConfigManager.checkIsValidForceFogCode(forceFogCode))) {
+            return Lang.getText(LangTextType.A0264);
+        }
+
+        if (data.turnsCount == null) {
+            return Lang.getText(LangTextType.A0253);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaSetCustomCounter(data: WarEvent.IWeaSetCustomCounter): string | null {
+        const customCounterIdArray = data.customCounterIdArray;
+        if ((customCounterIdArray)                                                                                                                                      &&
+            ((customCounterIdArray.length !== new Set(customCounterIdArray).size) || (customCounterIdArray.some(v => !ConfigManager.checkIsValidCustomCounterId(v))))
+        ) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0799));
+        }
+
+        const { deltaValue, multiplierPercentage } = data;
+        if ((deltaValue ?? multiplierPercentage) == null) {
+            return Lang.getText(LangTextType.A0264);
+        }
+
+        if (((deltaValue != null) && (Math.abs(deltaValue) > CommonConstants.WarEventActionSetCustomCounterMaxDeltaValue))                             ||
+            ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetCustomCounterMaxMultiplierPercentage))
+        ) {
+            return Lang.getText(LangTextType.A0265);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaDeprecatedSetPlayerAliveState(data: WarEvent.IWeaDeprecatedSetPlayerAliveState, playersCountUnneutral: number): string | null {
+        const playerIndex = data.playerIndex;
+        if ((playerIndex == null)                               ||
+            (playerIndex > playersCountUnneutral)               ||
+            (playerIndex < CommonConstants.WarFirstPlayerIndex)
+        ) {
+            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${playersCountUnneutral})`;
+        }
+
+        const playerAliveState: Types.Undefinable<PlayerAliveState> = data.playerAliveState;
+        if (playerAliveState == null) {
+            return Lang.getText(LangTextType.A0213);
+        }
+
+        if ((playerAliveState !== PlayerAliveState.Alive)   &&
+            (playerAliveState !== PlayerAliveState.Dead)    &&
+            (playerAliveState !== PlayerAliveState.Dying)
+        ) {
+            return Lang.getText(LangTextType.A0213);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaDeprecatedSetPlayerFund(data: WarEvent.IWeaDeprecatedSetPlayerFund, playersCountUnneutral: number): string | null {
+        const playerIndex = data.playerIndex;
+        if ((playerIndex == null)                               ||
+            (playerIndex > playersCountUnneutral)               ||
+            (playerIndex < CommonConstants.WarFirstPlayerIndex)
+        ) {
+            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${playersCountUnneutral})`;
+        }
+
+        const { deltaValue, multiplierPercentage } = data;
+        if ((deltaValue ?? multiplierPercentage) == null) {
+            return Lang.getText(LangTextType.A0264);
+        }
+
+        if (((deltaValue != null) && (Math.abs(deltaValue) > CommonConstants.WarEventActionSetPlayerFundMaxDeltaValue))                             ||
+            ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerFundMaxMultiplierPercentage))
+        ) {
+            return Lang.getText(LangTextType.A0265);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaDeprecatedSetPlayerCoEnergy(data: WarEvent.IWeaDeprecatedSetPlayerCoEnergy, playersCountUnneutral: number): string | null {
+        const playerIndex = data.playerIndex;
+        if ((playerIndex == null)                               ||
+            (playerIndex > playersCountUnneutral)               ||
+            (playerIndex < CommonConstants.WarFirstPlayerIndex)
+        ) {
+            return `${Lang.getText(LangTextType.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${playersCountUnneutral})`;
+        }
+
+        const { deltaPercentage, multiplierPercentage } = data;
+        if ((deltaPercentage ?? multiplierPercentage) == null) {
+            return Lang.getText(LangTextType.A0264);
+        }
+
+        if (((deltaPercentage != null) && (Math.abs(deltaPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxDeltaPercentage))              ||
+            ((multiplierPercentage != null) && (Math.abs(multiplierPercentage) > CommonConstants.WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage))
+        ) {
+            return Lang.getText(LangTextType.A0265);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaSetPlayerAliveState(data: WarEvent.IWeaSetPlayerAliveState, playersCountUnneutral: number): string | null {
+        const playerIndexArray = data.playerIndexArray;
+        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            return `${Lang.getText(LangTextType.A0212)}`;
+        }
+
+        const playerAliveState: Types.Undefinable<PlayerAliveState> = data.playerAliveState;
+        if (playerAliveState == null) {
+            return Lang.getText(LangTextType.A0213);
+        }
+
+        if ((playerAliveState !== PlayerAliveState.Alive)   &&
+            (playerAliveState !== PlayerAliveState.Dead)    &&
+            (playerAliveState !== PlayerAliveState.Dying)
+        ) {
+            return Lang.getText(LangTextType.A0213);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaSetPlayerState(data: WarEvent.IWeaSetPlayerState, playersCountUnneutral: number): string | null {
+        {
+            const conPlayerIndexArray = data.conPlayerIndexArray;
+            if ((conPlayerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(conPlayerIndexArray, playersCountUnneutral))) {
+                return `${Lang.getText(LangTextType.A0212)}`;
+            }
+        }
+
+        {
+            const conAliveStateArray = data.conAliveStateArray;
+            if ((conAliveStateArray) && (!ConfigManager.checkIsValidPlayerAliveStateSubset(conAliveStateArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0784));
+            }
+        }
+
+        {
+            const conCoUsingSkillTypeArray = data.conCoUsingSkillTypeArray;
+            if ((conCoUsingSkillTypeArray) && (!ConfigManager.checkIsValidCoSkillTypeSubset(conCoUsingSkillTypeArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0785));
+            }
+        }
+
+        {
+            const comparator = data.conFundComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.conEnergyPercentageComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const actAliveState = data.actAliveState;
+            if ((actAliveState != null) && (!ConfigManager.checkIsValidPlayerAliveState(actAliveState))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0784));
+            }
+        }
+
+        if ((data.actFundDeltaValue                 ??
+                data.actFundMultiplierPercentage    ??
+                data.actCoEnergyDeltaPct            ??
+                data.actCoEnergyMultiplierPct       ??
+                data.actAliveState
+            ) == null
+        ) {
+            return Lang.getText(LangTextType.A0264);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaSetPlayerCoEnergy(data: WarEvent.IWeaSetPlayerCoEnergy, playersCountUnneutral: number): string | null {
+        const playerIndexArray = data.playerIndexArray;
+        if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+            return `${Lang.getText(LangTextType.A0212)}`;
+        }
+
+        if ((data.actCoEnergyDeltaPct ?? data.actCoEnergyMultiplierPct) == null) {
+            return Lang.getText(LangTextType.A0264);
+        }
+
+        return null;
+    }
+    function getErrorTipForWeaSetUnitState(data: WarEvent.IWeaSetUnitState, war: BwWar): string | null {
+        {
+            const locationIdArray = data.conLocationIdArray;
+            if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0764));
+            }
+        }
+
+        {
+            const gridIndexArray = data.conGridIndexArray;
+            if ((gridIndexArray) && (!ConfigManager.checkIsValidGridIndexSubset(gridIndexArray, war.getTileMap().getMapSize()))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0531));
+            }
+        }
+
+        if (data.conUnitTypeArray?.some(v => !ConfigManager.checkIsValidUnitType(v))) {
+            return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0525));
+        }
+
+        const playersCountUnneutral = war.getPlayersCountUnneutral();
+        {
+            const playerIndexArray = data.conPlayerIndexArray;
+            if ((playerIndexArray) && (!ConfigManager.checkIsValidPlayerIndexSubset(playerIndexArray, playersCountUnneutral))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0521));
+            }
+        }
+
+        {
+            const teamIndexArray = data.conTeamIndexArray;
+            if ((teamIndexArray) && (!ConfigManager.checkIsValidTeamIndexSubset(teamIndexArray, playersCountUnneutral))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0377));
+            }
+        }
+
+        {
+            const actionStateArray = data.conActionStateArray;
+            if ((actionStateArray) && (!ConfigManager.checkIsValidUnitActionStateSubset(actionStateArray))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0526));
+            }
+        }
+
+        {
+            const comparator = data.conHpComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.conFuelPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.conPriAmmoPctComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const comparator = data.conPromotionComparator;
+            if ((comparator == null) || (!ConfigManager.checkIsValidValueComparator(comparator))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0774));
+            }
+        }
+
+        {
+            const actActionState = data.actActionState;
+            if ((actActionState != null) && (!ConfigManager.checkIsValidUnitActionState(actActionState))) {
+                return Lang.getFormattedText(LangTextType.F0091, Lang.getText(LangTextType.B0526));
+            }
+        }
+
+        if ((data.actHpMultiplierPercentage             ??
+                data.actHpDeltaValue                    ??
+                data.actFuelDeltaValue                  ??
+                data.actFuelMultiplierPercentage        ??
+                data.actPriAmmoDeltaValue               ??
+                data.actPriAmmoMultiplierPercentage     ??
+                data.actPromotionDeltaValue             ??
+                data.actPromotionMultiplierPercentage   ??
+                data.actActionState                     ??
+                data.actHasLoadedCo                     ??
+                (data.actDestroyUnit || null)
+            ) == null
+        ) {
+            return Lang.getText(LangTextType.A0264);
+        }
+
+        return null;
+    }
+    export function getErrorTipForWeaSimpleDialogueData(dialogueData: WarEvent.WeaSimpleDialogue.IDataForDialogue): string | null {
+        if (Object.keys(dialogueData).length !== 1) {
+            return Lang.getText(LangTextType.A0230);
+        }
+
+        const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+        {
+            const dataForCoDialogue = dialogueData.dataForCoDialogue;
+            if (dataForCoDialogue) {
+                const { coId, side, textArray, nameArray } = dataForCoDialogue;
+                if ((coId == null)                                                                                          ||
+                    (coId === CommonConstants.CoEmptyId)                                                                    ||
+                    (ConfigManager.getCoNameAndTierText(configVersion, coId) == null)                                       ||
+                    ((side !== Types.WarEventActionDialogueSide.Left) && (side !== Types.WarEventActionDialogueSide.Right)) ||
+                    (!Helpers.checkIsValidLanguageTextArray({
+                        list            : textArray,
+                        minTextCount    : 1,
+                        minTextLength   : 1,
+                        maxTextLength   : CommonConstants.WarEventActionDialogueTextMaxLength,
+                    }))                                                                                                     ||
+                    ((nameArray) && (!Helpers.checkIsValidLanguageTextArray({
+                        list            : nameArray,
+                        minTextCount    : 1,
+                        minTextLength   : 1,
+                        maxTextLength   : CommonConstants.WarEventActionDialogueNameMaxLength,
+                    })))
+                ) {
+                    return Lang.getText(LangTextType.A0231);
                 }
 
                 return null;
@@ -1605,33 +3837,28 @@ namespace WarEventHelper {
         return CONDITION_TYPE_ARRAY;
     }
     export function getConditionType(condition: IWarEventCondition): ConditionType | null {
-        if (condition.WecTurnIndexEqualTo) {
-            return ConditionType.WecTurnIndexEqualTo;
-        } else if (condition.WecTurnIndexGreaterThan) {
-            return ConditionType.WecTurnIndexGreaterThan;
-        } else if (condition.WecTurnIndexLessThan) {
-            return ConditionType.WecTurnIndexLessThan;
-        } else if (condition.WecTurnIndexRemainderEqualTo) {
-            return ConditionType.WecTurnIndexRemainderEqualTo;
-        } else if (condition.WecTurnPhaseEqualTo) {
-            return ConditionType.WecTurnPhaseEqualTo;
-        } else if (condition.WecPlayerIndexInTurnEqualTo) {
-            return ConditionType.WecPlayerIndexInTurnEqualTo;
-        } else if (condition.WecPlayerIndexInTurnGreaterThan) {
-            return ConditionType.WecPlayerIndexInTurnGreaterThan;
-        } else if (condition.WecPlayerIndexInTurnLessThan) {
-            return ConditionType.WecPlayerIndexInTurnLessThan;
-        } else if (condition.WecEventCalledCountTotalEqualTo) {
-            return ConditionType.WecEventCalledCountTotalEqualTo;
-        } else if (condition.WecEventCalledCountTotalGreaterThan) {
-            return ConditionType.WecEventCalledCountTotalGreaterThan;
-        } else if (condition.WecEventCalledCountTotalLessThan) {
-            return ConditionType.WecEventCalledCountTotalLessThan;
-        } else if (condition.WecPlayerAliveStateEqualTo) {
-            return ConditionType.WecPlayerAliveStateEqualTo;
-        } else {
-            return null;
-        }
+        if      (condition.WecTurnIndexEqualTo)                 { return ConditionType.WecTurnIndexEqualTo; }
+        else if (condition.WecTurnIndexGreaterThan)             { return ConditionType.WecTurnIndexGreaterThan; }
+        else if (condition.WecTurnIndexLessThan)                { return ConditionType.WecTurnIndexLessThan; }
+        else if (condition.WecTurnIndexRemainderEqualTo)        { return ConditionType.WecTurnIndexRemainderEqualTo; }
+        else if (condition.WecTurnAndPlayer)                    { return ConditionType.WecTurnAndPlayer; }
+        else if (condition.WecPlayerIndexInTurnEqualTo)         { return ConditionType.WecPlayerIndexInTurnEqualTo; }
+        else if (condition.WecPlayerIndexInTurnGreaterThan)     { return ConditionType.WecPlayerIndexInTurnGreaterThan; }
+        else if (condition.WecPlayerIndexInTurnLessThan)        { return ConditionType.WecPlayerIndexInTurnLessThan; }
+        else if (condition.WecEventCalledCountTotalEqualTo)     { return ConditionType.WecEventCalledCountTotalEqualTo; }
+        else if (condition.WecEventCalledCountTotalGreaterThan) { return ConditionType.WecEventCalledCountTotalGreaterThan; }
+        else if (condition.WecEventCalledCountTotalLessThan)    { return ConditionType.WecEventCalledCountTotalLessThan; }
+        else if (condition.WecEventCalledCount)                 { return ConditionType.WecEventCalledCount; }
+        else if (condition.WecPlayerAliveStateEqualTo)          { return ConditionType.WecPlayerAliveStateEqualTo; }
+        else if (condition.WecPlayerState)                      { return ConditionType.WecPlayerState; }
+        else if (condition.WecTurnPhaseEqualTo)                 { return ConditionType.WecTurnPhaseEqualTo; }
+        else if (condition.WecWeatherAndFog)                    { return ConditionType.WecWeatherAndFog; }
+        else if (condition.WecTilePlayerIndexEqualTo)           { return ConditionType.WecTilePlayerIndexEqualTo; }
+        else if (condition.WecTileTypeEqualTo)                  { return ConditionType.WecTileTypeEqualTo; }
+        else if (condition.WecTilePresence)                     { return ConditionType.WecTilePresence; }
+        else if (condition.WecUnitPresence)                     { return ConditionType.WecUnitPresence; }
+        else if (condition.WecCustomCounter)                    { return ConditionType.WecCustomCounter; }
+        else                                                    { return null; }
     }
     export function resetCondition(condition: IWarEventCondition, conditionType: ConditionType): void {
         const commonData = condition.WecCommonData;
@@ -1661,10 +3888,25 @@ namespace WarEventHelper {
                 divider         : 2,
                 remainderEqualTo: 0,
             };
+        } else if (conditionType === ConditionType.WecTurnAndPlayer) {
+            condition.WecTurnAndPlayer = {
+                turnIndex                       : null,
+                turnIndexComparator             : Types.ValueComparator.EqualTo,
+                turnIndexDivider                : null,
+                turnIndexRemainder              : null,
+                turnIndexRemainderComparator    : Types.ValueComparator.EqualTo,
+                turnPhase                       : null,
+                playerIndexArray                : null,
+            };
         } else if (conditionType === ConditionType.WecTurnPhaseEqualTo) {
             condition.WecTurnPhaseEqualTo = {
                 isNot           : false,
                 valueEqualTo    : Types.TurnPhaseCode.WaitBeginTurn,
+            };
+        } else if (conditionType === ConditionType.WecWeatherAndFog) {
+            condition.WecWeatherAndFog = {
+                weatherTypeArray    : null,
+                hasFogCurrently     : null,
             };
         } else if (conditionType === ConditionType.WecPlayerIndexInTurnEqualTo) {
             condition.WecPlayerIndexInTurnEqualTo = {
@@ -1699,60 +3941,150 @@ namespace WarEventHelper {
                 eventIdEqualTo  : 1,
                 countLessThan   : 1,
             };
+        } else if (conditionType === ConditionType.WecEventCalledCount) {
+            condition.WecEventCalledCount = {
+                eventIdArray            : null,
+                eventsCount             : 0,
+                eventsCountComparator   : Types.ValueComparator.EqualTo,
+                timesInTurn             : null,
+                timesInTurnComparator   : Types.ValueComparator.EqualTo,
+                timesTotal              : null,
+                timesTotalComparator    : Types.ValueComparator.EqualTo,
+            };
         } else if (conditionType === ConditionType.WecPlayerAliveStateEqualTo) {
             condition.WecPlayerAliveStateEqualTo = {
                 isNot               : false,
                 playerIndexEqualTo  : CommonConstants.WarFirstPlayerIndex,
                 aliveStateEqualTo   : PlayerAliveState.Alive,
             };
+        } else if (conditionType === ConditionType.WecPlayerState) {
+            condition.WecPlayerState = {
+                playersCount                : 0,
+                playersCountComparator      : Types.ValueComparator.EqualTo,
+                playerIndexArray            : null,
+                aliveStateArray             : null,
+                fund                        : null,
+                fundComparator              : Types.ValueComparator.EqualTo,
+                energyPercentage            : null,
+                energyPercentageComparator  : Types.ValueComparator.EqualTo,
+                coUsingSkillTypeArray       : null,
+            };
+        } else if (conditionType === ConditionType.WecTilePlayerIndexEqualTo) {
+            condition.WecTilePlayerIndexEqualTo = {
+                isNot       : false,
+                gridIndex   : { x: 0, y: 0 },
+                playerIndex : 0,
+            };
+        } else if (conditionType === ConditionType.WecTileTypeEqualTo) {
+            condition.WecTileTypeEqualTo = {
+                isNot       : false,
+                gridIndex   : { x: 0, y: 0 },
+                tileType    : Types.TileType.Plain,
+            };
+        } else if (conditionType === ConditionType.WecTilePresence) {
+            condition.WecTilePresence = {
+                teamIndexArray      : null,
+                playerIndexArray    : null,
+                locationIdArray     : null,
+                gridIndexArray      : null,
+                tileTypeArray       : null,
+                tilesCount          : 0,
+                tilesCountComparator: Types.ValueComparator.EqualTo,
+            };
+        } else if (conditionType === ConditionType.WecUnitPresence) {
+            condition.WecUnitPresence = {
+                teamIndexArray          : null,
+                playerIndexArray        : null,
+                locationIdArray         : null,
+                gridIndexArray          : null,
+                unitTypeArray           : null,
+                actionStateArray        : null,
+                hasLoadedCo             : null,
+                hp                      : null,
+                hpComparator            : Types.ValueComparator.EqualTo,
+                fuelPct                 : null,
+                fuelPctComparator       : Types.ValueComparator.EqualTo,
+                priAmmoPct              : null,
+                priAmmoPctComparator    : Types.ValueComparator.EqualTo,
+                promotion               : null,
+                promotionComparator     : Types.ValueComparator.EqualTo,
+                unitsCount              : 0,
+                unitsCountComparator    : Types.ValueComparator.EqualTo,
+            };
+        } else if (conditionType === ConditionType.WecCustomCounter) {
+            condition.WecCustomCounter = {
+                counterIdArray              : null,
+                counterCount                : 1,
+                counterCountComparator      : Types.ValueComparator.EqualTo,
+                value                       : null,
+                valueComparator             : Types.ValueComparator.EqualTo,
+                valueDivider                : null,
+                valueRemainder              : null,
+                valueRemainderComparator    : Types.ValueComparator.EqualTo,
+            };
         } else {
-            // TODO handle more condition types.
+            // todo: handle more condition types.
             throw Helpers.newError(`Invalid conditionType: ${conditionType}.`, ClientErrorCode.WarEventHelper_ResetCondition_00);
         }
     }
 
-    export function openConditionModifyPanel(fullData: IWarEventFullData, condition: IWarEventCondition): void {
-        // TODO handle more condition types.
-        WeConditionModifyPanel1.hide();
-        WeConditionModifyPanel2.hide();
-        WeConditionModifyPanel3.hide();
-        WeConditionModifyPanel4.hide();
-        WeConditionModifyPanel5.hide();
-        WeConditionModifyPanel6.hide();
-        WeConditionModifyPanel7.hide();
-        WeConditionModifyPanel8.hide();
-        WeConditionModifyPanel9.hide();
-        WeConditionModifyPanel10.hide();
-        WeConditionModifyPanel11.hide();
-        WeConditionModifyPanel12.hide();
+    export function openConditionModifyPanel({ fullData, condition, war }: {
+        fullData    : IWarEventFullData;
+        condition   : IWarEventCondition;
+        war         : BwWar;
+    }): void {
+        // todo: handle more condition types.
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel1);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel2);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel3);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel4);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel5);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel6);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel10);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel11);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel12);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel13);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel14);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel20);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel21);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel22);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel23);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel30);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel31);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel32);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel40);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel50);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeConditionModifyPanel60);
 
-        if (condition.WecTurnIndexEqualTo) {
-            WeConditionModifyPanel1.show({ fullData, condition });
-        } else if (condition.WecTurnIndexGreaterThan) {
-            WeConditionModifyPanel2.show({ fullData, condition });
-        } else if (condition.WecTurnIndexLessThan) {
-            WeConditionModifyPanel3.show({ fullData, condition });
-        } else if (condition.WecTurnIndexRemainderEqualTo) {
-            WeConditionModifyPanel4.show({ fullData, condition });
-        } else if (condition.WecTurnPhaseEqualTo) {
-            WeConditionModifyPanel5.show({ fullData, condition });
-        } else if (condition.WecPlayerIndexInTurnEqualTo) {
-            WeConditionModifyPanel6.show({ fullData, condition });
-        } else if (condition.WecPlayerIndexInTurnGreaterThan) {
-            WeConditionModifyPanel7.show({ fullData, condition });
-        } else if (condition.WecPlayerIndexInTurnLessThan) {
-            WeConditionModifyPanel8.show({ fullData, condition });
-        } else if (condition.WecEventCalledCountTotalEqualTo) {
-            WeConditionModifyPanel9.show({ fullData, condition });
-        } else if (condition.WecEventCalledCountTotalGreaterThan) {
-            WeConditionModifyPanel10.show({ fullData, condition });
-        } else if (condition.WecEventCalledCountTotalLessThan) {
-            WeConditionModifyPanel11.show({ fullData, condition });
-        } else if (condition.WecPlayerAliveStateEqualTo) {
-            WeConditionModifyPanel12.show({ fullData, condition });
-        } else {
-            throw Helpers.newError(`Invalid condition.`, ClientErrorCode.WarEventHelper_OpenConditionModifyPanel_00);
-        }
+        if      (condition.WecTurnIndexEqualTo)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel1, { fullData, condition, war }); }
+        else if (condition.WecTurnIndexGreaterThan)             { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel2, { fullData, condition, war }); }
+        else if (condition.WecTurnIndexLessThan)                { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel3, { fullData, condition, war }); }
+        else if (condition.WecTurnIndexRemainderEqualTo)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel4, { fullData, condition, war }); }
+        else if (condition.WecTurnPhaseEqualTo)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel5, { fullData, condition, war }); }
+        else if (condition.WecTurnAndPlayer)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel6, { fullData, condition, war }); }
+
+        else if (condition.WecPlayerIndexInTurnEqualTo)         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel10, { fullData, condition, war }); }
+        else if (condition.WecPlayerIndexInTurnGreaterThan)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel11, { fullData, condition, war }); }
+        else if (condition.WecPlayerIndexInTurnLessThan)        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel12, { fullData, condition, war }); }
+        else if (condition.WecPlayerAliveStateEqualTo)          { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel13, { fullData, condition, war }); }
+        else if (condition.WecPlayerState)                      { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel14, { fullData, condition, war }); }
+
+        else if (condition.WecEventCalledCountTotalEqualTo)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel20, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCountTotalGreaterThan) { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel21, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCountTotalLessThan)    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel22, { fullData, condition, war }); }
+        else if (condition.WecEventCalledCount)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel23, { fullData, condition, war }); }
+
+        else if (condition.WecTilePlayerIndexEqualTo)           { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel30, { fullData, condition, war }); }
+        else if (condition.WecTileTypeEqualTo)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel31, { fullData, condition, war }); }
+        else if (condition.WecTilePresence)                     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel32, { fullData, condition, war }); }
+
+        else if (condition.WecUnitPresence)                     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel40, { fullData, condition, war }); }
+
+        else if (condition.WecWeatherAndFog)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel50, { fullData, condition, war }); }
+
+        else if (condition.WecCustomCounter)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionModifyPanel60, { fullData, condition, war }); }
+
+        else                                                    { throw Helpers.newError(`Invalid condition.`, ClientErrorCode.WarEventHelper_OpenConditionModifyPanel_00); }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1762,16 +4094,23 @@ namespace WarEventHelper {
         return ACTION_TYPE_ARRAY;
     }
     export function getActionType(action: IWarEventAction): ActionType | null {
-        // TODO: handle future actions.
-        if (action.WeaAddUnit) {
-            return ActionType.AddUnit;
-        } else if (action.WeaSetPlayerAliveState) {
-            return ActionType.SetPlayerAliveState;
-        } else if (action.WeaDialogue) {
-            return ActionType.Dialogue;
-        } else {
-            return null;
-        }
+        // todo: handle future actions.
+        if      (action.WeaAddUnit)                         { return ActionType.AddUnit; }
+        else if (action.WeaDialogue)                        { return ActionType.Dialogue; }
+        else if (action.WeaSetViewpoint)                    { return ActionType.SetViewpoint; }
+        else if (action.WeaSetWeather)                      { return ActionType.SetWeather; }
+        else if (action.WeaSimpleDialogue)                  { return ActionType.SimpleDialogue; }
+        else if (action.WeaPlayBgm)                         { return ActionType.PlayBgm; }
+        else if (action.WeaSetForceFogCode)                 { return ActionType.SetForceFogCode; }
+        else if (action.WeaSetCustomCounter)                { return ActionType.SetCustomCounter; }
+        else if (action.WeaDeprecatedSetPlayerAliveState)   { return ActionType.DeprecatedSetPlayerAliveState; }
+        else if (action.WeaDeprecatedSetPlayerFund)         { return ActionType.DeprecatedSetPlayerFund; }
+        else if (action.WeaDeprecatedSetPlayerCoEnergy)     { return ActionType.DeprecatedSetPlayerCoEnergy; }
+        else if (action.WeaSetPlayerAliveState)             { return ActionType.SetPlayerAliveState; }
+        else if (action.WeaSetPlayerState)                  { return ActionType.SetPlayerState; }
+        else if (action.WeaSetPlayerCoEnergy)               { return ActionType.SetPlayerCoEnergy; }
+        else if (action.WeaSetUnitState)                    { return ActionType.SetUnitState; }
+        else                                                { return null; }
     }
     export function resetAction(action: IWarEventAction, actionType: ActionType): void {
         const commonData = action.WeaCommonData;
@@ -1780,19 +4119,117 @@ namespace WarEventHelper {
         }
         action.WeaCommonData = commonData;
 
-        // TODO handle future actions.
+        // todo handle future actions.
         if (actionType === ActionType.AddUnit) {
             action.WeaAddUnit = {
                 unitArray   : [],
             };
-        } else if (actionType === ActionType.SetPlayerAliveState) {
-            action.WeaSetPlayerAliveState = {
+        } else if (actionType === ActionType.Dialogue) {
+            action.WeaDialogue = {
+                backgroundId    : 0,
+                dataArray       : [],
+            };
+        } else if (actionType === ActionType.SetViewpoint) {
+            action.WeaSetViewpoint = {
+                gridIndex       : { x: 0, y: 0 },
+                needFocusEffect : false,
+            };
+        } else if (actionType === ActionType.SetWeather) {
+            action.WeaSetWeather = {
+                weatherType         : Types.WeatherType.Clear,
+                weatherTurnsCount   : 0,
+            };
+        } else if (actionType === ActionType.SimpleDialogue) {
+            action.WeaSimpleDialogue = {
+                dataArray       : [],
+            };
+        } else if (actionType === ActionType.PlayBgm) {
+            action.WeaPlayBgm = {
+                useCoBgm        : false,
+                bgmCode         : Types.BgmCode.None,
+            };
+        } else if (actionType === ActionType.SetForceFogCode) {
+            action.WeaSetForceFogCode = {
+                forceFogCode    : Types.ForceFogCode.Fog,
+                turnsCount      : 0,
+            };
+        } else if (actionType === ActionType.SetCustomCounter) {
+            action.WeaSetCustomCounter = {
+                customCounterIdArray    : null,
+                deltaValue              : 0,
+                multiplierPercentage    : 100,
+            };
+        } else if (actionType === ActionType.DeprecatedSetPlayerAliveState) {
+            action.WeaDeprecatedSetPlayerAliveState = {
                 playerIndex     : 1,
                 playerAliveState: PlayerAliveState.Alive,
             };
-        } else if (actionType === ActionType.Dialogue) {
-            action.WeaDialogue = {
-                dataArray: [],
+        } else if (actionType === ActionType.DeprecatedSetPlayerFund) {
+            action.WeaDeprecatedSetPlayerFund = {
+                playerIndex             : 1,
+                deltaValue              : 0,
+                multiplierPercentage    : 100,
+            };
+        } else if (actionType === ActionType.DeprecatedSetPlayerCoEnergy) {
+            action.WeaDeprecatedSetPlayerCoEnergy = {
+                playerIndex             : 1,
+                deltaPercentage         : 0,
+                multiplierPercentage    : 100,
+            };
+        } else if (actionType === ActionType.SetPlayerAliveState) {
+            action.WeaSetPlayerAliveState = {
+                playerIndexArray    : null,
+                playerAliveState    : PlayerAliveState.Alive,
+            };
+        } else if (actionType === ActionType.SetPlayerState) {
+            action.WeaSetPlayerState = {
+                conPlayerIndexArray             : null,
+                conAliveStateArray              : null,
+                conCoUsingSkillTypeArray        : null,
+                conEnergyPercentage             : null,
+                conEnergyPercentageComparator   : Types.ValueComparator.EqualTo,
+                conFund                         : null,
+                conFundComparator               : Types.ValueComparator.EqualTo,
+                actFundDeltaValue               : 0,
+                actFundMultiplierPercentage     : 100,
+                actCoEnergyDeltaPct             : 0,
+                actCoEnergyMultiplierPct        : 100,
+                actAliveState                   : null,
+            };
+        } else if (actionType === ActionType.SetPlayerCoEnergy) {
+            action.WeaSetPlayerCoEnergy = {
+                playerIndexArray            : null,
+                actCoEnergyDeltaPct         : 0,
+                actCoEnergyMultiplierPct    : 100,
+            };
+        } else if (actionType === ActionType.SetUnitState) {
+            action.WeaSetUnitState = {
+                conUnitTypeArray                    : null,
+                conTeamIndexArray                   : null,
+                conPlayerIndexArray                 : null,
+                conLocationIdArray                  : null,
+                conGridIndexArray                   : null,
+                conActionStateArray                 : null,
+                conHasLoadedCo                      : null,
+                conHp                               : null,
+                conHpComparator                     : Types.ValueComparator.EqualTo,
+                conFuelPct                          : null,
+                conFuelPctComparator                : Types.ValueComparator.EqualTo,
+                conPriAmmoPct                       : null,
+                conPriAmmoPctComparator             : Types.ValueComparator.EqualTo,
+                conPromotion                        : null,
+                conPromotionComparator              : Types.ValueComparator.EqualTo,
+                actDestroyUnit                      : null,
+                actActionState                      : null,
+                actHasLoadedCo                      : null,
+                actHpDeltaValue                     : 0,
+                actHpMultiplierPercentage           : 100,
+                actFuelDeltaValue                   : 0,
+                actFuelMultiplierPercentage         : 100,
+                actPriAmmoDeltaValue                : 0,
+                actPriAmmoMultiplierPercentage      : 100,
+                actPromotionDeltaValue              : 0,
+                actPromotionMultiplierPercentage    : 100,
             };
         } else {
             throw Helpers.newError(`Invalid actionType: ${actionType}.`, ClientErrorCode.WarEventHelper_ResetAction_00);
@@ -1800,18 +4237,44 @@ namespace WarEventHelper {
     }
 
     export function openActionModifyPanel(war: BwWar, fullData: IWarEventFullData, action: IWarEventAction): void {
-        // TODO handle more action types.
-        WeActionModifyPanel1.hide();
-        WeActionModifyPanel2.hide();
-        TwnsWeActionModifyPanel3.WeActionModifyPanel3.hide();
+        // todo: handle more action types.
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel1);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel2);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel3);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel4);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel5);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel6);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel7);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel10);
 
-        if (action.WeaAddUnit) {
-            WeActionModifyPanel1.show({ war, fullData, action });
-        } else if (action.WeaSetPlayerAliveState) {
-            WeActionModifyPanel2.show({ war, fullData, action });
-        } else if (action.WeaDialogue) {
-            TwnsWeActionModifyPanel3.WeActionModifyPanel3.show({ war, fullData, action });
-        } else {
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel20);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel21);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel22);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel23);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel24);
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel25);
+
+        TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionModifyPanel30);
+
+        if      (action.WeaAddUnit)                         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel1, { war, fullData, action }); }
+        else if (action.WeaSetCustomCounter)                { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel2, { war, fullData, action }); }
+        else if (action.WeaDialogue)                        { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel3, { war, fullData, action }); }
+        else if (action.WeaSetViewpoint)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel4, { war, fullData, action }); }
+        else if (action.WeaSetWeather)                      { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel5, { war, fullData, action }); }
+        else if (action.WeaSimpleDialogue)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel6, { war, fullData, action }); }
+        else if (action.WeaPlayBgm)                         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel7, { war, fullData, action }); }
+        else if (action.WeaSetForceFogCode)                 { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel10, { war, fullData, action }); }
+
+        else if (action.WeaDeprecatedSetPlayerAliveState)   { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel20, { war, fullData, action }); }
+        else if (action.WeaDeprecatedSetPlayerFund)         { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel21, { war, fullData, action }); }
+        else if (action.WeaDeprecatedSetPlayerCoEnergy)     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel22, { war, fullData, action }); }
+        else if (action.WeaSetPlayerAliveState)             { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel23, { war, fullData, action }); }
+        else if (action.WeaSetPlayerState)                  { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel24, { war, fullData, action }); }
+        else if (action.WeaSetPlayerCoEnergy)               { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel25, { war, fullData, action }); }
+
+        else if (action.WeaSetUnitState)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel30, { war, fullData, action }); }
+
+        else {
             throw Helpers.newError(`Invalid action.`, ClientErrorCode.WarEventHelper_OpenActionModifyPanel_00);
         }
     }
@@ -1840,6 +4303,39 @@ namespace WarEventHelper {
                 eventArray.sort((v1, v2) => Helpers.getExisted(v1.eventId) - Helpers.getExisted(v2.eventId));
                 return eventId;
             }
+        }
+    }
+    export function cloneEvent(fullData: IWarEventFullData, srcEventId: number, isShallowClone: boolean): number {
+        const eventArray    = Helpers.getExisted(fullData.eventArray);
+        const srcEvent      = Helpers.getExisted(eventArray.find(v => v.eventId === srcEventId));
+        for (let eventId = 1; ; ++eventId) {
+            if (eventArray.some(v => v.eventId === eventId)) {
+                continue;
+            }
+
+            const srcConditionNodeId = srcEvent.conditionNodeId;
+            if (isShallowClone) {
+                eventArray.push({
+                    eventId,
+                    eventNameArray          : Helpers.deepClone(srcEvent.eventNameArray),
+                    maxCallCountInPlayerTurn: srcEvent.maxCallCountInPlayerTurn,
+                    maxCallCountTotal       : srcEvent.maxCallCountTotal,
+                    actionIdArray           : Helpers.deepClone(srcEvent.actionIdArray),
+                    conditionNodeId         : srcConditionNodeId,
+                });
+            } else {
+                eventArray.push({
+                    eventId,
+                    eventNameArray          : Helpers.deepClone(srcEvent.eventNameArray),
+                    maxCallCountInPlayerTurn: srcEvent.maxCallCountInPlayerTurn,
+                    maxCallCountTotal       : srcEvent.maxCallCountTotal,
+                    actionIdArray           : (srcEvent.actionIdArray ?? []).map(v => cloneAction(fullData, v)),
+                    conditionNodeId         : srcConditionNodeId == null ? null : cloneNode(fullData, srcConditionNodeId, isShallowClone),
+                });
+            }
+
+            eventArray.sort((v1, v2) => Helpers.getExisted(v1.eventId) - Helpers.getExisted(v2.eventId));
+            return eventId;
         }
     }
 
@@ -1875,6 +4371,33 @@ namespace WarEventHelper {
 
                 return nodeId;
             }
+        }
+    }
+    export function cloneNode(fullData: IWarEventFullData, srcNodeId: number, isShallowClone: boolean): number {
+        const nodeArray = Helpers.getExisted(fullData.conditionNodeArray);
+        const srcNode   = Helpers.getExisted(nodeArray.find(v => v.nodeId === srcNodeId));
+        for (let nodeId = 1; ; ++nodeId) {
+            if (nodeArray.some(v => v.nodeId === nodeId)) {
+                continue;
+            }
+
+            const newNode   = Helpers.deepClone(srcNode);
+            newNode.nodeId  = nodeId;
+            nodeArray.push(newNode);
+            if (!isShallowClone) {
+                const conditionIdArray = srcNode.conditionIdArray;
+                if (conditionIdArray) {
+                    newNode.conditionIdArray = conditionIdArray.map(v => cloneCondition(fullData, v));
+                }
+
+                const subNodeIdArray = srcNode.subNodeIdArray;
+                if (subNodeIdArray) {
+                    newNode.subNodeIdArray = subNodeIdArray.map(v => cloneNode(fullData, v, isShallowClone));
+                }
+            }
+
+            nodeArray.sort((v1, v2) => Helpers.getExisted(v1.nodeId) - Helpers.getExisted(v2.nodeId));
+            return nodeId;
         }
     }
     export function cloneAndReplaceNodeInParentNode({ fullData, parentNodeId, nodeIdForDelete, nodeIdForClone }: {   // DONE
@@ -2031,9 +4554,14 @@ namespace WarEventHelper {
                     WecCommonData               : {
                         conditionId
                     },
-                    WecPlayerIndexInTurnEqualTo : {
-                        valueEqualTo    : 1,
-                        isNot           : false,
+                    WecTurnAndPlayer : {
+                        turnIndex                       : null,
+                        turnIndexComparator             : Types.ValueComparator.EqualTo,
+                        turnIndexDivider                : null,
+                        turnIndexRemainder              : null,
+                        turnIndexRemainderComparator    : Types.ValueComparator.EqualTo,
+                        turnPhase                       : null,
+                        playerIndexArray                : null,
                     },
                 });
                 conditionArray.sort((v1, v2) => Helpers.getExisted(v1.WecCommonData?.conditionId) - Helpers.getExisted(v2.WecCommonData?.conditionId));
@@ -2043,6 +4571,21 @@ namespace WarEventHelper {
 
                 return conditionId;
             }
+        }
+    }
+    export function cloneCondition(fullData: IWarEventFullData, srcConditionId: number): number {
+        const conditionArray    = Helpers.getExisted(fullData.conditionArray);
+        const newCondition      = Helpers.deepClone(Helpers.getExisted(conditionArray.find(v => v.WecCommonData?.conditionId === srcConditionId)));
+        conditionArray.push(newCondition);
+
+        for (let conditionId = 1; ; ++conditionId) {
+            if (conditionArray.some(v => v.WecCommonData?.conditionId === conditionId)) {
+                continue;
+            }
+
+            Helpers.getExisted(newCondition.WecCommonData).conditionId = conditionId;
+            conditionArray.sort((v1, v2) => Helpers.getExisted(v1.WecCommonData?.conditionId) - Helpers.getExisted(v2.WecCommonData?.conditionId));
+            return conditionId;
         }
     }
     export function cloneAndReplaceConditionInParentNode({ fullData, parentNodeId, conditionIdForDelete, conditionIdForClone }: {
@@ -2179,7 +4722,33 @@ namespace WarEventHelper {
             },
         };
     }
+    export function getDefaultSimpleCoDialogueData(): ProtoTypes.WarEvent.WeaSimpleDialogue.IDataForDialogue {
+        return {
+            dataForCoDialogue: {
+                coId        : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))[0],
+                side        : Types.WarEventActionSimpleDialogueSide.Bottom,
+                textArray   : [
+                    { languageType: Lang.getCurrentLanguageType(), text: `...` },
+                ],
+            },
+        };
+    }
 
+    export function cloneAction(fullData: IWarEventFullData, srcActionId: number): number {
+        const actionArray   = Helpers.getExisted(fullData.actionArray);
+        const newAction     = Helpers.deepClone(Helpers.getExisted(actionArray.find(v => v.WeaCommonData?.actionId === srcActionId)));
+        actionArray.push(newAction);
+
+        for (let actionId = 1; ; ++actionId) {
+            if (actionArray.some(v => v.WeaCommonData?.actionId === actionId)) {
+                continue;
+            }
+
+            Helpers.getExisted(newAction.WeaCommonData).actionId = actionId;
+            actionArray.sort((v1, v2) => Helpers.getExisted(v1.WeaCommonData?.actionId) - Helpers.getExisted(v2.WeaCommonData?.actionId));
+            return actionId;
+        }
+    }
     export function cloneAndReplaceActionInEvent({ fullData, eventId, actionIdForDelete, actionIdForClone }: {
         fullData            : IWarEventFullData;
         eventId             : number;
@@ -2231,21 +4800,8 @@ namespace WarEventHelper {
             return false;
         }
 
-        const eventData = getEvent(fullData, eventId);
-        if (eventData == null) {
-            return false;
-        }
-
-        if (eventData.actionIdArray == null) {
-            eventData.actionIdArray = [];
-        }
-
-        const actionIdArray = eventData.actionIdArray;
-        Helpers.deleteElementFromArray(actionIdArray, oldActionId);
-        if (actionIdArray.indexOf(newActionId) < 0) {
-            actionIdArray.push(newActionId);
-            actionIdArray.sort((v1, v2) => v1 - v2);
-        }
+        const actionIdArray = Helpers.getExisted(getEvent(fullData, eventId)?.actionIdArray);
+        actionIdArray[actionIdArray.indexOf(oldActionId)] = newActionId;
 
         return true;
     }

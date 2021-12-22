@@ -11,17 +11,14 @@
 // import MeModel              from "../model/MeModel";
 // import TwnsMeWar            from "../model/MeWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeMapTagPanel {
     import MeWar        = TwnsMeWar.MeWar;
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
 
-    export class MeMapTagPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeMapTagPanel;
-
+    export type OpenData = void;
+    export class MeMapTagPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnConfirm!   : TwnsUiButton.UiButton;
@@ -30,27 +27,7 @@ namespace TwnsMeMapTagPanel {
         private readonly _labelFog!     : TwnsUiLabel.UiLabel;
         private readonly _imgFog!       : TwnsUiImage.UiImage;
 
-        public static show(): void {
-            if (!MeMapTagPanel._instance) {
-                MeMapTagPanel._instance = new MeMapTagPanel();
-            }
-            MeMapTagPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeMapTagPanel._instance) {
-                await MeMapTagPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapEditor/MeMapTagPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -59,10 +36,16 @@ namespace TwnsMeMapTagPanel {
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
                 { ui: this._groupFog,       callback: this._onTouchedGroupMcw },
             ]);
-
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._imgFog.visible = !!(this._getWar().getMapTag() || {}).fog;
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _getWar(): MeWar {

@@ -119,7 +119,7 @@ namespace Helpers {
     }
 
     export function repeatString(str: string, times: number): string {
-        return (new Array(times + 1)).join(str);
+        return (new Array(Math.max(times, 0) + 1)).join(str);
     }
 
     export function getSuffixForRank(rank: Types.Undefinable<number>): string | null {
@@ -282,6 +282,47 @@ namespace Helpers {
         return arr.filter(v => v != null) as T[];
     }
 
+    export function checkIsMeetValueComparator({ comparator, actualValue, targetValue }: {
+        comparator  : Types.ValueComparator;
+        actualValue : number;
+        targetValue : number;
+    }): boolean {
+        return ((comparator === Types.ValueComparator.EqualTo)          && (actualValue === targetValue))
+            || ((comparator === Types.ValueComparator.NotEqualTo)       && (actualValue !== targetValue))
+            || ((comparator === Types.ValueComparator.GreaterThan)      && (actualValue > targetValue))
+            || ((comparator === Types.ValueComparator.NotGreaterThan)   && (actualValue <= targetValue))
+            || ((comparator === Types.ValueComparator.LessThan)         && (actualValue < targetValue))
+            || ((comparator === Types.ValueComparator.NotLessThan)      && (actualValue >= targetValue));
+    }
+    export function getNextValueComparator(comparator: Types.Undefinable<Types.ValueComparator>): Types.ValueComparator {
+        switch (comparator) {
+            case Types.ValueComparator.EqualTo          : return Types.ValueComparator.NotEqualTo;
+            case Types.ValueComparator.NotEqualTo       : return Types.ValueComparator.GreaterThan;
+            case Types.ValueComparator.GreaterThan      : return Types.ValueComparator.NotLessThan;
+            case Types.ValueComparator.NotLessThan      : return Types.ValueComparator.LessThan;
+            case Types.ValueComparator.LessThan         : return Types.ValueComparator.NotGreaterThan;
+            default                                     : return Types.ValueComparator.EqualTo;
+        }
+    }
+
+    export function getValueInRange({ minValue, maxValue, rawValue }: {
+        minValue    : number;
+        maxValue    : number;
+        rawValue    : number;
+    }): number {
+        if (minValue > maxValue) {
+            throw newError(`Helpers.getValueInRange() invalid minValue and maxValue: ${minValue}, ${maxValue}`, ClientErrorCode.Helpers_GetValueInRange_00);
+        }
+
+        if (rawValue > maxValue) {
+            return maxValue;
+        }
+        if (rawValue < minValue) {
+            return minValue;
+        }
+        return rawValue;
+    }
+
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */
     export function getDigitsCount(num: number): number {
         num = Math.abs(num);
@@ -411,6 +452,11 @@ namespace Helpers {
             return result;
         };
     }
+    export function wait(timeMs: number): Promise<void> {
+        return new Promise<void>(resolve => {
+            egret.setTimeout(resolve, null, timeMs);
+        });
+    }
 
     function getColorMatrix(color: Types.ColorType, value = 100): number[] | null {
         switch (color) {
@@ -472,7 +518,7 @@ namespace Helpers {
         const tween = egret.Tween.get(obj)
             .set(beginProps)
             .wait(waitTime || 0)
-            .to(endProps, tweenTime || 200, egret.Ease.sineOut);
+            .to(endProps, tweenTime || CommonConstants.DefaultTweenTime, egret.Ease.sineOut);
         if (callback) {
             tween.call(callback);
         }

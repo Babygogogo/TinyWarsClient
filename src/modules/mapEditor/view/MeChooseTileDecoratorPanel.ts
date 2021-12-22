@@ -15,6 +15,7 @@
 // import MeModel                  from "../model/MeModel";
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeChooseTileDecoratorPanel {
     import DataForDrawTileDecorator = TwnsMeDrawer.DataForDrawTileDecorator;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -22,12 +23,8 @@ namespace TwnsMeChooseTileDecoratorPanel {
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseTileDecoratorPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeChooseTileDecoratorPanel;
-
+    export type OpenData = void;
+    export class MeChooseTileDecoratorPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileDecoratorRenderer>;
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
@@ -36,27 +33,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
 
         private _dataListForRecent  : DataForTileDecoratorRenderer[] = [];
 
-        public static show(): void {
-            if (!MeChooseTileDecoratorPanel._instance) {
-                MeChooseTileDecoratorPanel._instance = new MeChooseTileDecoratorPanel();
-            }
-            MeChooseTileDecoratorPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeChooseTileDecoratorPanel._instance) {
-                await MeChooseTileDecoratorPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeChooseTileDecoratorPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -64,13 +41,20 @@ namespace TwnsMeChooseTileDecoratorPanel {
                 { ui: this._btnAutoFill,    callback: this._onTouchedBtnAutoFill },
                 { ui: this._btnCancel,      callback: this.close },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listCategory.setItemRenderer(CategoryRenderer);
             this._listRecent.setItemRenderer(TileDecoratorRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._updateListTileDecorator();
             this._updateListRecent();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public updateOnChooseTileDecorator(data: DataForDrawTileDecorator): void {
@@ -103,7 +87,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
         }
 
         private _onTouchedBtnAutoFill(): void {
-            TwnsCommonConfirmPanel.CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0233),
                 callback: () => {
                     Helpers.getExisted(MeModel.getWar()).getDrawer().autoFillTileDecorators();
@@ -130,7 +114,7 @@ namespace TwnsMeChooseTileDecoratorPanel {
 
                 const list = Helpers.getExisted(typeMap.get(decoratorType));
                 for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
-                    if ((decoratorType === Types.TileDecoratorType.Corner) && (shapeId === 0)) {
+                    if ((decoratorType === Types.TileDecoratorType.Shore) && (shapeId === 0)) {
                         continue;
                     }
 

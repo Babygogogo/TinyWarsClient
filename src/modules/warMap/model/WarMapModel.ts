@@ -239,6 +239,13 @@ namespace WarMapModel {
     export function getMmReviewingMaps(): IMapEditorData[] {
         return _reviewingMaps;
     }
+
+    export function getMapSize(mapRawData: IMapRawData): Types.MapSize | null {
+        const { mapWidth, mapHeight } = mapRawData;
+        return (mapWidth == null) || (mapHeight == null)
+             ? null
+             : { width: mapWidth, height: mapHeight };
+    }
 }
 
 // export default WarMapModel;

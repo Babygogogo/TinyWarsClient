@@ -12,16 +12,13 @@
 // import MeUtility            from "../model/MeUtility";
 // import TwnsMeWarMenuPanel   from "./MeWarMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeOffsetPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    export class MeOffsetPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeOffsetPanel;
-
+    export type OpenData = void;
+    export class MeOffsetPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _inputOffsetX! : TwnsUiTextInput.UiTextInput;
         private readonly _inputOffsetY! : TwnsUiTextInput.UiTextInput;
@@ -32,27 +29,7 @@ namespace TwnsMeOffsetPanel {
         private _offsetX    : number | null = null;
         private _offsetY    : number | null = null;
 
-        public static show(): void {
-            if (!MeOffsetPanel._instance) {
-                MeOffsetPanel._instance = new MeOffsetPanel();
-            }
-            MeOffsetPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeOffsetPanel._instance) {
-                await MeOffsetPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapEditor/MeOffsetPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -62,13 +39,18 @@ namespace TwnsMeOffsetPanel {
                 { ui: this._inputOffsetX,   callback: this._onFocusOutInputOffsetX, eventType: egret.Event.FOCUS_OUT },
                 { ui: this._inputOffsetY,   callback: this._onFocusOutInputOffsetY, eventType: egret.Event.FOCUS_OUT },
             ]);
-
+            this._setIsTouchMaskEnabled();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._inputOffsetY.text = "" + 0;
             this._inputOffsetX.text = "" + 0;
             this._offsetX           = 0;
             this._offsetY           = 0;
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnCancel(): void {
@@ -91,7 +73,7 @@ namespace TwnsMeOffsetPanel {
             }
 
             this.close();
-            TwnsMeWarMenuPanel.MeWarMenuPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.MeWarMenuPanel);
         }
 
         private _onFocusOutInputOffsetX(): void {

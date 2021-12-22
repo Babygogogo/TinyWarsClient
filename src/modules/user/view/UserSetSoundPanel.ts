@@ -11,16 +11,13 @@
 // import TwnsUiLabel          from "../../tools/ui/UiLabel";
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserSetSoundPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    export class UserSetSoundPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: UserSetSoundPanel;
-
+    export type OpenData = void;
+    export class UserSetSoundPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _labelTitle!           : TwnsUiLabel.UiLabel;
@@ -53,27 +50,7 @@ namespace TwnsUserSetSoundPanel {
         private _prevEffectMute             : boolean | null = null;
         private _prevEffectVolume           : number | null = null;
 
-        public static show(): void {
-            if (!UserSetSoundPanel._instance) {
-                UserSetSoundPanel._instance = new UserSetSoundPanel();
-            }
-            UserSetSoundPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (UserSetSoundPanel._instance) {
-                await UserSetSoundPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/user/UserSetSoundPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
             ]);
@@ -95,6 +72,7 @@ namespace TwnsUserSetSoundPanel {
                 { ui: this._btnDefault,         callback: this._onTouchedBtnDefault },
                 { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm },
             ]);
+            this._setIsTouchMaskEnabled();
 
             this._imgBgmMute.touchEnabled       = true;
             this._imgEffectMute.touchEnabled    = true;
@@ -106,11 +84,13 @@ namespace TwnsUserSetSoundPanel {
             this._prevEffectMute                = SoundManager.getIsEffectMute();
             this._prevEffectVolume              = SoundManager.getEffectVolume();
 
-            this._showOpenAnimation();
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            // nothing to do
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,7 +224,7 @@ namespace TwnsUserSetSoundPanel {
             this._labelBgmName.text = Lang.getBgmName(SoundManager.getPlayingBgmCode()) || CommonConstants.ErrorTextForUndefined;
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -255,21 +235,22 @@ namespace TwnsUserSetSoundPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

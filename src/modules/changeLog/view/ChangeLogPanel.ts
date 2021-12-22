@@ -19,16 +19,13 @@
 // import TwnsChangeLogAddPanel    from "./ChangeLogAddPanel";
 // import TwnsChangeLogModifyPanel from "./ChangeLogModifyPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsChangeLogPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    export class ChangeLogPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: ChangeLogPanel;
-
+    export type OpenData = void;
+    export class ChangeLogPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
@@ -38,28 +35,7 @@ namespace TwnsChangeLogPanel {
         private readonly _labelNoMessage!   : TwnsUiLabel.UiLabel;
         private readonly _btnAddMessage!    : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!ChangeLogPanel._instance) {
-                ChangeLogPanel._instance = new ChangeLogPanel();
-            }
-            ChangeLogPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (ChangeLogPanel._instance) {
-                await ChangeLogPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/changeLog/ChangeLogPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgChangeLogGetMessageList, callback: this._onMsgChangeLogGetMessageList },
@@ -70,17 +46,20 @@ namespace TwnsChangeLogPanel {
                 { ui: this._btnAddMessage,  callback: this._onTouchedBtnAddMessage },
                 { ui: this._btnClose,       callback: this.close },
             ]);
-            this._listMessage.setItemRenderer(MessageRenderer);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
-            this._showOpenAnimation();
+            this._listMessage.setItemRenderer(MessageRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
 
             if (!ChangeLogModel.getAllMessageList()) {
                 ChangeLogProxy.reqChangeLogGetMessageList();
             }
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -99,7 +78,7 @@ namespace TwnsChangeLogPanel {
         }
 
         private _onTouchedBtnAddMessage(): void {
-            TwnsChangeLogAddPanel.ChangeLogAddPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChangeLogAddPanel, void 0);
         }
 
         private _updateView(): void {
@@ -125,7 +104,7 @@ namespace TwnsChangeLogPanel {
             btn.visible = UserModel.checkCanSelfEditChangeLog();
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -136,21 +115,22 @@ namespace TwnsChangeLogPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -186,7 +166,7 @@ namespace TwnsChangeLogPanel {
 
         private _onTouchedBtnModify(): void {
             const messageId = this._getData().messageId;
-            (messageId != null) && (TwnsChangeLogModifyPanel.ChangeLogModifyPanel.show({ messageId }));
+            (messageId != null) && (TwnsPanelManager.open(TwnsPanelConfig.Dict.ChangeLogModifyPanel, { messageId }));
         }
     }
 }

@@ -3,43 +3,42 @@
 // import TwnsBwWar            from "../model/BwWar";
 // import Types                from "../../tools/helpers/Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwWarPanel {
-    import BwWar            = TwnsBwWar.BwWar;
-
-    type OpenDataForBwWarPanel = {
-        war: BwWar;
+    export type OpenData = {
+        war: TwnsBwWar.BwWar;
     };
-    export class BwWarPanel extends TwnsUiPanel.UiPanel<OpenDataForBwWarPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
+    export class BwWarPanel extends TwnsUiPanel.UiPanel<OpenData> {
+        private readonly _group!    : eui.Group;
 
-        private static _instance: BwWarPanel;
-
-        public static show(openData: OpenDataForBwWarPanel): void {
-            if (!BwWarPanel._instance) {
-                BwWarPanel._instance = new BwWarPanel();
-            }
-            BwWarPanel._instance.open(openData);
+        protected _onOpening(): void {
+            // nothing to do
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            this._group.addChild(this._getOpenData().war.getView());
+        }
+        protected _onClosing(): void {
+            this._group.removeChildren();
         }
 
-        public static async hide(): Promise<void> {
-            if (BwWarPanel._instance) {
-                await BwWarPanel._instance.close();
-            }
+        protected async _showOpenAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+                tweenTime   : 2000,
+            });
+
+            await Helpers.wait(2000);
         }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
+            });
 
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/baseWar/BwWarPanel.exml";
-        }
-
-        protected _onOpened(): void {
-            this.addChild(this._getOpenData().war.getView());
-        }
-
-        protected async _onClosed(): Promise<void> {
-            this.removeChildren();
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 }

@@ -20,6 +20,7 @@
 // import WarEventHelper       from "../../warEvent/model/WarEventHelper";
 // import TwnsMeWar            from "./MeWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MeUtility {
     import BwTile               = TwnsBwTile.BwTile;
     import MeWar                = TwnsMeWar.MeWar;
@@ -80,6 +81,64 @@ namespace MeUtility {
         38,     38,     44,     44,     39,     39,     44,     44,     // 111 0 1
         40,     41,     45,     45,     40,     41,     45,     45,     // 111 1 0
         42,     42,     46,     46,     42,     42,     46,     46,     // 111 1 1
+    ];
+    const TileRoadAutoShapeIdArray = [
+    //  0   1
+        0,  1,  // 0 0  0
+        1,  1,  // 0 0  1
+        0,  4,  // 0 1  0
+        2,  8,  // 0 1  1
+        0,  5,  // 1 0  0
+        3,  9,  // 1 0  1
+        0,  7,  // 1 1  0
+        6,  10, // 1 1  1
+    ];
+    const TileBridgeAutoShapeIdArray = [
+    //  0   1
+        0,  1,  // 0 0  0
+        1,  1,  // 0 0  1
+        0,  4,  // 0 1  0
+        2,  8,  // 0 1  1
+        0,  5,  // 1 0  0
+        3,  9,  // 1 0  1
+        0,  7,  // 1 1  0
+        6,  10, // 1 1  1
+    ];
+    const TilePlasmaAutoShapeIdMap = new Map<boolean, number[]>([
+        // boolean表示是否与陨石/激光发射器邻接
+        [ false, [
+        //  0       1
+            0,      1,      // 0 0  0
+            3,      15,     // 0 0  1
+            4,      10,     // 0 1  0
+            9,      8,      // 0 1  1
+            2,      11,     // 1 0  0
+            12,     6,      // 1 0  1
+            14,     5,      // 1 1  0
+            7,      13,     // 1 1  1
+        ]],
+        [ true, [
+        //  0       1
+            0,      16,     // 0 0  0
+            18,     24,     // 0 0  1
+            17,     20,     // 0 1  0
+            21,     26,     // 0 1  1
+            19,     22,     // 1 0  0
+            23,     28,     // 1 0  1
+            25,     29,     // 1 1  0
+            27,     13,     // 1 1  1
+        ]],
+    ]);
+    const TilePipeAutoShapeIdArray = [
+    //  0       1
+        0,      1,      // 0 0  0
+        3,      15,     // 0 0  1
+        4,      10,     // 0 1  0
+        9,      8,      // 0 1  1
+        2,      11,     // 1 0  0
+        12,     6,      // 1 0  1
+        14,     5,      // 1 1  0
+        7,      13,     // 1 1  1
     ];
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -487,6 +546,82 @@ namespace MeUtility {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function getAutoRoadShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+        const { x, y }      = gridIndex;
+        const isAdjacent4   = checkIsRoadOrBridge(tileMap, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkIsRoadOrBridge(tileMap, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkIsRoadOrBridge(tileMap, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkIsRoadOrBridge(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        return TileRoadAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+    }
+    export function getAutoBridgeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+        const { x, y }      = gridIndex;
+        const isAdjacent4   = checkIsRoadOrBridge(tileMap, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkIsRoadOrBridge(tileMap, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkIsRoadOrBridge(tileMap, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkIsRoadOrBridge(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        return TileBridgeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+    }
+    function checkIsRoadOrBridge(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+            return true;
+        }
+
+        const tileType = tileMap.getTile(gridIndex).getType();
+        return (tileType === Types.TileType.BridgeOnBeach)
+            || (tileType === Types.TileType.BridgeOnPlain)
+            || (tileType === Types.TileType.BridgeOnRiver)
+            || (tileType === Types.TileType.BridgeOnSea)
+            || (tileType === Types.TileType.Road);
+    }
+
+    export function getAutoPlasmaShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+        const { x, y }              = gridIndex;
+        const isAdjacent4           = checkIsPlasma(tileMap, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3           = checkIsPlasma(tileMap, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2           = checkIsPlasma(tileMap, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1           = checkIsPlasma(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === Types.TileType.Meteor);
+        return Helpers.getExisted(TilePlasmaAutoShapeIdMap.get(isAdjacentToMeteor))[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+    }
+    function checkIsPlasma(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+            return true;
+        }
+
+        const tileType = tileMap.getTile(gridIndex).getType();
+        return (tileType === Types.TileType.Plasma);
+    }
+
+    export function getAutoPipeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+        const isAdjacent4   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Left) ? 1 : 0;
+        const isAdjacent3   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Right) ? 1 : 0;
+        const isAdjacent2   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Down) ? 1 : 0;
+        const isAdjacent1   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Up) ? 1 : 0;
+        return TilePipeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
+    }
+    function checkCanLinkToPipe(tileMap: TwnsBwTileMap.BwTileMap, origin: GridIndex, direction: Types.Direction): boolean {
+        const gridIndex = GridIndexHelpers.getAdjacentGrid(origin, direction);
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+            return true;
+        }
+
+        const tile          = tileMap.getTile(gridIndex);
+        const objectType    = tile.getObjectType();
+        const objectShapeId = tile.getObjectShapeId();
+        if (objectType === Types.TileObjectType.Empty) {
+            return ((objectShapeId === 1) && ((direction === Types.Direction.Left) || (direction === Types.Direction.Right)))
+                || ((objectShapeId === 2) && ((direction === Types.Direction.Up) || (direction === Types.Direction.Down)));
+        } else if (objectType === Types.TileObjectType.Pipe) {
+            return true;
+        } else if (objectType === Types.TileObjectType.PipeJoint) {
+            return ((objectShapeId === 0) && ((direction === Types.Direction.Left) || (direction === Types.Direction.Right)))
+                || ((objectShapeId === 1) && ((direction === Types.Direction.Up) || (direction === Types.Direction.Down)));
+        } else {
+            return false;
+        }
+    }
+
     export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | null, shapeId: number | null } {
         const tile = tileMap.getTile(gridIndex);
         if (tile == null) {
@@ -520,7 +655,7 @@ namespace MeUtility {
             }
 
             return {
-                decoratorType   : TileDecoratorType.Corner,
+                decoratorType   : TileDecoratorType.Shore,
                 shapeId         : TileDecoratorAutoShapeIdArray[index],
             };
 
@@ -532,11 +667,11 @@ namespace MeUtility {
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 4 }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 5 };
+                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 4 }
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 5 };
                 }
 
             } else if ((shapeId === 1) || (shapeId === 5) || (shapeId === 9) || (shapeId === 13)) {
@@ -545,11 +680,11 @@ namespace MeUtility {
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 2 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 8 }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 10 };
+                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 8 }
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 10 };
                 }
 
             } else if ((shapeId === 2) || (shapeId === 6) || (shapeId === 10) || (shapeId === 14)) {
@@ -558,11 +693,11 @@ namespace MeUtility {
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 2 }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 3 };
+                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 2 }
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 3 };
                 }
 
             } else if ((shapeId === 3) || (shapeId === 7) || (shapeId === 11) || (shapeId === 15)) {
@@ -571,32 +706,32 @@ namespace MeUtility {
                 if (isSea1) {
                     return isSea2
                         ? { decoratorType: null,                        shapeId: null }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 4 };
                 } else {
                     return isSea2
-                        ? { decoratorType: TileDecoratorType.Corner,    shapeId: 8 }
-                        : { decoratorType: TileDecoratorType.Corner,    shapeId: 12 };
+                        ? { decoratorType: TileDecoratorType.Shore,    shapeId: 8 }
+                        : { decoratorType: TileDecoratorType.Shore,    shapeId: 12 };
                 }
 
             } else if ((shapeId === 16) || (shapeId === 20) || (shapeId === 24) || (shapeId === 28)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: 1 })))
                     ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 1 };
+                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 1 };
 
             } else if ((shapeId === 17) || (shapeId === 21) || (shapeId === 25) || (shapeId === 29)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: 1 })))
                     ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 4 };
+                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 4 };
 
             } else if ((shapeId === 18) || (shapeId === 22) || (shapeId === 26) || (shapeId === 30)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: -1, y: -1 })))
                     ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 8 };
+                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 8 };
 
             } else if ((shapeId === 19) || (shapeId === 23) || (shapeId === 27) || (shapeId === 31)) {
                 return (checkIsSeaOrEmpty(tileMap, GridIndexHelpers.add(gridIndex, { x: 1, y: -1 })))
                     ? { decoratorType: null,                        shapeId: null }
-                    : { decoratorType: TileDecoratorType.Corner,    shapeId: 2 };
+                    : { decoratorType: TileDecoratorType.Shore,    shapeId: 2 };
 
             } else {
                 return {

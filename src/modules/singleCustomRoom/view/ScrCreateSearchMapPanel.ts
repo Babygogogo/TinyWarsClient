@@ -9,16 +9,13 @@
 // import TwnsUiTextInput              from "../../tools/ui/UiTextInput";
 // import TwnsScrCreateMapListPanel    from "./ScrCreateMapListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsScrCreateSearchMapPanel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
-    export class ScrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<void> {
-        protected _IS_EXCLUSIVE = false;
-        protected _LAYER_TYPE   = Types.LayerType.Hud2;
-
-        private static _instance: ScrCreateSearchMapPanel;
-
+    export type OpenData = void;
+    export class ScrCreateSearchMapPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
         private readonly _btnReset!                 : TwnsUiButton.UiButton;
         private readonly _btnSearch!                : TwnsUiButton.UiButton;
@@ -35,26 +32,7 @@ namespace TwnsScrCreateSearchMapPanel {
         private readonly _inputPlayedTimes!         : TwnsUiTextInput.UiTextInput;
         private readonly _inputMinRating!           : TwnsUiTextInput.UiTextInput;
 
-        public static show(): void {
-            if (!ScrCreateSearchMapPanel._instance) {
-                ScrCreateSearchMapPanel._instance = new ScrCreateSearchMapPanel();
-            }
-            ScrCreateSearchMapPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (ScrCreateSearchMapPanel._instance) {
-                await ScrCreateSearchMapPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/singleCustomRoom/ScrCreateSearchMapPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose,  callback: this._onTouchedBtnClose },
                 { ui: this._btnReset,  callback: this._onTouchedBtnReset },
@@ -63,8 +41,13 @@ namespace TwnsScrCreateSearchMapPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
-
+            this._setIsTouchMaskEnabled();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onTouchedBtnClose(): void {
@@ -72,12 +55,12 @@ namespace TwnsScrCreateSearchMapPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            TwnsScrCreateMapListPanel.ScrCreateMapListPanel.getInstance().setMapFilters({});
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateMapListPanel, {});
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            TwnsScrCreateMapListPanel.ScrCreateMapListPanel.getInstance().setMapFilters({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateMapListPanel, {
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,

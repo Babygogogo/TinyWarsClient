@@ -146,7 +146,7 @@ namespace MfrModel {
             const newPlayerIndex                = data.newPlayerIndex;
             const playerDataInRoom              = Helpers.getExisted(roomInfo.playerDataList?.find(v => v.playerIndex === oldPlayerIndex));
             const playerDataInWar               = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.playerManager?.players?.find(v => v.playerIndex === newPlayerIndex));
-            playerDataInRoom.coId               = playerDataInWar.coId;
+            playerDataInRoom.coId               = data.coId;
             playerDataInRoom.unitAndTileSkinId  = playerDataInWar.unitAndTileSkinId;
             playerDataInRoom.playerIndex        = newPlayerIndex;
             if ((oldPlayerIndex !== newPlayerIndex) && (roomInfo.ownerPlayerIndex === oldPlayerIndex)) {

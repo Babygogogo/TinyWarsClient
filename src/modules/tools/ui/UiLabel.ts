@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiLabel {
     export class UiLabel extends eui.Label {
         public touchEnabled = false;
@@ -8,14 +9,24 @@ namespace TwnsUiLabel {
         public constructor() {
             super();
 
-            this.addEventListener(egret.Event.ENTER_FRAME, this._onRender, this);
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
         public setRichText(str: string): void {
             this.textFlow = (new egret.HtmlTextParser()).parser(str);
         }
 
-        private _onRender(): void {
+        private _onAddedToStage(): void {
+            this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+            this.addEventListener(egret.Event.ENTER_FRAME, this._onEnterFrame, this);
+            this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+        }
+        private _onRemovedFromStage(): void {
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.removeEventListener(egret.Event.ENTER_FRAME, this._onEnterFrame, this);
+            this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+        }
+        private _onEnterFrame(): void {
             this._autoResize();
         }
 

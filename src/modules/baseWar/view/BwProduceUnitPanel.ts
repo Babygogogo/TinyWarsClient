@@ -24,55 +24,26 @@
 // import TwnsBwUnitDetailPanel    from "./BwUnitDetailPanel";
 // import TwnsBwUnitView           from "./BwUnitView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwProduceUnitPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import BwUnitDetailPanel    = TwnsBwUnitDetailPanel.BwUnitDetailPanel;
-    import BwUnitView           = TwnsBwUnitView.BwUnitView;
     import UnitType             = Types.UnitType;
     import GridIndex            = Types.GridIndex;
     import BwWar                = TwnsBwWar.BwWar;
 
-    type OpenDataForBwProduceUnitPanel = {
+    export type OpenData = {
         gridIndex   : GridIndex;
         war         : BwWar;
     };
-    export class BwProduceUnitPanel extends TwnsUiPanel.UiPanel<OpenDataForBwProduceUnitPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: BwProduceUnitPanel;
-
+    export class BwProduceUnitPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _listUnit!     : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnDetail!    : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForBwProduceUnitPanel): void {
-            if (!BwProduceUnitPanel._instance) {
-                BwProduceUnitPanel._instance = new BwProduceUnitPanel();
-            }
-            BwProduceUnitPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (BwProduceUnitPanel._instance) {
-                await BwProduceUnitPanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = BwProduceUnitPanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = `resource/skins/baseWar/BwProduceUnitPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwPlannerStateChanged },
@@ -81,21 +52,20 @@ namespace TwnsBwProduceUnitPanel {
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
                 { ui: this._btnDetail, callback: this._onTouchedBtnDetail },
             ]);
+            this._setIsTouchMaskEnabled();
             this._setCallbackOnTouchedMask(() => {
                 this._getOpenData().war.getActionPlanner().setStateIdle();
             });
+
             this._listUnit.setItemRenderer(UnitRenderer);
             this._btnCancel.setShortSfxCode(Types.ShortSfxCode.None);
 
-            this._showOpenAnimation();
-
-            this._updateView();
-
             Notify.dispatch(NotifyType.BwProduceUnitPanelOpened);
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            this._updateView();
+        }
+        protected _onClosing(): void {
             Notify.dispatch(NotifyType.BwProduceUnitPanelClosed);
         }
 
@@ -116,7 +86,7 @@ namespace TwnsBwProduceUnitPanel {
         private _onTouchedBtnDetail(): void {
             const data = this._listUnit.getSelectedData();
             if (data) {
-                BwUnitDetailPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitDetailPanel, {
                     unit  : data.unit,
                 });
             }
@@ -175,14 +145,13 @@ namespace TwnsBwProduceUnitPanel {
                     minCost                 : skillCfg
                         ? Math.floor(cfgCost * costModifier * minNormalizedHp * skillCfg[5] / CommonConstants.UnitHpNormalizer / 100)
                         : Math.floor(cfgCost * costModifier),
-                    panel: this,
                 });
             }
 
             return dataList.sort(sorterForDataForList);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -193,22 +162,23 @@ namespace TwnsBwProduceUnitPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
 
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -226,7 +196,6 @@ namespace TwnsBwProduceUnitPanel {
         actionPlanner           : TwnsBwActionPlanner.BwActionPlanner;
         gridIndex               : GridIndex;
         unitProductionSkillCfg  : number[] | null;
-        panel                   : BwProduceUnitPanel;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private readonly _group!        : eui.Group;
@@ -239,7 +208,7 @@ namespace TwnsBwProduceUnitPanel {
         private readonly _imgProduce!   : TwnsUiImage.UiImage;
         private readonly _labelProduce! : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView      = new BwUnitView();
+        private readonly _unitView      = new TwnsBwUnitView.BwUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -289,7 +258,7 @@ namespace TwnsBwProduceUnitPanel {
                 return;
             }
 
-            if (!data.panel.getIsOpening()) {
+            if (!TwnsPanelManager.getRunningPanel(TwnsPanelConfig.Dict.BwProduceUnitPanel)) {
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
                 return;
             }
@@ -318,7 +287,7 @@ namespace TwnsBwProduceUnitPanel {
                         rawMaxHp,
                         Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * data.costModifier * skillCfg[5] / 100) / normalizer) * normalizer
                     );
-                    TwnsCommonInputPanel.CommonInputPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                         title           : `${Lang.getUnitName(unitType)} HP`,
                         currentValue    : "" + maxHp,
                         maxChars        : 3,

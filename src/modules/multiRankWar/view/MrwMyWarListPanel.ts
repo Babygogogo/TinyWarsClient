@@ -24,6 +24,7 @@
 // import TwnsUiTabItemRenderer                from "../../tools/ui/UiTabItemRenderer";
 // import WarMapModel                          from "../../warMap/model/WarMapModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMrwMyWarListPanel {
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -32,12 +33,8 @@ namespace TwnsMrwMyWarListPanel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
-    export class MrwMyWarListPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MrwMyWarListPanel;
-
+    export type OpenData = void;
+    export class MrwMyWarListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!         : eui.Group;
         private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage>;
 
@@ -57,25 +54,7 @@ namespace TwnsMrwMyWarListPanel {
         private _hasReceivedData    = false;
         private _isTabInitialized   = false;
 
-        public static show(): void {
-            if (!MrwMyWarListPanel._instance) {
-                MrwMyWarListPanel._instance = new MrwMyWarListPanel();
-            }
-            MrwMyWarListPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MrwMyWarListPanel._instance) {
-                await MrwMyWarListPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiRankWar/MrwMyWarListPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MrwPreviewingWarIdChanged,      callback: this._onNotifyMrwPreviewingWarIdChanged },
@@ -87,9 +66,8 @@ namespace TwnsMrwMyWarListPanel {
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listWar.setItemRenderer(WarRenderer);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._hasReceivedData   = false;
             this._isTabInitialized  = false;
             await this._initTabSettings();
@@ -99,9 +77,8 @@ namespace TwnsMrwMyWarListPanel {
 
             MpwProxy.reqMpwCommonGetMyWarInfoList();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -123,15 +100,15 @@ namespace TwnsMrwMyWarListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
-            TwnsLobbyTopPanel.LobbyTopPanel.show();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
 
         private _onTouchedBtnNextStep(): void {
             const warId = MpwModel.getMrwPreviewingWarId();
             if (warId != null) {
-                TwnsCommonBlockPanel.CommonBlockPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0040),
                 });
@@ -274,7 +251,7 @@ namespace TwnsMrwMyWarListPanel {
             return await MpwModel.createDataForCommonWarAdvancedSettingsPage(MpwModel.getMrwPreviewingWarId());
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
@@ -300,36 +277,37 @@ namespace TwnsMrwMyWarListPanel {
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupWarList,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnNextStep,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupTab,
-                    beginProps  : { alpha: 1, },
-                    endProps    : { alpha: 0, },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupWarList,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnNextStep,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 1, },
+                endProps    : { alpha: 0, },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -349,14 +327,12 @@ namespace TwnsMrwMyWarListPanel {
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.MrwPreviewingWarIdChanged,  callback: this._onNotifyMrwPreviewingWarIdChanged },
@@ -385,14 +361,6 @@ namespace TwnsMrwMyWarListPanel {
 
         private _onTouchTapBtnChoose(): void {
             MpwModel.setMrwPreviewingWarId(this._getData().warId);
-        }
-
-        private _onTouchTapBtnNext(): void {
-            TwnsCommonBlockPanel.CommonBlockPanel.show({
-                title   : Lang.getText(LangTextType.B0088),
-                content : Lang.getText(LangTextType.A0040),
-            });
-            MpwProxy.reqMpwCommonContinueWar(this._getData().warId);
         }
 
         private _updateState(): void {

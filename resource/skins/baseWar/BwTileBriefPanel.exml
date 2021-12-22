@@ -12,7 +12,7 @@
             </e:Group>
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="19" bottom="0"
                                  x="10" y="10" visible="true" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" />
-            <e:Group id="_conTileView" y="74" scaleX="0.5" scaleY="0.5" x="16" touchChildren="false"
+            <e:Group id="_conTileView" y="74" scaleX="1.5" scaleY="1.5" x="16" touchChildren="false"
                      touchEnabled="false" />
             <TwnsUiLabel:UiLabel id="_labelGridIndex" text="x11 y22" size="10" textColor="0xFFFFFF" y="22"
                                  horizontalCenter="0" />

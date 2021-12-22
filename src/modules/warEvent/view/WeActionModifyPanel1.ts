@@ -23,29 +23,21 @@
 // import TwnsWeActionAddUnitListPanel from "./WeActionAddUnitListPanel";
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel1 {
-    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import WeActionTypeListPanel    = TwnsWeActionTypeListPanel.WeActionTypeListPanel;
-    import WeActionAddUnitListPanel = TwnsWeActionAddUnitListPanel.WeActionAddUnitListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ColorValue               = Types.ColorValue;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
     import FocusEvent               = egret.FocusEvent;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import BwWar                    = TwnsBwWar.BwWar;
 
-    type OpenDataForWeActionModifyPanel1 = {
-        war         : BwWar;
+    export type OpenData = {
+        war         : TwnsMeWar.MeWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel1 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel1> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeActionModifyPanel1;
-
+    export class WeActionModifyPanel1 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _btnBack!          : TwnsUiButton.UiButton;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnAddUnit!       : TwnsUiButton.UiButton;
@@ -54,25 +46,7 @@ namespace TwnsWeActionModifyPanel1 {
         private readonly _labelUnitsCount!  : TwnsUiLabel.UiLabel;
         private readonly _listUnit!         : TwnsUiScrollList.UiScrollList<DataForUnitRenderer>;
 
-        public static show(openData: OpenDataForWeActionModifyPanel1): void {
-            if (!WeActionModifyPanel1._instance) {
-                WeActionModifyPanel1._instance = new WeActionModifyPanel1();
-            }
-            WeActionModifyPanel1._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WeActionModifyPanel1._instance) {
-                await WeActionModifyPanel1._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/warEvent/WeActionModifyPanel1.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnAddUnit,     callback: this._onTouchedBtnAddUnit },
                 { ui: this._btnClear,       callback: this._onTouchedBtnClear },
@@ -83,9 +57,16 @@ namespace TwnsWeActionModifyPanel1 {
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.WarEventFullDataChanged,    callback: this._onNotifyWarEventFullDataChanged },
             ]);
-            this._listUnit.setItemRenderer(UnitRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._listUnit.setItemRenderer(UnitRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +91,7 @@ namespace TwnsWeActionModifyPanel1 {
         }
 
         private _onTouchedBtnClear(): void {
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
                     Helpers.getExisted(this._getOpenData().action.WeaAddUnit?.unitArray).length = 0;
@@ -121,7 +102,7 @@ namespace TwnsWeActionModifyPanel1 {
 
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            WeActionTypeListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionTypeListPanel, {
                 war         : openData.war,
                 fullData    : openData.fullData,
                 action      : openData.action,
@@ -169,7 +150,7 @@ namespace TwnsWeActionModifyPanel1 {
     }
 
     type DataForUnitRenderer = {
-        war             : BwWar;
+        war             : TwnsMeWar.MeWar;
         action          : IWarEventAction;
         dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
     };
@@ -184,6 +165,9 @@ namespace TwnsWeActionModifyPanel1 {
         private readonly _groupNeedMovableTile!     : eui.Group;
         private readonly _labelNeedMovableTile!     : TwnsUiLabel.UiLabel;
         private readonly _imgNeedMovableTile!       : TwnsUiImage.UiImage;
+
+        private readonly _btnAiMode!                : TwnsUiButton.UiButton;
+        private readonly _labelAiMode!              : TwnsUiLabel.UiLabel;
 
         private readonly _labelGridIndex!           : TwnsUiLabel.UiLabel;
         private readonly _inputGridX!               : TwnsUiTextInput.UiTextInput;
@@ -236,6 +220,7 @@ namespace TwnsWeActionModifyPanel1 {
                 { ui: this._btnDelete,                  callback: this._onTouchedBtnDelete },
                 { ui: this._groupCanBeBlockedByUnit,    callback: this._onTouchedGroupCanBeBlockedByUnit },
                 { ui: this._groupNeedMovableTile,       callback: this._onTouchedGroupNeedMovableTile },
+                { ui: this._btnAiMode,                  callback: this._onTouchedBtnAiMode },
                 { ui: this._groupIsDiving,              callback: this._onTouchedGroupIsDiving },
                 { ui: this._groupHasLoadedCo,           callback: this._onTouchedGroupHasLoadedCo },
                 { ui: this._btnActionState,             callback: this._onTouchedBtnActionState },
@@ -259,7 +244,7 @@ namespace TwnsWeActionModifyPanel1 {
 
         private _onTouchedBtnDelete(): void {
             const data = this._getData();
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0029),
                 callback: () => {
                     Helpers.deleteElementFromArray(Helpers.getExisted(data.action.WeaAddUnit?.unitArray), data.dataForAddUnit);
@@ -275,6 +260,18 @@ namespace TwnsWeActionModifyPanel1 {
         private _onTouchedGroupNeedMovableTile(): void {
             const data                          = this._getData();
             data.dataForAddUnit.needMovableTile = !data.dataForAddUnit.needMovableTile;
+            Notify.dispatch(NotifyType.WarEventFullDataChanged);
+        }
+        private _onTouchedBtnAiMode(): void {
+            const unitData  = Helpers.getExisted(this._getData().dataForAddUnit.unitData);
+            const aiMode    = unitData.aiMode;
+            if (aiMode === Types.UnitAiMode.NoMove) {
+                unitData.aiMode = Types.UnitAiMode.Normal;
+            } else if ((aiMode === Types.UnitAiMode.Normal) || (aiMode == null)) {
+                unitData.aiMode = Types.UnitAiMode.WaitUntilCanAttack;
+            } else {
+                unitData.aiMode = Types.UnitAiMode.NoMove;
+            }
             Notify.dispatch(NotifyType.WarEventFullDataChanged);
         }
         private _onTouchedGroupIsDiving(): void {
@@ -301,7 +298,7 @@ namespace TwnsWeActionModifyPanel1 {
         }
         private _onTouchedBtnUnitType(): void {
             const data = this._getData();
-            WeActionAddUnitListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionAddUnitListPanel, {
                 configVersion   : data.war.getConfigVersion(),
                 dataForAddUnit  : data.dataForAddUnit,
             });
@@ -428,6 +425,7 @@ namespace TwnsWeActionModifyPanel1 {
             this._btnDelete.label               = Lang.getText(LangTextType.B0220);
             this._labelCanBeBlockedByUnit.text  = Lang.getText(LangTextType.B0532);
             this._labelNeedMovableTile.text     = Lang.getText(LangTextType.B0534);
+            this._btnAiMode.label               = Lang.getText(LangTextType.B0720);
             this._labelIsDiving.text            = Lang.getText(LangTextType.B0371);
             this._labelHasLoadedCo.text         = Lang.getText(LangTextType.B0421);
             this._labelGridIndex.text           = Lang.getText(LangTextType.B0531);
@@ -446,6 +444,7 @@ namespace TwnsWeActionModifyPanel1 {
             this._updateLabelError();
             this._updateComponentsForCanBeBlockedByUnit();
             this._updateComponentsForNeedMovableTile();
+            this._updateComponentsForAiMode();
             this._updateComponentsForIsDiving();
             this._updateComponentsForHasLoadedCo();
             this._updateComponentsForActionState();
@@ -478,6 +477,10 @@ namespace TwnsWeActionModifyPanel1 {
         private _updateComponentsForNeedMovableTile(): void {
             const data                          = this._getData();
             this._imgNeedMovableTile.visible    = (!!data.dataForAddUnit.needMovableTile);
+        }
+        private _updateComponentsForAiMode(): void {
+            const data              = this._getData();
+            this._labelAiMode.text  = Lang.getUnitAiModeName(data.dataForAddUnit.unitData?.aiMode ?? Types.UnitAiMode.Normal) ?? CommonConstants.ErrorTextForUndefined;
         }
         private _updateComponentsForIsDiving(): void {
             const data      = this._getData();
@@ -602,7 +605,7 @@ namespace TwnsWeActionModifyPanel1 {
 
     function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
         dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
-        war             : BwWar;
+        war             : TwnsMeWar.MeWar;
     }): string | null {
         if (dataForAddUnit.canBeBlockedByUnit == null) {
             return Lang.getText(LangTextType.A0192);
@@ -626,7 +629,7 @@ namespace TwnsWeActionModifyPanel1 {
         {
             const playerIndex = unitData.playerIndex;
             if ((playerIndex == null)                               ||
-                (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
+                (playerIndex > war.getPlayersCountUnneutral())      ||
                 (playerIndex < CommonConstants.WarFirstPlayerIndex)
             ) {
                 return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0521));

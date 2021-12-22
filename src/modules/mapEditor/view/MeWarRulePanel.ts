@@ -32,27 +32,16 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWarRulePanel {
-    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonHelpPanel          = TwnsCommonHelpPanel.CommonHelpPanel;
     import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
     import MeField                  = TwnsMeField.MeField;
     import MeWar                    = TwnsMeWar.MeWar;
-    import CommonChooseCoPanel      = TwnsCommonChooseCoPanel.CommonChooseCoPanel;
-    import MeAvailableCoPanel       = TwnsMeAvailableCoPanel.MeAvailableCoPanel;
-    import MeAddWarEventToRulePanel = TwnsMeAddWarEventToRulePanel.MeAddWarEventToRulePanel;
-    import MeModifyRuleNamePanel    = TwnsMeModifyRuleNamePanel.MeModifyRuleNamePanel;
-    import WeEventListPanel         = TwnsWeEventListPanel.WeEventListPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarRule                 = ProtoTypes.WarRule.IWarRule;
     import IDataForPlayerRule       = ProtoTypes.WarRule.IDataForPlayerRule;
 
-    export class MeWarRulePanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeWarRulePanel;
-
+    export type OpenData = void;
+    export class MeWarRulePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
         private readonly _listWarRule!              : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
         private readonly _btnAddRule!               : TwnsUiButton.UiButton;
@@ -94,30 +83,7 @@ namespace TwnsMeWarRulePanel {
         private _selectedIndex          : number | null = null;
         private _selectedRule           : IWarRule | null = null;
 
-        public static show(): void {
-            if (!MeWarRulePanel._instance) {
-                MeWarRulePanel._instance = new MeWarRulePanel();
-            }
-            MeWarRulePanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeWarRulePanel._instance) {
-                await MeWarRulePanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = MeWarRulePanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapEditor/MeWarRulePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MeWarRuleNameChanged,       callback: this._onNotifyMeWarRuleNameChanged },
@@ -140,16 +106,21 @@ namespace TwnsMeWarRulePanel {
                 { ui: this._btnAddWarEvent,         callback: this._onTouchedBtnAddWarEvent },
                 { ui: this._btnTestWarEvent,        callback: this._onTouchedBtnTestWarEvent },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listWarEvent.setItemRenderer(WarEventRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._resetView();
         }
-        protected async _onClosed(): Promise<void> {
-            Notify.dispatch(NotifyType.BwCoListPanelClosed);
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public setSelectedIndex(newIndex: number): void {
@@ -196,7 +167,6 @@ namespace TwnsMeWarRulePanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsMeWarMenuPanel.MeWarMenuPanel.show();
         }
 
         private _onTouchedBtnDelete(): void {
@@ -206,7 +176,7 @@ namespace TwnsMeWarRulePanel {
                 if (war.getWarRuleArray().length <= 1) {
                     FloatText.show(Lang.getText(LangTextType.A0096));
                 } else {
-                    CommonConfirmPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                         content : Lang.getText(LangTextType.A0097),
                         callback: () => {
                             war.deleteWarRule(Helpers.getExisted(selectedRule.ruleId));
@@ -228,7 +198,7 @@ namespace TwnsMeWarRulePanel {
         }
 
         private _onTouchedBtnHelpHasFog(): void {
-            CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0020),
                 content: Lang.getText(LangTextType.R0002),
             });
@@ -254,7 +224,7 @@ namespace TwnsMeWarRulePanel {
         private _onTouchedBtnModifyRuleName(): void {
             const rule = this._selectedRule;
             if ((rule) && (!this._getWar().getIsReviewingMap())) {
-                MeModifyRuleNamePanel.show({ ruleId: Helpers.getExisted(rule.ruleId) });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeModifyRuleNamePanel, { ruleId: Helpers.getExisted(rule.ruleId) });
             }
         }
 
@@ -312,7 +282,7 @@ namespace TwnsMeWarRulePanel {
         }
 
         private _onTouchedBtnEditWarEvent(): void {
-            WeEventListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeEventListPanel, {
                 war: this._getWar(),
             });
             this.close();
@@ -321,7 +291,7 @@ namespace TwnsMeWarRulePanel {
         private _onTouchedBtnAddWarEvent(): void {
             const warRule = this._selectedRule;
             if (warRule) {
-                MeAddWarEventToRulePanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeAddWarEventToRulePanel, {
                     warRule,
                 });
             }
@@ -749,7 +719,7 @@ namespace TwnsMeWarRulePanel {
                 callbackOnTouchedTitle  : isReviewing
                     ? null
                     : () => {
-                        MeAvailableCoPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeAvailableCoPanel, {
                             warRule,
                             playerRule,
                             isReviewing,
@@ -768,7 +738,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0178),
                             currentValue    : "" + currValue,
                             maxChars        : 7,
@@ -799,7 +769,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
                         const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0179),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -830,7 +800,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0180),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -861,7 +831,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0181),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -892,7 +862,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0182),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -923,7 +893,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
                         const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0183),
                             currentValue    : "" + currValue,
                             maxChars        : 5,
@@ -954,7 +924,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0184),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -986,7 +956,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0189),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -1024,7 +994,7 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        TwnsCommonInputPanel.CommonInputPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                             title           : Lang.getText(LangTextType.B0190),
                             currentValue    : "" + currValue,
                             maxChars        : 4,
@@ -1093,7 +1063,7 @@ namespace TwnsMeWarRulePanel {
                         for (const cfg of ConfigManager.getEnabledCoArray(configVersion)) {
                             coIdArray.push(cfg.coId);
                         }
-                        CommonChooseCoPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                             currentCoId         : playerRule.fixedCoIdInCcw ?? null,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {

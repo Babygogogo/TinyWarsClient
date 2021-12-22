@@ -12,6 +12,7 @@
 namespace MeModel {
     import MeWar            = TwnsMeWar.MeWar;
     import MapReviewStatus  = Types.MapReviewStatus;
+    import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
 
     const MAP_DICT  = new Map<number, IMapEditorData>();
@@ -28,7 +29,7 @@ namespace MeModel {
             MAP_DICT.set(slotIndex, {
                 slotIndex,
                 reviewStatus    : data.reviewStatus,
-                mapRawData      : data.mapRawData,
+                mapRawData      : convertBaseSeaToDecoratorShore(data.mapRawData),
                 reviewComment   : data.reviewComment,
             });
         }
@@ -46,7 +47,7 @@ namespace MeModel {
         MAP_DICT.set(slotIndex, {
             slotIndex,
             reviewStatus: data.reviewStatus,
-            mapRawData  : data.mapRawData,
+            mapRawData  : convertBaseSeaToDecoratorShore(data.mapRawData),
         });
     }
     export function getDataDict(): Map<number, IMapEditorData> {
@@ -68,7 +69,7 @@ namespace MeModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(mapRawData: Types.Undefinable<ProtoTypes.Map.IMapRawData>, slotIndex: number, isReview: boolean): Promise<MeWar> {
+    export async function loadWar(mapRawData: Types.Undefinable<IMapRawData>, slotIndex: number, isReview: boolean): Promise<MeWar> {
         if (_war) {
             Logger.warn(`MeManager.loadWar() another war has been loaded already!`);
             unloadWar();
@@ -105,6 +106,26 @@ namespace MeModel {
             reviewStatus: MapReviewStatus.None,
             mapRawData  : null,
         };
+    }
+
+    function convertBaseSeaToDecoratorShore(mapRawData: Types.Undefinable<IMapRawData>): IMapRawData | null {
+        if (mapRawData == null) {
+            return null;
+        }
+
+        for (const tileData of mapRawData.tileDataArray || []) {
+            if (tileData.baseType !== Types.TileBaseType.Sea) {
+                continue;
+            }
+
+            const shapeId = tileData.baseShapeId;
+            if (shapeId) {
+                tileData.decoratorType      = Types.TileDecoratorType.Shore;
+                tileData.decoratorShapeId   = shapeId;
+                tileData.baseShapeId        = 0;
+            }
+        }
+        return mapRawData;
     }
 }
 

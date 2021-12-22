@@ -16,19 +16,13 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmAvailabilityChangePanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import MmWarRulePanel       = TwnsMmWarRulePanel.MmWarRulePanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    type OpenDataForMmAvailabilityChangePanel = {
+    export type OpenData = {
         mapId   : number;
     };
-    export class MmAvailabilityChangePanel extends TwnsUiPanel.UiPanel<OpenDataForMmAvailabilityChangePanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MmAvailabilityChangePanel;
-
+    export class MmAvailabilityChangePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupMcw!     : eui.Group;
         private readonly _labelMcw!     : TwnsUiLabel.UiLabel;
         private readonly _imgMcw!       : TwnsUiImage.UiImage;
@@ -59,27 +53,7 @@ namespace TwnsMmAvailabilityChangePanel {
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForMmAvailabilityChangePanel): void {
-            if (!MmAvailabilityChangePanel._instance) {
-                MmAvailabilityChangePanel._instance = new MmAvailabilityChangePanel();
-            }
-            MmAvailabilityChangePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (MmAvailabilityChangePanel._instance) {
-                await MmAvailabilityChangePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapManagement/MmAvailabilityChangePanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -96,10 +70,16 @@ namespace TwnsMmAvailabilityChangePanel {
                 { ui: this._groupMrwStd,    callback: this._onTouchedGroupMrwStd },
                 { ui: this._groupMrwFog,    callback: this._onTouchedGroupMrwFog },
             ]);
+            this._setIsTouchMaskEnabled();
 
             this._btnDelete.setTextColor(0xFF0000);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
             this._updateImages();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -119,7 +99,7 @@ namespace TwnsMmAvailabilityChangePanel {
         }
 
         private _onTouchedBtnDelete(): void {
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0080),
                 callback: () => {
                     WarMapProxy.reqMmSetMapEnabled(this._getOpenData().mapId, false);
@@ -134,12 +114,12 @@ namespace TwnsMmAvailabilityChangePanel {
                 throw Helpers.newError(`MmAvailabilityChangePanel._onTouchedBtnWarRule() empty mapRawData.`);
             }
 
-            MmWarRulePanel.show(mapRawData);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, mapRawData);
             this.close();
         }
 
         private _onTouchedBtnRename(): void {
-            TwnsMmMapRenamePanel.MmMapRenamePanel.show({ mapId: this._getOpenData().mapId });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMapRenamePanel, { mapId: this._getOpenData().mapId });
         }
 
         private _onTouchedBtnCancel(): void {

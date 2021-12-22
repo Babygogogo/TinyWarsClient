@@ -15,55 +15,37 @@
 // import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
 // import MeModel                  from "../model/MeModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeAddWarEventToRulePanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    type OpenDataForMeAddWarEventId = {
+    export type OpenData = {
         warRule     : ProtoTypes.WarRule.IWarRule;
     };
-    export class MeAddWarEventToRulePanel extends TwnsUiPanel.UiPanel<OpenDataForMeAddWarEventId>{
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeAddWarEventToRulePanel;
-
+    export class MeAddWarEventToRulePanel extends TwnsUiPanel.UiPanel<OpenData>{
         private readonly _listWarEvent!     : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelNoWarEvent!  : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForMeAddWarEventId): void {
-            if (!MeAddWarEventToRulePanel._instance) {
-                MeAddWarEventToRulePanel._instance = new MeAddWarEventToRulePanel();
-            }
-            MeAddWarEventToRulePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (MeAddWarEventToRulePanel._instance) {
-                await MeAddWarEventToRulePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeAddWarEventToRulePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
             ]);
-            this._listWarEvent.setItemRenderer(WarEventRenderer);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
+            this._listWarEvent.setItemRenderer(WarEventRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {

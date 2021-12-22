@@ -14,6 +14,7 @@
 // import MeUtility                from "./MeUtility";
 // import TwnsMeWar                from "./MeWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeDrawer {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
@@ -42,6 +43,12 @@ namespace TwnsMeDrawer {
         unitType    : UnitType;
         playerIndex : number;
     };
+    export type DataForAddTileToLocation = {
+        locationIdArray: number[];
+    };
+    export type DataForDeleteTileFromLocation = {
+        locationIdArray: number[];
+    };
 
     export class MeDrawer {
         private _war?                           : TwnsMeWar.MeWar;
@@ -50,6 +57,8 @@ namespace TwnsMeDrawer {
         private _drawTargetTileBaseData         : DataForDrawTileBase | null = null;
         private _drawTargetTileDecoratorData    : DataForDrawTileDecorator | null = null;
         private _drawTargetUnit                 : TwnsBwUnit.BwUnit | null = null;
+        private _dataForAddTileToLocation       : DataForAddTileToLocation | null = null;
+        private _dataForDeleteTileFromLocation  : DataForDeleteTileFromLocation | null = null;
         private _symmetricalDrawType            = SymmetryType.None;
 
         private _notifyListeners: Notify.Listener[] = [
@@ -166,6 +175,28 @@ namespace TwnsMeDrawer {
             return this._drawTargetUnit;
         }
 
+        public setModeAddTileToLocation(data: DataForAddTileToLocation): void {
+            this._setDataForAddTileToLocation(data);
+            this._setMode(DrawerMode.AddTileToLocation);
+        }
+        private _setDataForAddTileToLocation(data: DataForAddTileToLocation): void {
+            this._dataForAddTileToLocation = data;
+        }
+        public getDataForAddTileToLocation(): DataForAddTileToLocation | null {
+            return this._dataForAddTileToLocation;
+        }
+
+        public setModeDeleteTileFromLocation(data: DataForDeleteTileFromLocation): void {
+            this._setDataForDeleteTileFromLocation(data);
+            this._setMode(DrawerMode.DeleteTileFromLocation);
+        }
+        private _setDataForDeleteTileFromLocation(data: DataForDeleteTileFromLocation): void {
+            this._dataForDeleteTileFromLocation = data;
+        }
+        public getDataForDeleteTileFromLocation(): DataForDeleteTileFromLocation | null {
+            return this._dataForDeleteTileFromLocation;
+        }
+
         public getSymmetricalDrawType(): SymmetryType {
             return this._symmetricalDrawType;
         }
@@ -173,6 +204,119 @@ namespace TwnsMeDrawer {
             this._symmetricalDrawType = type;
         }
 
+        public autoAdjustRoads(): void {
+            const war           = this._getWar();
+            const tileMap       = war.getTileMap();
+            const configVersion = war.getConfigVersion();
+            for (const tile of tileMap.getAllTiles()) {
+                if (tile.getType() !== Types.TileType.Road) {
+                    continue;
+                }
+
+                const gridIndex = tile.getGridIndex();
+                const shapeId   = MeUtility.getAutoRoadShapeId(tileMap, gridIndex);
+                if (shapeId !== tile.getObjectShapeId()) {
+                    tile.init({
+                        gridIndex       : tile.getGridIndex(),
+                        playerIndex     : tile.getPlayerIndex(),
+                        objectType      : tile.getObjectType(),
+                        objectShapeId   : shapeId,
+                        baseType        : tile.getBaseType(),
+                        baseShapeId     : tile.getBaseShapeId(),
+                    }, configVersion);
+                    tile.startRunning(war);
+                    tile.flushDataToView();
+
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                }
+            }
+        }
+        public autoAdjustBridges(): void {
+            const war           = this._getWar();
+            const tileMap       = war.getTileMap();
+            const configVersion = war.getConfigVersion();
+            for (const tile of tileMap.getAllTiles()) {
+                const tileType = tile.getType();
+                if ((tileType !== Types.TileType.BridgeOnBeach) &&
+                    (tileType !== Types.TileType.BridgeOnPlain) &&
+                    (tileType !== Types.TileType.BridgeOnRiver) &&
+                    (tileType !== Types.TileType.BridgeOnSea)
+                ) {
+                    continue;
+                }
+
+                const gridIndex = tile.getGridIndex();
+                const shapeId   = MeUtility.getAutoBridgeShapeId(tileMap, gridIndex);
+                if (shapeId !== tile.getObjectShapeId()) {
+                    tile.init({
+                        gridIndex       : tile.getGridIndex(),
+                        playerIndex     : tile.getPlayerIndex(),
+                        objectType      : tile.getObjectType(),
+                        objectShapeId   : shapeId,
+                        baseType        : tile.getBaseType(),
+                        baseShapeId     : tile.getBaseShapeId(),
+                    }, configVersion);
+                    tile.startRunning(war);
+                    tile.flushDataToView();
+
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                }
+            }
+        }
+        public autoAdjustPlasmas(): void {
+            const war           = this._getWar();
+            const tileMap       = war.getTileMap();
+            const configVersion = war.getConfigVersion();
+            for (const tile of tileMap.getAllTiles()) {
+                if (tile.getType() !== Types.TileType.Plasma) {
+                    continue;
+                }
+
+                const gridIndex = tile.getGridIndex();
+                const shapeId   = MeUtility.getAutoPlasmaShapeId(tileMap, gridIndex);
+                if (shapeId !== tile.getObjectShapeId()) {
+                    tile.init({
+                        gridIndex       : tile.getGridIndex(),
+                        playerIndex     : tile.getPlayerIndex(),
+                        objectType      : tile.getObjectType(),
+                        objectShapeId   : shapeId,
+                        baseType        : tile.getBaseType(),
+                        baseShapeId     : tile.getBaseShapeId(),
+                    }, configVersion);
+                    tile.startRunning(war);
+                    tile.flushDataToView();
+
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                }
+            }
+        }
+        public autoAdjustPipes(): void {
+            const war           = this._getWar();
+            const tileMap       = war.getTileMap();
+            const configVersion = war.getConfigVersion();
+            for (const tile of tileMap.getAllTiles()) {
+                if (tile.getType() !== Types.TileType.Pipe) {
+                    continue;
+                }
+
+                const gridIndex = tile.getGridIndex();
+                const shapeId   = MeUtility.getAutoPipeShapeId(tileMap, gridIndex);
+                if (shapeId !== tile.getObjectShapeId()) {
+                    tile.init({
+                        gridIndex       : tile.getGridIndex(),
+                        playerIndex     : tile.getPlayerIndex(),
+                        objectType      : tile.getObjectType(),
+                        objectShapeId   : shapeId,
+                        baseType        : tile.getBaseType(),
+                        baseShapeId     : tile.getBaseShapeId(),
+                    }, configVersion);
+                    tile.startRunning(war);
+                    tile.flushDataToView();
+
+                    Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
+                }
+            }
+        }
         public autoFillTileDecorators(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
@@ -221,6 +365,12 @@ namespace TwnsMeDrawer {
 
             } else if (mode === DrawerMode.DeleteUnit) {
                 this._handleDeleteUnit(gridIndex);
+
+            } else if (mode === DrawerMode.AddTileToLocation) {
+                this._handleAddTileToLocation(gridIndex);
+
+            } else if (mode === DrawerMode.DeleteTileFromLocation) {
+                this._handleDeleteTileFromLocation(gridIndex);
 
             } else if (mode === DrawerMode.Preview) {
                 // nothing to do
@@ -321,14 +471,22 @@ namespace TwnsMeDrawer {
             const war               = this._getWar();
             const configVersion     = war.getConfigVersion();
             const tileMap           = war.getTileMap();
+            const unitMap           = war.getUnitMap();
             const tile              = tileMap.getTile(gridIndex);
             const targetObjectData  = Helpers.getExisted(this.getDrawTargetTileObjectData());
+            const baseType          = tile.getBaseType();
             const objectType        = targetObjectData.objectType;
+            const isAttackableTile  = !!ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType).maxHp;
+            if ((isAttackableTile) && (unitMap.getUnitOnMap(gridIndex))) {
+                FloatText.show(Lang.getText(LangTextType.A0269));
+                return;
+            }
+
             const objectShapeId     = targetObjectData.shapeId;
             const playerIndex       = targetObjectData.playerIndex;
             tile.init({
                 gridIndex       : tile.getGridIndex(),
-                baseType        : tile.getBaseType(),
+                baseType,
                 baseShapeId     : tile.getBaseShapeId(),
                 decoratorType   : tile.getDecoratorType(),
                 decoratorShapeId: tile.getDecoratorShapeId(),
@@ -344,6 +502,10 @@ namespace TwnsMeDrawer {
             const symmetryType = this.getSymmetricalDrawType();
             const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
             if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
+                if ((isAttackableTile) && (unitMap.getUnitOnMap(symGridIndex))) {
+                    return;
+                }
+
                 const t2 = tileMap.getTile(symGridIndex);
                 t2.init({
                     gridIndex       : t2.getGridIndex(),
@@ -410,7 +572,7 @@ namespace TwnsMeDrawer {
         private _handleDeleteTileObject(gridIndex: GridIndex): void {
             const tileMap   = this._getWar().getTileMap();
             const tile      = tileMap.getTile(gridIndex);
-            tile.destroyTileObject();
+            tile.deleteTileObject();
             tile.flushDataToView();
 
             Notify.dispatch(NotifyType.MeTileChanged, { gridIndex } as NotifyData.MeTileChanged);
@@ -419,7 +581,7 @@ namespace TwnsMeDrawer {
             const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
             if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
-                t2.destroyTileObject();
+                t2.deleteTileObject();
                 t2.flushDataToView();
 
                 Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: symGridIndex } as NotifyData.MeTileChanged);
@@ -430,6 +592,12 @@ namespace TwnsMeDrawer {
                 WarDestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
                 Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as NotifyData.MeUnitChanged);
             }
+        }
+        private _handleAddTileToLocation(gridIndex: GridIndex): void {
+            this._getWar().getTileMap().getTile(gridIndex).setHasLocationFlagArray(this.getDataForAddTileToLocation()?.locationIdArray ?? [], true);
+        }
+        private _handleDeleteTileFromLocation(gridIndex: GridIndex): void {
+            this._getWar().getTileMap().getTile(gridIndex).setHasLocationFlagArray(this.getDataForDeleteTileFromLocation()?.locationIdArray ?? [], false);
         }
     }
 }

@@ -22,15 +22,10 @@ namespace TwnsUserPanel {
     import NotifyType   = TwnsNotifyType.NotifyType;
     import WarType      = Types.WarType;
 
-    type OpenDataForUserPanel = {
+    export type OpenData = {
         userId  : number;
     };
-    export class UserPanel extends TwnsUiPanel.UiPanel<OpenDataForUserPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: UserPanel;
-
+    export class UserPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
@@ -80,28 +75,7 @@ namespace TwnsUserPanel {
         private readonly _sclHistoryStd!            : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
         private readonly _sclHistoryFog!            : TwnsUiScrollList.UiScrollList<DataForHistoryRenderer>;
 
-        public static show(openData: OpenDataForUserPanel): void {
-            if (!UserPanel._instance) {
-                UserPanel._instance = new UserPanel();
-            }
-            UserPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (UserPanel._instance) {
-                await UserPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/user/UserPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserGetPublicInfo,    callback: this._onNotifyMsgUserGetPublicInfo },
@@ -114,17 +88,19 @@ namespace TwnsUserPanel {
                 { ui: this._btnSetAvatar,       callback: this._onTouchedBtnSetAvatar },
                 { ui: this._btnClose,           callback: this.close },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._sclHistoryStd.setItemRenderer(HistoryRenderer);
             this._sclHistoryFog.setItemRenderer(HistoryRenderer);
 
-            this._showOpenAnimation();
-
-            UserProxy.reqUserGetPublicInfo(this._getOpenData().userId);
-
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected async _updateOnOpenDataChanged(): Promise<void> {
+            UserProxy.reqUserGetPublicInfo(this._getOpenData().userId);
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -154,13 +130,13 @@ namespace TwnsUserPanel {
         private _onTouchedBtnChat(): void {
             const userId = this._getOpenData().userId;
             this.close();
-            TwnsChatPanel.ChatPanel.show({ toUserId: userId });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: userId });
         }
         private _onTouchedBtnSetAvatar(): void {
-            TwnsUserSetAvatarPanel.UserSetAvatarPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetAvatarPanel, void 0);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -171,21 +147,22 @@ namespace TwnsUserPanel {
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: 40 },
-                    callback    : resolve,
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: 40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private async _updateView(): Promise<void> {

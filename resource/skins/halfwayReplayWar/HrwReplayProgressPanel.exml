@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" />
+    <e:Group id="_group" horizontalCenter="0" verticalCenter="0" width="570" height="200">
+        <e:Group left="0" right="0" top="0" bottom="0" locked="true">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+            </e:Group>
+        </e:Group>
+        <e:Group y="60" horizontalCenter="0">
+            <e:Group x="0" y="0">
+                <TwnsUiImage:UiImage scale9Grid="1,1,2,2" x="0" y="0" height="0" width="50" />
+                <TwnsUiLabel:UiLabel id="_labelTarget" text="100" size="18" textColor="0xffffff" x="0" y="-26"
+                                     visible="true" />
+                <e:layout>
+                    <e:HorizontalLayout gap="10" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="0" y="24">
+                <TwnsUiButton:UiButton id="_btnFirst" label="" x="0" width="50" height="40" y="-74">
+                    <TwnsUiButton:skinName>
+                        <e:Skin states="up,down,disabled">
+                            <e:Image width="100%" height="100%" source="uncompressedColorTransparent0000" />
+                            <e:Image source="icon_replay_004" scaleX="0.8" scaleY="0.8" horizontalCenter="0"
+                                     verticalCenter="0" />
+                            <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                                 horizontalCenter="0" maxTextWidth="70" />
+                        </e:Skin>
+                    </TwnsUiButton:skinName>
+                </TwnsUiButton:UiButton>
+                <e:Group id="_groupProgress" y="-28" width="400" x="0">
+                    <TwnsUiImage:UiImage width="400" scale9Grid="5,5,2,2" source="uncompressedPbar0000"
+                                         verticalCenter="0" x="0" />
+                    <TwnsUiImage:UiImage id="_imgProgressBar" verticalCenter="0" width="321" x="0"
+                                         source="uncompressedPbar0001" scale9Grid="5,5,2,2" />
+                    <TwnsUiImage:UiImage id="_imgProgressPoint" y="0" x="300" anchorOffsetX="11" touchEnabled="false"
+                                         source="uncompressedCircle0008" />
+                </e:Group>
+                <TwnsUiButton:UiButton id="_btnLast" label="" x="10" width="50" height="40" y="-64">
+                    <TwnsUiButton:skinName>
+                        <e:Skin states="up,down,disabled">
+                            <e:Image width="100%" height="100%" source="uncompressedColorTransparent0000" />
+                            <e:Image scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0"
+                                     source="icon_replay_003" />
+                            <TwnsUiLabel:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                                 horizontalCenter="0" maxTextWidth="70" />
+                        </e:Skin>
+                    </TwnsUiButton:skinName>
+                </TwnsUiButton:UiButton>
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
+        <e:Group horizontalCenter="0" bottom="20">
+            <TwnsUiButton:UiButton id="_btnConfirm" label="确定" y="0" x="232" width="100"
+                                   skinName="Skins.Component.Button.ButtonYellow001" />
+            <TwnsUiButton:UiButton id="_btnCancel" label="取消" y="0" x="232" width="100"
+                                   skinName="Skins.Component.Button.ButtonGrey001" />
+            <e:layout>
+                <e:HorizontalLayout gap="50" />
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

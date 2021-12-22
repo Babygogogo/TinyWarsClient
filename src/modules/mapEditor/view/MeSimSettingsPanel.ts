@@ -19,44 +19,21 @@
 // import TwnsMeSimBasicSettingsPage       from "./MeSimBasicSettingsPage";
 // import TwnsMeWarMenuPanel               from "./MeWarMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeSimSettingsPanel {
-    import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import SpmCreateSfwSaveSlotsPanel   = TwnsSpmCreateSfwSaveSlotsPanel.SpmCreateSfwSaveSlotsPanel;
     import MeSimAdvancedSettingsPage    = TwnsMeSimAdvancedSettingsPage.MeSimAdvancedSettingsPage;
     import MeSimBasicSettingsPage       = TwnsMeSimBasicSettingsPage.MeSimBasicSettingsPage;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
 
-    export class MeSimSettingsPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeSimSettingsPanel;
-
+    export type OpenData = void;
+    export class MeSimSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, void>;
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnBack!          : TwnsUiButton.UiButton;
         private readonly _btnConfirm!       : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!MeSimSettingsPanel._instance) {
-                MeSimSettingsPanel._instance = new MeSimSettingsPanel();
-            }
-            MeSimSettingsPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeSimSettingsPanel._instance) {
-                await MeSimSettingsPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapEditor/MeSimSettingsPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -66,7 +43,8 @@ namespace TwnsMeSimSettingsPanel {
                 { type: NotifyType.MsgSpmCreateSfw,    callback: this._onMsgSpmCreateSfw },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -83,23 +61,28 @@ namespace TwnsMeSimSettingsPanel {
             this._updateComponentsForLanguage();
             this._btnConfirm.enabled = true;
         }
+        protected _onClosing(): void {
+            // nothing to do
+        }
 
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsMeWarMenuPanel.MeWarMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MeWarMenuPanel, void 0);
         }
 
-        private _onTouchedBtnConfirm(): void {
-            if (MeSimModel.checkIsValidWarData()) {
-                SpmCreateSfwSaveSlotsPanel.show(MeSimModel.getWarData());
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            const warData   = MeSimModel.getWarData();
+            const errorCode = await (new TwnsTwWar.TwWar()).getErrorCodeForInit(warData);
+            if (errorCode) {
+                FloatText.show(Lang.getErrorText(errorCode));
             } else {
-                FloatText.show(Lang.getText(LangTextType.A0146));
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSfwSaveSlotsPanel, warData);
             }
         }
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
                     FlowManager.gotoSinglePlayerWar({

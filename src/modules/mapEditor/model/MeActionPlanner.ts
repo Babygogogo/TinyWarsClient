@@ -86,10 +86,13 @@ namespace TwnsMeActionPlanner {
         protected _getNextStateOnTapWhenChoosingProductionTarget(gridIndex: GridIndex): State {
             return State.Idle;
         }
-        protected _getNextStateOnTapWhenPreviewingAttackableArea(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenPreviewingUnitAttackableArea(gridIndex: GridIndex): State {
             return State.Idle;
         }
-        protected _getNextStateOnTapWhenPreviewingMovableArea(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenPreviewingUnitMovableArea(gridIndex: GridIndex): State {
+            return State.Idle;
+        }
+        protected _getNextStateOnTapWhenPreviewingTileAttackableArea(gridIndex: GridIndex): State {
             return State.Idle;
         }
 

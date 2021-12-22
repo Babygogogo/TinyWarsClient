@@ -21,6 +21,7 @@
 // import TwnsUiListItemRenderer   from "./UiListItemRenderer";
 // import TwnsUiScrollList         from "./UiScrollList";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiMapInfo {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import TileType         = Types.TileType;
@@ -98,7 +99,7 @@ namespace TwnsUiMapInfo {
             if (mapId != null) {
                 const minValue = CommonConstants.MapMinRating;
                 const maxValue = CommonConstants.MapMaxRating;
-                TwnsCommonInputPanel.CommonInputPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
                     title           : Lang.getText(LangTextType.B0363),
                     currentValue    : `${UserModel.getMapRating(mapId) || 0}`,
                     maxChars        : 2,

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+        <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                             scale9Grid="1,1,2,2" x="10" y="10" locked="true" />
+        <e:Group left="0" right="0" top="0" bottom="0">
+            <e:Group id="_groupDialogue1" height="100" left="0" right="0" bottom="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                     scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0" />
+                <e:Group id="_groupCo1" left="10" verticalCenter="0" width="80" height="80">
+                    <TwnsUiImage:UiImage id="_imgCo1" source="coHead0001" width="80" height="80" y="0" scaleX="-1"
+                                         horizontalCenter="0" />
+                    <TwnsUiLabel:UiLabel id="_labelName1" text="Will" size="16" bold="true" horizontalCenter="0"
+                                         bottom="0" stroke="2" />
+                </e:Group>
+                <TwnsUiLabel:UiLabel id="_labelContent1" text="你，你不要过来啊！！" textColor="0xFFFFFF" size="18" left="100"
+                                     right="20" textAlign="left" wordWrap="true" lineSpacing="2" top="10" />
+            </e:Group>
+            <e:Group id="_groupDialogue2" height="100" left="0" right="0" x="10" top="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                     scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0" />
+                <e:Group id="_groupCo2" verticalCenter="0" width="80" height="80" y="20" right="10">
+                    <TwnsUiImage:UiImage id="_imgCo2" source="coHead0001" width="80" height="80" y="0"
+                                         horizontalCenter="0" />
+                    <TwnsUiLabel:UiLabel id="_labelName2" text="Will" size="16" bold="true" horizontalCenter="0"
+                                         bottom="0" stroke="2" />
+                </e:Group>
+                <TwnsUiLabel:UiLabel id="_labelContent2" text="你，你不要过来啊！！" textColor="0xFFFFFF" size="18" left="20"
+                                     right="100" textAlign="right" wordWrap="true" lineSpacing="2" top="10" />
+            </e:Group>
+        </e:Group>
+        <TwnsUiImage:UiImage id="_imgTouchMask" source="uncompressedColorTransparent0001" scale9Grid="1,1,2,2" alpha="0"
+                             left="0" right="0" top="0" bottom="0" />
+        <TwnsUiButton:UiButton id="_btnSkip" label="跳过" width="100" x="0" y="100"
+                               skinName="Skins.Component.Button.ButtonGrey001" />
+    </e:Group>
+</e:Skin>

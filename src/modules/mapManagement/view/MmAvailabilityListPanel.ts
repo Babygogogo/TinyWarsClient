@@ -29,13 +29,8 @@ namespace TwnsMmAvailabilityListPanel {
         playedTimes?    : number | null;
         minRating?      : number | null;
     };
-    type OpenData = FiltersForMapList | null;
+    export type OpenData = FiltersForMapList | null;
     export class MmAvailabilityListPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MmAvailabilityListPanel;
-
         private readonly _listMap!              : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
         private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
@@ -54,29 +49,7 @@ namespace TwnsMmAvailabilityListPanel {
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedMapId      : number | null = null;
 
-        public static show(openData: OpenData): void {
-            if (!MmAvailabilityListPanel._instance) {
-                MmAvailabilityListPanel._instance = new MmAvailabilityListPanel();
-            }
-
-            MmAvailabilityListPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (MmAvailabilityListPanel._instance) {
-                await MmAvailabilityListPanel._instance.close();
-            }
-        }
-        public static getInstance(): MmAvailabilityListPanel {
-            return MmAvailabilityListPanel._instance;
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapManagement/MmAvailabilityListPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgMmSetMapAvailability,    callback: this._onNotifyMsgMmSetMapAvailability },
@@ -87,13 +60,14 @@ namespace TwnsMmAvailabilityListPanel {
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ]);
             this._listMap.setItemRenderer(MapNameRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._groupInfo.visible = false;
             this._updateComponentsForLanguage();
 
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
-        protected async _onClosed(): Promise<void> {
+        protected _onClosing(): void {
             egret.Tween.removeTweens(this._groupInfo);
         }
 
@@ -149,12 +123,12 @@ namespace TwnsMmAvailabilityListPanel {
         }
 
         private _onTouchTapBtnSearch(): void {
-            TwnsMmAvailabilitySearchPanel.MmAvailabilitySearchPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilitySearchPanel, void 0);
         }
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsMmMainMenuPanel.MmMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMainMenuPanel, void 0);
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -249,7 +223,7 @@ namespace TwnsMmAvailabilityListPanel {
         }
 
         private _onTouchTapBtnNext(): void {
-            TwnsMmAvailabilityChangePanel.MmAvailabilityChangePanel.show({ mapId: this._getData().mapId });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilityChangePanel, { mapId: this._getData().mapId });
         }
 
         private _onNotifyMsgMmSetMapName(e: egret.Event): void {

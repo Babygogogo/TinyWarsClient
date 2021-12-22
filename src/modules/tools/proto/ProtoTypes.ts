@@ -95,6 +95,9 @@ export declare namespace Config {
 
         /** SystemCfg maxBanCount */
         maxBanCount?: (number|null);
+
+        /** SystemCfg dialogueBackgroundMaxId */
+        dialogueBackgroundMaxId?: (number|null);
     }
 
     /** Represents a SystemCfg. */
@@ -111,6 +114,9 @@ export declare namespace Config {
 
         /** SystemCfg maxBanCount. */
         public maxBanCount: number;
+
+        /** SystemCfg dialogueBackgroundMaxId. */
+        public dialogueBackgroundMaxId: number;
 
         /**
          * Creates a new SystemCfg instance using the specified properties.
@@ -370,6 +376,102 @@ export declare namespace Config {
 
         /**
          * Converts this UnitCategoryCfg to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeatherCategoryCfg. */
+    interface IWeatherCategoryCfg {
+
+        /** WeatherCategoryCfg category */
+        category?: (number|null);
+
+        /** WeatherCategoryCfg weatherTypes */
+        weatherTypes?: (number[]|null);
+    }
+
+    /** Represents a WeatherCategoryCfg. */
+    class WeatherCategoryCfg implements IWeatherCategoryCfg {
+
+        /**
+         * Constructs a new WeatherCategoryCfg.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Config.IWeatherCategoryCfg);
+
+        /** WeatherCategoryCfg category. */
+        public category: number;
+
+        /** WeatherCategoryCfg weatherTypes. */
+        public weatherTypes: number[];
+
+        /**
+         * Creates a new WeatherCategoryCfg instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeatherCategoryCfg instance
+         */
+        public static create(properties?: Config.IWeatherCategoryCfg): Config.WeatherCategoryCfg;
+
+        /**
+         * Encodes the specified WeatherCategoryCfg message. Does not implicitly {@link Config.WeatherCategoryCfg.verify|verify} messages.
+         * @param message WeatherCategoryCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Config.IWeatherCategoryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeatherCategoryCfg message, length delimited. Does not implicitly {@link Config.WeatherCategoryCfg.verify|verify} messages.
+         * @param message WeatherCategoryCfg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Config.IWeatherCategoryCfg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeatherCategoryCfg message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeatherCategoryCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Config.WeatherCategoryCfg;
+
+        /**
+         * Decodes a WeatherCategoryCfg message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeatherCategoryCfg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Config.WeatherCategoryCfg;
+
+        /**
+         * Verifies a WeatherCategoryCfg message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeatherCategoryCfg message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeatherCategoryCfg
+         */
+        public static fromObject(object: { [k: string]: any }): Config.WeatherCategoryCfg;
+
+        /**
+         * Creates a plain object from a WeatherCategoryCfg message. Also converts values to other types if specified.
+         * @param message WeatherCategoryCfg
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Config.WeatherCategoryCfg, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeatherCategoryCfg to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -1737,8 +1839,8 @@ export declare namespace Config {
         /** CoSkillCfg selfHpRecovery */
         selfHpRecovery?: (number[]|null);
 
-        /** CoSkillCfg indiscriminateAreaDamage */
-        indiscriminateAreaDamage?: (number[]|null);
+        /** CoSkillCfg fixedAreaDamage */
+        fixedAreaDamage?: (number[]|null);
 
         /** CoSkillCfg selfPromotionGain */
         selfPromotionGain?: (number[]|null);
@@ -1811,6 +1913,27 @@ export declare namespace Config {
 
         /** CoSkillCfg changeWeather */
         changeWeather?: (number[]|null);
+
+        /** CoSkillCfg selfUnitMoveCost */
+        selfUnitMoveCost?: (number[]|null);
+
+        /** CoSkillCfg selfOffenseBonusByTileDefense */
+        selfOffenseBonusByTileDefense?: (number[]|null);
+
+        /** CoSkillCfg selfDefenseBonusByTileDefense */
+        selfDefenseBonusByTileDefense?: (number[]|null);
+
+        /** CoSkillCfg selfRepairAmountBonus */
+        selfRepairAmountBonus?: (number[]|null);
+
+        /** CoSkillCfg selfOffenseBonusByEnemyTileDefense */
+        selfOffenseBonusByEnemyTileDefense?: (number[]|null);
+
+        /** CoSkillCfg selfOffenseBonusByCounter */
+        selfOffenseBonusByCounter?: (number[]|null);
+
+        /** CoSkillCfg selfPromotionBonusByProduce */
+        selfPromotionBonusByProduce?: (number[]|null);
     }
 
     /** Represents a CoSkillCfg. */
@@ -1873,8 +1996,8 @@ export declare namespace Config {
         /** CoSkillCfg selfHpRecovery. */
         public selfHpRecovery: number[];
 
-        /** CoSkillCfg indiscriminateAreaDamage. */
-        public indiscriminateAreaDamage: number[];
+        /** CoSkillCfg fixedAreaDamage. */
+        public fixedAreaDamage: number[];
 
         /** CoSkillCfg selfPromotionGain. */
         public selfPromotionGain: number[];
@@ -1947,6 +2070,27 @@ export declare namespace Config {
 
         /** CoSkillCfg changeWeather. */
         public changeWeather: number[];
+
+        /** CoSkillCfg selfUnitMoveCost. */
+        public selfUnitMoveCost: number[];
+
+        /** CoSkillCfg selfOffenseBonusByTileDefense. */
+        public selfOffenseBonusByTileDefense: number[];
+
+        /** CoSkillCfg selfDefenseBonusByTileDefense. */
+        public selfDefenseBonusByTileDefense: number[];
+
+        /** CoSkillCfg selfRepairAmountBonus. */
+        public selfRepairAmountBonus: number[];
+
+        /** CoSkillCfg selfOffenseBonusByEnemyTileDefense. */
+        public selfOffenseBonusByEnemyTileDefense: number[];
+
+        /** CoSkillCfg selfOffenseBonusByCounter. */
+        public selfOffenseBonusByCounter: number[];
+
+        /** CoSkillCfg selfPromotionBonusByProduce. */
+        public selfPromotionBonusByProduce: number[];
 
         /**
          * Creates a new CoSkillCfg instance using the specified properties.
@@ -2280,6 +2424,9 @@ export declare namespace Config {
         /** FullConfig Weather */
         Weather?: (Config.IWeatherCfg[]|null);
 
+        /** FullConfig WeatherCategory */
+        WeatherCategory?: (Config.IWeatherCategoryCfg[]|null);
+
         /** FullConfig UserAvatar */
         UserAvatar?: (Config.IUserAvatarCfg[]|null);
     }
@@ -2334,6 +2481,9 @@ export declare namespace Config {
 
         /** FullConfig Weather. */
         public Weather: Config.IWeatherCfg[];
+
+        /** FullConfig WeatherCategory. */
+        public WeatherCategory: Config.IWeatherCategoryCfg[];
 
         /** FullConfig UserAvatar. */
         public UserAvatar: Config.IUserAvatarCfg[];
@@ -4203,6 +4353,132 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WecTurnAndPlayer. */
+    interface IWecTurnAndPlayer {
+
+        /** WecTurnAndPlayer turnIndex */
+        turnIndex?: (number|null);
+
+        /** WecTurnAndPlayer turnIndexComparator */
+        turnIndexComparator?: (number|null);
+
+        /** WecTurnAndPlayer turnIndexDivider */
+        turnIndexDivider?: (number|null);
+
+        /** WecTurnAndPlayer turnIndexRemainder */
+        turnIndexRemainder?: (number|null);
+
+        /** WecTurnAndPlayer turnIndexRemainderComparator */
+        turnIndexRemainderComparator?: (number|null);
+
+        /** WecTurnAndPlayer turnPhase */
+        turnPhase?: (number|null);
+
+        /** WecTurnAndPlayer playerIndexArray */
+        playerIndexArray?: (number[]|null);
+    }
+
+    /** Represents a WecTurnAndPlayer. */
+    class WecTurnAndPlayer implements IWecTurnAndPlayer {
+
+        /**
+         * Constructs a new WecTurnAndPlayer.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecTurnAndPlayer);
+
+        /** WecTurnAndPlayer turnIndex. */
+        public turnIndex: number;
+
+        /** WecTurnAndPlayer turnIndexComparator. */
+        public turnIndexComparator: number;
+
+        /** WecTurnAndPlayer turnIndexDivider. */
+        public turnIndexDivider: number;
+
+        /** WecTurnAndPlayer turnIndexRemainder. */
+        public turnIndexRemainder: number;
+
+        /** WecTurnAndPlayer turnIndexRemainderComparator. */
+        public turnIndexRemainderComparator: number;
+
+        /** WecTurnAndPlayer turnPhase. */
+        public turnPhase: number;
+
+        /** WecTurnAndPlayer playerIndexArray. */
+        public playerIndexArray: number[];
+
+        /**
+         * Creates a new WecTurnAndPlayer instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecTurnAndPlayer instance
+         */
+        public static create(properties?: WarEvent.IWecTurnAndPlayer): WarEvent.WecTurnAndPlayer;
+
+        /**
+         * Encodes the specified WecTurnAndPlayer message. Does not implicitly {@link WarEvent.WecTurnAndPlayer.verify|verify} messages.
+         * @param message WecTurnAndPlayer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecTurnAndPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecTurnAndPlayer message, length delimited. Does not implicitly {@link WarEvent.WecTurnAndPlayer.verify|verify} messages.
+         * @param message WecTurnAndPlayer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecTurnAndPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecTurnAndPlayer message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecTurnAndPlayer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTurnAndPlayer;
+
+        /**
+         * Decodes a WecTurnAndPlayer message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecTurnAndPlayer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTurnAndPlayer;
+
+        /**
+         * Verifies a WecTurnAndPlayer message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecTurnAndPlayer message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecTurnAndPlayer
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTurnAndPlayer;
+
+        /**
+         * Creates a plain object from a WecTurnAndPlayer message. Also converts values to other types if specified.
+         * @param message WecTurnAndPlayer
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecTurnAndPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecTurnAndPlayer to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WecTurnPhaseEqualTo. */
     interface IWecTurnPhaseEqualTo {
 
@@ -4294,6 +4570,102 @@ export declare namespace WarEvent {
 
         /**
          * Converts this WecTurnPhaseEqualTo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecWeatherAndFog. */
+    interface IWecWeatherAndFog {
+
+        /** WecWeatherAndFog weatherTypeArray */
+        weatherTypeArray?: (number[]|null);
+
+        /** WecWeatherAndFog hasFogCurrently */
+        hasFogCurrently?: (boolean|null);
+    }
+
+    /** Represents a WecWeatherAndFog. */
+    class WecWeatherAndFog implements IWecWeatherAndFog {
+
+        /**
+         * Constructs a new WecWeatherAndFog.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecWeatherAndFog);
+
+        /** WecWeatherAndFog weatherTypeArray. */
+        public weatherTypeArray: number[];
+
+        /** WecWeatherAndFog hasFogCurrently. */
+        public hasFogCurrently: boolean;
+
+        /**
+         * Creates a new WecWeatherAndFog instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecWeatherAndFog instance
+         */
+        public static create(properties?: WarEvent.IWecWeatherAndFog): WarEvent.WecWeatherAndFog;
+
+        /**
+         * Encodes the specified WecWeatherAndFog message. Does not implicitly {@link WarEvent.WecWeatherAndFog.verify|verify} messages.
+         * @param message WecWeatherAndFog message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecWeatherAndFog, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecWeatherAndFog message, length delimited. Does not implicitly {@link WarEvent.WecWeatherAndFog.verify|verify} messages.
+         * @param message WecWeatherAndFog message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecWeatherAndFog, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecWeatherAndFog message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecWeatherAndFog
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecWeatherAndFog;
+
+        /**
+         * Decodes a WecWeatherAndFog message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecWeatherAndFog
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecWeatherAndFog;
+
+        /**
+         * Verifies a WecWeatherAndFog message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecWeatherAndFog message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecWeatherAndFog
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecWeatherAndFog;
+
+        /**
+         * Creates a plain object from a WecWeatherAndFog message. Also converts values to other types if specified.
+         * @param message WecWeatherAndFog
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecWeatherAndFog, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecWeatherAndFog to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -4893,6 +5265,132 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WecEventCalledCount. */
+    interface IWecEventCalledCount {
+
+        /** WecEventCalledCount eventIdArray */
+        eventIdArray?: (number[]|null);
+
+        /** WecEventCalledCount eventsCount */
+        eventsCount?: (number|null);
+
+        /** WecEventCalledCount eventsCountComparator */
+        eventsCountComparator?: (number|null);
+
+        /** WecEventCalledCount timesTotal */
+        timesTotal?: (number|null);
+
+        /** WecEventCalledCount timesTotalComparator */
+        timesTotalComparator?: (number|null);
+
+        /** WecEventCalledCount timesInTurn */
+        timesInTurn?: (number|null);
+
+        /** WecEventCalledCount timesInTurnComparator */
+        timesInTurnComparator?: (number|null);
+    }
+
+    /** Represents a WecEventCalledCount. */
+    class WecEventCalledCount implements IWecEventCalledCount {
+
+        /**
+         * Constructs a new WecEventCalledCount.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecEventCalledCount);
+
+        /** WecEventCalledCount eventIdArray. */
+        public eventIdArray: number[];
+
+        /** WecEventCalledCount eventsCount. */
+        public eventsCount: number;
+
+        /** WecEventCalledCount eventsCountComparator. */
+        public eventsCountComparator: number;
+
+        /** WecEventCalledCount timesTotal. */
+        public timesTotal: number;
+
+        /** WecEventCalledCount timesTotalComparator. */
+        public timesTotalComparator: number;
+
+        /** WecEventCalledCount timesInTurn. */
+        public timesInTurn: number;
+
+        /** WecEventCalledCount timesInTurnComparator. */
+        public timesInTurnComparator: number;
+
+        /**
+         * Creates a new WecEventCalledCount instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecEventCalledCount instance
+         */
+        public static create(properties?: WarEvent.IWecEventCalledCount): WarEvent.WecEventCalledCount;
+
+        /**
+         * Encodes the specified WecEventCalledCount message. Does not implicitly {@link WarEvent.WecEventCalledCount.verify|verify} messages.
+         * @param message WecEventCalledCount message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecEventCalledCount, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecEventCalledCount message, length delimited. Does not implicitly {@link WarEvent.WecEventCalledCount.verify|verify} messages.
+         * @param message WecEventCalledCount message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecEventCalledCount, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecEventCalledCount message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecEventCalledCount
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecEventCalledCount;
+
+        /**
+         * Decodes a WecEventCalledCount message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecEventCalledCount
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecEventCalledCount;
+
+        /**
+         * Verifies a WecEventCalledCount message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecEventCalledCount message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecEventCalledCount
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecEventCalledCount;
+
+        /**
+         * Creates a plain object from a WecEventCalledCount message. Also converts values to other types if specified.
+         * @param message WecEventCalledCount
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecEventCalledCount, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecEventCalledCount to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WecPlayerAliveStateEqualTo. */
     interface IWecPlayerAliveStateEqualTo {
 
@@ -4995,6 +5493,792 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WecPlayerState. */
+    interface IWecPlayerState {
+
+        /** WecPlayerState playersCount */
+        playersCount?: (number|null);
+
+        /** WecPlayerState playersCountComparator */
+        playersCountComparator?: (number|null);
+
+        /** WecPlayerState playerIndexArray */
+        playerIndexArray?: (number[]|null);
+
+        /** WecPlayerState aliveStateArray */
+        aliveStateArray?: (number[]|null);
+
+        /** WecPlayerState fund */
+        fund?: (number|null);
+
+        /** WecPlayerState fundComparator */
+        fundComparator?: (number|null);
+
+        /** WecPlayerState energyPercentage */
+        energyPercentage?: (number|null);
+
+        /** WecPlayerState energyPercentageComparator */
+        energyPercentageComparator?: (number|null);
+
+        /** WecPlayerState coUsingSkillTypeArray */
+        coUsingSkillTypeArray?: (number[]|null);
+    }
+
+    /** Represents a WecPlayerState. */
+    class WecPlayerState implements IWecPlayerState {
+
+        /**
+         * Constructs a new WecPlayerState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecPlayerState);
+
+        /** WecPlayerState playersCount. */
+        public playersCount: number;
+
+        /** WecPlayerState playersCountComparator. */
+        public playersCountComparator: number;
+
+        /** WecPlayerState playerIndexArray. */
+        public playerIndexArray: number[];
+
+        /** WecPlayerState aliveStateArray. */
+        public aliveStateArray: number[];
+
+        /** WecPlayerState fund. */
+        public fund: number;
+
+        /** WecPlayerState fundComparator. */
+        public fundComparator: number;
+
+        /** WecPlayerState energyPercentage. */
+        public energyPercentage: number;
+
+        /** WecPlayerState energyPercentageComparator. */
+        public energyPercentageComparator: number;
+
+        /** WecPlayerState coUsingSkillTypeArray. */
+        public coUsingSkillTypeArray: number[];
+
+        /**
+         * Creates a new WecPlayerState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecPlayerState instance
+         */
+        public static create(properties?: WarEvent.IWecPlayerState): WarEvent.WecPlayerState;
+
+        /**
+         * Encodes the specified WecPlayerState message. Does not implicitly {@link WarEvent.WecPlayerState.verify|verify} messages.
+         * @param message WecPlayerState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecPlayerState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecPlayerState message, length delimited. Does not implicitly {@link WarEvent.WecPlayerState.verify|verify} messages.
+         * @param message WecPlayerState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecPlayerState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecPlayerState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecPlayerState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecPlayerState;
+
+        /**
+         * Decodes a WecPlayerState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecPlayerState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecPlayerState;
+
+        /**
+         * Verifies a WecPlayerState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecPlayerState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecPlayerState
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecPlayerState;
+
+        /**
+         * Creates a plain object from a WecPlayerState message. Also converts values to other types if specified.
+         * @param message WecPlayerState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecPlayerState, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecPlayerState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecTilePlayerIndexEqualTo. */
+    interface IWecTilePlayerIndexEqualTo {
+
+        /** WecTilePlayerIndexEqualTo gridIndex */
+        gridIndex?: (Structure.IGridIndex|null);
+
+        /** WecTilePlayerIndexEqualTo playerIndex */
+        playerIndex?: (number|null);
+
+        /** WecTilePlayerIndexEqualTo isNot */
+        isNot?: (boolean|null);
+    }
+
+    /** Represents a WecTilePlayerIndexEqualTo. */
+    class WecTilePlayerIndexEqualTo implements IWecTilePlayerIndexEqualTo {
+
+        /**
+         * Constructs a new WecTilePlayerIndexEqualTo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecTilePlayerIndexEqualTo);
+
+        /** WecTilePlayerIndexEqualTo gridIndex. */
+        public gridIndex?: (Structure.IGridIndex|null);
+
+        /** WecTilePlayerIndexEqualTo playerIndex. */
+        public playerIndex: number;
+
+        /** WecTilePlayerIndexEqualTo isNot. */
+        public isNot: boolean;
+
+        /**
+         * Creates a new WecTilePlayerIndexEqualTo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecTilePlayerIndexEqualTo instance
+         */
+        public static create(properties?: WarEvent.IWecTilePlayerIndexEqualTo): WarEvent.WecTilePlayerIndexEqualTo;
+
+        /**
+         * Encodes the specified WecTilePlayerIndexEqualTo message. Does not implicitly {@link WarEvent.WecTilePlayerIndexEqualTo.verify|verify} messages.
+         * @param message WecTilePlayerIndexEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecTilePlayerIndexEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecTilePlayerIndexEqualTo message, length delimited. Does not implicitly {@link WarEvent.WecTilePlayerIndexEqualTo.verify|verify} messages.
+         * @param message WecTilePlayerIndexEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecTilePlayerIndexEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecTilePlayerIndexEqualTo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecTilePlayerIndexEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTilePlayerIndexEqualTo;
+
+        /**
+         * Decodes a WecTilePlayerIndexEqualTo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecTilePlayerIndexEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTilePlayerIndexEqualTo;
+
+        /**
+         * Verifies a WecTilePlayerIndexEqualTo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecTilePlayerIndexEqualTo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecTilePlayerIndexEqualTo
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTilePlayerIndexEqualTo;
+
+        /**
+         * Creates a plain object from a WecTilePlayerIndexEqualTo message. Also converts values to other types if specified.
+         * @param message WecTilePlayerIndexEqualTo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecTilePlayerIndexEqualTo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecTilePlayerIndexEqualTo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecTileTypeEqualTo. */
+    interface IWecTileTypeEqualTo {
+
+        /** WecTileTypeEqualTo gridIndex */
+        gridIndex?: (Structure.IGridIndex|null);
+
+        /** WecTileTypeEqualTo tileType */
+        tileType?: (number|null);
+
+        /** WecTileTypeEqualTo isNot */
+        isNot?: (boolean|null);
+    }
+
+    /** Represents a WecTileTypeEqualTo. */
+    class WecTileTypeEqualTo implements IWecTileTypeEqualTo {
+
+        /**
+         * Constructs a new WecTileTypeEqualTo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecTileTypeEqualTo);
+
+        /** WecTileTypeEqualTo gridIndex. */
+        public gridIndex?: (Structure.IGridIndex|null);
+
+        /** WecTileTypeEqualTo tileType. */
+        public tileType: number;
+
+        /** WecTileTypeEqualTo isNot. */
+        public isNot: boolean;
+
+        /**
+         * Creates a new WecTileTypeEqualTo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecTileTypeEqualTo instance
+         */
+        public static create(properties?: WarEvent.IWecTileTypeEqualTo): WarEvent.WecTileTypeEqualTo;
+
+        /**
+         * Encodes the specified WecTileTypeEqualTo message. Does not implicitly {@link WarEvent.WecTileTypeEqualTo.verify|verify} messages.
+         * @param message WecTileTypeEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecTileTypeEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecTileTypeEqualTo message, length delimited. Does not implicitly {@link WarEvent.WecTileTypeEqualTo.verify|verify} messages.
+         * @param message WecTileTypeEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecTileTypeEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecTileTypeEqualTo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecTileTypeEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTileTypeEqualTo;
+
+        /**
+         * Decodes a WecTileTypeEqualTo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecTileTypeEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTileTypeEqualTo;
+
+        /**
+         * Verifies a WecTileTypeEqualTo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecTileTypeEqualTo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecTileTypeEqualTo
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTileTypeEqualTo;
+
+        /**
+         * Creates a plain object from a WecTileTypeEqualTo message. Also converts values to other types if specified.
+         * @param message WecTileTypeEqualTo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecTileTypeEqualTo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecTileTypeEqualTo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecTilePresence. */
+    interface IWecTilePresence {
+
+        /** WecTilePresence playerIndexArray */
+        playerIndexArray?: (number[]|null);
+
+        /** WecTilePresence teamIndexArray */
+        teamIndexArray?: (number[]|null);
+
+        /** WecTilePresence tilesCount */
+        tilesCount?: (number|null);
+
+        /** WecTilePresence tilesCountComparator */
+        tilesCountComparator?: (number|null);
+
+        /** WecTilePresence tileTypeArray */
+        tileTypeArray?: (number[]|null);
+
+        /** WecTilePresence locationIdArray */
+        locationIdArray?: (number[]|null);
+
+        /** WecTilePresence gridIndexArray */
+        gridIndexArray?: (Structure.IGridIndex[]|null);
+    }
+
+    /** Represents a WecTilePresence. */
+    class WecTilePresence implements IWecTilePresence {
+
+        /**
+         * Constructs a new WecTilePresence.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecTilePresence);
+
+        /** WecTilePresence playerIndexArray. */
+        public playerIndexArray: number[];
+
+        /** WecTilePresence teamIndexArray. */
+        public teamIndexArray: number[];
+
+        /** WecTilePresence tilesCount. */
+        public tilesCount: number;
+
+        /** WecTilePresence tilesCountComparator. */
+        public tilesCountComparator: number;
+
+        /** WecTilePresence tileTypeArray. */
+        public tileTypeArray: number[];
+
+        /** WecTilePresence locationIdArray. */
+        public locationIdArray: number[];
+
+        /** WecTilePresence gridIndexArray. */
+        public gridIndexArray: Structure.IGridIndex[];
+
+        /**
+         * Creates a new WecTilePresence instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecTilePresence instance
+         */
+        public static create(properties?: WarEvent.IWecTilePresence): WarEvent.WecTilePresence;
+
+        /**
+         * Encodes the specified WecTilePresence message. Does not implicitly {@link WarEvent.WecTilePresence.verify|verify} messages.
+         * @param message WecTilePresence message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecTilePresence, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecTilePresence message, length delimited. Does not implicitly {@link WarEvent.WecTilePresence.verify|verify} messages.
+         * @param message WecTilePresence message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecTilePresence, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecTilePresence message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecTilePresence
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTilePresence;
+
+        /**
+         * Decodes a WecTilePresence message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecTilePresence
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTilePresence;
+
+        /**
+         * Verifies a WecTilePresence message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecTilePresence message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecTilePresence
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTilePresence;
+
+        /**
+         * Creates a plain object from a WecTilePresence message. Also converts values to other types if specified.
+         * @param message WecTilePresence
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecTilePresence, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecTilePresence to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecUnitPresence. */
+    interface IWecUnitPresence {
+
+        /** WecUnitPresence playerIndexArray */
+        playerIndexArray?: (number[]|null);
+
+        /** WecUnitPresence teamIndexArray */
+        teamIndexArray?: (number[]|null);
+
+        /** WecUnitPresence unitsCount */
+        unitsCount?: (number|null);
+
+        /** WecUnitPresence unitsCountComparator */
+        unitsCountComparator?: (number|null);
+
+        /** WecUnitPresence unitTypeArray */
+        unitTypeArray?: (number[]|null);
+
+        /** WecUnitPresence locationIdArray */
+        locationIdArray?: (number[]|null);
+
+        /** WecUnitPresence gridIndexArray */
+        gridIndexArray?: (Structure.IGridIndex[]|null);
+
+        /** WecUnitPresence actionStateArray */
+        actionStateArray?: (number[]|null);
+
+        /** WecUnitPresence hasLoadedCo */
+        hasLoadedCo?: (boolean|null);
+
+        /** WecUnitPresence hp */
+        hp?: (number|null);
+
+        /** WecUnitPresence hpComparator */
+        hpComparator?: (number|null);
+
+        /** WecUnitPresence fuelPct */
+        fuelPct?: (number|null);
+
+        /** WecUnitPresence fuelPctComparator */
+        fuelPctComparator?: (number|null);
+
+        /** WecUnitPresence priAmmoPct */
+        priAmmoPct?: (number|null);
+
+        /** WecUnitPresence priAmmoPctComparator */
+        priAmmoPctComparator?: (number|null);
+
+        /** WecUnitPresence promotion */
+        promotion?: (number|null);
+
+        /** WecUnitPresence promotionComparator */
+        promotionComparator?: (number|null);
+    }
+
+    /** Represents a WecUnitPresence. */
+    class WecUnitPresence implements IWecUnitPresence {
+
+        /**
+         * Constructs a new WecUnitPresence.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecUnitPresence);
+
+        /** WecUnitPresence playerIndexArray. */
+        public playerIndexArray: number[];
+
+        /** WecUnitPresence teamIndexArray. */
+        public teamIndexArray: number[];
+
+        /** WecUnitPresence unitsCount. */
+        public unitsCount: number;
+
+        /** WecUnitPresence unitsCountComparator. */
+        public unitsCountComparator: number;
+
+        /** WecUnitPresence unitTypeArray. */
+        public unitTypeArray: number[];
+
+        /** WecUnitPresence locationIdArray. */
+        public locationIdArray: number[];
+
+        /** WecUnitPresence gridIndexArray. */
+        public gridIndexArray: Structure.IGridIndex[];
+
+        /** WecUnitPresence actionStateArray. */
+        public actionStateArray: number[];
+
+        /** WecUnitPresence hasLoadedCo. */
+        public hasLoadedCo: boolean;
+
+        /** WecUnitPresence hp. */
+        public hp: number;
+
+        /** WecUnitPresence hpComparator. */
+        public hpComparator: number;
+
+        /** WecUnitPresence fuelPct. */
+        public fuelPct: number;
+
+        /** WecUnitPresence fuelPctComparator. */
+        public fuelPctComparator: number;
+
+        /** WecUnitPresence priAmmoPct. */
+        public priAmmoPct: number;
+
+        /** WecUnitPresence priAmmoPctComparator. */
+        public priAmmoPctComparator: number;
+
+        /** WecUnitPresence promotion. */
+        public promotion: number;
+
+        /** WecUnitPresence promotionComparator. */
+        public promotionComparator: number;
+
+        /**
+         * Creates a new WecUnitPresence instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecUnitPresence instance
+         */
+        public static create(properties?: WarEvent.IWecUnitPresence): WarEvent.WecUnitPresence;
+
+        /**
+         * Encodes the specified WecUnitPresence message. Does not implicitly {@link WarEvent.WecUnitPresence.verify|verify} messages.
+         * @param message WecUnitPresence message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecUnitPresence, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecUnitPresence message, length delimited. Does not implicitly {@link WarEvent.WecUnitPresence.verify|verify} messages.
+         * @param message WecUnitPresence message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecUnitPresence, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecUnitPresence message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecUnitPresence
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecUnitPresence;
+
+        /**
+         * Decodes a WecUnitPresence message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecUnitPresence
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecUnitPresence;
+
+        /**
+         * Verifies a WecUnitPresence message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecUnitPresence message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecUnitPresence
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecUnitPresence;
+
+        /**
+         * Creates a plain object from a WecUnitPresence message. Also converts values to other types if specified.
+         * @param message WecUnitPresence
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecUnitPresence, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecUnitPresence to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecCustomCounter. */
+    interface IWecCustomCounter {
+
+        /** WecCustomCounter counterIdArray */
+        counterIdArray?: (number[]|null);
+
+        /** WecCustomCounter counterCount */
+        counterCount?: (number|null);
+
+        /** WecCustomCounter counterCountComparator */
+        counterCountComparator?: (number|null);
+
+        /** WecCustomCounter value */
+        value?: (number|null);
+
+        /** WecCustomCounter valueComparator */
+        valueComparator?: (number|null);
+
+        /** WecCustomCounter valueDivider */
+        valueDivider?: (number|null);
+
+        /** WecCustomCounter valueRemainder */
+        valueRemainder?: (number|null);
+
+        /** WecCustomCounter valueRemainderComparator */
+        valueRemainderComparator?: (number|null);
+    }
+
+    /** Represents a WecCustomCounter. */
+    class WecCustomCounter implements IWecCustomCounter {
+
+        /**
+         * Constructs a new WecCustomCounter.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecCustomCounter);
+
+        /** WecCustomCounter counterIdArray. */
+        public counterIdArray: number[];
+
+        /** WecCustomCounter counterCount. */
+        public counterCount: number;
+
+        /** WecCustomCounter counterCountComparator. */
+        public counterCountComparator: number;
+
+        /** WecCustomCounter value. */
+        public value: number;
+
+        /** WecCustomCounter valueComparator. */
+        public valueComparator: number;
+
+        /** WecCustomCounter valueDivider. */
+        public valueDivider: number;
+
+        /** WecCustomCounter valueRemainder. */
+        public valueRemainder: number;
+
+        /** WecCustomCounter valueRemainderComparator. */
+        public valueRemainderComparator: number;
+
+        /**
+         * Creates a new WecCustomCounter instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecCustomCounter instance
+         */
+        public static create(properties?: WarEvent.IWecCustomCounter): WarEvent.WecCustomCounter;
+
+        /**
+         * Encodes the specified WecCustomCounter message. Does not implicitly {@link WarEvent.WecCustomCounter.verify|verify} messages.
+         * @param message WecCustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecCustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecCustomCounter message, length delimited. Does not implicitly {@link WarEvent.WecCustomCounter.verify|verify} messages.
+         * @param message WecCustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecCustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecCustomCounter message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecCustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecCustomCounter;
+
+        /**
+         * Decodes a WecCustomCounter message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecCustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecCustomCounter;
+
+        /**
+         * Verifies a WecCustomCounter message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecCustomCounter message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecCustomCounter
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecCustomCounter;
+
+        /**
+         * Creates a plain object from a WecCustomCounter message. Also converts values to other types if specified.
+         * @param message WecCustomCounter
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecCustomCounter, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecCustomCounter to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarEventCondition. */
     interface IWarEventCondition {
 
@@ -5013,8 +6297,14 @@ export declare namespace WarEvent {
         /** WarEventCondition WecTurnIndexRemainderEqualTo */
         WecTurnIndexRemainderEqualTo?: (WarEvent.IWecTurnIndexRemainderEqualTo|null);
 
+        /** WarEventCondition WecTurnAndPlayer */
+        WecTurnAndPlayer?: (WarEvent.IWecTurnAndPlayer|null);
+
         /** WarEventCondition WecTurnPhaseEqualTo */
         WecTurnPhaseEqualTo?: (WarEvent.IWecTurnPhaseEqualTo|null);
+
+        /** WarEventCondition WecWeatherAndFog */
+        WecWeatherAndFog?: (WarEvent.IWecWeatherAndFog|null);
 
         /** WarEventCondition WecPlayerIndexInTurnEqualTo */
         WecPlayerIndexInTurnEqualTo?: (WarEvent.IWecPlayerIndexInTurnEqualTo|null);
@@ -5034,8 +6324,29 @@ export declare namespace WarEvent {
         /** WarEventCondition WecEventCalledCountTotalLessThan */
         WecEventCalledCountTotalLessThan?: (WarEvent.IWecEventCalledCountTotalLessThan|null);
 
+        /** WarEventCondition WecEventCalledCount */
+        WecEventCalledCount?: (WarEvent.IWecEventCalledCount|null);
+
         /** WarEventCondition WecPlayerAliveStateEqualTo */
         WecPlayerAliveStateEqualTo?: (WarEvent.IWecPlayerAliveStateEqualTo|null);
+
+        /** WarEventCondition WecPlayerState */
+        WecPlayerState?: (WarEvent.IWecPlayerState|null);
+
+        /** WarEventCondition WecTilePlayerIndexEqualTo */
+        WecTilePlayerIndexEqualTo?: (WarEvent.IWecTilePlayerIndexEqualTo|null);
+
+        /** WarEventCondition WecTileTypeEqualTo */
+        WecTileTypeEqualTo?: (WarEvent.IWecTileTypeEqualTo|null);
+
+        /** WarEventCondition WecTilePresence */
+        WecTilePresence?: (WarEvent.IWecTilePresence|null);
+
+        /** WarEventCondition WecUnitPresence */
+        WecUnitPresence?: (WarEvent.IWecUnitPresence|null);
+
+        /** WarEventCondition WecCustomCounter */
+        WecCustomCounter?: (WarEvent.IWecCustomCounter|null);
     }
 
     /** Represents a WarEventCondition. */
@@ -5062,8 +6373,14 @@ export declare namespace WarEvent {
         /** WarEventCondition WecTurnIndexRemainderEqualTo. */
         public WecTurnIndexRemainderEqualTo?: (WarEvent.IWecTurnIndexRemainderEqualTo|null);
 
+        /** WarEventCondition WecTurnAndPlayer. */
+        public WecTurnAndPlayer?: (WarEvent.IWecTurnAndPlayer|null);
+
         /** WarEventCondition WecTurnPhaseEqualTo. */
         public WecTurnPhaseEqualTo?: (WarEvent.IWecTurnPhaseEqualTo|null);
+
+        /** WarEventCondition WecWeatherAndFog. */
+        public WecWeatherAndFog?: (WarEvent.IWecWeatherAndFog|null);
 
         /** WarEventCondition WecPlayerIndexInTurnEqualTo. */
         public WecPlayerIndexInTurnEqualTo?: (WarEvent.IWecPlayerIndexInTurnEqualTo|null);
@@ -5083,8 +6400,29 @@ export declare namespace WarEvent {
         /** WarEventCondition WecEventCalledCountTotalLessThan. */
         public WecEventCalledCountTotalLessThan?: (WarEvent.IWecEventCalledCountTotalLessThan|null);
 
+        /** WarEventCondition WecEventCalledCount. */
+        public WecEventCalledCount?: (WarEvent.IWecEventCalledCount|null);
+
         /** WarEventCondition WecPlayerAliveStateEqualTo. */
         public WecPlayerAliveStateEqualTo?: (WarEvent.IWecPlayerAliveStateEqualTo|null);
+
+        /** WarEventCondition WecPlayerState. */
+        public WecPlayerState?: (WarEvent.IWecPlayerState|null);
+
+        /** WarEventCondition WecTilePlayerIndexEqualTo. */
+        public WecTilePlayerIndexEqualTo?: (WarEvent.IWecTilePlayerIndexEqualTo|null);
+
+        /** WarEventCondition WecTileTypeEqualTo. */
+        public WecTileTypeEqualTo?: (WarEvent.IWecTileTypeEqualTo|null);
+
+        /** WarEventCondition WecTilePresence. */
+        public WecTilePresence?: (WarEvent.IWecTilePresence|null);
+
+        /** WarEventCondition WecUnitPresence. */
+        public WecUnitPresence?: (WarEvent.IWecUnitPresence|null);
+
+        /** WarEventCondition WecCustomCounter. */
+        public WecCustomCounter?: (WarEvent.IWecCustomCounter|null);
 
         /**
          * Creates a new WarEventCondition instance using the specified properties.
@@ -5550,107 +6888,14 @@ export declare namespace WarEvent {
         }
     }
 
-    /** Properties of a WeaSetPlayerAliveState. */
-    interface IWeaSetPlayerAliveState {
-
-        /** WeaSetPlayerAliveState playerIndex */
-        playerIndex?: (number|null);
-
-        /** WeaSetPlayerAliveState playerAliveState */
-        playerAliveState?: (number|null);
-    }
-
-    /** Represents a WeaSetPlayerAliveState. */
-    class WeaSetPlayerAliveState implements IWeaSetPlayerAliveState {
-
-        /**
-         * Constructs a new WeaSetPlayerAliveState.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: WarEvent.IWeaSetPlayerAliveState);
-
-        /** WeaSetPlayerAliveState playerIndex. */
-        public playerIndex: number;
-
-        /** WeaSetPlayerAliveState playerAliveState. */
-        public playerAliveState: number;
-
-        /**
-         * Creates a new WeaSetPlayerAliveState instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns WeaSetPlayerAliveState instance
-         */
-        public static create(properties?: WarEvent.IWeaSetPlayerAliveState): WarEvent.WeaSetPlayerAliveState;
-
-        /**
-         * Encodes the specified WeaSetPlayerAliveState message. Does not implicitly {@link WarEvent.WeaSetPlayerAliveState.verify|verify} messages.
-         * @param message WeaSetPlayerAliveState message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: WarEvent.IWeaSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified WeaSetPlayerAliveState message, length delimited. Does not implicitly {@link WarEvent.WeaSetPlayerAliveState.verify|verify} messages.
-         * @param message WeaSetPlayerAliveState message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: WarEvent.IWeaSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a WeaSetPlayerAliveState message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns WeaSetPlayerAliveState
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetPlayerAliveState;
-
-        /**
-         * Decodes a WeaSetPlayerAliveState message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns WeaSetPlayerAliveState
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetPlayerAliveState;
-
-        /**
-         * Verifies a WeaSetPlayerAliveState message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a WeaSetPlayerAliveState message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns WeaSetPlayerAliveState
-         */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetPlayerAliveState;
-
-        /**
-         * Creates a plain object from a WeaSetPlayerAliveState message. Also converts values to other types if specified.
-         * @param message WeaSetPlayerAliveState
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: WarEvent.WeaSetPlayerAliveState, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this WeaSetPlayerAliveState to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
     /** Properties of a WeaDialogue. */
     interface IWeaDialogue {
 
         /** WeaDialogue dataArray */
         dataArray?: (WarEvent.WeaDialogue.IDataForDialogue[]|null);
+
+        /** WeaDialogue backgroundId */
+        backgroundId?: (number|null);
     }
 
     /** Represents a WeaDialogue. */
@@ -5664,6 +6909,9 @@ export declare namespace WarEvent {
 
         /** WeaDialogue dataArray. */
         public dataArray: WarEvent.WeaDialogue.IDataForDialogue[];
+
+        /** WeaDialogue backgroundId. */
+        public backgroundId: number;
 
         /**
          * Creates a new WeaDialogue instance using the specified properties.
@@ -6033,6 +7281,1677 @@ export declare namespace WarEvent {
         }
     }
 
+    /** Properties of a WeaSimpleDialogue. */
+    interface IWeaSimpleDialogue {
+
+        /** WeaSimpleDialogue dataArray */
+        dataArray?: (WarEvent.WeaSimpleDialogue.IDataForDialogue[]|null);
+    }
+
+    /** Represents a WeaSimpleDialogue. */
+    class WeaSimpleDialogue implements IWeaSimpleDialogue {
+
+        /**
+         * Constructs a new WeaSimpleDialogue.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSimpleDialogue);
+
+        /** WeaSimpleDialogue dataArray. */
+        public dataArray: WarEvent.WeaSimpleDialogue.IDataForDialogue[];
+
+        /**
+         * Creates a new WeaSimpleDialogue instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSimpleDialogue instance
+         */
+        public static create(properties?: WarEvent.IWeaSimpleDialogue): WarEvent.WeaSimpleDialogue;
+
+        /**
+         * Encodes the specified WeaSimpleDialogue message. Does not implicitly {@link WarEvent.WeaSimpleDialogue.verify|verify} messages.
+         * @param message WeaSimpleDialogue message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSimpleDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSimpleDialogue message, length delimited. Does not implicitly {@link WarEvent.WeaSimpleDialogue.verify|verify} messages.
+         * @param message WeaSimpleDialogue message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSimpleDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSimpleDialogue message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSimpleDialogue
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSimpleDialogue;
+
+        /**
+         * Decodes a WeaSimpleDialogue message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSimpleDialogue
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSimpleDialogue;
+
+        /**
+         * Verifies a WeaSimpleDialogue message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSimpleDialogue message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSimpleDialogue
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSimpleDialogue;
+
+        /**
+         * Creates a plain object from a WeaSimpleDialogue message. Also converts values to other types if specified.
+         * @param message WeaSimpleDialogue
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSimpleDialogue, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSimpleDialogue to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WeaSimpleDialogue {
+
+        /** Properties of a DataForCoDialogue. */
+        interface IDataForCoDialogue {
+
+            /** DataForCoDialogue side */
+            side?: (number|null);
+
+            /** DataForCoDialogue coId */
+            coId?: (number|null);
+
+            /** DataForCoDialogue textArray */
+            textArray?: (Structure.ILanguageText[]|null);
+
+            /** DataForCoDialogue nameArray */
+            nameArray?: (Structure.ILanguageText[]|null);
+        }
+
+        /** Represents a DataForCoDialogue. */
+        class DataForCoDialogue implements IDataForCoDialogue {
+
+            /**
+             * Constructs a new DataForCoDialogue.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.WeaSimpleDialogue.IDataForCoDialogue);
+
+            /** DataForCoDialogue side. */
+            public side: number;
+
+            /** DataForCoDialogue coId. */
+            public coId: number;
+
+            /** DataForCoDialogue textArray. */
+            public textArray: Structure.ILanguageText[];
+
+            /** DataForCoDialogue nameArray. */
+            public nameArray: Structure.ILanguageText[];
+
+            /**
+             * Creates a new DataForCoDialogue instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns DataForCoDialogue instance
+             */
+            public static create(properties?: WarEvent.WeaSimpleDialogue.IDataForCoDialogue): WarEvent.WeaSimpleDialogue.DataForCoDialogue;
+
+            /**
+             * Encodes the specified DataForCoDialogue message. Does not implicitly {@link WarEvent.WeaSimpleDialogue.DataForCoDialogue.verify|verify} messages.
+             * @param message DataForCoDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.WeaSimpleDialogue.IDataForCoDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified DataForCoDialogue message, length delimited. Does not implicitly {@link WarEvent.WeaSimpleDialogue.DataForCoDialogue.verify|verify} messages.
+             * @param message DataForCoDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.WeaSimpleDialogue.IDataForCoDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a DataForCoDialogue message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns DataForCoDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSimpleDialogue.DataForCoDialogue;
+
+            /**
+             * Decodes a DataForCoDialogue message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns DataForCoDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSimpleDialogue.DataForCoDialogue;
+
+            /**
+             * Verifies a DataForCoDialogue message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a DataForCoDialogue message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns DataForCoDialogue
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.WeaSimpleDialogue.DataForCoDialogue;
+
+            /**
+             * Creates a plain object from a DataForCoDialogue message. Also converts values to other types if specified.
+             * @param message DataForCoDialogue
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.WeaSimpleDialogue.DataForCoDialogue, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this DataForCoDialogue to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a DataForDialogue. */
+        interface IDataForDialogue {
+
+            /** DataForDialogue dataForCoDialogue */
+            dataForCoDialogue?: (WarEvent.WeaSimpleDialogue.IDataForCoDialogue|null);
+        }
+
+        /** Represents a DataForDialogue. */
+        class DataForDialogue implements IDataForDialogue {
+
+            /**
+             * Constructs a new DataForDialogue.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.WeaSimpleDialogue.IDataForDialogue);
+
+            /** DataForDialogue dataForCoDialogue. */
+            public dataForCoDialogue?: (WarEvent.WeaSimpleDialogue.IDataForCoDialogue|null);
+
+            /**
+             * Creates a new DataForDialogue instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns DataForDialogue instance
+             */
+            public static create(properties?: WarEvent.WeaSimpleDialogue.IDataForDialogue): WarEvent.WeaSimpleDialogue.DataForDialogue;
+
+            /**
+             * Encodes the specified DataForDialogue message. Does not implicitly {@link WarEvent.WeaSimpleDialogue.DataForDialogue.verify|verify} messages.
+             * @param message DataForDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.WeaSimpleDialogue.IDataForDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified DataForDialogue message, length delimited. Does not implicitly {@link WarEvent.WeaSimpleDialogue.DataForDialogue.verify|verify} messages.
+             * @param message DataForDialogue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.WeaSimpleDialogue.IDataForDialogue, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a DataForDialogue message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns DataForDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSimpleDialogue.DataForDialogue;
+
+            /**
+             * Decodes a DataForDialogue message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns DataForDialogue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSimpleDialogue.DataForDialogue;
+
+            /**
+             * Verifies a DataForDialogue message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a DataForDialogue message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns DataForDialogue
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.WeaSimpleDialogue.DataForDialogue;
+
+            /**
+             * Creates a plain object from a DataForDialogue message. Also converts values to other types if specified.
+             * @param message DataForDialogue
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.WeaSimpleDialogue.DataForDialogue, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this DataForDialogue to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a WeaSetViewpoint. */
+    interface IWeaSetViewpoint {
+
+        /** WeaSetViewpoint gridIndex */
+        gridIndex?: (Structure.IGridIndex|null);
+
+        /** WeaSetViewpoint needFocusEffect */
+        needFocusEffect?: (boolean|null);
+    }
+
+    /** Represents a WeaSetViewpoint. */
+    class WeaSetViewpoint implements IWeaSetViewpoint {
+
+        /**
+         * Constructs a new WeaSetViewpoint.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetViewpoint);
+
+        /** WeaSetViewpoint gridIndex. */
+        public gridIndex?: (Structure.IGridIndex|null);
+
+        /** WeaSetViewpoint needFocusEffect. */
+        public needFocusEffect: boolean;
+
+        /**
+         * Creates a new WeaSetViewpoint instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetViewpoint instance
+         */
+        public static create(properties?: WarEvent.IWeaSetViewpoint): WarEvent.WeaSetViewpoint;
+
+        /**
+         * Encodes the specified WeaSetViewpoint message. Does not implicitly {@link WarEvent.WeaSetViewpoint.verify|verify} messages.
+         * @param message WeaSetViewpoint message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetViewpoint, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetViewpoint message, length delimited. Does not implicitly {@link WarEvent.WeaSetViewpoint.verify|verify} messages.
+         * @param message WeaSetViewpoint message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetViewpoint, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetViewpoint message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetViewpoint
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetViewpoint;
+
+        /**
+         * Decodes a WeaSetViewpoint message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetViewpoint
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetViewpoint;
+
+        /**
+         * Verifies a WeaSetViewpoint message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetViewpoint message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetViewpoint
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetViewpoint;
+
+        /**
+         * Creates a plain object from a WeaSetViewpoint message. Also converts values to other types if specified.
+         * @param message WeaSetViewpoint
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetViewpoint, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetViewpoint to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaSetWeather. */
+    interface IWeaSetWeather {
+
+        /** WeaSetWeather weatherType */
+        weatherType?: (number|null);
+
+        /** WeaSetWeather weatherTurnsCount */
+        weatherTurnsCount?: (number|null);
+    }
+
+    /** Represents a WeaSetWeather. */
+    class WeaSetWeather implements IWeaSetWeather {
+
+        /**
+         * Constructs a new WeaSetWeather.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetWeather);
+
+        /** WeaSetWeather weatherType. */
+        public weatherType: number;
+
+        /** WeaSetWeather weatherTurnsCount. */
+        public weatherTurnsCount: number;
+
+        /**
+         * Creates a new WeaSetWeather instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetWeather instance
+         */
+        public static create(properties?: WarEvent.IWeaSetWeather): WarEvent.WeaSetWeather;
+
+        /**
+         * Encodes the specified WeaSetWeather message. Does not implicitly {@link WarEvent.WeaSetWeather.verify|verify} messages.
+         * @param message WeaSetWeather message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetWeather, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetWeather message, length delimited. Does not implicitly {@link WarEvent.WeaSetWeather.verify|verify} messages.
+         * @param message WeaSetWeather message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetWeather, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetWeather message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetWeather
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetWeather;
+
+        /**
+         * Decodes a WeaSetWeather message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetWeather
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetWeather;
+
+        /**
+         * Verifies a WeaSetWeather message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetWeather message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetWeather
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetWeather;
+
+        /**
+         * Creates a plain object from a WeaSetWeather message. Also converts values to other types if specified.
+         * @param message WeaSetWeather
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetWeather, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetWeather to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaPlayBgm. */
+    interface IWeaPlayBgm {
+
+        /** WeaPlayBgm bgmCode */
+        bgmCode?: (number|null);
+
+        /** WeaPlayBgm useCoBgm */
+        useCoBgm?: (boolean|null);
+    }
+
+    /** Represents a WeaPlayBgm. */
+    class WeaPlayBgm implements IWeaPlayBgm {
+
+        /**
+         * Constructs a new WeaPlayBgm.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaPlayBgm);
+
+        /** WeaPlayBgm bgmCode. */
+        public bgmCode: number;
+
+        /** WeaPlayBgm useCoBgm. */
+        public useCoBgm: boolean;
+
+        /**
+         * Creates a new WeaPlayBgm instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaPlayBgm instance
+         */
+        public static create(properties?: WarEvent.IWeaPlayBgm): WarEvent.WeaPlayBgm;
+
+        /**
+         * Encodes the specified WeaPlayBgm message. Does not implicitly {@link WarEvent.WeaPlayBgm.verify|verify} messages.
+         * @param message WeaPlayBgm message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaPlayBgm, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaPlayBgm message, length delimited. Does not implicitly {@link WarEvent.WeaPlayBgm.verify|verify} messages.
+         * @param message WeaPlayBgm message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaPlayBgm, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaPlayBgm message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaPlayBgm
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaPlayBgm;
+
+        /**
+         * Decodes a WeaPlayBgm message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaPlayBgm
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaPlayBgm;
+
+        /**
+         * Verifies a WeaPlayBgm message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaPlayBgm message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaPlayBgm
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaPlayBgm;
+
+        /**
+         * Creates a plain object from a WeaPlayBgm message. Also converts values to other types if specified.
+         * @param message WeaPlayBgm
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaPlayBgm, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaPlayBgm to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaSetForceFogCode. */
+    interface IWeaSetForceFogCode {
+
+        /** WeaSetForceFogCode forceFogCode */
+        forceFogCode?: (number|null);
+
+        /** WeaSetForceFogCode turnsCount */
+        turnsCount?: (number|null);
+    }
+
+    /** Represents a WeaSetForceFogCode. */
+    class WeaSetForceFogCode implements IWeaSetForceFogCode {
+
+        /**
+         * Constructs a new WeaSetForceFogCode.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetForceFogCode);
+
+        /** WeaSetForceFogCode forceFogCode. */
+        public forceFogCode: number;
+
+        /** WeaSetForceFogCode turnsCount. */
+        public turnsCount: number;
+
+        /**
+         * Creates a new WeaSetForceFogCode instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetForceFogCode instance
+         */
+        public static create(properties?: WarEvent.IWeaSetForceFogCode): WarEvent.WeaSetForceFogCode;
+
+        /**
+         * Encodes the specified WeaSetForceFogCode message. Does not implicitly {@link WarEvent.WeaSetForceFogCode.verify|verify} messages.
+         * @param message WeaSetForceFogCode message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetForceFogCode, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetForceFogCode message, length delimited. Does not implicitly {@link WarEvent.WeaSetForceFogCode.verify|verify} messages.
+         * @param message WeaSetForceFogCode message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetForceFogCode, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetForceFogCode message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetForceFogCode
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetForceFogCode;
+
+        /**
+         * Decodes a WeaSetForceFogCode message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetForceFogCode
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetForceFogCode;
+
+        /**
+         * Verifies a WeaSetForceFogCode message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetForceFogCode message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetForceFogCode
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetForceFogCode;
+
+        /**
+         * Creates a plain object from a WeaSetForceFogCode message. Also converts values to other types if specified.
+         * @param message WeaSetForceFogCode
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetForceFogCode, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetForceFogCode to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaSetCustomCounter. */
+    interface IWeaSetCustomCounter {
+
+        /** WeaSetCustomCounter customCounterIdArray */
+        customCounterIdArray?: (number[]|null);
+
+        /** WeaSetCustomCounter multiplierPercentage */
+        multiplierPercentage?: (number|null);
+
+        /** WeaSetCustomCounter deltaValue */
+        deltaValue?: (number|null);
+    }
+
+    /** Represents a WeaSetCustomCounter. */
+    class WeaSetCustomCounter implements IWeaSetCustomCounter {
+
+        /**
+         * Constructs a new WeaSetCustomCounter.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetCustomCounter);
+
+        /** WeaSetCustomCounter customCounterIdArray. */
+        public customCounterIdArray: number[];
+
+        /** WeaSetCustomCounter multiplierPercentage. */
+        public multiplierPercentage: number;
+
+        /** WeaSetCustomCounter deltaValue. */
+        public deltaValue: number;
+
+        /**
+         * Creates a new WeaSetCustomCounter instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetCustomCounter instance
+         */
+        public static create(properties?: WarEvent.IWeaSetCustomCounter): WarEvent.WeaSetCustomCounter;
+
+        /**
+         * Encodes the specified WeaSetCustomCounter message. Does not implicitly {@link WarEvent.WeaSetCustomCounter.verify|verify} messages.
+         * @param message WeaSetCustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetCustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetCustomCounter message, length delimited. Does not implicitly {@link WarEvent.WeaSetCustomCounter.verify|verify} messages.
+         * @param message WeaSetCustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetCustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetCustomCounter message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetCustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetCustomCounter;
+
+        /**
+         * Decodes a WeaSetCustomCounter message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetCustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetCustomCounter;
+
+        /**
+         * Verifies a WeaSetCustomCounter message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetCustomCounter message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetCustomCounter
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetCustomCounter;
+
+        /**
+         * Creates a plain object from a WeaSetCustomCounter message. Also converts values to other types if specified.
+         * @param message WeaSetCustomCounter
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetCustomCounter, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetCustomCounter to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaDeprecatedSetPlayerAliveState. */
+    interface IWeaDeprecatedSetPlayerAliveState {
+
+        /** WeaDeprecatedSetPlayerAliveState playerIndex */
+        playerIndex?: (number|null);
+
+        /** WeaDeprecatedSetPlayerAliveState playerAliveState */
+        playerAliveState?: (number|null);
+    }
+
+    /** Represents a WeaDeprecatedSetPlayerAliveState. */
+    class WeaDeprecatedSetPlayerAliveState implements IWeaDeprecatedSetPlayerAliveState {
+
+        /**
+         * Constructs a new WeaDeprecatedSetPlayerAliveState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaDeprecatedSetPlayerAliveState);
+
+        /** WeaDeprecatedSetPlayerAliveState playerIndex. */
+        public playerIndex: number;
+
+        /** WeaDeprecatedSetPlayerAliveState playerAliveState. */
+        public playerAliveState: number;
+
+        /**
+         * Creates a new WeaDeprecatedSetPlayerAliveState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaDeprecatedSetPlayerAliveState instance
+         */
+        public static create(properties?: WarEvent.IWeaDeprecatedSetPlayerAliveState): WarEvent.WeaDeprecatedSetPlayerAliveState;
+
+        /**
+         * Encodes the specified WeaDeprecatedSetPlayerAliveState message. Does not implicitly {@link WarEvent.WeaDeprecatedSetPlayerAliveState.verify|verify} messages.
+         * @param message WeaDeprecatedSetPlayerAliveState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaDeprecatedSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaDeprecatedSetPlayerAliveState message, length delimited. Does not implicitly {@link WarEvent.WeaDeprecatedSetPlayerAliveState.verify|verify} messages.
+         * @param message WeaDeprecatedSetPlayerAliveState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaDeprecatedSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaDeprecatedSetPlayerAliveState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaDeprecatedSetPlayerAliveState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaDeprecatedSetPlayerAliveState;
+
+        /**
+         * Decodes a WeaDeprecatedSetPlayerAliveState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaDeprecatedSetPlayerAliveState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaDeprecatedSetPlayerAliveState;
+
+        /**
+         * Verifies a WeaDeprecatedSetPlayerAliveState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaDeprecatedSetPlayerAliveState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaDeprecatedSetPlayerAliveState
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaDeprecatedSetPlayerAliveState;
+
+        /**
+         * Creates a plain object from a WeaDeprecatedSetPlayerAliveState message. Also converts values to other types if specified.
+         * @param message WeaDeprecatedSetPlayerAliveState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaDeprecatedSetPlayerAliveState, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaDeprecatedSetPlayerAliveState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaDeprecatedSetPlayerFund. */
+    interface IWeaDeprecatedSetPlayerFund {
+
+        /** WeaDeprecatedSetPlayerFund playerIndex */
+        playerIndex?: (number|null);
+
+        /** WeaDeprecatedSetPlayerFund multiplierPercentage */
+        multiplierPercentage?: (number|null);
+
+        /** WeaDeprecatedSetPlayerFund deltaValue */
+        deltaValue?: (number|null);
+    }
+
+    /** Represents a WeaDeprecatedSetPlayerFund. */
+    class WeaDeprecatedSetPlayerFund implements IWeaDeprecatedSetPlayerFund {
+
+        /**
+         * Constructs a new WeaDeprecatedSetPlayerFund.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaDeprecatedSetPlayerFund);
+
+        /** WeaDeprecatedSetPlayerFund playerIndex. */
+        public playerIndex: number;
+
+        /** WeaDeprecatedSetPlayerFund multiplierPercentage. */
+        public multiplierPercentage: number;
+
+        /** WeaDeprecatedSetPlayerFund deltaValue. */
+        public deltaValue: number;
+
+        /**
+         * Creates a new WeaDeprecatedSetPlayerFund instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaDeprecatedSetPlayerFund instance
+         */
+        public static create(properties?: WarEvent.IWeaDeprecatedSetPlayerFund): WarEvent.WeaDeprecatedSetPlayerFund;
+
+        /**
+         * Encodes the specified WeaDeprecatedSetPlayerFund message. Does not implicitly {@link WarEvent.WeaDeprecatedSetPlayerFund.verify|verify} messages.
+         * @param message WeaDeprecatedSetPlayerFund message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaDeprecatedSetPlayerFund, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaDeprecatedSetPlayerFund message, length delimited. Does not implicitly {@link WarEvent.WeaDeprecatedSetPlayerFund.verify|verify} messages.
+         * @param message WeaDeprecatedSetPlayerFund message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaDeprecatedSetPlayerFund, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaDeprecatedSetPlayerFund message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaDeprecatedSetPlayerFund
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaDeprecatedSetPlayerFund;
+
+        /**
+         * Decodes a WeaDeprecatedSetPlayerFund message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaDeprecatedSetPlayerFund
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaDeprecatedSetPlayerFund;
+
+        /**
+         * Verifies a WeaDeprecatedSetPlayerFund message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaDeprecatedSetPlayerFund message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaDeprecatedSetPlayerFund
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaDeprecatedSetPlayerFund;
+
+        /**
+         * Creates a plain object from a WeaDeprecatedSetPlayerFund message. Also converts values to other types if specified.
+         * @param message WeaDeprecatedSetPlayerFund
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaDeprecatedSetPlayerFund, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaDeprecatedSetPlayerFund to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaDeprecatedSetPlayerCoEnergy. */
+    interface IWeaDeprecatedSetPlayerCoEnergy {
+
+        /** WeaDeprecatedSetPlayerCoEnergy playerIndex */
+        playerIndex?: (number|null);
+
+        /** WeaDeprecatedSetPlayerCoEnergy multiplierPercentage */
+        multiplierPercentage?: (number|null);
+
+        /** WeaDeprecatedSetPlayerCoEnergy deltaPercentage */
+        deltaPercentage?: (number|null);
+    }
+
+    /** Represents a WeaDeprecatedSetPlayerCoEnergy. */
+    class WeaDeprecatedSetPlayerCoEnergy implements IWeaDeprecatedSetPlayerCoEnergy {
+
+        /**
+         * Constructs a new WeaDeprecatedSetPlayerCoEnergy.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaDeprecatedSetPlayerCoEnergy);
+
+        /** WeaDeprecatedSetPlayerCoEnergy playerIndex. */
+        public playerIndex: number;
+
+        /** WeaDeprecatedSetPlayerCoEnergy multiplierPercentage. */
+        public multiplierPercentage: number;
+
+        /** WeaDeprecatedSetPlayerCoEnergy deltaPercentage. */
+        public deltaPercentage: number;
+
+        /**
+         * Creates a new WeaDeprecatedSetPlayerCoEnergy instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaDeprecatedSetPlayerCoEnergy instance
+         */
+        public static create(properties?: WarEvent.IWeaDeprecatedSetPlayerCoEnergy): WarEvent.WeaDeprecatedSetPlayerCoEnergy;
+
+        /**
+         * Encodes the specified WeaDeprecatedSetPlayerCoEnergy message. Does not implicitly {@link WarEvent.WeaDeprecatedSetPlayerCoEnergy.verify|verify} messages.
+         * @param message WeaDeprecatedSetPlayerCoEnergy message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaDeprecatedSetPlayerCoEnergy, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaDeprecatedSetPlayerCoEnergy message, length delimited. Does not implicitly {@link WarEvent.WeaDeprecatedSetPlayerCoEnergy.verify|verify} messages.
+         * @param message WeaDeprecatedSetPlayerCoEnergy message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaDeprecatedSetPlayerCoEnergy, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaDeprecatedSetPlayerCoEnergy message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaDeprecatedSetPlayerCoEnergy
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaDeprecatedSetPlayerCoEnergy;
+
+        /**
+         * Decodes a WeaDeprecatedSetPlayerCoEnergy message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaDeprecatedSetPlayerCoEnergy
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaDeprecatedSetPlayerCoEnergy;
+
+        /**
+         * Verifies a WeaDeprecatedSetPlayerCoEnergy message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaDeprecatedSetPlayerCoEnergy message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaDeprecatedSetPlayerCoEnergy
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaDeprecatedSetPlayerCoEnergy;
+
+        /**
+         * Creates a plain object from a WeaDeprecatedSetPlayerCoEnergy message. Also converts values to other types if specified.
+         * @param message WeaDeprecatedSetPlayerCoEnergy
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaDeprecatedSetPlayerCoEnergy, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaDeprecatedSetPlayerCoEnergy to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaSetPlayerAliveState. */
+    interface IWeaSetPlayerAliveState {
+
+        /** WeaSetPlayerAliveState playerIndexArray */
+        playerIndexArray?: (number[]|null);
+
+        /** WeaSetPlayerAliveState playerAliveState */
+        playerAliveState?: (number|null);
+    }
+
+    /** Represents a WeaSetPlayerAliveState. */
+    class WeaSetPlayerAliveState implements IWeaSetPlayerAliveState {
+
+        /**
+         * Constructs a new WeaSetPlayerAliveState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetPlayerAliveState);
+
+        /** WeaSetPlayerAliveState playerIndexArray. */
+        public playerIndexArray: number[];
+
+        /** WeaSetPlayerAliveState playerAliveState. */
+        public playerAliveState: number;
+
+        /**
+         * Creates a new WeaSetPlayerAliveState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetPlayerAliveState instance
+         */
+        public static create(properties?: WarEvent.IWeaSetPlayerAliveState): WarEvent.WeaSetPlayerAliveState;
+
+        /**
+         * Encodes the specified WeaSetPlayerAliveState message. Does not implicitly {@link WarEvent.WeaSetPlayerAliveState.verify|verify} messages.
+         * @param message WeaSetPlayerAliveState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetPlayerAliveState message, length delimited. Does not implicitly {@link WarEvent.WeaSetPlayerAliveState.verify|verify} messages.
+         * @param message WeaSetPlayerAliveState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetPlayerAliveState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetPlayerAliveState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetPlayerAliveState;
+
+        /**
+         * Decodes a WeaSetPlayerAliveState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetPlayerAliveState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetPlayerAliveState;
+
+        /**
+         * Verifies a WeaSetPlayerAliveState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetPlayerAliveState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetPlayerAliveState
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetPlayerAliveState;
+
+        /**
+         * Creates a plain object from a WeaSetPlayerAliveState message. Also converts values to other types if specified.
+         * @param message WeaSetPlayerAliveState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetPlayerAliveState, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetPlayerAliveState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaSetPlayerState. */
+    interface IWeaSetPlayerState {
+
+        /** WeaSetPlayerState conPlayerIndexArray */
+        conPlayerIndexArray?: (number[]|null);
+
+        /** WeaSetPlayerState actFundMultiplierPercentage */
+        actFundMultiplierPercentage?: (number|null);
+
+        /** WeaSetPlayerState actFundDeltaValue */
+        actFundDeltaValue?: (number|null);
+
+        /** WeaSetPlayerState actCoEnergyMultiplierPct */
+        actCoEnergyMultiplierPct?: (number|null);
+
+        /** WeaSetPlayerState actCoEnergyDeltaPct */
+        actCoEnergyDeltaPct?: (number|null);
+
+        /** WeaSetPlayerState actAliveState */
+        actAliveState?: (number|null);
+
+        /** WeaSetPlayerState conAliveStateArray */
+        conAliveStateArray?: (number[]|null);
+
+        /** WeaSetPlayerState conFund */
+        conFund?: (number|null);
+
+        /** WeaSetPlayerState conFundComparator */
+        conFundComparator?: (number|null);
+
+        /** WeaSetPlayerState conEnergyPercentage */
+        conEnergyPercentage?: (number|null);
+
+        /** WeaSetPlayerState conEnergyPercentageComparator */
+        conEnergyPercentageComparator?: (number|null);
+
+        /** WeaSetPlayerState conCoUsingSkillTypeArray */
+        conCoUsingSkillTypeArray?: (number[]|null);
+    }
+
+    /** Represents a WeaSetPlayerState. */
+    class WeaSetPlayerState implements IWeaSetPlayerState {
+
+        /**
+         * Constructs a new WeaSetPlayerState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetPlayerState);
+
+        /** WeaSetPlayerState conPlayerIndexArray. */
+        public conPlayerIndexArray: number[];
+
+        /** WeaSetPlayerState actFundMultiplierPercentage. */
+        public actFundMultiplierPercentage: number;
+
+        /** WeaSetPlayerState actFundDeltaValue. */
+        public actFundDeltaValue: number;
+
+        /** WeaSetPlayerState actCoEnergyMultiplierPct. */
+        public actCoEnergyMultiplierPct: number;
+
+        /** WeaSetPlayerState actCoEnergyDeltaPct. */
+        public actCoEnergyDeltaPct: number;
+
+        /** WeaSetPlayerState actAliveState. */
+        public actAliveState: number;
+
+        /** WeaSetPlayerState conAliveStateArray. */
+        public conAliveStateArray: number[];
+
+        /** WeaSetPlayerState conFund. */
+        public conFund: number;
+
+        /** WeaSetPlayerState conFundComparator. */
+        public conFundComparator: number;
+
+        /** WeaSetPlayerState conEnergyPercentage. */
+        public conEnergyPercentage: number;
+
+        /** WeaSetPlayerState conEnergyPercentageComparator. */
+        public conEnergyPercentageComparator: number;
+
+        /** WeaSetPlayerState conCoUsingSkillTypeArray. */
+        public conCoUsingSkillTypeArray: number[];
+
+        /**
+         * Creates a new WeaSetPlayerState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetPlayerState instance
+         */
+        public static create(properties?: WarEvent.IWeaSetPlayerState): WarEvent.WeaSetPlayerState;
+
+        /**
+         * Encodes the specified WeaSetPlayerState message. Does not implicitly {@link WarEvent.WeaSetPlayerState.verify|verify} messages.
+         * @param message WeaSetPlayerState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetPlayerState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetPlayerState message, length delimited. Does not implicitly {@link WarEvent.WeaSetPlayerState.verify|verify} messages.
+         * @param message WeaSetPlayerState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetPlayerState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetPlayerState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetPlayerState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetPlayerState;
+
+        /**
+         * Decodes a WeaSetPlayerState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetPlayerState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetPlayerState;
+
+        /**
+         * Verifies a WeaSetPlayerState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetPlayerState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetPlayerState
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetPlayerState;
+
+        /**
+         * Creates a plain object from a WeaSetPlayerState message. Also converts values to other types if specified.
+         * @param message WeaSetPlayerState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetPlayerState, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetPlayerState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaSetPlayerCoEnergy. */
+    interface IWeaSetPlayerCoEnergy {
+
+        /** WeaSetPlayerCoEnergy playerIndexArray */
+        playerIndexArray?: (number[]|null);
+
+        /** WeaSetPlayerCoEnergy actCoEnergyMultiplierPct */
+        actCoEnergyMultiplierPct?: (number|null);
+
+        /** WeaSetPlayerCoEnergy actCoEnergyDeltaPct */
+        actCoEnergyDeltaPct?: (number|null);
+    }
+
+    /** Represents a WeaSetPlayerCoEnergy. */
+    class WeaSetPlayerCoEnergy implements IWeaSetPlayerCoEnergy {
+
+        /**
+         * Constructs a new WeaSetPlayerCoEnergy.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetPlayerCoEnergy);
+
+        /** WeaSetPlayerCoEnergy playerIndexArray. */
+        public playerIndexArray: number[];
+
+        /** WeaSetPlayerCoEnergy actCoEnergyMultiplierPct. */
+        public actCoEnergyMultiplierPct: number;
+
+        /** WeaSetPlayerCoEnergy actCoEnergyDeltaPct. */
+        public actCoEnergyDeltaPct: number;
+
+        /**
+         * Creates a new WeaSetPlayerCoEnergy instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetPlayerCoEnergy instance
+         */
+        public static create(properties?: WarEvent.IWeaSetPlayerCoEnergy): WarEvent.WeaSetPlayerCoEnergy;
+
+        /**
+         * Encodes the specified WeaSetPlayerCoEnergy message. Does not implicitly {@link WarEvent.WeaSetPlayerCoEnergy.verify|verify} messages.
+         * @param message WeaSetPlayerCoEnergy message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetPlayerCoEnergy, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetPlayerCoEnergy message, length delimited. Does not implicitly {@link WarEvent.WeaSetPlayerCoEnergy.verify|verify} messages.
+         * @param message WeaSetPlayerCoEnergy message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetPlayerCoEnergy, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetPlayerCoEnergy message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetPlayerCoEnergy
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetPlayerCoEnergy;
+
+        /**
+         * Decodes a WeaSetPlayerCoEnergy message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetPlayerCoEnergy
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetPlayerCoEnergy;
+
+        /**
+         * Verifies a WeaSetPlayerCoEnergy message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetPlayerCoEnergy message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetPlayerCoEnergy
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetPlayerCoEnergy;
+
+        /**
+         * Creates a plain object from a WeaSetPlayerCoEnergy message. Also converts values to other types if specified.
+         * @param message WeaSetPlayerCoEnergy
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetPlayerCoEnergy, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetPlayerCoEnergy to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WeaSetUnitState. */
+    interface IWeaSetUnitState {
+
+        /** WeaSetUnitState conPlayerIndexArray */
+        conPlayerIndexArray?: (number[]|null);
+
+        /** WeaSetUnitState conTeamIndexArray */
+        conTeamIndexArray?: (number[]|null);
+
+        /** WeaSetUnitState conUnitTypeArray */
+        conUnitTypeArray?: (number[]|null);
+
+        /** WeaSetUnitState conLocationIdArray */
+        conLocationIdArray?: (number[]|null);
+
+        /** WeaSetUnitState conGridIndexArray */
+        conGridIndexArray?: (Structure.IGridIndex[]|null);
+
+        /** WeaSetUnitState conActionStateArray */
+        conActionStateArray?: (number[]|null);
+
+        /** WeaSetUnitState conHasLoadedCo */
+        conHasLoadedCo?: (boolean|null);
+
+        /** WeaSetUnitState conHp */
+        conHp?: (number|null);
+
+        /** WeaSetUnitState conHpComparator */
+        conHpComparator?: (number|null);
+
+        /** WeaSetUnitState conFuelPct */
+        conFuelPct?: (number|null);
+
+        /** WeaSetUnitState conFuelPctComparator */
+        conFuelPctComparator?: (number|null);
+
+        /** WeaSetUnitState conPriAmmoPct */
+        conPriAmmoPct?: (number|null);
+
+        /** WeaSetUnitState conPriAmmoPctComparator */
+        conPriAmmoPctComparator?: (number|null);
+
+        /** WeaSetUnitState conPromotion */
+        conPromotion?: (number|null);
+
+        /** WeaSetUnitState conPromotionComparator */
+        conPromotionComparator?: (number|null);
+
+        /** WeaSetUnitState actHpMultiplierPercentage */
+        actHpMultiplierPercentage?: (number|null);
+
+        /** WeaSetUnitState actHpDeltaValue */
+        actHpDeltaValue?: (number|null);
+
+        /** WeaSetUnitState actFuelMultiplierPercentage */
+        actFuelMultiplierPercentage?: (number|null);
+
+        /** WeaSetUnitState actFuelDeltaValue */
+        actFuelDeltaValue?: (number|null);
+
+        /** WeaSetUnitState actPriAmmoMultiplierPercentage */
+        actPriAmmoMultiplierPercentage?: (number|null);
+
+        /** WeaSetUnitState actPriAmmoDeltaValue */
+        actPriAmmoDeltaValue?: (number|null);
+
+        /** WeaSetUnitState actPromotionMultiplierPercentage */
+        actPromotionMultiplierPercentage?: (number|null);
+
+        /** WeaSetUnitState actPromotionDeltaValue */
+        actPromotionDeltaValue?: (number|null);
+
+        /** WeaSetUnitState actDestroyUnit */
+        actDestroyUnit?: (boolean|null);
+
+        /** WeaSetUnitState actActionState */
+        actActionState?: (number|null);
+
+        /** WeaSetUnitState actHasLoadedCo */
+        actHasLoadedCo?: (boolean|null);
+    }
+
+    /** Represents a WeaSetUnitState. */
+    class WeaSetUnitState implements IWeaSetUnitState {
+
+        /**
+         * Constructs a new WeaSetUnitState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetUnitState);
+
+        /** WeaSetUnitState conPlayerIndexArray. */
+        public conPlayerIndexArray: number[];
+
+        /** WeaSetUnitState conTeamIndexArray. */
+        public conTeamIndexArray: number[];
+
+        /** WeaSetUnitState conUnitTypeArray. */
+        public conUnitTypeArray: number[];
+
+        /** WeaSetUnitState conLocationIdArray. */
+        public conLocationIdArray: number[];
+
+        /** WeaSetUnitState conGridIndexArray. */
+        public conGridIndexArray: Structure.IGridIndex[];
+
+        /** WeaSetUnitState conActionStateArray. */
+        public conActionStateArray: number[];
+
+        /** WeaSetUnitState conHasLoadedCo. */
+        public conHasLoadedCo: boolean;
+
+        /** WeaSetUnitState conHp. */
+        public conHp: number;
+
+        /** WeaSetUnitState conHpComparator. */
+        public conHpComparator: number;
+
+        /** WeaSetUnitState conFuelPct. */
+        public conFuelPct: number;
+
+        /** WeaSetUnitState conFuelPctComparator. */
+        public conFuelPctComparator: number;
+
+        /** WeaSetUnitState conPriAmmoPct. */
+        public conPriAmmoPct: number;
+
+        /** WeaSetUnitState conPriAmmoPctComparator. */
+        public conPriAmmoPctComparator: number;
+
+        /** WeaSetUnitState conPromotion. */
+        public conPromotion: number;
+
+        /** WeaSetUnitState conPromotionComparator. */
+        public conPromotionComparator: number;
+
+        /** WeaSetUnitState actHpMultiplierPercentage. */
+        public actHpMultiplierPercentage: number;
+
+        /** WeaSetUnitState actHpDeltaValue. */
+        public actHpDeltaValue: number;
+
+        /** WeaSetUnitState actFuelMultiplierPercentage. */
+        public actFuelMultiplierPercentage: number;
+
+        /** WeaSetUnitState actFuelDeltaValue. */
+        public actFuelDeltaValue: number;
+
+        /** WeaSetUnitState actPriAmmoMultiplierPercentage. */
+        public actPriAmmoMultiplierPercentage: number;
+
+        /** WeaSetUnitState actPriAmmoDeltaValue. */
+        public actPriAmmoDeltaValue: number;
+
+        /** WeaSetUnitState actPromotionMultiplierPercentage. */
+        public actPromotionMultiplierPercentage: number;
+
+        /** WeaSetUnitState actPromotionDeltaValue. */
+        public actPromotionDeltaValue: number;
+
+        /** WeaSetUnitState actDestroyUnit. */
+        public actDestroyUnit: boolean;
+
+        /** WeaSetUnitState actActionState. */
+        public actActionState: number;
+
+        /** WeaSetUnitState actHasLoadedCo. */
+        public actHasLoadedCo: boolean;
+
+        /**
+         * Creates a new WeaSetUnitState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetUnitState instance
+         */
+        public static create(properties?: WarEvent.IWeaSetUnitState): WarEvent.WeaSetUnitState;
+
+        /**
+         * Encodes the specified WeaSetUnitState message. Does not implicitly {@link WarEvent.WeaSetUnitState.verify|verify} messages.
+         * @param message WeaSetUnitState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetUnitState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetUnitState message, length delimited. Does not implicitly {@link WarEvent.WeaSetUnitState.verify|verify} messages.
+         * @param message WeaSetUnitState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetUnitState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetUnitState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetUnitState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetUnitState;
+
+        /**
+         * Decodes a WeaSetUnitState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetUnitState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetUnitState;
+
+        /**
+         * Verifies a WeaSetUnitState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetUnitState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetUnitState
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetUnitState;
+
+        /**
+         * Creates a plain object from a WeaSetUnitState message. Also converts values to other types if specified.
+         * @param message WeaSetUnitState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetUnitState, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetUnitState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarEventAction. */
     interface IWarEventAction {
 
@@ -6042,11 +8961,47 @@ export declare namespace WarEvent {
         /** WarEventAction WeaAddUnit */
         WeaAddUnit?: (WarEvent.IWeaAddUnit|null);
 
-        /** WarEventAction WeaSetPlayerAliveState */
-        WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
+        /** WarEventAction WeaDeprecatedSetPlayerAliveState */
+        WeaDeprecatedSetPlayerAliveState?: (WarEvent.IWeaDeprecatedSetPlayerAliveState|null);
 
         /** WarEventAction WeaDialogue */
         WeaDialogue?: (WarEvent.IWeaDialogue|null);
+
+        /** WarEventAction WeaSetViewpoint */
+        WeaSetViewpoint?: (WarEvent.IWeaSetViewpoint|null);
+
+        /** WarEventAction WeaSetWeather */
+        WeaSetWeather?: (WarEvent.IWeaSetWeather|null);
+
+        /** WarEventAction WeaPlayBgm */
+        WeaPlayBgm?: (WarEvent.IWeaPlayBgm|null);
+
+        /** WarEventAction WeaSimpleDialogue */
+        WeaSimpleDialogue?: (WarEvent.IWeaSimpleDialogue|null);
+
+        /** WarEventAction WeaDeprecatedSetPlayerFund */
+        WeaDeprecatedSetPlayerFund?: (WarEvent.IWeaDeprecatedSetPlayerFund|null);
+
+        /** WarEventAction WeaDeprecatedSetPlayerCoEnergy */
+        WeaDeprecatedSetPlayerCoEnergy?: (WarEvent.IWeaDeprecatedSetPlayerCoEnergy|null);
+
+        /** WarEventAction WeaSetForceFogCode */
+        WeaSetForceFogCode?: (WarEvent.IWeaSetForceFogCode|null);
+
+        /** WarEventAction WeaSetCustomCounter */
+        WeaSetCustomCounter?: (WarEvent.IWeaSetCustomCounter|null);
+
+        /** WarEventAction WeaSetPlayerAliveState */
+        WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
+
+        /** WarEventAction WeaSetPlayerState */
+        WeaSetPlayerState?: (WarEvent.IWeaSetPlayerState|null);
+
+        /** WarEventAction WeaSetPlayerCoEnergy */
+        WeaSetPlayerCoEnergy?: (WarEvent.IWeaSetPlayerCoEnergy|null);
+
+        /** WarEventAction WeaSetUnitState */
+        WeaSetUnitState?: (WarEvent.IWeaSetUnitState|null);
     }
 
     /** Represents a WarEventAction. */
@@ -6064,11 +9019,47 @@ export declare namespace WarEvent {
         /** WarEventAction WeaAddUnit. */
         public WeaAddUnit?: (WarEvent.IWeaAddUnit|null);
 
-        /** WarEventAction WeaSetPlayerAliveState. */
-        public WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
+        /** WarEventAction WeaDeprecatedSetPlayerAliveState. */
+        public WeaDeprecatedSetPlayerAliveState?: (WarEvent.IWeaDeprecatedSetPlayerAliveState|null);
 
         /** WarEventAction WeaDialogue. */
         public WeaDialogue?: (WarEvent.IWeaDialogue|null);
+
+        /** WarEventAction WeaSetViewpoint. */
+        public WeaSetViewpoint?: (WarEvent.IWeaSetViewpoint|null);
+
+        /** WarEventAction WeaSetWeather. */
+        public WeaSetWeather?: (WarEvent.IWeaSetWeather|null);
+
+        /** WarEventAction WeaPlayBgm. */
+        public WeaPlayBgm?: (WarEvent.IWeaPlayBgm|null);
+
+        /** WarEventAction WeaSimpleDialogue. */
+        public WeaSimpleDialogue?: (WarEvent.IWeaSimpleDialogue|null);
+
+        /** WarEventAction WeaDeprecatedSetPlayerFund. */
+        public WeaDeprecatedSetPlayerFund?: (WarEvent.IWeaDeprecatedSetPlayerFund|null);
+
+        /** WarEventAction WeaDeprecatedSetPlayerCoEnergy. */
+        public WeaDeprecatedSetPlayerCoEnergy?: (WarEvent.IWeaDeprecatedSetPlayerCoEnergy|null);
+
+        /** WarEventAction WeaSetForceFogCode. */
+        public WeaSetForceFogCode?: (WarEvent.IWeaSetForceFogCode|null);
+
+        /** WarEventAction WeaSetCustomCounter. */
+        public WeaSetCustomCounter?: (WarEvent.IWeaSetCustomCounter|null);
+
+        /** WarEventAction WeaSetPlayerAliveState. */
+        public WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
+
+        /** WarEventAction WeaSetPlayerState. */
+        public WeaSetPlayerState?: (WarEvent.IWeaSetPlayerState|null);
+
+        /** WarEventAction WeaSetPlayerCoEnergy. */
+        public WeaSetPlayerCoEnergy?: (WarEvent.IWeaSetPlayerCoEnergy|null);
+
+        /** WarEventAction WeaSetUnitState. */
+        public WeaSetUnitState?: (WarEvent.IWeaSetUnitState|null);
 
         /**
          * Creates a new WarEventAction instance using the specified properties.
@@ -8226,6 +11217,648 @@ export declare namespace WarSerialization {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a CustomCounter. */
+    interface ICustomCounter {
+
+        /** CustomCounter customCounterId */
+        customCounterId?: (number|null);
+
+        /** CustomCounter customCounterValue */
+        customCounterValue?: (number|null);
+    }
+
+    /** Represents a CustomCounter. */
+    class CustomCounter implements ICustomCounter {
+
+        /**
+         * Constructs a new CustomCounter.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ICustomCounter);
+
+        /** CustomCounter customCounterId. */
+        public customCounterId: number;
+
+        /** CustomCounter customCounterValue. */
+        public customCounterValue: number;
+
+        /**
+         * Creates a new CustomCounter instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns CustomCounter instance
+         */
+        public static create(properties?: WarSerialization.ICustomCounter): WarSerialization.CustomCounter;
+
+        /**
+         * Encodes the specified CustomCounter message. Does not implicitly {@link WarSerialization.CustomCounter.verify|verify} messages.
+         * @param message CustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ICustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified CustomCounter message, length delimited. Does not implicitly {@link WarSerialization.CustomCounter.verify|verify} messages.
+         * @param message CustomCounter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ICustomCounter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a CustomCounter message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns CustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.CustomCounter;
+
+        /**
+         * Decodes a CustomCounter message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns CustomCounter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.CustomCounter;
+
+        /**
+         * Verifies a CustomCounter message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a CustomCounter message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns CustomCounter
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.CustomCounter;
+
+        /**
+         * Creates a plain object from a CustomCounter message. Also converts values to other types if specified.
+         * @param message CustomCounter
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.CustomCounter, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this CustomCounter to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a HalfwayReplayAction. */
+    interface IHalfwayReplayAction {
+
+        /** HalfwayReplayAction teamIndex */
+        teamIndex?: (number|null);
+
+        /** HalfwayReplayAction actionArray */
+        actionArray?: (WarAction.IWarActionContainer[]|null);
+    }
+
+    /** Represents a HalfwayReplayAction. */
+    class HalfwayReplayAction implements IHalfwayReplayAction {
+
+        /**
+         * Constructs a new HalfwayReplayAction.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.IHalfwayReplayAction);
+
+        /** HalfwayReplayAction teamIndex. */
+        public teamIndex: number;
+
+        /** HalfwayReplayAction actionArray. */
+        public actionArray: WarAction.IWarActionContainer[];
+
+        /**
+         * Creates a new HalfwayReplayAction instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns HalfwayReplayAction instance
+         */
+        public static create(properties?: WarSerialization.IHalfwayReplayAction): WarSerialization.HalfwayReplayAction;
+
+        /**
+         * Encodes the specified HalfwayReplayAction message. Does not implicitly {@link WarSerialization.HalfwayReplayAction.verify|verify} messages.
+         * @param message HalfwayReplayAction message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.IHalfwayReplayAction, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified HalfwayReplayAction message, length delimited. Does not implicitly {@link WarSerialization.HalfwayReplayAction.verify|verify} messages.
+         * @param message HalfwayReplayAction message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.IHalfwayReplayAction, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a HalfwayReplayAction message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns HalfwayReplayAction
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.HalfwayReplayAction;
+
+        /**
+         * Decodes a HalfwayReplayAction message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns HalfwayReplayAction
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.HalfwayReplayAction;
+
+        /**
+         * Verifies a HalfwayReplayAction message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a HalfwayReplayAction message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns HalfwayReplayAction
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.HalfwayReplayAction;
+
+        /**
+         * Creates a plain object from a HalfwayReplayAction message. Also converts values to other types if specified.
+         * @param message HalfwayReplayAction
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.HalfwayReplayAction, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this HalfwayReplayAction to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a TileCustomCrystalData. */
+    interface ITileCustomCrystalData {
+
+        /** TileCustomCrystalData radius */
+        radius?: (number|null);
+
+        /** TileCustomCrystalData priority */
+        priority?: (number|null);
+
+        /** TileCustomCrystalData canAffectSelf */
+        canAffectSelf?: (boolean|null);
+
+        /** TileCustomCrystalData canAffectAlly */
+        canAffectAlly?: (boolean|null);
+
+        /** TileCustomCrystalData canAffectEnemy */
+        canAffectEnemy?: (boolean|null);
+
+        /** TileCustomCrystalData deltaFund */
+        deltaFund?: (number|null);
+
+        /** TileCustomCrystalData deltaEnergyPercentage */
+        deltaEnergyPercentage?: (number|null);
+
+        /** TileCustomCrystalData deltaHp */
+        deltaHp?: (number|null);
+
+        /** TileCustomCrystalData deltaFuelPercentage */
+        deltaFuelPercentage?: (number|null);
+
+        /** TileCustomCrystalData deltaPrimaryAmmoPercentage */
+        deltaPrimaryAmmoPercentage?: (number|null);
+    }
+
+    /** Represents a TileCustomCrystalData. */
+    class TileCustomCrystalData implements ITileCustomCrystalData {
+
+        /**
+         * Constructs a new TileCustomCrystalData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ITileCustomCrystalData);
+
+        /** TileCustomCrystalData radius. */
+        public radius: number;
+
+        /** TileCustomCrystalData priority. */
+        public priority: number;
+
+        /** TileCustomCrystalData canAffectSelf. */
+        public canAffectSelf: boolean;
+
+        /** TileCustomCrystalData canAffectAlly. */
+        public canAffectAlly: boolean;
+
+        /** TileCustomCrystalData canAffectEnemy. */
+        public canAffectEnemy: boolean;
+
+        /** TileCustomCrystalData deltaFund. */
+        public deltaFund: number;
+
+        /** TileCustomCrystalData deltaEnergyPercentage. */
+        public deltaEnergyPercentage: number;
+
+        /** TileCustomCrystalData deltaHp. */
+        public deltaHp: number;
+
+        /** TileCustomCrystalData deltaFuelPercentage. */
+        public deltaFuelPercentage: number;
+
+        /** TileCustomCrystalData deltaPrimaryAmmoPercentage. */
+        public deltaPrimaryAmmoPercentage: number;
+
+        /**
+         * Creates a new TileCustomCrystalData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns TileCustomCrystalData instance
+         */
+        public static create(properties?: WarSerialization.ITileCustomCrystalData): WarSerialization.TileCustomCrystalData;
+
+        /**
+         * Encodes the specified TileCustomCrystalData message. Does not implicitly {@link WarSerialization.TileCustomCrystalData.verify|verify} messages.
+         * @param message TileCustomCrystalData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ITileCustomCrystalData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified TileCustomCrystalData message, length delimited. Does not implicitly {@link WarSerialization.TileCustomCrystalData.verify|verify} messages.
+         * @param message TileCustomCrystalData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ITileCustomCrystalData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a TileCustomCrystalData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns TileCustomCrystalData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.TileCustomCrystalData;
+
+        /**
+         * Decodes a TileCustomCrystalData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns TileCustomCrystalData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.TileCustomCrystalData;
+
+        /**
+         * Verifies a TileCustomCrystalData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a TileCustomCrystalData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns TileCustomCrystalData
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.TileCustomCrystalData;
+
+        /**
+         * Creates a plain object from a TileCustomCrystalData message. Also converts values to other types if specified.
+         * @param message TileCustomCrystalData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.TileCustomCrystalData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this TileCustomCrystalData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a TileCustomCannonData. */
+    interface ITileCustomCannonData {
+
+        /** TileCustomCannonData rangeForUp */
+        rangeForUp?: (number|null);
+
+        /** TileCustomCannonData rangeForDown */
+        rangeForDown?: (number|null);
+
+        /** TileCustomCannonData rangeForLeft */
+        rangeForLeft?: (number|null);
+
+        /** TileCustomCannonData rangeForRight */
+        rangeForRight?: (number|null);
+
+        /** TileCustomCannonData priority */
+        priority?: (number|null);
+
+        /** TileCustomCannonData canAffectSelf */
+        canAffectSelf?: (boolean|null);
+
+        /** TileCustomCannonData canAffectAlly */
+        canAffectAlly?: (boolean|null);
+
+        /** TileCustomCannonData canAffectEnemy */
+        canAffectEnemy?: (boolean|null);
+
+        /** TileCustomCannonData maxTargetCount */
+        maxTargetCount?: (number|null);
+
+        /** TileCustomCannonData deltaHp */
+        deltaHp?: (number|null);
+
+        /** TileCustomCannonData deltaFuelPercentage */
+        deltaFuelPercentage?: (number|null);
+
+        /** TileCustomCannonData deltaPrimaryAmmoPercentage */
+        deltaPrimaryAmmoPercentage?: (number|null);
+    }
+
+    /** Represents a TileCustomCannonData. */
+    class TileCustomCannonData implements ITileCustomCannonData {
+
+        /**
+         * Constructs a new TileCustomCannonData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ITileCustomCannonData);
+
+        /** TileCustomCannonData rangeForUp. */
+        public rangeForUp: number;
+
+        /** TileCustomCannonData rangeForDown. */
+        public rangeForDown: number;
+
+        /** TileCustomCannonData rangeForLeft. */
+        public rangeForLeft: number;
+
+        /** TileCustomCannonData rangeForRight. */
+        public rangeForRight: number;
+
+        /** TileCustomCannonData priority. */
+        public priority: number;
+
+        /** TileCustomCannonData canAffectSelf. */
+        public canAffectSelf: boolean;
+
+        /** TileCustomCannonData canAffectAlly. */
+        public canAffectAlly: boolean;
+
+        /** TileCustomCannonData canAffectEnemy. */
+        public canAffectEnemy: boolean;
+
+        /** TileCustomCannonData maxTargetCount. */
+        public maxTargetCount: number;
+
+        /** TileCustomCannonData deltaHp. */
+        public deltaHp: number;
+
+        /** TileCustomCannonData deltaFuelPercentage. */
+        public deltaFuelPercentage: number;
+
+        /** TileCustomCannonData deltaPrimaryAmmoPercentage. */
+        public deltaPrimaryAmmoPercentage: number;
+
+        /**
+         * Creates a new TileCustomCannonData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns TileCustomCannonData instance
+         */
+        public static create(properties?: WarSerialization.ITileCustomCannonData): WarSerialization.TileCustomCannonData;
+
+        /**
+         * Encodes the specified TileCustomCannonData message. Does not implicitly {@link WarSerialization.TileCustomCannonData.verify|verify} messages.
+         * @param message TileCustomCannonData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ITileCustomCannonData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified TileCustomCannonData message, length delimited. Does not implicitly {@link WarSerialization.TileCustomCannonData.verify|verify} messages.
+         * @param message TileCustomCannonData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ITileCustomCannonData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a TileCustomCannonData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns TileCustomCannonData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.TileCustomCannonData;
+
+        /**
+         * Decodes a TileCustomCannonData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns TileCustomCannonData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.TileCustomCannonData;
+
+        /**
+         * Verifies a TileCustomCannonData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a TileCustomCannonData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns TileCustomCannonData
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.TileCustomCannonData;
+
+        /**
+         * Creates a plain object from a TileCustomCannonData message. Also converts values to other types if specified.
+         * @param message TileCustomCannonData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.TileCustomCannonData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this TileCustomCannonData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a TileCustomLaserTurretData. */
+    interface ITileCustomLaserTurretData {
+
+        /** TileCustomLaserTurretData rangeForUp */
+        rangeForUp?: (number|null);
+
+        /** TileCustomLaserTurretData rangeForDown */
+        rangeForDown?: (number|null);
+
+        /** TileCustomLaserTurretData rangeForLeft */
+        rangeForLeft?: (number|null);
+
+        /** TileCustomLaserTurretData rangeForRight */
+        rangeForRight?: (number|null);
+
+        /** TileCustomLaserTurretData priority */
+        priority?: (number|null);
+
+        /** TileCustomLaserTurretData canAffectSelf */
+        canAffectSelf?: (boolean|null);
+
+        /** TileCustomLaserTurretData canAffectAlly */
+        canAffectAlly?: (boolean|null);
+
+        /** TileCustomLaserTurretData canAffectEnemy */
+        canAffectEnemy?: (boolean|null);
+
+        /** TileCustomLaserTurretData deltaHp */
+        deltaHp?: (number|null);
+
+        /** TileCustomLaserTurretData deltaFuelPercentage */
+        deltaFuelPercentage?: (number|null);
+
+        /** TileCustomLaserTurretData deltaPrimaryAmmoPercentage */
+        deltaPrimaryAmmoPercentage?: (number|null);
+    }
+
+    /** Represents a TileCustomLaserTurretData. */
+    class TileCustomLaserTurretData implements ITileCustomLaserTurretData {
+
+        /**
+         * Constructs a new TileCustomLaserTurretData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ITileCustomLaserTurretData);
+
+        /** TileCustomLaserTurretData rangeForUp. */
+        public rangeForUp: number;
+
+        /** TileCustomLaserTurretData rangeForDown. */
+        public rangeForDown: number;
+
+        /** TileCustomLaserTurretData rangeForLeft. */
+        public rangeForLeft: number;
+
+        /** TileCustomLaserTurretData rangeForRight. */
+        public rangeForRight: number;
+
+        /** TileCustomLaserTurretData priority. */
+        public priority: number;
+
+        /** TileCustomLaserTurretData canAffectSelf. */
+        public canAffectSelf: boolean;
+
+        /** TileCustomLaserTurretData canAffectAlly. */
+        public canAffectAlly: boolean;
+
+        /** TileCustomLaserTurretData canAffectEnemy. */
+        public canAffectEnemy: boolean;
+
+        /** TileCustomLaserTurretData deltaHp. */
+        public deltaHp: number;
+
+        /** TileCustomLaserTurretData deltaFuelPercentage. */
+        public deltaFuelPercentage: number;
+
+        /** TileCustomLaserTurretData deltaPrimaryAmmoPercentage. */
+        public deltaPrimaryAmmoPercentage: number;
+
+        /**
+         * Creates a new TileCustomLaserTurretData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns TileCustomLaserTurretData instance
+         */
+        public static create(properties?: WarSerialization.ITileCustomLaserTurretData): WarSerialization.TileCustomLaserTurretData;
+
+        /**
+         * Encodes the specified TileCustomLaserTurretData message. Does not implicitly {@link WarSerialization.TileCustomLaserTurretData.verify|verify} messages.
+         * @param message TileCustomLaserTurretData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ITileCustomLaserTurretData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified TileCustomLaserTurretData message, length delimited. Does not implicitly {@link WarSerialization.TileCustomLaserTurretData.verify|verify} messages.
+         * @param message TileCustomLaserTurretData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ITileCustomLaserTurretData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a TileCustomLaserTurretData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns TileCustomLaserTurretData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.TileCustomLaserTurretData;
+
+        /**
+         * Decodes a TileCustomLaserTurretData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns TileCustomLaserTurretData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.TileCustomLaserTurretData;
+
+        /**
+         * Verifies a TileCustomLaserTurretData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a TileCustomLaserTurretData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns TileCustomLaserTurretData
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.TileCustomLaserTurretData;
+
+        /**
+         * Creates a plain object from a TileCustomLaserTurretData message. Also converts values to other types if specified.
+         * @param message TileCustomLaserTurretData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.TileCustomLaserTurretData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this TileCustomLaserTurretData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a SerialTile. */
     interface ISerialTile {
 
@@ -8261,6 +11894,18 @@ export declare namespace WarSerialization {
 
         /** SerialTile decoratorShapeId */
         decoratorShapeId?: (number|null);
+
+        /** SerialTile locationFlags */
+        locationFlags?: (number|null);
+
+        /** SerialTile customCrystalData */
+        customCrystalData?: (WarSerialization.ITileCustomCrystalData|null);
+
+        /** SerialTile customCannonData */
+        customCannonData?: (WarSerialization.ITileCustomCannonData|null);
+
+        /** SerialTile customLaserTurretData */
+        customLaserTurretData?: (WarSerialization.ITileCustomLaserTurretData|null);
     }
 
     /** Represents a SerialTile. */
@@ -8304,6 +11949,18 @@ export declare namespace WarSerialization {
 
         /** SerialTile decoratorShapeId. */
         public decoratorShapeId: number;
+
+        /** SerialTile locationFlags. */
+        public locationFlags: number;
+
+        /** SerialTile customCrystalData. */
+        public customCrystalData?: (WarSerialization.ITileCustomCrystalData|null);
+
+        /** SerialTile customCannonData. */
+        public customCannonData?: (WarSerialization.ITileCustomCannonData|null);
+
+        /** SerialTile customLaserTurretData. */
+        public customLaserTurretData?: (WarSerialization.ITileCustomLaserTurretData|null);
 
         /**
          * Creates a new SerialTile instance using the specified properties.
@@ -8429,6 +12086,9 @@ export declare namespace WarSerialization {
 
         /** SerialUnit hasLoadedCo */
         hasLoadedCo?: (boolean|null);
+
+        /** SerialUnit aiMode */
+        aiMode?: (number|null);
     }
 
     /** Represents a SerialUnit. */
@@ -8490,6 +12150,9 @@ export declare namespace WarSerialization {
 
         /** SerialUnit hasLoadedCo. */
         public hasLoadedCo: boolean;
+
+        /** SerialUnit aiMode. */
+        public aiMode: number;
 
         /**
          * Creates a new SerialUnit instance using the specified properties.
@@ -9332,6 +12995,9 @@ export declare namespace WarSerialization {
 
         /** SerialWarEventManager calledCountList */
         calledCountList?: (WarSerialization.IDataForWarEventCalledCount[]|null);
+
+        /** SerialWarEventManager customCounterArray */
+        customCounterArray?: (WarSerialization.ICustomCounter[]|null);
     }
 
     /** Represents a SerialWarEventManager. */
@@ -9348,6 +13014,9 @@ export declare namespace WarSerialization {
 
         /** SerialWarEventManager calledCountList. */
         public calledCountList: WarSerialization.IDataForWarEventCalledCount[];
+
+        /** SerialWarEventManager customCounterArray. */
+        public customCounterArray: WarSerialization.ICustomCounter[];
 
         /**
          * Creates a new SerialWarEventManager instance using the specified properties.
@@ -9578,6 +13247,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar weatherManager */
         weatherManager?: (WarSerialization.ISerialWeatherManager|null);
+
+        /** SerialWar halfwayReplayActionArray */
+        halfwayReplayActionArray?: (WarSerialization.IHalfwayReplayAction[]|null);
     }
 
     /** Represents a SerialWar. */
@@ -9642,6 +13314,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar weatherManager. */
         public weatherManager?: (WarSerialization.ISerialWeatherManager|null);
+
+        /** SerialWar halfwayReplayActionArray. */
+        public halfwayReplayActionArray: WarSerialization.IHalfwayReplayAction[];
 
         /**
          * Creates a new SerialWar instance using the specified properties.
@@ -9801,549 +13476,6 @@ export declare class WarAction implements IWarAction {
 
 export declare namespace WarAction {
 
-    /** Properties of a WarActionSystemCallWarEvent. */
-    interface IWarActionSystemCallWarEvent {
-
-        /** WarActionSystemCallWarEvent warEventId */
-        warEventId?: (number|null);
-
-        /** WarActionSystemCallWarEvent extraDataList */
-        extraDataList?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent[]|null);
-    }
-
-    /** Represents a WarActionSystemCallWarEvent. */
-    class WarActionSystemCallWarEvent implements IWarActionSystemCallWarEvent {
-
-        /**
-         * Constructs a new WarActionSystemCallWarEvent.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: WarAction.IWarActionSystemCallWarEvent);
-
-        /** WarActionSystemCallWarEvent warEventId. */
-        public warEventId: number;
-
-        /** WarActionSystemCallWarEvent extraDataList. */
-        public extraDataList: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent[];
-
-        /**
-         * Creates a new WarActionSystemCallWarEvent instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns WarActionSystemCallWarEvent instance
-         */
-        public static create(properties?: WarAction.IWarActionSystemCallWarEvent): WarAction.WarActionSystemCallWarEvent;
-
-        /**
-         * Encodes the specified WarActionSystemCallWarEvent message. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.verify|verify} messages.
-         * @param message WarActionSystemCallWarEvent message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: WarAction.IWarActionSystemCallWarEvent, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified WarActionSystemCallWarEvent message, length delimited. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.verify|verify} messages.
-         * @param message WarActionSystemCallWarEvent message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: WarAction.IWarActionSystemCallWarEvent, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a WarActionSystemCallWarEvent message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns WarActionSystemCallWarEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemCallWarEvent;
-
-        /**
-         * Decodes a WarActionSystemCallWarEvent message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns WarActionSystemCallWarEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemCallWarEvent;
-
-        /**
-         * Verifies a WarActionSystemCallWarEvent message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a WarActionSystemCallWarEvent message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns WarActionSystemCallWarEvent
-         */
-        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemCallWarEvent;
-
-        /**
-         * Creates a plain object from a WarActionSystemCallWarEvent message. Also converts values to other types if specified.
-         * @param message WarActionSystemCallWarEvent
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: WarAction.WarActionSystemCallWarEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this WarActionSystemCallWarEvent to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    namespace WarActionSystemCallWarEvent {
-
-        /** Properties of an ExtraDataForWeaAddUnit. */
-        interface IExtraDataForWeaAddUnit {
-
-            /** ExtraDataForWeaAddUnit unitList */
-            unitList?: (WarSerialization.ISerialUnit[]|null);
-        }
-
-        /** Represents an ExtraDataForWeaAddUnit. */
-        class ExtraDataForWeaAddUnit implements IExtraDataForWeaAddUnit {
-
-            /**
-             * Constructs a new ExtraDataForWeaAddUnit.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit);
-
-            /** ExtraDataForWeaAddUnit unitList. */
-            public unitList: WarSerialization.ISerialUnit[];
-
-            /**
-             * Creates a new ExtraDataForWeaAddUnit instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns ExtraDataForWeaAddUnit instance
-             */
-            public static create(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
-
-            /**
-             * Encodes the specified ExtraDataForWeaAddUnit message. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit.verify|verify} messages.
-             * @param message ExtraDataForWeaAddUnit message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified ExtraDataForWeaAddUnit message, length delimited. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit.verify|verify} messages.
-             * @param message ExtraDataForWeaAddUnit message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes an ExtraDataForWeaAddUnit message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns ExtraDataForWeaAddUnit
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
-
-            /**
-             * Decodes an ExtraDataForWeaAddUnit message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns ExtraDataForWeaAddUnit
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
-
-            /**
-             * Verifies an ExtraDataForWeaAddUnit message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates an ExtraDataForWeaAddUnit message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns ExtraDataForWeaAddUnit
-             */
-            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
-
-            /**
-             * Creates a plain object from an ExtraDataForWeaAddUnit message. Also converts values to other types if specified.
-             * @param message ExtraDataForWeaAddUnit
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this ExtraDataForWeaAddUnit to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of an ExtraDataForSystemCallWarEvent. */
-        interface IExtraDataForSystemCallWarEvent {
-
-            /** ExtraDataForSystemCallWarEvent indexForActionIdList */
-            indexForActionIdList?: (number|null);
-
-            /** ExtraDataForSystemCallWarEvent ExtraDataForWeaAddUnit */
-            ExtraDataForWeaAddUnit?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit|null);
-        }
-
-        /** Represents an ExtraDataForSystemCallWarEvent. */
-        class ExtraDataForSystemCallWarEvent implements IExtraDataForSystemCallWarEvent {
-
-            /**
-             * Constructs a new ExtraDataForSystemCallWarEvent.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent);
-
-            /** ExtraDataForSystemCallWarEvent indexForActionIdList. */
-            public indexForActionIdList: number;
-
-            /** ExtraDataForSystemCallWarEvent ExtraDataForWeaAddUnit. */
-            public ExtraDataForWeaAddUnit?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit|null);
-
-            /**
-             * Creates a new ExtraDataForSystemCallWarEvent instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns ExtraDataForSystemCallWarEvent instance
-             */
-            public static create(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
-
-            /**
-             * Encodes the specified ExtraDataForSystemCallWarEvent message. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent.verify|verify} messages.
-             * @param message ExtraDataForSystemCallWarEvent message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified ExtraDataForSystemCallWarEvent message, length delimited. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent.verify|verify} messages.
-             * @param message ExtraDataForSystemCallWarEvent message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes an ExtraDataForSystemCallWarEvent message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns ExtraDataForSystemCallWarEvent
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
-
-            /**
-             * Decodes an ExtraDataForSystemCallWarEvent message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns ExtraDataForSystemCallWarEvent
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
-
-            /**
-             * Verifies an ExtraDataForSystemCallWarEvent message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates an ExtraDataForSystemCallWarEvent message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns ExtraDataForSystemCallWarEvent
-             */
-            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
-
-            /**
-             * Creates a plain object from an ExtraDataForSystemCallWarEvent message. Also converts values to other types if specified.
-             * @param message ExtraDataForSystemCallWarEvent
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this ExtraDataForSystemCallWarEvent to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-    }
-
-    /** Properties of a WarActionSystemDestroyPlayerForce. */
-    interface IWarActionSystemDestroyPlayerForce {
-
-        /** WarActionSystemDestroyPlayerForce targetPlayerIndex */
-        targetPlayerIndex?: (number|null);
-    }
-
-    /** Represents a WarActionSystemDestroyPlayerForce. */
-    class WarActionSystemDestroyPlayerForce implements IWarActionSystemDestroyPlayerForce {
-
-        /**
-         * Constructs a new WarActionSystemDestroyPlayerForce.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: WarAction.IWarActionSystemDestroyPlayerForce);
-
-        /** WarActionSystemDestroyPlayerForce targetPlayerIndex. */
-        public targetPlayerIndex: number;
-
-        /**
-         * Creates a new WarActionSystemDestroyPlayerForce instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns WarActionSystemDestroyPlayerForce instance
-         */
-        public static create(properties?: WarAction.IWarActionSystemDestroyPlayerForce): WarAction.WarActionSystemDestroyPlayerForce;
-
-        /**
-         * Encodes the specified WarActionSystemDestroyPlayerForce message. Does not implicitly {@link WarAction.WarActionSystemDestroyPlayerForce.verify|verify} messages.
-         * @param message WarActionSystemDestroyPlayerForce message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: WarAction.IWarActionSystemDestroyPlayerForce, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified WarActionSystemDestroyPlayerForce message, length delimited. Does not implicitly {@link WarAction.WarActionSystemDestroyPlayerForce.verify|verify} messages.
-         * @param message WarActionSystemDestroyPlayerForce message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: WarAction.IWarActionSystemDestroyPlayerForce, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a WarActionSystemDestroyPlayerForce message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns WarActionSystemDestroyPlayerForce
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemDestroyPlayerForce;
-
-        /**
-         * Decodes a WarActionSystemDestroyPlayerForce message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns WarActionSystemDestroyPlayerForce
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemDestroyPlayerForce;
-
-        /**
-         * Verifies a WarActionSystemDestroyPlayerForce message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a WarActionSystemDestroyPlayerForce message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns WarActionSystemDestroyPlayerForce
-         */
-        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemDestroyPlayerForce;
-
-        /**
-         * Creates a plain object from a WarActionSystemDestroyPlayerForce message. Also converts values to other types if specified.
-         * @param message WarActionSystemDestroyPlayerForce
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: WarAction.WarActionSystemDestroyPlayerForce, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this WarActionSystemDestroyPlayerForce to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a WarActionSystemEndWar. */
-    interface IWarActionSystemEndWar {
-    }
-
-    /** Represents a WarActionSystemEndWar. */
-    class WarActionSystemEndWar implements IWarActionSystemEndWar {
-
-        /**
-         * Constructs a new WarActionSystemEndWar.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: WarAction.IWarActionSystemEndWar);
-
-        /**
-         * Creates a new WarActionSystemEndWar instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns WarActionSystemEndWar instance
-         */
-        public static create(properties?: WarAction.IWarActionSystemEndWar): WarAction.WarActionSystemEndWar;
-
-        /**
-         * Encodes the specified WarActionSystemEndWar message. Does not implicitly {@link WarAction.WarActionSystemEndWar.verify|verify} messages.
-         * @param message WarActionSystemEndWar message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: WarAction.IWarActionSystemEndWar, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified WarActionSystemEndWar message, length delimited. Does not implicitly {@link WarAction.WarActionSystemEndWar.verify|verify} messages.
-         * @param message WarActionSystemEndWar message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: WarAction.IWarActionSystemEndWar, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a WarActionSystemEndWar message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns WarActionSystemEndWar
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemEndWar;
-
-        /**
-         * Decodes a WarActionSystemEndWar message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns WarActionSystemEndWar
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemEndWar;
-
-        /**
-         * Verifies a WarActionSystemEndWar message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a WarActionSystemEndWar message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns WarActionSystemEndWar
-         */
-        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemEndWar;
-
-        /**
-         * Creates a plain object from a WarActionSystemEndWar message. Also converts values to other types if specified.
-         * @param message WarActionSystemEndWar
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: WarAction.WarActionSystemEndWar, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this WarActionSystemEndWar to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a WarActionSystemHandleBootPlayer. */
-    interface IWarActionSystemHandleBootPlayer {
-    }
-
-    /** Represents a WarActionSystemHandleBootPlayer. */
-    class WarActionSystemHandleBootPlayer implements IWarActionSystemHandleBootPlayer {
-
-        /**
-         * Constructs a new WarActionSystemHandleBootPlayer.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: WarAction.IWarActionSystemHandleBootPlayer);
-
-        /**
-         * Creates a new WarActionSystemHandleBootPlayer instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns WarActionSystemHandleBootPlayer instance
-         */
-        public static create(properties?: WarAction.IWarActionSystemHandleBootPlayer): WarAction.WarActionSystemHandleBootPlayer;
-
-        /**
-         * Encodes the specified WarActionSystemHandleBootPlayer message. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.verify|verify} messages.
-         * @param message WarActionSystemHandleBootPlayer message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: WarAction.IWarActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified WarActionSystemHandleBootPlayer message, length delimited. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.verify|verify} messages.
-         * @param message WarActionSystemHandleBootPlayer message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: WarAction.IWarActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a WarActionSystemHandleBootPlayer message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns WarActionSystemHandleBootPlayer
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemHandleBootPlayer;
-
-        /**
-         * Decodes a WarActionSystemHandleBootPlayer message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns WarActionSystemHandleBootPlayer
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemHandleBootPlayer;
-
-        /**
-         * Verifies a WarActionSystemHandleBootPlayer message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a WarActionSystemHandleBootPlayer message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns WarActionSystemHandleBootPlayer
-         */
-        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemHandleBootPlayer;
-
-        /**
-         * Creates a plain object from a WarActionSystemHandleBootPlayer message. Also converts values to other types if specified.
-         * @param message WarActionSystemHandleBootPlayer
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: WarAction.WarActionSystemHandleBootPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this WarActionSystemHandleBootPlayer to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
     /** Properties of a WarActionSystemBeginTurn. */
     interface IWarActionSystemBeginTurn {
 
@@ -10439,17 +13571,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForSystemBeginTurn. */
         interface IExtraDataForSystemBeginTurn {
 
-            /** ExtraDataForSystemBeginTurn recoveryDataByTile */
-            recoveryDataByTile?: (Structure.IDataForModifyUnit[]|null);
-
-            /** ExtraDataForSystemBeginTurn recoveryDataByUnit */
-            recoveryDataByUnit?: (Structure.IDataForModifyUnit[]|null);
-
-            /** ExtraDataForSystemBeginTurn recoveryDataByCo */
-            recoveryDataByCo?: (Structure.IDataForModifyUnit[]|null);
-
-            /** ExtraDataForSystemBeginTurn playerData */
-            playerData?: (WarSerialization.ISerialPlayer|null);
+            /** ExtraDataForSystemBeginTurn commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForSystemBeginTurn. */
@@ -10461,17 +13584,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn);
 
-            /** ExtraDataForSystemBeginTurn recoveryDataByTile. */
-            public recoveryDataByTile: Structure.IDataForModifyUnit[];
-
-            /** ExtraDataForSystemBeginTurn recoveryDataByUnit. */
-            public recoveryDataByUnit: Structure.IDataForModifyUnit[];
-
-            /** ExtraDataForSystemBeginTurn recoveryDataByCo. */
-            public recoveryDataByCo: Structure.IDataForModifyUnit[];
-
-            /** ExtraDataForSystemBeginTurn playerData. */
-            public playerData?: (WarSerialization.ISerialPlayer|null);
+            /** ExtraDataForSystemBeginTurn commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForSystemBeginTurn instance using the specified properties.
@@ -10539,6 +13653,579 @@ export declare namespace WarAction {
 
             /**
              * Converts this ExtraDataForSystemBeginTurn to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a WarActionSystemCallWarEvent. */
+    interface IWarActionSystemCallWarEvent {
+
+        /** WarActionSystemCallWarEvent warEventId */
+        warEventId?: (number|null);
+
+        /** WarActionSystemCallWarEvent extraData */
+        extraData?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent|null);
+    }
+
+    /** Represents a WarActionSystemCallWarEvent. */
+    class WarActionSystemCallWarEvent implements IWarActionSystemCallWarEvent {
+
+        /**
+         * Constructs a new WarActionSystemCallWarEvent.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionSystemCallWarEvent);
+
+        /** WarActionSystemCallWarEvent warEventId. */
+        public warEventId: number;
+
+        /** WarActionSystemCallWarEvent extraData. */
+        public extraData?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent|null);
+
+        /**
+         * Creates a new WarActionSystemCallWarEvent instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionSystemCallWarEvent instance
+         */
+        public static create(properties?: WarAction.IWarActionSystemCallWarEvent): WarAction.WarActionSystemCallWarEvent;
+
+        /**
+         * Encodes the specified WarActionSystemCallWarEvent message. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.verify|verify} messages.
+         * @param message WarActionSystemCallWarEvent message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionSystemCallWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionSystemCallWarEvent message, length delimited. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.verify|verify} messages.
+         * @param message WarActionSystemCallWarEvent message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionSystemCallWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionSystemCallWarEvent message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionSystemCallWarEvent
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemCallWarEvent;
+
+        /**
+         * Decodes a WarActionSystemCallWarEvent message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionSystemCallWarEvent
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemCallWarEvent;
+
+        /**
+         * Verifies a WarActionSystemCallWarEvent message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionSystemCallWarEvent message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionSystemCallWarEvent
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemCallWarEvent;
+
+        /**
+         * Creates a plain object from a WarActionSystemCallWarEvent message. Also converts values to other types if specified.
+         * @param message WarActionSystemCallWarEvent
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionSystemCallWarEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionSystemCallWarEvent to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionSystemCallWarEvent {
+
+        /** Properties of an ExtraDataForSystemCallWarEvent. */
+        interface IExtraDataForSystemCallWarEvent {
+
+            /** ExtraDataForSystemCallWarEvent commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /** ExtraDataForSystemCallWarEvent warEventId */
+            warEventId?: (number|null);
+        }
+
+        /** Represents an ExtraDataForSystemCallWarEvent. */
+        class ExtraDataForSystemCallWarEvent implements IExtraDataForSystemCallWarEvent {
+
+            /**
+             * Constructs a new ExtraDataForSystemCallWarEvent.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent);
+
+            /** ExtraDataForSystemCallWarEvent commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /** ExtraDataForSystemCallWarEvent warEventId. */
+            public warEventId: number;
+
+            /**
+             * Creates a new ExtraDataForSystemCallWarEvent instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemCallWarEvent instance
+             */
+            public static create(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
+
+            /**
+             * Encodes the specified ExtraDataForSystemCallWarEvent message. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent.verify|verify} messages.
+             * @param message ExtraDataForSystemCallWarEvent message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemCallWarEvent message, length delimited. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent.verify|verify} messages.
+             * @param message ExtraDataForSystemCallWarEvent message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemCallWarEvent message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemCallWarEvent
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
+
+            /**
+             * Decodes an ExtraDataForSystemCallWarEvent message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemCallWarEvent
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
+
+            /**
+             * Verifies an ExtraDataForSystemCallWarEvent message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemCallWarEvent message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemCallWarEvent
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemCallWarEvent message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemCallWarEvent
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemCallWarEvent to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a WarActionSystemDestroyPlayerForce. */
+    interface IWarActionSystemDestroyPlayerForce {
+
+        /** WarActionSystemDestroyPlayerForce targetPlayerIndex */
+        targetPlayerIndex?: (number|null);
+
+        /** WarActionSystemDestroyPlayerForce extraData */
+        extraData?: (WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce|null);
+    }
+
+    /** Represents a WarActionSystemDestroyPlayerForce. */
+    class WarActionSystemDestroyPlayerForce implements IWarActionSystemDestroyPlayerForce {
+
+        /**
+         * Constructs a new WarActionSystemDestroyPlayerForce.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionSystemDestroyPlayerForce);
+
+        /** WarActionSystemDestroyPlayerForce targetPlayerIndex. */
+        public targetPlayerIndex: number;
+
+        /** WarActionSystemDestroyPlayerForce extraData. */
+        public extraData?: (WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce|null);
+
+        /**
+         * Creates a new WarActionSystemDestroyPlayerForce instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionSystemDestroyPlayerForce instance
+         */
+        public static create(properties?: WarAction.IWarActionSystemDestroyPlayerForce): WarAction.WarActionSystemDestroyPlayerForce;
+
+        /**
+         * Encodes the specified WarActionSystemDestroyPlayerForce message. Does not implicitly {@link WarAction.WarActionSystemDestroyPlayerForce.verify|verify} messages.
+         * @param message WarActionSystemDestroyPlayerForce message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionSystemDestroyPlayerForce, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionSystemDestroyPlayerForce message, length delimited. Does not implicitly {@link WarAction.WarActionSystemDestroyPlayerForce.verify|verify} messages.
+         * @param message WarActionSystemDestroyPlayerForce message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionSystemDestroyPlayerForce, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionSystemDestroyPlayerForce message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionSystemDestroyPlayerForce
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemDestroyPlayerForce;
+
+        /**
+         * Decodes a WarActionSystemDestroyPlayerForce message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionSystemDestroyPlayerForce
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemDestroyPlayerForce;
+
+        /**
+         * Verifies a WarActionSystemDestroyPlayerForce message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionSystemDestroyPlayerForce message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionSystemDestroyPlayerForce
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemDestroyPlayerForce;
+
+        /**
+         * Creates a plain object from a WarActionSystemDestroyPlayerForce message. Also converts values to other types if specified.
+         * @param message WarActionSystemDestroyPlayerForce
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionSystemDestroyPlayerForce, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionSystemDestroyPlayerForce to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionSystemDestroyPlayerForce {
+
+        /** Properties of an ExtraDataForSystemDestroyPlayerForce. */
+        interface IExtraDataForSystemDestroyPlayerForce {
+
+            /** ExtraDataForSystemDestroyPlayerForce commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /** ExtraDataForSystemDestroyPlayerForce targetPlayerIndex */
+            targetPlayerIndex?: (number|null);
+        }
+
+        /** Represents an ExtraDataForSystemDestroyPlayerForce. */
+        class ExtraDataForSystemDestroyPlayerForce implements IExtraDataForSystemDestroyPlayerForce {
+
+            /**
+             * Constructs a new ExtraDataForSystemDestroyPlayerForce.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce);
+
+            /** ExtraDataForSystemDestroyPlayerForce commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /** ExtraDataForSystemDestroyPlayerForce targetPlayerIndex. */
+            public targetPlayerIndex: number;
+
+            /**
+             * Creates a new ExtraDataForSystemDestroyPlayerForce instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemDestroyPlayerForce instance
+             */
+            public static create(properties?: WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce): WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce;
+
+            /**
+             * Encodes the specified ExtraDataForSystemDestroyPlayerForce message. Does not implicitly {@link WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce.verify|verify} messages.
+             * @param message ExtraDataForSystemDestroyPlayerForce message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemDestroyPlayerForce message, length delimited. Does not implicitly {@link WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce.verify|verify} messages.
+             * @param message ExtraDataForSystemDestroyPlayerForce message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemDestroyPlayerForce.IExtraDataForSystemDestroyPlayerForce, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemDestroyPlayerForce message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemDestroyPlayerForce
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce;
+
+            /**
+             * Decodes an ExtraDataForSystemDestroyPlayerForce message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemDestroyPlayerForce
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce;
+
+            /**
+             * Verifies an ExtraDataForSystemDestroyPlayerForce message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemDestroyPlayerForce message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemDestroyPlayerForce
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemDestroyPlayerForce message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemDestroyPlayerForce
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemDestroyPlayerForce.ExtraDataForSystemDestroyPlayerForce, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemDestroyPlayerForce to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a WarActionSystemEndWar. */
+    interface IWarActionSystemEndWar {
+
+        /** WarActionSystemEndWar extraData */
+        extraData?: (WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar|null);
+    }
+
+    /** Represents a WarActionSystemEndWar. */
+    class WarActionSystemEndWar implements IWarActionSystemEndWar {
+
+        /**
+         * Constructs a new WarActionSystemEndWar.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionSystemEndWar);
+
+        /** WarActionSystemEndWar extraData. */
+        public extraData?: (WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar|null);
+
+        /**
+         * Creates a new WarActionSystemEndWar instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionSystemEndWar instance
+         */
+        public static create(properties?: WarAction.IWarActionSystemEndWar): WarAction.WarActionSystemEndWar;
+
+        /**
+         * Encodes the specified WarActionSystemEndWar message. Does not implicitly {@link WarAction.WarActionSystemEndWar.verify|verify} messages.
+         * @param message WarActionSystemEndWar message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionSystemEndWar, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionSystemEndWar message, length delimited. Does not implicitly {@link WarAction.WarActionSystemEndWar.verify|verify} messages.
+         * @param message WarActionSystemEndWar message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionSystemEndWar, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionSystemEndWar message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionSystemEndWar
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemEndWar;
+
+        /**
+         * Decodes a WarActionSystemEndWar message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionSystemEndWar
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemEndWar;
+
+        /**
+         * Verifies a WarActionSystemEndWar message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionSystemEndWar message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionSystemEndWar
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemEndWar;
+
+        /**
+         * Creates a plain object from a WarActionSystemEndWar message. Also converts values to other types if specified.
+         * @param message WarActionSystemEndWar
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionSystemEndWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionSystemEndWar to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionSystemEndWar {
+
+        /** Properties of an ExtraDataForSystemEndWar. */
+        interface IExtraDataForSystemEndWar {
+
+            /** ExtraDataForSystemEndWar commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+        }
+
+        /** Represents an ExtraDataForSystemEndWar. */
+        class ExtraDataForSystemEndWar implements IExtraDataForSystemEndWar {
+
+            /**
+             * Constructs a new ExtraDataForSystemEndWar.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar);
+
+            /** ExtraDataForSystemEndWar commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /**
+             * Creates a new ExtraDataForSystemEndWar instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemEndWar instance
+             */
+            public static create(properties?: WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar): WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar;
+
+            /**
+             * Encodes the specified ExtraDataForSystemEndWar message. Does not implicitly {@link WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar.verify|verify} messages.
+             * @param message ExtraDataForSystemEndWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemEndWar message, length delimited. Does not implicitly {@link WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar.verify|verify} messages.
+             * @param message ExtraDataForSystemEndWar message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemEndWar.IExtraDataForSystemEndWar, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemEndWar message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemEndWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar;
+
+            /**
+             * Decodes an ExtraDataForSystemEndWar message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemEndWar
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar;
+
+            /**
+             * Verifies an ExtraDataForSystemEndWar message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemEndWar message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemEndWar
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemEndWar message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemEndWar
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemEndWar.ExtraDataForSystemEndWar, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemEndWar to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -10640,14 +14327,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForSystemEndTurn. */
         interface IExtraDataForSystemEndTurn {
 
-            /** ExtraDataForSystemEndTurn restTimeToBootForCurrentPlayer */
-            restTimeToBootForCurrentPlayer?: (number|null);
-
-            /** ExtraDataForSystemEndTurn discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForSystemEndTurn discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForSystemEndTurn commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForSystemEndTurn. */
@@ -10659,14 +14340,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionSystemEndTurn.IExtraDataForSystemEndTurn);
 
-            /** ExtraDataForSystemEndTurn restTimeToBootForCurrentPlayer. */
-            public restTimeToBootForCurrentPlayer: number;
-
-            /** ExtraDataForSystemEndTurn discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForSystemEndTurn discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForSystemEndTurn commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForSystemEndTurn instance using the specified properties.
@@ -10740,11 +14415,197 @@ export declare namespace WarAction {
         }
     }
 
+    /** Properties of a WarActionSystemHandleBootPlayer. */
+    interface IWarActionSystemHandleBootPlayer {
+
+        /** WarActionSystemHandleBootPlayer extraData */
+        extraData?: (WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer|null);
+    }
+
+    /** Represents a WarActionSystemHandleBootPlayer. */
+    class WarActionSystemHandleBootPlayer implements IWarActionSystemHandleBootPlayer {
+
+        /**
+         * Constructs a new WarActionSystemHandleBootPlayer.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionSystemHandleBootPlayer);
+
+        /** WarActionSystemHandleBootPlayer extraData. */
+        public extraData?: (WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer|null);
+
+        /**
+         * Creates a new WarActionSystemHandleBootPlayer instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionSystemHandleBootPlayer instance
+         */
+        public static create(properties?: WarAction.IWarActionSystemHandleBootPlayer): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Encodes the specified WarActionSystemHandleBootPlayer message. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.verify|verify} messages.
+         * @param message WarActionSystemHandleBootPlayer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionSystemHandleBootPlayer message, length delimited. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.verify|verify} messages.
+         * @param message WarActionSystemHandleBootPlayer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionSystemHandleBootPlayer message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionSystemHandleBootPlayer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Decodes a WarActionSystemHandleBootPlayer message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionSystemHandleBootPlayer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Verifies a WarActionSystemHandleBootPlayer message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionSystemHandleBootPlayer message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionSystemHandleBootPlayer
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Creates a plain object from a WarActionSystemHandleBootPlayer message. Also converts values to other types if specified.
+         * @param message WarActionSystemHandleBootPlayer
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionSystemHandleBootPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionSystemHandleBootPlayer to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionSystemHandleBootPlayer {
+
+        /** Properties of an ExtraDataForSystemHandleBootPlayer. */
+        interface IExtraDataForSystemHandleBootPlayer {
+
+            /** ExtraDataForSystemHandleBootPlayer commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+        }
+
+        /** Represents an ExtraDataForSystemHandleBootPlayer. */
+        class ExtraDataForSystemHandleBootPlayer implements IExtraDataForSystemHandleBootPlayer {
+
+            /**
+             * Constructs a new ExtraDataForSystemHandleBootPlayer.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer);
+
+            /** ExtraDataForSystemHandleBootPlayer commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /**
+             * Creates a new ExtraDataForSystemHandleBootPlayer instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemHandleBootPlayer instance
+             */
+            public static create(properties?: WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer): WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemHandleBootPlayer message. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer.verify|verify} messages.
+             * @param message ExtraDataForSystemHandleBootPlayer message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemHandleBootPlayer message, length delimited. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer.verify|verify} messages.
+             * @param message ExtraDataForSystemHandleBootPlayer message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemHandleBootPlayer.IExtraDataForSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemHandleBootPlayer message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemHandleBootPlayer
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer;
+
+            /**
+             * Decodes an ExtraDataForSystemHandleBootPlayer message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemHandleBootPlayer
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer;
+
+            /**
+             * Verifies an ExtraDataForSystemHandleBootPlayer message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemHandleBootPlayer message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemHandleBootPlayer
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemHandleBootPlayer message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemHandleBootPlayer
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemHandleBootPlayer.ExtraDataForSystemHandleBootPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemHandleBootPlayer to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WarActionSystemVoteForDraw. */
     interface IWarActionSystemVoteForDraw {
 
         /** WarActionSystemVoteForDraw isAgree */
         isAgree?: (boolean|null);
+
+        /** WarActionSystemVoteForDraw extraData */
+        extraData?: (WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw|null);
     }
 
     /** Represents a WarActionSystemVoteForDraw. */
@@ -10758,6 +14619,9 @@ export declare namespace WarAction {
 
         /** WarActionSystemVoteForDraw isAgree. */
         public isAgree: boolean;
+
+        /** WarActionSystemVoteForDraw extraData. */
+        public extraData?: (WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw|null);
 
         /**
          * Creates a new WarActionSystemVoteForDraw instance using the specified properties.
@@ -10828,6 +14692,105 @@ export declare namespace WarAction {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionSystemVoteForDraw {
+
+        /** Properties of an ExtraDataForSystemVoteForDraw. */
+        interface IExtraDataForSystemVoteForDraw {
+
+            /** ExtraDataForSystemVoteForDraw commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /** ExtraDataForSystemVoteForDraw isAgree */
+            isAgree?: (boolean|null);
+        }
+
+        /** Represents an ExtraDataForSystemVoteForDraw. */
+        class ExtraDataForSystemVoteForDraw implements IExtraDataForSystemVoteForDraw {
+
+            /**
+             * Constructs a new ExtraDataForSystemVoteForDraw.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw);
+
+            /** ExtraDataForSystemVoteForDraw commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /** ExtraDataForSystemVoteForDraw isAgree. */
+            public isAgree: boolean;
+
+            /**
+             * Creates a new ExtraDataForSystemVoteForDraw instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemVoteForDraw instance
+             */
+            public static create(properties?: WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw): WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw;
+
+            /**
+             * Encodes the specified ExtraDataForSystemVoteForDraw message. Does not implicitly {@link WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw.verify|verify} messages.
+             * @param message ExtraDataForSystemVoteForDraw message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemVoteForDraw message, length delimited. Does not implicitly {@link WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw.verify|verify} messages.
+             * @param message ExtraDataForSystemVoteForDraw message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemVoteForDraw.IExtraDataForSystemVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemVoteForDraw message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemVoteForDraw
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw;
+
+            /**
+             * Decodes an ExtraDataForSystemVoteForDraw message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemVoteForDraw
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw;
+
+            /**
+             * Verifies an ExtraDataForSystemVoteForDraw message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemVoteForDraw message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemVoteForDraw
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemVoteForDraw message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemVoteForDraw
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemVoteForDraw.ExtraDataForSystemVoteForDraw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemVoteForDraw to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a WarActionPlayerEndTurn. */
@@ -10925,14 +14888,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForPlayerEndTurn. */
         interface IExtraDataForPlayerEndTurn {
 
-            /** ExtraDataForPlayerEndTurn restTimeToBootForCurrentPlayer */
-            restTimeToBootForCurrentPlayer?: (number|null);
-
-            /** ExtraDataForPlayerEndTurn discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForPlayerEndTurn discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForPlayerEndTurn commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForPlayerEndTurn. */
@@ -10944,14 +14901,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionPlayerEndTurn.IExtraDataForPlayerEndTurn);
 
-            /** ExtraDataForPlayerEndTurn restTimeToBootForCurrentPlayer. */
-            public restTimeToBootForCurrentPlayer: number;
-
-            /** ExtraDataForPlayerEndTurn discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForPlayerEndTurn discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForPlayerEndTurn commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForPlayerEndTurn instance using the specified properties.
@@ -11030,6 +14981,9 @@ export declare namespace WarAction {
 
         /** WarActionPlayerSurrender deprecatedIsBoot */
         deprecatedIsBoot?: (boolean|null);
+
+        /** WarActionPlayerSurrender extraData */
+        extraData?: (WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender|null);
     }
 
     /** Represents a WarActionPlayerSurrender. */
@@ -11043,6 +14997,9 @@ export declare namespace WarAction {
 
         /** WarActionPlayerSurrender deprecatedIsBoot. */
         public deprecatedIsBoot: boolean;
+
+        /** WarActionPlayerSurrender extraData. */
+        public extraData?: (WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender|null);
 
         /**
          * Creates a new WarActionPlayerSurrender instance using the specified properties.
@@ -11113,6 +15070,99 @@ export declare namespace WarAction {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionPlayerSurrender {
+
+        /** Properties of an ExtraDataForPlayerSurrender. */
+        interface IExtraDataForPlayerSurrender {
+
+            /** ExtraDataForPlayerSurrender commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+        }
+
+        /** Represents an ExtraDataForPlayerSurrender. */
+        class ExtraDataForPlayerSurrender implements IExtraDataForPlayerSurrender {
+
+            /**
+             * Constructs a new ExtraDataForPlayerSurrender.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender);
+
+            /** ExtraDataForPlayerSurrender commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /**
+             * Creates a new ExtraDataForPlayerSurrender instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForPlayerSurrender instance
+             */
+            public static create(properties?: WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender): WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerSurrender message. Does not implicitly {@link WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender.verify|verify} messages.
+             * @param message ExtraDataForPlayerSurrender message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerSurrender message, length delimited. Does not implicitly {@link WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender.verify|verify} messages.
+             * @param message ExtraDataForPlayerSurrender message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionPlayerSurrender.IExtraDataForPlayerSurrender, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForPlayerSurrender message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForPlayerSurrender
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender;
+
+            /**
+             * Decodes an ExtraDataForPlayerSurrender message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForPlayerSurrender
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender;
+
+            /**
+             * Verifies an ExtraDataForPlayerSurrender message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForPlayerSurrender message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForPlayerSurrender
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender;
+
+            /**
+             * Creates a plain object from an ExtraDataForPlayerSurrender message. Also converts values to other types if specified.
+             * @param message ExtraDataForPlayerSurrender
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionPlayerSurrender.ExtraDataForPlayerSurrender, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForPlayerSurrender to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a WarActionPlayerProduceUnit. */
@@ -11228,17 +15278,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForPlayerProduceUnit. */
         interface IExtraDataForPlayerProduceUnit {
 
-            /** ExtraDataForPlayerProduceUnit discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForPlayerProduceUnit discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForPlayerProduceUnit cost */
-            cost?: (number|null);
-
-            /** ExtraDataForPlayerProduceUnit unitData */
-            unitData?: (WarSerialization.ISerialUnit|null);
+            /** ExtraDataForPlayerProduceUnit commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForPlayerProduceUnit. */
@@ -11250,17 +15291,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionPlayerProduceUnit.IExtraDataForPlayerProduceUnit);
 
-            /** ExtraDataForPlayerProduceUnit discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForPlayerProduceUnit discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForPlayerProduceUnit cost. */
-            public cost: number;
-
-            /** ExtraDataForPlayerProduceUnit unitData. */
-            public unitData?: (WarSerialization.ISerialUnit|null);
+            /** ExtraDataForPlayerProduceUnit commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForPlayerProduceUnit instance using the specified properties.
@@ -11339,6 +15371,9 @@ export declare namespace WarAction {
 
         /** WarActionPlayerDeleteUnit gridIndex */
         gridIndex?: (Structure.IGridIndex|null);
+
+        /** WarActionPlayerDeleteUnit extraData */
+        extraData?: (WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit|null);
     }
 
     /** Represents a WarActionPlayerDeleteUnit. */
@@ -11352,6 +15387,9 @@ export declare namespace WarAction {
 
         /** WarActionPlayerDeleteUnit gridIndex. */
         public gridIndex?: (Structure.IGridIndex|null);
+
+        /** WarActionPlayerDeleteUnit extraData. */
+        public extraData?: (WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit|null);
 
         /**
          * Creates a new WarActionPlayerDeleteUnit instance using the specified properties.
@@ -11424,11 +15462,107 @@ export declare namespace WarAction {
         public toJSON(): { [k: string]: any };
     }
 
+    namespace WarActionPlayerDeleteUnit {
+
+        /** Properties of an ExtraDataForPlayerDeleteUnit. */
+        interface IExtraDataForPlayerDeleteUnit {
+
+            /** ExtraDataForPlayerDeleteUnit commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+        }
+
+        /** Represents an ExtraDataForPlayerDeleteUnit. */
+        class ExtraDataForPlayerDeleteUnit implements IExtraDataForPlayerDeleteUnit {
+
+            /**
+             * Constructs a new ExtraDataForPlayerDeleteUnit.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit);
+
+            /** ExtraDataForPlayerDeleteUnit commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /**
+             * Creates a new ExtraDataForPlayerDeleteUnit instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForPlayerDeleteUnit instance
+             */
+            public static create(properties?: WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit): WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerDeleteUnit message. Does not implicitly {@link WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit.verify|verify} messages.
+             * @param message ExtraDataForPlayerDeleteUnit message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerDeleteUnit message, length delimited. Does not implicitly {@link WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit.verify|verify} messages.
+             * @param message ExtraDataForPlayerDeleteUnit message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionPlayerDeleteUnit.IExtraDataForPlayerDeleteUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForPlayerDeleteUnit message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForPlayerDeleteUnit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit;
+
+            /**
+             * Decodes an ExtraDataForPlayerDeleteUnit message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForPlayerDeleteUnit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit;
+
+            /**
+             * Verifies an ExtraDataForPlayerDeleteUnit message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForPlayerDeleteUnit message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForPlayerDeleteUnit
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit;
+
+            /**
+             * Creates a plain object from an ExtraDataForPlayerDeleteUnit message. Also converts values to other types if specified.
+             * @param message ExtraDataForPlayerDeleteUnit
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionPlayerDeleteUnit.ExtraDataForPlayerDeleteUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForPlayerDeleteUnit to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WarActionPlayerVoteForDraw. */
     interface IWarActionPlayerVoteForDraw {
 
         /** WarActionPlayerVoteForDraw isAgree */
         isAgree?: (boolean|null);
+
+        /** WarActionPlayerVoteForDraw extraData */
+        extraData?: (WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw|null);
     }
 
     /** Represents a WarActionPlayerVoteForDraw. */
@@ -11442,6 +15576,9 @@ export declare namespace WarAction {
 
         /** WarActionPlayerVoteForDraw isAgree. */
         public isAgree: boolean;
+
+        /** WarActionPlayerVoteForDraw extraData. */
+        public extraData?: (WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw|null);
 
         /**
          * Creates a new WarActionPlayerVoteForDraw instance using the specified properties.
@@ -11512,6 +15649,105 @@ export declare namespace WarAction {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionPlayerVoteForDraw {
+
+        /** Properties of an ExtraDataForPlayerVoteForDraw. */
+        interface IExtraDataForPlayerVoteForDraw {
+
+            /** ExtraDataForPlayerVoteForDraw commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /** ExtraDataForPlayerVoteForDraw isAgree */
+            isAgree?: (boolean|null);
+        }
+
+        /** Represents an ExtraDataForPlayerVoteForDraw. */
+        class ExtraDataForPlayerVoteForDraw implements IExtraDataForPlayerVoteForDraw {
+
+            /**
+             * Constructs a new ExtraDataForPlayerVoteForDraw.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw);
+
+            /** ExtraDataForPlayerVoteForDraw commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
+
+            /** ExtraDataForPlayerVoteForDraw isAgree. */
+            public isAgree: boolean;
+
+            /**
+             * Creates a new ExtraDataForPlayerVoteForDraw instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForPlayerVoteForDraw instance
+             */
+            public static create(properties?: WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw): WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerVoteForDraw message. Does not implicitly {@link WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw.verify|verify} messages.
+             * @param message ExtraDataForPlayerVoteForDraw message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForPlayerVoteForDraw message, length delimited. Does not implicitly {@link WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw.verify|verify} messages.
+             * @param message ExtraDataForPlayerVoteForDraw message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionPlayerVoteForDraw.IExtraDataForPlayerVoteForDraw, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForPlayerVoteForDraw message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForPlayerVoteForDraw
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw;
+
+            /**
+             * Decodes an ExtraDataForPlayerVoteForDraw message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForPlayerVoteForDraw
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw;
+
+            /**
+             * Verifies an ExtraDataForPlayerVoteForDraw message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForPlayerVoteForDraw message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForPlayerVoteForDraw
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw;
+
+            /**
+             * Creates a plain object from an ExtraDataForPlayerVoteForDraw message. Also converts values to other types if specified.
+             * @param message ExtraDataForPlayerVoteForDraw
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionPlayerVoteForDraw.ExtraDataForPlayerVoteForDraw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForPlayerVoteForDraw to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a WarActionPlayerUseCoSkill. */
@@ -11615,11 +15851,11 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForPlayerUseCoSkill. */
         interface IExtraDataForPlayerUseCoSkill {
 
-            /** ExtraDataForPlayerUseCoSkill discoveredUnitsAfterAction */
-            discoveredUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForPlayerUseCoSkill commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForPlayerUseCoSkill discoveredTilesAfterAction */
-            discoveredTilesAfterAction?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForPlayerUseCoSkill skillType */
+            skillType?: (number|null);
 
             /** ExtraDataForPlayerUseCoSkill skillDataArray */
             skillDataArray?: (Structure.IDataForUseCoSkill[]|null);
@@ -11634,11 +15870,11 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionPlayerUseCoSkill.IExtraDataForPlayerUseCoSkill);
 
-            /** ExtraDataForPlayerUseCoSkill discoveredUnitsAfterAction. */
-            public discoveredUnitsAfterAction: WarSerialization.ISerialUnit[];
+            /** ExtraDataForPlayerUseCoSkill commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForPlayerUseCoSkill discoveredTilesAfterAction. */
-            public discoveredTilesAfterAction: WarSerialization.ISerialTile[];
+            /** ExtraDataForPlayerUseCoSkill skillType. */
+            public skillType: number;
 
             /** ExtraDataForPlayerUseCoSkill skillDataArray. */
             public skillDataArray: Structure.IDataForUseCoSkill[];
@@ -11822,14 +16058,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitWait. */
         interface IExtraDataForUnitWait {
 
-            /** ExtraDataForUnitWait discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitWait discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitWait actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitWait commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForUnitWait. */
@@ -11841,14 +16071,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitWait.IExtraDataForUnitWait);
 
-            /** ExtraDataForUnitWait discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitWait discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitWait actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitWait commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForUnitWait instance using the specified properties.
@@ -12029,14 +16253,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitBeLoaded. */
         interface IExtraDataForUnitBeLoaded {
 
-            /** ExtraDataForUnitBeLoaded discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitBeLoaded discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitBeLoaded actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitBeLoaded commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForUnitBeLoaded. */
@@ -12048,14 +16266,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitBeLoaded.IExtraDataForUnitBeLoaded);
 
-            /** ExtraDataForUnitBeLoaded discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitBeLoaded discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitBeLoaded actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitBeLoaded commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForUnitBeLoaded instance using the specified properties.
@@ -12236,17 +16448,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitCaptureTile. */
         interface IExtraDataForUnitCaptureTile {
 
-            /** ExtraDataForUnitCaptureTile discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitCaptureTile discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitCaptureTile actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitCaptureTile actingTiles */
-            actingTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitCaptureTile commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForUnitCaptureTile. */
@@ -12258,17 +16461,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitCaptureTile.IExtraDataForUnitCaptureTile);
 
-            /** ExtraDataForUnitCaptureTile discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitCaptureTile discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitCaptureTile actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitCaptureTile actingTiles. */
-            public actingTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitCaptureTile commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForUnitCaptureTile instance using the specified properties.
@@ -12455,23 +16649,11 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitAttackTile. */
         interface IExtraDataForUnitAttackTile {
 
-            /** ExtraDataForUnitAttackTile discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitAttackTile commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitAttackTile discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitAttackTile actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitAttackTile battleDamageInfoArray */
-            battleDamageInfoArray?: (Structure.IBattleDamageInfo[]|null);
-
-            /** ExtraDataForUnitAttackTile affectedUnitsAfterAction */
-            affectedUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitAttackTile affectedPlayersAfterAction */
-            affectedPlayersAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+            /** ExtraDataForUnitAttackTile targetGridIndex */
+            targetGridIndex?: (Structure.IGridIndex|null);
         }
 
         /** Represents an ExtraDataForUnitAttackTile. */
@@ -12483,23 +16665,11 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitAttackTile.IExtraDataForUnitAttackTile);
 
-            /** ExtraDataForUnitAttackTile discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitAttackTile commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitAttackTile discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitAttackTile actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitAttackTile battleDamageInfoArray. */
-            public battleDamageInfoArray: Structure.IBattleDamageInfo[];
-
-            /** ExtraDataForUnitAttackTile affectedUnitsAfterAction. */
-            public affectedUnitsAfterAction: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitAttackTile affectedPlayersAfterAction. */
-            public affectedPlayersAfterAction: WarSerialization.ISerialPlayer[];
+            /** ExtraDataForUnitAttackTile targetGridIndex. */
+            public targetGridIndex?: (Structure.IGridIndex|null);
 
             /**
              * Creates a new ExtraDataForUnitAttackTile instance using the specified properties.
@@ -12686,23 +16856,11 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitAttackUnit. */
         interface IExtraDataForUnitAttackUnit {
 
-            /** ExtraDataForUnitAttackUnit discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitAttackUnit commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitAttackUnit discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitAttackUnit actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitAttackUnit battleDamageInfoArray */
-            battleDamageInfoArray?: (Structure.IBattleDamageInfo[]|null);
-
-            /** ExtraDataForUnitAttackUnit affectedUnitsAfterAction */
-            affectedUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitAttackUnit affectedPlayersAfterAction */
-            affectedPlayersAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+            /** ExtraDataForUnitAttackUnit targetGridIndex */
+            targetGridIndex?: (Structure.IGridIndex|null);
         }
 
         /** Represents an ExtraDataForUnitAttackUnit. */
@@ -12714,23 +16872,11 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitAttackUnit.IExtraDataForUnitAttackUnit);
 
-            /** ExtraDataForUnitAttackUnit discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitAttackUnit commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitAttackUnit discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitAttackUnit actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitAttackUnit battleDamageInfoArray. */
-            public battleDamageInfoArray: Structure.IBattleDamageInfo[];
-
-            /** ExtraDataForUnitAttackUnit affectedUnitsAfterAction. */
-            public affectedUnitsAfterAction: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitAttackUnit affectedPlayersAfterAction. */
-            public affectedPlayersAfterAction: WarSerialization.ISerialPlayer[];
+            /** ExtraDataForUnitAttackUnit targetGridIndex. */
+            public targetGridIndex?: (Structure.IGridIndex|null);
 
             /**
              * Creates a new ExtraDataForUnitAttackUnit instance using the specified properties.
@@ -12923,14 +17069,14 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitDropUnit. */
         interface IExtraDataForUnitDropUnit {
 
-            /** ExtraDataForUnitDropUnit discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitDropUnit commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitDropUnit discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitDropUnit isDropBlocked */
+            isDropBlocked?: (boolean|null);
 
-            /** ExtraDataForUnitDropUnit actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitDropUnit droppingUnitAndPathArray */
+            droppingUnitAndPathArray?: (Structure.IMovingUnitAndPath[]|null);
         }
 
         /** Represents an ExtraDataForUnitDropUnit. */
@@ -12942,14 +17088,14 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitDropUnit.IExtraDataForUnitDropUnit);
 
-            /** ExtraDataForUnitDropUnit discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitDropUnit commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitDropUnit discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitDropUnit isDropBlocked. */
+            public isDropBlocked: boolean;
 
-            /** ExtraDataForUnitDropUnit actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitDropUnit droppingUnitAndPathArray. */
+            public droppingUnitAndPathArray: Structure.IMovingUnitAndPath[];
 
             /**
              * Creates a new ExtraDataForUnitDropUnit instance using the specified properties.
@@ -13130,17 +17276,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitBuildTile. */
         interface IExtraDataForUnitBuildTile {
 
-            /** ExtraDataForUnitBuildTile discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitBuildTile discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitBuildTile actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitBuildTile actingTiles */
-            actingTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitBuildTile commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForUnitBuildTile. */
@@ -13152,17 +17289,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitBuildTile.IExtraDataForUnitBuildTile);
 
-            /** ExtraDataForUnitBuildTile discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitBuildTile discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitBuildTile actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitBuildTile actingTiles. */
-            public actingTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitBuildTile commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForUnitBuildTile instance using the specified properties.
@@ -13343,14 +17471,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitDive. */
         interface IExtraDataForUnitDive {
 
-            /** ExtraDataForUnitDive discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitDive discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitDive actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitDive commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForUnitDive. */
@@ -13362,14 +17484,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitDive.IExtraDataForUnitDive);
 
-            /** ExtraDataForUnitDive discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitDive discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitDive actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitDive commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForUnitDive instance using the specified properties.
@@ -13550,14 +17666,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitSurface. */
         interface IExtraDataForUnitSurface {
 
-            /** ExtraDataForUnitSurface discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitSurface discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitSurface actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitSurface commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForUnitSurface. */
@@ -13569,14 +17679,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitSurface.IExtraDataForUnitSurface);
 
-            /** ExtraDataForUnitSurface discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitSurface discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitSurface actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitSurface commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForUnitSurface instance using the specified properties.
@@ -13757,14 +17861,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitJoinUnit. */
         interface IExtraDataForUnitJoinUnit {
 
-            /** ExtraDataForUnitJoinUnit discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitJoinUnit discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitJoinUnit actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitJoinUnit commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForUnitJoinUnit. */
@@ -13776,14 +17874,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitJoinUnit.IExtraDataForUnitJoinUnit);
 
-            /** ExtraDataForUnitJoinUnit discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitJoinUnit discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitJoinUnit actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitJoinUnit commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForUnitJoinUnit instance using the specified properties.
@@ -13970,14 +18062,14 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitLaunchFlare. */
         interface IExtraDataForUnitLaunchFlare {
 
-            /** ExtraDataForUnitLaunchFlare discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLaunchFlare commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitLaunchFlare discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitLaunchFlare targetGridIndex */
+            targetGridIndex?: (Structure.IGridIndex|null);
 
-            /** ExtraDataForUnitLaunchFlare actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLaunchFlare flareRadius */
+            flareRadius?: (number|null);
         }
 
         /** Represents an ExtraDataForUnitLaunchFlare. */
@@ -13989,14 +18081,14 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitLaunchFlare.IExtraDataForUnitLaunchFlare);
 
-            /** ExtraDataForUnitLaunchFlare discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLaunchFlare commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitLaunchFlare discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitLaunchFlare targetGridIndex. */
+            public targetGridIndex?: (Structure.IGridIndex|null);
 
-            /** ExtraDataForUnitLaunchFlare actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLaunchFlare flareRadius. */
+            public flareRadius: number;
 
             /**
              * Creates a new ExtraDataForUnitLaunchFlare instance using the specified properties.
@@ -14183,14 +18275,11 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitLaunchSilo. */
         interface IExtraDataForUnitLaunchSilo {
 
-            /** ExtraDataForUnitLaunchSilo discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLaunchSilo commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitLaunchSilo discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitLaunchSilo actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLaunchSilo targetGridIndex */
+            targetGridIndex?: (Structure.IGridIndex|null);
         }
 
         /** Represents an ExtraDataForUnitLaunchSilo. */
@@ -14202,14 +18291,11 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitLaunchSilo.IExtraDataForUnitLaunchSilo);
 
-            /** ExtraDataForUnitLaunchSilo discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLaunchSilo commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitLaunchSilo discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitLaunchSilo actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLaunchSilo targetGridIndex. */
+            public targetGridIndex?: (Structure.IGridIndex|null);
 
             /**
              * Creates a new ExtraDataForUnitLaunchSilo instance using the specified properties.
@@ -14390,17 +18476,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitProduceUnit. */
         interface IExtraDataForUnitProduceUnit {
 
-            /** ExtraDataForUnitProduceUnit discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitProduceUnit discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitProduceUnit actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitProduceUnit cost */
-            cost?: (number|null);
+            /** ExtraDataForUnitProduceUnit commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForUnitProduceUnit. */
@@ -14412,17 +18489,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitProduceUnit.IExtraDataForUnitProduceUnit);
 
-            /** ExtraDataForUnitProduceUnit discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitProduceUnit discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitProduceUnit actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitProduceUnit cost. */
-            public cost: number;
+            /** ExtraDataForUnitProduceUnit commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForUnitProduceUnit instance using the specified properties.
@@ -14603,14 +18671,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitSupplyUnit. */
         interface IExtraDataForUnitSupplyUnit {
 
-            /** ExtraDataForUnitSupplyUnit discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitSupplyUnit discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitSupplyUnit actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitSupplyUnit commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForUnitSupplyUnit. */
@@ -14622,14 +18684,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitSupplyUnit.IExtraDataForUnitSupplyUnit);
 
-            /** ExtraDataForUnitSupplyUnit discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitSupplyUnit discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitSupplyUnit actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitSupplyUnit commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForUnitSupplyUnit instance using the specified properties.
@@ -14810,14 +18866,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitLoadCo. */
         interface IExtraDataForUnitLoadCo {
 
-            /** ExtraDataForUnitLoadCo discoveredUnits */
-            discoveredUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitLoadCo discoveredTiles */
-            discoveredTiles?: (WarSerialization.ISerialTile[]|null);
-
-            /** ExtraDataForUnitLoadCo actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitLoadCo commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
         }
 
         /** Represents an ExtraDataForUnitLoadCo. */
@@ -14829,14 +18879,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitLoadCo.IExtraDataForUnitLoadCo);
 
-            /** ExtraDataForUnitLoadCo discoveredUnits. */
-            public discoveredUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitLoadCo discoveredTiles. */
-            public discoveredTiles: WarSerialization.ISerialTile[];
-
-            /** ExtraDataForUnitLoadCo actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitLoadCo commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
             /**
              * Creates a new ExtraDataForUnitLoadCo instance using the specified properties.
@@ -15023,17 +19067,14 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForUnitUseCoSkill. */
         interface IExtraDataForUnitUseCoSkill {
 
-            /** ExtraDataForUnitUseCoSkill discoveredUnitsAfterAction */
-            discoveredUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
+            /** ExtraDataForUnitUseCoSkill commonExtraData */
+            commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitUseCoSkill discoveredTilesAfterAction */
-            discoveredTilesAfterAction?: (WarSerialization.ISerialTile[]|null);
+            /** ExtraDataForUnitUseCoSkill skillType */
+            skillType?: (number|null);
 
-            /** ExtraDataForUnitUseCoSkill actingUnits */
-            actingUnits?: (WarSerialization.ISerialUnit[]|null);
-
-            /** ExtraDataForUnitUseCoSkill skillDataList */
-            skillDataList?: (Structure.IDataForUseCoSkill[]|null);
+            /** ExtraDataForUnitUseCoSkill skillDataArray */
+            skillDataArray?: (Structure.IDataForUseCoSkill[]|null);
         }
 
         /** Represents an ExtraDataForUnitUseCoSkill. */
@@ -15045,17 +19086,14 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionUnitUseCoSkill.IExtraDataForUnitUseCoSkill);
 
-            /** ExtraDataForUnitUseCoSkill discoveredUnitsAfterAction. */
-            public discoveredUnitsAfterAction: WarSerialization.ISerialUnit[];
+            /** ExtraDataForUnitUseCoSkill commonExtraData. */
+            public commonExtraData?: (Structure.ICommonExtraDataForWarAction|null);
 
-            /** ExtraDataForUnitUseCoSkill discoveredTilesAfterAction. */
-            public discoveredTilesAfterAction: WarSerialization.ISerialTile[];
+            /** ExtraDataForUnitUseCoSkill skillType. */
+            public skillType: number;
 
-            /** ExtraDataForUnitUseCoSkill actingUnits. */
-            public actingUnits: WarSerialization.ISerialUnit[];
-
-            /** ExtraDataForUnitUseCoSkill skillDataList. */
-            public skillDataList: Structure.IDataForUseCoSkill[];
+            /** ExtraDataForUnitUseCoSkill skillDataArray. */
+            public skillDataArray: Structure.IDataForUseCoSkill[];
 
             /**
              * Creates a new ExtraDataForUnitUseCoSkill instance using the specified properties.
@@ -16140,6 +20178,108 @@ export declare namespace Structure {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a GridIndexAndPathInfo. */
+    interface IGridIndexAndPathInfo {
+
+        /** GridIndexAndPathInfo gridIndex */
+        gridIndex?: (Structure.IGridIndex|null);
+
+        /** GridIndexAndPathInfo isVisible */
+        isVisible?: (boolean|null);
+
+        /** GridIndexAndPathInfo isBlocked */
+        isBlocked?: (boolean|null);
+    }
+
+    /** Represents a GridIndexAndPathInfo. */
+    class GridIndexAndPathInfo implements IGridIndexAndPathInfo {
+
+        /**
+         * Constructs a new GridIndexAndPathInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.IGridIndexAndPathInfo);
+
+        /** GridIndexAndPathInfo gridIndex. */
+        public gridIndex?: (Structure.IGridIndex|null);
+
+        /** GridIndexAndPathInfo isVisible. */
+        public isVisible: boolean;
+
+        /** GridIndexAndPathInfo isBlocked. */
+        public isBlocked: boolean;
+
+        /**
+         * Creates a new GridIndexAndPathInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns GridIndexAndPathInfo instance
+         */
+        public static create(properties?: Structure.IGridIndexAndPathInfo): Structure.GridIndexAndPathInfo;
+
+        /**
+         * Encodes the specified GridIndexAndPathInfo message. Does not implicitly {@link Structure.GridIndexAndPathInfo.verify|verify} messages.
+         * @param message GridIndexAndPathInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.IGridIndexAndPathInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified GridIndexAndPathInfo message, length delimited. Does not implicitly {@link Structure.GridIndexAndPathInfo.verify|verify} messages.
+         * @param message GridIndexAndPathInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.IGridIndexAndPathInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a GridIndexAndPathInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns GridIndexAndPathInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.GridIndexAndPathInfo;
+
+        /**
+         * Decodes a GridIndexAndPathInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns GridIndexAndPathInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.GridIndexAndPathInfo;
+
+        /**
+         * Verifies a GridIndexAndPathInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a GridIndexAndPathInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns GridIndexAndPathInfo
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.GridIndexAndPathInfo;
+
+        /**
+         * Creates a plain object from a GridIndexAndPathInfo message. Also converts values to other types if specified.
+         * @param message GridIndexAndPathInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.GridIndexAndPathInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this GridIndexAndPathInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a MovePath. */
     interface IMovePath {
 
@@ -16237,6 +20377,102 @@ export declare namespace Structure {
 
         /**
          * Converts this MovePath to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a MovingUnitAndPath. */
+    interface IMovingUnitAndPath {
+
+        /** MovingUnitAndPath unit */
+        unit?: (WarSerialization.ISerialUnit|null);
+
+        /** MovingUnitAndPath path */
+        path?: (Structure.IGridIndexAndPathInfo[]|null);
+    }
+
+    /** Represents a MovingUnitAndPath. */
+    class MovingUnitAndPath implements IMovingUnitAndPath {
+
+        /**
+         * Constructs a new MovingUnitAndPath.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.IMovingUnitAndPath);
+
+        /** MovingUnitAndPath unit. */
+        public unit?: (WarSerialization.ISerialUnit|null);
+
+        /** MovingUnitAndPath path. */
+        public path: Structure.IGridIndexAndPathInfo[];
+
+        /**
+         * Creates a new MovingUnitAndPath instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MovingUnitAndPath instance
+         */
+        public static create(properties?: Structure.IMovingUnitAndPath): Structure.MovingUnitAndPath;
+
+        /**
+         * Encodes the specified MovingUnitAndPath message. Does not implicitly {@link Structure.MovingUnitAndPath.verify|verify} messages.
+         * @param message MovingUnitAndPath message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.IMovingUnitAndPath, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MovingUnitAndPath message, length delimited. Does not implicitly {@link Structure.MovingUnitAndPath.verify|verify} messages.
+         * @param message MovingUnitAndPath message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.IMovingUnitAndPath, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MovingUnitAndPath message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MovingUnitAndPath
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.MovingUnitAndPath;
+
+        /**
+         * Decodes a MovingUnitAndPath message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MovingUnitAndPath
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.MovingUnitAndPath;
+
+        /**
+         * Verifies a MovingUnitAndPath message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MovingUnitAndPath message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MovingUnitAndPath
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.MovingUnitAndPath;
+
+        /**
+         * Creates a plain object from a MovingUnitAndPath message. Also converts values to other types if specified.
+         * @param message MovingUnitAndPath
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.MovingUnitAndPath, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MovingUnitAndPath to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -16788,8 +21024,8 @@ export declare namespace Structure {
         /** DataForUseCoSkill skillIndex */
         skillIndex?: (number|null);
 
-        /** DataForUseCoSkill indiscriminateAreaDamageCenter */
-        indiscriminateAreaDamageCenter?: (Structure.IGridIndex|null);
+        /** DataForUseCoSkill fixedAreaDamageCenter */
+        fixedAreaDamageCenter?: (Structure.IGridIndex|null);
 
         /** DataForUseCoSkill newWeatherType */
         newWeatherType?: (number|null);
@@ -16807,8 +21043,8 @@ export declare namespace Structure {
         /** DataForUseCoSkill skillIndex. */
         public skillIndex: number;
 
-        /** DataForUseCoSkill indiscriminateAreaDamageCenter. */
-        public indiscriminateAreaDamageCenter?: (Structure.IGridIndex|null);
+        /** DataForUseCoSkill fixedAreaDamageCenter. */
+        public fixedAreaDamageCenter?: (Structure.IGridIndex|null);
 
         /** DataForUseCoSkill newWeatherType. */
         public newWeatherType: number;
@@ -17419,6 +21655,132 @@ export declare namespace Structure {
 
         /**
          * Converts this BattleDamageInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a CommonExtraDataForWarAction. */
+    interface ICommonExtraDataForWarAction {
+
+        /** CommonExtraDataForWarAction playerArrayAfterAction */
+        playerArrayAfterAction?: (WarSerialization.ISerialPlayer[]|null);
+
+        /** CommonExtraDataForWarAction unitArrayAfterAction */
+        unitArrayAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+        /** CommonExtraDataForWarAction destroyedUnitIdArray */
+        destroyedUnitIdArray?: (number[]|null);
+
+        /** CommonExtraDataForWarAction tileArrayAfterAction */
+        tileArrayAfterAction?: (WarSerialization.ISerialTile[]|null);
+
+        /** CommonExtraDataForWarAction nextUnitId */
+        nextUnitId?: (number|null);
+
+        /** CommonExtraDataForWarAction movingUnitAndPath */
+        movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+        /** CommonExtraDataForWarAction visibilityArrayFromPathsAfterAction */
+        visibilityArrayFromPathsAfterAction?: (number[]|null);
+    }
+
+    /** Represents a CommonExtraDataForWarAction. */
+    class CommonExtraDataForWarAction implements ICommonExtraDataForWarAction {
+
+        /**
+         * Constructs a new CommonExtraDataForWarAction.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.ICommonExtraDataForWarAction);
+
+        /** CommonExtraDataForWarAction playerArrayAfterAction. */
+        public playerArrayAfterAction: WarSerialization.ISerialPlayer[];
+
+        /** CommonExtraDataForWarAction unitArrayAfterAction. */
+        public unitArrayAfterAction: WarSerialization.ISerialUnit[];
+
+        /** CommonExtraDataForWarAction destroyedUnitIdArray. */
+        public destroyedUnitIdArray: number[];
+
+        /** CommonExtraDataForWarAction tileArrayAfterAction. */
+        public tileArrayAfterAction: WarSerialization.ISerialTile[];
+
+        /** CommonExtraDataForWarAction nextUnitId. */
+        public nextUnitId: number;
+
+        /** CommonExtraDataForWarAction movingUnitAndPath. */
+        public movingUnitAndPath?: (Structure.IMovingUnitAndPath|null);
+
+        /** CommonExtraDataForWarAction visibilityArrayFromPathsAfterAction. */
+        public visibilityArrayFromPathsAfterAction: number[];
+
+        /**
+         * Creates a new CommonExtraDataForWarAction instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns CommonExtraDataForWarAction instance
+         */
+        public static create(properties?: Structure.ICommonExtraDataForWarAction): Structure.CommonExtraDataForWarAction;
+
+        /**
+         * Encodes the specified CommonExtraDataForWarAction message. Does not implicitly {@link Structure.CommonExtraDataForWarAction.verify|verify} messages.
+         * @param message CommonExtraDataForWarAction message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.ICommonExtraDataForWarAction, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified CommonExtraDataForWarAction message, length delimited. Does not implicitly {@link Structure.CommonExtraDataForWarAction.verify|verify} messages.
+         * @param message CommonExtraDataForWarAction message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.ICommonExtraDataForWarAction, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a CommonExtraDataForWarAction message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns CommonExtraDataForWarAction
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.CommonExtraDataForWarAction;
+
+        /**
+         * Decodes a CommonExtraDataForWarAction message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns CommonExtraDataForWarAction
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.CommonExtraDataForWarAction;
+
+        /**
+         * Verifies a CommonExtraDataForWarAction message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a CommonExtraDataForWarAction message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns CommonExtraDataForWarAction
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.CommonExtraDataForWarAction;
+
+        /**
+         * Creates a plain object from a CommonExtraDataForWarAction message. Also converts values to other types if specified.
+         * @param message CommonExtraDataForWarAction
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.CommonExtraDataForWarAction, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this CommonExtraDataForWarAction to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -20777,6 +25139,9 @@ export declare namespace User {
 
         /** UserSettings unitOpacity */
         unitOpacity?: (number|null);
+
+        /** UserSettings isAutoScrollMap */
+        isAutoScrollMap?: (boolean|null);
     }
 
     /** Represents a UserSettings. */
@@ -20799,6 +25164,9 @@ export declare namespace User {
 
         /** UserSettings unitOpacity. */
         public unitOpacity: number;
+
+        /** UserSettings isAutoScrollMap. */
+        public isAutoScrollMap: boolean;
 
         /**
          * Creates a new UserSettings instance using the specified properties.
@@ -21795,6 +26163,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMpwExecuteWarAction */
         MsgMpwExecuteWarAction?: (NetMessage.IMsgMpwExecuteWarAction|null);
 
+        /** MessageContainer MsgMpwGetHalfwayReplayData */
+        MsgMpwGetHalfwayReplayData?: (NetMessage.IMsgMpwGetHalfwayReplayData|null);
+
         /** MessageContainer MsgSpmCreateScw */
         MsgSpmCreateScw?: (NetMessage.IMsgSpmCreateScw|null);
 
@@ -22170,6 +26541,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMpwExecuteWarAction. */
         public MsgMpwExecuteWarAction?: (NetMessage.IMsgMpwExecuteWarAction|null);
+
+        /** MessageContainer MsgMpwGetHalfwayReplayData. */
+        public MsgMpwGetHalfwayReplayData?: (NetMessage.IMsgMpwGetHalfwayReplayData|null);
 
         /** MessageContainer MsgSpmCreateScw. */
         public MsgSpmCreateScw?: (NetMessage.IMsgSpmCreateScw|null);
@@ -45054,6 +49428,297 @@ export declare namespace NetMessage {
         }
     }
 
+    /** Properties of a MsgMpwGetHalfwayReplayData. */
+    interface IMsgMpwGetHalfwayReplayData {
+
+        /** MsgMpwGetHalfwayReplayData c */
+        c?: (NetMessage.MsgMpwGetHalfwayReplayData.IC|null);
+
+        /** MsgMpwGetHalfwayReplayData s */
+        s?: (NetMessage.MsgMpwGetHalfwayReplayData.IS|null);
+    }
+
+    /** Represents a MsgMpwGetHalfwayReplayData. */
+    class MsgMpwGetHalfwayReplayData implements IMsgMpwGetHalfwayReplayData {
+
+        /**
+         * Constructs a new MsgMpwGetHalfwayReplayData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMpwGetHalfwayReplayData);
+
+        /** MsgMpwGetHalfwayReplayData c. */
+        public c?: (NetMessage.MsgMpwGetHalfwayReplayData.IC|null);
+
+        /** MsgMpwGetHalfwayReplayData s. */
+        public s?: (NetMessage.MsgMpwGetHalfwayReplayData.IS|null);
+
+        /**
+         * Creates a new MsgMpwGetHalfwayReplayData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMpwGetHalfwayReplayData instance
+         */
+        public static create(properties?: NetMessage.IMsgMpwGetHalfwayReplayData): NetMessage.MsgMpwGetHalfwayReplayData;
+
+        /**
+         * Encodes the specified MsgMpwGetHalfwayReplayData message. Does not implicitly {@link NetMessage.MsgMpwGetHalfwayReplayData.verify|verify} messages.
+         * @param message MsgMpwGetHalfwayReplayData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMpwGetHalfwayReplayData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMpwGetHalfwayReplayData message, length delimited. Does not implicitly {@link NetMessage.MsgMpwGetHalfwayReplayData.verify|verify} messages.
+         * @param message MsgMpwGetHalfwayReplayData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMpwGetHalfwayReplayData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMpwGetHalfwayReplayData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMpwGetHalfwayReplayData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwGetHalfwayReplayData;
+
+        /**
+         * Decodes a MsgMpwGetHalfwayReplayData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMpwGetHalfwayReplayData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwGetHalfwayReplayData;
+
+        /**
+         * Verifies a MsgMpwGetHalfwayReplayData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMpwGetHalfwayReplayData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMpwGetHalfwayReplayData
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwGetHalfwayReplayData;
+
+        /**
+         * Creates a plain object from a MsgMpwGetHalfwayReplayData message. Also converts values to other types if specified.
+         * @param message MsgMpwGetHalfwayReplayData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMpwGetHalfwayReplayData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMpwGetHalfwayReplayData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMpwGetHalfwayReplayData {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C warId */
+            warId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMpwGetHalfwayReplayData.IC);
+
+            /** C warId. */
+            public warId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgMpwGetHalfwayReplayData.IC): NetMessage.MsgMpwGetHalfwayReplayData.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMpwGetHalfwayReplayData.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMpwGetHalfwayReplayData.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMpwGetHalfwayReplayData.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMpwGetHalfwayReplayData.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwGetHalfwayReplayData.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwGetHalfwayReplayData.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwGetHalfwayReplayData.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMpwGetHalfwayReplayData.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S warId */
+            warId?: (number|null);
+
+            /** S warData */
+            warData?: (WarSerialization.ISerialWar|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMpwGetHalfwayReplayData.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S warId. */
+            public warId: number;
+
+            /** S warData. */
+            public warData?: (WarSerialization.ISerialWar|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMpwGetHalfwayReplayData.IS): NetMessage.MsgMpwGetHalfwayReplayData.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMpwGetHalfwayReplayData.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMpwGetHalfwayReplayData.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMpwGetHalfwayReplayData.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMpwGetHalfwayReplayData.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwGetHalfwayReplayData.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwGetHalfwayReplayData.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwGetHalfwayReplayData.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMpwGetHalfwayReplayData.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a MsgSpmCreateScw. */
     interface IMsgSpmCreateScw {
 
@@ -50335,6 +55000,9 @@ export declare namespace NetMessage {
 
             /** C selfPlayerIndex */
             selfPlayerIndex?: (number|null);
+
+            /** C selfCoId */
+            selfCoId?: (number|null);
         }
 
         /** Represents a C. */
@@ -50351,6 +55019,9 @@ export declare namespace NetMessage {
 
             /** C selfPlayerIndex. */
             public selfPlayerIndex: number;
+
+            /** C selfCoId. */
+            public selfCoId: number;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -53350,6 +58021,9 @@ export declare namespace NetMessage {
 
             /** C playerIndex */
             playerIndex?: (number|null);
+
+            /** C coId */
+            coId?: (number|null);
         }
 
         /** Represents a C. */
@@ -53366,6 +58040,9 @@ export declare namespace NetMessage {
 
             /** C playerIndex. */
             public playerIndex: number;
+
+            /** C coId. */
+            public coId: number;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -53452,6 +58129,9 @@ export declare namespace NetMessage {
 
             /** S newPlayerIndex */
             newPlayerIndex?: (number|null);
+
+            /** S coId */
+            coId?: (number|null);
         }
 
         /** Represents a S. */
@@ -53474,6 +58154,9 @@ export declare namespace NetMessage {
 
             /** S newPlayerIndex. */
             public newPlayerIndex: number;
+
+            /** S coId. */
+            public coId: number;
 
             /**
              * Creates a new S instance using the specified properties.

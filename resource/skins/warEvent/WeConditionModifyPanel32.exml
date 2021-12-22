@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*"
+        xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group height="450" verticalCenter="0" width="800" horizontalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
+                             horizontalCenter="0" locked="true" />
+        <TwnsUiButton:UiButton id="_btnType" label="切换类型" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                               width="120" top="0" left="0" locked="true" />
+        <TwnsUiButton:UiButton id="_btnClose" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                               width="120" right="0" top="0" locked="true" />
+        <e:Group y="40" left="10" right="10">
+            <TwnsUiLabel:UiLabel id="_labelDesc" text="创建战局" size="18" textColor="0xFFFFFF" y="0" width="780" x="274" />
+            <TwnsUiLabel:UiLabel id="_labelError" text="创建战局" size="18" textColor="0xFFFFFF" y="0" width="780" x="274" />
+            <e:layout>
+                <e:VerticalLayout horizontalAlign="center" />
+            </e:layout>
+        </e:Group>
+        <e:Group left="10" bottom="10">
+            <e:Group x="281" y="20">
+                <TwnsUiButton:UiButton id="_btnTileType" label="切换类型"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                       left="0" x="10" y="10" />
+                <TwnsUiLabel:UiLabel id="_labelTileType" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
+                                     width="650" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="271" y="10">
+                <TwnsUiButton:UiButton id="_btnLocation" label="切换类型"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                       left="0" x="10" y="10" />
+                <TwnsUiLabel:UiLabel id="_labelLocation" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
+                                     width="650" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="281" y="20">
+                <TwnsUiButton:UiButton id="_btnGridIndex" label="切换类型"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                       left="0" x="10" y="10" />
+                <TwnsUiLabel:UiLabel id="_labelGridIndex" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
+                                     width="650" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="301" y="40">
+                <TwnsUiButton:UiButton id="_btnTeamIndex" label="切换类型"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                       left="0" x="10" y="10" />
+                <TwnsUiLabel:UiLabel id="_labelTeamIndex" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
+                                     width="650" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="291" y="30">
+                <TwnsUiButton:UiButton id="_btnPlayerIndex" label="切换类型"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                       left="0" x="10" y="10" />
+                <TwnsUiLabel:UiLabel id="_labelPlayerIndex" text="取反" size="14" textColor="0xFFFFFF" x="20" y="20"
+                                     width="650" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:Group y="200" x="0">
+                <e:Group x="261" y="0">
+                    <TwnsUiButton:UiButton id="_btnTilesCountComparator" label="切换类型"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" top="0"
+                                           left="0" x="10" y="10" />
+                    <TwnsUiLabel:UiLabel id="_labelTilesCountComparator" text="取反" size="14" textColor="0xFFFFFF" x="20"
+                                         y="20" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
+                <e:Group x="188" y="43">
+                    <TwnsUiLabel:UiLabel id="_labelTilesCount" text="Tiles Count" size="18" textColor="0xFFFFFF" x="-88"
+                                         y="93" scaleX="1" scaleY="1" />
+                    <TwnsUiTextInput:UiTextInput id="_inputTilesCount" width="60" x="78" y="20" anchorOffsetX="0"
+                                                 anchorOffsetY="0" maxChars="4" restrict="0-9">
+                        <TwnsUiTextInput:skinName>
+                            <e:Skin width="100" height="30">
+                                <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
+                                <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30"
+                                                textColor="0xffffff" />
+                                <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                         height="30" textColor="0x808080" />
+                            </e:Skin>
+                        </TwnsUiTextInput:skinName>
+                    </TwnsUiTextInput:UiTextInput>
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" gap="40" />
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

@@ -13,17 +13,14 @@
 // import TwnsUiPanel          from "../../tools/ui/UiPanel";
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsChangeLogAddPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
 
-    export class ChangeLogAddPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: ChangeLogAddPanel;
-
+    export type OpenData = void;
+    export class ChangeLogAddPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _inputChinese! : TwnsUiTextInput.UiTextInput;
         private readonly _inputEnglish! : TwnsUiTextInput.UiTextInput;
         private readonly _labelTip!     : TwnsUiLabel.UiLabel;
@@ -33,29 +30,7 @@ namespace TwnsChangeLogAddPanel {
         private readonly _btnModify!    : TwnsUiButton.UiButton;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!ChangeLogAddPanel._instance) {
-                ChangeLogAddPanel._instance = new ChangeLogAddPanel();
-            }
-
-            ChangeLogAddPanel._instance.open();
-        }
-
-        public static async hide(): Promise<void> {
-            if (ChangeLogAddPanel._instance) {
-                await ChangeLogAddPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName               = "resource/skins/changeLog/ChangeLogAddPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -63,11 +38,17 @@ namespace TwnsChangeLogAddPanel {
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ]);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
             this._inputChinese.maxChars = CommonConstants.ChangeLogTextMaxLength;
             this._inputEnglish.maxChars = CommonConstants.ChangeLogTextMaxLength;
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {

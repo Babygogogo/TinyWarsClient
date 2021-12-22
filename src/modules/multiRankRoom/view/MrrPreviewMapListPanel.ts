@@ -33,15 +33,10 @@ namespace TwnsMrrPreviewMapListPanel {
     import WarBasicSettingsType                         = Types.WarBasicSettingsType;
     import ClientErrorCode                              = TwnsClientErrorCode.ClientErrorCode;
 
-    type OpenDataForMrrPreviewMapListPanel = {
+    export type OpenData = {
         hasFog: boolean;
     };
-    export class MrrPreviewMapListPanel extends TwnsUiPanel.UiPanel<OpenDataForMrrPreviewMapListPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MrrPreviewMapListPanel;
-
+    export class MrrPreviewMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
 
@@ -60,25 +55,7 @@ namespace TwnsMrrPreviewMapListPanel {
 
         private _isTabInitialized = false;
 
-        public static show(openData: OpenDataForMrrPreviewMapListPanel): void {
-            if (!MrrPreviewMapListPanel._instance) {
-                MrrPreviewMapListPanel._instance = new MrrPreviewMapListPanel();
-            }
-            MrrPreviewMapListPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (MrrPreviewMapListPanel._instance) {
-                await MrrPreviewMapListPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiRankRoom/MrrPreviewMapListPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
             ]);
@@ -88,18 +65,16 @@ namespace TwnsMrrPreviewMapListPanel {
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listMap.setItemRenderer(MapNameRenderer);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._isTabInitialized = false;
             await this._initTabSettings();
             this._updateComponentsForLanguage();
             await this._initGroupMapList();
             this.setAndReviseSelectedMapId(-1, true);
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public async setAndReviseSelectedMapId(mapId: number, needScroll: boolean): Promise<void> {
@@ -122,15 +97,15 @@ namespace TwnsMrrPreviewMapListPanel {
 
         private _onTouchedBtnBack(): void {
             this.close();
-            TwnsMrrMainMenuPanel.MrrMainMenuPanel.show();
-            TwnsLobbyTopPanel.LobbyTopPanel.show();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrMainMenuPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
 
-        private async _onTouchedBtnSwitch(): Promise<void> {
+        private _onTouchedBtnSwitch(): void {
             const hasFog = this._getOpenData().hasFog;
             this.close();
-            MrrPreviewMapListPanel.show({ hasFog: !hasFog });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MrrPreviewMapListPanel, { hasFog: !hasFog });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -365,7 +340,7 @@ namespace TwnsMrrPreviewMapListPanel {
             return this._listMap.getSelectedData()?.mapId ?? null;
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
@@ -391,36 +366,37 @@ namespace TwnsMrrPreviewMapListPanel {
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupMapList,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnSwitch,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupTab,
-                    beginProps  : { alpha: 1, },
-                    endProps    : { alpha: 0, },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupMapList,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnSwitch,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 1, },
+                endProps    : { alpha: 0, },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

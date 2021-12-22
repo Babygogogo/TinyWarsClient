@@ -11,11 +11,12 @@
 // import Helpers          from "./Helpers";
 // import LocalStorage     from "./LocalStorage";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Timer {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    const TILE_ANIMATION_INTERVAL_MS        = 350;
+    const TILE_ANIMATION_INTERVAL_MS        = 200;
     const UNIT_ANIMATION_INTERVAL_MS        = 120;
     const UNIT_STATE_INDICATOR_INTERVAL_MS  = 720;
     const GRID_ANIMATION_INTERVAL_MS        = 100;

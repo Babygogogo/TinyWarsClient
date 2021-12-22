@@ -58,7 +58,7 @@ namespace SoundManager {
         [ BgmCode.Co0010,       { name: "co0010.mp3",       start: 4.95,    end: 62     } ],
         [ BgmCode.Co0011,       { name: "co0011.mp3",       start: 7.45,    end: 61.2   } ],
         [ BgmCode.Co0042,       { name: "co0042.mp3",       start: 7.6,     end: 60.1   } ],
-        [ BgmCode.Co9999,       { name: "co9999.mp3",       start: 1.52,    end: 2.61   } ],
+        [ BgmCode.Co9999,       { name: "co9999.mp3",       start: 4.7,     end: 115.44 } ],
         // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
     ]);
     const _SHORT_SFX_PARAM = new Map<ShortSfxCode, ShortSfxParams>([
@@ -228,6 +228,10 @@ namespace SoundManager {
         }
     }
 
+    export function checkIsValidBgmCode(bgmCode: BgmCode): boolean {
+        return (bgmCode === BgmCode.None) || (_BGM_PARAMS.has(bgmCode));
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // bgm(背景音乐)
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -273,7 +277,7 @@ namespace SoundManager {
     function _updateBgmVolumeForNormal(): void {
         const gain = _bgmGain;
         if (gain) {
-            gain.gain.value = _getRevisedBgmVolume();
+            gain.gain.setValueAtTime(_getRevisedBgmVolume(), _audioContext.currentTime);
         }
     }
 
@@ -402,7 +406,7 @@ namespace SoundManager {
         const volume        = _getRevisedSfxVolume();
         const shortSfxGain  = _shortSfxGain;
         if (shortSfxGain) {
-            shortSfxGain.gain.value = volume;
+            shortSfxGain.gain.setValueAtTime(volume, _audioContext.currentTime);
         }
     }
 
@@ -495,10 +499,19 @@ namespace SoundManager {
         playLongSfx(Helpers.getExisted(_UNIT_MOVE_SFX_CODES.get(unitType), ClientErrorCode.SoundManager_PlayLongSfxForMoveUnit_00));
     }
     export function fadeoutLongSfxForMoveUnit(): void {
-        const longSfxGain = _longSfxGain;
-        if (longSfxGain) {
-            longSfxGain.gain.setValueAtTime(_getRevisedSfxVolume(), _audioContext.currentTime);
-            longSfxGain.gain.exponentialRampToValueAtTime(0.01, _audioContext.currentTime + _UNIT_MOVE_FADEOUT_TIME);
+        const gain = _longSfxGain?.gain;
+        if (gain == null) {
+            return;
+        }
+
+        const volume        = _getRevisedSfxVolume();
+        const currentTime   = _audioContext.currentTime;
+        gain.cancelScheduledValues(currentTime);
+        gain.setValueAtTime(volume, currentTime);
+        if (volume <= 0) {
+            playLongSfx(LongSfxCode.None);
+        } else {
+            gain.exponentialRampToValueAtTime(0.01, currentTime + _UNIT_MOVE_FADEOUT_TIME);
             _timeoutIdForStopLongSfx = egret.setTimeout(() => playLongSfx(LongSfxCode.None), null, _UNIT_MOVE_FADEOUT_TIME * 1000);
         }
     }
@@ -507,7 +520,7 @@ namespace SoundManager {
         const volume        = _getRevisedSfxVolume();
         const longSfxGain   = _longSfxGain;
         if (longSfxGain) {
-            longSfxGain.gain.value = volume;
+            longSfxGain.gain.setValueAtTime(volume, _audioContext.currentTime);
         }
     }
 

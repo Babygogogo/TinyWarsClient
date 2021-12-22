@@ -13,16 +13,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsLobbyTopPanel {
-    import UserPanel            = TwnsUserPanel.UserPanel;
-    import UserOnlineUsersPanel = TwnsUserOnlineUsersPanel.UserOnlineUsersPanel;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    export class LobbyTopPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance            : LobbyTopPanel | null = null;
-
+    export type OpenData = void;
+    export class LobbyTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
 
         private readonly _groupUserInfo!    : eui.Group;
@@ -30,28 +24,7 @@ namespace TwnsLobbyTopPanel {
         private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
         private readonly _labelUserId!      : TwnsUiLabel.UiLabel;
 
-        public static show(): void {
-            if (!LobbyTopPanel._instance) {
-                LobbyTopPanel._instance = new LobbyTopPanel();
-            }
-            LobbyTopPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (LobbyTopPanel._instance) {
-                await LobbyTopPanel._instance.close();
-            }
-        }
-        public static getInstance(): LobbyTopPanel | null {
-            return LobbyTopPanel._instance;
-        }
-
-        private constructor() {
-            super();
-
-            this.skinName = "resource/skins/lobby/LobbyTopPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogin,            callback: this._onMsgUserLogin },
@@ -62,13 +35,12 @@ namespace TwnsLobbyTopPanel {
             this._setUiListenerArray([
                 { ui: this._groupUserInfo,  callback: this._onTouchedGroupUserInfo },
             ]);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onMsgUserLogin(): void {
@@ -92,30 +64,31 @@ namespace TwnsLobbyTopPanel {
         }
 
         private _onTouchedGroupUserInfo(): void {
-            UserOnlineUsersPanel.hide();
-            TwnsChatPanel.ChatPanel.hide();
-            UserPanel.show({
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.UserOnlineUsersPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.ChatPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, {
                 userId: Helpers.getExisted(UserModel.getSelfUserId()),
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
-        private _showOpenAnimation(): void {
-            const group = this._group;
-            egret.Tween.removeTweens(group);
-            egret.Tween.get(group)
-                .set({ alpha: 0, top: -40 })
-                .to({ alpha: 1, top: 0 }, 200);
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                const group = this._group;
-                egret.Tween.removeTweens(group);
-                egret.Tween.get(group)
-                    .set({ alpha: 1, top: 0 })
-                    .to({ alpha: 0, top: -40 }, 200)
-                    .call(resolve);
+        protected async _showOpenAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, top: -40 },
+                endProps    : { alpha: 1, top: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, top: 0 },
+                endProps    : { alpha: 0, top: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateView(): void {

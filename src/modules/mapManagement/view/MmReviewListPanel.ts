@@ -17,17 +17,14 @@
 // import WarMapProxy              from "../../warMap/model/WarMapProxy";
 // import TwnsMmMainMenuPanel      from "./MmMainMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmReviewListPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
 
-    export class MmReviewListPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MmReviewListPanel;
-
+    export type OpenData = void;
+    export class MmReviewListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _zoomMap!          : TwnsUiZoomableMap.UiZoomableMap;
         private readonly _labelNoData!      : TwnsUiLabel.UiLabel;
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
@@ -38,25 +35,7 @@ namespace TwnsMmReviewListPanel {
         private _dataForListMap     : DataForMapRenderer[] = [];
         private _selectedIndex      : number | null = null;
 
-        public static show(): void {
-            if (!MmReviewListPanel._instance) {
-                MmReviewListPanel._instance = new MmReviewListPanel();
-            }
-            MmReviewListPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MmReviewListPanel._instance) {
-                await MmReviewListPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapManagement/MmReviewListPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgMmGetReviewingMaps,  callback: this._onMsgMmGetReviewingMaps },
@@ -65,12 +44,16 @@ namespace TwnsMmReviewListPanel {
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ]);
             this._listMap.setItemRenderer(MapRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
             this._labelLoading.visible  = true;
             this._labelNoData.visible   = false;
 
             WarMapProxy.reqMmGetReviewingMaps();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public async setSelectedIndex(newIndex: number): Promise<void> {
@@ -117,7 +100,7 @@ namespace TwnsMmReviewListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsMmMainMenuPanel.MmMainMenuPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMainMenuPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

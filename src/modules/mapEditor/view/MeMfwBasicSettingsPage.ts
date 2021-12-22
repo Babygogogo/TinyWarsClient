@@ -13,10 +13,10 @@
 // import TwnsWarMapBuildingListPanel  from "../../warMap/view/WarMapBuildingListPanel";
 // import MeMfwModel                   from "../model/MeMfwModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeMfwBasicSettingsPage {
     import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import CommonHelpPanel          = TwnsCommonHelpPanel.CommonHelpPanel;
-    import WarMapBuildingListPanel  = TwnsWarMapBuildingListPanel.WarMapBuildingListPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
@@ -78,7 +78,7 @@ namespace TwnsMeMfwBasicSettingsPage {
             if (MeMfwModel.getPresetWarRuleId() == null) {
                 callback();
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0129),
                     callback: () => {
                         MeMfwModel.setPresetWarRuleId(null);
@@ -89,7 +89,7 @@ namespace TwnsMeMfwBasicSettingsPage {
         }
 
         private _onTouchedBtnHelpHasFog(): void {
-            CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title  : Lang.getText(LangTextType.B0020),
                 content: Lang.getText(LangTextType.R0002),
             });
@@ -97,7 +97,7 @@ namespace TwnsMeMfwBasicSettingsPage {
 
         private async _onTouchedBtnBuildings(): Promise<void> {
             const mapRawData = MeMfwModel.getMapRawData();
-            WarMapBuildingListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WarMapBuildingListPanel, {
                 configVersion           : Helpers.getExisted(MeMfwModel.getWarData().settingsForCommon?.configVersion),
                 tileDataArray           : Helpers.getExisted(mapRawData.tileDataArray),
                 playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),

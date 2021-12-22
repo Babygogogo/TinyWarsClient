@@ -15,19 +15,15 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import TwnsCommonHelpPanel      from "./CommonHelpPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonCoListPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    type OpenDataForCommonBanCoPanel = {
+    export type OpenData = {
         war     : TwnsBwWar.BwWar;
     };
-    export class CommonCoListPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBanCoPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: CommonCoListPanel;
-
+    export class CommonCoListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
@@ -40,32 +36,7 @@ namespace TwnsCommonCoListPanel {
 
         private _previewingPlayerIndex  : number | null = null;
 
-        public static show(openData: OpenDataForCommonBanCoPanel): void {
-            if (!CommonCoListPanel._instance) {
-                CommonCoListPanel._instance = new CommonCoListPanel();
-            }
-            CommonCoListPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (CommonCoListPanel._instance) {
-                await CommonCoListPanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = CommonCoListPanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/common/CommonCoListPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
                 { ui: this._btnClose,   callback: this.close },
@@ -73,17 +44,15 @@ namespace TwnsCommonCoListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-
-            this._showOpenAnimation();
-
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
             this._initGroupCoNames();
             this._initComponentsForPreviewCo();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
+        protected _onClosing(): void {
             this._clearGroupCoNames();
             this._setPreviewingPlayerIndex(null);
         }
@@ -111,7 +80,7 @@ namespace TwnsCommonCoListPanel {
         }
 
         private _onTouchedBtnHelp(): void {
-            TwnsCommonHelpPanel.CommonHelpPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0143),
                 content : Lang.getText(LangTextType.R0004),
             });
@@ -176,7 +145,7 @@ namespace TwnsCommonCoListPanel {
             }
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -187,22 +156,22 @@ namespace TwnsCommonCoListPanel {
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
 
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: -40 },
-                    callback    : resolve,
-                });
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

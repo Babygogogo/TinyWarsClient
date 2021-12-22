@@ -9,6 +9,7 @@
 // import Lang                     from "../../tools/lang/Lang";
 // import TwnsLangTextType         from "../../tools/lang/LangTextType";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsRwActionPlanner {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
@@ -26,14 +27,14 @@ namespace TwnsRwActionPlanner {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
             } else {
-                TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwUnitActionsPanel);
             }
             if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
-                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.show({ war: this._getWar() });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDamagePreviewPanel, { war: this._getWar() });
             } else {
-                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwDamagePreviewPanel);
             }
         }
 
@@ -101,13 +102,17 @@ namespace TwnsRwActionPlanner {
                 if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if (unit.checkHasWeapon()) {
-                    return State.PreviewingAttackableArea;
+                    return State.PreviewingUnitAttackableArea;
                 } else {
-                    return State.PreviewingMovableArea;
+                    return State.PreviewingUnitMovableArea;
                 }
             }
         }
@@ -163,22 +168,26 @@ namespace TwnsRwActionPlanner {
                     if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
                         return State.ChoosingProductionTarget;
                     } else {
-                        return State.Idle;
+                        if (tile.checkIsMapWeapon()) {
+                            return State.PreviewingTileAttackableArea;
+                        } else {
+                            return State.Idle;
+                        }
                     }
                 } else {
                     if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                         return State.MakingMovePath;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.PreviewingMovableArea;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
             }
         }
-        protected _getNextStateOnTapWhenPreviewingAttackableArea(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenPreviewingUnitAttackableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
             const playerIndexInTurn = this._getWar().getPlayerInTurn().getPlayerIndex();
@@ -188,25 +197,29 @@ namespace TwnsRwActionPlanner {
                 if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
-                        return State.PreviewingMovableArea;
+                        return State.PreviewingUnitMovableArea;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.PreviewingMovableArea;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
             }
         }
-        protected _getNextStateOnTapWhenPreviewingMovableArea(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenPreviewingUnitMovableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
             const playerIndexInTurn = this._getWar().getPlayerInTurn().getPlayerIndex();
@@ -216,19 +229,55 @@ namespace TwnsRwActionPlanner {
                 if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitForPreviewingMovableArea() !== unit) {
-                        return State.PreviewingMovableArea;
+                        return State.PreviewingUnitMovableArea;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
                             return State.Idle;
+                        }
+                    }
+                }
+            }
+        }
+        protected _getNextStateOnTapWhenPreviewingTileAttackableArea(gridIndex: GridIndex): State {
+            const turnManager       = this._getTurnManager();
+            const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
+            const playerIndexInTurn = this._getWar().getPlayerInTurn().getPlayerIndex();
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === playerIndexInTurn) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            if (!unit) {
+                const tile = this._getTileMap().getTile(gridIndex);
+                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
+                    return State.ChoosingProductionTarget;
+                } else {
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
+                }
+            } else {
+                if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
+                    return State.MakingMovePath;
+                } else {
+                    if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
+                        return State.PreviewingUnitMovableArea;
+                    } else {
+                        if (unit.checkHasWeapon()) {
+                            return State.PreviewingUnitAttackableArea;
+                        } else {
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }

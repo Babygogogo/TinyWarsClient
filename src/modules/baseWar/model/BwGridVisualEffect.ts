@@ -116,6 +116,10 @@ namespace TwnsBwGridVisualEffect {
             this.getView().showEffectSkillActivation(gridIndex);
         }
 
+        public showEffectCharge(gridIndex: GridIndex): void {
+            this.getView().showEffectCharge(gridIndex);
+        }
+
         public showEffectSurface(gridIndex: GridIndex): void {
             this.getView().showEffectSurface(gridIndex);
         }

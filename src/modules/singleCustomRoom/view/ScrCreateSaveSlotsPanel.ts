@@ -15,52 +15,37 @@
 // import WarMapModel              from "../../warMap/model/WarMapModel";
 // import ScrCreateModel           from "../model/ScrCreateModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsScrCreateSaveSlotsPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    export class ScrCreateSaveSlotsPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: ScrCreateSaveSlotsPanel;
-
+    export type OpenData = void;
+    export class ScrCreateSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
         private readonly _listSaveSlot!     : eui.List;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
-        public static show(): void {
-            if (!ScrCreateSaveSlotsPanel._instance) {
-                ScrCreateSaveSlotsPanel._instance = new ScrCreateSaveSlotsPanel();
-            }
-            ScrCreateSaveSlotsPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (ScrCreateSaveSlotsPanel._instance) {
-                await ScrCreateSaveSlotsPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/singleCustomRoom/ScrCreateSaveSlotsPanel.exml`;
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._srlSaveSlot.setItemRenderer(SlotRenderer);
 
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +115,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
 
         private _onTouchedImgBg(): void {
             ScrCreateModel.setSaveSlotIndex(this._getData().slotIndex);
-            ScrCreateSaveSlotsPanel.hide();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.ScrCreateSaveSlotsPanel);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

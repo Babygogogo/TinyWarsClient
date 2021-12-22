@@ -15,21 +15,17 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonChooseCoPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    type OpenData = {
+    export type OpenData = {
         currentCoId         : number | null;
         availableCoIdArray  : number[];
         callbackOnConfirm   : (coId: number) => void;
     };
     export class CommonChooseCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: CommonChooseCoPanel;
-
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
 
@@ -42,28 +38,7 @@ namespace TwnsCommonChooseCoPanel {
         private _dataForListCo          : DataForCoRenderer[] = [];
         private _selectedIndex          : number | null = null;
 
-        public static show(openData: OpenData): void {
-            if (!CommonChooseCoPanel._instance) {
-                CommonChooseCoPanel._instance = new CommonChooseCoPanel();
-            }
-
-            CommonChooseCoPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (CommonChooseCoPanel._instance) {
-                await CommonChooseCoPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/common/CommonChooseCoPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
                 { ui: this._btnCancel,      callback: this._onTouchTapBtnBack },
@@ -71,15 +46,17 @@ namespace TwnsCommonChooseCoPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listCo.setItemRenderer(CoRenderer);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
             this._initListCo();
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public setAndReviseSelectedIndex(newIndex: number): void {
@@ -179,7 +156,7 @@ namespace TwnsCommonChooseCoPanel {
             });
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -190,22 +167,22 @@ namespace TwnsCommonChooseCoPanel {
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
 
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: -40 },
-                    callback    : resolve,
-                });
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 

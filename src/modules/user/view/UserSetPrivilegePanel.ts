@@ -14,19 +14,15 @@
 // import TwnsUiTextInput      from "../../tools/ui/UiTextInput";
 // import UserProxy            from "../../user/model/UserProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserSetPrivilegePanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    type OpenDataForUserSetPrivilegePanel = {
+    export type OpenData = {
         userId  : number;
     };
-    export class UserSetPrivilegePanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetPrivilegePanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: UserSetPrivilegePanel;
-
+    export class UserSetPrivilegePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _btnGetInfo!               : TwnsUiButton.UiButton;
         private readonly _inputUserId!              : TwnsUiTextInput.UiTextInput;
         private readonly _labelUserName!            : TwnsUiLabel.UiLabel;
@@ -48,28 +44,7 @@ namespace TwnsUserSetPrivilegePanel {
         private readonly _btnCancel!                : TwnsUiButton.UiButton;
         private readonly _btnConfirm!               : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenDataForUserSetPrivilegePanel): void {
-            if (!UserSetPrivilegePanel._instance) {
-                UserSetPrivilegePanel._instance = new UserSetPrivilegePanel();
-            }
-            UserSetPrivilegePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (UserSetPrivilegePanel._instance) {
-                await UserSetPrivilegePanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/user/UserSetPrivilegePanel.exml";
-        }
-
-        public _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserGetPublicInfo,   callback: this._onNotifyMsgUserGetPublicInfo },
                 { type: NotifyType.MsgUserSetPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
@@ -84,10 +59,16 @@ namespace TwnsUserSetPrivilegePanel {
                 { ui: this._groupIsChangeLogEditor, callback: this._onTouchedGroupIsChangeLogEditor },
                 { ui: this._groupIsMapCommittee,    callback: this._onTouchedGroupIsMapCommittee },
             ]);
-
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             const userId = this._getOpenData().userId;
             this._inputUserId.text = `${userId}`;
             UserProxy.reqUserGetPublicInfo(userId);
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyMsgUserGetPublicInfo(e: egret.Event): void {

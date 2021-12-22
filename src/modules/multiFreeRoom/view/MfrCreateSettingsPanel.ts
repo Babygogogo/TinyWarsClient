@@ -27,24 +27,19 @@
 // import TwnsMfrCreatePlayerInfoPage          from "./MfrCreatePlayerInfoPage";
 // import TwnsMfrMainMenuPanel                 from "./MfrMainMenuPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMfrCreateSettingsPanel {
-    import MfrMainMenuPanel                         = TwnsMfrMainMenuPanel.MfrMainMenuPanel;
     import MfrCreateAdvancedSettingsPage            = TwnsMfrCreateAdvancedSettingsPage.MfrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
-    import MfrCreatePlayerInfoPage                  = TwnsMfrCreatePlayerInfoPage.MfrCreatePlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class MfrCreateSettingsPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: MfrCreateSettingsPanel;
-
+    export type OpenData = void;
+    export class MfrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupNavigator!           : eui.Group;
         private readonly _labelMultiPlayer!         : TwnsUiLabel.UiLabel;
         private readonly _labelFreeMode!            : TwnsUiLabel.UiLabel;
@@ -52,6 +47,10 @@ namespace TwnsMfrCreateSettingsPanel {
         private readonly _labelRoomSettings!        : TwnsUiLabel.UiLabel;
 
         private readonly _groupSettings!            : eui.Group;
+        private readonly _groupChooseCo!            : eui.Group;
+        private readonly _labelChooseCo!            : TwnsUiLabel.UiLabel;
+        private readonly _btnChooseCo!              : TwnsUiButton.UiButton;
+
         private readonly _groupChoosePlayerIndex!   : eui.Group;
         private readonly _labelChoosePlayerIndex!   : TwnsUiLabel.UiLabel;
         private readonly _sclPlayerIndex!           : TwnsUiScrollList.UiScrollList<DataForPlayerIndexRenderer>;
@@ -69,37 +68,22 @@ namespace TwnsMfrCreateSettingsPanel {
         private _timeoutIdForBtnConfirm : number | null = null;
         private _isTabInitialized       = false;
 
-        public static show(): void {
-            if (!MfrCreateSettingsPanel._instance) {
-                MfrCreateSettingsPanel._instance = new MfrCreateSettingsPanel();
-            }
-            MfrCreateSettingsPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MfrCreateSettingsPanel._instance) {
-                await MfrCreateSettingsPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiFreeRoom/MfrCreateSettingsPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
+                { ui: this._btnChooseCo,    callback: this._onTouchedBtnChooseCo },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MfrCreateSelfCoIdChanged,   callback: this._onNotifyMfrCreateSelfCoIdChanged },
                 { type: NotifyType.MsgMfrCreateRoom,           callback: this._onNotifyMsgMfrCreateRoom },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
             this._sclSkinId.setItemRenderer(SkinIdRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._isTabInitialized = false;
             this._tabSettings.bindData([
                 {
@@ -112,11 +96,11 @@ namespace TwnsMfrCreateSettingsPanel {
                     pageClass   : MfrCreateAdvancedSettingsPage,
                     pageData    : null,
                 },
-                {
-                    tabItemData : { name: Lang.getText(LangTextType.B0224) },
-                    pageClass   : MfrCreatePlayerInfoPage,
-                    pageData    : null,
-                },
+                // {
+                //     tabItemData : { name: Lang.getText(LangTextType.B0224) },
+                //     pageClass   : TwnsMfrCreatePlayerInfoPage.MfrCreatePlayerInfoPage,
+                //     pageData    : null,
+                // },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
@@ -125,16 +109,14 @@ namespace TwnsMfrCreateSettingsPanel {
             ]);
             this._isTabInitialized = true;
 
-            this._showOpenAnimation();
-
             this._updateComponentsForLanguage();
             this._initSclPlayerIndex();
             this._initSclSkinId();
+            this._updateBtnChooseCo();
             this._btnConfirm.enabled = true;
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
             this._clearTimeoutForBtnConfirm();
         }
 
@@ -143,20 +125,38 @@ namespace TwnsMfrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(): void {
             this.close();
-            MfrMainMenuPanel.show();
-            TwnsLobbyTopPanel.LobbyTopPanel.show();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMainMenuPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
         private _onTouchedBtnConfirm(): void {
-            const data = MfrCreateModel.getData();
-            MfrProxy.reqCreateRoom(data);
+            MfrProxy.reqCreateRoom(MfrCreateModel.getData());
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
         }
+        private _onTouchedBtnChooseCo(): void {
+            const currentCoId = MfrCreateModel.getSelfCoId();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                currentCoId,
+                availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                    warRule         : MfrCreateModel.getWarRule(),
+                    playerIndex     : MfrCreateModel.getSelfPlayerIndex(),
+                    configVersion   : MfrCreateModel.getConfigVersion(),
+                }),
+                callbackOnConfirm   : (newCoId) => {
+                    if (newCoId !== currentCoId) {
+                        MfrCreateModel.setSelfCoId(newCoId);
+                    }
+                },
+            });
+        }
 
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
+        }
+        private _onNotifyMfrCreateSelfCoIdChanged(): void {
+            this._updateBtnChooseCo();
         }
         private _onNotifyMsgMfrCreateRoom(): void {
             FloatText.show(Lang.getText(LangTextType.A0015));
@@ -186,10 +186,16 @@ namespace TwnsMfrCreateSettingsPanel {
             this._labelFreeMode.text            = Lang.getText(LangTextType.B0557);
             this._labelCreateRoom.text          = Lang.getText(LangTextType.B0000);
             this._labelRoomSettings.text        = Lang.getText(LangTextType.B0571);
+            this._labelChooseCo.text            = Lang.getText(LangTextType.B0145);
             this._labelChoosePlayerIndex.text   = Lang.getText(LangTextType.B0572);
             this._labelChooseSkinId.text        = Lang.getText(LangTextType.B0586);
             this._btnBack.label                 = Lang.getText(LangTextType.B0146);
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
+        }
+
+        private _updateBtnChooseCo(): void {
+            const cfg               = ConfigManager.getCoBasicCfg(MfrCreateModel.getConfigVersion(), MfrCreateModel.getSelfCoId());
+            this._btnChooseCo.label = cfg.name;
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
@@ -344,7 +350,7 @@ namespace TwnsMfrCreateSettingsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Opening/closing animations.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
@@ -370,36 +376,37 @@ namespace TwnsMfrCreateSettingsPanel {
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupSettings,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnConfirm,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupTab,
-                    beginProps  : { alpha: 1, },
-                    endProps    : { alpha: 0, },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
             });
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupSettings,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnConfirm,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 1, },
+                endProps    : { alpha: 0, },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -446,6 +453,15 @@ namespace TwnsMfrCreateSettingsPanel {
                     FloatText.show(Lang.getText(LangTextType.A0204));
                 } else {
                     creator.setSelfPlayerIndex(playerIndex);
+
+                    const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
+                        warRule         : creator.getWarRule(),
+                        playerIndex,
+                        configVersion   : MfrCreateModel.getConfigVersion(),
+                    });
+                    if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
+                        creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
+                    }
                 }
             }
         }

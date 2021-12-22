@@ -128,7 +128,7 @@ namespace TwnsMfrCreateAdvancedSettingsPage {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                CommonHelpPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
                 });

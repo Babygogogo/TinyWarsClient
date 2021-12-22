@@ -26,6 +26,7 @@
 // import TwnsCcrMainMenuPanel                 from "./CcrMainMenuPanel";
 // import TwnsCcrRoomInfoPanel                 from "./CcrRoomInfoPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCcrMyRoomListPanel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -34,12 +35,8 @@ namespace TwnsCcrMyRoomListPanel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
-    export class CcrMyRoomListPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: CcrMyRoomListPanel;
-
+    export type OpenData = void;
+    export class CcrMyRoomListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
@@ -58,25 +55,7 @@ namespace TwnsCcrMyRoomListPanel {
         private _hasReceivedData    = false;
         private _isTabInitialized   = false;
 
-        public static show(): void {
-            if (!CcrMyRoomListPanel._instance) {
-                CcrMyRoomListPanel._instance = new CcrMyRoomListPanel();
-            }
-            CcrMyRoomListPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (CcrMyRoomListPanel._instance) {
-                await CcrMyRoomListPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/coopCustomRoom/CcrMyRoomListPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.CcrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyCcrJoinedPreviewingRoomIdChanged },
@@ -97,9 +76,8 @@ namespace TwnsCcrMyRoomListPanel {
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listRoom.setItemRenderer(RoomRenderer);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._hasReceivedData   = false;
             this._isTabInitialized  = false;
             await this._initTabSettings();
@@ -109,9 +87,8 @@ namespace TwnsCcrMyRoomListPanel {
 
             CcrProxy.reqCcrGetJoinedRoomInfoList();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -196,16 +173,16 @@ namespace TwnsCcrMyRoomListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsCcrMainMenuPanel.CcrMainMenuPanel.show();
-            TwnsLobbyTopPanel.LobbyTopPanel.show();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrMainMenuPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
 
         private _onTouchedBtnNextStep(): void {
             const roomId = CcrJoinModel.getJoinedPreviewingRoomId();
             if (roomId != null) {
                 this.close();
-                TwnsCcrRoomInfoPanel.CcrRoomInfoPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrRoomInfoPanel, {
                     roomId,
                 });
             }
@@ -347,7 +324,7 @@ namespace TwnsCcrMyRoomListPanel {
             return roomId == null ? null : await CcrModel.createDataForCommonWarAdvancedSettingsPage(roomId);
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
@@ -373,36 +350,37 @@ namespace TwnsCcrMyRoomListPanel {
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupRoomList,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnNextStep,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupTab,
-                    beginProps  : { alpha: 1, },
-                    endProps    : { alpha: 0, },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupRoomList,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnNextStep,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 1, },
+                endProps    : { alpha: 0, },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -422,14 +400,12 @@ namespace TwnsCcrMyRoomListPanel {
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.CcrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyCcrJoinedPreviewingRoomIdChanged },
@@ -457,13 +433,6 @@ namespace TwnsCcrMyRoomListPanel {
 
         private _onTouchTapBtnChoose(): void {
             CcrJoinModel.setJoinedPreviewingRoomId(this._getData().roomId);
-        }
-
-        private _onTouchTapBtnNext(): void {
-            CcrMyRoomListPanel.hide();
-            TwnsCcrRoomInfoPanel.CcrRoomInfoPanel.show({
-                roomId  : this._getData().roomId,
-            });
         }
 
         private _updateState(): void {

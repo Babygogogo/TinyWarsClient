@@ -15,24 +15,20 @@
 // import WarEventHelper               from "../model/WarEventHelper";
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeConditionModifyPanel4 {
-    import WeConditionTypeListPanel = TwnsWeConditionTypeListPanel.WeConditionTypeListPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
 
-    type OpenDataForWeConditionModifyPanel4 = {
+    export type OpenData = {
+        war         : TwnsBwWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
     /** WecTurnIndexRemainderEqualTo */
-    export class WeConditionModifyPanel4 extends TwnsUiPanel.UiPanel<OpenDataForWeConditionModifyPanel4> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeConditionModifyPanel4;
-
+    export class WeConditionModifyPanel4 extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
         private readonly _btnType!          : TwnsUiButton.UiButton;
@@ -46,28 +42,7 @@ namespace TwnsWeConditionModifyPanel4 {
         private readonly _labelRemainder!   : TwnsUiLabel.UiLabel;
         private readonly _inputRemainder!   : TwnsUiTextInput.UiTextInput;
 
-        public static show(openData: OpenDataForWeConditionModifyPanel4): void {
-            if (!WeConditionModifyPanel4._instance) {
-                WeConditionModifyPanel4._instance = new WeConditionModifyPanel4();
-            }
-            WeConditionModifyPanel4._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (WeConditionModifyPanel4._instance) {
-                await WeConditionModifyPanel4._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeConditionModifyPanel4.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -78,9 +53,16 @@ namespace TwnsWeConditionModifyPanel4 {
                 { ui: this._inputDivider,   callback: this._onFocusOutInputDivider, eventType: egret.FocusEvent.FOCUS_OUT },
                 { ui: this._inputRemainder, callback: this._onFocusOutInputRemainder, eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
-            this._inputDivider.restrict = `0-9`;
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
+            this._inputDivider.restrict = `0-9`;
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -88,9 +70,10 @@ namespace TwnsWeConditionModifyPanel4 {
         }
         private _onTouchedBtnType(): void {
             const openData = this._getOpenData();
-            WeConditionTypeListPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.WeConditionTypeListPanel, {
                 fullData    : openData.fullData,
                 condition   : openData.condition,
+                war         : openData.war,
             });
         }
         private _onTouchedGroupIsNot(): void {
@@ -147,7 +130,7 @@ namespace TwnsWeConditionModifyPanel4 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const condition         = openData.condition;
-            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition);
+            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition, openData.war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;

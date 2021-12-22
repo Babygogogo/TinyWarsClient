@@ -384,6 +384,17 @@ namespace TwnsBwUnitMap {
             }
         }
 
+        public removeUnitById(unitId: number, removeView: boolean): void {
+            const unit = this.getUnitById(unitId);
+            if (unit) {
+                if (unit.getLoaderUnitId() == null) {
+                    this.removeUnitOnMap(unit.getGridIndex(), removeView);
+                } else {
+                    this.removeUnitLoaded(unitId);
+                }
+            }
+        }
+
         private _forEachUnit(func: (unit: TwnsBwUnit.BwUnit) => any): void {
             this._forEachUnitOnMap(func);
             this._forEachUnitLoaded(func);

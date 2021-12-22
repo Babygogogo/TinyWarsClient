@@ -8,6 +8,7 @@
 // import SoundManager         from "./SoundManager";
 // import Types                from "./Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace CompatibilityHelpers {
     import LangTextType     = TwnsLangTextType.LangTextType;
 
@@ -117,7 +118,7 @@ namespace CompatibilityHelpers {
     }
 
     function showErrorText(text: string): void {
-        TwnsCommonErrorPanel.CommonErrorPanel.show({
+        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonErrorPanel, {
             content: text,
         });
         ChatProxy.reqChatAddMessage(

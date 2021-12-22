@@ -81,7 +81,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             McrCreateModel.resetDataByWarRuleId(this._initialWarRuleId);
         }
         private _onTouchedBtnCustomize(): void {
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     McrCreateModel.setCustomWarRuleId();
@@ -159,7 +159,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
-                CommonHelpPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title   : `CO`,
                     content : Lang.getText(LangTextType.R0004),
                 });
@@ -250,7 +250,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
         }
 
         private _onTouchedBtnCustom(): void {
-            CommonConfirmPanel.show({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0129),
                 callback: () => {
                     McrCreateModel.setCustomWarRuleId();
@@ -323,7 +323,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => TwnsCommonBanCoPanel.CommonBanCoPanel.show({
+            this._callbackForTouchLabelValue    = () => TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
                 playerIndex,
                 configVersion,
                 fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
@@ -334,12 +334,12 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
                     const callback = () => {
                         McrCreateModel.setBannedCoIdArray(playerIndex, bannedCoIdSet);
                         Notify.dispatch(NotifyType.McrCreateBannedCoIdArrayChanged);
-                        TwnsCommonBanCoPanel.CommonBanCoPanel.hide();
+                        TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBanCoPanel);
                     };
                     if ((selfCoId == null) || (!bannedCoIdSet.has(selfCoId))) {
                         callback();
                     } else {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0057),
                             callback: () => {
                                 McrCreateModel.setSelfCoId(CommonConstants.CoEmptyId);

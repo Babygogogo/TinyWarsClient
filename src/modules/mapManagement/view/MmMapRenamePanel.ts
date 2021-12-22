@@ -20,15 +20,10 @@ namespace TwnsMmMapRenamePanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
 
-    type OpenData = {
+    export type OpenData = {
         mapId   : number;
     };
     export class MmMapRenamePanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MmMapRenamePanel;
-
         private readonly _inputChinese!     : TwnsUiTextInput.UiTextInput;
         private readonly _inputEnglish!     : TwnsUiTextInput.UiTextInput;
         private readonly _labelTip!         : TwnsUiLabel.UiLabel;
@@ -38,29 +33,7 @@ namespace TwnsMmMapRenamePanel {
         private readonly _btnModify!        : TwnsUiButton.UiButton;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
 
-        public static show(openData: OpenData): void {
-            if (!MmMapRenamePanel._instance) {
-                MmMapRenamePanel._instance = new MmMapRenamePanel();
-            }
-
-            MmMapRenamePanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (MmMapRenamePanel._instance) {
-                await MmMapRenamePanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapManagement/MmMapRenamePanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -68,11 +41,17 @@ namespace TwnsMmMapRenamePanel {
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ]);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
 
             this._inputChinese.maxChars = CommonConstants.MapMaxNameLength;
             this._inputEnglish.maxChars = CommonConstants.MapMaxNameLength;
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {

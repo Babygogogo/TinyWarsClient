@@ -28,25 +28,19 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsChatPanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ChatCategory         = Types.ChatMessageToCategory;
     import ChatChannel          = Types.ChatChannel;
     import NetMessage           = ProtoTypes.NetMessage;
 
-    type OpenDataForChatPanel = {
+    export type OpenData = {
         toUserId?       : number | null;
         toMcrRoomId?    : number;
         toMfrRoomId?    : number;
         toCcrRoomId?    : number;
     };
-    export class ChatPanel extends TwnsUiPanel.UiPanel<OpenDataForChatPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: ChatPanel;
-
+    export class ChatPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
 
         private readonly _groupChannel!     : eui.Group;
@@ -63,31 +57,7 @@ namespace TwnsChatPanel {
         private _dataForListChat: DataForChatPageRenderer[] = [];
         private _selectedIndex  : number | null = null;
 
-        public static show(openData: OpenDataForChatPanel): void {
-            if (!ChatPanel._instance) {
-                ChatPanel._instance = new ChatPanel();
-            }
-            ChatPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (ChatPanel._instance) {
-                await ChatPanel._instance.close();
-            }
-        }
-        public static getIsOpening(): boolean {
-            const instance = ChatPanel._instance;
-            return instance ? instance.getIsOpening() : false;
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/chat/ChatPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected override _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgChatAddMessage,      callback: this._onMsgChatAddMessage },
@@ -98,26 +68,23 @@ namespace TwnsChatPanel {
                 { ui: this._btnRefresh, callback: this._onTouchedBtnRefresh },
                 { ui: this._btnSend,    callback: this._onTouchedBtnSend },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listChat.setItemRenderer(ChatPageRenderer);
             this._listMessage.setItemRenderer(MessageRenderer);
             this._inputMessage.maxChars = CommonConstants.ChatMessageMaxLength;
 
-            this._showOpenAnimation();
             this._updateComponentsForLanguage();
-
+        }
+        protected override async _updateOnOpenDataChanged(): Promise<void> {
             this._dataForListChat = await this._createDataForListChat();
             this._listChat.bindData(this._dataForListChat);
             this.setSelectedIndex(this._getDefaultSelectedIndex());
-
-            Notify.dispatch(NotifyType.ChatPanelOpened);
         }
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
+        protected override _onClosing(): void {
             this._dataForListChat.length    = 0;
             this._selectedIndex             = null;
-
-            Notify.dispatch(NotifyType.ChatPanelClosed);
         }
 
         public setSelectedIndex(newIndex: number): void {
@@ -227,7 +194,7 @@ namespace TwnsChatPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _showOpenAnimation(): void {
+        protected override async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -248,31 +215,32 @@ namespace TwnsChatPanel {
                 beginProps  : { alpha: 0, bottom: -40 },
                 endProps    : { alpha: 1, bottom: 0 },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve) => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupChannel,
-                    beginProps  : { alpha: 1, left: 0 },
-                    endProps    : { alpha: 0, left: -40 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._groupMessage,
-                    beginProps  : { alpha: 1, right: 0 },
-                    endProps    : { alpha: 0, right: -40 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupInput,
-                    beginProps  : { alpha: 1, bottom: 0 },
-                    endProps    : { alpha: 0, bottom: -40 },
-                });
+        protected override async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+            Helpers.resetTween({
+                obj         : this._groupChannel,
+                beginProps  : { alpha: 1, left: 0 },
+                endProps    : { alpha: 0, left: -40 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupMessage,
+                beginProps  : { alpha: 1, right: 0 },
+                endProps    : { alpha: 0, right: -40 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupInput,
+                beginProps  : { alpha: 1, bottom: 0 },
+                endProps    : { alpha: 0, bottom: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -706,10 +674,10 @@ namespace TwnsChatPanel {
                 if (userId !== UserModel.getSelfUserId()) {
                     const info = await UserModel.getUserPublicInfo(userId);
                     if (info) {
-                        CommonConfirmPanel.show({
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getFormattedText(LangTextType.F0025, info.nickname),
                             callback: () => {
-                                ChatPanel.show({ toUserId: userId });
+                                TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: userId });
                             },
                         });
                     }

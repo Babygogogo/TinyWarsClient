@@ -48,15 +48,14 @@ namespace TwnsBwWar {
         public abstract getMapId(): number | null;
         public abstract getIsNeedExecutedAction(): boolean;
         public abstract getIsNeedSeedRandom(): boolean;
-        public abstract getIsWarMenuPanelOpening(): boolean;
         public abstract getCanCheat(): boolean;
         public abstract getPlayerManager(): TwnsBwPlayerManager.BwPlayerManager;
         public abstract getField(): TwnsBwField.BwField;
         public abstract getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager;
         public abstract getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager;
         public abstract getSettingsBootTimerParams(): number[];
-        public abstract getIsRunTurnPhaseWithExtraData(): boolean;
-        public abstract updateTilesAndUnitsOnVisibilityChanged(): void;
+        public abstract getIsExecuteActionsWithExtraData(): boolean;
+        public abstract updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void;
         public abstract getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | null>;
         public abstract getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | null>;
         public abstract getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | null>;
@@ -195,12 +194,14 @@ namespace TwnsBwWar {
         public startRunningView(): BwWar {
             this.getView().startRunningView();
             this.getField().startRunningView();
+            this.getWeatherManager().startRunningView();
 
             return this;
         }
         public stopRunning(): BwWar {
             this.getField().stopRunning();
             this.getView().stopRunning();
+            this.getWeatherManager().stopRunning();
 
             this._setIsRunning(false);
 
@@ -280,6 +281,9 @@ namespace TwnsBwWar {
             return this.getCommonSettingManager().getWarRule();
         }
 
+        public getPlayersCountUnneutral(): number {
+            return this.getPlayerManager().getTotalPlayersCount(false);
+        }
         public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
@@ -309,7 +313,7 @@ namespace TwnsBwWar {
         public getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {
             return this.getField().getActionPlanner();
         }
-        public getGridVisionEffect(): TwnsBwGridVisualEffect.BwGridVisualEffect {
+        public getGridVisualEffect(): TwnsBwGridVisualEffect.BwGridVisualEffect {
             return this.getField().getGridVisualEffect();
         }
         public getCursor(): TwnsBwCursor.BwCursor {

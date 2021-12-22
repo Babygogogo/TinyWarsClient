@@ -14,19 +14,15 @@
 // import UserModel                from "../../user/model/UserModel";
 // import WwProxy                  from "../model/WwProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWwHandleRequestDetailPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    type OpenDataForMcrWatchHandleRequestDetailPanel = {
+    export type OpenData = {
         watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     };
-    export class WwHandleRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrWatchHandleRequestDetailPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WwHandleRequestDetailPanel;
-
+    export class WwHandleRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelYes!                 : TwnsUiLabel.UiLabel;
         private readonly _labelNo!                  : TwnsUiLabel.UiLabel;
@@ -38,27 +34,7 @@ namespace TwnsWwHandleRequestDetailPanel {
 
         private _dataForListPlayer  : DataForRequesterRenderer[] | null = null;
 
-        public static show(openData: OpenDataForMcrWatchHandleRequestDetailPanel): void {
-            if (!WwHandleRequestDetailPanel._instance) {
-                WwHandleRequestDetailPanel._instance = new WwHandleRequestDetailPanel();
-            }
-            WwHandleRequestDetailPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WwHandleRequestDetailPanel._instance) {
-                await WwHandleRequestDetailPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/watchWar/WwHandleRequestDetailPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -66,13 +42,16 @@ namespace TwnsWwHandleRequestDetailPanel {
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
-            this._listPlayer.setItemRenderer(RequesterRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._listPlayer.setItemRenderer(RequesterRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._dataForListPlayer = this._generateDataForListPlayer();
             this._updateView();
         }
-
-        protected async _onClosed(): Promise<void> {
+        protected _onClosing(): void {
             this._dataForListPlayer = null;
         }
 
@@ -93,6 +72,12 @@ namespace TwnsWwHandleRequestDetailPanel {
         }
 
         private _onTouchedBtnConfirm(): void {
+            const warId = this._getOpenData().watchInfo.warInfo?.warId;
+            if (warId == null) {
+                this.close();
+                return;
+            }
+
             const acceptUserIds : number[] = [];
             const declineUserIds: number[] = [];
             for (const data of this._dataForListPlayer || []) {
@@ -102,9 +87,13 @@ namespace TwnsWwHandleRequestDetailPanel {
                     declineUserIds.push(data.userId);
                 }
             }
-            const warId = this._getOpenData().watchInfo.warInfo?.warId;
-            (warId != null) && (WwProxy.reqWatchHandleRequest(warId, acceptUserIds, declineUserIds));
-            this.close();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                content : Lang.getFormattedText(LangTextType.F0082, acceptUserIds.length, declineUserIds.length),
+                callback: () => {
+                    WwProxy.reqWatchHandleRequest(warId, acceptUserIds, declineUserIds);
+                    this.close();
+                },
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +126,7 @@ namespace TwnsWwHandleRequestDetailPanel {
                         userId,
                         isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
                         isOpponent      : playerInfoList.some(v => v.userId === userId),
-                        isAccept        : false,
+                        isAccept        : true,
                     });
                 }
             }

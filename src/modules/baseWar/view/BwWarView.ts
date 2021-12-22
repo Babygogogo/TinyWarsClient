@@ -9,6 +9,7 @@
 // import TwnsNotifyType           from "../../tools/notify/NotifyType";
 // import TwnsUiZoomableComponent  from "../../tools/ui/UiZoomableComponent";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwWarView {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import GridIndex            = Types.GridIndex;
@@ -19,6 +20,7 @@ namespace TwnsBwWarView {
 
     export class BwWarView extends eui.Group {
         private _fieldContainer     = new TwnsUiZoomableComponent.UiZoomableComponent();
+        private _weatherContainer   = new eui.Group();
 
         private _isShowingVibration = false;
         private _vibrationMaxOffset = 4;
@@ -35,25 +37,33 @@ namespace TwnsBwWarView {
         public constructor() {
             super();
 
-            this.percentWidth           = 100;
-            this.percentHeight          = 100;
+            this.percentWidth   = 100;
+            this.percentHeight  = 100;
 
-            this._fieldContainer.top    = 0;
-            this._fieldContainer.bottom = 0;
-            this._fieldContainer.left   = 0;
-            this._fieldContainer.right  = 0;
-            this._fieldContainer.setBoundarySpacings(PADDING_HORIZONTAL, PADDING_HORIZONTAL, PADDING_VERTICAL, PADDING_VERTICAL);
-            this.addChild(this._fieldContainer);
+            const fieldContainer = this._fieldContainer;
+            resetContainer(fieldContainer);
+            fieldContainer.setBoundarySpacings(PADDING_HORIZONTAL, PADDING_HORIZONTAL, PADDING_VERTICAL, PADDING_VERTICAL);
+            this.addChild(fieldContainer);
+
+            const weatherContainer          = this._weatherContainer;
+            weatherContainer.touchChildren  = false;
+            weatherContainer.touchEnabled   = false;
+            weatherContainer.touchThrough   = true;
+            resetContainer(weatherContainer);
+            this.addChild(weatherContainer);
         }
 
         public init(war: BwWar): void {
-            const gridSize  = CommonConstants.GridSize;
-            const mapSize   = war.getTileMap().getMapSize();
-            this._fieldContainer.removeAllContents();
-            this._fieldContainer.setContentWidth(mapSize.width * gridSize.width);
-            this._fieldContainer.setContentHeight(mapSize.height * gridSize.height);
-            this._fieldContainer.addContent(war.getField().getView());
-            this._fieldContainer.setContentScale(0, true);
+            const gridSize          = CommonConstants.GridSize;
+            const mapSize           = war.getTileMap().getMapSize();
+            const fieldContainer    = this._fieldContainer;
+            fieldContainer.removeAllContents();
+            fieldContainer.setContentWidth(mapSize.width * gridSize.width);
+            fieldContainer.setContentHeight(mapSize.height * gridSize.height);
+            fieldContainer.addContent(war.getField().getView());
+            fieldContainer.setContentScale(0, true);
+
+            this._weatherContainer.addChild(war.getWeatherManager().getView());
         }
         public fastInit(war: BwWar): void {
             // nothing to do
@@ -89,12 +99,12 @@ namespace TwnsBwWarView {
                 (gridIndex.y + 0.5) * gridSize.height,
             );
             const newX      = Math.min(
-                Math.max(currPoint.x, 120),
-                stage.stageWidth - 120,
+                Math.max(currPoint.x, PADDING_HORIZONTAL),
+                stage.stageWidth - PADDING_HORIZONTAL,
             );
             const newY      = Math.min(
-                Math.max(currPoint.y, 120),
-                stage.stageHeight - 120,
+                Math.max(currPoint.y, PADDING_VERTICAL),
+                stage.stageHeight - PADDING_VERTICAL,
             );
             const newPoint  = this._getRevisedContentPointForMoveGrid(gridIndex, newX, newY);
             container.tweenContentToPoint(newPoint.x, newPoint.y, false);
@@ -134,9 +144,8 @@ namespace TwnsBwWarView {
             }, this, duration);
         }
         public stopVibration(): void {
-            this._isShowingVibration    = false;
-            this.x                      = 0;
-            this.y                      = 0;
+            this._isShowingVibration = false;
+            resetContainer(this._fieldContainer);
 
             if (this._vibrationTimeoutId != null) {
                 egret.clearTimeout(this._vibrationTimeoutId);
@@ -145,9 +154,14 @@ namespace TwnsBwWarView {
         }
         private _checkAndVibrate(): void {
             if (this._isShowingVibration) {
-                const maxOffset = this._vibrationMaxOffset;
-                this.x          = Math.random() * maxOffset * (Math.random() > 0.5 ? 1 : -1);
-                this.y          = Math.random() * maxOffset * (Math.random() > 0.5 ? 1 : -1);
+                const maxOffset         = this._vibrationMaxOffset;
+                const offsetX           = Math.random() * maxOffset * (Math.random() > 0.5 ? 1 : -1);
+                const offsetY           = Math.random() * maxOffset * (Math.random() > 0.5 ? 1 : -1);
+                const fieldContainer    = this._fieldContainer;
+                fieldContainer.top      = offsetY;
+                fieldContainer.bottom   = -offsetY;
+                fieldContainer.left     = offsetX;
+                fieldContainer.right    = -offsetX;
             }
         }
 
@@ -166,6 +180,13 @@ namespace TwnsBwWarView {
         private _onEnterFrame(): void {
             this._checkAndVibrate();
         }
+    }
+
+    function resetContainer(container: eui.UIComponent): void {
+        container.left      = 0;
+        container.right     = 0;
+        container.top       = 0;
+        container.bottom    = 0;
     }
 }
 

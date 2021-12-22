@@ -21,6 +21,7 @@ namespace TwnsBwUnit {
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
     import UnitType             = Types.UnitType;
+    import UnitAiMode           = Types.UnitAiMode;
     import MoveType             = Types.MoveType;
     import GridIndex            = Types.GridIndex;
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
@@ -47,6 +48,7 @@ namespace TwnsBwUnit {
         private _hasLoadedCo?               : boolean;
         private _loaderUnitId?              : number | null;
         private _primaryWeaponCurrentAmmo?  : number | null;
+        private _aiMode?                    : UnitAiMode | null;
 
         private readonly _view              = new TwnsBwUnitView.BwUnitView();
         private _war?                       : TwnsBwWar.BwWar;
@@ -88,6 +90,7 @@ namespace TwnsBwUnit {
             this.setFlareCurrentAmmo(unitData.flareCurrentAmmo ?? (unitTemplateCfg.flareMaxAmmo ?? null));
             this.setCurrentProduceMaterial(unitData.currentProduceMaterial ?? (unitTemplateCfg.maxProduceMaterial ?? null));
             this.setCurrentBuildMaterial(unitData.currentBuildMaterial ?? (unitTemplateCfg.maxBuildMaterial ?? null));
+            this.setAiMode(unitData.aiMode ?? UnitAiMode.Normal);
 
             this.getView().init(this);
         }
@@ -153,6 +156,9 @@ namespace TwnsBwUnit {
 
             const loaderUnitId = this.getLoaderUnitId();
             (loaderUnitId != null) && (data.loaderUnitId = loaderUnitId);
+
+            const aiMode = this.getAiMode();
+            (aiMode != UnitAiMode.Normal) && (data.aiMode = aiMode);
 
             return data;
         }
@@ -396,7 +402,12 @@ namespace TwnsBwUnit {
                 : null;
         }
 
-        public getAttackModifierByCo(selfGridIndex: GridIndex): number {
+        public getAttackModifierByCo({ selfGridIndex, targetUnit, targetGridIndex, isCounter }: {
+            selfGridIndex   : GridIndex;
+            targetUnit      : BwUnit | null;
+            targetGridIndex : GridIndex;
+            isCounter       : boolean;
+        }): number {
             const player = this.getPlayer();
             if (player.getCoId() === CommonConstants.CoEmptyId) {
                 return 0;
@@ -407,7 +418,8 @@ namespace TwnsBwUnit {
             const coZoneRadius              = player.getCoZoneRadius();
             const fund                      = player.getFund();
             const tileMap                   = this.getWar().getTileMap();
-            const selfTileType              = tileMap.getTile(selfGridIndex).getType();
+            const selfTile                  = tileMap.getTile(selfGridIndex);
+            const selfTileType              = selfTile.getType();
             const playerIndex               = this.getPlayerIndex();
             const promotion                 = this.getCurrentPromotion();
             const hasLoadedCo               = this.getHasLoadedCo();
@@ -496,13 +508,61 @@ namespace TwnsBwUnit {
                         }
                     }
                 }
+
+                {
+                    const cfg = skillCfg.selfOffenseBonusByTileDefense;
+                    if ((cfg)                                                                           &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex               : selfGridIndex,
+                            coSkillAreaType         : cfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius,
+                        })))
+                    ) {
+                        modifier += cfg[2] / 100 * selfTile.getDefenseAmount();
+                    }
+                }
+
+                {
+                    const cfg = skillCfg.selfOffenseBonusByEnemyTileDefense;
+                    if ((cfg)                                                                           &&
+                        (targetUnit)                                                                    &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex               : selfGridIndex,
+                            coSkillAreaType         : cfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius,
+                        })))
+                    ) {
+                        modifier += cfg[2] / 100 * tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit);
+                    }
+                }
+
+                {
+                    const cfg = skillCfg.selfOffenseBonusByCounter;
+                    if ((cfg)                                                                           &&
+                        (isCounter)                                                                     &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex               : selfGridIndex,
+                            coSkillAreaType         : cfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius,
+                        })))
+                    ) {
+                        modifier += cfg[2];
+                    }
+                }
             }
 
             return modifier;
         }
         public getAttackModifierByWeather(selfGridIndex: GridIndex): number {
             const war               = this.getWar();
-            const offenseBonusCfg   = war.getWeatherManager().getCurrentWeatherCfg().offenseBonus;
+            const weatherManager    = war.getWeatherManager();
+            const offenseBonusCfg   = weatherManager.getCurrentWeatherCfg().offenseBonus;
             if (offenseBonusCfg == null) {
                 return 0;
             }
@@ -518,15 +578,17 @@ namespace TwnsBwUnit {
                 return 0;
             }
 
+            const weatherType               = weatherManager.getCurrentWeatherType();
             const hasLoadedCo               = this.getHasLoadedCo();
             const player                    = this.getPlayer();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of this.getPlayer().getCoCurrentSkills()) {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfUnitIgnoreWeather;
-                if ((cfg)                                                                           &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))  &&
+                if ((cfg)                                                                               &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))          &&
+                    (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))      &&
+                    (ConfigManager.checkIsWeatherTypeInCategory(configVersion, weatherType, cfg[3]))    &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -549,17 +611,14 @@ namespace TwnsBwUnit {
             const configVersion             = this.getConfigVersion();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
-            const selfTileType              = this.getWar().getTileMap().getTile(selfGridIndex).getType();
+            const selfTile                  = this.getWar().getTileMap().getTile(selfGridIndex);
+            const selfTileType              = selfTile.getType();
             const promotion                 = this.getCurrentPromotion();
             const hasLoadedCo               = this.getHasLoadedCo();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifier = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
                 const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
-                if (skillCfg == null) {
-                    throw Helpers.newError(`Empty skillCfg.`);
-                }
-
                 {
                     const cfg = skillCfg.selfDefenseBonus;
                     if ((cfg)                                                                           &&
@@ -589,6 +648,21 @@ namespace TwnsBwUnit {
                         })))
                     ) {
                         modifier += cfg[3];
+                    }
+                }
+
+                {
+                    const cfg = skillCfg.selfDefenseBonusByTileDefense;
+                    if ((cfg)                                                                           &&
+                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                        ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                            gridIndex               : selfGridIndex,
+                            coSkillAreaType         : cfg[0],
+                            getCoGridIndexArrayOnMap,
+                            coZoneRadius,
+                        })))
+                    ) {
+                        modifier += cfg[2] / 100 * selfTile.getDefenseAmount();
                     }
                 }
             }
@@ -767,8 +841,9 @@ namespace TwnsBwUnit {
                     && ((!targetUnit.getIsDiving()) || (this.checkCanAttackDivingUnits()))
                     && (this.getBaseDamage(armorType) != null);
             } else {
-                const armorType = war.getTileMap().getTile(targetGridIndex).getArmorType();
-                if (armorType == null) {
+                const targetTile    = war.getTileMap().getTile(targetGridIndex);
+                const armorType     = targetTile.getArmorType();
+                if ((armorType == null) || (targetTile.getTeamIndex() === teamIndex)) {
                     return false;
                 } else {
                     return this.getBaseDamage(armorType) != null;
@@ -1135,7 +1210,8 @@ namespace TwnsBwUnit {
         }
         private _getMoveRangeModifierByWeather(): number {
             const war               = this.getWar();
-            const moveRangeBonus    = war.getWeatherManager().getCurrentWeatherCfg().movementBonus;
+            const weatherManager    = war.getWeatherManager();
+            const moveRangeBonus    = weatherManager.getCurrentWeatherCfg().movementBonus;
             if (moveRangeBonus == null) {
                 return 0;
             }
@@ -1146,21 +1222,23 @@ namespace TwnsBwUnit {
             const selfTileType  = war.getTileMap().getTile(selfGridIndex).getType();
             const modifier      = moveRangeBonus[2];
             if ((!modifier)                                                                                 ||
-                (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, moveRangeBonus[0]))     ||
+                (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, moveRangeBonus[0]))      ||
                 (!ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, moveRangeBonus[1]))
             ) {
                 return 0;
             }
 
+            const weatherType               = weatherManager.getCurrentWeatherType();
             const hasLoadedCo               = this.getHasLoadedCo();
             const player                    = this.getPlayer();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of this.getPlayer().getCoCurrentSkills()) {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfUnitIgnoreWeather;
-                if ((cfg)                                                                           &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))  &&
+                if ((cfg)                                                                               &&
+                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))          &&
+                    (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))      &&
+                    (ConfigManager.checkIsWeatherTypeInCategory(configVersion, weatherType, cfg[3]))    &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -1382,6 +1460,30 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg().repairAmountForLoadedUnits ?? null;
         }
 
+        public getNormalizedRepairHpModifier(): number {
+            const player                    = this.getPlayer();
+            const configVersion             = this.getConfigVersion();
+            const gridIndex                 = this.getGridIndex();
+            const coZoneRadius              = player.getCoZoneRadius();
+            const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
+            let totalModifier               = 0;
+            for (const skillId of player.getCoCurrentSkills()) {
+                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfRepairAmountBonus;
+                if ((cfg)                                               &&
+                    (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
+                        gridIndex,
+                        coSkillAreaType         : cfg[0],
+                        getCoGridIndexArrayOnMap,
+                        coZoneRadius,
+                    }))
+                ) {
+                    totalModifier += cfg[2];
+                }
+            }
+
+            return totalModifier;
+        }
+
         public setLoaderUnitId(loaderUnitId: number | null): void {
             this._loaderUnitId = loaderUnitId;
         }
@@ -1412,8 +1514,8 @@ namespace TwnsBwUnit {
                 const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
                 const normalizedRepairHp    = Math.min(
                     normalizedMaxHp - normalizedCurrentHp,
-                    repairAmount,
-                    Math.floor(unit.getPlayer().getFund() * normalizedMaxHp / productionCost)
+                    repairAmount + this.getNormalizedRepairHpModifier(),
+                    Math.floor(Math.max(0, unit.getPlayer().getFund()) * normalizedMaxHp / productionCost)
                 );
                 return {
                     hp  : (normalizedRepairHp + normalizedCurrentHp) * CommonConstants.UnitHpNormalizer - unit.getCurrentHp(),
@@ -1517,10 +1619,12 @@ namespace TwnsBwUnit {
 
             const war                   = this.getWar();
             const tileType              = war.getTileMap().getTile(gridIndex).getType();
-            const unitVisionFixedCfg    = war.getWeatherManager().getCurrentWeatherCfg().unitVisionFixed;
+            const weatherManager        = war.getWeatherManager();
+            const unitVisionFixedCfg    = weatherManager.getCurrentWeatherCfg().unitVisionFixed;
             if (unitVisionFixedCfg != null) {
                 const configVersion = war.getConfigVersion();
                 const unitType      = this.getUnitType();
+                const weatherType   = weatherManager.getCurrentWeatherType();
                 if ((ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, unitVisionFixedCfg[0])) &&
                     (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, unitVisionFixedCfg[1]))
                 ) {
@@ -1533,6 +1637,7 @@ namespace TwnsBwUnit {
                         return (skillCfg != null)
                             && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, skillCfg[1]))
                             && (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, skillCfg[2]))
+                            && (ConfigManager.checkIsWeatherTypeInCategory(configVersion, weatherType, skillCfg[3]))
                             && ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                                 coZoneRadius,
                                 gridIndex,
@@ -1747,6 +1852,108 @@ namespace TwnsBwUnit {
 
         public getLoadCoCost(): number {
             return Math.floor(ConfigManager.getCoBasicCfg(this.getConfigVersion(), this.getPlayer().getCoId()).boardCostPercentage * this.getProductionCfgCost() / 100);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for ai mode.
+        ////////////////////////////////////////////////////////////////////////////////
+        public setAiMode(aiMode: UnitAiMode): void {
+            if (!ConfigManager.checkIsValidUnitAiMode(aiMode)) {
+                throw Helpers.newError(`Invalid aiMode: ${aiMode}`, ClientErrorCode.BwUnit_SetAiMode_00);
+            }
+
+            this._aiMode = aiMode;
+        }
+        public getAiMode(): UnitAiMode {
+            return Helpers.getExisted(this._aiMode, ClientErrorCode.BwUnit_GetAiMode_00);
+        }
+
+        /**
+         * @returns indicates the ai mode is modified or not
+         */
+        public checkAndUpdateAiMode(): boolean {
+            if (this.getPlayer().getUserId() != null) {
+                return false;
+            }
+
+            const currentMode = this.getAiMode();
+            if (currentMode === UnitAiMode.Normal) {
+                // nothing to do
+                return false;
+
+            } else if (currentMode === UnitAiMode.WaitUntilCanAttack) {
+                const minAttackRange    = this.getMinAttackRange();
+                const maxAttackRange    = this.getFinalMaxAttackRange();
+                if ((minAttackRange == null) || (maxAttackRange == null)) {
+                    return false;
+                }
+
+                const war           = this.getWar();
+                const unitMap       = war.getUnitMap();
+                const tileMap       = war.getTileMap();
+                const mapSize       = unitMap.getMapSize();
+                const selfTeamIndex = this.getTeamIndex();
+                const selfGridIndex = this.getGridIndex();
+                const movableArea   = WarCommonHelpers.createMovableArea({
+                    origin          : selfGridIndex,
+                    maxMoveCost     : this.getFinalMoveRange(),
+                    mapSize,
+                    moveCostGetter  : gridIndex => {
+                        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+                            return null;
+                        } else {
+                            const existingUnit = unitMap.getUnitOnMap(gridIndex);
+                            if ((existingUnit) && (existingUnit.getTeamIndex() != selfTeamIndex)) {
+                                return null;
+                            } else {
+                                return tileMap.getTile(gridIndex).getMoveCostByUnit(this);
+                            }
+                        }
+                    },
+                });
+                const attackableArea = WarCommonHelpers.createAttackableAreaForUnit({
+                    movableArea,
+                    mapSize,
+                    minAttackRange,
+                    maxAttackRange,
+                    checkCanAttack: (moveGridIndex: GridIndex, targetGridIndex: GridIndex): boolean => {
+                        const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, selfGridIndex);
+                        if (((this.getLoaderUnitId() == null) || (hasMoved))    &&
+                            ((this.checkCanAttackAfterMove()) || (!hasMoved))
+                        ) {
+                            const targetUnit = unitMap.getUnitOnMap(targetGridIndex);
+                            if (targetUnit == null) {
+                                return false;
+                            } else {
+                                const armorType = targetUnit.getArmorType();
+                                return (targetUnit.getTeamIndex() !== selfTeamIndex)
+                                    && ((!targetUnit.getIsDiving()) || (this.checkCanAttackDivingUnits()))
+                                    && (this.getBaseDamage(armorType) != null);
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                });
+
+                if (!attackableArea.length) {
+                    return false;
+                } else {
+                    this.setAiMode(UnitAiMode.Normal);
+                    return true;
+                }
+
+            } else if (currentMode === UnitAiMode.NoMove) {
+                // nothing to do
+                return false;
+
+            } else {
+                throw Helpers.newError(`Invalid currentMode: ${currentMode}`, ClientErrorCode.BwUnit_CheckAndUpdateAiMode_00);
+            }
+        }
+
+        public checkCanAiDoAction(): boolean {
+            return this.getAiMode() !== UnitAiMode.WaitUntilCanAttack;
         }
     }
 

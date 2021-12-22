@@ -15,8 +15,8 @@
 // import UserModel                from "../../user/model/UserModel";
 // import TwnsMpwWar               from "./MpwWar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwActionPlanner {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import TurnPhaseCode        = Types.TurnPhaseCode;
     import UnitState            = Types.UnitActionState;
@@ -541,14 +541,14 @@ namespace TwnsMpwActionPlanner {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                TwnsBwUnitActionsPanel.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitActionsPanel, this._getDataForUnitActionsPanel());
             } else {
-                TwnsBwUnitActionsPanel.BwUnitActionsPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwUnitActionsPanel);
             }
             if ((currState === State.MakingMovePath) || (currState === State.ChoosingAttackTarget)) {
-                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.show({ war: this._getWar() });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDamagePreviewPanel, { war: this._getWar() });
             } else {
-                TwnsBwDamagePreviewPanel.BwDamagePreviewPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.BwDamagePreviewPanel);
             }
         }
 
@@ -572,16 +572,20 @@ namespace TwnsMpwActionPlanner {
                 if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                     return State.MakingMovePath;
                 } else {
                     if (unit.checkHasWeapon()) {
-                        return State.PreviewingAttackableArea;
+                        return State.PreviewingUnitAttackableArea;
                     } else {
-                        return State.PreviewingMovableArea;
+                        return State.PreviewingUnitMovableArea;
                     }
                 }
             }
@@ -667,22 +671,26 @@ namespace TwnsMpwActionPlanner {
                     if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                         return State.ChoosingProductionTarget;
                     } else {
-                        return State.Idle;
+                        if (tile.checkIsMapWeapon()) {
+                            return State.PreviewingTileAttackableArea;
+                        } else {
+                            return State.Idle;
+                        }
                     }
                 } else {
                     if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                         return State.MakingMovePath;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.PreviewingMovableArea;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
             }
         }
-        protected _getNextStateOnTapWhenPreviewingAttackableArea(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenPreviewingUnitAttackableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
             const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
@@ -692,25 +700,29 @@ namespace TwnsMpwActionPlanner {
                 if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
-                        return State.PreviewingMovableArea;
+                        return State.PreviewingUnitMovableArea;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.PreviewingMovableArea;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
             }
         }
-        protected _getNextStateOnTapWhenPreviewingMovableArea(gridIndex: GridIndex): State {
+        protected _getNextStateOnTapWhenPreviewingUnitMovableArea(gridIndex: GridIndex): State {
             const turnManager       = this._getTurnManager();
             const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
             const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
@@ -720,19 +732,55 @@ namespace TwnsMpwActionPlanner {
                 if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
                     return State.ChoosingProductionTarget;
                 } else {
-                    return State.Idle;
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
                 }
             } else {
                 if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
                     return State.MakingMovePath;
                 } else {
                     if (this.getUnitForPreviewingMovableArea() !== unit) {
-                        return State.PreviewingMovableArea;
+                        return State.PreviewingUnitMovableArea;
                     } else {
                         if (unit.checkHasWeapon()) {
-                            return State.PreviewingAttackableArea;
+                            return State.PreviewingUnitAttackableArea;
                         } else {
                             return State.Idle;
+                        }
+                    }
+                }
+            }
+        }
+        protected _getNextStateOnTapWhenPreviewingTileAttackableArea(gridIndex: GridIndex): State {
+            const turnManager       = this._getTurnManager();
+            const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
+            const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            if (!unit) {
+                const tile = this._getTileMap().getTile(gridIndex);
+                if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
+                    return State.ChoosingProductionTarget;
+                } else {
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
+                }
+            } else {
+                if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                    return State.MakingMovePath;
+                } else {
+                    if (this.getUnitsForPreviewingAttackableArea().has(unit.getUnitId())) {
+                        return State.PreviewingUnitMovableArea;
+                    } else {
+                        if (unit.checkHasWeapon()) {
+                            return State.PreviewingUnitAttackableArea;
+                        } else {
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }
@@ -775,7 +823,7 @@ namespace TwnsMpwActionPlanner {
                     : [{
                         actionType  : UnitActionType.UseCoSuperPower,
                         callback    : () => {
-                            CommonConfirmPanel.show({
+                            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0058),
                                 callback: () => this._setStateRequestingUnitUseCoSuperPower(),
                             });
@@ -792,7 +840,7 @@ namespace TwnsMpwActionPlanner {
                     : [{
                         actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
-                            CommonConfirmPanel.show({
+                            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0054),
                                 callback: () => this._setStateRequestingUnitUseCoPower(),
                             });
@@ -915,7 +963,7 @@ namespace TwnsMpwActionPlanner {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitDropOnChooseAction()
-                            : () => CommonConfirmPanel.show({
+                            : () => TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitDropOnChooseAction(),
                             }),
@@ -925,7 +973,7 @@ namespace TwnsMpwActionPlanner {
                         actionType  : UnitActionType.Wait,
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitWait()
-                            : () => CommonConfirmPanel.show({
+                            : () => TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                 content : Lang.getText(LangTextType.A0055),
                                 callback: () => this._setStateRequestingUnitWait(),
                             }),

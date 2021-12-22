@@ -29,8 +29,8 @@
 // import TwnsMcrMainMenuPanel                 from "./McrMainMenuPanel";
 // import TwnsMcrRoomInfoPanel                 from "./McrRoomInfoPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMcrJoinRoomListPanel {
-    import McrRoomInfoPanel                         = TwnsMcrRoomInfoPanel.McrRoomInfoPanel;
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
@@ -38,12 +38,8 @@ namespace TwnsMcrJoinRoomListPanel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
 
-    export class McrJoinRoomListPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: McrJoinRoomListPanel;
-
+    export type OpenData = void;
+    export class McrJoinRoomListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupTab!             : eui.Group;
         private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForWarCommonMapInfoPage | OpenDataForCommonWarPlayerInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage>;
 
@@ -63,25 +59,7 @@ namespace TwnsMcrJoinRoomListPanel {
         private _hasReceivedData    = false;
         private _isTabInitialized   = false;
 
-        public static show(): void {
-            if (!McrJoinRoomListPanel._instance) {
-                McrJoinRoomListPanel._instance = new McrJoinRoomListPanel();
-            }
-            McrJoinRoomListPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (McrJoinRoomListPanel._instance) {
-                await McrJoinRoomListPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/multiCustomRoom/McrJoinRoomListPanel.exml";
-        }
-
-        protected async _onOpened(): Promise<void> {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.McrJoinTargetRoomIdChanged,      callback: this._onNotifyMcrJoinTargetRoomIdChanged },
@@ -101,9 +79,8 @@ namespace TwnsMcrJoinRoomListPanel {
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listRoom.setItemRenderer(RoomRenderer);
-
-            this._showOpenAnimation();
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._hasReceivedData   = false;
             this._isTabInitialized  = false;
             await this._initTabSettings();
@@ -113,9 +90,8 @@ namespace TwnsMcrJoinRoomListPanel {
 
             McrProxy.reqMcrGetJoinableRoomInfoList();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +121,7 @@ namespace TwnsMcrJoinRoomListPanel {
             if (data.userId === UserModel.getSelfUserId()) {
                 const roomId = Helpers.getExisted(data.roomId);
                 this.close();
-                McrRoomInfoPanel.show({ roomId });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.McrRoomInfoPanel, { roomId });
                 FloatText.show(Lang.getFormattedText(LangTextType.F0069, roomId));
             }
         }
@@ -198,9 +174,9 @@ namespace TwnsMcrJoinRoomListPanel {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            TwnsMcrMainMenuPanel.McrMainMenuPanel.show();
-            TwnsLobbyTopPanel.LobbyTopPanel.show();
-            TwnsLobbyBottomPanel.LobbyBottomPanel.show();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyTopPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
 
         private async _onTouchedBtnNextStep(): Promise<void> {
@@ -224,7 +200,7 @@ namespace TwnsMcrJoinRoomListPanel {
                 if (!settingsForMcw.warPassword) {
                     callback();
                 } else {
-                    TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonJoinRoomPasswordPanel, {
                         mapId               : Helpers.getExisted(settingsForMcw.mapId),
                         warName             : settingsForMcw.warName ?? null,
                         password            : settingsForMcw.warPassword,
@@ -365,7 +341,7 @@ namespace TwnsMcrJoinRoomListPanel {
             return await McrModel.createDataForCommonWarAdvancedSettingsPage(McrJoinModel.getTargetRoomId());
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
@@ -391,36 +367,37 @@ namespace TwnsMcrJoinRoomListPanel {
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
             });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
-        private async _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                    callback    : resolve,
-                });
-                Helpers.resetTween({
-                    obj         : this._groupNavigator,
-                    beginProps  : { alpha: 1, y: 20 },
-                    endProps    : { alpha: 0, y: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupRoomList,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnNextStep,
-                    beginProps  : { alpha: 1, left: 20 },
-                    endProps    : { alpha: 0, left: -20 },
-                });
-                Helpers.resetTween({
-                    obj         : this._groupTab,
-                    beginProps  : { alpha: 1, },
-                    endProps    : { alpha: 0, },
-                });
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
             });
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 1, y: 20 },
+                endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupRoomList,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnNextStep,
+                beginProps  : { alpha: 1, left: 20 },
+                endProps    : { alpha: 0, left: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 1, },
+                endProps    : { alpha: 0, },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
@@ -440,14 +417,12 @@ namespace TwnsMcrJoinRoomListPanel {
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
         private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _btnNext!      : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgPassword!  : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
@@ -471,34 +446,6 @@ namespace TwnsMcrJoinRoomListPanel {
 
         private _onTouchTapBtnChoose(): void {
             McrJoinModel.setTargetRoomId(this._getData().roomId);
-        }
-
-        private async _onTouchTapBtnNext(): Promise<void> {
-            const roomInfo = await McrModel.getRoomInfo(this._getData().roomId);
-            if (roomInfo == null) {
-                return;
-            }
-
-            const settingsForMcw    = Helpers.getExisted(roomInfo.settingsForMcw);
-            const callback          = () => {
-                const joinData = McrJoinModel.getFastJoinData(roomInfo);
-                if (joinData) {
-                    McrProxy.reqMcrJoinRoom(joinData);
-                } else {
-                    FloatText.show(Lang.getText(LangTextType.A0145));
-                    McrProxy.reqMcrGetJoinableRoomInfoList();
-                }
-            };
-            if (!settingsForMcw.warPassword) {
-                callback();
-            } else {
-                TwnsCommonJoinRoomPasswordPanel.CommonJoinRoomPasswordPanel.show({
-                    mapId               : Helpers.getExisted(settingsForMcw.mapId),
-                    warName             : settingsForMcw.warName ?? null,
-                    password            : settingsForMcw.warPassword,
-                    callbackOnSucceed   : callback,
-                });
-            }
         }
     }
 }

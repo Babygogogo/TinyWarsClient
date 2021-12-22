@@ -14,6 +14,7 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 // import WarEventHelper           from "../model/WarEventHelper";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionTypeListPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
@@ -21,52 +22,34 @@ namespace TwnsWeActionTypeListPanel {
     import ActionType           = Types.WarEventActionType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    type OpenDataForWeActionTypeListPanel = {
+    export type OpenData = {
         war         : TwnsBwWar.BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionTypeListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionTypeListPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WeActionTypeListPanel;
-
+    export class WeActionTypeListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
 
-        public static show(openData: OpenDataForWeActionTypeListPanel): void {
-            if (!WeActionTypeListPanel._instance) {
-                WeActionTypeListPanel._instance = new WeActionTypeListPanel();
-            }
-            WeActionTypeListPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (WeActionTypeListPanel._instance) {
-                await WeActionTypeListPanel._instance.close();
-            }
-        }
-
-        private constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeActionTypeListPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
             ]);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
+
             this._listType.setItemRenderer(TypeRenderer);
 
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -140,7 +123,7 @@ namespace TwnsWeActionTypeListPanel {
             if (actionType !== WarEventHelper.getActionType(action)) {
                 WarEventHelper.resetAction(action, actionType);
                 WarEventHelper.openActionModifyPanel(data.war, data.fullData, action);
-                WeActionTypeListPanel.hide();
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.WeActionTypeListPanel);
 
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }

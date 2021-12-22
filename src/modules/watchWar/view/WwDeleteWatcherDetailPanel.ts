@@ -14,19 +14,15 @@
 // import UserModel                from "../../user/model/UserModel";
 // import WwProxy                  from "../model/WwProxy";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWwDeleteWatcherDetailPanel {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
 
-    type OpenDataForMcrWatchDeleteWatcherDetailPanel = {
+    export type OpenData = {
         watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     };
-    export class WwDeleteWatcherDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrWatchDeleteWatcherDetailPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: WwDeleteWatcherDetailPanel;
-
+    export class WwDeleteWatcherDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
         private readonly _labelDelete!              : TwnsUiLabel.UiLabel;
         private readonly _labelKeep!                : TwnsUiLabel.UiLabel;
@@ -38,27 +34,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
 
         private _dataForListPlayer  : DataForRequesterRenderer[] | null = null;
 
-        public static show(openData: OpenDataForMcrWatchDeleteWatcherDetailPanel): void {
-            if (!WwDeleteWatcherDetailPanel._instance) {
-                WwDeleteWatcherDetailPanel._instance = new WwDeleteWatcherDetailPanel();
-            }
-            WwDeleteWatcherDetailPanel._instance.open(openData);
-        }
-        public static async hide(): Promise<void> {
-            if (WwDeleteWatcherDetailPanel._instance) {
-                await WwDeleteWatcherDetailPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/watchWar/WwDeleteWatcherDetailPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -66,10 +42,17 @@ namespace TwnsWwDeleteWatcherDetailPanel {
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
-            this._listPlayer.setItemRenderer(RequesterRenderer);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
 
+            this._listPlayer.setItemRenderer(RequesterRenderer);
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._dataForListPlayer = this._generateDataForListPlayer();
             this._updateView();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         protected async _onClosed(): Promise<void> {

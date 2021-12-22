@@ -12,6 +12,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitView {
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
 
@@ -19,8 +20,8 @@ namespace TwnsBwUnitView {
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH * 3 / 4;
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_Y               = _GRID_HEIGHT / 2;
     const _IMG_UNIT_STAND_X                             = _GRID_WIDTH * 2 / 4;
-    const _IMG_UNIT_STATE_WIDTH                         = 28;
-    const _IMG_UNIT_STATE_HEIGHT                        = 36;
+    const _IMG_UNIT_STATE_WIDTH                         = 10;
+    const _IMG_UNIT_STATE_HEIGHT                        = 12;
     const _AIMING_TIME_MS                               = 500;
 
     export class BwUnitView extends egret.DisplayObjectContainer {
@@ -36,16 +37,25 @@ namespace TwnsBwUnitView {
         public constructor() {
             super();
 
-            this._imgUnit.anchorOffsetX = _IMG_UNIT_STAND_ANCHOR_OFFSET_X;
-            this._imgUnit.anchorOffsetY = _IMG_UNIT_STAND_ANCHOR_OFFSET_Y;
-            this._imgUnit.x             = _IMG_UNIT_STAND_X;
-            this._imgState.x            = 0;
-            this._imgState.y            = _GRID_HEIGHT - _IMG_UNIT_STATE_HEIGHT;
-            this._imgHp.x               = _GRID_WIDTH - _IMG_UNIT_STATE_WIDTH - 3;
-            this._imgHp.y               = _GRID_HEIGHT - _IMG_UNIT_STATE_HEIGHT;
-            this.addChild(this._imgUnit);
-            this.addChild(this._imgState);
-            this.addChild(this._imgHp);
+            const imgUnit           = this._imgUnit;
+            imgUnit.smoothing       = false;
+            imgUnit.anchorOffsetX   = _IMG_UNIT_STAND_ANCHOR_OFFSET_X;
+            imgUnit.anchorOffsetY   = _IMG_UNIT_STAND_ANCHOR_OFFSET_Y;
+            imgUnit.x               = _IMG_UNIT_STAND_X;
+
+            const imgState      = this._imgState;
+            imgState.smoothing  = false;
+            imgState.x          = 0;
+            imgState.y          = _GRID_HEIGHT - _IMG_UNIT_STATE_HEIGHT;
+
+            const imgHp     = this._imgHp;
+            imgHp.smoothing = false;
+            imgHp.x         = _GRID_WIDTH - _IMG_UNIT_STATE_WIDTH - 1;
+            imgHp.y         = _GRID_HEIGHT - _IMG_UNIT_STATE_HEIGHT;
+
+            this.addChild(imgUnit);
+            this.addChild(imgState);
+            this.addChild(imgHp);
         }
 
         public init(unit: TwnsBwUnit.BwUnit): BwUnitView {
@@ -68,7 +78,9 @@ namespace TwnsBwUnitView {
         }
 
         public resetAllViews(): void {
-            this._isDark = Helpers.getExisted(this.getUnit()).getActionState() === Types.UnitActionState.Acted;
+            const unit      = Helpers.getExisted(this.getUnit());
+            this._isDark    = unit.getActionState() === Types.UnitActionState.Acted;
+            this._setImgUnitFlippedX(unit.getPlayerIndex() % 2 === 0);
             this.resetStateAnimationFrames();
             this.showUnitAnimation(UnitAnimationType.Stand);
             this.updateImageHp();
@@ -93,7 +105,7 @@ namespace TwnsBwUnitView {
         public updateImageHp(): void {
             const unit          = Helpers.getExisted(this.getUnit());
             const normalizedHp  = unit.getNormalizedCurrentHp();
-            if ((normalizedHp >= unit.getNormalizedMaxHp()) || (normalizedHp <= 0)) {
+            if (normalizedHp >= unit.getNormalizedMaxHp()) {
                 this._imgHp.visible = false;
             } else {
                 this._imgHp.visible = true;
@@ -145,7 +157,6 @@ namespace TwnsBwUnitView {
             const unit                  = Helpers.getExisted(this.getUnit());
             const war                   = unit.getWar();
             const playerIndex           = unit.getPlayerIndex();
-            const skinIdMod             = unit.getSkinId() % 2;
             const unitType              = unit.getUnitType();
             const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const isAlwaysVisible       = watcherTeamIndexes.has(unit.getTeamIndex());
@@ -162,9 +173,9 @@ namespace TwnsBwUnitView {
                 const currentX  = gridIndex.x;
                 const previousX = path[i - 1].x;
                 if (currentX < previousX) {
-                    tween.call(() => this._setImgUnitFlippedX(skinIdMod === 1));
+                    tween.call(() => this._setImgUnitFlippedX(true));
                 } else if (currentX > previousX) {
-                    tween.call(() => this._setImgUnitFlippedX(skinIdMod === 0));
+                    tween.call(() => this._setImgUnitFlippedX(false));
                 }
 
                 if (!isAlwaysVisible) {
@@ -209,7 +220,7 @@ namespace TwnsBwUnitView {
             return new Promise<void>(resolve => {
                 if (!aiming) {
                     tween.call(() => {
-                        this._setImgUnitFlippedX(false);
+                        this._setImgUnitFlippedX(playerIndex % 2 === 0);
                         if ((isBlocked)                                         &&
                             (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
@@ -220,7 +231,7 @@ namespace TwnsBwUnitView {
                                 observerTeamIndexes : watcherTeamIndexes,
                             }))
                         ) {
-                            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                            war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
                         SoundManager.fadeoutLongSfxForMoveUnit();
 
@@ -231,13 +242,13 @@ namespace TwnsBwUnitView {
                     tween.call(() => {
                         cursor.setIsMovableByTouches(false);
                         cursor.setIsVisible(false);
-                        war.getGridVisionEffect().showEffectAiming(aiming, _AIMING_TIME_MS);
+                        war.getGridVisualEffect().showEffectAiming(aiming, _AIMING_TIME_MS);
                     })
                     .wait(_AIMING_TIME_MS)
                     .call(() => {
                         cursor.setIsMovableByTouches(true);
                         cursor.setIsVisible(true);
-                        this._setImgUnitFlippedX(false);
+                        this._setImgUnitFlippedX(playerIndex % 2 === 0);
                         if ((isBlocked)                                         &&
                             (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
@@ -248,8 +259,93 @@ namespace TwnsBwUnitView {
                                 observerTeamIndexes : watcherTeamIndexes,
                             }))
                         ) {
-                            war.getGridVisionEffect().showEffectBlock(endingGridIndex);
+                            war.getGridVisualEffect().showEffectBlock(endingGridIndex);
                         }
+                        SoundManager.fadeoutLongSfxForMoveUnit();
+
+                        resolve();
+                    });
+                }
+            });
+        }
+        public moveAlongExtraPath({ path, aiming, deleteViewAfterMoving }: {
+            path                    : ProtoTypes.Structure.IGridIndexAndPathInfo[];
+            aiming                  : GridIndex | null;
+            deleteViewAfterMoving   : boolean;
+        }): Promise<void> {
+            this.showUnitAnimation(UnitAnimationType.Move);
+
+            const startingPoint = GridIndexHelpers.createPointByGridIndex(Helpers.getExisted(GridIndexHelpers.convertGridIndex(path[0].gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_00));
+            this.x              = startingPoint.x;
+            this.y              = startingPoint.y;
+
+            const unit          = Helpers.getExisted(this.getUnit());
+            const war           = unit.getWar();
+            const unitType      = unit.getUnitType();
+            const tween         = egret.Tween.get(this);
+            if ((path.length > 0) || (aiming)) {
+                SoundManager.playLongSfxForMoveUnit(unitType);
+            }
+
+            for (let i = 1; i < path.length; ++i) {
+                const node          = path[i];
+                const gridIndex     = Helpers.getExisted(GridIndexHelpers.convertGridIndex(node.gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_01);
+                const currentX      = gridIndex.x;
+                const previousNode  = path[i - 1];
+                const previousX     = Helpers.getExisted(previousNode.gridIndex?.x, ClientErrorCode.BwUnitView_MoveAlongExtraPath_02);
+                if (currentX < previousX) {
+                    tween.call(() => this._setImgUnitFlippedX(true));
+                } else if (currentX > previousX) {
+                    tween.call(() => this._setImgUnitFlippedX(false));
+                }
+                tween.call(() => {
+                    this.visible = (!!previousNode.isVisible) || (!!node.isVisible);
+                });
+                tween.to(GridIndexHelpers.createPointByGridIndex(gridIndex), 200);
+            }
+
+            const endingNode        = path[path.length - 1];
+            const isBlockedInEnd    = !!endingNode.isBlocked;
+            const isVisibleInEnd    = !!endingNode.isVisible;
+            const unitMapView       = war.getUnitMap().getView();
+            if ((deleteViewAfterMoving) && (!isVisibleInEnd)) {
+                tween.call(() => {
+                    unitMapView.removeUnit(this);
+                });
+            }
+
+            const endingGridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(endingNode.gridIndex), ClientErrorCode.BwUnitView_MoveAlongExtraPath_03);
+            return new Promise<void>(resolve => {
+                if (!aiming) {
+                    tween.call(() => {
+                        this._setImgUnitFlippedX(unit.getPlayerIndex() % 2 === 0);
+                        if ((isBlockedInEnd) && (isVisibleInEnd)) {
+                            war.getGridVisualEffect().showEffectBlock(endingGridIndex);
+                        }
+                        (deleteViewAfterMoving) && (unitMapView.removeUnit(this));
+
+                        SoundManager.fadeoutLongSfxForMoveUnit();
+
+                        resolve();
+                    });
+                } else {
+                    const cursor = war.getCursor();
+                    tween.call(() => {
+                        cursor.setIsMovableByTouches(false);
+                        cursor.setIsVisible(false);
+                        war.getGridVisualEffect().showEffectAiming(aiming, _AIMING_TIME_MS);
+                    })
+                    .wait(_AIMING_TIME_MS)
+                    .call(() => {
+                        cursor.setIsMovableByTouches(true);
+                        cursor.setIsVisible(true);
+
+                        this._setImgUnitFlippedX(unit.getPlayerIndex() % 2 === 0);
+                        if ((isBlockedInEnd) && (isVisibleInEnd)) {
+                            war.getGridVisualEffect().showEffectBlock(endingGridIndex);
+                        }
+                        (deleteViewAfterMoving) && (unitMapView.removeUnit(this));
+
                         SoundManager.fadeoutLongSfxForMoveUnit();
 
                         resolve();

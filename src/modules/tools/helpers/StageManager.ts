@@ -94,12 +94,6 @@ namespace StageManager {
         return _stageScale;
     }
 
-    export function closeAllPanels(exceptions?: (TwnsUiPanel.UiPanel<any>)[]): void {
-        for (const [, layer] of _LAYERS) {
-            layer.closeAllPanels(exceptions);
-        }
-    }
-
     function _addLayer(layerType: LayerType): void {
         if (_LAYERS.has(layerType)) {
             throw Helpers.newError(`StageManager._addLayer() duplicated layer: ${layerType}.`, ClientErrorCode.StageManager_AddLayer_00);
@@ -115,7 +109,7 @@ namespace StageManager {
         _mouseY = e.stageY;
     }
     function _onMouseWheel(e: egret.Event): void {
-        Notify.dispatch(NotifyType.MouseWheel, e.data * (egret.Capabilities.os === `Unknown` ? 40 : 1));
+        Notify.dispatch(NotifyType.MouseWheel, e.data * ((egret.Capabilities.os === `Unknown` || navigator?.userAgent?.toLowerCase()?.includes(`firefox`)) ? 40 : 1));
     }
 
     function _onTouchBegin(e: egret.TouchEvent): void {
@@ -133,10 +127,12 @@ namespace StageManager {
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
         }
 
-        public closeAllPanels(exceptions?: (TwnsUiPanel.UiPanel<any>)[]): void {
+        public closeAllPanels(exceptions?: (TwnsUiPanel.UiPanel<any> | TwnsUiPanel.UiPanel<any>)[]): void {
             for (let i = this.numChildren - 1; i >= 0; --i) {
                 const child = this.getChildAt(i);
-                if ((child instanceof TwnsUiPanel.UiPanel) && (!exceptions?.some(v => child === v))) {
+                if (((child instanceof TwnsUiPanel.UiPanel) || (child instanceof TwnsUiPanel.UiPanel)) &&
+                    (!exceptions?.some(v => child === v))
+                ) {
                     child.close();
                 }
             }
@@ -147,7 +143,7 @@ namespace StageManager {
             const width     = this.width;
             for (let i = 0; i < this.numChildren; ++i) {
                 const child = this.getChildAt(i);
-                if (child instanceof TwnsUiPanel.UiPanel) {
+                if ((child instanceof TwnsUiPanel.UiPanel) || (child instanceof TwnsUiPanel.UiPanel)) {
                     child.resize(width, height);
                 }
             }

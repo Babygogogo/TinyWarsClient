@@ -10,13 +10,16 @@ namespace TwnsBwWeatherManager {
         private _forceWeatherType?      : WeatherType | null;
         private _expirePlayerIndex?     : number | null;
         private _expireTurnIndex?       : number | null;
-
         private _war?                   : TwnsBwWar.BwWar;
+
+        private readonly _view = new TwnsBwWeatherManagerView.BwWeatherManagerView();
 
         public init(data: Types.Undefinable<ISerialWeatherManager>): void {
             this.setForceWeatherType(data?.forceWeatherType ?? null);
             this.setExpireTurnIndex(data?.expireTurnIndex ?? null);
             this.setExpirePlayerIndex(data?.expirePlayerIndex ?? null);
+
+            this.getView().init(this);
         }
         public fastInit(data: Types.Undefinable<ISerialWeatherManager>): void {
             this.init(data);
@@ -39,12 +42,22 @@ namespace TwnsBwWeatherManager {
         public startRunning(war: TwnsBwWar.BwWar): void {
             this._setWar(war);
         }
+        public startRunningView(): void {
+            this.getView().startRunningView();
+        }
+        public stopRunning(): void {
+            this.getView().stopRunningView();
+        }
 
         private _setWar(war: TwnsBwWar.BwWar): void {
             this._war = war;
         }
         private _getWar(): TwnsBwWar.BwWar {
             return Helpers.getExisted(this._war, ClientErrorCode.BwWeatherManager_GetWar_00);
+        }
+
+        public getView(): TwnsBwWeatherManagerView.BwWeatherManagerView {
+            return this._view;
         }
 
         public getDefaultWeatherType(): WeatherType {

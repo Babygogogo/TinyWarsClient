@@ -47,7 +47,7 @@ namespace TwnsTwWar {
             return this._warEventManager;
         }
 
-        public getIsRunTurnPhaseWithExtraData(): boolean {
+        public getIsExecuteActionsWithExtraData(): boolean {
             return false;
         }
         public updateTilesAndUnitsOnVisibilityChanged(): void {
@@ -144,20 +144,16 @@ namespace TwnsTwWar {
         }
 
         public async getErrorCodeForInit(data: ISerialWar): Promise<ClientErrorCode> {
-            await this.init(data).catch(e => {
+            return await this.init(data).catch(e => {
                 const error = e as Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInit_00;
-            });
-
-            return ClientErrorCode.NoError;
+            }) || ClientErrorCode.NoError;
         }
         public async getErrorCodeForInitByMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-            await this.initByMapRawData(mapRawData).catch(e => {
+            return await this.initByMapRawData(mapRawData).catch(e => {
                 const error = e as Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitByMapRawData_00;
-            });
-
-            return ClientErrorCode.NoError;
+            }) || ClientErrorCode.NoError;
         }
 
         public getWarType(): Types.WarType {
@@ -172,10 +168,6 @@ namespace TwnsTwWar {
             return false;
         }
         public getIsNeedSeedRandom(): boolean {
-            return false;
-        }
-
-        public getIsWarMenuPanelOpening(): boolean {
             return false;
         }
 

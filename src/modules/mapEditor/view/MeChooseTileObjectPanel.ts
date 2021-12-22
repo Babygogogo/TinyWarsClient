@@ -15,6 +15,7 @@
 // import MeModel                  from "../model/MeModel";
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeChooseTileObjectPanel {
     import DataForDrawTileObject    = TwnsMeDrawer.DataForDrawTileObject;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -22,53 +23,40 @@ namespace TwnsMeChooseTileObjectPanel {
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseTileObjectPanel extends TwnsUiPanel.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: MeChooseTileObjectPanel;
-
+    export type OpenData = void;
+    export class MeChooseTileObjectPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
         private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileObjectRenderer>;
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
+        private readonly _btnAdjustRoad!    : TwnsUiButton.UiButton;
+        private readonly _btnAdjustPlasma!  : TwnsUiButton.UiButton;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
 
         private _dataListForRecent  : DataForTileObjectRenderer[] = [];
 
-        public static show(): void {
-            if (!MeChooseTileObjectPanel._instance) {
-                MeChooseTileObjectPanel._instance = new MeChooseTileObjectPanel();
-            }
-            MeChooseTileObjectPanel._instance.open();
-        }
-        public static async hide(): Promise<void> {
-            if (MeChooseTileObjectPanel._instance) {
-                await MeChooseTileObjectPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeChooseTileObjectPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnCancel,  callback: this.close },
+                { ui: this._btnAdjustRoad,      callback: this._onTouchedBtnAdjustRoad },
+                { ui: this._btnAdjustPlasma,    callback: this._onTouchedBtnAdjustPlasma },
+                { ui: this._btnCancel,          callback: this.close },
             ]);
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+
             this._listRecent.setItemRenderer(TileObjectRenderer);
             this._listCategory.setItemRenderer(CategoryRenderer);
-
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._updateListRecent();
             this._updateListCategory();
+        }
+        protected _onClosing(): void {
+            // nothing to do
         }
 
         public updateOnChooseTileObject(data: DataForDrawTileObject): void {
@@ -101,11 +89,36 @@ namespace TwnsMeChooseTileObjectPanel {
             this._updateComponentsForLanguage();
         }
 
+        private _onTouchedBtnAdjustRoad(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                content: Lang.getText(LangTextType.A0259),
+                callback: () => {
+                    const drawer = Helpers.getExisted(MeModel.getWar()).getDrawer();
+                    drawer.autoAdjustRoads();
+                    drawer.autoAdjustBridges();
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnAdjustPlasma(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                content: Lang.getText(LangTextType.A0260),
+                callback: () => {
+                    const drawer = Helpers.getExisted(MeModel.getWar()).getDrawer();
+                    drawer.autoAdjustPlasmas();
+                    drawer.autoAdjustPipes();
+                    this.close();
+                },
+            });
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
+            this._btnAdjustRoad.label   = Lang.getText(LangTextType.B0740);
+            this._btnAdjustPlasma.label = Lang.getText(LangTextType.B0741);
             this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
         }
 
@@ -118,7 +131,8 @@ namespace TwnsMeChooseTileObjectPanel {
                     }
 
                     const dataListForDrawTileObject = Helpers.getExisted(mapping.get(playerIndex));
-                    for (let shapeId = 0; shapeId < cfg.shapesCount; ++shapeId) {
+                    const shapesCount               = UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0 ? cfg.shapesCountForV0 : cfg.shapesCount;
+                    for (let shapeId = 0; shapeId < shapesCount; ++shapeId) {
                         dataListForDrawTileObject.push({
                             objectType,
                             playerIndex,

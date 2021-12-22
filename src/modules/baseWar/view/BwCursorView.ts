@@ -9,6 +9,7 @@
 // import Types                from "../../tools/helpers/Types";
 // import TwnsBwCursor         from "../model/BwCursor";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwCursorView {
     import GridIndex            = Types.GridIndex;
     import ActionPlannerState   = Types.ActionPlannerState;
@@ -29,22 +30,24 @@ namespace TwnsBwCursorView {
         `c04_t03_s02_f04`,
     ];
 
-    const _UPPER_LEFT_CORNER_OUTER_X    = -6;
-    const _UPPER_LEFT_CORNER_OUTER_Y    = -6;
-    const _UPPER_LEFT_CORNER_INNER_X    = 4;
-    const _UPPER_LEFT_CORNER_INNER_Y    = 4;
-    const _UPPER_RIGHT_CORNER_OUTER_X   = _GRID_WIDTH + 6;
-    const _UPPER_RIGHT_CORNER_OUTER_Y   = -6;
-    const _UPPER_RIGHT_CORNER_INNER_X   = _GRID_WIDTH - 4;
-    const _UPPER_RIGHT_CORNER_INNER_Y   = 4;
-    const _LOWER_LEFT_CORNER_OUTER_X    = -6;
-    const _LOWER_LEFT_CORNER_OUTER_Y    = _GRID_HEIGHT + 6;
-    const _LOWER_LEFT_CORNER_INNER_X    = 4;
-    const _LOWER_LEFT_CORNER_INNER_Y    = _GRID_HEIGHT - 4;
-    const _LOWER_RIGHT_CORNER_OUTER_X   = _GRID_WIDTH  + 6;
-    const _LOWER_RIGHT_CORNER_OUTER_Y   = _GRID_HEIGHT + 6;
-    const _LOWER_RIGHT_CORNER_INNER_X   = _GRID_WIDTH  - 4;
-    const _LOWER_RIGHT_CORNER_INNER_Y   = _GRID_HEIGHT - 4;
+    const OUT_LENGTH                    = _GRID_WIDTH / 6;
+    const IN_LENGTH                     = _GRID_WIDTH / 9;
+    const _UPPER_LEFT_CORNER_OUTER_X    = -OUT_LENGTH;
+    const _UPPER_LEFT_CORNER_OUTER_Y    = -OUT_LENGTH;
+    const _UPPER_LEFT_CORNER_INNER_X    = IN_LENGTH;
+    const _UPPER_LEFT_CORNER_INNER_Y    = IN_LENGTH;
+    const _UPPER_RIGHT_CORNER_OUTER_X   = _GRID_WIDTH + OUT_LENGTH;
+    const _UPPER_RIGHT_CORNER_OUTER_Y   = -OUT_LENGTH;
+    const _UPPER_RIGHT_CORNER_INNER_X   = _GRID_WIDTH - IN_LENGTH;
+    const _UPPER_RIGHT_CORNER_INNER_Y   = IN_LENGTH;
+    const _LOWER_LEFT_CORNER_OUTER_X    = -OUT_LENGTH;
+    const _LOWER_LEFT_CORNER_OUTER_Y    = _GRID_HEIGHT + OUT_LENGTH;
+    const _LOWER_LEFT_CORNER_INNER_X    = IN_LENGTH;
+    const _LOWER_LEFT_CORNER_INNER_Y    = _GRID_HEIGHT - IN_LENGTH;
+    const _LOWER_RIGHT_CORNER_OUTER_X   = _GRID_WIDTH  + OUT_LENGTH;
+    const _LOWER_RIGHT_CORNER_OUTER_Y   = _GRID_HEIGHT + OUT_LENGTH;
+    const _LOWER_RIGHT_CORNER_INNER_X   = _GRID_WIDTH  - IN_LENGTH;
+    const _LOWER_RIGHT_CORNER_INNER_Y   = _GRID_HEIGHT - IN_LENGTH;
 
     export class BwCursorView extends eui.Group {
         private _cursor?                : BwCursor;
@@ -294,10 +297,13 @@ namespace TwnsBwCursorView {
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 con.visible = true;
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitAttackableArea) {
                 con.visible = true;
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
+                con.visible = true;
+
+            } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 con.visible = true;
 
             } else {
@@ -338,10 +344,13 @@ namespace TwnsBwCursorView {
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitAttackableArea) {
                 con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 con.visible = false;
 
             } else {
@@ -380,10 +389,13 @@ namespace TwnsBwCursorView {
             } else if (state === ActionPlannerState.ChoosingProductionTarget) {
                 con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitAttackableArea) {
                 con.visible = false;
 
-            } else if (state === ActionPlannerState.PreviewingMovableArea) {
+            } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 con.visible = false;
 
             } else {
@@ -392,38 +404,58 @@ namespace TwnsBwCursorView {
         }
 
         private _initConForNormal(): void {
-            this._imgUpperLeftCorner.x = _UPPER_LEFT_CORNER_OUTER_X;
-            this._imgUpperLeftCorner.y = _UPPER_LEFT_CORNER_OUTER_Y;
-            this._conForNormal.addChild(this._imgUpperLeftCorner);
+            {
+                const img       = this._imgUpperLeftCorner;
+                img.smoothing   = false;
+                img.x           = _UPPER_LEFT_CORNER_OUTER_X;
+                img.y           = _UPPER_LEFT_CORNER_OUTER_Y;
+                this._conForNormal.addChild(img);
+            }
 
-            this._imgUpperRightCorner.x         = _UPPER_RIGHT_CORNER_OUTER_X;
-            this._imgUpperRightCorner.y         = _UPPER_RIGHT_CORNER_OUTER_Y;
-            this._imgUpperRightCorner.rotation  = 90;
-            this._conForNormal.addChild(this._imgUpperRightCorner);
+            {
+                const img       = this._imgUpperRightCorner;
+                img.smoothing   = false;
+                img.x           = _UPPER_RIGHT_CORNER_OUTER_X;
+                img.y           = _UPPER_RIGHT_CORNER_OUTER_Y;
+                img.rotation    = 90;
+                this._conForNormal.addChild(img);
+            }
 
-            this._imgLowerLeftCorner.x          = _LOWER_LEFT_CORNER_OUTER_X;
-            this._imgLowerLeftCorner.y          = _LOWER_LEFT_CORNER_OUTER_Y;
-            this._imgLowerLeftCorner.rotation   = -90;
-            this._conForNormal.addChild(this._imgLowerLeftCorner);
+            {
+                const img       = this._imgLowerLeftCorner;
+                img.smoothing   = false;
+                img.x           = _LOWER_LEFT_CORNER_OUTER_X;
+                img.y           = _LOWER_LEFT_CORNER_OUTER_Y;
+                img.rotation    = -90;
+                this._conForNormal.addChild(img);
+            }
 
-            this._imgLowerRightCorner.x         = _LOWER_RIGHT_CORNER_OUTER_X;
-            this._imgLowerRightCorner.y         = _LOWER_RIGHT_CORNER_OUTER_Y;
-            this._imgLowerRightCorner.rotation  = 180;
-            this._conForNormal.addChild(this._imgLowerRightCorner);
+            {
+                const img       = this._imgLowerRightCorner;
+                img.smoothing   = false;
+                img.x           = _LOWER_RIGHT_CORNER_OUTER_X;
+                img.y           = _LOWER_RIGHT_CORNER_OUTER_Y;
+                img.rotation    = 180;
+                this._conForNormal.addChild(img);
+            }
 
             this._conForAll.addChild(this._conForNormal);
         }
         private _initConForTarget(): void {
-            this._imgTarget.x = -_GRID_WIDTH;
-            this._imgTarget.y = -_GRID_HEIGHT;
-            this._conForTarget.addChild(this._imgTarget);
+            const img       = this._imgTarget;
+            img.smoothing   = false;
+            img.x           = -_GRID_WIDTH;
+            img.y           = -_GRID_HEIGHT;
+            this._conForTarget.addChild(img);
 
             this._conForAll.addChild(this._conForTarget);
         }
         private _initConForSiloArea(): void {
-            this._imgSiloArea.x = -_GRID_WIDTH * 2;
-            this._imgSiloArea.y = -_GRID_HEIGHT * 2;
-            this._conForSiloArea.addChild(this._imgSiloArea);
+            const img       = this._imgSiloArea;
+            img.smoothing   = false;
+            img.x           = -_GRID_WIDTH * 2;
+            img.y           = -_GRID_HEIGHT * 2;
+            this._conForSiloArea.addChild(img);
 
             this._conForAll.addChild(this._conForSiloArea);
         }

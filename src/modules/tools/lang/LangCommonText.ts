@@ -913,7 +913,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0216]: [
             `"已战败"状态下，玩家无法行动。如果玩家是直接从存活状态切换到已战败状态，则其部队和建筑所有权都会残留。`,
-            `In the Being Defeated state, players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
+            `In the Defeated state, players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
         ],
         [LangTextType.A0217]: [
             `所有数值设定与《高级战争：毁灭之日》保持一致。`,
@@ -1042,6 +1042,114 @@ namespace TwnsLangCommonText {
         [LangTextType.A0248]: [
             `已禁用自动保存`,
             `The auto save function is disabled successfully.`,
+        ],
+        [LangTextType.A0249]: [
+            `您将离开战局模式并进入回放（您可以随时返回）。\n确定要继续吗？`,
+            `You have to leave the war scene (you can enter it again later).\nAre you sure to continue?`,
+        ],
+        [LangTextType.A0250]: [
+            `指定坐标不合法`,
+            `The coordinate is not valid.`,
+        ],
+        [LangTextType.A0251]: [
+            `指定坐标超出了地图大小`,
+            `The coordinate is outside the map.`,
+        ],
+        [LangTextType.A0252]: [
+            `指定天气不合法`,
+            `The weather type is not valid.`,
+        ],
+        [LangTextType.A0253]: [
+            `指定持续时间不合法`,
+            `The duration is not valid.`,
+        ],
+        [LangTextType.A0254]: [
+            `设置为0回合可使指定状态永久持续`,
+            `Set 0 turns to make the state last forever.`,
+        ],
+        [LangTextType.A0255]: [
+            `指定玩家不合法`,
+            `The player is not valid.`,
+        ],
+        [LangTextType.A0256]: [
+            `指定地形类型不合法`,
+            `The tile type is invalid.`,
+        ],
+        [LangTextType.A0257]: [
+            `您确定要切换该部队的A.I.模式吗？`,
+            `Are you sure to switch the unit's A.I. mode?`,
+        ],
+        [LangTextType.A0258]: [
+            `此动作指定的对话背景不合法`,
+            `The background of the dialogues is invalid.`,
+        ],
+        [LangTextType.A0259]: [
+            `已绘制的道路和桥梁的造型将被覆盖，但覆盖结果可能不会完全符合您的预期。\n建议您先保存地图再进行此操作。\n确定要调整吗？`,
+            `The drawn roads and bridges will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure to adjust them?`
+        ],
+        [LangTextType.A0260]: [
+            `已绘制的等离子、超级等离子的造型将被覆盖，但覆盖结果可能不会完全符合您的预期。\n建议您先保存地图再进行此操作。\n确定要调整吗？`,
+            `The drawn (super) plasmas will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure to adjust them?`
+        ],
+        [LangTextType.A0261]: [
+            `地图文件体积太大，无法保存`,
+            `This map is too large to be saved.`,
+        ],
+        [LangTextType.A0262]: [
+            `播放当前回合中的CO专属BGM`,
+            `Play the theme of the CO who is in turn.`,
+        ],
+        [LangTextType.A0263]: [
+            `选择的BGM无效`,
+            `The chosen BGM is invalid.`,
+        ],
+        [LangTextType.A0264]: [
+            `参数未设置`,
+            `The parameters are not specified.`,
+        ],
+        [LangTextType.A0265]: [
+            `参数不合法`,
+            `The parameters are invalid.`,
+        ],
+        [LangTextType.A0266]: [
+            `请最少选择一个区域`,
+            `Please select at least one location.`,
+        ],
+        [LangTextType.A0267]: [
+            `正在编辑该区域，无法将其隐藏`,
+            `The location is being edited thus can't be hidden.`,
+        ],
+        [LangTextType.A0268]: [
+            `指定坐标已存在`,
+            `The coordinate exists already.`,
+        ],
+        [LangTextType.A0269]: [
+            `该地块已有部队占据，不能绘制可攻击的地形`,
+            `Can't draw an attackable terrain on a tile that occupied by a unit.`,
+        ],
+        [LangTextType.A0270]: [
+            `已搭载CO`,
+            `the CO is onboard`,
+        ],
+        [LangTextType.A0271]: [
+            `未搭载CO`,
+            `the CO is Not onboard`,
+        ],
+        [LangTextType.A0272]: [
+            [
+                `"存活"状态下，玩家可以正常行动。可以从其他状态切换到本状态（死而复生）。`,
+                ``,
+                `"即将战败"状态下，玩家无法行动。除非有其他事件把玩家状态改为"存活"，否则系统将自动清除所有该玩家的部队，建筑将变为中立，且状态将变为已战败。`,
+                ``,
+                `"已战败"状态下，玩家无法行动。如果玩家是直接从存活状态切换到已战败状态，则其部队和建筑所有权都会残留。`,
+            ].join(`\n`),
+            [
+                `Alive: players can do anything as usual. It's possible to make a (Being) Defeated player Alive again.`,
+                ``,
+                `Being Defeated: players can not do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
+                ``,
+                `Defeated: players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
+            ].join(`\n`),
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2505,7 +2613,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0368]: [
             `已行动`,
-            `Waiting`,
+            `Waited`,
         ],
         [LangTextType.B0369]: [
             `空闲`,
@@ -2540,7 +2648,7 @@ namespace TwnsLangCommonText {
             `Channel`,
         ],
         [LangTextType.B0377]: [
-            `组队`,
+            `队伍`,
             `Team`,
         ],
         [LangTextType.B0378]: [
@@ -2717,7 +2825,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0421]: [
             `已搭载CO`,
-            `CO on board`,
+            `CO onboard`,
         ],
         [LangTextType.B0422]: [
             `战斗`,
@@ -2980,8 +3088,8 @@ namespace TwnsLangCommonText {
             `Delete Action`,
         ],
         [LangTextType.B0487]: [
-            `克隆`,
-            `Clone`,
+            `浅克隆`,
+            `Shallow Clone`,
         ],
         [LangTextType.B0488]: [
             `条件节点`,
@@ -3505,7 +3613,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0618]: [
             `修改玩家状态`,
-            `Modify a Player's State`,
+            `Modify Players' State`,
         ],
         [LangTextType.B0619]: [
             `多人合作自定义游戏`,
@@ -3560,36 +3668,36 @@ namespace TwnsLangCommonText {
             `Switch BGM`,
         ],
         [LangTextType.B0632]: [
-            `Wandering Path`,
-            `Wandering Path`,
+            `Wandering Path (Lobby)`,
+            `Wandering Path (Lobby)`,
         ],
         [LangTextType.B0633]: [
-            `Design Time`,
-            `Design Time`,
+            `Design Time (Map Editor)`,
+            `Design Time (Map Editor)`,
         ],
         [LangTextType.B0634]: [
-            `We Will Prevail`,
-            `We Will Prevail`,
+            `We Will Prevail (Will)`,
+            `We Will Prevail (Will)`,
         ],
         [LangTextType.B0635]: [
-            `Hope Never Dies`,
-            `Hope Never Dies`,
+            `Hope Never Dies (Brenner)`,
+            `Hope Never Dies (Brenner)`,
         ],
         [LangTextType.B0636]: [
-            `Lost Memories`,
-            `Lost Memories`,
+            `Lost Memories (Isabella)`,
+            `Lost Memories (Isabella)`,
         ],
         [LangTextType.B0637]: [
-            `Proud Soldier`,
-            `Proud Soldier`,
+            `Proud Soldier (Gage)`,
+            `Proud Soldier (Gage)`,
         ],
         [LangTextType.B0638]: [
-            `Days of Ruin`,
-            `Days of Ruin`,
+            `Days of Ruin (No CO)`,
+            `Days of Ruin (No CO)`,
         ],
         [LangTextType.B0639]: [
-            `Rutty`,
-            `Rutty`,
+            `Rutty (??)`,
+            `Rutty (??)`,
         ],
         [LangTextType.B0640]: [
             `用户ID`,
@@ -3644,36 +3752,36 @@ namespace TwnsLangCommonText {
             `Go to War List`,
         ],
         [LangTextType.B0653]: [
-            `Supreme Logician`,
-            `Supreme Logician`,
+            `Supreme Logician (Lin)`,
+            `Supreme Logician (Lin)`,
         ],
         [LangTextType.B0654]: [
-            `Goddess of Revenge`,
-            `Goddess of Revenge`,
+            `Goddess of Revenge (Tasha)`,
+            `Goddess of Revenge (Tasha)`,
         ],
         [LangTextType.B0655]: [
-            `Hero of Legend`,
-            `Hero of Legend`,
+            `Hero of Legend (Forsythe)`,
+            `Hero of Legend (Forsythe)`,
         ],
         [LangTextType.B0656]: [
-            `Flight of the Coward`,
-            `Flight of the Coward`,
+            `Flight of the Coward (Waylon)`,
+            `Flight of the Coward (Waylon)`,
         ],
         [LangTextType.B0657]: [
-            `Madman's Reign`,
-            `Madman's Reign`,
+            `Madman's Reign (Greyfield)`,
+            `Madman's Reign (Greyfield)`,
         ],
         [LangTextType.B0658]: [
-            `Cruel Rose`,
-            `Cruel Rose`,
+            `Cruel Rose (Tabitha)`,
+            `Cruel Rose (Tabitha)`,
         ],
         [LangTextType.B0659]: [
-            `Puppet Master`,
-            `Puppet Master`,
+            `Puppet Master (Caulder)`,
+            `Puppet Master (Caulder)`,
         ],
         [LangTextType.B0660]: [
-            `Power Up`,
-            `Power Up`,
+            `Power Up (Power)`,
+            `Power Up (Power)`,
         ],
         [LangTextType.B0661]: [
             `删除地形装饰物`,
@@ -3856,8 +3964,8 @@ namespace TwnsLangCommonText {
             `Weather`,
         ],
         [LangTextType.B0706]: [
-            `Mr. Bear`,
-            `Mr. Bear`,
+            `Mr. Bear (Penny)`,
+            `Mr. Bear (Penny)`,
         ],
         [LangTextType.B0707]: [
             `头像`,
@@ -3870,6 +3978,410 @@ namespace TwnsLangCommonText {
         [LangTextType.B0709]: [
             `自动保存`,
             `Auto Save`,
+        ],
+        [LangTextType.B0710]: [
+            `回放`,
+            `Replay`,
+        ],
+        [LangTextType.B0711]: [
+            `返回战局`,
+            `Back to War`,
+        ],
+        [LangTextType.B0712]: [
+            `回放进度`,
+            `Replay Progress`,
+        ],
+        [LangTextType.B0713]: [
+            `重置视角`,
+            `Reset Viewpoint`,
+        ],
+        [LangTextType.B0714]: [
+            `显示特效`,
+            `Show Effect`,
+        ],
+        [LangTextType.B0715]: [
+            `改变天气`,
+            `Change Weather`,
+        ],
+        [LangTextType.B0716]: [
+            `指定地块所属的玩家是...`,
+            `The tile's owner is ...`,
+        ],
+        [LangTextType.B0717]: [
+            `指定地块的类型是...`,
+            `The tile's type is ...`,
+        ],
+        [LangTextType.B0718]: [
+            `地形类型`,
+            `Terrain Type`,
+        ],
+        [LangTextType.B0719]: [
+            `战局`,
+            `War`,
+        ],
+        [LangTextType.B0720]: [
+            `A.I.模式`,
+            `A.I. Mode`,
+        ],
+        [LangTextType.B0721]: [
+            `站桩`,
+            `No Move`,
+        ],
+        [LangTextType.B0722]: [
+            `守株待兔`,
+            `Standby`,
+        ],
+        [LangTextType.B0723]: [
+            `正常`,
+            `Normal`,
+        ],
+        [LangTextType.B0724]: [
+            `A.I.模式已切换`,
+            `A.I. Mode switched.`,
+        ],
+        [LangTextType.B0725]: [
+            `多人合作明战`,
+            `Coop Std`,
+        ],
+        [LangTextType.B0726]: [
+            `多人合作雾战`,
+            `Coop FoW`,
+        ],
+        [LangTextType.B0727]: [
+            `背景`,
+            `Background`,
+        ],
+        [LangTextType.B0728]: [
+            `播放简易对话`,
+            `Show Simple Dialogue`,
+        ],
+        [LangTextType.B0729]: [
+            `显示在下侧`,
+            `Show on bottom`,
+        ],
+        [LangTextType.B0730]: [
+            `增加CO能量%`,
+            `Add CO Energy %`,
+        ],
+        [LangTextType.B0731]: [
+            `增加部队HP`,
+            `Add Unit's HP`,
+        ],
+        [LangTextType.B0732]: [
+            `增加部队燃料%`,
+            `Add Unit's Fuel %`,
+        ],
+        [LangTextType.B0733]: [
+            `增加部队主弹药%`,
+            `Add Unit's Pri.Ammo %`,
+        ],
+        [LangTextType.B0734]: [
+            `生效范围`,
+            `Effective Radius`,
+        ],
+        [LangTextType.B0735]: [
+            `影响自身`,
+            `Affect Self`,
+        ],
+        [LangTextType.B0736]: [
+            `影响队友`,
+            `Affect Ally`,
+        ],
+        [LangTextType.B0737]: [
+            `影响敌人`,
+            `Affect Enemy`,
+        ],
+        [LangTextType.B0738]: [
+            `增加资金`,
+            `Add Fund`,
+        ],
+        [LangTextType.B0739]: [
+            `优先级`,
+            `Priority`,
+        ],
+        [LangTextType.B0740]: [
+            `调整路桥造型`,
+            `Adjust Roads & Bridges`,
+        ],
+        [LangTextType.B0741]: [
+            `调整等离子`,
+            `Adjust Plasmas`,
+        ],
+        [LangTextType.B0742]: [
+            `上`,
+            `Up`,
+        ],
+        [LangTextType.B0743]: [
+            `右`,
+            `Right`,
+        ],
+        [LangTextType.B0744]: [
+            `下`,
+            `Down`,
+        ],
+        [LangTextType.B0745]: [
+            `左`,
+            `Left`,
+        ],
+        [LangTextType.B0746]: [
+            `最大攻击目标数`,
+            `Max. Targets`,
+        ],
+        [LangTextType.B0747]: [
+            `部队不透明度`,
+            `Unit Opacity`,
+        ],
+        [LangTextType.B0748]: [
+            `深克隆`,
+            `Deep Clone`,
+        ],
+        [LangTextType.B0749]: [
+            `已被引用`,
+            `Referenced`,
+        ],
+        [LangTextType.B0750]: [
+            `播放BGM`,
+            `Play BGM`,
+        ],
+        [LangTextType.B0751]: [
+            `指定BGM`,
+            `Specific BGM`,
+        ],
+        [LangTextType.B0752]: [
+            `修改玩家的资金`,
+            `Modify Players' Fund`,
+        ],
+        [LangTextType.B0753]: [
+            `最终值`,
+            `Final Value`,
+        ],
+        [LangTextType.B0754]: [
+            `增减值`,
+            `Delta Value`,
+        ],
+        [LangTextType.B0755]: [
+            `倍率`,
+            `Multiplier`,
+        ],
+        [LangTextType.B0756]: [
+            `修改玩家的CO能量`,
+            `Modify Players' CO Energy`,
+        ],
+        [LangTextType.B0757]: [
+            `显示所有区域`,
+            `Show All Locations`,
+        ],
+        [LangTextType.B0758]: [
+            `隐藏所有区域`,
+            `Hide All Locations`,
+        ],
+        [LangTextType.B0759]: [
+            `添加区域地块`,
+            `Add To Location`,
+        ],
+        [LangTextType.B0760]: [
+            `删除区域地块`,
+            `Del From Location`,
+        ],
+        [LangTextType.B0761]: [
+            `全选`,
+            `Select All`,
+        ],
+        [LangTextType.B0762]: [
+            `全不选`,
+            `Unselect All`,
+        ],
+        [LangTextType.B0763]: [
+            `任意部队`,
+            `Any Unit`,
+        ],
+        [LangTextType.B0764]: [
+            `区域`,
+            `Location`,
+        ],
+        [LangTextType.B0765]: [
+            `任意坐标`,
+            `Any Coordinate`,
+        ],
+        [LangTextType.B0766]: [
+            `任意玩家`,
+            `Any Player`
+        ],
+        [LangTextType.B0767]: [
+            `==`,
+            `==`,
+        ],
+        [LangTextType.B0768]: [
+            `!=`,
+            `!=`,
+        ],
+        [LangTextType.B0769]: [
+            `>`,
+            `>`
+        ],
+        [LangTextType.B0770]: [
+            `<=`,
+            `<=`,
+        ],
+        [LangTextType.B0771]: [
+            `<`,
+            `<`,
+        ],
+        [LangTextType.B0772]: [
+            `>=`,
+            `>=`,
+        ],
+        [LangTextType.B0773]: [
+            `部队数量`,
+            `Units Count`,
+        ],
+        [LangTextType.B0774]: [
+            `比较符`,
+            `Comparator`,
+        ],
+        [LangTextType.B0775]: [
+            `特定部队数量统计...`,
+            `Unit Presence ...`,
+        ],
+        [LangTextType.B0776]: [
+            `任意`,
+            `Any`,
+        ],
+        [LangTextType.B0777]: [
+            `任意地形`,
+            `Any Terrain`,
+        ],
+        [LangTextType.B0778]: [
+            `地形数量`,
+            `Terrains Count`,
+        ],
+        [LangTextType.B0779]: [
+            `特定地形数量统计...`,
+            `Terrain Presence ...`,
+        ],
+        [LangTextType.B0780]: [
+            `阶段`,
+            `Phase`,
+        ],
+        [LangTextType.B0781]: [
+            `当前回合与玩家是...`,
+            `The Current Turn and Player ...`,
+        ],
+        [LangTextType.B0782]: [
+            `回合阶段`,
+            `Turn Phase`,
+        ],
+        [LangTextType.B0783]: [
+            `、且`,
+            `, and `,
+        ],
+        [LangTextType.B0784]: [
+            `存活状态`,
+            `Alive State`,
+        ],
+        [LangTextType.B0785]: [
+            `激活中的CO技能类型`,
+            `Activating CO Skill Type`,
+        ],
+        [LangTextType.B0786]: [
+            `玩家状态...`,
+            `Players' State ...`
+        ],
+        [LangTextType.B0787]: [
+            `CO能量百分比`,
+            `CO Energy %`,
+        ],
+        [LangTextType.B0788]: [
+            `事件数量`,
+            `Number of Events`,
+        ],
+        [LangTextType.B0789]: [
+            `事件触发次数...`,
+            `War Event Triggered Times ...`,
+        ],
+        [LangTextType.B0790]: [
+            `当前玩家回合内的触发次数`,
+            `Triggered Times in turn`,
+        ],
+        [LangTextType.B0791]: [
+            `合计触发次数`,
+            `Total Triggered Times`,
+        ],
+        [LangTextType.B0792]: [
+            `ID`,
+            `ID`,
+        ],
+        [LangTextType.B0793]: [
+            `地图自动滚动`,
+            `Auto Scroll Map`,
+        ],
+        [LangTextType.B0794]: [
+            `天气与战争迷雾...`,
+            `Weather Condition and Fog of War ...`,
+        ],
+        [LangTextType.B0795]: [
+            `设置战争迷雾`,
+            `Set Fog of War`,
+        ],
+        [LangTextType.B0796]: [
+            `强制起雾`,
+            `Force FoW`,
+        ],
+        [LangTextType.B0797]: [
+            `强制无雾`,
+            `Force No FoW`,
+        ],
+        [LangTextType.B0798]: [
+            `不强制`,
+            `No Force`,
+        ],
+        [LangTextType.B0799]: [
+            `自定义计数器ID`,
+            `Custom Counter ID`,
+        ],
+        [LangTextType.B0800]: [
+            `设置自定义计数器`,
+            `Set Custom Counters`,
+        ],
+        [LangTextType.B0801]: [
+            `计数器数量`,
+            `Number of Counters`,
+        ],
+        [LangTextType.B0802]: [
+            `自定义计数器...`,
+            `Custom Counters ...`,
+        ],
+        [LangTextType.B0803]: [
+            `值`,
+            `Value`,
+        ],
+        [LangTextType.B0804]: [
+            `地图评分`,
+            `Map Rating`,
+        ],
+        [LangTextType.B0805]: [
+            `类型`,
+            `Type`,
+        ],
+        [LangTextType.B0806]: [
+            `设置部队状态`,
+            `Set Units' State`,
+        ],
+        [LangTextType.B0807]: [
+            `真实HP`,
+            `Real HP`,
+        ],
+        [LangTextType.B0808]: [
+            `摧毁`,
+            `Destroy`,
+        ],
+        [LangTextType.B0809]: [
+            `CO能量值`,
+            `CO Energy`,
+        ],
+        [LangTextType.B0810]: [
+            `修改玩家状态`,
+            `Set Players' State`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3894,19 +4406,19 @@ namespace TwnsLangCommonText {
             `Road`,
         ],
         [LangTextType.B1005]: [
-            `桥梁`,
+            `桥梁(平原)`,
             `BridgeOnPlain`,
         ],
         [LangTextType.B1006]: [
-            `桥梁`,
+            `桥梁(河)`,
             `BridgeOnRiver`,
         ],
         [LangTextType.B1007]: [
-            `桥梁`,
+            `桥梁(沙滩)`,
             `BridgeOnBeach`,
         ],
         [LangTextType.B1008]: [
-            `桥梁`,
+            `桥梁(海)`,
             `BridgeOnSea`,
         ],
         [LangTextType.B1009]: [
@@ -3934,7 +4446,7 @@ namespace TwnsLangCommonText {
             `Rough`,
         ],
         [LangTextType.B1015]: [
-            `迷雾`,
+            `迷雾(海)`,
             `MistOnSea`,
         ],
         [LangTextType.B1016]: [
@@ -3998,16 +4510,56 @@ namespace TwnsLangCommonText {
             `TempSeaport`,
         ],
         [LangTextType.B1031]: [
-            `迷雾`,
+            `迷雾(平原)`,
             `MistOnPlain`,
         ],
         [LangTextType.B1032]: [
-            `迷雾`,
+            `迷雾(河)`,
             `MistOnRiver`,
         ],
         [LangTextType.B1033]: [
-            `迷雾`,
+            `迷雾(沙滩)`,
             `MistOnBeach`,
+        ],
+        [LangTextType.B1034]: [
+            `水晶`,
+            `Crystal`,
+        ],
+        [LangTextType.B1035]: [
+            `神秘水晶`,
+            `Myst.Crystal`,
+        ],
+        [LangTextType.B1036]: [
+            `加农炮(下)`,
+            `Cannon(Down)`,
+        ],
+        [LangTextType.B1037]: [
+            `神秘加农炮`,
+            `Myst.Cannon`,
+        ],
+        [LangTextType.B1038]: [
+            `激光炮`,
+            `LaserTurret`,
+        ],
+        [LangTextType.B1039]: [
+            `神秘激光炮`,
+            `Myst.LaserTurret`,
+        ],
+        [LangTextType.B1040]: [
+            `管道接口`,
+            `Joint`,
+        ],
+        [LangTextType.B1041]: [
+            `加农炮(左)`,
+            `Cannon(Left)`,
+        ],
+        [LangTextType.B1042]: [
+            `加农炮(右)`,
+            `Cannon(Right)`,
+        ],
+        [LangTextType.B1043]: [
+            `加农炮(上)`,
+            `Cannon(Up)`,
         ],
 
         [LangTextType.B1200]: [
@@ -4211,8 +4763,8 @@ namespace TwnsLangCommonText {
             `It's %s (p%d)'s turn!!`,
         ],
         [LangTextType.F0023]: [
-            `地图的总格子数必须小于%d，否则不能提审`,
-            `The number of the tiles must be less than %d, or the map can't be submitted for review.`,
+            `地图的总格子数必须小于等于%d`,
+            `The number of the tiles must be less than or equal to %d.`,
         ],
         [LangTextType.F0024]: [
             `修改时间: %s`,
@@ -4383,8 +4935,8 @@ namespace TwnsLangCommonText {
             `Do you want to go to the %s website?`,
         ],
         [LangTextType.F0066]: [
-            `设置玩家 P%d 的状态为 %s`,
-            `Set P%d's state as %s.`,
+            `设置玩家 %s 的状态为 %s`,
+            `Set %s's state as %s.`,
         ],
         [LangTextType.F0067]: [
             `无法在 %s 上放置部队。`,
@@ -4417,6 +4969,214 @@ namespace TwnsLangCommonText {
         [LangTextType.F0074]: [
             `当前天气将在第%d回合、P%d开始前结束（当前：第%d回合、P%d）。`,
             `The current weather will end before D%d P%d's turn begins (current: D%d P%d).`,
+        ],
+        [LangTextType.F0075]: [
+            `把坐标(%d, %d)移动到屏幕中心`,
+            `Move (%d, %d) to the screen center.`,
+        ],
+        [LangTextType.F0076]: [
+            `把天气改为%s，持续%d回合`,
+            `Set the weather condition to %s for %d turns.`,
+        ],
+        [LangTextType.F0077]: [
+            `把天气永久改为%s`,
+            `Set the weather condition to %s forever.`,
+        ],
+        [LangTextType.F0078]: [
+            `地块(%d, %d)属于玩家P%d`,
+            `The owner of the tile (%d, %d) is P%d.`,
+        ],
+        [LangTextType.F0079]: [
+            `地块(%d, %d)不属于玩家P%d`,
+            `The owner of the tile (%d, %d) is not P%d.`,
+        ],
+        [LangTextType.F0080]: [
+            `地块(%d, %d)的类型是%s`,
+            `The type of the tile (%d, %d) is %s.`,
+        ],
+        [LangTextType.F0081]: [
+            `地块(%d, %d)的类型不是%s`,
+            `The type of the tile (%d, %d) is not %s.`,
+        ],
+        [LangTextType.F0082]: [
+            `您将同意%d人的观战请求，同时拒绝%d人的观战请求。\n您确定要继续吗？`,
+            `You are going to accept %d players' requests while declining %d players' ones.\nAre you sure to continue?`,
+        ],
+        [LangTextType.F0083]: [
+            `您将向%d个玩家发起观战请求。\n您确定要继续吗？`,
+            `You are going to send requests to %d players.\nAre you sure to continue?`,
+        ],
+        [LangTextType.F0084]: [
+            `%s 已成功创建`,
+            `%s is created successfully.`
+        ],
+        [LangTextType.F0085]: [
+            `发生简易剧情对话，参与CO: %s`,
+            `Start a simple dialogue, COs: %s`,
+        ],
+        [LangTextType.F0086]: [
+            `修改 %s 的CO能量，公式为：当前能量 * %d%% + 最大能量 * %d%%`,
+            `Set %s's CO energy to: current energy * %d%% + max energy * %d%%.`,
+        ],
+        [LangTextType.F0087]: [
+            `修改 %s 的资金，公式为：当前资金 * %d%% + %d`,
+            `Set %s's fund to: current fund * %d%% + %d.`,
+        ],
+        [LangTextType.F0088]: [
+            `假设当前值是10000，则动作执行后将变为%d`,
+            `Assume the current value is 10000, then the value will become %d after this action is executed.`,
+        ],
+        [LangTextType.F0089]: [
+            `假设玩家当前CO能量是40%，则动作执行后为%d%%`,
+            `Assume the player's current CO energy is 40%%, then the energy will become %d%% after this action is executed.`,
+        ],
+        [LangTextType.F0090]: [
+            `类型为 %s%s 的部队的数量 %s %s`,
+            `Get all units that is %s%s. The number of the units %s %s.`,
+        ],
+        [LangTextType.F0091]: [
+            `%s无效`,
+            `Invalid %s.`,
+        ],
+        [LangTextType.F0092]: [
+            `选择%s`,
+            `Select %s`,
+        ],
+        [LangTextType.F0093]: [
+            `类型为 %s、且位于 %s、且归属于 %s 的地形的数量 %s %s`,
+            `The number of %s at %s that owned by %s is %s %s.`,
+        ],
+        [LangTextType.F0094]: [
+            `当前回合数是 %s、且回合阶段为 %s、且是 %s 的回合`,
+            `The Current Turn is %s, and the Turn Phase is %s, and the Current Player is %s.`,
+        ],
+        [LangTextType.F0095]: [
+            `当前回合数是 %s、且当前回合数除以 %s 的余数 %s %s、且回合阶段为 %s、且是 %s 的回合`,
+            `The Current Turn is %s, and the Current Turn mod %s is %s %s, and the Turn Phase is %s, and the Current Player is %s.`,
+        ],
+        [LangTextType.F0096]: [
+            `当前回合数除以 %s 的余数 %s %s、且回合阶段为 %s、且是 %s 的回合`,
+            `The Current Turn mod %s is %s %s, and the Turn Phase is %s, and the Current Player is %s.`,
+        ],
+        [LangTextType.F0097]: [
+            `任意%s`,
+            `Any %s`,
+        ],
+        [LangTextType.F0098]: [
+            `玩家序号为 %s%s 的玩家的数量 %s %s`,
+            `The number of players who is %s%s %s %s.`,
+        ],
+        [LangTextType.F0099]: [
+            `存活状态是 %s`,
+            `the Alive State is %s`,
+        ],
+        [LangTextType.F0100]: [
+            `资金 %s %s`,
+            `the Fund %s %s`,
+        ],
+        [LangTextType.F0101]: [
+            `CO能量值百分比 %s %s`,
+            `the CO Energy %% %s %s`,
+        ],
+        [LangTextType.F0102]: [
+            `激活中的CO技能类型是 %s`,
+            `the activating CO Skill Type is %s`,
+        ],
+        [LangTextType.F0103]: [
+            `ID为 %s%s 的事件的数量 %s %s`,
+            `The number of events whose ID is %s%s %s %s.`,
+        ],
+        [LangTextType.F0104]: [
+            `当前玩家回合内的触发次数 %s %s`,
+            `the Triggered Times in the current player's turn %s %s`,
+        ],
+        [LangTextType.F0105]: [
+            `合计触发次数 %s %s`,
+            `the Total Triggered Times %s %s`,
+        ],
+        [LangTextType.F0106]: [
+            `当前天气是 %s%s`,
+            `The Weather Condition is %s%s.`,
+        ],
+        [LangTextType.F0107]: [
+            `战争迷雾%s`,
+            `the Fog of War is %s`,
+        ],
+        [LangTextType.F0108]: [
+            `把战争迷雾改为%s，持续%d回合`,
+            `Set the Fog of War to %s for %d turns.`,
+        ],
+        [LangTextType.F0109]: [
+            `把战争迷雾永久改为%s`,
+            `Set the Fog of War to %s forever.`,
+        ],
+        [LangTextType.F0110]: [
+            `修改ID为 %s 的自定义计数器的值，公式为：当前值 * %d%% + %d`,
+            `Set the value of the Custom Counters whose ID is %s to: current value * %d%% + %d.`,
+        ],
+        [LangTextType.F0111]: [
+            `ID为 %s%s 的自定义计数器的数量 %s %s`,
+            `The number of Custom Counters whose ID is %s%s %s %s.`,
+        ],
+        [LangTextType.F0112]: [
+            `值 %s %s`,
+            `the Value %s %s`,
+        ],
+        [LangTextType.F0113]: [
+            `值除以 %s 的余数 %s %s`,
+            `the Value mod %s %s %s`,
+        ],
+        [LangTextType.F0114]: [
+            `修改类型为 %s%s 的所有部队的属性。`,
+            `Get all units that is %s%s, then modify their states.`,
+        ],
+        [LangTextType.F0115]: [
+            `归属于 %s`,
+            `is owned by %s`,
+        ],
+        [LangTextType.F0116]: [
+            `位于区域 %s`,
+            `is in the location %s`,
+        ],
+        [LangTextType.F0117]: [
+            `坐标为 %s`,
+            `the coordinate is %s`,
+        ],
+        [LangTextType.F0118]: [
+            `行动状态为 %s`,
+            `the action state is %s`,
+        ],
+        [LangTextType.F0119]: [
+            `%s: 当前值 * %s%% + %s。`,
+            `%s: current value * %s%% + %s.`,
+        ],
+        [LangTextType.F0120]: [
+            `真实HP %s %s`,
+            `the real HP %s %s`,
+        ],
+        [LangTextType.F0121]: [
+            `燃料%% %s %s`,
+            `the fuel%% %s %s`,
+        ],
+        [LangTextType.F0122]: [
+            `主武器弹药%% %s %s`,
+            `the primary weapon ammo%% %s %s`,
+        ],
+        [LangTextType.F0123]: [
+            `晋升等级 %s %s`,
+            `the promotion %s %s`,
+        ],
+        [LangTextType.F0124]: [
+            `找到类型为 %s%s 的所有部队，并摧毁它们。`,
+            `Get all units that is %s%s, then destroy them all.`,
+        ],
+        [LangTextType.F0125]: [
+            `%s: %s。`,
+            `%s: %s.`,
+        ],
+        [LangTextType.F0126]: [
+            `找到玩家序号为 %s%s 的所有玩家，并修改他们的属性。`,
+            `Get all players that is %s%s, then modify their states.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4645,6 +5405,22 @@ namespace TwnsLangCommonText {
                 `Sandstorm: all units' offense -30%.`,
                 `Snowy: all units' move range -1.`,
                 `Rainy: force FoW, all tiles' vision become 0, and all units' vision become 1.`,
+            ].join(`\n`),
+        ],
+        [LangTextType.R0010]: [
+            [
+                `A.I.模式会决定了此部队被A.I.操作时的行动方式，具体如下：`,
+                ``,
+                `0(正常)：A.I.按照自己认为的最佳方式来行动`,
+                `1(守株待兔)：在有敌军进入可攻击范围之内以前，部队不会执行任何行动`,
+                `2(站桩)：部队不会离开自己所处的位置，但会执行任何可能的行动`,
+            ].join(`\n`),
+            [
+                `The A.I. mode determines how the unit will act as below:`,
+                ``,
+                `0(Normal): The unit will do anything the A.I. thinks appropriate.`,
+                `1(Standby): The unit will do nothing util an enemy unit enters it's attackable area.`,
+                `2(No Move): The unit will not move away from the current grid, but will do anything else.`,
             ].join(`\n`),
         ],
     };

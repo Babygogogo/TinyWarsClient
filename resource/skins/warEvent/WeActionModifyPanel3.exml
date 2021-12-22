@@ -2,8 +2,8 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*"
         xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
         xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001" scale9Grid="1,1,2,2"
-                         locked="true" />
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
     <e:Group top="40" bottom="0" width="960" horizontalCenter="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
@@ -18,7 +18,7 @@
                 <e:HorizontalLayout/>
             </e:layout>
         </e:Group>
-        <e:Group y="34" locked="true">
+        <e:Group y="34">
             <TwnsUiButton:UiButton id="_btnAddDialogue" label="Add Unit"
                                    skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" x="0" y="0" />
             <TwnsUiButton:UiButton id="_btnClear" label="Clear" skinName="Skins.Component.Button.ButtonSelfAdaption001"
@@ -31,13 +31,22 @@
                                width="120" right="0" top="0" />
         <TwnsUiLabel:UiLabel id="_labelDialoguesCount" text="创建战局" size="18" textColor="0xFFFFFF" y="40"
                              horizontalCenter="0" />
+        <e:Group x="720" y="34">
+            <TwnsUiButton:UiButton id="_btnBackground" label="Background"
+                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" x="273" y="0" />
+            <TwnsUiLabel:UiLabel id="_labelBackground" text="创建战局" size="18" textColor="0xFFFFFF" y="40" x="0" />
+            <e:layout>
+                <e:HorizontalLayout verticalAlign="middle" />
+            </e:layout>
+        </e:Group>
         <TwnsUiScrollList:UiScrollList id="_listDialogue" left="5" right="5" top="70" bottom="10">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin currentState="up" states="down,up" width="950" height="200">
                         <e:Group left="0" right="0" top="0" bottom="0">
-                            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
-                                                 anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0" />
+                            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2"
+                                                 anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
+                                                 top="0" bottom="0" />
                             <e:Group left="0" right="0">
                                 <TwnsUiLabel:UiLabel id="_labelError" text="error" size="14" textColor="0xffffff"
                                                      verticalCenter="0" x="10" />

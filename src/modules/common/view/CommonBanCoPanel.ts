@@ -15,12 +15,13 @@
 // import TwnsUiLabel              from "../../tools/ui/UiLabel";
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonBanCoPanel {
     import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    type OpenDataForCommonBanCoPanel = {
+    export type OpenData = {
         playerIndex         : number;
         configVersion       : string;
         bannedCoIdArray     : number[];
@@ -29,12 +30,7 @@ namespace TwnsCommonBanCoPanel {
         selfCoId            : number | null;
         callbackOnConfirm   : ((bannedCoIdSet: Set<number>) => void) | null;
     };
-    export class CommonBanCoPanel extends TwnsUiPanel.UiPanel<OpenDataForCommonBanCoPanel> {
-        protected readonly _LAYER_TYPE   = Types.LayerType.Hud2;
-        protected readonly _IS_EXCLUSIVE = true;
-
-        private static _instance: CommonBanCoPanel;
-
+    export class CommonBanCoPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _group!                    : eui.Group;
         private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;
@@ -51,28 +47,7 @@ namespace TwnsCommonBanCoPanel {
         private _bannedCoIdSet          = new Set<number>();
         private _previewCoId            : number | null = null;
 
-        public static show(openData: OpenDataForCommonBanCoPanel): void {
-            if (!CommonBanCoPanel._instance) {
-                CommonBanCoPanel._instance = new CommonBanCoPanel();
-            }
-            CommonBanCoPanel._instance.open(openData);
-        }
-
-        public static async hide(): Promise<void> {
-            if (CommonBanCoPanel._instance) {
-                await CommonBanCoPanel._instance.close();
-            }
-        }
-
-        public constructor() {
-            super();
-
-            this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/common/CommonBanCoPanel.exml";
-        }
-
-        protected _onOpened(): void {
+        protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -81,9 +56,10 @@ namespace TwnsCommonBanCoPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-
-            this._showOpenAnimation();
-
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+        }
+        protected async _updateOnOpenDataChanged(): Promise<void> {
             const openData      = this._getOpenData();
             const bannedCoIdSet = this._bannedCoIdSet;
             bannedCoIdSet.clear();
@@ -97,10 +73,7 @@ namespace TwnsCommonBanCoPanel {
             this._initGroupCoNames();
             this._initComponentsForPreviewCo();
         }
-
-        protected async _onClosed(): Promise<void> {
-            await this._showCloseAnimation();
-
+        protected _onClosing(): void {
             // this._clearGroupCoTiers();
             this._clearGroupCoNames();
         }
@@ -130,7 +103,7 @@ namespace TwnsCommonBanCoPanel {
             } else {
                 const bannedCoIdSet = this._bannedCoIdSet;
                 if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
-                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0130),
                     });
@@ -139,7 +112,7 @@ namespace TwnsCommonBanCoPanel {
 
                 const maxBanCount = openData.maxBanCount;
                 if ((maxBanCount != null) && (bannedCoIdSet.size > maxBanCount)) {
-                    TwnsCommonAlertPanel.CommonAlertPanel.show({
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
                     });
@@ -205,7 +178,7 @@ namespace TwnsCommonBanCoPanel {
             }
 
             if (coId === CommonConstants.CoEmptyId) {
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0130),
                 });
@@ -214,7 +187,7 @@ namespace TwnsCommonBanCoPanel {
 
             const maxBanCount = openData.maxBanCount;
             if ((maxBanCount != null) && (bannedCoIdSet.size >= maxBanCount)) {
-                TwnsCommonAlertPanel.CommonAlertPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getFormattedText(LangTextType.F0031, maxBanCount),
                 });
@@ -229,7 +202,7 @@ namespace TwnsCommonBanCoPanel {
             if (openData.selfCoId !== coId) {
                 callback();
             } else {
-                CommonConfirmPanel.show({
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0057),
                     callback,
                 });
@@ -349,7 +322,7 @@ namespace TwnsCommonBanCoPanel {
             });
         }
 
-        private _showOpenAnimation(): void {
+        protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
@@ -360,22 +333,23 @@ namespace TwnsCommonBanCoPanel {
                 beginProps  : { alpha: 0, verticalCenter: -40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
-        }
-        private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>(resolve => {
-                Helpers.resetTween({
-                    obj         : this._imgMask,
-                    beginProps  : { alpha: 1 },
-                    endProps    : { alpha: 0 },
-                });
 
-                Helpers.resetTween({
-                    obj         : this._group,
-                    beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: -40 },
-                    callback    : resolve,
-                });
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
+        }
+        protected async _showCloseAnimation(): Promise<void> {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 1 },
+                endProps    : { alpha: 0 },
             });
+
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 1, verticalCenter: 0 },
+                endProps    : { alpha: 0, verticalCenter: -40 },
+            });
+
+            await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
     }
 
