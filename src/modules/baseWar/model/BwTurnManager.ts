@@ -1057,7 +1057,7 @@ namespace TwnsBwTurnManager {
 
         {
             const { deltaFund, deltaEnergyPercentage } = data;
-            if (deltaFund ?? deltaEnergyPercentage) {
+            if (deltaFund || deltaEnergyPercentage) {
                 for (const player of war.getPlayerManager().getAllPlayers()) {
                     const teamIndex = player.getTeamIndex();
                     if (((canAffectSelf) && (player.getPlayerIndex() === playerIndexInTurn))    ||
@@ -1088,7 +1088,7 @@ namespace TwnsBwTurnManager {
         }
         {
             const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
-            if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
+            if (deltaHp || deltaFuelPercentage || deltaPrimaryAmmoPercentage) {
                 for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(tile.getGridIndex(), 0, Helpers.getExisted(data.radius, ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01), unitMap.getMapSize())) {
                     const unit = unitMap.getUnitOnMap(gridIndex);
                     if (unit == null) {
@@ -1203,7 +1203,7 @@ namespace TwnsBwTurnManager {
 
             {
                 const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
-                if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
+                if (deltaHp || deltaFuelPercentage || deltaPrimaryAmmoPercentage) {
                     if (deltaFuelPercentage) {
                         if (deltaFuelPercentage < 0) {
                             unit.setCurrentFuel(Math.max(
@@ -1358,7 +1358,7 @@ namespace TwnsBwTurnManager {
         const affectedUnits         = new Set<TwnsBwUnit.BwUnit>();
         {
             const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
-            if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
+            if (deltaHp || deltaFuelPercentage || deltaPrimaryAmmoPercentage) {
                 for (const unit of candidateUnitArray) {
                     if (deltaFuelPercentage) {
                         if (deltaFuelPercentage < 0) {

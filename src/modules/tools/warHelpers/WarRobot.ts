@@ -40,8 +40,9 @@ namespace WarRobot {
         action  : IWarActionContainer;
     };
     type DamageMapData = {
-        max     : number;
-        total   : number;
+        max             : number;
+        directTotal     : number;
+        indirectTotal   : number;
     };
     type CommonParams = {
         war                     : BwWar;
@@ -71,7 +72,7 @@ namespace WarRobot {
     const _PRODUCTION_CANDIDATES: { [tileType: number]: { [unitType: number]: number } } = {
         [TileType.Factory]: {
             [UnitType.Infantry]     : 500,
-            [UnitType.Mech]         : 0,
+            [UnitType.Mech]         : -200,
             [UnitType.Bike]         : 520,
             [UnitType.Recon]        : 0,
             [UnitType.Flare]        : 0,
@@ -752,27 +753,33 @@ namespace WarRobot {
                 }
 
                 for (let y = 0; y < mapHeight; ++y) {
-                    if (column[y] == null) {
+                    const attackableGridData = column[y];
+                    if (attackableGridData == null) {
                         continue;
                     }
 
-                    const tile              = tileMap.getTile({ x, y });
-                    const tileDefenseAmount = tile.getDefenseAmountForUnit(targetUnit);
+                    const targetGridIndex   : GridIndex = { x, y };
+                    const isDirect          = GridIndexHelpers.getDistance(attackableGridData.movePathDestination, targetGridIndex) <= 1;
                     const damage            = Math.floor(
                         (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                         * normalizedHp
-                        * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileDefenseAmount)
+                        * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit))
                         / CommonConstants.UnitHpNormalizer
                     );
                     if (!damageMap[x][y]) {
                         damageMap[x][y] = {
-                            max     : damage,
-                            total   : damage,
+                            max             : damage,
+                            directTotal     : isDirect ? damage : 0,
+                            indirectTotal   : isDirect ? 0 : damage,
                         };
                     } else {
-                        const grid  = damageMap[x][y];
-                        grid.max    = Math.max(grid.max, damage);
-                        grid.total  += damage;
+                        const damageGridData    = damageMap[x][y];
+                        damageGridData.max      = Math.max(damageGridData.max, damage);
+                        if (isDirect) {
+                            damageGridData.directTotal += damage;
+                        } else {
+                            damageGridData.indirectTotal += damage;
+                        }
                     }
                 }
             }
@@ -968,8 +975,19 @@ namespace WarRobot {
 
         const data = damageMap ? damageMap[gridIndex.x][gridIndex.y] : undefined;
         if (data) {
-            const productionCost = unit.getProductionCfgCost();
-            return - data.total * productionCost / 3000 / Math.max(1, commonParams.unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1) * 0.05;
+            // inf(1500)                    30000
+            // 1hp伤害且击毁    -1.6        -32
+            // 1hp伤害且存活    -0.1        -2
+            // 100hp伤害且击毁  -11.5       -230
+            // 100hp伤害且存活  -10         -200
+            const currentHp         = unit.getCurrentHp();
+            const directDamage      = data.directTotal;
+            const indirectDamage    = data.indirectTotal;
+            return -(
+                Math.min(directDamage, currentHp) * 0.05                +
+                Math.min(indirectDamage, currentHp) * 0.15              +
+                ((directDamage + indirectDamage >= currentHp) ? 3 : 0)
+            ) * unit.getProductionCfgCost() / 3000 / Math.max(1, commonParams.unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1);
         } else {
             return 0;
         }
@@ -982,7 +1000,7 @@ namespace WarRobot {
         const { width: mapWidth, height: mapHeight }    = mapSize;
         const tileMap                                   = war.getTileMap();
         const teamIndex                                 = unit.getTeamIndex();
-        const distanceInfoArray                         : { distance: number, scaler: number }[] = [];
+        let minDistance                                 = Number.MAX_SAFE_INTEGER;
         for (let x = 0; x < mapWidth; ++x) {
             if (movableArea[x] == null) {
                 continue;
@@ -995,36 +1013,72 @@ namespace WarRobot {
                 }
 
                 const tile          = tileMap.getTile({ x, y });
-                const tileType      = tile.getType();
                 const tileTeamIndex = tile.getTeamIndex();
-                if ((tile.getMaxCapturePoint() != null) &&
-                    (tileTeamIndex !== teamIndex)
+                const distance      = info.totalMoveCost;
+                if ((tile.getMaxCapturePoint() == null) ||
+                    (tileTeamIndex === teamIndex)       ||
+                    (distance > minDistance)
                 ) {
-                    distanceInfoArray.push({
-                        distance: info.totalMoveCost,
-                        scaler  : (_DISTANCE_SCORE_SCALERS[tileType] || 1) * (tileTeamIndex === CommonConstants.WarNeutralTeamIndex ? 1.2 : 1),
-                    });
+                    continue;
                 }
+
+                minDistance = distance;
             }
         }
 
-        const tilesCount = distanceInfoArray.length;
-        if (tilesCount <= 0) {
-            return 0;
-        } else {
-            const productionCost    = unit.getProductionCfgCost();
-            const currentHp         = unit.getCurrentHp();
-            const maxHp             = unit.getMaxHp();
-            let score               = 0;
-            let maxDistance         = 0;
-            for (const distanceInfo of distanceInfoArray) {
-                const distance  = distanceInfo.distance;
-                maxDistance     = Math.max(maxDistance, distance);
-                score           += - Math.pow(distance, 2) * distanceInfo.scaler;
-            }
-            return score / tilesCount / (maxDistance || 1) * 2 * productionCost / maxHp * currentHp / 3000;
-        }
+        return minDistance >= Number.MAX_SAFE_INTEGER
+            ? 0
+            : -minDistance * 2;
 
+        // method 2
+        // const { war, mapSize }                          = commonParams;
+        // const { width: mapWidth, height: mapHeight }    = mapSize;
+        // const tileMap                                   = war.getTileMap();
+        // const teamIndex                                 = unit.getTeamIndex();
+        // const distanceInfoArray                         : { distance: number, scaler: number }[] = [];
+        // for (let x = 0; x < mapWidth; ++x) {
+        //     if (movableArea[x] == null) {
+        //         continue;
+        //     }
+
+        //     for (let y = 0; y < mapHeight; ++y) {
+        //         const info = movableArea[x][y];
+        //         if (info == null) {
+        //             continue;
+        //         }
+
+        //         const tile          = tileMap.getTile({ x, y });
+        //         const tileType      = tile.getType();
+        //         const tileTeamIndex = tile.getTeamIndex();
+        //         if ((tile.getMaxCapturePoint() != null) &&
+        //             (tileTeamIndex !== teamIndex)
+        //         ) {
+        //             distanceInfoArray.push({
+        //                 distance: info.totalMoveCost,
+        //                 scaler  : (_DISTANCE_SCORE_SCALERS[tileType] || 1) * (tileTeamIndex === CommonConstants.WarNeutralTeamIndex ? 1.2 : 1),
+        //             });
+        //         }
+        //     }
+        // }
+
+        // const tilesCount = distanceInfoArray.length;
+        // if (tilesCount <= 0) {
+        //     return 0;
+        // } else {
+        //     const currentHp         = unit.getCurrentHp();
+        //     const maxHp             = unit.getMaxHp();
+        //     let score               = 0;
+        //     let maxDistance         = 0;
+        //     for (const distanceInfo of distanceInfoArray) {
+        //         const distance  = distanceInfo.distance;
+        //         maxDistance     = Math.max(maxDistance, distance);
+        //         score           += - Math.pow(distance, 2) * distanceInfo.scaler;
+        //     }
+        //     return score / tilesCount / (maxDistance || 1) * 2 * unit.getProductionCfgCost() / 3000 / maxHp * currentHp;
+        // }
+
+
+        // method 1
         // const tileMap                                   = war.getTileMap();
         // const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
         // const teamIndex                                 = unit.getTeamIndex();
@@ -1155,27 +1209,26 @@ namespace WarRobot {
         const { war, mapSize }  = commonParams;
         const tileMap           = war.getTileMap();
         const tile              = tileMap.getTile(gridIndex);
+        const passiveScaler     = unit.getProductionCfgCost() / 3000 / Math.max(1, commonParams.unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1);
         if (tile.checkCanRepairUnit(unit)) {
-            const normalizedMaxHp       = unit.getNormalizedMaxHp();
-            const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
-            totalScore += (normalizedMaxHp - normalizedCurrentHp) * 15;
+            totalScore += (unit.getMaxHp() - unit.getCurrentHp()) * 0.2 * passiveScaler;
         }
 
         if (tile.checkCanSupplyUnit(unit)) {
             const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
             if (maxAmmo) {
                 const primaryWeaponCurrentAmmo = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForPosition_00);
-                totalScore += (maxAmmo - primaryWeaponCurrentAmmo) / maxAmmo * 55;
+                totalScore += (maxAmmo - primaryWeaponCurrentAmmo) / maxAmmo * 10 * passiveScaler;
             }
 
             const maxFuel       = unit.getMaxFuel();
             const currentFuel   = unit.getCurrentFuel();
-            totalScore          += (maxFuel - currentFuel) / maxFuel * 50 * (unit.checkIsDestroyedOnOutOfFuel() ? 2 : 1);
+            totalScore          += (maxFuel - currentFuel) / maxFuel * 10 * (unit.checkIsDestroyedOnOutOfFuel() ? 2 : 1);
 
             const maxFlareAmmo = unit.getFlareMaxAmmo();
             if ((maxFlareAmmo) && (_IS_NEED_VISIBILITY) && (war.getFogMap().checkHasFogCurrently())) {
                 const flareCurrentAmmo = Helpers.getExisted(unit.getFlareCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForPosition_01);
-                totalScore += (maxFlareAmmo - flareCurrentAmmo) / maxFlareAmmo * 55;
+                totalScore += (maxFlareAmmo - flareCurrentAmmo) / maxFlareAmmo * 10 * passiveScaler;
             }
         }
 
@@ -1212,7 +1265,7 @@ namespace WarRobot {
         });
 
         totalScore += await getScoreForDistanceToCapturableBuildings(commonParams, unit, movableArea);
-        totalScore += await getScoreForDistanceToOtherUnits(commonParams, unit, movableArea);
+        // totalScore += await getScoreForDistanceToOtherUnits(commonParams, unit, movableArea);
 
         return totalScore;
     }
@@ -1232,10 +1285,9 @@ namespace WarRobot {
             });
             let scoreForMovePath = 0;
             for (const unit of discoveredUnits) {
-                const productionCost    = unit.getProductionCfgCost();
                 const currentHp         = unit.getCurrentHp();
                 const maxHp             = unit.getMaxHp();
-                scoreForMovePath += 0.3 + productionCost * currentHp / maxHp / 3000 * (unit.getHasLoadedCo() ? 2 : 1) * 0.2;
+                scoreForMovePath += 0.3 + currentHp / maxHp * unit.getProductionCfgCost() / 3000 * (unit.getHasLoadedCo() ? 2 : 1) * 0.3;
             }
 
             return scoreForMovePath;
@@ -1253,15 +1305,33 @@ namespace WarRobot {
 
         if (!loader.checkCanLaunchLoadedUnit()) {
             return -1000;
-        } else {
-            if (loader.getNormalizedRepairHpForLoadedUnit() != null) {
-                const normalizedMaxHp = unit.getNormalizedMaxHp();
-                const normalizedCurrentHp = unit.getNormalizedCurrentHp();
-                return (normalizedMaxHp - normalizedCurrentHp) * 10;
-            } else {
-                return 0;
+        }
+
+        const passiveScaler = unit.getProductionCfgCost() / 3000 / Math.max(1, commonParams.unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1);
+        let totalScore      = 0;
+        if (loader.getNormalizedRepairHpForLoadedUnit() != null) {
+            totalScore += (unit.getMaxHp() - unit.getCurrentHp()) * 0.2 * passiveScaler;
+        }
+
+        if (loader.checkCanSupplyLoadedUnit()) {
+            const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+            if (maxAmmo) {
+                const primaryWeaponCurrentAmmo = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_02);
+                totalScore += (maxAmmo - primaryWeaponCurrentAmmo) / maxAmmo * 10 * passiveScaler;
+            }
+
+            const maxFuel       = unit.getMaxFuel();
+            const currentFuel   = unit.getCurrentFuel();
+            totalScore          += (maxFuel - currentFuel) / maxFuel * 10 * (unit.checkIsDestroyedOnOutOfFuel() ? 2 : 1);
+
+            const maxFlareAmmo = unit.getFlareMaxAmmo();
+            if ((maxFlareAmmo) && (_IS_NEED_VISIBILITY) && (war.getFogMap().checkHasFogCurrently())) {
+                const flareCurrentAmmo = Helpers.getExisted(unit.getFlareCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_03);
+                totalScore += (maxFlareAmmo - flareCurrentAmmo) / maxFlareAmmo * 10 * passiveScaler;
             }
         }
+
+        return totalScore;
     }
 
     async function getScoreForActionUnitJoin(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex): Promise<number> {
@@ -1271,28 +1341,25 @@ namespace WarRobot {
         const targetUnit    = Helpers.getExisted(war.getUnitMap().getUnitOnMap(gridIndex), ClientErrorCode.SpwRobot_GetScoreForActionUnitJoin_00);
         if (targetUnit.getActionState() === UnitActionState.Idle) {
             return -9999;
-        } else {
-            const normalizedCurrentHp1  = unit.getNormalizedCurrentHp();
-            const normalizedCurrentHp2  = targetUnit.getNormalizedCurrentHp();
-            const normalizedMaxHp       = unit.getNormalizedMaxHp();
-            const newHp                 = normalizedCurrentHp1 + normalizedCurrentHp2;
-            if (!targetUnit.getIsCapturingTile()) {
-                return newHp > normalizedMaxHp
-                    ? ((newHp - normalizedMaxHp) * (-50))
-                    : ((normalizedMaxHp - newHp) * 5);
-            } else {
-                const tile                  = war.getTileMap().getTile(gridIndex);
-                const currentCapturePoint   = Helpers.getExisted(tile.getCurrentCapturePoint(), ClientErrorCode.SpwRobot_GetScoreForActionUnitJoin_01);
-                const captureAmount         = Helpers.getExisted(targetUnit.getCaptureAmount(gridIndex), ClientErrorCode.SpwRobot_GetScoreForActionUnitJoin_02);
-                if (captureAmount >= currentCapturePoint) {
-                    return (newHp > normalizedMaxHp)
-                        ? ((newHp - normalizedMaxHp) * (-50))
-                        : ((normalizedMaxHp - newHp) * 5);
-                } else {
-                    return (Math.min(normalizedMaxHp, newHp) >= currentCapturePoint) ? 60 : 30;
-                }
-            }
         }
+
+        const normalizedMaxHp       = unit.getNormalizedMaxHp();
+        const rawNewHp              = unit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp();
+        const tile                  = war.getTileMap().getTile(gridIndex);
+        const currentCapturePoint   = tile.getCurrentCapturePoint();
+        const captureAmount         = targetUnit.getCaptureAmount(gridIndex);
+        if ((currentCapturePoint == null)           ||
+            (captureAmount == null)                 ||
+            (captureAmount >= currentCapturePoint)
+        ) {
+            return rawNewHp > normalizedMaxHp
+                ? ((rawNewHp - normalizedMaxHp) * (-20))
+                : 0;
+        }
+
+        return (Math.min(normalizedMaxHp, rawNewHp) >= currentCapturePoint)
+            ? (_TILE_VALUE[tile.getType()] ?? 0)
+            : 0;
     }
 
     async function getScoreForActionUnitAttack({ commonParams, focusUnit, focusUnitGridIndex, battleDamageInfoArray }: {
