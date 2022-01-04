@@ -346,23 +346,25 @@ namespace TwnsWwMakeRequestWarsPanel {
         panel   : WwMakeRequestWarsPanel;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
-        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _labelId!      : TwnsUiLabel.UiLabel;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
-        protected _onOpened(): void {
-            this._setUiListenerArray([
-                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-            ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
+        protected _onDataChanged(): void {
+            this._updateView();
         }
 
-        protected _onDataChanged(): void {
+        public onItemTapEvent(): void {
+            const data = this._getData();
+            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.info.warInfo?.warId, ClientErrorCode.WwMakeRequestWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
+        }
+
+        private _updateView(): void {
+            this._updateLabelId();
             this._updateLabelName();
         }
 
-        private _onTouchTapBtnChoose(): void {
-            const data = this._getData();
-            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.info.warInfo?.warId, ClientErrorCode.WwMakeRequestWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
+        private _updateLabelId(): void {
+            this._labelId.text = `#${this._getData().info.warInfo?.warId}`;
         }
 
         private async _updateLabelName(): Promise<void> {

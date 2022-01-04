@@ -239,14 +239,11 @@ namespace TwnsMcrMyRoomListPanel {
 
             } else {
                 const dataArray         = this._createDataForListRoom();
+                const roomId            = McrJoinModel.getJoinedPreviewingRoomId();
                 labelLoading.visible    = false;
                 labelNoRoom.visible     = !dataArray.length;
                 listRoom.bindData(dataArray);
-
-                const roomId = McrJoinModel.getJoinedPreviewingRoomId();
-                if (dataArray.every(v => v.roomId != roomId)) {
-                    McrJoinModel.setJoinedPreviewingRoomId(dataArray.length ? dataArray[0].roomId : null);
-                }
+                listRoom.setSelectedIndex(dataArray.findIndex(v => v.roomId === roomId));
             }
         }
 
@@ -398,23 +395,13 @@ namespace TwnsMcrMyRoomListPanel {
         roomId: number;
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
-        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _labelId!      : TwnsUiLabel.UiLabel;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
-        protected _onOpened(): void {
-            this._setUiListenerArray([
-                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-            ]);
-            this._setNotifyListenerArray([
-                { type: NotifyType.McrJoinedPreviewingRoomIdChanged,   callback: this._onNotifyMcrJoinedPreviewingRoomIdChanged },
-            ]);
-        }
-
         protected async _onDataChanged(): Promise<void> {
-            this._updateState();
-
             const roomId            = this._getData().roomId;
+            this._labelId.text      = `#${roomId}`;
             this._imgRed.visible    = await McrModel.checkIsRedForRoom(roomId);
 
             const settingsForMcw    = (await McrModel.getRoomInfo(roomId))?.settingsForMcw;
@@ -423,16 +410,8 @@ namespace TwnsMcrMyRoomListPanel {
                 : (settingsForMcw.warName || (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)))) ?? CommonConstants.ErrorTextForUndefined;
         }
 
-        private _onNotifyMcrJoinedPreviewingRoomIdChanged(): void {
-            this._updateState();
-        }
-
-        private _onTouchTapBtnChoose(): void {
+        public onItemTapEvent(): void {
             McrJoinModel.setJoinedPreviewingRoomId(this._getData().roomId);
-        }
-
-        private _updateState(): void {
-            this.currentState = this._getData().roomId === McrJoinModel.getJoinedPreviewingRoomId() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }

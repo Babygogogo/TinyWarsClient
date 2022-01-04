@@ -32,11 +32,15 @@ namespace TwnsBwUnitBriefPanel {
     };
     // eslint-disable-next-line no-shadow
     export class BwUnitBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        private readonly _group!    : eui.Group;
+        private readonly _group!        : eui.Group;
+        private readonly _btnExpand!    : TwnsUiButton.UiButton;
+        private readonly _btnNarrow!    : TwnsUiButton.UiButton;
+
         private _cellList           : BwUnitBriefCell[] = [];
 
         private _unitList   : BwUnit[] = [];
         private _isLeftSide = true;
+        private _isExpanded = true;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -49,6 +53,10 @@ namespace TwnsBwUnitBriefPanel {
                 { type: NotifyType.MeUnitChanged,                   callback: this._onNotifyMeUnitChanged },
                 { type: NotifyType.UnitAnimationTick,               callback: this._onNotifyUnitAnimationTick },
                 { type: NotifyType.UnitStateIndicatorTick,          callback: this._onNotifyUnitStateIndicatorTick },
+            ]);
+            this._setUiListenerArray([
+                { ui: this._btnExpand,  callback: this._onTouchedBtnExpand },
+                { ui: this._btnNarrow,  callback: this._onTouchedBtnNarrow },
             ]);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -105,6 +113,15 @@ namespace TwnsBwUnitBriefPanel {
             }
         }
 
+        private _onTouchedBtnExpand(): void {
+            this._isExpanded = true;
+            this._updateView();
+        }
+        private _onTouchedBtnNarrow(): void {
+            this._isExpanded = false;
+            this._updateView();
+        }
+
         private _onCellTouchTap(e: egret.TouchEvent): void {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             for (let i = 0; i < this._cellList.length; ++i) {
@@ -122,50 +139,56 @@ namespace TwnsBwUnitBriefPanel {
             const war = this._getOpenData().war;
             if (!war.getIsRunning()) {
                 this.visible = false;
-            } else {
-                this.visible = true;
+                return;
+            }
 
-                const unitList  = this._unitList;
-                unitList.length = 0;
+            this.visible = true;
 
-                const unitMap       = war.getUnitMap();
-                const gridIndex     = war.getCursor().getGridIndex();
-                const unitOnMap     = unitMap.getUnitOnMap(gridIndex);
-                const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const isExpanded        = this._isExpanded;
+            this._btnExpand.visible = !isExpanded;
+            this._btnNarrow.visible = isExpanded;
+            this._group.visible     = isExpanded;
 
-                if ((unitOnMap)                                         &&
-                    (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
-                        war,
-                        gridIndex,
-                        unitType            : unitOnMap.getUnitType(),
-                        isDiving            : unitOnMap.getIsDiving(),
-                        unitPlayerIndex     : unitOnMap.getPlayerIndex(),
-                        observerTeamIndexes : teamIndexes
-                    }))
+            const unitList  = this._unitList;
+            unitList.length = 0;
+
+            const unitMap       = war.getUnitMap();
+            const gridIndex     = war.getCursor().getGridIndex();
+            const unitOnMap     = unitMap.getUnitOnMap(gridIndex);
+            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+
+            if ((unitOnMap)                                         &&
+                (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                    war,
+                    gridIndex,
+                    unitType            : unitOnMap.getUnitType(),
+                    isDiving            : unitOnMap.getIsDiving(),
+                    unitPlayerIndex     : unitOnMap.getPlayerIndex(),
+                    observerTeamIndexes : teamIndexes
+                }))
+            ) {
+                unitList.push(unitOnMap);
+
+                if ((!war.getFogMap().checkHasFogCurrently())   ||
+                    (teamIndexes.has(unitOnMap.getTeamIndex()))
                 ) {
-                    unitList.push(unitOnMap);
-
-                    if ((!war.getFogMap().checkHasFogCurrently())   ||
-                        (teamIndexes.has(unitOnMap.getTeamIndex()))
-                    ) {
-                        for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
-                            unitList.push(loadedUnit);
-                        }
+                    for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
+                        unitList.push(loadedUnit);
                     }
                 }
-
-                this._group.removeChildren();
-                const cellList      = this._cellList;
-                const length        = unitList.length;
-                this._group.width   = length * _CELL_WIDTH;
-                for (let i = 0; i < length; ++i) {
-                    cellList[i] = cellList[i] || this._createCell();
-                    cellList[i].setUnit(unitList[i]);
-                    this._group.addChild(cellList[i]);
-                }
-
-                this._updatePosition();
             }
+
+            this._group.removeChildren();
+            const cellList      = this._cellList;
+            const length        = unitList.length;
+            this._group.width   = length * _CELL_WIDTH;
+            for (let i = 0; i < length; ++i) {
+                cellList[i] = cellList[i] || this._createCell();
+                cellList[i].setUnit(unitList[i]);
+                this._group.addChild(cellList[i]);
+            }
+
+            this._updatePosition();
         }
 
         // private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {

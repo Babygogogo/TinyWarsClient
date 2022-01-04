@@ -200,6 +200,7 @@ namespace McrProxy {
         const data = e.data as NetMessage.MsgMcrGetJoinedRoomInfoList.IS;
         if (!data.errorCode) {
             McrModel.setJoinedRoomInfoList(data.roomInfoList || []);
+            McrJoinModel.updateOnMsgMcrGetJoinedRoomInfoList();
             Notify.dispatch(NotifyType.MsgMcrGetJoinedRoomInfoList, data);
         }
     }

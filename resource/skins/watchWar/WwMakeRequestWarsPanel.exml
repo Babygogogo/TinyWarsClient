@@ -66,7 +66,8 @@
             <TwnsUiButton:skinName>
                 <e:Skin>
                     <e:Group left="0" right="0" top="0" bottom="0">
-                        <e:Image source="uncompressedPentagon0000" scale9Grid="4,4,1,1" left="0" right="0" top="0" bottom="0" />
+                        <e:Image source="uncompressedPentagon0000" scale9Grid="4,4,1,1" left="0" right="0" top="0"
+                                 bottom="0" />
                         <TwnsUiLabel:UiLabel id="labelDisplay" size="16" textColor="0xffffff" text="Change Password"
                                              textAlign="center" verticalAlign="middle" wordWrap="true"
                                              verticalCenter="0" bold="true" x="10" />
@@ -85,22 +86,19 @@
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin width="200" height="40" currentState="up" states="up,down">
-                            <TwnsUiImage:UiImage source="uncompressedPentagon0002" left="10" right="0" top="0" bottom="0"
-                                                 visible.down="false" scale9Grid="4,4,1,1" />
+                            <TwnsUiImage:UiImage source="uncompressedPentagon0002" left="10" right="0" top="0"
+                                                 bottom="0" visible.down="false" scale9Grid="4,4,1,1" />
                             <TwnsUiImage:UiImage left="10" right="0" top="0" bottom="0" x="10" y="10"
-                                                 source="uncompressedPentagon0003" visible.up="false" scale9Grid="4,4,1,1" />
-                            <TwnsUiButton:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0">
-                                <TwnsUiButton:skinName>
-                                    <e:Skin states="up,down,disabled">
-                                        <e:Image source="uncompressedColorTransparent0000" left="0" right="0" top="0"
-                                                 bottom="0" />
-                                        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
-                                                 bold="true" textColor="0x000000" />
-                                    </e:Skin>
-                                </TwnsUiButton:skinName>
-                            </TwnsUiButton:UiButton>
-                            <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0" x="20"
-                                                 maxTextWidth="150" />
+                                                 source="uncompressedPentagon0003" visible.up="false"
+                                                 scale9Grid="4,4,1,1" />
+                            <e:Group x="20" verticalCenter="0">
+                                <TwnsUiLabel:UiLabel id="_labelId" text="地图名称" size="10" x="10" maxTextWidth="150" y="0" />
+                                <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="14" x="0" maxTextWidth="150"
+                                                     y="0" />
+                                <e:layout>
+                                    <e:VerticalLayout gap="2" />
+                                </e:layout>
+                            </e:Group>
                         </e:Skin>
                     </e:itemRendererSkinName>
                     <e:layout>

@@ -416,19 +416,15 @@ namespace TwnsMcrJoinRoomListPanel {
         roomId  : number;
     };
     class RoomRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRoomRenderer> {
-        private readonly _btnChoose!    : TwnsUiButton.UiButton;
+        private readonly _labelId!      : TwnsUiLabel.UiLabel;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgPassword!  : TwnsUiLabel.UiLabel;
 
-        protected _onOpened(): void {
-            this._setUiListenerArray([
-                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-            ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
-        }
-
         protected async _onDataChanged(): Promise<void> {
-            const roomInfo = await McrModel.getRoomInfo(this._getData().roomId);
+            const roomId        = this._getData().roomId;
+            this._labelId.text  = `#${roomId}`;
+
+            const roomInfo = await McrModel.getRoomInfo(roomId);
             if (roomInfo == null) {
                 return;
             }
@@ -444,7 +440,7 @@ namespace TwnsMcrJoinRoomListPanel {
             }
         }
 
-        private _onTouchTapBtnChoose(): void {
+        public onItemTapEvent(): void {
             McrJoinModel.setTargetRoomId(this._getData().roomId);
         }
     }

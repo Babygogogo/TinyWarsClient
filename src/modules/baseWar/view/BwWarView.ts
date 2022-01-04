@@ -11,16 +11,35 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwWarView {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import GridIndex            = Types.GridIndex;
-    import Point                = Types.Point;
-    import BwWar                = TwnsBwWar.BwWar;
-    const PADDING_HORIZONTAL    = 150;
-    const PADDING_VERTICAL      = 120;
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import GridIndex    = Types.GridIndex;
+    import Point        = Types.Point;
+
+    const CENTRAL_PADDING = 120;
+
+    type Padding = {
+        left    : number;
+        right   : number;
+        bottom  : number;
+        top     : number;
+    };
+    // eslint-disable-next-line no-shadow
+    const enum PaddingType {
+        Default,
+        Replay,
+        MapEditor,
+    }
+    const PADDINGS = new Map<PaddingType, Padding>([
+        [PaddingType.Default,   { left: 90,     right: 90,  top: 120,   bottom: 20 }],
+        [PaddingType.MapEditor, { left: 90,     right: 90,  top: 120,   bottom: 120 }],
+        [PaddingType.Replay,    { left: 90,     right: 90,  top: 60,    bottom: 20 }],
+    ]);
 
     export class BwWarView extends eui.Group {
         private _fieldContainer     = new TwnsUiZoomableComponent.UiZoomableComponent();
         private _weatherContainer   = new eui.Group();
+
+        private _padding = Helpers.getExisted(PADDINGS.get(PaddingType.Default));
 
         private _isShowingVibration = false;
         private _vibrationMaxOffset = 4;
@@ -42,7 +61,6 @@ namespace TwnsBwWarView {
 
             const fieldContainer = this._fieldContainer;
             resetContainer(fieldContainer);
-            fieldContainer.setBoundarySpacings(PADDING_HORIZONTAL, PADDING_HORIZONTAL, PADDING_VERTICAL, PADDING_VERTICAL);
             this.addChild(fieldContainer);
 
             const weatherContainer          = this._weatherContainer;
@@ -53,10 +71,13 @@ namespace TwnsBwWarView {
             this.addChild(weatherContainer);
         }
 
-        public init(war: BwWar): void {
+        public init(war: TwnsBwWar.BwWar): void {
             const gridSize          = CommonConstants.GridSize;
             const mapSize           = war.getTileMap().getMapSize();
             const fieldContainer    = this._fieldContainer;
+            const padding           = getPadding(war);
+            this._padding           = padding;
+            fieldContainer.setBoundarySpacings(padding.left, padding.right, padding.top, padding.bottom);
             fieldContainer.removeAllContents();
             fieldContainer.setContentWidth(mapSize.width * gridSize.width);
             fieldContainer.setContentHeight(mapSize.height * gridSize.height);
@@ -65,7 +86,8 @@ namespace TwnsBwWarView {
 
             this._weatherContainer.addChild(war.getWeatherManager().getView());
         }
-        public fastInit(war: BwWar): void {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        public fastInit(war: TwnsBwWar.BwWar): void {
             // nothing to do
         }
 
@@ -91,21 +113,32 @@ namespace TwnsBwWarView {
         }
 
         public tweenGridToCentralArea(gridIndex: GridIndex): void {
-            const stage     = StageManager.getStage();
-            const gridSize  = CommonConstants.GridSize;
-            const container = this._fieldContainer;
-            const currPoint = container.getContents().localToGlobal(
-                (gridIndex.x + 0.5) * gridSize.width,
-                (gridIndex.y + 0.5) * gridSize.height,
-            );
-            const newX      = Math.min(
-                Math.max(currPoint.x, PADDING_HORIZONTAL),
-                stage.stageWidth - PADDING_HORIZONTAL,
-            );
-            const newY      = Math.min(
-                Math.max(currPoint.y, PADDING_VERTICAL),
-                stage.stageHeight - PADDING_VERTICAL,
-            );
+            const stage             = StageManager.getStage();
+            const gridSize          = CommonConstants.GridSize;
+            const container         = this._fieldContainer;
+            const contents          = container.getContents();
+            const gridWidth         = gridSize.width;
+            const gridHeight        = gridSize.height;
+            const stageWidth        = stage.stageWidth;
+            const stageHeight       = stage.stageHeight;
+            const gridX             = gridIndex.x;
+            const gridY             = gridIndex.y;
+            const currPoint         = contents.localToGlobal((gridX + 0.5) * gridWidth, (gridY + 0.5) * gridHeight);
+            const topLeftPoint      = contents.localToGlobal(gridX * gridWidth, gridY * gridHeight);
+            const bottomRightPoint  = contents.localToGlobal((gridX + 1) * gridWidth, (gridY + 1) * gridHeight);
+            const currX             = currPoint.x;
+            const currY             = currPoint.y;
+            // const padding           = this._padding;
+            const newX              = Helpers.getValueInRange({
+                minValue    : CENTRAL_PADDING + currX - topLeftPoint.x,
+                maxValue    : stageWidth - CENTRAL_PADDING + currX - bottomRightPoint.x,
+                rawValue    : currX,
+            });
+            const newY              = Helpers.getValueInRange({
+                minValue    : CENTRAL_PADDING + currY - topLeftPoint.y,
+                maxValue    : stageHeight - CENTRAL_PADDING + currY - bottomRightPoint.y,
+                rawValue    : currY,
+            });
             const newPoint  = this._getRevisedContentPointForMoveGrid(gridIndex, newX, newY);
             container.tweenContentToPoint(newPoint.x, newPoint.y, false);
         }
@@ -187,6 +220,16 @@ namespace TwnsBwWarView {
         container.right     = 0;
         container.top       = 0;
         container.bottom    = 0;
+    }
+
+    function getPadding(war: TwnsBwWar.BwWar): Padding {
+        if (war instanceof TwnsRwWar.RwWar) {
+            return Helpers.getExisted(PADDINGS.get(PaddingType.Replay));
+        } else if (war instanceof TwnsMeWar.MeWar) {
+            return Helpers.getExisted(PADDINGS.get(PaddingType.MapEditor));
+        } else {
+            return Helpers.getExisted(PADDINGS.get(PaddingType.Default));
+        }
     }
 }
 

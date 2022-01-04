@@ -7,6 +7,7 @@
 // import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
 // import McrModel                 from "./McrModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace McrJoinModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import IMcrRoomInfo         = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
@@ -58,6 +59,10 @@ namespace McrJoinModel {
     }
     export function updateOnMsgMcrDeleteRoomByServer(): void {
         reviseTargetRoomId();
+        reviseJoinedPreviewingRoomId();
+    }
+    export function updateOnMsgMcrGetJoinedRoomInfoList(): void {
+        reviseJoinedPreviewingRoomId();
     }
 
     function reviseTargetRoomId(): void {
@@ -68,6 +73,17 @@ namespace McrJoinModel {
             const roomId = getTargetRoomId();
             if ((roomId == null) || (!roomIdSet.has(roomId))) {
                 setTargetRoomId(roomIdSet.values().next().value);
+            }
+        }
+    }
+    function reviseJoinedPreviewingRoomId(): void {
+        const roomIdSet = McrModel.getJoinedRoomIdSet();
+        if (roomIdSet.size <= 0) {
+            setJoinedPreviewingRoomId(null);
+        } else {
+            const roomId = getJoinedPreviewingRoomId();
+            if ((roomId == null) || (!roomIdSet.has(roomId))) {
+                setJoinedPreviewingRoomId(roomIdSet.values().next().value);
             }
         }
     }
