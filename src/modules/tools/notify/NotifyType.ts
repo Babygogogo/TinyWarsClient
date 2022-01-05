@@ -108,6 +108,7 @@ namespace TwnsNotifyType {
         BwUnitBeAttacked,
         BwUnitBeSupplied,
         BwUnitBeRepaired,
+        BwUnitChanged,
 
         BwTileBeDestroyed,
         BwTileBeAttacked,
@@ -123,7 +124,6 @@ namespace TwnsNotifyType {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MeDrawerModeChanged,
-        MeUnitChanged,
         MeTileChanged,
         MeMapNameChanged,
         MeWarRuleNameChanged,

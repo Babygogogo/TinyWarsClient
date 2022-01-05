@@ -1151,6 +1151,14 @@ namespace TwnsLangCommonText {
                 `Defeated: players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
             ].join(`\n`),
         ],
+        [LangTextType.A0273]: [
+            `当前无法进行此操作，请稍后再试`,
+            `This operation is currently unavailable, please retry it later.`,
+        ],
+        [LangTextType.A0274]: [
+            `此部队已满载`,
+            `The unit is fully loaded.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4382,6 +4390,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0810]: [
             `修改玩家状态`,
             `Set Players' State`,
+        ],
+        [LangTextType.B0811]: [
+            `装载部队`,
+            `Load a Unit`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

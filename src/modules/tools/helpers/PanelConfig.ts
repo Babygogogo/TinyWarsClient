@@ -46,6 +46,7 @@ namespace TwnsPanelConfig {
 
         ChatPanel                           : PanelConfig<TwnsChatPanel.OpenData>;
 
+        CommonAddLoadedUnitPanel            : PanelConfig<TwnsCommonAddLoadedUnitPanel.OpenData>;
         CommonAlertPanel                    : PanelConfig<TwnsCommonAlertPanel.OpenData>;
         CommonBanCoPanel                    : PanelConfig<TwnsCommonBanCoPanel.OpenData>;
         CommonBlockPanel                    : PanelConfig<TwnsCommonBlockPanel.OpenData>;
@@ -57,6 +58,7 @@ namespace TwnsPanelConfig {
         CommonChooseLocationPanel           : PanelConfig<TwnsCommonChooseLocationPanel.OpenData>;
         CommonChoosePlayerAliveStatePanel   : PanelConfig<TwnsCommonChoosePlayerAliveStatePanel.OpenData>;
         CommonChoosePlayerIndexPanel        : PanelConfig<TwnsCommonChoosePlayerIndexPanel.OpenData>;
+        CommonChooseSingleUnitTypePanel     : PanelConfig<TwnsCommonChooseSingleUnitTypePanel.OpenData>;
         CommonChooseTeamIndexPanel          : PanelConfig<TwnsCommonChooseTeamIndexPanel.OpenData>;
         CommonChooseTileTypePanel           : PanelConfig<TwnsCommonChooseTileTypePanel.OpenData>;
         CommonChooseUnitActionStatePanel    : PanelConfig<TwnsCommonChooseUnitActionStatePanel.OpenData>;
@@ -446,6 +448,12 @@ namespace TwnsPanelConfig {
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
+            CommonAddLoadedUnitPanel: {
+                cls         : TwnsCommonAddLoadedUnitPanel?.CommonAddLoadedUnitPanel,
+                skinName    : `resource/skins/common/CommonAddLoadedUnitPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             CommonAlertPanel: {
                 cls         : TwnsCommonAlertPanel?.CommonAlertPanel,
                 skinName    : `resource/skins/common/CommonAlertPanel.exml`,
@@ -509,6 +517,12 @@ namespace TwnsPanelConfig {
             CommonChoosePlayerIndexPanel: {
                 cls         : TwnsCommonChoosePlayerIndexPanel?.CommonChoosePlayerIndexPanel,
                 skinName    : `resource/skins/common/CommonChoosePlayerIndexPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseSingleUnitTypePanel: {
+                cls         : TwnsCommonChooseSingleUnitTypePanel?.CommonChooseSingleUnitTypePanel,
+                skinName    : `resource/skins/common/CommonChooseSingleUnitTypePanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

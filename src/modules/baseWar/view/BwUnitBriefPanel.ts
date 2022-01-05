@@ -47,10 +47,10 @@ namespace TwnsBwUnitBriefPanel {
                 // { type: NotifyType.GlobalTouchBegin,                callback: this._onNotifyGlobalTouchBegin },
                 // { type: NotifyType.GlobalTouchMove,                 callback: this._onNotifyGlobalTouchMove },
                 { type: NotifyType.BwCursorGridIndexChanged,        callback: this._onNotifyBwCursorGridIndexChanged },
-                { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateSet },
                 { type: NotifyType.BwProduceUnitPanelOpened,        callback: this._onNotifyBwProduceUnitPanelOpened },
                 { type: NotifyType.BwProduceUnitPanelClosed,        callback: this._onNotifyBwProduceUnitPanelClosed },
-                { type: NotifyType.MeUnitChanged,                   callback: this._onNotifyMeUnitChanged },
+                { type: NotifyType.BwUnitChanged,                   callback: this._onNotifyBwUnitChanged },
                 { type: NotifyType.UnitAnimationTick,               callback: this._onNotifyUnitAnimationTick },
                 { type: NotifyType.UnitStateIndicatorTick,          callback: this._onNotifyUnitStateIndicatorTick },
             ]);
@@ -82,7 +82,7 @@ namespace TwnsBwUnitBriefPanel {
         private _onNotifyBwCursorGridIndexChanged(): void {
             this._updateView();
         }
-        private _onNotifyBwActionPlannerStateChanged(): void {
+        private _onNotifyBwActionPlannerStateSet(): void {
             const planner = this._getOpenData().war.getActionPlanner();
             if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
                 (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
@@ -96,8 +96,8 @@ namespace TwnsBwUnitBriefPanel {
         private _onNotifyBwProduceUnitPanelClosed(): void {
             this._updateView();
         }
-        private _onNotifyMeUnitChanged(e: egret.Event): void {
-            const data = e.data as NotifyData.MeUnitChanged;
+        private _onNotifyBwUnitChanged(e: egret.Event): void {
+            const data = e.data as NotifyData.BwUnitChanged;
             if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
                 this._updateView();
             }

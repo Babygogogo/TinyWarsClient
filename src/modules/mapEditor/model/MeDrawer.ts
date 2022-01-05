@@ -549,7 +549,7 @@ namespace TwnsMeDrawer {
             unitMap.setUnitOnMap(unit);
             unitMap.setNextUnitId(unitId + 1);
 
-            Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as NotifyData.MeUnitChanged);
+            Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as NotifyData.BwUnitChanged);
         }
         private _handleDeleteTileDecorator(gridIndex: GridIndex): void {
             const tileMap   = this._getWar().getTileMap();
@@ -590,7 +590,7 @@ namespace TwnsMeDrawer {
         private _handleDeleteUnit(gridIndex: GridIndex): void {
             if (this._getWar().getUnitMap().getUnitOnMap(gridIndex)) {
                 WarDestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
-                Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as NotifyData.MeUnitChanged);
+                Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as NotifyData.BwUnitChanged);
             }
         }
         private _handleAddTileToLocation(gridIndex: GridIndex): void {
