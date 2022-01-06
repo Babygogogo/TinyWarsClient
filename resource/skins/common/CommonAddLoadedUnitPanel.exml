@@ -4,7 +4,7 @@
         xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group width="760" horizontalCenter="0" height="290" verticalCenter="0">
+    <e:Group width="760" horizontalCenter="0" height="260" verticalCenter="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
         <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
@@ -17,27 +17,22 @@
                     <TwnsUiLabel:UiLabel id="_labelError" text="error" size="16" textColor="0xffffff" verticalCenter="0"
                                          x="10" />
                 </e:Group>
-                <e:Group y="-39" left="0" right="0" x="-158" width="750">
-                    <e:Group x="271" y="10">
-                        <TwnsUiButton:UiButton id="_btnAiMode" label="A.I. Mode"
-                                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100"
-                                               right="0" top="0" x="10" y="10" />
-                        <TwnsUiLabel:UiLabel id="_labelAiMode" text="Transport Copter" size="18" textColor="0xFFFFFF"
-                                             x="0" y="12" />
-                        <e:layout>
-                            <e:HorizontalLayout verticalAlign="middle" />
-                        </e:layout>
-                    </e:Group>
-                    <e:layout>
-                        <e:HorizontalLayout gap="40" />
-                    </e:layout>
-                </e:Group>
                 <e:Group width="750" x="345" y="88">
                     <e:Group x="261" y="0">
                         <TwnsUiButton:UiButton id="_btnUnitType" label="Unit Type"
                                                skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100"
                                                right="0" top="0" x="10" y="10" />
                         <TwnsUiLabel:UiLabel id="_labelUnitType" text="Transport Copter" size="18" textColor="0xFFFFFF"
+                                             x="0" y="12" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="508" y="10">
+                        <TwnsUiButton:UiButton id="_btnAiMode" label="A.I. Mode"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100"
+                                               right="0" top="0" x="10" y="10" />
+                        <TwnsUiLabel:UiLabel id="_labelAiMode" text="Transport Copter" size="18" textColor="0xFFFFFF"
                                              x="0" y="12" />
                         <e:layout>
                             <e:HorizontalLayout verticalAlign="middle" />

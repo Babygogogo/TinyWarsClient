@@ -19,13 +19,19 @@
             </e:Group>
             <e:Scroller left="20" right="20" top="60" bottom="70">
                 <e:Group horizontalCenter="0">
-                    <e:Group id="_groupCoNames" horizontalCenter="0">
+                    <e:Group id="_groupOriginCoNames" width="320" x="0">
                         <e:layout>
-                            <e:TileLayout orientation="rows" columnAlign="justifyUsingGap" />
+                            <e:TileLayout orientation="rows" columnAlign="justifyUsingGap" requestedColumnCount="3" />
+                        </e:layout>
+                    </e:Group>
+                    <TwnsUiImage:UiImage y="-8" source="uncompressedColorWhite0000" height="2" width="320" x="0" />
+                    <e:Group id="_groupCustomCoNames" width="320" x="0">
+                        <e:layout>
+                            <e:TileLayout orientation="rows" columnAlign="justifyUsingGap" requestedColumnCount="3" />
                         </e:layout>
                     </e:Group>
                     <e:layout>
-                        <e:VerticalLayout gap="30" horizontalAlign="contentJustify" />
+                        <e:VerticalLayout gap="10" />
                     </e:layout>
                 </e:Group>
             </e:Scroller>

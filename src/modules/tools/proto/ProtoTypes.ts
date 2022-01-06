@@ -23753,6 +23753,12 @@ export declare namespace Replay {
 
         /** ReplayFilter coName */
         coName?: (string|null);
+
+        /** ReplayFilter hasFog */
+        hasFog?: (boolean|null);
+
+        /** ReplayFilter isRankedMatch */
+        isRankedMatch?: (boolean|null);
     }
 
     /** Represents a ReplayFilter. */
@@ -23781,6 +23787,12 @@ export declare namespace Replay {
 
         /** ReplayFilter coName. */
         public coName: string;
+
+        /** ReplayFilter hasFog. */
+        public hasFog: boolean;
+
+        /** ReplayFilter isRankedMatch. */
+        public isRankedMatch: boolean;
 
         /**
          * Creates a new ReplayFilter instance using the specified properties.

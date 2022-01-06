@@ -1212,8 +1212,8 @@ namespace TwnsLangCommonText {
             "Team D",
         ],
         [LangTextType.B0012]: [
-            "是",
-            "Yes",
+            `是`,
+            `Yes`,
         ],
         [LangTextType.B0013]: [
             "否",

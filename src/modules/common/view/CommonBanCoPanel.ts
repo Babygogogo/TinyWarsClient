@@ -17,9 +17,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonBanCoPanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType     = TwnsLangTextType.LangTextType;
+    import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
         playerIndex         : number;
@@ -35,7 +34,8 @@ namespace TwnsCommonBanCoPanel {
         private readonly _group!                    : eui.Group;
         private readonly _labelAvailableCoTitle!    : TwnsUiLabel.UiLabel;
         // private readonly _groupCoTiers              : eui.Group;
-        private readonly _groupCoNames!             : eui.Group;
+        private readonly _groupOriginCoNames!       : eui.Group;
+        private readonly _groupCustomCoNames!       : eui.Group;
         private readonly _btnCancel!                : TwnsUiButton.UiButton;
         private readonly _btnConfirm!               : TwnsUiButton.UiButton;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
@@ -280,6 +280,8 @@ namespace TwnsCommonBanCoPanel {
                 return (name1 || "").localeCompare(name2 || "", "zh");
             });
 
+            const groupOriginCoNames = this._groupOriginCoNames;
+            const groupCustomCoNames = this._groupCustomCoNames;
             for (const coId of fullCoIdArray) {
                 const renderer = new RendererForCoName();
                 renderer.setConfigVersion(configVersion);
@@ -288,14 +290,20 @@ namespace TwnsCommonBanCoPanel {
 
                 renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
                 this._renderersForCoNames.push(renderer);
-                this._groupCoNames.addChild(renderer);
+
+                if (ConfigManager.checkIsOriginCo(configVersion, coId)) {
+                    groupOriginCoNames.addChild(renderer);
+                } else {
+                    groupCustomCoNames.addChild(renderer);
+                }
             }
 
             this._updateGroupCoNames();
         }
 
         private _clearGroupCoNames(): void {
-            this._groupCoNames.removeChildren();
+            this._groupOriginCoNames.removeChildren();
+            this._groupCustomCoNames.removeChildren();
             this._renderersForCoNames.length = 0;
         }
 

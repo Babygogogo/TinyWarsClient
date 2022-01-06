@@ -19,11 +19,6 @@ namespace TwnsRwSearchReplayPanel {
 
     export type OpenData = void;
     export class RwSearchReplayPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        protected _IS_EXCLUSIVE = false;
-        protected _LAYER_TYPE   = Types.LayerType.Hud2;
-
-        private static _instance: RwSearchReplayPanel;
-
         private readonly _imgMask!                      : TwnsUiImage.UiImage;
 
         private readonly _group!                        : eui.Group;
@@ -51,6 +46,15 @@ namespace TwnsRwSearchReplayPanel {
         private readonly _labelMinMyRatingTitle!        : TwnsUiLabel.UiLabel;
         private readonly _inputMinMyRating!             : TwnsUiTextInput.UiTextInput;
 
+        private readonly _btnHasFog!                    : TwnsUiButton.UiButton;
+        private readonly _labelHasFog!                  : TwnsUiLabel.UiLabel;
+
+        private readonly _btnIsRanked!                  : TwnsUiButton.UiButton;
+        private readonly _labelIsRanked!                : TwnsUiLabel.UiLabel;
+
+        private _hasFog     : boolean | null = null;
+        private _isRanked   : boolean | null = null;
+
         protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose,               callback: this.close },
@@ -58,6 +62,8 @@ namespace TwnsRwSearchReplayPanel {
                 { ui: this._btnSearch,              callback: this._onTouchedBtnSearch },
                 { ui: this._inputMinGlobalRating,   callback: this._onFocusOutInputMinGlobalRating, eventType: egret.Event.FOCUS_OUT },
                 { ui: this._inputMinMyRating,       callback: this._onFocusOutInputMinMyRating,     eventType: egret.Event.FOCUS_OUT },
+                { ui: this._btnHasFog,              callback: this._onTouchedBtnHasFog },
+                { ui: this._btnIsRanked,            callback: this._onTouchedBtnIsRanked },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
@@ -85,6 +91,8 @@ namespace TwnsRwSearchReplayPanel {
                 minMyRating     : getNumber(this._inputMinMyRating.text),
                 minGlobalRating : getNumber(this._inputMinGlobalRating.text),
                 coName          : this._inputCoName.text || null,
+                hasFog          : this._hasFog,
+                isRankedMatch   : this._isRanked,
             });
             this.close();
         }
@@ -105,6 +113,30 @@ namespace TwnsRwSearchReplayPanel {
             }
         }
 
+        private _onTouchedBtnHasFog(): void {
+            const hasFog = this._hasFog;
+            if (hasFog === true) {
+                this._hasFog = false;
+            } else if (hasFog === false) {
+                this._hasFog = null;
+            } else {
+                this._hasFog = true;
+            }
+            this._updateLabelHasFog();
+        }
+
+        private _onTouchedBtnIsRanked(): void {
+            const isRanked = this._isRanked;
+            if (isRanked === true) {
+                this._isRanked = false;
+            } else if (isRanked === false) {
+                this._isRanked = null;
+            } else {
+                this._isRanked = true;
+            }
+            this._updateLabelIsRanked();
+        }
+
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
@@ -120,6 +152,35 @@ namespace TwnsRwSearchReplayPanel {
             this._labelDesc.text                    = Lang.getText(LangTextType.A0063);
             this._btnReset.label                    = Lang.getText(LangTextType.B0567);
             this._btnSearch.label                   = Lang.getText(LangTextType.B0228);
+            this._btnHasFog.label                   = Lang.getText(LangTextType.B0020);
+            this._btnIsRanked.label                 = Lang.getText(LangTextType.B0404);
+
+            this._updateLabelHasFog();
+            this._updateLabelIsRanked();
+        }
+
+        private _updateLabelHasFog(): void {
+            const hasFog    = this._hasFog;
+            const label     = this._labelHasFog;
+            if (hasFog === true) {
+                label.text = Lang.getText(LangTextType.B0012);
+            } else if (hasFog === false) {
+                label.text = Lang.getText(LangTextType.B0013);
+            } else {
+                label.text = `--`;
+            }
+        }
+
+        private _updateLabelIsRanked(): void {
+            const isRanked  = this._isRanked;
+            const label     = this._labelIsRanked;
+            if (isRanked === true) {
+                label.text = Lang.getText(LangTextType.B0012);
+            } else if (isRanked === false) {
+                label.text = Lang.getText(LangTextType.B0013);
+            } else {
+                label.text = `--`;
+            }
         }
 
         protected async _showOpenAnimation(): Promise<void> {

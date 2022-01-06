@@ -926,6 +926,9 @@ namespace ConfigManager {
             return idArray;
         }
     }
+    export function checkIsOriginCo(version: string, coId: number): boolean {
+        return getCoBasicCfg(version, coId).designer === `Intelligent Systems`;
+    }
 
     export function getCoBustImageSource(coId: number): string {
         return `coBust${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
