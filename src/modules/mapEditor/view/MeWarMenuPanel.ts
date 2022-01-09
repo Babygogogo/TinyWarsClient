@@ -592,6 +592,11 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0681),
                     callback: () => {
+                        if (navigator?.clipboard?.readText == null) {
+                            FloatText.show(Lang.getText(LangTextType.A0275));
+                            return;
+                        }
+
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0237),
                             callback: async () => {

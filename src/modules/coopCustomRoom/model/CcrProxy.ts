@@ -6,6 +6,7 @@
 // import TwnsNotifyType       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace CcrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
@@ -161,9 +162,10 @@ namespace CcrProxy {
         }
     }
 
-    export function reqCcrGetJoinableRoomInfoList(): void {
+    export function reqCcrGetJoinableRoomInfoList(roomFilter: Types.Undefinable<ProtoTypes.CoopCustomRoom.IRoomFilter>): void {
         NetManager.send({
             MsgCcrGetJoinableRoomInfoList: { c: {
+                roomFilter,
             }, },
         });
     }

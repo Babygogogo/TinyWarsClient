@@ -175,9 +175,10 @@ namespace McrProxy {
         }
     }
 
-    export function reqMcrGetJoinableRoomInfoList(): void {
+    export function reqMcrGetJoinableRoomInfoList(roomFilter: Types.Undefinable<ProtoTypes.MultiCustomRoom.IRoomFilter>): void {
         NetManager.send({
             MsgMcrGetJoinableRoomInfoList: { c: {
+                roomFilter,
             }, },
         });
     }

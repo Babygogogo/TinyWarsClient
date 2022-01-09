@@ -1427,24 +1427,18 @@ namespace TwnsBwUnit {
                 && (this.getPlayerIndex() === unit.getPlayerIndex())
                 && (this.getLoadedUnitsCount() < maxLoadUnitsCount);
         }
+
         public checkCanDropLoadedUnit(tileType: TileType): boolean {
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                throw Helpers.newError(`BwUnit.checkCanDropLoadedUnit() configVersion is empty.`);
-                return false;
-            }
-
-            const cfg = this._getTemplateCfg();
-            if (cfg == null) {
-                throw Helpers.newError(`BwUnit.checkCanDropLoadedUnit() cfg is empty.`);
-                return false;
-            }
-
-            const loadableTileCategory = cfg.loadableTileCategory;
+            const cfg                   = this._getTemplateCfg();
+            const loadableTileCategory  = cfg.loadableTileCategory;
             return (cfg.canDropLoadedUnits === 1)
                 && (loadableTileCategory != null)
-                && (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, loadableTileCategory));
+                && (ConfigManager.checkIsTileTypeInCategory(this.getConfigVersion(), tileType, loadableTileCategory));
         }
+        public getCfgCanDropLoadedUnit(): boolean {
+            return this._getTemplateCfg().loadableTileCategory != null;
+        }
+
         public checkCanLaunchLoadedUnit(): boolean {
             return this._getTemplateCfg()?.canLaunchLoadedUnits === 1;
         }

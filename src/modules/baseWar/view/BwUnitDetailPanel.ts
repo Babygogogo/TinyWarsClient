@@ -146,13 +146,14 @@ namespace TwnsBwUnitDetailPanel {
 
                     const unitMap   = war.getUnitMap();
                     const gridIndex = unit.getGridIndex();
-                    if (unit.getLoaderUnitId() == null) {
-                        unitMap.removeUnitOnMap(gridIndex, true);
-                    }
                     for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
                         unitMap.removeUnitLoaded(u.getUnitId());
                     }
-                    unitMap.removeUnitLoaded(unit.getUnitId());
+                    if (unit.getLoaderUnitId() == null) {
+                        unitMap.removeUnitOnMap(gridIndex, true);
+                    } else {
+                        unitMap.removeUnitLoaded(unit.getUnitId());
+                    }
 
                     unit.getLoaderUnit()?.updateView();
                     war.getActionPlanner().setStateIdle();

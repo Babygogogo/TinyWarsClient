@@ -6,6 +6,7 @@
 // import TwnsNotifyType       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MfrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
@@ -161,9 +162,10 @@ namespace MfrProxy {
         }
     }
 
-    export function reqMfrGetJoinableRoomInfoList(): void {
+    export function reqMfrGetJoinableRoomInfoList(roomFilter: Types.Undefinable<ProtoTypes.MultiFreeRoom.IRoomFilter>): void {
         NetManager.send({
             MsgMfrGetJoinableRoomInfoList: { c: {
+                roomFilter,
             }, },
         });
     }

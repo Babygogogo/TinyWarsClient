@@ -54,7 +54,7 @@ namespace WarRobot {
         globalOffenseBonuses    : Map<number, number>;
         globalDefenseBonuses    : Map<number, number>;
         luckValues              : Map<number, number>;
-        randomIndex             : number;
+        getAndTickRandomInteger : () => number;
     };
 
     const _IS_NEED_VISIBILITY = true;
@@ -358,6 +358,13 @@ namespace WarRobot {
 
         const playerIndexInTurn     = war.getPlayerIndexInTurn();
         const unitValues            = await getUnitValues(war);
+        const randomNumberManager   = war.getRandomNumberManager();
+        const isNeedSeedRandom      = randomNumberManager.getIsNeedSeedRandom();
+        const getRandomIntegerArray = Helpers.createLazyFunc(() => {
+            return randomNumberManager.getSeedRandomCurrentState().S ?? [];
+        });
+        let randomIndex             = 0;
+
         return {
             war,
             playerIndexInTurn,
@@ -368,7 +375,21 @@ namespace WarRobot {
             globalOffenseBonuses    : await getGlobalOffenseBonuses(war),
             globalDefenseBonuses    : await getGlobalDefenseBonuses(war),
             luckValues              : await getLuckValues(war),
-            randomIndex             : 0,
+            getAndTickRandomInteger : () => {
+                if (!isNeedSeedRandom) {
+                    return Math.floor(Math.random() * 256);
+                }
+
+                const array     = getRandomIntegerArray();
+                const length    = array.length;
+                if (!length) {
+                    return 0;
+                } else {
+                    const integer   = array[randomIndex];
+                    randomIndex     = (randomIndex + 1) % length;
+                    return integer;
+                }
+            },
         };
     }
 
@@ -498,19 +519,7 @@ namespace WarRobot {
             if (score1 !== score2) {
                 return score1 > score2 ? data1 : data2;
             } else {
-                const randomNumberManager = commonParams.war.getRandomNumberManager();
-                if (!randomNumberManager.getIsNeedSeedRandom()) {
-                    return Math.random() > 0.5 ? data1 : data2;
-                } else {
-                    const array     = randomNumberManager.getSeedRandomCurrentState().S || [];
-                    const length    = array.length;
-                    if (!length) {
-                        return data1;
-                    } else {
-                        commonParams.randomIndex = (commonParams.randomIndex + 1) % length;
-                        return array[commonParams.randomIndex] % 2 === 0 ? data1 : data2;
-                    }
-                }
+                return commonParams.getAndTickRandomInteger() % 2 === 0 ? data1 : data2;
             }
         }
     }
@@ -1308,10 +1317,6 @@ namespace WarRobot {
             throw Helpers.newError(`Can't load the unit.`, ClientErrorCode.SpwRobot_GetScoreForActionUnitBeLoaded_01);
         }
 
-        if (!loader.checkCanLaunchLoadedUnit()) {
-            return -9999;
-        }
-
         const passiveScaler = unit.getProductionCfgCost() / 1000 / Math.max(1, commonParams.unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1);
         let totalScore      = 0;
         if (loader.getNormalizedRepairHpForLoadedUnit() != null) {
@@ -1496,6 +1501,12 @@ namespace WarRobot {
         await Helpers.checkAndCallLater();
 
         return unit.checkIsFuelInShort() ? -10 : 10;
+    }
+
+    async function getScoreForActionUnitDropUnit(unit: BwUnit, dropDestinations: ProtoTypes.Structure.IDropDestination[]): Promise<number> {
+        await Helpers.checkAndCallLater();
+
+        return dropDestinations.length * 100;
     }
 
     async function getScoreForActionUnitLaunchSilo(commonParams: CommonParams, unitValueMap: number[][], targetGridIndex: GridIndex): Promise<number> {
@@ -1841,6 +1852,77 @@ namespace WarRobot {
         }
     }
 
+    async function getScoreAndActionUnitDropUnit({ commonParams, unit, gridIndex, pathNodes }: {
+        commonParams    : CommonParams;
+        unit            : BwUnit;
+        gridIndex       : GridIndex;
+        pathNodes       : MovePathNode[];
+    }): Promise<ScoreAndAction | null> {
+        await Helpers.checkAndCallLater();
+
+        if ((!unit.getCfgCanDropLoadedUnit()) || (unit.getLoadedUnitsCount() <= 0)) {
+            return null;
+        }
+
+        const war           = commonParams.war;
+        const tileMap       = war.getTileMap();
+        const loaderTile    = tileMap.getTile(gridIndex);
+        if (!unit.checkCanDropLoadedUnit(loaderTile.getType())) {
+            return null;
+        }
+
+        const unitMap           = war.getUnitMap();
+        const targetTileArray   = GridIndexHelpers.getAdjacentGrids(gridIndex, commonParams.mapSize)
+            .filter(v => {
+                const existingUnit = unitMap.getUnitOnMap(v);
+                return (existingUnit == null) || (existingUnit == unit);
+            })
+            .map(v => tileMap.getTile(v))
+            .sort(() => commonParams.getAndTickRandomInteger() % 2 === 0 ? -1 : 1);
+        const loadedUnitArray   = unit.getLoadedUnits()
+            .filter(v => loaderTile.getMoveCostByUnit(v) != null)
+            .sort((v1, v2) => {
+                const hp1 = v1.getCurrentHp();
+                const hp2 = v2.getCurrentHp();
+                if (hp1 !== hp2) {
+                    return hp2 - hp1;
+                } else {
+                    return v1.getUnitId() - v2.getUnitId();
+                }
+            });
+
+        const dropDestinations: ProtoTypes.Structure.IDropDestination[] = [];
+        for (const loadedUnit of loadedUnitArray) {
+            const index = targetTileArray.findIndex(v => v.getMoveCostByUnit(loadedUnit) != null);
+            if (index >= 0) {
+                dropDestinations.push({
+                    unitId      : loadedUnit.getUnitId(),
+                    gridIndex   : targetTileArray[index].getGridIndex(),
+                });
+                targetTileArray.splice(index, 1);
+            }
+        }
+
+        if (!dropDestinations.length) {
+            return null;
+        } else {
+            const score = await getScoreForActionUnitDropUnit(unit, dropDestinations);
+            return {
+                score,
+                action  : { WarActionUnitDropUnit: {
+                    path        : {
+                        nodes           : pathNodes,
+                        fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                        isBlocked       : false,
+                    },
+                    launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+                    dropDestinations,
+                    isDropBlocked   : false,
+                } },
+            };
+        }
+    }
+
     async function getScoreAndActionUnitLaunchSilo(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
         await Helpers.checkAndCallLater();
 
@@ -2018,6 +2100,7 @@ namespace WarRobot {
             getScoreAndActionUnitAttack(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitCaptureTile(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitDive(unit, gridIndex, pathNodes),
+            getScoreAndActionUnitDropUnit({ commonParams, unit, gridIndex, pathNodes }),
             getScoreAndActionUnitLaunchSilo(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitLaunchFlare(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitSurface(unit, gridIndex, pathNodes),

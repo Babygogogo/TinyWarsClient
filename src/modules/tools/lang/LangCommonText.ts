@@ -1159,6 +1159,10 @@ namespace TwnsLangCommonText {
             `此部队已满载`,
             `The unit is fully loaded.`,
         ],
+        [LangTextType.A0275]: [
+            `无法访问系统剪贴板`,
+            `Failed to access the system clipboard.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2809,11 +2813,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0415]: [
             `排位明战`,
-            `Rank Std`,
+            `Ranked Std`,
         ],
         [LangTextType.B0416]: [
             `排位雾战`,
-            `Rank FoW`,
+            `Ranked FoW`,
         ],
         [LangTextType.B0417]: [
             `自由明战`,
@@ -4394,6 +4398,18 @@ namespace TwnsLangCommonText {
         [LangTextType.B0811]: [
             `装载部队`,
             `Load a Unit`,
+        ],
+        [LangTextType.B0812]: [
+            `自由模式明战`,
+            `Free Std`,
+        ],
+        [LangTextType.B0813]: [
+            `自由模式雾战`,
+            `Free FoW`,
+        ],
+        [LangTextType.B0814]: [
+            `房间ID`,
+            `Room ID`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -13,6 +13,7 @@
 // import UserModel                            from "../../user/model/UserModel";
 // import WarMapModel                          from "../../warMap/model/WarMapModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace McrModel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import NetMessage                               = ProtoTypes.NetMessage;

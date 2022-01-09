@@ -92,7 +92,12 @@
                                                  source="uncompressedPentagon0003" visible.up="false"
                                                  scale9Grid="4,4,1,1" />
                             <e:Group x="20" verticalCenter="0">
-                                <TwnsUiLabel:UiLabel id="_labelId" text="地图名称" size="10" x="10" maxTextWidth="150" y="0" />
+                                <e:Group x="0" y="0">
+                                    <TwnsUiLabel:UiLabel id="_labelId" text="#999999" size="10" maxTextWidth="150"
+                                                         left="0" verticalCenter="0" />
+                                    <TwnsUiLabel:UiLabel id="_labelType" text="地图名称" size="10" x="60" maxTextWidth="150"
+                                                         verticalCenter="0" />
+                                </e:Group>
                                 <TwnsUiLabel:UiLabel id="_labelName" text="地图名称" size="14" x="0" maxTextWidth="150"
                                                      y="0" />
                                 <e:layout>

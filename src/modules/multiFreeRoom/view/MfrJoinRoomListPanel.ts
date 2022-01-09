@@ -38,21 +38,22 @@ namespace TwnsMfrJoinRoomListPanel {
 
     export type OpenData = void;
     export class MfrJoinRoomListPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        private readonly _groupTab!         : eui.Group;
-        private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarPlayerInfoPage>;
+        private readonly _groupTab!             : eui.Group;
+        private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarPlayerInfoPage>;
 
-        private readonly _groupNavigator!   : eui.Group;
-        private readonly _labelMultiPlayer! : TwnsUiLabel.UiLabel;
-        private readonly _labelFreeMode!    : TwnsUiLabel.UiLabel;
-        private readonly _labelJoinRoom!    : TwnsUiLabel.UiLabel;
+        private readonly _groupNavigator!       : eui.Group;
+        private readonly _labelMultiPlayer!     : TwnsUiLabel.UiLabel;
+        private readonly _labelFreeMode!        : TwnsUiLabel.UiLabel;
+        private readonly _labelJoinRoom!        : TwnsUiLabel.UiLabel;
 
-        private readonly _btnBack!           : TwnsUiButton.UiButton;
-        private readonly _btnNextStep!       : TwnsUiButton.UiButton;
+        private readonly _btnBack!              : TwnsUiButton.UiButton;
+        private readonly _btnNextStep!          : TwnsUiButton.UiButton;
+        private readonly _btnSearch!            : TwnsUiButton.UiButton;
 
-        private readonly _groupRoomList!     : eui.Group;
-        private readonly _listRoom!          : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
-        private readonly _labelNoRoom!       : TwnsUiLabel.UiLabel;
-        private readonly _labelLoading!      : TwnsUiLabel.UiLabel;
+        private readonly _groupRoomList!        : eui.Group;
+        private readonly _listRoom!             : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
+        private readonly _labelNoRoom!          : TwnsUiLabel.UiLabel;
+        private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
         private _hasReceivedData    = false;
         private _isTabInitialized   = false;
@@ -75,6 +76,7 @@ namespace TwnsMfrJoinRoomListPanel {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
                 { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
+                { ui: this._btnSearch,      callback: this._onTouchedBtnSearch },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listRoom.setItemRenderer(RoomRenderer);
@@ -87,7 +89,7 @@ namespace TwnsMfrJoinRoomListPanel {
             this._updateGroupRoomList();
             this._updateComponentsForTargetRoomInfo();
 
-            MfrProxy.reqMfrGetJoinableRoomInfoList();
+            MfrProxy.reqMfrGetJoinableRoomInfoList(null);
         }
         protected _onClosing(): void {
             // nothing to do
@@ -194,7 +196,7 @@ namespace TwnsMfrJoinRoomListPanel {
                         MfrProxy.reqMfrJoinRoom(joinData);
                     } else {
                         FloatText.show(Lang.getText(LangTextType.A0145));
-                        MfrProxy.reqMfrGetJoinableRoomInfoList();
+                        MfrProxy.reqMfrGetJoinableRoomInfoList(null);
                     }
                 };
 
@@ -210,6 +212,10 @@ namespace TwnsMfrJoinRoomListPanel {
                     });
                 }
             }
+        }
+
+        private _onTouchedBtnSearch(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrSearchRoomPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -249,6 +255,7 @@ namespace TwnsMfrJoinRoomListPanel {
             this._btnBack.label             = Lang.getText(LangTextType.B0146);
             this._labelNoRoom.text          = Lang.getText(LangTextType.B0582);
             this._btnNextStep.label         = Lang.getText(LangTextType.B0583);
+            this._btnSearch.label           = Lang.getText(LangTextType.B0228);
         }
 
         private _updateGroupRoomList(): void {
@@ -366,6 +373,11 @@ namespace TwnsMfrJoinRoomListPanel {
                 endProps    : { alpha: 1, y: 20 },
             });
             Helpers.resetTween({
+                obj         : this._btnSearch,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 80 },
+            });
+            Helpers.resetTween({
                 obj         : this._groupRoomList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
@@ -393,6 +405,11 @@ namespace TwnsMfrJoinRoomListPanel {
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnSearch,
+                beginProps  : { alpha: 1, y: 80 },
+                endProps    : { alpha: 0, y: 40 },
             });
             Helpers.resetTween({
                 obj         : this._groupRoomList,

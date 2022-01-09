@@ -347,6 +347,7 @@ namespace TwnsWwMakeRequestWarsPanel {
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
         private readonly _labelId!      : TwnsUiLabel.UiLabel;
+        private readonly _labelType!    : TwnsUiLabel.UiLabel;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onDataChanged(): void {
@@ -360,11 +361,22 @@ namespace TwnsWwMakeRequestWarsPanel {
 
         private _updateView(): void {
             this._updateLabelId();
+            this._updateLabelType();
             this._updateLabelName();
         }
 
         private _updateLabelId(): void {
             this._labelId.text = `#${this._getData().info.warInfo?.warId}`;
+        }
+
+        private _updateLabelType(): void {
+            const warInfo   = this._getData().info.warInfo;
+            const label     = this._labelType;
+            if (warInfo == null) {
+                label.text = CommonConstants.ErrorTextForUndefined;
+            } else {
+                label.text = Lang.getWarTypeName(WarCommonHelpers.getWarTypeByMpwWarInfo(warInfo)) ?? CommonConstants.ErrorTextForUndefined;
+            }
         }
 
         private async _updateLabelName(): Promise<void> {

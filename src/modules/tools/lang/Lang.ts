@@ -278,6 +278,8 @@ namespace Lang {
             case Types.WarType.Me       : return getText(LangTextType.B0419);
             case Types.WarType.MrwStd   : return getText(LangTextType.B0415);
             case Types.WarType.MrwFog   : return getText(LangTextType.B0416);
+            case Types.WarType.MfwStd   : return getText(LangTextType.B0812);
+            case Types.WarType.MfwFog   : return getText(LangTextType.B0813);
             case Types.WarType.ScwStd   : return getText(LangTextType.B0610);
             case Types.WarType.ScwFog   : return getText(LangTextType.B0611);
             case Types.WarType.SfwStd   : return getText(LangTextType.B0612);

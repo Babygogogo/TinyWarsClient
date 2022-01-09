@@ -41,6 +41,7 @@ namespace TwnsPanelConfig {
         CcrMainMenuPanel                    : PanelConfig<TwnsCcrMainMenuPanel.OpenData>;
         CcrMyRoomListPanel                  : PanelConfig<TwnsCcrMyRoomListPanel.OpenData>;
         CcrRoomInfoPanel                    : PanelConfig<TwnsCcrRoomInfoPanel.OpenData>;
+        CcrSearchRoomPanel                  : PanelConfig<TwnsCcrSearchRoomPanel.OpenData>;
 
         CcwMyWarListPanel                   : PanelConfig<TwnsCcwMyWarListPanel.OpenData>;
 
@@ -93,6 +94,7 @@ namespace TwnsPanelConfig {
         McrMainMenuPanel                    : PanelConfig<TwnsMcrMainMenuPanel.OpenData>;
         McrMyRoomListPanel                  : PanelConfig<TwnsMcrMyRoomListPanel.OpenData>;
         McrRoomInfoPanel                    : PanelConfig<TwnsMcrRoomInfoPanel.OpenData>;
+        McrSearchRoomPanel                  : PanelConfig<TwnsMcrSearchRoomPanel.OpenData>;
 
         McwMyWarListPanel                   : PanelConfig<TwnsMcwMyWarListPanel.OpenData>;
 
@@ -125,6 +127,7 @@ namespace TwnsPanelConfig {
         MfrMainMenuPanel                    : PanelConfig<TwnsMfrMainMenuPanel.OpenData>;
         MfrMyRoomListPanel                  : PanelConfig<TwnsMfrMyRoomListPanel.OpenData>;
         MfrRoomInfoPanel                    : PanelConfig<TwnsMfrRoomInfoPanel.OpenData>;
+        MfrSearchRoomPanel                  : PanelConfig<TwnsMfrSearchRoomPanel.OpenData>;
 
         MfwMyWarListPanel                   : PanelConfig<TwnsMfwMyWarListPanel.OpenData>;
 
@@ -431,6 +434,12 @@ namespace TwnsPanelConfig {
                 isExclusive : true,
             },
 
+            CcrSearchRoomPanel: {
+                cls         : TwnsCcrSearchRoomPanel?.CcrSearchRoomPanel,
+                skinName    : `resource/skins/coopCustomRoom/CcrSearchRoomPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             CcwMyWarListPanel: {
                 cls         : TwnsCcwMyWarListPanel?.CcwMyWarListPanel,
@@ -728,6 +737,12 @@ namespace TwnsPanelConfig {
                 isExclusive : true,
             },
 
+            McrSearchRoomPanel: {
+                cls         : TwnsMcrSearchRoomPanel?.McrSearchRoomPanel,
+                skinName    : `resource/skins/multiCustomRoom/McrSearchRoomPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             McwMyWarListPanel: {
                 cls         : TwnsMcwMyWarListPanel?.McwMyWarListPanel,
@@ -914,6 +929,12 @@ namespace TwnsPanelConfig {
                 skinName    : `resource/skins/multiFreeRoom/MfrRoomInfoPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
+            },
+
+            MfrSearchRoomPanel: {
+                cls         : TwnsMfrSearchRoomPanel?.MfrSearchRoomPanel,
+                skinName    : `resource/skins/multiFreeRoom/MfrSearchRoomPanel.exml`,
+                layer       : LayerType.Hud0,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -50,6 +50,7 @@ namespace TwnsCcrJoinRoomListPanel {
 
         private readonly _btnBack!              : TwnsUiButton.UiButton;
         private readonly _btnNextStep!          : TwnsUiButton.UiButton;
+        private readonly _btnSearch!            : TwnsUiButton.UiButton;
 
         private readonly _groupRoomList!        : eui.Group;
         private readonly _listRoom!             : TwnsUiScrollList.UiScrollList<DataForRoomRenderer>;
@@ -77,6 +78,7 @@ namespace TwnsCcrJoinRoomListPanel {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
                 { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
+                { ui: this._btnSearch,      callback: this._onTouchedBtnSearch },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listRoom.setItemRenderer(RoomRenderer);
@@ -89,7 +91,7 @@ namespace TwnsCcrJoinRoomListPanel {
             this._updateGroupRoomList();
             this._updateComponentsForTargetRoomInfo();
 
-            CcrProxy.reqCcrGetJoinableRoomInfoList();
+            CcrProxy.reqCcrGetJoinableRoomInfoList(null);
         }
         protected _onClosing(): void {
             // nothing to do
@@ -199,7 +201,7 @@ namespace TwnsCcrJoinRoomListPanel {
                         CcrProxy.reqCcrJoinRoom(joinData);
                     } else {
                         FloatText.show(Lang.getText(LangTextType.A0145));
-                        CcrProxy.reqCcrGetJoinableRoomInfoList();
+                        CcrProxy.reqCcrGetJoinableRoomInfoList(null);
                     }
                 };
                 if (!settingsForCcw.warPassword) {
@@ -213,6 +215,10 @@ namespace TwnsCcrJoinRoomListPanel {
                     });
                 }
             }
+        }
+
+        private _onTouchedBtnSearch(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrSearchRoomPanel, void 0);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -252,6 +258,7 @@ namespace TwnsCcrJoinRoomListPanel {
             this._btnBack.label             = Lang.getText(LangTextType.B0146);
             this._labelNoRoom.text          = Lang.getText(LangTextType.B0582);
             this._btnNextStep.label         = Lang.getText(LangTextType.B0583);
+            this._btnSearch.label           = Lang.getText(LangTextType.B0228);
         }
 
         private _updateGroupRoomList(): void {
@@ -364,6 +371,11 @@ namespace TwnsCcrJoinRoomListPanel {
                 endProps    : { alpha: 1, y: 20 },
             });
             Helpers.resetTween({
+                obj         : this._btnSearch,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 80 },
+            });
+            Helpers.resetTween({
                 obj         : this._groupRoomList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
@@ -391,6 +403,11 @@ namespace TwnsCcrJoinRoomListPanel {
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnSearch,
+                beginProps  : { alpha: 1, y: 80 },
+                endProps    : { alpha: 0, y: 40 },
             });
             Helpers.resetTween({
                 obj         : this._groupRoomList,
