@@ -1341,6 +1341,8 @@ namespace WarRobot {
         const tileMap                   = war.getTileMap();
         const unitHpDict                = new Map<BwUnit, number>();
         const tileHpDict                = new Map<BwTile, number>();
+        const scalerForSelfDamage       = 1 / Math.max(1, unitValueRatio);
+        const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 2);
 
         let totalScore = 0;
         for (const battleDamageInfo of battleDamageInfoArray) {
@@ -1383,7 +1385,7 @@ namespace WarRobot {
                 const isSelfDamaged     = unitTeamIndex2 === focusTeamIndex;
                 let score               = (actualDamage + (isUnitDestroyed ? 30 : 0))
                     * unitProductionCost2 / 1000
-                    * (isSelfDamaged ? 1 / Math.max(1, unitValueRatio) : Math.max(1, unitValueRatio))
+                    * (isSelfDamaged ? scalerForSelfDamage : scalerForEnemyDamage)
                     * (unit2.getHasLoadedCo() ? 2 : 1)
                     * (_DAMAGE_SCORE_SCALERS[unitType1][unitType2] ?? 1);
 
@@ -1413,7 +1415,7 @@ namespace WarRobot {
                     for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unit2, true)) {
                         score += (loadedUnit.getCurrentHp() + 30)
                             * loadedUnit.getProductionCfgCost() / 1000
-                            * (isSelfDamaged ? 1 / Math.max(1, unitValueRatio) : Math.max(1, unitValueRatio))
+                            * (isSelfDamaged ? scalerForSelfDamage : scalerForEnemyDamage)
                             * (loadedUnit.getHasLoadedCo() ? 2 : 1);
                     }
                 }
@@ -1425,7 +1427,7 @@ namespace WarRobot {
             throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_09);
         }
 
-        return totalScore * 1.2;
+        return totalScore;
     }
 
     async function getScoreForActionUnitCaptureTile(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex): Promise<number> {
