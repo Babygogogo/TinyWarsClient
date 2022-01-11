@@ -25,6 +25,7 @@ namespace WarRobot {
     import UnitType             = Types.UnitType;
     import UnitActionState      = Types.UnitActionState;
     import UnitAiMode           = Types.UnitAiMode;
+    import CoSkillType          = Types.CoSkillType;
     import BwUnit               = TwnsBwUnit.BwUnit;
     import BwTile               = TwnsBwTile.BwTile;
     import BwWar                = TwnsBwWar.BwWar;
@@ -44,16 +45,22 @@ namespace WarRobot {
         directTotal     : number;
         indirectTotal   : number;
     };
+    type UnitsInfo = {
+        value           : number;
+        allCountOnMap   : number;
+        idleCountOnMap  : number;
+    };
     type CommonParams = {
         war                     : BwWar;
         playerIndexInTurn       : number;
         mapSize                 : Types.MapSize;
-        unitValues              : Map<number, number>;
+        unitsInfoDict           : Map<number, UnitsInfo>;
         unitValueRatio          : number;
         visibleUnits            : Set<BwUnit>;
         globalOffenseBonuses    : Map<number, number>;
         globalDefenseBonuses    : Map<number, number>;
         luckValues              : Map<number, number>;
+        bestActionDict          : Map<BwUnit, IWarActionContainer>;
         getAndTickRandomInteger : () => number;
     };
 
@@ -357,7 +364,7 @@ namespace WarRobot {
         await Helpers.checkAndCallLater();
 
         const playerIndexInTurn     = war.getPlayerIndexInTurn();
-        const unitValues            = await getUnitValues(war);
+        const unitsInfoDict         = await getUnitsInfoDict(war);
         const randomNumberManager   = war.getRandomNumberManager();
         const isNeedSeedRandom      = randomNumberManager.getIsNeedSeedRandom();
         const getRandomIntegerArray = Helpers.createLazyFunc(() => {
@@ -369,12 +376,13 @@ namespace WarRobot {
             war,
             playerIndexInTurn,
             mapSize                 : war.getTileMap().getMapSize(),
-            unitValues,
-            unitValueRatio          : await getUnitValueRatio(war, unitValues, playerIndexInTurn),
+            unitsInfoDict,
+            unitValueRatio          : await getUnitValueRatio(war, unitsInfoDict, playerIndexInTurn),
             visibleUnits            : WarVisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, new Set([war.getPlayer(playerIndexInTurn).getTeamIndex()])),
             globalOffenseBonuses    : await getGlobalOffenseBonuses(war),
             globalDefenseBonuses    : await getGlobalDefenseBonuses(war),
             luckValues              : await getLuckValues(war),
+            bestActionDict          : new Map(),
             getAndTickRandomInteger : () => {
                 if (!isNeedSeedRandom) {
                     return Math.floor(Math.random() * 256);
@@ -393,22 +401,34 @@ namespace WarRobot {
         };
     }
 
-    async function getUnitValues(war: BwWar): Promise<Map<number, number>> {
+    async function getUnitsInfoDict(war: BwWar): Promise<Map<number, UnitsInfo>> {
         await Helpers.checkAndCallLater();
 
-        const unitValues = new Map<number, number>();
+        const unitsInfoDict = new Map<number, UnitsInfo>();
         for (const unit of war.getUnitMap().getAllUnits()) {
-            const playerIndex           = unit.getPlayerIndex();
-            const productionCost        = unit.getProductionCfgCost();
-            const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
-            const normalizedMaxHp       = unit.getNormalizedMaxHp();
-            unitValues.set(playerIndex, (unitValues.get(playerIndex) || 0) + productionCost * normalizedCurrentHp / normalizedMaxHp);
+            const playerIndex   = unit.getPlayerIndex();
+            const value         = unit.getProductionCfgCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp();
+            const isOnMap       = unit.getLoaderUnitId() == null;
+            const isIdle        = unit.getActionState() === UnitActionState.Idle;
+
+            if (!unitsInfoDict.has(playerIndex)) {
+                unitsInfoDict.set(playerIndex, {
+                    value,
+                    allCountOnMap   : isOnMap ? 1 : 0,
+                    idleCountOnMap  : isOnMap && isIdle ? 1 : 0,
+                });
+            } else {
+                const info          = Helpers.getExisted(unitsInfoDict.get(playerIndex), ClientErrorCode.SpwRobot_GetUnitsInfoDict_00);
+                info.value          += value;
+                info.allCountOnMap  += isOnMap ? 1 : 0;
+                info.idleCountOnMap += isOnMap && isIdle ? 1 : 0;
+            }
         }
 
-        return unitValues;
+        return unitsInfoDict;
     }
 
-    async function getUnitValueRatio(war: BwWar, unitValues: Map<number, number>, playerIndexInTurn: number): Promise<number> {
+    async function getUnitValueRatio(war: BwWar, unitsInfoDict: Map<number, UnitsInfo>, playerIndexInTurn: number): Promise<number> {
         await Helpers.checkAndCallLater();
 
         const playerManager = war.getPlayerManager();
@@ -416,7 +436,7 @@ namespace WarRobot {
         const selfTeamIndex = playerInTurn.getTeamIndex();
         let selfValue       = 0;
         let enemyValue      = 0;
-        for (const [playerIndex, value] of unitValues) {
+        for (const [playerIndex, { value }] of unitsInfoDict) {
             const player    = playerManager.getPlayer(playerIndex);
             const teamIndex = player.getTeamIndex();
             if (teamIndex === selfTeamIndex) {
@@ -800,24 +820,7 @@ namespace WarRobot {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Candidate units generators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function getCandidateUnitsForPhase1(commonParams: CommonParams): Promise<BwUnit[]> {
-        await Helpers.checkAndCallLater();
 
-        const { war, playerIndexInTurn }    = commonParams;
-        const units                         : BwUnit[] = [];
-        for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())
-            ) {
-                const maxAttackRange = unit.getFinalMaxAttackRange();
-                if ((maxAttackRange != null) && (maxAttackRange > 1)) {
-                    units.push(unit);
-                }
-            }
-        }
-        return units;
-    }
     // async function _getCandidateUnitsForPhase1a(commonParams: CommonParams): Promise<BwUnit[]> {
     //     await Helpers.checkAndCallLater();
 
@@ -832,66 +835,6 @@ namespace WarRobot {
     //     });
     //     return units;
     // }
-
-    async function getCandidateUnitsForPhase2(commonParams: CommonParams): Promise<BwUnit[]> {
-        await Helpers.checkAndCallLater();
-
-        const { war, playerIndexInTurn }    = commonParams;
-        const units                         : BwUnit[] = [];
-        for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())                         &&
-                (unit.getIsCapturingTile())
-            ) {
-                units.push(unit);
-            }
-        }
-
-        return units;
-    }
-
-    async function getCandidateUnitsForPhase3(commonParams: CommonParams): Promise<BwUnit[]> {
-        // await Helpers.checkAndCallLater();
-
-        // const { war, playerIndexInTurn }    = commonParams;
-        // const units                         : BwUnit[] = [];
-        // war.getUnitMap().forEachUnitOnMap((unit: BwUnit) => {
-        //     if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-        //         (unit.getActionState() === UnitActionState.Idle)    &&
-        //         (unit.checkIsCapturer())
-        //     ) {
-        //         units.push(unit);
-        //     }
-        // });
-
-        // return units;
-
-        await Helpers.checkAndCallLater();
-
-        const { war, playerIndexInTurn }    = commonParams;
-        const units                         : BwUnit[] = [];
-        for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())
-            ) {
-                units.push(unit);
-
-                if (unit.checkCanLaunchLoadedUnit()) {
-                    for (const loadedUnit of unit.getLoadedUnits()) {
-                        if ((loadedUnit.getActionState() === UnitActionState.Idle) &&
-                            (loadedUnit.checkCanAiDoAction())
-                        ) {
-                            units.push(loadedUnit);
-                        }
-                    }
-                }
-            }
-        }
-
-        return units;
-    }
 
     // async function _getCandidateUnitsForPhase4(commonParams: CommonParams): Promise<BwUnit[]> {
     //     await Helpers.checkAndCallLater();
@@ -993,7 +936,7 @@ namespace WarRobot {
         const indirectDamage    = data.indirectTotal;
         const canBeDestroyed    = directDamage + indirectDamage >= currentHp;
         let score               = -(
-            Math.min(currentHp, directDamage + indirectDamage * 3) +
+            (data.max >= 15 ? Math.min(currentHp, directDamage + indirectDamage * 3) : 0) +
             (canBeDestroyed ? 30 : 0)
         ) * unit.getProductionCfgCost() / 1000 / unitValueRatio * (unit.getHasLoadedCo() ? 2 : 1);
 
@@ -1014,7 +957,7 @@ namespace WarRobot {
         const tileMap                                   = war.getTileMap();
         const unitMap                                   = war.getUnitMap();
         const teamIndex                                 = unit.getTeamIndex();
-        let minDistance                                 = Number.MAX_SAFE_INTEGER;
+        const distanceArray                             : number[] = [];
         for (let x = 0; x < mapWidth; ++x) {
             if (movableArea[x] == null) {
                 continue;
@@ -1026,25 +969,31 @@ namespace WarRobot {
                     continue;
                 }
 
-                const distance = info.totalMoveCost;
-                if (distance > minDistance) {
-                    continue;
-                }
-
+                const distance      = info.totalMoveCost;
                 const gridIndex     : GridIndex = { x, y };
                 const tile          = tileMap.getTile(gridIndex);
                 const existingUnit  = unitMap.getUnitOnMap(gridIndex);
                 if (((tile.getMaxCapturePoint() != null) && (tile.getTeamIndex() !== teamIndex))    ||
                     ((existingUnit != null) && (existingUnit.getTeamIndex() !== teamIndex))
                 ) {
-                    minDistance = distance;
+                    distanceArray.push(distance);
                 }
             }
         }
+        distanceArray.sort((v1, v2) => v1 - v2);
 
-        return ((minDistance >= Number.MAX_SAFE_INTEGER) || (minDistance <= 0))
-            ? 0
-            : -minDistance - Math.ceil(minDistance / Math.max(1, unit.getFinalMoveRange())) * unit.getCurrentHp() * unit.getProductionCfgCost() / 1000 / Math.max(1, commonParams.unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1);
+        const moveRange = unit.getFinalMoveRange();
+        const scaler    = unit.getCurrentHp() * unit.getProductionCfgCost() / 1000 / Math.max(1, commonParams.unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1);
+        let score       = 0;
+        for (let i = Math.min(1, distanceArray.length - 1); i >= 0; --i) {
+            const distance = distanceArray[i];
+            if (distance > 0) {
+                score += -(distance + Math.ceil(distance / Math.max(1, moveRange)) * scaler) / (i === 0 ? 1 : 100);
+            } else {
+                score += unit.checkIsCapturer() ? 0 : ((-scaler - 10) / (i === 0 ? 1 : 100));
+            }
+        }
+        return score;
 
         // method 2
         // const { war, mapSize }                          = commonParams;
@@ -1253,15 +1202,16 @@ namespace WarRobot {
             }
         }
 
-        const teamIndex = unit.getTeamIndex();
-        if (tile.getTeamIndex() === teamIndex) {
+        const unitTeamIndex = unit.getTeamIndex();
+        const tileTeamIndex = tile.getTeamIndex();
+        if (tileTeamIndex === unitTeamIndex) {
             switch (tile.getType()) {
                 case TileType.Factory   : totalScore += -5000; break;
                 case TileType.Airport   : totalScore += -2000; break;
                 case TileType.Seaport   : totalScore += -1500; break;
                 default                 : break;
             }
-        } else if (tile.getTeamIndex() !== CommonConstants.WarNeutralTeamIndex) {
+        } else if (tileTeamIndex !== CommonConstants.WarNeutralTeamIndex) {
             switch (tile.getType()) {
                 case TileType.Factory   : totalScore += 50; break;
                 case TileType.Airport   : totalScore += 20; break;
@@ -1475,7 +1425,7 @@ namespace WarRobot {
             throw Helpers.newError(`Invalid battleDamageInfo.`, ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_09);
         }
 
-        return totalScore;
+        return totalScore * 1.2;
     }
 
     async function getScoreForActionUnitCaptureTile(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex): Promise<number> {
@@ -1563,6 +1513,13 @@ namespace WarRobot {
         } else {
             return unit.getCurrentHp() * 10;
         }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async function getScoreForActionUnitUseCoSkill(unit: BwUnit): Promise<number> {
+        await Helpers.checkAndCallLater();
+
+        return 9999;
     }
 
     async function getScoreForActionPlayerProduceUnit({ commonParams, producingGridIndex, producingUnitType, idleFactoriesCount, getMinTurnsCountForAttack }: {
@@ -2079,6 +2036,63 @@ namespace WarRobot {
         };
     }
 
+    async function getScoreAndActionUnitUseCoSkill(commonParams: CommonParams, unit: BwUnit, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
+        const war               = commonParams.war;
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const unitsInfo         = Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_00);
+        const player            = war.getPlayer(playerIndexInTurn);
+        const configVersion     = war.getConfigVersion();
+        const idleUnitsCount    = unitsInfo.idleCountOnMap;
+        const allUnitsCount     = unitsInfo.allCountOnMap;
+
+        if (unit.checkCanUseCoSkill(CoSkillType.SuperPower)) {
+            const canResetState = player.getCoSkills(CoSkillType.SuperPower).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+            if (((canResetState) && (idleUnitsCount > 0))                       ||
+                ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
+            ) {
+                return null;
+            } else {
+                return {
+                    score   : await getScoreForActionUnitUseCoSkill(unit),
+                    action  : { WarActionUnitUseCoSkill: {
+                        path        : {
+                            nodes           : pathNodes,
+                            fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                            isBlocked       : false,
+                        },
+                        launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+                        skillType       : CoSkillType.SuperPower,
+                    } },
+                };
+            }
+        }
+
+        if (unit.checkCanUseCoSkill(Types.CoSkillType.Power)) {
+            const canResetState = player.getCoSkills(CoSkillType.Power).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+            if ((player.getCoCurrentEnergy() > Helpers.getExisted((player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_01) * 1.1))  ||
+                ((canResetState) && (idleUnitsCount > 0))                       ||
+                ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
+            ) {
+                return null;
+            } else {
+                return {
+                    score   : await getScoreForActionUnitUseCoSkill(unit),
+                    action  : { WarActionUnitUseCoSkill: {
+                        path        : {
+                            nodes           : pathNodes,
+                            fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                            isBlocked       : false,
+                        },
+                        launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
+                        skillType       : CoSkillType.Power,
+                    } },
+                };
+            }
+        }
+
+        return null;
+    }
+
     async function getBestScoreAndActionForUnitAndPath(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
         await Helpers.checkAndCallLater();
 
@@ -2106,6 +2120,7 @@ namespace WarRobot {
             getScoreAndActionUnitSurface(unit, gridIndex, pathNodes),
             getScoreAndActionUnitWait(unit, pathNodes),
             getScoreAndActionUnitLoadCo(unit, pathNodes),
+            getScoreAndActionUnitUseCoSkill(commonParams, unit, pathNodes),
         ]));
 
         let bestScoreAndAction: ScoreAndAction | null = null;
@@ -2363,58 +2378,662 @@ namespace WarRobot {
     //     }
     // }
 
-    // Phase 1: make the ranged units to attack enemies.
-    async function getActionForPhase1(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+    // Phase 1: 发动co技能
+    async function getCandidateUnitsForPhase1(commonParams: CommonParams): Promise<BwUnit[]> {
         await Helpers.checkAndCallLater();
 
-        let bestScoreAndAction: ScoreAndAction | null = null;
-        for (const unit of await getCandidateUnitsForPhase1(commonParams)) {
-            const scoreAndAction = await getBestScoreAndActionForCandidateUnit(commonParams, unit);
-            if (scoreAndAction == null) {
-                continue;
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const unitMap           = commonParams.war.getUnitMap();
+        const units             : BwUnit[] = [];
+        for (const unit of unitMap.getAllUnitsOnMap()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)                                                       &&
+                (unit.getActionState() === UnitActionState.Idle)                                                    &&
+                (unit.checkCanAiDoAction())                                                                         &&
+                ((unit.checkCanUseCoSkill(CoSkillType.Power) || (unit.checkCanUseCoSkill(CoSkillType.SuperPower))))
+            ) {
+                units.push(unit);
             }
-
-            const action = scoreAndAction.action;
-            if ((action.WarActionUnitAttackUnit) || (action.WarActionUnitAttackTile)) {
-                bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction, commonParams);
+        }
+        for (const unit of unitMap.getAllUnitsLoaded()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)                                                       &&
+                (unit.getActionState() === UnitActionState.Idle)                                                    &&
+                (unit.checkCanAiDoAction())                                                                         &&
+                ((unit.checkCanUseCoSkill(CoSkillType.Power) || (unit.checkCanUseCoSkill(CoSkillType.SuperPower))))
+            ) {
+                const loaderUnit = unit.getLoaderUnit();
+                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+                    (loaderUnit.checkCanAiDoAction())                               &&
+                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+                ) {
+                    units.push(unit);
+                }
             }
         }
 
-        return bestScoreAndAction ? bestScoreAndAction.action : null;
+        return units.sort((v1, v2) => {
+            const hp1 = v1.getCurrentHp();
+            const hp2 = v2.getCurrentHp();
+            if (hp1 !== hp2) {
+                return hp2 - hp1;
+            } else {
+                return v1.getUnitId() - v2.getUnitId();
+            }
+        });
+    }
+    async function getActionForPhase1(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+        const war               = commonParams.war;
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const configVersion     = war.getConfigVersion();
+        const player            = war.getPlayer(playerIndexInTurn);
+        const coType            = player.getCoType();
+
+        if (coType === Types.CoType.Global) {
+            const unitsInfo         = Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetActionForPhase1_00);
+            const allUnitsCount     = unitsInfo.allCountOnMap;
+            const idleUnitsCount    = unitsInfo.idleCountOnMap;
+            if (player.checkCanUseCoSkill(CoSkillType.SuperPower)) {
+                const canResetState = player.getCoSkills(CoSkillType.SuperPower).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+                if (((canResetState) && (idleUnitsCount > 0))                       ||
+                    ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
+                ) {
+                    return null;
+                } else {
+                    return {
+                        WarActionPlayerUseCoSkill: {
+                            skillType   : CoSkillType.SuperPower,
+                        },
+                    };
+                }
+
+            } else if (player.checkCanUseCoSkill(Types.CoSkillType.Power)) {
+                const canResetState = player.getCoSkills(CoSkillType.Power).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+                if ((player.getCoCurrentEnergy() > Helpers.getExisted((player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetActionForPhase1_01) * 1.1))   ||
+                    ((canResetState) && (idleUnitsCount > 0))                                                                                               ||
+                    ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
+                ) {
+                    return null;
+                } else {
+                    return {
+                        WarActionPlayerUseCoSkill: {
+                            skillType   : CoSkillType.Power,
+                        },
+                    };
+                }
+
+            } else {
+                return null;
+            }
+        }
+
+        if (coType === Types.CoType.Zoned) {
+            const bestActionDict = commonParams.bestActionDict;
+            for (const unit of await getCandidateUnitsForPhase1(commonParams)) {
+                {
+                    const existingBestAction = bestActionDict.get(unit);
+                    if (existingBestAction) {
+                        return existingBestAction;
+                    }
+                }
+
+                const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+                if (action == null) {
+                    continue;
+                }
+
+                bestActionDict.set(unit, action);
+                return action;
+            }
+
+            return null;
+        }
+
+        return null;
     }
 
-    // Phase 2: move the infantries, mech and bikes that are capturing buildings.
+    // Phase 2: 让能占领建筑的部队进行占领（若当前最佳操作不是占领则跳过）
+    // Phase 2: 操作能占领建筑的部队
+    async function getCandidateUnitsForPhase2(commonParams: CommonParams): Promise<BwUnit[]> {
+        await Helpers.checkAndCallLater();
+
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const war               = commonParams.war;
+        const unitMap           = war.getUnitMap();
+        const units             : BwUnit[] = [];
+        for (const unit of unitMap.getAllUnitsOnMap()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())                         &&
+                (unit.checkIsCapturer())
+            ) {
+                units.push(unit);
+            }
+        }
+        for (const unit of unitMap.getAllUnitsLoaded()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())                         &&
+                (unit.checkIsCapturer())
+            ) {
+                const loaderUnit = unit.getLoaderUnit();
+                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+                    (loaderUnit.checkCanAiDoAction())                               &&
+                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+                ) {
+                    units.push(unit);
+                }
+            }
+        }
+
+        const tileMap = war.getTileMap();
+        return units.sort((v1, v2) => {
+            const capturePoint1 = tileMap.getTile(v1.getGridIndex()).getCurrentCapturePoint() ?? Number.MAX_SAFE_INTEGER;
+            const capturePoint2 = tileMap.getTile(v2.getGridIndex()).getCurrentCapturePoint() ?? Number.MAX_SAFE_INTEGER;
+            if (capturePoint1 != capturePoint2) {
+                return capturePoint1 - capturePoint2;
+            }
+
+            const hp1 = v1.getCurrentHp();
+            const hp2 = v2.getCurrentHp();
+            if (hp1 !== hp2) {
+                return hp2 - hp1;
+            } else {
+                return v1.getUnitId() - v2.getUnitId();
+            }
+        });
+    }
     async function getActionForPhase2(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         await Helpers.checkAndCallLater();
 
-        let bestScoreAndAction: ScoreAndAction | null = null;
+        const bestActionDict = commonParams.bestActionDict;
         for (const unit of await getCandidateUnitsForPhase2(commonParams)) {
-            const scoreAndAction = await getBestScoreAndActionForCandidateUnit(commonParams, unit);
-            if (scoreAndAction == null) {
+            {
+                const existingBestAction = bestActionDict.get(unit);
+                if (existingBestAction) {
+                    // if (existingBestAction.WarActionUnitCaptureTile) {
+                    //     return existingBestAction;
+                    // }
+                    // continue;
+                    return existingBestAction;
+                }
+            }
+
+            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+            if (action == null) {
                 continue;
             }
 
-            bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction, commonParams);
+            bestActionDict.set(unit, action);
+            // if (action.WarActionUnitCaptureTile) {
+            //     return action;
+            // }
+            return action;
         }
 
-        return bestScoreAndAction ? bestScoreAndAction.action : null;
+        return null;
     }
 
-    //  Phase 3: move the other infantries, mech and bikes.
+    // Phase 3: 让远程部队开火（若当前最佳操作不是开火则跳过）
+    // Phase 3: 操作远程部队
+    async function getCandidateUnitsForPhase3(commonParams: CommonParams): Promise<BwUnit[]> {
+        await Helpers.checkAndCallLater();
+
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const unitMap           = commonParams.war.getUnitMap();
+        const units             : BwUnit[] = [];
+        for (const unit of unitMap.getAllUnitsOnMap()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())
+            ) {
+                const maxAttackRange = unit.getFinalMaxAttackRange();
+                if ((maxAttackRange == null) || (maxAttackRange <= 1)) {
+                    continue;
+                }
+
+                units.push(unit);
+            }
+        }
+        for (const unit of unitMap.getAllUnitsLoaded()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())
+            ) {
+                const maxAttackRange = unit.getFinalMaxAttackRange();
+                if ((maxAttackRange == null) || (maxAttackRange <= 1) || (!unit.checkCanAttackAfterMove())) {
+                    continue;
+                }
+
+                const loaderUnit = unit.getLoaderUnit();
+                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+                    (loaderUnit.checkCanAiDoAction())                               &&
+                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+                ) {
+                    units.push(unit);
+                }
+            }
+        }
+
+        return units.sort((v1, v2) => {
+            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+            if (cost1 !== cost2) {
+                return cost2 - cost1;
+            }
+
+            return v1.getUnitId() - v2.getUnitId();
+        });
+    }
     async function getActionForPhase3(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         await Helpers.checkAndCallLater();
 
-        let bestScoreAndAction: ScoreAndAction | null | undefined = null;
+        const bestActionDict = commonParams.bestActionDict;
         for (const unit of await getCandidateUnitsForPhase3(commonParams)) {
-            const scoreAndAction = await getBestScoreAndActionForCandidateUnit(commonParams, unit);
-            if (scoreAndAction == null) {
+            {
+                const existingBestAction = bestActionDict.get(unit);
+                if (existingBestAction) {
+                    // if ((existingBestAction.WarActionUnitAttackTile) || (existingBestAction.WarActionUnitAttackUnit)) {
+                    //     return existingBestAction;
+                    // }
+                    // continue;
+                    return existingBestAction;
+                }
+            }
+
+            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+            if (action == null) {
                 continue;
             }
 
-            bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction, commonParams);
+            bestActionDict.set(unit, action);
+            // if ((action.WarActionUnitAttackTile) || (action.WarActionUnitAttackUnit)) {
+            //     return action;
+            // }
+            return action;
         }
 
-        return bestScoreAndAction ? bestScoreAndAction.action : null;
+        return null;
+    }
+
+    // Phase 4: 让近程部队开火（若当前最佳操作不是开火则跳过；优先顺序是大飞机-车辆和小飞机-步兵？）
+    // Phase 4: 操作近程部队
+    async function getCandidateUnitsForPhase4(commonParams: CommonParams): Promise<BwUnit[]> {
+        await Helpers.checkAndCallLater();
+
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const unitMap           = commonParams.war.getUnitMap();
+        const units             : BwUnit[] = [];
+        for (const unit of unitMap.getAllUnitsOnMap()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())
+            ) {
+                const maxAttackRange = unit.getFinalMaxAttackRange();
+                if ((maxAttackRange == null) || (maxAttackRange > 1)) {
+                    continue;
+                }
+
+                units.push(unit);
+            }
+        }
+        for (const unit of unitMap.getAllUnitsLoaded()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())
+            ) {
+                const maxAttackRange = unit.getFinalMaxAttackRange();
+                if ((maxAttackRange == null) || (maxAttackRange > 1) || (!unit.checkCanAttackAfterMove())) {
+                    continue;
+                }
+
+                const loaderUnit = unit.getLoaderUnit();
+                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+                    (loaderUnit.checkCanAiDoAction())                               &&
+                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+                ) {
+                    units.push(unit);
+                }
+            }
+        }
+
+        return units.sort((v1, v2) => {
+            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+            if (cost1 !== cost2) {
+                return cost2 - cost1;
+            }
+
+            return v1.getUnitId() - v2.getUnitId();
+        });
+    }
+    async function getActionForPhase4(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+        await Helpers.checkAndCallLater();
+
+        const bestActionDict = commonParams.bestActionDict;
+        for (const unit of await getCandidateUnitsForPhase4(commonParams)) {
+            {
+                const existingBestAction = bestActionDict.get(unit);
+                if (existingBestAction) {
+                    // if ((existingBestAction.WarActionUnitAttackTile) || (existingBestAction.WarActionUnitAttackUnit)) {
+                    //     return existingBestAction;
+                    // }
+                    // continue;
+                    return existingBestAction;
+                }
+            }
+
+            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+            if (action == null) {
+                continue;
+            }
+
+            bestActionDict.set(unit, action);
+            // if ((action.WarActionUnitAttackTile) || (action.WarActionUnitAttackUnit)) {
+            //     return action;
+            // }
+            return action;
+        }
+
+        return null;
+    }
+
+    // Phase 5: 操作只能卸载而不能弹射装载物的运输部队
+    async function getCandidateUnitsForPhase5(commonParams: CommonParams): Promise<BwUnit[]> {
+        await Helpers.checkAndCallLater();
+
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const unitMap           = commonParams.war.getUnitMap();
+        const units             : BwUnit[] = [];
+        for (const unit of unitMap.getAllUnitsOnMap()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())                         &&
+                (unit.getMaxLoadUnitsCount())                       &&
+                (!unit.checkCanLaunchLoadedUnit())
+            ) {
+                units.push(unit);
+            }
+        }
+        for (const unit of unitMap.getAllUnitsLoaded()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())                         &&
+                (unit.getMaxLoadUnitsCount())                       &&
+                (!unit.checkCanLaunchLoadedUnit())
+            ) {
+                const loaderUnit = unit.getLoaderUnit();
+                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+                    (loaderUnit.checkCanAiDoAction())                               &&
+                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+                ) {
+                    units.push(unit);
+                }
+            }
+        }
+
+        return units.sort((v1, v2) => {
+            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+            if (cost1 !== cost2) {
+                return cost1 - cost2;
+            }
+
+            return v1.getUnitId() - v2.getUnitId();
+        });
+    }
+    async function getActionForPhase5(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+        await Helpers.checkAndCallLater();
+
+        const bestActionDict = commonParams.bestActionDict;
+        for (const unit of await getCandidateUnitsForPhase5(commonParams)) {
+            {
+                const existingBestAction = bestActionDict.get(unit);
+                if (existingBestAction) {
+                    return existingBestAction;
+                }
+            }
+
+            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+            if (action == null) {
+                continue;
+            }
+
+            bestActionDict.set(unit, action);
+            return action;
+        }
+
+        return null;
+    }
+
+    // Phase 6: 操作剩余近程、且不能弹射装载物的部队
+    async function getCandidateUnitsForPhase6(commonParams: CommonParams): Promise<BwUnit[]> {
+        await Helpers.checkAndCallLater();
+
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const unitMap           = commonParams.war.getUnitMap();
+        const units             : BwUnit[] = [];
+        for (const unit of unitMap.getAllUnitsOnMap()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())                         &&
+                (!unit.checkCanLaunchLoadedUnit())
+            ) {
+                const maxAttackRange = unit.getFinalMaxAttackRange();
+                if ((maxAttackRange == null) || (maxAttackRange > 1)) {
+                    continue;
+                }
+
+                units.push(unit);
+            }
+        }
+        for (const unit of unitMap.getAllUnitsLoaded()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())                         &&
+                (!unit.checkCanLaunchLoadedUnit())
+            ) {
+                const maxAttackRange = unit.getFinalMaxAttackRange();
+                if ((maxAttackRange == null) || (maxAttackRange > 1)) {
+                    continue;
+                }
+
+                const loaderUnit = unit.getLoaderUnit();
+                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+                    (loaderUnit.checkCanAiDoAction())                               &&
+                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+                ) {
+                    units.push(unit);
+                }
+            }
+        }
+
+        return units.sort((v1, v2) => {
+            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+            if (cost1 !== cost2) {
+                return cost1 - cost2;
+            }
+
+            return v1.getUnitId() - v2.getUnitId();
+        });
+    }
+    async function getActionForPhase6(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+        await Helpers.checkAndCallLater();
+
+        const bestActionDict = commonParams.bestActionDict;
+        for (const unit of await getCandidateUnitsForPhase6(commonParams)) {
+            {
+                const existingBestAction = bestActionDict.get(unit);
+                if (existingBestAction) {
+                    return existingBestAction;
+                }
+            }
+
+            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+            if (action == null) {
+                continue;
+            }
+
+            bestActionDict.set(unit, action);
+            return action;
+        }
+
+        return null;
+    }
+
+    // Phase 7: 操作剩余远程、且不能弹射装载物的部队
+    async function getCandidateUnitsForPhase7(commonParams: CommonParams): Promise<BwUnit[]> {
+        await Helpers.checkAndCallLater();
+
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const unitMap           = commonParams.war.getUnitMap();
+        const units             : BwUnit[] = [];
+        for (const unit of unitMap.getAllUnitsOnMap()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())                         &&
+                (!unit.checkCanLaunchLoadedUnit())
+            ) {
+                const maxAttackRange = unit.getFinalMaxAttackRange();
+                if ((maxAttackRange == null) || (maxAttackRange <= 1)) {
+                    continue;
+                }
+
+                units.push(unit);
+            }
+        }
+        for (const unit of unitMap.getAllUnitsLoaded()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())                         &&
+                (!unit.checkCanLaunchLoadedUnit())
+            ) {
+                const maxAttackRange = unit.getFinalMaxAttackRange();
+                if ((maxAttackRange == null) || (maxAttackRange <= 1)) {
+                    continue;
+                }
+
+                const loaderUnit = unit.getLoaderUnit();
+                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+                    (loaderUnit.checkCanAiDoAction())                               &&
+                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+                ) {
+                    units.push(unit);
+                }
+            }
+        }
+
+        return units.sort((v1, v2) => {
+            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+            if (cost1 !== cost2) {
+                return cost1 - cost2;
+            }
+
+            return v1.getUnitId() - v2.getUnitId();
+        });
+    }
+    async function getActionForPhase7(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+        await Helpers.checkAndCallLater();
+
+        const bestActionDict = commonParams.bestActionDict;
+        for (const unit of await getCandidateUnitsForPhase7(commonParams)) {
+            {
+                const existingBestAction = bestActionDict.get(unit);
+                if (existingBestAction) {
+                    return existingBestAction;
+                }
+            }
+
+            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+            if (action == null) {
+                continue;
+            }
+
+            bestActionDict.set(unit, action);
+            return action;
+        }
+
+        return null;
+    }
+
+    // Phase 8: 操作剩余任意部队
+    async function getCandidateUnitsForPhase8(commonParams: CommonParams): Promise<BwUnit[]> {
+        await Helpers.checkAndCallLater();
+
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const unitMap           = commonParams.war.getUnitMap();
+        const units             : BwUnit[] = [];
+        for (const unit of unitMap.getAllUnitsOnMap()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())
+            ) {
+                units.push(unit);
+            }
+        }
+        for (const unit of unitMap.getAllUnitsLoaded()) {
+            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+                (unit.getActionState() === UnitActionState.Idle)    &&
+                (unit.checkCanAiDoAction())
+            ) {
+                const loaderUnit = unit.getLoaderUnit();
+                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+                    (loaderUnit.checkCanAiDoAction())                               &&
+                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+                ) {
+                    units.push(unit);
+                }
+            }
+        }
+
+        return units.sort((v1, v2) => {
+            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+            if (cost1 !== cost2) {
+                return cost1 - cost2;
+            }
+
+            return v1.getUnitId() - v2.getUnitId();
+        });
+    }
+    async function getActionForPhase8(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+        await Helpers.checkAndCallLater();
+
+        const bestActionDict = commonParams.bestActionDict;
+        for (const unit of await getCandidateUnitsForPhase8(commonParams)) {
+            {
+                const existingBestAction = bestActionDict.get(unit);
+                if (existingBestAction) {
+                    return existingBestAction;
+                }
+            }
+
+            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+            if (action == null) {
+                continue;
+            }
+
+            bestActionDict.set(unit, action);
+            return action;
+        }
+
+        return null;
     }
 
     // Phase 4: move the air combat units.
@@ -2477,15 +3096,15 @@ namespace WarRobot {
     //     }
     // }
 
-    // Phase 8: build units.
-    async function getActionForPhase8(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+    // Phase 9: 生产部队
+    async function getActionForPhase9(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         await Helpers.checkAndCallLater();
 
         return await getBestActionPlayerProduceUnit(commonParams);
     }
 
-    // Phase 9: vote for draw.
-    async function getActionForPhase9(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+    // Phase 11: 投票和局
+    async function getActionForPhase11(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         await Helpers.checkAndCallLater();
 
         if (commonParams.war.getDrawVoteManager().getRemainingVotes() == null) {
@@ -2499,8 +3118,8 @@ namespace WarRobot {
         }
     }
 
-    // Phase 10: end turn.
-    async function getActionForPhase10(): Promise<IWarActionContainer> {
+    // Phase 12: 结束回合
+    async function getActionForPhase12(): Promise<IWarActionContainer> {
         await Helpers.checkAndCallLater();
 
         return {
@@ -2512,9 +3131,14 @@ namespace WarRobot {
         getActionForPhase1,
         getActionForPhase2,
         getActionForPhase3,
+        getActionForPhase4,
+        getActionForPhase5,
+        getActionForPhase6,
+        getActionForPhase7,
         getActionForPhase8,
         getActionForPhase9,
-        getActionForPhase10,
+        getActionForPhase11,
+        getActionForPhase12,
     ];
     async function doGetNextAction(war: BwWar): Promise<IWarActionContainer> {
         const commonParams = await getCommonParams(war);

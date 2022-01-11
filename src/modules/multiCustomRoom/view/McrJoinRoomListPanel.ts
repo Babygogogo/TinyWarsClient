@@ -253,7 +253,7 @@ namespace TwnsMcrJoinRoomListPanel {
             this._btnBack.label             = Lang.getText(LangTextType.B0146);
             this._labelNoRoom.text          = Lang.getText(LangTextType.B0582);
             this._btnNextStep.label         = Lang.getText(LangTextType.B0583);
-            this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
+            this._btnSearch.label           = Lang.getText(LangTextType.B0228);
         }
 
         private _updateGroupRoomList(): void {

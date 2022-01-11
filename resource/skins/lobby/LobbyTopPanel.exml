@@ -6,9 +6,9 @@
         <e:Group id="_groupUserInfo" x="40" y="4">
             <TwnsUiImage:UiImage id="_imgAvatar" x="2" y="8" source="userAvatar0001" scaleX="0.6" scaleY="0.6" />
             <TwnsUiImage:UiImage source="lobbyTop0000" x="0" y="0" />
-            <TwnsUiLabel:UiLabel id="_labelNickname" text="babygogogo" y="20" size="14" x="70" textColor="0xffffff"
-                                 bold="true" />
-            <TwnsUiLabel:UiLabel id="_labelUserId" text="ID: 1" y="40" size="12" x="70" textColor="0xFFFFFF" />
+            <TwnsUiLabel:UiLabel id="_labelNickname" text="babygogogo" y="23" size="14" x="70" textColor="0xffffff"
+                                 bold="true" maxTextWidth="130" />
+            <TwnsUiLabel:UiLabel id="_labelUserId" text="ID: 1" y="42" size="12" x="70" textColor="0xFFFFFF" />
         </e:Group>
     </e:Group>
 </e:Skin>
