@@ -18,7 +18,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonWarBasicSettingsPage {
-    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType = Types.WarBasicSettingsType;
@@ -211,8 +210,9 @@ namespace TwnsCommonWarBasicSettingsPage {
             const data              = this._getData();
             const warRule           = data.warRule;
             const labelValue        = this._labelValue;
-            labelValue.text         = Lang.getWarRuleNameInLanguage(warRule) || CommonConstants.ErrorTextForUndefined;
-            labelValue.textColor    = warRule.ruleId == null ? 0xFFFF00 : 0xFFFFFF;
+            const ruleId            = warRule.ruleId;
+            labelValue.text         = `${ruleId == null ? `` : `(#${ruleId}) `}${Lang.getWarRuleNameInLanguage(warRule) || CommonConstants.ErrorTextForUndefined}`;
+            labelValue.textColor    = ruleId == null ? 0xFFFF00 : 0xFFFFFF;
             this._btnHelp.visible   = false;
         }
         private _updateViewAsHasFog(): void {

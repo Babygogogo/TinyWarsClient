@@ -188,6 +188,10 @@ namespace TwnsLangErrorText {
             `此战局未有回放步骤数据（或数据已丢失），无法即时回放`,
             `Failed to replay this war because there is no data or some of the data has been lost.`,
         ],
+        [ServerErrorCode.MsgSpmCreateSrw0020]: [
+            `各个玩家使用的势力颜色必须互不相同`,
+            `Players can't use the same color.`,
+        ],
         [ServerErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,
             `The server is under maintenance.`,
@@ -232,6 +236,14 @@ namespace TwnsLangErrorText {
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_13]: [
             `您禁用了不存在的CO`,
             `You can't ban a non-existing CO.`,
+        ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_20]: [
+            `挑战模式下，至少要有一个势力由AI控制`,
+            `There must be at least 1 A.I. player in the War Room Mode.`,
+        ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_21]: [
+            `挑战模式下，必须有且只有一个队伍的势力由玩家控制`,
+            `There must be one team that controlled by human player in the War Room Mode.`,
         ],
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_22]: [
             `合作模式下，至少要有一个势力由AI控制`,

@@ -22,6 +22,7 @@ namespace NotifyData {
     export type BwUnitChanged               = { gridIndex: GridIndex };
     export type MeTileChanged               = { gridIndex: GridIndex };
     export type ScrCreatePlayerInfoChanged  = { playerIndex: number };
+    export type SrrCreatePlayerInfoChanged  = { playerIndex: number };
 }
 
 // export default NotifyData;

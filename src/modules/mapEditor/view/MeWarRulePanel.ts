@@ -686,8 +686,10 @@ namespace TwnsMeWarRulePanel {
                 this._createDataVisionRangeModifier(warRule, playerRule, isReviewing),
                 this._createDataLuckLowerLimit(warRule, playerRule, isReviewing),
                 this._createDataLuckUpperLimit(warRule, playerRule, isReviewing),
+                this._createDataIsControlledByAiInCcw(warRule, playerRule, isReviewing),
                 this._createDataAiCoIdInCcw(warRule, playerRule, isReviewing),
-                this._createDataAiControlInCcw(warRule, playerRule, isReviewing),
+                this._createDataIsControlledByAiInSrw(warRule, playerRule, isReviewing),
+                this._createDataAiCoIdInSrw(warRule, playerRule, isReviewing),
             ];
         }
         private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
@@ -1020,7 +1022,7 @@ namespace TwnsMeWarRulePanel {
                 },
             };
         }
-        private _createDataAiCoIdInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataIsControlledByAiInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const isControlledByAi = playerRule.fixedCoIdInCcw != null;
             return {
                 titleText               : Lang.getText(LangTextType.B0645),
@@ -1044,7 +1046,7 @@ namespace TwnsMeWarRulePanel {
                     },
             };
         }
-        private _createDataAiControlInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataAiCoIdInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const coId          = playerRule.fixedCoIdInCcw;
             const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
             return {
@@ -1068,6 +1070,60 @@ namespace TwnsMeWarRulePanel {
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {
                                 WarRuleHelpers.setFixedCoIdInCcw(warRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
+                                this._updateView();
+                            },
+                        });
+                    },
+            };
+        }
+        private _createDataIsControlledByAiInSrw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const isControlledByAi = playerRule.fixedCoIdInSrw != null;
+            return {
+                titleText               : Lang.getText(LangTextType.B0816),
+                infoText                : Lang.getText(isControlledByAi ? LangTextType.B0012 : LangTextType.B0013),
+                infoColor               : isControlledByAi ? 0x00FF00 : 0xFFFFFF,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        if (!warRule.ruleAvailability?.canSrw) {
+                            FloatText.show(Lang.getText(LangTextType.A0276));
+                            return;
+                        }
+
+                        const playerIndex = Helpers.getExisted(playerRule.playerIndex);
+                        if (isControlledByAi) {
+                            WarRuleHelpers.setFixedCoIdInSrw(warRule, playerIndex, null);
+                        } else {
+                            WarRuleHelpers.setFixedCoIdInSrw(warRule, playerIndex, CommonConstants.CoEmptyId);
+                        }
+                        this._updateView();
+                    },
+            };
+        }
+        private _createDataAiCoIdInSrw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const coId          = playerRule.fixedCoIdInSrw;
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            return {
+                titleText               : Lang.getText(LangTextType.B0815),
+                infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),
+                infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        if (!warRule.ruleAvailability?.canSrw) {
+                            FloatText.show(Lang.getText(LangTextType.A0276));
+                            return;
+                        }
+
+                        const coIdArray: number[] = [];
+                        for (const cfg of ConfigManager.getEnabledCoArray(configVersion)) {
+                            coIdArray.push(cfg.coId);
+                        }
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                            currentCoId         : playerRule.fixedCoIdInSrw ?? null,
+                            availableCoIdArray  : coIdArray,
+                            callbackOnConfirm   : (newCoId: number) => {
+                                WarRuleHelpers.setFixedCoIdInSrw(warRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
                                 this._updateView();
                             },
                         });

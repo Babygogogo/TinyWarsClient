@@ -68,6 +68,11 @@ namespace TwnsNotifyType {
         ScrCreateWarSaveSlotChanged,
         ScrCreatePlayerInfoChanged,
 
+        SrrCreatePresetWarRuleIdChanged,
+        SrrCreateBannedCoIdArrayChanged,
+        SrrCreateWarSaveSlotChanged,
+        SrrCreatePlayerInfoChanged,
+
         McwPreviewingWarIdChanged,
         MrwPreviewingWarIdChanged,
         MfwPreviewingWarIdChanged,

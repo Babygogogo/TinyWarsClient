@@ -50,7 +50,7 @@ namespace TwnsLangCommonText {
             "The network connection is not stable.",
         ],
         [LangTextType.A0010]: [
-            "没有符合条件的地图，请更换条件再试",
+            "没有符合条件的地图",
             "No maps found.",
         ],
         [LangTextType.A0011]: [
@@ -1163,6 +1163,10 @@ namespace TwnsLangCommonText {
             `无法访问系统剪贴板`,
             `Failed to access the system clipboard.`,
         ],
+        [LangTextType.A0276]: [
+            `此规则已被设定为不可用于挑战模式，因此无法修改此选项。`,
+            `The war rule is not available for the War Room mode. Please change that first.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2196,8 +2200,8 @@ namespace TwnsLangCommonText {
             `COM`,
         ],
         [LangTextType.B0257]: [
-            `War Room`,
-            `War Room`,
+            `挑战模式明战`,
+            `War Room Std`,
         ],
         [LangTextType.B0258]: [
             `选择`,
@@ -3608,8 +3612,8 @@ namespace TwnsLangCommonText {
             `Simulation FoW`,
         ],
         [LangTextType.B0614]: [
-            `单人排位游戏`,
-            `SP Ranking Games`,
+            `挑战模式`,
+            `War Room`,
         ],
         [LangTextType.B0615]: [
             `替换动作`,
@@ -4410,6 +4414,18 @@ namespace TwnsLangCommonText {
         [LangTextType.B0814]: [
             `房间ID`,
             `Room ID`,
+        ],
+        [LangTextType.B0815]: [
+            `挑战模式中AI的CO`,
+            `CO for A.I. in War Room`,
+        ],
+        [LangTextType.B0816]: [
+            `挑战模式中由AI控制`,
+            `Controlled by A.I. in War Room`,
+        ],
+        [LangTextType.B0817]: [
+            `挑战模式雾战`,
+            `War Room FoW`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

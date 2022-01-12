@@ -182,6 +182,13 @@ namespace WarRuleHelpers {
         return getPlayerRule(warRule, playerIndex).fixedCoIdInCcw ?? null;
     }
 
+    export function setFixedCoIdInSrw(warRule: IWarRule, playerIndex: number, coId: number | null): void {
+        getPlayerRule(warRule, playerIndex).fixedCoIdInSrw = coId;
+    }
+    export function getFixedCoIdInSrw(warRule: IWarRule, playerIndex: number): number | null {
+        return getPlayerRule(warRule, playerIndex).fixedCoIdInSrw ?? null;
+    }
+
     export function getTeamIndex(warRule: IWarRule, playerIndex: number): number {
         if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
             return CommonConstants.WarNeutralTeamIndex;

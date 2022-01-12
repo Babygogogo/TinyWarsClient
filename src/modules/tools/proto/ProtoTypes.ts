@@ -50813,8 +50813,8 @@ export declare namespace NetMessage {
             /** C settingsForCommon */
             settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-            /** C settingsForSrw */
-            settingsForSrw?: (WarSettings.ISettingsForSrw|null);
+            /** C mapId */
+            mapId?: (number|null);
 
             /** C playerInfoList */
             playerInfoList?: (Structure.IDataForPlayerInRoom[]|null);
@@ -50838,8 +50838,8 @@ export declare namespace NetMessage {
             /** C settingsForCommon. */
             public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-            /** C settingsForSrw. */
-            public settingsForSrw?: (WarSettings.ISettingsForSrw|null);
+            /** C mapId. */
+            public mapId: number;
 
             /** C playerInfoList. */
             public playerInfoList: Structure.IDataForPlayerInRoom[];

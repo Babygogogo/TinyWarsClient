@@ -2,7 +2,7 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <e:Group top="40" bottom="0" width="160" left="0" locked="true">
+    <e:Group top="0" bottom="0" width="160" left="0" locked="true">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" right="0" top="0" bottom="0" />
         <TwnsUiLabel:UiLabel id="_labelMenuTitle" text="预设规则" y="10" bold="true" size="20" textColor="0xffffff"
@@ -40,7 +40,7 @@
             </e:layout>
         </e:Group>
     </e:Group>
-    <e:Group left="160" top="40" bottom="0" right="0">
+    <e:Group left="160" top="0" bottom="0" right="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="-1" right="1" top="0" bottom="0" locked="true" />
         <e:Scroller top="10" bottom="10" left="0" right="0">
@@ -115,19 +115,6 @@
                                 <e:HorizontalLayout gap="10" verticalAlign="middle" />
                             </e:layout>
                         </e:Group>
-                        <e:Group height="28" x="10" y="44">
-                            <TwnsUiButton:UiButton id="_btnAvailabilityScw" label="单人游戏" y="0" right="0"
-                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
-                            <e:Group horizontalCenter="0" bottom="16">
-                                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6"
-                                                     verticalCenter="0" y="10" source="common0005" />
-                                <TwnsUiImage:UiImage id="_imgAvailabilityScw" anchorOffsetX="0" anchorOffsetY="0"
-                                                     alpha="0.8" x="0" verticalCenter="0" source="common0006" />
-                            </e:Group>
-                            <e:layout>
-                                <e:HorizontalLayout gap="10" verticalAlign="middle" />
-                            </e:layout>
-                        </e:Group>
                         <e:Group height="28" x="20" y="54">
                             <TwnsUiButton:UiButton id="_btnAvailabilityMrw" label="排位赛" y="0" right="0"
                                                    skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
@@ -154,7 +141,20 @@
                                 <e:HorizontalLayout gap="10" verticalAlign="middle" />
                             </e:layout>
                         </e:Group>
-                        <e:Group height="28" x="10" y="44" visible="false">
+                        <e:Group height="28" x="10" y="44">
+                            <TwnsUiButton:UiButton id="_btnAvailabilityScw" label="单人游戏" y="0" right="0"
+                                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
+                            <e:Group horizontalCenter="0" bottom="16">
+                                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6"
+                                                     verticalCenter="0" y="10" source="common0005" />
+                                <TwnsUiImage:UiImage id="_imgAvailabilityScw" anchorOffsetX="0" anchorOffsetY="0"
+                                                     alpha="0.8" x="0" verticalCenter="0" source="common0006" />
+                            </e:Group>
+                            <e:layout>
+                                <e:HorizontalLayout gap="10" verticalAlign="middle" />
+                            </e:layout>
+                        </e:Group>
+                        <e:Group height="28" x="10" y="44" visible="true">
                             <TwnsUiButton:UiButton id="_btnAvailabilitySrw" label="单人排位游戏" y="0" right="0"
                                                    skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
                             <e:Group horizontalCenter="0" bottom="16">
@@ -168,7 +168,7 @@
                             </e:layout>
                         </e:Group>
                         <e:layout>
-                            <e:TileLayout orientation="rows" requestedColumnCount="2" horizontalGap="90" />
+                            <e:TileLayout orientation="rows" requestedColumnCount="3" horizontalGap="40" />
                         </e:layout>
                     </e:Group>
                     <e:layout>

@@ -16,12 +16,15 @@
 // import ScrCreateModel           from "../model/ScrCreateModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsScrCreateSaveSlotsPanel {
+namespace TwnsSpmCreateSaveSlotsPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    export type OpenData = void;
-    export class ScrCreateSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenData = {
+        currentSlotIndex    : number;
+        callback            : (slotIndex: number) => void;
+    };
+    export class SpmCreateSaveSlotsPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelPanelTitle!  : TwnsUiLabel.UiLabel;
         private readonly _srlSaveSlot!      : TwnsUiScrollList.UiScrollList<DataForSlotRenderer>;
@@ -66,7 +69,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
             this._updateComponentsForLanguage();
 
             this._srlSaveSlot.bindData(this._createDataForList());
-            this._listSaveSlot.selectedIndex = ScrCreateModel.getSaveSlotIndex();
+            this._listSaveSlot.selectedIndex = this._getOpenData().currentSlotIndex;
         }
 
         private _updateComponentsForLanguage(): void {
@@ -77,10 +80,12 @@ namespace TwnsScrCreateSaveSlotsPanel {
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
             const slotDict  = SpmModel.getSlotDict();
+            const callback  = this._getOpenData().callback;
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
                     slotInfo    : slotDict.get(slotIndex) ?? null,
+                    callback,
                 });
             }
 
@@ -91,6 +96,7 @@ namespace TwnsScrCreateSaveSlotsPanel {
     type DataForSlotRenderer = {
         slotIndex   : number;
         slotInfo    : Types.SpmWarSaveSlotData | null;
+        callback    : (slotIndex: number) => void;
     };
     class SlotRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSlotRenderer> {
         private readonly _group!            : eui.Group;
@@ -114,8 +120,9 @@ namespace TwnsScrCreateSaveSlotsPanel {
         }
 
         private _onTouchedImgBg(): void {
-            ScrCreateModel.setSaveSlotIndex(this._getData().slotIndex);
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.ScrCreateSaveSlotsPanel);
+            const data = this._getData();
+            data.callback(data.slotIndex);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.SpmCreateSaveSlotsPanel);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,4 +156,4 @@ namespace TwnsScrCreateSaveSlotsPanel {
     }
 }
 
-// export default TwnsScrCreateSaveSlotsPanel;
+// export default TwnsSpmCreateSaveSlotsPanel;

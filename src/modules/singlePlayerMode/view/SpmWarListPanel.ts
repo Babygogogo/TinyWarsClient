@@ -425,14 +425,10 @@ namespace TwnsSpmWarListPanel {
         slotIndex: number;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
-        private readonly _btnChoose!    : TwnsUiButton.UiButton;
         private readonly _labelType!    : TwnsUiLabel.UiLabel;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
-            this._setUiListenerArray([
-                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-            ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
@@ -460,7 +456,7 @@ namespace TwnsSpmWarListPanel {
             }
         }
 
-        private _onTouchTapBtnChoose(): void {
+        public onItemTapEvent(): void {
             SpmModel.setPreviewingSlotIndex(this._getData().slotIndex);
         }
     }

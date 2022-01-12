@@ -164,10 +164,10 @@ namespace TwnsPanelConfig {
         RwWarMenuPanel                      : PanelConfig<TwnsRwWarMenuPanel.OpenData>;
 
         ScrCreateMapListPanel               : PanelConfig<TwnsScrCreateMapListPanel.OpenData>;
-        ScrCreateSaveSlotsPanel             : PanelConfig<TwnsScrCreateSaveSlotsPanel.OpenData>;
         ScrCreateSearchMapPanel             : PanelConfig<TwnsScrCreateSearchMapPanel.OpenData>;
         ScrCreateSettingsPanel              : PanelConfig<TwnsScrCreateSettingsPanel.OpenData>;
 
+        SpmCreateSaveSlotsPanel             : PanelConfig<TwnsSpmCreateSaveSlotsPanel.OpenData>;
         SpmCreateSfwSaveSlotsPanel          : PanelConfig<TwnsSpmCreateSfwSaveSlotsPanel.OpenData>;
         SpmMainMenuPanel                    : PanelConfig<TwnsSpmMainMenuPanel.OpenData>;
         SpmWarListPanel                     : PanelConfig<TwnsSpmWarListPanel.OpenData>;
@@ -176,6 +176,9 @@ namespace TwnsPanelConfig {
         SpwSidePanel                        : PanelConfig<TwnsSpwSidePanel.OpenData>;
         SpwTopPanel                         : PanelConfig<TwnsSpwTopPanel.OpenData>;
         SpwWarMenuPanel                     : PanelConfig<TwnsSpwWarMenuPanel.OpenData>;
+
+        SrrCreateMapListPanel               : PanelConfig<TwnsSrrCreateMapListPanel.OpenData>;
+        SrrCreateSettingsPanel              : PanelConfig<TwnsSrrCreateSettingsPanel.OpenData>;
 
         UserChangeDiscordIdPanel            : PanelConfig<TwnsUserChangeDiscordIdPanel.OpenData>;
         UserChangeNicknamePanel             : PanelConfig<TwnsUserChangeNicknamePanel.OpenData>;
@@ -1130,12 +1133,6 @@ namespace TwnsPanelConfig {
                 isExclusive : true,
             },
 
-            ScrCreateSaveSlotsPanel: {
-                cls         : TwnsScrCreateSaveSlotsPanel?.ScrCreateSaveSlotsPanel,
-                skinName    : `resource/skins/singleCustomRoom/ScrCreateSaveSlotsPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
             ScrCreateSearchMapPanel: {
                 cls         : TwnsScrCreateSearchMapPanel?.ScrCreateSearchMapPanel,
                 skinName    : `resource/skins/singleCustomRoom/ScrCreateSearchMapPanel.exml`,
@@ -1150,6 +1147,12 @@ namespace TwnsPanelConfig {
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
+            SpmCreateSaveSlotsPanel: {
+                cls         : TwnsSpmCreateSaveSlotsPanel?.SpmCreateSaveSlotsPanel,
+                skinName    : `resource/skins/singlePlayerMode/SpmCreateSaveSlotsPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             SpmCreateSfwSaveSlotsPanel: {
                 cls         : TwnsSpmCreateSfwSaveSlotsPanel?.SpmCreateSfwSaveSlotsPanel,
                 skinName    : `resource/skins/singlePlayerMode/SpmCreateSfwSaveSlotsPanel.exml`,
@@ -1193,6 +1196,21 @@ namespace TwnsPanelConfig {
                 cls         : TwnsSpwWarMenuPanel?.SpwWarMenuPanel,
                 skinName    : `resource/skins/singlePlayerWar/SpwWarMenuPanel.exml`,
                 layer       : LayerType.Hud0,
+            },
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            SrrCreateMapListPanel: {
+                cls         : TwnsSrrCreateMapListPanel?.SrrCreateMapListPanel,
+                skinName    : `resource/skins/singleRankRoom/SrrCreateMapListPanel.exml`,
+                layer       : LayerType.Scene,
+                isExclusive : true,
+            },
+
+            SrrCreateSettingsPanel: {
+                cls         : TwnsSrrCreateSettingsPanel?.SrrCreateSettingsPanel,
+                skinName    : `resource/skins/singleRankRoom/SrrCreateSettingsPanel.exml`,
+                layer       : LayerType.Scene,
+                isExclusive : true,
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////

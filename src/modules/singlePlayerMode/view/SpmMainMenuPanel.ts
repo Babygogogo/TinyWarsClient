@@ -24,6 +24,7 @@ namespace TwnsSpmMainMenuPanel {
     export class SpmMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupLeft!            : eui.Group;
         private readonly _btnCampaign!          : TwnsUiButton.UiButton;
+        private readonly _btnCreateWarRoom!     : TwnsUiButton.UiButton;
         private readonly _btnCreateCustomWar!   : TwnsUiButton.UiButton;
         private readonly _btnContinueWar!       : TwnsUiButton.UiButton;
 
@@ -37,6 +38,7 @@ namespace TwnsSpmMainMenuPanel {
                 { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
                 { ui: this._btnCampaign,        callback: this._onTouchedBtnCampaign },
+                { ui: this._btnCreateWarRoom,   callback: this._onTouchedBtnCreateWarRoom },
                 { ui: this._btnCreateCustomWar, callback: this._onTouchedBtnCreateCustomWar },
                 { ui: this._btnContinueWar,     callback: this._onTouchedBtnContinueWar },
             ]);
@@ -73,6 +75,12 @@ namespace TwnsSpmMainMenuPanel {
         }
         private _onTouchedBtnCampaign(): void {
             FloatText.show(Lang.getText(LangTextType.A0053));
+        }
+        private _onTouchedBtnCreateWarRoom(): void {
+            this.close();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.SrrCreateMapListPanel, null);
         }
         private _onTouchedBtnCreateCustomWar(): void {
             this.close();
@@ -156,9 +164,15 @@ namespace TwnsSpmMainMenuPanel {
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
+                obj         : this._btnCreateWarRoom,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 66,
+                endProps    : { alpha: 1, left: 0 },
+            });
+            Helpers.resetTween({
                 obj         : this._btnCreateCustomWar,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 100,
+                waitTime    : 133,
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({

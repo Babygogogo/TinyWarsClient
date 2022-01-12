@@ -4755,6 +4755,17 @@ namespace TwnsClientErrorCode {
         ScrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_08,
         ScrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_09,
 
+        SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_00,
+        SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_01,
+        SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_02,
+        SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_03,
+        SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_04,
+        SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_05,
+        SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_06,
+        SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_07,
+        SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_08,
+        SrrCreateSettingsPanel_CreateDataForCommonWarBasicSettingsPage_09,
+
         RwWarMenuPanel_OnTouchedBtnBack_00,
         RwWarMenuPanel_OnTouchedBtnBack_01,
         RwWarMenuPanel_OnTouchedBtnBack_02,
