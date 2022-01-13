@@ -424,6 +424,15 @@ namespace WarRobot {
                 info.idleCountOnMap += isOnMap && isIdle ? 1 : 0;
             }
         }
+        for (const [playerIndex] of war.getPlayerManager().getAllPlayersDict()) {
+            if (!unitsInfoDict.has(playerIndex)) {
+                unitsInfoDict.set(playerIndex, {
+                    value           : 0,
+                    allCountOnMap   : 0,
+                    idleCountOnMap  : 0,
+                });
+            }
+        }
 
         return unitsInfoDict;
     }
@@ -2071,7 +2080,7 @@ namespace WarRobot {
 
         if (unit.checkCanUseCoSkill(Types.CoSkillType.Power)) {
             const canResetState = player.getCoSkills(CoSkillType.Power).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
-            if ((player.getCoCurrentEnergy() > Helpers.getExisted((player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_01) * 1.1))  ||
+            if ((player.getCoCurrentEnergy() > Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_01) * 1.1)  ||
                 ((canResetState) && (idleUnitsCount > 0))                       ||
                 ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
             ) {
@@ -2451,7 +2460,7 @@ namespace WarRobot {
 
             } else if (player.checkCanUseCoSkill(Types.CoSkillType.Power)) {
                 const canResetState = player.getCoSkills(CoSkillType.Power).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
-                if ((player.getCoCurrentEnergy() > Helpers.getExisted((player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetActionForPhase1_01) * 1.1))   ||
+                if ((player.getCoCurrentEnergy() > Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetActionForPhase1_01) * 1.1)     ||
                     ((canResetState) && (idleUnitsCount > 0))                                                                                               ||
                     ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
                 ) {

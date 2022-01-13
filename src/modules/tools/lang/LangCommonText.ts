@@ -1167,6 +1167,34 @@ namespace TwnsLangCommonText {
             `此规则已被设定为不可用于挑战模式，因此无法修改此选项。`,
             `The war rule is not available for the War Room mode. Please change that first.`,
         ],
+        [LangTextType.A0277]: [
+            [
+                `恭喜通关！您是否希望以此战局数据参与全服排行？`,
+                `\n`,
+                `注：服务器将花费一定时间来验证数据的合法性，所以排名可能不会立刻刷新。`,
+            ].join(`\n`),
+            [
+                `Do you want to participate the server-wide ranking with the replay data?`,
+                `\n`,
+                `Note: It will take some time for the server to validate the data, therefore the ranking may not be updated very soon.`,
+            ].join(`\n`),
+        ],
+        [LangTextType.A0278]: [
+            `数据版本太旧，无法参与排行`,
+            `The data is deprecated.`,
+        ],
+        [LangTextType.A0279]: [
+            `已有分数更高的通关数据`,
+            `There is an existing and better replay data.`,
+        ],
+        [LangTextType.A0280]: [
+            `已成功提交回放数据，请耐心等候`,
+            `The data is successfully submitted for validation.`,
+        ],
+        [LangTextType.A0281]: [
+            `分数太低，无法参与排行`,
+            `The score is too low.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

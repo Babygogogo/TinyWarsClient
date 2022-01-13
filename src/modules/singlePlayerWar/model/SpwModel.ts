@@ -139,35 +139,53 @@ namespace SpwModel {
     function checkAndEndWar(war: BwWar): boolean {
         if (!war.getIsEnded()) {
             return false;
+        }
+        // TODO: show panels for srw.
+
+        const callback = () => FlowManager.gotoLobby();
+        if (war.getDrawVoteManager().checkIsDraw()) {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0030),
+                callback,
+            });
         } else {
-            // TODO: show panels for srw.
-            const callback = () => FlowManager.gotoLobby();
-            if (war.getDrawVoteManager().checkIsDraw()) {
+            const humanPlayerArray = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
+            if (humanPlayerArray.length <= 0) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
-                    content : Lang.getText(LangTextType.A0030),
+                    content : Lang.getText(LangTextType.A0035),
                     callback,
                 });
             } else {
-                const humanPlayerList = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
-                if (humanPlayerList.length <= 0) {
+                if (humanPlayerArray.every(v => v.getAliveState() === Types.PlayerAliveState.Dead)) {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
-                        content : Lang.getText(LangTextType.A0035),
+                        content : Lang.getText(LangTextType.A0023),
                         callback,
                     });
                 } else {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
-                        content : humanPlayerList.some(v => v.getAliveState() === Types.PlayerAliveState.Alive)
-                            ? Lang.getText(LangTextType.A0022)
-                            : Lang.getText(LangTextType.A0023),
-                        callback,
+                        content : Lang.getText(LangTextType.A0022),
+                        callback: () => {
+                            callback();
+
+                            if (war instanceof SrwWar) {
+                                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                                    content : Lang.getText(LangTextType.A0277),
+                                    callback: () => {
+                                        SpmProxy.reqSpmValidateSrw(war);
+                                    },
+                                });
+                            }
+                        },
                     });
                 }
             }
-            return true;
         }
+
+        return true;
     }
 
     async function checkAndHandleSystemActions(war: BwWar): Promise<boolean> {

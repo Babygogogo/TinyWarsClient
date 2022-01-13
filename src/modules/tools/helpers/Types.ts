@@ -836,6 +836,14 @@ namespace Types {
         LessThan,
         NotLessThan,
     }
+
+    // eslint-disable-next-line no-shadow
+    export const enum SpmValidateSrwStatus {
+        Succeed,
+        ConfigVersionNotLatest,
+        ScoreNotHighest,
+        ScoreTooLow,
+    }
 }
 
 // export default Types;

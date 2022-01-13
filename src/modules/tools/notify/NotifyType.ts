@@ -316,7 +316,8 @@ namespace TwnsNotifyType {
         MsgSpmSaveScw,
         MsgSpmSaveSfw,
         MsgSpmSaveSrw,
-        MsgSpmGetSrwRankInfo,
+        MsgSpmGetRankList,
+        MsgSpmGetRankListFailed,
         MsgSpmValidateSrw
     }
 }

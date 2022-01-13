@@ -11,6 +11,7 @@
 // import SpmModel             from "./SpmModel";
 // import SpmSrwRankModel      from "./SpmSrwRankModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace SpmProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
@@ -19,16 +20,16 @@ namespace SpmProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgSpmCreateScw,                      callback: _onMsgSpmCreateScw },
-            { msgCode: NetMessageCodes.MsgSpmCreateSfw,                      callback: _onMsgSpmCreateSfw },
-            { msgCode: NetMessageCodes.MsgSpmCreateSrw,                      callback: _onMsgSpmCreateSrw },
-            { msgCode: NetMessageCodes.MsgSpmGetWarSaveSlotFullDataArray,    callback: _onMsgSpmGetWarSaveSlotFullDataArray },
-            { msgCode: NetMessageCodes.MsgSpmDeleteWarSaveSlot,              callback: _onMsgSpmDeleteWarSaveSlot },
-            { msgCode: NetMessageCodes.MsgSpmSaveScw,                        callback: _onMsgSpmSaveScw },
-            { msgCode: NetMessageCodes.MsgSpmSaveSfw,                        callback: _onMsgSpmSaveSfw },
-            { msgCode: NetMessageCodes.MsgSpmSaveSrw,                        callback: _onMsgSpmSaveSrw },
-            { msgCode: NetMessageCodes.MsgSpmGetSrwRankInfo,                 callback: _onMsgSpmGetSrwRankInfo },
-            { msgCode: NetMessageCodes.MsgSpmValidateSrw,                    callback: _onMsgSpmValidateSrw },
+            { msgCode: NetMessageCodes.MsgSpmCreateScw,                     callback: _onMsgSpmCreateScw },
+            { msgCode: NetMessageCodes.MsgSpmCreateSfw,                     callback: _onMsgSpmCreateSfw },
+            { msgCode: NetMessageCodes.MsgSpmCreateSrw,                     callback: _onMsgSpmCreateSrw },
+            { msgCode: NetMessageCodes.MsgSpmGetWarSaveSlotFullDataArray,   callback: _onMsgSpmGetWarSaveSlotFullDataArray },
+            { msgCode: NetMessageCodes.MsgSpmDeleteWarSaveSlot,             callback: _onMsgSpmDeleteWarSaveSlot },
+            { msgCode: NetMessageCodes.MsgSpmSaveScw,                       callback: _onMsgSpmSaveScw },
+            { msgCode: NetMessageCodes.MsgSpmSaveSfw,                       callback: _onMsgSpmSaveSfw },
+            { msgCode: NetMessageCodes.MsgSpmSaveSrw,                       callback: _onMsgSpmSaveSrw },
+            { msgCode: NetMessageCodes.MsgSpmGetRankList,                   callback: _onMsgSpmGetRankList },
+            { msgCode: NetMessageCodes.MsgSpmValidateSrw,                   callback: _onMsgSpmValidateSrw },
         ], null);
     }
 
@@ -158,25 +159,26 @@ namespace SpmProxy {
         }
     }
 
-    export function reqSpmGetSrwRankInfo(mapId: number): void {
+    export function reqSpmGetRankList(mapId: number): void {
         NetManager.send({
-            MsgSpmGetSrwRankInfo: { c: {
+            MsgSpmGetRankList: { c: {
                 mapId,
             } },
         });
     }
-    function _onMsgSpmGetSrwRankInfo(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmGetSrwRankInfo.IS;
-        if (!data.errorCode) {
-            SpmSrwRankModel.updateOnMsgSpmGetSrwRankInfo(data);
-            Notify.dispatch(NotifyType.MsgSpmGetSrwRankInfo, data);
+    function _onMsgSpmGetRankList(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmGetRankList.IS;
+        if (data.errorCode) {
+            Notify.dispatch(NotifyType.MsgSpmGetRankListFailed, data);
+        } else {
+            SpmModel.updateOnMsgSpmGetRankList(data);
+            Notify.dispatch(NotifyType.MsgSpmGetRankList, data);
         }
     }
 
     export function reqSpmValidateSrw(war: SrwWar): void {
         NetManager.send({
             MsgSpmValidateSrw: { c: {
-                slotIndex   : war.getSaveSlotIndex(),
                 warData     : war.serializeForValidation(),
             } },
         });
@@ -184,7 +186,6 @@ namespace SpmProxy {
     function _onMsgSpmValidateSrw(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmValidateSrw.IS;
         if (!data.errorCode) {
-            SpmModel.updateOnMsgSpmValidateSrw(data);
             Notify.dispatch(NotifyType.MsgSpmValidateSrw, data);
         }
     }

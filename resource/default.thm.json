@@ -187,6 +187,7 @@
 		"resource/skins/singlePlayerMode/SpmCreateSaveSlotsPanel.exml",
 		"resource/skins/singlePlayerMode/SpmCreateSfwSaveSlotsPanel.exml",
 		"resource/skins/singlePlayerMode/SpmMainMenuPanel.exml",
+		"resource/skins/singlePlayerMode/SpmRankPage.exml",
 		"resource/skins/singlePlayerMode/SpmWarListPanel.exml",
 		"resource/skins/singlePlayerWar/SpwLoadWarPanel.exml",
 		"resource/skins/singlePlayerWar/SpwSidePanel.exml",

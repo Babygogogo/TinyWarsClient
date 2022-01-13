@@ -25164,8 +25164,8 @@ export declare namespace User {
         /** UserWarStatistics mpwArray */
         mpwArray?: (User.UserWarStatistics.IUserMpwStatistics[]|null);
 
-        /** UserWarStatistics srwArray */
-        srwArray?: (User.UserWarStatistics.IUserSrwStatistics[]|null);
+        /** UserWarStatistics spwArray */
+        spwArray?: (User.UserWarStatistics.IUserSpwStatistics[]|null);
     }
 
     /** Represents a UserWarStatistics. */
@@ -25180,8 +25180,8 @@ export declare namespace User {
         /** UserWarStatistics mpwArray. */
         public mpwArray: User.UserWarStatistics.IUserMpwStatistics[];
 
-        /** UserWarStatistics srwArray. */
-        public srwArray: User.UserWarStatistics.IUserSrwStatistics[];
+        /** UserWarStatistics spwArray. */
+        public spwArray: User.UserWarStatistics.IUserSpwStatistics[];
 
         /**
          * Creates a new UserWarStatistics instance using the specified properties.
@@ -25370,103 +25370,109 @@ export declare namespace User {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a UserSrwStatistics. */
-        interface IUserSrwStatistics {
+        /** Properties of a UserSpwStatistics. */
+        interface IUserSpwStatistics {
 
-            /** UserSrwStatistics mapId */
+            /** UserSpwStatistics mapId */
             mapId?: (number|null);
 
-            /** UserSrwStatistics ruleId */
+            /** UserSpwStatistics ruleId */
             ruleId?: (number|null);
 
-            /** UserSrwStatistics highScore */
+            /** UserSpwStatistics highScore */
             highScore?: (number|null);
+
+            /** UserSpwStatistics configVersion */
+            configVersion?: (string|null);
         }
 
-        /** Represents a UserSrwStatistics. */
-        class UserSrwStatistics implements IUserSrwStatistics {
+        /** Represents a UserSpwStatistics. */
+        class UserSpwStatistics implements IUserSpwStatistics {
 
             /**
-             * Constructs a new UserSrwStatistics.
+             * Constructs a new UserSpwStatistics.
              * @param [properties] Properties to set
              */
-            constructor(properties?: User.UserWarStatistics.IUserSrwStatistics);
+            constructor(properties?: User.UserWarStatistics.IUserSpwStatistics);
 
-            /** UserSrwStatistics mapId. */
+            /** UserSpwStatistics mapId. */
             public mapId: number;
 
-            /** UserSrwStatistics ruleId. */
+            /** UserSpwStatistics ruleId. */
             public ruleId: number;
 
-            /** UserSrwStatistics highScore. */
+            /** UserSpwStatistics highScore. */
             public highScore: number;
 
+            /** UserSpwStatistics configVersion. */
+            public configVersion: string;
+
             /**
-             * Creates a new UserSrwStatistics instance using the specified properties.
+             * Creates a new UserSpwStatistics instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns UserSrwStatistics instance
+             * @returns UserSpwStatistics instance
              */
-            public static create(properties?: User.UserWarStatistics.IUserSrwStatistics): User.UserWarStatistics.UserSrwStatistics;
+            public static create(properties?: User.UserWarStatistics.IUserSpwStatistics): User.UserWarStatistics.UserSpwStatistics;
 
             /**
-             * Encodes the specified UserSrwStatistics message. Does not implicitly {@link User.UserWarStatistics.UserSrwStatistics.verify|verify} messages.
-             * @param message UserSrwStatistics message or plain object to encode
+             * Encodes the specified UserSpwStatistics message. Does not implicitly {@link User.UserWarStatistics.UserSpwStatistics.verify|verify} messages.
+             * @param message UserSpwStatistics message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: User.UserWarStatistics.IUserSrwStatistics, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: User.UserWarStatistics.IUserSpwStatistics, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified UserSrwStatistics message, length delimited. Does not implicitly {@link User.UserWarStatistics.UserSrwStatistics.verify|verify} messages.
-             * @param message UserSrwStatistics message or plain object to encode
+             * Encodes the specified UserSpwStatistics message, length delimited. Does not implicitly {@link User.UserWarStatistics.UserSpwStatistics.verify|verify} messages.
+             * @param message UserSpwStatistics message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: User.UserWarStatistics.IUserSrwStatistics, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: User.UserWarStatistics.IUserSpwStatistics, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a UserSrwStatistics message from the specified reader or buffer.
+             * Decodes a UserSpwStatistics message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns UserSrwStatistics
+             * @returns UserSpwStatistics
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserWarStatistics.UserSrwStatistics;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserWarStatistics.UserSpwStatistics;
 
             /**
-             * Decodes a UserSrwStatistics message from the specified reader or buffer, length delimited.
+             * Decodes a UserSpwStatistics message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns UserSrwStatistics
+             * @returns UserSpwStatistics
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserWarStatistics.UserSrwStatistics;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserWarStatistics.UserSpwStatistics;
 
             /**
-             * Verifies a UserSrwStatistics message.
+             * Verifies a UserSpwStatistics message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a UserSrwStatistics message from a plain object. Also converts values to their respective internal types.
+             * Creates a UserSpwStatistics message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns UserSrwStatistics
+             * @returns UserSpwStatistics
              */
-            public static fromObject(object: { [k: string]: any }): User.UserWarStatistics.UserSrwStatistics;
+            public static fromObject(object: { [k: string]: any }): User.UserWarStatistics.UserSpwStatistics;
 
             /**
-             * Creates a plain object from a UserSrwStatistics message. Also converts values to other types if specified.
-             * @param message UserSrwStatistics
+             * Creates a plain object from a UserSpwStatistics message. Also converts values to other types if specified.
+             * @param message UserSpwStatistics
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: User.UserWarStatistics.UserSrwStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: User.UserWarStatistics.UserSpwStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this UserSrwStatistics to JSON.
+             * Converts this UserSpwStatistics to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -26541,8 +26547,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgSpmValidateSrw */
         MsgSpmValidateSrw?: (NetMessage.IMsgSpmValidateSrw|null);
 
-        /** MessageContainer MsgSpmGetSrwRankInfo */
-        MsgSpmGetSrwRankInfo?: (NetMessage.IMsgSpmGetSrwRankInfo|null);
+        /** MessageContainer MsgSpmGetRankList */
+        MsgSpmGetRankList?: (NetMessage.IMsgSpmGetRankList|null);
 
         /** MessageContainer MsgMrrSetMaxConcurrentCount */
         MsgMrrSetMaxConcurrentCount?: (NetMessage.IMsgMrrSetMaxConcurrentCount|null);
@@ -26920,8 +26926,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgSpmValidateSrw. */
         public MsgSpmValidateSrw?: (NetMessage.IMsgSpmValidateSrw|null);
 
-        /** MessageContainer MsgSpmGetSrwRankInfo. */
-        public MsgSpmGetSrwRankInfo?: (NetMessage.IMsgSpmGetSrwRankInfo|null);
+        /** MessageContainer MsgSpmGetRankList. */
+        public MsgSpmGetRankList?: (NetMessage.IMsgSpmGetRankList|null);
 
         /** MessageContainer MsgMrrSetMaxConcurrentCount. */
         public MsgMrrSetMaxConcurrentCount?: (NetMessage.IMsgMrrSetMaxConcurrentCount|null);
@@ -52616,9 +52622,6 @@ export declare namespace NetMessage {
         /** Properties of a C. */
         interface IC {
 
-            /** C slotIndex */
-            slotIndex?: (number|null);
-
             /** C warData */
             warData?: (WarSerialization.ISerialWar|null);
         }
@@ -52631,9 +52634,6 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              */
             constructor(properties?: NetMessage.MsgSpmValidateSrw.IC);
-
-            /** C slotIndex. */
-            public slotIndex: number;
 
             /** C warData. */
             public warData?: (WarSerialization.ISerialWar|null);
@@ -52715,8 +52715,8 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S slotIndex */
-            slotIndex?: (number|null);
+            /** S status */
+            status?: (number|null);
         }
 
         /** Represents a S. */
@@ -52731,8 +52731,8 @@ export declare namespace NetMessage {
             /** S errorCode. */
             public errorCode: number;
 
-            /** S slotIndex. */
-            public slotIndex: number;
+            /** S status. */
+            public status: number;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -52806,297 +52806,297 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgSpmGetSrwRankInfo. */
-    interface IMsgSpmGetSrwRankInfo {
+    /** Properties of a MsgSpmGetRankList. */
+    interface IMsgSpmGetRankList {
 
-        /** MsgSpmGetSrwRankInfo c */
-        c?: (NetMessage.MsgSpmGetSrwRankInfo.IC|null);
+        /** MsgSpmGetRankList c */
+        c?: (NetMessage.MsgSpmGetRankList.IC|null);
 
-        /** MsgSpmGetSrwRankInfo s */
-        s?: (NetMessage.MsgSpmGetSrwRankInfo.IS|null);
+        /** MsgSpmGetRankList s */
+        s?: (NetMessage.MsgSpmGetRankList.IS|null);
     }
 
-    /** Represents a MsgSpmGetSrwRankInfo. */
-    class MsgSpmGetSrwRankInfo implements IMsgSpmGetSrwRankInfo {
+    /** Represents a MsgSpmGetRankList. */
+    class MsgSpmGetRankList implements IMsgSpmGetRankList {
 
         /**
-         * Constructs a new MsgSpmGetSrwRankInfo.
+         * Constructs a new MsgSpmGetRankList.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgSpmGetSrwRankInfo);
+        constructor(properties?: NetMessage.IMsgSpmGetRankList);
 
-        /** MsgSpmGetSrwRankInfo c. */
-        public c?: (NetMessage.MsgSpmGetSrwRankInfo.IC|null);
+        /** MsgSpmGetRankList c. */
+        public c?: (NetMessage.MsgSpmGetRankList.IC|null);
 
-        /** MsgSpmGetSrwRankInfo s. */
-        public s?: (NetMessage.MsgSpmGetSrwRankInfo.IS|null);
+        /** MsgSpmGetRankList s. */
+        public s?: (NetMessage.MsgSpmGetRankList.IS|null);
 
         /**
-         * Creates a new MsgSpmGetSrwRankInfo instance using the specified properties.
+         * Creates a new MsgSpmGetRankList instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgSpmGetSrwRankInfo instance
+         * @returns MsgSpmGetRankList instance
          */
-        public static create(properties?: NetMessage.IMsgSpmGetSrwRankInfo): NetMessage.MsgSpmGetSrwRankInfo;
+        public static create(properties?: NetMessage.IMsgSpmGetRankList): NetMessage.MsgSpmGetRankList;
 
         /**
-         * Encodes the specified MsgSpmGetSrwRankInfo message. Does not implicitly {@link NetMessage.MsgSpmGetSrwRankInfo.verify|verify} messages.
-         * @param message MsgSpmGetSrwRankInfo message or plain object to encode
+         * Encodes the specified MsgSpmGetRankList message. Does not implicitly {@link NetMessage.MsgSpmGetRankList.verify|verify} messages.
+         * @param message MsgSpmGetRankList message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgSpmGetSrwRankInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgSpmGetRankList, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgSpmGetSrwRankInfo message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetSrwRankInfo.verify|verify} messages.
-         * @param message MsgSpmGetSrwRankInfo message or plain object to encode
+         * Encodes the specified MsgSpmGetRankList message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetRankList.verify|verify} messages.
+         * @param message MsgSpmGetRankList message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgSpmGetSrwRankInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgSpmGetRankList, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgSpmGetSrwRankInfo message from the specified reader or buffer.
+         * Decodes a MsgSpmGetRankList message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgSpmGetSrwRankInfo
+         * @returns MsgSpmGetRankList
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetSrwRankInfo;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetRankList;
 
         /**
-         * Decodes a MsgSpmGetSrwRankInfo message from the specified reader or buffer, length delimited.
+         * Decodes a MsgSpmGetRankList message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgSpmGetSrwRankInfo
+         * @returns MsgSpmGetRankList
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetSrwRankInfo;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetRankList;
 
         /**
-         * Verifies a MsgSpmGetSrwRankInfo message.
+         * Verifies a MsgSpmGetRankList message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgSpmGetSrwRankInfo message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgSpmGetRankList message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgSpmGetSrwRankInfo
+         * @returns MsgSpmGetRankList
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetSrwRankInfo;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetRankList;
 
         /**
-         * Creates a plain object from a MsgSpmGetSrwRankInfo message. Also converts values to other types if specified.
-         * @param message MsgSpmGetSrwRankInfo
+         * Creates a plain object from a MsgSpmGetRankList message. Also converts values to other types if specified.
+         * @param message MsgSpmGetRankList
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgSpmGetSrwRankInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgSpmGetRankList, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgSpmGetSrwRankInfo to JSON.
+         * Converts this MsgSpmGetRankList to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgSpmGetSrwRankInfo {
+    namespace MsgSpmGetRankList {
 
-        /** Properties of a SrwRankSingleInfo. */
-        interface ISrwRankSingleInfo {
+        /** Properties of a SpmRankSingleInfo. */
+        interface ISpmRankSingleInfo {
 
-            /** SrwRankSingleInfo rankId */
+            /** SpmRankSingleInfo rankId */
             rankId?: (number|null);
 
-            /** SrwRankSingleInfo userId */
+            /** SpmRankSingleInfo userId */
             userId?: (number|null);
 
-            /** SrwRankSingleInfo score */
+            /** SpmRankSingleInfo score */
             score?: (number|null);
         }
 
-        /** Represents a SrwRankSingleInfo. */
-        class SrwRankSingleInfo implements ISrwRankSingleInfo {
+        /** Represents a SpmRankSingleInfo. */
+        class SpmRankSingleInfo implements ISpmRankSingleInfo {
 
             /**
-             * Constructs a new SrwRankSingleInfo.
+             * Constructs a new SpmRankSingleInfo.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgSpmGetSrwRankInfo.ISrwRankSingleInfo);
+            constructor(properties?: NetMessage.MsgSpmGetRankList.ISpmRankSingleInfo);
 
-            /** SrwRankSingleInfo rankId. */
+            /** SpmRankSingleInfo rankId. */
             public rankId: number;
 
-            /** SrwRankSingleInfo userId. */
+            /** SpmRankSingleInfo userId. */
             public userId: number;
 
-            /** SrwRankSingleInfo score. */
+            /** SpmRankSingleInfo score. */
             public score: number;
 
             /**
-             * Creates a new SrwRankSingleInfo instance using the specified properties.
+             * Creates a new SpmRankSingleInfo instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SrwRankSingleInfo instance
+             * @returns SpmRankSingleInfo instance
              */
-            public static create(properties?: NetMessage.MsgSpmGetSrwRankInfo.ISrwRankSingleInfo): NetMessage.MsgSpmGetSrwRankInfo.SrwRankSingleInfo;
+            public static create(properties?: NetMessage.MsgSpmGetRankList.ISpmRankSingleInfo): NetMessage.MsgSpmGetRankList.SpmRankSingleInfo;
 
             /**
-             * Encodes the specified SrwRankSingleInfo message. Does not implicitly {@link NetMessage.MsgSpmGetSrwRankInfo.SrwRankSingleInfo.verify|verify} messages.
-             * @param message SrwRankSingleInfo message or plain object to encode
+             * Encodes the specified SpmRankSingleInfo message. Does not implicitly {@link NetMessage.MsgSpmGetRankList.SpmRankSingleInfo.verify|verify} messages.
+             * @param message SpmRankSingleInfo message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgSpmGetSrwRankInfo.ISrwRankSingleInfo, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgSpmGetRankList.ISpmRankSingleInfo, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SrwRankSingleInfo message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetSrwRankInfo.SrwRankSingleInfo.verify|verify} messages.
-             * @param message SrwRankSingleInfo message or plain object to encode
+             * Encodes the specified SpmRankSingleInfo message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetRankList.SpmRankSingleInfo.verify|verify} messages.
+             * @param message SpmRankSingleInfo message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgSpmGetSrwRankInfo.ISrwRankSingleInfo, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgSpmGetRankList.ISpmRankSingleInfo, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SrwRankSingleInfo message from the specified reader or buffer.
+             * Decodes a SpmRankSingleInfo message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SrwRankSingleInfo
+             * @returns SpmRankSingleInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetSrwRankInfo.SrwRankSingleInfo;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetRankList.SpmRankSingleInfo;
 
             /**
-             * Decodes a SrwRankSingleInfo message from the specified reader or buffer, length delimited.
+             * Decodes a SpmRankSingleInfo message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SrwRankSingleInfo
+             * @returns SpmRankSingleInfo
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetSrwRankInfo.SrwRankSingleInfo;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetRankList.SpmRankSingleInfo;
 
             /**
-             * Verifies a SrwRankSingleInfo message.
+             * Verifies a SpmRankSingleInfo message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a SrwRankSingleInfo message from a plain object. Also converts values to their respective internal types.
+             * Creates a SpmRankSingleInfo message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SrwRankSingleInfo
+             * @returns SpmRankSingleInfo
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetSrwRankInfo.SrwRankSingleInfo;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetRankList.SpmRankSingleInfo;
 
             /**
-             * Creates a plain object from a SrwRankSingleInfo message. Also converts values to other types if specified.
-             * @param message SrwRankSingleInfo
+             * Creates a plain object from a SpmRankSingleInfo message. Also converts values to other types if specified.
+             * @param message SpmRankSingleInfo
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgSpmGetSrwRankInfo.SrwRankSingleInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgSpmGetRankList.SpmRankSingleInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SrwRankSingleInfo to JSON.
+             * Converts this SpmRankSingleInfo to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of a SrwRankInfoForRule. */
-        interface ISrwRankInfoForRule {
+        /** Properties of a SpmRankInfoForRule. */
+        interface ISpmRankInfoForRule {
 
-            /** SrwRankInfoForRule ruleId */
+            /** SpmRankInfoForRule ruleId */
             ruleId?: (number|null);
 
-            /** SrwRankInfoForRule infoArray */
-            infoArray?: (NetMessage.MsgSpmGetSrwRankInfo.ISrwRankSingleInfo[]|null);
+            /** SpmRankInfoForRule infoArray */
+            infoArray?: (NetMessage.MsgSpmGetRankList.ISpmRankSingleInfo[]|null);
         }
 
-        /** Represents a SrwRankInfoForRule. */
-        class SrwRankInfoForRule implements ISrwRankInfoForRule {
+        /** Represents a SpmRankInfoForRule. */
+        class SpmRankInfoForRule implements ISpmRankInfoForRule {
 
             /**
-             * Constructs a new SrwRankInfoForRule.
+             * Constructs a new SpmRankInfoForRule.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgSpmGetSrwRankInfo.ISrwRankInfoForRule);
+            constructor(properties?: NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule);
 
-            /** SrwRankInfoForRule ruleId. */
+            /** SpmRankInfoForRule ruleId. */
             public ruleId: number;
 
-            /** SrwRankInfoForRule infoArray. */
-            public infoArray: NetMessage.MsgSpmGetSrwRankInfo.ISrwRankSingleInfo[];
+            /** SpmRankInfoForRule infoArray. */
+            public infoArray: NetMessage.MsgSpmGetRankList.ISpmRankSingleInfo[];
 
             /**
-             * Creates a new SrwRankInfoForRule instance using the specified properties.
+             * Creates a new SpmRankInfoForRule instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns SrwRankInfoForRule instance
+             * @returns SpmRankInfoForRule instance
              */
-            public static create(properties?: NetMessage.MsgSpmGetSrwRankInfo.ISrwRankInfoForRule): NetMessage.MsgSpmGetSrwRankInfo.SrwRankInfoForRule;
+            public static create(properties?: NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule): NetMessage.MsgSpmGetRankList.SpmRankInfoForRule;
 
             /**
-             * Encodes the specified SrwRankInfoForRule message. Does not implicitly {@link NetMessage.MsgSpmGetSrwRankInfo.SrwRankInfoForRule.verify|verify} messages.
-             * @param message SrwRankInfoForRule message or plain object to encode
+             * Encodes the specified SpmRankInfoForRule message. Does not implicitly {@link NetMessage.MsgSpmGetRankList.SpmRankInfoForRule.verify|verify} messages.
+             * @param message SpmRankInfoForRule message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgSpmGetSrwRankInfo.ISrwRankInfoForRule, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified SrwRankInfoForRule message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetSrwRankInfo.SrwRankInfoForRule.verify|verify} messages.
-             * @param message SrwRankInfoForRule message or plain object to encode
+             * Encodes the specified SpmRankInfoForRule message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetRankList.SpmRankInfoForRule.verify|verify} messages.
+             * @param message SpmRankInfoForRule message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgSpmGetSrwRankInfo.ISrwRankInfoForRule, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a SrwRankInfoForRule message from the specified reader or buffer.
+             * Decodes a SpmRankInfoForRule message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns SrwRankInfoForRule
+             * @returns SpmRankInfoForRule
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetSrwRankInfo.SrwRankInfoForRule;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetRankList.SpmRankInfoForRule;
 
             /**
-             * Decodes a SrwRankInfoForRule message from the specified reader or buffer, length delimited.
+             * Decodes a SpmRankInfoForRule message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns SrwRankInfoForRule
+             * @returns SpmRankInfoForRule
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetSrwRankInfo.SrwRankInfoForRule;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetRankList.SpmRankInfoForRule;
 
             /**
-             * Verifies a SrwRankInfoForRule message.
+             * Verifies a SpmRankInfoForRule message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a SrwRankInfoForRule message from a plain object. Also converts values to their respective internal types.
+             * Creates a SpmRankInfoForRule message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns SrwRankInfoForRule
+             * @returns SpmRankInfoForRule
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetSrwRankInfo.SrwRankInfoForRule;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetRankList.SpmRankInfoForRule;
 
             /**
-             * Creates a plain object from a SrwRankInfoForRule message. Also converts values to other types if specified.
-             * @param message SrwRankInfoForRule
+             * Creates a plain object from a SpmRankInfoForRule message. Also converts values to other types if specified.
+             * @param message SpmRankInfoForRule
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgSpmGetSrwRankInfo.SrwRankInfoForRule, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgSpmGetRankList.SpmRankInfoForRule, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this SrwRankInfoForRule to JSON.
+             * Converts this SpmRankInfoForRule to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -53116,7 +53116,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgSpmGetSrwRankInfo.IC);
+            constructor(properties?: NetMessage.MsgSpmGetRankList.IC);
 
             /** C mapId. */
             public mapId: number;
@@ -53126,23 +53126,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgSpmGetSrwRankInfo.IC): NetMessage.MsgSpmGetSrwRankInfo.C;
+            public static create(properties?: NetMessage.MsgSpmGetRankList.IC): NetMessage.MsgSpmGetRankList.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgSpmGetSrwRankInfo.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgSpmGetRankList.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgSpmGetSrwRankInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgSpmGetRankList.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetSrwRankInfo.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetRankList.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgSpmGetSrwRankInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgSpmGetRankList.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -53152,7 +53152,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetSrwRankInfo.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetRankList.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -53161,7 +53161,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetSrwRankInfo.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetRankList.C;
 
             /**
              * Verifies a C message.
@@ -53175,7 +53175,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetSrwRankInfo.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetRankList.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -53183,7 +53183,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgSpmGetSrwRankInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgSpmGetRankList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -53202,7 +53202,7 @@ export declare namespace NetMessage {
             mapId?: (number|null);
 
             /** S infoArray */
-            infoArray?: (NetMessage.MsgSpmGetSrwRankInfo.ISrwRankInfoForRule[]|null);
+            infoArray?: (NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule[]|null);
         }
 
         /** Represents a S. */
@@ -53212,7 +53212,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgSpmGetSrwRankInfo.IS);
+            constructor(properties?: NetMessage.MsgSpmGetRankList.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -53221,30 +53221,30 @@ export declare namespace NetMessage {
             public mapId: number;
 
             /** S infoArray. */
-            public infoArray: NetMessage.MsgSpmGetSrwRankInfo.ISrwRankInfoForRule[];
+            public infoArray: NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule[];
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgSpmGetSrwRankInfo.IS): NetMessage.MsgSpmGetSrwRankInfo.S;
+            public static create(properties?: NetMessage.MsgSpmGetRankList.IS): NetMessage.MsgSpmGetRankList.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgSpmGetSrwRankInfo.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgSpmGetRankList.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgSpmGetSrwRankInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgSpmGetRankList.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetSrwRankInfo.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetRankList.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgSpmGetSrwRankInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgSpmGetRankList.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -53254,7 +53254,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetSrwRankInfo.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetRankList.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -53263,7 +53263,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetSrwRankInfo.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetRankList.S;
 
             /**
              * Verifies a S message.
@@ -53277,7 +53277,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetSrwRankInfo.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetRankList.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -53285,7 +53285,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgSpmGetSrwRankInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgSpmGetRankList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

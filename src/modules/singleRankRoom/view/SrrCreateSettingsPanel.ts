@@ -29,6 +29,7 @@ namespace TwnsSrrCreateSettingsPanel {
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForSpmRankPage                   = TwnsSpmRankPage.OpenData;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
@@ -44,7 +45,7 @@ namespace TwnsSrrCreateSettingsPanel {
         private readonly _labelGameSettings!    : TwnsUiLabel.UiLabel;
 
         private readonly _groupTab!             : eui.Group;
-        private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage>;
+        private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, void | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForSpmRankPage>;
 
         private readonly _btnBack!              : TwnsUiButton.UiButton;
         private readonly _btnConfirm!           : TwnsUiButton.UiButton;
@@ -86,6 +87,11 @@ namespace TwnsSrrCreateSettingsPanel {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : TwnsSrrCreatePlayerInfoPage.SrrCreatePlayerInfoPage,
                     pageData    : null,
+                },
+                {
+                    tabItemData : { name: Lang.getText(LangTextType.B0436) },
+                    pageClass   : TwnsSpmRankPage.SpmRankPage,
+                    pageData    : this._createDataForSpmRankPage(),
                 },
             ]);
             this._isTabInitialized = true;
@@ -175,6 +181,12 @@ namespace TwnsSrrCreateSettingsPanel {
             return mapId == null
                 ? {}
                 : { mapInfo: { mapId } };
+        }
+
+        private _createDataForSpmRankPage(): OpenDataForSpmRankPage {
+            return {
+                mapId   : SrrCreateModel.getMapId(),
+            };
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {

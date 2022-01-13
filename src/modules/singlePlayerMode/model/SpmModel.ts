@@ -7,13 +7,33 @@
 // import ProtoManager     from "../../tools/proto/ProtoManager";
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace SpmModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
+    import LangTextType         = TwnsLangTextType.LangTextType;
     import NetMessage           = ProtoTypes.NetMessage;
     import SpmWarSaveSlotData   = Types.SpmWarSaveSlotData;
+    import ISpmRankInfoForRule  = NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule;
+    import MsgSpmGetRankListIs  = NetMessage.MsgSpmGetRankList.IS;
 
     export function init(): void {
-        // nothing to do
+        Notify.addEventListeners([
+            { type: NotifyType.MsgSpmValidateSrw,   callback: _onNotifyMsgSpmValidateSrw, },
+        ], null);
+    }
+
+    function _onNotifyMsgSpmValidateSrw(e: egret.Event): void {
+        const data      = e.data as ProtoTypes.NetMessage.MsgSpmValidateSrw.IS;
+        const status    = data.status;
+        if (status === Types.SpmValidateSrwStatus.ConfigVersionNotLatest) {
+            FloatText.show(Lang.getText(LangTextType.A0278));
+        } else if (status === Types.SpmValidateSrwStatus.ScoreNotHighest) {
+            FloatText.show(Lang.getText(LangTextType.A0279));
+        } else if (status === Types.SpmValidateSrwStatus.ScoreTooLow) {
+            FloatText.show(Lang.getText(LangTextType.A0281));
+        } else {
+            FloatText.show(Lang.getText(LangTextType.A0280));
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,8 +142,72 @@ namespace SpmModel {
             slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
     }
-    export function updateOnMsgSpmValidateSrw(data: NetMessage.MsgSpmValidateSrw.IS): void {
-        getSlotDict().delete(Helpers.getExisted(data.slotIndex));
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for rank list.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    const _rankDataDict     = new Map<number, ISpmRankInfoForRule[]>();
+    const _rankDataRequests = new Map<number, ((info: MsgSpmGetRankListIs) => void)[]>();
+
+    export function getRankData(mapId: number): Promise<ISpmRankInfoForRule[]> {
+        const localData = getLocalRankData(mapId);
+        if (localData) {
+            return new Promise<ISpmRankInfoForRule[]>((resolve) => resolve(localData));
+        }
+
+        if (_rankDataRequests.has(mapId)) {
+            return new Promise<ISpmRankInfoForRule[]>((resolve) => {
+                Helpers.getExisted(_rankDataRequests.get(mapId)).push(info => resolve(info.infoArray ?? []));
+            });
+        }
+
+        new Promise<void>((resolve) => {
+            const callbackOnSucceed = (e: egret.Event): void => {
+                const data = e.data as MsgSpmGetRankListIs;
+                if (data.mapId === mapId) {
+                    Notify.removeEventListener(NotifyType.MsgSpmGetRankList,        callbackOnSucceed);
+                    Notify.removeEventListener(NotifyType.MsgSpmGetRankListFailed,  callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_rankDataRequests.get(mapId))) {
+                        cb(data);
+                    }
+                    _rankDataRequests.delete(mapId);
+
+                    resolve();
+                }
+            };
+            const callbackOnFailed = (e: egret.Event): void => {
+                const data = e.data as MsgSpmGetRankListIs;
+                if (data.mapId === mapId) {
+                    Notify.removeEventListener(NotifyType.MsgSpmGetRankList,        callbackOnSucceed);
+                    Notify.removeEventListener(NotifyType.MsgSpmGetRankListFailed,  callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_rankDataRequests.get(mapId))) {
+                        cb(data);
+                    }
+                    _rankDataRequests.delete(mapId);
+
+                    resolve();
+                }
+            };
+
+            Notify.addEventListener(NotifyType.MsgSpmGetRankList,       callbackOnSucceed);
+            Notify.addEventListener(NotifyType.MsgSpmGetRankListFailed, callbackOnFailed);
+
+            SpmProxy.reqSpmGetRankList(mapId);
+        });
+
+        return new Promise((resolve) => {
+            _rankDataRequests.set(mapId, [info => resolve(info.infoArray ?? [])]);
+        });
+    }
+
+    function getLocalRankData(mapId: number): ISpmRankInfoForRule[] | null {
+        return _rankDataDict.get(mapId) ?? null;
+    }
+
+    export function updateOnMsgSpmGetRankList(data: MsgSpmGetRankListIs): void {
+        _rankDataDict.set(Helpers.getExisted(data.mapId), data.infoArray ?? []);
     }
 }
 
