@@ -114,7 +114,7 @@ namespace TwnsSpmRankPage {
             const dataArray : DataForUserRenderer[] = [];
             for (const rankData of (await SpmModel.getRankData(data.mapId)).find(v => v.ruleId === ruleId)?.infoArray ?? []) {
                 dataArray.push({
-                    rank    : Helpers.getExisted(rankData.rankId),
+                    rank    : 0,
                     userId  : Helpers.getExisted(rankData.userId),
                     score   : Helpers.getExisted(rankData.score),
                     isLast  : false,

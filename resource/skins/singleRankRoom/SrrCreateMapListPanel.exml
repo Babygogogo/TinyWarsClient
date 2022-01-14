@@ -37,6 +37,8 @@
                 <e:VerticalLayout horizontalAlign="center" gap="4" />
             </e:layout>
         </e:Group>
+        <TwnsUiButton:UiButton id="_btnHelp" skinName="Skins.Component.Button.ButtonHelp001" right="110" scaleX="1.5"
+                               scaleY="1.5" y="24" />
         <TwnsUiButton:UiButton id="_btnSearch" label="Filter" x="20" y="80" height="30" width="200" visible="false">
             <TwnsUiButton:skinName>
                 <e:Skin>

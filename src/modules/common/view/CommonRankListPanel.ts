@@ -32,13 +32,19 @@ namespace TwnsCommonRankListPanel {
         private readonly _labelStdNoData!   : TwnsUiLabel.UiLabel;
         private readonly _labelStdNickname! : TwnsUiLabel.UiLabel;
         private readonly _labelStdScore!    : TwnsUiLabel.UiLabel;
-        private readonly _listStd!          : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
+        private readonly _listStd!          : TwnsUiScrollList.UiScrollList<DataForMrwUserRenderer>;
 
         private readonly _labelFogTitle!    : TwnsUiLabel.UiLabel;
         private readonly _labelFogNoData!   : TwnsUiLabel.UiLabel;
         private readonly _labelFogNickname! : TwnsUiLabel.UiLabel;
         private readonly _labelFogScore!    : TwnsUiLabel.UiLabel;
-        private readonly _listFog!          : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
+        private readonly _listFog!          : TwnsUiScrollList.UiScrollList<DataForMrwUserRenderer>;
+
+        private readonly _labelSpmTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmNoData!   : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmNickname! : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmScore!    : TwnsUiLabel.UiLabel;
+        private readonly _listSpm!          : TwnsUiScrollList.UiScrollList<DataForSpmUserRenderer>;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -51,8 +57,9 @@ namespace TwnsCommonRankListPanel {
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
 
-            this._listStd.setItemRenderer(UserRenderer);
-            this._listFog.setItemRenderer(UserRenderer);
+            this._listStd.setItemRenderer(MrwUserRenderer);
+            this._listFog.setItemRenderer(MrwUserRenderer);
+            this._listSpm.setItemRenderer(SpmUserRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             CommonProxy.reqGetRankList();
@@ -81,6 +88,7 @@ namespace TwnsCommonRankListPanel {
         private _updateView(): void {
             this._updateComponentsForStd();
             this._updateComponentsForFog();
+            this._updateComponentsForSpm();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -93,13 +101,17 @@ namespace TwnsCommonRankListPanel {
             this._labelFogNoData.text   = Lang.getText(LangTextType.B0278);
             this._labelFogNickname.text = Lang.getText(LangTextType.B0175);
             this._labelFogScore.text    = Lang.getText(LangTextType.B0579);
+            this._labelSpmTitle.text    = Lang.getText(LangTextType.B0818);
+            this._labelSpmNoData.text   = Lang.getText(LangTextType.B0278);
+            this._labelSpmNickname.text = Lang.getText(LangTextType.B0175);
+            this._labelSpmScore.text    = Lang.getText(LangTextType.B0579);
         }
 
         private _updateComponentsForStd(): void {
             const playersCount  = 2;
             const warType       = Types.WarType.MrwStd;
-            const dataList      : DataForUserRenderer[] = [];
-            for (const data of CommonModel.getRankList() || []) {
+            const dataList      : DataForMrwUserRenderer[] = [];
+            for (const data of CommonModel.getMrwRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
@@ -122,8 +134,8 @@ namespace TwnsCommonRankListPanel {
         private _updateComponentsForFog(): void {
             const playersCount  = 2;
             const warType       = Types.WarType.MrwFog;
-            const dataList      : DataForUserRenderer[] = [];
-            for (const data of CommonModel.getRankList() || []) {
+            const dataList      : DataForMrwUserRenderer[] = [];
+            for (const data of CommonModel.getMrwRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     const userId = data.userId;
                     if (userId == null) {
@@ -141,6 +153,19 @@ namespace TwnsCommonRankListPanel {
 
             this._labelFogNoData.visible = !dataList.length;
             this._listFog.bindData(dataList);
+        }
+
+        private _updateComponentsForSpm(): void {
+            const dataArray: DataForSpmUserRenderer[] = [];
+            for (const userId of CommonModel.getSpmOverallRankArray() || []) {
+                dataArray.push({
+                    rank    : dataArray.length + 1,
+                    userId,
+                });
+            }
+
+            this._labelSpmNoData.visible = !dataArray.length;
+            this._listSpm.bindData(dataArray);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -173,13 +198,13 @@ namespace TwnsCommonRankListPanel {
         }
     }
 
-    type DataForUserRenderer = {
+    type DataForMrwUserRenderer = {
         rank        : number;
         userId      : number;
         playersCount: number;
         warType     : Types.WarType;
     };
-    class UserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUserRenderer> {
+    class MrwUserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMrwUserRenderer> {
         private readonly _group!            : eui.Group;
         private readonly _imgBg!            : TwnsUiImage.UiImage;
         private readonly _labelIndex!       : TwnsUiLabel.UiLabel;
@@ -235,6 +260,58 @@ namespace TwnsCommonRankListPanel {
             } else {
                 labelScore.text = `${rankInfo.currentScore}`;
             }
+        }
+    }
+
+    type DataForSpmUserRenderer = {
+        rank        : number;
+        userId      : number;
+    };
+    class SpmUserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSpmUserRenderer> {
+        private readonly _group!            : eui.Group;
+        private readonly _imgBg!            : TwnsUiImage.UiImage;
+        private readonly _labelIndex!       : TwnsUiLabel.UiLabel;
+        private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
+        private readonly _labelScore!       : TwnsUiLabel.UiLabel;
+
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._imgBg, callback: this._onTouchedImgBg },
+            ]);
+            this._imgBg.touchEnabled = true;
+        }
+
+        protected _onDataChanged(): void {
+            this._updateView();
+        }
+
+        private _onTouchedImgBg(): void {
+            const data = this.data;
+            if (data) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId: data.userId });
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for view.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private async _updateView(): Promise<void> {
+            const data = this.data;
+            if (!data) {
+                return;
+            }
+
+            const rank              = data.rank;
+            const labelNickname     = this._labelNickname;
+            const labelScore        = this._labelScore;
+            labelNickname.text      = Lang.getText(LangTextType.B0029);
+            labelScore.text         = ``;
+            this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
+            this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
+
+            const userInfo      = Helpers.getExisted(await UserModel.getUserPublicInfo(data.userId));
+            labelNickname.text  = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
+            labelScore.text     = `${Helpers.formatString("%.2f", userInfo.userSpmOverallRankInfo?.currentScore ?? 0)}`;
         }
     }
 }

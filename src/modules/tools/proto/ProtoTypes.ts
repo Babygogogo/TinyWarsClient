@@ -21450,103 +21450,103 @@ export declare namespace Structure {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a DataForPlayerRank. */
-    interface IDataForPlayerRank {
+    /** Properties of a DataForMrwPlayerRank. */
+    interface IDataForMrwPlayerRank {
 
-        /** DataForPlayerRank warType */
+        /** DataForMrwPlayerRank warType */
         warType?: (number|null);
 
-        /** DataForPlayerRank playersCountUnneutral */
+        /** DataForMrwPlayerRank playersCountUnneutral */
         playersCountUnneutral?: (number|null);
 
-        /** DataForPlayerRank userId */
+        /** DataForMrwPlayerRank userId */
         userId?: (number|null);
     }
 
-    /** Represents a DataForPlayerRank. */
-    class DataForPlayerRank implements IDataForPlayerRank {
+    /** Represents a DataForMrwPlayerRank. */
+    class DataForMrwPlayerRank implements IDataForMrwPlayerRank {
 
         /**
-         * Constructs a new DataForPlayerRank.
+         * Constructs a new DataForMrwPlayerRank.
          * @param [properties] Properties to set
          */
-        constructor(properties?: Structure.IDataForPlayerRank);
+        constructor(properties?: Structure.IDataForMrwPlayerRank);
 
-        /** DataForPlayerRank warType. */
+        /** DataForMrwPlayerRank warType. */
         public warType: number;
 
-        /** DataForPlayerRank playersCountUnneutral. */
+        /** DataForMrwPlayerRank playersCountUnneutral. */
         public playersCountUnneutral: number;
 
-        /** DataForPlayerRank userId. */
+        /** DataForMrwPlayerRank userId. */
         public userId: number;
 
         /**
-         * Creates a new DataForPlayerRank instance using the specified properties.
+         * Creates a new DataForMrwPlayerRank instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns DataForPlayerRank instance
+         * @returns DataForMrwPlayerRank instance
          */
-        public static create(properties?: Structure.IDataForPlayerRank): Structure.DataForPlayerRank;
+        public static create(properties?: Structure.IDataForMrwPlayerRank): Structure.DataForMrwPlayerRank;
 
         /**
-         * Encodes the specified DataForPlayerRank message. Does not implicitly {@link Structure.DataForPlayerRank.verify|verify} messages.
-         * @param message DataForPlayerRank message or plain object to encode
+         * Encodes the specified DataForMrwPlayerRank message. Does not implicitly {@link Structure.DataForMrwPlayerRank.verify|verify} messages.
+         * @param message DataForMrwPlayerRank message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: Structure.IDataForPlayerRank, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: Structure.IDataForMrwPlayerRank, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified DataForPlayerRank message, length delimited. Does not implicitly {@link Structure.DataForPlayerRank.verify|verify} messages.
-         * @param message DataForPlayerRank message or plain object to encode
+         * Encodes the specified DataForMrwPlayerRank message, length delimited. Does not implicitly {@link Structure.DataForMrwPlayerRank.verify|verify} messages.
+         * @param message DataForMrwPlayerRank message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: Structure.IDataForPlayerRank, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: Structure.IDataForMrwPlayerRank, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a DataForPlayerRank message from the specified reader or buffer.
+         * Decodes a DataForMrwPlayerRank message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns DataForPlayerRank
+         * @returns DataForMrwPlayerRank
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.DataForPlayerRank;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.DataForMrwPlayerRank;
 
         /**
-         * Decodes a DataForPlayerRank message from the specified reader or buffer, length delimited.
+         * Decodes a DataForMrwPlayerRank message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns DataForPlayerRank
+         * @returns DataForMrwPlayerRank
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.DataForPlayerRank;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.DataForMrwPlayerRank;
 
         /**
-         * Verifies a DataForPlayerRank message.
+         * Verifies a DataForMrwPlayerRank message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a DataForPlayerRank message from a plain object. Also converts values to their respective internal types.
+         * Creates a DataForMrwPlayerRank message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns DataForPlayerRank
+         * @returns DataForMrwPlayerRank
          */
-        public static fromObject(object: { [k: string]: any }): Structure.DataForPlayerRank;
+        public static fromObject(object: { [k: string]: any }): Structure.DataForMrwPlayerRank;
 
         /**
-         * Creates a plain object from a DataForPlayerRank message. Also converts values to other types if specified.
-         * @param message DataForPlayerRank
+         * Creates a plain object from a DataForMrwPlayerRank message. Also converts values to other types if specified.
+         * @param message DataForMrwPlayerRank
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: Structure.DataForPlayerRank, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: Structure.DataForMrwPlayerRank, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this DataForPlayerRank to JSON.
+         * Converts this DataForMrwPlayerRank to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -24956,6 +24956,9 @@ export declare namespace User {
 
         /** UserRankInfo mrwArray */
         mrwArray?: (User.UserRankInfo.IUserMrwRankInfo[]|null);
+
+        /** UserRankInfo spmOverallInfo */
+        spmOverallInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
     }
 
     /** Represents a UserRankInfo. */
@@ -24969,6 +24972,9 @@ export declare namespace User {
 
         /** UserRankInfo mrwArray. */
         public mrwArray: User.UserRankInfo.IUserMrwRankInfo[];
+
+        /** UserRankInfo spmOverallInfo. */
+        public spmOverallInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
 
         /**
          * Creates a new UserRankInfo instance using the specified properties.
@@ -25152,6 +25158,102 @@ export declare namespace User {
 
             /**
              * Converts this UserMrwRankInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a UserSpmOverallRankInfo. */
+        interface IUserSpmOverallRankInfo {
+
+            /** UserSpmOverallRankInfo currentScore */
+            currentScore?: (number|null);
+
+            /** UserSpmOverallRankInfo currentRank */
+            currentRank?: (number|null);
+        }
+
+        /** Represents a UserSpmOverallRankInfo. */
+        class UserSpmOverallRankInfo implements IUserSpmOverallRankInfo {
+
+            /**
+             * Constructs a new UserSpmOverallRankInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: User.UserRankInfo.IUserSpmOverallRankInfo);
+
+            /** UserSpmOverallRankInfo currentScore. */
+            public currentScore: number;
+
+            /** UserSpmOverallRankInfo currentRank. */
+            public currentRank: number;
+
+            /**
+             * Creates a new UserSpmOverallRankInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns UserSpmOverallRankInfo instance
+             */
+            public static create(properties?: User.UserRankInfo.IUserSpmOverallRankInfo): User.UserRankInfo.UserSpmOverallRankInfo;
+
+            /**
+             * Encodes the specified UserSpmOverallRankInfo message. Does not implicitly {@link User.UserRankInfo.UserSpmOverallRankInfo.verify|verify} messages.
+             * @param message UserSpmOverallRankInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: User.UserRankInfo.IUserSpmOverallRankInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified UserSpmOverallRankInfo message, length delimited. Does not implicitly {@link User.UserRankInfo.UserSpmOverallRankInfo.verify|verify} messages.
+             * @param message UserSpmOverallRankInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: User.UserRankInfo.IUserSpmOverallRankInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a UserSpmOverallRankInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns UserSpmOverallRankInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserRankInfo.UserSpmOverallRankInfo;
+
+            /**
+             * Decodes a UserSpmOverallRankInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns UserSpmOverallRankInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserRankInfo.UserSpmOverallRankInfo;
+
+            /**
+             * Verifies a UserSpmOverallRankInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a UserSpmOverallRankInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns UserSpmOverallRankInfo
+             */
+            public static fromObject(object: { [k: string]: any }): User.UserRankInfo.UserSpmOverallRankInfo;
+
+            /**
+             * Creates a plain object from a UserSpmOverallRankInfo message. Also converts values to other types if specified.
+             * @param message UserSpmOverallRankInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: User.UserRankInfo.UserSpmOverallRankInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this UserSpmOverallRankInfo to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -25958,6 +26060,9 @@ export declare namespace User {
 
         /** UserPublicInfo userMpwStatisticsArray */
         userMpwStatisticsArray?: (User.UserWarStatistics.IUserMpwStatistics[]|null);
+
+        /** UserPublicInfo userSpmOverallRankInfo */
+        userSpmOverallRankInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
     }
 
     /** Represents a UserPublicInfo. */
@@ -26007,6 +26112,9 @@ export declare namespace User {
 
         /** UserPublicInfo userMpwStatisticsArray. */
         public userMpwStatisticsArray: User.UserWarStatistics.IUserMpwStatistics[];
+
+        /** UserPublicInfo userSpmOverallRankInfo. */
+        public userSpmOverallRankInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
 
         /**
          * Creates a new UserPublicInfo instance using the specified properties.
@@ -28445,8 +28553,11 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S rankDataList */
-            rankDataList?: (Structure.IDataForPlayerRank[]|null);
+            /** S mrwRankDataArray */
+            mrwRankDataArray?: (Structure.IDataForMrwPlayerRank[]|null);
+
+            /** S spmOverallRankArray */
+            spmOverallRankArray?: (number[]|null);
         }
 
         /** Represents a S. */
@@ -28461,8 +28572,11 @@ export declare namespace NetMessage {
             /** S errorCode. */
             public errorCode: number;
 
-            /** S rankDataList. */
-            public rankDataList: Structure.IDataForPlayerRank[];
+            /** S mrwRankDataArray. */
+            public mrwRankDataArray: Structure.IDataForMrwPlayerRank[];
+
+            /** S spmOverallRankArray. */
+            public spmOverallRankArray: number[];
 
             /**
              * Creates a new S instance using the specified properties.
@@ -52907,9 +53021,6 @@ export declare namespace NetMessage {
         /** Properties of a SpmRankSingleInfo. */
         interface ISpmRankSingleInfo {
 
-            /** SpmRankSingleInfo rankId */
-            rankId?: (number|null);
-
             /** SpmRankSingleInfo userId */
             userId?: (number|null);
 
@@ -52925,9 +53036,6 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              */
             constructor(properties?: NetMessage.MsgSpmGetRankList.ISpmRankSingleInfo);
-
-            /** SpmRankSingleInfo rankId. */
-            public rankId: number;
 
             /** SpmRankSingleInfo userId. */
             public userId: number;

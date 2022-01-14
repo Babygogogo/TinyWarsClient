@@ -65,7 +65,8 @@ namespace CommonProxy {
     function _onMsgCommonGetRankList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCommonGetRankList.IS;
         if (!data.errorCode) {
-            CommonModel.setRankList(data.rankDataList || []);
+            CommonModel.setMrwRankArray(data.mrwRankDataArray || []);
+            CommonModel.setSpmOverallRankArray(data.spmOverallRankArray || []);
             Notify.dispatch(NotifyType.MsgCommonGetRankList, data);
         }
     }

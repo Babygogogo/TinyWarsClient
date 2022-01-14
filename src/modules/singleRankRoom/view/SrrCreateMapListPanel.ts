@@ -45,6 +45,8 @@ namespace TwnsSrrCreateMapListPanel {
         private readonly _labelWarRoomMode!     : TwnsUiLabel.UiLabel;
         private readonly _labelChooseMap!       : TwnsUiLabel.UiLabel;
 
+        private readonly _btnHelp!              : TwnsUiButton.UiButton;
+
         private readonly _btnBack!              : TwnsUiButton.UiButton;
         private readonly _btnSearch!            : TwnsUiButton.UiButton;
         private readonly _btnMapInfo!           : TwnsUiButton.UiButton;
@@ -65,6 +67,7 @@ namespace TwnsSrrCreateMapListPanel {
                 { ui: this._btnSearch,      callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
                 { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
+                { ui: this._btnHelp,        callback: this._onTouchedBtnHelp },
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
@@ -138,6 +141,13 @@ namespace TwnsSrrCreateMapListPanel {
                 await SrrCreateModel.resetDataByMapId(selectedMapId);
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.SrrCreateSettingsPanel, void 0);
             }
+        }
+
+        private _onTouchedBtnHelp(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+                title   : Lang.getText(LangTextType.B0614),
+                content : Lang.getText(LangTextType.R0011),
+            });
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -216,6 +226,11 @@ namespace TwnsSrrCreateMapListPanel {
                 endProps    : { alpha: 1, y: 20 },
             });
             Helpers.resetTween({
+                obj         : this._btnHelp,
+                beginProps  : { alpha: 0, y: -16 },
+                endProps    : { alpha: 1, y: 24 },
+            });
+            Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
@@ -258,6 +273,11 @@ namespace TwnsSrrCreateMapListPanel {
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 1, y: 20 },
                 endProps    : { alpha: 0, y: -20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnHelp,
+                beginProps  : { alpha: 1, y: 24 },
+                endProps    : { alpha: 0, y: -16 },
             });
             Helpers.resetTween({
                 obj         : this._btnBack,

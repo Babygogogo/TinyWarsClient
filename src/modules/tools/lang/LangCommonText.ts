@@ -1171,12 +1171,16 @@ namespace TwnsLangCommonText {
             [
                 `恭喜通关！您是否希望以此战局数据参与全服排行？`,
                 `\n`,
-                `注：服务器将花费一定时间来验证数据的合法性，所以排名可能不会立刻刷新。`,
+                `注：`,
+                `1. 服务器将花费一定时间来验证数据的合法性，所以排名可能不会立刻刷新。`,
+                `2. 若您曾经提交过分数更高的记录，则该记录仍将保留，此次提交将被自动忽略。`,
             ].join(`\n`),
             [
                 `Do you want to participate the server-wide ranking with the replay data?`,
                 `\n`,
-                `Note: It will take some time for the server to validate the data, therefore the ranking may not be updated very soon.`,
+                `Note:`,
+                `1. It will take some time for the server to validate the data, therefore the ranking may not be updated very soon.`,
+                `2. If there is a better record of yours, that record will be kept, and this new record will be ignored.`,
             ].join(`\n`),
         ],
         [LangTextType.A0278]: [
@@ -4455,6 +4459,10 @@ namespace TwnsLangCommonText {
             `挑战模式雾战`,
             `War Room FoW`,
         ],
+        [LangTextType.B0818]: [
+            `挑战`,
+            `WR`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5479,6 +5487,7 @@ namespace TwnsLangCommonText {
                 `Rainy: force FoW, all tiles' vision become 0, and all units' vision become 1.`,
             ].join(`\n`),
         ],
+
         [LangTextType.R0010]: [
             [
                 `A.I.模式会决定了此部队被A.I.操作时的行动方式，具体如下：`,
@@ -5493,6 +5502,29 @@ namespace TwnsLangCommonText {
                 `0(Normal): The unit will do anything the A.I. thinks appropriate.`,
                 `1(Standby): The unit will do nothing util an enemy unit enters it's attackable area.`,
                 `2(No Move): The unit will not move away from the current grid, but will do anything else.`,
+            ].join(`\n`),
+        ],
+
+        [LangTextType.R0011]: [
+            [
+                `在挑战模式中，您每次通过任意关卡，系统都会计算此次的关卡得分，并上传到服务器，与全服玩家进行排名比拼。`,
+                ``,
+                `挑战模式还包含一个总排行榜。您通过的关卡越多，单个关卡的排名越高，则您在总榜的分数和排名也越高。`,
+                ``,
+                `注：`,
+                `1. 关卡得分仅与您通关时所经过的回合数、以及总动作数有关，与其他所有因素（如敌我战损）都无关。`,
+                `2. 您可以多次挑战同一个关卡，系统将保留得分最高的通关记录。`,
+                `3. 部分地图可能包含不止一个的挑战规则，每个规则都有独立的排行榜，且同样计入总榜分数。`,
+            ].join(`\n`),
+            [
+                `In the War Room mode, every time you pass any level, the system will calculate the level score and upload it to the server for ranking competition with other players.`,
+                ``,
+                `The War Room mode also includes a general ranking list. The more levels you pass, the higher the ranking of a single level, the higher your score and ranking in the general list.`,
+                ``,
+                `Note:`,
+                `1. The level score is only related to the number of rounds you have passed and the total number of actions, and has nothing to do with all other factors (such as the battle loss of the enemy and ourselves).`,
+                `2. You can challenge the same level many times, and the system will keep the clearance record with the highest score.`,
+                `3. Some maps may contain more than one challenge rule. Each rule has an independent ranking list and is also included in the score for the general ranking list.`,
             ].join(`\n`),
         ],
     };
