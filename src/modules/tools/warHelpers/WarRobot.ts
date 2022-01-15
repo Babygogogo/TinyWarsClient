@@ -1522,7 +1522,7 @@ namespace WarRobot {
         if (unit.getUnitType() !== Types.UnitType.Tank) {
             return -9999;
         } else {
-            return unit.getCurrentHp() * 10;
+            return unit.getCurrentHp() * 100;
         }
     }
 

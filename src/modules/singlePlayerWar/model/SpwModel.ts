@@ -165,22 +165,28 @@ namespace SpwModel {
                         callback,
                     });
                 } else {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
-                        title   : Lang.getText(LangTextType.B0088),
-                        content : Lang.getText(LangTextType.A0022),
-                        callback: () => {
-                            callback();
+                    if (war instanceof SrwWar) {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                            title   : Lang.getText(LangTextType.B0088),
+                            content : Lang.getFormattedText(LangTextType.F0127, war.calculateTotalScore()),
+                            callback: () => {
+                                callback();
 
-                            if (war instanceof SrwWar) {
                                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                                     content : Lang.getText(LangTextType.A0277),
                                     callback: () => {
                                         SpmProxy.reqSpmValidateSrw(war);
                                     },
                                 });
-                            }
-                        },
-                    });
+                            },
+                        });
+                    } else {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                            title   : Lang.getText(LangTextType.B0088),
+                            content : Lang.getText(LangTextType.A0022),
+                            callback,
+                        });
+                    }
                 }
             }
         }

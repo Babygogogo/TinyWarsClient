@@ -176,6 +176,12 @@ namespace TwnsSrrCreateSettingsPanel {
             }
         }
 
+        private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, this._createDataForCommonWarAdvancedSettingsPage());
+            }
+        }
+
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
             const mapId = SrrCreateModel.getMapId();
             return mapId == null
@@ -206,6 +212,7 @@ namespace TwnsSrrCreateSettingsPanel {
                         callbackOnModify: async () => {
                             await SrrCreateModel.tickPresetWarRuleId();
                             this._updateCommonWarBasicSettingsPage();
+                            this._updateCommonWarAdvancedSettingsPage();
                         },
                     },
                     {

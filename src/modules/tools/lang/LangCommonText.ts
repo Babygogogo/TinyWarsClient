@@ -4463,6 +4463,14 @@ namespace TwnsLangCommonText {
             `挑战`,
             `WR`,
         ],
+        [LangTextType.B0819]: [
+            `挑战模式总积分`,
+            `War Room Overall Score`,
+        ],
+        [LangTextType.B0820]: [
+            `挑战模式总排名`,
+            `War Room Overall Rank`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5258,6 +5266,10 @@ namespace TwnsLangCommonText {
             `找到玩家序号为 %s%s 的所有玩家，并修改他们的属性。`,
             `Get all players that is %s%s, then modify their states.`,
         ],
+        [LangTextType.F0127]: [
+            `恭喜您获得本局的胜利！本次得分：%s\n\n即将回到大厅…`,
+            `You win! Score: %s.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.
@@ -5513,6 +5525,7 @@ namespace TwnsLangCommonText {
                 ``,
                 `注：`,
                 `1. 关卡得分仅与您通关时所经过的回合数、以及总动作数有关，与其他所有因素（如敌我战损）都无关。`,
+                `分数 = 100000 - (回合数 - 1) * 1000 - 动作数`,
                 `2. 您可以多次挑战同一个关卡，系统将保留得分最高的通关记录。`,
                 `3. 部分地图可能包含不止一个的挑战规则，每个规则都有独立的排行榜，且同样计入总榜分数。`,
             ].join(`\n`),
@@ -5523,6 +5536,7 @@ namespace TwnsLangCommonText {
                 ``,
                 `Note:`,
                 `1. The level score is only related to the number of rounds you have passed and the total number of actions, and has nothing to do with all other factors (such as the battle loss of the enemy and ourselves).`,
+                `score = 100000 - (turns - 1) * 1000 - actions`,
                 `2. You can challenge the same level many times, and the system will keep the clearance record with the highest score.`,
                 `3. Some maps may contain more than one challenge rule. Each rule has an independent ranking list and is also included in the score for the general ranking list.`,
             ].join(`\n`),
