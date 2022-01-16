@@ -9,7 +9,16 @@
                     <e:Skin width="280" height="320" currentState="up" states="up,down">
                         <e:Group left="0" right="0" top="0" bottom="0">
                             <e:Group horizontalCenter="0" top="0" bottom="0">
-                                <e:Group y="0" left="0" right="0" height="26" width="280">
+                                <e:Group x="20" height="30" y="0">
+                                    <TwnsUiLabel:UiLabel id="_labelMyScoreTitle" text="明战" textColor="0xFFFFFF"
+                                                         size="14" x="0" y="0" bold="true" />
+                                    <TwnsUiLabel:UiLabel id="_labelMyScore" text="明战" textColor="0xFFFFFF" size="14"
+                                                         x="10" y="0" />
+                                    <e:layout>
+                                        <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                                    </e:layout>
+                                </e:Group>
+                                <e:Group y="30" left="0" right="0" height="26" width="280">
                                     <TwnsUiImage:UiImage scale9Grid="1,1,2,2" source="uncompressedColorBlue0000"
                                                          left="0" right="0" top="0" bottom="0" />
                                     <TwnsUiLabel:UiLabel id="_labelStdTitle" text="明战" textColor="0xFFFFFF" size="14"
@@ -19,7 +28,7 @@
                                     <TwnsUiLabel:UiLabel id="_labelStdScore" text="明战" textColor="0xFFFFFF" size="14"
                                                          bold="true" x="230" verticalCenter="0" y="16" />
                                 </e:Group>
-                                <TwnsUiScrollList:UiScrollList id="_listStd" horizontalCenter="0" top="26" bottom="0"
+                                <TwnsUiScrollList:UiScrollList id="_listStd" horizontalCenter="0" top="56" bottom="0"
                                                                width="280">
                                     <e:List>
                                         <e:itemRendererSkinName>

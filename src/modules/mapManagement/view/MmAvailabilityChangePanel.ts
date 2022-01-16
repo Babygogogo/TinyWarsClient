@@ -15,7 +15,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmAvailabilityChangePanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -114,7 +113,9 @@ namespace TwnsMmAvailabilityChangePanel {
                 throw Helpers.newError(`MmAvailabilityChangePanel._onTouchedBtnWarRule() empty mapRawData.`);
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, mapRawData);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, {
+                mapRawData,
+            });
             this.close();
         }
 

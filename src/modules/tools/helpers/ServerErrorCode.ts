@@ -4132,6 +4132,17 @@ export const enum ServerErrorCode {
     MapManager_UpdateOnSetMapName_0008,
     MapManager_UpdateOnSetMapName_0009,
 
+    MapManager_UpdateOnSubmitWarRule_0000,
+    MapManager_UpdateOnSubmitWarRule_0001,
+    MapManager_UpdateOnSubmitWarRule_0002,
+    MapManager_UpdateOnSubmitWarRule_0003,
+    MapManager_UpdateOnSubmitWarRule_0004,
+    MapManager_UpdateOnSubmitWarRule_0005,
+    MapManager_UpdateOnSubmitWarRule_0006,
+    MapManager_UpdateOnSubmitWarRule_0007,
+    MapManager_UpdateOnSubmitWarRule_0008,
+    MapManager_UpdateOnSubmitWarRule_0009,
+
     MapManager_UpdateOnMpwWarEnded_0000,
     MapManager_UpdateOnMpwWarEnded_0001,
     MapManager_UpdateOnMpwWarEnded_0002,

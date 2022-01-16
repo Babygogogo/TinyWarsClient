@@ -23,9 +23,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSrrCreateMapListPanel {
-    import LangTextType             = TwnsLangTextType.LangTextType;
-    import NotifyType               = TwnsNotifyType.NotifyType;
-    import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
+    import LangTextType                     = TwnsLangTextType.LangTextType;
+    import NotifyType                       = TwnsNotifyType.NotifyType;
+    import IDataForMapTag                   = ProtoTypes.Map.IDataForMapTag;
+    import OpenDataForCommonWarMapInfoPage  = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
+    import OpenDataForSpmRankPage           = TwnsSpmRankPage.OpenData;
 
     type FiltersForMapList = {
         mapName?        : string | null;
@@ -36,9 +38,8 @@ namespace TwnsSrrCreateMapListPanel {
     };
     export type OpenData = FiltersForMapList | null;
     export class SrrCreateMapListPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        private readonly _groupMapView!         : eui.Group;
-        private readonly _zoomMap!              : TwnsUiZoomableMap.UiZoomableMap;
-        private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
+        private readonly _groupTab!             : eui.Group;
+        private readonly _tabSettings!          : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForSpmRankPage>;
 
         private readonly _groupNavigator!       : eui.Group;
         private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
@@ -49,15 +50,13 @@ namespace TwnsSrrCreateMapListPanel {
 
         private readonly _btnBack!              : TwnsUiButton.UiButton;
         private readonly _btnSearch!            : TwnsUiButton.UiButton;
-        private readonly _btnMapInfo!           : TwnsUiButton.UiButton;
         private readonly _btnNextStep!          : TwnsUiButton.UiButton;
 
         private readonly _groupMapList!         : eui.Group;
         private readonly _listMap!              : TwnsUiScrollList.UiScrollList<DataForMapNameRenderer>;
         private readonly _labelNoMap!           : TwnsUiLabel.UiLabel;
 
-        private readonly _uiMapInfo!            : TwnsUiMapInfo.UiMapInfo;
-
+        private _isTabInitialized   = false;
         private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedMapId      : number | null = null;
@@ -72,9 +71,12 @@ namespace TwnsSrrCreateMapListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
+            this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listMap.setItemRenderer(MapNameRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
+            this._isTabInitialized = false;
+            await this._initTabSettings();
             this._updateComponentsForLanguage();
 
             this.setMapFilters(this._getOpenData() || this._mapFilters);
@@ -83,7 +85,7 @@ namespace TwnsSrrCreateMapListPanel {
             // nothing to do
         }
 
-        public async setAndReviseSelectedMapId(newMapId: number | null): Promise<void> {
+        public setAndReviseSelectedMapId(newMapId: number | null): void {
             const dataList = this._dataForList;
             if (dataList.length <= 0) {
                 this._selectedMapId = null;
@@ -96,8 +98,8 @@ namespace TwnsSrrCreateMapListPanel {
                 (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
 
                 this._listMap.setSelectedIndex(newIndex);
-                await this._showMap(dataList[newIndex].mapId);
             }
+            this._updateComponentsForPreviewingMapInfo();
         }
         public getSelectedMapId(): number | null {
             return this._selectedMapId;
@@ -161,12 +163,26 @@ namespace TwnsSrrCreateMapListPanel {
             this._labelWarRoomMode.text         = Lang.getText(LangTextType.B0614);
             this._labelSinglePlayer.text        = Lang.getText(LangTextType.B0138);
             this._labelChooseMap.text           = Lang.getText(LangTextType.B0227);
-            this._labelLoading.text             = Lang.getText(LangTextType.A0150);
             this._labelNoMap.text               = Lang.getText(LangTextType.A0010);
             this._btnBack.label                 = Lang.getText(LangTextType.B0146);
             this._btnSearch.label               = Lang.getText(LangTextType.B0228);
-            this._btnMapInfo.label              = Lang.getText(LangTextType.B0298);
             this._btnNextStep.label             = Lang.getText(LangTextType.B0566);
+        }
+
+        private async _initTabSettings(): Promise<void> {
+            this._tabSettings.bindData([
+                {
+                    tabItemData : { name: Lang.getText(LangTextType.B0298) },
+                    pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
+                },
+                {
+                    tabItemData : { name: Lang.getText(LangTextType.B0436) },
+                    pageClass   : TwnsSpmRankPage.SpmRankPage,
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
+                },
+            ]);
+            this._isTabInitialized = true;
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
@@ -205,18 +221,47 @@ namespace TwnsSrrCreateMapListPanel {
             return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
-        private async _showMap(mapId: number): Promise<void> {
-            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
-            this._uiMapInfo.setData({
-                mapInfo: {
-                    mapId,
-                },
-            });
+        private async _updateComponentsForPreviewingMapInfo(): Promise<void> {
+            const groupTab      = this._groupTab;
+            const btnNextStep   = this._btnNextStep;
+            if (this._selectedMapId == null) {
+                groupTab.visible    = false;
+                btnNextStep.visible = false;
+            } else {
+                groupTab.visible    = true;
+                btnNextStep.visible = true;
+
+                this._updateCommonMapInfoPage();
+                this._updateCommonWarPlayerInfoPage();
+            }
+        }
+
+        private async _updateCommonMapInfoPage(): Promise<void> {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
+            }
+        }
+
+        private _updateCommonWarPlayerInfoPage(): void {
+            if (this._isTabInitialized) {
+                this._tabSettings.updatePageData(1, this._createDataForCommonWarPlayerInfoPage());
+            }
+        }
+
+        private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
+            const mapId = this._selectedMapId;
+            return mapId == null
+                ? null
+                : { mapInfo: { mapId } };
+        }
+
+        private _createDataForCommonWarPlayerInfoPage(): OpenDataForSpmRankPage {
+            return { mapId: this._selectedMapId };
         }
 
         protected async _showOpenAnimation(): Promise<void> {
             Helpers.resetTween({
-                obj         : this._groupMapView,
+                obj         : this._groupTab,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
             });
@@ -241,11 +286,6 @@ namespace TwnsSrrCreateMapListPanel {
                 endProps    : { alpha: 1, y: 80 },
             });
             Helpers.resetTween({
-                obj         : this._btnMapInfo,
-                beginProps  : { alpha: 0, y: 40 },
-                endProps    : { alpha: 1, y: 80 },
-            });
-            Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
@@ -255,17 +295,12 @@ namespace TwnsSrrCreateMapListPanel {
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
             });
-            Helpers.resetTween({
-                obj         : this._uiMapInfo,
-                beginProps  : { alpha: 0, right: -40 },
-                endProps    : { alpha: 1, right: 0 },
-            });
 
             await Helpers.wait(CommonConstants.DefaultTweenTime);
         }
         protected async _showCloseAnimation(): Promise<void> {
             Helpers.resetTween({
-                obj         : this._groupMapView,
+                obj         : this._groupTab,
                 beginProps  : { alpha: 1 },
                 endProps    : { alpha: 0 },
             });
@@ -290,11 +325,6 @@ namespace TwnsSrrCreateMapListPanel {
                 endProps    : { alpha: 0, y: 40 },
             });
             Helpers.resetTween({
-                obj         : this._btnMapInfo,
-                beginProps  : { alpha: 1, y: 80 },
-                endProps    : { alpha: 0, y: 40 },
-            });
-            Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
@@ -303,11 +333,6 @@ namespace TwnsSrrCreateMapListPanel {
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 1, left: 20 },
                 endProps    : { alpha: 0, left: -20 },
-            });
-            Helpers.resetTween({
-                obj         : this._uiMapInfo,
-                beginProps  : { alpha: 1, right: 0 },
-                endProps    : { alpha: 0, right: -40 },
             });
 
             await Helpers.wait(CommonConstants.DefaultTweenTime);
@@ -321,24 +346,28 @@ namespace TwnsSrrCreateMapListPanel {
     };
 
     class MapNameRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMapNameRenderer> {
-        private readonly _btnChoose!    : TwnsUiButton.UiButton;
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
-
-        protected _onOpened(): void {
-            this._setUiListenerArray([
-                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-            ]);
-            this._setShortSfxCode(Types.ShortSfxCode.None);
-        }
 
         protected _onDataChanged(): void {
             const data          = this._getData();
             WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v || CommonConstants.ErrorTextForUndefined);
         }
 
-        private _onTouchTapBtnChoose(): void {
+        public onItemTapEvent(): void {
             const data = this._getData();
             data.panel.setAndReviseSelectedMapId(data.mapId);
+        }
+    }
+
+
+    type DataForTabItemRenderer = {
+        name: string;
+    };
+    class TabItemRenderer extends TwnsUiTabItemRenderer.UiTabItemRenderer<DataForTabItemRenderer> {
+        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+
+        protected _onDataChanged(): void {
+            this._labelName.text = this._getData().name;
         }
     }
 }

@@ -26490,9 +26490,6 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMeSubmitMap */
         MsgMeSubmitMap?: (NetMessage.IMsgMeSubmitMap|null);
 
-        /** MessageContainer MsgMeSubmitWarRule */
-        MsgMeSubmitWarRule?: (NetMessage.IMsgMeSubmitWarRule|null);
-
         /** MessageContainer MsgMeGetSubmittedWarRuleList */
         MsgMeGetSubmittedWarRuleList?: (NetMessage.IMsgMeGetSubmittedWarRuleList|null);
 
@@ -26531,6 +26528,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMmSetMapName */
         MsgMmSetMapName?: (NetMessage.IMsgMmSetMapName|null);
+
+        /** MessageContainer MsgMmAddWarRule */
+        MsgMmAddWarRule?: (NetMessage.IMsgMmAddWarRule|null);
 
         /** MessageContainer MsgReplaySetRating */
         MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
@@ -26869,9 +26869,6 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMeSubmitMap. */
         public MsgMeSubmitMap?: (NetMessage.IMsgMeSubmitMap|null);
 
-        /** MessageContainer MsgMeSubmitWarRule. */
-        public MsgMeSubmitWarRule?: (NetMessage.IMsgMeSubmitWarRule|null);
-
         /** MessageContainer MsgMeGetSubmittedWarRuleList. */
         public MsgMeGetSubmittedWarRuleList?: (NetMessage.IMsgMeGetSubmittedWarRuleList|null);
 
@@ -26910,6 +26907,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMmSetMapName. */
         public MsgMmSetMapName?: (NetMessage.IMsgMmSetMapName|null);
+
+        /** MessageContainer MsgMmAddWarRule. */
+        public MsgMmAddWarRule?: (NetMessage.IMsgMmAddWarRule|null);
 
         /** MessageContainer MsgReplaySetRating. */
         public MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
@@ -36708,291 +36708,6 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgMeSubmitWarRule. */
-    interface IMsgMeSubmitWarRule {
-
-        /** MsgMeSubmitWarRule c */
-        c?: (NetMessage.MsgMeSubmitWarRule.IC|null);
-
-        /** MsgMeSubmitWarRule s */
-        s?: (NetMessage.MsgMeSubmitWarRule.IS|null);
-    }
-
-    /** Represents a MsgMeSubmitWarRule. */
-    class MsgMeSubmitWarRule implements IMsgMeSubmitWarRule {
-
-        /**
-         * Constructs a new MsgMeSubmitWarRule.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IMsgMeSubmitWarRule);
-
-        /** MsgMeSubmitWarRule c. */
-        public c?: (NetMessage.MsgMeSubmitWarRule.IC|null);
-
-        /** MsgMeSubmitWarRule s. */
-        public s?: (NetMessage.MsgMeSubmitWarRule.IS|null);
-
-        /**
-         * Creates a new MsgMeSubmitWarRule instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns MsgMeSubmitWarRule instance
-         */
-        public static create(properties?: NetMessage.IMsgMeSubmitWarRule): NetMessage.MsgMeSubmitWarRule;
-
-        /**
-         * Encodes the specified MsgMeSubmitWarRule message. Does not implicitly {@link NetMessage.MsgMeSubmitWarRule.verify|verify} messages.
-         * @param message MsgMeSubmitWarRule message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IMsgMeSubmitWarRule, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified MsgMeSubmitWarRule message, length delimited. Does not implicitly {@link NetMessage.MsgMeSubmitWarRule.verify|verify} messages.
-         * @param message MsgMeSubmitWarRule message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IMsgMeSubmitWarRule, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a MsgMeSubmitWarRule message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns MsgMeSubmitWarRule
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMeSubmitWarRule;
-
-        /**
-         * Decodes a MsgMeSubmitWarRule message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MsgMeSubmitWarRule
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMeSubmitWarRule;
-
-        /**
-         * Verifies a MsgMeSubmitWarRule message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MsgMeSubmitWarRule message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MsgMeSubmitWarRule
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMeSubmitWarRule;
-
-        /**
-         * Creates a plain object from a MsgMeSubmitWarRule message. Also converts values to other types if specified.
-         * @param message MsgMeSubmitWarRule
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.MsgMeSubmitWarRule, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MsgMeSubmitWarRule to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    namespace MsgMeSubmitWarRule {
-
-        /** Properties of a C. */
-        interface IC {
-
-            /** C mapId */
-            mapId?: (number|null);
-
-            /** C warRuleList */
-            warRuleList?: (WarRule.IWarRule[]|null);
-        }
-
-        /** Represents a C. */
-        class C implements IC {
-
-            /**
-             * Constructs a new C.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgMeSubmitWarRule.IC);
-
-            /** C mapId. */
-            public mapId: number;
-
-            /** C warRuleList. */
-            public warRuleList: WarRule.IWarRule[];
-
-            /**
-             * Creates a new C instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns C instance
-             */
-            public static create(properties?: NetMessage.MsgMeSubmitWarRule.IC): NetMessage.MsgMeSubmitWarRule.C;
-
-            /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMeSubmitWarRule.C.verify|verify} messages.
-             * @param message C message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgMeSubmitWarRule.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMeSubmitWarRule.C.verify|verify} messages.
-             * @param message C message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgMeSubmitWarRule.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a C message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns C
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMeSubmitWarRule.C;
-
-            /**
-             * Decodes a C message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns C
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMeSubmitWarRule.C;
-
-            /**
-             * Verifies a C message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a C message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns C
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMeSubmitWarRule.C;
-
-            /**
-             * Creates a plain object from a C message. Also converts values to other types if specified.
-             * @param message C
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgMeSubmitWarRule.C, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this C to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a S. */
-        interface IS {
-
-            /** S errorCode */
-            errorCode?: (number|null);
-        }
-
-        /** Represents a S. */
-        class S implements IS {
-
-            /**
-             * Constructs a new S.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgMeSubmitWarRule.IS);
-
-            /** S errorCode. */
-            public errorCode: number;
-
-            /**
-             * Creates a new S instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns S instance
-             */
-            public static create(properties?: NetMessage.MsgMeSubmitWarRule.IS): NetMessage.MsgMeSubmitWarRule.S;
-
-            /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMeSubmitWarRule.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgMeSubmitWarRule.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMeSubmitWarRule.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgMeSubmitWarRule.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a S message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMeSubmitWarRule.S;
-
-            /**
-             * Decodes a S message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMeSubmitWarRule.S;
-
-            /**
-             * Verifies a S message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a S message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns S
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMeSubmitWarRule.S;
-
-            /**
-             * Creates a plain object from a S message. Also converts values to other types if specified.
-             * @param message S
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgMeSubmitWarRule.S, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this S to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-    }
-
     /** Properties of a MsgMeGetSubmittedWarRuleList. */
     interface IMsgMeGetSubmittedWarRuleList {
 
@@ -41028,6 +40743,303 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMmSetMapName.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMmAddWarRule. */
+    interface IMsgMmAddWarRule {
+
+        /** MsgMmAddWarRule c */
+        c?: (NetMessage.MsgMmAddWarRule.IC|null);
+
+        /** MsgMmAddWarRule s */
+        s?: (NetMessage.MsgMmAddWarRule.IS|null);
+    }
+
+    /** Represents a MsgMmAddWarRule. */
+    class MsgMmAddWarRule implements IMsgMmAddWarRule {
+
+        /**
+         * Constructs a new MsgMmAddWarRule.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMmAddWarRule);
+
+        /** MsgMmAddWarRule c. */
+        public c?: (NetMessage.MsgMmAddWarRule.IC|null);
+
+        /** MsgMmAddWarRule s. */
+        public s?: (NetMessage.MsgMmAddWarRule.IS|null);
+
+        /**
+         * Creates a new MsgMmAddWarRule instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMmAddWarRule instance
+         */
+        public static create(properties?: NetMessage.IMsgMmAddWarRule): NetMessage.MsgMmAddWarRule;
+
+        /**
+         * Encodes the specified MsgMmAddWarRule message. Does not implicitly {@link NetMessage.MsgMmAddWarRule.verify|verify} messages.
+         * @param message MsgMmAddWarRule message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMmAddWarRule, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMmAddWarRule message, length delimited. Does not implicitly {@link NetMessage.MsgMmAddWarRule.verify|verify} messages.
+         * @param message MsgMmAddWarRule message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMmAddWarRule, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMmAddWarRule message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMmAddWarRule
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmAddWarRule;
+
+        /**
+         * Decodes a MsgMmAddWarRule message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMmAddWarRule
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmAddWarRule;
+
+        /**
+         * Verifies a MsgMmAddWarRule message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMmAddWarRule message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMmAddWarRule
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmAddWarRule;
+
+        /**
+         * Creates a plain object from a MsgMmAddWarRule message. Also converts values to other types if specified.
+         * @param message MsgMmAddWarRule
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMmAddWarRule, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMmAddWarRule to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMmAddWarRule {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C mapId */
+            mapId?: (number|null);
+
+            /** C warRule */
+            warRule?: (WarRule.IWarRule|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMmAddWarRule.IC);
+
+            /** C mapId. */
+            public mapId: number;
+
+            /** C warRule. */
+            public warRule?: (WarRule.IWarRule|null);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgMmAddWarRule.IC): NetMessage.MsgMmAddWarRule.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmAddWarRule.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMmAddWarRule.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmAddWarRule.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMmAddWarRule.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmAddWarRule.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmAddWarRule.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmAddWarRule.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMmAddWarRule.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S mapId */
+            mapId?: (number|null);
+
+            /** S warRule */
+            warRule?: (WarRule.IWarRule|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMmAddWarRule.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S mapId. */
+            public mapId: number;
+
+            /** S warRule. */
+            public warRule?: (WarRule.IWarRule|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMmAddWarRule.IS): NetMessage.MsgMmAddWarRule.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmAddWarRule.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMmAddWarRule.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmAddWarRule.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMmAddWarRule.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmAddWarRule.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmAddWarRule.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmAddWarRule.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMmAddWarRule.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

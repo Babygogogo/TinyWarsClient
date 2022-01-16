@@ -177,6 +177,8 @@
 		"bin-debug/modules/mapEditor/view/MeWarMenuPanel.js",
 		"bin-debug/modules/mapEditor/view/MeWarRulePanel.js",
 		"bin-debug/modules/mapManagement/view/MmAcceptMapPanel.js",
+		"bin-debug/modules/mapManagement/view/MmAddRuleMapListPanel.js",
+		"bin-debug/modules/mapManagement/view/MmAddRuleSearchPanel.js",
 		"bin-debug/modules/mapManagement/view/MmAvailabilityChangePanel.js",
 		"bin-debug/modules/baseWar/view/BwTileBriefPanel.js",
 		"bin-debug/modules/mapManagement/view/MmAvailabilitySearchPanel.js",
@@ -218,8 +220,8 @@
 		"bin-debug/modules/multiFreeRoom/view/MfrRoomInfoPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrSearchRoomPanel.js",
 		"bin-debug/modules/baseWar/view/BwUnitActionsPanel.js",
-		"bin-debug/modules/multiFreeWar/view/MfwMyWarListPanel.js",
 		"bin-debug/modules/baseWar/view/BwUnitBriefPanel.js",
+		"bin-debug/modules/multiPlayerWar/model/MpwActionPlanner.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwField.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwFogMap.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwModel.js",
@@ -424,6 +426,6 @@
 		"bin-debug/modules/watchWar/view/WwMakeRequestDetailPanel.js",
 		"bin-debug/modules/watchWar/view/WwMakeRequestWarsPanel.js",
 		"bin-debug/modules/watchWar/view/WwOngoingWarsPanel.js",
-		"bin-debug/modules/multiPlayerWar/model/MpwActionPlanner.js"
+		"bin-debug/modules/multiFreeWar/view/MfwMyWarListPanel.js"
 	]
 }

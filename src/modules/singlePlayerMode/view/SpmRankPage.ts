@@ -22,7 +22,7 @@ namespace TwnsSpmRankPage {
     import NotifyType   = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        mapId   : number;
+        mapId   : number | null;
     };
     export class SpmRankPage extends TwnsUiTabPage.UiTabPage<OpenData> {
         private readonly _listRule! : TwnsUiScrollList.UiScrollList<DataForRuleRenderer>;
@@ -52,7 +52,13 @@ namespace TwnsSpmRankPage {
         }
 
         private async _updateListRule(): Promise<void> {
-            const mapId         = this._getOpenData().mapId;
+            const mapId     = this._getOpenData().mapId;
+            const listRule  = this._listRule;
+            if (mapId == null) {
+                listRule.clear();
+                return;
+            }
+
             const mapRawData    = await WarMapModel.getRawData(mapId);
             const dataArray     : DataForRuleRenderer[] = [];
             for (const rule of mapRawData?.warRuleArray?.filter(v => v.ruleAvailability?.canSrw) ?? []) {
@@ -61,7 +67,7 @@ namespace TwnsSpmRankPage {
                     ruleId  : Helpers.getExisted(rule.ruleId),
                 });
             }
-            this._listRule.bindData(dataArray.sort((v1, v2) => v1.ruleId - v2.ruleId));
+            listRule.bindData(dataArray.sort((v1, v2) => v1.ruleId - v2.ruleId));
         }
     }
 
@@ -70,11 +76,14 @@ namespace TwnsSpmRankPage {
         ruleId  : number;
     };
     class RuleRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForRuleRenderer> {
-        private readonly _labelStdTitle!    : TwnsUiLabel.UiLabel;
-        private readonly _labelStdNoData!   : TwnsUiLabel.UiLabel;
-        private readonly _labelStdNickname! : TwnsUiLabel.UiLabel;
-        private readonly _labelStdScore!    : TwnsUiLabel.UiLabel;
-        private readonly _listStd!          : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
+        private readonly _labelMyScoreTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelMyScore!         : TwnsUiLabel.UiLabel;
+
+        private readonly _labelStdTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelStdNoData!       : TwnsUiLabel.UiLabel;
+        private readonly _labelStdNickname!     : TwnsUiLabel.UiLabel;
+        private readonly _labelStdScore!        : TwnsUiLabel.UiLabel;
+        private readonly _listStd!              : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -82,6 +91,7 @@ namespace TwnsSpmRankPage {
             ]);
 
             this._listStd.setItemRenderer(UserRenderer);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
         protected async _onDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
@@ -103,16 +113,18 @@ namespace TwnsSpmRankPage {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelStdNoData.text   = Lang.getText(LangTextType.B0278);
-            this._labelStdNickname.text = Lang.getText(LangTextType.B0175);
-            this._labelStdScore.text    = Lang.getText(LangTextType.B0579);
+            this._labelMyScoreTitle.text    = `${Lang.getText(LangTextType.B0822)}:`;
+            this._labelStdNoData.text       = Lang.getText(LangTextType.B0278);
+            this._labelStdNickname.text     = Lang.getText(LangTextType.B0175);
+            this._labelStdScore.text        = Lang.getText(LangTextType.B0579);
         }
 
         private async _updateComponentsForStd(): Promise<void> {
             const data      = this._getData();
             const ruleId    = data.ruleId;
+            const mapId     = data.mapId;
             const dataArray : DataForUserRenderer[] = [];
-            for (const rankData of (await SpmModel.getRankData(data.mapId)).find(v => v.ruleId === ruleId)?.infoArray ?? []) {
+            for (const rankData of (await SpmModel.getRankData(mapId)).find(v => v.ruleId === ruleId)?.infoArray ?? []) {
                 dataArray.push({
                     rank    : 0,
                     userId  : Helpers.getExisted(rankData.userId),
@@ -124,15 +136,30 @@ namespace TwnsSpmRankPage {
             const length = dataArray.length;
             if (length) {
                 dataArray.sort((v1, v2) => v2.score - v1.score);
-                for (let i = 0; i < length; ++i) {
-                    dataArray[i].rank = i + 1;
+
+                dataArray[0].rank = 1;
+                for (let i = 1; i < length; ++i) {
+                    const currentData   = dataArray[i];
+                    const previousData  = dataArray[i - 1];
+                    currentData.rank    = currentData.score === previousData.score ? previousData.rank : i + 1;
                 }
+
                 dataArray[length - 1].isLast = true;
             }
 
             this._labelStdTitle.text        = `#${ruleId}`;
             this._labelStdNoData.visible    = !length;
             this._listStd.bindData(dataArray);
+
+            const configVersion = ConfigManager.getLatestConfigVersion();
+            const myScore       = UserModel.getSelfInfo()?.userComplexInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore;
+            const labelMyScore  = this._labelMyScore;
+            if (myScore == null) {
+                labelMyScore.text = `--`;
+            } else {
+                const rank          = dataArray.find(v => v.score === myScore)?.rank;
+                labelMyScore.text   = rank == null ? `${myScore} (--)` : `${myScore} (${rank}${Helpers.getSuffixForRank(rank)})`;
+            }
         }
     }
 

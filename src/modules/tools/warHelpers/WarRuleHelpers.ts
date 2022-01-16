@@ -535,14 +535,15 @@ namespace WarRuleHelpers {
             (rulesCount <= 0)                               ||
             (rulesCount > CommonConstants.WarRuleMaxCount)
         ) {
-            return ClientErrorCode.WarRuleValidation05;
+            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForWarRuleArray_00;
         }
 
-        const ruleIdSet = new Set<number>();
+        const ruleIdSet         = new Set<number>();
+        const trimmedRuleArray  : IWarRule[] = [];
         for (const rule of ruleList) {
             const ruleId = rule.ruleId;
             if ((ruleId == null) || (ruleId < 0) || (ruleId >= rulesCount) || (ruleIdSet.has(ruleId))) {
-                return ClientErrorCode.WarRuleValidation06;
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForWarRuleArray_01;
             }
             ruleIdSet.add(ruleId);
 
@@ -550,6 +551,14 @@ namespace WarRuleHelpers {
             if (warRuleErrorCode) {
                 return warRuleErrorCode;
             }
+
+            const trimmedRule           = Helpers.deepClone(rule);
+            trimmedRule.ruleId          = null;
+            trimmedRule.ruleNameArray   = null;
+            if (trimmedRuleArray.some(v => Helpers.checkIsSameValue(v, trimmedRule))) {
+                return ClientErrorCode.WarRuleHelpers_GetErrorCodeForWarRuleArray_02;
+            }
+            trimmedRuleArray.push(trimmedRule);
         }
 
         return ClientErrorCode.NoError;

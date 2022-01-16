@@ -114,6 +114,11 @@ namespace WarMapModel {
         const mapRawData = await getRawData(mapId);
         (mapRawData) && (mapRawData.mapNameArray = mapNameArray);
     }
+    export async function updateOnAddWarRule(data: ProtoTypes.NetMessage.MsgMmAddWarRule.IS): Promise<void> {
+        const mapId     = Helpers.getExisted(data.mapId);
+        const warRule   = Helpers.getExisted(data.warRule);
+        Helpers.getExisted((await getRawData(mapId))?.warRuleArray).push(warRule);
+    }
 
     export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {
         const mapBriefData = await getBriefData(mapId);

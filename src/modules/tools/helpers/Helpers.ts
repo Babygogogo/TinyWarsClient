@@ -187,6 +187,27 @@ namespace Helpers {
         }
     }
 
+    /**
+     * 对于某个key，如果其中一个obj不包含它，而另一个obj包含它但值为null/undefined，则依然认为这两个obj相同
+     */
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    export function checkIsSameValue(obj1: any, obj2: any): boolean {
+        const type = typeof(obj1);
+        if (type !== typeof(obj2)) {
+            return false;
+        }
+        if (type !== "object") {
+            return obj1 == obj2;
+        }
+
+        const keys = Object.keys(obj1).filter(v => obj1[v] != null);
+        if (keys.length !== Object.keys(obj2).filter(v => obj2[v] != null).length) {
+            return false;
+        }
+
+        return keys.every(v => checkIsSameValue(obj1[v], obj2[v]));
+    }
+
     export function checkIsEmptyObject(obj: { [key: string]: any }): boolean {
         for (const k in obj) {
             return false;

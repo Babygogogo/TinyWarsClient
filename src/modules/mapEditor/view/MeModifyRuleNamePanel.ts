@@ -15,15 +15,16 @@
 // import MeModel              from "../model/MeModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeModifyRuleNamePanel {
+namespace TwnsCommonModifyWarRuleNamePanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
 
     export type OpenData = {
-        ruleId  : number;
+        rule        : ProtoTypes.WarRule.IWarRule;
+        callback    : () => void;
     };
-    export class MeModifyRuleNamePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonModifyWarRuleNamePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _inputChinese! : TwnsUiTextInput.UiTextInput;
         private readonly _inputEnglish! : TwnsUiTextInput.UiTextInput;
         private readonly _labelTip!     : TwnsUiLabel.UiLabel;
@@ -67,8 +68,9 @@ namespace TwnsMeModifyRuleNamePanel {
             } else if (textList.some(v => Helpers.getExisted(v.text).length > CommonConstants.WarRuleNameMaxLength)) {
                 FloatText.show(Lang.getFormattedText(LangTextType.F0034, CommonConstants.WarRuleNameMaxLength));
             } else {
-                Helpers.getExisted(MeModel.getWar()).setWarRuleNameList(this._getOpenData().ruleId, textList);
-                Notify.dispatch(NotifyType.MeWarRuleNameChanged);
+                const openData              = this._getOpenData();
+                openData.rule.ruleNameArray = textList;
+                openData.callback();
                 this.close();
             }
         }
@@ -76,7 +78,7 @@ namespace TwnsMeModifyRuleNamePanel {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const textList          = Helpers.getExisted(MeModel.getWar()).getWarRuleByRuleId(this._getOpenData().ruleId).ruleNameArray;
+            const textList          = this._getOpenData().rule.ruleNameArray;
             this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese }) ?? ``;
             this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English }) ?? ``;
         }
@@ -87,7 +89,7 @@ namespace TwnsMeModifyRuleNamePanel {
             this._labelChinese.text = Lang.getText(LangTextType.B0455);
             this._labelEnglish.text = Lang.getText(LangTextType.B0456);
             this._labelTip.text     = Lang.getText(LangTextType.A0156);
-            this._labelTitle.text   = `${Lang.getText(LangTextType.B0459)} #${this._getOpenData().ruleId}`;
+            this._labelTitle.text   = `${Lang.getText(LangTextType.B0459)} #${this._getOpenData().rule}`;
         }
     }
 }

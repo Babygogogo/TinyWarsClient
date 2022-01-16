@@ -1199,6 +1199,28 @@ namespace TwnsLangCommonText {
             `分数太低，无法参与排行`,
             `The score is too low.`,
         ],
+        [LangTextType.A0282]: [
+            [
+                `您确定要提交此规则、作为本地图的全新规则吗？`,
+                ``,
+                `注：`,
+                `1. 此操作将直接生效且无法撤销，请务必检查各项设定，确保正确无误！`,
+                `2. 此操作不会影响地图已有的各个规则。`,
+                `3. 操作前请尽可能与地图原作者联系，使其清楚并同意新增此规则。`,
+            ].join(`\n`),
+            [
+                `Do you want to submit this rule as a brand new rule for this map?`,
+                ``,
+                `Note:`,
+                `1. This operation will take effect directly and cannot be undone. Please be sure to check all settings to ensure that they are correct.`,
+                `2. This operation will not affect the existing rules of the map.`,
+                `3. Before operation, please contact the original author of the map as much as possible to make him/her clear and agree to add this rule.`,
+            ].join(`\n`),
+        ],
+        [LangTextType.A0283]: [
+            `已成功新增规则`,
+            `The rule is added successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2933,7 +2955,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0436]: [
             `排位积分榜`,
-            `Rank List`,
+            `Leaderboard`,
         ],
         [LangTextType.B0437]: [
             `标准`,
@@ -4471,6 +4493,22 @@ namespace TwnsLangCommonText {
             `挑战模式总排名`,
             `War Room Overall Rank`,
         ],
+        [LangTextType.B0821]: [
+            `地图ID`,
+            `Map ID`,
+        ],
+        [LangTextType.B0822]: [
+            `我的积分`,
+            `My Score`,
+        ],
+        [LangTextType.B0823]: [
+            `新增规则`,
+            `Add Rules`,
+        ],
+        [LangTextType.B0824]: [
+            `提交`,
+            `Submit`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5532,13 +5570,13 @@ namespace TwnsLangCommonText {
             [
                 `In the War Room mode, every time you pass any level, the system will calculate the level score and upload it to the server for ranking competition with other players.`,
                 ``,
-                `The War Room mode also includes a general ranking list. The more levels you pass, the higher the ranking of a single level, the higher your score and ranking in the general list.`,
+                `The War Room mode also includes an overall leaderboard. The more levels you pass, the higher the ranking of a single level, the higher your score and ranking in the general list.`,
                 ``,
                 `Note:`,
                 `1. The level score is only related to the number of rounds you have passed and the total number of actions, and has nothing to do with all other factors (such as the battle loss of the enemy and ourselves).`,
                 `score = 100000 - (turns - 1) * 1000 - actions`,
                 `2. You can challenge the same level many times, and the system will keep the clearance record with the highest score.`,
-                `3. Some maps may contain more than one challenge rule. Each rule has an independent ranking list and is also included in the score for the general ranking list.`,
+                `3. Some maps may contain more than one challenge rule. Each rule has an independent leaderboard and is also included in the score for the overall leaderboard.`,
             ].join(`\n`),
         ],
     };

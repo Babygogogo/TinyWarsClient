@@ -17,17 +17,20 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmWarRulePanel {
-    import CommonHelpPanel              = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import IWarRule                     = ProtoTypes.WarRule.IWarRule;
     import IDataForPlayerRule           = ProtoTypes.WarRule.IDataForPlayerRule;
 
-    export type OpenData = ProtoTypes.Map.IMapRawData;
+    export type OpenData = {
+        mapRawData  : ProtoTypes.Map.IMapRawData;
+    };
     export class MmWarRulePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
         private readonly _listWarRule!          : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
         private readonly _btnBack!              : TwnsUiButton.UiButton;
+
+        private readonly _btnSubmitRule!        : TwnsUiButton.UiButton;
 
         private readonly _btnModifyRuleName!    : TwnsUiButton.UiButton;
         private readonly _labelRuleName!        : TwnsUiLabel.UiLabel;
@@ -36,6 +39,9 @@ namespace TwnsMmWarRulePanel {
         private readonly _imgHasFog!            : TwnsUiImage.UiImage;
         private readonly _btnHelpHasFog!        : TwnsUiButton.UiButton;
 
+        private readonly _btnModifyWeather!     : TwnsUiButton.UiButton;
+        private readonly _labelWeather!         : TwnsUiLabel.UiLabel;
+
         private readonly _labelAvailability!    : TwnsUiLabel.UiLabel;
         private readonly _btnAvailabilityMcw!   : TwnsUiButton.UiButton;
         private readonly _imgAvailabilityMcw!   : TwnsUiImage.UiImage;
@@ -43,6 +49,14 @@ namespace TwnsMmWarRulePanel {
         private readonly _imgAvailabilityScw!   : TwnsUiImage.UiImage;
         private readonly _btnAvailabilityMrw!   : TwnsUiButton.UiButton;
         private readonly _imgAvailabilityMrw!   : TwnsUiImage.UiImage;
+        private readonly _btnAvailabilityCcw!   : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilityCcw!   : TwnsUiImage.UiImage;
+        private readonly _btnAvailabilitySrw!   : TwnsUiButton.UiButton;
+        private readonly _imgAvailabilitySrw!   : TwnsUiImage.UiImage;
+
+        private readonly _labelWarEventListTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _btnAddWarEvent!           : TwnsUiButton.UiButton;
+        private readonly _listWarEvent!             : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
 
         private readonly _labelPlayerList!      : TwnsUiLabel.UiLabel;
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
@@ -53,15 +67,27 @@ namespace TwnsMmWarRulePanel {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMmAddWarRule,     callback: this._onNotifyMsgMmAddWarRule },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
+                { ui: this._btnSubmitRule,          callback: this._onTouchedBtnSubmitRule },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
+                { ui: this._btnModifyHasFog,        callback: this._onTouchedBtnModifyHasFog },
+                { ui: this._btnModifyWeather,       callback: this._onTouchedBtnModifyWeather },
+                { ui: this._btnModifyRuleName,      callback: this._onTouchedBtnModifyRuleName },
+                { ui: this._btnAvailabilityMcw,     callback: this._onTouchedBtnAvailabilityMcw },
+                { ui: this._btnAvailabilityScw,     callback: this._onTouchedBtnAvailabilityScw },
+                { ui: this._btnAvailabilityMrw,     callback: this._onTouchedBtnAvailabilityMrw },
+                { ui: this._btnAvailabilityCcw,     callback: this._onTouchedBtnAvailabilityCcw },
+                { ui: this._btnAvailabilitySrw,     callback: this._onTouchedBtnAvailabilitySrw },
+                { ui: this._btnAddWarEvent,         callback: this._onTouchedBtnAddWarEvent },
             ]);
             this._setIsTouchMaskEnabled();
 
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
+            this._listWarEvent.setItemRenderer(WarEventRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -83,7 +109,7 @@ namespace TwnsMmWarRulePanel {
             } else {
                 const oldIndex      = this.getSelectedIndex();
                 this._selectedIndex = newIndex;
-                this._selectedRule  = dataList[newIndex].rule;
+                this._selectedRule  = Helpers.deepClone(dataList[newIndex].rule);
                 if ((oldIndex != null) && (dataList[oldIndex])) {
                     this._listWarRule.updateSingleData(oldIndex, dataList[oldIndex]);
                 }
@@ -103,8 +129,25 @@ namespace TwnsMmWarRulePanel {
             this._updateComponentsForLanguage();
         }
 
+        private _onNotifyMsgMmAddWarRule(): void {
+            FloatText.show(Lang.getText(LangTextType.A0283));
+            this._resetView();
+        }
+
         private _onTouchedBtnBack(): void {
             this.close();
+        }
+
+        private _onTouchedBtnSubmitRule(): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    content     : Lang.getText(LangTextType.A0282),
+                    callback    : () => {
+                        WarMapProxy.reqMmAddWarRule(Helpers.getExisted(this._getOpenData().mapRawData.mapId), rule);
+                    },
+                });
+            }
         }
 
         private _onTouchedBtnHelpHasFog(): void {
@@ -114,33 +157,128 @@ namespace TwnsMmWarRulePanel {
             });
         }
 
+        private _onTouchedBtnModifyHasFog(): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                WarRuleHelpers.setHasFogByDefault(rule, !WarRuleHelpers.getHasFogByDefault(rule));
+                this._updateImgHasFog(rule);
+            }
+        }
+
+        private _onTouchedBtnModifyWeather(): void {
+            const rule  = this._selectedRule;
+            if (rule) {
+                WarRuleHelpers.tickDefaultWeatherType(rule, Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+                this._updateLabelWeather(rule);
+            }
+        }
+
+        private _onTouchedBtnModifyRuleName(): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonModifyWarRuleNamePanel, {
+                    rule,
+                    callback: () => {
+                        this._updateLabelRuleName(rule);
+                    },
+                });
+            }
+        }
+
+        private _onTouchedBtnAvailabilityMcw(): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                const ruleAvailability  = Helpers.getExisted(rule.ruleAvailability);
+                ruleAvailability.canMcw = !ruleAvailability.canMcw;
+                this._updateImgAvailabilityMcw(rule);
+            }
+        }
+
+        private _onTouchedBtnAvailabilityScw(): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                const ruleAvailability  = Helpers.getExisted(rule.ruleAvailability);
+                ruleAvailability.canScw = !ruleAvailability.canScw;
+                this._updateImgAvailabilityScw(rule);
+            }
+        }
+
+        private _onTouchedBtnAvailabilityMrw(): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                const ruleAvailability  = Helpers.getExisted(rule.ruleAvailability);
+                ruleAvailability.canMrw = !ruleAvailability.canMrw;
+                this._updateImgAvailabilityMrw(rule);
+            }
+        }
+
+        private _onTouchedBtnAvailabilityCcw(): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                const ruleAvailability  = Helpers.getExisted(rule.ruleAvailability);
+                const canCcw            = !ruleAvailability.canCcw;
+                ruleAvailability.canCcw = canCcw;
+                this._updateImgAvailabilityCcw(rule);
+
+                if (!canCcw) {
+                    for (const playerRule of rule.ruleForPlayers?.playerRuleDataArray || []) {
+                        playerRule.fixedCoIdInCcw = null;
+                        this._updateListPlayerRule(rule);
+                    }
+                }
+            }
+        }
+
+        private _onTouchedBtnAvailabilitySrw(): void {
+            const rule = this._selectedRule;
+            if (rule) {
+                const ruleAvailability  = Helpers.getExisted(rule.ruleAvailability);
+                ruleAvailability.canSrw = !ruleAvailability.canSrw;
+                this._updateImgAvailabilitySrw(rule);
+            }
+        }
+
+        private _onTouchedBtnAddWarEvent(): void {
+            const warRule = this._selectedRule;
+            if (warRule) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeAddWarEventToRulePanel, {
+                    warRule,
+                    warEventArray   : this._getOpenData().mapRawData.warEventFullData?.eventArray ?? [],
+                });
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _resetView(): void {
-            this._btnBack.setTextColor(0x00FF00);
-
             this._dataForListWarRule = this._createDataForListWarRule();
             this._listWarRule.bindData(this._dataForListWarRule);
             this.setSelectedIndex(0);
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text       = Lang.getText(LangTextType.B0314);
-            this._labelAvailability.text    = Lang.getText(LangTextType.B0406);
-            this._labelPlayerList.text      = Lang.getText(LangTextType.B0407);
-            this._btnAvailabilityMcw.label  = Lang.getText(LangTextType.B0137);
-            this._btnAvailabilityScw.label  = Lang.getText(LangTextType.B0138);
-            this._btnAvailabilityMrw.label  = Lang.getText(LangTextType.B0404);
-            this._btnBack.label             = Lang.getText(LangTextType.B0146);
-            this._btnModifyRuleName.label   = Lang.getText(LangTextType.B0315);
-            this._btnModifyHasFog.label     = Lang.getText(LangTextType.B0020);
+            this._btnSubmitRule.label           = Lang.getText(LangTextType.B0824);
+            this._labelMenuTitle.text           = Lang.getText(LangTextType.B0314);
+            this._labelAvailability.text        = Lang.getText(LangTextType.B0406);
+            this._labelPlayerList.text          = Lang.getText(LangTextType.B0407);
+            this._btnAvailabilityMcw.label      = Lang.getText(LangTextType.B0137);
+            this._btnAvailabilityScw.label      = Lang.getText(LangTextType.B0138);
+            this._btnAvailabilityMrw.label      = Lang.getText(LangTextType.B0404);
+            this._btnAvailabilityCcw.label      = Lang.getText(LangTextType.B0619);
+            this._btnAvailabilitySrw.label      = Lang.getText(LangTextType.B0614);
+            this._btnBack.label                 = Lang.getText(LangTextType.B0146);
+            this._btnModifyRuleName.label       = Lang.getText(LangTextType.B0315);
+            this._btnModifyHasFog.label         = Lang.getText(LangTextType.B0020);
+            this._labelWarEventListTitle.text   = Lang.getText(LangTextType.B0461);
+            this._btnAddWarEvent.label          = Lang.getText(LangTextType.B0320);
+            this._btnModifyWeather.label        = Lang.getText(LangTextType.B0705);
         }
 
         private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
             const data  : DataForWarRuleNameRenderer[] = [];
             let index   = 0;
-            for (const rule of this._getOpenData().warRuleArray || []) {
+            for (const rule of this._getOpenData().mapRawData.warRuleArray || []) {
                 data.push({
                     index,
                     rule,
@@ -155,15 +293,22 @@ namespace TwnsMmWarRulePanel {
         private _updateComponentsForRule(): void {
             const rule = this._selectedRule;
             this._updateLabelRuleName(rule);
+            this._updateLabelWeather(rule);
             this._updateImgHasFog(rule);
             this._updateImgAvailabilityMcw(rule);
             this._updateImgAvailabilityScw(rule);
             this._updateImgAvailabilityMrw(rule);
-            this.updateListPlayerRule(rule);
+            this._updateImgAvailabilityCcw(rule);
+            this._updateImgAvailabilitySrw(rule);
+            this._updateListWarEvent(rule);
+            this._updateListPlayerRule(rule);
         }
 
         private _updateLabelRuleName(rule: IWarRule | null): void {
             this._labelRuleName.text = Lang.concatLanguageTextList(rule?.ruleNameArray) || Lang.getText(LangTextType.B0001);
+        }
+        private _updateLabelWeather(rule: IWarRule | null): void {
+            this._labelWeather.text = Lang.getWeatherName(rule ? WarRuleHelpers.getDefaultWeatherType(rule) : Types.WeatherType.Clear);
         }
         private _updateImgHasFog(rule: IWarRule | null): void {
             this._imgHasFog.visible = rule ? !!rule.ruleForGlobalParams?.hasFogByDefault : false;
@@ -177,7 +322,32 @@ namespace TwnsMmWarRulePanel {
         private _updateImgAvailabilityMrw(rule: IWarRule | null): void {
             this._imgAvailabilityMrw.visible = rule ? !!rule.ruleAvailability?.canMrw : false;
         }
-        public updateListPlayerRule(rule: IWarRule | null): void {
+        private _updateImgAvailabilityCcw(rule: IWarRule | null): void {
+            this._imgAvailabilityCcw.visible = !!rule?.ruleAvailability?.canCcw;
+        }
+        private _updateImgAvailabilitySrw(rule: IWarRule | null): void {
+            this._imgAvailabilitySrw.visible = !!rule?.ruleAvailability?.canSrw;
+        }
+        private _updateListWarEvent(warRule: IWarRule | null): void {
+            const list = this._listWarEvent;
+            if (warRule == null) {
+                list.clear();
+                return;
+            }
+
+            const dataArray         : DataForWarEventRenderer[] = [];
+            const warEventFullData  = this._getOpenData().mapRawData.warEventFullData;
+            for (const warEventId of warRule.warEventIdArray || []) {
+                dataArray.push({
+                    panel               : this,
+                    warEventFullData,
+                    warEventId,
+                    warRule,
+                });
+            }
+            list.bindData(dataArray);
+        }
+        public _updateListPlayerRule(rule: IWarRule | null): void {
             const listPlayer = this._listPlayer;
             if (rule == null) {
                 listPlayer.clear();
@@ -195,7 +365,7 @@ namespace TwnsMmWarRulePanel {
                         index,
                         playerRule,
                         warRule     : rule,
-                        isReviewing : true,
+                        isReviewing : false,
                         panel       : this,
                     });
                     ++index;
@@ -264,7 +434,7 @@ namespace TwnsMmWarRulePanel {
             return [
                 this._createDataPlayerIndex(warRule, playerRule, isReviewing),
                 this._createDataTeamIndex(warRule, playerRule, isReviewing),
-                this._createDataAvailableCoIdList(warRule, playerRule, isReviewing),
+                this._createDataBannedCoIdArray(warRule, playerRule, isReviewing),
                 this._createDataInitialFund(warRule, playerRule, isReviewing),
                 this._createDataIncomeMultiplier(warRule, playerRule, isReviewing),
                 this._createDataEnergyAddPctOnLoadCo(warRule, playerRule, isReviewing),
@@ -274,6 +444,10 @@ namespace TwnsMmWarRulePanel {
                 this._createDataVisionRangeModifier(warRule, playerRule, isReviewing),
                 this._createDataLuckLowerLimit(warRule, playerRule, isReviewing),
                 this._createDataLuckUpperLimit(warRule, playerRule, isReviewing),
+                this._createDataIsControlledByAiInCcw(warRule, playerRule, isReviewing),
+                this._createDataAiCoIdInCcw(warRule, playerRule, isReviewing),
+                this._createDataIsControlledByAiInSrw(warRule, playerRule, isReviewing),
+                this._createDataAiCoIdInSrw(warRule, playerRule, isReviewing),
             ];
         }
         private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -289,18 +463,36 @@ namespace TwnsMmWarRulePanel {
                 titleText               : Lang.getText(LangTextType.B0019),
                 infoText                : Lang.getPlayerTeamName(Helpers.getExisted(playerRule.teamIndex)) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        WarRuleHelpers.tickTeamIndex(warRule, Helpers.getExisted(playerRule.playerIndex));
+                        this._updateView();
+                    },
             };
         }
-        private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataBannedCoIdArray(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const bannedCoIdArray   = playerRule.bannedCoIdArray ?? [];
+            const configVersion     = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
             return {
                 titleText               : Lang.getText(LangTextType.B0403),
-                infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
+                infoText                : `${bannedCoIdArray.length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRuleAvailableCoPanel, {
-                        warRule,
-                        playerRule,
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
+                        configVersion,
+                        playerIndex         : Helpers.getExisted(playerRule.playerIndex),
+                        bannedCoIdArray,
+                        fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                        maxBanCount         : null,
+                        selfCoId            : null,
+                        callbackOnConfirm   : bannedCoIdSet => {
+                            if (!isReviewing) {
+                                playerRule.bannedCoIdArray = [...bannedCoIdSet];
+                                this._updateView();
+                            }
+                            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBanCoPanel);
+                        },
                     });
                 },
             };
@@ -311,7 +503,29 @@ namespace TwnsMmWarRulePanel {
                 titleText               : Lang.getText(LangTextType.B0178),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
+                        const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                            title           : Lang.getText(LangTextType.B0178),
+                            currentValue    : "" + currValue,
+                            maxChars        : 7,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                } else {
+                                    WarRuleHelpers.setInitialFund(warRule, Helpers.getExisted(playerRule.playerIndex), value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
             };
         }
         private _createDataIncomeMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -320,7 +534,29 @@ namespace TwnsMmWarRulePanel {
                 titleText               : Lang.getText(LangTextType.B0179),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
+                        const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                            title           : Lang.getText(LangTextType.B0179),
+                            currentValue    : "" + currValue,
+                            maxChars        : 5,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                } else {
+                                    WarRuleHelpers.setIncomeMultiplier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
             };
         }
         private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -329,7 +565,29 @@ namespace TwnsMmWarRulePanel {
                 titleText               : Lang.getText(LangTextType.B0180),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
+                        const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                            title           : Lang.getText(LangTextType.B0180),
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                } else {
+                                    WarRuleHelpers.setEnergyAddPctOnLoadCo(warRule, Helpers.getExisted(playerRule.playerIndex), value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
             };
         }
         private _createDataEnergyGrowthMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -338,7 +596,29 @@ namespace TwnsMmWarRulePanel {
                 titleText               : Lang.getText(LangTextType.B0181),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
+                        const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                            title           : Lang.getText(LangTextType.B0181),
+                            currentValue    : "" + currValue,
+                            maxChars        : 5,
+                            charRestrict    : "0-9",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                } else {
+                                    WarRuleHelpers.setEnergyGrowthMultiplier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
             };
         }
         private _createDataMoveRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -347,7 +627,29 @@ namespace TwnsMmWarRulePanel {
                 titleText               : Lang.getText(LangTextType.B0182),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
+                        const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                            title           : Lang.getText(LangTextType.B0182),
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                } else {
+                                    WarRuleHelpers.setMoveRangeModifier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
             };
         }
         private _createDataAttackPowerModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -356,7 +658,29 @@ namespace TwnsMmWarRulePanel {
                 titleText               : Lang.getText(LangTextType.B0183),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
+                        const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                            title           : Lang.getText(LangTextType.B0183),
+                            currentValue    : "" + currValue,
+                            maxChars        : 5,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                } else {
+                                    WarRuleHelpers.setAttackPowerModifier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
             };
         }
         private _createDataVisionRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -365,26 +689,285 @@ namespace TwnsMmWarRulePanel {
                 titleText               : Lang.getText(LangTextType.B0184),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
+                        const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                            title           : Lang.getText(LangTextType.B0184),
+                            currentValue    : "" + currValue,
+                            maxChars        : 3,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                } else {
+                                    WarRuleHelpers.setVisionRangeModifier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
             };
         }
         private _createDataLuckLowerLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = Helpers.getExisted(playerRule.luckLowerLimit);
+            const currValue     = Helpers.getExisted(playerRule.luckLowerLimit);
+            const playerIndex   = Helpers.getExisted(playerRule.playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0189),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        const minValue      = CommonConstants.WarRuleLuckMinLimit;
+                        const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                            title           : Lang.getText(LangTextType.B0189),
+                            currentValue    : "" + currValue,
+                            maxChars        : 4,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                } else {
+                                    const upperLimit = WarRuleHelpers.getLuckUpperLimit(warRule, playerIndex);
+                                    if (value <= upperLimit) {
+                                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
+                                    } else {
+                                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
+                                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, upperLimit);
+                                    }
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
             };
         }
         private _createDataLuckUpperLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = Helpers.getExisted(playerRule.luckUpperLimit);
+            const currValue     = Helpers.getExisted(playerRule.luckUpperLimit);
+            const playerIndex   = Helpers.getExisted(playerRule.playerIndex);
             return {
                 titleText               : Lang.getText(LangTextType.B0190),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
-                callbackOnTouchedTitle  : null,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        const minValue      = CommonConstants.WarRuleLuckMinLimit;
+                        const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                            title           : Lang.getText(LangTextType.B0190),
+                            currentValue    : "" + currValue,
+                            maxChars        : 4,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                } else {
+                                    const lowerLimit = WarRuleHelpers.getLuckLowerLimit(warRule, playerIndex);
+                                    if (value >= lowerLimit) {
+                                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
+                                    } else {
+                                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
+                                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
+                                    }
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
             };
+        }
+        private _createDataIsControlledByAiInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const isControlledByAi = playerRule.fixedCoIdInCcw != null;
+            return {
+                titleText               : Lang.getText(LangTextType.B0645),
+                infoText                : Lang.getText(isControlledByAi ? LangTextType.B0012 : LangTextType.B0013),
+                infoColor               : isControlledByAi ? 0x00FF00 : 0xFFFFFF,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        if (!warRule.ruleAvailability?.canCcw) {
+                            FloatText.show(Lang.getText(LangTextType.A0221));
+                            return;
+                        }
+
+                        const playerIndex = Helpers.getExisted(playerRule.playerIndex);
+                        if (isControlledByAi) {
+                            WarRuleHelpers.setFixedCoIdInCcw(warRule, playerIndex, null);
+                        } else {
+                            WarRuleHelpers.setFixedCoIdInCcw(warRule, playerIndex, CommonConstants.CoEmptyId);
+                        }
+                        this._updateView();
+                    },
+            };
+        }
+        private _createDataAiCoIdInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const coId          = playerRule.fixedCoIdInCcw;
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            return {
+                titleText               : Lang.getText(LangTextType.B0644),
+                infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),
+                infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        if (!warRule.ruleAvailability?.canCcw) {
+                            FloatText.show(Lang.getText(LangTextType.A0221));
+                            return;
+                        }
+
+                        const coIdArray: number[] = [];
+                        for (const cfg of ConfigManager.getEnabledCoArray(configVersion)) {
+                            coIdArray.push(cfg.coId);
+                        }
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                            currentCoId         : playerRule.fixedCoIdInCcw ?? null,
+                            availableCoIdArray  : coIdArray,
+                            callbackOnConfirm   : (newCoId: number) => {
+                                WarRuleHelpers.setFixedCoIdInCcw(warRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
+                                this._updateView();
+                            },
+                        });
+                    },
+            };
+        }
+        private _createDataIsControlledByAiInSrw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const isControlledByAi = playerRule.fixedCoIdInSrw != null;
+            return {
+                titleText               : Lang.getText(LangTextType.B0816),
+                infoText                : Lang.getText(isControlledByAi ? LangTextType.B0012 : LangTextType.B0013),
+                infoColor               : isControlledByAi ? 0x00FF00 : 0xFFFFFF,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        if (!warRule.ruleAvailability?.canSrw) {
+                            FloatText.show(Lang.getText(LangTextType.A0276));
+                            return;
+                        }
+
+                        const playerIndex = Helpers.getExisted(playerRule.playerIndex);
+                        if (isControlledByAi) {
+                            WarRuleHelpers.setFixedCoIdInSrw(warRule, playerIndex, null);
+                        } else {
+                            WarRuleHelpers.setFixedCoIdInSrw(warRule, playerIndex, CommonConstants.CoEmptyId);
+                        }
+                        this._updateView();
+                    },
+            };
+        }
+        private _createDataAiCoIdInSrw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const coId          = playerRule.fixedCoIdInSrw;
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            return {
+                titleText               : Lang.getText(LangTextType.B0815),
+                infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),
+                infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        if (!warRule.ruleAvailability?.canSrw) {
+                            FloatText.show(Lang.getText(LangTextType.A0276));
+                            return;
+                        }
+
+                        const coIdArray: number[] = [];
+                        for (const cfg of ConfigManager.getEnabledCoArray(configVersion)) {
+                            coIdArray.push(cfg.coId);
+                        }
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                            currentCoId         : playerRule.fixedCoIdInSrw ?? null,
+                            availableCoIdArray  : coIdArray,
+                            callbackOnConfirm   : (newCoId: number) => {
+                                WarRuleHelpers.setFixedCoIdInSrw(warRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
+                                this._updateView();
+                            },
+                        });
+                    },
+            };
+        }
+    }
+
+    type DataForWarEventRenderer = {
+        panel               : MmWarRulePanel;
+        warEventFullData    : Types.Undefinable<ProtoTypes.Map.IWarEventFullData>;
+        warEventId          : number;
+        warRule             : IWarRule;
+    };
+    class WarEventRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventRenderer> {
+        private readonly _labelWarEventIdTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelWarEventId!      : TwnsUiLabel.UiLabel;
+        private readonly _btnUp!                : TwnsUiButton.UiButton;
+        private readonly _btnDown!              : TwnsUiButton.UiButton;
+        private readonly _btnDelete!            : TwnsUiButton.UiButton;
+        private readonly _labelWarEventName!    : TwnsUiLabel.UiLabel;
+
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnUp,      callback: this._onTouchedBtnUp },
+                { ui: this._btnDown,    callback: this._onTouchedBtnDown },
+                { ui: this._btnDelete,  callback: this._onTouchedBtnDelete },
+            ]);
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ]);
+
+            this._updateComponentsForLanguage();
+        }
+
+        private _onTouchedBtnUp(): void {
+            const data = this.data;
+            if (data) {
+                WarRuleHelpers.moveWarEventId(data.warRule, data.warEventId, -1);
+                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+            }
+        }
+        private _onTouchedBtnDown(): void {
+            const data = this.data;
+            if (data) {
+                WarRuleHelpers.moveWarEventId(data.warRule, data.warEventId, 1);
+                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+            }
+        }
+        private _onTouchedBtnDelete(): void {
+            const data = this.data;
+            if (data) {
+                WarRuleHelpers.deleteWarEventId(data.warRule, data.warEventId);
+                Notify.dispatch(NotifyType.MeWarEventIdArrayChanged);
+            }
+        }
+        private _onNotifyLanguageChanged(): void {
+            this._updateComponentsForLanguage();
+        }
+
+        protected _onDataChanged(): void {
+            const data                  = this._getData();
+            this._labelWarEventId.text  = `${data.warEventId}`;
+            this._updateLabelWarEventName();
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelWarEventIdTitle.text = `${Lang.getText(LangTextType.B0462)}:`;
+            this._btnUp.label               = Lang.getText(LangTextType.B0463);
+            this._btnDown.label             = Lang.getText(LangTextType.B0464);
+            this._btnDelete.label           = Lang.getText(LangTextType.B0220);
+            this._updateLabelWarEventName();
+        }
+        private _updateLabelWarEventName(): void {
+            const data                      = this._getData();
+            this._labelWarEventName.text    = Lang.getLanguageText({ textArray: data.warEventFullData?.eventArray?.find(v => v.eventId === data.warEventId)?.eventNameArray }) ?? CommonConstants.ErrorTextForUndefined;
         }
     }
 
@@ -394,7 +977,6 @@ namespace TwnsMmWarRulePanel {
         infoColor               : number;
         callbackOnTouchedTitle  : (() => void) | null;
     };
-
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
         private readonly _btnTitle!     : TwnsUiButton.UiButton;
         private readonly _labelValue!   : TwnsUiLabel.UiLabel;

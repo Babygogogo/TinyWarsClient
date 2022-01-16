@@ -41,6 +41,8 @@ namespace TwnsUiMapInfo {
         private readonly _groupMapInfo!             : eui.Group;
         private readonly _labelMapName!             : TwnsUiLabel.UiLabel;
         private readonly _labelDesigner!            : TwnsUiLabel.UiLabel;
+        private readonly _labelMapIdTitle!          : TwnsUiLabel.UiLabel;
+        private readonly _labelMapId!               : TwnsUiLabel.UiLabel;
         private readonly _labelRatingTitle!         : TwnsUiLabel.UiLabel;
         private readonly _labelRating!              : TwnsUiLabel.UiLabel;
         private readonly _labelRaters!              : TwnsUiLabel.UiLabel;
@@ -124,6 +126,7 @@ namespace TwnsUiMapInfo {
             this._labelPlayedTimesTitle.text    = Lang.getText(LangTextType.B0565);
             this._labelMapSizeTitle.text        = Lang.getText(LangTextType.B0300);
             this._labelRatingTitle.text         = Lang.getText(LangTextType.B0364);
+            this._labelMapIdTitle.text          = Lang.getText(LangTextType.B0821);
             this._labelMyRatingTitle.text       = Lang.getText(LangTextType.B0363);
             this._updateLabelDesigner();
         }
@@ -133,6 +136,7 @@ namespace TwnsUiMapInfo {
 
             const data              = this._data;
             const labelMapName      = this._labelMapName;
+            const labelMapId        = this._labelMapId;
             const labelPlayersCount = this._labelPlayersCount;
             const labelRating       = this._labelRating;
             const labelRaters       = this._labelRaters;
@@ -143,6 +147,7 @@ namespace TwnsUiMapInfo {
 
             if (data == null) {
                 labelMapName.text       = `--`;
+                labelMapId.text         = `--`;
                 labelPlayersCount.text  = `--`;
                 labelRating.text        = `--`;
                 labelRaters.text        = `(--)`;
@@ -161,6 +166,7 @@ namespace TwnsUiMapInfo {
                 const rating            = await WarMapModel.getAverageRating(mapId);
                 const myRating          = UserModel.getMapRating(mapId);
                 labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
+                labelMapId.text         = `${mapId}`;
                 labelPlayersCount.text  = `${mapRawData.playersCountUnneutral}`;
                 labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
                 labelRaters.text        = `(${await WarMapModel.getTotalRatersCount(mapId)})`;
@@ -178,6 +184,7 @@ namespace TwnsUiMapInfo {
                 const tileMapData       = Helpers.getExisted(warData.field?.tileMap);
                 const mapSize           = WarCommonHelpers.getMapSize(tileMapData);
                 labelMapName.text       = `--`;
+                labelMapId.text         = `--`;
                 labelPlayersCount.text  = `${Helpers.getExisted(warData.playerManager?.players).length - 1}`;
                 labelRating.text        = `--`;
                 labelRaters.text        = `(--)`;

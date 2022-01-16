@@ -25,6 +25,7 @@ namespace WarMapProxy {
             { msgCode: NetMessageCodes.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
             { msgCode: NetMessageCodes.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
             { msgCode: NetMessageCodes.MsgMmSetMapName,                 callback: _onMsgMmSetMapName },
+            { msgCode: NetMessageCodes.MsgMmAddWarRule,                 callback: _onMsgMmAddWarRule },
         ], null);
     }
 
@@ -174,6 +175,22 @@ namespace WarMapProxy {
         if (!data.errorCode) {
             await WarMapModel.updateOnSetMapName(data);
             Notify.dispatch(NotifyType.MsgMmSetMapName, data);
+        }
+    }
+
+    export function reqMmAddWarRule(mapId: number, warRule: ProtoTypes.WarRule.IWarRule): void {
+        NetManager.send({
+            MsgMmAddWarRule: { c: {
+                mapId,
+                warRule,
+            } },
+        });
+    }
+    async function _onMsgMmAddWarRule(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgMmAddWarRule.IS;
+        if (!data.errorCode) {
+            await WarMapModel.updateOnAddWarRule(data);
+            Notify.dispatch(NotifyType.MsgMmAddWarRule, data);
         }
     }
 }

@@ -131,7 +131,6 @@ namespace TwnsNotifyType {
         MeDrawerModeChanged,
         MeTileChanged,
         MeMapNameChanged,
-        MeWarRuleNameChanged,
         MeWarEventIdArrayChanged,
         MeBannedCoIdArrayChanged,
 
@@ -189,6 +188,7 @@ namespace TwnsNotifyType {
         MsgMeGetDataList,
         MsgMeGetData,
         MsgMeSubmitMap,
+        MsgMmAddWarRule,
 
         MsgMmSetMapAvailability,
         MsgMmReloadAllMaps,

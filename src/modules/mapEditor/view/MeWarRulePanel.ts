@@ -86,7 +86,6 @@ namespace TwnsMeWarRulePanel {
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MeWarRuleNameChanged,       callback: this._onNotifyMeWarRuleNameChanged },
                 { type: NotifyType.MeWarEventIdArrayChanged,   callback: this._onNotifyMeWarEventIdArrayChanged },
             ]);
             this._setUiListenerArray([
@@ -112,7 +111,6 @@ namespace TwnsMeWarRulePanel {
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listWarEvent.setItemRenderer(WarEventRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
@@ -155,10 +153,6 @@ namespace TwnsMeWarRulePanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
-        }
-
-        private _onNotifyMeWarRuleNameChanged(): void {
-            this._updateLabelRuleName(this._selectedRule);
         }
 
         private _onNotifyMeWarEventIdArrayChanged(): void {
@@ -224,7 +218,12 @@ namespace TwnsMeWarRulePanel {
         private _onTouchedBtnModifyRuleName(): void {
             const rule = this._selectedRule;
             if ((rule) && (!this._getWar().getIsReviewingMap())) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeModifyRuleNamePanel, { ruleId: Helpers.getExisted(rule.ruleId) });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonModifyWarRuleNamePanel, {
+                    rule,
+                    callback    : () => {
+                        this._updateLabelRuleName(rule);
+                    }
+                });
             }
         }
 
@@ -293,6 +292,7 @@ namespace TwnsMeWarRulePanel {
             if (warRule) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.MeAddWarEventToRulePanel, {
                     warRule,
+                    warEventArray   : this._getWar().getWarEventManager().getWarEventFullData()?.eventArray ?? [],
                 });
             }
         }
@@ -850,7 +850,7 @@ namespace TwnsMeWarRulePanel {
                                 }
                             },
                         });
-                },
+                    },
             };
         }
         private _createDataMoveRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {

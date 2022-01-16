@@ -7,6 +7,7 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import MeModel              from "./MeModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MeProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
@@ -14,9 +15,9 @@ namespace MeProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgMeGetMapDataList,    callback: _onMsgMeGetMapDataList    },
-            { msgCode: NetMessageCodes.MsgMeGetMapData,        callback: _onMsgMeGetMapData        },
-            { msgCode: NetMessageCodes.MsgMeSubmitMap,         callback: _onMsgMeSubmitMap         },
+            { msgCode: NetMessageCodes.MsgMeGetMapDataList,     callback: _onMsgMeGetMapDataList },
+            { msgCode: NetMessageCodes.MsgMeGetMapData,         callback: _onMsgMeGetMapData },
+            { msgCode: NetMessageCodes.MsgMeSubmitMap,          callback: _onMsgMeSubmitMap },
         ], null);
     }
 
