@@ -81,8 +81,8 @@ namespace WarRobot {
             [UnitType.Infantry]     : 500,
             [UnitType.Mech]         : -200,
             [UnitType.Bike]         : 520,
-            [UnitType.Recon]        : -100,
-            [UnitType.Flare]        : -100,
+            [UnitType.Recon]        : 100,
+            [UnitType.Flare]        : 100,
             [UnitType.AntiAir]      : 300,
             [UnitType.Tank]         : 650,
             [UnitType.MediumTank]   : 600,
@@ -1542,12 +1542,26 @@ namespace WarRobot {
     }): Promise<number | null> {
         await Helpers.checkAndCallLater();
 
-        const { war, playerIndexInTurn }    = commonParams;
-        const tileMap                       = war.getTileMap();
-        const tileType                      = tileMap.getTile(producingGridIndex).getType();
-        const configVersion                 = war.getConfigVersion();
-        const player                        = war.getPlayerManager().getPlayer(playerIndexInTurn);
-        const producingUnit                 = new BwUnit();
+        const war = commonParams.war;
+        if (((!_IS_NEED_VISIBILITY) || (!war.getFogMap().checkHasFogCurrently()))               &&
+            ((producingUnitType === UnitType.Flare) || (producingUnitType === UnitType.Recon))
+        ) {
+            return null;
+        }
+
+        if ((producingUnitType === UnitType.TransportCopter)    ||
+            (producingUnitType === UnitType.Rig)                ||
+            (producingUnitType === UnitType.Lander)
+        ) {
+            return null;
+        }
+
+        const playerIndexInTurn = commonParams.playerIndexInTurn;
+        const tileMap           = war.getTileMap();
+        const tileType          = tileMap.getTile(producingGridIndex).getType();
+        const configVersion     = war.getConfigVersion();
+        const player            = war.getPlayerManager().getPlayer(playerIndexInTurn);
+        const producingUnit     = new BwUnit();
         producingUnit.init({
             unitId      : 0,
             unitType    : producingUnitType,
@@ -1570,14 +1584,7 @@ namespace WarRobot {
             }
         }
 
-        let score = Helpers.getExisted(_PRODUCTION_CANDIDATES[tileType][producingUnitType], ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_00);
-        if ((_IS_NEED_VISIBILITY)                                           &&
-            (war.getFogMap().checkHasFogCurrently())                        &&
-            ((producingUnitType === UnitType.Flare) || (producingUnitType === UnitType.Recon))
-        ) {
-            score += 200;
-        }
-
+        let score                           = Helpers.getExisted(_PRODUCTION_CANDIDATES[tileType][producingUnitType], ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_00);
         const producingTeamIndex            = producingUnit.getTeamIndex();
         const producingUnitCurrentHp        = producingUnit.getCurrentHp();
         const producingUnitMaxAttackRange   = producingUnit.getFinalMaxAttackRange();
@@ -1650,7 +1657,7 @@ namespace WarRobot {
         }
 
         if (!canAttack) {
-            score += -999999;
+            return null;
         }
         return score;
     }
