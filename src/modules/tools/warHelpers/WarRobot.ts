@@ -89,7 +89,7 @@ namespace WarRobot {
             [UnitType.WarTank]      : 550,
             [UnitType.Artillery]    : 400,
             [UnitType.AntiTank]     : 350,
-            [UnitType.Rockets]      : 300,
+            [UnitType.Rockets]      : 600,
             [UnitType.Missiles]     : -9999,
             [UnitType.Rig]          : -9999,
         },
@@ -939,19 +939,19 @@ namespace WarRobot {
             return 0;
         }
 
-        const unitValueRatio    = Math.max(1, commonParams.unitValueRatio);
-        const currentHp         = unit.getCurrentHp();
-        const directDamage      = data.directTotal;
-        const indirectDamage    = data.indirectTotal;
-        const canBeDestroyed    = directDamage + indirectDamage >= currentHp;
-        let score               = -(
+        const scalerForUnitValueRatio   = Math.pow(1 / Math.max(1, commonParams.unitValueRatio), 2);
+        const currentHp                 = unit.getCurrentHp();
+        const directDamage              = data.directTotal;
+        const indirectDamage            = data.indirectTotal;
+        const canBeDestroyed            = directDamage + indirectDamage >= currentHp;
+        let score                       = -(
             (data.max >= 15 ? Math.min(currentHp, directDamage + indirectDamage * 3) : 0) +
             (canBeDestroyed ? 30 : 0)
-        ) * unit.getProductionCfgCost() / 1000 / unitValueRatio * (unit.getHasLoadedCo() ? 2 : 1);
+        ) * unit.getProductionCfgCost() / 1000 * scalerForUnitValueRatio * (unit.getHasLoadedCo() ? 2 : 1);
 
         if (canBeDestroyed) {
             for (const loadedUnit of commonParams.war.getUnitMap().getUnitsLoadedByLoader(unit, true)) {
-                score += -(loadedUnit.getCurrentHp() + 30) * loadedUnit.getProductionCfgCost() / 1000 / unitValueRatio * (loadedUnit.getHasLoadedCo() ? 2 : 1);
+                score += -(loadedUnit.getCurrentHp() + 30) * loadedUnit.getProductionCfgCost() / 1000 * scalerForUnitValueRatio * (loadedUnit.getHasLoadedCo() ? 2 : 1);
             }
         }
 
@@ -1191,13 +1191,13 @@ namespace WarRobot {
         if (tile.checkCanSupplyUnit(unit)) {
             {
                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
-                if (maxAmmo) {
+                if ((maxAmmo) && (unit.checkIsPrimaryWeaponAmmoInShort())) {
                     const currentAmmo   = Helpers.getExisted(unit.getPrimaryWeaponCurrentAmmo(), ClientErrorCode.SpwRobot_GetScoreForPosition_00);
                     totalScore          += ((maxAmmo - currentAmmo) / maxAmmo * 10 + (currentAmmo <= 0 ? 40 : 0)) * passiveScaler;
                 }
             }
 
-            {
+            if (unit.checkIsFuelInShort()) {
                 const maxFuel   = unit.getMaxFuel();
                 totalScore      += (maxFuel - unit.getCurrentFuel()) / maxFuel * 10 * (unit.checkIsDestroyedOnOutOfFuel() ? 5 : 1) * passiveScaler;
             }
@@ -1350,7 +1350,7 @@ namespace WarRobot {
         const tileMap                   = war.getTileMap();
         const unitHpDict                = new Map<BwUnit, number>();
         const tileHpDict                = new Map<BwTile, number>();
-        const scalerForSelfDamage       = 1 / Math.max(1, unitValueRatio);
+        const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 2);
         const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 2);
 
         let totalScore = 0;

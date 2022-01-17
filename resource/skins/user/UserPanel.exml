@@ -18,8 +18,7 @@
         </e:Group>
         <e:Group y="50" left="30">
             <e:Group x="0" y="0">
-                <TwnsUiImage:UiImage id="_imgAvatar" x="10" y="10" scale9Grid="1,1,2,2" source="userAvatar0001"
-                                     scaleX="0.44" scaleY="0.44" />
+                <TwnsUiImage:UiImage id="_imgAvatar" x="10" y="10" source="userAvatar0001" scaleX="0.44" scaleY="0.44" />
                 <e:Group x="90" y="6">
                     <TwnsUiButton:UiButton id="_btnChat" label="聊天" skinName="Skins.Component.Button.ButtonYellow001"
                                            width="100" left="0" top="0" />
