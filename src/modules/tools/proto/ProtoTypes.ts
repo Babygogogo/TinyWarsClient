@@ -8952,6 +8952,114 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WeaSetTileState. */
+    interface IWeaSetTileState {
+
+        /** WeaSetTileState conLocationIdArray */
+        conLocationIdArray?: (number[]|null);
+
+        /** WeaSetTileState conGridIndexArray */
+        conGridIndexArray?: (Structure.IGridIndex[]|null);
+
+        /** WeaSetTileState actTileData */
+        actTileData?: (WarSerialization.ISerialTile|null);
+
+        /** WeaSetTileState actDestroyUnit */
+        actDestroyUnit?: (boolean|null);
+    }
+
+    /** Represents a WeaSetTileState. */
+    class WeaSetTileState implements IWeaSetTileState {
+
+        /**
+         * Constructs a new WeaSetTileState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetTileState);
+
+        /** WeaSetTileState conLocationIdArray. */
+        public conLocationIdArray: number[];
+
+        /** WeaSetTileState conGridIndexArray. */
+        public conGridIndexArray: Structure.IGridIndex[];
+
+        /** WeaSetTileState actTileData. */
+        public actTileData?: (WarSerialization.ISerialTile|null);
+
+        /** WeaSetTileState actDestroyUnit. */
+        public actDestroyUnit: boolean;
+
+        /**
+         * Creates a new WeaSetTileState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetTileState instance
+         */
+        public static create(properties?: WarEvent.IWeaSetTileState): WarEvent.WeaSetTileState;
+
+        /**
+         * Encodes the specified WeaSetTileState message. Does not implicitly {@link WarEvent.WeaSetTileState.verify|verify} messages.
+         * @param message WeaSetTileState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetTileState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetTileState message, length delimited. Does not implicitly {@link WarEvent.WeaSetTileState.verify|verify} messages.
+         * @param message WeaSetTileState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetTileState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetTileState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetTileState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetTileState;
+
+        /**
+         * Decodes a WeaSetTileState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetTileState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetTileState;
+
+        /**
+         * Verifies a WeaSetTileState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetTileState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetTileState
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetTileState;
+
+        /**
+         * Creates a plain object from a WeaSetTileState message. Also converts values to other types if specified.
+         * @param message WeaSetTileState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetTileState, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetTileState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarEventAction. */
     interface IWarEventAction {
 
@@ -9002,6 +9110,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetUnitState */
         WeaSetUnitState?: (WarEvent.IWeaSetUnitState|null);
+
+        /** WarEventAction WeaSetTileState */
+        WeaSetTileState?: (WarEvent.IWeaSetTileState|null);
     }
 
     /** Represents a WarEventAction. */
@@ -9060,6 +9171,9 @@ export declare namespace WarEvent {
 
         /** WarEventAction WeaSetUnitState. */
         public WeaSetUnitState?: (WarEvent.IWeaSetUnitState|null);
+
+        /** WarEventAction WeaSetTileState. */
+        public WeaSetTileState?: (WarEvent.IWeaSetTileState|null);
 
         /**
          * Creates a new WarEventAction instance using the specified properties.

@@ -66,6 +66,20 @@ namespace TwnsBwTile {
             this.flushDataToView();
         }
 
+        public getErrorCodeForTileData(data: ISerialTile, playersCountUnneutral: number): ClientErrorCode {
+            const playerIndex = data.playerIndex;
+            if ((playerIndex != null) && (playerIndex > playersCountUnneutral)) {
+                return ClientErrorCode.BwTile_GetErrorCodeForTileData_00;
+            }
+
+            try {
+                this.init(data, Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+            } catch (e) {
+                return (e as Types.CustomError).errorCode ?? ClientErrorCode.BwTile_GetErrorCodeForTileData_01;
+            }
+
+            return ClientErrorCode.NoError;
+        }
         public deserialize(data: ISerialTile, configVersion: string): void {
             const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.BwTile_Deserialize_00);
             const gridX     = gridIndex.x;
@@ -230,7 +244,7 @@ namespace TwnsBwTile {
             const decoratorShapeId = this.getDecoratorShapeId();
             (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
 
-            const locationFlags = this._getLocationFlags();
+            const locationFlags = this.getLocationFlags();
             (locationFlags !== 0) && (data.locationFlags = locationFlags);
 
             return data;
@@ -271,7 +285,7 @@ namespace TwnsBwTile {
                 const decoratorShapeId = this.getDecoratorShapeId();
                 (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
 
-                const locationFlags = this._getLocationFlags();
+                const locationFlags = this.getLocationFlags();
                 (locationFlags !== 0) && (data.locationFlags = locationFlags);
 
                 return data;
@@ -461,32 +475,41 @@ namespace TwnsBwTile {
         private _setLocationFlags(flags: number): void {
             this._locationFlags = flags;
         }
-        private _getLocationFlags(): number {
+        public getLocationFlags(): number {
             return Helpers.getExisted(this._locationFlags, ClientErrorCode.BwTile_GetLocationFlags_00);
         }
 
         /** @param locationId range: [1-30] */
         public getHasLocationFlag(locationId: number): boolean {
-            return !!((this._getLocationFlags() >> (locationId - 1)) & 1);
+            return !!((this.getLocationFlags() >> (locationId - 1)) & 1);
         }
         /** @param locationId range: [1-30] */
         public setHasLocationFlag(locationId: number, hasFlag: boolean): void {
             if (hasFlag) {
-                this._setLocationFlags(this._getLocationFlags() | (1 << (locationId - 1)));
+                this._setLocationFlags(this.getLocationFlags() | (1 << (locationId - 1)));
             } else {
-                this._setLocationFlags(this._getLocationFlags() & ~(1 << (locationId - 1)));
+                this._setLocationFlags(this.getLocationFlags() & ~(1 << (locationId - 1)));
             }
             Notify.dispatch(TwnsNotifyType.NotifyType.BwTileLocationFlagSet, this as NotifyData.BwTileLocationFlagSet);
         }
         public setHasLocationFlagArray(locationIdArray: number[], hasFlag: boolean): void {
             for (const locationId of locationIdArray) {
                 if (hasFlag) {
-                    this._setLocationFlags(this._getLocationFlags() | (1 << (locationId - 1)));
+                    this._setLocationFlags(this.getLocationFlags() | (1 << (locationId - 1)));
                 } else {
-                    this._setLocationFlags(this._getLocationFlags() & ~(1 << (locationId - 1)));
+                    this._setLocationFlags(this.getLocationFlags() & ~(1 << (locationId - 1)));
                 }
             }
             Notify.dispatch(TwnsNotifyType.NotifyType.BwTileLocationFlagSet, this as NotifyData.BwTileLocationFlagSet);
+        }
+        public getHasLocationFlagArray(): number[] {
+            const locationIdArray: number[] = [];
+            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+                if (this.getHasLocationFlag(locationId)) {
+                    locationIdArray.push(locationId);
+                }
+            }
+            return locationIdArray;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -560,6 +583,7 @@ namespace TwnsBwTile {
                 objectShapeId   : objectType === this.getObjectType() ? this.getObjectShapeId() : null,
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
+                locationFlags   : this.getLocationFlags(),
             }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }
@@ -574,6 +598,7 @@ namespace TwnsBwTile {
                 objectShapeId   : getNewObjectShapeIdOnObjectDestroyed(this.getObjectType(), this.getObjectShapeId()),
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
+                locationFlags   : this.getLocationFlags(),
             }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }
@@ -592,6 +617,7 @@ namespace TwnsBwTile {
                 objectShapeId   : null,
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
+                locationFlags   : this.getLocationFlags(),
             }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }

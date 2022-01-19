@@ -235,6 +235,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithExtraData(action.WeaSetPlayerState, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithExtraData(action.WeaSetUnitState, isFastExecute); }
+            else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithExtraData(action.WeaSetTileState, isFastExecute); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -258,6 +259,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithoutExtraData(action.WeaSetPlayerState, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithoutExtraData(action.WeaSetUnitState, isFastExecute); }
+            else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithoutExtraData(action.WeaSetTileState, isFastExecute); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -868,6 +870,56 @@ namespace TwnsBwWarEventManager {
                         if (!isFastExecute) {
                             unit.updateView();
                         }
+                    }
+                }
+            }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetTileStateWithExtraData(action: WarEvent.IWeaSetTileState, isFastExecute: boolean): Promise<void> {
+            // nothing to do
+        }
+        private async _callActionSetTileStateWithoutExtraData(action: WarEvent.IWeaSetTileState, isFastExecute: boolean): Promise<void> {
+            const war               = this._getWar();
+            const configVersion     = war.getConfigVersion();
+            const actTileData       = Helpers.getExisted(action.actTileData, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00);
+            const actBaseType       = Helpers.getExisted(actTileData.baseType, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_01);
+            const actObjectType     = Helpers.getExisted(actTileData.objectType, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_02);
+            const actDestroyUnit    = action.actDestroyUnit;
+            const isAttackable      = ConfigManager.getTileTemplateCfg(configVersion, actBaseType, actObjectType).maxHp != null;
+            const locationIdArray   = action.conLocationIdArray ?? [];
+            const gridIndexArray    = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_03)) ?? [];
+            const unitMap           = war.getUnitMap();
+            const tileMap           = war.getTileMap();
+            const mapSize           = tileMap.getMapSize();
+            const mapWidth          = mapSize.width;
+            const mapHeight         = mapSize.height;
+            for (let x = 0; x < mapWidth; ++x) {
+                for (let y = 0; y < mapHeight; ++y) {
+                    const gridIndex : Types.GridIndex = { x, y };
+                    const tile      = tileMap.getTile(gridIndex);
+                    if (((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
+                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))
+                    ) {
+                        continue;
+                    }
+
+                    if (unitMap.getUnitOnMap(gridIndex)) {
+                        if (actDestroyUnit) {
+                            WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
+                        } else if (isAttackable) {
+                            continue;
+                        }
+                    }
+
+                    const tileData          = Helpers.deepClone(actTileData);
+                    tileData.locationFlags  = tile.getLocationFlags();
+                    tileData.gridIndex      = gridIndex;
+                    tile.init(tileData, configVersion);
+                    tile.startRunning(war);
+
+                    if (!isFastExecute) {
+                        tile.flushDataToView();
                     }
                 }
             }

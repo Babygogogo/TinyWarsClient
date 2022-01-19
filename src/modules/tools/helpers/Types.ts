@@ -771,6 +771,8 @@ namespace Types {
         SetPlayerCoEnergy,
 
         SetUnitState,
+
+        SetTileState,
     }
 
     // eslint-disable-next-line no-shadow

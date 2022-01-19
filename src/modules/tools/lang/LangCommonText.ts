@@ -981,7 +981,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0233]: [
             `已有的地形装饰物会被覆盖。您确定要自动填充吗？`,
-            `The current tile decorators will be overwritten. Are you sure to auto fill?`,
+            `The current tile decorations will be overwritten. Are you sure to auto fill?`,
         ],
         [LangTextType.A0234]: [
             `导出失败，请使用chrome浏览器重试`,
@@ -1220,6 +1220,10 @@ namespace TwnsLangCommonText {
         [LangTextType.A0283]: [
             `已成功新增规则`,
             `The rule is added successfully.`,
+        ],
+        [LangTextType.A0284]: [
+            `摧毁地块上的部队。`,
+            `Destroy units on the tiles.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2419,11 +2423,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0302]: [
             `地形基底`,
-            `Tile Bases`,
+            `Tile Base`,
         ],
         [LangTextType.B0303]: [
             `地形物体`,
-            `Tile Objects`,
+            `Tile Object`,
         ],
         [LangTextType.B0304]: [
             `部队`,
@@ -3855,11 +3859,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0661]: [
             `删除地形装饰物`,
-            `Del Tile Decorator`,
+            `Del Tile Decoration`,
         ],
         [LangTextType.B0662]: [
             `绘制地形装饰物`,
-            `Draw Tile Decorator`,
+            `Draw Tile Decoration`,
         ],
         [LangTextType.B0663]: [
             `陆地边角`,
@@ -3867,7 +3871,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0664]: [
             `地形装饰物`,
-            `Tile Decorator`,
+            `Tile Decoration`,
         ],
         [LangTextType.B0665]: [
             `跳过`,
@@ -4508,6 +4512,14 @@ namespace TwnsLangCommonText {
         [LangTextType.B0824]: [
             `提交`,
             `Submit`,
+        ],
+        [LangTextType.B0825]: [
+            `设置地形属性`,
+            `Set Terrains' State`,
+        ],
+        [LangTextType.B0826]: [
+            `摧毁部队`,
+            `Destroy Units`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5307,6 +5319,10 @@ namespace TwnsLangCommonText {
         [LangTextType.F0127]: [
             `恭喜您获得本局的胜利！本次得分：%s\n\n即将回到大厅…`,
             `You win! Score: %s.`,
+        ],
+        [LangTextType.F0128]: [
+            `找到坐标为 %s%s 的所有地块，并修改其属性。`,
+            `Get all terrains that the coordinate is %s%s, then modify their states.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

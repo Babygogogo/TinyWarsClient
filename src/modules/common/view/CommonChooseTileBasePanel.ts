@@ -20,25 +20,17 @@
 // import TwnsMeTileSimpleView     from "./MeTileSimpleView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeChooseTileBasePanel {
+namespace TwnsCommonChooseTileBasePanel {
     import DataForDrawTileBase  = TwnsMeDrawer.DataForDrawTileBase;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
-    const MAX_RECENT_COUNT = 10;
-
-    export type OpenData = void;
-    export class MeChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenData = {
+        callback: (baseType: Types.TileBaseType, shapeId: number) => void;
+    };
+    export class CommonChooseTileBasePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listCategory!     : TwnsUiScrollList.UiScrollList<DataForCategoryRenderer>;
-        private readonly _listRecent!       : TwnsUiScrollList.UiScrollList<DataForTileBaseRenderer>;
-        private readonly _labelRecentTitle! : TwnsUiLabel.UiLabel;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
-        private readonly _groupFill!        : eui.Group;
-        private readonly _imgFill!          : TwnsUiImage.UiImage;
-        private readonly _labelFill!        : TwnsUiLabel.UiLabel;
-
-        private _needFill           = false;
-        private _dataListForRecent  : DataForTileBaseRenderer[] = [];
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -46,50 +38,19 @@ namespace TwnsMeChooseTileBasePanel {
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
-                { ui: this._groupFill,  callback: this._onTouchedGroupFill },
             ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
 
             this._listCategory.setItemRenderer(CategoryRenderer);
-            this._listRecent.setItemRenderer(TileBaseRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._needFill = false;
-            this._updateImgFill();
-            this._updateListTileObject();
-            this._updateListRecent();
+            this._updateListTileBase();
         }
         protected _onClosing(): void {
             // nothing to do
-        }
-
-        public getNeedFill(): boolean {
-            return this._needFill;
-        }
-
-        public updateOnChooseTileBase(data: DataForDrawTileBase): void {
-            const dataList      = this._dataListForRecent;
-            const filteredList  = dataList.filter(v => {
-                const oldData = v.dataForDrawTileBase;
-                return (oldData.baseType != data.baseType)
-                    || (oldData.shapeId != data.shapeId);
-            });
-            dataList.length     = 0;
-            dataList[0]         = {
-                dataForDrawTileBase : data,
-                panel               : this,
-            };
-            for (const v of filteredList) {
-                if (dataList.length < MAX_RECENT_COUNT) {
-                    dataList.push(v);
-                } else {
-                    break;
-                }
-            }
-            this._updateListRecent();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -99,22 +60,11 @@ namespace TwnsMeChooseTileBasePanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedGroupFill(): void {
-            this._needFill = !this._needFill;
-            this._updateImgFill();
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
-            this._labelFill.text        = Lang.getText(LangTextType.B0294);
-            this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
-        }
-
-        private _updateImgFill(): void {
-            this._imgFill.visible = this._needFill;
         }
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
@@ -137,31 +87,27 @@ namespace TwnsMeChooseTileBasePanel {
                 }
             }
 
-            const dataList: DataForCategoryRenderer[] = [];
+            const callback  = this._getOpenData().callback;
+            const dataArray : DataForCategoryRenderer[] = [];
             for (const [, dataListForDrawTileBase] of typeMap) {
-                dataList.push({
+                dataArray.push({
                     dataListForDrawTileBase,
-                    panel                   : this,
+                    callback,
                 });
             }
 
-            return dataList;
+            return dataArray;
         }
 
-        private _updateListTileObject(): void {
+        private _updateListTileBase(): void {
             this._listCategory.bindData(this._createDataForListCategory());
             this._listCategory.scrollVerticalTo(0);
-        }
-
-        private _updateListRecent(): void {
-            this._listRecent.bindData(this._dataListForRecent);
-            this._listRecent.scrollHorizontalTo(0);
         }
     }
 
     type DataForCategoryRenderer = {
         dataListForDrawTileBase : DataForDrawTileBase[];
-        panel                   : MeChooseTileBasePanel;
+        callback                : (baseType: Types.TileBaseType, shapeId: number) => void;
     };
     class CategoryRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForCategoryRenderer> {
         private readonly _labelCategory!    : TwnsUiLabel.UiLabel;
@@ -170,6 +116,7 @@ namespace TwnsMeChooseTileBasePanel {
         protected _onOpened(): void {
             this._listTileBase.setItemRenderer(TileBaseRenderer);
             this._listTileBase.setScrollPolicyH(eui.ScrollPolicy.OFF);
+            this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected _onDataChanged(): void {
@@ -178,11 +125,11 @@ namespace TwnsMeChooseTileBasePanel {
             this._labelCategory.text        = Lang.getTileName(ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty)) ?? CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileBase   : DataForTileBaseRenderer[] = [];
-            const panel                 = data.panel;
+            const callback              = data.callback;
             for (const dataForDrawTileBase of dataListForDrawTileBase) {
                 dataListForTileBase.push({
-                    panel,
                     dataForDrawTileBase,
+                    callback,
                 });
             }
             this._listTileBase.bindData(dataListForTileBase);
@@ -191,7 +138,7 @@ namespace TwnsMeChooseTileBasePanel {
 
     type DataForTileBaseRenderer = {
         dataForDrawTileBase : DataForDrawTileBase;
-        panel               : MeChooseTileBasePanel;
+        callback            : (baseType: Types.TileBaseType, shapeId: number) => void;
     };
     class TileBaseRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTileBaseRenderer> {
         private readonly _group!        : eui.Group;
@@ -233,40 +180,11 @@ namespace TwnsMeChooseTileBasePanel {
 
         public onItemTapEvent(): void {
             const data                  = this._getData();
-            const panel                 = data.panel;
             const dataForDrawTileBase   = data.dataForDrawTileBase;
-            if (!panel.getNeedFill()) {
-                panel.updateOnChooseTileBase(dataForDrawTileBase);
-                panel.close();
-                Helpers.getExisted(MeModel.getWar()).getDrawer().setModeDrawTileBase(dataForDrawTileBase);
-            } else {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
-                    content : Lang.getText(LangTextType.A0089),
-                    callback: () => {
-                        const war           = Helpers.getExisted(MeModel.getWar());
-                        const configVersion = war.getConfigVersion();
-                        for (const tile of war.getTileMap().getAllTiles()) {
-                            tile.init({
-                                gridIndex       : tile.getGridIndex(),
-                                objectShapeId   : tile.getObjectShapeId(),
-                                objectType      : tile.getObjectType(),
-                                playerIndex     : tile.getPlayerIndex(),
-                                baseShapeId     : dataForDrawTileBase.shapeId,
-                                baseType        : dataForDrawTileBase.baseType,
-                                locationFlags   : tile.getLocationFlags(),
-                            }, configVersion);
-                            tile.startRunning(war);
-                            tile.flushDataToView();
-                        }
-
-                        panel.updateOnChooseTileBase(dataForDrawTileBase);
-                        panel.close();
-                        Notify.dispatch(NotifyType.MeTileChanged, { gridIndex: war.getCursor().getGridIndex() } as NotifyData.MeTileChanged);
-                    },
-                });
-            }
+            data.callback(dataForDrawTileBase.baseType, dataForDrawTileBase.shapeId);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonChooseTileBasePanel);
         }
     }
 }
 
-// export default TwnsMeChooseTileBasePanel;
+// export default TwnsCommonChooseTileBasePanel;

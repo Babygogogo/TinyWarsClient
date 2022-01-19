@@ -3,6 +3,7 @@
 // import CommonConstants  from "../../tools/helpers/CommonConstants";
 // import Types            from "../../tools/helpers/Types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MpwUtility {
     import BwTile = TwnsBwTile.BwTile;
 
@@ -19,6 +20,7 @@ namespace MpwUtility {
             decoratorShapeId: tile.getDecoratorShapeId(),
             objectShapeId   : tile.getObjectShapeId(),
             currentHp       : tile.getCurrentHp(),
+            locationFlags   : tile.getLocationFlags(),
         }, tile.getConfigVersion());
     }
 }

@@ -67,7 +67,7 @@ namespace CommonConstants {
     export const WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage = 10000;
     export const WarEventActionSetPlayerCoEnergyMaxDeltaPercentage      = 100;
 
-    export const MapEditorSlotMaxCountForNormal         = 3;
+    export const MapEditorSlotMaxCountForNormal         = 5;
     export const MapEditorSlotMaxCountForCommittee      = 100;
     export const MapEditorAutoSaveMinTime               = 180;
     export const MapEditorAutoSaveMaxTime               = 1800;

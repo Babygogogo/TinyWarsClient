@@ -61,6 +61,9 @@ namespace TwnsPanelConfig {
         CommonChoosePlayerIndexPanel        : PanelConfig<TwnsCommonChoosePlayerIndexPanel.OpenData>;
         CommonChooseSingleUnitTypePanel     : PanelConfig<TwnsCommonChooseSingleUnitTypePanel.OpenData>;
         CommonChooseTeamIndexPanel          : PanelConfig<TwnsCommonChooseTeamIndexPanel.OpenData>;
+        CommonChooseTileBasePanel           : PanelConfig<TwnsCommonChooseTileBasePanel.OpenData>;
+        CommonChooseTileDecoratorPanel      : PanelConfig<TwnsCommonChooseTileDecoratorPanel.OpenData>;
+        CommonChooseTileObjectPanel         : PanelConfig<TwnsCommonChooseTileObjectPanel.OpenData>;
         CommonChooseTileTypePanel           : PanelConfig<TwnsCommonChooseTileTypePanel.OpenData>;
         CommonChooseUnitActionStatePanel    : PanelConfig<TwnsCommonChooseUnitActionStatePanel.OpenData>;
         CommonChooseUnitTypePanel           : PanelConfig<TwnsCommonChooseUnitTypePanel.OpenData>;
@@ -212,6 +215,7 @@ namespace TwnsPanelConfig {
         WeActionModifyPanel24               : PanelConfig<TwnsWeActionModifyPanel24.OpenData>;
         WeActionModifyPanel25               : PanelConfig<TwnsWeActionModifyPanel25.OpenData>;
         WeActionModifyPanel30               : PanelConfig<TwnsWeActionModifyPanel30.OpenData>;
+        WeActionModifyPanel40               : PanelConfig<TwnsWeActionModifyPanel40.OpenData>;
         WeActionReplacePanel                : PanelConfig<TwnsWeActionReplacePanel.OpenData>;
         WeActionTypeListPanel               : PanelConfig<TwnsWeActionTypeListPanel.OpenData>;
         WeCommandPanel                      : PanelConfig<TwnsWeCommandPanel.OpenData>;
@@ -543,6 +547,24 @@ namespace TwnsPanelConfig {
             CommonChooseTeamIndexPanel: {
                 cls         : TwnsCommonChooseTeamIndexPanel?.CommonChooseTeamIndexPanel,
                 skinName    : `resource/skins/common/CommonChooseTeamIndexPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseTileBasePanel: {
+                cls         : TwnsCommonChooseTileBasePanel?.CommonChooseTileBasePanel,
+                skinName    : `resource/skins/common/CommonChooseTileBasePanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseTileDecoratorPanel: {
+                cls         : TwnsCommonChooseTileDecoratorPanel?.CommonChooseTileDecoratorPanel,
+                skinName    : `resource/skins/common/CommonChooseTileDecoratorPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonChooseTileObjectPanel: {
+                cls         : TwnsCommonChooseTileObjectPanel?.CommonChooseTileObjectPanel,
+                skinName    : `resource/skins/common/CommonChooseTileObjectPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -1405,6 +1427,12 @@ namespace TwnsPanelConfig {
             WeActionModifyPanel30: {
                 cls         : TwnsWeActionModifyPanel30?.WeActionModifyPanel30,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel30.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            WeActionModifyPanel40: {
+                cls         : TwnsWeActionModifyPanel40?.WeActionModifyPanel40,
+                skinName    : `resource/skins/warEvent/WeActionModifyPanel40.exml`,
                 layer       : LayerType.Hud0,
             },
 

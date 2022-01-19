@@ -223,6 +223,7 @@ namespace TwnsMeDrawer {
                         objectShapeId   : shapeId,
                         baseType        : tile.getBaseType(),
                         baseShapeId     : tile.getBaseShapeId(),
+                        locationFlags   : tile.getLocationFlags(),
                     }, configVersion);
                     tile.startRunning(war);
                     tile.flushDataToView();
@@ -255,6 +256,7 @@ namespace TwnsMeDrawer {
                         objectShapeId   : shapeId,
                         baseType        : tile.getBaseType(),
                         baseShapeId     : tile.getBaseShapeId(),
+                        locationFlags   : tile.getLocationFlags(),
                     }, configVersion);
                     tile.startRunning(war);
                     tile.flushDataToView();
@@ -282,6 +284,7 @@ namespace TwnsMeDrawer {
                         objectShapeId   : shapeId,
                         baseType        : tile.getBaseType(),
                         baseShapeId     : tile.getBaseShapeId(),
+                        locationFlags   : tile.getLocationFlags(),
                     }, configVersion);
                     tile.startRunning(war);
                     tile.flushDataToView();
@@ -309,6 +312,7 @@ namespace TwnsMeDrawer {
                         objectShapeId   : shapeId,
                         baseType        : tile.getBaseType(),
                         baseShapeId     : tile.getBaseShapeId(),
+                        locationFlags   : tile.getLocationFlags(),
                     }, configVersion);
                     tile.startRunning(war);
                     tile.flushDataToView();
@@ -335,6 +339,7 @@ namespace TwnsMeDrawer {
                     baseShapeId     : tile.getBaseShapeId(),
                     decoratorType,
                     decoratorShapeId,
+                    locationFlags   : tile.getLocationFlags(),
                 }, configVersion);
                 tile.startRunning(war);
                 tile.flushDataToView();
@@ -398,6 +403,7 @@ namespace TwnsMeDrawer {
                 decoratorShapeId: tile.getDecoratorShapeId(),
                 baseType,
                 baseShapeId,
+                locationFlags   : tile.getLocationFlags(),
             }, configVersion);
             tile.startRunning(war);
             tile.flushDataToView();
@@ -417,6 +423,7 @@ namespace TwnsMeDrawer {
                     decoratorShapeId: t2.getDecoratorShapeId(),
                     baseType        : baseType,
                     baseShapeId     : ConfigManager.getSymmetricalTileBaseShapeId(baseType, baseShapeId, symmetryType),
+                    locationFlags   : t2.getLocationFlags(),
                 }, configVersion);
                 t2.startRunning(war);
                 t2.flushDataToView();
@@ -441,6 +448,7 @@ namespace TwnsMeDrawer {
                 baseShapeId     : tile.getBaseShapeId(),
                 decoratorType,
                 decoratorShapeId,
+                locationFlags   : tile.getLocationFlags(),
             }, configVersion);
             tile.startRunning(war);
             tile.flushDataToView();
@@ -460,6 +468,7 @@ namespace TwnsMeDrawer {
                     baseShapeId     : t2.getBaseShapeId(),
                     decoratorType,
                     decoratorShapeId: ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType),
+                    locationFlags   : t2.getLocationFlags(),
                 }, configVersion);
                 t2.startRunning(war);
                 t2.flushDataToView();
@@ -493,6 +502,7 @@ namespace TwnsMeDrawer {
                 playerIndex,
                 objectType,
                 objectShapeId,
+                locationFlags   : tile.getLocationFlags(),
             }, configVersion);
             tile.startRunning(war);
             tile.flushDataToView();
@@ -516,6 +526,7 @@ namespace TwnsMeDrawer {
                     playerIndex,
                     objectType,
                     objectShapeId   : ConfigManager.getSymmetricalTileObjectShapeId(objectType, objectShapeId, symmetryType),
+                    locationFlags   : t2.getLocationFlags(),
                 }, configVersion);
                 t2.startRunning(war);
                 t2.flushDataToView();
