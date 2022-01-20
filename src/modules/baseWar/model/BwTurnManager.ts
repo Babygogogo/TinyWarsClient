@@ -753,12 +753,12 @@ namespace TwnsBwTurnManager {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseResetVisionForCurrentPlayerWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
             const war = this.getWar();
-            war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
+            war.getFogMap().resetMapFromPathsForPlayerWithEncodedData(war.getPlayerIndexInTurn());
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseResetVisionForCurrentPlayerWithoutExtraData(isFastExecute: boolean): void {
             const war = this.getWar();
-            war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
+            war.getFogMap().resetMapFromPathsForPlayerWithEncodedData(war.getPlayerIndexInTurn());
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

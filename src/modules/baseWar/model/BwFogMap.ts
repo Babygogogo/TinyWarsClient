@@ -238,10 +238,13 @@ namespace TwnsBwFogMap {
         }
 
         public resetAllMapsForPlayer(playerIndex: number): void {
-            this.resetMapFromPathsForPlayer(playerIndex);
+            this.resetMapFromPathsForPlayerWithEncodedData(playerIndex);
         }
 
-        public resetMapFromPathsForPlayer(playerIndex: number, encodedData?: string): void {
+        public resetMapFromPathsForPlayer(playerIndex: number, visibilityList: Types.Visibility[] | null): void {
+            resetMapFromPath(this._getMapFromPath(playerIndex), this.getMapSize(), visibilityList);
+        }
+        public resetMapFromPathsForPlayerWithEncodedData(playerIndex: number, encodedData?: string): void {
             const map = Helpers.getExisted(this._getAllMapsFromPath().get(playerIndex));
             if (encodedData == null) {
                 fillMap(map, 0);

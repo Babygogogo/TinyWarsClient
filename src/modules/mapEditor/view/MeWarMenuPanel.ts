@@ -621,6 +621,11 @@ namespace TwnsMeWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0680),
                 callback: () => {
+                    if (navigator?.clipboard?.writeText == null) {
+                        FloatText.show(Lang.getText(LangTextType.A0275));
+                        return;
+                    }
+
                     navigator.clipboard.writeText(JSON.stringify(this._getWar().serializeForMap()));
 
                     FloatText.show(Lang.getText(LangTextType.A0235));

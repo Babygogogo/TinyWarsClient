@@ -887,10 +887,18 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const weatherManager    = war.getWeatherManager();
             const playerIndex       = player.getPlayerIndex();
+            const fogMap            = war.getFogMap();
+            const hasFog            = fogMap.checkHasFogCurrently();
             weatherManager.setForceWeatherType(Helpers.getExisted(skillData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeatherWithExtraData_00));
             weatherManager.setExpirePlayerIndex(playerIndex);
             weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + cfg[0]);
             // war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+            if ((!hasFog) && (fogMap.checkHasFogCurrently()) && (cfg[1])) {
+                const mapSize           = fogMap.getMapSize();
+                const visibilityArray   : Types.Visibility[] = new Array(mapSize.width * mapSize.height);
+                visibilityArray.fill(Types.Visibility.TrueVision);
+                fogMap.resetMapFromPathsForPlayer(playerIndex, visibilityArray);
+            }
 
             if (!isFastExecute) {
                 weatherManager.getView().resetView(false);
@@ -909,10 +917,18 @@ namespace WarCoSkillHelpers {
         if (cfg) {
             const weatherManager    = war.getWeatherManager();
             const playerIndex       = player.getPlayerIndex();
+            const fogMap            = war.getFogMap();
+            const hasFog            = fogMap.checkHasFogCurrently();
             weatherManager.setForceWeatherType(Helpers.getExisted(skillData.newWeatherType, ClientErrorCode.WarCoSkillHelpers_ExeChangeWeatherWithoutExtraData_00));
             weatherManager.setExpirePlayerIndex(playerIndex);
             weatherManager.setExpireTurnIndex(war.getTurnManager().getTurnIndex() + cfg[0]);
             // war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+            if ((!hasFog) && (fogMap.checkHasFogCurrently()) && (cfg[1])) {
+                const mapSize           = fogMap.getMapSize();
+                const visibilityArray   : Types.Visibility[] = new Array(mapSize.width * mapSize.height);
+                visibilityArray.fill(Types.Visibility.TrueVision);
+                fogMap.resetMapFromPathsForPlayer(playerIndex, visibilityArray);
+            }
 
             if (!isFastExecute) {
                 weatherManager.getView().resetView(false);
@@ -946,7 +962,7 @@ namespace WarCoSkillHelpers {
         {
             const cfg = skillCfg.changeWeather;
             if (cfg) {
-                dataForUseCoSkill.newWeatherType = Helpers.pickRandomElement(cfg.slice(1), war.getRandomNumberManager().getRandomNumber());
+                dataForUseCoSkill.newWeatherType = Helpers.pickRandomElement(cfg.slice(2), war.getRandomNumberManager().getRandomNumber());
             }
         }
 
