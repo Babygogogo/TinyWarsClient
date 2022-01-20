@@ -243,7 +243,7 @@ namespace TwnsRwWar {
         public getIsNeedSeedRandom(): boolean {
             return true;
         }
-        public getMapId(): number {
+        public getMapId(): number | null {
             const settingsForMcw = this._getSettingsForMcw();
             if (settingsForMcw) {
                 return Helpers.getExisted(settingsForMcw.mapId);
@@ -264,7 +264,7 @@ namespace TwnsRwWar {
                 return Helpers.getExisted(settingsForCcw.mapId);
             }
 
-            throw Helpers.newError(`Invalid war data.`, ClientErrorCode.RwWar_GetMapId_00);
+            return null;
         }
 
         public getSettingsBootTimerParams(): number[] {

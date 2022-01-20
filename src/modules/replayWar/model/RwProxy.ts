@@ -6,6 +6,7 @@
 // import NetManager                   from "../../tools/network/NetManager";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace RwProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
@@ -44,9 +45,9 @@ namespace RwProxy {
     function _onMsgReplayGetData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetData.IS;
         if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgReplayGetDataFailed);
+            Notify.dispatch(NotifyType.MsgReplayGetDataFailed, data);
         } else {
-            RwModel.setReplayData(data);
+            RwModel.updateOnMsgReplayGetData(data);
             Notify.dispatch(NotifyType.MsgReplayGetData, data);
         }
     }

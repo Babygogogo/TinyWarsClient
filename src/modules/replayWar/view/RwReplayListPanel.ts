@@ -60,8 +60,6 @@ namespace TwnsRwReplayListPanel {
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.RwPreviewingReplayIdChanged,    callback: this._onNotifyRwPreviewingReplayIdChanged },
                 { type: NotifyType.MsgReplayGetInfoList,           callback: this._onNotifyMsgReplayGetInfoList },
-                { type: NotifyType.MsgReplayGetData,               callback: this._onNotifyMsgReplayGetData },
-                { type: NotifyType.MsgReplayGetDataFailed,         callback: this._onNotifyMsgReplayGetDataFailed },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -110,15 +108,6 @@ namespace TwnsRwReplayListPanel {
             }
         }
 
-        private _onNotifyMsgReplayGetData(): void {
-            const data = Helpers.getExisted(RwModel.getReplayData());
-            FlowManager.gotoReplayWar(Helpers.getExisted(data.encodedWar), Helpers.getExisted(data.replayId));
-        }
-
-        private _onNotifyMsgReplayGetDataFailed(): void {
-            TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
-        }
-
         private _onTouchTapBtnBack(): void {
             this.close();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
@@ -128,26 +117,32 @@ namespace TwnsRwReplayListPanel {
         private _onTouchedBtnSearch(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.RwSearchReplayPanel, void 0);
         }
-        private _onTouchedBtnNextStep(): void {
+        private async _onTouchedBtnNextStep(): Promise<void> {
             const replayId = RwModel.getPreviewingReplayId();
             if (replayId != null) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0040),
                 });
-                RwProxy.reqReplayGetData(replayId);
+
+                const data = await RwModel.getReplayData(replayId);
+                if (data) {
+                    FlowManager.gotoReplayWar(data, Helpers.getExisted(replayId));
+                } else {
+                    TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
+                }
             }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _initTabSettings(): void {
+        private async _initTabSettings(): Promise<void> {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : this._createDataForCommonWarMapInfoPage(),
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -210,9 +205,9 @@ namespace TwnsRwReplayListPanel {
             }
         }
 
-        private _updateCommonWarMapInfoPage(): void {
+        private async _updateCommonWarMapInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, this._createDataForCommonWarMapInfoPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
             }
         }
 
@@ -233,12 +228,24 @@ namespace TwnsRwReplayListPanel {
             return dataArray.sort((v1, v2) => v2.replayId - v1.replayId);
         }
 
-        private _createDataForCommonWarMapInfoPage(): OpenDataForCommonWarMapInfoPage {
-            const replayId  = RwModel.getPreviewingReplayId();
-            const mapId     = replayId == null ? null : RwModel.getReplayInfo(replayId)?.replayBriefInfo?.mapId;
-            return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+        private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
+            const replayId = RwModel.getPreviewingReplayId();
+            if (replayId == null) {
+                return {};
+            }
+
+            const mapId = RwModel.getReplayInfo(replayId)?.replayBriefInfo?.mapId;
+            if (mapId != null) {
+                return { mapInfo: { mapId } };
+            } else {
+                const replayData = (await RwModel.getReplayData(replayId))?.settingsForMfw?.initialWarData;
+                return replayData == null
+                    ? {}
+                    : { warInfo: {
+                        warData : replayData,
+                        players : replayData.playerManager?.players
+                    } };
+            }
         }
 
         private _createDataForCommonWarPlayerInfoPage(): OpenDataForCommonWarPlayerInfoPage {
@@ -387,9 +394,12 @@ namespace TwnsRwReplayListPanel {
                 labelType.text  = ``;
                 labelName.text  = ``;
             } else {
+                const mapId     = replayBriefInfo.mapId;
                 labelId.text    = `ID: ${replayBriefInfo.replayId}`;
                 labelType.text  = Lang.getWarTypeName(Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined;
-                labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayBriefInfo.mapId)) ?? CommonConstants.ErrorTextForUndefined;
+                labelName.text  = mapId == null
+                    ? `----`
+                    : await WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
 

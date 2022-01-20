@@ -107,9 +107,9 @@ namespace TwnsCommonChangeVersionPanel {
                 {
                     gameVersion : GameVersion.Test,
                 },
-                {
-                    gameVersion : GameVersion.Awbw,
-                },
+                // {
+                //     gameVersion : GameVersion.Awbw,
+                // },
             ];
         }
 

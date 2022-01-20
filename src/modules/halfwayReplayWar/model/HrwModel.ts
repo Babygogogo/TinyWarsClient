@@ -52,6 +52,18 @@ namespace HrwModel {
                 nextUnitId  : unitDataArray.length,
             };
         }
+        {
+            const settingsForMfw = warData.settingsForMfw;
+            if (settingsForMfw) {
+                const initialWarData            = Helpers.getExisted(settingsForMfw.initialWarData);
+                warData.remainingVotesForDraw   = Helpers.deepClone(initialWarData.remainingVotesForDraw);
+                warData.weatherManager          = Helpers.deepClone(initialWarData.weatherManager);
+                warData.warEventManager         = Helpers.deepClone(initialWarData.warEventManager);
+                warData.playerManager           = Helpers.deepClone(initialWarData.playerManager);
+                warData.turnManager             = Helpers.deepClone(initialWarData.turnManager);
+                warData.field                   = Helpers.deepClone(initialWarData.field);
+            }
+        }
         warData.executedActions = generateExecutedActions(warData);
 
         const war = new TwnsHrwWar.HrwWar();

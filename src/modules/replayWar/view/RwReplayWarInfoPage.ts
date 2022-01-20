@@ -10,6 +10,7 @@
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 // import RwModel              from "../model/RwModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsRwReplayWarInfoPage {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
@@ -113,10 +114,10 @@ namespace TwnsRwReplayWarInfoPage {
         }
 
         private async _updateLabelMapName(): Promise<void> {
-            const replayInfo        = this._getReplayInfo();
-            this._labelMapName.text = replayInfo
-                ? (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(replayInfo.replayBriefInfo?.mapId)) ?? CommonConstants.ErrorTextForUndefined)
-                : CommonConstants.ErrorTextForUndefined;
+            const mapId             = this._getReplayInfo()?.replayBriefInfo?.mapId;
+            this._labelMapName.text = mapId == null
+                ? `----`
+                : (await WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateLabelTurnIndex(): Promise<void> {

@@ -207,7 +207,7 @@ namespace FlowManager {
 
         SoundManager.playCoBgmWithWar(war, true);
     }
-    export async function gotoReplayWar(warData: Uint8Array, replayId: number): Promise<void> {
+    export async function gotoReplayWar(warData: ProtoTypes.WarSerialization.ISerialWar, replayId: number): Promise<void> {
         const war = await RwModel.loadWar(warData, replayId);
         HrwModel.unloadWar();
         MpwModel.unloadWar();
