@@ -209,6 +209,7 @@
 		"resource/skins/user/UserPanel.exml",
 		"resource/skins/user/UserRegisterPanel.exml",
 		"resource/skins/user/UserSetAvatarPanel.exml",
+		"resource/skins/user/UserSetOpacityPanel.exml",
 		"resource/skins/user/UserSetPasswordPanel.exml",
 		"resource/skins/user/UserSetPrivilegePanel.exml",
 		"resource/skins/user/UserSetSoundPanel.exml",

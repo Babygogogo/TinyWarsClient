@@ -61,6 +61,7 @@ namespace TwnsUserSettingsPanel {
         private readonly _btnRankList!              : TwnsUiButton.UiButton;
         private readonly _btnShowOnlineUsers!       : TwnsUiButton.UiButton;
         private readonly _btnSetSound!              : TwnsUiButton.UiButton;
+        private readonly _btnSetOpacity!            : TwnsUiButton.UiButton;
         private readonly _btnSetStageScaler!        : TwnsUiButton.UiButton;
         private readonly _btnServerStatus!          : TwnsUiButton.UiButton;
         private readonly _btnComplaint!             : TwnsUiButton.UiButton;
@@ -88,6 +89,7 @@ namespace TwnsUserSettingsPanel {
                 { ui: this._btnRankList,            callback: this._onTouchedBtnRankList },
                 { ui: this._btnShowOnlineUsers,     callback: this._onTouchedBtnShowOnlineUsers },
                 { ui: this._btnSetSound,            callback: this._onTouchedBtnSetSound },
+                { ui: this._btnSetOpacity,          callback: this._onTouchedBtnSetOpacity },
                 { ui: this._btnSetStageScaler,      callback: this._onTouchedBtnSetStageScaler },
                 { ui: this._btnServerStatus,        callback: this._onTouchedBtnServerStatus },
                 { ui: this._btnComplaint,           callback: this._onTouchedBtnComplaint },
@@ -267,6 +269,9 @@ namespace TwnsUserSettingsPanel {
         private _onTouchedBtnSetSound(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetSoundPanel, void 0);
         }
+        private _onTouchedBtnSetOpacity(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetOpacityPanel, void 0);
+        }
         private _onTouchedBtnSetStageScaler(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetStageScalePanel, void 0);
         }
@@ -335,8 +340,8 @@ namespace TwnsUserSettingsPanel {
             group.addChild(this._btnChangePassword);
             group.addChild(this._btnChangeNickname);
             group.addChild(this._btnChangeDiscordId);
-            group.addChild(this._btnChangeGameVersion);
             group.addChild(this._btnSetSound);
+            group.addChild(this._btnSetOpacity);
             group.addChild(this._btnSetStageScaler);
             group.addChild(this._btnRankList);
             group.addChild(this._btnShowOnlineUsers);
@@ -344,6 +349,7 @@ namespace TwnsUserSettingsPanel {
             group.addChild(this._btnChangeLog);
             group.addChild(this._btnUnitsInfo);
             group.addChild(this._btnComplaint);
+            group.addChild(this._btnChangeGameVersion);
             if (UserModel.getIsSelfAdmin()) {
                 group.addChild(this._btnSetPrivilege);
             }
@@ -361,6 +367,7 @@ namespace TwnsUserSettingsPanel {
             this._updateBtnRankList();
             this._updateBtnShowOnlineUsers();
             this._updateBtnSetSound();
+            this._updateBtnSetOpacity();
             this._updateBtnSetStageScaler();
             this._updateBtnUnitsInfo();
             this._updateBtnChangeLog();
@@ -390,6 +397,9 @@ namespace TwnsUserSettingsPanel {
         }
         private _updateBtnSetSound(): void {
             this._btnSetSound.label = Lang.getText(LangTextType.B0540);
+        }
+        private _updateBtnSetOpacity(): void {
+            this._btnSetOpacity.label = Lang.getText(LangTextType.B0827);
         }
         private _updateBtnSetStageScaler(): void {
             this._btnSetStageScaler.label = Lang.getText(LangTextType.B0558);

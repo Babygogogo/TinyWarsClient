@@ -75,6 +75,8 @@
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnSetSound" label="声音设置" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
+                    <TwnsUiButton:UiButton id="_btnSetOpacity" label="不透明度设置" y="370" x="266"
+                                           skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnSetStageScaler" label="分辨率设置" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <e:layout>

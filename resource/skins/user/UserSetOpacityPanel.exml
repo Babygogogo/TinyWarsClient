@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" />
+    <e:Group id="_group" horizontalCenter="0" verticalCenter="0" width="460" height="390">
+        <e:Group left="0" right="0" top="0" bottom="0" locked="true">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+            </e:Group>
+        </e:Group>
+        <e:Group y="60" horizontalCenter="0">
+            <e:Group y="0" x="0">
+                <e:Group x="0" y="0">
+                    <TwnsUiLabel:UiLabel id="_labelUnitTitle" text="背景音乐" size="18" textColor="0xffffff" left="0"
+                                         top="0" />
+                    <TwnsUiLabel:UiLabel id="_labelUnitOpacity" text="100" size="20" textColor="0xffffff" x="150"
+                                         top="0" />
+                </e:Group>
+                <e:Group left="0" top="0" width="400">
+                    <e:Group id="_groupUnitOpacity" width="400" verticalCenter="0" left="0">
+                        <TwnsUiImage:UiImage width="400" verticalCenter="0" source="uncompressedPbar0000"
+                                             scale9Grid="5,5,2,2" />
+                        <TwnsUiImage:UiImage id="_imgUnitBar" verticalCenter="0" width="400" x="0" visible="true"
+                                             source="uncompressedPbar0001" scale9Grid="5,5,2,2" />
+                        <TwnsUiImage:UiImage id="_imgUnitPoint" y="0" x="161" anchorOffsetX="11" touchEnabled="false"
+                                             source="uncompressedCircle0008" />
+                    </e:Group>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:Group y="10" x="10">
+                <e:Group x="0" y="0">
+                    <TwnsUiLabel:UiLabel id="_labelTileBaseTitle" text="背景音乐" size="18" textColor="0xFFFFFF" left="0"
+                                         top="0" />
+                    <TwnsUiLabel:UiLabel id="_labelTileBaseOpacity" text="100" size="20" textColor="0xFFFFFF" x="150"
+                                         top="0" />
+                </e:Group>
+                <e:Group left="0" top="0" width="400">
+                    <e:Group id="_groupTileBaseOpacity" width="400" verticalCenter="0" left="0">
+                        <TwnsUiImage:UiImage width="400" verticalCenter="0" source="uncompressedPbar0000"
+                                             scale9Grid="5,5,2,2" />
+                        <TwnsUiImage:UiImage id="_imgTileBaseBar" verticalCenter="0" width="400" x="0" visible="true"
+                                             source="uncompressedPbar0001" scale9Grid="5,5,2,2" />
+                        <TwnsUiImage:UiImage id="_imgTileBasePoint" y="0" x="161" anchorOffsetX="11"
+                                             touchEnabled="false" source="uncompressedCircle0008" />
+                    </e:Group>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:Group y="20" x="20">
+                <e:Group x="0" y="0">
+                    <TwnsUiLabel:UiLabel id="_labelTileDecoratorTitle" text="背景音乐" size="18" textColor="0xFFFFFF"
+                                         left="0" top="0" />
+                    <TwnsUiLabel:UiLabel id="_labelTileDecoratorOpacity" text="100" size="20" textColor="0xFFFFFF"
+                                         x="150" top="0" />
+                </e:Group>
+                <e:Group left="0" top="0" width="400">
+                    <e:Group id="_groupTileDecoratorOpacity" width="400" verticalCenter="0" left="0">
+                        <TwnsUiImage:UiImage width="400" verticalCenter="0" source="uncompressedPbar0000"
+                                             scale9Grid="5,5,2,2" />
+                        <TwnsUiImage:UiImage id="_imgTileDecoratorBar" verticalCenter="0" width="400" x="0"
+                                             visible="true" source="uncompressedPbar0001" scale9Grid="5,5,2,2" />
+                        <TwnsUiImage:UiImage id="_imgTileDecoratorPoint" y="0" x="161" anchorOffsetX="11"
+                                             touchEnabled="false" source="uncompressedCircle0008" />
+                    </e:Group>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:Group y="30" x="30">
+                <e:Group x="0" y="0">
+                    <TwnsUiLabel:UiLabel id="_labelTileObjectTitle" text="背景音乐" size="18" textColor="0xFFFFFF" left="0"
+                                         top="0" />
+                    <TwnsUiLabel:UiLabel id="_labelTileObjectOpacity" text="100" size="20" textColor="0xFFFFFF" x="150"
+                                         top="0" />
+                </e:Group>
+                <e:Group left="0" top="0" width="400">
+                    <e:Group id="_groupTileObjectOpacity" width="400" verticalCenter="0" left="0">
+                        <TwnsUiImage:UiImage width="400" verticalCenter="0" source="uncompressedPbar0000"
+                                             scale9Grid="5,5,2,2" />
+                        <TwnsUiImage:UiImage id="_imgTileObjectBar" verticalCenter="0" width="400" x="0" visible="true"
+                                             source="uncompressedPbar0001" scale9Grid="5,5,2,2" />
+                        <TwnsUiImage:UiImage id="_imgTileObjectPoint" y="0" x="161" anchorOffsetX="11"
+                                             touchEnabled="false" source="uncompressedCircle0008" />
+                    </e:Group>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout gap="20" />
+            </e:layout>
+        </e:Group>
+        <e:Group horizontalCenter="0" bottom="20">
+            <TwnsUiButton:UiButton id="_btnConfirm" label="确定" y="0" x="232" width="100"
+                                   skinName="Skins.Component.Button.ButtonYellow001" />
+            <TwnsUiButton:UiButton id="_btnDefault" label="恢复默认" y="0" x="0" width="100"
+                                   skinName="Skins.Component.Button.ButtonGrey001" />
+            <TwnsUiButton:UiButton id="_btnCancel" label="取消" y="0" x="232" width="100"
+                                   skinName="Skins.Component.Button.ButtonGrey001" />
+            <e:layout>
+                <e:HorizontalLayout gap="50" />
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

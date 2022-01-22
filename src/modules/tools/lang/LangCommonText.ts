@@ -2882,11 +2882,11 @@ namespace TwnsLangCommonText {
             `Ranked FoW`,
         ],
         [LangTextType.B0417]: [
-            `自由明战`,
+            `自定义明战`,
             `Custom Std`,
         ],
         [LangTextType.B0418]: [
-            `自由雾战`,
+            `自定义雾战`,
             `Custom FoW`,
         ],
         [LangTextType.B0419]: [
@@ -4520,6 +4520,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0826]: [
             `摧毁部队`,
             `Destroy Units`,
+        ],
+        [LangTextType.B0827]: [
+            `不透明度设置`,
+            `Opacity Settings`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

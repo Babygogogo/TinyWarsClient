@@ -362,6 +362,7 @@
 		"bin-debug/modules/user/view/UserPanel.js",
 		"bin-debug/modules/user/view/UserRegisterPanel.js",
 		"bin-debug/modules/user/view/UserSetAvatarPanel.js",
+		"bin-debug/modules/user/view/UserSetOpacityPanel.js",
 		"bin-debug/modules/user/view/UserSetPasswordPanel.js",
 		"bin-debug/modules/user/view/UserSetPrivilegePanel.js",
 		"bin-debug/modules/user/view/UserSetSoundPanel.js",

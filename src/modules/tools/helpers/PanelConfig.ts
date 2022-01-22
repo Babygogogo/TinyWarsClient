@@ -193,6 +193,7 @@ namespace TwnsPanelConfig {
         UserPanel                           : PanelConfig<TwnsUserPanel.OpenData>;
         UserRegisterPanel                   : PanelConfig<TwnsUserRegisterPanel.OpenData>;
         UserSetAvatarPanel                  : PanelConfig<TwnsUserSetAvatarPanel.OpenData>;
+        UserSetOpacityPanel                 : PanelConfig<TwnsUserSetOpacityPanel.OpenData>;
         UserSetPasswordPanel                : PanelConfig<TwnsUserSetPasswordPanel.OpenData>;
         UserSetPrivilegePanel               : PanelConfig<TwnsUserSetPrivilegePanel.OpenData>;
         UserSetSoundPanel                   : PanelConfig<TwnsUserSetSoundPanel.OpenData>;
@@ -1317,6 +1318,12 @@ namespace TwnsPanelConfig {
             UserSetSoundPanel: {
                 cls         : TwnsUserSetSoundPanel?.UserSetSoundPanel,
                 skinName    : `resource/skins/user/UserSetSoundPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            UserSetOpacityPanel: {
+                cls         : TwnsUserSetOpacityPanel?.UserSetOpacityPanel,
+                skinName    : `resource/skins/user/UserSetOpacityPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

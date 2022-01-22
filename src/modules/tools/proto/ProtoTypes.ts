@@ -25695,6 +25695,114 @@ export declare namespace User {
         }
     }
 
+    /** Properties of a UserOpacitySettings. */
+    interface IUserOpacitySettings {
+
+        /** UserOpacitySettings unitOpacity */
+        unitOpacity?: (number|null);
+
+        /** UserOpacitySettings tileBaseOpacity */
+        tileBaseOpacity?: (number|null);
+
+        /** UserOpacitySettings tileObjectOpacity */
+        tileObjectOpacity?: (number|null);
+
+        /** UserOpacitySettings tileDecoratorOpacity */
+        tileDecoratorOpacity?: (number|null);
+    }
+
+    /** Represents a UserOpacitySettings. */
+    class UserOpacitySettings implements IUserOpacitySettings {
+
+        /**
+         * Constructs a new UserOpacitySettings.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: User.IUserOpacitySettings);
+
+        /** UserOpacitySettings unitOpacity. */
+        public unitOpacity: number;
+
+        /** UserOpacitySettings tileBaseOpacity. */
+        public tileBaseOpacity: number;
+
+        /** UserOpacitySettings tileObjectOpacity. */
+        public tileObjectOpacity: number;
+
+        /** UserOpacitySettings tileDecoratorOpacity. */
+        public tileDecoratorOpacity: number;
+
+        /**
+         * Creates a new UserOpacitySettings instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns UserOpacitySettings instance
+         */
+        public static create(properties?: User.IUserOpacitySettings): User.UserOpacitySettings;
+
+        /**
+         * Encodes the specified UserOpacitySettings message. Does not implicitly {@link User.UserOpacitySettings.verify|verify} messages.
+         * @param message UserOpacitySettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: User.IUserOpacitySettings, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified UserOpacitySettings message, length delimited. Does not implicitly {@link User.UserOpacitySettings.verify|verify} messages.
+         * @param message UserOpacitySettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: User.IUserOpacitySettings, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a UserOpacitySettings message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns UserOpacitySettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserOpacitySettings;
+
+        /**
+         * Decodes a UserOpacitySettings message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns UserOpacitySettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserOpacitySettings;
+
+        /**
+         * Verifies a UserOpacitySettings message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a UserOpacitySettings message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UserOpacitySettings
+         */
+        public static fromObject(object: { [k: string]: any }): User.UserOpacitySettings;
+
+        /**
+         * Creates a plain object from a UserOpacitySettings message. Also converts values to other types if specified.
+         * @param message UserOpacitySettings
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: User.UserOpacitySettings, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UserOpacitySettings to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a UserSettings. */
     interface IUserSettings {
 
@@ -25707,11 +25815,14 @@ export declare namespace User {
         /** UserSettings isShowGridBorder */
         isShowGridBorder?: (boolean|null);
 
-        /** UserSettings unitOpacity */
-        unitOpacity?: (number|null);
+        /** UserSettings deprecatedUnitOpacity */
+        deprecatedUnitOpacity?: (number|null);
 
         /** UserSettings isAutoScrollMap */
         isAutoScrollMap?: (boolean|null);
+
+        /** UserSettings opacitySettings */
+        opacitySettings?: (User.IUserOpacitySettings|null);
     }
 
     /** Represents a UserSettings. */
@@ -25732,11 +25843,14 @@ export declare namespace User {
         /** UserSettings isShowGridBorder. */
         public isShowGridBorder: boolean;
 
-        /** UserSettings unitOpacity. */
-        public unitOpacity: number;
+        /** UserSettings deprecatedUnitOpacity. */
+        public deprecatedUnitOpacity: number;
 
         /** UserSettings isAutoScrollMap. */
         public isAutoScrollMap: boolean;
+
+        /** UserSettings opacitySettings. */
+        public opacitySettings?: (User.IUserOpacitySettings|null);
 
         /**
          * Creates a new UserSettings instance using the specified properties.

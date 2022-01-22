@@ -26,6 +26,7 @@ namespace MeUtility {
     import MeWar                = TwnsMeWar.MeWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import GridIndex            = Types.GridIndex;
+    import TileType             = Types.TileType;
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
     import SymmetryType         = Types.SymmetryType;
@@ -548,31 +549,39 @@ namespace MeUtility {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getAutoRoadShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
         const { x, y }      = gridIndex;
-        const isAdjacent4   = checkIsRoadOrBridge(tileMap, { x: x - 1, y }) ? 1 : 0;
-        const isAdjacent3   = checkIsRoadOrBridge(tileMap, { x: x + 1, y }) ? 1 : 0;
-        const isAdjacent2   = checkIsRoadOrBridge(tileMap, { x, y: y + 1 }) ? 1 : 0;
-        const isAdjacent1   = checkIsRoadOrBridge(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        const isAdjacent4   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x, y: y - 1 }) ? 1 : 0;
         return TileRoadAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     export function getAutoBridgeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
         const { x, y }      = gridIndex;
-        const isAdjacent4   = checkIsRoadOrBridge(tileMap, { x: x - 1, y }) ? 1 : 0;
-        const isAdjacent3   = checkIsRoadOrBridge(tileMap, { x: x + 1, y }) ? 1 : 0;
-        const isAdjacent2   = checkIsRoadOrBridge(tileMap, { x, y: y + 1 }) ? 1 : 0;
-        const isAdjacent1   = checkIsRoadOrBridge(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        const isAdjacent4   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x, y: y - 1 }) ? 1 : 0;
         return TileBridgeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    function checkIsRoadOrBridge(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
-        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+    function checkCanRoadOrBridgeLinkToTile(tileMap: TwnsBwTileMap.BwTileMap, gridIndex1: GridIndex, gridIndex2: GridIndex): boolean {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex2, tileMap.getMapSize())) {
             return true;
         }
 
-        const tileType = tileMap.getTile(gridIndex).getType();
-        return (tileType === Types.TileType.BridgeOnBeach)
-            || (tileType === Types.TileType.BridgeOnPlain)
-            || (tileType === Types.TileType.BridgeOnRiver)
-            || (tileType === Types.TileType.BridgeOnSea)
-            || (tileType === Types.TileType.Road);
+        const tile2         = tileMap.getTile(gridIndex2);
+        const objectType2   = tile2.getObjectType();
+        if ((objectType2 === TileObjectType.Bridge) || (objectType2 === TileObjectType.Road)) {
+            return true;
+        }
+
+        const baseType1 = tileMap.getTile(gridIndex1).getBaseType();
+        if ((baseType1 === TileBaseType.River) || (baseType1 === TileBaseType.Sea)) {
+            if (tile2.getMoveCostByMoveType(Types.MoveType.Tank) != null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     export function getAutoPlasmaShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
@@ -581,7 +590,7 @@ namespace MeUtility {
         const isAdjacent3           = checkIsPlasma(tileMap, { x: x + 1, y }) ? 1 : 0;
         const isAdjacent2           = checkIsPlasma(tileMap, { x, y: y + 1 }) ? 1 : 0;
         const isAdjacent1           = checkIsPlasma(tileMap, { x, y: y - 1 }) ? 1 : 0;
-        const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === Types.TileType.Meteor);
+        const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === TileType.Meteor);
         return Helpers.getExisted(TilePlasmaAutoShapeIdMap.get(isAdjacentToMeteor))[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     function checkIsPlasma(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
@@ -590,7 +599,7 @@ namespace MeUtility {
         }
 
         const tileType = tileMap.getTile(gridIndex).getType();
-        return (tileType === Types.TileType.Plasma);
+        return (tileType === TileType.Plasma);
     }
 
     export function getAutoPipeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {

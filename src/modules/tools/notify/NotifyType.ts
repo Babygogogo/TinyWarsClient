@@ -13,7 +13,7 @@ namespace TwnsNotifyType {
         GridAnimationTick,
         UnitAndTileTextureVersionChanged,
         UserSettingsIsShowGridBorderChanged,
-        UserSettingsUnitOpacityChanged,
+        UserSettingsOpacitySettingsChanged,
         UserSettingsIsAutoScrollMapChanged,
 
         MouseWheel,

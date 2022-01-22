@@ -52,7 +52,7 @@ namespace TwnsMpwWarMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: NotifyType.UserSettingsUnitOpacityChanged,      callback: this._onNotifyUserSettingsUnitOpacityChanged },
+                { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyMsgUserSettingsOpacitySettingsChanged },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onNotifyMsgSpmCreateSfw },
                 { type: NotifyType.MsgMpwGetHalfwayReplayData,          callback: this._onNotifyMsgMpwGetHalfwayReplayData },
                 { type: NotifyType.MsgMpwGetHalfwayReplayDataFailed,    callback: this._onNotifyMsgMpwGetHalfwayReplayDataFailed },
@@ -97,7 +97,7 @@ namespace TwnsMpwWarMenuPanel {
         private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._updateView();
         }
-        private _onNotifyUserSettingsUnitOpacityChanged(): void {
+        private _onNotifyMsgUserSettingsOpacitySettingsChanged(): void {
             this._updateBtnUnitOpacity();
         }
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
@@ -426,7 +426,7 @@ namespace TwnsMpwWarMenuPanel {
         }
 
         private _updateBtnUnitOpacity(): void {
-            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${UserModel.getSelfSettingsUnitOpacity()}%`;
+            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100}%`;
         }
 
         private _updateBtnMapRating(): void {

@@ -58,7 +58,7 @@ namespace TwnsSpwWarMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: NotifyType.UserSettingsUnitOpacityChanged,      callback: this._onNotifyUserSettingsUnitOpacityChanged },
+                { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
                 { type: NotifyType.MsgSpmSaveScw,                       callback: this._onMsgSpmSaveScw },
                 { type: NotifyType.MsgSpmSaveSfw,                       callback: this._onMsgSpmSaveSfw },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onMsgSpmCreateSfw },
@@ -109,7 +109,7 @@ namespace TwnsSpwWarMenuPanel {
             this._updateView();
         }
 
-        private _onNotifyUserSettingsUnitOpacityChanged(): void {
+        private _onNotifyUserSettingsOpacitySettingsChanged(): void {
             this._updateBtnUnitOpacity();
         }
 
@@ -425,7 +425,7 @@ namespace TwnsSpwWarMenuPanel {
         }
 
         private _updateBtnUnitOpacity(): void {
-            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${UserModel.getSelfSettingsUnitOpacity()}%`;
+            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100}%`;
         }
 
         private _updateBtnMapRating(): void {

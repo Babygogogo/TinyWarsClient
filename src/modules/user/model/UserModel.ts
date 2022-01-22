@@ -224,20 +224,47 @@ namespace UserModel {
         return getSelfSettings()?.isAutoScrollMap ?? true;
     }
 
-    export function getSelfSettingsUnitOpacity(): number {
-        return getSelfSettings()?.unitOpacity ?? 100;
+    export function getSelfSettingsOpacitySettings(): ProtoTypes.User.IUserOpacitySettings | null {
+        return getSelfSettings()?.opacitySettings ?? null;
+    }
+    export function setSelfSettingsOpacitySettings(opacitySettings: ProtoTypes.User.IUserOpacitySettings): void {
+        const selfSettings = getSelfSettings();
+        if (selfSettings == null) {
+            return;
+        }
+
+        selfSettings.opacitySettings = opacitySettings;
+        Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
     }
     export function reqTickSelfSettingsUnitOpacity(): void {
-        const opacity = getSelfSettingsUnitOpacity();
-        if (opacity === 100) {
-            UserProxy.reqUserSetSettings({ unitOpacity: 75 });
-        } else if (opacity === 75) {
-            UserProxy.reqUserSetSettings({ unitOpacity: 50 });
-        } else if (opacity === 50) {
-            UserProxy.reqUserSetSettings({ unitOpacity: 0 });
+        const unitOpacity = getSelfSettingsOpacitySettings()?.unitOpacity;
+        if ((unitOpacity === 100) || (unitOpacity == null)) {
+            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 75 } });
+        } else if (unitOpacity === 75) {
+            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 50 } });
+        } else if (unitOpacity === 50) {
+            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 0 } });
         } else {
-            UserProxy.reqUserSetSettings({ unitOpacity: 100 });
+            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 100 } });
         }
+    }
+    function mergeSelfSettingsOpacitySettings(newOpacitySettings: ProtoTypes.User.IUserOpacitySettings): void {
+        const selfSettings = getSelfSettings();
+        if (selfSettings == null) {
+            return;
+        }
+
+        const currentOpacitySettings = selfSettings.opacitySettings;
+        if (currentOpacitySettings == null) {
+            selfSettings.opacitySettings = Helpers.deepClone(newOpacitySettings);
+        } else {
+            currentOpacitySettings.tileBaseOpacity      = newOpacitySettings.tileBaseOpacity ?? currentOpacitySettings.tileBaseOpacity;
+            currentOpacitySettings.tileDecoratorOpacity = newOpacitySettings.tileDecoratorOpacity ?? currentOpacitySettings.tileDecoratorOpacity;
+            currentOpacitySettings.tileObjectOpacity    = newOpacitySettings.tileObjectOpacity ?? currentOpacitySettings.tileObjectOpacity;
+            currentOpacitySettings.unitOpacity          = newOpacitySettings.unitOpacity ?? currentOpacitySettings.unitOpacity;
+        }
+
+        Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
     }
 
     export function updateOnMsgUserLogin(data: NetMessage.MsgUserLogin.IS): void {
@@ -273,13 +300,12 @@ namespace UserModel {
 
         const oldIsShowGridBorder   = getSelfSettingsIsShowGridBorder();
         const oldVersion            = getSelfSettingsTextureVersion();
-        const oldUnitOpacity        = getSelfSettingsUnitOpacity();
         const oldIsAutoScrollMap    = getSelfSettingsIsAutoScrollMap();
         (newSettings.isSetPathMode != null)             && (selfSettings.isSetPathMode = newSettings.isSetPathMode);
         (newSettings.isShowGridBorder != null)          && (selfSettings.isShowGridBorder = newSettings.isShowGridBorder);
         (newSettings.unitAndTileTextureVersion != null) && (selfSettings.unitAndTileTextureVersion = newSettings.unitAndTileTextureVersion);
-        (newSettings.unitOpacity != null)               && (selfSettings.unitOpacity = newSettings.unitOpacity);
         (newSettings.isAutoScrollMap != null)           && (selfSettings.isAutoScrollMap = newSettings.isAutoScrollMap);
+        (newSettings.opacitySettings != null)           && (mergeSelfSettingsOpacitySettings(newSettings.opacitySettings));
 
         if (oldVersion !== getSelfSettingsTextureVersion()) {
             CommonModel.updateOnUnitAndTileTextureVersionChanged();
@@ -287,9 +313,6 @@ namespace UserModel {
         }
         if (oldIsShowGridBorder !== getSelfSettingsIsShowGridBorder()) {
             Notify.dispatch(NotifyType.UserSettingsIsShowGridBorderChanged);
-        }
-        if (oldUnitOpacity !== getSelfSettingsUnitOpacity()) {
-            Notify.dispatch(NotifyType.UserSettingsUnitOpacityChanged);
         }
         if (oldIsAutoScrollMap !== getSelfSettingsIsAutoScrollMap()) {
             Notify.dispatch(NotifyType.UserSettingsIsAutoScrollMapChanged);

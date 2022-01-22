@@ -30,6 +30,7 @@ namespace TwnsBwTileMapView {
             { type: NotifyType.TileAnimationTick,                   callback: this._onNotifyTileAnimationTick },
             { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyIsShowGridBorderChanged },
             { type: NotifyType.BwTileLocationFlagSet,               callback: this._onNotifyBwTileLocationFlagSet },
+            { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
         ];
 
         private _tileMap?: TwnsBwTileMap.BwTileMap;
@@ -45,6 +46,8 @@ namespace TwnsBwTileMapView {
             this.addChild(this._coZoneContainer);
             this._locationLayer.alpha   = 0.6;
             this._gridBorderLayer.alpha = 0.3;
+
+            this._updateOpacityForTileLayers();
         }
 
         public init(tileMap: TwnsBwTileMap.BwTileMap): void {
@@ -321,8 +324,19 @@ namespace TwnsBwTileMapView {
             img.visible = false;
         }
 
+        private _onNotifyUserSettingsOpacitySettingsChanged(): void {
+            this._updateOpacityForTileLayers();
+        }
+
         private _updateGridBorderLayerVisible(): void {
             this._gridBorderLayer.visible = UserModel.getSelfSettingsIsShowGridBorder();
+        }
+
+        private _updateOpacityForTileLayers(): void {
+            const opacitySettings       = UserModel.getSelfSettingsOpacitySettings();
+            this._baseLayer.alpha       = (opacitySettings?.tileBaseOpacity ?? 100) / 100;
+            this._objectLayer.alpha     = (opacitySettings?.tileObjectOpacity ?? 100) / 100;
+            this._decoratorLayer.alpha  = (opacitySettings?.tileDecoratorOpacity ?? 100) / 100;
         }
     }
 }
