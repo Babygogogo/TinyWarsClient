@@ -15,18 +15,18 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCommonChooseSingleUnitTypePanel {
+namespace TwnsCommonChooseSingleTileTypePanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import UnitType             = Types.UnitType;
+    import TileType             = Types.TileType;
 
     export type OpenData = {
-        currentUnitType : UnitType;
-        unitTypeArray   : UnitType[];
+        currentTileType : TileType;
+        tileTypeArray   : TileType[];
         playerIndex     : number;
-        callback        : (unitType: UnitType) => void;
+        callback        : (tileType: TileType) => void;
     };
-    export class CommonChooseSingleUnitTypePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class CommonChooseSingleTileTypePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;
         private readonly _group!        : eui.Group;
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
@@ -70,10 +70,10 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
             const openData      = this._getOpenData();
             const playerIndex   = openData.playerIndex;
             const dataArray     : DataForTypeRenderer[] = [];
-            for (const newUnitType of openData.unitTypeArray) {
+            for (const newTileType of openData.tileTypeArray) {
                 dataArray.push({
-                    currentUnitType: openData.currentUnitType,
-                    newUnitType,
+                    currentTileType: openData.currentTileType,
+                    newTileType,
                     playerIndex,
                     callback        : openData.callback,
                 });
@@ -112,48 +112,52 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
     }
 
     type DataForTypeRenderer = {
-        currentUnitType : UnitType;
-        newUnitType     : UnitType;
+        currentTileType : TileType;
+        newTileType     : TileType;
         playerIndex     : number;
-        callback        : (unitType: UnitType) => void;
+        callback        : (tileType: TileType) => void;
     };
     class TypeRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForTypeRenderer> {
-        private readonly _conUnitView!  : eui.Group;
+        private readonly _conTileView!  : eui.Group;
         private readonly _labelType!    : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView      = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _tileView      = new TwnsMeTileSimpleView.MeTileSimpleView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.UnitAnimationTick,   callback: this._onNotifyUnitAnimationTick },
+                { type: NotifyType.TileAnimationTick,   callback: this._onNotifyTileAnimationTick },
             ]);
 
-            this._conUnitView.addChild(this._unitView);
+            const conTileView   = this._conTileView;
+            const tileView      = this._tileView;
+            conTileView.addChild(tileView.getImgBase());
+            conTileView.addChild(tileView.getImgDecorator());
+            conTileView.addChild(tileView.getImgObject());
         }
 
         protected async _onDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
 
             this._updateLabelType();
-            this._updateUnitView();
+            this._updateTileView();
         }
 
         public onItemTapEvent(): void {
             const data          = this._getData();
-            const newUnitType   = data.newUnitType;
-            if (newUnitType !== data.currentUnitType) {
-                data.callback(newUnitType);
+            const newTileType   = data.newTileType;
+            if (newTileType !== data.currentTileType) {
+                data.callback(newTileType);
 
-                TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonChooseSingleUnitTypePanel);
+                TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonChooseSingleTileTypePanel);
             }
         }
 
         private _onNotifyLanguageChanged(): void {        // DONE
             this._updateComponentsForLanguage();
         }
-        private _onNotifyUnitAnimationTick(): void {
-            this._unitView.updateOnAnimationTick(Timer.getUnitAnimationTickCount());
+        private _onNotifyTileAnimationTick(): void {
+            this._tileView.updateOnAnimationTick();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -163,18 +167,27 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
         private _updateLabelType(): void {
             const data      = this._getData();
             const label     = this._labelType;
-            label.text      = Lang.getUnitName(data.newUnitType) || CommonConstants.ErrorTextForUndefined;
-            label.textColor = data.currentUnitType === data.newUnitType ? 0x00FF00 : 0xFFFFFF;
+            label.text      = Lang.getTileName(data.newTileType) || CommonConstants.ErrorTextForUndefined;
+            label.textColor = data.currentTileType === data.newTileType ? 0x00FF00 : 0xFFFFFF;
         }
-        private _updateUnitView(): void {
-            const data = this._getData();
-            this._unitView.update({
-                gridIndex   : { x: 0, y: 0 },
-                playerIndex : data.playerIndex,
-                unitType    : data.newUnitType,
+        private _updateTileView(): void {
+            const data          = this._getData();
+            const tileType      = data.newTileType;
+            const objectType    = ConfigManager.getTileObjectTypeByTileType(tileType);
+            const baseType      = ConfigManager.getTileBaseTypeByTileType(tileType);
+            const playerIndex   = data.playerIndex;
+
+            this._tileView.init({
+                tileBaseType        : baseType,
+                tileBaseShapeId     : 0,
+                tileDecoratorType   : null,
+                tileDecoratorShapeId: null,
+                tileObjectType      : objectType,
+                tileObjectShapeId   : 0,
+                playerIndex         : ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
             });
         }
     }
 }
 
-// export default TwnsCommonChooseSingleUnitTypePanel;
+// export default TwnsCommonChooseSingleTileTypePanel;

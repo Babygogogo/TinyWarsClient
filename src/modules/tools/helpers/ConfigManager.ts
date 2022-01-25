@@ -633,6 +633,9 @@ namespace ConfigManager {
         return Helpers.getExisted(cfgDict[tileType], ClientErrorCode.ConfigManager_GetMoveCostCfgByTileType_01);
     }
 
+    export function getTileBaseTypeByTileType(type: TileType): TileBaseType {
+        return Helpers.getExisted(CommonConstants.TileTypeToTileBaseType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
+    }
     export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
         return Helpers.getExisted(CommonConstants.TileTypeToTileObjectType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }

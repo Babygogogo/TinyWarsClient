@@ -14,6 +14,15 @@ namespace TwnsMeTileSimpleView {
     import TileObjectType           = Types.TileObjectType;
 
     const { height: GRID_HEIGHT }   = CommonConstants.GridSize;
+    export type TileViewData = {
+        tileBaseType        : TileBaseType | null;
+        tileBaseShapeId     : number | null;
+        tileDecoratorType   : TileDecoratorType | null;
+        tileDecoratorShapeId: number | null;
+        tileObjectType      : TileObjectType | null;
+        tileObjectShapeId   : number | null;
+        playerIndex         : number;
+    };
 
     export class MeTileSimpleView {
         private readonly _imgBase       = new TwnsUiImage.UiImage();
@@ -48,22 +57,14 @@ namespace TwnsMeTileSimpleView {
             }
         }
 
-        public init({ tileBaseType, tileBaseShapeId, tileDecoratorType, tileDecoratorShapeId, tileObjectType, tileObjectShapeId, playerIndex }: {
-            tileBaseType        : TileBaseType | null;
-            tileBaseShapeId     : number | null;
-            tileDecoratorType   : TileDecoratorType | null;
-            tileDecoratorShapeId: number | null;
-            tileObjectType      : TileObjectType | null;
-            tileObjectShapeId   : number | null;
-            playerIndex         : number;
-        }): MeTileSimpleView {
-            this._baseType          = tileBaseType;
-            this._baseShapeId       = tileBaseShapeId;
-            this._decoratorType     = tileDecoratorType;
-            this._decoratorShapeId  = tileDecoratorShapeId;
-            this._objectType        = tileObjectType;
-            this._objectShapeId     = tileObjectShapeId;
-            this._playerIndex       = playerIndex;
+        public init(data: TileViewData): MeTileSimpleView {
+            this._baseType          = data.tileBaseType;
+            this._baseShapeId       = data.tileBaseShapeId;
+            this._decoratorType     = data.tileDecoratorType;
+            this._decoratorShapeId  = data.tileDecoratorShapeId;
+            this._objectType        = data.tileObjectType;
+            this._objectShapeId     = data.tileObjectShapeId;
+            this._playerIndex       = data.playerIndex;
 
             return this;
         }

@@ -170,6 +170,7 @@ namespace TwnsCommonAddLoadedUnitPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseSingleUnitTypePanel, {
                 currentUnitType : Helpers.getExisted(this._getUnitData().unitType),
                 unitTypeArray   : ConfigManager.getUnitTypesByCategory(loaderUnit.getConfigVersion(), Helpers.getExisted(loaderUnit.getLoadUnitCategory())),
+                playerIndex     : loaderUnit.getPlayerIndex(),
                 callback        : unitType => {
                     this._resetUnitData(unitType);
                     this._updateView();

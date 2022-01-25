@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" source="uncompressedColorTransparent0001" left="0" right="0" top="0" bottom="0"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="680" horizontalCenter="0" height="480" verticalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0" locked="true">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
+                                       verticalCenter="0" right="30" />
+            </e:Group>
+        </e:Group>
+        <e:Group x="30" y="60">
+            <TwnsUiLabel:UiLabel id="_labelPlayer1" text="Label" x="110" y="49" size="20" />
+            <e:Group y="40" left="0">
+                <e:Group id="_conTileView1" scaleX="1.5" scaleY="1.5" y="36" x="0" touchEnabled="false"
+                         touchThrough="true" touchChildren="false" />
+                <TwnsUiButton:UiButton id="_btnTileView1" label="Button" scaleX="1" scaleY="1" width="36" height="36"
+                                       left="0" top="0">
+                    <TwnsUiButton:skinName>
+                        <e:Skin>
+                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                        </e:Skin>
+                    </TwnsUiButton:skinName>
+                </TwnsUiButton:UiButton>
+                <e:Group id="_conUnitView1" scaleX="1.5" scaleY="1.5" x="50" y="0" touchChildren="false"
+                         touchEnabled="false" touchThrough="true" visible="true" />
+                <TwnsUiButton:UiButton id="_btnUnitView1" label="Button" scaleX="1" scaleY="1" left="50" top="0"
+                                       width="36" height="36">
+                    <TwnsUiButton:skinName>
+                        <e:Skin>
+                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                        </e:Skin>
+                    </TwnsUiButton:skinName>
+                </TwnsUiButton:UiButton>
+            </e:Group>
+            <e:Group x="0" top="0">
+                <TwnsUiImage:UiImage id="_imgCo1" source="coEyeNormal0001" scaleX="1" scaleY="1" x="0" y="0" />
+                <TwnsUiButton:UiButton id="_btnSkill1" label="Button" x="90"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                       width="60" />
+            </e:Group>
+            <e:Group x="0" y="90">
+                <e:Group y="0" x="0">
+                    <TwnsUiButton:UiButton id="_btnHp1" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelHp1" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="40" x="0">
+                    <TwnsUiButton:UiButton id="_btnWeapon1" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelWeapon1" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="50" x="10">
+                    <TwnsUiButton:UiButton id="_btnPromotion1" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelPromotion1" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="50" x="10">
+                    <TwnsUiButton:UiButton id="_btnTower1" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelTower1" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="60" x="20">
+                    <TwnsUiButton:UiButton id="_btnOffenseBonus1" label="Offense Bonus"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelOffenseBonus1" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="70" x="30">
+                    <TwnsUiButton:UiButton id="_btnUpperLuck1" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelUpperLuck1" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="80" x="40">
+                    <TwnsUiButton:UiButton id="_btnLowerLuck1" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelLowerLuck1" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="90" x="50">
+                    <TwnsUiButton:UiButton id="_btnFund1" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelFund1" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="100" x="60">
+                    <TwnsUiButton:UiButton id="_btnCity1" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelCity1" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
+        <e:Group x="230" y="60">
+            <TwnsUiLabel:UiLabel text="Label" x="120" y="59" id="_labelPlayer2" size="20" />
+            <e:Group y="40" left="0">
+                <e:Group id="_conTileView2" scaleX="1.5" scaleY="1.5" y="36" x="0" touchChildren="false"
+                         touchEnabled="false" touchThrough="true" />
+                <TwnsUiButton:UiButton id="_btnTileView2" label="Button" scaleX="1" scaleY="1" width="36" height="36"
+                                       left="0" top="0">
+                    <TwnsUiButton:skinName>
+                        <e:Skin>
+                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                        </e:Skin>
+                    </TwnsUiButton:skinName>
+                </TwnsUiButton:UiButton>
+                <e:Group id="_conUnitView2" scaleX="1.5" scaleY="1.5" x="50" y="0" touchChildren="false"
+                         touchEnabled="false" touchThrough="true" />
+                <TwnsUiButton:UiButton id="_btnUnitView2" label="Button" left="50" top="0" width="36" height="36">
+                    <TwnsUiButton:skinName>
+                        <e:Skin>
+                            <e:Image left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0000" />
+                        </e:Skin>
+                    </TwnsUiButton:skinName>
+                </TwnsUiButton:UiButton>
+            </e:Group>
+            <e:Group left="0" top="0">
+                <TwnsUiImage:UiImage id="_imgCo2" source="coEyeNormal0001" scaleX="1" scaleY="1" x="0" y="0" />
+                <TwnsUiButton:UiButton label="Button" x="90" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                       verticalCenter="0" width="60" id="_btnSkill2" />
+            </e:Group>
+            <e:Group x="0" y="90">
+                <e:Group y="0" x="0">
+                    <TwnsUiButton:UiButton id="_btnHp2" label="Button"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel text="100" x="120" id="_labelHp2" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="40" x="0">
+                    <TwnsUiButton:UiButton id="_btnWeapon2" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelWeapon2" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="70" x="30">
+                    <TwnsUiButton:UiButton id="_btnPromotion2" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelPromotion2" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="70" x="30">
+                    <TwnsUiButton:UiButton id="_btnTower2" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelTower2" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="80" x="40">
+                    <TwnsUiButton:UiButton id="_btnOffenseBonus2" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelOffenseBonus2" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="90" x="50">
+                    <TwnsUiButton:UiButton id="_btnUpperLuck2" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelUpperLuck2" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="100" x="60">
+                    <TwnsUiButton:UiButton id="_btnLowerLuck2" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelLowerLuck2" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="110" x="70">
+                    <TwnsUiButton:UiButton id="_btnFund2" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelFund2" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:Group y="120" x="80">
+                    <TwnsUiButton:UiButton id="_btnCity2" label="Weapon"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel id="_labelCity2" text="100" x="120" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
+        <e:Group x="430" y="60">
+            <e:Group x="0" y="0">
+                <TwnsUiButton:UiButton id="_btnSwitchPlayer" label="Button"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="220" x="0" y="-68" />
+                <e:Group y="-34" x="0">
+                    <TwnsUiButton:UiButton id="_btnWeather" label="Button"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiLabel:UiLabel text="100" x="120" id="_labelWeather" size="16" verticalCenter="0" />
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:Group x="0" y="68">
+                <TwnsUiLabel:UiLabel text="Label" x="0" y="-48" id="_labelAttackTitle" size="20" />
+                <TwnsUiLabel:UiLabel text="Label" x="0" y="-22" id="_labelAttackDamage" size="16" />
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:Group x="10" y="78">
+                <TwnsUiLabel:UiLabel text="Label" x="0" y="-48" id="_labelDefendTitle" size="20" />
+                <TwnsUiLabel:UiLabel text="Label" x="0" y="-22" id="_labelDefendDamage" size="16" lineSpacing="4" />
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout gap="14" />
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

@@ -4,7 +4,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="640" horizontalCenter="0" height="380" verticalCenter="0">
+    <e:Group id="_group" width="640" horizontalCenter="0" height="470" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0" locked="true">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                  scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
@@ -24,7 +24,7 @@
                             <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2"
                                                  anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
                                                  top="0" bottom="0" locked="true" />
-                            <e:Group id="_conUnitView" x="4" y="2" scaleX="1.5" scaleY="1.5" />
+                            <e:Group id="_conTileView" x="6" y="34" scaleX="1.2" scaleY="1.2" />
                             <TwnsUiLabel:UiLabel id="_labelType" text="日期" size="16" textColor="0xffffff" x="42"
                                                  verticalCenter="0" maxTextWidth="100" />
                         </e:Group>

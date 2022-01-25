@@ -1225,6 +1225,20 @@ namespace TwnsLangCommonText {
             `摧毁地块上的部队。`,
             `Destroy units on the tiles.`,
         ],
+        [LangTextType.A0285]: [
+            [
+                `若您希望地图进入游戏正式图池以供其他玩家游玩，您必须提审地图，并等待地图审核小组审核通过。`,
+                `但是，本游戏对地图质量有一定要求。在对游戏机制有足够深入的理解之前，您的地图可能无法过审。`,
+                ``,
+                `不过，您可以通过菜单中的自由模式选项，直接使用本地图建立多人游戏，而无需通过审核。`,
+            ].join("\n"),
+            [
+                `If you want the map to enter the official map pool of the game for other players to play, you must submit the map and wait for the approval of the Map Committee.`,
+                `However, this game has certain requirements for map quality. Your map may not be accepted until you have a deep enough understanding of the game mechanism.`,
+                ``,
+                `Still, you can directly use this map to establish a multiplayer game through the free mode option in the menu without approval.`,
+            ].join("\n"),
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1234,8 +1248,8 @@ namespace TwnsLangCommonText {
             "Create Rooms",
         ],
         [LangTextType.B0001]: [
-            "无",
-            "None",
+            `无`,
+            `None`,
         ],
         [LangTextType.B0002]: [
             "基本设置",
@@ -4524,6 +4538,46 @@ namespace TwnsLangCommonText {
         [LangTextType.B0827]: [
             `不透明度设置`,
             `Opacity Settings`,
+        ],
+        [LangTextType.B0828]: [
+            `伤害计算器`,
+            `Damage Calculator`,
+        ],
+        [LangTextType.B0829]: [
+            `无技能`,
+            `No Skill`,
+        ],
+        [LangTextType.B0830]: [
+            `武器`,
+            `Weapon`,
+        ],
+        [LangTextType.B0831]: [
+            `进攻方`,
+            `Attacker`,
+        ],
+        [LangTextType.B0832]: [
+            `防守方`,
+            `Defender`,
+        ],
+        [LangTextType.B0833]: [
+            `指挥塔数量`,
+            `Towers`,
+        ],
+        [LangTextType.B0834]: [
+            `城市数量`,
+            `Cities`,
+        ],
+        [LangTextType.B0835]: [
+            `交换攻防双方`,
+            `Switch Attacker & Defender`,
+        ],
+        [LangTextType.B0836]: [
+            `无法进攻`,
+            `Can't attack.`,
+        ],
+        [LangTextType.B0837]: [
+            `反击`,
+            `Counter`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

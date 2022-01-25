@@ -38,6 +38,9 @@ namespace TwnsBwDamagePreviewPanel {
                 { type: NotifyType.BwCursorGridIndexChanged,        callback: this._onNotifyBwCursorGridIndexChanged },
                 { type: NotifyType.BwActionPlannerMovePathChanged,  callback: this._onNotifyBwActionPlannerMovePathChanged },
             ]);
+            this._setUiListenerArray([
+                { ui: this._group,  callback: this._onTouchedGroup },
+            ]);
 
             this._updateView();
         }
@@ -62,6 +65,77 @@ namespace TwnsBwDamagePreviewPanel {
         }
         private _onNotifyBwActionPlannerMovePathChanged(): void {
             this._updateView();
+        }
+
+        private _onTouchedGroup(): void {
+            const war               = this._getOpenData().war;
+            const defenderGridIndex = war.getCursor().getGridIndex();
+            const defenderUnit      = war.getUnitMap().getUnitOnMap(defenderGridIndex);
+            if (defenderUnit == null) {
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonForbidden01);
+                return;
+            }
+
+            const actionPlanner         = war.getActionPlanner();
+            const tileMap               = war.getTileMap();
+            const commonSettingsManager = war.getCommonSettingManager();
+            const allTiles              = tileMap.getAllTiles();
+            const allCities             = allTiles.filter(v => v.getType() === Types.TileType.City);
+            const allCommandTowers      = allTiles.filter(v => v.getType() === Types.TileType.CommandTower);
+            const attackerUnit          = Helpers.getExisted(actionPlanner.getFocusUnit());
+            const attackerPlayer        = attackerUnit.getPlayer();
+            const attackerPlayerIndex   = attackerUnit.getPlayerIndex();
+            const attackerArmorType     = attackerUnit.getArmorType();
+            const defenderArmorType     = defenderUnit.getArmorType();
+            const defenderPlayer        = defenderUnit.getPlayer();
+            const defenderPlayerIndex   = defenderUnit.getPlayerIndex();
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageCalculatorPanel, {
+                data: {
+                    configVersion   : war.getConfigVersion(),
+                    weatherType     : war.getWeatherManager().getCurrentWeatherType(),
+                    attackerData    : {
+                        coId            : attackerPlayer.getCoId(),
+                        coSkillType     : attackerPlayer.getCoUsingSkillType(),
+                        unitType        : attackerUnit.getUnitType(),
+                        unitHp          : attackerUnit.getCurrentHp(),
+                        unitWeaponType  : (attackerUnit.getPrimaryWeaponBaseDamage(defenderArmorType) != null)
+                            ? (Types.WeaponType.Primary)
+                            : (attackerUnit.getSecondaryWeaponBaseDamage(defenderArmorType) != null
+                                ? Types.WeaponType.Secondary
+                                : null
+                            ),
+                        unitPromotion   : attackerUnit.getCurrentPromotion(),
+                        tileType        : tileMap.getTile(actionPlanner.getMovePathDestination()).getType(),
+                        towersCount     : allCommandTowers.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length,
+                        offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(attackerPlayerIndex),
+                        upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(attackerPlayerIndex),
+                        lowerLuck       : commonSettingsManager.getSettingsLuckLowerLimit(attackerPlayerIndex),
+                        fund            : attackerPlayer.getFund(),
+                        citiesCount     : allCities.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length,
+                    },
+                    defenderData    : {
+                        coId            : defenderPlayer.getCoId(),
+                        coSkillType     : defenderPlayer.getCoUsingSkillType(),
+                        unitType        : defenderUnit.getUnitType(),
+                        unitHp          : defenderUnit.getCurrentHp(),
+                        unitWeaponType  : (defenderUnit.getPrimaryWeaponBaseDamage(attackerArmorType) != null)
+                            ? (Types.WeaponType.Primary)
+                            : (defenderUnit.getSecondaryWeaponBaseDamage(attackerArmorType) != null
+                                ? Types.WeaponType.Secondary
+                                : null
+                            ),
+                        unitPromotion   : defenderUnit.getCurrentPromotion(),
+                        tileType        : tileMap.getTile(defenderGridIndex).getType(),
+                        towersCount     : allCommandTowers.filter(v => v.getPlayerIndex() === defenderPlayerIndex).length,
+                        offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(defenderPlayerIndex),
+                        upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(defenderPlayerIndex),
+                        lowerLuck       : commonSettingsManager.getSettingsLuckLowerLimit(defenderPlayerIndex),
+                        fund            : defenderPlayer.getFund(),
+                        citiesCount     : allCities.filter(v => v.getPlayerIndex() === defenderPlayerIndex).length,
+                    },
+                },
+            });
+            SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

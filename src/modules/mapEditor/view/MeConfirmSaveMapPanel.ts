@@ -67,7 +67,7 @@ namespace TwnsMeConfirmSaveMapPanel {
                 btnConfirm.visible              = true;
                 groupNeedReview.visible         = !errorCode;
                 labelReviewDescTitle.visible    = !!errorCode;
-                labelReviewDesc.text            = errorCode ? Lang.getErrorText(errorCode) : ``;
+                labelReviewDesc.text            = errorCode ? Lang.getErrorText(errorCode) : Lang.getText(LangTextType.A0285);
             }
         }
         protected _onClosing(): void {
@@ -121,9 +121,8 @@ namespace TwnsMeConfirmSaveMapPanel {
             this._btnCancel.label           = Lang.getText(LangTextType.B0154);
             this._labelTitle.text           = Lang.getText(LangTextType.B0088);
             this._labelReviewDescTitle.text = Lang.getText(LangTextType.A0083);
-            this._labelReviewDesc.text      = Lang.getText(LangTextType.A0083);
             this._labelNeedReview.text      = Lang.getText(LangTextType.B0289);
-            this._labelContent.setRichText(Lang.getText(LangTextType.A0082));
+            this._labelContent.text         = Lang.getText(LangTextType.A0082);
         }
 
         private _updateImgNeedReview(): void {

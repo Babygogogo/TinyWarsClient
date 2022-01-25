@@ -59,6 +59,7 @@ namespace TwnsPanelConfig {
         CommonChooseLocationPanel           : PanelConfig<TwnsCommonChooseLocationPanel.OpenData>;
         CommonChoosePlayerAliveStatePanel   : PanelConfig<TwnsCommonChoosePlayerAliveStatePanel.OpenData>;
         CommonChoosePlayerIndexPanel        : PanelConfig<TwnsCommonChoosePlayerIndexPanel.OpenData>;
+        CommonChooseSingleTileTypePanel     : PanelConfig<TwnsCommonChooseSingleTileTypePanel.OpenData>;
         CommonChooseSingleUnitTypePanel     : PanelConfig<TwnsCommonChooseSingleUnitTypePanel.OpenData>;
         CommonChooseTeamIndexPanel          : PanelConfig<TwnsCommonChooseTeamIndexPanel.OpenData>;
         CommonChooseTileBasePanel           : PanelConfig<TwnsCommonChooseTileBasePanel.OpenData>;
@@ -72,6 +73,7 @@ namespace TwnsPanelConfig {
         CommonCoInfoPanel                   : PanelConfig<TwnsCommonCoInfoPanel.OpenData>;
         CommonCoListPanel                   : PanelConfig<TwnsCommonCoListPanel.OpenData>;
         CommonConfirmPanel                  : PanelConfig<TwnsCommonConfirmPanel.OpenData>;
+        CommonDamageCalculatorPanel         : PanelConfig<TwnsCommonDamageCalculatorPanel.OpenData>;
         CommonDamageChartPanel              : PanelConfig<TwnsCommonDamageChartPanel.OpenData>;
         CommonErrorPanel                    : PanelConfig<TwnsCommonErrorPanel.OpenData>;
         CommonHelpPanel                     : PanelConfig<TwnsCommonHelpPanel.OpenData>;
@@ -539,6 +541,12 @@ namespace TwnsPanelConfig {
                 layer       : LayerType.Hud0,
             },
 
+            CommonChooseSingleTileTypePanel: {
+                cls         : TwnsCommonChooseSingleTileTypePanel?.CommonChooseSingleTileTypePanel,
+                skinName    : `resource/skins/common/CommonChooseSingleTileTypePanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             CommonChooseSingleUnitTypePanel: {
                 cls         : TwnsCommonChooseSingleUnitTypePanel?.CommonChooseSingleUnitTypePanel,
                 skinName    : `resource/skins/common/CommonChooseSingleUnitTypePanel.exml`,
@@ -615,6 +623,13 @@ namespace TwnsPanelConfig {
                 cls         : TwnsCommonConfirmPanel?.CommonConfirmPanel,
                 skinName    : `resource/skins/common/CommonConfirmPanel.exml`,
                 layer       : LayerType.Notify0,
+            },
+
+            CommonDamageCalculatorPanel: {
+                cls         : TwnsCommonDamageCalculatorPanel?.CommonDamageCalculatorPanel,
+                skinName    : `resource/skins/common/CommonDamageCalculatorPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : true,
             },
 
             CommonDamageChartPanel: {

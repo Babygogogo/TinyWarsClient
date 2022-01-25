@@ -43,6 +43,7 @@ namespace TwnsUserSettingsPanel {
         private readonly _imgMask!                  : TwnsUiImage.UiImage;
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
         private readonly _btnClose!                 : TwnsUiButton.UiButton;
+        private readonly _btnDamageCalculator!      : TwnsUiButton.UiButton;
         private readonly _group!                    : eui.Group;
         private readonly _scroller!                 : eui.Scroller;
 
@@ -82,6 +83,7 @@ namespace TwnsUserSettingsPanel {
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,               callback: this.close },
+                { ui: this._btnDamageCalculator,    callback: this._onTouchedBtnDamageCalculator },
                 { ui: this._btnChangeNickname,      callback: this._onTouchedBtnChangeNickname },
                 { ui: this._btnChangePassword,      callback: this._onTouchedBtnChangePassword },
                 { ui: this._btnChangeDiscordId,     callback: this._onTouchedBtnChangeDiscordId },
@@ -247,6 +249,11 @@ namespace TwnsUserSettingsPanel {
         private _onMsgUserSetDiscordId(): void {
             const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnMsgUserSetDiscordId_00);
             UserProxy.reqUserGetPublicInfo(selfUserId);
+        }
+        private _onTouchedBtnDamageCalculator(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageCalculatorPanel, {
+                data    : null,
+            });
         }
         private _onTouchedBtnChangeNickname(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.UserChangeNicknamePanel, void 0);

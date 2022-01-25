@@ -2058,6 +2058,17 @@ namespace TwnsClientErrorCode {
         ConfigManager_GetTileObjectTypeByTileType_08,
         ConfigManager_GetTileObjectTypeByTileType_09,
 
+        ConfigManager_GetTileBaseTypeByTileType_00,
+        ConfigManager_GetTileBaseTypeByTileType_01,
+        ConfigManager_GetTileBaseTypeByTileType_02,
+        ConfigManager_GetTileBaseTypeByTileType_03,
+        ConfigManager_GetTileBaseTypeByTileType_04,
+        ConfigManager_GetTileBaseTypeByTileType_05,
+        ConfigManager_GetTileBaseTypeByTileType_06,
+        ConfigManager_GetTileBaseTypeByTileType_07,
+        ConfigManager_GetTileBaseTypeByTileType_08,
+        ConfigManager_GetTileBaseTypeByTileType_09,
+
         ConfigManager_GetTileBaseImageSource_00,
         ConfigManager_GetTileBaseImageSource_01,
         ConfigManager_GetTileBaseImageSource_02,
