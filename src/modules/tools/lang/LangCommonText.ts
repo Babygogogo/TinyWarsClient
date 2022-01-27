@@ -1239,6 +1239,10 @@ namespace TwnsLangCommonText {
                 `Still, you can directly use this map to establish a multiplayer game through the free mode option in the menu without approval.`,
             ].join("\n"),
         ],
+        [LangTextType.A0286]: [
+            `此操作无法撤销。您确定要继续吗？`,
+            `This operation can not be undone. Are you sure to continue?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4578,6 +4582,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0837]: [
             `反击`,
             `Counter`,
+        ],
+        [LangTextType.B0838]: [
+            `删除信息`,
+            `Delete Message`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

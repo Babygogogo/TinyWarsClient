@@ -9,6 +9,7 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import ChatModel            from "./ChatModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace ChatProxy {
     import NetMessage       = ProtoTypes.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
@@ -16,10 +17,11 @@ namespace ChatProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgChatAddMessage,                callback: _onMsgChatAddMessage,             },
-            { msgCode: NetMessageCodes.MsgChatGetAllMessages,            callback: _onMsgChatGetAllMessages          },
-            { msgCode: NetMessageCodes.MsgChatUpdateReadProgress,        callback: _onMsgChatUpdateReadProgress      },
-            { msgCode: NetMessageCodes.MsgChatGetAllReadProgressList,    callback: _onMsgChatGetAllReadProgressList  },
+            { msgCode: NetMessageCodes.MsgChatAddMessage,               callback: _onMsgChatAddMessage },
+            { msgCode: NetMessageCodes.MsgChatGetAllMessages,           callback: _onMsgChatGetAllMessages },
+            { msgCode: NetMessageCodes.MsgChatUpdateReadProgress,       callback: _onMsgChatUpdateReadProgress },
+            { msgCode: NetMessageCodes.MsgChatGetAllReadProgressList,   callback: _onMsgChatGetAllReadProgressList },
+            { msgCode: NetMessageCodes.MsgChatDeleteMessage,            callback: _onMsgChatDeleteMessage },
         ], null);
     }
 
@@ -82,6 +84,17 @@ namespace ChatProxy {
         if (!data.errorCode) {
             ChatModel.resetAllReadProgress(data.list || []);
             Notify.dispatch(NotifyType.MsgChatGetAllReadProgressList, data);
+        }
+    }
+
+    export function reqChatDeleteMessage(messageId: number): void {
+        NetManager.send({ MsgChatDeleteMessage: { c: { messageId } } });
+    }
+    function _onMsgChatDeleteMessage(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgChatDeleteMessage.IS;
+        if (!data.errorCode) {
+            ChatModel.updateOnDeleteMessage(Helpers.getExisted(data.messageId));
+            Notify.dispatch(NotifyType.MsgChatDeleteMessage, data);
         }
     }
 }

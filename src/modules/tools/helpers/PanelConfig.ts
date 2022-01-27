@@ -45,6 +45,7 @@ namespace TwnsPanelConfig {
 
         CcwMyWarListPanel                   : PanelConfig<TwnsCcwMyWarListPanel.OpenData>;
 
+        ChatCommandPanel                    : PanelConfig<TwnsChatCommandPanel.OpenData>;
         ChatPanel                           : PanelConfig<TwnsChatPanel.OpenData>;
 
         CommonAddLoadedUnitPanel            : PanelConfig<TwnsCommonAddLoadedUnitPanel.OpenData>;
@@ -461,6 +462,12 @@ namespace TwnsPanelConfig {
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
+            ChatCommandPanel: {
+                cls         : TwnsChatCommandPanel?.ChatCommandPanel,
+                skinName    : `resource/skins/chat/ChatCommandPanel.exml`,
+                layer       : LayerType.Hud0,
+                needCache   : false,
+            },
             ChatPanel: {
                 cls         : TwnsChatPanel?.ChatPanel,
                 skinName    : `resource/skins/chat/ChatPanel.exml`,

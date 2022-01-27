@@ -99,6 +99,9 @@ namespace UserModel {
         return (!!privilege)
             && ((!!privilege.isAdmin) || (!!privilege.isChangeLogEditor));
     }
+    export function getIsSelfChatManager(): boolean {
+        return !!getSelfUserPrivilege()?.isChatManager;
+    }
 
     export function getSelfNickname(): string | null {
         const info = getSelfInfo();

@@ -7082,6 +7082,17 @@ export const enum ServerErrorCode {
     ExeChatAddMessage_ExeWithSocket_0008,
     ExeChatAddMessage_ExeWithSocket_0009,
 
+    ExeChatDeleteMessage_ExeWithSocket_0000,
+    ExeChatDeleteMessage_ExeWithSocket_0001,
+    ExeChatDeleteMessage_ExeWithSocket_0002,
+    ExeChatDeleteMessage_ExeWithSocket_0003,
+    ExeChatDeleteMessage_ExeWithSocket_0004,
+    ExeChatDeleteMessage_ExeWithSocket_0005,
+    ExeChatDeleteMessage_ExeWithSocket_0006,
+    ExeChatDeleteMessage_ExeWithSocket_0007,
+    ExeChatDeleteMessage_ExeWithSocket_0008,
+    ExeChatDeleteMessage_ExeWithSocket_0009,
+
     MsgChatUpdateReadProgress0000,
     MsgChatUpdateReadProgress0001,
     MsgChatUpdateReadProgress0002,

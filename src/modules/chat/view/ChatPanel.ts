@@ -59,9 +59,10 @@ namespace TwnsChatPanel {
 
         protected override _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgChatAddMessage,      callback: this._onMsgChatAddMessage },
-                { type: NotifyType.MsgChatGetAllMessages,  callback: this._onMsgChatGetAllMessages },
+                { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgChatAddMessage,       callback: this._onNotifyMsgChatAddMessage },
+                { type: NotifyType.MsgChatDeleteMessage,    callback: this._onNotifyMsgChatDeleteMessage },
+                { type: NotifyType.MsgChatGetAllMessages,   callback: this._onNotifyMsgChatGetAllMessages },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
@@ -124,7 +125,7 @@ namespace TwnsChatPanel {
             this._updateComponentsForLanguage();
         }
 
-        private async _onMsgChatAddMessage(e: egret.Event): Promise<void> {
+        private async _onNotifyMsgChatAddMessage(e: egret.Event): Promise<void> {
             const message       = Helpers.getExisted((e.data as NetMessage.MsgChatAddMessage.IS).message);
             const fromUserId    = message.fromUserId;
             if (fromUserId === UserModel.getSelfUserId()) {
@@ -159,7 +160,22 @@ namespace TwnsChatPanel {
             this._listChat.bindData(newDataList);
         }
 
-        private async _onMsgChatGetAllMessages(): Promise<void> {
+        private async _onNotifyMsgChatDeleteMessage(e: egret.Event): Promise<void> {
+            const messageId = (e.data as NetMessage.MsgChatDeleteMessage.IS).messageId;
+            const list      = this._listMessage;
+            if (list.getBoundDataArray()?.some(v => v.message.messageId === messageId)) {
+                const chatData  = this._dataForListChat[Helpers.getExisted(this.getSelectedIndex())];
+                const dataArray : DataForMessageRenderer[] = [];
+                for (const message of ChatModel.getMessagesForCategory(chatData.toCategory).get(chatData.toTarget) || []) {
+                    dataArray.push({ message });
+                }
+
+                list.bindData(dataArray);
+                this._labelNoMessage.visible = !dataArray.length;
+            }
+        }
+
+        private async _onNotifyMsgChatGetAllMessages(): Promise<void> {
             this._dataForListChat = await this._createDataForListChat();
             this._listChat.bindData(this._dataForListChat);
             this.setSelectedIndex(0);
@@ -674,11 +690,9 @@ namespace TwnsChatPanel {
                 if (userId !== UserModel.getSelfUserId()) {
                     const info = await UserModel.getUserPublicInfo(userId);
                     if (info) {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
-                            content : Lang.getFormattedText(LangTextType.F0025, info.nickname),
-                            callback: () => {
-                                TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: userId });
-                            },
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatCommandPanel, {
+                            messageId   : Helpers.getExisted(message.messageId),
+                            userId,
                         });
                     }
                 }

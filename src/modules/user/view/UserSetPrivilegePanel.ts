@@ -38,9 +38,15 @@ namespace TwnsUserSetPrivilegePanel {
         private readonly _groupIsChangeLogEditor!   : eui.Group;
         private readonly _imgIsChangeLogEditor!     : TwnsUiImage.UiImage;
         private readonly _labelIsChangeLogEditor!   : TwnsUiLabel.UiLabel;
+
         private readonly _groupCanChat!             : eui.Group;
         private readonly _imgCanChat!               : TwnsUiImage.UiImage;
         private readonly _labelCanChat!             : TwnsUiLabel.UiLabel;
+
+        private readonly _groupChatManager!         : eui.Group;
+        private readonly _imgChatManager!           : TwnsUiImage.UiImage;
+        private readonly _labelChatManager!         : TwnsUiLabel.UiLabel;
+
         private readonly _btnCancel!                : TwnsUiButton.UiButton;
         private readonly _btnConfirm!               : TwnsUiButton.UiButton;
 
@@ -54,6 +60,7 @@ namespace TwnsUserSetPrivilegePanel {
                 { ui: this._btnConfirm,             callback: this._onTouchedBtnConfirm },
                 { ui: this._btnCancel,              callback: this.close },
                 { ui: this._groupCanChat,           callback: this._onTouchedGroupCanChat },
+                { ui: this._groupChatManager,       callback: this._onTouchedGroupChatManager },
                 { ui: this._groupCanLogin,          callback: this._onTouchedGroupCanLogin },
                 { ui: this._groupIsAdmin,           callback: this._onTouchedGroupIsAdmin },
                 { ui: this._groupIsChangeLogEditor, callback: this._onTouchedGroupIsChangeLogEditor },
@@ -78,6 +85,7 @@ namespace TwnsUserSetPrivilegePanel {
                 const userPrivilege                 = Helpers.getExisted(userPublicInfo.userPrivilege);
                 this._labelUserName.text            = userPublicInfo.nickname || CommonConstants.ErrorTextForUndefined;
                 this._imgCanChat.visible            = !!userPrivilege.canChat;
+                this._imgChatManager.visible        = !!userPrivilege.isChatManager;
                 this._imgCanLogin.visible           = !!userPrivilege.canLogin;
                 this._imgIsAdmin.visible            = !!userPrivilege.isAdmin;
                 this._imgIsChangeLogEditor.visible  = !!userPrivilege.isChangeLogEditor;
@@ -104,12 +112,17 @@ namespace TwnsUserSetPrivilegePanel {
                     isAdmin             : !!this._imgIsAdmin.visible,
                     isChangeLogEditor   : !!this._imgIsChangeLogEditor.visible,
                     isMapCommittee      : !!this._imgIsMapCommittee.visible,
+                    isChatManager       : !!this._imgChatManager.visible,
                 });
             }
         }
 
         private _onTouchedGroupCanChat(): void {
             const img   = this._imgCanChat;
+            img.visible = !img.visible;
+        }
+        private _onTouchedGroupChatManager(): void {
+            const img   = this._imgChatManager;
             img.visible = !img.visible;
         }
         private _onTouchedGroupCanLogin(): void {

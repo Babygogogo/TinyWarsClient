@@ -7,10 +7,10 @@
 // import UserModel        from "../../user/model/UserModel";
 // import TwnsChatPanel    from "../view/ChatPanel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace ChatModel {
     import ChatCategory     = Types.ChatMessageToCategory;
     import IChatMessage     = ProtoTypes.Chat.IChatMessage;
-    import ChatPanel        = TwnsChatPanel.ChatPanel;
 
     type MessageDict                    = Map<number, IChatMessage[]>;
     const _allMessageDict               = new Map<ChatCategory, MessageDict>();
@@ -75,6 +75,15 @@ namespace ChatModel {
 
             } else {
                 Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
+            }
+        }
+    }
+
+    export function updateOnDeleteMessage(messageId: number): void {
+        for (const [, messageDict] of _allMessageDict) {
+            for (const [, messageArray] of messageDict) {
+                const index = messageArray.findIndex(v => v.messageId === messageId);
+                (index >= 0) && (messageArray.splice(index, 1));
             }
         }
     }

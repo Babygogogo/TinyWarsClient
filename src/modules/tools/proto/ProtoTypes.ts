@@ -24651,6 +24651,9 @@ export declare namespace Chat {
     /** Properties of a ChatMessage. */
     interface IChatMessage {
 
+        /** ChatMessage messageId */
+        messageId?: (number|null);
+
         /** ChatMessage fromUserId */
         fromUserId?: (number|null);
 
@@ -24675,6 +24678,9 @@ export declare namespace Chat {
          * @param [properties] Properties to set
          */
         constructor(properties?: Chat.IChatMessage);
+
+        /** ChatMessage messageId. */
+        public messageId: number;
 
         /** ChatMessage fromUserId. */
         public fromUserId: number;
@@ -24968,6 +24974,9 @@ export declare namespace User {
 
         /** UserPrivilege isChangeLogEditor */
         isChangeLogEditor?: (boolean|null);
+
+        /** UserPrivilege isChatManager */
+        isChatManager?: (boolean|null);
     }
 
     /** Represents a UserPrivilege. */
@@ -24993,6 +25002,9 @@ export declare namespace User {
 
         /** UserPrivilege isChangeLogEditor. */
         public isChangeLogEditor: boolean;
+
+        /** UserPrivilege isChatManager. */
+        public isChatManager: boolean;
 
         /**
          * Creates a new UserPrivilege instance using the specified properties.
@@ -26733,6 +26745,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgChatGetAllReadProgressList */
         MsgChatGetAllReadProgressList?: (NetMessage.IMsgChatGetAllReadProgressList|null);
 
+        /** MessageContainer MsgChatDeleteMessage */
+        MsgChatDeleteMessage?: (NetMessage.IMsgChatDeleteMessage|null);
+
         /** MessageContainer MsgMmSetMapAvailability */
         MsgMmSetMapAvailability?: (NetMessage.IMsgMmSetMapAvailability|null);
 
@@ -27111,6 +27126,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgChatGetAllReadProgressList. */
         public MsgChatGetAllReadProgressList?: (NetMessage.IMsgChatGetAllReadProgressList|null);
+
+        /** MessageContainer MsgChatDeleteMessage. */
+        public MsgChatDeleteMessage?: (NetMessage.IMsgChatDeleteMessage|null);
 
         /** MessageContainer MsgMmSetMapAvailability. */
         public MsgMmSetMapAvailability?: (NetMessage.IMsgMmSetMapAvailability|null);
@@ -38346,6 +38364,291 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgChatGetAllReadProgressList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgChatDeleteMessage. */
+    interface IMsgChatDeleteMessage {
+
+        /** MsgChatDeleteMessage c */
+        c?: (NetMessage.MsgChatDeleteMessage.IC|null);
+
+        /** MsgChatDeleteMessage s */
+        s?: (NetMessage.MsgChatDeleteMessage.IS|null);
+    }
+
+    /** Represents a MsgChatDeleteMessage. */
+    class MsgChatDeleteMessage implements IMsgChatDeleteMessage {
+
+        /**
+         * Constructs a new MsgChatDeleteMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgChatDeleteMessage);
+
+        /** MsgChatDeleteMessage c. */
+        public c?: (NetMessage.MsgChatDeleteMessage.IC|null);
+
+        /** MsgChatDeleteMessage s. */
+        public s?: (NetMessage.MsgChatDeleteMessage.IS|null);
+
+        /**
+         * Creates a new MsgChatDeleteMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgChatDeleteMessage instance
+         */
+        public static create(properties?: NetMessage.IMsgChatDeleteMessage): NetMessage.MsgChatDeleteMessage;
+
+        /**
+         * Encodes the specified MsgChatDeleteMessage message. Does not implicitly {@link NetMessage.MsgChatDeleteMessage.verify|verify} messages.
+         * @param message MsgChatDeleteMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgChatDeleteMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgChatDeleteMessage message, length delimited. Does not implicitly {@link NetMessage.MsgChatDeleteMessage.verify|verify} messages.
+         * @param message MsgChatDeleteMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgChatDeleteMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgChatDeleteMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgChatDeleteMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChatDeleteMessage;
+
+        /**
+         * Decodes a MsgChatDeleteMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgChatDeleteMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChatDeleteMessage;
+
+        /**
+         * Verifies a MsgChatDeleteMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgChatDeleteMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgChatDeleteMessage
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgChatDeleteMessage;
+
+        /**
+         * Creates a plain object from a MsgChatDeleteMessage message. Also converts values to other types if specified.
+         * @param message MsgChatDeleteMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgChatDeleteMessage, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgChatDeleteMessage to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgChatDeleteMessage {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C messageId */
+            messageId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgChatDeleteMessage.IC);
+
+            /** C messageId. */
+            public messageId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgChatDeleteMessage.IC): NetMessage.MsgChatDeleteMessage.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgChatDeleteMessage.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgChatDeleteMessage.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgChatDeleteMessage.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgChatDeleteMessage.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChatDeleteMessage.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChatDeleteMessage.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgChatDeleteMessage.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgChatDeleteMessage.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S messageId */
+            messageId?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgChatDeleteMessage.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S messageId. */
+            public messageId: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgChatDeleteMessage.IS): NetMessage.MsgChatDeleteMessage.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgChatDeleteMessage.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgChatDeleteMessage.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgChatDeleteMessage.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgChatDeleteMessage.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChatDeleteMessage.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChatDeleteMessage.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgChatDeleteMessage.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgChatDeleteMessage.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

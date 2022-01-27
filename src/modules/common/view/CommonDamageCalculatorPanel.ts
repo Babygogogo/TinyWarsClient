@@ -240,16 +240,16 @@ namespace TwnsCommonDamageCalculatorPanel {
         }
 
         private _onTouchedBtnUnitView1(): void {
-            this._handleTouchedConUnitView(this._calculatorData.attackerData);
+            this._handleTouchedConUnitView(this._calculatorData.attackerData, 1);
         }
         private _onTouchedBtnUnitView2(): void {
-            this._handleTouchedConUnitView(this._calculatorData.defenderData);
+            this._handleTouchedConUnitView(this._calculatorData.defenderData, 2);
         }
-        private _handleTouchedConUnitView(playerData: PlayerData): void {
+        private _handleTouchedConUnitView(playerData: PlayerData, playerIndex: number): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseSingleUnitTypePanel, {
                 currentUnitType : playerData.unitType,
                 unitTypeArray   : ConfigManager.getUnitTypesByCategory(this._calculatorData.configVersion, Types.UnitCategory.All),
-                playerIndex     : 2,
+                playerIndex,
                 callback        : unitType => {
                     playerData.unitType = unitType;
                     this._updateView();
@@ -258,18 +258,18 @@ namespace TwnsCommonDamageCalculatorPanel {
         }
 
         private _onTouchedBtnTileView1(): void {
-            this._handleTouchedConTileView(this._calculatorData.attackerData);
+            this._handleTouchedConTileView(this._calculatorData.attackerData, 1);
         }
         private _onTouchedBtnTileView2(): void {
-            this._handleTouchedConTileView(this._calculatorData.defenderData);
+            this._handleTouchedConTileView(this._calculatorData.defenderData, 2);
         }
-        private _handleTouchedConTileView(playerData: PlayerData): void {
+        private _handleTouchedConTileView(playerData: PlayerData, playerIndex: number): void {
             const configVersion         = this._calculatorData.configVersion;
             const destroyableTileTypes  = ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseSingleTileTypePanel, {
                 currentTileType : Types.TileType.Plain,
                 tileTypeArray   : ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.All).filter(v => destroyableTileTypes.indexOf(v) < 0),
-                playerIndex     : 2,
+                playerIndex,
                 callback        : tileType => {
                     playerData.tileType = tileType;
                     this._updateView();

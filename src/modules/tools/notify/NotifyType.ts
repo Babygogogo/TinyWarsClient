@@ -166,6 +166,7 @@ namespace TwnsNotifyType {
         MsgChatAddMessage,
         MsgChatUpdateReadProgress,
         MsgChatGetAllReadProgressList,
+        MsgChatDeleteMessage,
 
         MsgUserGetPublicInfo,
         MsgUserGetPublicInfoFailed,
