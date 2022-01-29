@@ -75,7 +75,9 @@ namespace TwnsLobbyBottomPanel {
         }
 
         private _onTouchedBtnGameData(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, {
+                configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+            });
         }
 
         private _onMsgUserLogout(): void {

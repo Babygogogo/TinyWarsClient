@@ -819,6 +819,12 @@ namespace Types {
     }
 
     // eslint-disable-next-line no-shadow
+    export const enum CoEnergyType {
+        Dor         = 1,
+        Trilogy     = 2,
+    }
+
+    // eslint-disable-next-line no-shadow
     export enum WarEventActionDialogueSide {
         Left    = 1,
         Right   = 2,

@@ -539,8 +539,9 @@ namespace TwnsCommonDamageCalculatorPanel {
             const data                      = this._calculatorData;
             const attackerData              = data.attackerData;
             const defenderData              = data.defenderData;
-            this._imgCo1.source             = ConfigManager.getCoEyeImageSource(attackerData.coId, true);
-            this._imgCo2.source             = ConfigManager.getCoEyeImageSource(defenderData.coId, true);
+            const configVersion             = data.configVersion;
+            this._imgCo1.source             = ConfigManager.getCoEyeImageSource(configVersion, attackerData.coId, true);
+            this._imgCo2.source             = ConfigManager.getCoEyeImageSource(configVersion, defenderData.coId, true);
             this._labelHp1.text             = `${attackerData.unitHp}`;
             this._labelHp2.text             = `${defenderData.unitHp}`;
             this._labelPromotion1.text      = `${attackerData.unitPromotion}`;

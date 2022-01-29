@@ -291,6 +291,7 @@ namespace TwnsTwWar {
             coId                        : data.coId,
             coCurrentEnergy             : null,
             coUsingSkillType            : Types.CoSkillType.Passive,
+            coPowerActivatedCount       : null,
             coIsDestroyedInTurn         : false,
             watchOngoingSrcUserIdArray  : null,
             watchRequestSrcUserIdArray  : null,

@@ -286,9 +286,10 @@ namespace TwnsCcrCreatePlayerInfoPage {
                     : Lang.getText(LangTextType.B0607));
 
             const coId                      = isSelfPlayer ? CcrCreateModel.getSelfCoId() : (playerRule.fixedCoIdInCcw ?? null);
-            const coCfg                     = coId == null ? null : ConfigManager.getCoBasicCfg(Helpers.getExisted(settingsForCommon.configVersion), coId);
+            const configVersion             = Helpers.getExisted(settingsForCommon.configVersion);
+            const coCfg                     = coId == null ? null : ConfigManager.getCoBasicCfg(configVersion, coId);
             this._labelCo.text              = coCfg ? coCfg.name : `??`;
-            this._imgCoHead.source          = coId == null ? `` : ConfigManager.getCoHeadImageSource(coId);
+            this._imgCoHead.source          = coId == null ? `` : ConfigManager.getCoHeadImageSource(configVersion, coId);
             this._imgCoInfo.visible         = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
             this._btnChangeCo.visible       = (isSelfPlayer) || (!isHumanPlayer);
             this._btnChangeSkinId.visible   = (isSelfPlayer) || (!isHumanPlayer);

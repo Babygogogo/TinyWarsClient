@@ -270,9 +270,10 @@ namespace TwnsBwWarInfoPanel {
         private async _updateComponentsForPlayerInfo(): Promise<void> {
             const data                  = this._getData();
             const playerIndex           = data.playerIndex;
-            const player                = data.war.getPlayer(playerIndex);
+            const war                   = data.war;
+            const player                = war.getPlayer(playerIndex);
             this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source          = ConfigManager.getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgCo.source          = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
             this._labelPlayerName.text  = `P${playerIndex}`;
         }
 

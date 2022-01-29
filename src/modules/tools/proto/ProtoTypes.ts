@@ -98,6 +98,9 @@ export declare namespace Config {
 
         /** SystemCfg dialogueBackgroundMaxId */
         dialogueBackgroundMaxId?: (number|null);
+
+        /** SystemCfg globalCoEnergyParameters */
+        globalCoEnergyParameters?: (number[]|null);
     }
 
     /** Represents a SystemCfg. */
@@ -117,6 +120,9 @@ export declare namespace Config {
 
         /** SystemCfg dialogueBackgroundMaxId. */
         public dialogueBackgroundMaxId: number;
+
+        /** SystemCfg globalCoEnergyParameters. */
+        public globalCoEnergyParameters: number[];
 
         /**
          * Creates a new SystemCfg instance using the specified properties.
@@ -1623,14 +1629,17 @@ export declare namespace Config {
         /** CoBasicCfg designer */
         designer?: (string|null);
 
-        /** CoBasicCfg fullPortrait */
-        fullPortrait?: (string|null);
+        /** CoBasicCfg image */
+        image?: (number|null);
 
         /** CoBasicCfg tier */
         tier?: (number|null);
 
         /** CoBasicCfg maxLoadCount */
         maxLoadCount?: (number|null);
+
+        /** CoBasicCfg energyType */
+        energyType?: (number|null);
 
         /** CoBasicCfg passiveSkills */
         passiveSkills?: (number[]|null);
@@ -1687,14 +1696,17 @@ export declare namespace Config {
         /** CoBasicCfg designer. */
         public designer: string;
 
-        /** CoBasicCfg fullPortrait. */
-        public fullPortrait: string;
+        /** CoBasicCfg image. */
+        public image: number;
 
         /** CoBasicCfg tier. */
         public tier: number;
 
         /** CoBasicCfg maxLoadCount. */
         public maxLoadCount: number;
+
+        /** CoBasicCfg energyType. */
+        public energyType: number;
 
         /** CoBasicCfg passiveSkills. */
         public passiveSkills: number[];
@@ -12383,6 +12395,9 @@ export declare namespace WarSerialization {
 
         /** SerialPlayer unitAndTileSkinId */
         unitAndTileSkinId?: (number|null);
+
+        /** SerialPlayer coPowerActivatedCount */
+        coPowerActivatedCount?: (number|null);
     }
 
     /** Represents a SerialPlayer. */
@@ -12435,6 +12450,9 @@ export declare namespace WarSerialization {
 
         /** SerialPlayer unitAndTileSkinId. */
         public unitAndTileSkinId: number;
+
+        /** SerialPlayer coPowerActivatedCount. */
+        public coPowerActivatedCount: number;
 
         /**
          * Creates a new SerialPlayer instance using the specified properties.

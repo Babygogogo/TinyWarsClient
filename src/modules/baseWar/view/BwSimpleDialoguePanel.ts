@@ -18,6 +18,7 @@ namespace TwnsBwSimpleDialoguePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
+        configVersion   : string;
         actionData      : ProtoTypes.WarEvent.IWeaSimpleDialogue;
         callbackOnClose : () => void;
     };
@@ -168,11 +169,12 @@ namespace TwnsBwSimpleDialoguePanel {
         private _tickDialogue(): void {
             ++this._dialogueIndex;
 
-            const dataForCoDialogue     = Helpers.getExisted(Helpers.getExisted(this._getOpenData().actionData.dataArray)[this._dialogueIndex].dataForCoDialogue);
+            const openData              = this._getOpenData();
+            const dataForCoDialogue     = Helpers.getExisted(Helpers.getExisted(openData.actionData.dataArray)[this._dialogueIndex].dataForCoDialogue);
             const groupCo1              = this._groupCo1;
             const groupCo2              = this._groupCo2;
             const coId                  = Helpers.getExisted(dataForCoDialogue.coId);
-            const coImageSource         = ConfigManager.getCoHeadImageSource(coId);
+            const coImageSource         = ConfigManager.getCoHeadImageSource(openData.configVersion, coId);
             const coName                = Lang.getLanguageText({ textArray: dataForCoDialogue.nameArray }) ?? ConfigManager.getCoNameAndTierText(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId);
             const side                  = dataForCoDialogue.side;
 

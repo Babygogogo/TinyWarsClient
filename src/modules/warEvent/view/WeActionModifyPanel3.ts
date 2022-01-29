@@ -120,14 +120,16 @@ namespace TwnsWeActionModifyPanel3 {
         private _onTouchedBtnPlay(): void {
             const openData          = this._getOpenData();
             const action            = openData.action;
+            const war               = openData.war;
             const dialogueAction    = Helpers.getExisted(action.WeaDialogue);
-            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, openData.war);
+            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, war);
             if (errorTip) {
                 FloatText.show(errorTip);
                 return;
             }
 
             TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
+                configVersion   : war.getConfigVersion(),
                 actionData      : dialogueAction,
                 callbackOnClose : () => {
                     // nothing to do

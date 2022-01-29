@@ -25,6 +25,7 @@ namespace WarCoSkillHelpers {
     type DamageMaps = {
         hpMap               : number[][];
         fundMap             : number[][];
+        unitCountMap        : number[][];
         capturerValueMap    : number[][];
     };
     type ValueMaps = {
@@ -983,8 +984,11 @@ namespace WarCoSkillHelpers {
         } else if (targetType === 3) {  // random: HP or fund
             return getFixedAreaDamageCenterForType3({ war, valueMaps, radius, hpDamage, isIndiscriminate });
 
-        } else if (targetType === 4) {
+        } else if (targetType === 4) {  // HP of inf/mech/bike
             return getFixedAreaDamageCenterForType4({ war, valueMaps, radius, hpDamage, isIndiscriminate });
+
+        } else if (targetType === 5) {  // number of units
+            return getFixedAreaDamageCenterForType5({ war, valueMaps, radius, hpDamage, isIndiscriminate });
 
         } else {
             throw Helpers.newError(`Invalid targetType: ${targetType}`, ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenter_00);
@@ -1051,6 +1055,22 @@ namespace WarCoSkillHelpers {
         }
     }
 
+    function getFixedAreaDamageCenterForType5({ war, valueMaps, radius, hpDamage, isIndiscriminate }: {
+        war                 : BwWar;
+        valueMaps           : ValueMaps;
+        radius              : number;
+        hpDamage            : number;
+        isIndiscriminate    : boolean;
+    }): GridIndex {
+        const damageMap = getDamageMap({ valueMaps, hpDamage, isIndiscriminate });
+        const centers   = getCentersOfHighestDamage(damageMap.unitCountMap, radius);
+        if (centers.length === 1) {
+            return centers[0];
+        } else {
+            return Helpers.getExisted(Helpers.pickRandomElement(centers, war.getRandomNumberManager().getRandomNumber()), ClientErrorCode.WarCoSkillHelpers_GetFixedAreaDamageCenterForType5_00);
+        }
+    }
+
     function getValueMap(unitMap: BwUnitMap, teamIndex: number): ValueMaps {
         const { width, height } = unitMap.getMapSize();
         const hpMap             = Helpers.createEmptyMap(width, height, 0);
@@ -1086,6 +1106,7 @@ namespace WarCoSkillHelpers {
 
         const hpMap             = Helpers.createEmptyMap(width, height, 0);
         const fundMap           = Helpers.createEmptyMap(width, height, 0);
+        const unitCountMap      = Helpers.createEmptyMap(width, height, 0);
         const capturerValueMap  = Helpers.createEmptyMap(width, height, 0);
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
@@ -1096,12 +1117,14 @@ namespace WarCoSkillHelpers {
                     if (isIndiscriminate) {
                         hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;
                         fundMap[x][y]           = isSameTeam ? -realFundDamage * 2 : realFundDamage;
+                        unitCountMap[x][y]      = isSameTeam ? -2 : 1;
                         capturerValueMap[x][y]  = isSameTeam
                             ? (-realHpDamage * 2)
                             : (srcCapturerMap[x][y] ? realHpDamage * 100000 : realHpDamage);
                     } else {
                         hpMap[x][y]             = isSameTeam ? 0 : realHpDamage;
                         fundMap[x][y]           = isSameTeam ? 0 : realFundDamage;
+                        unitCountMap[x][y]      = isSameTeam ? 0 : 1;
                         capturerValueMap[x][y]  = isSameTeam
                             ? (0)
                             : (srcCapturerMap[x][y] ? realHpDamage * 100000 : realHpDamage);
@@ -1109,7 +1132,7 @@ namespace WarCoSkillHelpers {
                 }
             }
         }
-        return { hpMap, fundMap, capturerValueMap };
+        return { hpMap, fundMap, unitCountMap, capturerValueMap };
     }
 
     function getCentersOfHighestDamage(map: number[][], radius: number): GridIndex[] {

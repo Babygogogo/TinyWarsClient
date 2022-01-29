@@ -311,6 +311,9 @@ namespace ConfigManager {
     export function getSystemDialogueBackgroundMaxId(version: string): number {
         return Helpers.getExisted(getSystemCfg(version).dialogueBackgroundMaxId, ClientErrorCode.ConfigManager_GetSystemDialogueBackgroundMaxId_00);
     }
+    export function getSystemGlobalCoEnergyParameters(version: string): number[] {
+        return Helpers.getExisted(getSystemCfg(version).globalCoEnergyParameters, ClientErrorCode.ConfigManager_GetSystemGlobalCoEnergyParameters_00);
+    }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
         const mapping = Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);
@@ -933,14 +936,14 @@ namespace ConfigManager {
         return getCoBasicCfg(version, coId).designer === `Intelligent Systems`;
     }
 
-    export function getCoBustImageSource(coId: number): string {
-        return `coBust${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    export function getCoBustImageSource(version: string, coId: number): string {
+        return `coBust${Helpers.getNumText(Helpers.getExisted(getCoBasicCfg(version, coId).image), 4)}`;
     }
-    export function getCoHeadImageSource(coId: number): string {
-        return `coHead${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    export function getCoHeadImageSource(version: string, coId: number): string {
+        return `coHead${Helpers.getNumText(Helpers.getExisted(getCoBasicCfg(version, coId).image), 4)}`;
     }
-    export function getCoEyeImageSource(coId: number, isAlive: boolean): string {
-        return `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    export function getCoEyeImageSource(version: string, coId: number, isAlive: boolean): string {
+        return `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(Helpers.getExisted(getCoBasicCfg(version, coId).image), 4)}`;
     }
     export function getDialogueBackgroundImage(backgroundId: number): string {
         return `resource/assets/texture/background/dialogueBackground${Helpers.getNumText(backgroundId, 4)}.jpg`;

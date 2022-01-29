@@ -182,9 +182,10 @@ namespace TwnsSrrCreatePlayerInfoPage {
                 : Lang.getText(LangTextType.B0031);
 
             const coId                  = Helpers.getExisted(playerData.coId);
-            const coCfg                 = ConfigManager.getCoBasicCfg(Helpers.getExisted(settingsForCommon.configVersion), coId);
+            const configVersion         = Helpers.getExisted(settingsForCommon.configVersion);
+            const coCfg                 = ConfigManager.getCoBasicCfg(configVersion, coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
-            this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
+            this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(configVersion, coId);
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
         }
 

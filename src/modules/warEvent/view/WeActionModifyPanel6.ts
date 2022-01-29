@@ -123,6 +123,7 @@ namespace TwnsWeActionModifyPanel6 {
             }
 
             TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
+                configVersion   : openData.war.getConfigVersion(),
                 actionData      : dialogueAction,
                 callbackOnClose : () => {
                     // nothing to do

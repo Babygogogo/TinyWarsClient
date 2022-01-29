@@ -347,6 +347,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
+                    configVersion   : this._getWar().getConfigVersion(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -359,6 +360,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
+                    configVersion   : this._getWar().getConfigVersion(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -440,6 +442,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
+                    configVersion   : this._getWar().getConfigVersion(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -452,6 +455,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
+                    configVersion   : this._getWar().getConfigVersion(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });

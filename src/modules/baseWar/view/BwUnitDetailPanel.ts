@@ -124,8 +124,10 @@ namespace TwnsBwUnitDetailPanel {
         }
 
         private _onTouchedBtnUnitsInfo(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, {
+                configVersion   : this._getOpenData().unit.getConfigVersion(),
+            });
             this.close();
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, void 0);
         }
 
         private _onTouchedBtnDelete(): void {

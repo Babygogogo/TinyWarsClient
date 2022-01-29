@@ -1454,13 +1454,14 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg().repairAmountForLoadedUnits ?? null;
         }
 
-        public getNormalizedRepairHpModifier(): number {
+        public getNormalizedRepairAmountAndCostModifier(): { amountModifier: number, costMultiplierPct: number } {
             const player                    = this.getPlayer();
             const configVersion             = this.getConfigVersion();
             const gridIndex                 = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
-            let totalModifier               = 0;
+            let amountModifier              = 0;
+            let costMultiplierPct           = 100;
             for (const skillId of player.getCoCurrentSkills()) {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfRepairAmountBonus;
                 if ((cfg)                                               &&
@@ -1471,11 +1472,12 @@ namespace TwnsBwUnit {
                         coZoneRadius,
                     }))
                 ) {
-                    totalModifier += cfg[2];
+                    amountModifier      += cfg[2];
+                    costMultiplierPct   = costMultiplierPct * cfg[3] / 100;
                 }
             }
 
-            return totalModifier;
+            return { amountModifier, costMultiplierPct };
         }
 
         public setLoaderUnitId(loaderUnitId: number | null): void {
@@ -1504,12 +1506,15 @@ namespace TwnsBwUnit {
                 return null;
             } else {
                 const normalizedMaxHp       = unit.getNormalizedMaxHp();
-                const productionCost        = unit.getProductionFinalCost();
+                const modifier              = this.getNormalizedRepairAmountAndCostModifier();
+                const productionCost        = Math.floor(unit.getProductionFinalCost() * modifier.costMultiplierPct / 100);
                 const normalizedCurrentHp   = unit.getNormalizedCurrentHp();
                 const normalizedRepairHp    = Math.min(
                     normalizedMaxHp - normalizedCurrentHp,
-                    repairAmount + this.getNormalizedRepairHpModifier(),
-                    Math.floor(Math.max(0, unit.getPlayer().getFund()) * normalizedMaxHp / productionCost)
+                    repairAmount + modifier.amountModifier,
+                    productionCost > 0
+                        ? Math.floor(Math.max(0, unit.getPlayer().getFund()) * normalizedMaxHp / productionCost)
+                        : Number.MAX_SAFE_INTEGER,
                 );
                 return {
                     hp  : (normalizedRepairHp + normalizedCurrentHp) * CommonConstants.UnitHpNormalizer - unit.getCurrentHp(),

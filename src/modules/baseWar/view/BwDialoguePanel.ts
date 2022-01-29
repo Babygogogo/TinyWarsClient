@@ -18,6 +18,7 @@ namespace TwnsBwDialoguePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
+        configVersion   : string;
         actionData      : ProtoTypes.WarEvent.IWeaDialogue;
         callbackOnClose : () => void;
     };
@@ -173,12 +174,13 @@ namespace TwnsBwDialoguePanel {
             const labelContent                          = this._labelContent;
             const imgCo1                                = this._imgCo1;
             const imgCo2                                = this._imgCo2;
-            const { dataForCoDialogue, dataForAside }   = Helpers.getExisted(this._getOpenData().actionData.dataArray)[this._dialogueIndex];
+            const openData                              = this._getOpenData();
+            const { dataForCoDialogue, dataForAside }   = Helpers.getExisted(openData.actionData.dataArray)[this._dialogueIndex];
 
             if (dataForCoDialogue) {
                 const { side, nameArray }   = dataForCoDialogue;
                 const coId                  = Helpers.getExisted(dataForCoDialogue.coId);
-                const coImageSource         = ConfigManager.getCoBustImageSource(coId);
+                const coImageSource         = ConfigManager.getCoBustImageSource(openData.configVersion, coId);
                 const coName                = Lang.getLanguageText({ textArray: nameArray }) ?? ConfigManager.getCoNameAndTierText(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId);
 
                 if (side === Types.WarEventActionDialogueSide.Left) {

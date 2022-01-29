@@ -290,7 +290,9 @@ namespace TwnsUserSettingsPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: CommonConstants.AdminUserId });
         }
         private _onTouchedBtnUnitsInfo(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, {
+                configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+            });
         }
         private _onTouchedBtnChangeLog(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ChangeLogPanel, void 0);

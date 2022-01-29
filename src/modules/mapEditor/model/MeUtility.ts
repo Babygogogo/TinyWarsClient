@@ -261,6 +261,7 @@ namespace MeUtility {
             coId                        : 0,
             coCurrentEnergy             : null,
             coUsingSkillType            : Types.CoSkillType.Passive,
+            coPowerActivatedCount       : null,
             coIsDestroyedInTurn         : false,
             watchRequestSrcUserIdArray  : [],
             watchOngoingSrcUserIdArray  : [],

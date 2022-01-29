@@ -859,6 +859,7 @@ namespace WarActionExecutor {
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            targetCfgProductionCost     : unit2.getProductionCfgCost(),
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
@@ -1023,6 +1024,7 @@ namespace WarActionExecutor {
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            targetCfgProductionCost     : unit2.getProductionCfgCost(),
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
@@ -1194,6 +1196,7 @@ namespace WarActionExecutor {
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            targetCfgProductionCost     : unit2.getProductionCfgCost(),
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
@@ -1376,6 +1379,7 @@ namespace WarActionExecutor {
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            targetCfgProductionCost     : unit2.getProductionCfgCost(),
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
@@ -3392,11 +3396,12 @@ namespace WarActionExecutor {
 
         attackerPlayer.setFund(Math.floor(currentFund + addFund));
     }
-    function handleEnergyForUnitAttackUnit({ war, attackerPlayer, targetPlayer, targetLostNormalizedHp, isAttackerInAttackerCoZone, isTargetInTargetCoZone }: {
+    function handleEnergyForUnitAttackUnit({ war, attackerPlayer, targetPlayer, targetLostNormalizedHp, targetCfgProductionCost, isAttackerInAttackerCoZone, isTargetInTargetCoZone }: {
         war                         : BwWar;
         attackerPlayer              : BwPlayer;
         targetPlayer                : BwPlayer;
         targetLostNormalizedHp      : number;
+        targetCfgProductionCost     : number;
         isAttackerInAttackerCoZone  : boolean;
         isTargetInTargetCoZone      : boolean;
     }): void {
@@ -3407,32 +3412,58 @@ namespace WarActionExecutor {
         const commonSettingManager  = war.getCommonSettingManager();
         const configVersion         = war.getConfigVersion();
         if (!attackerPlayer.checkCoIsUsingActiveSkill()) {
-            const coType1 = attackerPlayer.getCoType();
-            if (((coType1 === Types.CoType.Zoned) && (isAttackerInAttackerCoZone)) ||
-                (coType1 === Types.CoType.Global)
-            ) {
-                const playerIndex1  = attackerPlayer.getPlayerIndex();
-                const multiplier1   = Helpers.getExisted(playerIndex1 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex1), ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00);
-                const energy1       = attackerPlayer.getCoCurrentEnergy();
+            const coEnergyType1 = attackerPlayer.getCoEnergyType();
+            if (coEnergyType1 === Types.CoEnergyType.Trilogy) {
+                const multiplier1 = commonSettingManager.getSettingsEnergyGrowthMultiplier(attackerPlayer.getPlayerIndex());
                 attackerPlayer.setCoCurrentEnergy(Math.min(
                     attackerPlayer.getCoMaxEnergy(),
-                    energy1 + Math.floor(targetLostNormalizedHp * multiplier1 * ConfigManager.getSystemEnergyGrowthMultiplierForAttacker(configVersion) / 100),
+                    attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostNormalizedHp * targetCfgProductionCost * multiplier1 * ConfigManager.getSystemGlobalCoEnergyParameters(configVersion)[2] / 100 / 10 / 100),
                 ));
+
+            } else if (coEnergyType1 === Types.CoEnergyType.Dor) {
+                const coType1 = attackerPlayer.getCoType();
+                if (((coType1 === Types.CoType.Zoned) && (isAttackerInAttackerCoZone)) ||
+                    (coType1 === Types.CoType.Global)
+                ) {
+                    const playerIndex1  = attackerPlayer.getPlayerIndex();
+                    const multiplier1   = commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex1);
+                    const energy1       = attackerPlayer.getCoCurrentEnergy();
+                    attackerPlayer.setCoCurrentEnergy(Math.min(
+                        attackerPlayer.getCoMaxEnergy(),
+                        energy1 + Math.floor(targetLostNormalizedHp * multiplier1 * ConfigManager.getSystemEnergyGrowthMultiplierForAttacker(configVersion) / 100),
+                    ));
+                }
+
+            } else {
+                throw Helpers.newError(`Invalid coEnergyType1: ${coEnergyType1}`, ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00);
             }
         }
 
         if (!targetPlayer.checkCoIsUsingActiveSkill()) {
-            const coType2 = targetPlayer.getCoType();
-            if (((coType2 === Types.CoType.Zoned) && (isTargetInTargetCoZone)) ||
-                (coType2 === Types.CoType.Global)
-            ) {
-                const playerIndex2  = targetPlayer.getPlayerIndex();
-                const multiplier2   = Helpers.getExisted(playerIndex2 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex2), ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01);
-                const energy2       = targetPlayer.getCoCurrentEnergy();
+            const coEnergyType2 = targetPlayer.getCoEnergyType();
+            if (coEnergyType2 === Types.CoEnergyType.Trilogy) {
+                const multiplier2 = commonSettingManager.getSettingsEnergyGrowthMultiplier(targetPlayer.getPlayerIndex());
                 targetPlayer.setCoCurrentEnergy(Math.min(
                     targetPlayer.getCoMaxEnergy(),
-                    energy2 + Math.floor(targetLostNormalizedHp * multiplier2 * ConfigManager.getSystemEnergyGrowthMultiplierForDefender(configVersion) / 100),
+                    targetPlayer.getCoCurrentEnergy() + Math.floor(targetLostNormalizedHp * targetCfgProductionCost * multiplier2 * ConfigManager.getSystemGlobalCoEnergyParameters(configVersion)[3] / 100 / 10 / 100),
                 ));
+
+            } else if (coEnergyType2 === Types.CoEnergyType.Dor) {
+                const coType2 = targetPlayer.getCoType();
+                if (((coType2 === Types.CoType.Zoned) && (isTargetInTargetCoZone)) ||
+                    (coType2 === Types.CoType.Global)
+                ) {
+                    const playerIndex2  = targetPlayer.getPlayerIndex();
+                    const multiplier2   = commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex2);
+                    const energy2       = targetPlayer.getCoCurrentEnergy();
+                    targetPlayer.setCoCurrentEnergy(Math.min(
+                        targetPlayer.getCoMaxEnergy(),
+                        energy2 + Math.floor(targetLostNormalizedHp * multiplier2 * ConfigManager.getSystemEnergyGrowthMultiplierForDefender(configVersion) / 100),
+                    ));
+                }
+
+            } else {
+                throw Helpers.newError(`Invalid coEnergyType2: ${coEnergyType2}`, ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01);
             }
         }
     }

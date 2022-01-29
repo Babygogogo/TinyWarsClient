@@ -34,6 +34,7 @@ namespace TwnsBwPlayer {
         private _coCurrentEnergy?           : number;
         private _coUsingSkillType?          : Types.CoSkillType;
         private _coIsDestroyedInTurn?       : boolean;
+        private _coPowerActivatedCount?     : number;
         private _watchOngoingSrcUserIds?    : Set<number>;
         private _watchRequestSrcUserIds?    : Set<number>;
 
@@ -106,6 +107,7 @@ namespace TwnsBwPlayer {
             this._setUnitAndTileSkinId(unitAndTileSkinId);
             this.setCoId(coId);
             this.setCoCurrentEnergy(coCurrentEnergy);
+            this._setCoPowerActivatedCount(data.coPowerActivatedCount ?? 0);
             this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
         }
@@ -127,6 +129,7 @@ namespace TwnsBwPlayer {
                 userId                      : this.getUserId(),
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
+                coPowerActivatedCount       : this.getCoPowerActivatedCount(),
                 watchRequestSrcUserIdArray  : [...(this.getWatchRequestSrcUserIds() || [])],
                 watchOngoingSrcUserIdArray  : [...(this.getWatchOngoingSrcUserIds() || [])],
             };
@@ -147,6 +150,7 @@ namespace TwnsBwPlayer {
                 userId                      : playerIndex > 0 ? UserModel.getSelfUserId() : null,
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
+                coPowerActivatedCount       : this.getCoPowerActivatedCount(),
                 watchRequestSrcUserIdArray  : [],
                 watchOngoingSrcUserIdArray  : []
             };
@@ -272,8 +276,7 @@ namespace TwnsBwPlayer {
             return Helpers.getExisted(this._coCurrentEnergy);
         }
         public getCoMaxEnergy(): number {
-            const config = this._getCoBasicCfg();
-            return config ? WarCommonHelpers.getCoMaxEnergy(config) : 0;
+            return this._getRevisedEnergy(WarCommonHelpers.getCoMaxEnergy(this._getCoBasicCfg()));
         }
         public getCoZoneExpansionEnergyList(): number[] | null {
             const cfg = this._getCoBasicCfg();
@@ -282,12 +285,41 @@ namespace TwnsBwPlayer {
         public getCoPowerEnergy(): number | null {
             const energyList    = this._getCoBasicCfg().powerEnergyList;
             const energy        = energyList ? energyList[0] : null;
-            return (energy != null) && (energy >= 0) ? energy : null;
+            if ((energy == null) || (energy < 0)) {
+                return null;
+            } else {
+                return this._getRevisedEnergy(energy);
+            }
         }
         public getCoSuperPowerEnergy(): number | null {
             const energyList    = this._getCoBasicCfg().powerEnergyList;
             const energy        = energyList ? energyList[1] : null;
-            return (energy != null) && (energy >= 0) ? energy : null;
+            if ((energy == null) || (energy < 0)) {
+                return null;
+            } else {
+                return this._getRevisedEnergy(energy);
+            }
+        }
+        private _getRevisedEnergy(energy: number): number {
+            const energyType = this.getCoEnergyType();
+            if (energyType === Types.CoEnergyType.Dor) {
+                return energy;
+            } else if (energyType === Types.CoEnergyType.Trilogy) {
+                const cfg = ConfigManager.getSystemGlobalCoEnergyParameters(this._getWar().getConfigVersion());
+                return Math.floor(energy * (Math.min(cfg[1], this.getCoPowerActivatedCount()) * cfg[0] + 100) / 100);
+            } else {
+                throw Helpers.newError(`Invalid energyType: ${energyType}`, ClientErrorCode.BwPlayer_GetRevisedEnergy_00);
+            }
+        }
+
+        public getCoEnergyType(): Types.CoEnergyType {
+            return Helpers.getExisted(this._getCoBasicCfg().energyType, ClientErrorCode.BwPlayer_GetCoEnergyType_00);
+        }
+        public getCoPowerActivatedCount(): number {
+            return Helpers.getExisted(this._coPowerActivatedCount, ClientErrorCode.BwPlayer_GetCoPowerActivatedCount_00);
+        }
+        private _setCoPowerActivatedCount(count: number): void {
+            this._coPowerActivatedCount = count;
         }
 
         public getCoZoneRadius(): number {
@@ -389,6 +421,7 @@ namespace TwnsBwPlayer {
             }
 
             this.setCoUsingSkillType(skillType);
+            this._setCoPowerActivatedCount(this.getCoPowerActivatedCount() + 1);
         }
 
         public getCoIsDestroyedInTurn(): boolean {

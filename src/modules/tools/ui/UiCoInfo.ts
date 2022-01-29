@@ -126,7 +126,7 @@ namespace TwnsUiCoInfo {
             const coId                  = coData.coId;
             const configVersion         = coData.configVersion;
             const cfg                   = ConfigManager.getCoBasicCfg(configVersion, coId);
-            this._imgCoPortrait.source  = ConfigManager.getCoBustImageSource(coId);
+            this._imgCoPortrait.source  = ConfigManager.getCoBustImageSource(configVersion, coId);
             this._labelCoName.text      = cfg.name;
             this._labelDesigner.text    = cfg.designer ?? ``;
 
