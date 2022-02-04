@@ -1626,8 +1626,11 @@ export declare namespace Config {
         /** CoBasicCfg isEnabledForDialogue */
         isEnabledForDialogue?: (number|null);
 
-        /** CoBasicCfg designer */
-        designer?: (string|null);
+        /** CoBasicCfg artDesigner */
+        artDesigner?: (string|null);
+
+        /** CoBasicCfg dataDesigner */
+        dataDesigner?: (string|null);
 
         /** CoBasicCfg image */
         image?: (number|null);
@@ -1693,8 +1696,11 @@ export declare namespace Config {
         /** CoBasicCfg isEnabledForDialogue. */
         public isEnabledForDialogue: number;
 
-        /** CoBasicCfg designer. */
-        public designer: string;
+        /** CoBasicCfg artDesigner. */
+        public artDesigner: string;
+
+        /** CoBasicCfg dataDesigner. */
+        public dataDesigner: string;
 
         /** CoBasicCfg image. */
         public image: number;

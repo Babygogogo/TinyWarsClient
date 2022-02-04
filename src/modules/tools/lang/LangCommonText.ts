@@ -4587,6 +4587,14 @@ namespace TwnsLangCommonText {
             `删除信息`,
             `Delete Message`,
         ],
+        [LangTextType.B0839]: [
+            `美术设计`,
+            `Art Designer`,
+        ],
+        [LangTextType.B0840]: [
+            `数值设计`,
+            `Numerical Setup`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

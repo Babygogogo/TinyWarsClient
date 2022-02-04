@@ -1402,19 +1402,23 @@ namespace WarRobot {
                     const unitOriginGridIndex2  = unit2.getGridIndex();
                     const gridIndex2            = (unit2 === focusUnit) ? focusUnitGridIndex : unitOriginGridIndex2;
                     if (GridIndexHelpers.checkIsEqual(gridIndex2, unitOriginGridIndex2)) {
-                        const tile2         = tileMap.getTile(gridIndex2);
-                        const captureAmount = unit2.getCaptureAmount(gridIndex2);
-                        const capturePoint  = tile2.getCurrentCapturePoint();
-                        if ((captureAmount != null) && (capturePoint != null)) {
-                            score *= captureAmount >= capturePoint ? 2 : 1.1;
+                        const tile2 = tileMap.getTile(gridIndex2);
+                        if (tile2.getTeamIndex() !== unitTeamIndex2) {
+                            const captureAmount = unit2.getCaptureAmount(gridIndex2);
+                            const capturePoint  = tile2.getCurrentCapturePoint();
+                            if ((captureAmount != null) && (capturePoint != null)) {
+                                score *= captureAmount >= capturePoint ? 2 : 1.1;
 
-                            const tileType2 = tile2.getType();
-                            if ((tileType2 === TileType.Headquarters)    ||
-                                (tileType2 === TileType.Factory)         ||
-                                (tileType2 === TileType.Airport)         ||
-                                (tileType2 === TileType.Seaport)
-                            ) {
-                                score *= 5;
+                                const tileType2 = tile2.getType();
+                                if (tileType2 === TileType.Headquarters) {
+                                    score *= 10000;
+                                } else if (
+                                    (tileType2 === TileType.Factory)    ||
+                                    (tileType2 === TileType.Airport)    ||
+                                    (tileType2 === TileType.Seaport)
+                                ) {
+                                    score *= 5;
+                                }
                             }
                         }
                     }

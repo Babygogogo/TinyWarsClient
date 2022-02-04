@@ -924,7 +924,7 @@ namespace ConfigManager {
         } else {
             const idArray: number[] = [];
             for (const cfg of getEnabledCoArray(version)) {
-                if (cfg.designer !== "Intelligent Systems") {
+                if (cfg.dataDesigner !== "Intelligent Systems") {
                     idArray.push(cfg.coId);
                 }
             }
@@ -933,7 +933,7 @@ namespace ConfigManager {
         }
     }
     export function checkIsOriginCo(version: string, coId: number): boolean {
-        return getCoBasicCfg(version, coId).designer === `Intelligent Systems`;
+        return getCoBasicCfg(version, coId).dataDesigner === `Intelligent Systems`;
     }
 
     export function getCoBustImageSource(version: string, coId: number): string {
