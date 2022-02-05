@@ -3992,7 +3992,7 @@ namespace TwnsLangCommonText {
             `Buildings and Income`,
         ],
         [LangTextType.B0690]: [
-            `和局`,
+            `求和`,
             `Set Draw`,
         ],
         [LangTextType.B0691]: [
@@ -4594,6 +4594,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0840]: [
             `数值设计`,
             `Numerical Setup`,
+        ],
+        [LangTextType.B0841]: [
+            `处理他人求和`,
+            `Handle Draw`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

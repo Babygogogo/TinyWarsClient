@@ -30,7 +30,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwTopPanel {
-    import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -286,7 +285,7 @@ namespace TwnsMpwTopPanel {
         private _updateGroupTimer(): void {
             const war       = this._getOpenData().war;
             const group     = this._groupTimer;
-            const restTime  = war ? war.getBootRestTime() : null;
+            const restTime  = war ? war.getBootRestTime(war.getPlayerIndexInTurn()) : null;
             if (restTime == null) {
                 group.visible = false;
             } else {

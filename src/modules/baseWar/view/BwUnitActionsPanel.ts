@@ -44,8 +44,8 @@ namespace TwnsBwUnitActionsPanel {
             this._updatePosition();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            this._updatePosition();
             this._updateView();
+            this._updatePosition();
         }
         protected _onClosing(): void {
             // nothing to do

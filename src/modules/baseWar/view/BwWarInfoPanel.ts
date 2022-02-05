@@ -41,6 +41,7 @@ namespace TwnsBwWarInfoPanel {
         CurrentFund,
         BuildingsAndIncome,
         UnitsAndValue,
+        TimeLimit,
         InitialFund,
         IncomeMultiplier,
         EnergyAddPctOnLoadCo,
@@ -310,7 +311,10 @@ namespace TwnsBwWarInfoPanel {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnModify, callback: this._onTouchedBtnModify },
+                { ui: this._btnModify,          callback: this._onTouchedBtnModify },
+            ]);
+            this._setNotifyListenerArray([
+                { type: NotifyType.TimeTick,    callback: this._onNotifyTimeTick },
             ]);
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
@@ -351,6 +355,11 @@ namespace TwnsBwWarInfoPanel {
                 this._modifyAsLuckUpperLimit();
             } else {
                 throw Helpers.newError(`Invalid infoType: ${infoType}`, ClientErrorCode.BwWarInfoPanel_InfoRenderer_OnTouchedBtnModify_00);
+            }
+        }
+        private _onNotifyTimeTick(): void {
+            if (this._getData().infoType === InfoType.TimeLimit) {
+                this._updateViewAsTimeLimit();
             }
         }
         private _modifyAsPlayer(): void {
@@ -624,6 +633,8 @@ namespace TwnsBwWarInfoPanel {
                 this._updateViewAsBuildingsAndIncome();
             } else if (infoType === InfoType.UnitsAndValue) {
                 this._updateViewAsUnitsAndValue();
+            } else if (infoType === InfoType.TimeLimit) {
+                this._updateViewAsTimeLimit();
             } else if (infoType === InfoType.InitialFund) {
                 this._updateViewAsInitialFund();
             } else if (infoType === InfoType.IncomeMultiplier) {
@@ -759,6 +770,24 @@ namespace TwnsBwWarInfoPanel {
             this._btnModify.visible = false;
             this._imgModify.visible = false;
         }
+        private _updateViewAsTimeLimit(): void {
+            const data      = this._getData();
+            const war       = data.war;
+            const restTime  = war.getBootRestTime(data.playerIndex);
+            const label     = this._labelValue;
+            if (restTime == null) {
+                label.text      = `--`;
+                label.textColor = 0xffffff;
+            } else {
+                label.text      = Helpers.getTimeDurationText2(restTime);
+                label.textColor = restTime >= 30 * 60
+                    ? 0xFFFFFF
+                    : (restTime >= 5 * 60 ? 0xFFFF00 : 0xFF4400);
+            }
+
+            this._btnModify.visible = false;
+            this._imgModify.visible = false;
+        }
         private _updateViewAsInitialFund(): void {
             const data              = this._getData();
             const war               = data.war;
@@ -888,6 +917,7 @@ namespace TwnsBwWarInfoPanel {
             InfoType.CurrentFund,
             InfoType.BuildingsAndIncome,
             InfoType.UnitsAndValue,
+            InfoType.TimeLimit,
             InfoType.InitialFund,
             InfoType.IncomeMultiplier,
             InfoType.EnergyAddPctOnLoadCo,
@@ -908,6 +938,7 @@ namespace TwnsBwWarInfoPanel {
             case InfoType.CurrentFund               : return Lang.getText(LangTextType.B0032);
             case InfoType.BuildingsAndIncome        : return Lang.getText(LangTextType.B0689);
             case InfoType.UnitsAndValue             : return Lang.getText(LangTextType.B0688);
+            case InfoType.TimeLimit                 : return Lang.getText(LangTextType.B0021);
             case InfoType.InitialFund               : return Lang.getText(LangTextType.B0178);
             case InfoType.IncomeMultiplier          : return Lang.getText(LangTextType.B0179);
             case InfoType.EnergyAddPctOnLoadCo      : return Lang.getText(LangTextType.B0180);

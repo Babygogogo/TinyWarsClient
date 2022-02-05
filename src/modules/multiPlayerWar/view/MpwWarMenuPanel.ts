@@ -411,12 +411,18 @@ namespace TwnsMpwWarMenuPanel {
             this._btnSimulation.label   = Lang.getText(LangTextType.B0325);
             this._btnFreeMode.label     = Lang.getText(LangTextType.B0557);
             this._btnSetPath.label      = Lang.getText(LangTextType.B0430);
-            this._btnSetDraw.label      = Lang.getText(LangTextType.B0690);
             this._btnSurrender.label    = Lang.getText(LangTextType.B0055);
             this._btnGotoWarList.label  = Lang.getText(LangTextType.B0652);
             this._btnGotoLobby.label    = Lang.getText(LangTextType.B0054);
+            this._updateBtnSetDraw();
             this._updateBtnUnitOpacity();
             this._updateBtnMapRating();
+        }
+
+        private _updateBtnSetDraw(): void {
+            this._btnSetDraw.label = this._getWar().getDrawVoteManager().getRemainingVotes() == null
+                ? Lang.getText(LangTextType.B0690)
+                : Lang.getText(LangTextType.B0841);
         }
 
         private _updateBtnUnitOpacity(): void {

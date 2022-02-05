@@ -119,7 +119,8 @@ namespace TwnsRwWar {
             const nickname      = await this.getPlayerInTurn().getNickname();
             const playerIndex   = this.getPlayerIndexInTurn();
             const suffix        = this._getDescSuffix();
-            if (!action.isAgree) {
+            const isAgree       = action.extraData ? action.extraData.isAgree : action.isAgree;
+            if (!isAgree) {
                 return `${Lang.getFormattedText(LangTextType.F0017, playerIndex, nickname)} ${suffix}`;
             } else {
                 if (this.getDrawVoteManager().getRemainingVotes()) {
@@ -267,6 +268,9 @@ namespace TwnsRwWar {
             return null;
         }
 
+        public getBootRestTime(): number | null {
+            return null;
+        }
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }

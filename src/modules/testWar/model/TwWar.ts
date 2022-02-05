@@ -171,6 +171,9 @@ namespace TwnsTwWar {
             return false;
         }
 
+        public getBootRestTime(): number | null {
+            return null;
+        }
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }

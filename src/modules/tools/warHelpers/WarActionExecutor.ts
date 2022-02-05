@@ -352,8 +352,9 @@ namespace WarActionExecutor {
             playerInTurn.setHasVotedForDraw(true);
         }
 
-        const drawVoteManager = war.getDrawVoteManager();
-        if (!action.isAgree) {
+        const drawVoteManager   = war.getDrawVoteManager();
+        const isAgree           = actionExtraData ? actionExtraData.isAgree : action.isAgree;
+        if (!isAgree) {
             drawVoteManager.setRemainingVotes(null);
         } else {
             drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || drawVoteManager.getMaxVotes()) - 1);
@@ -384,8 +385,9 @@ namespace WarActionExecutor {
             playerInTurn.setHasVotedForDraw(true);
         }
 
-        const drawVoteManager = war.getDrawVoteManager();
-        if (!action.isAgree) {
+        const drawVoteManager   = war.getDrawVoteManager();
+        const isAgree           = actionExtraData ? actionExtraData.isAgree : action.isAgree;
+        if (!isAgree) {
             drawVoteManager.setRemainingVotes(null);
         } else {
             drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || drawVoteManager.getMaxVotes()) - 1);
