@@ -780,24 +780,17 @@ namespace TwnsBwUnitDetailPanel {
                 return;
             }
 
-            const currValue = unit.getCurrentBuildMaterial();
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0347),
-                currentValue    : "" + currValue,
-                maxChars        : 2,
-                charRestrict    : "0-9",
+                currentValue    : unit.getCurrentBuildMaterial() ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        unit.setCurrentBuildMaterial(value);
-                        unit.updateView();
-                        this._updateView();
-                    }
+                    unit.setCurrentBuildMaterial(panel.getInputValue());
+                    unit.updateView();
+                    this._updateView();
                 },
             });
         }
@@ -808,24 +801,17 @@ namespace TwnsBwUnitDetailPanel {
                 return;
             }
 
-            const currValue     = unit.getFlareCurrentAmmo();
             const minValue      = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0349),
-                currentValue    : "" + currValue,
-                maxChars        : 2,
-                charRestrict    : "0-9",
+                currentValue    : unit.getFlareCurrentAmmo() ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        unit.setFlareCurrentAmmo(value);
-                        unit.updateView();
-                        this._updateView();
-                    }
+                    unit.setFlareCurrentAmmo(panel.getInputValue());
+                    unit.updateView();
+                    this._updateView();
                 },
             });
         }
@@ -839,22 +825,16 @@ namespace TwnsBwUnitDetailPanel {
             const currValue = unit.getCurrentFuel();
             const maxValue  = unit.getMaxFuel();
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0342),
-                currentValue    : "" + currValue,
-                maxChars        : 2,
-                charRestrict    : "0-9",
+                currentValue    : currValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        unit.setCurrentFuel(value);
-                        unit.updateView();
-                        this._updateView();
-                    }
+                    unit.setCurrentFuel(panel.getInputValue());
+                    unit.updateView();
+                    this._updateView();
                 },
             });
         }
@@ -888,22 +868,16 @@ namespace TwnsBwUnitDetailPanel {
             const currValue = unit.getCurrentHp();
             const maxValue  = unit.getMaxHp();
             const minValue  = 1;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0339),
-                currentValue    : "" + currValue,
-                maxChars        : 3,
-                charRestrict    : "0-9",
+                currentValue    : currValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        unit.setCurrentHp(value);
-                        unit.updateView();
-                        this._updateView();
-                    }
+                    unit.setCurrentHp(panel.getInputValue());
+                    unit.updateView();
+                    this._updateView();
                 },
             });
         }
@@ -937,22 +911,16 @@ namespace TwnsBwUnitDetailPanel {
 
             const currValue = unit.getPrimaryWeaponCurrentAmmo();
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0350),
-                currentValue    : "" + currValue,
-                maxChars        : 2,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        unit.setPrimaryWeaponCurrentAmmo(value);
-                        unit.updateView();
-                        this._updateView();
-                    }
+                    unit.setPrimaryWeaponCurrentAmmo(panel.getInputValue());
+                    unit.updateView();
+                    this._updateView();
                 },
             });
         }
@@ -966,22 +934,16 @@ namespace TwnsBwUnitDetailPanel {
 
             const currValue = unit.getCurrentProduceMaterial();
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0348),
-                currentValue    : "" + currValue,
-                maxChars        : 2,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        unit.setCurrentProduceMaterial(value);
-                        unit.updateView();
-                        this._updateView();
-                    }
+                    unit.setCurrentProduceMaterial(panel.getInputValue());
+                    unit.updateView();
+                    this._updateView();
                 },
             });
         }
@@ -997,22 +959,16 @@ namespace TwnsBwUnitDetailPanel {
 
             const currValue = unit.getCurrentPromotion();
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0370),
-                currentValue    : "" + currValue,
-                maxChars        : 1,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        unit.setCurrentPromotion(value);
-                        unit.updateView();
-                        this._updateView();
-                    }
+                    unit.setCurrentPromotion(panel.getInputValue());
+                    unit.updateView();
+                    this._updateView();
                 },
             });
         }

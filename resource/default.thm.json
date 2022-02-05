@@ -65,6 +65,7 @@
 		"resource/skins/common/CommonDamageChartPanel.exml",
 		"resource/skins/common/CommonErrorPanel.exml",
 		"resource/skins/common/CommonHelpPanel.exml",
+		"resource/skins/common/CommonInputIntegerPanel.exml",
 		"resource/skins/common/CommonInputPanel.exml",
 		"resource/skins/component/textInput/TextInput003.exml",
 		"resource/skins/common/CommonJoinRoomPasswordPanel.exml",

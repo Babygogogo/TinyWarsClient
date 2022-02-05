@@ -79,6 +79,7 @@ namespace TwnsPanelConfig {
         CommonErrorPanel                    : PanelConfig<TwnsCommonErrorPanel.OpenData>;
         CommonHelpPanel                     : PanelConfig<TwnsCommonHelpPanel.OpenData>;
         CommonInputPanel                    : PanelConfig<TwnsCommonInputPanel.OpenData>;
+        CommonInputIntegerPanel             : PanelConfig<TwnsCommonInputIntegerPanel.OpenData>;
         CommonJoinRoomPasswordPanel         : PanelConfig<TwnsCommonJoinRoomPasswordPanel.OpenData>;
         CommonModifyWarRuleNamePanel        : PanelConfig<TwnsCommonModifyWarRuleNamePanel.OpenData>;
         CommonRankListPanel                 : PanelConfig<TwnsCommonRankListPanel.OpenData>;
@@ -661,6 +662,12 @@ namespace TwnsPanelConfig {
             CommonInputPanel: {
                 cls         : TwnsCommonInputPanel?.CommonInputPanel,
                 skinName    : `resource/skins/common/CommonInputPanel.exml`,
+                layer       : LayerType.Notify0,
+            },
+
+            CommonInputIntegerPanel: {
+                cls         : TwnsCommonInputIntegerPanel?.CommonInputIntegerPanel,
+                skinName    : `resource/skins/common/CommonInputIntegerPanel.exml`,
                 layer       : LayerType.Notify0,
             },
 

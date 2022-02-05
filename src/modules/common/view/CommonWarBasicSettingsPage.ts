@@ -363,22 +363,17 @@ namespace TwnsCommonWarBasicSettingsPage {
             const callback      = Helpers.getExisted(data.callbackOnModify);
             const minValue      = 1;
             const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
-            const currentValue  = data.currentValue;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            const currentValue  = Number(data.currentValue) ?? 0;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0389),
-                currentValue    : `${currentValue}`,
-                maxChars        : 5,
-                charRestrict    : `0-9`,
+                currentValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        if (value !== currentValue) {
-                            callback(value);
-                        }
+                    const value = panel.getInputValue();
+                    if (value !== currentValue) {
+                        callback(value);
                     }
                 },
             });
@@ -388,22 +383,17 @@ namespace TwnsCommonWarBasicSettingsPage {
             const callback      = Helpers.getExisted(data.callbackOnModify);
             const minValue      = 0;
             const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
-            const currentValue  = data.currentValue;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            const currentValue  = Number(data.currentValue) ?? 0;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0390),
-                currentValue    : `${currentValue}`,
-                maxChars        : 5,
-                charRestrict    : `0-9`,
+                currentValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        if (value !== currentValue) {
-                            callback(value);
-                        }
+                    const value = panel.getInputValue();
+                    if (value !== currentValue) {
+                        callback(value);
                     }
                 },
             });

@@ -103,6 +103,7 @@
 		"bin-debug/modules/common/view/CommonDamageChartPanel.js",
 		"bin-debug/modules/common/view/CommonErrorPanel.js",
 		"bin-debug/modules/baseWar/model/BwDrawVoteManager.js",
+		"bin-debug/modules/common/view/CommonInputIntegerPanel.js",
 		"bin-debug/modules/common/view/CommonInputPanel.js",
 		"bin-debug/modules/common/view/CommonJoinRoomPasswordPanel.js",
 		"bin-debug/modules/common/view/CommonRankListPanel.js",
@@ -223,8 +224,8 @@
 		"bin-debug/modules/multiFreeRoom/view/MfrJoinRoomListPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrMainMenuPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrMyRoomListPanel.js",
-		"bin-debug/modules/multiFreeRoom/view/MfrRoomInfoPanel.js",
 		"bin-debug/modules/baseWar/view/BwTileView.js",
+		"bin-debug/modules/multiFreeRoom/view/MfrSearchRoomPanel.js",
 		"bin-debug/modules/baseWar/view/BwUnitActionsPanel.js",
 		"bin-debug/modules/multiFreeWar/view/MfwMyWarListPanel.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwActionPlanner.js",
@@ -434,6 +435,6 @@
 		"bin-debug/modules/watchWar/view/WwMakeRequestDetailPanel.js",
 		"bin-debug/modules/watchWar/view/WwMakeRequestWarsPanel.js",
 		"bin-debug/modules/watchWar/view/WwOngoingWarsPanel.js",
-		"bin-debug/modules/multiFreeRoom/view/MfrSearchRoomPanel.js"
+		"bin-debug/modules/multiFreeRoom/view/MfrRoomInfoPanel.js"
 	]
 }

@@ -287,19 +287,14 @@ namespace TwnsBwProduceUnitPanel {
                         rawMaxHp,
                         Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * data.costModifier * skillCfg[5] / 100) / normalizer) * normalizer
                     );
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                         title           : `${Lang.getUnitName(unitType)} HP`,
-                        currentValue    : "" + maxHp,
-                        maxChars        : 3,
-                        charRestrict    : "0-9",
+                        currentValue    : maxHp,
+                        maxValue        : maxHp,
+                        minValue        : minHp,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minHp}, ${maxHp}]`,
                         callback        : panel => {
-                            const value = Number(panel.getInputText());
-                            if ((isNaN(value)) || (value > maxHp) || (value < minHp)) {
-                                FloatText.show(Lang.getText(LangTextType.A0098));
-                            } else {
-                                actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, value);
-                            }
+                            actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, panel.getInputValue());
                         },
                     });
                 }

@@ -287,21 +287,15 @@ namespace TwnsCommonDamageCalculatorPanel {
             const currValue     = playerData.unitHp;
             const minValue      = 1;
             const maxValue      = CommonConstants.UnitMaxHp;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0339),
-                currentValue    : "" + currValue,
-                maxChars        : 3,
-                charRestrict    : "0-9",
+                currentValue    : currValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        playerData.unitHp = value;
-                        this._updateView();
-                    }
+                    playerData.unitHp = panel.getInputValue();
+                    this._updateView();
                 },
             });
         }
@@ -341,21 +335,15 @@ namespace TwnsCommonDamageCalculatorPanel {
             const currValue     = playerData.towersCount;
             const minValue      = 0;
             const maxValue      = 999;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0833),
-                currentValue    : "" + currValue,
-                maxChars        : 3,
-                charRestrict    : "0-9",
+                currentValue    : currValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        playerData.towersCount = value;
-                        this._updateView();
-                    }
+                    playerData.towersCount = panel.getInputValue();
+                    this._updateView();
                 },
             });
         }
@@ -370,21 +358,15 @@ namespace TwnsCommonDamageCalculatorPanel {
             const currValue     = playerData.offenseBonus;
             const minValue      = -10000;
             const maxValue      = 10000;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0183),
-                currentValue    : "" + currValue,
-                maxChars        : 6,
-                charRestrict    : "0-9//-",
+                currentValue    : currValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        playerData.offenseBonus = value;
-                        this._updateView();
-                    }
+                    playerData.offenseBonus = panel.getInputValue();
+                    this._updateView();
                 },
             });
         }
@@ -399,21 +381,15 @@ namespace TwnsCommonDamageCalculatorPanel {
             const currValue     = playerData.upperLuck;
             const minValue      = playerData.lowerLuck;
             const maxValue      = 10000;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0190),
-                currentValue    : "" + currValue,
-                maxChars        : 6,
-                charRestrict    : "0-9//-",
+                currentValue    : currValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        playerData.upperLuck = value;
-                        this._updateView();
-                    }
+                    playerData.upperLuck = panel.getInputValue();
+                    this._updateView();
                 },
             });
         }
@@ -428,21 +404,15 @@ namespace TwnsCommonDamageCalculatorPanel {
             const currValue     = playerData.lowerLuck;
             const minValue      = -10000;
             const maxValue      = playerData.upperLuck;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0189),
-                currentValue    : "" + currValue,
-                maxChars        : 6,
-                charRestrict    : "0-9//-",
+                currentValue    : currValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        playerData.lowerLuck = value;
-                        this._updateView();
-                    }
+                    playerData.lowerLuck = panel.getInputValue();
+                    this._updateView();
                 },
             });
         }
@@ -457,21 +427,15 @@ namespace TwnsCommonDamageCalculatorPanel {
             const currValue     = playerData.fund;
             const minValue      = -10000000;
             const maxValue      = 10000000;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0032),
-                currentValue    : "" + currValue,
-                maxChars        : 9,
-                charRestrict    : "0-9//-",
+                currentValue    : currValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        playerData.fund = value;
-                        this._updateView();
-                    }
+                    playerData.fund = panel.getInputValue();
+                    this._updateView();
                 },
             });
         }
@@ -486,21 +450,15 @@ namespace TwnsCommonDamageCalculatorPanel {
             const currValue     = playerData.citiesCount;
             const minValue      = 0;
             const maxValue      = 999;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0834),
-                currentValue    : "" + currValue,
-                maxChars        : 3,
-                charRestrict    : "0-9",
+                currentValue    : currValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        playerData.citiesCount = value;
-                        this._updateView();
-                    }
+                    playerData.citiesCount = panel.getInputValue();
+                    this._updateView();
                 },
             });
         }

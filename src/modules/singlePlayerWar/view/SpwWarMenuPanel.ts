@@ -302,20 +302,14 @@ namespace TwnsSpwWarMenuPanel {
             const mapId     = Helpers.getExisted(this._getWar().getMapId());
             const minValue  = CommonConstants.MapMinRating;
             const maxValue  = CommonConstants.MapMaxRating;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0363),
-                currentValue    : `${UserModel.getMapRating(mapId) || 0}`,
-                maxChars        : 2,
-                charRestrict    : "0-9",
+                currentValue    : UserModel.getMapRating(mapId) || 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        UserProxy.reqUserSetMapRating(mapId, value);
-                    }
+                    UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
                 },
             });
         }
