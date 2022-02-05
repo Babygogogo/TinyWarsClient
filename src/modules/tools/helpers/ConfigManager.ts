@@ -311,9 +311,6 @@ namespace ConfigManager {
     export function getSystemDialogueBackgroundMaxId(version: string): number {
         return Helpers.getExisted(getSystemCfg(version).dialogueBackgroundMaxId, ClientErrorCode.ConfigManager_GetSystemDialogueBackgroundMaxId_00);
     }
-    export function getSystemGlobalCoEnergyParameters(version: string): number[] {
-        return Helpers.getExisted(getSystemCfg(version).globalCoEnergyParameters, ClientErrorCode.ConfigManager_GetSystemGlobalCoEnergyParameters_00);
-    }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
         const mapping = Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);

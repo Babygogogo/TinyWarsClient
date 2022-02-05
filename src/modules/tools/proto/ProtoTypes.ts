@@ -98,9 +98,6 @@ export declare namespace Config {
 
         /** SystemCfg dialogueBackgroundMaxId */
         dialogueBackgroundMaxId?: (number|null);
-
-        /** SystemCfg globalCoEnergyParameters */
-        globalCoEnergyParameters?: (number[]|null);
     }
 
     /** Represents a SystemCfg. */
@@ -120,9 +117,6 @@ export declare namespace Config {
 
         /** SystemCfg dialogueBackgroundMaxId. */
         public dialogueBackgroundMaxId: number;
-
-        /** SystemCfg globalCoEnergyParameters. */
-        public globalCoEnergyParameters: number[];
 
         /**
          * Creates a new SystemCfg instance using the specified properties.
@@ -1644,6 +1638,12 @@ export declare namespace Config {
         /** CoBasicCfg energyType */
         energyType?: (number|null);
 
+        /** CoBasicCfg globalCoEnergyParameters */
+        globalCoEnergyParameters?: (number[]|null);
+
+        /** CoBasicCfg canGetEnergyWithBattleOnPowerSkills */
+        canGetEnergyWithBattleOnPowerSkills?: (number|null);
+
         /** CoBasicCfg passiveSkills */
         passiveSkills?: (number[]|null);
 
@@ -1713,6 +1713,12 @@ export declare namespace Config {
 
         /** CoBasicCfg energyType. */
         public energyType: number;
+
+        /** CoBasicCfg globalCoEnergyParameters. */
+        public globalCoEnergyParameters: number[];
+
+        /** CoBasicCfg canGetEnergyWithBattleOnPowerSkills. */
+        public canGetEnergyWithBattleOnPowerSkills: number;
 
         /** CoBasicCfg passiveSkills. */
         public passiveSkills: number[];

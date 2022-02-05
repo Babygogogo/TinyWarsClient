@@ -305,13 +305,16 @@ namespace TwnsBwPlayer {
             if (energyType === Types.CoEnergyType.Dor) {
                 return energy;
             } else if (energyType === Types.CoEnergyType.Trilogy) {
-                const cfg = ConfigManager.getSystemGlobalCoEnergyParameters(this._getWar().getConfigVersion());
+                const cfg = Helpers.getExisted(this.getGlobalCoEnergyParameters(), ClientErrorCode.BwPlayer_GetRevisedEnergy_00);
                 return Math.floor(energy * (Math.min(cfg[1], this.getCoPowerActivatedCount()) * cfg[0] + 100) / 100);
             } else {
-                throw Helpers.newError(`Invalid energyType: ${energyType}`, ClientErrorCode.BwPlayer_GetRevisedEnergy_00);
+                throw Helpers.newError(`Invalid energyType: ${energyType}`, ClientErrorCode.BwPlayer_GetRevisedEnergy_01);
             }
         }
 
+        public getGlobalCoEnergyParameters(): Types.Undefinable<number[]> {
+            return this._getCoBasicCfg().globalCoEnergyParameters;
+        }
         public getCoEnergyType(): Types.CoEnergyType {
             return Helpers.getExisted(this._getCoBasicCfg().energyType, ClientErrorCode.BwPlayer_GetCoEnergyType_00);
         }
@@ -405,6 +408,10 @@ namespace TwnsBwPlayer {
                 return false;
             }
         }
+        public checkCanGetEnergyWithBattle(): boolean {
+            return (!!this._getCoBasicCfg().canGetEnergyWithBattleOnPowerSkills)
+                || (!this.checkCoIsUsingActiveSkill());
+        }
 
         public updateOnUseCoSkill(skillType: Types.CoSkillType): void {
             const currentEnergy = this.getCoCurrentEnergy();
@@ -420,8 +427,8 @@ namespace TwnsBwPlayer {
                 throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_02);
             }
 
-            this.setCoUsingSkillType(skillType);
             this._setCoPowerActivatedCount(this.getCoPowerActivatedCount() + 1);
+            this.setCoUsingSkillType(skillType);
         }
 
         public getCoIsDestroyedInTurn(): boolean {

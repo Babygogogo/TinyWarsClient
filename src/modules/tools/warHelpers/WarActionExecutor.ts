@@ -3411,13 +3411,14 @@ namespace WarActionExecutor {
 
         const commonSettingManager  = war.getCommonSettingManager();
         const configVersion         = war.getConfigVersion();
-        if (!attackerPlayer.checkCoIsUsingActiveSkill()) {
+        if (attackerPlayer.checkCanGetEnergyWithBattle()) {
             const coEnergyType1 = attackerPlayer.getCoEnergyType();
             if (coEnergyType1 === Types.CoEnergyType.Trilogy) {
-                const multiplier1 = commonSettingManager.getSettingsEnergyGrowthMultiplier(attackerPlayer.getPlayerIndex());
+                const multiplier1       = commonSettingManager.getSettingsEnergyGrowthMultiplier(attackerPlayer.getPlayerIndex());
+                const energyParameters1 = Helpers.getExisted(attackerPlayer.getGlobalCoEnergyParameters());
                 attackerPlayer.setCoCurrentEnergy(Math.min(
                     attackerPlayer.getCoMaxEnergy(),
-                    attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostNormalizedHp * targetCfgProductionCost * multiplier1 * ConfigManager.getSystemGlobalCoEnergyParameters(configVersion)[2] / 100 / 10 / 100),
+                    attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostNormalizedHp * targetCfgProductionCost * multiplier1 * energyParameters1[2] / 100 / 10 / 100),
                 ));
 
             } else if (coEnergyType1 === Types.CoEnergyType.Dor) {
@@ -3439,13 +3440,14 @@ namespace WarActionExecutor {
             }
         }
 
-        if (!targetPlayer.checkCoIsUsingActiveSkill()) {
+        if (targetPlayer.checkCanGetEnergyWithBattle()) {
             const coEnergyType2 = targetPlayer.getCoEnergyType();
             if (coEnergyType2 === Types.CoEnergyType.Trilogy) {
-                const multiplier2 = commonSettingManager.getSettingsEnergyGrowthMultiplier(targetPlayer.getPlayerIndex());
+                const multiplier2       = commonSettingManager.getSettingsEnergyGrowthMultiplier(targetPlayer.getPlayerIndex());
+                const energyParameters2 = Helpers.getExisted(targetPlayer.getGlobalCoEnergyParameters());
                 targetPlayer.setCoCurrentEnergy(Math.min(
                     targetPlayer.getCoMaxEnergy(),
-                    targetPlayer.getCoCurrentEnergy() + Math.floor(targetLostNormalizedHp * targetCfgProductionCost * multiplier2 * ConfigManager.getSystemGlobalCoEnergyParameters(configVersion)[3] / 100 / 10 / 100),
+                    targetPlayer.getCoCurrentEnergy() + Math.floor(targetLostNormalizedHp * targetCfgProductionCost * multiplier2 * energyParameters2[3] / 100 / 10 / 100),
                 ));
 
             } else if (coEnergyType2 === Types.CoEnergyType.Dor) {
