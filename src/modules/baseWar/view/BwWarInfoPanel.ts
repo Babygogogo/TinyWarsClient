@@ -771,15 +771,21 @@ namespace TwnsBwWarInfoPanel {
             this._imgModify.visible = false;
         }
         private _updateViewAsTimeLimit(): void {
-            const data      = this._getData();
-            const war       = data.war;
-            const restTime  = war.getBootRestTime(data.playerIndex);
-            const label     = this._labelValue;
+            const data          = this._getData();
+            const war           = data.war;
+            const playerIndex   = data.playerIndex;
+            const restTime      = war.getBootRestTime(playerIndex);
+            const label         = this._labelValue;
             if (restTime == null) {
                 label.text      = `--`;
                 label.textColor = 0xffffff;
             } else {
-                label.text      = Helpers.getTimeDurationText2(restTime);
+                const params            = war.getSettingsBootTimerParams();
+                const textForAddTime    = params[0] === Types.BootTimerType.Incremental
+                    ? `(+${params[2] * war.getUnitMap().getAllUnits().filter(v => v.getPlayerIndex() === playerIndex).length}s)`
+                    : ``;
+
+                label.text      = `${Helpers.getTimeDurationText2(restTime)}${textForAddTime}`;
                 label.textColor = restTime >= 30 * 60
                     ? 0xFFFFFF
                     : (restTime >= 5 * 60 ? 0xFFFF00 : 0xFF4400);
