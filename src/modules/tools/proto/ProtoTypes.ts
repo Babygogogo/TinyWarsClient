@@ -12410,6 +12410,9 @@ export declare namespace WarSerialization {
 
         /** SerialPlayer coPowerActivatedCount */
         coPowerActivatedCount?: (number|null);
+
+        /** SerialPlayer hasTakenManualAction */
+        hasTakenManualAction?: (boolean|null);
     }
 
     /** Represents a SerialPlayer. */
@@ -12465,6 +12468,9 @@ export declare namespace WarSerialization {
 
         /** SerialPlayer coPowerActivatedCount. */
         public coPowerActivatedCount: number;
+
+        /** SerialPlayer hasTakenManualAction. */
+        public hasTakenManualAction: boolean;
 
         /**
          * Creates a new SerialPlayer instance using the specified properties.

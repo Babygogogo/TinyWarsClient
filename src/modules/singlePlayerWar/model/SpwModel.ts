@@ -223,15 +223,30 @@ namespace SpwModel {
             return true;
         }
 
-        // Handle the booted players (make them dying).
+        // Handle the booted players (make them dying or end turn).
+        const playerInTurn          = playerManager.getPlayerInTurn();
+        const remainingVotesForDraw = war.getDrawVoteManager().getRemainingVotes();
+        const hasVotedForDraw       = playerInTurn.getHasVotedForDraw();
         if (war.checkIsBoot()) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
                 throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_00);
             }
 
-            await handleSystemHandleBootPlayer(war);
-            await checkAndHandleSystemActions(war);
-            return true;
+            if (!playerInTurn.getHasTakenManualAction()) {
+                await handleSystemHandleBootPlayer(war);
+                await checkAndHandleSystemActions(war);
+                return true;
+            } else {
+                if ((remainingVotesForDraw) && (!hasVotedForDraw)) {
+                    await handleSystemVoteForDraw(war, false);
+                    await checkAndHandleSystemActions(war);
+                    return true;
+                } else {
+                    await handleSystemEndTurn(war);
+                    await checkAndHandleSystemActions(war);
+                    return true;
+                }
+            }
         }
 
         // Handle the dying players (destroy force).
@@ -246,12 +261,11 @@ namespace SpwModel {
         }
 
         // Handle system vote for draw.
-        const playerInTurn = playerManager.getPlayerInTurn();
-        if ((war.getDrawVoteManager().getRemainingVotes())                                                      &&
-            (!playerInTurn.getHasVotedForDraw())                                                                &&
+        if ((remainingVotesForDraw)                                                                             &&
+            (!hasVotedForDraw)                                                                                  &&
             ((playerInTurn.checkIsNeutral()) || (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead))
         ) {
-            await handleSystemVoteForDraw(war);
+            await handleSystemVoteForDraw(war, true);
             await checkAndHandleSystemActions(war);
             return true;
         }
@@ -295,11 +309,11 @@ namespace SpwModel {
             },
         });
     }
-    async function handleSystemVoteForDraw(war: BwWar): Promise<void> {
+    async function handleSystemVoteForDraw(war: BwWar, isAgree: boolean): Promise<void> {
         await reviseAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemVoteForDraw  : {
-                isAgree : true,
+                isAgree,
             },
         });
     }

@@ -197,6 +197,10 @@ namespace TwnsLangErrorText {
             `The server is under maintenance.`,
         ],
 
+        [ClientErrorCode.BwPlayerManager_Init_03]: [
+            `势力颜色不合法`,
+            `The colors of the forces are invalid.`,
+        ],
         [ClientErrorCode.MapRawDataValidation04]: [
             `势力数量不合法`,
             `The number of the forces is not valid.`,

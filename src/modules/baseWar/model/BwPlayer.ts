@@ -35,6 +35,7 @@ namespace TwnsBwPlayer {
         private _coUsingSkillType?          : Types.CoSkillType;
         private _coIsDestroyedInTurn?       : boolean;
         private _coPowerActivatedCount?     : number;
+        private _hasTakenManualAction?      : boolean;
         private _watchOngoingSrcUserIds?    : Set<number>;
         private _watchRequestSrcUserIds?    : Set<number>;
 
@@ -108,6 +109,7 @@ namespace TwnsBwPlayer {
             this.setCoId(coId);
             this.setCoCurrentEnergy(coCurrentEnergy);
             this._setCoPowerActivatedCount(data.coPowerActivatedCount ?? 0);
+            this.setHasTakenManualAction(data.hasTakenManualAction ?? false);
             this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
         }
@@ -130,6 +132,7 @@ namespace TwnsBwPlayer {
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
                 coPowerActivatedCount       : this.getCoPowerActivatedCount(),
+                hasTakenManualAction        : this.getHasTakenManualAction(),
                 watchRequestSrcUserIdArray  : [...(this.getWatchRequestSrcUserIds() || [])],
                 watchOngoingSrcUserIdArray  : [...(this.getWatchOngoingSrcUserIds() || [])],
             };
@@ -151,6 +154,7 @@ namespace TwnsBwPlayer {
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
                 coPowerActivatedCount       : this.getCoPowerActivatedCount(),
+                hasTakenManualAction        : this.getHasTakenManualAction(),
                 watchRequestSrcUserIdArray  : [],
                 watchOngoingSrcUserIdArray  : []
             };
@@ -323,6 +327,13 @@ namespace TwnsBwPlayer {
         }
         private _setCoPowerActivatedCount(count: number): void {
             this._coPowerActivatedCount = count;
+        }
+
+        public getHasTakenManualAction(): boolean {
+            return Helpers.getExisted(this._hasTakenManualAction);
+        }
+        public setHasTakenManualAction(hasTaken: boolean): void {
+            this._hasTakenManualAction = hasTaken;
         }
 
         public getCoZoneRadius(): number {

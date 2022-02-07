@@ -121,10 +121,10 @@ namespace MeMfwModel {
     export function tickUnitAndTileSkinId(playerIndex: number): void {
         const currSkinId        = getUnitAndTileSkinId(playerIndex);
         const newSkinId         = currSkinId % CommonConstants.UnitAndTileMaxSkinId + 1;
-        const existingPlayer    = getWarData().playerManager?.players?.find(v => v.unitAndTileSkinId === newSkinId);
-        if (existingPlayer) {
-            setUnitAndTileSkinId(Helpers.getExisted(existingPlayer.playerIndex), currSkinId);
-        }
+        // const existingPlayer    = getWarData().playerManager?.players?.find(v => v.unitAndTileSkinId === newSkinId);
+        // if (existingPlayer) {
+        //     setUnitAndTileSkinId(Helpers.getExisted(existingPlayer.playerIndex), currSkinId);
+        // }
         setUnitAndTileSkinId(playerIndex, newSkinId);
     }
     export function getUnitAndTileSkinId(playerIndex: number): number {

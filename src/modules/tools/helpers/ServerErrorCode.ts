@@ -1135,6 +1135,17 @@ export const enum ServerErrorCode {
     BwPlayer_GetCoPowerActivatedCount_0008,
     BwPlayer_GetCoPowerActivatedCount_0009,
 
+    BwPlayer_GetHasTakenManualAction_0000,
+    BwPlayer_GetHasTakenManualAction_0001,
+    BwPlayer_GetHasTakenManualAction_0002,
+    BwPlayer_GetHasTakenManualAction_0003,
+    BwPlayer_GetHasTakenManualAction_0004,
+    BwPlayer_GetHasTakenManualAction_0005,
+    BwPlayer_GetHasTakenManualAction_0006,
+    BwPlayer_GetHasTakenManualAction_0007,
+    BwPlayer_GetHasTakenManualAction_0008,
+    BwPlayer_GetHasTakenManualAction_0009,
+
     BwPlayer_UpdateOnUseCoSkill_0000,
     BwPlayer_UpdateOnUseCoSkill_0001,
     BwPlayer_UpdateOnUseCoSkill_0002,
