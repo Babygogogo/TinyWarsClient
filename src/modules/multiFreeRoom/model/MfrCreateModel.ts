@@ -56,6 +56,13 @@ namespace MfrCreateModel {
         return Helpers.getExisted(getData().settingsForMfw);
     }
 
+    export function getTurnsLimit(): number {
+        return getInitialWarData().settingsForCommon?.turnsLimit ?? CommonConstants.WarMaxTurnsLimit;
+    }
+    export function setTurnsLimit(turnsLimit: number): void {
+        Helpers.getExisted(getInitialWarData().settingsForCommon).turnsLimit = turnsLimit;
+    }
+
     export function getInitialWarData(): ISerialWar {
         return Helpers.getExisted(getSettingsForMfw().initialWarData);
     }

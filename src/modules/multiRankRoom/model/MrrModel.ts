@@ -282,7 +282,8 @@ namespace MrrModel {
             return { dataArrayForListSettings: [] };
         }
 
-        const warRule           = Helpers.getExisted(roomInfo.settingsForCommon?.warRule);
+        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
+        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
         const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
@@ -309,6 +310,12 @@ namespace MrrModel {
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     warRule,
                     callbackOnModify: null,
                 },

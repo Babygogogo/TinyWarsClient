@@ -12,6 +12,7 @@
 // import WarRuleHelpers                       from "../../tools/warHelpers/WarRuleHelpers";
 // import UserModel                            from "../../user/model/UserModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MfrModel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import IMfrRoomInfo                             = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
@@ -294,7 +295,8 @@ namespace MfrModel {
         }
 
         const settingsForMfw    = Helpers.getExisted(roomInfo.settingsForMfw);
-        const warRule           = Helpers.getExisted(settingsForMfw.initialWarData?.settingsForCommon?.warRule);
+        const settingsForCommon = Helpers.getExisted(settingsForMfw.initialWarData?.settingsForCommon);
+        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         const bootTimerParams   = Helpers.getExisted(settingsForMfw.bootTimerParams);
         const warPassword       = settingsForMfw.warPassword;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
@@ -333,6 +335,12 @@ namespace MfrModel {
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     warRule,
                     callbackOnModify: null,
                 },

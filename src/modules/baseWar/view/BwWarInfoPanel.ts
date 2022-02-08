@@ -67,6 +67,7 @@ namespace TwnsBwWarInfoPanel {
         private readonly _scroller!         : eui.Scroller;
         private readonly _labelTurnTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelTurn!        : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnsLimit!  : TwnsUiLabel.UiLabel;
         private readonly _listRuleTitle!    : TwnsUiScrollList.UiScrollList<DataForRuleTitleRenderer>;
         private readonly _listPlayer!       : TwnsUiScrollList.UiScrollList<DataForPlayerRenderer>;
 
@@ -102,7 +103,9 @@ namespace TwnsBwWarInfoPanel {
             this._updateComponentsForLanguage();
 
             const playerRuleTypeArray   = getInfoTypeArray();
-            this._labelTurn.text        = Helpers.getNumText(this._getOpenData().war.getTurnManager().getTurnIndex());
+            const war                   = this._getOpenData().war;
+            this._labelTurn.text        = Helpers.getNumText(war.getTurnManager().getTurnIndex());
+            this._labelTurnsLimit.text  = `/${war.getCommonSettingManager().getTurnsLimit()}`;
             this._initListSetting(playerRuleTypeArray);
             this._updateListPlayer(playerRuleTypeArray);
         }

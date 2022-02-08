@@ -10253,6 +10253,9 @@ export declare namespace WarSettings {
 
         /** SettingsForCommon warRule */
         warRule?: (WarRule.IWarRule|null);
+
+        /** SettingsForCommon turnsLimit */
+        turnsLimit?: (number|null);
     }
 
     /** Represents a SettingsForCommon. */
@@ -10272,6 +10275,9 @@ export declare namespace WarSettings {
 
         /** SettingsForCommon warRule. */
         public warRule?: (WarRule.IWarRule|null);
+
+        /** SettingsForCommon turnsLimit. */
+        public turnsLimit: number;
 
         /**
          * Creates a new SettingsForCommon instance using the specified properties.

@@ -49,6 +49,7 @@ namespace TwnsSpwTopPanel {
 
         private readonly _groupPlayer!          : eui.Group;
         private readonly _labelPlayer!          : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnIndex!       : TwnsUiLabel.UiLabel;
 
         private readonly _groupInfo!            : eui.Group;
         private readonly _labelCurrEnergy!      : TwnsUiLabel.UiLabel;
@@ -64,6 +65,7 @@ namespace TwnsSpwTopPanel {
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.BwPlayerFundChanged,             callback: this._onNotifyBwPlayerFundChanged },
                 { type: NotifyType.BwPlayerIndexInTurnChanged,      callback: this._onNotifyBwPlayerIndexInTurnChanged },
+                { type: NotifyType.BwTurnIndexChanged,              callback: this._onNotifyBwTurnIndexChanged },
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.BwForceWeatherTypeChanged,       callback: this._onNotifyBwForceWeatherTypeChanged },
@@ -107,6 +109,9 @@ namespace TwnsSpwTopPanel {
             const war = this._getOpenData().war;
             this._updateView();
             SoundManager.playCoBgmWithWar(war, false);
+        }
+        private _onNotifyBwTurnIndexChanged(): void {
+            this._updateLabelTurnIndex();
         }
         private _onNotifyBwCoEnergyChanged(): void {
             this._updateLabelEnergy();
@@ -196,6 +201,7 @@ namespace TwnsSpwTopPanel {
             this._updateListPlayer();
             this._updateImgSkinAndCo();
             this._updateLabelPlayer();
+            this._updateLabelTurnIndex();
             this._updateLabelFundAndAddFund();
             this._updateLabelEnergy();
             this._updateBtnChat();
@@ -204,6 +210,7 @@ namespace TwnsSpwTopPanel {
         private _updateComponentsForLanguage(): void {
             this._labelSinglePlayer.text = Lang.getText(LangTextType.B0138);
             this._updateLabelWeather();
+            this._updateLabelTurnIndex();
         }
 
         private _updateLabelWeather(): void {
@@ -212,6 +219,10 @@ namespace TwnsSpwTopPanel {
 
         private _updateListPlayer(): void {
             this._listPlayer.bindData(this._createDataArrayForListPlayer());
+        }
+
+        private _updateLabelTurnIndex(): void {
+            this._labelTurnIndex.text = `${Lang.getText(LangTextType.B0191)} ${this._getOpenData().war.getTurnManager().getTurnIndex()}`;
         }
 
         private async _updateLabelPlayer(): Promise<void> {

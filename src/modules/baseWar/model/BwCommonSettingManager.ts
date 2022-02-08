@@ -64,6 +64,9 @@ namespace TwnsBwCommonSettingManager {
         public getSettingsForCommon(): ISettingsForCommon {
             return Helpers.getExisted(this._settingsForCommon, ClientErrorCode.BwCommonSettingManager_GetSettingsForCommon_00);
         }
+        public getTurnsLimit(): number {
+            return this.getSettingsForCommon().turnsLimit ?? CommonConstants.WarMaxTurnsLimit;
+        }
         public getWarRule(): ProtoTypes.WarRule.IWarRule {
             return Helpers.getExisted(this.getSettingsForCommon().warRule);
         }

@@ -223,10 +223,34 @@ namespace SpwModel {
             return true;
         }
 
+        // Handle the dying players (destroy force).
+        const playersCount = playerManager.getTotalPlayersCount(false);
+        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
+            const player = playerManager.getPlayer(playerIndex);
+            if (player.getAliveState() === Types.PlayerAliveState.Dying) {
+                await handleSystemDestroyPlayerForce(war, playerIndex);
+                await checkAndHandleSystemActions(war);
+                return true;
+            }
+        }
+
+        // Handle turns limit.
+        const playerInTurn      = playerManager.getPlayerInTurn();
+        const hasVotedForDraw   = playerInTurn.getHasVotedForDraw();
+        if (war.getTurnManager().getTurnIndex() > war.getCommonSettingManager().getTurnsLimit()) {
+            if (!hasVotedForDraw) {
+                await handleSystemVoteForDraw(war, true);
+                await checkAndHandleSystemActions(war);
+                return true;
+            } else {
+                await handleSystemEndTurn(war);
+                await checkAndHandleSystemActions(war);
+                return true;
+            }
+        }
+
         // Handle the booted players (make them dying or end turn).
-        const playerInTurn          = playerManager.getPlayerInTurn();
         const remainingVotesForDraw = war.getDrawVoteManager().getRemainingVotes();
-        const hasVotedForDraw       = playerInTurn.getHasVotedForDraw();
         if (war.checkIsBoot()) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
                 throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_00);
@@ -246,17 +270,6 @@ namespace SpwModel {
                     await checkAndHandleSystemActions(war);
                     return true;
                 }
-            }
-        }
-
-        // Handle the dying players (destroy force).
-        const playersCount = playerManager.getTotalPlayersCount(false);
-        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
-            const player = playerManager.getPlayer(playerIndex);
-            if (player.getAliveState() === Types.PlayerAliveState.Dying) {
-                await handleSystemDestroyPlayerForce(war, playerIndex);
-                await checkAndHandleSystemActions(war);
-                return true;
             }
         }
 

@@ -4599,6 +4599,10 @@ namespace TwnsLangCommonText {
             `处理他人求和`,
             `Handle Draw`,
         ],
+        [LangTextType.B0842]: [
+            `回合数限制`,
+            `Turns Limit`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5671,6 +5675,15 @@ namespace TwnsLangCommonText {
                 `score = 100000 - (turns - 1) * 1000 - actions`,
                 `2. You can challenge the same level many times, and the system will keep the clearance record with the highest score.`,
                 `3. Some maps may contain more than one challenge rule. Each rule has an independent leaderboard and is also included in the score for the overall leaderboard.`,
+            ].join(`\n`),
+        ],
+
+        [LangTextType.R0012]: [
+            [
+                `若回合数超过了回合限制，则本局游戏将自动以和局结束。`,
+            ].join(`\n`),
+            [
+                `If there is no winner by the time the turn limit has been exceeded, the game will be considered a Draw.`,
             ].join(`\n`),
         ],
     };

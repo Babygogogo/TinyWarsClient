@@ -116,6 +116,8 @@ namespace CommonConstants {
     export const WarBootTimerRegularDefaultValue        = 3600 * 24 * 3;
     export const WarBootTimerIncrementalMaxLimit        = 3600 * 24;
     export const WarBootTimerDefaultParams              = [Types.BootTimerType.Regular, WarBootTimerRegularDefaultValue];
+    export const WarMaxTurnsLimit                       = 80;
+    export const WarMinTurnsLimit                       = 20;
 
     export const WarRuleFirstId                             = 0;
     export const WarRuleNameMaxLength                       = 15;

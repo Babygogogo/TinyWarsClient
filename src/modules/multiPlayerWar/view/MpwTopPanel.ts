@@ -57,6 +57,7 @@ namespace TwnsMpwTopPanel {
         private readonly _groupPlayer!          : eui.Group;
         private readonly _labelPlayer!          : TwnsUiLabel.UiLabel;
         private readonly _labelPlayerState!     : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnIndex!       : TwnsUiLabel.UiLabel;
 
         private readonly _groupInfo!            : eui.Group;
         private readonly _labelCurrEnergy!      : TwnsUiLabel.UiLabel;
@@ -72,6 +73,7 @@ namespace TwnsMpwTopPanel {
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.TimeTick,                        callback: this._onNotifyTimeTick },
                 { type: NotifyType.BwPlayerFundChanged,             callback: this._onNotifyBwPlayerFundChanged },
+                { type: NotifyType.BwTurnIndexChanged,              callback: this._onNotifyBwTurnIndexChanged },
                 { type: NotifyType.BwPlayerIndexInTurnChanged,      callback: this._onNotifyBwPlayerIndexInTurnChanged },
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
@@ -129,6 +131,9 @@ namespace TwnsMpwTopPanel {
         }
         private _onNotifyBwPlayerFundChanged(): void {
             this._updateLabelFundAndAddFund();
+        }
+        private _onNotifyBwTurnIndexChanged(): void {
+            this._updateLabelTurnIndex();
         }
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
             const war = this._getOpenData().war;
@@ -239,6 +244,7 @@ namespace TwnsMpwTopPanel {
             this._updateImgSkinAndCo();
             this._updateLabelPlayerState();
             this._updateLabelPlayer();
+            this._updateLabelTurnIndex();
             this._updateLabelWeather();
             this._updateGroupTimer();
             this._updateLabelFundAndAddFund();
@@ -247,8 +253,9 @@ namespace TwnsMpwTopPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            // nothing to do
             this._updateLabelWeather();
+            this._updateLabelPlayerState();
+            this._updateLabelTurnIndex();
         }
 
         private _updateListPlayer(): void {
@@ -276,6 +283,10 @@ namespace TwnsMpwTopPanel {
         private async _updateLabelPlayer(): Promise<void> {
             const player            = this._getOpenData().war.getPlayerInTurn();
             this._labelPlayer.text  = `${await player.getNickname()}`;
+        }
+
+        private _updateLabelTurnIndex(): void {
+            this._labelTurnIndex.text = `${Lang.getText(LangTextType.B0191)} ${this._getOpenData().war.getTurnManager().getTurnIndex()}`;
         }
 
         private _updateLabelWeather(): void {

@@ -278,6 +278,12 @@ namespace TwnsMrrPreviewMapListPanel {
                         callbackOnModify: null,
                     },
                     {
+                        settingsType    : WarBasicSettingsType.TurnsLimit,
+                        currentValue    : CommonConstants.WarMaxTurnsLimit,
+                        warRule,
+                        callbackOnModify: null,
+                    },
+                    {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
                         warRule,

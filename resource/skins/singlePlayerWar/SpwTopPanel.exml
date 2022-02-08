@@ -54,6 +54,8 @@
                 <e:Group id="_groupPlayer" x="32" y="8">
                     <TwnsUiLabel:UiLabel id="_labelPlayer" text="玩家名居然能有十个字" size="16" x="-374" textColor="0xffffff"
                                          y="-8" maxTextWidth="160" />
+                    <TwnsUiLabel:UiLabel id="_labelTurnIndex" text="Online" size="12" x="60" textColor="0xFFFFFF"
+                                         maxTextWidth="230" top="0" />
                     <e:layout>
                         <e:VerticalLayout gap="2" />
                     </e:layout>

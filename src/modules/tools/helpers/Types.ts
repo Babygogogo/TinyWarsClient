@@ -807,6 +807,7 @@ namespace Types {
         TimerRegularParam,
         TimerIncrementalParam1,
         TimerIncrementalParam2,
+        TurnsLimit,
         SpmSaveSlotIndex,
         SpmSaveSlotComment,
     }

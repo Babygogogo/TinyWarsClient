@@ -9,6 +9,7 @@
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace CcrCreateModel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import BootTimerType            = Types.BootTimerType;
@@ -23,7 +24,9 @@ namespace CcrCreateModel {
     ];
 
     const _dataForCreateRoom: DataForCreateRoom = {
-        settingsForCommon       : {},
+        settingsForCommon       : {
+            turnsLimit          : CommonConstants.WarMaxTurnsLimit,
+        },
         settingsForCcw          : {},
 
         selfCoId                : CommonConstants.CoEmptyId,
@@ -43,6 +46,7 @@ namespace CcrCreateModel {
         setWarPassword("");
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+        setTurnsLimit(CommonConstants.WarMaxTurnsLimit);
         setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
         await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canCcw)?.ruleId));
     }
@@ -139,6 +143,13 @@ namespace CcrCreateModel {
                 }
             }
         }
+    }
+
+    export function getTurnsLimit(): number {
+        return Helpers.getExisted(getSettingsForCommon().turnsLimit);
+    }
+    export function setTurnsLimit(turnsLimit: number): void {
+        getSettingsForCommon().turnsLimit = turnsLimit;
     }
 
     export function setWarName(name: string | null): void {

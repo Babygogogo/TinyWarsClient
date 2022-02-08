@@ -111,6 +111,8 @@ namespace TwnsCommonWarBasicSettingsPage {
                 this._modifyAsHasFog();
             } else if (settingsType === WarBasicSettingsType.Weather) {
                 this._modifyAsWeather();
+            } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
+                this._modifyAsTurnsLimit();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 this._modifyAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
@@ -138,6 +140,11 @@ namespace TwnsCommonWarBasicSettingsPage {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title  : Lang.getText(LangTextType.B0705),
                     content: Lang.getText(LangTextType.R0009),
+                });
+            } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+                    title  : Lang.getText(LangTextType.B0842),
+                    content: Lang.getText(LangTextType.R0012),
                 });
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
@@ -170,6 +177,8 @@ namespace TwnsCommonWarBasicSettingsPage {
                 this._updateViewAsHasFog();
             } else if (settingsType === WarBasicSettingsType.Weather) {
                 this._updateViewAsWeather();
+            } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
+                this._updateViewAsTurnsLimit();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 this._updateViewAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
@@ -229,6 +238,11 @@ namespace TwnsCommonWarBasicSettingsPage {
             const labelValue        = this._labelValue;
             labelValue.text         = Lang.getWeatherName(weatherType);
             labelValue.textColor    = weatherType === Types.WeatherType.Clear ? 0xFFFFFF: 0xFFFF00;
+            this._btnHelp.visible   = true;
+        }
+        private _updateViewAsTurnsLimit(): void {
+            const data              = this._getData();
+            this._labelValue.text   = `${data.currentValue ?? CommonConstants.WarMaxTurnsLimit}`;
             this._btnHelp.visible   = true;
         }
         private _updateViewAsTimerType(): void {
@@ -347,6 +361,26 @@ namespace TwnsCommonWarBasicSettingsPage {
                     callback: () => callback(null),
                 });
             }
+        }
+        private _modifyAsTurnsLimit(): void {
+            const data          = this._getData();
+            const callback      = Helpers.getExisted(data.callbackOnModify);
+            const minValue      = CommonConstants.WarMinTurnsLimit;
+            const maxValue      = CommonConstants.WarMaxTurnsLimit;
+            const currentValue  = Number(data.currentValue) || maxValue;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                title           : Lang.getText(LangTextType.B0842),
+                currentValue,
+                minValue,
+                maxValue,
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = panel.getInputValue();
+                    if (value !== currentValue) {
+                        callback(value);
+                    }
+                },
+            });
         }
         private _modifyAsTimerType(): void {
             const data      = this._getData();

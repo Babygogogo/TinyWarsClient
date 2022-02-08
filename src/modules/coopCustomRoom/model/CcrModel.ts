@@ -299,7 +299,8 @@ namespace CcrModel {
             return { dataArrayForListSettings: [] };
         }
 
-        const warRule           = Helpers.getExisted(roomInfo.settingsForCommon?.warRule);
+        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
+        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         const settingsForCcw    = Helpers.getExisted(roomInfo.settingsForCcw);
         const bootTimerParams   = Helpers.getExisted(settingsForCcw.bootTimerParams);
         const warPassword       = settingsForCcw.warPassword;
@@ -345,6 +346,12 @@ namespace CcrModel {
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     warRule,
                     callbackOnModify: null,
                 },

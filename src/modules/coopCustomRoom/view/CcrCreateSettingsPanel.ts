@@ -151,6 +151,7 @@ namespace TwnsCcrCreateSettingsPanel {
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
             const warRule           = CcrCreateModel.getWarRule();
+            const turnsLimit        = CcrCreateModel.getTurnsLimit();
             const bootTimerParams   = CcrCreateModel.getBootTimerParams();
             const timerType         = bootTimerParams[0] as Types.BootTimerType;
             const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -223,6 +224,18 @@ namespace TwnsCcrCreateSettingsPanel {
                         callbackOnModify: () => {
                             CcrCreateModel.tickDefaultWeatherType();
                             CcrCreateModel.setCustomWarRuleId();
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TurnsLimit,
+                        currentValue    : turnsLimit,
+                        warRule,
+                        callbackOnModify: (newValue: string | number | null) => {
+                            if (typeof newValue !== "number") {
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
+                            }
+                            CcrCreateModel.setTurnsLimit(newValue);
                             this._updateCommonWarBasicSettingsPage();
                         },
                     },

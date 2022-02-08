@@ -1605,10 +1605,13 @@ namespace WarRobot {
                 },
             });
         });
-        let canAttack = false;
+        let canAttack       = false;
+        let hasEnemyUnit    = false;
         for (const unit of war.getUnitMap().getAllUnits()) {
             const unitCurrentHp = unit.getCurrentHp();
-            if (unit.getTeamIndex() === producingTeamIndex) {
+            if (unit.getTeamIndex() !== producingTeamIndex) {
+                hasEnemyUnit = true;
+            } else {
                 if (unit.getUnitType() === producingUnitType) {
                     score += -unitCurrentHp * productionCost / 1000;
                 }
@@ -1660,7 +1663,7 @@ namespace WarRobot {
             }
         }
 
-        if (!canAttack) {
+        if ((!canAttack) && (hasEnemyUnit)) {
             return null;
         }
         return score;
@@ -3134,7 +3137,7 @@ namespace WarRobot {
         } else {
             return {
                 WarActionPlayerVoteForDraw: {
-                    isAgree : false,
+                    isAgree : true,
                 },
             };
         }

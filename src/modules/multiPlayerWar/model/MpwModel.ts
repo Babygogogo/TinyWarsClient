@@ -39,6 +39,7 @@ namespace MpwModel {
     import IMpwWarInfo                              = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarActionContainer                      = ProtoTypes.WarAction.IWarActionContainer;
     import IWarRule                                 = ProtoTypes.WarRule.IWarRule;
+    import ISettingsForCommon                       = ProtoTypes.WarSettings.ISettingsForCommon;
     import ISettingsForMcw                          = ProtoTypes.WarSettings.ISettingsForMcw;
     import ISettingsForCcw                          = ProtoTypes.WarSettings.ISettingsForCcw;
     import ISettingsForMrw                          = ProtoTypes.WarSettings.ISettingsForMrw;
@@ -154,21 +155,22 @@ namespace MpwModel {
             return null;
         }
 
-        const warRule                                                               = Helpers.getExisted(warInfo.settingsForCommon?.warRule);
+        const settingsForCommon                                                     = Helpers.getExisted(warInfo.settingsForCommon);
+        const warRule                                                               = Helpers.getExisted(settingsForCommon.warRule);
         const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
         if (settingsForMcw) {
-            return await createDataForCommonWarBasicSettingsPageForMcw(warRule, settingsForMcw);
+            return await createDataForCommonWarBasicSettingsPageForMcw(warRule, settingsForCommon, settingsForMcw);
         } else if (settingsForCcw) {
-            return await createDataForCommonWarBasicSettingsPageForCcw(warRule, settingsForCcw);
+            return await createDataForCommonWarBasicSettingsPageForCcw(warRule, settingsForCommon, settingsForCcw);
         } else if (settingsForMrw) {
-            return await createDataForCommonWarBasicSettingsPageForMrw(warRule, settingsForMrw);
+            return await createDataForCommonWarBasicSettingsPageForMrw(warRule, settingsForCommon, settingsForMrw);
         } else if (settingsForMfw) {
-            return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForMfw);
+            return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForCommon, settingsForMfw);
         } else {
             throw Helpers.newError(`Invalid warInfo.`);
         }
     }
-    async function createDataForCommonWarBasicSettingsPageForMcw(warRule: IWarRule, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMcw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForMcw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -216,6 +218,12 @@ namespace MpwModel {
                     callbackOnModify: null,
                 },
                 {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
@@ -251,7 +259,7 @@ namespace MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForCcw(warRule: IWarRule, settingsForCcw: ISettingsForCcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForCcw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForCcw: ISettingsForCcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForCcw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -299,6 +307,12 @@ namespace MpwModel {
                     callbackOnModify: null,
                 },
                 {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
@@ -334,7 +348,7 @@ namespace MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForMrw(warRule: IWarRule, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMrw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -360,6 +374,12 @@ namespace MpwModel {
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     warRule,
                     callbackOnModify: null,
                 },
@@ -399,7 +419,7 @@ namespace MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForMfw(warRule: IWarRule, settingsForMfw: ISettingsForMfw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMfw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMfw: ISettingsForMfw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForMfw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -437,6 +457,12 @@ namespace MpwModel {
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     warRule,
                     callbackOnModify: null,
                 },

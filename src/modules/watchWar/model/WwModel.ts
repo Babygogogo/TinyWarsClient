@@ -130,7 +130,8 @@ namespace WwModel {
         }
 
         const warInfo           = Helpers.getExisted(watchInfo.warInfo, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_00);
-        const warRule           = Helpers.getExisted(warInfo.settingsForCommon?.warRule, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_01);
+        const settingsForCommon = Helpers.getExisted(warInfo.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_01);
+        const warRule           = Helpers.getExisted(settingsForCommon.warRule, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_02);
         const { settingsForMcw, settingsForCcw, settingsForMfw, settingsForMrw } = warInfo;
         const bootTimerParams   = settingsForMcw?.bootTimerParams ?? settingsForMfw?.bootTimerParams ?? settingsForCcw?.bootTimerParams ?? CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
@@ -139,7 +140,7 @@ namespace WwModel {
             dataArrayForListSettings: [
                 {
                     settingsType    : WarBasicSettingsType.MapName,
-                    currentValue    : mapId == null ? `----` : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(mapId, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_02)),
+                    currentValue    : mapId == null ? `----` : await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(mapId, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_03)),
                     warRule,
                     callbackOnModify: null,
                 },
@@ -174,6 +175,12 @@ namespace WwModel {
                     callbackOnModify: null,
                 },
                 {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
@@ -204,7 +211,7 @@ namespace WwModel {
                 },
             );
         } else {
-            throw Helpers.newError(`Invalid timerType.`, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_03);
+            throw Helpers.newError(`Invalid timerType.`, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_04);
         }
 
         return openData;

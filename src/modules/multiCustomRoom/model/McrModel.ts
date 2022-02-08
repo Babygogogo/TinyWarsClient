@@ -305,7 +305,8 @@ namespace McrModel {
             return { dataArrayForListSettings: [] };
         }
 
-        const warRule           = Helpers.getExisted(roomInfo.settingsForCommon?.warRule);
+        const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
+        const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         const settingsForMcw    = Helpers.getExisted(roomInfo.settingsForMcw);
         const bootTimerParams   = Helpers.getExisted(settingsForMcw.bootTimerParams);
         const warPassword       = settingsForMcw.warPassword;
@@ -351,6 +352,12 @@ namespace McrModel {
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     warRule,
                     callbackOnModify: null,
                 },
