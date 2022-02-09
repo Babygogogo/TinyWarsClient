@@ -174,7 +174,6 @@ namespace TwnsScrCreateMapListPanel {
                 const rating        = await WarMapModel.getAverageRating(mapId);
                 if ((!mapBriefData.ruleAvailability?.canScw)                                                ||
                     (!mapExtraData.isEnabled)                                                               ||
-                    (!mapExtraData.mapComplexInfo?.mapAvailability?.canScw)                                 ||
                     ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                         ||
                     ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))    ||
                     ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))               ||

@@ -28,30 +28,6 @@ namespace TwnsMmAcceptMapPanel {
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
-        private readonly _groupMcw!     : eui.Group;
-        private readonly _labelMcw!     : TwnsUiLabel.UiLabel;
-        private readonly _imgMcw!       : TwnsUiImage.UiImage;
-
-        private readonly _groupCcw!     : eui.Group;
-        private readonly _labelCcw!     : TwnsUiLabel.UiLabel;
-        private readonly _imgCcw!       : TwnsUiImage.UiImage;
-
-        private readonly _groupScw!     : eui.Group;
-        private readonly _labelScw!     : TwnsUiLabel.UiLabel;
-        private readonly _imgScw!       : TwnsUiImage.UiImage;
-
-        private readonly _groupSrw!     : eui.Group;
-        private readonly _labelSrw!     : TwnsUiLabel.UiLabel;
-        private readonly _imgSrw!       : TwnsUiImage.UiImage;
-
-        private readonly _groupMrwStd!  : eui.Group;
-        private readonly _labelMrwStd!  : TwnsUiLabel.UiLabel;
-        private readonly _imgMrwStd!    : TwnsUiImage.UiImage;
-
-        private readonly _groupMrwFog!  : eui.Group;
-        private readonly _labelMrwFog!  : TwnsUiLabel.UiLabel;
-        private readonly _imgMrwFog!    : TwnsUiImage.UiImage;
-
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
@@ -59,12 +35,6 @@ namespace TwnsMmAcceptMapPanel {
             this._setUiListenerArray([
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm, },
-                { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
-                { ui: this._groupCcw,       callback: this._onTouchedGroupCcw },
-                { ui: this._groupScw,       callback: this._onTouchedGroupScw },
-                { ui: this._groupSrw,       callback: this._onTouchedGroupSrw },
-                { ui: this._groupMrwStd,    callback: this._onTouchedGroupMrwStd },
-                { ui: this._groupMrwFog,    callback: this._onTouchedGroupMrwFog },
             ]);
             this._setIsTouchMaskEnabled();
         }
@@ -72,12 +42,6 @@ namespace TwnsMmAcceptMapPanel {
             this._updateComponentsForLanguage();
 
             this._inputReason.maxChars  = CommonConstants.MapReviewCommentMaxLength;
-            this._imgMcw.visible        = false;
-            this._imgCcw.visible        = false;
-            this._imgScw.visible        = false;
-            this._imgSrw.visible        = false;
-            this._imgMrwStd.visible     = false;
-            this._imgMrwFog.visible     = false;
         }
         protected _onClosing(): void {
             // nothing to do
@@ -98,34 +62,8 @@ namespace TwnsMmAcceptMapPanel {
                 modifiedTime    : war.getMapModifiedTime(),
                 isAccept        : true,
                 reviewComment   : this._inputReason.text,
-                availability    : {
-                    canMcw      : this._imgMcw.visible,
-                    canCcw      : this._imgCcw.visible,
-                    canScw      : this._imgScw.visible,
-                    canSrw      : this._imgSrw.visible,
-                    canMrwStd   : this._imgMrwStd.visible,
-                    canMrwFog   : this._imgMrwFog.visible,
-                },
             });
             this.close();
-        }
-        private _onTouchedGroupMcw(): void {
-            this._imgMcw.visible = !this._imgMcw.visible;
-        }
-        private _onTouchedGroupCcw(): void {
-            this._imgCcw.visible = !this._imgCcw.visible;
-        }
-        private _onTouchedGroupScw(): void {
-            this._imgScw.visible = !this._imgScw.visible;
-        }
-        private _onTouchedGroupSrw(): void {
-            this._imgSrw.visible = !this._imgSrw.visible;
-        }
-        private _onTouchedGroupMrwStd(): void {
-            this._imgMrwStd.visible = !this._imgMrwStd.visible;
-        }
-        private _onTouchedGroupMrwFog(): void {
-            this._imgMrwFog.visible = !this._imgMrwFog.visible;
         }
 
         private _updateComponentsForLanguage(): void {
@@ -133,12 +71,6 @@ namespace TwnsMmAcceptMapPanel {
             this._btnCancel.label   = Lang.getText(LangTextType.B0154);
             this._labelTitle.text   = Lang.getText(LangTextType.B0296);
             this._labelTips.text    = Lang.getText(LangTextType.A0105);
-            this._labelMcw.text     = Lang.getText(LangTextType.B0200);
-            this._labelCcw.text     = Lang.getText(LangTextType.B0619);
-            this._labelMrwStd.text  = Lang.getText(LangTextType.B0404);
-            this._labelMrwFog.text  = Lang.getText(LangTextType.B0408);
-            this._labelScw.text     = Lang.getText(LangTextType.B0409);
-            this._labelSrw.text     = Lang.getText(LangTextType.B0614);
         }
     }
 }

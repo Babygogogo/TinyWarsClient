@@ -1243,6 +1243,10 @@ namespace TwnsLangCommonText {
             `此操作无法撤销。您确定要继续吗？`,
             `This operation can not be undone. Are you sure to continue?`,
         ],
+        [LangTextType.A0287]: [
+            `已成功修改规则可用性`,
+            `The rule availability is modified successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4528,8 +4532,8 @@ namespace TwnsLangCommonText {
             `Add Rules`,
         ],
         [LangTextType.B0824]: [
-            `提交`,
-            `Submit`,
+            `作为新规则提交`,
+            `Submit as a New Rule`,
         ],
         [LangTextType.B0825]: [
             `设置地形属性`,
@@ -4602,6 +4606,10 @@ namespace TwnsLangCommonText {
         [LangTextType.B0842]: [
             `回合数限制`,
             `Turns Limit`,
+        ],
+        [LangTextType.B0843]: [
+            `修改可用性`,
+            `Modify Availability`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

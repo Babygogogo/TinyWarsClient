@@ -187,30 +187,21 @@ namespace TwnsMrrPreviewMapListPanel {
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const hasFog        = this._getOpenData().hasFog;
-            const promiseArray  : Promise<ProtoTypes.Map.IMapRawData | null>[] = [];
+            const promiseArray: Promise<ProtoTypes.Map.IMapRawData | null>[] = [];
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapExtraData = mapBriefData.mapExtraData;
-                if (!mapExtraData?.isEnabled) {
-                    continue;
-                }
-
-                const mapAvailability = Helpers.getExisted(mapExtraData.mapComplexInfo?.mapAvailability);
-                if (((hasFog) && (mapAvailability.canMrwFog))   ||
-                    ((!hasFog) && (mapAvailability.canMrwStd))
+                if ((mapBriefData.mapExtraData?.isEnabled)  &&
+                    (mapBriefData.ruleAvailability?.canMrw)
                 ) {
                     promiseArray.push(WarMapModel.getRawData(mapId));
                 }
             }
 
+            const hasFog    = this._getOpenData().hasFog;
             const dataArray : DataForMapNameRenderer[] = [];
             for (const mapRawData of await Promise.all(promiseArray)) {
-                if ((mapRawData) &&
-                    (mapRawData.warRuleArray?.some(v => {
-                        return (v.ruleAvailability?.canMrw)
-                            && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
-                    }))
-                ) {
+                if (mapRawData?.warRuleArray?.some(v => {
+                    return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
+                })) {
                     dataArray.push({
                         mapId   : Helpers.getExisted(mapRawData.mapId),
                         mapName : Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || CommonConstants.ErrorTextForUndefined,

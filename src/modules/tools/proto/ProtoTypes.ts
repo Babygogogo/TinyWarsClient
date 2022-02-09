@@ -2670,121 +2670,121 @@ export declare class Map implements IMap {
 
 export declare namespace Map {
 
-    /** Properties of a MapAvailability. */
-    interface IMapAvailability {
+    /** Properties of a DeprecatedMapAvailability. */
+    interface IDeprecatedMapAvailability {
 
-        /** MapAvailability canMcw */
+        /** DeprecatedMapAvailability canMcw */
         canMcw?: (boolean|null);
 
-        /** MapAvailability canScw */
+        /** DeprecatedMapAvailability canScw */
         canScw?: (boolean|null);
 
-        /** MapAvailability canMrwStd */
+        /** DeprecatedMapAvailability canMrwStd */
         canMrwStd?: (boolean|null);
 
-        /** MapAvailability canMrwFog */
+        /** DeprecatedMapAvailability canMrwFog */
         canMrwFog?: (boolean|null);
 
-        /** MapAvailability canSrw */
+        /** DeprecatedMapAvailability canSrw */
         canSrw?: (boolean|null);
 
-        /** MapAvailability canCcw */
+        /** DeprecatedMapAvailability canCcw */
         canCcw?: (boolean|null);
     }
 
-    /** Represents a MapAvailability. */
-    class MapAvailability implements IMapAvailability {
+    /** Represents a DeprecatedMapAvailability. */
+    class DeprecatedMapAvailability implements IDeprecatedMapAvailability {
 
         /**
-         * Constructs a new MapAvailability.
+         * Constructs a new DeprecatedMapAvailability.
          * @param [properties] Properties to set
          */
-        constructor(properties?: Map.IMapAvailability);
+        constructor(properties?: Map.IDeprecatedMapAvailability);
 
-        /** MapAvailability canMcw. */
+        /** DeprecatedMapAvailability canMcw. */
         public canMcw: boolean;
 
-        /** MapAvailability canScw. */
+        /** DeprecatedMapAvailability canScw. */
         public canScw: boolean;
 
-        /** MapAvailability canMrwStd. */
+        /** DeprecatedMapAvailability canMrwStd. */
         public canMrwStd: boolean;
 
-        /** MapAvailability canMrwFog. */
+        /** DeprecatedMapAvailability canMrwFog. */
         public canMrwFog: boolean;
 
-        /** MapAvailability canSrw. */
+        /** DeprecatedMapAvailability canSrw. */
         public canSrw: boolean;
 
-        /** MapAvailability canCcw. */
+        /** DeprecatedMapAvailability canCcw. */
         public canCcw: boolean;
 
         /**
-         * Creates a new MapAvailability instance using the specified properties.
+         * Creates a new DeprecatedMapAvailability instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MapAvailability instance
+         * @returns DeprecatedMapAvailability instance
          */
-        public static create(properties?: Map.IMapAvailability): Map.MapAvailability;
+        public static create(properties?: Map.IDeprecatedMapAvailability): Map.DeprecatedMapAvailability;
 
         /**
-         * Encodes the specified MapAvailability message. Does not implicitly {@link Map.MapAvailability.verify|verify} messages.
-         * @param message MapAvailability message or plain object to encode
+         * Encodes the specified DeprecatedMapAvailability message. Does not implicitly {@link Map.DeprecatedMapAvailability.verify|verify} messages.
+         * @param message DeprecatedMapAvailability message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: Map.IMapAvailability, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: Map.IDeprecatedMapAvailability, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MapAvailability message, length delimited. Does not implicitly {@link Map.MapAvailability.verify|verify} messages.
-         * @param message MapAvailability message or plain object to encode
+         * Encodes the specified DeprecatedMapAvailability message, length delimited. Does not implicitly {@link Map.DeprecatedMapAvailability.verify|verify} messages.
+         * @param message DeprecatedMapAvailability message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: Map.IMapAvailability, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: Map.IDeprecatedMapAvailability, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MapAvailability message from the specified reader or buffer.
+         * Decodes a DeprecatedMapAvailability message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MapAvailability
+         * @returns DeprecatedMapAvailability
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.MapAvailability;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.DeprecatedMapAvailability;
 
         /**
-         * Decodes a MapAvailability message from the specified reader or buffer, length delimited.
+         * Decodes a DeprecatedMapAvailability message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MapAvailability
+         * @returns DeprecatedMapAvailability
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.MapAvailability;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.DeprecatedMapAvailability;
 
         /**
-         * Verifies a MapAvailability message.
+         * Verifies a DeprecatedMapAvailability message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MapAvailability message from a plain object. Also converts values to their respective internal types.
+         * Creates a DeprecatedMapAvailability message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MapAvailability
+         * @returns DeprecatedMapAvailability
          */
-        public static fromObject(object: { [k: string]: any }): Map.MapAvailability;
+        public static fromObject(object: { [k: string]: any }): Map.DeprecatedMapAvailability;
 
         /**
-         * Creates a plain object from a MapAvailability message. Also converts values to other types if specified.
-         * @param message MapAvailability
+         * Creates a plain object from a DeprecatedMapAvailability message. Also converts values to other types if specified.
+         * @param message DeprecatedMapAvailability
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: Map.MapAvailability, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: Map.DeprecatedMapAvailability, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MapAvailability to JSON.
+         * Converts this DeprecatedMapAvailability to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -2991,8 +2991,8 @@ export declare namespace Map {
     /** Properties of a MapComplexInfo. */
     interface IMapComplexInfo {
 
-        /** MapComplexInfo mapAvailability */
-        mapAvailability?: (Map.IMapAvailability|null);
+        /** MapComplexInfo deprecatedMapAvailability */
+        deprecatedMapAvailability?: (Map.IDeprecatedMapAvailability|null);
 
         /** MapComplexInfo warStatisticsArray */
         warStatisticsArray?: (Map.MapComplexInfo.IWarStatistics[]|null);
@@ -3007,8 +3007,8 @@ export declare namespace Map {
          */
         constructor(properties?: Map.IMapComplexInfo);
 
-        /** MapComplexInfo mapAvailability. */
-        public mapAvailability?: (Map.IMapAvailability|null);
+        /** MapComplexInfo deprecatedMapAvailability. */
+        public deprecatedMapAvailability?: (Map.IDeprecatedMapAvailability|null);
 
         /** MapComplexInfo warStatisticsArray. */
         public warStatisticsArray: Map.MapComplexInfo.IWarStatistics[];
@@ -26790,8 +26790,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgChatDeleteMessage */
         MsgChatDeleteMessage?: (NetMessage.IMsgChatDeleteMessage|null);
 
-        /** MessageContainer MsgMmSetMapAvailability */
-        MsgMmSetMapAvailability?: (NetMessage.IMsgMmSetMapAvailability|null);
+        /** MessageContainer MsgMmSetWarRuleAvailability */
+        MsgMmSetWarRuleAvailability?: (NetMessage.IMsgMmSetWarRuleAvailability|null);
 
         /** MessageContainer MsgMmSetMapEnabled */
         MsgMmSetMapEnabled?: (NetMessage.IMsgMmSetMapEnabled|null);
@@ -27172,8 +27172,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgChatDeleteMessage. */
         public MsgChatDeleteMessage?: (NetMessage.IMsgChatDeleteMessage|null);
 
-        /** MessageContainer MsgMmSetMapAvailability. */
-        public MsgMmSetMapAvailability?: (NetMessage.IMsgMmSetMapAvailability|null);
+        /** MessageContainer MsgMmSetWarRuleAvailability. */
+        public MsgMmSetWarRuleAvailability?: (NetMessage.IMsgMmSetWarRuleAvailability|null);
 
         /** MessageContainer MsgMmSetMapEnabled. */
         public MsgMmSetMapEnabled?: (NetMessage.IMsgMmSetMapEnabled|null);
@@ -38700,103 +38700,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgMmSetMapAvailability. */
-    interface IMsgMmSetMapAvailability {
+    /** Properties of a MsgMmSetWarRuleAvailability. */
+    interface IMsgMmSetWarRuleAvailability {
 
-        /** MsgMmSetMapAvailability c */
-        c?: (NetMessage.MsgMmSetMapAvailability.IC|null);
+        /** MsgMmSetWarRuleAvailability c */
+        c?: (NetMessage.MsgMmSetWarRuleAvailability.IC|null);
 
-        /** MsgMmSetMapAvailability s */
-        s?: (NetMessage.MsgMmSetMapAvailability.IS|null);
+        /** MsgMmSetWarRuleAvailability s */
+        s?: (NetMessage.MsgMmSetWarRuleAvailability.IS|null);
     }
 
-    /** Represents a MsgMmSetMapAvailability. */
-    class MsgMmSetMapAvailability implements IMsgMmSetMapAvailability {
+    /** Represents a MsgMmSetWarRuleAvailability. */
+    class MsgMmSetWarRuleAvailability implements IMsgMmSetWarRuleAvailability {
 
         /**
-         * Constructs a new MsgMmSetMapAvailability.
+         * Constructs a new MsgMmSetWarRuleAvailability.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgMmSetMapAvailability);
+        constructor(properties?: NetMessage.IMsgMmSetWarRuleAvailability);
 
-        /** MsgMmSetMapAvailability c. */
-        public c?: (NetMessage.MsgMmSetMapAvailability.IC|null);
+        /** MsgMmSetWarRuleAvailability c. */
+        public c?: (NetMessage.MsgMmSetWarRuleAvailability.IC|null);
 
-        /** MsgMmSetMapAvailability s. */
-        public s?: (NetMessage.MsgMmSetMapAvailability.IS|null);
+        /** MsgMmSetWarRuleAvailability s. */
+        public s?: (NetMessage.MsgMmSetWarRuleAvailability.IS|null);
 
         /**
-         * Creates a new MsgMmSetMapAvailability instance using the specified properties.
+         * Creates a new MsgMmSetWarRuleAvailability instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgMmSetMapAvailability instance
+         * @returns MsgMmSetWarRuleAvailability instance
          */
-        public static create(properties?: NetMessage.IMsgMmSetMapAvailability): NetMessage.MsgMmSetMapAvailability;
+        public static create(properties?: NetMessage.IMsgMmSetWarRuleAvailability): NetMessage.MsgMmSetWarRuleAvailability;
 
         /**
-         * Encodes the specified MsgMmSetMapAvailability message. Does not implicitly {@link NetMessage.MsgMmSetMapAvailability.verify|verify} messages.
-         * @param message MsgMmSetMapAvailability message or plain object to encode
+         * Encodes the specified MsgMmSetWarRuleAvailability message. Does not implicitly {@link NetMessage.MsgMmSetWarRuleAvailability.verify|verify} messages.
+         * @param message MsgMmSetWarRuleAvailability message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgMmSetMapAvailability, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgMmSetWarRuleAvailability, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgMmSetMapAvailability message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapAvailability.verify|verify} messages.
-         * @param message MsgMmSetMapAvailability message or plain object to encode
+         * Encodes the specified MsgMmSetWarRuleAvailability message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetWarRuleAvailability.verify|verify} messages.
+         * @param message MsgMmSetWarRuleAvailability message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgMmSetMapAvailability, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgMmSetWarRuleAvailability, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgMmSetMapAvailability message from the specified reader or buffer.
+         * Decodes a MsgMmSetWarRuleAvailability message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgMmSetMapAvailability
+         * @returns MsgMmSetWarRuleAvailability
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapAvailability;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetWarRuleAvailability;
 
         /**
-         * Decodes a MsgMmSetMapAvailability message from the specified reader or buffer, length delimited.
+         * Decodes a MsgMmSetWarRuleAvailability message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgMmSetMapAvailability
+         * @returns MsgMmSetWarRuleAvailability
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapAvailability;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetWarRuleAvailability;
 
         /**
-         * Verifies a MsgMmSetMapAvailability message.
+         * Verifies a MsgMmSetWarRuleAvailability message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgMmSetMapAvailability message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgMmSetWarRuleAvailability message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgMmSetMapAvailability
+         * @returns MsgMmSetWarRuleAvailability
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapAvailability;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetWarRuleAvailability;
 
         /**
-         * Creates a plain object from a MsgMmSetMapAvailability message. Also converts values to other types if specified.
-         * @param message MsgMmSetMapAvailability
+         * Creates a plain object from a MsgMmSetWarRuleAvailability message. Also converts values to other types if specified.
+         * @param message MsgMmSetWarRuleAvailability
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgMmSetMapAvailability, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgMmSetWarRuleAvailability, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgMmSetMapAvailability to JSON.
+         * Converts this MsgMmSetWarRuleAvailability to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgMmSetMapAvailability {
+    namespace MsgMmSetWarRuleAvailability {
 
         /** Properties of a C. */
         interface IC {
@@ -38804,8 +38804,11 @@ export declare namespace NetMessage {
             /** C mapId */
             mapId?: (number|null);
 
+            /** C ruleId */
+            ruleId?: (number|null);
+
             /** C availability */
-            availability?: (Map.IMapAvailability|null);
+            availability?: (WarRule.IRuleAvailability|null);
         }
 
         /** Represents a C. */
@@ -38815,36 +38818,39 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMmSetMapAvailability.IC);
+            constructor(properties?: NetMessage.MsgMmSetWarRuleAvailability.IC);
 
             /** C mapId. */
             public mapId: number;
 
+            /** C ruleId. */
+            public ruleId: number;
+
             /** C availability. */
-            public availability?: (Map.IMapAvailability|null);
+            public availability?: (WarRule.IRuleAvailability|null);
 
             /**
              * Creates a new C instance using the specified properties.
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgMmSetMapAvailability.IC): NetMessage.MsgMmSetMapAvailability.C;
+            public static create(properties?: NetMessage.MsgMmSetWarRuleAvailability.IC): NetMessage.MsgMmSetWarRuleAvailability.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmSetMapAvailability.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmSetWarRuleAvailability.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMmSetMapAvailability.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMmSetWarRuleAvailability.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapAvailability.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetWarRuleAvailability.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMmSetMapAvailability.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMmSetWarRuleAvailability.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -38854,7 +38860,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapAvailability.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetWarRuleAvailability.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -38863,7 +38869,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapAvailability.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetWarRuleAvailability.C;
 
             /**
              * Verifies a C message.
@@ -38877,7 +38883,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapAvailability.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetWarRuleAvailability.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -38885,7 +38891,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMmSetMapAvailability.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMmSetWarRuleAvailability.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -38903,8 +38909,11 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
+            /** S ruleId */
+            ruleId?: (number|null);
+
             /** S availability */
-            availability?: (Map.IMapAvailability|null);
+            availability?: (WarRule.IRuleAvailability|null);
         }
 
         /** Represents a S. */
@@ -38914,7 +38923,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMmSetMapAvailability.IS);
+            constructor(properties?: NetMessage.MsgMmSetWarRuleAvailability.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -38922,31 +38931,34 @@ export declare namespace NetMessage {
             /** S mapId. */
             public mapId: number;
 
+            /** S ruleId. */
+            public ruleId: number;
+
             /** S availability. */
-            public availability?: (Map.IMapAvailability|null);
+            public availability?: (WarRule.IRuleAvailability|null);
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgMmSetMapAvailability.IS): NetMessage.MsgMmSetMapAvailability.S;
+            public static create(properties?: NetMessage.MsgMmSetWarRuleAvailability.IS): NetMessage.MsgMmSetWarRuleAvailability.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmSetMapAvailability.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmSetWarRuleAvailability.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMmSetMapAvailability.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMmSetWarRuleAvailability.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapAvailability.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetWarRuleAvailability.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMmSetMapAvailability.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMmSetWarRuleAvailability.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -38956,7 +38968,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapAvailability.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetWarRuleAvailability.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -38965,7 +38977,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapAvailability.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetWarRuleAvailability.S;
 
             /**
              * Verifies a S message.
@@ -38979,7 +38991,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapAvailability.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetWarRuleAvailability.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -38987,7 +38999,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMmSetMapAvailability.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMmSetWarRuleAvailability.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -39961,9 +39973,6 @@ export declare namespace NetMessage {
 
             /** C reviewComment */
             reviewComment?: (string|null);
-
-            /** C availability */
-            availability?: (Map.IMapAvailability|null);
         }
 
         /** Represents a C. */
@@ -39989,9 +39998,6 @@ export declare namespace NetMessage {
 
             /** C reviewComment. */
             public reviewComment: string;
-
-            /** C availability. */
-            public availability?: (Map.IMapAvailability|null);
 
             /**
              * Creates a new C instance using the specified properties.

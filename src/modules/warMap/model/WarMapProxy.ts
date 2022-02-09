@@ -19,7 +19,7 @@ namespace WarMapProxy {
             { msgCode: NetMessageCodes.MsgMapGetEnabledRawDataList,     callback: _onMsgMapGetEnabledRawDataList },
             { msgCode: NetMessageCodes.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
             { msgCode: NetMessageCodes.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
-            { msgCode: NetMessageCodes.MsgMmSetMapAvailability,         callback: _onMsgMmSetMapAvailability },
+            { msgCode: NetMessageCodes.MsgMmSetWarRuleAvailability,     callback: _onMsgMmSetWarRuleAvailability },
             { msgCode: NetMessageCodes.MsgMmSetMapEnabled,              callback: _onMsgMmSetMapEnabled },
             { msgCode: NetMessageCodes.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
             { msgCode: NetMessageCodes.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
@@ -79,18 +79,24 @@ namespace WarMapProxy {
         }
     }
 
-    export function reqMmSetMapAvailability(mapId: number, availability: ProtoTypes.Map.IMapAvailability): void {
+    export function reqMmSetWarRuleAvailability({ mapId, ruleId, availability }: {
+        mapId       : number;
+        ruleId      : number;
+        availability: ProtoTypes.WarRule.IRuleAvailability;
+    }): void {
         NetManager.send({
-            MsgMmSetMapAvailability: { c: {
+            MsgMmSetWarRuleAvailability: { c: {
                 mapId,
+                ruleId,
                 availability,
             }, },
         });
     }
-    function _onMsgMmSetMapAvailability(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMmSetMapAvailability.IS;
+    async function _onMsgMmSetWarRuleAvailability(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgMmSetWarRuleAvailability.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMmSetMapAvailability);
+            await WarMapModel.updateOnSetWarRuleAvailability(data);
+            Notify.dispatch(NotifyType.MsgMmSetWarRuleAvailability, data);
         }
     }
 
@@ -123,16 +129,13 @@ namespace WarMapProxy {
         }
     }
 
-    export function reqMmReviewMap(
-        { designerUserId, slotIndex, modifiedTime, isAccept, reviewComment, availability }: {
-            designerUserId  : number;
-            slotIndex       : number;
-            modifiedTime    : number;
-            isAccept        : boolean;
-            reviewComment   : string | null;
-            availability    : ProtoTypes.Map.IMapAvailability;
-        }
-    ): void {
+    export function reqMmReviewMap({ designerUserId, slotIndex, modifiedTime, isAccept, reviewComment }: {
+        designerUserId  : number;
+        slotIndex       : number;
+        modifiedTime    : number;
+        isAccept        : boolean;
+        reviewComment   : string | null;
+    }): void {
         NetManager.send({
             MsgMmReviewMap: { c: {
                 designerUserId,
@@ -140,7 +143,6 @@ namespace WarMapProxy {
                 modifiedTime,
                 isAccept,
                 reviewComment,
-                availability,
             }, },
         });
     }

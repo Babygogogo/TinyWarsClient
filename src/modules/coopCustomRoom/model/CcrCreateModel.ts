@@ -275,7 +275,7 @@ namespace CcrCreateModel {
     export function tickBootTimerType(): void {
         const params = getBootTimerParams();
         if ((params) && (params[0] === BootTimerType.Regular)) {
-            setBootTimerParams([BootTimerType.Incremental, 60 * 15, 15]);
+            setBootTimerParams([BootTimerType.Incremental, 60 * 15, 10]);
         } else {
             setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         }

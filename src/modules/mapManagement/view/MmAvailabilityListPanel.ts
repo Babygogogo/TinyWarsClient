@@ -51,9 +51,8 @@ namespace TwnsMmAvailabilityListPanel {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMmSetMapAvailability,    callback: this._onNotifyMsgMmSetMapAvailability },
-                { type: NotifyType.MsgMmSetMapEnabled,         callback: this._onNotifyMsgMmSetMapEnabled },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMmSetMapEnabled,          callback: this._onNotifyMsgMmSetMapEnabled },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -113,10 +112,6 @@ namespace TwnsMmAvailabilityListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMsgMmSetMapAvailability(): void {
-            FloatText.show(Lang.getText(LangTextType.A0059));
-        }
-
         private _onNotifyMsgMmSetMapEnabled(): void {
             FloatText.show(Lang.getText(LangTextType.A0081));
             this.setMapFilters(this._mapFilters);
@@ -223,7 +218,7 @@ namespace TwnsMmAvailabilityListPanel {
         }
 
         private _onTouchTapBtnNext(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAvailabilityChangePanel, { mapId: this._getData().mapId });
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmCommandPanel, { mapId: this._getData().mapId });
         }
 
         private _onNotifyMsgMmSetMapName(e: egret.Event): void {

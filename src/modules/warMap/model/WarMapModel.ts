@@ -119,6 +119,10 @@ namespace WarMapModel {
         const warRule   = Helpers.getExisted(data.warRule);
         Helpers.getExisted((await getRawData(mapId))?.warRuleArray).push(warRule);
     }
+    export async function updateOnSetWarRuleAvailability(data: ProtoTypes.NetMessage.MsgMmSetWarRuleAvailability.IS): Promise<void> {
+        const warRule               = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.warRuleArray?.find(v => v.ruleId === data.ruleId));
+        warRule.ruleAvailability    = data.availability;
+    }
 
     export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {
         const mapBriefData = await getBriefData(mapId);

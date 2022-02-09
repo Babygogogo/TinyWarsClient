@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
-    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001" scale9Grid="1,1,2,2" />
-    <e:Group width="840" height="400" horizontalCenter="0" verticalCenter="0">
-        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" locked="true" />
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*"
+        xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" />
+    <e:Group width="840" height="330" horizontalCenter="0" verticalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
         <TwnsUiLabel:UiLabel id="_labelTitle" text="过审" textColor="0xffffff" y="12" horizontalCenter="0" size="24"
-                        locked="true" />
+                             locked="true" />
         <TwnsUiLabel:UiLabel id="_labelTips" text="请输入您的评价和改进意见，可留空" textColor="0xFFFFFF" size="18" left="10" right="10"
-                        top="40" wordWrap="true" textAlign="center" locked="true" />
+                             top="40" wordWrap="true" textAlign="center" locked="true" />
         <TwnsUiTextInput:UiTextInput id="_inputReason" anchorOffsetX="0" anchorOffsetY="0" left="10" right="10"
-                            height="100" top="70">
+                                     height="200" top="70">
             <TwnsUiButton:skinName>
                 <e:Skin width="100" height="30">
                     <e:Image source="uncompressedColorPink0000" left="0" right="0" bottom="0" />
@@ -21,64 +23,9 @@
                 </e:Skin>
             </TwnsUiButton:skinName>
         </TwnsUiTextInput:UiTextInput>
-        <e:Scroller left="30" right="30" top="180">
-            <e:Group>
-                <e:Group id="_groupMcw" y="178" x="229">
-                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="common0005" />
-                    <TwnsUiImage:UiImage id="_imgMcw" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="common0006" />
-                    <TwnsUiLabel:UiLabel id="_labelMcw" text="自定义多人游戏" textColor="0xFFFFFF" size="20" x="32"
-                                    verticalCenter="0" />
-                </e:Group>
-                <e:Group id="_groupCcw" y="188" x="239">
-                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="common0005" />
-                    <TwnsUiImage:UiImage id="_imgCcw" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="common0006" />
-                    <TwnsUiLabel:UiLabel id="_labelCcw" text="多人合作自定义游戏" textColor="0xFFFFFF" size="20" x="32"
-                                    verticalCenter="0" />
-                </e:Group>
-                <e:Group id="_groupScw" y="188" x="239">
-                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="common0005" />
-                    <TwnsUiImage:UiImage id="_imgScw" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="common0006" />
-                    <TwnsUiLabel:UiLabel id="_labelScw" text="自定义单人游戏" textColor="0xFFFFFF" size="20" x="32"
-                                    verticalCenter="0" />
-                </e:Group>
-                <e:Group id="_groupSrw" y="188" x="239">
-                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="common0005" />
-                    <TwnsUiImage:UiImage id="_imgSrw" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="common0006" />
-                    <TwnsUiLabel:UiLabel id="_labelSrw" text="自定义单人游戏" textColor="0xFFFFFF" size="20" x="32"
-                                    verticalCenter="0" />
-                </e:Group>
-                <e:Group id="_groupMrwStd" y="188" x="239">
-                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="common0005" />
-                    <TwnsUiImage:UiImage id="_imgMrwStd" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="common0006" />
-                    <TwnsUiLabel:UiLabel id="_labelMrwStd" text="明战排位" textColor="0xFFFFFF" size="20" x="32"
-                                    verticalCenter="0" />
-                </e:Group>
-                <e:Group id="_groupMrwFog" y="188" x="239">
-                    <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="common0005" />
-                    <TwnsUiImage:UiImage id="_imgMrwFog" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="common0006" />
-                    <TwnsUiLabel:UiLabel id="_labelMrwFog" text="雾战排位" textColor="0xFFFFFF" size="20" x="32"
-                                    verticalCenter="0" />
-                </e:Group>
-                <e:layout>
-                    <e:TileLayout orientation="rows" requestedColumnCount="3" columnAlign="justifyUsingGap" />
-                </e:layout>
-            </e:Group>
-        </e:Scroller>
         <TwnsUiButton:UiButton id="_btnCancel" label="取消" horizontalCenter="-120" bottom="15"
-                         skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"></TwnsUiButton:UiButton>
+                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"></TwnsUiButton:UiButton>
         <TwnsUiButton:UiButton id="_btnConfirm" label="确定" horizontalCenter="120" bottom="15"
-                         skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"></TwnsUiButton:UiButton>
+                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"></TwnsUiButton:UiButton>
     </e:Group>
 </e:Skin>

@@ -141,13 +141,14 @@ namespace TwnsPanelConfig {
         MmAcceptMapPanel                    : PanelConfig<TwnsMmAcceptMapPanel.OpenData>;
         MmAddRuleMapListPanel               : PanelConfig<TwnsMmAddRuleMapListPanel.OpenData>;
         MmAddRuleSearchPanel                : PanelConfig<TwnsMmAddRuleSearchPanel.OpenData>;
-        MmAvailabilityChangePanel           : PanelConfig<TwnsMmAvailabilityChangePanel.OpenData>;
         MmAvailabilityListPanel             : PanelConfig<TwnsMmAvailabilityListPanel.OpenData>;
         MmAvailabilitySearchPanel           : PanelConfig<TwnsMmAvailabilitySearchPanel.OpenData>;
+        MmCommandPanel                      : PanelConfig<TwnsMmCommandPanel.OpenData>;
         MmMainMenuPanel                     : PanelConfig<TwnsMmMainMenuPanel.OpenData>;
         MmMapRenamePanel                    : PanelConfig<TwnsMmMapRenamePanel.OpenData>;
         MmRejectMapPanel                    : PanelConfig<TwnsMmRejectMapPanel.OpenData>;
         MmReviewListPanel                   : PanelConfig<TwnsMmReviewListPanel.OpenData>;
+        MmSetWarRuleAvailabilityPanel       : PanelConfig<TwnsMmSetWarRuleAvailabilityPanel.OpenData>;
         MmTagChangePanel                    : PanelConfig<TwnsMmTagChangePanel.OpenData>;
         MmTagListPanel                      : PanelConfig<TwnsMmTagListPanel.OpenData>;
         MmTagSearchPanel                    : PanelConfig<TwnsMmTagSearchPanel.OpenData>;
@@ -1022,12 +1023,6 @@ namespace TwnsPanelConfig {
                 layer       : LayerType.Hud0,
             },
 
-            MmAvailabilityChangePanel: {
-                cls         : TwnsMmAvailabilityChangePanel?.MmAvailabilityChangePanel,
-                skinName    : `resource/skins/mapManagement/MmAvailabilityChangePanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
             MmAvailabilityListPanel: {
                 cls         : TwnsMmAvailabilityListPanel?.MmAvailabilityListPanel,
                 skinName    : `resource/skins/mapManagement/MmAvailabilityListPanel.exml`,
@@ -1038,6 +1033,12 @@ namespace TwnsPanelConfig {
             MmAvailabilitySearchPanel: {
                 cls         : TwnsMmAvailabilitySearchPanel?.MmAvailabilitySearchPanel,
                 skinName    : `resource/skins/mapManagement/MmAvailabilitySearchPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            MmCommandPanel: {
+                cls         : TwnsMmCommandPanel?.MmCommandPanel,
+                skinName    : `resource/skins/mapManagement/MmCommandPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
@@ -1065,6 +1066,12 @@ namespace TwnsPanelConfig {
                 skinName    : `resource/skins/mapManagement/MmReviewListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
+            },
+
+            MmSetWarRuleAvailabilityPanel: {
+                cls         : TwnsMmSetWarRuleAvailabilityPanel?.MmSetWarRuleAvailabilityPanel,
+                skinName    : `resource/skins/mapManagement/MmSetWarRuleAvailabilityPanel.exml`,
+                layer       : LayerType.Hud0,
             },
 
             MmTagChangePanel: {

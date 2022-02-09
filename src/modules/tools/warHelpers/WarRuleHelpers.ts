@@ -692,14 +692,10 @@ namespace WarRuleHelpers {
                         teamIndexSetForHumanInSrw.add(teamIndex);
                     }
                 } else {
-                    if (!canSrw) {
-                        return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_14;
-                    } else {
-                        if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInSrw) == null) {
-                            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_15;
-                        }
-                        teamIndexSetForAiInSrw.add(teamIndex);
+                    if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInSrw) == null) {
+                        return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_15;
                     }
+                    teamIndexSetForAiInSrw.add(teamIndex);
                 }
             }
 
@@ -710,14 +706,10 @@ namespace WarRuleHelpers {
                         playerIndexSetForHumanInCcw.add(playerIndex);
                     }
                 } else {
-                    if (!canCcw) {
-                        return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_16;
-                    } else {
-                        if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInCcw) == null) {
-                            return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_17;
-                        }
-                        playerIndexSetForAiInCcw.add(playerIndex);
+                    if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInCcw) == null) {
+                        return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_17;
                     }
+                    playerIndexSetForAiInCcw.add(playerIndex);
                 }
             }
         }

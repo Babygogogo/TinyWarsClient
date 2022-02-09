@@ -945,7 +945,7 @@ namespace WarRobot {
         const indirectDamage            = data.indirectTotal;
         const canBeDestroyed            = directDamage + indirectDamage >= currentHp;
         let score                       = -(
-            (data.max >= 15 ? Math.min(currentHp, directDamage + indirectDamage * 3) : 0) +
+            (data.max >= 25 ? Math.min(currentHp, directDamage + indirectDamage * 3) : 0) +
             (canBeDestroyed ? 30 : 0)
         ) * unit.getProductionCfgCost() / 1000 * scalerForUnitValueRatio * (unit.getHasLoadedCo() ? 2 : 1);
 

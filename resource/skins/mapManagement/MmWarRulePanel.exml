@@ -29,6 +29,10 @@
             </e:List>
         </TwnsUiScrollList:UiScrollList>
         <e:Group x="0" bottom="0">
+            <TwnsUiButton:UiButton id="_btnSubmitRule" label="天气" width="160"
+                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" y="0" right="0" />
+            <TwnsUiButton:UiButton id="_btnSetAvailability" label="Modify Availability" y="0" right="0"
+                                   skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" />
             <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                    width="160" x="0" y="40" />
             <e:layout>
@@ -267,7 +271,5 @@
                 </e:layout>
             </e:Group>
         </e:Scroller>
-        <TwnsUiButton:UiButton id="_btnSubmitRule" label="天气" width="160"
-                               skinName="Skins.Component.Button.ButtonSelfAdaption001" y="0" right="0" />
     </e:Group>
 </e:Skin>

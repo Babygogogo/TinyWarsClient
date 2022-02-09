@@ -159,7 +159,6 @@ namespace TwnsMcrCreateMapListPanel {
                 const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId);
                 if ((!mapBriefData.ruleAvailability?.canMcw)                                                            ||
                     (!mapExtraData.isEnabled)                                                                           ||
-                    (!mapExtraData.mapComplexInfo?.mapAvailability?.canMcw)                                             ||
                     ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
                     ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                ||
                     ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||

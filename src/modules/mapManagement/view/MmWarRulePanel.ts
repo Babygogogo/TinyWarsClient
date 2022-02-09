@@ -30,6 +30,7 @@ namespace TwnsMmWarRulePanel {
         private readonly _listWarRule!          : TwnsUiScrollList.UiScrollList<DataForWarRuleNameRenderer>;
         private readonly _btnBack!              : TwnsUiButton.UiButton;
 
+        private readonly _btnSetAvailability!   : TwnsUiButton.UiButton;
         private readonly _btnSubmitRule!        : TwnsUiButton.UiButton;
 
         private readonly _btnModifyRuleName!    : TwnsUiButton.UiButton;
@@ -67,11 +68,13 @@ namespace TwnsMmWarRulePanel {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMmAddWarRule,     callback: this._onNotifyMsgMmAddWarRule },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMmAddWarRule,             callback: this._onNotifyMsgMmAddWarRule },
+                { type: NotifyType.MsgMmSetWarRuleAvailability, callback: this._onNotifyMsgMmSetWarRuleAvailability },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
+                { ui: this._btnSetAvailability,     callback: this._onTouchedBtnSetAvailability },
                 { ui: this._btnSubmitRule,          callback: this._onTouchedBtnSubmitRule },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
                 { ui: this._btnModifyHasFog,        callback: this._onTouchedBtnModifyHasFog },
@@ -134,8 +137,23 @@ namespace TwnsMmWarRulePanel {
             this._resetView();
         }
 
+        private _onNotifyMsgMmSetWarRuleAvailability(): void {
+            FloatText.show(Lang.getText(LangTextType.A0287));
+            this._resetView();
+        }
+
         private _onTouchedBtnBack(): void {
             this.close();
+        }
+
+        private _onTouchedBtnSetAvailability(): void {
+            const ruleId = this._selectedRule?.ruleId;
+            if (ruleId != null) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MmSetWarRuleAvailabilityPanel, {
+                    mapId   : Helpers.getExisted(this._getOpenData().mapRawData.mapId),
+                    ruleId,
+                });
+            }
         }
 
         private _onTouchedBtnSubmitRule(): void {
@@ -258,6 +276,7 @@ namespace TwnsMmWarRulePanel {
         }
 
         private _updateComponentsForLanguage(): void {
+            this._btnSetAvailability.label      = Lang.getText(LangTextType.B0843);
             this._btnSubmitRule.label           = Lang.getText(LangTextType.B0824);
             this._labelMenuTitle.text           = Lang.getText(LangTextType.B0314);
             this._labelAvailability.text        = Lang.getText(LangTextType.B0406);
