@@ -8985,11 +8985,23 @@ export declare namespace WarEvent {
         /** WeaSetTileState conGridIndexArray */
         conGridIndexArray?: (Structure.IGridIndex[]|null);
 
+        /** WeaSetTileState conIsHighlighted */
+        conIsHighlighted?: (boolean|null);
+
         /** WeaSetTileState actTileData */
         actTileData?: (WarSerialization.ISerialTile|null);
 
         /** WeaSetTileState actDestroyUnit */
         actDestroyUnit?: (boolean|null);
+
+        /** WeaSetTileState actIsModifyTileBase */
+        actIsModifyTileBase?: (boolean|null);
+
+        /** WeaSetTileState actIsModifyTileDecorator */
+        actIsModifyTileDecorator?: (boolean|null);
+
+        /** WeaSetTileState actIsModifyTileObject */
+        actIsModifyTileObject?: (boolean|null);
     }
 
     /** Represents a WeaSetTileState. */
@@ -9007,11 +9019,23 @@ export declare namespace WarEvent {
         /** WeaSetTileState conGridIndexArray. */
         public conGridIndexArray: Structure.IGridIndex[];
 
+        /** WeaSetTileState conIsHighlighted. */
+        public conIsHighlighted: boolean;
+
         /** WeaSetTileState actTileData. */
         public actTileData?: (WarSerialization.ISerialTile|null);
 
         /** WeaSetTileState actDestroyUnit. */
         public actDestroyUnit: boolean;
+
+        /** WeaSetTileState actIsModifyTileBase. */
+        public actIsModifyTileBase: boolean;
+
+        /** WeaSetTileState actIsModifyTileDecorator. */
+        public actIsModifyTileDecorator: boolean;
+
+        /** WeaSetTileState actIsModifyTileObject. */
+        public actIsModifyTileObject: boolean;
 
         /**
          * Creates a new WeaSetTileState instance using the specified properties.
@@ -12042,6 +12066,9 @@ export declare namespace WarSerialization {
         /** SerialTile locationFlags */
         locationFlags?: (number|null);
 
+        /** SerialTile isHighlighted */
+        isHighlighted?: (boolean|null);
+
         /** SerialTile customCrystalData */
         customCrystalData?: (WarSerialization.ITileCustomCrystalData|null);
 
@@ -12096,6 +12123,9 @@ export declare namespace WarSerialization {
 
         /** SerialTile locationFlags. */
         public locationFlags: number;
+
+        /** SerialTile isHighlighted. */
+        public isHighlighted: boolean;
 
         /** SerialTile customCrystalData. */
         public customCrystalData?: (WarSerialization.ITileCustomCrystalData|null);

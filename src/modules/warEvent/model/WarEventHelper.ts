@@ -2605,18 +2605,24 @@ namespace WarEventHelper {
             return null;
         }
 
-        const gridIndexArray        = data.conGridIndexArray;
-        const textForGridIndexArray = gridIndexArray?.length
-            ? gridIndexArray.map(v => `(${v.x},${v.y})`).join(`/`)
+        const conGridIndexArray         = data.conGridIndexArray;
+        const textForConGridIndexArray  = conGridIndexArray?.length
+            ? conGridIndexArray.map(v => `(${v.x},${v.y})`).join(`/`)
             : Lang.getFormattedText(LangTextType.F0097, Lang.getText(LangTextType.B0531));
 
-        const locationIdArray       = data.conLocationIdArray;
-        const textForLocation       = locationIdArray?.length
-            ? Lang.getFormattedText(LangTextType.F0116, locationIdArray.join(`/`))
+        const conLocationIdArray    = data.conLocationIdArray;
+        const textForConLocation    = conLocationIdArray?.length
+            ? Lang.getFormattedText(LangTextType.F0116, conLocationIdArray.join(`/`))
             : null;
 
+        const conIsHighlighted          = data.conIsHighlighted;
+        const textForConIsHighlighted   = conIsHighlighted == null
+            ? null
+            : Lang.getText(conIsHighlighted ? LangTextType.B0848 : LangTextType.B0849);
+
         const textArrayForSubConditions = Helpers.getNonNullElements([
-            textForLocation,
+            textForConLocation,
+            textForConIsHighlighted,
         ]);
 
         const actDestroyUnit        = data.actDestroyUnit;
@@ -2624,21 +2630,32 @@ namespace WarEventHelper {
             ? Lang.getText(LangTextType.A0284)
             : null;
 
-        const actTileData           = data.actTileData;
-        const actTileBaseType       = actTileData?.baseType;
-        const actTileObjectType     = actTileData?.objectType;
-        const actTileType           = (actTileBaseType != null) && (actTileObjectType != null) ? ConfigManager.getTileType(actTileBaseType, actTileObjectType) : null;
+        const actTileData               = data.actTileData;
+        const actTileBaseType           = actTileData?.baseType;
+        const actTileObjectType         = actTileData?.objectType;
+        const actIsModifyTileBase       = (data.actIsModifyTileBase) || (data.actIsModifyTileBase == null);
+        const actIsModifyTileDecorator  = (data.actIsModifyTileDecorator) || (data.actIsModifyTileDecorator == null);
+        const actIsModifyTileObject     = (data.actIsModifyTileObject) || (data.actIsModifyTileObject == null);
+        const actTileType               = (actIsModifyTileBase || actIsModifyTileDecorator || actIsModifyTileObject) && (actTileBaseType != null) && (actTileObjectType != null)
+            ? ConfigManager.getTileType(actTileBaseType, actTileObjectType)
+            : null;
         const textForActTileData    = actTileType != null
             ? Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0718), Lang.getTileName(actTileType))
             : null;
 
+        const actIsHighlighted          = actTileData?.isHighlighted;
+        const textForActIsHighlighted   = actIsHighlighted == null
+            ? null
+            : Lang.getFormattedText(LangTextType.F0125, Lang.getText(LangTextType.B0847), Lang.getText(actIsHighlighted ? LangTextType.B0012 : LangTextType.B0013));
+
         const textArrayForModifiers = Helpers.getNonNullElements([
             textForActTileData,
             textForActDestroyUnit,
+            textForActIsHighlighted,
         ]);
         return `${Lang.getFormattedText(
             LangTextType.F0128,
-            textForGridIndexArray,
+            textForConGridIndexArray,
             textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
         )} ${textArrayForModifiers.join(` `)}`;
     }
@@ -4356,7 +4373,10 @@ namespace WarEventHelper {
                     objectType  : Types.TileObjectType.Empty,
                     baseType    : Types.TileBaseType.Plain,
                 },
-                actDestroyUnit  : false,
+                actIsModifyTileBase         : true,
+                actIsModifyTileDecorator    : true,
+                actIsModifyTileObject       : true,
+                actDestroyUnit              : false,
             };
         } else {
             throw Helpers.newError(`Invalid actionType: ${actionType}.`, ClientErrorCode.WarEventHelper_ResetAction_00);

@@ -21,6 +21,7 @@ namespace MpwUtility {
             objectShapeId   : tile.getObjectShapeId(),
             currentHp       : tile.getCurrentHp(),
             locationFlags   : tile.getLocationFlags(),
+            isHighlighted   : tile.getIsHighlighted(),
         }, tile.getConfigVersion());
     }
 }

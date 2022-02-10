@@ -4635,6 +4635,30 @@ namespace TwnsLangCommonText {
             `停顿时间`,
             `Pause Time`,
         ],
+        [LangTextType.B0847]: [
+            `高亮`,
+            `Highlight`,
+        ],
+        [LangTextType.B0848]: [
+            `已高亮`,
+            `is Highlighted`,
+        ],
+        [LangTextType.B0849]: [
+            `未高亮`,
+            `is Not Highlighted`,
+        ],
+        [LangTextType.B0850]: [
+            `修改基底`,
+            `Modify Base`,
+        ],
+        [LangTextType.B0851]: [
+            `修改装饰物`,
+            `Modify Decoration`,
+        ],
+        [LangTextType.B0852]: [
+            `修改物体`,
+            `Modify Object`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [

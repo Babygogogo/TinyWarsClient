@@ -884,41 +884,61 @@ namespace TwnsBwWarEventManager {
             // nothing to do
         }
         private async _callActionSetTileStateWithoutExtraData(action: WarEvent.IWeaSetTileState, isFastExecute: boolean): Promise<void> {
-            const war               = this._getWar();
-            const configVersion     = war.getConfigVersion();
-            const actTileData       = Helpers.getExisted(action.actTileData, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00);
-            const actBaseType       = Helpers.getExisted(actTileData.baseType, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_01);
-            const actObjectType     = Helpers.getExisted(actTileData.objectType, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_02);
-            const actDestroyUnit    = action.actDestroyUnit;
-            const isAttackable      = ConfigManager.getTileTemplateCfg(configVersion, actBaseType, actObjectType).maxHp != null;
-            const locationIdArray   = action.conLocationIdArray ?? [];
-            const gridIndexArray    = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_03)) ?? [];
-            const unitMap           = war.getUnitMap();
-            const tileMap           = war.getTileMap();
-            const mapSize           = tileMap.getMapSize();
-            const mapWidth          = mapSize.width;
-            const mapHeight         = mapSize.height;
+            const war                       = this._getWar();
+            const configVersion             = war.getConfigVersion();
+            const actTileData               = Helpers.getExisted(action.actTileData, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00);
+            const rawActBaseType            = Helpers.getExisted(actTileData.baseType, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_01);
+            const rawActObjectType          = Helpers.getExisted(actTileData.objectType, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_02);
+            const actDestroyUnit            = action.actDestroyUnit;
+            const actIsModifyTileBase       = (action.actIsModifyTileBase) || (action.actIsModifyTileBase == null);
+            const actIsModifyTileDecorator  = (action.actIsModifyTileDecorator) || (action.actIsModifyTileDecorator == null);
+            const actIsModifyTileObject     = (action.actIsModifyTileObject) || (action.actIsModifyTileObject == null);
+            const conIsHighlighted          = action.conIsHighlighted;
+            const conLocationIdArray        = action.conLocationIdArray ?? [];
+            const conGridIndexArray         = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_03)) ?? [];
+            const unitMap                   = war.getUnitMap();
+            const tileMap                   = war.getTileMap();
+            const mapSize                   = tileMap.getMapSize();
+            const mapWidth                  = mapSize.width;
+            const mapHeight                 = mapSize.height;
             for (let x = 0; x < mapWidth; ++x) {
                 for (let y = 0; y < mapHeight; ++y) {
                     const gridIndex : Types.GridIndex = { x, y };
                     const tile      = tileMap.getTile(gridIndex);
-                    if (((gridIndexArray.length) && (!gridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex))))   ||
-                        ((locationIdArray.length) && (!locationIdArray.some(v => tile.getHasLocationFlag(v))))
+                    if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
+                        ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
+                        ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
                     ) {
                         continue;
                     }
 
+                    const actBaseType   = actIsModifyTileBase ? rawActBaseType : tile.getBaseType();
+                    const actObjectType = actIsModifyTileObject ? rawActObjectType : tile.getObjectType();
                     if (unitMap.getUnitOnMap(gridIndex)) {
                         if (actDestroyUnit) {
                             WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
-                        } else if (isAttackable) {
+                        } else if (ConfigManager.getTileTemplateCfg(configVersion, actBaseType, actObjectType).maxHp != null) {
                             continue;
                         }
                     }
 
                     const tileData          = Helpers.deepClone(actTileData);
-                    tileData.locationFlags  = tile.getLocationFlags();
                     tileData.gridIndex      = gridIndex;
+                    tileData.locationFlags  ??= tile.getLocationFlags();
+                    tileData.isHighlighted  ??= tile.getIsHighlighted();
+                    if (!actIsModifyTileBase) {
+                        tileData.baseType       = tile.getBaseType();
+                        tileData.baseShapeId    = tile.getBaseShapeId();
+                    }
+                    if (!actIsModifyTileDecorator) {
+                        tileData.decoratorType      = tile.getDecoratorType();
+                        tileData.decoratorShapeId   = tile.getDecoratorShapeId();
+                    }
+                    if (!actIsModifyTileObject) {
+                        tileData.objectType     = tile.getObjectType();
+                        tileData.objectShapeId  = tile.getObjectShapeId();
+                    }
+
                     tile.init(tileData, configVersion);
                     tile.startRunning(war);
 

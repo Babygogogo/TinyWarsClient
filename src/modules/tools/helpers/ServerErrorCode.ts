@@ -2575,6 +2575,17 @@ export const enum ServerErrorCode {
     BwTile_GetNewObjectShapeIdOnObjectDestroyed_0008,
     BwTile_GetNewObjectShapeIdOnObjectDestroyed_0009,
 
+    BwTile_GetIsHighlighted_0000,
+    BwTile_GetIsHighlighted_0001,
+    BwTile_GetIsHighlighted_0002,
+    BwTile_GetIsHighlighted_0003,
+    BwTile_GetIsHighlighted_0004,
+    BwTile_GetIsHighlighted_0005,
+    BwTile_GetIsHighlighted_0006,
+    BwTile_GetIsHighlighted_0007,
+    BwTile_GetIsHighlighted_0008,
+    BwTile_GetIsHighlighted_0009,
+
     BwTileMap_Init_0000,
     BwTileMap_Init_0001,
     BwTileMap_Init_0002,

@@ -15,6 +15,7 @@ namespace NotifyData {
     export type BwCoIdChanged               = TwnsBwPlayer.BwPlayer;
     export type BwCursorGridIndexChanged    = TwnsBwCursor.BwCursor;
     export type BwTileLocationFlagSet       = TwnsBwTile.BwTile;
+    export type BwTileIsHighlightChanged    = TwnsBwTile.BwTile;
     export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
     export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
     export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };

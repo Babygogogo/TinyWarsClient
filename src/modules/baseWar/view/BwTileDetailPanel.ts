@@ -43,6 +43,7 @@ namespace TwnsBwTileDetailPanel {
         Hp,
         CapturePoint,
         BuildPoint,
+        IsHighlighted,
 
         CrystalRadius,
         CrystalPriority,
@@ -102,6 +103,7 @@ namespace TwnsBwTileDetailPanel {
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.BwActionPlannerStateChanged,     callback: this._onNotifyBwPlannerStateChanged },
                 { type: NotifyType.TileAnimationTick,               callback: this._onNotifyTileAnimationTick },
+                { type: NotifyType.BwTileIsHighlightedChanged,      callback: this._onNotifyTileIsHighlightedChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,                               callback: this.close },
@@ -117,6 +119,7 @@ namespace TwnsBwTileDetailPanel {
             conTileView.addChild(tileView.getImgBase());
             conTileView.addChild(tileView.getImgDecorator());
             conTileView.addChild(tileView.getImgObject());
+            conTileView.addChild(tileView.getImgHighlight());
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -137,13 +140,17 @@ namespace TwnsBwTileDetailPanel {
         private _onNotifyTileAnimationTick(): void {
             this._tileView.updateView();
         }
+        private _onNotifyTileIsHighlightedChanged(): void {
+            this._updateTileView();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
-            this._updateTileViewAndLabelName();
+            this._updateLabelName();
+            this._updateTileView();
             this._updateListInfo();
         }
 
@@ -153,13 +160,16 @@ namespace TwnsBwTileDetailPanel {
             this._updateListMoveCost();
         }
 
-        private _updateTileViewAndLabelName(): void {
+        private _updateLabelName(): void {
             const data              = this._getOpenData();
             const tile              = data.tile;
             this._labelName.text    = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
             this._labelName1.text   = Lang.getTileName(tile.getType(), Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
+        }
 
-            const tileView = this._tileView;
+        private _updateTileView(): void {
+            const tile      = this._getOpenData().tile;
+            const tileView  = this._tileView;
             tileView.setData({
                 tileData    : tile.serialize(),
                 hasFog      : tile.getHasFog(),
@@ -185,6 +195,7 @@ namespace TwnsBwTileDetailPanel {
                 createInfoHp(war, tile),
                 createInfoCapturePoint(war, tile),
                 createInfoBuildPoint(war, tile),
+                createInfoIsHighlighted(war, tile),
                 createInfoCrystalRadius(war, tile),
                 createInfoCrystalPriority(war, tile),
                 createInfoCrystalCanAffectSelf(war, tile),
@@ -329,6 +340,7 @@ namespace TwnsBwTileDetailPanel {
             else if (infoType === TileInfoType.Hp)                                      { this._modifyAsHp(); }
             else if (infoType === TileInfoType.CapturePoint)                            { this._modifyAsCapturePoint(); }
             else if (infoType === TileInfoType.BuildPoint)                              { this._modifyAsBuildPoint(); }
+            else if (infoType === TileInfoType.IsHighlighted)                           { this._modifyAsIsHighlighted(); }
             else if (infoType === TileInfoType.CrystalRadius)                           { this._modifyAsCrystalRadius(); }
             else if (infoType === TileInfoType.CrystalPriority)                         { this._modifyAsCrystalPriority(); }
             else if (infoType === TileInfoType.CrystalCanAffectSelf)                    { this._modifyAsCrystalCanAffectSelf(); }
@@ -387,6 +399,7 @@ namespace TwnsBwTileDetailPanel {
             else if (infoType === TileInfoType.Hp)                                      { this._updateViewAsHp(); }
             else if (infoType === TileInfoType.CapturePoint)                            { this._updateViewAsCapturePoint(); }
             else if (infoType === TileInfoType.BuildPoint)                              { this._updateViewAsBuildPoint(); }
+            else if (infoType === TileInfoType.IsHighlighted)                           { this._updateViewAsIsHighlighted(); }
             else if (infoType === TileInfoType.CrystalRadius)                           { this._updateViewAsCrystalRadius(); }
             else if (infoType === TileInfoType.CrystalPriority)                         { this._updateViewAsCrystalPriority(); }
             else if (infoType === TileInfoType.CrystalCanAffectSelf)                    { this._updateViewAsCrystalCanAffectSelf(); }
@@ -520,6 +533,13 @@ namespace TwnsBwTileDetailPanel {
             this._labelValue.text       = `${currentValue} / ${tile.getMaxBuildPoint()}`;
             this._groupExtra.visible    = false;
             this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (currentValue != null);
+        }
+        private _updateViewAsIsHighlighted(): void {
+            const { tile, war }         = this._getData();
+            this._labelTitle.text       = Lang.getText(LangTextType.B0847);
+            this._labelValue.text       = Lang.getText(tile.getIsHighlighted() ? LangTextType.B0012 : LangTextType.B0013);
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = WarCommonHelpers.checkCanCheatInWar(war.getWarType());
         }
         private _updateViewAsCrystalRadius(): void {
             const { tile, war }         = this._getData();
@@ -878,6 +898,16 @@ namespace TwnsBwTileDetailPanel {
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsIsHighlighted(): void {
+            const { tile, war } = this._getData();
+            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
+                return;
+            }
+
+            tile.setIsHighlighted(!tile.getIsHighlighted());
+            tile.flushDataToView();
+            this._updateView();
         }
         private _modifyAsCrystalRadius(): void {
             const { tile, war } = this._getData();
@@ -1692,6 +1722,14 @@ namespace TwnsBwTileDetailPanel {
                 war,
                 tile,
             };
+    }
+    function createInfoIsHighlighted(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return {
+            index       : 0,
+            infoType    : TileInfoType.IsHighlighted,
+            war,
+            tile,
+        };
     }
     function createInfoCrystalRadius(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getCustomCrystalData() == null)

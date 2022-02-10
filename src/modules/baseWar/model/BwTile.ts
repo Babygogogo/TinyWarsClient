@@ -42,6 +42,7 @@ namespace TwnsBwTile {
         private _currentBuildPoint?     : number | null;
         private _currentCapturePoint?   : number | null;
         private _locationFlags?         : number;
+        private _isHighlighted?         : boolean;
 
         private _customCrystalData?     : ITileCustomCrystalData | null;
         private _customCannonData?      : ITileCustomCannonData | null;
@@ -206,6 +207,7 @@ namespace TwnsBwTile {
             this.setCurrentBuildPoint(currentBuildPoint ?? (templateCfg.maxBuildPoint ?? null));
             this.setCurrentCapturePoint(currentCapturePoint ?? (templateCfg.maxCapturePoint ?? null));
             this._setLocationFlags(data.locationFlags ?? 0);
+            this.setIsHighlighted(data.isHighlighted ?? false);
 
             this._setCustomCrystalData(customCrystalData);
             this._setCustomCannonData(customCannonData);
@@ -247,6 +249,9 @@ namespace TwnsBwTile {
             const locationFlags = this.getLocationFlags();
             (locationFlags !== 0) && (data.locationFlags = locationFlags);
 
+            const isHighlighted = this.getIsHighlighted();
+            (isHighlighted) && (data.isHighlighted = isHighlighted);
+
             return data;
         }
         public serializeForCreateSfw(): ISerialTile {
@@ -287,6 +292,9 @@ namespace TwnsBwTile {
 
                 const locationFlags = this.getLocationFlags();
                 (locationFlags !== 0) && (data.locationFlags = locationFlags);
+
+                const isHighlighted = this.getIsHighlighted();
+                (isHighlighted) && (data.isHighlighted = isHighlighted);
 
                 return data;
             }
@@ -513,6 +521,19 @@ namespace TwnsBwTile {
         }
 
         ////////////////////////////////////////////////////////////////////////////////
+        // Functions for highlight.
+        ////////////////////////////////////////////////////////////////////////////////
+        public getIsHighlighted(): boolean {
+            return Helpers.getExisted(this._isHighlighted);
+        }
+        public setIsHighlighted(isHighlighted: boolean): void {
+            if (this._isHighlighted !== isHighlighted) {
+                this._isHighlighted = isHighlighted;
+                Notify.dispatch(TwnsNotifyType.NotifyType.BwTileIsHighlightedChanged, this as NotifyData.BwTileIsHighlightChanged);
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
         // Functions for defense amount for units.
         ////////////////////////////////////////////////////////////////////////////////
         public getNormalizedDefenseAmount(): number {
@@ -584,6 +605,7 @@ namespace TwnsBwTile {
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
+                isHighlighted   : this.getIsHighlighted(),
             }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }
@@ -599,6 +621,7 @@ namespace TwnsBwTile {
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
+                isHighlighted   : this.getIsHighlighted(),
             }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }
@@ -618,6 +641,7 @@ namespace TwnsBwTile {
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
                 locationFlags   : this.getLocationFlags(),
+                isHighlighted   : this.getIsHighlighted(),
             }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }

@@ -22,6 +22,7 @@ namespace TwnsBwTileMapView {
         private readonly _decoratorLayer            = new egret.DisplayObjectContainer();
         private readonly _gridBorderLayer           = new egret.DisplayObjectContainer();
         private readonly _objectLayer               = new egret.DisplayObjectContainer();
+        private readonly _highlightLayer            = new egret.DisplayObjectContainer();
         private readonly _locationLayer             = new egret.DisplayObjectContainer();
         private readonly _coZoneContainer           = new egret.DisplayObjectContainer();
         private readonly _coZoneAreaImageDict       = new Map<number, TwnsUiImage.UiImage[][]>();
@@ -43,6 +44,7 @@ namespace TwnsBwTileMapView {
             this.addChild(this._decoratorLayer);
             this.addChild(this._gridBorderLayer);
             this.addChild(this._objectLayer);
+            this.addChild(this._highlightLayer);
             this.addChild(this._locationLayer);
             this.addChild(this._coZoneContainer);
             this._locationLayer.alpha   = 0.6;
@@ -59,10 +61,12 @@ namespace TwnsBwTileMapView {
                 const baseLayer         = this._baseLayer;
                 const decoratorLayer    = this._decoratorLayer;
                 const objectLayer       = this._objectLayer;
+                const highlightLayer    = this._highlightLayer;
                 tileViewArray.length    = 0;
                 baseLayer.removeChildren();
                 decoratorLayer.removeChildren();
                 objectLayer.removeChildren();
+                highlightLayer.removeChildren();
 
                 for (const tile of tileMap.getAllTiles()) {
                     const view  = tile.getView();
@@ -89,6 +93,13 @@ namespace TwnsBwTileMapView {
                         imgObject.x     = x;
                         imgObject.y     = y;
                         objectLayer.addChild(imgObject);
+                    }
+
+                    {
+                        const imgHighlight  = view.getImgHighlight();
+                        imgHighlight.x      = x;
+                        imgHighlight.y      = y;
+                        objectLayer.addChild(imgHighlight);
                     }
                 }
             }

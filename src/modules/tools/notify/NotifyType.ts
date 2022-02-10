@@ -118,6 +118,7 @@ namespace TwnsNotifyType {
         BwTileBeDestroyed,
         BwTileBeAttacked,
         BwTileLocationFlagSet,
+        BwTileIsHighlightedChanged,
 
         BwTileMapLocationVisibleSet,
 
