@@ -43,8 +43,10 @@ namespace TwnsRwWar {
         private _settingsForScw?                    : ProtoTypes.WarSettings.ISettingsForScw | null;
         private _settingsForMrw?                    : ProtoTypes.WarSettings.ISettingsForMrw | null;
         private _settingsForCcw?                    : ProtoTypes.WarSettings.ISettingsForCcw | null;
+        private _settingsForMfw?                    : ProtoTypes.WarSettings.ISettingsForMfw | null;
 
         private _replayId?                          : number;
+        private _pauseTimeMs                        = 1000;
         private _isAutoReplay                       = false;
         private _nextActionId                       = 0;
         private _checkpointIdsForNextActionId       = new Map<number, number>();
@@ -56,6 +58,7 @@ namespace TwnsRwWar {
             this._setSettingsForScw(warData.settingsForScw ?? null);
             this._setSettingsForMrw(warData.settingsForMrw ?? null);
             this._setSettingsForCcw(warData.settingsForCcw ?? null);
+            this._setSettingsForMfw(warData.settingsForMfw ?? null);
             this.setNextActionId(0);
 
             this._setCheckpointId(0, 0);
@@ -234,6 +237,8 @@ namespace TwnsRwWar {
                 return hasFog ? WarType.ScwFog : WarType.ScwStd;
             } else if (this._getSettingsForCcw()) {
                 return hasFog ? WarType.CcwFog : WarType.CcwStd;
+            } else if (this._getSettingsForMfw()) {
+                return hasFog ? WarType.MfwFog : WarType.MfwStd;
             } else {
                 throw Helpers.newError(`Invalid war data.`, ClientErrorCode.RwWar_GetWarType_00);
             }
@@ -303,6 +308,12 @@ namespace TwnsRwWar {
         private _setSettingsForCcw(value: ProtoTypes.WarSettings.ISettingsForCcw | null): void {
             this._settingsForCcw = value;
         }
+        private _getSettingsForMfw(): ProtoTypes.WarSettings.ISettingsForMfw | null {
+            return Helpers.getDefined(this._settingsForMfw, ClientErrorCode.RwWar_GetSettingsForMfw_00);
+        }
+        private _setSettingsForMfw(value: ProtoTypes.WarSettings.ISettingsForMfw | null): void {
+            this._settingsForMfw = value;
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
@@ -312,6 +323,13 @@ namespace TwnsRwWar {
         }
         public setReplayId(replayId: number): void {
             this._replayId = replayId;
+        }
+
+        public getPauseTimeMs(): number {
+            return this._pauseTimeMs;
+        }
+        public setPauseTimeMs(time: number): void {
+            this._pauseTimeMs = time;
         }
 
         public getNextActionId(): number {
@@ -507,7 +525,7 @@ namespace TwnsRwWar {
                     if ((!this.checkIsInEnd()) && (this.getIsAutoReplay()) && (!this.getIsExecutingAction()) && (this.getIsRunning())) {
                         this._doExecuteAction(this.getNextAction(), isFastExecute);
                     }
-                }, null, 1000);
+                }, null, this.getPauseTimeMs());
             }
         }
     }

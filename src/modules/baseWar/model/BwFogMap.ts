@@ -264,10 +264,10 @@ namespace TwnsBwFogMap {
             for (const pathNode of path) {
                 const visionRange = unit.getVisionRangeForPlayer(playerIndex, pathNode);
                 if (visionRange) {
-                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(pathNode, 0, 1, mapSize)) {
+                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: pathNode, minDistance: 0, maxDistance: 1, mapSize })) {
                         mapFromPath[gridIndex.x][gridIndex.y] = Visibility.TrueVision;
                     }
-                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(pathNode, 2, visionRange, mapSize)) {
+                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: pathNode, minDistance: 2, maxDistance: visionRange, mapSize })) {
                         if (unit.checkIsTrueVision(gridIndex)) {
                             mapFromPath[gridIndex.x][gridIndex.y] = Visibility.TrueVision;
                         } else {
@@ -293,7 +293,7 @@ namespace TwnsBwFogMap {
         }
         public updateMapFromPathsByFlare(playerIndex: number, flareGridIndex: GridIndex, flareRadius: number): void {
             const map = this._getMapFromPath(playerIndex);
-            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(flareGridIndex, 0, flareRadius, this.getMapSize())) {
+            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: flareGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize: this.getMapSize() })) {
                 map[gridIndex.x][gridIndex.y] = 2;
             }
         }
@@ -376,7 +376,7 @@ namespace TwnsBwFogMap {
 
                         const visionRange = tile.getVisionRangeForTeamIndexes(teamIndexes);
                         if (visionRange != null) {
-                            for (const g of GridIndexHelpers.getGridsWithinDistance(tileGridIndex, 0, visionRange, mapSize)) {
+                            for (const g of GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: visionRange, mapSize })) {
                                 if (resultMap[g.x][g.y] === Visibility.OutsideVision) {
                                     resultMap[g.x][g.y] = Visibility.InsideVision;
                                 }
@@ -440,12 +440,12 @@ namespace TwnsBwFogMap {
                         if (unit) {
                             const visionRange = unit.getVisionRangeForTeamIndexes(teamIndexes, unitGridIndex);
                             if (visionRange != null) {
-                                for (const g of GridIndexHelpers.getGridsWithinDistance(unitGridIndex, 0, 1, mapSize)) {
+                                for (const g of GridIndexHelpers.getGridsWithinDistance({ origin: unitGridIndex, minDistance: 0, maxDistance: 1, mapSize })) {
                                     resultMap[g.x][g.y] = Visibility.TrueVision;
                                 }
 
                                 const isTrueVision = unit.checkIsTrueVision(unitGridIndex);
-                                for (const g of GridIndexHelpers.getGridsWithinDistance(unitGridIndex, 2, visionRange, mapSize)) {
+                                for (const g of GridIndexHelpers.getGridsWithinDistance({ origin: unitGridIndex, minDistance: 2, maxDistance: visionRange, mapSize })) {
                                     if (isTrueVision) {
                                         resultMap[g.x][g.y] = Visibility.TrueVision;
                                     } else {

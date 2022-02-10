@@ -1090,7 +1090,7 @@ namespace TwnsBwTurnManager {
         {
             const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
             if (deltaHp || deltaFuelPercentage || deltaPrimaryAmmoPercentage) {
-                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(tile.getGridIndex(), 0, Helpers.getExisted(data.radius, ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01), unitMap.getMapSize())) {
+                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: tile.getGridIndex(), minDistance: 0, maxDistance: Helpers.getExisted(data.radius, ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01), mapSize: unitMap.getMapSize() })) {
                     const unit = unitMap.getUnitOnMap(gridIndex);
                     if (unit == null) {
                         continue;

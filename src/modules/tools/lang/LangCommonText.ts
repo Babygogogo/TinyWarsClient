@@ -1247,6 +1247,18 @@ namespace TwnsLangCommonText {
             `已成功修改规则可用性`,
             `The rule availability is modified successfully.`,
         ],
+        [LangTextType.A0288]: [
+            `已保存当前状态`,
+            `The current state is saved successfully.`,
+        ],
+        [LangTextType.A0289]: [
+            `尚未保存任何状态`,
+            `There is no saved state.`,
+        ],
+        [LangTextType.A0290]: [
+            `值越大，则自动回放时每个动作之间的停顿时间越长。`,
+            `The higher the value, the longer the pause time between each action during automatic playback.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4611,6 +4623,18 @@ namespace TwnsLangCommonText {
             `修改可用性`,
             `Modify Availability`,
         ],
+        [LangTextType.B0844]: [
+            `保存`,
+            `Save`,
+        ],
+        [LangTextType.B0845]: [
+            `读取`,
+            `Load`,
+        ],
+        [LangTextType.B0846]: [
+            `停顿时间`,
+            `Pause Time`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4827,7 +4851,7 @@ namespace TwnsLangCommonText {
             `WarTank`,
         ],
         [LangTextType.B1209]: [
-            `自走炮`,
+            `自行火炮`,
             `Artillery`,
         ],
         [LangTextType.B1210]: [
@@ -4891,7 +4915,7 @@ namespace TwnsLangCommonText {
             `Lander`,
         ],
         [LangTextType.B1225]: [
-            `炮舰`,
+            `炮艇`,
             `Gunboat`,
         ],
 

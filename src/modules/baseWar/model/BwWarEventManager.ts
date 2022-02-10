@@ -1487,27 +1487,24 @@ namespace TwnsBwWarEventManager {
 
         for (let distance = 0; distance <= maxDistance; ++distance) {
             const gridIndex = GridIndexHelpers.getGridsWithinDistance(
-                origin,
-                distance,
-                distance,
-                mapSize,
-                (g): boolean => {
-                    if (unitMap.getUnitOnMap(g)) {
-                        return false;
-                    }
+                {
+                    origin, minDistance: distance, maxDistance: distance, mapSize, predicate: (g): boolean => {
+                        if (unitMap.getUnitOnMap(g)) {
+                            return false;
+                        }
 
-                    const tile = tileMap.getTile(g);
-                    if (tile.getMaxHp() != null) {
-                        return false;
-                    }
+                        const tile = tileMap.getTile(g);
+                        if (tile.getMaxHp() != null) {
+                            return false;
+                        }
 
-                    if ((needMovableTile) && (tile.getMoveCostByMoveType(moveType) == null)) {
-                        return false;
-                    }
+                        if ((needMovableTile) && (tile.getMoveCostByMoveType(moveType) == null)) {
+                            return false;
+                        }
 
-                    return true;
-                }
-            )[0];
+                        return true;
+                    }
+                }            )[0];
             if (gridIndex) {
                 return gridIndex;
             }

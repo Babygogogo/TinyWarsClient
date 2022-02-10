@@ -166,6 +166,10 @@ namespace TwnsBwUnitMapView {
                 this._resetVisibleForAllUnitsOnMap();
                 Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea()).setViewVisible(false);
 
+            } else if (state === ActionPlannerState.PreviewingUnitVisibleArea) {
+                this._resetVisibleForAllUnitsOnMap();
+                Helpers.getExisted(actionPlanner.getUnitForPreviewingVisibleArea()).setViewVisible(false);
+
             } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 this._resetVisibleForAllUnitsOnMap();
 

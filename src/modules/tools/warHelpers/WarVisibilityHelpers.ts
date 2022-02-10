@@ -382,13 +382,13 @@ namespace WarVisibilityHelpers {
         const playerIndex   = unit.getPlayerIndex();
         const isTrueVision  = path.length ? unit.checkIsTrueVision(path[0]) : false;
         for (const node of path) {
-            for (const grid of GridIndexHelpers.getGridsWithinDistance(node, 0, 1, mapSize)) {
+            for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: node, minDistance: 0, maxDistance: 1, mapSize })) {
                 visibilityMap[grid.x][grid.y] = Visibility.TrueVision;
             }
 
             const visionRange = unit.getVisionRangeForPlayer(playerIndex, node);
             if (visionRange) {
-                for (const grid of GridIndexHelpers.getGridsWithinDistance(node, 2, visionRange, mapSize)) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: node, minDistance: 2, maxDistance: visionRange, mapSize })) {
                     if (isTrueVision) {
                         visibilityMap[grid.x][grid.y] = Visibility.TrueVision;
                     } else {

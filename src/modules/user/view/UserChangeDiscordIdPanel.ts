@@ -18,7 +18,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUserChangeDiscordIdPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export type OpenData = void;

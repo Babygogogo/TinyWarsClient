@@ -1478,7 +1478,7 @@ namespace WarRobot {
         await Helpers.checkAndCallLater();
 
         let score = 9999;
-        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, commonParams.mapSize)) {
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize: commonParams.mapSize })) {
             score += unitValueMap[gridIndex.x][gridIndex.y] ?? 0;
         }
 
@@ -1492,7 +1492,7 @@ namespace WarRobot {
         const { war, mapSize, visibleUnits }    = commonParams;
         const unitMap                           = war.getUnitMap();
         let score                               = 0;
-        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, mapSize)) {
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize })) {
             const u = unitMap.getUnitOnMap(gridIndex);
             if ((u) && (!u.getIsDiving()) && (!visibleUnits.has(u))) {
                 score += 3 + u.getCurrentHp() / u.getMaxHp() * u.getProductionCfgCost() / 1000 * (u.getHasLoadedCo() ? 2 : 1) * 2;
@@ -1625,11 +1625,7 @@ namespace WarRobot {
                 if (baseDamage != null) {
                     const movableArea = getProducingUnitMovableArea();
                     const minDistance = Helpers.getNonNullElements(GridIndexHelpers.getGridsWithinDistance(
-                        unitGridIndex,
-                        0,
-                        producingUnitMaxAttackRange,
-                        mapSize
-                    ).map(g => {
+                        { origin: unitGridIndex, minDistance: 0, maxDistance: producingUnitMaxAttackRange, mapSize }                    ).map(g => {
                         const column = movableArea[g.x];
                         return (column ? column[g.y] : null)?.totalMoveCost;
                     })).sort((d1, d2) => d1 - d2)[0];
@@ -1743,7 +1739,7 @@ namespace WarRobot {
         const launchUnitId                      = unit.getLoaderUnitId() == null ? null : unit.getUnitId();
         const unitMap                           = war.getUnitMap();
         let bestScoreAndAction                  : ScoreAndAction | null = null;
-        for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance(gridIndex, minRange, maxRange, mapSize)) {
+        for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: gridIndex, minDistance: minRange, maxDistance: maxRange, mapSize })) {
             const targetUnit = unitMap.getUnitOnMap(targetGridIndex);
             if ((_IS_NEED_VISIBILITY) && (targetUnit != null) && (!visibleUnits.has(targetUnit))) {
                 continue;
@@ -1980,7 +1976,7 @@ namespace WarRobot {
 
         const flareMaxRange     = Helpers.getExisted(unit.getFlareMaxRange(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchFlare_00);
         let bestScoreAndAction  : ScoreAndAction | null = null;
-        for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance(gridIndex, 0, flareMaxRange, mapSize)) {
+        for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: gridIndex, minDistance: 0, maxDistance: flareMaxRange, mapSize })) {
             const score         = await getScoreForActionUnitLaunchFlare(commonParams, unit, targetGridIndex);
             bestScoreAndAction  = getBetterScoreAndAction(
                 bestScoreAndAction,
@@ -2327,11 +2323,7 @@ namespace WarRobot {
 
             const movableArea   = Helpers.getExisted(movableAreaDict.get(attackerUnit), ClientErrorCode.SpwRobot_GetBestActionPlayerProduceUnit_00);
             const minDistance   = Helpers.getNonNullElements(GridIndexHelpers.getGridsWithinDistance(
-                targetGridIndex,
-                0,
-                maxAttackRange,
-                mapSize
-            ).map(g => {
+                { origin: targetGridIndex, minDistance: 0, maxDistance: maxAttackRange, mapSize }            ).map(g => {
                 const column = movableArea[g.x];
                 return (column ? column[g.y] : null)?.totalMoveCost;
             })).sort((d1, d2) => d1 - d2)[0];

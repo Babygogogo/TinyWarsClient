@@ -218,14 +218,20 @@ namespace TwnsLobbyPanel {
         }
 
         private async _updateComponentsForLanguage(): Promise<void> {
-            this._labelTips0.text   = Lang.getText(LangTextType.A0195);
-            this._labelTips1.text   = ` `;
-            this._labelTips2.text   = `${Lang.getText(LangTextType.B0537)}:`;
-            this._labelTips3.text   = `368142455`;
-            this._labelTips4.text   = `${Lang.getText(LangTextType.B0538)}:`;
-            this._labelTips5.text   = CommonConstants.DiscordUrl;
-            this._labelTips6.text   = `${Lang.getText(LangTextType.B0539)}:`;
-            this._labelTips7.text   = CommonConstants.GithubUrl;
+            this._labelTips0.text       = Lang.getText(LangTextType.A0195);
+            this._labelTips1.text       = ` `;
+            this._labelTips2.text       = `${Lang.getText(LangTextType.B0537)}:`;
+            this._labelTips3.text       = `368142455`;
+            this._labelTips4.text       = `${Lang.getText(LangTextType.B0538)}:`;
+            this._labelTips5.textFlow   = [{
+                text    : CommonConstants.DiscordUrl,
+                style   : { underline: true },
+            }];
+            this._labelTips6.text       = `${Lang.getText(LangTextType.B0539)}:`;
+            this._labelTips7.textFlow   = [{
+                text    : CommonConstants.GithubUrl,
+                style   : { underline: true },
+            }];
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {

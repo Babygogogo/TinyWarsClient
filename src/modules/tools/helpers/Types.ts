@@ -531,6 +531,7 @@ namespace Types {
         ChoosingProductionTarget,
         PreviewingUnitAttackableArea,
         PreviewingUnitMovableArea,
+        PreviewingUnitVisibleArea,
         PreviewingTileAttackableArea,
 
         RequestingPlayerActivateSkill,

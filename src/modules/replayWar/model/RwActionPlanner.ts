@@ -242,10 +242,38 @@ namespace TwnsRwActionPlanner {
                     if (this.getUnitForPreviewingMovableArea() !== unit) {
                         return State.PreviewingUnitMovableArea;
                     } else {
+                        return State.PreviewingUnitVisibleArea;
+                    }
+                }
+            }
+        }
+        protected _getNextStateOnTapWhenPreviewingUnitVisibleArea(gridIndex: GridIndex): State {
+            const turnManager       = this._getTurnManager();
+            const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
+            const playerIndexInTurn = this._getWar().getPlayerInTurn().getPlayerIndex();
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === playerIndexInTurn) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            if (!unit) {
+                const tile = this._getTileMap().getTile(gridIndex);
+                if ((isSelfInTurn) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
+                    return State.ChoosingProductionTarget;
+                } else {
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
+                }
+            } else {
+                if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === playerIndexInTurn))) {
+                    return State.MakingMovePath;
+                } else {
+                    if (this.getUnitForPreviewingVisibleArea() !== unit) {
+                        return State.PreviewingUnitVisibleArea;
+                    } else {
                         if (unit.checkHasWeapon()) {
                             return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.Idle;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }

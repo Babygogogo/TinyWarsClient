@@ -48,6 +48,8 @@ namespace TwnsCommonDamageCalculatorPanel {
         minDamage   : number;
         maxDamage   : number;
     };
+    let _savedData: CalculatorData | null = null;
+
     export type OpenData = {
         data    : CalculatorData | null;
     };
@@ -121,6 +123,8 @@ namespace TwnsCommonDamageCalculatorPanel {
         private readonly _labelCity2!           : TwnsUiLabel.UiLabel;
 
         private readonly _btnSwitchPlayer!      : TwnsUiButton.UiButton;
+        private readonly _btnSaveState!         : TwnsUiButton.UiButton;
+        private readonly _btnLoadState!         : TwnsUiButton.UiButton;
 
         private readonly _btnWeather!           : TwnsUiButton.UiButton;
         private readonly _labelWeather!         : TwnsUiLabel.UiLabel;
@@ -168,6 +172,8 @@ namespace TwnsCommonDamageCalculatorPanel {
                 { ui: this._btnCity1,                   callback: this._onTouchedBtnCity1 },
                 { ui: this._btnCity2,                   callback: this._onTouchedBtnCity2 },
                 { ui: this._btnSwitchPlayer,            callback: this._onTouchedBtnSwitchPlayer },
+                { ui: this._btnSaveState,               callback: this._onTouchedBtnSaveState },
+                { ui: this._btnLoadState,               callback: this._onTouchedBtnLoadState },
                 { ui: this._btnWeather,                 callback: this._onTouchedBtnWeather },
             ]);
             this._setNotifyListenerArray([
@@ -469,6 +475,19 @@ namespace TwnsCommonDamageCalculatorPanel {
             this._updateView();
         }
 
+        private _onTouchedBtnSaveState(): void {
+            _savedData = Helpers.deepClone(this._calculatorData);
+            FloatText.show(Lang.getText(LangTextType.A0288));
+        }
+        private _onTouchedBtnLoadState(): void {
+            if (_savedData == null) {
+                FloatText.show(Lang.getText(LangTextType.A0289));
+            } else {
+                this._calculatorData = Helpers.deepClone(_savedData);
+                this._updateView();
+            }
+        }
+
         private _onTouchedBtnWeather(): void {
             const data          = this._calculatorData;
             const typeArray     = ConfigManager.getAvailableWeatherTypes(data.configVersion);
@@ -557,6 +576,8 @@ namespace TwnsCommonDamageCalculatorPanel {
             this._btnCity1.label            = Lang.getText(LangTextType.B0834);
             this._btnCity2.label            = Lang.getText(LangTextType.B0834);
             this._btnSwitchPlayer.label     = Lang.getText(LangTextType.B0835);
+            this._btnSaveState.label        = Lang.getText(LangTextType.B0844);
+            this._btnLoadState.label        = Lang.getText(LangTextType.B0845);
             this._btnWeather.label          = Lang.getText(LangTextType.B0705);
             this._labelAttackTitle.text     = `${Lang.getText(LangTextType.B0039)}:`;
             this._labelDefendTitle.text     = `${Lang.getText(LangTextType.B0837)}:`;

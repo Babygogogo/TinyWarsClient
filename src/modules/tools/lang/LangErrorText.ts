@@ -124,13 +124,13 @@ namespace TwnsLangErrorText {
             "用户不存在，获取user public info失败。",
             "The user doesn't exist thus fail to get its public info.",
         ],
-        [ServerErrorCode.MsgMpwCommonContinueWar0001]: [
+        [ServerErrorCode.ExeMpwCommonContinueWar_ExeWithSocket_0001]: [
             `战局不存在`,
             `The game doesn't exist.`,
         ],
-        [ServerErrorCode.MsgMpwCommonContinueWar0003]: [
-            `您未参与该战局，或已经被击败`,
-            `You have not joined the game, or you have been defeated.`,
+        [ServerErrorCode.ExeMpwCommonContinueWar_ExeWithSocket_0002]: [
+            `您未参与该战局`,
+            `You have not joined the game.`,
         ],
         [ServerErrorCode.ExeCcrCreateRoom_DoExecute_0019]: [
             `AI玩家的颜色设置不合法`,

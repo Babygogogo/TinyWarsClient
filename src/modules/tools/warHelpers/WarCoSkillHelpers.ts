@@ -688,7 +688,7 @@ namespace WarCoSkillHelpers {
 
         const center            = Helpers.getExisted(skillData.fixedAreaDamageCenter);
         const gridVisualEffect  = war.getGridVisualEffect();
-        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, cfg[1], unitMap.getMapSize())) {
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: center as GridIndex, minDistance: 0, maxDistance: cfg[1], mapSize: unitMap.getMapSize() })) {
             gridVisualEffect.showEffectExplosion(gridIndex);
         }
     }
@@ -712,7 +712,7 @@ namespace WarCoSkillHelpers {
         const actionState       = cfg[4];
         const teamIndex         = player.getTeamIndex();
         const gridVisualEffect  = war.getGridVisualEffect();
-        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, cfg[1], mapSize)) {
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: center as GridIndex, minDistance: 0, maxDistance: cfg[1], mapSize })) {
             const unit = unitMap.getUnitOnMap(gridIndex);
             if ((unit)                                                      &&
                 ((isIndiscriminate) || (unit.getTeamIndex() !== teamIndex))
@@ -1146,7 +1146,7 @@ namespace WarCoSkillHelpers {
             for (let y = 0; y < height; ++y) {
                 const center        = { x, y };
                 let totalDamage     = 0;
-                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center, 0, radius, mapSize)) {
+                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: center, minDistance: 0, maxDistance: radius, mapSize })) {
                     totalDamage += map[gridIndex.x][gridIndex.y];
                 }
 

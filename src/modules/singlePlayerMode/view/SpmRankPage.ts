@@ -126,6 +126,7 @@ namespace TwnsSpmRankPage {
             const dataArray : DataForUserRenderer[] = [];
             for (const rankData of (await SpmModel.getRankData(mapId)).find(v => v.ruleId === ruleId)?.infoArray ?? []) {
                 dataArray.push({
+                    index   : 0,
                     rank    : 0,
                     userId  : Helpers.getExisted(rankData.userId),
                     score   : Helpers.getExisted(rankData.score),
@@ -137,11 +138,13 @@ namespace TwnsSpmRankPage {
             if (length) {
                 dataArray.sort((v1, v2) => v2.score - v1.score);
 
-                dataArray[0].rank = 1;
+                dataArray[0].rank   = 1;
+                dataArray[0].index  = 1;
                 for (let i = 1; i < length; ++i) {
                     const currentData   = dataArray[i];
                     const previousData  = dataArray[i - 1];
                     currentData.rank    = currentData.score === previousData.score ? previousData.rank : i + 1;
+                    currentData.index   = i + 1;
                 }
 
                 dataArray[length - 1].isLast = true;
@@ -164,6 +167,7 @@ namespace TwnsSpmRankPage {
     }
 
     type DataForUserRenderer = {
+        index   : number;
         rank    : number;
         userId  : number;
         score   : number;
@@ -205,7 +209,7 @@ namespace TwnsSpmRankPage {
             labelNickname.text          = Lang.getText(LangTextType.B0029);
             this._labelIndex.text       = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._labelScore.text       = `${data.score}`;
-            this._imgBg.alpha           = rank % 2 == 1 ? 0.2 : 0.5;
+            this._imgBg.alpha           = data.index % 2 == 1 ? 0.2 : 0.5;
             this._imgBottomLine.visible = data.isLast;
 
             const userInfo = Helpers.getExisted(await UserModel.getUserPublicInfo(data.userId));

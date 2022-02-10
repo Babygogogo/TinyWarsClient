@@ -743,14 +743,15 @@ namespace WarRuleHelpers {
     }
 
     function checkIsValidWarRuleAvailability(availability: WarRule.IRuleAvailability): boolean {
-        const {
-            canMcw,     canScw,     canMrw,     canSrw,     canCcw
-        } = availability;
-        return (!!canMcw)
-            || (!!canScw)
-            || (!!canMrw)
-            || (!!canSrw)
-            || (!!canCcw);
+        // const {
+        //     canMcw,     canScw,     canMrw,     canSrw,     canCcw
+        // } = availability;
+        // return (!!canMcw)
+        //     || (!!canScw)
+        //     || (!!canMrw)
+        //     || (!!canSrw)
+        //     || (!!canCcw);
+        return availability != null;
     }
 
     function getErrorCodeForRuleForGlobalParams(rule: IRuleForGlobalParams): ClientErrorCode {

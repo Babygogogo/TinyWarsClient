@@ -303,6 +303,9 @@ namespace TwnsBwCursorView {
             } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
                 con.visible = true;
 
+            } else if (state === ActionPlannerState.PreviewingUnitVisibleArea) {
+                con.visible = true;
+
             } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 con.visible = true;
 
@@ -350,6 +353,9 @@ namespace TwnsBwCursorView {
             } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
                 con.visible = false;
 
+            } else if (state === ActionPlannerState.PreviewingUnitVisibleArea) {
+                con.visible = false;
+
             } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 con.visible = false;
 
@@ -393,6 +399,9 @@ namespace TwnsBwCursorView {
                 con.visible = false;
 
             } else if (state === ActionPlannerState.PreviewingUnitMovableArea) {
+                con.visible = false;
+
+            } else if (state === ActionPlannerState.PreviewingUnitVisibleArea) {
                 con.visible = false;
 
             } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {

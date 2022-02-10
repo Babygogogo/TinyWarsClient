@@ -348,7 +348,7 @@ namespace TwnsBwTileMapView {
 
                 for (const coGridIndex of gridIndexList) {
                     const { x: coX, y: coY } = coGridIndex;
-                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(coGridIndex, radius, radius, mapSize)) {
+                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: coGridIndex, minDistance: radius, maxDistance: radius, mapSize })) {
                         const { x, y }  = gridIndex;
                         const deltaX = x - coX;
                         if (deltaX >= 0) {

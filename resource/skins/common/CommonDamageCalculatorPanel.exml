@@ -4,7 +4,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" source="uncompressedColorTransparent0001" left="0" right="0" top="0" bottom="0"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="680" horizontalCenter="0" height="480" verticalCenter="0">
+    <e:Group id="_group" width="690" horizontalCenter="0" height="480" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0" locked="true">
             <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
                                  scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
@@ -203,7 +203,15 @@
         <e:Group x="430" y="60">
             <e:Group x="0" y="0">
                 <TwnsUiButton:UiButton id="_btnSwitchPlayer" label="Button"
-                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="220" x="0" y="-68" />
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="230" x="0" y="-68" />
+                <e:Group y="-24" x="10">
+                    <TwnsUiButton:UiButton id="_btnSaveState" label="Button"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" left="0" />
+                    <TwnsUiButton:UiButton id="_btnLoadState" label="Button"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"
+                                           width="110" y="10" left="120" />
+                </e:Group>
                 <e:Group y="-34" x="0">
                     <TwnsUiButton:UiButton id="_btnWeather" label="Button"
                                            skinName="Skins.Component.Button.ButtonSelfAdaption001" verticalCenter="0"

@@ -2394,7 +2394,7 @@ namespace WarActionExecutor {
             const targetGridIndex   = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
             if (targetGridIndex) {
                 const flareRadius = Helpers.getExisted(actionExtraData.flareRadius, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_01);
-                for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, mapSize)) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize })) {
                     gridVisualEffect.showEffectFlare(grid);
                 }
             }
@@ -2438,7 +2438,7 @@ namespace WarActionExecutor {
                     throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_03);
                 }
 
-                for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, mapSize)) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize })) {
                     gridVisualEffect.showEffectFlare(grid);
                 }
             }
@@ -2485,7 +2485,7 @@ namespace WarActionExecutor {
                     playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 });
 
-                const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, unitMap.getMapSize());
+                const targetGrids   = GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize: unitMap.getMapSize() });
                 const targetUnits   : BwUnit[] = [];
                 for (const grid of targetGrids) {
                     const unit = unitMap.getUnitOnMap(grid);
@@ -2517,7 +2517,7 @@ namespace WarActionExecutor {
 
             const targetGridIndex = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
             if (targetGridIndex) {
-                for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, mapSize)) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize })) {
                     gridVisualEffect.showEffectSiloExplosion(grid);
                 }
             }
@@ -2555,7 +2555,7 @@ namespace WarActionExecutor {
                 });
 
                 const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
-                const targetGrids       = GridIndexHelpers.getGridsWithinDistance(Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), 0, CommonConstants.SiloRadius, mapSize);
+                const targetGrids       = GridIndexHelpers.getGridsWithinDistance({ origin: Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize });
                 const targetUnits       : BwUnit[] = [];
                 for (const grid of targetGrids) {
                     const unit = unitMap.getUnitOnMap(grid);
