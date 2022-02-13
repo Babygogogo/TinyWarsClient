@@ -25,29 +25,33 @@ namespace TwnsLobbyPanel {
 
     export type OpenData = void;
     export class LobbyPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        private readonly _groupTips!        : eui.Group;
-        private readonly _groupWelcome!     : eui.Group;
-        private readonly _labelTips0!       : TwnsUiLabel.UiLabel;
-        private readonly _labelTips1!       : TwnsUiLabel.UiLabel;
-        private readonly _groupQq!          : eui.Group;
-        private readonly _labelTips2!       : TwnsUiLabel.UiLabel;
-        private readonly _labelTips3!       : TwnsUiLabel.UiLabel;
-        private readonly _groupDiscord!     : eui.Group;
-        private readonly _labelTips4!       : TwnsUiLabel.UiLabel;
-        private readonly _labelTips5!       : TwnsUiLabel.UiLabel;
-        private readonly _groupGithub!      : eui.Group;
-        private readonly _labelTips6!       : TwnsUiLabel.UiLabel;
-        private readonly _labelTips7!       : TwnsUiLabel.UiLabel;
+        private readonly _groupTips!            : eui.Group;
+        private readonly _groupWelcome!         : eui.Group;
+        private readonly _labelTips0!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips1!           : TwnsUiLabel.UiLabel;
+        private readonly _groupQq!              : eui.Group;
+        private readonly _labelTips2!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips3!           : TwnsUiLabel.UiLabel;
+        private readonly _groupDiscord!         : eui.Group;
+        private readonly _labelTips4!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips5!           : TwnsUiLabel.UiLabel;
+        private readonly _groupGithub!          : eui.Group;
+        private readonly _labelTips6!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips7!           : TwnsUiLabel.UiLabel;
+        private readonly _groupSwitchVersion!   : eui.Group;
+        private readonly _labelTips8!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips9!           : TwnsUiLabel.UiLabel;
 
-        private readonly _group!            : eui.Group;
-        private readonly _btnSinglePlayer!  : TwnsUiButton.UiButton;
-        private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
-        private readonly _btnRanking!       : TwnsUiButton.UiButton;
+        private readonly _group!                : eui.Group;
+        private readonly _btnSinglePlayer!      : TwnsUiButton.UiButton;
+        private readonly _btnMultiPlayer!       : TwnsUiButton.UiButton;
+        private readonly _btnRanking!           : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._groupDiscord,       callback: this._onTouchedGroupDiscord },
                 { ui: this._groupGithub,        callback: this._onTouchedGroupGithub },
+                { ui: this._groupSwitchVersion, callback: this._onTouchedGroupSwitchVersion },
                 { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
                 { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
@@ -92,6 +96,18 @@ namespace TwnsLobbyPanel {
                     content : Lang.getFormattedText(LangTextType.F0065, `GitHub`),
                     callback: () => {
                         window.open(CommonConstants.GithubUrl);
+                    },
+                });
+            }
+        }
+
+        private _onTouchedGroupSwitchVersion(): void {
+            if (window?.open) {
+                const isTest = CommonConstants.GameVersion === Types.GameVersion.Legacy;
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    content : Lang.getFormattedText(LangTextType.F0065, Lang.getText(isTest ? LangTextType.B0854 : LangTextType.B0854)),
+                    callback: () => {
+                        window.open(isTest ? CommonConstants.TestVersionUrl : CommonConstants.LegacyVersionUrl);
                     },
                 });
             }
@@ -184,17 +200,23 @@ namespace TwnsLobbyPanel {
             Helpers.resetTween({
                 obj         : this._groupQq,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 66,
+                waitTime    : 50,
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
                 obj         : this._groupDiscord,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 132,
+                waitTime    : 100,
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
                 obj         : this._groupGithub,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 150,
+                endProps    : { alpha: 1, left: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupSwitchVersion,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
@@ -232,6 +254,22 @@ namespace TwnsLobbyPanel {
                 text    : CommonConstants.GithubUrl,
                 style   : { underline: true },
             }];
+
+            const labelTips8    = this._labelTips8;
+            const labelTips9    = this._labelTips9;
+            if (CommonConstants.GameVersion === Types.GameVersion.Legacy) {
+                labelTips8.text     = `${Lang.getText(LangTextType.B0854)}:`;
+                labelTips9.textFlow = [{
+                    text    : CommonConstants.TestVersionUrl,
+                    style   : { underline: true },
+                }];
+            } else {
+                labelTips8.text     = `${Lang.getText(LangTextType.B0853)}:`;
+                labelTips9.textFlow = [{
+                    text    : CommonConstants.LegacyVersionUrl,
+                    style   : { underline: true },
+                }];
+            }
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {

@@ -191,6 +191,7 @@ namespace TwnsNotifyType {
         MsgMeGetData,
         MsgMeSubmitMap,
         MsgMmAddWarRule,
+        MsgMmDeleteWarRule,
 
         MsgMmSetWarRuleAvailability,
         MsgMmReloadAllMaps,

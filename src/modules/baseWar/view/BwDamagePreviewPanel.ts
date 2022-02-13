@@ -89,6 +89,11 @@ namespace TwnsBwDamagePreviewPanel {
             const defenderArmorType     = defenderUnit.getArmorType();
             const defenderPlayer        = defenderUnit.getPlayer();
             const defenderPlayerIndex   = defenderUnit.getPlayerIndex();
+            const hasFog                = war.getFogMap().checkHasFogCurrently();
+            const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const canSeeHiddenInfo1     = (!hasFog) || (watcherTeamIndexes.has(attackerPlayer.getTeamIndex()));
+            const canSeeHiddenInfo2     = (!hasFog) || (watcherTeamIndexes.has(defenderPlayer.getTeamIndex()));
+
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageCalculatorPanel, {
                 data: {
                     configVersion   : war.getConfigVersion(),
@@ -110,8 +115,8 @@ namespace TwnsBwDamagePreviewPanel {
                         offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(attackerPlayerIndex),
                         upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(attackerPlayerIndex),
                         lowerLuck       : commonSettingsManager.getSettingsLuckLowerLimit(attackerPlayerIndex),
-                        fund            : attackerPlayer.getFund(),
-                        citiesCount     : allCities.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length,
+                        fund            : canSeeHiddenInfo1 ? attackerPlayer.getFund() : 0,
+                        citiesCount     : canSeeHiddenInfo1 ? allCities.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length : 0,
                     },
                     defenderData    : {
                         coId            : defenderPlayer.getCoId(),
@@ -130,8 +135,8 @@ namespace TwnsBwDamagePreviewPanel {
                         offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(defenderPlayerIndex),
                         upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(defenderPlayerIndex),
                         lowerLuck       : commonSettingsManager.getSettingsLuckLowerLimit(defenderPlayerIndex),
-                        fund            : defenderPlayer.getFund(),
-                        citiesCount     : allCities.filter(v => v.getPlayerIndex() === defenderPlayerIndex).length,
+                        fund            : canSeeHiddenInfo2 ? defenderPlayer.getFund() : 0,
+                        citiesCount     : canSeeHiddenInfo2 ? allCities.filter(v => v.getPlayerIndex() === defenderPlayerIndex).length : 0,
                     },
                 },
             });

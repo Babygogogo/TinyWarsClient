@@ -257,10 +257,33 @@ namespace TwnsCommonDamageCalculatorPanel {
                 unitTypeArray   : ConfigManager.getUnitTypesByCategory(this._calculatorData.configVersion, Types.UnitCategory.All),
                 playerIndex,
                 callback        : unitType => {
-                    playerData.unitType = unitType;
-                    this._updateView();
+                    if (playerData.unitType !== unitType) {
+                        playerData.unitType = unitType;
+
+                        this._reviseWeaponType();
+                        this._updateView();
+                    }
                 },
             });
+        }
+        private _reviseWeaponType(): void {
+            const calculatorData    = this._calculatorData;
+            const playerData1       = calculatorData.attackerData;
+            const playerData2       = calculatorData.defenderData;
+            this._doReviseWeaponType(playerData1, playerData2);
+            this._doReviseWeaponType(playerData2, playerData1);
+        }
+        private _doReviseWeaponType(playerData1: PlayerData, playerData2: PlayerData): void {
+            const configVersion = this._calculatorData.configVersion;
+            const armorType2    = ConfigManager.getUnitTemplateCfg(configVersion, playerData2.unitType).armorType;
+            const damageCfg     = ConfigManager.getDamageChartCfgs(configVersion, playerData1.unitType)[armorType2];
+            if (damageCfg[Types.WeaponType.Primary].damage != null) {
+                playerData1.unitWeaponType = Types.WeaponType.Primary;
+            } else if (damageCfg[Types.WeaponType.Secondary].damage != null) {
+                playerData1.unitWeaponType = Types.WeaponType.Secondary;
+            } else {
+                playerData1.unitWeaponType = null;
+            }
         }
 
         private _onTouchedBtnTileView1(): void {

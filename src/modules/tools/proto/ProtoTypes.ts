@@ -26847,6 +26847,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMmAddWarRule */
         MsgMmAddWarRule?: (NetMessage.IMsgMmAddWarRule|null);
 
+        /** MessageContainer MsgMmDeleteWarRule */
+        MsgMmDeleteWarRule?: (NetMessage.IMsgMmDeleteWarRule|null);
+
         /** MessageContainer MsgReplaySetRating */
         MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
 
@@ -27228,6 +27231,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMmAddWarRule. */
         public MsgMmAddWarRule?: (NetMessage.IMsgMmAddWarRule|null);
+
+        /** MessageContainer MsgMmDeleteWarRule. */
+        public MsgMmDeleteWarRule?: (NetMessage.IMsgMmDeleteWarRule|null);
 
         /** MessageContainer MsgReplaySetRating. */
         public MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
@@ -41649,6 +41655,303 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMmAddWarRule.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMmDeleteWarRule. */
+    interface IMsgMmDeleteWarRule {
+
+        /** MsgMmDeleteWarRule c */
+        c?: (NetMessage.MsgMmDeleteWarRule.IC|null);
+
+        /** MsgMmDeleteWarRule s */
+        s?: (NetMessage.MsgMmDeleteWarRule.IS|null);
+    }
+
+    /** Represents a MsgMmDeleteWarRule. */
+    class MsgMmDeleteWarRule implements IMsgMmDeleteWarRule {
+
+        /**
+         * Constructs a new MsgMmDeleteWarRule.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMmDeleteWarRule);
+
+        /** MsgMmDeleteWarRule c. */
+        public c?: (NetMessage.MsgMmDeleteWarRule.IC|null);
+
+        /** MsgMmDeleteWarRule s. */
+        public s?: (NetMessage.MsgMmDeleteWarRule.IS|null);
+
+        /**
+         * Creates a new MsgMmDeleteWarRule instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMmDeleteWarRule instance
+         */
+        public static create(properties?: NetMessage.IMsgMmDeleteWarRule): NetMessage.MsgMmDeleteWarRule;
+
+        /**
+         * Encodes the specified MsgMmDeleteWarRule message. Does not implicitly {@link NetMessage.MsgMmDeleteWarRule.verify|verify} messages.
+         * @param message MsgMmDeleteWarRule message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMmDeleteWarRule, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMmDeleteWarRule message, length delimited. Does not implicitly {@link NetMessage.MsgMmDeleteWarRule.verify|verify} messages.
+         * @param message MsgMmDeleteWarRule message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMmDeleteWarRule, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMmDeleteWarRule message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMmDeleteWarRule
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmDeleteWarRule;
+
+        /**
+         * Decodes a MsgMmDeleteWarRule message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMmDeleteWarRule
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmDeleteWarRule;
+
+        /**
+         * Verifies a MsgMmDeleteWarRule message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMmDeleteWarRule message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMmDeleteWarRule
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmDeleteWarRule;
+
+        /**
+         * Creates a plain object from a MsgMmDeleteWarRule message. Also converts values to other types if specified.
+         * @param message MsgMmDeleteWarRule
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMmDeleteWarRule, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMmDeleteWarRule to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMmDeleteWarRule {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C mapId */
+            mapId?: (number|null);
+
+            /** C ruleId */
+            ruleId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMmDeleteWarRule.IC);
+
+            /** C mapId. */
+            public mapId: number;
+
+            /** C ruleId. */
+            public ruleId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgMmDeleteWarRule.IC): NetMessage.MsgMmDeleteWarRule.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmDeleteWarRule.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMmDeleteWarRule.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmDeleteWarRule.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMmDeleteWarRule.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmDeleteWarRule.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmDeleteWarRule.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmDeleteWarRule.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMmDeleteWarRule.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S mapId */
+            mapId?: (number|null);
+
+            /** S ruleId */
+            ruleId?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMmDeleteWarRule.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S mapId. */
+            public mapId: number;
+
+            /** S ruleId. */
+            public ruleId: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMmDeleteWarRule.IS): NetMessage.MsgMmDeleteWarRule.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmDeleteWarRule.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMmDeleteWarRule.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmDeleteWarRule.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMmDeleteWarRule.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmDeleteWarRule.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmDeleteWarRule.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmDeleteWarRule.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMmDeleteWarRule.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

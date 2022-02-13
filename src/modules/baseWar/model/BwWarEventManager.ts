@@ -922,23 +922,18 @@ namespace TwnsBwWarEventManager {
                         }
                     }
 
-                    const tileData          = Helpers.deepClone(actTileData);
-                    tileData.gridIndex      = gridIndex;
-                    tileData.locationFlags  ??= tile.getLocationFlags();
-                    tileData.isHighlighted  ??= tile.getIsHighlighted();
-                    if (!actIsModifyTileBase) {
-                        tileData.baseType       = tile.getBaseType();
-                        tileData.baseShapeId    = tile.getBaseShapeId();
-                    }
-                    if (!actIsModifyTileDecorator) {
-                        tileData.decoratorType      = tile.getDecoratorType();
-                        tileData.decoratorShapeId   = tile.getDecoratorShapeId();
-                    }
-                    if (!actIsModifyTileObject) {
-                        tileData.objectType     = tile.getObjectType();
-                        tileData.objectShapeId  = tile.getObjectShapeId();
-                    }
-
+                    const tileData: ProtoTypes.WarSerialization.ISerialTile = {
+                        gridIndex,
+                        playerIndex         : actIsModifyTileObject ? actTileData.playerIndex : tile.getPlayerIndex(),
+                        baseType            : actBaseType,
+                        baseShapeId         : actIsModifyTileBase ? actTileData.baseShapeId : tile.getBaseShapeId(),
+                        decoratorType       : actIsModifyTileDecorator ? actTileData.decoratorType : tile.getDecoratorType(),
+                        decoratorShapeId    : actIsModifyTileDecorator ? actTileData.decoratorShapeId : tile.getDecoratorShapeId(),
+                        objectType          : actObjectType,
+                        objectShapeId       : actIsModifyTileObject ? actTileData.objectShapeId : tile.getObjectShapeId(),
+                        locationFlags       : tile.getLocationFlags(),
+                        isHighlighted       : tile.getIsHighlighted(),
+                    };
                     tile.init(tileData, configVersion);
                     tile.startRunning(war);
 

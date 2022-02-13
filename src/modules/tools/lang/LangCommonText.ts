@@ -1204,7 +1204,7 @@ namespace TwnsLangCommonText {
                 `您确定要提交此规则、作为本地图的全新规则吗？`,
                 ``,
                 `注：`,
-                `1. 此操作将直接生效且无法撤销，请务必检查各项设定，确保正确无误！`,
+                `1. 请务必检查各项设定，确保正确无误。`,
                 `2. 此操作不会影响地图已有的各个规则。`,
                 `3. 操作前请尽可能与地图原作者联系，使其清楚并同意新增此规则。`,
             ].join(`\n`),
@@ -1212,7 +1212,7 @@ namespace TwnsLangCommonText {
                 `Do you want to submit this rule as a brand new rule for this map?`,
                 ``,
                 `Note:`,
-                `1. This operation will take effect directly and cannot be undone. Please be sure to check all settings to ensure that they are correct.`,
+                `1. Please be sure to check all settings to ensure that they are correct.`,
                 `2. This operation will not affect the existing rules of the map.`,
                 `3. Before operation, please contact the original author of the map as much as possible to make him/her clear and agree to add this rule.`,
             ].join(`\n`),
@@ -1258,6 +1258,30 @@ namespace TwnsLangCommonText {
         [LangTextType.A0290]: [
             `值越大，则自动回放时每个动作之间的停顿时间越长。`,
             `The higher the value, the longer the pause time between each action during automatic playback.`,
+        ],
+        [LangTextType.A0291]: [
+            `必须保留最少一个规则`,
+            `There must be at least one rule.`,
+        ],
+        [LangTextType.A0292]: [
+            [
+                `您确定要删除此规则吗？`,
+                ``,
+                `注：`,
+                `1. 若此规则曾用于单机挑战模式，则相关排名、分数、回放将被清除。`,
+                `2. 多人模式相关数据不会变化，回放也会保留。`,
+            ].join(`\n`),
+            [
+                `Are you sure to delete this rule?`,
+                ``,
+                `Note:`,
+                `1. If this rule has been used in the war room mode, the relevant ranking, score and replay will be cleared.`,
+                `2. The data related to multiplayer mode will not change, and the replays will be kept.`,
+            ].join(`\n`),
+        ],
+        [LangTextType.A0293]: [
+            `已成功删除规则`,
+            `The rule is deleted successfully.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4658,6 +4682,14 @@ namespace TwnsLangCommonText {
         [LangTextType.B0852]: [
             `修改物体`,
             `Modify Object`,
+        ],
+        [LangTextType.B0853]: [
+            `Legacy版(毁灭之日)`,
+            `Legacy Version (AW DoR)`,
+        ],
+        [LangTextType.B0854]: [
+            `Test版(老三代平衡版)`,
+            `Test Version (AW 1/2/DS rebalanced)`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -32,6 +32,7 @@ namespace TwnsMmWarRulePanel {
 
         private readonly _btnSetAvailability!   : TwnsUiButton.UiButton;
         private readonly _btnSubmitRule!        : TwnsUiButton.UiButton;
+        private readonly _btnDeleteRule!        : TwnsUiButton.UiButton;
 
         private readonly _btnModifyRuleName!    : TwnsUiButton.UiButton;
         private readonly _labelRuleName!        : TwnsUiLabel.UiLabel;
@@ -70,12 +71,14 @@ namespace TwnsMmWarRulePanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgMmAddWarRule,             callback: this._onNotifyMsgMmAddWarRule },
+                { type: NotifyType.MsgMmDeleteWarRule,          callback: this._onNotifyMsgMmDeleteWarRule },
                 { type: NotifyType.MsgMmSetWarRuleAvailability, callback: this._onNotifyMsgMmSetWarRuleAvailability },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
                 { ui: this._btnSetAvailability,     callback: this._onTouchedBtnSetAvailability },
                 { ui: this._btnSubmitRule,          callback: this._onTouchedBtnSubmitRule },
+                { ui: this._btnDeleteRule,          callback: this._onTouchedBtnDeleteRule },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
                 { ui: this._btnModifyHasFog,        callback: this._onTouchedBtnModifyHasFog },
                 { ui: this._btnModifyWeather,       callback: this._onTouchedBtnModifyWeather },
@@ -137,6 +140,11 @@ namespace TwnsMmWarRulePanel {
             this._resetView();
         }
 
+        private _onNotifyMsgMmDeleteWarRule(): void {
+            FloatText.show(Lang.getText(LangTextType.A0293));
+            this._resetView();
+        }
+
         private _onNotifyMsgMmSetWarRuleAvailability(): void {
             FloatText.show(Lang.getText(LangTextType.A0287));
             this._resetView();
@@ -164,6 +172,24 @@ namespace TwnsMmWarRulePanel {
                     callback    : () => {
                         WarMapProxy.reqMmAddWarRule(Helpers.getExisted(this._getOpenData().mapRawData.mapId), rule);
                     },
+                });
+            }
+        }
+
+        private _onTouchedBtnDeleteRule(): void {
+            const ruleId = this._selectedRule?.ruleId;
+            if (ruleId != null) {
+                const mapRawData = this._getOpenData().mapRawData;
+                if ((mapRawData.warRuleArray ?? []).length <= 1) {
+                    FloatText.show(Lang.getText(LangTextType.A0291));
+                    return;
+                }
+
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    content : Lang.getText(LangTextType.A0292),
+                    callback: () => {
+                        WarMapProxy.reqMmDeleteWarRule(Helpers.getExisted(mapRawData.mapId), ruleId);
+                    }
                 });
             }
         }
@@ -278,6 +304,7 @@ namespace TwnsMmWarRulePanel {
         private _updateComponentsForLanguage(): void {
             this._btnSetAvailability.label      = Lang.getText(LangTextType.B0843);
             this._btnSubmitRule.label           = Lang.getText(LangTextType.B0824);
+            this._btnDeleteRule.label           = Lang.getText(LangTextType.B0220);
             this._labelMenuTitle.text           = Lang.getText(LangTextType.B0314);
             this._labelAvailability.text        = Lang.getText(LangTextType.B0406);
             this._labelPlayerList.text          = Lang.getText(LangTextType.B0407);

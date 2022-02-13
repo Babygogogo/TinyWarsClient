@@ -28,6 +28,8 @@ namespace CommonConstants {
 
     export const DiscordUrl                             = `https://discord.gg/jdtRpY9`;
     export const GithubUrl                              = `https://github.com/Babygogogo/TinyWarsClient`;
+    export const LegacyVersionUrl                       = `https://tinywars.online/game/legacy`;
+    export const TestVersionUrl                         = `https://tinywars.online/game/test`;
 
     export const ErrorTextForLang                       = `LangErr`;
     export const ErrorTextForUndefined                  = `UndefErr`;

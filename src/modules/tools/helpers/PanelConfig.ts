@@ -139,8 +139,6 @@ namespace TwnsPanelConfig {
         MfwMyWarListPanel                   : PanelConfig<TwnsMfwMyWarListPanel.OpenData>;
 
         MmAcceptMapPanel                    : PanelConfig<TwnsMmAcceptMapPanel.OpenData>;
-        MmAddRuleMapListPanel               : PanelConfig<TwnsMmAddRuleMapListPanel.OpenData>;
-        MmAddRuleSearchPanel                : PanelConfig<TwnsMmAddRuleSearchPanel.OpenData>;
         MmAvailabilityListPanel             : PanelConfig<TwnsMmAvailabilityListPanel.OpenData>;
         MmAvailabilitySearchPanel           : PanelConfig<TwnsMmAvailabilitySearchPanel.OpenData>;
         MmCommandPanel                      : PanelConfig<TwnsMmCommandPanel.OpenData>;
@@ -1007,19 +1005,6 @@ namespace TwnsPanelConfig {
             MmAcceptMapPanel: {
                 cls         : TwnsMmAcceptMapPanel?.MmAcceptMapPanel,
                 skinName    : `resource/skins/mapManagement/MmAcceptMapPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
-            MmAddRuleMapListPanel: {
-                cls         : TwnsMmAddRuleMapListPanel?.MmAddRuleMapListPanel,
-                skinName    : `resource/skins/mapManagement/MmAddRuleMapListPanel.exml`,
-                layer       : LayerType.Scene,
-                isExclusive : true,
-            },
-
-            MmAddRuleSearchPanel: {
-                cls         : TwnsMmAddRuleSearchPanel?.MmAddRuleSearchPanel,
-                skinName    : `resource/skins/mapManagement/MmAddRuleSearchPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

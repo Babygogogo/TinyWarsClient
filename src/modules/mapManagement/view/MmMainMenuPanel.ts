@@ -93,13 +93,6 @@ namespace TwnsMmMainMenuPanel {
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.MmTagListPanel, null);
                     },
                 },
-                {
-                    name    : Lang.getText(LangTextType.B0823),
-                    callback: (): void => {
-                        this.close();
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MmAddRuleMapListPanel, null);
-                    },
-                },
             ];
 
             return dataList;

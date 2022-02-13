@@ -139,8 +139,6 @@
 		"resource/skins/mapEditor/MeWarMenuPanel.exml",
 		"resource/skins/mapEditor/MeWarRulePanel.exml",
 		"resource/skins/mapManagement/MmAcceptMapPanel.exml",
-		"resource/skins/mapManagement/MmAddRuleMapListPanel.exml",
-		"resource/skins/mapManagement/MmAddRuleSearchPanel.exml",
 		"resource/skins/mapManagement/MmAvailabilityListPanel.exml",
 		"resource/skins/mapManagement/MmAvailabilitySearchPanel.exml",
 		"resource/skins/mapManagement/MmCommandPanel.exml",

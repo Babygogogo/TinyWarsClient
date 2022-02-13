@@ -119,6 +119,13 @@ namespace WarMapModel {
         const warRule   = Helpers.getExisted(data.warRule);
         Helpers.getExisted((await getRawData(mapId))?.warRuleArray).push(warRule);
     }
+    export async function updateOnDeleteWarRule(data: ProtoTypes.NetMessage.MsgMmDeleteWarRule.IS): Promise<void> {
+        const mapId         = Helpers.getExisted(data.mapId);
+        const ruleId        = Helpers.getExisted(data.ruleId);
+        const warRuleArray  = Helpers.getExisted((await getRawData(mapId))?.warRuleArray);
+        const index         = warRuleArray.findIndex(v => v.ruleId === ruleId);
+        (index >= 0) && (warRuleArray.splice(index, 1));
+    }
     export async function updateOnSetWarRuleAvailability(data: ProtoTypes.NetMessage.MsgMmSetWarRuleAvailability.IS): Promise<void> {
         const warRule               = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.warRuleArray?.find(v => v.ruleId === data.ruleId));
         warRule.ruleAvailability    = data.availability;
