@@ -84,7 +84,7 @@ namespace WarEventHelper {
         ActionType.AddUnit,
         ActionType.SetUnitState,
 
-        ActionType.SetTileState,
+        ActionType.SetTileType,
 
         ActionType.SetWeather,
         ActionType.SetForceFogCode,
@@ -520,7 +520,7 @@ namespace WarEventHelper {
             || (checkIsValidWeaSetPlayerState(action.WeaSetPlayerState, playersCountUnneutral))
             || (checkIsValidWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral))
             || (checkIsValidWeaSetUnitState(action.WeaSetUnitState, mapSize, playersCountUnneutral))
-            || (checkIsValidWeaSetTileState(action.WeaSetTileState, mapSize, playersCountUnneutral));
+            || (checkIsValidWeaSetTileType(action.WeaSetTileType, mapSize, playersCountUnneutral));
         }
     function checkIsValidWeaAddUnit({ action, configVersion, mapSize, playersCountUnneutral }: {
         action                  : Types.Undefinable<ProtoTypes.WarEvent.IWeaAddUnit>;
@@ -1045,7 +1045,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetTileState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetTileState>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetTileType(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetTileType>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -2232,7 +2232,7 @@ namespace WarEventHelper {
             || (getDescForWeaSetPlayerState(action.WeaSetPlayerState))
             || (getDescForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy))
             || (getDescForWeaSetUnitState(action.WeaSetUnitState))
-            || (getDescForWeaSetTileState(action.WeaSetTileState));
+            || (getDescForWeaSetTileType(action.WeaSetTileType));
     }
     function getDescForWeaAddUnit(data: Types.Undefinable<WarEvent.IWeaAddUnit>): string | null {
         if (!data) {
@@ -2600,7 +2600,7 @@ namespace WarEventHelper {
             textArrayForSubConditions.length ? textArrayForSubConditions.map(v => `${Lang.getText(LangTextType.B0783)}${v}`).join(``) : ``,
         )} ${textArrayForModifiers.join(` `)}`;
     }
-    function getDescForWeaSetTileState(data: Types.Undefinable<WarEvent.IWeaSetTileState>): string | null {
+    function getDescForWeaSetTileType(data: Types.Undefinable<WarEvent.IWeaSetTileType>): string | null {
         if (data == null) {
             return null;
         }
@@ -3200,7 +3200,7 @@ namespace WarEventHelper {
         else if (action.WeaSetPlayerState)                  { return getErrorTipForWeaSetPlayerState(action.WeaSetPlayerState, playersCountUnneutral); }
         else if (action.WeaSetPlayerCoEnergy)               { return getErrorTipForWeaSetPlayerCoEnergy(action.WeaSetPlayerCoEnergy, playersCountUnneutral); }
         else if (action.WeaSetUnitState)                    { return getErrorTipForWeaSetUnitState(action.WeaSetUnitState, war); }
-        else if (action.WeaSetTileState)                    { return getErrorTipForWeaSetTileState(action.WeaSetTileState, war); }
+        else if (action.WeaSetTileType)                     { return getErrorTipForWeaSetTileType(action.WeaSetTileType, war); }
         else {
             return Lang.getText(LangTextType.A0177);
         }
@@ -3635,7 +3635,7 @@ namespace WarEventHelper {
 
         return null;
     }
-    function getErrorTipForWeaSetTileState(data: WarEvent.IWeaSetTileState, war: BwWar): string | null {
+    function getErrorTipForWeaSetTileType(data: WarEvent.IWeaSetTileType, war: BwWar): string | null {
         {
             const locationIdArray = data.conLocationIdArray;
             if ((locationIdArray) && (!ConfigManager.checkIsValidLocationIdSubset(locationIdArray))) {
@@ -4243,7 +4243,7 @@ namespace WarEventHelper {
         else if (action.WeaSetPlayerState)                  { return ActionType.SetPlayerState; }
         else if (action.WeaSetPlayerCoEnergy)               { return ActionType.SetPlayerCoEnergy; }
         else if (action.WeaSetUnitState)                    { return ActionType.SetUnitState; }
-        else if (action.WeaSetTileState)                    { return ActionType.SetTileState; }
+        else if (action.WeaSetTileType)                     { return ActionType.SetTileType; }
         else                                                { return null; }
     }
     export function resetAction(action: IWarEventAction, actionType: ActionType): void {
@@ -4365,8 +4365,8 @@ namespace WarEventHelper {
                 actPromotionDeltaValue              : 0,
                 actPromotionMultiplierPercentage    : 100,
             };
-        } else if (actionType === ActionType.SetTileState) {
-            action.WeaSetTileState = {
+        } else if (actionType === ActionType.SetTileType) {
+            action.WeaSetTileType = {
                 actTileData     : {
                     gridIndex   : null,
                     playerIndex : CommonConstants.WarNeutralPlayerIndex,
@@ -4423,7 +4423,7 @@ namespace WarEventHelper {
 
         else if (action.WeaSetUnitState)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel30, { war, fullData, action }); }
 
-        else if (action.WeaSetTileState)                    { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel40, { war, fullData, action }); }
+        else if (action.WeaSetTileType)                     { TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionModifyPanel40, { war, fullData, action }); }
 
         else {
             throw Helpers.newError(`Invalid action.`, ClientErrorCode.WarEventHelper_OpenActionModifyPanel_00);

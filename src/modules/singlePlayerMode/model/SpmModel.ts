@@ -9,12 +9,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace SpmModel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import LangTextType         = TwnsLangTextType.LangTextType;
-    import NetMessage           = ProtoTypes.NetMessage;
-    import SpmWarSaveSlotData   = Types.SpmWarSaveSlotData;
-    import ISpmRankInfoForRule  = NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule;
-    import MsgSpmGetRankListIs  = NetMessage.MsgSpmGetRankList.IS;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NetMessage               = ProtoTypes.NetMessage;
+    import SpmWarSaveSlotData       = Types.SpmWarSaveSlotData;
+    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import ISpmRankInfoForRule      = NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule;
+    import MsgSpmGetRankListIs      = NetMessage.MsgSpmGetRankList.IS;
+    import MsgSpmGetReplayDataIs    = NetMessage.MsgSpmGetReplayData.IS;
 
     export function init(): void {
         Notify.addEventListeners([
@@ -208,6 +210,125 @@ namespace SpmModel {
 
     export function updateOnMsgSpmGetRankList(data: MsgSpmGetRankListIs): void {
         _rankDataDict.set(Helpers.getExisted(data.mapId), data.infoArray ?? []);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for replay data.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    const _replayDataDict       = new Map<number, ISerialWar | null>();
+    const _replayDataRequests   = new Map<number, ((info: MsgSpmGetReplayDataIs) => void)[]>();
+
+    export function getReplayData(rankId: number): Promise<ISerialWar | null> {
+        if (_replayDataDict.has(rankId)) {
+            return new Promise<ISerialWar | null>((resolve) => resolve(_replayDataDict.get(rankId) ?? null));
+        }
+
+        if (_replayDataRequests.has(rankId)) {
+            return new Promise<ISerialWar | null>((resolve) => {
+                Helpers.getExisted(_replayDataRequests.get(rankId)).push(() => {
+                    resolve(_replayDataDict.get(rankId) ?? null);
+                });
+            });
+        }
+
+        new Promise<void>((resolve) => {
+            const callbackOnSucceed = (e: egret.Event): void => {
+                const data = e.data as MsgSpmGetReplayDataIs;
+                if (data.rankId === rankId) {
+                    Notify.removeEventListener(NotifyType.MsgSpmGetReplayData,          callbackOnSucceed);
+                    Notify.removeEventListener(NotifyType.MsgSpmGetReplayDataFailed,    callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_replayDataRequests.get(rankId))) {
+                        cb(data);
+                    }
+                    _replayDataRequests.delete(rankId);
+
+                    resolve();
+                }
+            };
+            const callbackOnFailed = (e: egret.Event): void => {
+                const data = e.data as MsgSpmGetReplayDataIs;
+                if (data.rankId === rankId) {
+                    Notify.removeEventListener(NotifyType.MsgSpmGetReplayData,          callbackOnSucceed);
+                    Notify.removeEventListener(NotifyType.MsgSpmGetReplayDataFailed,    callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_replayDataRequests.get(rankId))) {
+                        cb(data);
+                    }
+                    _replayDataRequests.delete(rankId);
+
+                    resolve();
+                }
+            };
+
+            Notify.addEventListener(NotifyType.MsgSpmGetReplayData,         callbackOnSucceed);
+            Notify.addEventListener(NotifyType.MsgSpmGetReplayDataFailed,   callbackOnFailed);
+
+            SpmProxy.reqSpmGetReplayData(rankId);
+        });
+
+        return new Promise((resolve) => {
+            _replayDataRequests.set(rankId, [() => {
+                resolve(_replayDataDict.get(rankId) ?? null);
+            }]);
+        });
+    }
+    async function decodeAndReviseReplayData(encodedWar: Types.Undefinable<Uint8Array>): Promise<ISerialWar | null> {
+        if (encodedWar == null) {
+            return null;
+        }
+
+        const warData = ProtoManager.decodeAsSerialWar(encodedWar);
+        if (warData.field == null) {
+            warData.field = {
+                fogMap  : {
+                    forceFogCode: Types.ForceFogCode.None,
+                },
+            };
+        }
+
+        if (warData.turnManager == null) {
+            warData.turnManager = {
+                turnIndex       : CommonConstants.WarFirstTurnIndex,
+                turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
+                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                enterTurnTime   : 0,
+            };
+        }
+
+        const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
+        if (settingsForCommon.warRule == null) {
+            const mapRawData = await WarMapModel.getRawData(Helpers.getExisted(warData.settingsForSrw?.mapId));
+            if (mapRawData == null) {
+                return null;
+            }
+
+            const ruleId    = Helpers.getExisted(settingsForCommon.presetWarRuleId);
+            const warRule   = mapRawData.warRuleArray?.find(v => v.ruleId === ruleId);
+            if (warRule == null) {
+                return null;
+            }
+
+            settingsForCommon.warRule = Helpers.deepClone(warRule);
+        }
+
+        for (const playerData of warData.playerManager?.players ?? []) {
+            playerData.fund                 ??= 0;
+            playerData.hasVotedForDraw      ??= false;
+            playerData.aliveState           ??= Types.PlayerAliveState.Alive;
+            playerData.restTimeToBoot       ??= 0;
+            playerData.coIsDestroyedInTurn  ??= false;
+            playerData.coUsingSkillType     ??= Types.CoSkillType.Passive;
+        }
+
+        return warData;
+    }
+
+    export async function updateOnMsgSpmGetReplayData(data: MsgSpmGetReplayDataIs): Promise<void> {
+        _replayDataDict.set(
+            Helpers.getExisted(data.rankId),
+            await decodeAndReviseReplayData(data.encodedWar),
+        );
     }
 }
 

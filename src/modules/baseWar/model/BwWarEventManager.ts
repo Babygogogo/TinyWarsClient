@@ -235,7 +235,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithExtraData(action.WeaSetPlayerState, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithExtraData(action.WeaSetUnitState, isFastExecute); }
-            else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithExtraData(action.WeaSetTileState, isFastExecute); }
+            else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithExtraData(action.WeaSetTileType, isFastExecute); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -259,7 +259,7 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithoutExtraData(action.WeaSetPlayerState, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithoutExtraData(action.WeaSetUnitState, isFastExecute); }
-            else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithoutExtraData(action.WeaSetTileState, isFastExecute); }
+            else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithoutExtraData(action.WeaSetTileType, isFastExecute); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -880,22 +880,22 @@ namespace TwnsBwWarEventManager {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        private async _callActionSetTileStateWithExtraData(action: WarEvent.IWeaSetTileState, isFastExecute: boolean): Promise<void> {
+        private async _callActionSetTileTypeWithExtraData(action: WarEvent.IWeaSetTileType, isFastExecute: boolean): Promise<void> {
             // nothing to do
         }
-        private async _callActionSetTileStateWithoutExtraData(action: WarEvent.IWeaSetTileState, isFastExecute: boolean): Promise<void> {
+        private async _callActionSetTileTypeWithoutExtraData(action: WarEvent.IWeaSetTileType, isFastExecute: boolean): Promise<void> {
             const war                       = this._getWar();
             const configVersion             = war.getConfigVersion();
-            const actTileData               = Helpers.getExisted(action.actTileData, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00);
-            const rawActBaseType            = Helpers.getExisted(actTileData.baseType, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_01);
-            const rawActObjectType          = Helpers.getExisted(actTileData.objectType, ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_02);
+            const actTileData               = Helpers.getExisted(action.actTileData, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_00);
+            const rawActBaseType            = Helpers.getExisted(actTileData.baseType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_01);
+            const rawActObjectType          = Helpers.getExisted(actTileData.objectType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_02);
             const actDestroyUnit            = action.actDestroyUnit;
             const actIsModifyTileBase       = (action.actIsModifyTileBase) || (action.actIsModifyTileBase == null);
             const actIsModifyTileDecorator  = (action.actIsModifyTileDecorator) || (action.actIsModifyTileDecorator == null);
             const actIsModifyTileObject     = (action.actIsModifyTileObject) || (action.actIsModifyTileObject == null);
             const conIsHighlighted          = action.conIsHighlighted;
             const conLocationIdArray        = action.conLocationIdArray ?? [];
-            const conGridIndexArray         = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_03)) ?? [];
+            const conGridIndexArray         = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_03)) ?? [];
             const unitMap                   = war.getUnitMap();
             const tileMap                   = war.getTileMap();
             const mapSize                   = tileMap.getMapSize();

@@ -2588,8 +2588,8 @@ namespace TwnsLangCommonText {
             `Accounts`,
         ],
         [LangTextType.B0329]: [
-            `在线总时长`,
-            `Online Time`,
+            `玩家在线总时长`,
+            `Users' Online Time`,
         ],
         [LangTextType.B0330]: [
             `新增账号数`,
@@ -4572,8 +4572,8 @@ namespace TwnsLangCommonText {
             `Submit as a New Rule`,
         ],
         [LangTextType.B0825]: [
-            `设置地形属性`,
-            `Set Terrains' State`,
+            `设置地形类型`,
+            `Set Terrains' Type`,
         ],
         [LangTextType.B0826]: [
             `摧毁部队`,

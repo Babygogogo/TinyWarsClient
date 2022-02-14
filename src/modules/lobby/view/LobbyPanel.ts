@@ -103,7 +103,7 @@ namespace TwnsLobbyPanel {
 
         private _onTouchedGroupSwitchVersion(): void {
             if (window?.open) {
-                const isTest = CommonConstants.GameVersion === Types.GameVersion.Legacy;
+                const isTest = (CommonConstants.GameVersion as any) === Types.GameVersion.Legacy;
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getFormattedText(LangTextType.F0065, Lang.getText(isTest ? LangTextType.B0854 : LangTextType.B0854)),
                     callback: () => {
@@ -257,7 +257,7 @@ namespace TwnsLobbyPanel {
 
             const labelTips8    = this._labelTips8;
             const labelTips9    = this._labelTips9;
-            if (CommonConstants.GameVersion === Types.GameVersion.Legacy) {
+            if ((CommonConstants.GameVersion as any) === Types.GameVersion.Legacy) {
                 labelTips8.text     = `${Lang.getText(LangTextType.B0854)}:`;
                 labelTips9.textFlow = [{
                     text    : CommonConstants.TestVersionUrl,

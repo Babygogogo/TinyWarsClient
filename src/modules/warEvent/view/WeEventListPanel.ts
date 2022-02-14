@@ -72,10 +72,13 @@ namespace TwnsWeEventListPanel {
             const fullData  = Helpers.getExisted(this._getOpenData().war.getWarEventManager().getWarEventFullData());
             const eventId   = WarEventHelper.addEvent(fullData);
             if (eventId != null) {
-                WarEventHelper.createAndReplaceSubNodeInEvent({
-                    fullData,
-                    eventId,
-                });
+                const subNodeId = WarEventHelper.createAndReplaceSubNodeInEvent({ fullData, eventId });
+                if (subNodeId != null) {
+                    WarEventHelper.addDefaultCondition(fullData, subNodeId);
+                }
+
+                WarEventHelper.addDefaultAction(fullData, eventId);
+
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }

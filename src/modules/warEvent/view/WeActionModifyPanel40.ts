@@ -355,8 +355,8 @@ namespace TwnsWeActionModifyPanel40 {
         }
 
 
-        private _getAction(): ProtoTypes.WarEvent.IWeaSetTileState {
-            return Helpers.getExisted(this._getOpenData().action.WeaSetTileState);
+        private _getAction(): ProtoTypes.WarEvent.IWeaSetTileType {
+            return Helpers.getExisted(this._getOpenData().action.WeaSetTileType);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {
             this._imgInnerTouchMask.visible = isEnabled;

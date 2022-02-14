@@ -30,6 +30,7 @@ namespace SpmProxy {
             { msgCode: NetMessageCodes.MsgSpmSaveSrw,                       callback: _onMsgSpmSaveSrw },
             { msgCode: NetMessageCodes.MsgSpmGetRankList,                   callback: _onMsgSpmGetRankList },
             { msgCode: NetMessageCodes.MsgSpmValidateSrw,                   callback: _onMsgSpmValidateSrw },
+            { msgCode: NetMessageCodes.MsgSpmGetReplayData,                 callback: _onMsgSpmGetReplayData },
         ], null);
     }
 
@@ -187,6 +188,23 @@ namespace SpmProxy {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmValidateSrw.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgSpmValidateSrw, data);
+        }
+    }
+
+    export function reqSpmGetReplayData(rankId: number): void {
+        NetManager.send({
+            MsgSpmGetReplayData: { c: {
+                rankId,
+            } },
+        });
+    }
+    async function _onMsgSpmGetReplayData(e: egret.Event): Promise<void> {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmGetReplayData.IS;
+        if (data.errorCode) {
+            Notify.dispatch(NotifyType.MsgSpmGetReplayDataFailed);
+        } else {
+            await SpmModel.updateOnMsgSpmGetReplayData(data);
+            Notify.dispatch(NotifyType.MsgSpmGetReplayData, data);
         }
     }
 }

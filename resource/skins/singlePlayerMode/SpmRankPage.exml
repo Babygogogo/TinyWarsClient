@@ -6,9 +6,9 @@
         <TwnsUiScrollList:UiScrollList id="_listRule" left="0" right="20" top="0" bottom="20">
             <e:List>
                 <e:itemRendererSkinName>
-                    <e:Skin width="280" height="320" currentState="up" states="up,down">
+                    <e:Skin width="300" height="320" currentState="up" states="up,down">
                         <e:Group left="0" right="0" top="0" bottom="0">
-                            <e:Group horizontalCenter="0" top="0" bottom="0">
+                            <e:Group top="0" bottom="0" left="0" right="0">
                                 <e:Group x="20" height="30" y="0">
                                     <TwnsUiLabel:UiLabel id="_labelMyScoreTitle" text="明战" textColor="0xFFFFFF"
                                                          size="14" x="0" y="0" bold="true" />
@@ -18,7 +18,7 @@
                                         <e:HorizontalLayout verticalAlign="middle" gap="10" />
                                     </e:layout>
                                 </e:Group>
-                                <e:Group y="30" left="0" right="0" height="26" width="280">
+                                <e:Group y="30" left="0" right="0" height="26">
                                     <TwnsUiImage:UiImage scale9Grid="1,1,2,2" source="uncompressedColorBlue0000"
                                                          left="0" right="0" top="0" bottom="0" />
                                     <TwnsUiLabel:UiLabel id="_labelStdTitle" text="明战" textColor="0xFFFFFF" size="14"
@@ -28,11 +28,10 @@
                                     <TwnsUiLabel:UiLabel id="_labelStdScore" text="明战" textColor="0xFFFFFF" size="14"
                                                          bold="true" x="230" verticalCenter="0" y="16" />
                                 </e:Group>
-                                <TwnsUiScrollList:UiScrollList id="_listStd" horizontalCenter="0" top="56" bottom="0"
-                                                               width="280">
+                                <TwnsUiScrollList:UiScrollList id="_listStd" top="56" bottom="0" left="0" right="0">
                                     <e:List>
                                         <e:itemRendererSkinName>
-                                            <e:Skin width="280" height="26">
+                                            <e:Skin width="300" height="26">
                                                 <e:Group left="0" right="0" top="0" bottom="0">
                                                     <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0000"
                                                                          left="0" right="0" top="0" bottom="0"
@@ -44,13 +43,18 @@
                                                                          textColor="0xFFFFFF" size="14"
                                                                          maxTextWidth="170" verticalCenter="0" x="60"
                                                                          y="16" />
-                                                    <TwnsUiLabel:UiLabel id="_labelScore" text="9999"
-                                                                         textColor="0xFFFFFF" size="14"
-                                                                         maxTextWidth="170" verticalCenter="0" x="230"
-                                                                         y="26" />
+                                                    <e:Group id="_groupScore" left="230" right="0" top="0" bottom="0">
+                                                        <TwnsUiLabel:UiLabel id="_labelScore" text="9999"
+                                                                             textColor="0xFFFFFF" size="14"
+                                                                             maxTextWidth="170" x="0" verticalCenter="0" />
+                                                        <TwnsUiImage:UiImage id="_imgReplay" source="icon_replay_001"
+                                                                             width="20" height="20" x="46"
+                                                                             verticalCenter="0" />
+                                                    </e:Group>
                                                     <TwnsUiImage:UiImage id="_imgBottomLine"
                                                                          source="uncompressedColorBlue0000" left="0"
-                                                                         right="0" height="1" bottom="0" />
+                                                                         right="0" height="1" bottom="0"
+                                                                         smoothing="false" />
                                                 </e:Group>
                                             </e:Skin>
                                         </e:itemRendererSkinName>

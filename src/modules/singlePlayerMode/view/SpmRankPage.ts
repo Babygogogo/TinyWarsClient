@@ -120,17 +120,26 @@ namespace TwnsSpmRankPage {
         }
 
         private async _updateComponentsForStd(): Promise<void> {
-            const data      = this._getData();
-            const ruleId    = data.ruleId;
-            const mapId     = data.mapId;
-            const dataArray : DataForUserRenderer[] = [];
+            const data          = this._getData();
+            const ruleId        = data.ruleId;
+            const mapId         = data.mapId;
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const selfInfo      = UserModel.getSelfInfo()?.userComplexInfo;
+            const selfScore     = selfInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore ?? Number.MIN_SAFE_INTEGER;
+            const selfPrivilege = selfInfo?.userPrivilege;
+            const hasPrivilege  = selfPrivilege?.isAdmin ?? selfPrivilege?.isMapCommittee ?? false;
+            const dataArray     : DataForUserRenderer[] = [];
+
             for (const rankData of (await SpmModel.getRankData(mapId)).find(v => v.ruleId === ruleId)?.infoArray ?? []) {
+                const score = Helpers.getExisted(rankData.score);
                 dataArray.push({
-                    index   : 0,
-                    rank    : 0,
-                    userId  : Helpers.getExisted(rankData.userId),
-                    score   : Helpers.getExisted(rankData.score),
-                    isLast  : false,
+                    index       : 0,
+                    rankId      : Helpers.getExisted(rankData.rankId),
+                    rank        : 0,
+                    userId      : Helpers.getExisted(rankData.userId),
+                    score,
+                    canReplay   : (hasPrivilege) || (selfScore >= score),
+                    isLast      : false,
                 });
             }
 
@@ -154,7 +163,6 @@ namespace TwnsSpmRankPage {
             this._labelStdNoData.visible    = !length;
             this._listStd.bindData(dataArray);
 
-            const configVersion = ConfigManager.getLatestConfigVersion();
             const myScore       = UserModel.getSelfInfo()?.userComplexInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore;
             const labelMyScore  = this._labelMyScore;
             if (myScore == null) {
@@ -167,11 +175,13 @@ namespace TwnsSpmRankPage {
     }
 
     type DataForUserRenderer = {
-        index   : number;
-        rank    : number;
-        userId  : number;
-        score   : number;
-        isLast  : boolean;
+        index       : number;
+        rankId      : number;
+        rank        : number;
+        userId      : number;
+        score       : number;
+        canReplay   : boolean;
+        isLast      : boolean;
     };
     class UserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUserRenderer> {
         private readonly _group!            : eui.Group;
@@ -179,11 +189,15 @@ namespace TwnsSpmRankPage {
         private readonly _imgBottomLine!    : TwnsUiImage.UiImage;
         private readonly _labelIndex!       : TwnsUiLabel.UiLabel;
         private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
+
+        private readonly _groupScore!       : eui.Group;
         private readonly _labelScore!       : TwnsUiLabel.UiLabel;
+        private readonly _imgReplay!        : TwnsUiImage.UiImage;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._imgBg, callback: this._onTouchedImgBg },
+                { ui: this._imgBg,          callback: this._onTouchedImgBg },
+                { ui: this._groupScore,     callback: this._onTouchedGroupScore },
             ]);
             this._imgBg.touchEnabled = true;
         }
@@ -196,6 +210,15 @@ namespace TwnsSpmRankPage {
             const data = this.data;
             if (data) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId: data.userId });
+            }
+        }
+        private async _onTouchedGroupScore(): Promise<void> {
+            const data = this._getData();
+            if (!data.canReplay) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.UserPanel, { userId: data.userId });
+            } else {
+                const replayData = await SpmModel.getReplayData(data.rankId);
+                (replayData) && (FlowManager.gotoReplayWar(replayData, -1));
             }
         }
 
@@ -211,9 +234,11 @@ namespace TwnsSpmRankPage {
             this._labelScore.text       = `${data.score}`;
             this._imgBg.alpha           = data.index % 2 == 1 ? 0.2 : 0.5;
             this._imgBottomLine.visible = data.isLast;
+            this._imgReplay.visible     = data.canReplay;
 
             const userInfo = Helpers.getExisted(await UserModel.getUserPublicInfo(data.userId));
             labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
+
         }
     }
 }

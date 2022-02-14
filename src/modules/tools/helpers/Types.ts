@@ -773,7 +773,7 @@ namespace Types {
 
         SetUnitState,
 
-        SetTileState,
+        SetTileType,
     }
 
     // eslint-disable-next-line no-shadow

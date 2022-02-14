@@ -8976,133 +8976,133 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WeaSetTileState. */
-    interface IWeaSetTileState {
+    /** Properties of a WeaSetTileType. */
+    interface IWeaSetTileType {
 
-        /** WeaSetTileState conLocationIdArray */
+        /** WeaSetTileType conLocationIdArray */
         conLocationIdArray?: (number[]|null);
 
-        /** WeaSetTileState conGridIndexArray */
+        /** WeaSetTileType conGridIndexArray */
         conGridIndexArray?: (Structure.IGridIndex[]|null);
 
-        /** WeaSetTileState conIsHighlighted */
+        /** WeaSetTileType conIsHighlighted */
         conIsHighlighted?: (boolean|null);
 
-        /** WeaSetTileState actTileData */
+        /** WeaSetTileType actTileData */
         actTileData?: (WarSerialization.ISerialTile|null);
 
-        /** WeaSetTileState actDestroyUnit */
+        /** WeaSetTileType actDestroyUnit */
         actDestroyUnit?: (boolean|null);
 
-        /** WeaSetTileState actIsModifyTileBase */
+        /** WeaSetTileType actIsModifyTileBase */
         actIsModifyTileBase?: (boolean|null);
 
-        /** WeaSetTileState actIsModifyTileDecorator */
+        /** WeaSetTileType actIsModifyTileDecorator */
         actIsModifyTileDecorator?: (boolean|null);
 
-        /** WeaSetTileState actIsModifyTileObject */
+        /** WeaSetTileType actIsModifyTileObject */
         actIsModifyTileObject?: (boolean|null);
     }
 
-    /** Represents a WeaSetTileState. */
-    class WeaSetTileState implements IWeaSetTileState {
+    /** Represents a WeaSetTileType. */
+    class WeaSetTileType implements IWeaSetTileType {
 
         /**
-         * Constructs a new WeaSetTileState.
+         * Constructs a new WeaSetTileType.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWeaSetTileState);
+        constructor(properties?: WarEvent.IWeaSetTileType);
 
-        /** WeaSetTileState conLocationIdArray. */
+        /** WeaSetTileType conLocationIdArray. */
         public conLocationIdArray: number[];
 
-        /** WeaSetTileState conGridIndexArray. */
+        /** WeaSetTileType conGridIndexArray. */
         public conGridIndexArray: Structure.IGridIndex[];
 
-        /** WeaSetTileState conIsHighlighted. */
+        /** WeaSetTileType conIsHighlighted. */
         public conIsHighlighted: boolean;
 
-        /** WeaSetTileState actTileData. */
+        /** WeaSetTileType actTileData. */
         public actTileData?: (WarSerialization.ISerialTile|null);
 
-        /** WeaSetTileState actDestroyUnit. */
+        /** WeaSetTileType actDestroyUnit. */
         public actDestroyUnit: boolean;
 
-        /** WeaSetTileState actIsModifyTileBase. */
+        /** WeaSetTileType actIsModifyTileBase. */
         public actIsModifyTileBase: boolean;
 
-        /** WeaSetTileState actIsModifyTileDecorator. */
+        /** WeaSetTileType actIsModifyTileDecorator. */
         public actIsModifyTileDecorator: boolean;
 
-        /** WeaSetTileState actIsModifyTileObject. */
+        /** WeaSetTileType actIsModifyTileObject. */
         public actIsModifyTileObject: boolean;
 
         /**
-         * Creates a new WeaSetTileState instance using the specified properties.
+         * Creates a new WeaSetTileType instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WeaSetTileState instance
+         * @returns WeaSetTileType instance
          */
-        public static create(properties?: WarEvent.IWeaSetTileState): WarEvent.WeaSetTileState;
+        public static create(properties?: WarEvent.IWeaSetTileType): WarEvent.WeaSetTileType;
 
         /**
-         * Encodes the specified WeaSetTileState message. Does not implicitly {@link WarEvent.WeaSetTileState.verify|verify} messages.
-         * @param message WeaSetTileState message or plain object to encode
+         * Encodes the specified WeaSetTileType message. Does not implicitly {@link WarEvent.WeaSetTileType.verify|verify} messages.
+         * @param message WeaSetTileType message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWeaSetTileState, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWeaSetTileType, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WeaSetTileState message, length delimited. Does not implicitly {@link WarEvent.WeaSetTileState.verify|verify} messages.
-         * @param message WeaSetTileState message or plain object to encode
+         * Encodes the specified WeaSetTileType message, length delimited. Does not implicitly {@link WarEvent.WeaSetTileType.verify|verify} messages.
+         * @param message WeaSetTileType message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWeaSetTileState, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWeaSetTileType, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WeaSetTileState message from the specified reader or buffer.
+         * Decodes a WeaSetTileType message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WeaSetTileState
+         * @returns WeaSetTileType
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetTileState;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetTileType;
 
         /**
-         * Decodes a WeaSetTileState message from the specified reader or buffer, length delimited.
+         * Decodes a WeaSetTileType message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WeaSetTileState
+         * @returns WeaSetTileType
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetTileState;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetTileType;
 
         /**
-         * Verifies a WeaSetTileState message.
+         * Verifies a WeaSetTileType message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WeaSetTileState message from a plain object. Also converts values to their respective internal types.
+         * Creates a WeaSetTileType message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WeaSetTileState
+         * @returns WeaSetTileType
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetTileState;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetTileType;
 
         /**
-         * Creates a plain object from a WeaSetTileState message. Also converts values to other types if specified.
-         * @param message WeaSetTileState
+         * Creates a plain object from a WeaSetTileType message. Also converts values to other types if specified.
+         * @param message WeaSetTileType
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WeaSetTileState, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WeaSetTileType, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WeaSetTileState to JSON.
+         * Converts this WeaSetTileType to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -9159,8 +9159,8 @@ export declare namespace WarEvent {
         /** WarEventAction WeaSetUnitState */
         WeaSetUnitState?: (WarEvent.IWeaSetUnitState|null);
 
-        /** WarEventAction WeaSetTileState */
-        WeaSetTileState?: (WarEvent.IWeaSetTileState|null);
+        /** WarEventAction WeaSetTileType */
+        WeaSetTileType?: (WarEvent.IWeaSetTileType|null);
     }
 
     /** Represents a WarEventAction. */
@@ -9220,8 +9220,8 @@ export declare namespace WarEvent {
         /** WarEventAction WeaSetUnitState. */
         public WeaSetUnitState?: (WarEvent.IWeaSetUnitState|null);
 
-        /** WarEventAction WeaSetTileState. */
-        public WeaSetTileState?: (WarEvent.IWeaSetTileState|null);
+        /** WarEventAction WeaSetTileType. */
+        public WeaSetTileType?: (WarEvent.IWeaSetTileType|null);
 
         /**
          * Creates a new WarEventAction instance using the specified properties.
@@ -26976,6 +26976,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgSpmGetRankList */
         MsgSpmGetRankList?: (NetMessage.IMsgSpmGetRankList|null);
 
+        /** MessageContainer MsgSpmGetReplayData */
+        MsgSpmGetReplayData?: (NetMessage.IMsgSpmGetReplayData|null);
+
         /** MessageContainer MsgMrrSetMaxConcurrentCount */
         MsgMrrSetMaxConcurrentCount?: (NetMessage.IMsgMrrSetMaxConcurrentCount|null);
 
@@ -27360,6 +27363,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgSpmGetRankList. */
         public MsgSpmGetRankList?: (NetMessage.IMsgSpmGetRankList|null);
+
+        /** MessageContainer MsgSpmGetReplayData. */
+        public MsgSpmGetReplayData?: (NetMessage.IMsgSpmGetReplayData|null);
 
         /** MessageContainer MsgMrrSetMaxConcurrentCount. */
         public MsgMrrSetMaxConcurrentCount?: (NetMessage.IMsgMrrSetMaxConcurrentCount|null);
@@ -53945,6 +53951,9 @@ export declare namespace NetMessage {
         /** Properties of a SpmRankSingleInfo. */
         interface ISpmRankSingleInfo {
 
+            /** SpmRankSingleInfo rankId */
+            rankId?: (number|null);
+
             /** SpmRankSingleInfo userId */
             userId?: (number|null);
 
@@ -53960,6 +53969,9 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              */
             constructor(properties?: NetMessage.MsgSpmGetRankList.ISpmRankSingleInfo);
+
+            /** SpmRankSingleInfo rankId. */
+            public rankId: number;
 
             /** SpmRankSingleInfo userId. */
             public userId: number;
@@ -54318,6 +54330,297 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgSpmGetRankList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgSpmGetReplayData. */
+    interface IMsgSpmGetReplayData {
+
+        /** MsgSpmGetReplayData c */
+        c?: (NetMessage.MsgSpmGetReplayData.IC|null);
+
+        /** MsgSpmGetReplayData s */
+        s?: (NetMessage.MsgSpmGetReplayData.IS|null);
+    }
+
+    /** Represents a MsgSpmGetReplayData. */
+    class MsgSpmGetReplayData implements IMsgSpmGetReplayData {
+
+        /**
+         * Constructs a new MsgSpmGetReplayData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgSpmGetReplayData);
+
+        /** MsgSpmGetReplayData c. */
+        public c?: (NetMessage.MsgSpmGetReplayData.IC|null);
+
+        /** MsgSpmGetReplayData s. */
+        public s?: (NetMessage.MsgSpmGetReplayData.IS|null);
+
+        /**
+         * Creates a new MsgSpmGetReplayData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgSpmGetReplayData instance
+         */
+        public static create(properties?: NetMessage.IMsgSpmGetReplayData): NetMessage.MsgSpmGetReplayData;
+
+        /**
+         * Encodes the specified MsgSpmGetReplayData message. Does not implicitly {@link NetMessage.MsgSpmGetReplayData.verify|verify} messages.
+         * @param message MsgSpmGetReplayData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgSpmGetReplayData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgSpmGetReplayData message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetReplayData.verify|verify} messages.
+         * @param message MsgSpmGetReplayData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgSpmGetReplayData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgSpmGetReplayData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgSpmGetReplayData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetReplayData;
+
+        /**
+         * Decodes a MsgSpmGetReplayData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgSpmGetReplayData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetReplayData;
+
+        /**
+         * Verifies a MsgSpmGetReplayData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgSpmGetReplayData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgSpmGetReplayData
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetReplayData;
+
+        /**
+         * Creates a plain object from a MsgSpmGetReplayData message. Also converts values to other types if specified.
+         * @param message MsgSpmGetReplayData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgSpmGetReplayData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgSpmGetReplayData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgSpmGetReplayData {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C rankId */
+            rankId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgSpmGetReplayData.IC);
+
+            /** C rankId. */
+            public rankId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgSpmGetReplayData.IC): NetMessage.MsgSpmGetReplayData.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgSpmGetReplayData.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgSpmGetReplayData.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetReplayData.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgSpmGetReplayData.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetReplayData.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetReplayData.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetReplayData.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgSpmGetReplayData.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S rankId */
+            rankId?: (number|null);
+
+            /** S encodedWar */
+            encodedWar?: (Uint8Array|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgSpmGetReplayData.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S rankId. */
+            public rankId: number;
+
+            /** S encodedWar. */
+            public encodedWar: Uint8Array;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgSpmGetReplayData.IS): NetMessage.MsgSpmGetReplayData.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgSpmGetReplayData.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgSpmGetReplayData.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgSpmGetReplayData.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgSpmGetReplayData.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmGetReplayData.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmGetReplayData.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmGetReplayData.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgSpmGetReplayData.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
