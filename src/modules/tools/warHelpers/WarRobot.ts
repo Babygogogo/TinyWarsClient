@@ -763,7 +763,7 @@ namespace WarRobot {
                         return null;
                     } else {
                         const existingUnit = unitMap.getUnitOnMap(gridIndex);
-                        if ((existingUnit) && (existingUnit.getTeamIndex() != attackerTeamIndex)) {
+                        if ((existingUnit) && (existingUnit !== targetUnit) && (existingUnit.getTeamIndex() != attackerTeamIndex)) {
                             return null;
                         } else {
                             const tile = tileMap.getTile(gridIndex);
@@ -801,7 +801,7 @@ namespace WarRobot {
                     const damage            = Math.floor(
                         (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                         * normalizedHp
-                        * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit))
+                        * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
                         / CommonConstants.UnitHpNormalizer
                     );
                     if (!damageMap[x][y]) {
@@ -923,7 +923,7 @@ namespace WarRobot {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Score calculators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function getScoreForThreat(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, damageMap: DamageMapData[][] | null | undefined): Promise<number> {
+    async function getScoreForBeThreatened(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, damageMap: DamageMapData[][] | null | undefined): Promise<number> {
         // const hp            = unit.getCurrentHp();
         // const data          = damageMap[gridIndex.x][gridIndex.y];
         // const maxDamage     = Math.min(data ? data.max : 0, hp);
@@ -939,16 +939,13 @@ namespace WarRobot {
             return 0;
         }
 
-        const scalerForUnitValueRatio   = Math.pow(1 / Math.max(1, commonParams.unitValueRatio), 2);
+        const scalerForUnitValueRatio   = Math.pow(1 / Math.max(1, commonParams.unitValueRatio), 1);
         const currentHp                 = unit.getCurrentHp();
         const directDamage              = data.directTotal;
         const indirectDamage            = data.indirectTotal;
-        const canBeDestroyed            = directDamage + indirectDamage >= currentHp;
-        let score                       = -(
-            (data.max >= 25 ? Math.min(currentHp, directDamage + indirectDamage * 3) : 0) +
-            (canBeDestroyed ? 30 : 0)
-        ) * unit.getProductionCfgCost() / 1000 * scalerForUnitValueRatio * (unit.getHasLoadedCo() ? 2 : 1);
-
+        const totalDamage               = directDamage + indirectDamage;
+        const canBeDestroyed            = totalDamage >= currentHp;
+        let score                       = -(totalDamage + (canBeDestroyed ? 30 : 0)) * unit.getProductionCfgCost() / 1000 * scalerForUnitValueRatio * (unit.getHasLoadedCo() ? 2 : 1);
         if (canBeDestroyed) {
             for (const loadedUnit of commonParams.war.getUnitMap().getUnitsLoadedByLoader(unit, true)) {
                 score += -(loadedUnit.getCurrentHp() + 30) * loadedUnit.getProductionCfgCost() / 1000 * scalerForUnitValueRatio * (loadedUnit.getHasLoadedCo() ? 2 : 1);
@@ -956,6 +953,117 @@ namespace WarRobot {
         }
 
         return score;
+    }
+
+    async function getScoreForThreatEnemies(commonParams: CommonParams, attackerUnit: BwUnit, gridIndex: GridIndex, scoreDictForThreatEnemy: Map<BwUnit, number>): Promise<number> {
+        await Helpers.checkAndCallLater();
+
+        const war           = commonParams.war;
+        const unitMap       = war.getUnitMap();
+        const loaderUnit    = unitMap.getUnitOnMap(gridIndex);
+        if ((loaderUnit)                                                &&
+            (loaderUnit.getUnitType() !== attackerUnit.getUnitType())   &&
+            (!loaderUnit.checkCanLaunchLoadedUnit())
+        ) {
+            return 0;
+        }
+
+        const mapSize           = commonParams.mapSize;
+        const tileMap           = war.getTileMap();
+        const attackerTeamIndex = attackerUnit.getTeamIndex();
+        const movableArea       = WarCommonHelpers.createMovableArea({
+            origin          : gridIndex,
+            maxMoveCost     : attackerUnit.getFinalMoveRange(),
+            mapSize,
+            moveCostGetter  : g => {
+                if (!GridIndexHelpers.checkIsInsideMap(g, mapSize)) {
+                    return null;
+                } else {
+                    const existingUnit = unitMap.getUnitOnMap(g);
+                    if ((existingUnit) && (existingUnit.getTeamIndex() != attackerTeamIndex)) {
+                        return null;
+                    } else {
+                        return tileMap.getTile(g).getMoveCostByUnit(attackerUnit);
+                    }
+                }
+            },
+        });
+        const attackableArea = WarCommonHelpers.createAttackableAreaForUnit({
+            movableArea,
+            mapSize,
+            minAttackRange  : attackerUnit.getMinAttackRange(),
+            maxAttackRange  : attackerUnit.getFinalMaxAttackRange(),
+            checkCanAttack  : (moveGridIndex: GridIndex): boolean => {
+                const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, gridIndex);
+                return ((attackerUnit.checkCanAttackAfterMove()) || (!hasMoved));
+            }
+        });
+
+        const scalerForUnitValueRatio   = Math.pow(Math.max(1, commonParams.unitValueRatio), 1);
+        const mapWidth                  = mapSize.width;
+        const mapHeight                 = mapSize.height;
+        const normalizedHp              = attackerUnit.getNormalizedCurrentHp();
+        const attackerPlayerIndex       = attackerUnit.getPlayerIndex();
+        const luckValue                 = Helpers.getExisted(commonParams.luckValues.get(attackerPlayerIndex), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_00);
+        const globalOffenseBonus        = Helpers.getExisted(commonParams.globalOffenseBonuses.get(attackerPlayerIndex), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_01);
+        const globalDefenseBonuses      = commonParams.globalDefenseBonuses;
+        const attackBonus               = globalOffenseBonus + attackerUnit.getPromotionAttackBonus();
+        let totalScore                  = 0;
+        for (let x = 0; x < mapWidth; ++x) {
+            const column = attackableArea[x];
+            if (column == null) {
+                continue;
+            }
+
+            for (let y = 0; y < mapHeight; ++y) {
+                const attackableGridData = column[y];
+                if (attackableGridData == null) {
+                    continue;
+                }
+
+                const targetGridIndex   : GridIndex = { x, y };
+                const targetUnit        = unitMap.getUnitOnMap(targetGridIndex);
+                if (targetUnit == null) {
+                    continue;
+                }
+
+                if (scoreDictForThreatEnemy.has(targetUnit)) {
+                    totalScore += Helpers.getExisted(scoreDictForThreatEnemy.get(targetUnit), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_02);
+                    continue;
+                }
+
+                if (targetUnit.getTeamIndex() === attackerTeamIndex) {
+                    scoreDictForThreatEnemy.set(targetUnit, 0);
+                    continue;
+                }
+
+                const baseDamage = attackerUnit.getBaseDamage(targetUnit.getArmorType());
+                if (baseDamage == null) {
+                    scoreDictForThreatEnemy.set(targetUnit, 0);
+                    continue;
+                }
+
+                const globalDefenseBonus    = Helpers.getExisted(globalDefenseBonuses.get(targetUnit.getPlayerIndex()), ClientErrorCode.SpwRobot_GetScoreForThreatEnemies_03);
+                const damage                = Math.floor(
+                    (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
+                    * normalizedHp
+                    * WarDamageCalculator.getDamageMultiplierForDefenseBonus(globalDefenseBonus + tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(targetUnit) + targetUnit.getPromotionDefenseBonus())
+                    / CommonConstants.UnitHpNormalizer
+                );
+                const canDestroy    = damage >= targetUnit.getCurrentHp();
+                let score           = (damage + (canDestroy ? 30 : 0)) * targetUnit.getProductionCfgCost() / 1000 * scalerForUnitValueRatio * (targetUnit.getHasLoadedCo() ? 2 : 1);
+                if (canDestroy) {
+                    for (const loadedUnit of unitMap.getUnitsLoadedByLoader(targetUnit, true)) {
+                        score += -(loadedUnit.getCurrentHp() + 30) * loadedUnit.getProductionCfgCost() / 1000 * scalerForUnitValueRatio * (loadedUnit.getHasLoadedCo() ? 2 : 1);
+                    }
+                }
+
+                scoreDictForThreatEnemy.set(targetUnit, score);
+                totalScore += score;
+            }
+        }
+
+        return totalScore;
     }
 
     async function getScoreForDistanceToCapturableBuildings(commonParams: CommonParams, unit: BwUnit, movableArea: MovableArea): Promise<number> {
@@ -1171,15 +1279,20 @@ namespace WarRobot {
     //     //     + (maxScoreForAllies > Number.MIN_VALUE ? maxScoreForAllies : 0);
     // }
 
-    async function getScoreForPosition({ commonParams, unit, gridIndex, damageMap }: {
-        commonParams: CommonParams;
-        unit        : BwUnit;
-        gridIndex   : GridIndex;
-        damageMap   : DamageMapData[][] | null | undefined;
+    async function getScoreForPosition({ commonParams, unit, gridIndex, damageMap, scoreDictForThreatEnemy }: {
+        commonParams            : CommonParams;
+        unit                    : BwUnit;
+        gridIndex               : GridIndex;
+        damageMap               : DamageMapData[][] | null | undefined;
+        scoreDictForThreatEnemy : Map<BwUnit, number>;
     }): Promise<number> {
         await Helpers.checkAndCallLater();
 
-        let totalScore          = await getScoreForThreat(commonParams, unit, gridIndex, damageMap);
+        const [scoreForBeThreatened, scoreForThreatEnemies] = await Promise.all([
+            getScoreForBeThreatened(commonParams, unit, gridIndex, damageMap),
+            getScoreForThreatEnemies(commonParams, unit, gridIndex, scoreDictForThreatEnemy),
+        ]);
+        let totalScore          = scoreForBeThreatened + scoreForThreatEnemies;
         const { war, mapSize }  = commonParams;
         const tileMap           = war.getTileMap();
         const tile              = tileMap.getTile(gridIndex);
@@ -1350,8 +1463,8 @@ namespace WarRobot {
         const tileMap                   = war.getTileMap();
         const unitHpDict                = new Map<BwUnit, number>();
         const tileHpDict                = new Map<BwTile, number>();
-        const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 2);
-        const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 2);
+        const scalerForSelfDamage       = Math.pow(1 / Math.max(1, unitValueRatio), 1) * 9999;
+        const scalerForEnemyDamage      = Math.pow(Math.max(1, unitValueRatio), 1) * 9999;
 
         let totalScore = 0;
         for (const battleDamageInfo of battleDamageInfoArray) {
@@ -1450,10 +1563,10 @@ namespace WarRobot {
         const currentCapturePoint   = Helpers.getExisted(tile.getCurrentCapturePoint(), ClientErrorCode.SpwRobot_GetScoreForActionUnitCaptureTile_00 );
         const captureAmount         = Helpers.getExisted(unit.getCaptureAmount(gridIndex), ClientErrorCode.SpwRobot_GetScoreAndActionUnitCaptureTile_01);
         if (captureAmount >= currentCapturePoint) {
-            return 9999;
+            return 99999999;
         }
         if (captureAmount <= 0) {
-            return -9999;
+            return -99999999;
         }
 
         const turnsCount = Math.ceil(currentCapturePoint / captureAmount);
@@ -1534,7 +1647,7 @@ namespace WarRobot {
     async function getScoreForActionUnitUseCoSkill(unit: BwUnit): Promise<number> {
         await Helpers.checkAndCallLater();
 
-        return 9999;
+        return 999999999;
     }
 
     async function getScoreForActionPlayerProduceUnit({ commonParams, producingGridIndex, producingUnitType, idleFactoriesCount, getMinTurnsCountForAttack }: {
@@ -1625,7 +1738,7 @@ namespace WarRobot {
                 if (baseDamage != null) {
                     const movableArea = getProducingUnitMovableArea();
                     const minDistance = Helpers.getNonNullElements(GridIndexHelpers.getGridsWithinDistance(
-                        { origin: unitGridIndex, minDistance: 0, maxDistance: producingUnitMaxAttackRange, mapSize }                    ).map(g => {
+                        { origin: unitGridIndex, minDistance: 0, maxDistance: producingUnitMaxAttackRange, mapSize }                ).map(g => {
                         const column = movableArea[g.x];
                         return (column ? column[g.y] : null)?.totalMoveCost;
                     })).sort((d1, d2) => d1 - d2)[0];
@@ -2159,11 +2272,12 @@ namespace WarRobot {
             return null;
         }
 
-        const reachableArea         = await getReachableArea({ commonParams, unit: candidateUnit, passableGridIndex: null, blockedGridIndex: null });
-        const damageMapForSurface   = await createDamageMap(commonParams, candidateUnit, false);
-        const damageMapForDive      = candidateUnit.checkIsDiver() ? await createDamageMap(commonParams, candidateUnit, true) : null;
-        const originGridIndex       = candidateUnit.getGridIndex();
-        // const scoreMapForDistance   = await _createScoreMapForDistance(candidateUnit);
+        const reachableArea             = await getReachableArea({ commonParams, unit: candidateUnit, passableGridIndex: null, blockedGridIndex: null });
+        const damageMapForSurface       = await createDamageMap(commonParams, candidateUnit, false);
+        const damageMapForDive          = candidateUnit.checkIsDiver() ? await createDamageMap(commonParams, candidateUnit, true) : null;
+        const originGridIndex           = candidateUnit.getGridIndex();
+        const scoreDictForThreatEnemy   = new Map<BwUnit, number>();
+        // const scoreMapForDistance       = await _createScoreMapForDistance(candidateUnit);
         const { width: mapWidth, height: mapHeight }    = commonParams.mapSize;
         let bestScoreAndAction                          : ScoreAndAction | null = null;
         for (let x = 0; x < mapWidth; ++x) {
@@ -2198,9 +2312,10 @@ namespace WarRobot {
                 const scoreForMovePath  = await getScoreForMovePath(commonParams, candidateUnit, pathNodes);
                 const scoreForPosition  = await getScoreForPosition({
                     commonParams,
-                    unit        : candidateUnit,
+                    unit                    : candidateUnit,
                     gridIndex,
-                    damageMap   : ((action.WarActionUnitDive) || ((candidateUnit.getIsDiving()) && (!action.WarActionUnitSurface))) ? damageMapForDive : damageMapForSurface,
+                    damageMap               : ((action.WarActionUnitDive) || ((candidateUnit.getIsDiving()) && (!action.WarActionUnitSurface))) ? damageMapForDive : damageMapForSurface,
+                    scoreDictForThreatEnemy,
                 });
                 bestScoreAndAction  = getBetterScoreAndAction(
                     bestScoreAndAction,
@@ -2323,7 +2438,7 @@ namespace WarRobot {
 
             const movableArea   = Helpers.getExisted(movableAreaDict.get(attackerUnit), ClientErrorCode.SpwRobot_GetBestActionPlayerProduceUnit_00);
             const minDistance   = Helpers.getNonNullElements(GridIndexHelpers.getGridsWithinDistance(
-                { origin: targetGridIndex, minDistance: 0, maxDistance: maxAttackRange, mapSize }            ).map(g => {
+                { origin: targetGridIndex, minDistance: 0, maxDistance: maxAttackRange, mapSize }        ).map(g => {
                 const column = movableArea[g.x];
                 return (column ? column[g.y] : null)?.totalMoveCost;
             })).sort((d1, d2) => d1 - d2)[0];
@@ -2466,7 +2581,7 @@ namespace WarRobot {
 
             } else if (player.checkCanUseCoSkill(Types.CoSkillType.Power)) {
                 const canResetState = player.getCoSkills(CoSkillType.Power).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
-                if ((player.getCoCurrentEnergy() > Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetActionForPhase1_01) * 1.1)     ||
+                if ((player.getCoCurrentEnergy() > Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetActionForPhase1_01) * 1.1)   ||
                     ((canResetState) && (idleUnitsCount > 0))                                                                                               ||
                     ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
                 ) {

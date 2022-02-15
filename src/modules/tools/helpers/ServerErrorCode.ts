@@ -6688,6 +6688,17 @@ export const enum ServerErrorCode {
     SpwRobot_GetScoreForThreat_0008,
     SpwRobot_GetScoreForThreat_0009,
 
+    SpwRobot_GetScoreForThreatEnemies_0000,
+    SpwRobot_GetScoreForThreatEnemies_0001,
+    SpwRobot_GetScoreForThreatEnemies_0002,
+    SpwRobot_GetScoreForThreatEnemies_0003,
+    SpwRobot_GetScoreForThreatEnemies_0004,
+    SpwRobot_GetScoreForThreatEnemies_0005,
+    SpwRobot_GetScoreForThreatEnemies_0006,
+    SpwRobot_GetScoreForThreatEnemies_0007,
+    SpwRobot_GetScoreForThreatEnemies_0008,
+    SpwRobot_GetScoreForThreatEnemies_0009,
+
     SpwRobot_GetScoreForDistanceToCapturableBuildings_0000,
     SpwRobot_GetScoreForDistanceToCapturableBuildings_0001,
     SpwRobot_GetScoreForDistanceToCapturableBuildings_0002,

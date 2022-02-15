@@ -3516,6 +3516,17 @@ namespace TwnsClientErrorCode {
         SpwRobot_GetScoreForThreat_08,
         SpwRobot_GetScoreForThreat_09,
 
+        SpwRobot_GetScoreForThreatEnemies_00,
+        SpwRobot_GetScoreForThreatEnemies_01,
+        SpwRobot_GetScoreForThreatEnemies_02,
+        SpwRobot_GetScoreForThreatEnemies_03,
+        SpwRobot_GetScoreForThreatEnemies_04,
+        SpwRobot_GetScoreForThreatEnemies_05,
+        SpwRobot_GetScoreForThreatEnemies_06,
+        SpwRobot_GetScoreForThreatEnemies_07,
+        SpwRobot_GetScoreForThreatEnemies_08,
+        SpwRobot_GetScoreForThreatEnemies_09,
+
         SpwRobot_GetScoreForDistanceToCapturableBuildings_00,
         SpwRobot_GetScoreForDistanceToCapturableBuildings_01,
         SpwRobot_GetScoreForDistanceToCapturableBuildings_02,

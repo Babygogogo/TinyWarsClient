@@ -122,7 +122,7 @@ namespace WarEventHelper {
         return idArray;
     }
 
-    export function trimWarEventFullData(fullData: Types.Undefinable<IWarEventFullData>, eventIdArray: Types.Undefinable<number[]>): IWarEventFullData {
+    export function trimAndCloneWarEventFullData(fullData: Types.Undefinable<IWarEventFullData>, eventIdArray: Types.Undefinable<number[]>): IWarEventFullData {
         const dstEventArray     : IWarEvent[] = [];
         const dstNodeArray      : IWarEventConditionNode[] = [];
         const dstConditionArray : IWarEventCondition[] = [];
@@ -186,7 +186,7 @@ namespace WarEventHelper {
             }
         }
 
-        return trimmedData;
+        return Helpers.deepClone(trimmedData);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

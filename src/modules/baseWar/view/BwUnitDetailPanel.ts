@@ -753,8 +753,9 @@ namespace TwnsBwUnitDetailPanel {
         }
 
         private _modifyAsActionState(): void {
-            const data = this._getData();
-            if (!WarCommonHelpers.checkCanCheatInWar(data.war.getWarType())) {
+            const data  = this._getData();
+            const war   = data.war;
+            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
                 return;
             }
 
@@ -766,6 +767,7 @@ namespace TwnsBwUnitDetailPanel {
                 callback    : () => {
                     unit.setActionState(state === Types.UnitActionState.Acted ? Types.UnitActionState.Idle : Types.UnitActionState.Acted);
                     unit.updateView();
+                    war.getActionPlanner().setStateIdle();
                     this._updateView();
                 }
             });

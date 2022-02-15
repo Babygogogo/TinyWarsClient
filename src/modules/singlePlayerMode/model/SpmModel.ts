@@ -297,8 +297,8 @@ namespace SpmModel {
         }
 
         const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
+        const mapRawData        = await WarMapModel.getRawData(Helpers.getExisted(warData.settingsForSrw?.mapId));
         if (settingsForCommon.warRule == null) {
-            const mapRawData = await WarMapModel.getRawData(Helpers.getExisted(warData.settingsForSrw?.mapId));
             if (mapRawData == null) {
                 return null;
             }
@@ -310,6 +310,13 @@ namespace SpmModel {
             }
 
             settingsForCommon.warRule = Helpers.deepClone(warRule);
+        }
+
+        if (warData.warEventManager == null) {
+            warData.warEventManager = {
+                warEventFullData    : WarEventHelper.trimAndCloneWarEventFullData(mapRawData?.warEventFullData, settingsForCommon.warRule.warEventIdArray),
+                calledCountList     : [],
+            };
         }
 
         for (const playerData of warData.playerManager?.players ?? []) {
