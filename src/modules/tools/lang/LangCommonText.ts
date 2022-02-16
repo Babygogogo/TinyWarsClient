@@ -1283,6 +1283,10 @@ namespace TwnsLangCommonText {
             `已成功删除规则`,
             `The rule is deleted successfully.`,
         ],
+        [LangTextType.A0294]: [
+            `添加区域和删除区域所指定的ID有重合`,
+            `Some ID specified by the "Add to Location" and the "Del from Location" coincide.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4691,6 +4695,34 @@ namespace TwnsLangCommonText {
             `Test版(老三代平衡版)`,
             `Test Version (AW 1/2/DS rebalanced)`,
         ],
+        [LangTextType.B0855]: [
+            `当前宽高及格子数`,
+            `Current W/H/Grids`,
+        ],
+        [LangTextType.B0856]: [
+            `新的宽高及格子数`,
+            `New W/H/Grids`,
+        ],
+        [LangTextType.B0857]: [
+            `顶部增减行数`,
+            `Top Delta Lines`,
+        ],
+        [LangTextType.B0858]: [
+            `底部增减行数`,
+            `Bottom Delta Lines`,
+        ],
+        [LangTextType.B0859]: [
+            `左方增减行数`,
+            `Left Delta Lines`,
+        ],
+        [LangTextType.B0860]: [
+            `右方增减行数`,
+            `Right Delta Lines`,
+        ],
+        [LangTextType.B0861]: [
+            `设置地形状态`,
+            `Set Terrains' State`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -5072,7 +5104,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0023]: [
             `地图的总格子数必须小于等于%d`,
-            `The number of the tiles must be less than or equal to %d.`,
+            `The number of the grids must be less than or equal to %d.`,
         ],
         [LangTextType.F0024]: [
             `修改时间: %s`,
@@ -5493,6 +5525,10 @@ namespace TwnsLangCommonText {
         [LangTextType.F0128]: [
             `找到坐标为 %s%s 的所有地块，并修改其属性。`,
             `Get all terrains that the coordinate is %s%s, then modify their states.`,
+        ],
+        [LangTextType.F0129]: [
+            `找到坐标为 %s%s 的所有地块，并修改其类型。`,
+            `Get all terrains that the coordinate is %s%s, then modify their type.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

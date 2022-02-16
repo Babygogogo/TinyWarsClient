@@ -1333,6 +1333,17 @@ namespace TwnsClientErrorCode {
         BwWarEventManager_CallActionSetTileTypeWithoutExtraData_08,
         BwWarEventManager_CallActionSetTileTypeWithoutExtraData_09,
 
+        BwWarEventManager_CallActionSetTileStateWithoutExtraData_00,
+        BwWarEventManager_CallActionSetTileStateWithoutExtraData_01,
+        BwWarEventManager_CallActionSetTileStateWithoutExtraData_02,
+        BwWarEventManager_CallActionSetTileStateWithoutExtraData_03,
+        BwWarEventManager_CallActionSetTileStateWithoutExtraData_04,
+        BwWarEventManager_CallActionSetTileStateWithoutExtraData_05,
+        BwWarEventManager_CallActionSetTileStateWithoutExtraData_06,
+        BwWarEventManager_CallActionSetTileStateWithoutExtraData_07,
+        BwWarEventManager_CallActionSetTileStateWithoutExtraData_08,
+        BwWarEventManager_CallActionSetTileStateWithoutExtraData_09,
+
         BwWarEventManager_CheckIsMeetConEventCalledCount_00,
         BwWarEventManager_CheckIsMeetConEventCalledCount_01,
         BwWarEventManager_CheckIsMeetConEventCalledCount_02,

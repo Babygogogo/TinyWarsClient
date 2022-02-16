@@ -177,7 +177,15 @@ namespace TwnsUserSetOpacityPanel {
             this._updateView();
         }
         private _onTouchedBtnConfirm(): void {
-            UserProxy.reqUserSetSettings({ opacitySettings: UserModel.getSelfSettingsOpacitySettings() });
+            const opacitySettings       = UserModel.getSelfSettingsOpacitySettings() ?? {};
+            const prevOpacitySettings   = this._prevOpacitySettings;
+            if (((opacitySettings.tileBaseOpacity ?? 100) !== (prevOpacitySettings.tileBaseOpacity ?? 100))             ||
+                ((opacitySettings.tileDecoratorOpacity ?? 100) !== (prevOpacitySettings.tileDecoratorOpacity ?? 100))   ||
+                ((opacitySettings.tileObjectOpacity ?? 100) !== (prevOpacitySettings.tileObjectOpacity ?? 100))         ||
+                ((opacitySettings.unitOpacity ?? 100) !== (prevOpacitySettings.unitOpacity ?? 100))
+            ) {
+                UserProxy.reqUserSetSettings({ opacitySettings });
+            }
 
             this.close();
         }

@@ -1,60 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
-    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001" />
-    <e:Group width="430" height="280" horizontalCenter="0" verticalCenter="0">
-        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <TwnsUiLabel:UiLabel id="_labelTitle" text="调整大小" textColor="0xffffff" y="12" horizontalCenter="0" size="24" />
-        <TwnsUiLabel:UiLabel id="_labelCurrSizeTitle" text="当前宽高" textColor="0xFFFFFF" y="60" size="20" x="20" />
-        <TwnsUiLabel:UiLabel id="_labelCurrWidth" text="20" textColor="0xFFFFFF" y="58" size="20" horizontalCenter="0" />
-        <TwnsUiLabel:UiLabel id="_labelCurrHeight" text="20" textColor="0xFFFFFF" y="58" size="20" horizontalCenter="120" />
-        <TwnsUiLabel:UiLabel id="_labelNewSizeTitle" text="新宽高" textColor="0xFFFFFF" y="110" size="20" x="20" />
-        <TwnsUiTextInput:UiTextInput id="_inputNewWidth" width="60" y="110" anchorOffsetX="0" anchorOffsetY="0" restrict="0-9"
-                            maxChars="3" horizontalCenter="0">
-            <TwnsUiButton:skinName>
-                <e:Skin width="100" height="30">
-                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
-                    <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff"
-                                    textAlign="center" />
-                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
-                             textColor="0x808080" />
-                </e:Skin>
-            </TwnsUiButton:skinName>
-        </TwnsUiTextInput:UiTextInput>
-        <TwnsUiTextInput:UiTextInput id="_inputNewHeight" width="60" y="110" anchorOffsetX="0" anchorOffsetY="0" restrict="0-9"
-                            maxChars="3" horizontalCenter="120">
-            <TwnsUiButton:skinName>
-                <e:Skin width="100" height="30">
-                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
-                    <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff"
-                                    textAlign="center" />
-                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
-                             textColor="0x808080" />
-                </e:Skin>
-            </TwnsUiButton:skinName>
-        </TwnsUiTextInput:UiTextInput>
-        <TwnsUiLabel:UiLabel id="_labelTips1" text="注：若新的宽高小于当前宽高，则超出的图块会被裁剪掉（以左上角为原点）" textColor="0xFFFFFF" size="16"
-                        bottom="90" left="10" right="10" verticalAlign="middle" textAlign="center" wordWrap="true" />
-        <TwnsUiLabel:UiLabel id="_labelTips2" text="地图的总格子数必须小于1000，否则不能提审" textColor="0xFFFFFF" size="16" bottom="50"
-                        left="10" right="10" verticalAlign="middle" textAlign="center" wordWrap="true" />
-        <TwnsUiButton:UiButton id="_btnCancel" label="取消" horizontalCenter="-80" bottom="15">
-            <TwnsUiButton:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
-                             textColor="0xff0000" />
-                </e:Skin>
-            </TwnsUiButton:skinName>
-        </TwnsUiButton:UiButton>
-        <TwnsUiButton:UiButton id="_btnConfirm" label="确定" horizontalCenter="80" bottom="15">
-            <e:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
-                             textColor="0x00ff00" />
-                </e:Skin>
-            </e:skinName>
-        </TwnsUiButton:UiButton>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*"
+        xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" />
+    <e:Group width="460" height="300" horizontalCenter="0" verticalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="调整大小" textColor="0xffffff" y="10" horizontalCenter="0" size="24" />
+        <e:Group y="50" width="380" height="90" horizontalCenter="0">
+            <e:Group horizontalCenter="0" top="0">
+                <TwnsUiButton:UiButton id="_btnDeltaTop" label="确定"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" width="80" />
+                <TwnsUiLabel:UiLabel id="_labelDeltaTop" text="20" textColor="0xFFFFFF" size="20" x="90"
+                                     verticalCenter="0" />
+            </e:Group>
+            <e:Group verticalCenter="0" left="0">
+                <TwnsUiButton:UiButton id="_btnDeltaLeft" label="确定"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" width="80" />
+                <TwnsUiLabel:UiLabel id="_labelDeltaLeft" text="20" textColor="0xFFFFFF" size="20" x="90"
+                                     verticalCenter="0" />
+            </e:Group>
+            <e:Group verticalCenter="0" right="0">
+                <TwnsUiButton:UiButton id="_btnDeltaRight" label="确定"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" width="80" />
+                <TwnsUiLabel:UiLabel id="_labelDeltaRight" text="20" textColor="0xFFFFFF" size="20" x="90"
+                                     verticalCenter="0" />
+            </e:Group>
+            <e:Group horizontalCenter="0" bottom="0">
+                <TwnsUiButton:UiButton id="_btnDeltaBottom" label="确定"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" width="80" />
+                <TwnsUiLabel:UiLabel id="_labelDeltaBottom" text="20" textColor="0xFFFFFF" size="20" x="90"
+                                     verticalCenter="0" />
+            </e:Group>
+        </e:Group>
+        <e:Group x="20" y="160">
+            <TwnsUiLabel:UiLabel id="_labelCurrSizeTitle" text="当前宽高" textColor="0xFFFFFF" size="20" x="0"
+                                 verticalCenter="0" />
+            <TwnsUiLabel:UiLabel id="_labelCurrWidth" text="20" textColor="0xFFFFFF" size="20" x="200"
+                                 verticalCenter="0" />
+            <TwnsUiLabel:UiLabel id="_labelCurrHeight" text="20" textColor="0xFFFFFF" size="20" x="270"
+                                 verticalCenter="0" />
+            <TwnsUiLabel:UiLabel id="_labelCurrGrids" text="20" textColor="0xFFFFFF" size="20" x="340"
+                                 verticalCenter="0" y="10" />
+        </e:Group>
+        <e:Group x="20" y="190">
+            <TwnsUiLabel:UiLabel id="_labelNewSizeTitle" text="新宽高" textColor="0xFFFFFF" y="0" size="20" x="0" />
+            <TwnsUiLabel:UiLabel id="_labelNewWidth" text="20" textColor="0xFFFFFF" size="20" x="200" verticalCenter="0" />
+            <TwnsUiLabel:UiLabel id="_labelNewHeight" text="20" textColor="0xFFFFFF" size="20" x="270"
+                                 verticalCenter="0" />
+            <TwnsUiLabel:UiLabel id="_labelNewGrids" text="20" textColor="0xFFFFFF" size="20" x="340" verticalCenter="0" />
+        </e:Group>
+        <TwnsUiLabel:UiLabel id="_labelTips" text="地图的总格子数必须小于1000，否则不能提审" textColor="0xFFFFFF" size="16" bottom="50"
+                             left="10" right="10" verticalAlign="middle" textAlign="center" wordWrap="true" />
+        <e:Group horizontalCenter="0" bottom="10">
+            <TwnsUiButton:UiButton id="_btnConfirm" label="确定" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                   y="0" width="80" left="0" />
+            <TwnsUiButton:UiButton id="_btnCancel" label="取消" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                   x="160" y="0" width="80" />
+        </e:Group>
     </e:Group>
 </e:Skin>

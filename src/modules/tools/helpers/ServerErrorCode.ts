@@ -1663,6 +1663,17 @@ export const enum ServerErrorCode {
     BwWarEventManager_CallActionSetTileType_0008,
     BwWarEventManager_CallActionSetTileType_0009,
 
+    BwWarEventManager_CallActionSetTileState_0000,
+    BwWarEventManager_CallActionSetTileState_0001,
+    BwWarEventManager_CallActionSetTileState_0002,
+    BwWarEventManager_CallActionSetTileState_0003,
+    BwWarEventManager_CallActionSetTileState_0004,
+    BwWarEventManager_CallActionSetTileState_0005,
+    BwWarEventManager_CallActionSetTileState_0006,
+    BwWarEventManager_CallActionSetTileState_0007,
+    BwWarEventManager_CallActionSetTileState_0008,
+    BwWarEventManager_CallActionSetTileState_0009,
+
     BwWarEventManager_CallActionSetForceFogCode_0000,
     BwWarEventManager_CallActionSetForceFogCode_0001,
     BwWarEventManager_CallActionSetForceFogCode_0002,

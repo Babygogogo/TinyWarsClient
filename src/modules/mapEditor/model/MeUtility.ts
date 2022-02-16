@@ -325,15 +325,31 @@ namespace MeUtility {
         return tileList;
     }
     function getNewUnitDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialUnit[] {
-        const unitList: ISerialUnit[] = [];
+        const unitDataArray: ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
             const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
             if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
-                unitList.push(unitData);
+                unitDataArray.push(unitData);
             }
         }
 
-        return unitList;
+        const allUnitsDict  = new Map<number, { unit: ISerialUnit, newUnitId: number }>();
+        let nextUnitId      = 0;
+        for (const unit of unitDataArray) {
+            allUnitsDict.set(Helpers.getExisted(unit.unitId), { unit, newUnitId: nextUnitId } );
+            ++nextUnitId;
+        }
+        for (const [, value] of allUnitsDict) {
+            const unit  = value.unit;
+            unit.unitId = value.newUnitId;
+
+            const loaderUnitId = unit.loaderUnitId;
+            if (loaderUnitId != null) {
+                unit.loaderUnitId = Helpers.getExisted(allUnitsDict.get(loaderUnitId)).newUnitId;
+            }
+        }
+
+        return unitDataArray;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -222,8 +222,8 @@ namespace TwnsLangErrorText {
             `There is a redundant event condition node. Please delete it via the 'Delete Redundancy' button if you don't need it.`,
         ],
         [ClientErrorCode.WarEventFullDataValidation12]: [
-            `存在未被引用的事件`,
-            `There is a redundant event.`,
+            `存在未被任何规则使用的事件`,
+            `There is a redundant event that is not used in any rules.`,
         ],
         [ClientErrorCode.WarRuleValidation02]: [
             `尚未设置预设规则的可用性`,

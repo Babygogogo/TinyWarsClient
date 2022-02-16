@@ -119,7 +119,6 @@ namespace TwnsPanelConfig {
         MeMapTagPanel                       : PanelConfig<TwnsMeMapTagPanel.OpenData>;
         MeMfwSettingsPanel                  : PanelConfig<TwnsMeMfwSettingsPanel.OpenData>;
         MeModifyMapNamePanel                : PanelConfig<TwnsMeModifyMapNamePanel.OpenData>;
-        MeOffsetPanel                       : PanelConfig<TwnsMeOffsetPanel.OpenData>;
         MeResizePanel                       : PanelConfig<TwnsMeResizePanel.OpenData>;
         MeSimSettingsPanel                  : PanelConfig<TwnsMeSimSettingsPanel.OpenData>;
         MeSymmetryPanel                     : PanelConfig<TwnsMeSymmetryPanel.OpenData>;
@@ -220,6 +219,7 @@ namespace TwnsPanelConfig {
         WeActionModifyPanel25               : PanelConfig<TwnsWeActionModifyPanel25.OpenData>;
         WeActionModifyPanel30               : PanelConfig<TwnsWeActionModifyPanel30.OpenData>;
         WeActionModifyPanel40               : PanelConfig<TwnsWeActionModifyPanel40.OpenData>;
+        WeActionModifyPanel41               : PanelConfig<TwnsWeActionModifyPanel41.OpenData>;
         WeActionReplacePanel                : PanelConfig<TwnsWeActionReplacePanel.OpenData>;
         WeActionTypeListPanel               : PanelConfig<TwnsWeActionTypeListPanel.OpenData>;
         WeCommandPanel                      : PanelConfig<TwnsWeCommandPanel.OpenData>;
@@ -897,12 +897,6 @@ namespace TwnsPanelConfig {
                 layer       : LayerType.Hud0,
             },
 
-            MeOffsetPanel: {
-                cls         : TwnsMeOffsetPanel?.MeOffsetPanel,
-                skinName    : `resource/skins/mapEditor/MeOffsetPanel.exml`,
-                layer       : LayerType.Hud0,
-            },
-
             MeResizePanel: {
                 cls         : TwnsMeResizePanel?.MeResizePanel,
                 skinName    : `resource/skins/mapEditor/MeResizePanel.exml`,
@@ -1461,6 +1455,12 @@ namespace TwnsPanelConfig {
             WeActionModifyPanel40: {
                 cls         : TwnsWeActionModifyPanel40?.WeActionModifyPanel40,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel40.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            WeActionModifyPanel41: {
+                cls         : TwnsWeActionModifyPanel41?.WeActionModifyPanel41,
+                skinName    : `resource/skins/warEvent/WeActionModifyPanel41.exml`,
                 layer       : LayerType.Hud0,
             },
 
