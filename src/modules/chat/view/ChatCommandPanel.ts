@@ -38,7 +38,7 @@ namespace TwnsChatCommandPanel {
     import NotifyType               = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        userId      : number;
+        userId      : number | null;
         messageId   : number;
     };
     export class ChatCommandPanel extends TwnsUiPanel.UiPanel<OpenData> {
@@ -138,8 +138,15 @@ namespace TwnsChatCommandPanel {
         private async _updateGroupButtons(): Promise<void> {
             const group = this._groupButtons;
             group.removeChildren();
-            group.addChild(this._btnPrivateChat);
-            group.addChild(this._btnUserInfo);
+
+            const userId = this._getOpenData().userId;
+            if ((userId != null) && (userId > 1000000)) {
+                group.addChild(this._btnUserInfo);
+
+                if (userId !== UserModel.getSelfUserId()) {
+                    group.addChild(this._btnPrivateChat);
+                }
+            }
             if ((UserModel.getIsSelfAdmin()) || (UserModel.getIsSelfChatManager())) {
                 group.addChild(this._btnDeleteMessage);
             }

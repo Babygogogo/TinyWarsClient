@@ -761,6 +761,9 @@ namespace ConfigManager {
     export function getCoBasicCfg(version: string, coId: number): CoBasicCfg {
         return Helpers.getExisted(getAllCoBasicCfgDict(version)[coId], ClientErrorCode.ConfigManager_GetCoBasicCfg_00);
     }
+    export function checkHasCo(version: string, coId: number): boolean {
+        return getAllCoBasicCfgDict(version)[coId] != null;
+    }
     export function getAllCoBasicCfgDict(version: string): { [coId: number]: CoBasicCfg } {
         return Helpers.getExisted(_ALL_CONFIGS.get(version)?.CoBasic, ClientErrorCode.ConfigManager_GetAllCoBasicCfgDict_00);
     }
@@ -1003,8 +1006,11 @@ namespace ConfigManager {
         const shapeIdList   = cfg ? cfg.get(shapeId) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }
+    export function getSymmetricalTileObjectType(objectType: TileObjectType, symmetryType: Types.SymmetryType): TileObjectType {
+        return Helpers.getExisted(CommonConstants.TileObjectTypeSymmetry.get(objectType))[symmetryType];
+    }
     export function getSymmetricalTileObjectShapeId(objectType: TileObjectType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
-        const cfg           = CommonConstants.TileObjectSymmetry.get(objectType);
+        const cfg           = CommonConstants.TileObjectShapeSymmetry.get(objectType);
         const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }

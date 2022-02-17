@@ -1287,6 +1287,10 @@ namespace TwnsLangCommonText {
             `添加区域和删除区域所指定的ID有重合`,
             `Some ID specified by the "Add to Location" and the "Del from Location" coincide.`,
         ],
+        [LangTextType.A0295]: [
+            `地图长宽必须相同才能使用此功能`,
+            `The width and height of the map is not the same.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4705,23 +4709,63 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0857]: [
             `顶部增减行数`,
-            `Top Delta Lines`,
+            `Add/Delete Top Lines`,
         ],
         [LangTextType.B0858]: [
             `底部增减行数`,
-            `Bottom Delta Lines`,
+            `Add/Delete Bottom Lines`,
         ],
         [LangTextType.B0859]: [
             `左方增减行数`,
-            `Left Delta Lines`,
+            `Add/Delete Left Lines`,
         ],
         [LangTextType.B0860]: [
             `右方增减行数`,
-            `Right Delta Lines`,
+            `Add/Delete Right Lines`,
         ],
         [LangTextType.B0861]: [
             `设置地形状态`,
             `Set Terrains' State`,
+        ],
+        [LangTextType.B0862]: [
+            `填充地形(轴对称)`,
+            `Fill Terrains (Mirroring)`,
+        ],
+        [LangTextType.B0863]: [
+            `填充地形(旋转对称)`,
+            `Fill Terrains (Rotational)`,
+        ],
+        [LangTextType.B0864]: [
+            `从上到下`,
+            `From Up To Down`,
+        ],
+        [LangTextType.B0865]: [
+            `从下到上`,
+            `From Down To Up`,
+        ],
+        [LangTextType.B0866]: [
+            `从左到右`,
+            `From Left To Right`,
+        ],
+        [LangTextType.B0867]: [
+            `从右到左`,
+            `From Right To Left`,
+        ],
+        [LangTextType.B0868]: [
+            `从左上到右下`,
+            `From UL To DR`,
+        ],
+        [LangTextType.B0869]: [
+            `从右下到左上`,
+            `From DR To UL`,
+        ],
+        [LangTextType.B0870]: [
+            `从右上到左下`,
+            `From UR To DL`,
+        ],
+        [LangTextType.B0871]: [
+            `从左下到右上`,
+            `From DL to UR`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

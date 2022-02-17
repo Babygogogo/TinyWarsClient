@@ -681,7 +681,7 @@ namespace WarRuleHelpers {
             if (bannedCoIdArray.indexOf(CommonConstants.CoEmptyId) >= 0) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_12;
             }
-            if (bannedCoIdArray.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null)) {
+            if (bannedCoIdArray.some(coId => !ConfigManager.checkHasCo(configVersion, coId))) {
                 return ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_13;
             }
 

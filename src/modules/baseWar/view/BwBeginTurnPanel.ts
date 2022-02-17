@@ -9,16 +9,21 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwBeginTurnPanel {
     export type OpenData = {
-        playerIndex     : number;
-        teamIndex       : number;
-        nickname        : string;
-        callbackOnFinish: () => void;
+        configVersion       : string;
+        playerIndex         : number;
+        teamIndex           : number;
+        nickname            : string;
+        coId                : number;
+        unitAndTileSkinId   : number;
+        callbackOnFinish    : () => void;
     };
     export class BwBeginTurnPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;
         private readonly _labelPlayerIndex! : TwnsUiLabel.UiLabel;
         private readonly _labelNickname!    : TwnsUiLabel.UiLabel;
         private readonly _labelTurnStart!   : TwnsUiLabel.UiLabel;
+        private readonly _imgSkin!          : TwnsUiImage.UiImage;
+        private readonly _imgCo!            : TwnsUiImage.UiImage;
 
         private _timeoutIdForClose  : number | null = null;
 
@@ -40,6 +45,8 @@ namespace TwnsBwBeginTurnPanel {
             this._labelPlayerIndex.text = `${Lang.getPlayerForceName(openData.playerIndex)} (${Lang.getPlayerTeamName(openData.teamIndex)})`;
             this._labelNickname.text    = openData.nickname;
             this._labelTurnStart.text   = Lang.getText(TwnsLangTextType.LangTextType.B0679);
+            this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoHeadFrame(openData.unitAndTileSkinId);
+            this._imgCo.source          = ConfigManager.getCoHeadImageSource(openData.configVersion, openData.coId);
         }
         protected _onClosing(): void {
             this._clearTimeoutForClose();
@@ -63,7 +70,7 @@ namespace TwnsBwBeginTurnPanel {
         protected async _showOpenAnimation(): Promise<void> {
             this.alpha = 0;
             egret.Tween.get(this)
-                .to({ alpha: 1 }, 250);
+                .to({ alpha: 1 }, 150);
 
             await Helpers.wait(250);
 
@@ -71,7 +78,7 @@ namespace TwnsBwBeginTurnPanel {
         }
         protected async _showCloseAnimation(): Promise<void> {
             egret.Tween.get(this)
-                .to({ alpha: 0 }, 250);
+                .to({ alpha: 0 }, 150);
 
             await Helpers.wait(250);
         }

@@ -550,9 +550,12 @@ namespace WarActionExecutor {
             const nickname = await playerInTurn.getNickname();
             await new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBeginTurnPanel, {
+                    configVersion       : war.getConfigVersion(),
                     playerIndex,
                     teamIndex           : playerInTurn.getTeamIndex(),
                     nickname,
+                    coId                : playerInTurn.getCoId(),
+                    unitAndTileSkinId   : playerInTurn.getUnitAndTileSkinId(),
                     callbackOnFinish    : () => resolve(),
                 });
             });

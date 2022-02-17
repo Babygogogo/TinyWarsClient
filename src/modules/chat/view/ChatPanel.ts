@@ -685,18 +685,10 @@ namespace TwnsChatPanel {
 
         public async onItemTapEvent(): Promise<void> {
             const message = this._getData().message;
-            if (message.toCategory !== ChatCategory.Private) {
-                const userId = Helpers.getExisted(message.fromUserId);
-                if (userId !== UserModel.getSelfUserId()) {
-                    const info = await UserModel.getUserPublicInfo(userId);
-                    if (info) {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatCommandPanel, {
-                            messageId   : Helpers.getExisted(message.messageId),
-                            userId,
-                        });
-                    }
-                }
-            }
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatCommandPanel, {
+                messageId   : Helpers.getExisted(message.messageId),
+                userId      : message.fromUserId,
+            });
         }
     }
 }

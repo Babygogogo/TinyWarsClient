@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
-    <e:Group width="380" height="222" horizontalCenter="0" verticalCenter="0">
-        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <e:Group x="20" y="20">
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group width="600" height="450" horizontalCenter="0" verticalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
+        <e:Group y="20" horizontalCenter="0">
             <e:Group id="_groupLeftRight" x="0" y="0">
                 <e:Group x="0" y="4">
-                    <TwnsUiLabel:UiLabel id="_labelLeftRightTitle" text="L to R" textColor="0xFFFFFF" size="20" y="0" x="0" />
+                    <TwnsUiLabel:UiLabel id="_labelLeftRightTitle" text="L to R" textColor="0xFFFFFF" size="20" y="0"
+                                         x="0" />
                     <TwnsUiLabel:UiLabel id="_labelLeftRightRate" text="100%" textColor="0xFFFFFF" size="20" y="0" x="0" />
                     <e:layout>
                         <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
-                <e:Group id="_groupLeftRightBox" x="180" y="0">
+                <e:Group id="_groupLeftRightBox" x="220" y="0">
                     <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
                     <TwnsUiImage:UiImage id="_imgLeftRight" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    source="common0006" y="0" />
-                    <TwnsUiLabel:UiLabel id="_labelLeftRightAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20" x="32"
-                                    y="4" />
+                                         source="common0006" y="0" />
+                    <TwnsUiLabel:UiLabel id="_labelLeftRightAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
+                                         x="32" y="4" />
                 </e:Group>
             </e:Group>
             <e:Group id="_groupUpDown" x="10" y="10">
@@ -29,69 +33,127 @@
                         <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
-                <e:Group id="_groupUpDownBox" x="180" y="0">
+                <e:Group id="_groupUpDownBox" x="220" y="0">
                     <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
                     <TwnsUiImage:UiImage id="_imgUpDown" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    source="common0006" y="0" />
-                    <TwnsUiLabel:UiLabel id="_labelUpDownAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20" x="32"
-                                    y="4" />
+                                         source="common0006" y="0" />
+                    <TwnsUiLabel:UiLabel id="_labelUpDownAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
+                                         x="32" y="4" />
                 </e:Group>
             </e:Group>
             <e:Group id="_groupRotational" x="20" y="20">
                 <e:Group x="0" y="4">
-                    <TwnsUiLabel:UiLabel id="_labelRotationalTitle" text="Rotational" textColor="0xFFFFFF" size="20" y="0"
-                                    x="0" />
-                    <TwnsUiLabel:UiLabel id="_labelRotationalRate" text="100%" textColor="0xFFFFFF" size="20" y="0" x="0" />
+                    <TwnsUiLabel:UiLabel id="_labelRotationalTitle" text="Rotational" textColor="0xFFFFFF" size="20"
+                                         y="0" x="0" />
+                    <TwnsUiLabel:UiLabel id="_labelRotationalRate" text="100%" textColor="0xFFFFFF" size="20" y="0"
+                                         x="0" />
                     <e:layout>
                         <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
-                <e:Group id="_groupRotationalBox" x="180" y="0">
+                <e:Group id="_groupRotationalBox" x="220" y="0">
                     <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
                     <TwnsUiImage:UiImage id="_imgRotational" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    source="common0006" y="0" />
+                                         source="common0006" y="0" />
                     <TwnsUiLabel:UiLabel id="_labelRotationalAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
-                                    x="32" y="4" />
+                                         x="32" y="4" />
                 </e:Group>
             </e:Group>
             <e:Group id="_groupUpLeftDownRight" x="30" y="30">
                 <e:Group x="0" y="4">
-                    <TwnsUiLabel:UiLabel id="_labelUpLeftDownRightTitle" text="UL to DR" textColor="0xFFFFFF" size="20" y="0"
-                                    x="0" />
+                    <TwnsUiLabel:UiLabel id="_labelUpLeftDownRightTitle" text="UL to DR" textColor="0xFFFFFF" size="20"
+                                         y="0" x="0" />
                     <TwnsUiLabel:UiLabel id="_labelUpLeftDownRightRate" text="100%" textColor="0xFFFFFF" size="20" y="0"
-                                    x="0" />
+                                         x="0" />
                     <e:layout>
                         <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
-                <e:Group id="_groupUpLeftDownRightBox" x="180" y="0">
+                <e:Group id="_groupUpLeftDownRightBox" x="220" y="0">
                     <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
                     <TwnsUiImage:UiImage id="_imgUpLeftDownRight" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    source="common0006" y="0" />
-                    <TwnsUiLabel:UiLabel id="_labelUpLeftDownRightAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
-                                    x="32" y="4" />
+                                         source="common0006" y="0" />
+                    <TwnsUiLabel:UiLabel id="_labelUpLeftDownRightAuto" text="Auto Draw Tile" textColor="0xFFFFFF"
+                                         size="20" x="32" y="4" />
                 </e:Group>
             </e:Group>
             <e:Group id="_groupUpRightDownLeft" x="40" y="40">
                 <e:Group x="0" y="4">
-                    <TwnsUiLabel:UiLabel id="_labelUpRightDownLeftTitle" text="UR to DL" textColor="0xFFFFFF" size="20" y="0"
-                                    x="0" />
+                    <TwnsUiLabel:UiLabel id="_labelUpRightDownLeftTitle" text="UR to DL" textColor="0xFFFFFF" size="20"
+                                         y="0" x="0" />
                     <TwnsUiLabel:UiLabel id="_labelUpRightDownLeftRate" text="100%" textColor="0xFFFFFF" size="20" y="0"
-                                    x="0" />
+                                         x="0" />
                     <e:layout>
                         <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
-                <e:Group id="_groupUpRightDownLeftBox" x="180" y="0">
+                <e:Group id="_groupUpRightDownLeftBox" x="220" y="0">
                     <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
                     <TwnsUiImage:UiImage id="_imgUpRightDownLeft" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    source="common0006" y="0" />
-                    <TwnsUiLabel:UiLabel id="_labelUpRightDownLeftAuto" text="Auto Draw Tile" textColor="0xFFFFFF" size="20"
-                                    x="32" y="4" />
+                                         source="common0006" y="0" />
+                    <TwnsUiLabel:UiLabel id="_labelUpRightDownLeftAuto" text="Auto Draw Tile" textColor="0xFFFFFF"
+                                         size="20" x="32" y="4" />
                 </e:Group>
             </e:Group>
             <e:layout>
                 <e:VerticalLayout gap="12" />
+            </e:layout>
+        </e:Group>
+        <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" y="220" source="uncompressedColorWhite0000"
+                             height="1" left="4" right="4" />
+        <e:Group y="230" horizontalCenter="0">
+            <e:Group y="0" x="0">
+                <TwnsUiLabel:UiLabel id="_labelFill1" text="自动填充地形" textColor="0xFFFFFF" size="20" y="0"
+                                     horizontalCenter="0" />
+                <e:Group y="29" horizontalCenter="0">
+                    <TwnsUiButton:UiButton id="_btnUpDown1" label="Top To Bottom" x="0" y="0"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="10" y="10" id="_btnDownUp1"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="10" y="10" id="_btnLeftRight1"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="20" y="20" id="_btnRightLeft1"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="30" y="30" id="_btnUpLeftDownRight1"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="40" y="40" id="_btnDownRightUpLeft1"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="50" y="50" id="_btnUpRightDownLeft1"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="60" y="60" id="_btnDownLeftUpRight1"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <e:layout>
+                        <e:TileLayout orientation="rows" requestedColumnCount="4" />
+                    </e:layout>
+                </e:Group>
+            </e:Group>
+            <e:Group y="108" x="0">
+                <TwnsUiLabel:UiLabel id="_labelFill2" text="自动填充地形" textColor="0xFFFFFF" size="20" y="0"
+                                     horizontalCenter="0" />
+                <e:Group y="29">
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="0" y="0" id="_btnUpDown2"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="10" y="10" id="_btnDownUp2"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="10" y="10" id="_btnLeftRight2"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="20" y="20" id="_btnRightLeft2"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="30" y="30" id="_btnUpLeftDownRight2"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="40" y="40" id="_btnDownRightUpLeft2"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="50" y="50" id="_btnUpRightDownLeft2"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <TwnsUiButton:UiButton label="Top To Bottom" x="60" y="60" id="_btnDownLeftUpRight2"
+                                           skinName="Skins.Component.Button.ButtonSelfAdaption001" width="140" />
+                    <e:layout>
+                        <e:TileLayout orientation="rows" requestedColumnCount="4" />
+                    </e:layout>
+                </e:Group>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout gap="20" />
             </e:layout>
         </e:Group>
     </e:Group>
