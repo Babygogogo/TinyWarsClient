@@ -541,7 +541,7 @@ namespace MeUtility {
         const objectType    = tile1.getObjectType();
         const decoratorType = tile1.getDecoratorType();
         return (baseType === tile2.getBaseType())
-            && (objectType === tile2.getObjectType())
+            && (ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType) === tile2.getObjectType())
             && (decoratorType == tile2.getDecoratorType())
             && (ConfigManager.checkIsTileBaseSymmetrical({
                 baseType,
