@@ -88,7 +88,7 @@ namespace TwnsWwOngoingWarsPanel {
 
         public async setAndReviseSelectedWarId(warId: number, needScroll: boolean): Promise<void> {
             const listMap   = this._listWar;
-            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.info.warInfo?.warId === warId));
+            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.info.warId === warId));
             listMap.setSelectedIndex(index);
             this._updateComponentsForTargetWarInfo();
 
@@ -97,7 +97,7 @@ namespace TwnsWwOngoingWarsPanel {
             }
         }
         private _getSelectedWarId(): number | null {
-            return this._listWar.getSelectedData()?.info.warInfo?.warId ?? null;
+            return this._listWar.getSelectedData()?.info.warId ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -132,7 +132,7 @@ namespace TwnsWwOngoingWarsPanel {
         private _onTouchedBtnNextStep(): void {
             const data = this._listWar.getSelectedData();
             if (data) {
-                WwProxy.reqWatchContinueWar(Helpers.getExisted(data.info.warInfo?.warId, ClientErrorCode.WwOngoingWarsPanel_OnTouchedBtnNextStep_00));
+                WwProxy.reqWatchContinueWar(Helpers.getExisted(data.info.warId, ClientErrorCode.WwOngoingWarsPanel_OnTouchedBtnNextStep_00));
             }
         }
 
@@ -151,20 +151,20 @@ namespace TwnsWwOngoingWarsPanel {
             return dataArray;
         }
 
-        private _createDataForCommonWarMapInfoPage(): OpenDataForWarCommonMapInfoPage {
-            return WwModel.createDataForCommonWarMapInfoPage(this._getSelectedWarId());
+        private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForWarCommonMapInfoPage> {
+            return await WwModel.createDataForCommonWarMapInfoPage(this._getSelectedWarId());
         }
 
-        private _createDataForCommonWarPlayerInfoPage(): OpenDataForCommonWarPlayerInfoPage {
-            return WwModel.createDataForCommonWarPlayerInfoPage(this._getSelectedWarId());
+        private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
+            return await WwModel.createDataForCommonWarPlayerInfoPage(this._getSelectedWarId());
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
             return await WwModel.createDataForCommonWarBasicSettingsPage(this._getSelectedWarId());
         }
 
-        private _createDataForCommonWarAdvancedSettingsPage(): OpenDataForCommonWarAdvancedSettingsPage {
-            return WwModel.createDataForCommonWarAdvancedSettingsPage(this._getSelectedWarId());
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+            return await WwModel.createDataForCommonWarAdvancedSettingsPage(this._getSelectedWarId());
         }
 
         private async _initTabSettings(): Promise<void> {
@@ -172,12 +172,12 @@ namespace TwnsWwOngoingWarsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : this._createDataForCommonWarMapInfoPage(),
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
-                    pageData    : this._createDataForCommonWarPlayerInfoPage(),
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -187,7 +187,7 @@ namespace TwnsWwOngoingWarsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
-                    pageData    : this._createDataForCommonWarAdvancedSettingsPage(),
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
             ]);
             this._isTabInitialized = true;
@@ -234,10 +234,10 @@ namespace TwnsWwOngoingWarsPanel {
                 } else {
                     groupTab.visible = true;
 
-                    this._tabSettings.updatePageData(0, this._createDataForCommonWarMapInfoPage());
-                    this._tabSettings.updatePageData(1, this._createDataForCommonWarPlayerInfoPage());
+                    this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
+                    this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
                     this._tabSettings.updatePageData(2, await this._createDataForCommonWarBasicSettingsPage());
-                    this._tabSettings.updatePageData(3, this._createDataForCommonWarAdvancedSettingsPage());
+                    this._tabSettings.updatePageData(3, await this._createDataForCommonWarAdvancedSettingsPage());
                 }
             }
         }
@@ -327,7 +327,7 @@ namespace TwnsWwOngoingWarsPanel {
 
         public onItemTapEvent(): void {
             const data = this._getData();
-            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.info.warInfo?.warId, ClientErrorCode.WwOngoingWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
+            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.info.warId, ClientErrorCode.WwOngoingWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
         }
 
         private _updateView(): void {
@@ -336,14 +336,14 @@ namespace TwnsWwOngoingWarsPanel {
         }
 
         private _updateLabelId(): void {
-            this._labelId.text = `#${this._getData().info.warInfo?.warId}`;
+            this._labelId.text = `#${this._getData().info.warId}`;
         }
 
         private async _updateLabelName(): Promise<void> {
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const warInfo = this._getData().info.warInfo;
+            const warInfo = await MpwModel.getWarSettings(Helpers.getExisted(this._getData().info.warId));
             if (warInfo != null) {
                 const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warInfo;
                 if (settingsForMfw) {

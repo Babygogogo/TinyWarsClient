@@ -57,7 +57,7 @@ namespace TwnsCcwMyWarListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.CcwPreviewingWarIdChanged,      callback: this._onNotifyCcwPreviewingWarIdChanged },
-                { type: NotifyType.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
+                { type: NotifyType.MsgMpwCommonGetMyWarIdArray,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -74,7 +74,7 @@ namespace TwnsCcwMyWarListPanel {
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
 
-            MpwProxy.reqMpwCommonGetMyWarInfoList();
+            MpwProxy.reqMpwCommonGetMyWarIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -154,7 +154,7 @@ namespace TwnsCcwMyWarListPanel {
             this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
         }
 
-        private _updateGroupWarList(): void {
+        private async _updateGroupWarList(): Promise<void> {
             const labelLoading  = this._labelLoading;
             const labelNoWar    = this._labelNoWar;
             const listWar       = this._listWar;
@@ -164,7 +164,7 @@ namespace TwnsCcwMyWarListPanel {
                 listWar.clear();
 
             } else {
-                const dataArray         = this._createDataForListWar();
+                const dataArray         = await this._createDataForListWar();
                 labelLoading.visible    = false;
                 labelNoWar.visible      = !dataArray.length;
                 listWar.bindData(dataArray);
@@ -176,7 +176,7 @@ namespace TwnsCcwMyWarListPanel {
             }
         }
 
-        private _updateComponentsForPreviewingWarInfo(): void {
+        private async _updateComponentsForPreviewingWarInfo(): Promise<void> {
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
             const warId         = MpwModel.getCcwPreviewingWarId();
@@ -186,7 +186,7 @@ namespace TwnsCcwMyWarListPanel {
             } else {
                 groupTab.visible    = true;
                 btnNextStep.visible = true;
-                btnNextStep.setRedVisible(MpwModel.checkIsRedForMyWar(MpwModel.getMyWarInfo(warId)));
+                btnNextStep.setRedVisible(MpwModel.checkIsRedForMyWar(await MpwModel.getWarProgressInfo(warId)));
 
                 this._updateCommonWarMapInfoPage();
                 this._updateCommonWarPlayerInfoPage();
@@ -219,13 +219,9 @@ namespace TwnsCcwMyWarListPanel {
             }
         }
 
-        private _createDataForListWar(): DataForWarRenderer[] {
+        private async _createDataForListWar(): Promise<DataForWarRenderer[]> {
             const dataArray: DataForWarRenderer[] = [];
-            for (const warInfo of MpwModel.getMyCcwWarInfoArray()) {
-                const warId = warInfo.warId;
-                if (warId == null) {
-                    throw Helpers.newError(`CcwMyWarListPanel._createDataForListWar() empty warId.`);
-                }
+            for (const warId of await MpwModel.getMyCcwWarIdArray()) {
                 dataArray.push({
                     warId,
                 });
@@ -238,7 +234,7 @@ namespace TwnsCcwMyWarListPanel {
             const warId = MpwModel.getCcwPreviewingWarId();
             const mapId = warId == null
                 ? null
-                : MpwModel.getMyWarInfo(warId)?.settingsForCcw?.mapId;
+                : (await MpwModel.getWarSettings(warId))?.settingsForCcw?.mapId;
             return mapId == null
                 ? null
                 : { mapInfo: { mapId }, };
@@ -347,17 +343,17 @@ namespace TwnsCcwMyWarListPanel {
         protected async _onDataChanged(): Promise<void> {
             this._updateState();
 
-            const warId     = this._getData().warId;
-            const warInfo   = MpwModel.getMyWarInfo(warId);
-            const imgRed    = this._imgRed;
-            const labelName = this._labelName;
-            if (!warInfo) {
+            const warId         = this._getData().warId;
+            const warSettings   = await MpwModel.getWarSettings(warId);
+            const imgRed        = this._imgRed;
+            const labelName     = this._labelName;
+            if (!warSettings) {
                 imgRed.visible  = false;
                 labelName.text  = ``;
             } else {
-                imgRed.visible = MpwModel.checkIsRedForMyWar(warInfo);
+                imgRed.visible = MpwModel.checkIsRedForMyWar(warSettings);
 
-                const settingsForCcw = warInfo.settingsForCcw;
+                const settingsForCcw = warSettings.settingsForCcw;
                 if (settingsForCcw == null) {
                     throw Helpers.newError(`CcwMyWarListPanel.WarRenderer._onDataChanged() empty settingsForCcw.`);
                 } else {

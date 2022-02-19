@@ -48,7 +48,7 @@ namespace TwnsWwMakeRequestDetailPanel {
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            this._dataForListPlayer = this._generateDataForListPlayer();
+            this._dataForListPlayer = await this._generateDataForListPlayer();
             this._updateView();
         }
         protected _onClosing(): void {
@@ -73,7 +73,7 @@ namespace TwnsWwMakeRequestDetailPanel {
         }
 
         private _onTouchedBtnConfirm(): void {
-            const warId = this._getOpenData().watchInfo.warInfo?.warId;
+            const warId = this._getOpenData().watchInfo.warId;
             if (warId == null) {
                 this.close();
                 return;
@@ -115,10 +115,10 @@ namespace TwnsWwMakeRequestDetailPanel {
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
         }
 
-        private _generateDataForListPlayer(): DataForPlayerRenderer[] {
+        private async _generateDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
             const openData          = this._getOpenData().watchInfo;
-            const warInfo           = openData.warInfo;
-            const configVersion     = warInfo?.settingsForCommon?.configVersion;
+            const warId             = Helpers.getExisted(openData.warId);
+            const configVersion     = (await MpwModel.getWarSettings(warId))?.settingsForCommon?.configVersion;
             if (configVersion == null) {
                 return [];
             }
@@ -126,7 +126,7 @@ namespace TwnsWwMakeRequestDetailPanel {
             const selfUserId        = Helpers.getExisted(UserModel.getSelfUserId());
             const ongoingDstUserIds = openData.ongoingDstUserIds || [];
             const requestDstUserIds = openData.requestDstUserIds || [];
-            const playerInfoList    = warInfo?.playerInfoList || [];
+            const playerInfoList    = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
 
             const dataList: DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playerInfoList.length; ++playerIndex) {

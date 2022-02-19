@@ -56,7 +56,7 @@ namespace TwnsMfwMyWarListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MfwPreviewingWarIdChanged,      callback: this._onNotifyMfwPreviewingWarIdChanged },
-                { type: NotifyType.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
+                { type: NotifyType.MsgMpwCommonGetMyWarIdArray,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -73,7 +73,7 @@ namespace TwnsMfwMyWarListPanel {
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
 
-            MpwProxy.reqMpwCommonGetMyWarInfoList();
+            MpwProxy.reqMpwCommonGetMyWarIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -122,7 +122,7 @@ namespace TwnsMfwMyWarListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : this._createDataForCommonMapInfoPage(),
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
@@ -153,7 +153,7 @@ namespace TwnsMfwMyWarListPanel {
             this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
         }
 
-        private _updateGroupWarList(): void {
+        private async _updateGroupWarList(): Promise<void> {
             const labelLoading  = this._labelLoading;
             const labelNoWar    = this._labelNoWar;
             const listWar       = this._listWar;
@@ -163,7 +163,7 @@ namespace TwnsMfwMyWarListPanel {
                 listWar.clear();
 
             } else {
-                const dataArray         = this._createDataForListWar();
+                const dataArray         = await this._createDataForListWar();
                 labelLoading.visible    = false;
                 labelNoWar.visible      = !dataArray.length;
                 listWar.bindData(dataArray);
@@ -175,7 +175,7 @@ namespace TwnsMfwMyWarListPanel {
             }
         }
 
-        private _updateComponentsForPreviewingWarInfo(): void {
+        private async _updateComponentsForPreviewingWarInfo(): Promise<void> {
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
             const warId         = MpwModel.getMfwPreviewingWarId();
@@ -185,7 +185,7 @@ namespace TwnsMfwMyWarListPanel {
             } else {
                 groupTab.visible    = true;
                 btnNextStep.visible = true;
-                btnNextStep.setRedVisible(MpwModel.checkIsRedForMyWar(MpwModel.getMyWarInfo(warId)));
+                btnNextStep.setRedVisible(MpwModel.checkIsRedForMyWar(await MpwModel.getWarProgressInfo(warId)));
 
                 this._updateCommonMapInfoPage();
                 this._updateCommonWarPlayerInfoPage();
@@ -194,9 +194,9 @@ namespace TwnsMfwMyWarListPanel {
             }
         }
 
-        private _updateCommonMapInfoPage(): void {
+        private async _updateCommonMapInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
             }
         }
 
@@ -218,20 +218,20 @@ namespace TwnsMfwMyWarListPanel {
             }
         }
 
-        private _createDataForListWar(): DataForWarRenderer[] {
+        private async _createDataForListWar(): Promise<DataForWarRenderer[]> {
             const dataArray: DataForWarRenderer[] = [];
-            for (const warInfo of MpwModel.getMyMfwWarInfoArray()) {
+            for (const warId of await MpwModel.getMyMfwWarIdArray()) {
                 dataArray.push({
-                    warId: Helpers.getExisted(warInfo.warId),
+                    warId,
                 });
             }
 
             return dataArray.sort((v1, v2) => v1.warId - v2.warId);
         }
 
-        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const warId     = MpwModel.getMfwPreviewingWarId();
-            const warData   = warId == null ? null : MpwModel.getMyWarInfo(warId)?.settingsForMfw?.initialWarData;
+            const warData   = warId == null ? null : (await MpwModel.getWarSettings(warId))?.settingsForMfw?.initialWarData;
             return warData == null
                 ? {}
                 : { warInfo: { warData, players: null } };
@@ -343,16 +343,16 @@ namespace TwnsMfwMyWarListPanel {
         protected async _onDataChanged(): Promise<void> {
             this._updateState();
 
-            const warId     = this._getData().warId;
-            const warInfo   = MpwModel.getMyWarInfo(warId);
-            const imgRed    = this._imgRed;
-            const labelName = this._labelName;
-            if (!warInfo) {
+            const warId         = this._getData().warId;
+            const warSettings   = await MpwModel.getWarSettings(warId);
+            const imgRed        = this._imgRed;
+            const labelName     = this._labelName;
+            if (warSettings == null) {
                 imgRed.visible  = false;
                 labelName.text  = ``;
             } else {
-                imgRed.visible          = MpwModel.checkIsRedForMyWar(warInfo);
-                labelName.text          = warInfo.settingsForMfw?.warName || `#${warInfo.warId}`;
+                imgRed.visible          = MpwModel.checkIsRedForMyWar(warSettings);
+                labelName.text          = warSettings.settingsForMfw?.warName || `#${warSettings.warId}`;
             }
         }
 

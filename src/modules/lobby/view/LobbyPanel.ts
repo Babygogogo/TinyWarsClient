@@ -57,12 +57,13 @@ namespace TwnsLobbyPanel {
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
-                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,    callback: this._onMsgMfrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,    callback: this._onMsgCcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserLogout,                   callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,     callback: this._onMsgMcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,     callback: this._onMsgMfrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,     callback: this._onMsgCcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,   callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMpwCommonGetWarProgressInfo,  callback: this._onMsgMpwCommonGetWarProgressInfo },
             ]);
 
             this._updateComponentsForLanguage();
@@ -145,6 +146,11 @@ namespace TwnsLobbyPanel {
         }
 
         private _onMsgMrrGetMyRoomPublicInfoList(): void {
+            this._updateBtnRanking();
+        }
+
+        private _onMsgMpwCommonGetWarProgressInfo(): void {
+            this._updateBtnMultiPlayer();
             this._updateBtnRanking();
         }
 
@@ -274,18 +280,18 @@ namespace TwnsLobbyPanel {
 
         private async _updateBtnMultiPlayer(): Promise<void> {
             this._btnMultiPlayer.setRedVisible(
-                (MpwModel.checkIsRedForMyMcwWars()) ||
-                (MpwModel.checkIsRedForMyMfwWars()) ||
-                (MpwModel.checkIsRedForMyCcwWars()) ||
-                (await McrModel.checkIsRed())       ||
-                (await MfrModel.checkIsRed())       ||
+                (await MpwModel.checkIsRedForMyMcwWars())   ||
+                (await MpwModel.checkIsRedForMyMfwWars())   ||
+                (await MpwModel.checkIsRedForMyCcwWars())   ||
+                (await McrModel.checkIsRed())               ||
+                (await MfrModel.checkIsRed())               ||
                 (await CcrModel.checkIsRed())
             );
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MpwModel.checkIsRedForMyMrwWars()) ||
                 (await MrrModel.checkIsRed())
             );
         }

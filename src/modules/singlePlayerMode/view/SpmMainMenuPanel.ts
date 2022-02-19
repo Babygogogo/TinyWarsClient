@@ -48,6 +48,7 @@ namespace TwnsSpmMainMenuPanel {
                 { type: NotifyType.MsgMfrGetJoinedRoomInfoList,     callback: this._onMsgMfrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgCcrGetJoinedRoomInfoList,     callback: this._onMsgCcrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,   callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMpwCommonGetWarProgressInfo,  callback: this._onMsgMpwCommonGetWarProgressInfo },
             ]);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -107,24 +108,28 @@ namespace TwnsSpmMainMenuPanel {
         private _onMsgMrrGetMyRoomPublicInfoList(): void {
             this._updateBtnRanking();
         }
+        private _onMsgMpwCommonGetWarProgressInfo(): void {
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private async _updateBtnMultiPlayer(): Promise<void> {
             this._btnMultiPlayer.setRedVisible(
-                (MpwModel.checkIsRedForMyMcwWars()) ||
-                (MpwModel.checkIsRedForMyMfwWars()) ||
-                (MpwModel.checkIsRedForMyCcwWars()) ||
-                (await McrModel.checkIsRed())       ||
-                (await MfrModel.checkIsRed())       ||
+                (await MpwModel.checkIsRedForMyMcwWars())   ||
+                (await MpwModel.checkIsRedForMyMfwWars())   ||
+                (await MpwModel.checkIsRedForMyCcwWars())   ||
+                (await McrModel.checkIsRed())               ||
+                (await MfrModel.checkIsRed())               ||
                 (await CcrModel.checkIsRed())
             );
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MpwModel.checkIsRedForMyMrwWars())   ||
                 (await MrrModel.checkIsRed())
             );
         }

@@ -23295,8 +23295,8 @@ export declare namespace MultiPlayerWar {
     /** Properties of a MpwWatchInfo. */
     interface IMpwWatchInfo {
 
-        /** MpwWatchInfo warInfo */
-        warInfo?: (MultiPlayerWar.IMpwWarInfo|null);
+        /** MpwWatchInfo warId */
+        warId?: (number|null);
 
         /** MpwWatchInfo ongoingDstUserIds */
         ongoingDstUserIds?: (number[]|null);
@@ -23306,9 +23306,6 @@ export declare namespace MultiPlayerWar {
 
         /** MpwWatchInfo ongoingSrcUserIds */
         ongoingSrcUserIds?: (number[]|null);
-
-        /** MpwWatchInfo requestSrcUserIds */
-        requestSrcUserIds?: (number[]|null);
 
         /** MpwWatchInfo requesterInfos */
         requesterInfos?: (MultiPlayerWar.IMpwWatchRequesterInfo[]|null);
@@ -23323,8 +23320,8 @@ export declare namespace MultiPlayerWar {
          */
         constructor(properties?: MultiPlayerWar.IMpwWatchInfo);
 
-        /** MpwWatchInfo warInfo. */
-        public warInfo?: (MultiPlayerWar.IMpwWarInfo|null);
+        /** MpwWatchInfo warId. */
+        public warId: number;
 
         /** MpwWatchInfo ongoingDstUserIds. */
         public ongoingDstUserIds: number[];
@@ -23334,9 +23331,6 @@ export declare namespace MultiPlayerWar {
 
         /** MpwWatchInfo ongoingSrcUserIds. */
         public ongoingSrcUserIds: number[];
-
-        /** MpwWatchInfo requestSrcUserIds. */
-        public requestSrcUserIds: number[];
 
         /** MpwWatchInfo requesterInfos. */
         public requesterInfos: MultiPlayerWar.IMpwWatchRequesterInfo[];
@@ -23412,145 +23406,241 @@ export declare namespace MultiPlayerWar {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a MpwWarInfo. */
-    interface IMpwWarInfo {
+    /** Properties of a MpwWarSettings. */
+    interface IMpwWarSettings {
 
-        /** MpwWarInfo settingsForCommon */
-        settingsForCommon?: (WarSettings.ISettingsForCommon|null);
-
-        /** MpwWarInfo settingsForMcw */
-        settingsForMcw?: (WarSettings.ISettingsForMcw|null);
-
-        /** MpwWarInfo settingsForMrw */
-        settingsForMrw?: (WarSettings.ISettingsForMrw|null);
-
-        /** MpwWarInfo settingsForMfw */
-        settingsForMfw?: (WarSettings.ISettingsForMfw|null);
-
-        /** MpwWarInfo settingsForCcw */
-        settingsForCcw?: (WarSettings.ISettingsForCcw|null);
-
-        /** MpwWarInfo warId */
+        /** MpwWarSettings warId */
         warId?: (number|null);
 
-        /** MpwWarInfo playerInfoList */
-        playerInfoList?: (Structure.IWarPlayerInfo[]|null);
+        /** MpwWarSettings settingsForCommon */
+        settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-        /** MpwWarInfo playerIndexInTurn */
-        playerIndexInTurn?: (number|null);
+        /** MpwWarSettings settingsForMcw */
+        settingsForMcw?: (WarSettings.ISettingsForMcw|null);
 
-        /** MpwWarInfo turnIndex */
-        turnIndex?: (number|null);
+        /** MpwWarSettings settingsForMrw */
+        settingsForMrw?: (WarSettings.ISettingsForMrw|null);
 
-        /** MpwWarInfo enterTurnTime */
-        enterTurnTime?: (number|null);
+        /** MpwWarSettings settingsForMfw */
+        settingsForMfw?: (WarSettings.ISettingsForMfw|null);
+
+        /** MpwWarSettings settingsForCcw */
+        settingsForCcw?: (WarSettings.ISettingsForCcw|null);
     }
 
-    /** Represents a MpwWarInfo. */
-    class MpwWarInfo implements IMpwWarInfo {
+    /** Represents a MpwWarSettings. */
+    class MpwWarSettings implements IMpwWarSettings {
 
         /**
-         * Constructs a new MpwWarInfo.
+         * Constructs a new MpwWarSettings.
          * @param [properties] Properties to set
          */
-        constructor(properties?: MultiPlayerWar.IMpwWarInfo);
+        constructor(properties?: MultiPlayerWar.IMpwWarSettings);
 
-        /** MpwWarInfo settingsForCommon. */
-        public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
-
-        /** MpwWarInfo settingsForMcw. */
-        public settingsForMcw?: (WarSettings.ISettingsForMcw|null);
-
-        /** MpwWarInfo settingsForMrw. */
-        public settingsForMrw?: (WarSettings.ISettingsForMrw|null);
-
-        /** MpwWarInfo settingsForMfw. */
-        public settingsForMfw?: (WarSettings.ISettingsForMfw|null);
-
-        /** MpwWarInfo settingsForCcw. */
-        public settingsForCcw?: (WarSettings.ISettingsForCcw|null);
-
-        /** MpwWarInfo warId. */
+        /** MpwWarSettings warId. */
         public warId: number;
 
-        /** MpwWarInfo playerInfoList. */
-        public playerInfoList: Structure.IWarPlayerInfo[];
+        /** MpwWarSettings settingsForCommon. */
+        public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
 
-        /** MpwWarInfo playerIndexInTurn. */
-        public playerIndexInTurn: number;
+        /** MpwWarSettings settingsForMcw. */
+        public settingsForMcw?: (WarSettings.ISettingsForMcw|null);
 
-        /** MpwWarInfo turnIndex. */
-        public turnIndex: number;
+        /** MpwWarSettings settingsForMrw. */
+        public settingsForMrw?: (WarSettings.ISettingsForMrw|null);
 
-        /** MpwWarInfo enterTurnTime. */
-        public enterTurnTime: number;
+        /** MpwWarSettings settingsForMfw. */
+        public settingsForMfw?: (WarSettings.ISettingsForMfw|null);
+
+        /** MpwWarSettings settingsForCcw. */
+        public settingsForCcw?: (WarSettings.ISettingsForCcw|null);
 
         /**
-         * Creates a new MpwWarInfo instance using the specified properties.
+         * Creates a new MpwWarSettings instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MpwWarInfo instance
+         * @returns MpwWarSettings instance
          */
-        public static create(properties?: MultiPlayerWar.IMpwWarInfo): MultiPlayerWar.MpwWarInfo;
+        public static create(properties?: MultiPlayerWar.IMpwWarSettings): MultiPlayerWar.MpwWarSettings;
 
         /**
-         * Encodes the specified MpwWarInfo message. Does not implicitly {@link MultiPlayerWar.MpwWarInfo.verify|verify} messages.
-         * @param message MpwWarInfo message or plain object to encode
+         * Encodes the specified MpwWarSettings message. Does not implicitly {@link MultiPlayerWar.MpwWarSettings.verify|verify} messages.
+         * @param message MpwWarSettings message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: MultiPlayerWar.IMpwWarInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: MultiPlayerWar.IMpwWarSettings, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MpwWarInfo message, length delimited. Does not implicitly {@link MultiPlayerWar.MpwWarInfo.verify|verify} messages.
-         * @param message MpwWarInfo message or plain object to encode
+         * Encodes the specified MpwWarSettings message, length delimited. Does not implicitly {@link MultiPlayerWar.MpwWarSettings.verify|verify} messages.
+         * @param message MpwWarSettings message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: MultiPlayerWar.IMpwWarInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: MultiPlayerWar.IMpwWarSettings, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MpwWarInfo message from the specified reader or buffer.
+         * Decodes a MpwWarSettings message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MpwWarInfo
+         * @returns MpwWarSettings
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiPlayerWar.MpwWarInfo;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiPlayerWar.MpwWarSettings;
 
         /**
-         * Decodes a MpwWarInfo message from the specified reader or buffer, length delimited.
+         * Decodes a MpwWarSettings message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MpwWarInfo
+         * @returns MpwWarSettings
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiPlayerWar.MpwWarInfo;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiPlayerWar.MpwWarSettings;
 
         /**
-         * Verifies a MpwWarInfo message.
+         * Verifies a MpwWarSettings message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MpwWarInfo message from a plain object. Also converts values to their respective internal types.
+         * Creates a MpwWarSettings message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MpwWarInfo
+         * @returns MpwWarSettings
          */
-        public static fromObject(object: { [k: string]: any }): MultiPlayerWar.MpwWarInfo;
+        public static fromObject(object: { [k: string]: any }): MultiPlayerWar.MpwWarSettings;
 
         /**
-         * Creates a plain object from a MpwWarInfo message. Also converts values to other types if specified.
-         * @param message MpwWarInfo
+         * Creates a plain object from a MpwWarSettings message. Also converts values to other types if specified.
+         * @param message MpwWarSettings
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: MultiPlayerWar.MpwWarInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: MultiPlayerWar.MpwWarSettings, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MpwWarInfo to JSON.
+         * Converts this MpwWarSettings to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a MpwWarProgressInfo. */
+    interface IMpwWarProgressInfo {
+
+        /** MpwWarProgressInfo warId */
+        warId?: (number|null);
+
+        /** MpwWarProgressInfo playerInfoList */
+        playerInfoList?: (Structure.IWarPlayerInfo[]|null);
+
+        /** MpwWarProgressInfo playerIndexInTurn */
+        playerIndexInTurn?: (number|null);
+
+        /** MpwWarProgressInfo turnIndex */
+        turnIndex?: (number|null);
+
+        /** MpwWarProgressInfo enterTurnTime */
+        enterTurnTime?: (number|null);
+
+        /** MpwWarProgressInfo isEnded */
+        isEnded?: (boolean|null);
+    }
+
+    /** Represents a MpwWarProgressInfo. */
+    class MpwWarProgressInfo implements IMpwWarProgressInfo {
+
+        /**
+         * Constructs a new MpwWarProgressInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: MultiPlayerWar.IMpwWarProgressInfo);
+
+        /** MpwWarProgressInfo warId. */
+        public warId: number;
+
+        /** MpwWarProgressInfo playerInfoList. */
+        public playerInfoList: Structure.IWarPlayerInfo[];
+
+        /** MpwWarProgressInfo playerIndexInTurn. */
+        public playerIndexInTurn: number;
+
+        /** MpwWarProgressInfo turnIndex. */
+        public turnIndex: number;
+
+        /** MpwWarProgressInfo enterTurnTime. */
+        public enterTurnTime: number;
+
+        /** MpwWarProgressInfo isEnded. */
+        public isEnded: boolean;
+
+        /**
+         * Creates a new MpwWarProgressInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MpwWarProgressInfo instance
+         */
+        public static create(properties?: MultiPlayerWar.IMpwWarProgressInfo): MultiPlayerWar.MpwWarProgressInfo;
+
+        /**
+         * Encodes the specified MpwWarProgressInfo message. Does not implicitly {@link MultiPlayerWar.MpwWarProgressInfo.verify|verify} messages.
+         * @param message MpwWarProgressInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: MultiPlayerWar.IMpwWarProgressInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MpwWarProgressInfo message, length delimited. Does not implicitly {@link MultiPlayerWar.MpwWarProgressInfo.verify|verify} messages.
+         * @param message MpwWarProgressInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: MultiPlayerWar.IMpwWarProgressInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MpwWarProgressInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MpwWarProgressInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiPlayerWar.MpwWarProgressInfo;
+
+        /**
+         * Decodes a MpwWarProgressInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MpwWarProgressInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiPlayerWar.MpwWarProgressInfo;
+
+        /**
+         * Verifies a MpwWarProgressInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MpwWarProgressInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MpwWarProgressInfo
+         */
+        public static fromObject(object: { [k: string]: any }): MultiPlayerWar.MpwWarProgressInfo;
+
+        /**
+         * Creates a plain object from a MpwWarProgressInfo message. Also converts values to other types if specified.
+         * @param message MpwWarProgressInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: MultiPlayerWar.MpwWarProgressInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MpwWarProgressInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -27063,8 +27153,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMcrGetJoinableRoomInfoList */
         MsgMcrGetJoinableRoomInfoList?: (NetMessage.IMsgMcrGetJoinableRoomInfoList|null);
 
-        /** MessageContainer MsgMpwCommonGetMyWarInfoList */
-        MsgMpwCommonGetMyWarInfoList?: (NetMessage.IMsgMpwCommonGetMyWarInfoList|null);
+        /** MessageContainer MsgMpwCommonGetMyWarIdArray */
+        MsgMpwCommonGetMyWarIdArray?: (NetMessage.IMsgMpwCommonGetMyWarIdArray|null);
 
         /** MessageContainer MsgMpwCommonContinueWar */
         MsgMpwCommonContinueWar?: (NetMessage.IMsgMpwCommonContinueWar|null);
@@ -27077,6 +27167,12 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMpwCommonBroadcastGameStart */
         MsgMpwCommonBroadcastGameStart?: (NetMessage.IMsgMpwCommonBroadcastGameStart|null);
+
+        /** MessageContainer MsgMpwCommonGetWarSettings */
+        MsgMpwCommonGetWarSettings?: (NetMessage.IMsgMpwCommonGetWarSettings|null);
+
+        /** MessageContainer MsgMpwCommonGetWarProgressInfo */
+        MsgMpwCommonGetWarProgressInfo?: (NetMessage.IMsgMpwCommonGetWarProgressInfo|null);
 
         /** MessageContainer MsgMpwWatchMakeRequest */
         MsgMpwWatchMakeRequest?: (NetMessage.IMsgMpwWatchMakeRequest|null);
@@ -27451,8 +27547,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMcrGetJoinableRoomInfoList. */
         public MsgMcrGetJoinableRoomInfoList?: (NetMessage.IMsgMcrGetJoinableRoomInfoList|null);
 
-        /** MessageContainer MsgMpwCommonGetMyWarInfoList. */
-        public MsgMpwCommonGetMyWarInfoList?: (NetMessage.IMsgMpwCommonGetMyWarInfoList|null);
+        /** MessageContainer MsgMpwCommonGetMyWarIdArray. */
+        public MsgMpwCommonGetMyWarIdArray?: (NetMessage.IMsgMpwCommonGetMyWarIdArray|null);
 
         /** MessageContainer MsgMpwCommonContinueWar. */
         public MsgMpwCommonContinueWar?: (NetMessage.IMsgMpwCommonContinueWar|null);
@@ -27465,6 +27561,12 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMpwCommonBroadcastGameStart. */
         public MsgMpwCommonBroadcastGameStart?: (NetMessage.IMsgMpwCommonBroadcastGameStart|null);
+
+        /** MessageContainer MsgMpwCommonGetWarSettings. */
+        public MsgMpwCommonGetWarSettings?: (NetMessage.IMsgMpwCommonGetWarSettings|null);
+
+        /** MessageContainer MsgMpwCommonGetWarProgressInfo. */
+        public MsgMpwCommonGetWarProgressInfo?: (NetMessage.IMsgMpwCommonGetWarProgressInfo|null);
 
         /** MessageContainer MsgMpwWatchMakeRequest. */
         public MsgMpwWatchMakeRequest?: (NetMessage.IMsgMpwWatchMakeRequest|null);
@@ -46968,103 +47070,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgMpwCommonGetMyWarInfoList. */
-    interface IMsgMpwCommonGetMyWarInfoList {
+    /** Properties of a MsgMpwCommonGetMyWarIdArray. */
+    interface IMsgMpwCommonGetMyWarIdArray {
 
-        /** MsgMpwCommonGetMyWarInfoList c */
-        c?: (NetMessage.MsgMpwCommonGetMyWarInfoList.IC|null);
+        /** MsgMpwCommonGetMyWarIdArray c */
+        c?: (NetMessage.MsgMpwCommonGetMyWarIdArray.IC|null);
 
-        /** MsgMpwCommonGetMyWarInfoList s */
-        s?: (NetMessage.MsgMpwCommonGetMyWarInfoList.IS|null);
+        /** MsgMpwCommonGetMyWarIdArray s */
+        s?: (NetMessage.MsgMpwCommonGetMyWarIdArray.IS|null);
     }
 
-    /** Represents a MsgMpwCommonGetMyWarInfoList. */
-    class MsgMpwCommonGetMyWarInfoList implements IMsgMpwCommonGetMyWarInfoList {
+    /** Represents a MsgMpwCommonGetMyWarIdArray. */
+    class MsgMpwCommonGetMyWarIdArray implements IMsgMpwCommonGetMyWarIdArray {
 
         /**
-         * Constructs a new MsgMpwCommonGetMyWarInfoList.
+         * Constructs a new MsgMpwCommonGetMyWarIdArray.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgMpwCommonGetMyWarInfoList);
+        constructor(properties?: NetMessage.IMsgMpwCommonGetMyWarIdArray);
 
-        /** MsgMpwCommonGetMyWarInfoList c. */
-        public c?: (NetMessage.MsgMpwCommonGetMyWarInfoList.IC|null);
+        /** MsgMpwCommonGetMyWarIdArray c. */
+        public c?: (NetMessage.MsgMpwCommonGetMyWarIdArray.IC|null);
 
-        /** MsgMpwCommonGetMyWarInfoList s. */
-        public s?: (NetMessage.MsgMpwCommonGetMyWarInfoList.IS|null);
+        /** MsgMpwCommonGetMyWarIdArray s. */
+        public s?: (NetMessage.MsgMpwCommonGetMyWarIdArray.IS|null);
 
         /**
-         * Creates a new MsgMpwCommonGetMyWarInfoList instance using the specified properties.
+         * Creates a new MsgMpwCommonGetMyWarIdArray instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgMpwCommonGetMyWarInfoList instance
+         * @returns MsgMpwCommonGetMyWarIdArray instance
          */
-        public static create(properties?: NetMessage.IMsgMpwCommonGetMyWarInfoList): NetMessage.MsgMpwCommonGetMyWarInfoList;
+        public static create(properties?: NetMessage.IMsgMpwCommonGetMyWarIdArray): NetMessage.MsgMpwCommonGetMyWarIdArray;
 
         /**
-         * Encodes the specified MsgMpwCommonGetMyWarInfoList message. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarInfoList.verify|verify} messages.
-         * @param message MsgMpwCommonGetMyWarInfoList message or plain object to encode
+         * Encodes the specified MsgMpwCommonGetMyWarIdArray message. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarIdArray.verify|verify} messages.
+         * @param message MsgMpwCommonGetMyWarIdArray message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgMpwCommonGetMyWarInfoList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgMpwCommonGetMyWarIdArray, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgMpwCommonGetMyWarInfoList message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarInfoList.verify|verify} messages.
-         * @param message MsgMpwCommonGetMyWarInfoList message or plain object to encode
+         * Encodes the specified MsgMpwCommonGetMyWarIdArray message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarIdArray.verify|verify} messages.
+         * @param message MsgMpwCommonGetMyWarIdArray message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgMpwCommonGetMyWarInfoList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgMpwCommonGetMyWarIdArray, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgMpwCommonGetMyWarInfoList message from the specified reader or buffer.
+         * Decodes a MsgMpwCommonGetMyWarIdArray message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgMpwCommonGetMyWarInfoList
+         * @returns MsgMpwCommonGetMyWarIdArray
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetMyWarInfoList;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetMyWarIdArray;
 
         /**
-         * Decodes a MsgMpwCommonGetMyWarInfoList message from the specified reader or buffer, length delimited.
+         * Decodes a MsgMpwCommonGetMyWarIdArray message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgMpwCommonGetMyWarInfoList
+         * @returns MsgMpwCommonGetMyWarIdArray
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetMyWarInfoList;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetMyWarIdArray;
 
         /**
-         * Verifies a MsgMpwCommonGetMyWarInfoList message.
+         * Verifies a MsgMpwCommonGetMyWarIdArray message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgMpwCommonGetMyWarInfoList message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgMpwCommonGetMyWarIdArray message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgMpwCommonGetMyWarInfoList
+         * @returns MsgMpwCommonGetMyWarIdArray
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetMyWarInfoList;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetMyWarIdArray;
 
         /**
-         * Creates a plain object from a MsgMpwCommonGetMyWarInfoList message. Also converts values to other types if specified.
-         * @param message MsgMpwCommonGetMyWarInfoList
+         * Creates a plain object from a MsgMpwCommonGetMyWarIdArray message. Also converts values to other types if specified.
+         * @param message MsgMpwCommonGetMyWarIdArray
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgMpwCommonGetMyWarInfoList, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgMpwCommonGetMyWarIdArray, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgMpwCommonGetMyWarInfoList to JSON.
+         * Converts this MsgMpwCommonGetMyWarIdArray to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgMpwCommonGetMyWarInfoList {
+    namespace MsgMpwCommonGetMyWarIdArray {
 
         /** Properties of a C. */
         interface IC {
@@ -47077,30 +47179,30 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMpwCommonGetMyWarInfoList.IC);
+            constructor(properties?: NetMessage.MsgMpwCommonGetMyWarIdArray.IC);
 
             /**
              * Creates a new C instance using the specified properties.
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgMpwCommonGetMyWarInfoList.IC): NetMessage.MsgMpwCommonGetMyWarInfoList.C;
+            public static create(properties?: NetMessage.MsgMpwCommonGetMyWarIdArray.IC): NetMessage.MsgMpwCommonGetMyWarIdArray.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarInfoList.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarIdArray.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMpwCommonGetMyWarInfoList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMpwCommonGetMyWarIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarInfoList.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarIdArray.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMpwCommonGetMyWarInfoList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMpwCommonGetMyWarIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -47110,7 +47212,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetMyWarInfoList.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetMyWarIdArray.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -47119,7 +47221,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetMyWarInfoList.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetMyWarIdArray.C;
 
             /**
              * Verifies a C message.
@@ -47133,7 +47235,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetMyWarInfoList.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetMyWarIdArray.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -47141,7 +47243,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMpwCommonGetMyWarInfoList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMpwCommonGetMyWarIdArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -47153,8 +47255,8 @@ export declare namespace NetMessage {
         /** Properties of a S. */
         interface IS {
 
-            /** S infos */
-            infos?: (MultiPlayerWar.IMpwWarInfo[]|null);
+            /** S warIdArray */
+            warIdArray?: (number[]|null);
         }
 
         /** Represents a S. */
@@ -47164,33 +47266,33 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMpwCommonGetMyWarInfoList.IS);
+            constructor(properties?: NetMessage.MsgMpwCommonGetMyWarIdArray.IS);
 
-            /** S infos. */
-            public infos: MultiPlayerWar.IMpwWarInfo[];
+            /** S warIdArray. */
+            public warIdArray: number[];
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgMpwCommonGetMyWarInfoList.IS): NetMessage.MsgMpwCommonGetMyWarInfoList.S;
+            public static create(properties?: NetMessage.MsgMpwCommonGetMyWarIdArray.IS): NetMessage.MsgMpwCommonGetMyWarIdArray.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarInfoList.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarIdArray.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMpwCommonGetMyWarInfoList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMpwCommonGetMyWarIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarInfoList.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetMyWarIdArray.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMpwCommonGetMyWarInfoList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMpwCommonGetMyWarIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -47200,7 +47302,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetMyWarInfoList.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetMyWarIdArray.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -47209,7 +47311,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetMyWarInfoList.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetMyWarIdArray.S;
 
             /**
              * Verifies a S message.
@@ -47223,7 +47325,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetMyWarInfoList.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetMyWarIdArray.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -47231,7 +47333,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMpwCommonGetMyWarInfoList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMpwCommonGetMyWarIdArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -48027,6 +48129,588 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMpwCommonBroadcastGameStart.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMpwCommonGetWarSettings. */
+    interface IMsgMpwCommonGetWarSettings {
+
+        /** MsgMpwCommonGetWarSettings c */
+        c?: (NetMessage.MsgMpwCommonGetWarSettings.IC|null);
+
+        /** MsgMpwCommonGetWarSettings s */
+        s?: (NetMessage.MsgMpwCommonGetWarSettings.IS|null);
+    }
+
+    /** Represents a MsgMpwCommonGetWarSettings. */
+    class MsgMpwCommonGetWarSettings implements IMsgMpwCommonGetWarSettings {
+
+        /**
+         * Constructs a new MsgMpwCommonGetWarSettings.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMpwCommonGetWarSettings);
+
+        /** MsgMpwCommonGetWarSettings c. */
+        public c?: (NetMessage.MsgMpwCommonGetWarSettings.IC|null);
+
+        /** MsgMpwCommonGetWarSettings s. */
+        public s?: (NetMessage.MsgMpwCommonGetWarSettings.IS|null);
+
+        /**
+         * Creates a new MsgMpwCommonGetWarSettings instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMpwCommonGetWarSettings instance
+         */
+        public static create(properties?: NetMessage.IMsgMpwCommonGetWarSettings): NetMessage.MsgMpwCommonGetWarSettings;
+
+        /**
+         * Encodes the specified MsgMpwCommonGetWarSettings message. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarSettings.verify|verify} messages.
+         * @param message MsgMpwCommonGetWarSettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMpwCommonGetWarSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMpwCommonGetWarSettings message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarSettings.verify|verify} messages.
+         * @param message MsgMpwCommonGetWarSettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMpwCommonGetWarSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMpwCommonGetWarSettings message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMpwCommonGetWarSettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetWarSettings;
+
+        /**
+         * Decodes a MsgMpwCommonGetWarSettings message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMpwCommonGetWarSettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetWarSettings;
+
+        /**
+         * Verifies a MsgMpwCommonGetWarSettings message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMpwCommonGetWarSettings message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMpwCommonGetWarSettings
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetWarSettings;
+
+        /**
+         * Creates a plain object from a MsgMpwCommonGetWarSettings message. Also converts values to other types if specified.
+         * @param message MsgMpwCommonGetWarSettings
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMpwCommonGetWarSettings, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMpwCommonGetWarSettings to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMpwCommonGetWarSettings {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C warId */
+            warId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMpwCommonGetWarSettings.IC);
+
+            /** C warId. */
+            public warId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgMpwCommonGetWarSettings.IC): NetMessage.MsgMpwCommonGetWarSettings.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarSettings.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMpwCommonGetWarSettings.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarSettings.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMpwCommonGetWarSettings.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetWarSettings.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetWarSettings.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetWarSettings.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMpwCommonGetWarSettings.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S warId */
+            warId?: (number|null);
+
+            /** S warSettings */
+            warSettings?: (MultiPlayerWar.IMpwWarSettings|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMpwCommonGetWarSettings.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S warId. */
+            public warId: number;
+
+            /** S warSettings. */
+            public warSettings?: (MultiPlayerWar.IMpwWarSettings|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMpwCommonGetWarSettings.IS): NetMessage.MsgMpwCommonGetWarSettings.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarSettings.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMpwCommonGetWarSettings.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarSettings.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMpwCommonGetWarSettings.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetWarSettings.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetWarSettings.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetWarSettings.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMpwCommonGetWarSettings.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMpwCommonGetWarProgressInfo. */
+    interface IMsgMpwCommonGetWarProgressInfo {
+
+        /** MsgMpwCommonGetWarProgressInfo c */
+        c?: (NetMessage.MsgMpwCommonGetWarProgressInfo.IC|null);
+
+        /** MsgMpwCommonGetWarProgressInfo s */
+        s?: (NetMessage.MsgMpwCommonGetWarProgressInfo.IS|null);
+    }
+
+    /** Represents a MsgMpwCommonGetWarProgressInfo. */
+    class MsgMpwCommonGetWarProgressInfo implements IMsgMpwCommonGetWarProgressInfo {
+
+        /**
+         * Constructs a new MsgMpwCommonGetWarProgressInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMpwCommonGetWarProgressInfo);
+
+        /** MsgMpwCommonGetWarProgressInfo c. */
+        public c?: (NetMessage.MsgMpwCommonGetWarProgressInfo.IC|null);
+
+        /** MsgMpwCommonGetWarProgressInfo s. */
+        public s?: (NetMessage.MsgMpwCommonGetWarProgressInfo.IS|null);
+
+        /**
+         * Creates a new MsgMpwCommonGetWarProgressInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMpwCommonGetWarProgressInfo instance
+         */
+        public static create(properties?: NetMessage.IMsgMpwCommonGetWarProgressInfo): NetMessage.MsgMpwCommonGetWarProgressInfo;
+
+        /**
+         * Encodes the specified MsgMpwCommonGetWarProgressInfo message. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarProgressInfo.verify|verify} messages.
+         * @param message MsgMpwCommonGetWarProgressInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMpwCommonGetWarProgressInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMpwCommonGetWarProgressInfo message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarProgressInfo.verify|verify} messages.
+         * @param message MsgMpwCommonGetWarProgressInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMpwCommonGetWarProgressInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMpwCommonGetWarProgressInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMpwCommonGetWarProgressInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetWarProgressInfo;
+
+        /**
+         * Decodes a MsgMpwCommonGetWarProgressInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMpwCommonGetWarProgressInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetWarProgressInfo;
+
+        /**
+         * Verifies a MsgMpwCommonGetWarProgressInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMpwCommonGetWarProgressInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMpwCommonGetWarProgressInfo
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetWarProgressInfo;
+
+        /**
+         * Creates a plain object from a MsgMpwCommonGetWarProgressInfo message. Also converts values to other types if specified.
+         * @param message MsgMpwCommonGetWarProgressInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMpwCommonGetWarProgressInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMpwCommonGetWarProgressInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMpwCommonGetWarProgressInfo {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C warId */
+            warId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMpwCommonGetWarProgressInfo.IC);
+
+            /** C warId. */
+            public warId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgMpwCommonGetWarProgressInfo.IC): NetMessage.MsgMpwCommonGetWarProgressInfo.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarProgressInfo.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMpwCommonGetWarProgressInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarProgressInfo.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMpwCommonGetWarProgressInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetWarProgressInfo.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetWarProgressInfo.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetWarProgressInfo.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMpwCommonGetWarProgressInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S warId */
+            warId?: (number|null);
+
+            /** S warProgressInfo */
+            warProgressInfo?: (MultiPlayerWar.IMpwWarProgressInfo|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMpwCommonGetWarProgressInfo.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S warId. */
+            public warId: number;
+
+            /** S warProgressInfo. */
+            public warProgressInfo?: (MultiPlayerWar.IMpwWarProgressInfo|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMpwCommonGetWarProgressInfo.IS): NetMessage.MsgMpwCommonGetWarProgressInfo.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarProgressInfo.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMpwCommonGetWarProgressInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMpwCommonGetWarProgressInfo.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMpwCommonGetWarProgressInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwCommonGetWarProgressInfo.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwCommonGetWarProgressInfo.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwCommonGetWarProgressInfo.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMpwCommonGetWarProgressInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

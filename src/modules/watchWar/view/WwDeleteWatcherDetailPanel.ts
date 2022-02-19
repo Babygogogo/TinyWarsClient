@@ -48,7 +48,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
             this._listPlayer.setItemRenderer(RequesterRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            this._dataForListPlayer = this._generateDataForListPlayer();
+            this._dataForListPlayer = await this._generateDataForListPlayer();
             this._updateView();
         }
         protected _onClosing(): void {
@@ -83,7 +83,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
                 }
             }
             if (deleteUserIds.length) {
-                const warId = this._getOpenData().watchInfo.warInfo?.warId;
+                const warId = this._getOpenData().watchInfo.warId;
                 (warId != null) && (WwProxy.reqWatchDeleteWatcher(warId, deleteUserIds));
             }
             this.close();
@@ -107,9 +107,9 @@ namespace TwnsWwDeleteWatcherDetailPanel {
             this._btnCancel.label               = Lang.getText(LangTextType.B0154);
         }
 
-        private _generateDataForListPlayer(): DataForRequesterRenderer[] {
+        private async _generateDataForListPlayer(): Promise<DataForRequesterRenderer[]> {
             const openData          = this._getOpenData().watchInfo;
-            const playerInfoList    = openData.warInfo?.playerInfoList || [];
+            const playerInfoList    = (await MpwModel.getWarProgressInfo(Helpers.getExisted(openData.warId)))?.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
             for (const info of openData.requesterInfos || []) {
                 const userId = info.userId;
@@ -118,7 +118,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
                         panel           : this,
                         userId,
                         isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
-                        isOpponent      : playerInfoList.some(v => v.userId === userId),
+                        isOpponent      : !!playerInfoList?.some(v => v.userId === userId),
                         isDelete        : false,
                     });
                 }

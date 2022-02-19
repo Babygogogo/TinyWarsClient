@@ -1173,7 +1173,7 @@ namespace WarCommonHelpers {
             return WarType.Undefined;
         }
     }
-    export function getWarTypeByMpwWarInfo(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo): WarType {
+    export function getWarTypeByMpwWarSettings(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarSettings): WarType {
         const warRule   = warInfo.settingsForCommon?.warRule;
         const hasFog    = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
         if (hasFog == null) {

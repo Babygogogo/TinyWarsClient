@@ -36,20 +36,23 @@ namespace MpwModel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
-    import IMpwWarInfo                              = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarActionContainer                      = ProtoTypes.WarAction.IWarActionContainer;
     import IWarRule                                 = ProtoTypes.WarRule.IWarRule;
+    import IMpwWarSettings                          = ProtoTypes.MultiPlayerWar.IMpwWarSettings;
+    import IMpwWarProgressInfo                      = ProtoTypes.MultiPlayerWar.IMpwWarProgressInfo;
     import ISettingsForCommon                       = ProtoTypes.WarSettings.ISettingsForCommon;
     import ISettingsForMcw                          = ProtoTypes.WarSettings.ISettingsForMcw;
     import ISettingsForCcw                          = ProtoTypes.WarSettings.ISettingsForCcw;
     import ISettingsForMrw                          = ProtoTypes.WarSettings.ISettingsForMrw;
     import ISettingsForMfw                          = ProtoTypes.WarSettings.ISettingsForMfw;
     import ISerialWar                               = ProtoTypes.WarSerialization.ISerialWar;
+    import MsgMpwCommonGetWarSettingsIs             = ProtoTypes.NetMessage.MsgMpwCommonGetWarSettings.IS;
+    import MsgMpwCommonGetWarProgressInfoIs         = ProtoTypes.NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
-    let _allWarInfoList         : IMpwWarInfo[] = [];
+    let _allMyWarIdArray        : number[] = [];
     let _mcwPreviewingWarId     : number | null = null;
     let _mrwPreviewingWarId     : number | null = null;
     let _mfwPreviewingWarId     : number | null = null;
@@ -62,26 +65,44 @@ namespace MpwModel {
         // nothing to do.
     }
 
-    export function setAllMyWarInfoList(infoList: IMpwWarInfo[]): void {
-        _allWarInfoList = infoList || [];
+    export function setAllMyWarIdArray(idArray: number[]): void {
+        _allMyWarIdArray = idArray || [];
     }
-    function getAllMyWarInfoList(): IMpwWarInfo[] {
-        return _allWarInfoList;
+    export async function getMyMcwWarIdArray(): Promise<number[]> {
+        const warIdArray: number[] = [];
+        for (const warId of _allMyWarIdArray) {
+            if ((await getWarSettings(warId))?.settingsForMcw) {
+                warIdArray.push(warId);
+            }
+        }
+        return warIdArray;
     }
-    export function getMyMcwWarInfoArray(): IMpwWarInfo[] {
-        return getAllMyWarInfoList().filter(v => v.settingsForMcw != null);
+    export async function getMyMrwWarIdArray(): Promise<number[]> {
+        const warIdArray: number[] = [];
+        for (const warId of _allMyWarIdArray) {
+            if ((await getWarSettings(warId))?.settingsForMrw) {
+                warIdArray.push(warId);
+            }
+        }
+        return warIdArray;
     }
-    export function getMyMrwWarInfoArray(): IMpwWarInfo[] {
-        return getAllMyWarInfoList().filter(v => v.settingsForMrw != null);
+    export async function getMyMfwWarIdArray(): Promise<number[]> {
+        const warIdArray: number[] = [];
+        for (const warId of _allMyWarIdArray) {
+            if ((await getWarSettings(warId))?.settingsForMfw) {
+                warIdArray.push(warId);
+            }
+        }
+        return warIdArray;
     }
-    export function getMyMfwWarInfoArray(): IMpwWarInfo[] {
-        return getAllMyWarInfoList().filter(v => v.settingsForMfw != null);
-    }
-    export function getMyCcwWarInfoArray(): IMpwWarInfo[] {
-        return getAllMyWarInfoList().filter(v => v.settingsForCcw != null);
-    }
-    export function getMyWarInfo(warId: number): IMpwWarInfo | null {
-        return getAllMyWarInfoList().find(v => v.warId === warId) ?? null;
+    export async function getMyCcwWarIdArray(): Promise<number[]> {
+        const warIdArray: number[] = [];
+        for (const warId of _allMyWarIdArray) {
+            if ((await getWarSettings(warId))?.settingsForCcw) {
+                warIdArray.push(warId);
+            }
+        }
+        return warIdArray;
     }
 
     export function getMcwPreviewingWarId(): number | null {
@@ -124,33 +145,172 @@ namespace MpwModel {
         }
     }
 
-    export function checkIsRedForMyMcwWars(): boolean {
-        return checkIsRedForMyWars(getMyMcwWarInfoArray());
+    export async function checkIsRedForMyMcwWars(): Promise<boolean> {
+        return checkIsRedForMyWars(await getMyMcwWarIdArray());
     }
-    export function checkIsRedForMyMrwWars(): boolean {
-        return checkIsRedForMyWars(getMyMrwWarInfoArray());
+    export async function checkIsRedForMyMrwWars(): Promise<boolean> {
+        return checkIsRedForMyWars(await getMyMrwWarIdArray());
     }
-    export function checkIsRedForMyMfwWars(): boolean {
-        return checkIsRedForMyWars(getMyMfwWarInfoArray());
+    export async function checkIsRedForMyMfwWars(): Promise<boolean> {
+        return checkIsRedForMyWars(await getMyMfwWarIdArray());
     }
-    export function checkIsRedForMyCcwWars(): boolean {
-        return checkIsRedForMyWars(getMyCcwWarInfoArray());
+    export async function checkIsRedForMyCcwWars(): Promise<boolean> {
+        return checkIsRedForMyWars(await getMyCcwWarIdArray());
     }
-    export function checkIsRedForMyWar(warInfo: IMpwWarInfo | null): boolean {
-        if (warInfo == null) {
+    export function checkIsRedForMyWar(progressInfo: IMpwWarProgressInfo | null): boolean {
+        if (progressInfo == null) {
             return false;
         } else {
             const selfUserId = UserModel.getSelfUserId();
-            return (warInfo.playerInfoList || []).some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
+            return (progressInfo.playerInfoList || []).some(v => (v.playerIndex === progressInfo.playerIndexInTurn) && (v.userId === selfUserId));
         }
     }
-    function checkIsRedForMyWars(wars: IMpwWarInfo[]): boolean {
-        return wars.some(warInfo => checkIsRedForMyWar(warInfo));
+    async function checkIsRedForMyWars(warIdArray: number[]): Promise<boolean> {
+        for (const warId of warIdArray) {
+            const warProgressInfo = await getWarProgressInfo(warId);
+            if (checkIsRedForMyWar(warProgressInfo)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for war settings.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    const _warSettingsDict      = new Map<number, IMpwWarSettings | null>();
+    const _warSettingsRequests  = new Map<number, ((info: MsgMpwCommonGetWarSettingsIs) => void)[]>();
+
+    export function getWarSettings(warId: number): Promise<IMpwWarSettings | null> {
+        if (_warSettingsDict.has(warId)) {
+            return new Promise<IMpwWarSettings | null>((resolve) => resolve(_warSettingsDict.get(warId) ?? null));
+        }
+
+        if (_warSettingsRequests.has(warId)) {
+            return new Promise<IMpwWarSettings | null>((resolve) => {
+                Helpers.getExisted(_warSettingsRequests.get(warId)).push(() => {
+                    resolve(_warSettingsDict.get(warId) ?? null);
+                });
+            });
+        }
+
+        new Promise<void>((resolve) => {
+            const callbackOnSucceeded = (e: egret.Event): void => {
+                const data = e.data as MsgMpwCommonGetWarSettingsIs;
+                if (data.warId === warId) {
+                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarSettings,       callbackOnSucceeded);
+                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarSettingsFailed, callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_warSettingsRequests.get(warId))) {
+                        cb(data);
+                    }
+                    _warSettingsRequests.delete(warId);
+
+                    resolve();
+                }
+            };
+            const callbackOnFailed = (e: egret.Event): void => {
+                const data = e.data as MsgMpwCommonGetWarSettingsIs;
+                if (data.warId === warId) {
+                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarSettings,       callbackOnSucceeded);
+                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarSettingsFailed, callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_warSettingsRequests.get(warId))) {
+                        cb(data);
+                    }
+                    _warSettingsRequests.delete(warId);
+
+                    resolve();
+                }
+            };
+
+            Notify.addEventListener(NotifyType.MsgMpwCommonGetWarSettings,          callbackOnSucceeded);
+            Notify.addEventListener(NotifyType.MsgMpwCommonGetWarSettingsFailed,    callbackOnFailed);
+
+            MpwProxy.reqMpwCommonGetWarSettings(warId);
+        });
+
+        return new Promise((resolve) => {
+            _warSettingsRequests.set(warId, [() => {
+                resolve(_warSettingsDict.get(warId) ?? null);
+            }]);
+        });
+    }
+
+    export async function updateOnMsgMpwCommonGetWarSettings(data: MsgMpwCommonGetWarSettingsIs): Promise<void> {
+        _warSettingsDict.set(Helpers.getExisted(data.warId), data.warSettings ?? null);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for war progress info.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    const _warProgressInfoDict      = new Map<number, IMpwWarProgressInfo | null >();
+    const _warProgressInfoRequests  = new Map<number, ((info: MsgMpwCommonGetWarProgressInfoIs) => void)[]>();
+
+    export function getWarProgressInfo(warId: number): Promise<IMpwWarProgressInfo | null> {
+        if (_warProgressInfoDict.has(warId)) {
+            return new Promise<IMpwWarProgressInfo | null>((resolve) => resolve(_warProgressInfoDict.get(warId) ?? null));
+        }
+
+        if (_warProgressInfoRequests.has(warId)) {
+            return new Promise<IMpwWarProgressInfo | null>((resolve) => {
+                Helpers.getExisted(_warProgressInfoRequests.get(warId)).push(() => {
+                    resolve(_warProgressInfoDict.get(warId) ?? null);
+                });
+            });
+        }
+
+        new Promise<void>((resolve) => {
+            const callbackOnSucceeded = (e: egret.Event): void => {
+                const data = e.data as MsgMpwCommonGetWarProgressInfoIs;
+                if (data.warId === warId) {
+                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarProgressInfo,       callbackOnSucceeded);
+                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarProgressInfoFailed, callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_warProgressInfoRequests.get(warId))) {
+                        cb(data);
+                    }
+                    _warProgressInfoRequests.delete(warId);
+
+                    resolve();
+                }
+            };
+            const callbackOnFailed = (e: egret.Event): void => {
+                const data = e.data as MsgMpwCommonGetWarProgressInfoIs;
+                if (data.warId === warId) {
+                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarProgressInfo,       callbackOnSucceeded);
+                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarProgressInfoFailed, callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_warProgressInfoRequests.get(warId))) {
+                        cb(data);
+                    }
+                    _warProgressInfoRequests.delete(warId);
+
+                    resolve();
+                }
+            };
+
+            Notify.addEventListener(NotifyType.MsgMpwCommonGetWarProgressInfo,          callbackOnSucceeded);
+            Notify.addEventListener(NotifyType.MsgMpwCommonGetWarProgressInfoFailed,    callbackOnFailed);
+
+            MpwProxy.reqMpwCommonGetWarProgressInfo(warId);
+        });
+
+        return new Promise((resolve) => {
+            _warProgressInfoRequests.set(warId, [() => {
+                resolve(_warProgressInfoDict.get(warId) ?? null);
+            }]);
+        });
+    }
+
+    export async function updateOnMsgMpwCommonGetWarProgressInfo(data: MsgMpwCommonGetWarProgressInfoIs): Promise<void> {
+        _warProgressInfoDict.set(Helpers.getExisted(data.warId), data.warProgressInfo ?? null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function createDataForCommonWarBasicSettingsPage(warId: number | null): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const warInfo = warId == null ? null : getMyWarInfo(warId);
+        const warInfo = warId == null ? null : await getWarSettings(warId);
         if (warInfo == null) {
             return null;
         }
@@ -504,7 +664,7 @@ namespace MpwModel {
     }
 
     export async function createDataForCommonWarAdvancedSettingsPage(warId: number | null): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-        const warInfo = warId == null ? null : getMyWarInfo(warId);
+        const warInfo = warId == null ? null : await getWarSettings(warId);
         if (warInfo == null) {
             return null;
         }
@@ -544,15 +704,20 @@ namespace MpwModel {
     }
 
     export async function createDataForCommonWarPlayerInfoPage(warId: number | null): Promise<OpenDataForCommonWarPlayerInfoPage> {
-        const warInfo = warId == null ? null : getMyWarInfo(warId);
-        if (warInfo == null) {
+        const warSettings = warId == null ? null : await getWarSettings(warId);
+        if (warSettings == null) {
             return null;
         }
 
-        const settingsForCommon = Helpers.getExisted(warInfo.settingsForCommon);
+        const warProgressInfo = warId == null ? null : await getWarProgressInfo(warId);
+        if (warProgressInfo == null) {
+            return null;
+        }
+
+        const settingsForCommon = Helpers.getExisted(warSettings.settingsForCommon);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
-        for (const playerInfo of warInfo.playerInfoList || []) {
+        for (const playerInfo of warProgressInfo.playerInfoList || []) {
             const playerIndex   = Helpers.getExisted(playerInfo.playerIndex);
             const userId        = playerInfo.userId ?? null;
             playerInfoArray.push({
@@ -563,7 +728,7 @@ namespace MpwModel {
                 coId                : Helpers.getExisted(playerInfo.coId),
                 unitAndTileSkinId   : Helpers.getExisted(playerInfo.unitAndTileSkinId),
                 isReady             : null,
-                isInTurn            : playerIndex === warInfo.playerIndexInTurn,
+                isInTurn            : playerIndex === warProgressInfo.playerIndexInTurn,
                 isDefeat            : !playerInfo.isAlive,
             });
         }

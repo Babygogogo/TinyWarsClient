@@ -56,45 +56,48 @@ namespace WwModel {
         return _watchedWarInfos;
     }
 
-    function getWatchInfo(warId: number): IMpwWatchInfo | null {
-        return getUnwatchedWarInfos()?.find(v => v.warInfo?.warId === warId)
-            ?? getWatchOngoingWarInfos()?.find(v => v.warInfo?.warId === warId)
-            ?? getWatchRequestedWarInfos()?.find(v => v.warInfo?.warId === warId)
-            ?? getWatchedWarInfos()?.find(v => v.warInfo?.warId === warId)
-            ?? null;
-    }
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function createDataForCommonWarMapInfoPage(warId: number | null): OpenDataForWarCommonMapInfoPage {
-        const watchInfo = warId == null ? null : getWatchInfo(warId);
-        if (watchInfo == null) {
+    export async function createDataForCommonWarMapInfoPage(warId: number | null): Promise<OpenDataForWarCommonMapInfoPage> {
+        if (warId == null) {
             return null;
         }
 
-        const warInfo   = Helpers.getExisted(watchInfo.warInfo, ClientErrorCode.WwModel_CreateDataForCommonWarMapInfoPage_00);
-        const mapId     = warInfo.settingsForCcw?.mapId ?? warInfo.settingsForMcw?.mapId ?? warInfo.settingsForMrw?.mapId;
+        const warSettings = await MpwModel.getWarSettings(warId);
+        if (warSettings == null) {
+            return null;
+        }
+
+        const mapId = warSettings.settingsForCcw?.mapId ?? warSettings.settingsForMcw?.mapId ?? warSettings.settingsForMrw?.mapId;
         if (mapId != null) {
             return { mapInfo: { mapId } };
         } else {
             return {
                 warInfo : {
-                    warData : Helpers.getExisted(warInfo.settingsForMfw?.initialWarData, ClientErrorCode.WwModel_CreateDataForCommonWarMapInfoPage_01),
+                    warData : Helpers.getExisted(warSettings.settingsForMfw?.initialWarData, ClientErrorCode.WwModel_CreateDataForCommonWarMapInfoPage_01),
                     players : null,
                 },
             };
         }
     }
 
-    export function createDataForCommonWarPlayerInfoPage(warId: number | null): OpenDataForCommonWarPlayerInfoPage {
-        const watchInfo = warId == null ? null : getWatchInfo(warId);
-        if (watchInfo == null) {
+    export async function createDataForCommonWarPlayerInfoPage(warId: number | null): Promise<OpenDataForCommonWarPlayerInfoPage> {
+        if (warId == null) {
             return null;
         }
 
-        const warInfo               = Helpers.getExisted(watchInfo.warInfo, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_00);
-        const settingsForCommon     = Helpers.getExisted(warInfo.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_01);
+        const warSettings = await MpwModel.getWarSettings(warId);
+        if (warSettings == null) {
+            return null;
+        }
+
+        const warProgressInfo = await MpwModel.getWarProgressInfo(warId);
+        if (warProgressInfo == null) {
+            return null;
+        }
+
+        const settingsForCommon     = Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_01);
         const warRule               = Helpers.getExisted(settingsForCommon.warRule, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_02);
-        const playerDataList        = Helpers.getExisted(warInfo.playerInfoList, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_03);
+        const playerDataList        = Helpers.getExisted(warProgressInfo.playerInfoList, ClientErrorCode.WwModel_CreateDataForCommonWarPlayerInfoPage_03);
         const playersCountUnneutral = WarRuleHelpers.getPlayersCountUnneutral(warRule);
         const playerInfoArray       : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
@@ -108,7 +111,7 @@ namespace WwModel {
                 coId                : playerData.coId ?? null,
                 unitAndTileSkinId   : playerData.unitAndTileSkinId ?? null,
                 isReady             : null,
-                isInTurn            : warInfo.playerIndexInTurn === playerIndex,
+                isInTurn            : warProgressInfo.playerIndexInTurn === playerIndex,
                 isDefeat            : !playerData.isAlive,
             });
         }
@@ -124,15 +127,18 @@ namespace WwModel {
     }
 
     export async function createDataForCommonWarBasicSettingsPage(warId: number | null): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const watchInfo = warId == null ? null : getWatchInfo(warId);
-        if (watchInfo == null) {
+        if (warId == null) {
             return null;
         }
 
-        const warInfo           = Helpers.getExisted(watchInfo.warInfo, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_00);
-        const settingsForCommon = Helpers.getExisted(warInfo.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_01);
+        const warSettings = await MpwModel.getWarSettings(warId);
+        if (warSettings == null) {
+            return null;
+        }
+
+        const settingsForCommon = Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_01);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule, ClientErrorCode.WwModel_CreateDataForCommonWarBasicSettingsPage_02);
-        const { settingsForMcw, settingsForCcw, settingsForMfw, settingsForMrw } = warInfo;
+        const { settingsForMcw, settingsForCcw, settingsForMfw, settingsForMrw } = warSettings;
         const bootTimerParams   = settingsForMcw?.bootTimerParams ?? settingsForMfw?.bootTimerParams ?? settingsForCcw?.bootTimerParams ?? CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const mapId             = settingsForMcw?.mapId ?? settingsForMrw?.mapId ?? settingsForCcw?.mapId ?? null;
@@ -217,18 +223,17 @@ namespace WwModel {
         return openData;
     }
 
-    export function createDataForCommonWarAdvancedSettingsPage(warId: number | null): OpenDataForCommonWarAdvancedSettingsPage {
-        const watchInfo = warId == null ? null : getWatchInfo(warId);
-        if (watchInfo == null) {
+    export async function createDataForCommonWarAdvancedSettingsPage(warId: number | null): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
+        const warSettings = warId == null ? null : await MpwModel.getWarSettings(warId);
+        if (warSettings == null) {
             return null;
         }
 
-        const warInfo           = Helpers.getExisted(watchInfo.warInfo, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_00);
-        const settingsForCommon = Helpers.getExisted(warInfo.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_01);
+        const settingsForCommon = Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_01);
         return {
             configVersion   : Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_02),
             warRule         : Helpers.getExisted(settingsForCommon.warRule, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_03),
-            warType         : WarCommonHelpers.getWarTypeByMpwWarInfo(warInfo),
+            warType         : WarCommonHelpers.getWarTypeByMpwWarSettings(warSettings),
         };
     }
 }
