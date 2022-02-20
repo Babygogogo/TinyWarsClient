@@ -156,15 +156,11 @@ namespace TwnsLangErrorText {
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
         ],
-        [ServerErrorCode.MsgMpwWatchMakeRequest0005]: [
-            `该玩家已战败，无法观战`,
-            `The target player has been defeated in the game.`
-        ],
-        [ServerErrorCode.MsgMpwWatchMakeRequest0006]: [
+        [ServerErrorCode.MsgMpwWatchMakeRequest_ExeWithSocket_0004]: [
             `已请求观战该玩家`,
             `You have already requested to watch the player.`,
         ],
-        [ServerErrorCode.MsgMpwWatchMakeRequest0007]: [
+        [ServerErrorCode.MsgMpwWatchMakeRequest_ExeWithSocket_0005]: [
             `观战请求已被接受`,
             `The request has already been accepted.`,
         ],

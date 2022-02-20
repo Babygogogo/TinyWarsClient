@@ -58,12 +58,13 @@ namespace TwnsMcrMainMenuPanel {
                 { ui: this._btnFreeMode,        callback: this._onTouchedBtnFreeMode },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.MsgUserLogout,                   callback: this._onMsgUserLogout },
-                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,     callback: this._onMsgMcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,     callback: this._onMsgMfrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,     callback: this._onMsgCcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,   callback: this._onMsgMrrGetMyRoomPublicInfoList },
-                { type: NotifyType.MsgMpwCommonGetWarProgressInfo,  callback: this._onMsgMpwCommonGetWarProgressInfo },
+                { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,         callback: this._onMsgMcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,         callback: this._onMsgMfrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,         callback: this._onMsgCcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,       callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
+                { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
             ]);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -148,6 +149,10 @@ namespace TwnsMcrMainMenuPanel {
             this._updateBtnContinueWar();
             this._updateBtnCoopMode();
             this._updateBtnFreeMode();
+        }
+        private _onMsgMpwWatchGetRequestedWarIdArray(): void {
+            this._updateBtnMultiPlayer();
+            this._updateBtnWatchWar();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -254,20 +259,11 @@ namespace TwnsMcrMainMenuPanel {
             this._updateBtnContinueWar();
             this._updateBtnCoopMode();
             this._updateBtnFreeMode();
-
-            const watchInfos = WwModel.getWatchRequestedWarInfos();
-            this._btnWatchWar.setRedVisible((!!watchInfos) && (watchInfos.length > 0));
+            this._updateBtnWatchWar();
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {
-            this._btnMultiPlayer.setRedVisible(
-                (await MpwModel.checkIsRedForMyMcwWars())   ||
-                (await MpwModel.checkIsRedForMyMfwWars())   ||
-                (await MpwModel.checkIsRedForMyCcwWars())   ||
-                (await McrModel.checkIsRed())               ||
-                (await MfrModel.checkIsRed())               ||
-                (await CcrModel.checkIsRed())
-            );
+            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
         }
 
         private async _updateBtnRanking(): Promise<void> {
@@ -286,11 +282,15 @@ namespace TwnsMcrMainMenuPanel {
         }
 
         private async _updateBtnCoopMode(): Promise<void> {
-            this._btnCoopMode.setRedVisible((await MpwModel.checkIsRedForMyCcwWars()) || await CcrModel.checkIsRed());
+            this._btnCoopMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiCoopMode());
         }
 
         private async _updateBtnFreeMode(): Promise<void> {
-            this._btnFreeMode.setRedVisible((await MpwModel.checkIsRedForMyMfwWars()) || await MfrModel.checkIsRed());
+            this._btnFreeMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiFreeMode());
+        }
+
+        private _updateBtnWatchWar(): void {
+            this._btnWatchWar.setRedVisible(WwModel.checkIsRed());
         }
     }
 }

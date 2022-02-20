@@ -1291,6 +1291,23 @@ namespace TwnsLangCommonText {
             `地图长宽必须相同才能使用此功能`,
             `The width and height of the map is not the same.`,
         ],
+        [LangTextType.A0296]: [
+            [
+                `此地图包含可用于多人排位赛的规则。请仔细检查各项设定，确保没有质量问题。`,
+                ``,
+                `您确定要过审此地图吗?`,
+            ].join(`\n`),
+            [
+                `This map contains rules that can be used for multiplayer ranked matches. Please check the settings carefully to ensure that there are no quality problems.`,
+                ``,
+                `Are you sure to accept this map?`,
+            ].join(`\n`),
+            ``,
+        ],
+        [LangTextType.A0297]: [
+            `无法获取观战信息`,
+            `Failed to load the spectating data.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

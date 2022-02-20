@@ -14,7 +14,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WwModel {
-    import IMpwWatchInfo                            = ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+    import NotifyType                               = TwnsNotifyType.NotifyType;
+    import IMpwWatchIncomingInfo                    = ProtoTypes.MultiPlayerWar.IMpwWatchIncomingInfo;
+    import IMpwWatchOutgoingInfo                    = ProtoTypes.MultiPlayerWar.IMpwWatchOutgoingInfo;
+    import MsgMpwWatchGetIncomingInfoIs             = ProtoTypes.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
+    import MsgMpwWatchGetOutgoingInfoIs             = ProtoTypes.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
@@ -22,38 +26,174 @@ namespace WwModel {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
-    let _unwatchedWarInfos      : IMpwWatchInfo[] | null = null;
-    let _watchOngoingWarInfos   : IMpwWatchInfo[] | null = null;
-    let _watchRequestedWarInfos : IMpwWatchInfo[] | null = null;
-    let _watchedWarInfos        : IMpwWatchInfo[] | null = null;
+    let _requestableWarIdArray  : number[] | null = null;
+    let _ongoingWarIdArray      : number[] | null = null;
+    let _requestedWarIdArray    : number[] | null = null;
+    let _watchedWarIdArray      : number[] | null = null;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function setUnwatchedWarInfos(infos: IMpwWatchInfo[]): void {
-        _unwatchedWarInfos = infos;
+    export function setRequestableWarIdArray(warIdArray: number[]): void {
+        _requestableWarIdArray = warIdArray;
     }
-    export function getUnwatchedWarInfos(): IMpwWatchInfo[] | null {
-        return _unwatchedWarInfos;
-    }
-
-    export function setWatchOngoingWarInfos(infos: IMpwWatchInfo[]): void {
-        _watchOngoingWarInfos = infos;
-    }
-    export function getWatchOngoingWarInfos(): IMpwWatchInfo[] | null {
-        return _watchOngoingWarInfos;
+    export function getRequestableWarIdArray(): number[] | null {
+        return _requestableWarIdArray;
     }
 
-    export function setWatchRequestedWarInfos(infos: IMpwWatchInfo[]): void {
-        _watchRequestedWarInfos = infos;
+    export function setOngoingWarIdArray(warIdArray: number[]): void {
+        _ongoingWarIdArray = warIdArray;
     }
-    export function getWatchRequestedWarInfos(): IMpwWatchInfo[] | null {
-        return _watchRequestedWarInfos;
+    export function getOngoingWarIdArray(): number[] | null {
+        return _ongoingWarIdArray;
     }
 
-    export function setWatchedWarInfos(infos: IMpwWatchInfo[]): void {
-        _watchedWarInfos = infos;
+    export function setRequestedWarIdArray(warIdArray: number[]): void {
+        _requestedWarIdArray = warIdArray;
     }
-    export function getWatchedWarInfos(): IMpwWatchInfo[] | null {
-        return _watchedWarInfos;
+    export function getRequestedWarIdArray(): number[] | null {
+        return _requestedWarIdArray;
+    }
+
+    export function setWatchedWarIdArray(warIdArray: number[]): void {
+        _watchedWarIdArray = warIdArray;
+    }
+    export function getWatchedWarIdArray(): number[] | null {
+        return _watchedWarIdArray;
+    }
+
+    export function checkIsRed(): boolean {
+        return !!getRequestedWarIdArray()?.length;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for incoming info.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    const _watchIncomingInfoDict        = new Map<number, IMpwWatchIncomingInfo | null>();
+    const _watchIncomingInfoRequests    = new Map<number, ((info: MsgMpwWatchGetIncomingInfoIs) => void)[]>();
+
+    export function getWatchIncomingInfo(warId: number): Promise<IMpwWatchIncomingInfo | null> {
+        if (_watchIncomingInfoDict.has(warId)) {
+            return new Promise<IMpwWatchIncomingInfo | null>((resolve) => resolve(_watchIncomingInfoDict.get(warId) ?? null));
+        }
+
+        if (_watchIncomingInfoRequests.has(warId)) {
+            return new Promise<IMpwWatchIncomingInfo | null>((resolve) => {
+                Helpers.getExisted(_watchIncomingInfoRequests.get(warId)).push(() => {
+                    resolve(_watchIncomingInfoDict.get(warId) ?? null);
+                });
+            });
+        }
+
+        new Promise<void>((resolve) => {
+            const callbackOnSucceeded = (e: egret.Event): void => {
+                const data = e.data as MsgMpwWatchGetIncomingInfoIs;
+                if (data.warId === warId) {
+                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetIncomingInfo,       callbackOnSucceeded);
+                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetIncomingInfoFailed, callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_watchIncomingInfoRequests.get(warId))) {
+                        cb(data);
+                    }
+                    _watchIncomingInfoRequests.delete(warId);
+
+                    resolve();
+                }
+            };
+            const callbackOnFailed = (e: egret.Event): void => {
+                const data = e.data as MsgMpwWatchGetIncomingInfoIs;
+                if (data.warId === warId) {
+                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetIncomingInfo,       callbackOnSucceeded);
+                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetIncomingInfoFailed, callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_watchIncomingInfoRequests.get(warId))) {
+                        cb(data);
+                    }
+                    _watchIncomingInfoRequests.delete(warId);
+
+                    resolve();
+                }
+            };
+
+            Notify.addEventListener(NotifyType.MsgMpwWatchGetIncomingInfo,          callbackOnSucceeded);
+            Notify.addEventListener(NotifyType.MsgMpwWatchGetIncomingInfoFailed,    callbackOnFailed);
+
+            WwProxy.reqMpwWatchGetIncomingInfo(warId);
+        });
+
+        return new Promise((resolve) => {
+            _watchIncomingInfoRequests.set(warId, [() => {
+                resolve(_watchIncomingInfoDict.get(warId) ?? null);
+            }]);
+        });
+    }
+
+    export async function updateOnMsgMpwWatchGetIncomingInfo(data: MsgMpwWatchGetIncomingInfoIs): Promise<void> {
+        _watchIncomingInfoDict.set(Helpers.getExisted(data.warId), data.incomingInfo ?? null);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for outgoing info.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    const _watchOutgoingInfoDict        = new Map<number, IMpwWatchOutgoingInfo | null>();
+    const _watchOutgoingInfoRequests    = new Map<number, ((info: MsgMpwWatchGetOutgoingInfoIs) => void)[]>();
+
+    export function getWatchOutgoingInfo(warId: number): Promise<IMpwWatchOutgoingInfo | null> {
+        if (_watchOutgoingInfoDict.has(warId)) {
+            return new Promise<IMpwWatchOutgoingInfo | null>((resolve) => resolve(_watchOutgoingInfoDict.get(warId) ?? null));
+        }
+
+        if (_watchOutgoingInfoRequests.has(warId)) {
+            return new Promise<IMpwWatchOutgoingInfo | null>((resolve) => {
+                Helpers.getExisted(_watchOutgoingInfoRequests.get(warId)).push(() => {
+                    resolve(_watchOutgoingInfoDict.get(warId) ?? null);
+                });
+            });
+        }
+
+        new Promise<void>((resolve) => {
+            const callbackOnSucceeded = (e: egret.Event): void => {
+                const data = e.data as MsgMpwWatchGetOutgoingInfoIs;
+                if (data.warId === warId) {
+                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetOutgoingInfo,       callbackOnSucceeded);
+                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetOutgoingInfoFailed, callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_watchOutgoingInfoRequests.get(warId))) {
+                        cb(data);
+                    }
+                    _watchOutgoingInfoRequests.delete(warId);
+
+                    resolve();
+                }
+            };
+            const callbackOnFailed = (e: egret.Event): void => {
+                const data = e.data as MsgMpwWatchGetOutgoingInfoIs;
+                if (data.warId === warId) {
+                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetOutgoingInfo,       callbackOnSucceeded);
+                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetOutgoingInfoFailed, callbackOnFailed);
+
+                    for (const cb of Helpers.getExisted(_watchOutgoingInfoRequests.get(warId))) {
+                        cb(data);
+                    }
+                    _watchOutgoingInfoRequests.delete(warId);
+
+                    resolve();
+                }
+            };
+
+            Notify.addEventListener(NotifyType.MsgMpwWatchGetOutgoingInfo,          callbackOnSucceeded);
+            Notify.addEventListener(NotifyType.MsgMpwWatchGetOutgoingInfoFailed,    callbackOnFailed);
+
+            WwProxy.reqMpwWatchGetOutgoingInfo(warId);
+        });
+
+        return new Promise((resolve) => {
+            _watchOutgoingInfoRequests.set(warId, [() => {
+                resolve(_watchOutgoingInfoDict.get(warId) ?? null);
+            }]);
+        });
+    }
+
+    export async function updateOnMsgMpwWatchGetOutgoingInfo(data: MsgMpwWatchGetOutgoingInfoIs): Promise<void> {
+        _watchOutgoingInfoDict.set(Helpers.getExisted(data.warId), data.outgoingInfo ?? null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

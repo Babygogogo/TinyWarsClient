@@ -80,7 +80,7 @@ namespace TwnsWwOngoingWarsPanel {
             this._updateGroupWarList();
             this._updateComponentsForTargetWarInfo();
 
-            WwProxy.reqWatchGetOngoingWarInfos();
+            WwProxy.reqMpwWatchGetOngoingWarIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -88,7 +88,7 @@ namespace TwnsWwOngoingWarsPanel {
 
         public async setAndReviseSelectedWarId(warId: number, needScroll: boolean): Promise<void> {
             const listMap   = this._listWar;
-            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.info.warId === warId));
+            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.warId === warId));
             listMap.setSelectedIndex(index);
             this._updateComponentsForTargetWarInfo();
 
@@ -97,7 +97,7 @@ namespace TwnsWwOngoingWarsPanel {
             }
         }
         private _getSelectedWarId(): number | null {
-            return this._listWar.getSelectedData()?.info.warId ?? null;
+            return this._listWar.getSelectedData()?.warId ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ namespace TwnsWwOngoingWarsPanel {
 
         private _onNotifyMsgMpwWatchContinueWarFailed(): void {
             TwnsPanelManager.close(TwnsPanelConfig.Dict.CommonBlockPanel);
-            WwProxy.reqWatchGetOngoingWarInfos();
+            WwProxy.reqMpwWatchGetOngoingWarIdArray();
         }
 
         private _onTouchTapBtnBack(): void {
@@ -132,7 +132,7 @@ namespace TwnsWwOngoingWarsPanel {
         private _onTouchedBtnNextStep(): void {
             const data = this._listWar.getSelectedData();
             if (data) {
-                WwProxy.reqWatchContinueWar(Helpers.getExisted(data.info.warId, ClientErrorCode.WwOngoingWarsPanel_OnTouchedBtnNextStep_00));
+                WwProxy.reqWatchContinueWar(Helpers.getExisted(data.warId, ClientErrorCode.WwOngoingWarsPanel_OnTouchedBtnNextStep_00));
             }
         }
 
@@ -141,9 +141,9 @@ namespace TwnsWwOngoingWarsPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListWar(): DataForWarRenderer[] {
             const dataArray: DataForWarRenderer[] = [];
-            for (const info of WwModel.getWatchOngoingWarInfos() || []) {
+            for (const warId of WwModel.getOngoingWarIdArray() || []) {
                 dataArray.push({
-                    info,
+                    warId,
                     panel   : this,
                 });
             }
@@ -314,7 +314,7 @@ namespace TwnsWwOngoingWarsPanel {
     }
 
     type DataForWarRenderer = {
-        info    : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+        warId   : number;
         panel   : WwOngoingWarsPanel;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
@@ -327,7 +327,7 @@ namespace TwnsWwOngoingWarsPanel {
 
         public onItemTapEvent(): void {
             const data = this._getData();
-            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.info.warId, ClientErrorCode.WwOngoingWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
+            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.warId, ClientErrorCode.WwOngoingWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
         }
 
         private _updateView(): void {
@@ -336,14 +336,14 @@ namespace TwnsWwOngoingWarsPanel {
         }
 
         private _updateLabelId(): void {
-            this._labelId.text = `#${this._getData().info.warId}`;
+            this._labelId.text = `#${this._getData().warId}`;
         }
 
         private async _updateLabelName(): Promise<void> {
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const warInfo = await MpwModel.getWarSettings(Helpers.getExisted(this._getData().info.warId));
+            const warInfo = await MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
             if (warInfo != null) {
                 const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warInfo;
                 if (settingsForMfw) {

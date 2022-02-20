@@ -1,8 +1,7 @@
 {
     "cSpell.words": [
-        "Awbw",
-        "Twns",
         "attackable",
+        "Awbw",
         "buildable",
         "capturable",
         "cfgs",
@@ -10,10 +9,12 @@
         "pbar",
         "prng",
         "relogin",
+        "requestable",
         "scroller",
         "seedrandom",
         "tinywars",
         "tweens",
+        "Twns",
         "zoomable"
     ]
 }

@@ -14,18 +14,20 @@ namespace WwProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgMpwWatchGetUnwatchedWarInfos,       callback: _onMsgMpwWatchGetUnwatchedWarInfos },
-            { msgCode: NetMessageCodes.MsgMpwWatchGetOngoingWarInfos,         callback: _onMsgMpwWatchGetOngoingWarInfos },
-            { msgCode: NetMessageCodes.MsgMpwWatchGetRequestedWarInfos,       callback: _onMsgMpwWatchGetRequestedWarInfos },
-            { msgCode: NetMessageCodes.MsgMpwWatchGetWatchedWarInfos,         callback: _onMsgMpwWatchGetWatchedWarInfos },
-            { msgCode: NetMessageCodes.MsgMpwWatchMakeRequest,                callback: _onMsgMpwWatchMakeRequest },
-            { msgCode: NetMessageCodes.MsgMpwWatchHandleRequest,              callback: _onMsgMpwWatchHandleRequest },
-            { msgCode: NetMessageCodes.MsgMpwWatchDeleteWatcher,              callback: _onMsgMpwWatchDeleteWatcher },
-            { msgCode: NetMessageCodes.MsgMpwWatchContinueWar,                callback: _onMsgMpwWatchContinueWar },
+            { msgCode: NetMessageCodes.MsgMpwWatchGetRequestableWarIdArray,     callback: _onMsgMpwWatchGetRequestableWarIdArray },
+            { msgCode: NetMessageCodes.MsgMpwWatchGetOngoingWarIdArray,         callback: _onMsgMpwWatchGetOngoingWarIdArray },
+            { msgCode: NetMessageCodes.MsgMpwWatchGetRequestedWarIdArray,       callback: _onMsgMpwWatchGetRequestedWarIdArray },
+            { msgCode: NetMessageCodes.MsgMpwWatchGetWatchedWarIdArray,         callback: _onMsgMpwWatchGetWatchedWarIdArray },
+            { msgCode: NetMessageCodes.MsgMpwWatchMakeRequest,                  callback: _onMsgMpwWatchMakeRequest },
+            { msgCode: NetMessageCodes.MsgMpwWatchHandleRequest,                callback: _onMsgMpwWatchHandleRequest },
+            { msgCode: NetMessageCodes.MsgMpwWatchDeleteWatcher,                callback: _onMsgMpwWatchDeleteWatcher },
+            { msgCode: NetMessageCodes.MsgMpwWatchContinueWar,                  callback: _onMsgMpwWatchContinueWar },
+            { msgCode: NetMessageCodes.MsgMpwWatchGetIncomingInfo,              callback: _onMsgMpwWatchGetIncomingInfo },
+            { msgCode: NetMessageCodes.MsgMpwWatchGetOutgoingInfo,              callback: _onMsgMpwWatchGetOutgoingInfo },
         ], null);
     }
 
-    export function reqUnwatchedWarInfos({ warId, coName, mapName, userNickname, playersCountUnneutral }: {
+    export function reqMpwWatchGetRequestableWarIdArray({ warId, coName, mapName, userNickname, playersCountUnneutral }: {
         warId?                  : number | null;
         coName?                 : string | null;
         mapName?                : string | null;
@@ -33,7 +35,7 @@ namespace WwProxy {
         playersCountUnneutral?  : number | null;
     }): void {
         NetManager.send({
-            MsgMpwWatchGetUnwatchedWarInfos: { c: {
+            MsgMpwWatchGetRequestableWarIdArray: { c: {
                 warId,
                 coName,
                 mapName,
@@ -42,52 +44,52 @@ namespace WwProxy {
             } },
         });
     }
-    function _onMsgMpwWatchGetUnwatchedWarInfos(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwWatchGetUnwatchedWarInfos.IS;
+    function _onMsgMpwWatchGetRequestableWarIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwWatchGetRequestableWarIdArray.IS;
         if (!data.errorCode) {
-            WwModel.setUnwatchedWarInfos(data.infoArray || []);
+            WwModel.setRequestableWarIdArray(data.warIdArray || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetUnwatchedWarInfos, data);
         }
     }
 
-    export function reqWatchGetOngoingWarInfos(): void {
+    export function reqMpwWatchGetOngoingWarIdArray(): void {
         NetManager.send({
-            MsgMpwWatchGetOngoingWarInfos: { c: {
+            MsgMpwWatchGetOngoingWarIdArray: { c: {
             } },
         });
     }
-    function _onMsgMpwWatchGetOngoingWarInfos(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwWatchGetOngoingWarInfos.IS;
+    function _onMsgMpwWatchGetOngoingWarIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwWatchGetOngoingWarIdArray.IS;
         if (!data.errorCode) {
-            WwModel.setWatchOngoingWarInfos(data.infos || []);
+            WwModel.setOngoingWarIdArray(data.warIdArray || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetOngoingWarInfos, data);
         }
     }
 
-    export function reqWatchRequestedWarInfos(): void {
+    export function reqMpwWatchRequestedWarIdArray(): void {
         NetManager.send({
-            MsgMpwWatchGetRequestedWarInfos: { c: {
+            MsgMpwWatchGetRequestedWarIdArray: { c: {
             }, }
         });
     }
-    function _onMsgMpwWatchGetRequestedWarInfos(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwWatchGetRequestedWarInfos.IS;
+    function _onMsgMpwWatchGetRequestedWarIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwWatchGetRequestedWarIdArray.IS;
         if (!data.errorCode) {
-            WwModel.setWatchRequestedWarInfos(data.infos || []);
-            Notify.dispatch(NotifyType.MsgMpwWatchGetRequestedWarInfos, data);
+            WwModel.setRequestedWarIdArray(data.warIdArray || []);
+            Notify.dispatch(NotifyType.MsgMpwWatchGetRequestedWarIdArray, data);
         }
     }
 
-    export function reqWatchedWarInfos(): void {
+    export function reqMpwWatchWatchedWarIdArray(): void {
         NetManager.send({
-            MsgMpwWatchGetWatchedWarInfos: { c: {
+            MsgMpwWatchGetWatchedWarIdArray: { c: {
             }, }
         });
     }
-    function _onMsgMpwWatchGetWatchedWarInfos(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwWatchGetWatchedWarInfos.IS;
+    function _onMsgMpwWatchGetWatchedWarIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwWatchGetWatchedWarIdArray.IS;
         if (!data.errorCode) {
-            WwModel.setWatchedWarInfos(data.infos || []);
+            WwModel.setWatchedWarIdArray(data.warIdArray || []);
             Notify.dispatch(NotifyType.MsgMpwWatchGetWatchedWarInfos, data);
         }
     }
@@ -151,6 +153,40 @@ namespace WwProxy {
             Notify.dispatch(NotifyType.MsgMpwWatchContinueWarFailed, data);
         } else {
             Notify.dispatch(NotifyType.MsgMpwWatchContinueWar, data);
+        }
+    }
+
+    export function reqMpwWatchGetIncomingInfo(warId: number): void {
+        NetManager.send({
+            MsgMpwWatchGetIncomingInfo: { c: {
+                warId,
+            } },
+        });
+    }
+    function _onMsgMpwWatchGetIncomingInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwWatchGetIncomingInfo.IS;
+        if (data.errorCode) {
+            Notify.dispatch(NotifyType.MsgMpwWatchGetIncomingInfoFailed, data);
+        } else {
+            WwModel.updateOnMsgMpwWatchGetIncomingInfo(data);
+            Notify.dispatch(NotifyType.MsgMpwWatchGetIncomingInfo, data);
+        }
+    }
+
+    export function reqMpwWatchGetOutgoingInfo(warId: number): void {
+        NetManager.send({
+            MsgMpwWatchGetOutgoingInfo: { c: {
+                warId,
+            } },
+        });
+    }
+    function _onMsgMpwWatchGetOutgoingInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
+        if (data.errorCode) {
+            Notify.dispatch(NotifyType.MsgMpwWatchGetOutgoingInfoFailed, data);
+        } else {
+            WwModel.updateOnMsgMpwWatchGetOutgoingInfo(data);
+            Notify.dispatch(NotifyType.MsgMpwWatchGetOutgoingInfo, data);
         }
     }
 }

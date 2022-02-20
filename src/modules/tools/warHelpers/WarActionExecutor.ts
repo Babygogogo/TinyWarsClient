@@ -155,8 +155,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
-        const desc = await war.getDescForExePlayerDeleteUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExePlayerDeleteUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -217,8 +217,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
-        const desc = await war.getDescForExePlayerProduceUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExePlayerProduceUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         handlePlayerProduceUnit(war, action);
         war.updateTilesAndUnitsOnVisibilityChanged(false);
@@ -584,8 +584,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
-        const desc = await war.getDescForExeSystemCallWarEvent(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeSystemCallWarEvent(action);
+        // (desc) && (FloatText.show(desc));
 
         const warEventManager   = war.getWarEventManager();
         const actionExtraData   = action.extraData;
@@ -621,8 +621,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
-        const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -921,8 +921,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<void> {
-        const desc = await war.getDescForExeUnitAttackTile(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitAttackTile(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -1259,8 +1259,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitAttackUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitAttackUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const warView           = war.getView();
         const gridVisualEffect  = war.getGridVisualEffect();
@@ -1508,8 +1508,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<void> {
-        const desc = await war.getDescForExeUnitBeLoaded(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitBeLoaded(action);
+        // (desc) && (FloatText.show(desc));
 
         const unitMap           = war.getUnitMap();
         const actionExtraData   = action.extraData;
@@ -1627,8 +1627,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<void> {
-        const desc = await war.getDescForExeUnitBuildTile(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitBuildTile(action);
+        // (desc) && (FloatText.show(desc));
 
         const unitMap           = war.getUnitMap();
         const actionExtraData   = action.extraData;
@@ -1743,8 +1743,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<void> {
-        const desc = await war.getDescForExeUnitCaptureTile(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitCaptureTile(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData   = action.extraData;
         const unitMap           = war.getUnitMap();
@@ -1887,8 +1887,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<void> {
-        const desc = await war.getDescForExeUnitDive(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitDive(action);
+        // (desc) && (FloatText.show(desc));
 
         const gridVisualEffect  = war.getGridVisualEffect();
         const actionExtraData   = action.extraData;
@@ -2000,8 +2000,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitDropUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitDropUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData   = action.extraData;
         const gridVisualEffect  = war.getGridVisualEffect();
@@ -2203,8 +2203,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitJoinUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitJoinUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const unitMap           = war.getUnitMap();
         const actionExtraData   = action.extraData;
@@ -2377,8 +2377,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<void> {
-        const desc = await war.getDescForExeUnitLaunchFlare(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitLaunchFlare(action);
+        // (desc) && (FloatText.show(desc));
 
         const gridVisualEffect  = war.getGridVisualEffect();
         const mapSize           = war.getTileMap().getMapSize();
@@ -2502,8 +2502,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<void> {
-        const desc = await war.getDescForExeUnitLaunchSilo(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitLaunchSilo(action);
+        // (desc) && (FloatText.show(desc));
 
         const gridVisualEffect  = war.getGridVisualEffect();
         const unitMap           = war.getUnitMap();
@@ -2633,8 +2633,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<void> {
-        const desc = await war.getDescForExeUnitLoadCo(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitLoadCo(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -2743,8 +2743,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitProduceUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitProduceUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -2892,8 +2892,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitSupplyUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitSupplyUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -2997,8 +2997,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<void> {
-        const desc = await war.getDescForExeUnitSurface(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitSurface(action);
+        // (desc) && (FloatText.show(desc));
 
         const gridVisualEffect  = war.getGridVisualEffect();
         const actionExtraData   = action.extraData;
@@ -3258,8 +3258,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<void> {
-        const desc = await war.getDescForExeUnitWait(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitWait(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {

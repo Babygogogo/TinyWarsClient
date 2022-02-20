@@ -55,15 +55,25 @@ namespace TwnsMmAcceptMapPanel {
             this.close();
         }
         private _onTouchedBtnConfirm(): void {
-            const war = this._getOpenData().war;
-            WarMapProxy.reqMmReviewMap({
-                designerUserId  : war.getMapDesignerUserId(),
-                slotIndex       : war.getMapSlotIndex(),
-                modifiedTime    : war.getMapModifiedTime(),
-                isAccept        : true,
-                reviewComment   : this._inputReason.text,
-            });
-            this.close();
+            const war       = this._getOpenData().war;
+            const callback  = () => {
+                WarMapProxy.reqMmReviewMap({
+                    designerUserId  : war.getMapDesignerUserId(),
+                    slotIndex       : war.getMapSlotIndex(),
+                    modifiedTime    : war.getMapModifiedTime(),
+                    isAccept        : true,
+                    reviewComment   : this._inputReason.text,
+                });
+                this.close();
+            };
+            if (!war.getWarRuleArray().some(v => v.ruleAvailability?.canMrw)) {
+                callback();
+            } else {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    content : Lang.getText(LangTextType.A0296),
+                    callback,
+                });
+            }
         }
 
         private _updateComponentsForLanguage(): void {

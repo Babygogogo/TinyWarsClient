@@ -20,7 +20,7 @@ namespace TwnsWwHandleRequestDetailPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchIncomingInfo;
     };
     export class WwHandleRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
@@ -118,7 +118,7 @@ namespace TwnsWwHandleRequestDetailPanel {
             const openData          = this._getOpenData().watchInfo;
             const playerInfoList    = (await MpwModel.getWarProgressInfo(Helpers.getExisted(openData.warId)))?.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of openData.requesterInfos || []) {
+            for (const info of openData.srcUserInfoArray || []) {
                 const userId = info.userId;
                 if (userId != null) {
                     dataList.push({

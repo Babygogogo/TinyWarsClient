@@ -103,7 +103,7 @@ namespace TwnsWwMakeRequestWarsPanel {
 
         public async setAndReviseSelectedWarId(warId: number, needScroll: boolean): Promise<void> {
             const listMap   = this._listWar;
-            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.info.warId === warId));
+            const index     = Helpers.getExisted(listMap.getRandomIndex(v => v.warId === warId));
             listMap.setSelectedIndex(index);
             this._updateComponentsForTargetWarInfo();
 
@@ -112,7 +112,7 @@ namespace TwnsWwMakeRequestWarsPanel {
             }
         }
         private _getSelectedWarId(): number | null {
-            return this._listWar.getSelectedData()?.info.warId ?? null;
+            return this._listWar.getSelectedData()?.warId ?? null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -144,11 +144,18 @@ namespace TwnsWwMakeRequestWarsPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WwSearchWarPanel, void 0);
         }
 
-        private _onTouchedBtnNextStep(): void {
+        private async _onTouchedBtnNextStep(): Promise<void> {
             const data = this._listWar.getSelectedData();
-            if (data) {
+            if (data == null) {
+                return;
+            }
+
+            const info = await WwModel.getWatchOutgoingInfo(data.warId);
+            if (info == null) {
+                FloatText.show(Lang.getText(LangTextType.A0297));
+            } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMakeRequestDetailPanel, {
-                    watchInfo: data.info,
+                    watchInfo: info,
                 });
             }
         }
@@ -158,9 +165,9 @@ namespace TwnsWwMakeRequestWarsPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _createDataForListWar(): DataForWarRenderer[] {
             const dataArray: DataForWarRenderer[] = [];
-            for (const info of WwModel.getUnwatchedWarInfos() || []) {
+            for (const warId of WwModel.getRequestableWarIdArray() || []) {
                 dataArray.push({
-                    info,
+                    warId,
                     panel   : this,
                 });
             }
@@ -342,7 +349,7 @@ namespace TwnsWwMakeRequestWarsPanel {
     }
 
     type DataForWarRenderer = {
-        info    : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+        warId   : number;
         panel   : WwMakeRequestWarsPanel;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
@@ -356,7 +363,7 @@ namespace TwnsWwMakeRequestWarsPanel {
 
         public onItemTapEvent(): void {
             const data = this._getData();
-            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.info.warId, ClientErrorCode.WwMakeRequestWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
+            data.panel.setAndReviseSelectedWarId(Helpers.getExisted(data.warId, ClientErrorCode.WwMakeRequestWarsPanel_WarRenderer_OnTouchTapBtnChoose_00), false);
         }
 
         private _updateView(): void {
@@ -366,11 +373,11 @@ namespace TwnsWwMakeRequestWarsPanel {
         }
 
         private _updateLabelId(): void {
-            this._labelId.text = `#${this._getData().info.warId}`;
+            this._labelId.text = `#${this._getData().warId}`;
         }
 
         private async _updateLabelType(): Promise<void> {
-            const warSettings   = await MpwModel.getWarSettings(Helpers.getExisted(this._getData().info.warId));
+            const warSettings   = await MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
             const label         = this._labelType;
             if (warSettings == null) {
                 label.text = CommonConstants.ErrorTextForUndefined;
@@ -383,7 +390,7 @@ namespace TwnsWwMakeRequestWarsPanel {
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const warSettings = await MpwModel.getWarSettings(Helpers.getExisted(this._getData().info.warId));
+            const warSettings = await MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
             if (warSettings != null) {
                 const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warSettings;
                 if (settingsForMfw) {
@@ -416,7 +423,7 @@ namespace TwnsWwMakeRequestWarsPanel {
     }
 
     function reqDataArray(filter: WarFilter): void {
-        WwProxy.reqUnwatchedWarInfos({
+        WwProxy.reqMpwWatchGetRequestableWarIdArray({
             warId                   : filter.warId,
             coName                  : filter.coName,
             mapName                 : filter.mapName,

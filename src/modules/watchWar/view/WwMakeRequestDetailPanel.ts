@@ -22,7 +22,7 @@ namespace TwnsWwMakeRequestDetailPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchOutgoingInfo;
     };
     export class WwMakeRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
@@ -123,10 +123,10 @@ namespace TwnsWwMakeRequestDetailPanel {
                 return [];
             }
 
-            const selfUserId        = Helpers.getExisted(UserModel.getSelfUserId());
-            const ongoingDstUserIds = openData.ongoingDstUserIds || [];
-            const requestDstUserIds = openData.requestDstUserIds || [];
-            const playerInfoList    = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
+            const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
+            const ongoingDstUserIdArray = openData.ongoingDstUserIdArray || [];
+            const requestDstUserIdArray = openData.requestDstUserIdArray || [];
+            const playerInfoList        = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
 
             const dataList: DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playerInfoList.length; ++playerIndex) {
@@ -140,8 +140,8 @@ namespace TwnsWwMakeRequestDetailPanel {
                     continue;
                 }
 
-                const isRequested   = requestDstUserIds.indexOf(userId) >= 0;
-                const isWatching    = ongoingDstUserIds.indexOf(userId) >= 0;
+                const isRequested   = requestDstUserIdArray.indexOf(userId) >= 0;
+                const isWatching    = ongoingDstUserIdArray.indexOf(userId) >= 0;
                 dataList.push({
                     panel           : this,
                     configVersion,
