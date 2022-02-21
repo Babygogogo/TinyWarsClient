@@ -107,72 +107,23 @@ namespace RwModel {
     // Functions for replay data.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _replayDataDict       = new Map<number, ISerialWar | null>();
-    const _replayDataRequests   = new Map<number, ((info: MsgReplayGetDataIs) => void)[]>();
+    const _replayDataGetter     = Helpers.createCachedDataGetter({
+        dataDict                : _replayDataDict,
+        reqData                 : (replayId: number) => RwProxy.reqReplayGetData(replayId),
+    });
 
     export function getReplayData(replayId: number): Promise<ISerialWar | null> {
-        if (_replayDataDict.has(replayId)) {
-            return new Promise<ISerialWar | null>((resolve) => resolve(_replayDataDict.get(replayId) ?? null));
-        }
-
-        if (_replayDataRequests.has(replayId)) {
-            return new Promise<ISerialWar | null>((resolve) => {
-                Helpers.getExisted(_replayDataRequests.get(replayId)).push(info => {
-                    const encodedWar = info.encodedWar;
-                    resolve(encodedWar ? ProtoManager.decodeAsSerialWar(encodedWar) : null);
-                });
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceed = (e: egret.Event): void => {
-                const data = e.data as MsgReplayGetDataIs;
-                if (data.replayId === replayId) {
-                    Notify.removeEventListener(NotifyType.MsgReplayGetData,        callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgReplayGetDataFailed,  callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_replayDataRequests.get(replayId))) {
-                        cb(data);
-                    }
-                    _replayDataRequests.delete(replayId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as MsgReplayGetDataIs;
-                if (data.replayId === replayId) {
-                    Notify.removeEventListener(NotifyType.MsgReplayGetData,        callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgReplayGetDataFailed,  callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_replayDataRequests.get(replayId))) {
-                        cb(data);
-                    }
-                    _replayDataRequests.delete(replayId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgReplayGetData,       callbackOnSucceed);
-            Notify.addEventListener(NotifyType.MsgReplayGetDataFailed, callbackOnFailed);
-
-            RwProxy.reqReplayGetData(replayId);
-        });
-
-        return new Promise((resolve) => {
-            _replayDataRequests.set(replayId, [info => {
-                const encodedWar = info.encodedWar;
-                resolve(encodedWar ? ProtoManager.decodeAsSerialWar(encodedWar) : null);
-            }]);
-        });
+        return _replayDataGetter.getData(replayId);
     }
 
     export function updateOnMsgReplayGetData(data: MsgReplayGetDataIs): void {
-        const encodedWar = data.encodedWar;
+        const encodedWar    = data.encodedWar;
+        const replayId      = Helpers.getExisted(data.replayId);
         _replayDataDict.set(
-            Helpers.getExisted(data.replayId),
+            replayId,
             encodedWar ? ProtoManager.decodeAsSerialWar(encodedWar) : null
         );
+        _replayDataGetter.dataUpdated(replayId);
     }
 }
 

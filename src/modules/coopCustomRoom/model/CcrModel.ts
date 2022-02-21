@@ -13,10 +13,9 @@
 // import UserModel                            from "../../user/model/UserModel";
 // import WarMapModel                          from "../../warMap/model/WarMapModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace CcrModel {
-    import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
-    import NetMessage                               = ProtoTypes.NetMessage;
     import ICcrRoomInfo                             = ProtoTypes.CoopCustomRoom.ICcrRoomInfo;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
@@ -26,7 +25,10 @@ namespace CcrModel {
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgCcrJoinRoom.IC;
 
     const _roomInfoDict         = new Map<number, ICcrRoomInfo | null>();
-    const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgCcrGetRoomInfo.IS) => void)[]>();
+    const _roomInfoGetter       = Helpers.createCachedDataGetter({
+        dataDict                : _roomInfoDict,
+        reqData                 : (roomId: number) => CcrProxy.reqCcrGetRoomInfo(roomId),
+    });
 
     const _unjoinedRoomIdSet    = new Set<number>();
     const _joinedRoomIdSet      = new Set<number>();
@@ -35,61 +37,11 @@ namespace CcrModel {
     // Functions for rooms.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getRoomInfo(roomId: number): Promise<ICcrRoomInfo | null> {
-        {
-            const cachedInfo = _roomInfoDict.get(roomId);
-            if (cachedInfo !== undefined) {
-                return new Promise(resolve => resolve(cachedInfo));
-            }
-        }
-
-        if (_roomInfoRequests.has(roomId)) {
-            return new Promise((resolve) => {
-                Helpers.getExisted(_roomInfoRequests.get(roomId)).push(info => resolve(info.roomInfo || null));
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgCcrGetRoomInfo.IS;
-                if (data.roomId === roomId) {
-                    Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfoFailed,   callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
-                        cb(data);
-                    }
-                    _roomInfoRequests.delete(roomId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgCcrGetRoomInfo.IS;
-                if (data.roomId === roomId) {
-                    Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgCcrGetRoomInfoFailed,   callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
-                        cb(data);
-                    }
-                    _roomInfoRequests.delete(roomId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgCcrGetRoomInfo,        callbackOnSucceed);
-            Notify.addEventListener(NotifyType.MsgCcrGetRoomInfoFailed,  callbackOnFailed);
-
-            CcrProxy.reqCcrGetRoomInfo(roomId);
-        });
-
-        return new Promise((resolve) => {
-            _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo || null)]);
-        });
+        return _roomInfoGetter.getData(roomId);
     }
     function setRoomInfo(roomId: number, info: ICcrRoomInfo | null): void {
         _roomInfoDict.set(roomId, info);
+        _roomInfoGetter.dataUpdated(roomId);
     }
 
     export function setJoinableRoomInfoList(infoList: ICcrRoomInfo[]): void {

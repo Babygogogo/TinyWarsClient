@@ -20,7 +20,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
     import NotifyType   = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchIncomingInfo;
+        warId: number;
     };
     export class WwDeleteWatcherDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
@@ -75,7 +75,13 @@ namespace TwnsWwDeleteWatcherDetailPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnConfirm(): void {
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            const warId = this._getOpenData().warId;
+            if (await WwModel.getWatchIncomingInfo(warId) == null) {
+                this.close();
+                return;
+            }
+
             const deleteUserIds : number[] = [];
             for (const data of this._dataForListPlayer || []) {
                 if (data.isDelete) {
@@ -83,8 +89,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
                 }
             }
             if (deleteUserIds.length) {
-                const warId = this._getOpenData().watchInfo.warId;
-                (warId != null) && (WwProxy.reqWatchDeleteWatcher(warId, deleteUserIds));
+                WwProxy.reqWatchDeleteWatcher(warId, deleteUserIds);
             }
             this.close();
         }
@@ -108,10 +113,10 @@ namespace TwnsWwDeleteWatcherDetailPanel {
         }
 
         private async _generateDataForListPlayer(): Promise<DataForRequesterRenderer[]> {
-            const openData          = this._getOpenData().watchInfo;
-            const playerInfoList    = (await MpwModel.getWarProgressInfo(Helpers.getExisted(openData.warId)))?.playerInfoList;
+            const warId             = this._getOpenData().warId;
+            const playerInfoList    = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of openData.srcUserInfoArray || []) {
+            for (const info of (await WwModel.getWatchIncomingInfo(warId))?.srcUserInfoArray || []) {
                 const userId = info.userId;
                 if (userId != null) {
                     dataList.push({

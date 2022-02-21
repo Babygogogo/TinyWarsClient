@@ -7,6 +7,7 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import MrrModel             from "./MrrModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MrrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
@@ -43,12 +44,8 @@ namespace MrrProxy {
     }
     async function _onMsgMrrGetRoomPublicInfo(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMrrGetRoomPublicInfoFailed, data);
-        } else {
-            await MrrModel.updateOnMsgMrrGetRoomPublicInfo(data);
-            Notify.dispatch(NotifyType.MsgMrrGetRoomPublicInfo, data);
-        }
+        await MrrModel.updateOnMsgMrrGetRoomPublicInfo(data);
+        Notify.dispatch(NotifyType.MsgMrrGetRoomPublicInfo, data);
     }
 
     export function reqMrrGetMyRoomPublicInfoList(): void {

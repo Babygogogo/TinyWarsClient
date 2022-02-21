@@ -63,8 +63,13 @@ namespace TwnsMeImportPanel {
 
         private async _createDataForListMap(): Promise<DataForMapRenderer[]> {
             const dataArray: DataForMapRenderer[] = [];
-            for (const [mapId, extraData] of WarMapModel.getBriefDataDict()) {
-                if (extraData.mapExtraData?.isEnabled) {
+            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+                const mapBriefData = await WarMapModel.getBriefData(mapId);
+                if (mapBriefData == null) {
+                    continue;
+                }
+
+                if (mapBriefData.mapExtraData?.isEnabled) {
                     dataArray.push({
                         mapId,
                         mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined,

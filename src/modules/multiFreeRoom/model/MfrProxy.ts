@@ -154,12 +154,8 @@ namespace MfrProxy {
     }
     function _onMsgMfrGetRoomInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMfrGetRoomInfo.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMfrGetRoomInfoFailed, data);
-        } else {
-            MfrModel.updateOnMsgMfrGetRoomInfo(data);
-            Notify.dispatch(NotifyType.MsgMfrGetRoomInfo, data);
-        }
+        MfrModel.updateOnMsgMfrGetRoomInfo(data);
+        Notify.dispatch(NotifyType.MsgMfrGetRoomInfo, data);
     }
 
     export function reqMfrGetJoinableRoomInfoList(roomFilter: Types.Undefinable<ProtoTypes.MultiFreeRoom.IRoomFilter>): void {

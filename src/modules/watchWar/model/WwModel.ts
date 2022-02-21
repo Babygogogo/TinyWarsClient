@@ -14,7 +14,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WwModel {
-    import NotifyType                               = TwnsNotifyType.NotifyType;
     import IMpwWatchIncomingInfo                    = ProtoTypes.MultiPlayerWar.IMpwWatchIncomingInfo;
     import IMpwWatchOutgoingInfo                    = ProtoTypes.MultiPlayerWar.IMpwWatchOutgoingInfo;
     import MsgMpwWatchGetIncomingInfoIs             = ProtoTypes.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
@@ -67,133 +66,39 @@ namespace WwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for incoming info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _watchIncomingInfoDict        = new Map<number, IMpwWatchIncomingInfo | null>();
-    const _watchIncomingInfoRequests    = new Map<number, ((info: MsgMpwWatchGetIncomingInfoIs) => void)[]>();
+    const _watchIncomingInfoDict    = new Map<number, IMpwWatchIncomingInfo | null>();
+    const _watchIncomingInfoGetter  = Helpers.createCachedDataGetter({
+        dataDict                : _watchIncomingInfoDict,
+        reqData                 : (warId: number) => WwProxy.reqMpwWatchGetIncomingInfo(warId),
+    });
 
     export function getWatchIncomingInfo(warId: number): Promise<IMpwWatchIncomingInfo | null> {
-        if (_watchIncomingInfoDict.has(warId)) {
-            return new Promise<IMpwWatchIncomingInfo | null>((resolve) => resolve(_watchIncomingInfoDict.get(warId) ?? null));
-        }
-
-        if (_watchIncomingInfoRequests.has(warId)) {
-            return new Promise<IMpwWatchIncomingInfo | null>((resolve) => {
-                Helpers.getExisted(_watchIncomingInfoRequests.get(warId)).push(() => {
-                    resolve(_watchIncomingInfoDict.get(warId) ?? null);
-                });
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceeded = (e: egret.Event): void => {
-                const data = e.data as MsgMpwWatchGetIncomingInfoIs;
-                if (data.warId === warId) {
-                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetIncomingInfo,       callbackOnSucceeded);
-                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetIncomingInfoFailed, callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_watchIncomingInfoRequests.get(warId))) {
-                        cb(data);
-                    }
-                    _watchIncomingInfoRequests.delete(warId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as MsgMpwWatchGetIncomingInfoIs;
-                if (data.warId === warId) {
-                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetIncomingInfo,       callbackOnSucceeded);
-                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetIncomingInfoFailed, callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_watchIncomingInfoRequests.get(warId))) {
-                        cb(data);
-                    }
-                    _watchIncomingInfoRequests.delete(warId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgMpwWatchGetIncomingInfo,          callbackOnSucceeded);
-            Notify.addEventListener(NotifyType.MsgMpwWatchGetIncomingInfoFailed,    callbackOnFailed);
-
-            WwProxy.reqMpwWatchGetIncomingInfo(warId);
-        });
-
-        return new Promise((resolve) => {
-            _watchIncomingInfoRequests.set(warId, [() => {
-                resolve(_watchIncomingInfoDict.get(warId) ?? null);
-            }]);
-        });
+        return _watchIncomingInfoGetter.getData(warId);
     }
 
     export async function updateOnMsgMpwWatchGetIncomingInfo(data: MsgMpwWatchGetIncomingInfoIs): Promise<void> {
-        _watchIncomingInfoDict.set(Helpers.getExisted(data.warId), data.incomingInfo ?? null);
+        const warId = Helpers.getExisted(data.warId);
+        _watchIncomingInfoDict.set(warId, data.incomingInfo ?? null);
+        _watchIncomingInfoGetter.dataUpdated(warId);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for outgoing info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _watchOutgoingInfoDict        = new Map<number, IMpwWatchOutgoingInfo | null>();
-    const _watchOutgoingInfoRequests    = new Map<number, ((info: MsgMpwWatchGetOutgoingInfoIs) => void)[]>();
+    const _watchOutgoingInfoDict    = new Map<number, IMpwWatchOutgoingInfo | null>();
+    const _watchOutgoingInfoGetter  = Helpers.createCachedDataGetter({
+        dataDict                : _watchOutgoingInfoDict,
+        reqData                 : (warId: number) => WwProxy.reqMpwWatchGetOutgoingInfo(warId),
+    });
 
     export function getWatchOutgoingInfo(warId: number): Promise<IMpwWatchOutgoingInfo | null> {
-        if (_watchOutgoingInfoDict.has(warId)) {
-            return new Promise<IMpwWatchOutgoingInfo | null>((resolve) => resolve(_watchOutgoingInfoDict.get(warId) ?? null));
-        }
-
-        if (_watchOutgoingInfoRequests.has(warId)) {
-            return new Promise<IMpwWatchOutgoingInfo | null>((resolve) => {
-                Helpers.getExisted(_watchOutgoingInfoRequests.get(warId)).push(() => {
-                    resolve(_watchOutgoingInfoDict.get(warId) ?? null);
-                });
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceeded = (e: egret.Event): void => {
-                const data = e.data as MsgMpwWatchGetOutgoingInfoIs;
-                if (data.warId === warId) {
-                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetOutgoingInfo,       callbackOnSucceeded);
-                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetOutgoingInfoFailed, callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_watchOutgoingInfoRequests.get(warId))) {
-                        cb(data);
-                    }
-                    _watchOutgoingInfoRequests.delete(warId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as MsgMpwWatchGetOutgoingInfoIs;
-                if (data.warId === warId) {
-                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetOutgoingInfo,       callbackOnSucceeded);
-                    Notify.removeEventListener(NotifyType.MsgMpwWatchGetOutgoingInfoFailed, callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_watchOutgoingInfoRequests.get(warId))) {
-                        cb(data);
-                    }
-                    _watchOutgoingInfoRequests.delete(warId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgMpwWatchGetOutgoingInfo,          callbackOnSucceeded);
-            Notify.addEventListener(NotifyType.MsgMpwWatchGetOutgoingInfoFailed,    callbackOnFailed);
-
-            WwProxy.reqMpwWatchGetOutgoingInfo(warId);
-        });
-
-        return new Promise((resolve) => {
-            _watchOutgoingInfoRequests.set(warId, [() => {
-                resolve(_watchOutgoingInfoDict.get(warId) ?? null);
-            }]);
-        });
+        return _watchOutgoingInfoGetter.getData(warId);
     }
 
     export async function updateOnMsgMpwWatchGetOutgoingInfo(data: MsgMpwWatchGetOutgoingInfoIs): Promise<void> {
-        _watchOutgoingInfoDict.set(Helpers.getExisted(data.warId), data.outgoingInfo ?? null);
+        const warId = Helpers.getExisted(data.warId);
+        _watchOutgoingInfoDict.set(warId, data.outgoingInfo ?? null);
+        _watchOutgoingInfoGetter.dataUpdated(warId);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

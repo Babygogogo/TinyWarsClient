@@ -20,7 +20,7 @@ namespace TwnsWwHandleRequestDetailPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchIncomingInfo;
+        warId: number;
     };
     export class WwHandleRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
@@ -71,9 +71,9 @@ namespace TwnsWwHandleRequestDetailPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnConfirm(): void {
-            const warId = this._getOpenData().watchInfo.warId;
-            if (warId == null) {
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            const warId = this._getOpenData().warId;
+            if (await WwModel.getWatchIncomingInfo(warId) == null) {
                 this.close();
                 return;
             }
@@ -115,10 +115,10 @@ namespace TwnsWwHandleRequestDetailPanel {
         }
 
         private async _generateDataForListPlayer(): Promise<DataForRequesterRenderer[]> {
-            const openData          = this._getOpenData().watchInfo;
-            const playerInfoList    = (await MpwModel.getWarProgressInfo(Helpers.getExisted(openData.warId)))?.playerInfoList;
+            const warId             = this._getOpenData().warId;
+            const playerInfoList    = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of openData.srcUserInfoArray || []) {
+            for (const info of (await WwModel.getWatchIncomingInfo(warId))?.srcUserInfoArray || []) {
                 const userId = info.userId;
                 if (userId != null) {
                     dataList.push({

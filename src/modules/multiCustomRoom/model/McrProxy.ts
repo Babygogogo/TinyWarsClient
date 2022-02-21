@@ -167,12 +167,8 @@ namespace McrProxy {
     }
     function _onMsgMcrGetRoomInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrGetRoomInfoFailed, data);
-        } else {
-            McrModel.updateOnMsgMcrGetRoomInfo(data);
-            Notify.dispatch(NotifyType.MsgMcrGetRoomInfo, data);
-        }
+        McrModel.updateOnMsgMcrGetRoomInfo(data);
+        Notify.dispatch(NotifyType.MsgMcrGetRoomInfo, data);
     }
 
     export function reqMcrGetJoinableRoomInfoList(roomFilter: Types.Undefinable<ProtoTypes.MultiCustomRoom.IRoomFilter>): void {

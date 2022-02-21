@@ -134,7 +134,12 @@ namespace TwnsMmTagListPanel {
             (mapNameForFilter)  && (mapNameForFilter = mapNameForFilter.toLowerCase());
             (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
-            for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
+            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+                const mapBriefData = await WarMapModel.getBriefData(mapId);
+                if (mapBriefData == null) {
+                    continue;
+                }
+
                 const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
                 const averageRating     = await WarMapModel.getAverageRating(mapId);
                 const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId);

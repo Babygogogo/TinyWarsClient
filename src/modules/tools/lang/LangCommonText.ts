@@ -1308,6 +1308,10 @@ namespace TwnsLangCommonText {
             `无法获取观战信息`,
             `Failed to load the spectating data.`,
         ],
+        [LangTextType.A0298]: [
+            `尚未设置预设规则的可用性`,
+            `The availability of the preset rule has not been set.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

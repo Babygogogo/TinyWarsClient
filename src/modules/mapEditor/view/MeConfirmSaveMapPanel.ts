@@ -61,6 +61,13 @@ namespace TwnsMeConfirmSaveMapPanel {
                 labelReviewDescTitle.visible    = false;
                 labelReviewDesc.text            = Lang.getText(LangTextType.A0261);
 
+            } else if (mapRawData.warRuleArray?.some(v => !checkIsValidAvailability(v.ruleAvailability))) {
+                this._mapRawData                = mapRawData;
+                btnConfirm.visible              = true;
+                groupNeedReview.visible         = false;
+                labelReviewDescTitle.visible    = true;
+                labelReviewDesc.text            = Lang.getText(LangTextType.A0298);
+
             } else {
                 const errorCode                 = await MeUtility.getErrorCodeForMapRawData(mapRawData);
                 this._mapRawData                = mapRawData;
@@ -128,6 +135,18 @@ namespace TwnsMeConfirmSaveMapPanel {
         private _updateImgNeedReview(): void {
             this._imgNeedReview.visible = this._needReview;
         }
+    }
+
+    function checkIsValidAvailability(ruleAvailability: Types.Undefinable<ProtoTypes.WarRule.IRuleAvailability>): boolean {
+        if (ruleAvailability == null) {
+            return false;
+        }
+
+        return !!((ruleAvailability.canCcw)
+            || (ruleAvailability.canMcw)
+            || (ruleAvailability.canMrw)
+            || (ruleAvailability.canScw)
+            || (ruleAvailability.canSrw));
     }
 }
 

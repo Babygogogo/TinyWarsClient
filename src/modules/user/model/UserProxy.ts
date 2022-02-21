@@ -97,12 +97,8 @@ namespace UserProxy {
     }
     function _onMsgUserGetPublicInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgUserGetPublicInfoFailed, data);
-        } else {
-            UserModel.setUserPublicInfo(Helpers.getExisted(data.userPublicInfo));
-            Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
-        }
+        UserModel.setUserPublicInfo(Helpers.getExisted(data.userId), data.userPublicInfo ?? null);
+        Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
     }
 
     export function reqUserGetOnlineState(userId: number): void {

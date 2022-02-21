@@ -194,7 +194,12 @@ namespace TwnsSrrCreateMapListPanel {
             (mapName)       && (mapName     = mapName.toLowerCase());
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
-            for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
+            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+                const mapBriefData = await WarMapModel.getBriefData(mapId);
+                if (mapBriefData == null) {
+                    continue;
+                }
+
                 const mapExtraData  = Helpers.getExisted(mapBriefData.mapExtraData);
                 const mapTag        = mapBriefData.mapTag || {};
                 const realMapName   = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));

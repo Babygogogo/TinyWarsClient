@@ -462,6 +462,11 @@ namespace Helpers {
             });
         }
     }
+    export function wait(timeMs: number): Promise<void> {
+        return new Promise<void>(resolve => {
+            egret.setTimeout(resolve, null, timeMs);
+        });
+    }
     export function createLazyFunc<T>(func: () => T): () => T {
         let hasCalled   = false;
         let result      : T;
@@ -473,10 +478,135 @@ namespace Helpers {
             return result;
         };
     }
-    export function wait(timeMs: number): Promise<void> {
-        return new Promise<void>(resolve => {
-            egret.setTimeout(resolve, null, timeMs);
-        });
+    // export function createCachedDataGetter<DataType, NetMessageType>({ dataDict, dataExpireTime = 999999, notifyTypeForSucceed, notifyTypeForFail, checkIsTargetMessage, reqData }: {
+    //     dataDict                : Map<number, DataType | null>;
+    //     dataExpireTime?         : number;
+    //     notifyTypeForSucceed    : TwnsNotifyType.NotifyType;
+    //     notifyTypeForFail       : TwnsNotifyType.NotifyType;
+    //     checkIsTargetMessage    : (msg: NetMessageType, key: number) => boolean;
+    //     reqData                 : (key: number) => void;
+    // }): (key: number) => Promise<DataType | null> {
+    //     const requestDict           = new Map<number, (() => void)[]>();
+    //     const requestTimestampDict  = new Map<number, number>();
+    //     const dataTimestampDict     = new Map<number, number>();
+
+    //     return (key: number): Promise<DataType | null> => {
+    //         const serverTimestamp = Timer.getServerTimestamp();
+    //         if ((dataDict.has(key))                                                     &&
+    //             (serverTimestamp - (dataTimestampDict.get(key) ?? 0) <= dataExpireTime)
+    //         ) {
+    //             return new Promise<DataType | null>(resolve => resolve(dataDict.get(key) ?? null));
+    //         }
+
+    //         if ((requestDict.has(key))                                          &&
+    //             (serverTimestamp - (requestTimestampDict.get(key) ?? 0) <= 10)
+    //         ) {
+    //             return new Promise<DataType | null>(resolve => {
+    //                 getExisted(requestDict.get(key)).push(() => {
+    //                     resolve(dataDict.get(key) ?? null);
+    //                 });
+    //             });
+    //         }
+
+    //         return new Promise<DataType | null>(resolve => {
+    //             if (requestDict.has(key)) {
+    //                 getExisted(requestDict.get(key)).push(() => {
+    //                     resolve(dataDict.get(key) ?? null);
+    //                 });
+
+    //             } else {
+    //                 const callbackOnSucceeded = (e: egret.Event): void => {
+    //                     if (checkIsTargetMessage(e.data, key)) {
+    //                         Notify.removeEventListener(notifyTypeForSucceed,    callbackOnSucceeded);
+    //                         Notify.removeEventListener(notifyTypeForFail,       callbackOnFailed);
+
+    //                         dataTimestampDict.set(key, Timer.getServerTimestamp());
+
+    //                         for (const cb of getExisted(requestDict.get(key))) {
+    //                             cb();
+    //                         }
+    //                         requestDict.delete(key);
+    //                     }
+    //                 };
+    //                 const callbackOnFailed = (e: egret.Event): void => {
+    //                     if (checkIsTargetMessage(e.data, key)) {
+    //                         Notify.removeEventListener(notifyTypeForSucceed,    callbackOnSucceeded);
+    //                         Notify.removeEventListener(notifyTypeForFail,       callbackOnFailed);
+
+    //                         for (const cb of getExisted(requestDict.get(key))) {
+    //                             cb();
+    //                         }
+    //                         requestDict.delete(key);
+    //                     }
+    //                 };
+    //                 Notify.addEventListener(notifyTypeForSucceed,   callbackOnSucceeded);
+    //                 Notify.addEventListener(notifyTypeForFail,      callbackOnFailed);
+
+    //                 requestDict.set(key, [() => {
+    //                     resolve(dataDict.get(key) ?? null);
+    //                 }]);
+    //             }
+
+    //             requestTimestampDict.set(key, serverTimestamp);
+    //             reqData(key);
+    //         });
+    //     };
+    // }
+    export function createCachedDataGetter<DataType>({ dataDict, dataExpireTime = 999999, reqData }: {
+        dataDict            : Map<number, DataType | null>;
+        dataExpireTime?     : number;
+        reqData             : (key: number) => void;
+    }): {
+        getData     : (key: number) => Promise<DataType | null>;
+        dataUpdated : (key: number) => void;
+    } {
+        const requestDict           = new Map<number, (() => void)[]>();
+        const requestTimestampDict  = new Map<number, number>();
+        const dataTimestampDict     = new Map<number, number>();
+
+        return {
+            getData: (key: number): Promise<DataType | null> => {
+                const serverTimestamp = Timer.getServerTimestamp();
+                if ((dataDict.has(key))                                                     &&
+                    (serverTimestamp - (dataTimestampDict.get(key) ?? 0) <= dataExpireTime)
+                ) {
+                    return new Promise<DataType | null>(resolve => resolve(dataDict.get(key) ?? null));
+                }
+
+                if ((requestDict.has(key))                                          &&
+                    (serverTimestamp - (requestTimestampDict.get(key) ?? 0) <= 10)
+                ) {
+                    return new Promise<DataType | null>(resolve => {
+                        getExisted(requestDict.get(key)).push(() => {
+                            resolve(dataDict.get(key) ?? null);
+                        });
+                    });
+                }
+
+                return new Promise<DataType | null>(resolve => {
+                    if (requestDict.has(key)) {
+                        getExisted(requestDict.get(key)).push(() => {
+                            resolve(dataDict.get(key) ?? null);
+                        });
+                    } else {
+                        requestDict.set(key, [() => {
+                            resolve(dataDict.get(key) ?? null);
+                        }]);
+                    }
+
+                    requestTimestampDict.set(key, serverTimestamp);
+                    reqData(key);
+                });
+            },
+            dataUpdated : (key: number): void => {
+                dataTimestampDict.set(key, Timer.getServerTimestamp());
+
+                for (const cb of requestDict.get(key) ?? []) {
+                    cb();
+                }
+                requestDict.delete(key);
+            },
+        };
     }
 
     function getColorMatrix(color: Types.ColorType, value = 100): number[] | null {

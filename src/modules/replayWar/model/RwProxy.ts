@@ -44,12 +44,8 @@ namespace RwProxy {
     }
     function _onMsgReplayGetData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetData.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgReplayGetDataFailed, data);
-        } else {
-            RwModel.updateOnMsgReplayGetData(data);
-            Notify.dispatch(NotifyType.MsgReplayGetData, data);
-        }
+        RwModel.updateOnMsgReplayGetData(data);
+        Notify.dispatch(NotifyType.MsgReplayGetData, data);
     }
 
     export function reqReplaySetRating(replayId: number, rating: number): void {

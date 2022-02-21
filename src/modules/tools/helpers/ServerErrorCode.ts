@@ -7228,11 +7228,16 @@ export const enum ServerErrorCode {
     MsgMapGetBriefData0001,
     MsgMapGetBriefData0002,
 
-    MsgMapGetEnabledBriefDataList0000,
-    MsgMapGetEnabledBriefDataList0001,
-
-    MsgMapGetEnabledRawDataList0000,
-    MsgMapGetEnabledRawDataList0001,
+    ExeMapGetEnabledMapIdArray_ExeWithSocket_0000,
+    ExeMapGetEnabledMapIdArray_ExeWithSocket_0001,
+    ExeMapGetEnabledMapIdArray_ExeWithSocket_0002,
+    ExeMapGetEnabledMapIdArray_ExeWithSocket_0003,
+    ExeMapGetEnabledMapIdArray_ExeWithSocket_0004,
+    ExeMapGetEnabledMapIdArray_ExeWithSocket_0005,
+    ExeMapGetEnabledMapIdArray_ExeWithSocket_0006,
+    ExeMapGetEnabledMapIdArray_ExeWithSocket_0007,
+    ExeMapGetEnabledMapIdArray_ExeWithSocket_0008,
+    ExeMapGetEnabledMapIdArray_ExeWithSocket_0009,
 
     MsgMapGetRawData0000,
     MsgMapGetRawData0001,

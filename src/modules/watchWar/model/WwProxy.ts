@@ -165,12 +165,8 @@ namespace WwProxy {
     }
     function _onMsgMpwWatchGetIncomingInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetIncomingInfo.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMpwWatchGetIncomingInfoFailed, data);
-        } else {
-            WwModel.updateOnMsgMpwWatchGetIncomingInfo(data);
-            Notify.dispatch(NotifyType.MsgMpwWatchGetIncomingInfo, data);
-        }
+        WwModel.updateOnMsgMpwWatchGetIncomingInfo(data);
+        Notify.dispatch(NotifyType.MsgMpwWatchGetIncomingInfo, data);
     }
 
     export function reqMpwWatchGetOutgoingInfo(warId: number): void {
@@ -182,12 +178,8 @@ namespace WwProxy {
     }
     function _onMsgMpwWatchGetOutgoingInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMpwWatchGetOutgoingInfoFailed, data);
-        } else {
-            WwModel.updateOnMsgMpwWatchGetOutgoingInfo(data);
-            Notify.dispatch(NotifyType.MsgMpwWatchGetOutgoingInfo, data);
-        }
+        WwModel.updateOnMsgMpwWatchGetOutgoingInfo(data);
+        Notify.dispatch(NotifyType.MsgMpwWatchGetOutgoingInfo, data);
     }
 }
 

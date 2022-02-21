@@ -158,7 +158,7 @@ namespace TwnsNotifyType {
 
         MsgMapGetRawData,
         MsgMapGetRawDataFailed,
-        MsgMapGetEnabledBriefDataList,
+        MsgMapGetEnabledMapIdArray,
         MsgMapGetEnabledRawDataList,
         MsgMapGetBriefData,
         MsgMapGetBriefDataFailed,
@@ -276,8 +276,8 @@ namespace TwnsNotifyType {
         MsgMpwWatchGetIncomingInfoFailed,
         MsgMpwWatchGetOutgoingInfo,
         MsgMpwWatchGetOutgoingInfoFailed,
-        MsgMpwGetHalfwayReplayDataFailed,
         MsgMpwGetHalfwayReplayData,
+        MsgMpwGetHalfwayReplayDataFailed,
 
         MsgMpwWatchGetUnwatchedWarInfos,
         MsgMpwWatchGetOngoingWarInfos,

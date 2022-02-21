@@ -169,12 +169,8 @@ namespace SpmProxy {
     }
     function _onMsgSpmGetRankList(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmGetRankList.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgSpmGetRankListFailed, data);
-        } else {
-            SpmModel.updateOnMsgSpmGetRankList(data);
-            Notify.dispatch(NotifyType.MsgSpmGetRankList, data);
-        }
+        SpmModel.updateOnMsgSpmGetRankList(data);
+        Notify.dispatch(NotifyType.MsgSpmGetRankList, data);
     }
 
     export function reqSpmValidateSrw(war: SrwWar): void {
@@ -200,12 +196,8 @@ namespace SpmProxy {
     }
     async function _onMsgSpmGetReplayData(e: egret.Event): Promise<void> {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmGetReplayData.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgSpmGetReplayDataFailed);
-        } else {
-            await SpmModel.updateOnMsgSpmGetReplayData(data);
-            Notify.dispatch(NotifyType.MsgSpmGetReplayData, data);
-        }
+        await SpmModel.updateOnMsgSpmGetReplayData(data);
+        Notify.dispatch(NotifyType.MsgSpmGetReplayData, data);
     }
 }
 

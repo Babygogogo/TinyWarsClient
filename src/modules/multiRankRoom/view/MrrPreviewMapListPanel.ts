@@ -188,7 +188,12 @@ namespace TwnsMrrPreviewMapListPanel {
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
             const promiseArray: Promise<ProtoTypes.Map.IMapRawData | null>[] = [];
-            for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
+            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+                const mapBriefData = await WarMapModel.getBriefData(mapId);
+                if (mapBriefData == null) {
+                    continue;
+                }
+
                 if ((mapBriefData.mapExtraData?.isEnabled)  &&
                     (mapBriefData.ruleAvailability?.canMrw)
                 ) {

@@ -14,16 +14,17 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MfrModel {
-    import NotifyType                               = TwnsNotifyType.NotifyType;
     import IMfrRoomInfo                             = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
-    import NetMessage                               = ProtoTypes.NetMessage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
     const _roomInfoDict         = new Map<number, IMfrRoomInfo | null>();
-    const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgMfrGetRoomInfo.IS) => void)[]>();
+    const _roomInfoGetter       = Helpers.createCachedDataGetter({
+        dataDict                : _roomInfoDict,
+        reqData                 : (roomId: number) => MfrProxy.reqMfrGetRoomInfo(roomId),
+    });
 
     const _unjoinedRoomIdSet    = new Set<number>();
     const _joinedRoomIdSet      = new Set<number>();
@@ -32,61 +33,11 @@ namespace MfrModel {
     // Functions for rooms.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getRoomInfo(roomId: number): Promise<IMfrRoomInfo | null> {
-        if (roomId == null) {
-            return new Promise((resolve) => resolve(null));
-        }
-        if (_roomInfoDict.has(roomId)) {
-            return new Promise(resolve => resolve(_roomInfoDict.get(roomId) ?? null));
-        }
-
-        if (_roomInfoRequests.has(roomId)) {
-            return new Promise((resolve) => {
-                Helpers.getExisted(_roomInfoRequests.get(roomId)).push(info => resolve(info.roomInfo ?? null));
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgMfrGetRoomInfo.IS;
-                if (data.roomId === roomId) {
-                    Notify.removeEventListener(NotifyType.MsgMfrGetRoomInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgMfrGetRoomInfoFailed,   callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
-                        cb(data);
-                    }
-                    _roomInfoRequests.delete(roomId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgMfrGetRoomInfo.IS;
-                if (data.roomId === roomId) {
-                    Notify.removeEventListener(NotifyType.MsgMfrGetRoomInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgMfrGetRoomInfoFailed,   callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
-                        cb(data);
-                    }
-                    _roomInfoRequests.delete(roomId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgMfrGetRoomInfo,        callbackOnSucceed);
-            Notify.addEventListener(NotifyType.MsgMfrGetRoomInfoFailed,  callbackOnFailed);
-
-            MfrProxy.reqMfrGetRoomInfo(roomId);
-        });
-
-        return new Promise((resolve) => {
-            _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo ?? null)]);
-        });
+        return _roomInfoGetter.getData(roomId);
     }
     function setRoomInfo(roomId: number, info: IMfrRoomInfo | null): void {
         _roomInfoDict.set(roomId, info);
+        _roomInfoGetter.dataUpdated(roomId);
     }
 
     export function setJoinableRoomInfoList(infoList: IMfrRoomInfo[]): void {

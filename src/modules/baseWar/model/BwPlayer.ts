@@ -110,8 +110,8 @@ namespace TwnsBwPlayer {
             this.setCoCurrentEnergy(coCurrentEnergy);
             this._setCoPowerActivatedCount(data.coPowerActivatedCount ?? 0);
             this.setHasTakenManualAction(data.hasTakenManualAction ?? false);
-            this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
-            this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
+            this.setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
+            this.setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
         }
 
         public startRunning(war: TwnsBwWar.BwWar): void {
@@ -215,7 +215,7 @@ namespace TwnsBwPlayer {
             return Helpers.getExisted(this._restTimeToBoot);
         }
 
-        private _setWatchOngoingSrcUserIds(list: number[]): void {
+        public setWatchOngoingSrcUserIds(list: number[]): void {
             this._watchOngoingSrcUserIds = new Set(list);
         }
         public getWatchOngoingSrcUserIds(): Set<number> {
@@ -228,7 +228,7 @@ namespace TwnsBwPlayer {
             this.getWatchOngoingSrcUserIds().delete(userId);
         }
 
-        private _setWatchRequestSrcUserIds(list: number[]): void {
+        public setWatchRequestSrcUserIds(list: number[]): void {
             this._watchRequestSrcUserIds = new Set(list);
         }
         public getWatchRequestSrcUserIds(): Set<number> {

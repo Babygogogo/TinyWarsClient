@@ -154,12 +154,8 @@ namespace CcrProxy {
     }
     function _onMsgCcrGetRoomInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgCcrGetRoomInfo.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgCcrGetRoomInfoFailed, data);
-        } else {
-            CcrModel.updateOnMsgCcrGetRoomInfo(data);
-            Notify.dispatch(NotifyType.MsgCcrGetRoomInfo, data);
-        }
+        CcrModel.updateOnMsgCcrGetRoomInfo(data);
+        Notify.dispatch(NotifyType.MsgCcrGetRoomInfo, data);
     }
 
     export function reqCcrGetJoinableRoomInfoList(roomFilter: Types.Undefinable<ProtoTypes.CoopCustomRoom.IRoomFilter>): void {

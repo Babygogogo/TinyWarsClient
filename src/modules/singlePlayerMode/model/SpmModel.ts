@@ -149,129 +149,32 @@ namespace SpmModel {
     // Functions for rank list.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _rankDataDict     = new Map<number, ISpmRankInfoForRule[]>();
-    const _rankDataRequests = new Map<number, ((info: MsgSpmGetRankListIs) => void)[]>();
+    const _rankDataGetter   = Helpers.createCachedDataGetter({
+        dataDict            : _rankDataDict,
+        reqData             : (mapId: number) => SpmProxy.reqSpmGetRankList(mapId),
+    });
 
-    export function getRankData(mapId: number): Promise<ISpmRankInfoForRule[]> {
-        const localData = getLocalRankData(mapId);
-        if (localData) {
-            return new Promise<ISpmRankInfoForRule[]>((resolve) => resolve(localData));
-        }
-
-        if (_rankDataRequests.has(mapId)) {
-            return new Promise<ISpmRankInfoForRule[]>((resolve) => {
-                Helpers.getExisted(_rankDataRequests.get(mapId)).push(info => resolve(info.infoArray ?? []));
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceed = (e: egret.Event): void => {
-                const data = e.data as MsgSpmGetRankListIs;
-                if (data.mapId === mapId) {
-                    Notify.removeEventListener(NotifyType.MsgSpmGetRankList,        callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgSpmGetRankListFailed,  callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_rankDataRequests.get(mapId))) {
-                        cb(data);
-                    }
-                    _rankDataRequests.delete(mapId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as MsgSpmGetRankListIs;
-                if (data.mapId === mapId) {
-                    Notify.removeEventListener(NotifyType.MsgSpmGetRankList,        callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgSpmGetRankListFailed,  callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_rankDataRequests.get(mapId))) {
-                        cb(data);
-                    }
-                    _rankDataRequests.delete(mapId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgSpmGetRankList,       callbackOnSucceed);
-            Notify.addEventListener(NotifyType.MsgSpmGetRankListFailed, callbackOnFailed);
-
-            SpmProxy.reqSpmGetRankList(mapId);
-        });
-
-        return new Promise((resolve) => {
-            _rankDataRequests.set(mapId, [info => resolve(info.infoArray ?? [])]);
-        });
-    }
-
-    function getLocalRankData(mapId: number): ISpmRankInfoForRule[] | null {
-        return _rankDataDict.get(mapId) ?? null;
+    export function getRankData(mapId: number): Promise<ISpmRankInfoForRule[] | null> {
+        return _rankDataGetter.getData(mapId);
     }
 
     export function updateOnMsgSpmGetRankList(data: MsgSpmGetRankListIs): void {
-        _rankDataDict.set(Helpers.getExisted(data.mapId), data.infoArray ?? []);
+        const mapId = Helpers.getExisted(data.mapId);
+        _rankDataDict.set(mapId, data.infoArray ?? []);
+        _rankDataGetter.dataUpdated(mapId);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for replay data.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _replayDataDict       = new Map<number, ISerialWar | null>();
-    const _replayDataRequests   = new Map<number, ((info: MsgSpmGetReplayDataIs) => void)[]>();
+    const _replayDataGetter     = Helpers.createCachedDataGetter({
+        dataDict                : _replayDataDict,
+        reqData                 : (rankId: number) => SpmProxy.reqSpmGetReplayData(rankId),
+    });
 
     export function getReplayData(rankId: number): Promise<ISerialWar | null> {
-        if (_replayDataDict.has(rankId)) {
-            return new Promise<ISerialWar | null>((resolve) => resolve(_replayDataDict.get(rankId) ?? null));
-        }
-
-        if (_replayDataRequests.has(rankId)) {
-            return new Promise<ISerialWar | null>((resolve) => {
-                Helpers.getExisted(_replayDataRequests.get(rankId)).push(() => {
-                    resolve(_replayDataDict.get(rankId) ?? null);
-                });
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceed = (e: egret.Event): void => {
-                const data = e.data as MsgSpmGetReplayDataIs;
-                if (data.rankId === rankId) {
-                    Notify.removeEventListener(NotifyType.MsgSpmGetReplayData,          callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgSpmGetReplayDataFailed,    callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_replayDataRequests.get(rankId))) {
-                        cb(data);
-                    }
-                    _replayDataRequests.delete(rankId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as MsgSpmGetReplayDataIs;
-                if (data.rankId === rankId) {
-                    Notify.removeEventListener(NotifyType.MsgSpmGetReplayData,          callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgSpmGetReplayDataFailed,    callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_replayDataRequests.get(rankId))) {
-                        cb(data);
-                    }
-                    _replayDataRequests.delete(rankId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgSpmGetReplayData,         callbackOnSucceed);
-            Notify.addEventListener(NotifyType.MsgSpmGetReplayDataFailed,   callbackOnFailed);
-
-            SpmProxy.reqSpmGetReplayData(rankId);
-        });
-
-        return new Promise((resolve) => {
-            _replayDataRequests.set(rankId, [() => {
-                resolve(_replayDataDict.get(rankId) ?? null);
-            }]);
-        });
+        return _replayDataGetter.getData(rankId);
     }
     async function decodeAndReviseReplayData(encodedWar: Types.Undefinable<Uint8Array>): Promise<ISerialWar | null> {
         if (encodedWar == null) {
@@ -332,10 +235,9 @@ namespace SpmModel {
     }
 
     export async function updateOnMsgSpmGetReplayData(data: MsgSpmGetReplayDataIs): Promise<void> {
-        _replayDataDict.set(
-            Helpers.getExisted(data.rankId),
-            await decodeAndReviseReplayData(data.encodedWar),
-        );
+        const rankId = Helpers.getExisted(data.rankId);
+        _replayDataDict.set(rankId, await decodeAndReviseReplayData(data.encodedWar));
+        _replayDataGetter.dataUpdated(rankId);
     }
 }
 

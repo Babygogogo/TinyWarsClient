@@ -21,12 +21,15 @@ namespace UserModel {
     import IUserPrivilege       = ProtoTypes.User.IUserPrivilege;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
-    let _isLoggedIn                 = false;
-    let _selfInfo                   : IUserSelfInfo | null = null;
-    let _selfAccount                : string;
-    let _selfPassword               : string | null = null;
-    const _userPublicInfoDict       = new Map<number, IUserPublicInfo | null>();
-    const _userPublicInfoRequests   = new Map<number, ((info: NetMessage.MsgUserGetPublicInfo.IS) => void)[]>();
+    let _isLoggedIn             = false;
+    let _selfInfo               : IUserSelfInfo | null = null;
+    let _selfAccount            : string;
+    let _selfPassword           : string | null = null;
+    const _userPublicInfoDict   = new Map<number, IUserPublicInfo | null>();
+    const _userPublicInfoGetter = Helpers.createCachedDataGetter({
+        dataDict                : _userPublicInfoDict,
+        reqData                 : (userId: number) => UserProxy.reqUserGetPublicInfo(userId),
+    });
 
     export function init(): void {
         Notify.addEventListeners([
@@ -138,63 +141,11 @@ namespace UserModel {
     }
 
     export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | null> {
-        if (userId == null) {
-            return new Promise((resolve) => resolve(null));
-        }
-
-        const localData = _userPublicInfoDict.get(userId);
-        if (localData) {
-            return new Promise(resolve => resolve(localData));
-        }
-
-        if (_userPublicInfoRequests.has(userId)) {
-            return new Promise((resolve) => {
-                Helpers.getExisted(_userPublicInfoRequests.get(userId)).push(info => resolve(info.userPublicInfo ?? null));
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
-                if (data.userId === userId) {
-                    Notify.removeEventListener(NotifyType.MsgUserGetPublicInfo,        callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgUserGetPublicInfoFailed,  callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_userPublicInfoRequests.get(userId))) {
-                        cb(data);
-                    }
-                    _userPublicInfoRequests.delete(userId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
-                if (data.userId === userId) {
-                    Notify.removeEventListener(NotifyType.MsgUserGetPublicInfo,        callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgUserGetPublicInfoFailed,  callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_userPublicInfoRequests.get(userId))) {
-                        cb(data);
-                    }
-                    _userPublicInfoRequests.delete(userId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgUserGetPublicInfo,       callbackOnSucceed);
-            Notify.addEventListener(NotifyType.MsgUserGetPublicInfoFailed, callbackOnFailed);
-
-            UserProxy.reqUserGetPublicInfo(userId);
-        });
-
-        return new Promise((resolve) => {
-            _userPublicInfoRequests.set(userId, [info => resolve(info.userPublicInfo ?? null)]);
-        });
+        return _userPublicInfoGetter.getData(userId);
     }
-    export function setUserPublicInfo(info: IUserPublicInfo): void {
-        _userPublicInfoDict.set(Helpers.getExisted(info.userId), info);
+    export function setUserPublicInfo(userId: number, info: IUserPublicInfo | null): void {
+        _userPublicInfoDict.set(userId, info);
+        _userPublicInfoGetter.dataUpdated(userId);
     }
 
     export async function getUserNickname(userId: number): Promise<string | null> {

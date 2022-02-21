@@ -22,7 +22,7 @@ namespace TwnsWwMakeRequestDetailPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchOutgoingInfo;
+        warId   : number;
     };
     export class WwMakeRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
@@ -72,9 +72,9 @@ namespace TwnsWwMakeRequestDetailPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnConfirm(): void {
-            const warId = this._getOpenData().watchInfo.warId;
-            if (warId == null) {
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            const warId = this._getOpenData().warId;
+            if (await WwModel.getWatchOutgoingInfo(warId) == null) {
                 this.close();
                 return;
             }
@@ -116,16 +116,20 @@ namespace TwnsWwMakeRequestDetailPanel {
         }
 
         private async _generateDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
-            const openData          = this._getOpenData().watchInfo;
-            const warId             = Helpers.getExisted(openData.warId);
-            const configVersion     = (await MpwModel.getWarSettings(warId))?.settingsForCommon?.configVersion;
+            const warId         = this._getOpenData().warId;
+            const outgoingInfo  = await WwModel.getWatchOutgoingInfo(warId);
+            if (outgoingInfo == null) {
+                return [];
+            }
+
+            const configVersion = (await MpwModel.getWarSettings(warId))?.settingsForCommon?.configVersion;
             if (configVersion == null) {
                 return [];
             }
 
             const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
-            const ongoingDstUserIdArray = openData.ongoingDstUserIdArray || [];
-            const requestDstUserIdArray = openData.requestDstUserIdArray || [];
+            const ongoingDstUserIdArray = outgoingInfo.ongoingDstUserIdArray || [];
+            const requestDstUserIdArray = outgoingInfo.requestDstUserIdArray || [];
             const playerInfoList        = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
 
             const dataList: DataForPlayerRenderer[] = [];

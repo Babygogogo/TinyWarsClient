@@ -167,7 +167,12 @@ namespace TwnsCcrCreateMapListPanel {
             const mapDesigner                               = (mapFilters.mapDesigner || "").toLowerCase();
             const { playersCount, playedTimes, minRating }  = mapFilters;
 
-            for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
+            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+                const mapBriefData = await WarMapModel.getBriefData(mapId);
+                if (mapBriefData == null) {
+                    continue;
+                }
+
                 const mapExtraData      = Helpers.getExisted(mapBriefData.mapExtraData);
                 const mapTag            = mapBriefData.mapTag || {};
                 const realMapName       = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));

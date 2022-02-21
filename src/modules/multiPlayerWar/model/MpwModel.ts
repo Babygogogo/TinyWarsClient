@@ -52,6 +52,9 @@ namespace MpwModel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
+    const _NOTIFY_LISTENERS     : Notify.Listener[] = [
+        { type  : NotifyType.MsgMpwWatchGetIncomingInfo,    callback: _onNotifyMsgMpwWatchGetIncomingInfo },
+    ];
     let _allMyWarIdArray        : number[] = [];
     let _mcwPreviewingWarId     : number | null = null;
     let _mrwPreviewingWarId     : number | null = null;
@@ -62,7 +65,7 @@ namespace MpwModel {
     const _cachedActions        : IWarActionContainer[] = [];
 
     export function init(): void {
-        // nothing to do.
+        Notify.addEventListeners(_NOTIFY_LISTENERS);
     }
 
     export function setAllMyWarIdArray(idArray: number[]): void {
@@ -180,132 +183,38 @@ namespace MpwModel {
     // Functions for war settings.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _warSettingsDict      = new Map<number, IMpwWarSettings | null>();
-    const _warSettingsRequests  = new Map<number, ((info: MsgMpwCommonGetWarSettingsIs) => void)[]>();
+    const _warSettingsGetter    = Helpers.createCachedDataGetter({
+        dataDict                : _warSettingsDict,
+        reqData                 : (warId: number) => MpwProxy.reqMpwCommonGetWarSettings(warId),
+    });
 
     export function getWarSettings(warId: number): Promise<IMpwWarSettings | null> {
-        if (_warSettingsDict.has(warId)) {
-            return new Promise<IMpwWarSettings | null>((resolve) => resolve(_warSettingsDict.get(warId) ?? null));
-        }
-
-        if (_warSettingsRequests.has(warId)) {
-            return new Promise<IMpwWarSettings | null>((resolve) => {
-                Helpers.getExisted(_warSettingsRequests.get(warId)).push(() => {
-                    resolve(_warSettingsDict.get(warId) ?? null);
-                });
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceeded = (e: egret.Event): void => {
-                const data = e.data as MsgMpwCommonGetWarSettingsIs;
-                if (data.warId === warId) {
-                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarSettings,       callbackOnSucceeded);
-                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarSettingsFailed, callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_warSettingsRequests.get(warId))) {
-                        cb(data);
-                    }
-                    _warSettingsRequests.delete(warId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as MsgMpwCommonGetWarSettingsIs;
-                if (data.warId === warId) {
-                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarSettings,       callbackOnSucceeded);
-                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarSettingsFailed, callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_warSettingsRequests.get(warId))) {
-                        cb(data);
-                    }
-                    _warSettingsRequests.delete(warId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgMpwCommonGetWarSettings,          callbackOnSucceeded);
-            Notify.addEventListener(NotifyType.MsgMpwCommonGetWarSettingsFailed,    callbackOnFailed);
-
-            MpwProxy.reqMpwCommonGetWarSettings(warId);
-        });
-
-        return new Promise((resolve) => {
-            _warSettingsRequests.set(warId, [() => {
-                resolve(_warSettingsDict.get(warId) ?? null);
-            }]);
-        });
+        return _warSettingsGetter.getData(warId);
     }
 
     export async function updateOnMsgMpwCommonGetWarSettings(data: MsgMpwCommonGetWarSettingsIs): Promise<void> {
-        _warSettingsDict.set(Helpers.getExisted(data.warId), data.warSettings ?? null);
+        const warId = Helpers.getExisted(data.warId);
+        _warSettingsDict.set(warId, data.warSettings ?? null);
+        _warSettingsGetter.dataUpdated(warId);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for war progress info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     const _warProgressInfoDict      = new Map<number, IMpwWarProgressInfo | null >();
-    const _warProgressInfoRequests  = new Map<number, ((info: MsgMpwCommonGetWarProgressInfoIs) => void)[]>();
+    const _warProgressInfoGetter    = Helpers.createCachedDataGetter({
+        dataDict                : _warProgressInfoDict,
+        reqData                 : (warId: number) => MpwProxy.reqMpwCommonGetWarProgressInfo(warId),
+    });
 
     export function getWarProgressInfo(warId: number): Promise<IMpwWarProgressInfo | null> {
-        if (_warProgressInfoDict.has(warId)) {
-            return new Promise<IMpwWarProgressInfo | null>((resolve) => resolve(_warProgressInfoDict.get(warId) ?? null));
-        }
-
-        if (_warProgressInfoRequests.has(warId)) {
-            return new Promise<IMpwWarProgressInfo | null>((resolve) => {
-                Helpers.getExisted(_warProgressInfoRequests.get(warId)).push(() => {
-                    resolve(_warProgressInfoDict.get(warId) ?? null);
-                });
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceeded = (e: egret.Event): void => {
-                const data = e.data as MsgMpwCommonGetWarProgressInfoIs;
-                if (data.warId === warId) {
-                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarProgressInfo,       callbackOnSucceeded);
-                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarProgressInfoFailed, callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_warProgressInfoRequests.get(warId))) {
-                        cb(data);
-                    }
-                    _warProgressInfoRequests.delete(warId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as MsgMpwCommonGetWarProgressInfoIs;
-                if (data.warId === warId) {
-                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarProgressInfo,       callbackOnSucceeded);
-                    Notify.removeEventListener(NotifyType.MsgMpwCommonGetWarProgressInfoFailed, callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_warProgressInfoRequests.get(warId))) {
-                        cb(data);
-                    }
-                    _warProgressInfoRequests.delete(warId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgMpwCommonGetWarProgressInfo,          callbackOnSucceeded);
-            Notify.addEventListener(NotifyType.MsgMpwCommonGetWarProgressInfoFailed,    callbackOnFailed);
-
-            MpwProxy.reqMpwCommonGetWarProgressInfo(warId);
-        });
-
-        return new Promise((resolve) => {
-            _warProgressInfoRequests.set(warId, [() => {
-                resolve(_warProgressInfoDict.get(warId) ?? null);
-            }]);
-        });
+        return _warProgressInfoGetter.getData(warId);
     }
 
     export async function updateOnMsgMpwCommonGetWarProgressInfo(data: MsgMpwCommonGetWarProgressInfoIs): Promise<void> {
-        _warProgressInfoDict.set(Helpers.getExisted(data.warId), data.warProgressInfo ?? null);
+        const warId = Helpers.getExisted(data.warId);
+        _warProgressInfoDict.set(warId, data.warProgressInfo ?? null);
+        _warProgressInfoGetter.dataUpdated(warId);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -773,6 +682,23 @@ namespace MpwModel {
     }
     function _setWar(war: MpwWar | null): void {
         _war = war;
+    }
+
+    function _onNotifyMsgMpwWatchGetIncomingInfo(e: egret.Event): void {
+        const data  = e.data as ProtoTypes.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
+        const war   = getWar();
+        if (war?.getWarId() !== Helpers.getExisted(data.warId)) {
+            return;
+        }
+
+        const player = war.getPlayerLoggedIn();
+        if (player == null) {
+            return;
+        }
+
+        const info = data.incomingInfo;
+        player.setWatchOngoingSrcUserIds(info?.ongoingSrcUserIdArray ?? []);
+        player.setWatchRequestSrcUserIds(info?.requestSrcUserIdArray ?? []);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

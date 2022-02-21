@@ -100,12 +100,8 @@ namespace MpwProxy {
     }
     function _onMsgMpwCommonGetWarSettings(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwCommonGetWarSettings.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMpwCommonGetWarSettingsFailed, data);
-        } else {
-            MpwModel.updateOnMsgMpwCommonGetWarSettings(data);
-            Notify.dispatch(NotifyType.MsgMpwCommonGetWarSettings, data);
-        }
+        MpwModel.updateOnMsgMpwCommonGetWarSettings(data);
+        Notify.dispatch(NotifyType.MsgMpwCommonGetWarSettings, data);
     }
 
     export function reqMpwCommonGetWarProgressInfo(warId: number): void {
@@ -117,12 +113,8 @@ namespace MpwProxy {
     }
     function _onMsgMpwCommonGetWarProgressInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMpwCommonGetWarProgressInfoFailed, data);
-        } else {
-            MpwModel.updateOnMsgMpwCommonGetWarProgressInfo(data);
-            Notify.dispatch(NotifyType.MsgMpwCommonGetWarProgressInfo, data);
-        }
+        MpwModel.updateOnMsgMpwCommonGetWarProgressInfo(data);
+        Notify.dispatch(NotifyType.MsgMpwCommonGetWarProgressInfo, data);
     }
 
     export function reqMpwGetHalfwayReplayData(warId: number): void {

@@ -15,8 +15,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace McrModel {
-    import NotifyType                               = TwnsNotifyType.NotifyType;
-    import NetMessage                               = ProtoTypes.NetMessage;
     import IMcrRoomInfo                             = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -27,7 +25,10 @@ namespace McrModel {
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
 
     const _roomInfoDict         = new Map<number, IMcrRoomInfo | null>();
-    const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgMcrGetRoomInfo.IS) => void)[]>();
+    const _roomInfoGetter       = Helpers.createCachedDataGetter({
+        dataDict                : _roomInfoDict,
+        reqData                 : (roomId: number) => McrProxy.reqMcrGetRoomInfo(roomId),
+    });
 
     const _unjoinedRoomIdSet    = new Set<number>();
     const _joinedRoomIdSet      = new Set<number>();
@@ -36,61 +37,11 @@ namespace McrModel {
     // Functions for rooms.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getRoomInfo(roomId: number): Promise<IMcrRoomInfo | null> {
-        {
-            const cachedInfo = _roomInfoDict.get(roomId);
-            if (cachedInfo !== undefined) {
-                return new Promise(resolve => resolve(cachedInfo));
-            }
-        }
-
-        if (_roomInfoRequests.has(roomId)) {
-            return new Promise((resolve) => {
-                Helpers.getExisted(_roomInfoRequests.get(roomId)).push(info => resolve(info.roomInfo ?? null));
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
-                if (data.roomId === roomId) {
-                    Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfoFailed,   callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
-                        cb(data);
-                    }
-                    _roomInfoRequests.delete(roomId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
-                if (data.roomId === roomId) {
-                    Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgMcrGetRoomInfoFailed,   callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
-                        cb(data);
-                    }
-                    _roomInfoRequests.delete(roomId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgMcrGetRoomInfo,        callbackOnSucceed);
-            Notify.addEventListener(NotifyType.MsgMcrGetRoomInfoFailed,  callbackOnFailed);
-
-            McrProxy.reqMcrGetRoomInfo(roomId);
-        });
-
-        return new Promise((resolve) => {
-            _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo ?? null)]);
-        });
+        return _roomInfoGetter.getData(roomId);
     }
     function setRoomInfo(roomId: number, info: IMcrRoomInfo | null): void {
         _roomInfoDict.set(roomId, info);
+        _roomInfoGetter.dataUpdated(roomId);
     }
 
     export function setJoinableRoomInfoList(infoList: IMcrRoomInfo[]): void {

@@ -20,7 +20,6 @@ namespace MrrModel {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
-    import NetMessage                               = ProtoTypes.NetMessage;
     import IMrrRoomInfo                             = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
@@ -30,7 +29,10 @@ namespace MrrModel {
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
     const _roomInfoDict             = new Map<number, IMrrRoomInfo | null>();
-    const _roomInfoRequests         = new Map<number, ((info: NetMessage.MsgMrrGetRoomPublicInfo.IS) => void)[]>();
+    const _roomInfoGetter           = Helpers.createCachedDataGetter({
+        dataDict                    : _roomInfoDict,
+        reqData                     : (roomId: number) => MrrProxy.reqMrrGetRoomPublicInfo(roomId),
+    });
 
     export function setMaxConcurrentCount(hasFog: boolean, count: number): void {
         if (hasFog) {
@@ -45,60 +47,10 @@ namespace MrrModel {
 
     function setRoomInfo(roomId: number, roomInfo: IMrrRoomInfo | null): void {
         _roomInfoDict.set(roomId, roomInfo);
+        _roomInfoGetter.dataUpdated(roomId);
     }
     export function getRoomInfo(roomId: number): Promise<IMrrRoomInfo | null> {
-        if (roomId == null) {
-            return new Promise((resolve) => resolve(null));
-        }
-        if (_roomInfoDict.has(roomId)) {
-            return new Promise(resolve => resolve(_roomInfoDict.get(roomId) ?? null));
-        }
-
-        if (_roomInfoRequests.has(roomId)) {
-            return new Promise((resolve) => {
-                Helpers.getExisted(_roomInfoRequests.get(roomId)).push(info => resolve(info.roomInfo ?? null));
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
-                if (data.roomId === roomId) {
-                    Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
-                        cb(data);
-                    }
-                    _roomInfoRequests.delete(roomId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
-                if (data.roomId === roomId) {
-                    Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_roomInfoRequests.get(roomId))) {
-                        cb(data);
-                    }
-                    _roomInfoRequests.delete(roomId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgMrrGetRoomPublicInfo,        callbackOnSucceed);
-            Notify.addEventListener(NotifyType.MsgMrrGetRoomPublicInfoFailed,  callbackOnFailed);
-
-            MrrProxy.reqMrrGetRoomPublicInfo(roomId);
-        });
-
-        return new Promise((resolve) => {
-            _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo ?? null)]);
-        });
+        return _roomInfoGetter.getData(roomId);
     }
 
     export function updateWithMyRoomInfoList(roomList: IMrrRoomInfo[]): void {
@@ -117,8 +69,8 @@ namespace MrrModel {
     }
 
     export async function updateOnMsgMrrGetRoomPublicInfo(data: ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS): Promise<void> {
-        const roomInfo  = Helpers.getExisted(data.roomInfo);
-        const roomId    = Helpers.getExisted(roomInfo.roomId);
+        const roomId    = Helpers.getExisted(data.roomId);
+        const roomInfo  = data.roomInfo ?? null;
         setRoomInfo(roomId, roomInfo);
 
         if (MrrSelfSettingsModel.getRoomId() === roomId) {
@@ -191,13 +143,7 @@ namespace MrrModel {
         }
     }
     export function updateOnMsgMrrDeleteRoomByServer(data: ProtoTypes.NetMessage.MsgMrrDeleteRoomByServer.IS): void {
-        const roomId        = Helpers.getExisted(data.roomId);
-        const oldRoomInfo   = _roomInfoDict.get(roomId);
-        setRoomInfo(roomId, null);
-
-        if ((oldRoomInfo) && (checkIsMyRoom(oldRoomInfo))) {
-            Notify.dispatch(NotifyType.MrrMyRoomDeleted);
-        }
+        setRoomInfo(Helpers.getExisted(data.roomId), null);
     }
 
     export async function checkIsRed(): Promise<boolean> {

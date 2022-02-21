@@ -150,12 +150,12 @@ namespace TwnsWwMakeRequestWarsPanel {
                 return;
             }
 
-            const info = await WwModel.getWatchOutgoingInfo(data.warId);
-            if (info == null) {
+            const warId = data.warId;
+            if (await WwModel.getWatchOutgoingInfo(warId) == null) {
                 FloatText.show(Lang.getText(LangTextType.A0297));
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.WwMakeRequestDetailPanel, {
-                    watchInfo: info,
+                    warId,
                 });
             }
         }

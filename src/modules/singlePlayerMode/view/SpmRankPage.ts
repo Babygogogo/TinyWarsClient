@@ -130,7 +130,7 @@ namespace TwnsSpmRankPage {
             const hasPrivilege  = selfPrivilege?.isAdmin ?? selfPrivilege?.isMapCommittee ?? false;
             const dataArray     : DataForUserRenderer[] = [];
 
-            for (const rankData of (await SpmModel.getRankData(mapId)).find(v => v.ruleId === ruleId)?.infoArray ?? []) {
+            for (const rankData of (await SpmModel.getRankData(mapId))?.find(v => v.ruleId === ruleId)?.infoArray ?? []) {
                 const score = Helpers.getExisted(rankData.score);
                 dataArray.push({
                     index       : 0,

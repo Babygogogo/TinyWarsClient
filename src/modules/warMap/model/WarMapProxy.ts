@@ -15,8 +15,7 @@ namespace WarMapProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgMapGetEnabledBriefDataList,   callback: _onMsgMapGetEnabledBriefDataList },
-            { msgCode: NetMessageCodes.MsgMapGetEnabledRawDataList,     callback: _onMsgMapGetEnabledRawDataList },
+            { msgCode: NetMessageCodes.MsgMapGetEnabledMapIdArray,      callback: _onMsgMapGetEnabledMapIdArray },
             { msgCode: NetMessageCodes.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
             { msgCode: NetMessageCodes.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
             { msgCode: NetMessageCodes.MsgMmSetWarRuleAvailability,     callback: _onMsgMmSetWarRuleAvailability },
@@ -30,19 +29,11 @@ namespace WarMapProxy {
         ], null);
     }
 
-    function _onMsgMapGetEnabledBriefDataList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMapGetEnabledBriefDataList.IS;
+    function _onMsgMapGetEnabledMapIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMapGetEnabledMapIdArray.IS;
         if (!data.errorCode) {
-            WarMapModel.resetBriefDataDict(data.dataList || []);
-            Notify.dispatch(NotifyType.MsgMapGetEnabledBriefDataList, data);
-        }
-    }
-
-    function _onMsgMapGetEnabledRawDataList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMapGetEnabledRawDataList.IS;
-        if (!data.errorCode) {
-            WarMapModel.updateRawDataDict(data.dataList || []);
-            Notify.dispatch(NotifyType.MsgMapGetEnabledRawDataList, data);
+            WarMapModel.resetEnabledMapIdArray(data.mapIdArray || []);
+            Notify.dispatch(NotifyType.MsgMapGetEnabledMapIdArray, data);
         }
     }
 
@@ -54,13 +45,9 @@ namespace WarMapProxy {
         });
     }
     function _onMsgMapGetBriefData(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMapGetBriefData.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMapGetBriefDataFailed, data);
-        } else {
-            WarMapModel.setBriefData(Helpers.getExisted(data.mapBriefData));
-            Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
-        }
+        const data  = e.data as NetMessage.MsgMapGetBriefData.IS;
+        WarMapModel.setBriefData(Helpers.getExisted(data.mapId), data.mapBriefData ?? null);
+        Notify.dispatch(NotifyType.MsgMapGetBriefData, data);
     }
 
     export function reqGetMapRawData(mapId: number): void {
@@ -72,12 +59,8 @@ namespace WarMapProxy {
     }
     function _onMsgMapGetRawData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMapGetRawData.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMapGetRawDataFailed, data);
-        } else {
-            WarMapModel.setRawData(Helpers.getExisted(data.mapId), Helpers.getExisted(data.mapRawData));
-            Notify.dispatch(NotifyType.MsgMapGetRawData, data);
-        }
+        WarMapModel.setRawData(Helpers.getExisted(data.mapId), data.mapRawData ?? null);
+        Notify.dispatch(NotifyType.MsgMapGetRawData, data);
     }
 
     export function reqMmSetWarRuleAvailability({ mapId, ruleId, availability }: {
@@ -112,7 +95,6 @@ namespace WarMapProxy {
     function _onMsgMmSetMapEnabled(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmSetMapEnabled.IS;
         if (!data.errorCode) {
-            WarMapModel.updateOnSetMapEnabled(data);
             Notify.dispatch(NotifyType.MsgMmSetMapEnabled, data);
         }
     }
