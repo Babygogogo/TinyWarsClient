@@ -1312,6 +1312,18 @@ namespace TwnsLangCommonText {
             `尚未设置预设规则的可用性`,
             `The availability of the preset rule has not been set.`,
         ],
+        [LangTextType.A0299]: [
+            `您已向所有玩家发送过观战请求`,
+            `You have already made requests to all players.`,
+        ],
+        [LangTextType.A0300]: [
+            `暂未收到观战请求`,
+            `There is no incoming request.`,
+        ],
+        [LangTextType.A0301]: [
+            `目前无人观战`,
+            `There is no spectator.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2146,7 +2158,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0207]: [
             `发起请求`,
-            `Make Request`,
+            `Make Requests`,
         ],
         [LangTextType.B0208]: [
             `处理请求`,
@@ -4787,6 +4799,22 @@ namespace TwnsLangCommonText {
         [LangTextType.B0871]: [
             `从左下到右上`,
             `From DL to UR`,
+        ],
+        [LangTextType.B0872]: [
+            `观战`,
+            `Spectate`,
+        ],
+        [LangTextType.B0873]: [
+            `游戏观战者`,
+            `Game Spectators`,
+        ],
+        [LangTextType.B0874]: [
+            `我的观战者`,
+            `My Spectators`,
+        ],
+        [LangTextType.B0875]: [
+            `我收到的观战请求`,
+            `Incoming Requests`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

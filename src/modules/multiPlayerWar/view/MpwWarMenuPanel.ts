@@ -43,6 +43,7 @@ namespace TwnsMpwWarMenuPanel {
         private readonly _btnReplay!            : TwnsUiButton.UiButton;
         private readonly _btnUnitOpacity!       : TwnsUiButton.UiButton;
         private readonly _btnMapRating!         : TwnsUiButton.UiButton;
+        private readonly _btnSpectate!          : TwnsUiButton.UiButton;
         private readonly _btnSetDraw!           : TwnsUiButton.UiButton;
         private readonly _btnSurrender!         : TwnsUiButton.UiButton;
         private readonly _btnGotoWarList!       : TwnsUiButton.UiButton;
@@ -57,6 +58,7 @@ namespace TwnsMpwWarMenuPanel {
                 { type: NotifyType.MsgMpwGetHalfwayReplayData,          callback: this._onNotifyMsgMpwGetHalfwayReplayData },
                 { type: NotifyType.MsgMpwGetHalfwayReplayDataFailed,    callback: this._onNotifyMsgMpwGetHalfwayReplayDataFailed },
                 { type: NotifyType.MsgUserSetMapRating,                 callback: this._onNotifyMsgUserSetMapRating },
+                { type: NotifyType.MsgMpwWatchGetIncomingInfo,          callback: this._onNotifyMsgMpwWatchGetIncomingInfo },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,                                   callback: this.close },
@@ -69,6 +71,7 @@ namespace TwnsMpwWarMenuPanel {
                 { ui: this._btnReplay,                                  callback: this._onTouchedBtnReplay },
                 { ui: this._btnUnitOpacity,                             callback: this._onTouchedBtnUnitOpacity },
                 { ui: this._btnMapRating,                               callback: this._onTouchedBtnMapRating },
+                { ui: this._btnSpectate,                                callback: this._onTouchedBtnSpectate },
                 { ui: this._btnSetDraw,                                 callback: this._onTouchedBtnSetDraw },
                 { ui: this._btnSurrender,                               callback: this._onTouchedBtnSurrender },
                 { ui: this._btnGotoWarList,                             callback: this._onTouchedBtnGotoWarList },
@@ -122,6 +125,9 @@ namespace TwnsMpwWarMenuPanel {
         }
         private _onNotifyMsgUserSetMapRating(): void {
             this._updateBtnMapRating();
+        }
+        private _onNotifyMsgMpwWatchGetIncomingInfo(): void {
+            this._updateBtnSpectate();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -271,6 +277,10 @@ namespace TwnsMpwWarMenuPanel {
             });
         }
 
+        private _onTouchedBtnSpectate(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MpwSpectatePanel, void 0);
+        }
+
         private _onTouchedBtnSetDraw(): void {
             if (!this._checkCanDoAction()) {
                 FloatText.show(Lang.getText(LangTextType.A0239));
@@ -400,6 +410,8 @@ namespace TwnsMpwWarMenuPanel {
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
+
+            this._updateBtnSpectate();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -410,6 +422,7 @@ namespace TwnsMpwWarMenuPanel {
             this._btnDeleteUnit.label   = Lang.getText(LangTextType.B0081);
             this._btnSimulation.label   = Lang.getText(LangTextType.B0325);
             this._btnFreeMode.label     = Lang.getText(LangTextType.B0557);
+            this._btnSpectate.label     = Lang.getText(LangTextType.B0872);
             this._btnSetPath.label      = Lang.getText(LangTextType.B0430);
             this._btnSurrender.label    = Lang.getText(LangTextType.B0055);
             this._btnGotoWarList.label  = Lang.getText(LangTextType.B0652);
@@ -438,6 +451,11 @@ namespace TwnsMpwWarMenuPanel {
                 btn.visible = true;
                 btn.label   = `${Lang.getText(LangTextType.B0804)}: ${UserModel.getMapRating(mapId) ?? `--`}`;
             }
+        }
+
+        private async _updateBtnSpectate(): Promise<void> {
+            const info = await WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
+            this._btnSpectate.setRedVisible(!!info?.requestSrcUserIdArray?.length);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

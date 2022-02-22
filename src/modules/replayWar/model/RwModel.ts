@@ -106,10 +106,8 @@ namespace RwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for replay data.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _replayDataDict       = new Map<number, ISerialWar | null>();
-    const _replayDataGetter     = Helpers.createCachedDataGetter({
-        dataDict                : _replayDataDict,
-        reqData                 : (replayId: number) => RwProxy.reqReplayGetData(replayId),
+    const _replayDataGetter = Helpers.createCachedDataAccessor<number, ISerialWar>({
+        reqData : (replayId: number) => RwProxy.reqReplayGetData(replayId),
     });
 
     export function getReplayData(replayId: number): Promise<ISerialWar | null> {
@@ -117,13 +115,8 @@ namespace RwModel {
     }
 
     export function updateOnMsgReplayGetData(data: MsgReplayGetDataIs): void {
-        const encodedWar    = data.encodedWar;
-        const replayId      = Helpers.getExisted(data.replayId);
-        _replayDataDict.set(
-            replayId,
-            encodedWar ? ProtoManager.decodeAsSerialWar(encodedWar) : null
-        );
-        _replayDataGetter.dataUpdated(replayId);
+        const encodedWar = data.encodedWar;
+        _replayDataGetter.setData(Helpers.getExisted(data.replayId), encodedWar ? ProtoManager.decodeAsSerialWar(encodedWar) : null);
     }
 }
 

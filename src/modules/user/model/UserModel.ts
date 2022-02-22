@@ -21,14 +21,12 @@ namespace UserModel {
     import IUserPrivilege       = ProtoTypes.User.IUserPrivilege;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
-    let _isLoggedIn             = false;
-    let _selfInfo               : IUserSelfInfo | null = null;
-    let _selfAccount            : string;
-    let _selfPassword           : string | null = null;
-    const _userPublicInfoDict   = new Map<number, IUserPublicInfo | null>();
-    const _userPublicInfoGetter = Helpers.createCachedDataGetter({
-        dataDict                : _userPublicInfoDict,
-        reqData                 : (userId: number) => UserProxy.reqUserGetPublicInfo(userId),
+    let _isLoggedIn                 = false;
+    let _selfInfo                   : IUserSelfInfo | null = null;
+    let _selfAccount                : string;
+    let _selfPassword               : string | null = null;
+    const _userPublicInfoAccessor   = Helpers.createCachedDataAccessor<number, IUserPublicInfo>({
+        reqData                     : (userId: number) => UserProxy.reqUserGetPublicInfo(userId),
     });
 
     export function init(): void {
@@ -141,11 +139,10 @@ namespace UserModel {
     }
 
     export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | null> {
-        return _userPublicInfoGetter.getData(userId);
+        return _userPublicInfoAccessor.getData(userId);
     }
     export function setUserPublicInfo(userId: number, info: IUserPublicInfo | null): void {
-        _userPublicInfoDict.set(userId, info);
-        _userPublicInfoGetter.dataUpdated(userId);
+        _userPublicInfoAccessor.setData(userId, info);
     }
 
     export async function getUserNickname(userId: number): Promise<string | null> {

@@ -81,12 +81,7 @@ namespace TwnsMfrMainMenuPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmMainMenuPanel, void 0);
         }
         private _onTouchedBtnCreateRoom(): void {
-            FloatText.show(Lang.getText(LangTextType.A0053));
             FloatText.show(Lang.getText(LangTextType.A0198));
-            // this.close();
-            // Lobby.LobbyTopPanel.hide();
-            // Lobby.LobbyBottomPanel.hide();
-            // MfrCreateMapListPanel.show({});
         }
         private _onTouchedBtnJoinRoom(): void {
             this.close();

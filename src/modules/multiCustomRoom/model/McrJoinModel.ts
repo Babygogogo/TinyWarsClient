@@ -61,7 +61,7 @@ namespace McrJoinModel {
         reviseTargetRoomId();
         reviseJoinedPreviewingRoomId();
     }
-    export function updateOnMsgMcrGetJoinedRoomInfoList(): void {
+    export function updateOnMsgMcrGetJoinedRoomIdArray(): void {
         reviseJoinedPreviewingRoomId();
     }
 

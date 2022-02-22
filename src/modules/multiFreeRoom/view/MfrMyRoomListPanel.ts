@@ -58,7 +58,7 @@ namespace TwnsMfrMyRoomListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MfrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyMfrJoinedPreviewingRoomIdChanged },
-                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,         callback: this._onNotifyMsgMfrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,         callback: this._onNotifyMsgMfrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgMfrCreateRoom,                    callback: this._onNotifyMsgCreateRoom },
                 { type: NotifyType.MsgMfrDeleteRoomByServer,            callback: this._onNotifyMsgMfrDeleteRoomByServer },
                 { type: NotifyType.MsgMfrJoinRoom,                      callback: this._onNotifyMsgMfrJoinRoom },
@@ -84,7 +84,7 @@ namespace TwnsMfrMyRoomListPanel {
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
 
-            MfrProxy.reqMfrGetJoinedRoomInfoList();
+            MfrProxy.reqMfrGetJoinedRoomIdArray();
         }
         protected _onClosing(): void {
             // nothing to do

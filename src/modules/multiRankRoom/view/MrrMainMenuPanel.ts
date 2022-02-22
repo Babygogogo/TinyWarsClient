@@ -47,9 +47,9 @@ namespace TwnsMrrMainMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
                 { type: NotifyType.MsgMrrGetRoomPublicInfo,             callback: this._onMsgMrrGetRoomPublicInfo },
-                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,       callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetJoinedRoomIdArray },
                 { type: NotifyType.MsgMcrGetJoinedRoomInfoList,         callback: this._onMsgMcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,         callback: this._onMsgMfrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgCcrGetJoinedRoomInfoList,         callback: this._onMsgCcrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
                 { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
@@ -107,7 +107,7 @@ namespace TwnsMrrMainMenuPanel {
         private _onMsgMrrGetRoomPublicInfo(): void {
             this._updateComponentsForRed();
         }
-        private _onMsgMrrGetMyRoomPublicInfoList(): void {
+        private _onMsgMrrGetJoinedRoomIdArray(): void {
             this._updateComponentsForRed();
         }
         private _onMsgMcrGetJoinedRoomInfoList(): void {

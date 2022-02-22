@@ -34,6 +34,8 @@
                                        width="140" height="30" id="_btnSetPath" />
                 <TwnsUiButton:UiButton label="Button" x="-200" y="20" skinName="Skins.Component.Button.ButtonBlack002"
                                        width="140" height="30" id="_btnUnitOpacity" />
+                <TwnsUiButton:UiButton label="Button" x="-180" y="40" skinName="Skins.Component.Button.ButtonBlack002"
+                                       width="140" height="30" id="_btnSpectate" />
                 <TwnsUiButton:UiButton label="Button" x="-190" y="30" skinName="Skins.Component.Button.ButtonBlack002"
                                        width="140" height="30" id="_btnMapRating" />
                 <e:layout>

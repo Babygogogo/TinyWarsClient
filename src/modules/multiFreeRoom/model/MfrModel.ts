@@ -20,10 +20,8 @@ namespace MfrModel {
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
-    const _roomInfoDict         = new Map<number, IMfrRoomInfo | null>();
-    const _roomInfoGetter       = Helpers.createCachedDataGetter({
-        dataDict                : _roomInfoDict,
-        reqData                 : (roomId: number) => MfrProxy.reqMfrGetRoomInfo(roomId),
+    const _roomInfoAccessor = Helpers.createCachedDataAccessor<number, IMfrRoomInfo>({
+        reqData : (roomId: number) => MfrProxy.reqMfrGetRoomInfo(roomId),
     });
 
     const _unjoinedRoomIdSet    = new Set<number>();
@@ -33,11 +31,10 @@ namespace MfrModel {
     // Functions for rooms.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getRoomInfo(roomId: number): Promise<IMfrRoomInfo | null> {
-        return _roomInfoGetter.getData(roomId);
+        return _roomInfoAccessor.getData(roomId);
     }
     function setRoomInfo(roomId: number, info: IMfrRoomInfo | null): void {
-        _roomInfoDict.set(roomId, info);
-        _roomInfoGetter.dataUpdated(roomId);
+        _roomInfoAccessor.setData(roomId, info);
     }
 
     export function setJoinableRoomInfoList(infoList: IMfrRoomInfo[]): void {
@@ -52,12 +49,10 @@ namespace MfrModel {
         return _unjoinedRoomIdSet;
     }
 
-    export function setJoinedRoomInfoList(infoList: IMfrRoomInfo[]): void {
+    export function setJoinedRoomIdArray(roomIdArray: number[]): void {
         _joinedRoomIdSet.clear();
-        for (const roomInfo of infoList || []) {
-            const roomId = Helpers.getExisted(roomInfo.roomId);
+        for (const roomId of roomIdArray || []) {
             _joinedRoomIdSet.add(roomId);
-            setRoomInfo(roomId, roomInfo);
         }
     }
     export function getJoinedRoomIdSet(): Set<number> {

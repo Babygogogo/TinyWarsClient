@@ -14,19 +14,19 @@ namespace MfrProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgMfrCreateRoom,                 callback: _onMsgMfrCreateRoom },
-            { msgCode: NetMessageCodes.MsgMfrJoinRoom,                   callback: _onMsgMfrJoinRoom },
-            { msgCode: NetMessageCodes.MsgMfrDeleteRoomByPlayer,         callback: _onMsgMfrDeleteRoomByPlayer },
-            { msgCode: NetMessageCodes.MsgMfrDeleteRoomByServer,         callback: _onMsgMfrDeleteRoomByServer },
-            { msgCode: NetMessageCodes.MsgMfrExitRoom,                   callback: _onMsgMfrExitRoom },
-            { msgCode: NetMessageCodes.MsgMfrDeletePlayer,               callback: _onMsgMfrDeletePlayer },
-            { msgCode: NetMessageCodes.MsgMfrSetReady,                   callback: _onMsgMfrSetReady },
-            { msgCode: NetMessageCodes.MsgMfrSetSelfSettings,            callback: _onMsgMfrSetSelfSettings },
-            { msgCode: NetMessageCodes.MsgMfrGetOwnerPlayerIndex,        callback: _onMsgMfrGetOwnerPlayerIndex },
-            { msgCode: NetMessageCodes.MsgMfrGetRoomInfo,                callback: _onMsgMfrGetRoomInfo },
-            { msgCode: NetMessageCodes.MsgMfrGetJoinableRoomInfoList,    callback: _onMsgMfrGetJoinableRoomInfoList },
-            { msgCode: NetMessageCodes.MsgMfrGetJoinedRoomInfoList,      callback: _onMsgMfrGetJoinedRoomInfoList },
-            { msgCode: NetMessageCodes.MsgMfrStartWar,                   callback: _onMsgMfrStartWar },
+            { msgCode: NetMessageCodes.MsgMfrCreateRoom,                callback: _onMsgMfrCreateRoom },
+            { msgCode: NetMessageCodes.MsgMfrJoinRoom,                  callback: _onMsgMfrJoinRoom },
+            { msgCode: NetMessageCodes.MsgMfrDeleteRoomByPlayer,        callback: _onMsgMfrDeleteRoomByPlayer },
+            { msgCode: NetMessageCodes.MsgMfrDeleteRoomByServer,        callback: _onMsgMfrDeleteRoomByServer },
+            { msgCode: NetMessageCodes.MsgMfrExitRoom,                  callback: _onMsgMfrExitRoom },
+            { msgCode: NetMessageCodes.MsgMfrDeletePlayer,              callback: _onMsgMfrDeletePlayer },
+            { msgCode: NetMessageCodes.MsgMfrSetReady,                  callback: _onMsgMfrSetReady },
+            { msgCode: NetMessageCodes.MsgMfrSetSelfSettings,           callback: _onMsgMfrSetSelfSettings },
+            { msgCode: NetMessageCodes.MsgMfrGetOwnerPlayerIndex,       callback: _onMsgMfrGetOwnerPlayerIndex },
+            { msgCode: NetMessageCodes.MsgMfrGetRoomInfo,               callback: _onMsgMfrGetRoomInfo },
+            { msgCode: NetMessageCodes.MsgMfrGetJoinableRoomInfoList,   callback: _onMsgMfrGetJoinableRoomInfoList },
+            { msgCode: NetMessageCodes.MsgMfrGetJoinedRoomIdArray,      callback: _onMsgMfrGetJoinedRoomIdArray },
+            { msgCode: NetMessageCodes.MsgMfrStartWar,                  callback: _onMsgMfrStartWar },
         ], null);
     }
 
@@ -173,18 +173,16 @@ namespace MfrProxy {
         }
     }
 
-    export function reqMfrGetJoinedRoomInfoList(): void {
+    export function reqMfrGetJoinedRoomIdArray(): void {
         NetManager.send({
-            MsgMfrGetJoinedRoomInfoList: { c: {
+            MsgMfrGetJoinedRoomIdArray: { c: {
             }, }
         });
     }
-    function _onMsgMfrGetJoinedRoomInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMfrGetJoinedRoomInfoList.IS;
-        if (!data.errorCode) {
-            MfrModel.setJoinedRoomInfoList(data.roomInfoList || []);
-            Notify.dispatch(NotifyType.MsgMfrGetJoinedRoomInfoList, data);
-        }
+    function _onMsgMfrGetJoinedRoomIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMfrGetJoinedRoomIdArray.IS;
+        MfrModel.setJoinedRoomIdArray(data.roomIdArray || []);
+        Notify.dispatch(NotifyType.MsgMfrGetJoinedRoomIdArray, data);
     }
 
     export function reqMfrStartWar(roomId: number): void {

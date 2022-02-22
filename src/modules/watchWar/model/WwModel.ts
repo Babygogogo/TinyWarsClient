@@ -66,39 +66,31 @@ namespace WwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for incoming info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _watchIncomingInfoDict    = new Map<number, IMpwWatchIncomingInfo | null>();
-    const _watchIncomingInfoGetter  = Helpers.createCachedDataGetter({
-        dataDict                : _watchIncomingInfoDict,
-        reqData                 : (warId: number) => WwProxy.reqMpwWatchGetIncomingInfo(warId),
+    const _watchIncomingInfoAccessor = Helpers.createCachedDataAccessor<number, IMpwWatchIncomingInfo>({
+        reqData : (warId: number) => WwProxy.reqMpwWatchGetIncomingInfo(warId),
     });
 
     export function getWatchIncomingInfo(warId: number): Promise<IMpwWatchIncomingInfo | null> {
-        return _watchIncomingInfoGetter.getData(warId);
+        return _watchIncomingInfoAccessor.getData(warId);
     }
 
     export async function updateOnMsgMpwWatchGetIncomingInfo(data: MsgMpwWatchGetIncomingInfoIs): Promise<void> {
-        const warId = Helpers.getExisted(data.warId);
-        _watchIncomingInfoDict.set(warId, data.incomingInfo ?? null);
-        _watchIncomingInfoGetter.dataUpdated(warId);
+        _watchIncomingInfoAccessor.setData(Helpers.getExisted(data.warId), data.incomingInfo ?? null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for outgoing info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _watchOutgoingInfoDict    = new Map<number, IMpwWatchOutgoingInfo | null>();
-    const _watchOutgoingInfoGetter  = Helpers.createCachedDataGetter({
-        dataDict                : _watchOutgoingInfoDict,
-        reqData                 : (warId: number) => WwProxy.reqMpwWatchGetOutgoingInfo(warId),
+    const _watchOutgoingInfoAccessor = Helpers.createCachedDataAccessor<number, IMpwWatchOutgoingInfo>({
+        reqData : (warId: number) => WwProxy.reqMpwWatchGetOutgoingInfo(warId),
     });
 
     export function getWatchOutgoingInfo(warId: number): Promise<IMpwWatchOutgoingInfo | null> {
-        return _watchOutgoingInfoGetter.getData(warId);
+        return _watchOutgoingInfoAccessor.getData(warId);
     }
 
     export async function updateOnMsgMpwWatchGetOutgoingInfo(data: MsgMpwWatchGetOutgoingInfoIs): Promise<void> {
-        const warId = Helpers.getExisted(data.warId);
-        _watchOutgoingInfoDict.set(warId, data.outgoingInfo ?? null);
-        _watchOutgoingInfoGetter.dataUpdated(warId);
+        _watchOutgoingInfoAccessor.setData(Helpers.getExisted(data.warId), data.outgoingInfo ?? null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -28,10 +28,11 @@ namespace MrrModel {
     let _previewingRoomId           : number | null = null;
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
-    const _roomInfoDict             = new Map<number, IMrrRoomInfo | null>();
-    const _roomInfoGetter           = Helpers.createCachedDataGetter({
-        dataDict                    : _roomInfoDict,
-        reqData                     : (roomId: number) => MrrProxy.reqMrrGetRoomPublicInfo(roomId),
+    const _roomInfoAccessor         = Helpers.createCachedDataAccessor<number, IMrrRoomInfo>({
+        reqData : (roomId: number) => MrrProxy.reqMrrGetRoomPublicInfo(roomId),
+    });
+    const _joinedRoomIdArrayAccessor = Helpers.createCachedDataAccessor<null, number[]>({
+        reqData : () => MrrProxy.reqMrrGetJoinedRoomIdArray(),
     });
 
     export function setMaxConcurrentCount(hasFog: boolean, count: number): void {
@@ -46,26 +47,17 @@ namespace MrrModel {
     }
 
     function setRoomInfo(roomId: number, roomInfo: IMrrRoomInfo | null): void {
-        _roomInfoDict.set(roomId, roomInfo);
-        _roomInfoGetter.dataUpdated(roomId);
+        _roomInfoAccessor.setData(roomId, roomInfo);
     }
     export function getRoomInfo(roomId: number): Promise<IMrrRoomInfo | null> {
-        return _roomInfoGetter.getData(roomId);
+        return _roomInfoAccessor.getData(roomId);
     }
 
-    export function updateWithMyRoomInfoList(roomList: IMrrRoomInfo[]): void {
-        for (const roomInfo of roomList || []) {
-            setRoomInfo(Helpers.getExisted(roomInfo.roomId), roomInfo);
-        }
+    export function setJoinedRoomIdArray(roomIdArray: number[]): void {
+        _joinedRoomIdArrayAccessor.setData(null, roomIdArray);
     }
-    export function getMyRoomIdArray(): number[] {
-        const idArray: number[] = [];
-        for (const [roomId, roomInfo] of _roomInfoDict) {
-            if (checkIsMyRoom(roomInfo)) {
-                idArray.push(roomId);
-            }
-        }
-        return idArray;
+    export function getJoinedRoomIdArray(): Promise<number[] | null> {
+        return _joinedRoomIdArrayAccessor.getData(null);
     }
 
     export async function updateOnMsgMrrGetRoomPublicInfo(data: ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS): Promise<void> {
@@ -147,12 +139,11 @@ namespace MrrModel {
     }
 
     export async function checkIsRed(): Promise<boolean> {
-        for (const roomId of getMyRoomIdArray()) {
-            if (await checkIsRedForRoom(roomId)) {
-                return true;
-            }
+        const promiseArray: Promise<boolean>[] = [];
+        for (const roomId of await getJoinedRoomIdArray() ?? []) {
+            promiseArray.push(checkIsRedForRoom(roomId));
         }
-        return false;
+        return Helpers.checkIsAnyPromiseTrue(promiseArray);
     }
     export async function checkIsRedForRoom(roomId: number): Promise<boolean> {
         const roomInfo = await getRoomInfo(roomId);
@@ -315,11 +306,6 @@ namespace MrrModel {
             warRule,
             warType         : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
         };
-    }
-
-    function checkIsMyRoom(roomInfo: IMrrRoomInfo | null): boolean {
-        const selfUserId = UserModel.getSelfUserId();
-        return !!roomInfo?.playerDataList?.some(v => v.userId === selfUserId);
     }
 }
 

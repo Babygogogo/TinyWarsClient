@@ -21,13 +21,8 @@ namespace McrModel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
-    export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMcrCreateRoom.IC;
-    export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
-
-    const _roomInfoDict         = new Map<number, IMcrRoomInfo | null>();
-    const _roomInfoGetter       = Helpers.createCachedDataGetter({
-        dataDict                : _roomInfoDict,
-        reqData                 : (roomId: number) => McrProxy.reqMcrGetRoomInfo(roomId),
+    const _roomInfoAccessor = Helpers.createCachedDataAccessor<number, IMcrRoomInfo>({
+        reqData : (roomId: number) => McrProxy.reqMcrGetRoomInfo(roomId),
     });
 
     const _unjoinedRoomIdSet    = new Set<number>();
@@ -37,11 +32,10 @@ namespace McrModel {
     // Functions for rooms.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getRoomInfo(roomId: number): Promise<IMcrRoomInfo | null> {
-        return _roomInfoGetter.getData(roomId);
+        return _roomInfoAccessor.getData(roomId);
     }
     function setRoomInfo(roomId: number, info: IMcrRoomInfo | null): void {
-        _roomInfoDict.set(roomId, info);
-        _roomInfoGetter.dataUpdated(roomId);
+        _roomInfoAccessor.setData(roomId, info);
     }
 
     export function setJoinableRoomInfoList(infoList: IMcrRoomInfo[]): void {
@@ -56,12 +50,10 @@ namespace McrModel {
         return _unjoinedRoomIdSet;
     }
 
-    export function setJoinedRoomInfoList(infoList: IMcrRoomInfo[]): void {
+    export function setJoinedRoomIdArray(roomIdArray: number[]): void {
         _joinedRoomIdSet.clear();
-        for (const roomInfo of infoList || []) {
-            const roomId = Helpers.getExisted(roomInfo.roomId);
+        for (const roomId of roomIdArray || []) {
             _joinedRoomIdSet.add(roomId);
-            setRoomInfo(roomId, roomInfo);
         }
     }
     export function getJoinedRoomIdSet(): Set<number> {

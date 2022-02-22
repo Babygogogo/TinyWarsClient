@@ -15,13 +15,13 @@ namespace MrrProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgMrrGetMaxConcurrentCount,      callback: _onMsgMrrGetMaxConcurrentCount },
-            { msgCode: NetMessageCodes.MsgMrrGetRoomPublicInfo,          callback: _onMsgMrrGetRoomPublicInfo },
-            { msgCode: NetMessageCodes.MsgMrrGetMyRoomPublicInfoList,    callback: _onMsgMrrGetMyRoomPublicInfoList },
-            { msgCode: NetMessageCodes.MsgMrrSetBannedCoIdList,          callback: _onMsgMrrSetBannedCoIdList },
-            { msgCode: NetMessageCodes.MsgMrrSetMaxConcurrentCount,      callback: _onMsgMrrSetMaxConcurrentCount },
-            { msgCode: NetMessageCodes.MsgMrrSetSelfSettings,            callback: _onMsgMrrSetSelfSettings },
-            { msgCode: NetMessageCodes.MsgMrrDeleteRoomByServer,         callback: _onMsgMrrDeleteRoomByServer },
+            { msgCode: NetMessageCodes.MsgMrrGetMaxConcurrentCount,     callback: _onMsgMrrGetMaxConcurrentCount },
+            { msgCode: NetMessageCodes.MsgMrrGetRoomPublicInfo,         callback: _onMsgMrrGetRoomPublicInfo },
+            { msgCode: NetMessageCodes.MsgMrrGetJoinedRoomIdArray,      callback: _onMsgMrrGetJoinedRoomIdArray },
+            { msgCode: NetMessageCodes.MsgMrrSetBannedCoIdList,         callback: _onMsgMrrSetBannedCoIdList },
+            { msgCode: NetMessageCodes.MsgMrrSetMaxConcurrentCount,     callback: _onMsgMrrSetMaxConcurrentCount },
+            { msgCode: NetMessageCodes.MsgMrrSetSelfSettings,           callback: _onMsgMrrSetSelfSettings },
+            { msgCode: NetMessageCodes.MsgMrrDeleteRoomByServer,        callback: _onMsgMrrDeleteRoomByServer },
         ]);
     }
 
@@ -48,16 +48,14 @@ namespace MrrProxy {
         Notify.dispatch(NotifyType.MsgMrrGetRoomPublicInfo, data);
     }
 
-    export function reqMrrGetMyRoomPublicInfoList(): void {
-        NetManager.send({ MsgMrrGetMyRoomPublicInfoList: { c: {
+    export function reqMrrGetJoinedRoomIdArray(): void {
+        NetManager.send({ MsgMrrGetJoinedRoomIdArray: { c: {
         }, }, });
     }
-    function _onMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMrrGetMyRoomPublicInfoList.IS;
-        if (!data.errorCode) {
-            MrrModel.updateWithMyRoomInfoList(data.roomInfoList || []);
-            Notify.dispatch(NotifyType.MsgMrrGetMyRoomPublicInfoList, data);
-        }
+    function _onMsgMrrGetJoinedRoomIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMrrGetJoinedRoomIdArray.IS;
+        MrrModel.setJoinedRoomIdArray(data.roomIdArray || []);
+        Notify.dispatch(NotifyType.MsgMrrGetJoinedRoomIdArray, data);
     }
 
     export function reqMrrSetBannedCoIdList(roomId: number, bannedCoIdList: number[]): void {

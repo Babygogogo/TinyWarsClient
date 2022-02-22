@@ -85,7 +85,7 @@ namespace TwnsMcrMyRoomListPanel {
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
 
-            McrProxy.reqMcrGetJoinedRoomInfoList();
+            McrProxy.reqMcrGetJoinedRoomIdArray();
         }
         protected _onClosing(): void {
             // nothing to do

@@ -53,7 +53,8 @@ namespace MpwModel {
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
     const _NOTIFY_LISTENERS     : Notify.Listener[] = [
-        { type  : NotifyType.MsgMpwWatchGetIncomingInfo,    callback: _onNotifyMsgMpwWatchGetIncomingInfo },
+        { type: NotifyType.MsgMpwWatchGetIncomingInfo,      callback: _onNotifyMsgMpwWatchGetIncomingInfo },
+        { type: NotifyType.MsgMpwWatchGetOutgoingInfo,      callback: _onNotifyMsgMpwWatchGetOutgoingInfo },
     ];
     let _allMyWarIdArray        : number[] = [];
     let _mcwPreviewingWarId     : number | null = null;
@@ -182,29 +183,23 @@ namespace MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for war settings.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _warSettingsDict      = new Map<number, IMpwWarSettings | null>();
-    const _warSettingsGetter    = Helpers.createCachedDataGetter({
-        dataDict                : _warSettingsDict,
-        reqData                 : (warId: number) => MpwProxy.reqMpwCommonGetWarSettings(warId),
+    const _warSettingsAccessor = Helpers.createCachedDataAccessor<number, IMpwWarSettings>({
+        reqData : (warId: number) => MpwProxy.reqMpwCommonGetWarSettings(warId),
     });
 
     export function getWarSettings(warId: number): Promise<IMpwWarSettings | null> {
-        return _warSettingsGetter.getData(warId);
+        return _warSettingsAccessor.getData(warId);
     }
 
     export async function updateOnMsgMpwCommonGetWarSettings(data: MsgMpwCommonGetWarSettingsIs): Promise<void> {
-        const warId = Helpers.getExisted(data.warId);
-        _warSettingsDict.set(warId, data.warSettings ?? null);
-        _warSettingsGetter.dataUpdated(warId);
+        _warSettingsAccessor.setData(Helpers.getExisted(data.warId), data.warSettings ?? null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for war progress info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _warProgressInfoDict      = new Map<number, IMpwWarProgressInfo | null >();
-    const _warProgressInfoGetter    = Helpers.createCachedDataGetter({
-        dataDict                : _warProgressInfoDict,
-        reqData                 : (warId: number) => MpwProxy.reqMpwCommonGetWarProgressInfo(warId),
+    const _warProgressInfoGetter = Helpers.createCachedDataAccessor<number, IMpwWarProgressInfo>({
+        reqData : (warId: number) => MpwProxy.reqMpwCommonGetWarProgressInfo(warId),
     });
 
     export function getWarProgressInfo(warId: number): Promise<IMpwWarProgressInfo | null> {
@@ -212,9 +207,7 @@ namespace MpwModel {
     }
 
     export async function updateOnMsgMpwCommonGetWarProgressInfo(data: MsgMpwCommonGetWarProgressInfoIs): Promise<void> {
-        const warId = Helpers.getExisted(data.warId);
-        _warProgressInfoDict.set(warId, data.warProgressInfo ?? null);
-        _warProgressInfoGetter.dataUpdated(warId);
+        _warProgressInfoGetter.setData(Helpers.getExisted(data.warId), data.warProgressInfo ?? null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -699,6 +692,40 @@ namespace MpwModel {
         const info = data.incomingInfo;
         player.setWatchOngoingSrcUserIds(info?.ongoingSrcUserIdArray ?? []);
         player.setWatchRequestSrcUserIds(info?.requestSrcUserIdArray ?? []);
+    }
+    function _onNotifyMsgMpwWatchGetOutgoingInfo(e: egret.Event): void {
+        const data  = e.data as ProtoTypes.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
+        const war   = getWar();
+        if (war?.getWarId() !== Helpers.getExisted(data.warId)) {
+            return;
+        }
+
+        const info = data.outgoingInfo;
+        if (info == null) {
+            return;
+        }
+
+        const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
+        const ongoingDstUserIdArray = info.ongoingDstUserIdArray ?? [];
+        const requestDstUserIdArray = info.requestDstUserIdArray ?? [];
+        for (const [, player] of war.getPlayerManager().getAllPlayersDict()) {
+            const userId = player.getUserId();
+            if (userId == null) {
+                continue;
+            }
+
+            if (ongoingDstUserIdArray.indexOf(userId) >= 0) {
+                player.addWatchOngoingSrcUserId(selfUserId);
+            } else {
+                player.removeWatchOngoingSrcUserId(selfUserId);
+            }
+
+            if (requestDstUserIdArray.indexOf(userId) >= 0) {
+                player.addWatchRequestSrcUserId(selfUserId);
+            } else {
+                player.removeWatchRequestSrcUserId(selfUserId);
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

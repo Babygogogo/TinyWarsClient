@@ -45,9 +45,9 @@ namespace TwnsSpmMainMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
                 { type: NotifyType.MsgMcrGetJoinedRoomInfoList,         callback: this._onMsgMcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,         callback: this._onMsgMfrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,         callback: this._onMsgMfrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgCcrGetJoinedRoomInfoList,         callback: this._onMsgCcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,       callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMrrGetJoinedRoomIdArray,       callback: this._onMsgMrrGetMyRoomPublicInfoList },
                 { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
                 { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
             ]);

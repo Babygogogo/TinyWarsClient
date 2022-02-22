@@ -152,6 +152,7 @@ namespace TwnsPanelConfig {
         MmWarRuleAvailableCoPanel           : PanelConfig<TwnsMmWarRuleAvailableCoPanel.OpenData>;
         MmWarRulePanel                      : PanelConfig<TwnsMmWarRulePanel.OpenData>;
 
+        MpwSpectatePanel                    : PanelConfig<TwnsMpwSpectatePanel.OpenData>;
         MpwSidePanel                        : PanelConfig<TwnsMpwSidePanel.OpenData>;
         MpwTopPanel                         : PanelConfig<TwnsMpwTopPanel.OpenData>;
         MpwWarMenuPanel                     : PanelConfig<TwnsMpwWarMenuPanel.OpenData>;
@@ -1085,6 +1086,12 @@ namespace TwnsPanelConfig {
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
+            MpwSpectatePanel: {
+                cls         : TwnsMpwSpectatePanel?.MpwSpectatePanel,
+                skinName    : `resource/skins/multiPlayerWar/MpwSpectatePanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             MpwSidePanel: {
                 cls         : TwnsMpwSidePanel?.MpwSidePanel,
                 skinName    : `resource/skins/multiPlayerWar/MpwSidePanel.exml`,

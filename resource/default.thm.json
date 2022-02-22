@@ -172,6 +172,7 @@
 		"resource/skins/multiFreeRoom/MfrSearchRoomPanel.exml",
 		"resource/skins/multiFreeWar/MfwMyWarListPanel.exml",
 		"resource/skins/multiPlayerWar/MpwSidePanel.exml",
+		"resource/skins/multiPlayerWar/MpwSpectatePanel.exml",
 		"resource/skins/multiPlayerWar/MpwTopPanel.exml",
 		"resource/skins/multiPlayerWar/MpwWarMenuPanel.exml",
 		"resource/skins/multiRankRoom/MrrMainMenuPanel.exml",

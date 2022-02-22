@@ -24,10 +24,8 @@ namespace CcrModel {
     export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgCcrCreateRoom.IC;
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgCcrJoinRoom.IC;
 
-    const _roomInfoDict         = new Map<number, ICcrRoomInfo | null>();
-    const _roomInfoGetter       = Helpers.createCachedDataGetter({
-        dataDict                : _roomInfoDict,
-        reqData                 : (roomId: number) => CcrProxy.reqCcrGetRoomInfo(roomId),
+    const _roomInfoAccessor = Helpers.createCachedDataAccessor<number, ICcrRoomInfo>({
+        reqData : (roomId: number) => CcrProxy.reqCcrGetRoomInfo(roomId),
     });
 
     const _unjoinedRoomIdSet    = new Set<number>();
@@ -37,11 +35,10 @@ namespace CcrModel {
     // Functions for rooms.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getRoomInfo(roomId: number): Promise<ICcrRoomInfo | null> {
-        return _roomInfoGetter.getData(roomId);
+        return _roomInfoAccessor.getData(roomId);
     }
     function setRoomInfo(roomId: number, info: ICcrRoomInfo | null): void {
-        _roomInfoDict.set(roomId, info);
-        _roomInfoGetter.dataUpdated(roomId);
+        _roomInfoAccessor.setData(roomId, info);
     }
 
     export function setJoinableRoomInfoList(infoList: ICcrRoomInfo[]): void {

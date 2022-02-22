@@ -148,10 +148,8 @@ namespace SpmModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for rank list.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _rankDataDict     = new Map<number, ISpmRankInfoForRule[]>();
-    const _rankDataGetter   = Helpers.createCachedDataGetter({
-        dataDict            : _rankDataDict,
-        reqData             : (mapId: number) => SpmProxy.reqSpmGetRankList(mapId),
+    const _rankDataGetter = Helpers.createCachedDataAccessor<number, ISpmRankInfoForRule[]>({
+        reqData : (mapId: number) => SpmProxy.reqSpmGetRankList(mapId),
     });
 
     export function getRankData(mapId: number): Promise<ISpmRankInfoForRule[] | null> {
@@ -159,22 +157,18 @@ namespace SpmModel {
     }
 
     export function updateOnMsgSpmGetRankList(data: MsgSpmGetRankListIs): void {
-        const mapId = Helpers.getExisted(data.mapId);
-        _rankDataDict.set(mapId, data.infoArray ?? []);
-        _rankDataGetter.dataUpdated(mapId);
+        _rankDataGetter.setData(Helpers.getExisted(data.mapId), data.infoArray ?? []);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for replay data.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _replayDataDict       = new Map<number, ISerialWar | null>();
-    const _replayDataGetter     = Helpers.createCachedDataGetter({
-        dataDict                : _replayDataDict,
-        reqData                 : (rankId: number) => SpmProxy.reqSpmGetReplayData(rankId),
+    const _replayDataAccessor = Helpers.createCachedDataAccessor<number, ISerialWar>({
+        reqData : (rankId: number) => SpmProxy.reqSpmGetReplayData(rankId),
     });
 
     export function getReplayData(rankId: number): Promise<ISerialWar | null> {
-        return _replayDataGetter.getData(rankId);
+        return _replayDataAccessor.getData(rankId);
     }
     async function decodeAndReviseReplayData(encodedWar: Types.Undefinable<Uint8Array>): Promise<ISerialWar | null> {
         if (encodedWar == null) {
@@ -235,9 +229,7 @@ namespace SpmModel {
     }
 
     export async function updateOnMsgSpmGetReplayData(data: MsgSpmGetReplayDataIs): Promise<void> {
-        const rankId = Helpers.getExisted(data.rankId);
-        _replayDataDict.set(rankId, await decodeAndReviseReplayData(data.encodedWar));
-        _replayDataGetter.dataUpdated(rankId);
+        _replayDataAccessor.setData(Helpers.getExisted(data.rankId), await decodeAndReviseReplayData(data.encodedWar));
     }
 }
 

@@ -17,15 +17,10 @@ namespace WarMapModel {
 
     let _reviewingMaps          : IMapEditorData[];
     const _enabledMapIdArray    : number[] = [];
-    const _rawDataDict          = new Map<number, IMapRawData | null>();
-    const _rawDataGetter        = Helpers.createCachedDataGetter({
-        dataDict                : _rawDataDict,
-        dataExpireTime          : 5,
+    const _rawDataAccessor      = Helpers.createCachedDataAccessor<number, IMapRawData>({
         reqData                 : (mapId: number) => WarMapProxy.reqGetMapRawData(mapId),
     });
-    const _briefDataDict        = new Map<number, IMapBriefData | null>();
-    const _briefDataGetter      = Helpers.createCachedDataGetter({
-        dataDict                : _briefDataDict,
+    const _briefDataGetter      = Helpers.createCachedDataAccessor<number, IMapBriefData>({
         reqData                 : (mapId: number) => WarMapProxy.reqGetMapBriefData(mapId),
     });
 
@@ -42,8 +37,7 @@ namespace WarMapModel {
     }
 
     export function setBriefData(mapId: number, data: IMapBriefData | null): void {
-        _briefDataDict.set(mapId, data);
-        _briefDataGetter.dataUpdated(mapId);
+        _briefDataGetter.setData(mapId, data);
     }
     export function getBriefData(mapId: number): Promise<IMapBriefData | null> {
         return _briefDataGetter.getData(mapId);
@@ -121,14 +115,13 @@ namespace WarMapModel {
         }
     }
     export function getRawData(mapId: number): Promise<IMapRawData | null> {
-        return _rawDataGetter.getData(mapId);
+        return _rawDataAccessor.getData(mapId);
     }
     export function setRawData(mapId: number, mapRawData: IMapRawData | null): void {
         // LocalStorage的地图版本可能比服务器上的旧，因此暂时禁用
         // LocalStorage.setMapRawData(mapId, mapRawData);
 
-        _rawDataDict.set(mapId, mapRawData);
-        _rawDataGetter.dataUpdated(mapId);
+        _rawDataAccessor.setData(mapId, mapRawData);
     }
 
     // function getLocalMapRawData(mapId: number): IMapRawData | null {

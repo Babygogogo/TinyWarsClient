@@ -552,20 +552,20 @@ namespace Helpers {
     //         });
     //     };
     // }
-    export function createCachedDataGetter<DataType>({ dataDict, dataExpireTime = 999999, reqData }: {
-        dataDict            : Map<number, DataType | null>;
+    export function createCachedDataAccessor<KeyType, DataType>({ dataExpireTime = 999999, reqData }: {
         dataExpireTime?     : number;
-        reqData             : (key: number) => void;
+        reqData             : (key: KeyType) => void;
     }): {
-        getData     : (key: number) => Promise<DataType | null>;
-        dataUpdated : (key: number) => void;
+        getData     : (key: KeyType) => Promise<DataType | null>;
+        setData     : (key: KeyType, data: DataType | null) => void;
     } {
-        const requestDict           = new Map<number, (() => void)[]>();
-        const requestTimestampDict  = new Map<number, number>();
-        const dataTimestampDict     = new Map<number, number>();
+        const dataDict              = new Map<KeyType, DataType | null>();
+        const dataTimestampDict     = new Map<KeyType, number>();
+        const requestDict           = new Map<KeyType, (() => void)[]>();
+        const requestTimestampDict  = new Map<KeyType, number>();
 
         return {
-            getData: (key: number): Promise<DataType | null> => {
+            getData: (key: KeyType): Promise<DataType | null> => {
                 const serverTimestamp = Timer.getServerTimestamp();
                 if ((dataDict.has(key))                                                     &&
                     (serverTimestamp - (dataTimestampDict.get(key) ?? 0) <= dataExpireTime)
@@ -598,8 +598,9 @@ namespace Helpers {
                     reqData(key);
                 });
             },
-            dataUpdated : (key: number): void => {
+            setData : (key: KeyType, data: DataType | null): void => {
                 dataTimestampDict.set(key, Timer.getServerTimestamp());
+                dataDict.set(key, data);
 
                 for (const cb of requestDict.get(key) ?? []) {
                     cb();
@@ -694,6 +695,15 @@ namespace Helpers {
         const error     : Types.CustomError = new Error(msg);
         error.errorCode = errorCode;
         return error;
+    }
+
+    export async function checkIsAnyPromiseTrue(promiseArray: (Promise<boolean> | boolean)[]): Promise<boolean> {
+        for (const promise of promiseArray) {
+            if (await promise) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
