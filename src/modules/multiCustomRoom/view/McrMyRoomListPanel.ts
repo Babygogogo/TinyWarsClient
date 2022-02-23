@@ -59,16 +59,9 @@ namespace TwnsMcrMyRoomListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.McrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyMcrJoinedPreviewingRoomIdChanged },
-                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,         callback: this._onNotifyMsgMcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMcrCreateRoom,                    callback: this._onNotifyMsgCreateRoom },
-                { type: NotifyType.MsgMcrDeleteRoomByServer,            callback: this._onNotifyMsgMcrDeleteRoomByServer },
-                { type: NotifyType.MsgMcrJoinRoom,                      callback: this._onNotifyMsgMcrJoinRoom },
-                { type: NotifyType.MsgMcrDeletePlayer,                  callback: this._onNotifyMsgMcrDeletePlayer },
-                { type: NotifyType.MsgMcrExitRoom,                      callback: this._onNotifyMsgMcrExitRoom },
-                { type: NotifyType.MsgMcrGetRoomInfo,                   callback: this._onNotifyMsgMcrGetRoomInfo },
-                { type: NotifyType.MsgMcrSetSelfSettings,               callback: this._onNotifyMsgMcrSetSelfSettings },
-                { type: NotifyType.MsgMcrSetReady,                      callback: this._onNotifyMsgMcrSetReady },
-                { type: NotifyType.MsgMcrGetOwnerPlayerIndex,           callback: this._onNotifyMsgMcrGetOwnerPlayerIndex },
+                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onNotifyMsgMcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMcrGetRoomStaticInfo,             callback: this._onNotifyMsgMcrGetRoomStaticInfo },
+                { type: NotifyType.MsgMcrGetRoomPlayerInfo,             callback: this._onNotifyMsgMcrGetRoomPlayerInfo },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -102,75 +95,24 @@ namespace TwnsMcrMyRoomListPanel {
             this._updateComponentsForPreviewingRoomInfo();
         }
 
-        private _onNotifyMsgMcrGetJoinedRoomInfoList(): void {
+        private _onNotifyMsgMcrGetJoinedRoomIdArray(): void {
             this._hasReceivedData = true;
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
         }
 
-        private _onNotifyMsgCreateRoom(): void {
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgMcrDeleteRoomByServer(): void {
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgMcrJoinRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrJoinRoom.IS;
-            if (data.roomId === McrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgMcrDeletePlayer(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS;
-            if (data.roomId === McrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgMcrExitRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrExitRoom.IS;
-            if (data.roomId === McrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgMcrGetRoomInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomInfo.IS;
+        private _onNotifyMsgMcrGetRoomStaticInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomStaticInfo.IS;
             if (data.roomId === McrJoinModel.getJoinedPreviewingRoomId()) {
                 this._updateComponentsForPreviewingRoomInfo();
             }
         }
 
-        private _onNotifyMsgMcrSetSelfSettings(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrSetSelfSettings.IS;
+        private _onNotifyMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
             if (data.roomId === McrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
+                this._updateComponentsForPreviewingRoomInfo();
             }
-        }
-
-        private _onNotifyMsgMcrSetReady(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrSetReady.IS;
-            if (data.roomId === McrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-        }
-
-        private _onNotifyMsgMcrGetOwnerPlayerIndex(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetOwnerPlayerIndex.IS;
-            if (data.roomId === McrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-
-            this._updateGroupRoomList();
         }
 
         private _onTouchTapBtnBack(): void {
@@ -291,7 +233,7 @@ namespace TwnsMcrMyRoomListPanel {
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const roomId = McrJoinModel.getJoinedPreviewingRoomId();
-            const mapId = roomId == null ? null : (await McrModel.getRoomInfo(roomId))?.settingsForMcw?.mapId;
+            const mapId = roomId == null ? null : (await McrModel.getRoomStaticInfo(roomId))?.settingsForMcw?.mapId;
             return mapId == null
                 ? null
                 : { mapInfo : { mapId, }, };
@@ -399,15 +341,39 @@ namespace TwnsMcrMyRoomListPanel {
         private readonly _labelName!    : TwnsUiLabel.UiLabel;
         private readonly _imgRed!       : TwnsUiLabel.UiLabel;
 
-        protected async _onDataChanged(): Promise<void> {
-            const roomId            = this._getData().roomId;
-            this._labelId.text      = `#${roomId}`;
-            this._imgRed.visible    = await McrModel.checkIsRedForRoom(roomId);
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMcrGetRoomStaticInfo,     callback: this._onNotifyMsgMcrGetRoomStaticInfo },
+                { type: NotifyType.MsgMcrGetRoomPlayerInfo,     callback: this._onNotifyMsgMcrGetRoomPlayerInfo },
+            ]);
+        }
 
-            const settingsForMcw    = (await McrModel.getRoomInfo(roomId))?.settingsForMcw;
+        protected async _onDataChanged(): Promise<void> {
+            this._labelId.text = `#${this._getData().roomId}`;
+            this._updateImgRed();
+            this._updateLabelName();
+        }
+
+        private _onNotifyLanguageChanged(): void {
+            this._updateLabelName();
+        }
+        private _onNotifyMsgMcrGetRoomStaticInfo(): void {
+            this._updateImgRed();
+        }
+        private _onNotifyMsgMcrGetRoomPlayerInfo(): void {
+            this._updateImgRed();
+        }
+
+        private async _updateLabelName(): Promise<void> {
+            const settingsForMcw    = (await McrModel.getRoomStaticInfo(this._getData().roomId))?.settingsForMcw;
             this._labelName.text    = (settingsForMcw == null)
                 ? ``
                 : (settingsForMcw.warName || (await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(settingsForMcw.mapId)))) ?? CommonConstants.ErrorTextForUndefined;
+        }
+
+        private async _updateImgRed(): Promise<void> {
+            this._imgRed.visible = await McrModel.checkIsRedForRoom(this._getData().roomId);
         }
 
         public onItemTapEvent(): void {

@@ -66,12 +66,12 @@ namespace TwnsMcrSearchRoomPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            McrProxy.reqMcrGetJoinableRoomInfoList(null);
+            McrProxy.reqMcrGetJoinableRoomIdArray(null);
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            McrProxy.reqMcrGetJoinableRoomInfoList({
+            McrProxy.reqMcrGetJoinableRoomIdArray({
                 roomId          : getNumber(this._inputReplayId.text),
                 mapName         : this._inputMapName.text || null,
                 userNickname    : this._inputUserNickname.text || null,

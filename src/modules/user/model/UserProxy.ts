@@ -20,10 +20,11 @@ namespace UserProxy {
             { msgCode: NetMessageCodes.MsgUserRegister,                 callback: _onMsgUserRegister, },
             { msgCode: NetMessageCodes.MsgUserLogout,                   callback: _onMsgUserLogout, },
             { msgCode: NetMessageCodes.MsgUserGetPublicInfo,            callback: _onMsgUserGetPublicInfo, },
+            { msgCode: NetMessageCodes.MsgUserGetBriefInfo,             callback: _onMsgUserGetBriefInfo, },
             { msgCode: NetMessageCodes.MsgUserGetOnlineState,           callback: _onMsgUserGetOnlineState },
             { msgCode: NetMessageCodes.MsgUserSetNickname,              callback: _onMsgUserSetNickname, },
             { msgCode: NetMessageCodes.MsgUserSetDiscordId,             callback: _onMsgUserSetDiscordId, },
-            { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,           callback: _onMsgUserGetOnlineUsers, },
+            { msgCode: NetMessageCodes.MsgUserGetOnlineUserIdArray,     callback: _onMsgUserGetOnlineUserIdArray, },
             { msgCode: NetMessageCodes.MsgUserSetPrivilege,             callback: _onMsgUserSetPrivilege, },
             { msgCode: NetMessageCodes.MsgUserSetPassword,              callback: _onMsgUserSetPassword, },
             { msgCode: NetMessageCodes.MsgUserSetSettings,              callback: _onMsgUserSetSettings, },
@@ -97,8 +98,25 @@ namespace UserProxy {
     }
     function _onMsgUserGetPublicInfo(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
-        UserModel.setUserPublicInfo(Helpers.getExisted(data.userId), data.userPublicInfo ?? null);
-        Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
+        if (!data.errorCode) {
+            UserModel.setUserPublicInfo(Helpers.getExisted(data.userId), data.userPublicInfo ?? null);
+            Notify.dispatch(NotifyType.MsgUserGetPublicInfo, data);
+        }
+    }
+
+    export function reqUserGetBriefInfo(userId: number): void {
+        NetManager.send({
+            MsgUserGetBriefInfo: { c: {
+                userId,
+            } },
+        });
+    }
+    function _onMsgUserGetBriefInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserGetBriefInfo.IS;
+        if (!data.errorCode) {
+            UserModel.setUserBriefInfo(Helpers.getExisted(data.userId), data.userBriefInfo ?? null);
+            Notify.dispatch(NotifyType.MsgUserGetBriefInfo, data);
+        }
     }
 
     export function reqUserGetOnlineState(userId: number): void {
@@ -150,15 +168,15 @@ namespace UserProxy {
         }
     }
 
-    export function reqUserGetOnlineUsers(): void {
+    export function reqUserGetOnlineUserIdArray(): void {
         NetManager.send({
-            MsgUserGetOnlineUsers: { c: {} },
+            MsgUserGetOnlineUserIdArray: { c: {} },
         });
     }
-    function _onMsgUserGetOnlineUsers(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgUserGetOnlineUsers.IS;
+    function _onMsgUserGetOnlineUserIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserGetOnlineUserIdArray.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgUserGetOnlineUsers, data);
+            Notify.dispatch(NotifyType.MsgUserGetOnlineUserIdArray, data);
         }
     }
 

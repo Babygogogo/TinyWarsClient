@@ -18,23 +18,29 @@ namespace RwModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import RwWar                = TwnsRwWar.RwWar;
 
-    let _replayInfoList     : IReplayInfo[] | null = null;
-    let _previewingReplayId : number | null = null;
-    let _war                : RwWar | null = null;
+    let _replayIdArray          : number[] | null = null;
+    let _previewingReplayId     : number | null = null;
+    let _war                    : RwWar | null = null;
+    const _replayInfoAccessor   = Helpers.createCachedDataAccessor<number, IReplayInfo>({
+        reqData : (replayId: number) => RwProxy.reqReplayGetInfo(replayId),
+    });
 
     export function init(): void {
         // nothing to do
     }
 
-    export function setReplayInfoList(infoList: IReplayInfo[]): void {
-        _replayInfoList = infoList;
+    export function setReplayIdArray(replayIdArray: number[]): void {
+        _replayIdArray = replayIdArray;
     }
-    export function getReplayInfoList(): IReplayInfo[] | null {
-        return _replayInfoList;
+    export function getReplayIdArray(): number[] | null {
+        return _replayIdArray;
     }
-    export function getReplayInfo(replayId: number): IReplayInfo | null {
-        const replayInfoArray = getReplayInfoList();
-        return replayInfoArray ? replayInfoArray.find(v => v.replayBriefInfo?.replayId === replayId) ?? null : null;
+
+    export async function getReplayInfo(replayId: number): Promise<IReplayInfo | null> {
+        return _replayInfoAccessor.getData(replayId);
+    }
+    export function setReplayInfo(replayId: number, replayInfo: IReplayInfo | null): void {
+        _replayInfoAccessor.setData(replayId, replayInfo);
     }
 
     export function setPreviewingReplayId(replayId: number | null): void {

@@ -57,9 +57,9 @@ namespace TwnsRwReplayListPanel {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.RwPreviewingReplayIdChanged,    callback: this._onNotifyRwPreviewingReplayIdChanged },
-                { type: NotifyType.MsgReplayGetInfoList,           callback: this._onNotifyMsgReplayGetInfoList },
+                { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.RwPreviewingReplayIdChanged,     callback: this._onNotifyRwPreviewingReplayIdChanged },
+                { type: NotifyType.MsgReplayGetReplayIdArray,       callback: this._onNotifyMsgReplayGetReplayIdArray },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -77,7 +77,7 @@ namespace TwnsRwReplayListPanel {
             this._updateGroupReplayList();
             this._updateComponentsForPreviewingReplayInfo();
 
-            RwProxy.reqReplayInfos(null);
+            RwProxy.reqReplayGetReplayIdArray(null);
         }
         protected _onClosing(): void {
             // nothing to do
@@ -95,13 +95,13 @@ namespace TwnsRwReplayListPanel {
             this._updateComponentsForPreviewingReplayInfo();
         }
 
-        private _onNotifyMsgReplayGetInfoList(): void {
+        private _onNotifyMsgReplayGetReplayIdArray(): void {
             this._hasReceivedData = true;
 
-            const replayId          = RwModel.getPreviewingReplayId();
-            const replayInfoArray   = RwModel.getReplayInfoList() || [];
-            if (replayInfoArray.every(v => v.replayBriefInfo?.replayId !== replayId)) {
-                RwModel.setPreviewingReplayId(replayInfoArray[0]?.replayBriefInfo?.replayId ?? null);
+            const replayId      = RwModel.getPreviewingReplayId();
+            const replayIdArray = RwModel.getReplayIdArray() || [];
+            if (replayIdArray.every(v => v !== replayId)) {
+                RwModel.setPreviewingReplayId(replayIdArray[0] ?? null);
             } else {
                 this._updateGroupReplayList();
                 this._updateComponentsForPreviewingReplayInfo();
@@ -147,7 +147,7 @@ namespace TwnsRwReplayListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
-                    pageData    : this._createDataForCommonWarPlayerInfoPage(),
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -198,10 +198,9 @@ namespace TwnsRwReplayListPanel {
                 groupTab.visible    = true;
                 btnNextStep.visible = true;
 
-                const tab = this._tabSettings;
-                tab.updatePageData(2, { replayId } as OpenDataForRwReplayWarInfoPage);
                 this._updateCommonWarMapInfoPage();
                 this._updateCommonWarPlayerInfoPage();
+                this._updateRwReplayWarInfoPage();
             }
         }
 
@@ -211,17 +210,24 @@ namespace TwnsRwReplayListPanel {
             }
         }
 
-        private _updateCommonWarPlayerInfoPage(): void {
+        private async _updateCommonWarPlayerInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(1, this._createDataForCommonWarPlayerInfoPage());
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
+            }
+        }
+
+        private _updateRwReplayWarInfoPage(): void {
+            if (this._isTabInitialized) {
+                const replayId = RwModel.getPreviewingReplayId();
+                this._tabSettings.updatePageData(2, (replayId == null ? null : { replayId }) as OpenDataForRwReplayWarInfoPage);
             }
         }
 
         private _createDataForListReplay(): DataForReplayRenderer[] {
             const dataArray: DataForReplayRenderer[] = [];
-            for (const replayInfo of RwModel.getReplayInfoList() || []) {
+            for (const replayId of RwModel.getReplayIdArray() || []) {
                 dataArray.push({
-                    replayId: Helpers.getExisted(replayInfo.replayBriefInfo?.replayId),
+                    replayId,
                 });
             }
 
@@ -234,7 +240,7 @@ namespace TwnsRwReplayListPanel {
                 return {};
             }
 
-            const mapId = RwModel.getReplayInfo(replayId)?.replayBriefInfo?.mapId;
+            const mapId = (await RwModel.getReplayInfo(replayId))?.replayBriefInfo?.mapId;
             if (mapId != null) {
                 return { mapInfo: { mapId } };
             } else {
@@ -248,13 +254,13 @@ namespace TwnsRwReplayListPanel {
             }
         }
 
-        private _createDataForCommonWarPlayerInfoPage(): OpenDataForCommonWarPlayerInfoPage {
+        private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
             const replayId = RwModel.getPreviewingReplayId();
             if (replayId == null) {
                 return null;
             }
 
-            const replayInfo = RwModel.getReplayInfo(replayId);
+            const replayInfo = await RwModel.getReplayInfo(replayId);
             if (replayInfo == null) {
                 return null;
             }
@@ -384,7 +390,7 @@ namespace TwnsRwReplayListPanel {
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const replayInfo        = RwModel.getReplayInfo(this._getData().replayId);
+            const replayInfo        = await RwModel.getReplayInfo(this._getData().replayId);
             const replayBriefInfo   = replayInfo ? replayInfo.replayBriefInfo : null;
             const labelId           = this._labelId;
             const labelType         = this._labelType;

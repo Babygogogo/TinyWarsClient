@@ -58,11 +58,13 @@ namespace TwnsMcrMainMenuPanel {
                 { ui: this._btnFreeMode,        callback: this._onTouchedBtnFreeMode },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
-                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,         callback: this._onMsgMcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,         callback: this._onMsgMfrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgUserLogout,                       callback: this._onNotifyMsgUserLogout },
+                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onNotifyMsgMcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMcrGetRoomPlayerInfo,             callback: this._onNotifyMsgMcrGetRoomPlayerInfo },
+                { type: NotifyType.MsgMcrGetRoomStaticInfo,             callback: this._onNotifyMsgMcrGetRoomStaticInfo },
+                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgCcrGetJoinedRoomInfoList,         callback: this._onMsgCcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMrrGetJoinedRoomIdArray,       callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetMyRoomPublicInfoList },
                 { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
                 { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
             ]);
@@ -128,11 +130,19 @@ namespace TwnsMcrMainMenuPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMainMenuPanel, void 0);
         }
 
-        private _onMsgUserLogout(): void {
+        private _onNotifyMsgUserLogout(): void {
             this.close();
         }
-        private _onMsgMcrGetJoinedRoomInfoList(): void {
+        private _onNotifyMsgMcrGetJoinedRoomIdArray(): void {
             this._updateBtnMultiPlayer();
+        }
+        private _onNotifyMsgMcrGetRoomPlayerInfo(): void {
+            this._updateBtnMultiPlayer();
+            this._updateBtnMyRoom();
+        }
+        private _onNotifyMsgMcrGetRoomStaticInfo(): void {
+            this._updateBtnMultiPlayer();
+            this._updateBtnMyRoom();
         }
         private _onMsgMfrGetJoinedRoomInfoList(): void {
             this._updateBtnMultiPlayer();

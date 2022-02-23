@@ -59,7 +59,7 @@ namespace TwnsLobbyPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
-                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,         callback: this._onMsgMcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onMsgMcrGetJoinedRoomIdArray },
                 { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgCcrGetJoinedRoomInfoList,         callback: this._onMsgCcrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetJoinedRoomIdArray },
@@ -134,7 +134,7 @@ namespace TwnsLobbyPanel {
             this.close();
         }
 
-        private _onMsgMcrGetJoinedRoomInfoList(): void {
+        private _onMsgMcrGetJoinedRoomIdArray(): void {
             this._updateBtnMultiPlayer();
         }
 

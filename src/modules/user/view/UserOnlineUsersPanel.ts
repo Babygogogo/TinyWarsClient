@@ -34,13 +34,12 @@ namespace TwnsUserOnlineUsersPanel {
         private readonly _listUser!             : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
-        private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS | null = null;
-        private _dataForList: DataForUserRenderer[] | null = null;
+        private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUserIdArray.IS | null = null;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgUserGetOnlineUsers,  callback: this._onNotifySUserGetOnlineUsers },
+                { type: NotifyType.MsgUserGetOnlineUserIdArray,  callback: this._onNotifySUserGetOnlineUsers },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
@@ -50,7 +49,7 @@ namespace TwnsUserOnlineUsersPanel {
 
             this._listUser.setItemRenderer(UserRenderer);
 
-            UserProxy.reqUserGetOnlineUsers();
+            UserProxy.reqUserGetOnlineUserIdArray();
 
             this._updateView();
             this._updateComponentsForLanguage();
@@ -60,7 +59,6 @@ namespace TwnsUserOnlineUsersPanel {
         }
         protected _onClosing(): void {
             this._msg           = null;
-            this._dataForList   = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +76,7 @@ namespace TwnsUserOnlineUsersPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             const msg = this._msg;
             if (!msg) {
                 this._labelLoading.visible  = true;
@@ -87,21 +85,24 @@ namespace TwnsUserOnlineUsersPanel {
             } else {
                 this._labelLoading.visible  = false;
                 this._labelUsersCount.text  = `${msg.totalCount}`;
-                this._dataForList           = this._createDataForList();
-                this._listUser.bindData(this._dataForList);
+                this._listUser.bindData(await this._createDataForList());
             }
         }
 
-        private _createDataForList(): DataForUserRenderer[] {
-            const msg       = this._msg;
-            const dataArray : DataForUserRenderer[] = [];
-            for (const userInfo of msg ? msg.userInfos || [] : []) {
-                dataArray.push({
-                    index   : 0,
-                    userId  : userInfo.userId,
-                    nickname: userInfo.nickname,
-                });
+        private async _createDataForList(): Promise<DataForUserRenderer[]> {
+            const dataArray     : DataForUserRenderer[] = [];
+            const promiseArray  : Promise<void>[] = [];
+            for (const userId of this._msg?.userIdArray ?? []) {
+                promiseArray.push((async () => {
+                    dataArray.push({
+                        index   : 0,
+                        userId,
+                        nickname: (await UserModel.getUserBriefInfo(userId))?.nickname,
+                    });
+                })());
             }
+
+            await Promise.all(promiseArray);
             dataArray.sort((v1, v2) => {
                 const nickname1 = v1.nickname;
                 const nickname2 = v2.nickname;

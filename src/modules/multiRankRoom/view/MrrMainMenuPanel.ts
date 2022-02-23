@@ -48,7 +48,7 @@ namespace TwnsMrrMainMenuPanel {
                 { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
                 { type: NotifyType.MsgMrrGetRoomPublicInfo,             callback: this._onMsgMrrGetRoomPublicInfo },
                 { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetJoinedRoomIdArray },
-                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,         callback: this._onMsgMcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onMsgMcrGetJoinedRoomIdArray },
                 { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgCcrGetJoinedRoomInfoList,         callback: this._onMsgCcrGetJoinedRoomInfoList },
                 { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
@@ -110,7 +110,7 @@ namespace TwnsMrrMainMenuPanel {
         private _onMsgMrrGetJoinedRoomIdArray(): void {
             this._updateComponentsForRed();
         }
-        private _onMsgMcrGetJoinedRoomInfoList(): void {
+        private _onMsgMcrGetJoinedRoomIdArray(): void {
             this._updateBtnMultiPlayer();
         }
         private _onMsgMfrGetJoinedRoomInfoList(): void {

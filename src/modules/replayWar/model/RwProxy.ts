@@ -14,24 +14,25 @@ namespace RwProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgReplayGetInfoList,    callback: _onMsgReplayGetInfoList },
-            { msgCode: NetMessageCodes.MsgReplayGetData,        callback: _onMsgReplayGetData },
-            { msgCode: NetMessageCodes.MsgReplaySetRating,      callback: _onMsgReplaySetRating },
+            { msgCode: NetMessageCodes.MsgReplayGetReplayIdArray,   callback: _onMsgReplayGetReplayIdArray },
+            { msgCode: NetMessageCodes.MsgReplayGetData,            callback: _onMsgReplayGetData },
+            { msgCode: NetMessageCodes.MsgReplayGetInfo,            callback: _onMsgReplayGetInfo },
+            { msgCode: NetMessageCodes.MsgReplaySetRating,          callback: _onMsgReplaySetRating },
         ], null);
     }
 
-    export function reqReplayInfos(replayFilter: ProtoTypes.Replay.IReplayFilter | null): void {
+    export function reqReplayGetReplayIdArray(replayFilter: ProtoTypes.Replay.IReplayFilter | null): void {
         NetManager.send({
-            MsgReplayGetInfoList: { c: {
+            MsgReplayGetReplayIdArray: { c: {
                 replayFilter,
             }, },
         });
     }
-    function _onMsgReplayGetInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgReplayGetInfoList.IS;
+    function _onMsgReplayGetReplayIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgReplayGetReplayIdArray.IS;
         if (!data.errorCode) {
-            RwModel.setReplayInfoList(data.infos || []);
-            Notify.dispatch(NotifyType.MsgReplayGetInfoList, data);
+            RwModel.setReplayIdArray(data.replayIdArray || []);
+            Notify.dispatch(NotifyType.MsgReplayGetReplayIdArray, data);
         }
     }
 
@@ -44,8 +45,25 @@ namespace RwProxy {
     }
     function _onMsgReplayGetData(e: egret.Event): void {
         const data = e.data as NetMessage.MsgReplayGetData.IS;
-        RwModel.updateOnMsgReplayGetData(data);
-        Notify.dispatch(NotifyType.MsgReplayGetData, data);
+        if (!data.errorCode) {
+            RwModel.updateOnMsgReplayGetData(data);
+            Notify.dispatch(NotifyType.MsgReplayGetData, data);
+        }
+    }
+
+    export function reqReplayGetInfo(replayId: number): void {
+        NetManager.send({
+            MsgReplayGetInfo: { c: {
+                replayId,
+            }, },
+        });
+    }
+    function _onMsgReplayGetInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgReplayGetInfo.IS;
+        if (!data.errorCode) {
+            RwModel.setReplayInfo(Helpers.getExisted(data.replayId), data.replayInfo ?? null);
+            Notify.dispatch(NotifyType.MsgReplayGetInfo, data);
+        }
     }
 
     export function reqReplaySetRating(replayId: number, rating: number): void {

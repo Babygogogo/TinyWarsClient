@@ -79,12 +79,12 @@ namespace TwnsRwSearchReplayPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            RwProxy.reqReplayInfos(null);
+            RwProxy.reqReplayGetReplayIdArray(null);
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            RwProxy.reqReplayInfos({
+            RwProxy.reqReplayGetReplayIdArray({
                 replayId        : getNumber(this._inputReplayId.text),
                 mapName         : this._inputMapName.text || null,
                 userNickname    : this._inputUserNickname.text || null,

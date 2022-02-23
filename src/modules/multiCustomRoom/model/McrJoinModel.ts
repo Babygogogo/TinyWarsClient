@@ -10,7 +10,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace McrJoinModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import IMcrRoomInfo         = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
+    import IMcrRoomStaticInfo   = ProtoTypes.MultiCustomRoom.IMcrRoomStaticInfo;
+    import IMcrRoomPlayerInfo   = ProtoTypes.MultiCustomRoom.IMcrRoomPlayerInfo;
 
     export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMcrCreateRoom.IC;
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
@@ -18,16 +19,16 @@ namespace McrJoinModel {
     let _targetRoomId               : number | null = null;
     let _joinedPreviewingRoomId     : number | null = null;
 
-    export function getFastJoinData(roomInfo: IMcrRoomInfo): DataForJoinRoom | null {
-        const playerIndex       = generateAvailablePlayerIndexList(roomInfo)[0];
-        const unitAndTileSkinId = generateAvailableSkinIdList(roomInfo)[0];
+    export function getFastJoinData(roomStaticInfo: IMcrRoomStaticInfo, roomPlayerInfo: IMcrRoomPlayerInfo): DataForJoinRoom | null {
+        const playerIndex       = generateAvailablePlayerIndexList(roomStaticInfo, roomPlayerInfo)[0];
+        const unitAndTileSkinId = generateAvailableSkinIdList(roomPlayerInfo)[0];
         if ((playerIndex == null) || (unitAndTileSkinId == null)) {
             return null;
         } else {
             return {
-                roomId          : roomInfo.roomId,
+                roomId          : roomStaticInfo.roomId,
                 isReady         : false,
-                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(Helpers.getExisted(roomInfo.settingsForCommon), playerIndex),
+                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(Helpers.getExisted(roomStaticInfo.settingsForCommon), playerIndex),
                 playerIndex,
                 unitAndTileSkinId,
             };
@@ -54,12 +55,8 @@ namespace McrJoinModel {
         }
     }
 
-    export function updateOnMsgMcrGetJoinableRoomInfoList(): void {
+    export function updateOnMsgMcrGetJoinableRoomIdArray(): void {
         reviseTargetRoomId();
-    }
-    export function updateOnMsgMcrDeleteRoomByServer(): void {
-        reviseTargetRoomId();
-        reviseJoinedPreviewingRoomId();
     }
     export function updateOnMsgMcrGetJoinedRoomIdArray(): void {
         reviseJoinedPreviewingRoomId();
@@ -88,9 +85,9 @@ namespace McrJoinModel {
         }
     }
 
-    function generateAvailablePlayerIndexList(info: IMcrRoomInfo): number[] {
-        const playersCount      = WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(info.settingsForCommon?.warRule));
-        const playerInfoList    = Helpers.getExisted(info.playerDataList);
+    function generateAvailablePlayerIndexList(roomStaticInfo: IMcrRoomStaticInfo, roomPlayerInfo: IMcrRoomPlayerInfo): number[] {
+        const playersCount      = WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForCommon?.warRule));
+        const playerInfoList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
         const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {
             if (playerInfoList.every(v => v.playerIndex !== i)) {
@@ -100,8 +97,8 @@ namespace McrJoinModel {
         return indexes;
     }
 
-    function generateAvailableSkinIdList(roomInfo: IMcrRoomInfo): number[] {
-        const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
+    function generateAvailableSkinIdList(roomPlayerInfo: IMcrRoomPlayerInfo): number[] {
+        const playerDataList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
         const idList            : number[] = [];
         for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
             if (playerDataList.every(v => v.unitAndTileSkinId !== skinId)) {

@@ -16,6 +16,7 @@ namespace UserModel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NetMessage           = ProtoTypes.NetMessage;
     import IUserPublicInfo      = ProtoTypes.User.IUserPublicInfo;
+    import IUserBriefInfo       = ProtoTypes.User.IUserBriefInfo;
     import IUserSettings        = ProtoTypes.User.IUserSettings;
     import IUserSelfInfo        = ProtoTypes.User.IUserSelfInfo;
     import IUserPrivilege       = ProtoTypes.User.IUserPrivilege;
@@ -27,6 +28,9 @@ namespace UserModel {
     let _selfPassword               : string | null = null;
     const _userPublicInfoAccessor   = Helpers.createCachedDataAccessor<number, IUserPublicInfo>({
         reqData                     : (userId: number) => UserProxy.reqUserGetPublicInfo(userId),
+    });
+    const _userBriefInfoAccessor    = Helpers.createCachedDataAccessor<number, IUserBriefInfo>({
+        reqData                     : (userId: number) => UserProxy.reqUserGetBriefInfo(userId),
     });
 
     export function init(): void {
@@ -143,6 +147,13 @@ namespace UserModel {
     }
     export function setUserPublicInfo(userId: number, info: IUserPublicInfo | null): void {
         _userPublicInfoAccessor.setData(userId, info);
+    }
+
+    export function getUserBriefInfo(userId: number): Promise<IUserBriefInfo | null> {
+        return _userBriefInfoAccessor.getData(userId);
+    }
+    export function setUserBriefInfo(userId: number, info: IUserBriefInfo | null): void {
+        _userBriefInfoAccessor.setData(userId, info);
     }
 
     export async function getUserNickname(userId: number): Promise<string | null> {

@@ -855,6 +855,12 @@ namespace Types {
         ScoreNotHighest,
         ScoreTooLow,
     }
+
+    // eslint-disable-next-line no-shadow
+    export const enum ExitRoomType {
+        SelfExit            = 1,
+        DeletedByRoomOwner  = 2,
+    }
 }
 
 // export default Types;
