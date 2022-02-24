@@ -315,7 +315,7 @@ namespace TwnsChatPanel {
                 }
             }
             for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.CcrRoom)) {
-                if (await CcrModel.getRoomInfo(toRoomId)) {
+                if (await CcrModel.getRoomStaticInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -327,7 +327,7 @@ namespace TwnsChatPanel {
                 }
             }
             for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.MfrRoom)) {
-                if (await MfrModel.getRoomInfo(toRoomId)) {
+                if (await MfrModel.getRoomStaticInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -624,7 +624,7 @@ namespace TwnsChatPanel {
             } else if (toCategory === ChatCategory.CcrRoom) {
                 labelType.text = `${Lang.getText(LangTextType.B0643)} #${toTarget}`;
                 labelName.text = ``;
-                CcrModel.getRoomInfo(toTarget).then(async (v) => {
+                CcrModel.getRoomStaticInfo(toTarget).then(async (v) => {
                     if (v == null) {
                         labelName.text = ``;
                     } else {
@@ -641,7 +641,7 @@ namespace TwnsChatPanel {
             } else if (toCategory === ChatCategory.MfrRoom) {
                 labelType.text = `${Lang.getText(LangTextType.B0556)} #${toTarget}`;
                 labelName.text = ``;
-                MfrModel.getRoomInfo(toTarget).then(async (v) => {
+                MfrModel.getRoomStaticInfo(toTarget).then(async (v) => {
                     if (v == null) {
                         labelName.text = ``;
                     } else {

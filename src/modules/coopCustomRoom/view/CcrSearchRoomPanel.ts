@@ -66,12 +66,12 @@ namespace TwnsCcrSearchRoomPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            CcrProxy.reqCcrGetJoinableRoomInfoList(null);
+            CcrProxy.reqCcrGetJoinableRoomIdArray(null);
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            CcrProxy.reqCcrGetJoinableRoomInfoList({
+            CcrProxy.reqCcrGetJoinableRoomIdArray({
                 roomId          : getNumber(this._inputReplayId.text),
                 mapName         : this._inputMapName.text || null,
                 userNickname    : this._inputUserNickname.text || null,

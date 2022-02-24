@@ -62,21 +62,26 @@ namespace TwnsMeImportPanel {
         }
 
         private async _createDataForListMap(): Promise<DataForMapRenderer[]> {
-            const dataArray: DataForMapRenderer[] = [];
+            const dataArray     : DataForMapRenderer[] = [];
+            const promiseArray  : Promise<void>[] = [];
             for (const mapId of WarMapModel.getEnabledMapIdArray()) {
-                const mapBriefData = await WarMapModel.getBriefData(mapId);
-                if (mapBriefData == null) {
-                    continue;
-                }
+                promiseArray.push((async () => {
+                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    if (mapBriefData == null) {
+                        return;
+                    }
 
-                if (mapBriefData.mapExtraData?.isEnabled) {
-                    dataArray.push({
-                        mapId,
-                        mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined,
-                        panel       : this,
-                    });
-                }
+                    if (mapBriefData.mapExtraData?.isEnabled) {
+                        dataArray.push({
+                            mapId,
+                            mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined,
+                            panel       : this,
+                        });
+                    }
+                })());
             }
+
+            await Promise.all(promiseArray);
             return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 

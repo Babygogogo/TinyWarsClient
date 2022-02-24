@@ -189,16 +189,20 @@ namespace TwnsMrrPreviewMapListPanel {
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
             const promiseArray: Promise<ProtoTypes.Map.IMapRawData | null>[] = [];
             for (const mapId of WarMapModel.getEnabledMapIdArray()) {
-                const mapBriefData = await WarMapModel.getBriefData(mapId);
-                if (mapBriefData == null) {
-                    continue;
-                }
+                promiseArray.push((async (): Promise<ProtoTypes.Map.IMapRawData | null> => {
+                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    if (mapBriefData == null) {
+                        return null;
+                    }
 
-                if ((mapBriefData.mapExtraData?.isEnabled)  &&
-                    (mapBriefData.ruleAvailability?.canMrw)
-                ) {
-                    promiseArray.push(WarMapModel.getRawData(mapId));
-                }
+                    if ((mapBriefData.mapExtraData?.isEnabled)  &&
+                        (mapBriefData.ruleAvailability?.canMrw)
+                    ) {
+                        return await WarMapModel.getRawData(mapId);
+                    }
+
+                    return null;
+                })());
             }
 
             const hasFog    = this._getOpenData().hasFog;

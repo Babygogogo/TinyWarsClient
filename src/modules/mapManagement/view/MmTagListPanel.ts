@@ -134,31 +134,36 @@ namespace TwnsMmTagListPanel {
             (mapNameForFilter)  && (mapNameForFilter = mapNameForFilter.toLowerCase());
             (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
+            const promiseArray: Promise<void>[] = [];
             for (const mapId of WarMapModel.getEnabledMapIdArray()) {
-                const mapBriefData = await WarMapModel.getBriefData(mapId);
-                if (mapBriefData == null) {
-                    continue;
-                }
+                promiseArray.push((async () => {
+                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    if (mapBriefData == null) {
+                        return;
+                    }
 
-                const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
-                const averageRating     = await WarMapModel.getAverageRating(mapId);
-                const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId);
-                if ((!mapBriefData.mapExtraData?.isEnabled)                                                                 ||
-                    ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
-                    ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                    ||
-                    ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                               ||
-                    ((playedTimes != null) && (actualPlayedTimes < playedTimes))                                            ||
-                    ((minRating != null) && ((averageRating == null) || (averageRating < minRating)))
-                ) {
-                    continue;
-                } else {
-                    data.push({
-                        mapId,
-                        mapName,
-                        panel   : this,
-                    });
-                }
+                    const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
+                    const averageRating     = await WarMapModel.getAverageRating(mapId);
+                    const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId);
+                    if ((!mapBriefData.mapExtraData?.isEnabled)                                                                 ||
+                        ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
+                        ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                    ||
+                        ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                               ||
+                        ((playedTimes != null) && (actualPlayedTimes < playedTimes))                                            ||
+                        ((minRating != null) && ((averageRating == null) || (averageRating < minRating)))
+                    ) {
+                        return;
+                    } else {
+                        data.push({
+                            mapId,
+                            mapName,
+                            panel   : this,
+                        });
+                    }
+                })());
             }
+
+            await Promise.all(promiseArray);
             return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 

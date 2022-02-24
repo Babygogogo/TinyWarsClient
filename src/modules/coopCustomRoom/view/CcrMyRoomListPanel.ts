@@ -59,16 +59,9 @@ namespace TwnsCcrMyRoomListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.CcrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyCcrJoinedPreviewingRoomIdChanged },
-                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,         callback: this._onNotifyMsgCcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgCcrCreateRoom,                    callback: this._onNotifyMsgCreateRoom },
-                { type: NotifyType.MsgCcrDeleteRoomByServer,            callback: this._onNotifyMsgCcrDeleteRoomByServer },
-                { type: NotifyType.MsgCcrJoinRoom,                      callback: this._onNotifyMsgCcrJoinRoom },
-                { type: NotifyType.MsgCcrDeletePlayer,                  callback: this._onNotifyMsgCcrDeletePlayer },
-                { type: NotifyType.MsgCcrExitRoom,                      callback: this._onNotifyMsgCcrExitRoom },
-                { type: NotifyType.MsgCcrGetRoomInfo,                   callback: this._onNotifyMsgCcrGetRoomInfo },
-                { type: NotifyType.MsgCcrSetSelfSettings,               callback: this._onNotifyMsgCcrSetSelfSettings },
-                { type: NotifyType.MsgCcrSetReady,                      callback: this._onNotifyMsgCcrSetReady },
-                { type: NotifyType.MsgCcrGetOwnerPlayerIndex,           callback: this._onNotifyMsgCcrGetOwnerPlayerIndex },
+                { type: NotifyType.MsgCcrGetJoinedRoomIdArray,          callback: this._onNotifyMsgCcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgCcrGetRoomStaticInfo,             callback: this._onNotifyMsgCcrGetRoomStaticInfo },
+                { type: NotifyType.MsgCcrGetRoomPlayerInfo,             callback: this._onNotifyMsgCcrGetRoomPlayerInfo },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -85,7 +78,7 @@ namespace TwnsCcrMyRoomListPanel {
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
 
-            CcrProxy.reqCcrGetJoinedRoomInfoList();
+            CcrProxy.reqCcrGetJoinedRoomIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -102,72 +95,23 @@ namespace TwnsCcrMyRoomListPanel {
             this._updateComponentsForPreviewingRoomInfo();
         }
 
-        private _onNotifyMsgCcrGetJoinedRoomInfoList(): void {
+        private _onNotifyMsgCcrGetJoinedRoomIdArray(): void {
             this._hasReceivedData = true;
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
         }
 
-        private _onNotifyMsgCreateRoom(): void {
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgCcrDeleteRoomByServer(): void {
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgCcrJoinRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrJoinRoom.IS;
-            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgCcrDeletePlayer(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrDeletePlayer.IS;
-            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgCcrExitRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrExitRoom.IS;
-            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgCcrGetRoomInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomInfo.IS;
+        private _onNotifyMsgCcrGetRoomStaticInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomStaticInfo.IS;
             if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
                 this._updateComponentsForPreviewingRoomInfo();
             }
         }
 
-        private _onNotifyMsgCcrSetSelfSettings(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrSetSelfSettings.IS;
+        private _onNotifyMsgCcrGetRoomPlayerInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomPlayerInfo.IS;
             if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-        }
-
-        private _onNotifyMsgCcrSetReady(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrSetReady.IS;
-            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-        }
-
-        private _onNotifyMsgCcrGetOwnerPlayerIndex(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetOwnerPlayerIndex.IS;
-            if (data.roomId === CcrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
+                this._updateComponentsForPreviewingRoomInfo();
             }
         }
 
@@ -303,7 +247,7 @@ namespace TwnsCcrMyRoomListPanel {
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const roomId    = CcrJoinModel.getJoinedPreviewingRoomId();
-            const mapId     = roomId == null ? null : (await CcrModel.getRoomInfo(roomId))?.settingsForCcw?.mapId;
+            const mapId     = roomId == null ? null : (await CcrModel.getRoomStaticInfo(roomId))?.settingsForCcw?.mapId;
             return mapId == null
                 ? null
                 : { mapInfo: { mapId } };
@@ -418,7 +362,7 @@ namespace TwnsCcrMyRoomListPanel {
             const roomId            = this._getData().roomId;
             this._imgRed.visible    = await CcrModel.checkIsRedForRoom(roomId);
 
-            const settingsForCcw    = (await CcrModel.getRoomInfo(roomId))?.settingsForCcw;
+            const settingsForCcw    = (await CcrModel.getRoomStaticInfo(roomId))?.settingsForCcw;
             const warName           = settingsForCcw?.warName;
             if (warName) {
                 this._labelName.text = warName;

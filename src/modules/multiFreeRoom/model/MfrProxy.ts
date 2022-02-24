@@ -16,15 +16,14 @@ namespace MfrProxy {
         NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgMfrCreateRoom,                callback: _onMsgMfrCreateRoom },
             { msgCode: NetMessageCodes.MsgMfrJoinRoom,                  callback: _onMsgMfrJoinRoom },
-            { msgCode: NetMessageCodes.MsgMfrDeleteRoomByPlayer,        callback: _onMsgMfrDeleteRoomByPlayer },
-            { msgCode: NetMessageCodes.MsgMfrDeleteRoomByServer,        callback: _onMsgMfrDeleteRoomByServer },
+            { msgCode: NetMessageCodes.MsgMfrDeleteRoom,                callback: _onMsgMfrDeleteRoom },
             { msgCode: NetMessageCodes.MsgMfrExitRoom,                  callback: _onMsgMfrExitRoom },
             { msgCode: NetMessageCodes.MsgMfrDeletePlayer,              callback: _onMsgMfrDeletePlayer },
             { msgCode: NetMessageCodes.MsgMfrSetReady,                  callback: _onMsgMfrSetReady },
             { msgCode: NetMessageCodes.MsgMfrSetSelfSettings,           callback: _onMsgMfrSetSelfSettings },
-            { msgCode: NetMessageCodes.MsgMfrGetOwnerPlayerIndex,       callback: _onMsgMfrGetOwnerPlayerIndex },
-            { msgCode: NetMessageCodes.MsgMfrGetRoomInfo,               callback: _onMsgMfrGetRoomInfo },
-            { msgCode: NetMessageCodes.MsgMfrGetJoinableRoomInfoList,   callback: _onMsgMfrGetJoinableRoomInfoList },
+            { msgCode: NetMessageCodes.MsgMfrGetRoomStaticInfo,         callback: _onMsgMfrGetRoomStaticInfo },
+            { msgCode: NetMessageCodes.MsgMfrGetRoomPlayerInfo,         callback: _onMsgMfrGetRoomPlayerInfo },
+            { msgCode: NetMessageCodes.MsgMfrGetJoinableRoomIdArray,    callback: _onMsgMfrGetJoinableRoomIdArray },
             { msgCode: NetMessageCodes.MsgMfrGetJoinedRoomIdArray,      callback: _onMsgMfrGetJoinedRoomIdArray },
             { msgCode: NetMessageCodes.MsgMfrStartWar,                  callback: _onMsgMfrStartWar },
         ], null);
@@ -50,30 +49,21 @@ namespace MfrProxy {
     async function _onMsgMfrJoinRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrJoinRoom.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrJoinRoom(data);
             Notify.dispatch(NotifyType.MsgMfrJoinRoom, data);
         }
     }
 
-    export function reqMfrDeleteRoomByPlayer(roomId: number): void {
+    export function reqMfrDeleteRoom(roomId: number): void {
         NetManager.send({
-            MsgMfrDeleteRoomByPlayer: { c: {
+            MsgMfrDeleteRoom: { c: {
                 roomId,
             } },
         });
     }
-    function _onMsgMfrDeleteRoomByPlayer(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMfrDeleteRoomByPlayer.IS;
+    function _onMsgMfrDeleteRoom(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMfrDeleteRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMfrDeleteRoomByPlayer, data);
-        }
-    }
-
-    function _onMsgMfrDeleteRoomByServer(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMfrDeleteRoomByServer.IS;
-        if (!data.errorCode) {
-            MfrModel.updateOnMsgMfrDeleteRoomByServer(data);
-            Notify.dispatch(NotifyType.MsgMfrDeleteRoomByServer, data);
+            Notify.dispatch(NotifyType.MsgMfrDeleteRoom, data);
         }
     }
 
@@ -87,7 +77,6 @@ namespace MfrProxy {
     async function _onMsgMfrExitRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrExitRoom.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrExitRoom(data);
             Notify.dispatch(NotifyType.MsgMfrExitRoom, data);
         }
     }
@@ -103,7 +92,6 @@ namespace MfrProxy {
     async function _onMsgMfrDeletePlayer(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrDeletePlayer.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrDeletePlayer(data);
             Notify.dispatch(NotifyType.MsgMfrDeletePlayer, data);
         }
     }
@@ -119,7 +107,6 @@ namespace MfrProxy {
     async function _onMsgMfrSetReady(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrSetReady.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrSetReady(data);
             Notify.dispatch(NotifyType.MsgMfrSetReady, data);
         }
     }
@@ -132,44 +119,52 @@ namespace MfrProxy {
     async function _onMsgMfrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrSetSelfSettings.IS;
         if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrSetSelfSettings(data);
             Notify.dispatch(NotifyType.MsgMfrSetSelfSettings, data);
         }
     }
 
-    async function _onMsgMfrGetOwnerPlayerIndex(e: egret.Event): Promise<void> {
-        const data = e.data as NetMessage.MsgMfrGetOwnerPlayerIndex.IS;
-        if (!data.errorCode) {
-            await MfrModel.updateOnMsgMfrGetOwnerPlayerIndex(data);
-            Notify.dispatch(NotifyType.MsgMfrGetOwnerPlayerIndex, data);
-        }
-    }
-
-    export function reqMfrGetRoomInfo(roomId: number): void {
+    export function reqMfrGetRoomStaticInfo(roomId: number): void {
         NetManager.send({
-            MsgMfrGetRoomInfo: { c: {
+            MsgMfrGetRoomStaticInfo: { c: {
                 roomId,
             }, },
         });
     }
-    function _onMsgMfrGetRoomInfo(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMfrGetRoomInfo.IS;
-        MfrModel.updateOnMsgMfrGetRoomInfo(data);
-        Notify.dispatch(NotifyType.MsgMfrGetRoomInfo, data);
+    function _onMsgMfrGetRoomStaticInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMfrGetRoomStaticInfo.IS;
+        if (!data.errorCode) {
+            MfrModel.setRoomStaticInfo(Helpers.getExisted(data.roomId), data.roomStaticInfo ?? null);
+            Notify.dispatch(NotifyType.MsgMfrGetRoomStaticInfo, data);
+        }
     }
 
-    export function reqMfrGetJoinableRoomInfoList(roomFilter: Types.Undefinable<ProtoTypes.MultiFreeRoom.IRoomFilter>): void {
+    export function reqMfrGetRoomPlayerInfo(roomId: number): void {
         NetManager.send({
-            MsgMfrGetJoinableRoomInfoList: { c: {
+            MsgMfrGetRoomPlayerInfo: { c: {
+                roomId,
+            }, },
+        });
+    }
+    function _onMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMfrGetRoomPlayerInfo.IS;
+        if (!data.errorCode) {
+            MfrModel.setRoomPlayerInfo(Helpers.getExisted(data.roomId), data.roomPlayerInfo ?? null);
+            Notify.dispatch(NotifyType.MsgMfrGetRoomPlayerInfo, data);
+        }
+    }
+
+    export function reqMfrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<ProtoTypes.MultiFreeRoom.IRoomFilter>): void {
+        NetManager.send({
+            MsgMfrGetJoinableRoomIdArray: { c: {
                 roomFilter,
             }, },
         });
     }
-    function _onMsgMfrGetJoinableRoomInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMfrGetJoinableRoomInfoList.IS;
+    function _onMsgMfrGetJoinableRoomIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMfrGetJoinableRoomIdArray.IS;
         if (!data.errorCode) {
-            MfrModel.setJoinableRoomInfoList(data.roomInfoList || []);
-            Notify.dispatch(NotifyType.MsgMfrGetJoinableRoomInfoList, data);
+            MfrModel.setJoinableRoomIdArray(data.roomIdArray || []);
+            Notify.dispatch(NotifyType.MsgMfrGetJoinableRoomIdArray, data);
         }
     }
 
@@ -181,8 +176,10 @@ namespace MfrProxy {
     }
     function _onMsgMfrGetJoinedRoomIdArray(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMfrGetJoinedRoomIdArray.IS;
-        MfrModel.setJoinedRoomIdArray(data.roomIdArray || []);
-        Notify.dispatch(NotifyType.MsgMfrGetJoinedRoomIdArray, data);
+        if (!data.errorCode) {
+            MfrModel.setJoinedRoomIdArray(data.roomIdArray || []);
+            Notify.dispatch(NotifyType.MsgMfrGetJoinedRoomIdArray, data);
+        }
     }
 
     export function reqMfrStartWar(roomId: number): void {

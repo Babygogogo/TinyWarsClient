@@ -22991,6 +22991,216 @@ export declare namespace MultiFreeRoom {
          */
         public toJSON(): { [k: string]: any };
     }
+
+    /** Properties of a MfrRoomStaticInfo. */
+    interface IMfrRoomStaticInfo {
+
+        /** MfrRoomStaticInfo roomId */
+        roomId?: (number|null);
+
+        /** MfrRoomStaticInfo createTime */
+        createTime?: (number|null);
+
+        /** MfrRoomStaticInfo creatorUserId */
+        creatorUserId?: (number|null);
+
+        /** MfrRoomStaticInfo settingsForMfw */
+        settingsForMfw?: (WarSettings.ISettingsForMfw|null);
+    }
+
+    /** Represents a MfrRoomStaticInfo. */
+    class MfrRoomStaticInfo implements IMfrRoomStaticInfo {
+
+        /**
+         * Constructs a new MfrRoomStaticInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: MultiFreeRoom.IMfrRoomStaticInfo);
+
+        /** MfrRoomStaticInfo roomId. */
+        public roomId: number;
+
+        /** MfrRoomStaticInfo createTime. */
+        public createTime: number;
+
+        /** MfrRoomStaticInfo creatorUserId. */
+        public creatorUserId: number;
+
+        /** MfrRoomStaticInfo settingsForMfw. */
+        public settingsForMfw?: (WarSettings.ISettingsForMfw|null);
+
+        /**
+         * Creates a new MfrRoomStaticInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MfrRoomStaticInfo instance
+         */
+        public static create(properties?: MultiFreeRoom.IMfrRoomStaticInfo): MultiFreeRoom.MfrRoomStaticInfo;
+
+        /**
+         * Encodes the specified MfrRoomStaticInfo message. Does not implicitly {@link MultiFreeRoom.MfrRoomStaticInfo.verify|verify} messages.
+         * @param message MfrRoomStaticInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: MultiFreeRoom.IMfrRoomStaticInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MfrRoomStaticInfo message, length delimited. Does not implicitly {@link MultiFreeRoom.MfrRoomStaticInfo.verify|verify} messages.
+         * @param message MfrRoomStaticInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: MultiFreeRoom.IMfrRoomStaticInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MfrRoomStaticInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MfrRoomStaticInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiFreeRoom.MfrRoomStaticInfo;
+
+        /**
+         * Decodes a MfrRoomStaticInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MfrRoomStaticInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiFreeRoom.MfrRoomStaticInfo;
+
+        /**
+         * Verifies a MfrRoomStaticInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MfrRoomStaticInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MfrRoomStaticInfo
+         */
+        public static fromObject(object: { [k: string]: any }): MultiFreeRoom.MfrRoomStaticInfo;
+
+        /**
+         * Creates a plain object from a MfrRoomStaticInfo message. Also converts values to other types if specified.
+         * @param message MfrRoomStaticInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: MultiFreeRoom.MfrRoomStaticInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MfrRoomStaticInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a MfrRoomPlayerInfo. */
+    interface IMfrRoomPlayerInfo {
+
+        /** MfrRoomPlayerInfo roomId */
+        roomId?: (number|null);
+
+        /** MfrRoomPlayerInfo ownerPlayerIndex */
+        ownerPlayerIndex?: (number|null);
+
+        /** MfrRoomPlayerInfo playerDataList */
+        playerDataList?: (Structure.IDataForPlayerInRoom[]|null);
+    }
+
+    /** Represents a MfrRoomPlayerInfo. */
+    class MfrRoomPlayerInfo implements IMfrRoomPlayerInfo {
+
+        /**
+         * Constructs a new MfrRoomPlayerInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: MultiFreeRoom.IMfrRoomPlayerInfo);
+
+        /** MfrRoomPlayerInfo roomId. */
+        public roomId: number;
+
+        /** MfrRoomPlayerInfo ownerPlayerIndex. */
+        public ownerPlayerIndex: number;
+
+        /** MfrRoomPlayerInfo playerDataList. */
+        public playerDataList: Structure.IDataForPlayerInRoom[];
+
+        /**
+         * Creates a new MfrRoomPlayerInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MfrRoomPlayerInfo instance
+         */
+        public static create(properties?: MultiFreeRoom.IMfrRoomPlayerInfo): MultiFreeRoom.MfrRoomPlayerInfo;
+
+        /**
+         * Encodes the specified MfrRoomPlayerInfo message. Does not implicitly {@link MultiFreeRoom.MfrRoomPlayerInfo.verify|verify} messages.
+         * @param message MfrRoomPlayerInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: MultiFreeRoom.IMfrRoomPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MfrRoomPlayerInfo message, length delimited. Does not implicitly {@link MultiFreeRoom.MfrRoomPlayerInfo.verify|verify} messages.
+         * @param message MfrRoomPlayerInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: MultiFreeRoom.IMfrRoomPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MfrRoomPlayerInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MfrRoomPlayerInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiFreeRoom.MfrRoomPlayerInfo;
+
+        /**
+         * Decodes a MfrRoomPlayerInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MfrRoomPlayerInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiFreeRoom.MfrRoomPlayerInfo;
+
+        /**
+         * Verifies a MfrRoomPlayerInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MfrRoomPlayerInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MfrRoomPlayerInfo
+         */
+        public static fromObject(object: { [k: string]: any }): MultiFreeRoom.MfrRoomPlayerInfo;
+
+        /**
+         * Creates a plain object from a MfrRoomPlayerInfo message. Also converts values to other types if specified.
+         * @param message MfrRoomPlayerInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: MultiFreeRoom.MfrRoomPlayerInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MfrRoomPlayerInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
 }
 
 /** Properties of a CoopCustomRoom. */
@@ -23314,6 +23524,222 @@ export declare namespace CoopCustomRoom {
 
         /**
          * Converts this CcrRoomInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a CcrRoomStaticInfo. */
+    interface ICcrRoomStaticInfo {
+
+        /** CcrRoomStaticInfo roomId */
+        roomId?: (number|null);
+
+        /** CcrRoomStaticInfo createTime */
+        createTime?: (number|null);
+
+        /** CcrRoomStaticInfo creatorUserId */
+        creatorUserId?: (number|null);
+
+        /** CcrRoomStaticInfo settingsForCommon */
+        settingsForCommon?: (WarSettings.ISettingsForCommon|null);
+
+        /** CcrRoomStaticInfo settingsForCcw */
+        settingsForCcw?: (WarSettings.ISettingsForCcw|null);
+    }
+
+    /** Represents a CcrRoomStaticInfo. */
+    class CcrRoomStaticInfo implements ICcrRoomStaticInfo {
+
+        /**
+         * Constructs a new CcrRoomStaticInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: CoopCustomRoom.ICcrRoomStaticInfo);
+
+        /** CcrRoomStaticInfo roomId. */
+        public roomId: number;
+
+        /** CcrRoomStaticInfo createTime. */
+        public createTime: number;
+
+        /** CcrRoomStaticInfo creatorUserId. */
+        public creatorUserId: number;
+
+        /** CcrRoomStaticInfo settingsForCommon. */
+        public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
+
+        /** CcrRoomStaticInfo settingsForCcw. */
+        public settingsForCcw?: (WarSettings.ISettingsForCcw|null);
+
+        /**
+         * Creates a new CcrRoomStaticInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns CcrRoomStaticInfo instance
+         */
+        public static create(properties?: CoopCustomRoom.ICcrRoomStaticInfo): CoopCustomRoom.CcrRoomStaticInfo;
+
+        /**
+         * Encodes the specified CcrRoomStaticInfo message. Does not implicitly {@link CoopCustomRoom.CcrRoomStaticInfo.verify|verify} messages.
+         * @param message CcrRoomStaticInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: CoopCustomRoom.ICcrRoomStaticInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified CcrRoomStaticInfo message, length delimited. Does not implicitly {@link CoopCustomRoom.CcrRoomStaticInfo.verify|verify} messages.
+         * @param message CcrRoomStaticInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: CoopCustomRoom.ICcrRoomStaticInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a CcrRoomStaticInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns CcrRoomStaticInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CoopCustomRoom.CcrRoomStaticInfo;
+
+        /**
+         * Decodes a CcrRoomStaticInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns CcrRoomStaticInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CoopCustomRoom.CcrRoomStaticInfo;
+
+        /**
+         * Verifies a CcrRoomStaticInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a CcrRoomStaticInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns CcrRoomStaticInfo
+         */
+        public static fromObject(object: { [k: string]: any }): CoopCustomRoom.CcrRoomStaticInfo;
+
+        /**
+         * Creates a plain object from a CcrRoomStaticInfo message. Also converts values to other types if specified.
+         * @param message CcrRoomStaticInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: CoopCustomRoom.CcrRoomStaticInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this CcrRoomStaticInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a CcrRoomPlayerInfo. */
+    interface ICcrRoomPlayerInfo {
+
+        /** CcrRoomPlayerInfo roomId */
+        roomId?: (number|null);
+
+        /** CcrRoomPlayerInfo ownerPlayerIndex */
+        ownerPlayerIndex?: (number|null);
+
+        /** CcrRoomPlayerInfo playerDataList */
+        playerDataList?: (Structure.IDataForPlayerInRoom[]|null);
+    }
+
+    /** Represents a CcrRoomPlayerInfo. */
+    class CcrRoomPlayerInfo implements ICcrRoomPlayerInfo {
+
+        /**
+         * Constructs a new CcrRoomPlayerInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: CoopCustomRoom.ICcrRoomPlayerInfo);
+
+        /** CcrRoomPlayerInfo roomId. */
+        public roomId: number;
+
+        /** CcrRoomPlayerInfo ownerPlayerIndex. */
+        public ownerPlayerIndex: number;
+
+        /** CcrRoomPlayerInfo playerDataList. */
+        public playerDataList: Structure.IDataForPlayerInRoom[];
+
+        /**
+         * Creates a new CcrRoomPlayerInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns CcrRoomPlayerInfo instance
+         */
+        public static create(properties?: CoopCustomRoom.ICcrRoomPlayerInfo): CoopCustomRoom.CcrRoomPlayerInfo;
+
+        /**
+         * Encodes the specified CcrRoomPlayerInfo message. Does not implicitly {@link CoopCustomRoom.CcrRoomPlayerInfo.verify|verify} messages.
+         * @param message CcrRoomPlayerInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: CoopCustomRoom.ICcrRoomPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified CcrRoomPlayerInfo message, length delimited. Does not implicitly {@link CoopCustomRoom.CcrRoomPlayerInfo.verify|verify} messages.
+         * @param message CcrRoomPlayerInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: CoopCustomRoom.ICcrRoomPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a CcrRoomPlayerInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns CcrRoomPlayerInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CoopCustomRoom.CcrRoomPlayerInfo;
+
+        /**
+         * Decodes a CcrRoomPlayerInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns CcrRoomPlayerInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CoopCustomRoom.CcrRoomPlayerInfo;
+
+        /**
+         * Verifies a CcrRoomPlayerInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a CcrRoomPlayerInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns CcrRoomPlayerInfo
+         */
+        public static fromObject(object: { [k: string]: any }): CoopCustomRoom.CcrRoomPlayerInfo;
+
+        /**
+         * Creates a plain object from a CcrRoomPlayerInfo message. Also converts values to other types if specified.
+         * @param message CcrRoomPlayerInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: CoopCustomRoom.CcrRoomPlayerInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this CcrRoomPlayerInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -27393,12 +27819,6 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMmReviewMap */
         MsgMmReviewMap?: (NetMessage.IMsgMmReviewMap|null);
 
-        /** MessageContainer MsgMmGetReviewingWarRuleList */
-        MsgMmGetReviewingWarRuleList?: (NetMessage.IMsgMmGetReviewingWarRuleList|null);
-
-        /** MessageContainer MsgMmReviewWarRule */
-        MsgMmReviewWarRule?: (NetMessage.IMsgMmReviewWarRule|null);
-
         /** MessageContainer MsgMmSetMapTag */
         MsgMmSetMapTag?: (NetMessage.IMsgMmSetMapTag|null);
 
@@ -27600,11 +28020,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMfrJoinRoom */
         MsgMfrJoinRoom?: (NetMessage.IMsgMfrJoinRoom|null);
 
-        /** MessageContainer MsgMfrDeleteRoomByPlayer */
-        MsgMfrDeleteRoomByPlayer?: (NetMessage.IMsgMfrDeleteRoomByPlayer|null);
-
-        /** MessageContainer MsgMfrDeleteRoomByServer */
-        MsgMfrDeleteRoomByServer?: (NetMessage.IMsgMfrDeleteRoomByServer|null);
+        /** MessageContainer MsgMfrDeleteRoom */
+        MsgMfrDeleteRoom?: (NetMessage.IMsgMfrDeleteRoom|null);
 
         /** MessageContainer MsgMfrSetReady */
         MsgMfrSetReady?: (NetMessage.IMsgMfrSetReady|null);
@@ -27618,17 +28035,17 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMfrStartWar */
         MsgMfrStartWar?: (NetMessage.IMsgMfrStartWar|null);
 
-        /** MessageContainer MsgMfrGetOwnerPlayerIndex */
-        MsgMfrGetOwnerPlayerIndex?: (NetMessage.IMsgMfrGetOwnerPlayerIndex|null);
-
         /** MessageContainer MsgMfrGetJoinedRoomIdArray */
         MsgMfrGetJoinedRoomIdArray?: (NetMessage.IMsgMfrGetJoinedRoomIdArray|null);
 
-        /** MessageContainer MsgMfrGetRoomInfo */
-        MsgMfrGetRoomInfo?: (NetMessage.IMsgMfrGetRoomInfo|null);
+        /** MessageContainer MsgMfrGetJoinableRoomIdArray */
+        MsgMfrGetJoinableRoomIdArray?: (NetMessage.IMsgMfrGetJoinableRoomIdArray|null);
 
-        /** MessageContainer MsgMfrGetJoinableRoomInfoList */
-        MsgMfrGetJoinableRoomInfoList?: (NetMessage.IMsgMfrGetJoinableRoomInfoList|null);
+        /** MessageContainer MsgMfrGetRoomStaticInfo */
+        MsgMfrGetRoomStaticInfo?: (NetMessage.IMsgMfrGetRoomStaticInfo|null);
+
+        /** MessageContainer MsgMfrGetRoomPlayerInfo */
+        MsgMfrGetRoomPlayerInfo?: (NetMessage.IMsgMfrGetRoomPlayerInfo|null);
 
         /** MessageContainer MsgCcrCreateRoom */
         MsgCcrCreateRoom?: (NetMessage.IMsgCcrCreateRoom|null);
@@ -27639,11 +28056,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgCcrJoinRoom */
         MsgCcrJoinRoom?: (NetMessage.IMsgCcrJoinRoom|null);
 
-        /** MessageContainer MsgCcrDeleteRoomByPlayer */
-        MsgCcrDeleteRoomByPlayer?: (NetMessage.IMsgCcrDeleteRoomByPlayer|null);
-
-        /** MessageContainer MsgCcrDeleteRoomByServer */
-        MsgCcrDeleteRoomByServer?: (NetMessage.IMsgCcrDeleteRoomByServer|null);
+        /** MessageContainer MsgCcrDeleteRoom */
+        MsgCcrDeleteRoom?: (NetMessage.IMsgCcrDeleteRoom|null);
 
         /** MessageContainer MsgCcrSetReady */
         MsgCcrSetReady?: (NetMessage.IMsgCcrSetReady|null);
@@ -27654,20 +28068,20 @@ export declare namespace NetMessage {
         /** MessageContainer MsgCcrSetSelfSettings */
         MsgCcrSetSelfSettings?: (NetMessage.IMsgCcrSetSelfSettings|null);
 
-        /** MessageContainer MsgCcrGetOwnerPlayerIndex */
-        MsgCcrGetOwnerPlayerIndex?: (NetMessage.IMsgCcrGetOwnerPlayerIndex|null);
-
         /** MessageContainer MsgCcrStartWar */
         MsgCcrStartWar?: (NetMessage.IMsgCcrStartWar|null);
 
-        /** MessageContainer MsgCcrGetJoinedRoomInfoList */
-        MsgCcrGetJoinedRoomInfoList?: (NetMessage.IMsgCcrGetJoinedRoomInfoList|null);
+        /** MessageContainer MsgCcrGetJoinedRoomIdArray */
+        MsgCcrGetJoinedRoomIdArray?: (NetMessage.IMsgCcrGetJoinedRoomIdArray|null);
 
-        /** MessageContainer MsgCcrGetRoomInfo */
-        MsgCcrGetRoomInfo?: (NetMessage.IMsgCcrGetRoomInfo|null);
+        /** MessageContainer MsgCcrGetJoinableRoomIdArray */
+        MsgCcrGetJoinableRoomIdArray?: (NetMessage.IMsgCcrGetJoinableRoomIdArray|null);
 
-        /** MessageContainer MsgCcrGetJoinableRoomInfoList */
-        MsgCcrGetJoinableRoomInfoList?: (NetMessage.IMsgCcrGetJoinableRoomInfoList|null);
+        /** MessageContainer MsgCcrGetRoomStaticInfo */
+        MsgCcrGetRoomStaticInfo?: (NetMessage.IMsgCcrGetRoomStaticInfo|null);
+
+        /** MessageContainer MsgCcrGetRoomPlayerInfo */
+        MsgCcrGetRoomPlayerInfo?: (NetMessage.IMsgCcrGetRoomPlayerInfo|null);
     }
 
     /** Represents a MessageContainer. */
@@ -27786,12 +28200,6 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMmReviewMap. */
         public MsgMmReviewMap?: (NetMessage.IMsgMmReviewMap|null);
-
-        /** MessageContainer MsgMmGetReviewingWarRuleList. */
-        public MsgMmGetReviewingWarRuleList?: (NetMessage.IMsgMmGetReviewingWarRuleList|null);
-
-        /** MessageContainer MsgMmReviewWarRule. */
-        public MsgMmReviewWarRule?: (NetMessage.IMsgMmReviewWarRule|null);
 
         /** MessageContainer MsgMmSetMapTag. */
         public MsgMmSetMapTag?: (NetMessage.IMsgMmSetMapTag|null);
@@ -27994,11 +28402,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMfrJoinRoom. */
         public MsgMfrJoinRoom?: (NetMessage.IMsgMfrJoinRoom|null);
 
-        /** MessageContainer MsgMfrDeleteRoomByPlayer. */
-        public MsgMfrDeleteRoomByPlayer?: (NetMessage.IMsgMfrDeleteRoomByPlayer|null);
-
-        /** MessageContainer MsgMfrDeleteRoomByServer. */
-        public MsgMfrDeleteRoomByServer?: (NetMessage.IMsgMfrDeleteRoomByServer|null);
+        /** MessageContainer MsgMfrDeleteRoom. */
+        public MsgMfrDeleteRoom?: (NetMessage.IMsgMfrDeleteRoom|null);
 
         /** MessageContainer MsgMfrSetReady. */
         public MsgMfrSetReady?: (NetMessage.IMsgMfrSetReady|null);
@@ -28012,17 +28417,17 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMfrStartWar. */
         public MsgMfrStartWar?: (NetMessage.IMsgMfrStartWar|null);
 
-        /** MessageContainer MsgMfrGetOwnerPlayerIndex. */
-        public MsgMfrGetOwnerPlayerIndex?: (NetMessage.IMsgMfrGetOwnerPlayerIndex|null);
-
         /** MessageContainer MsgMfrGetJoinedRoomIdArray. */
         public MsgMfrGetJoinedRoomIdArray?: (NetMessage.IMsgMfrGetJoinedRoomIdArray|null);
 
-        /** MessageContainer MsgMfrGetRoomInfo. */
-        public MsgMfrGetRoomInfo?: (NetMessage.IMsgMfrGetRoomInfo|null);
+        /** MessageContainer MsgMfrGetJoinableRoomIdArray. */
+        public MsgMfrGetJoinableRoomIdArray?: (NetMessage.IMsgMfrGetJoinableRoomIdArray|null);
 
-        /** MessageContainer MsgMfrGetJoinableRoomInfoList. */
-        public MsgMfrGetJoinableRoomInfoList?: (NetMessage.IMsgMfrGetJoinableRoomInfoList|null);
+        /** MessageContainer MsgMfrGetRoomStaticInfo. */
+        public MsgMfrGetRoomStaticInfo?: (NetMessage.IMsgMfrGetRoomStaticInfo|null);
+
+        /** MessageContainer MsgMfrGetRoomPlayerInfo. */
+        public MsgMfrGetRoomPlayerInfo?: (NetMessage.IMsgMfrGetRoomPlayerInfo|null);
 
         /** MessageContainer MsgCcrCreateRoom. */
         public MsgCcrCreateRoom?: (NetMessage.IMsgCcrCreateRoom|null);
@@ -28033,11 +28438,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgCcrJoinRoom. */
         public MsgCcrJoinRoom?: (NetMessage.IMsgCcrJoinRoom|null);
 
-        /** MessageContainer MsgCcrDeleteRoomByPlayer. */
-        public MsgCcrDeleteRoomByPlayer?: (NetMessage.IMsgCcrDeleteRoomByPlayer|null);
-
-        /** MessageContainer MsgCcrDeleteRoomByServer. */
-        public MsgCcrDeleteRoomByServer?: (NetMessage.IMsgCcrDeleteRoomByServer|null);
+        /** MessageContainer MsgCcrDeleteRoom. */
+        public MsgCcrDeleteRoom?: (NetMessage.IMsgCcrDeleteRoom|null);
 
         /** MessageContainer MsgCcrSetReady. */
         public MsgCcrSetReady?: (NetMessage.IMsgCcrSetReady|null);
@@ -28048,20 +28450,20 @@ export declare namespace NetMessage {
         /** MessageContainer MsgCcrSetSelfSettings. */
         public MsgCcrSetSelfSettings?: (NetMessage.IMsgCcrSetSelfSettings|null);
 
-        /** MessageContainer MsgCcrGetOwnerPlayerIndex. */
-        public MsgCcrGetOwnerPlayerIndex?: (NetMessage.IMsgCcrGetOwnerPlayerIndex|null);
-
         /** MessageContainer MsgCcrStartWar. */
         public MsgCcrStartWar?: (NetMessage.IMsgCcrStartWar|null);
 
-        /** MessageContainer MsgCcrGetJoinedRoomInfoList. */
-        public MsgCcrGetJoinedRoomInfoList?: (NetMessage.IMsgCcrGetJoinedRoomInfoList|null);
+        /** MessageContainer MsgCcrGetJoinedRoomIdArray. */
+        public MsgCcrGetJoinedRoomIdArray?: (NetMessage.IMsgCcrGetJoinedRoomIdArray|null);
 
-        /** MessageContainer MsgCcrGetRoomInfo. */
-        public MsgCcrGetRoomInfo?: (NetMessage.IMsgCcrGetRoomInfo|null);
+        /** MessageContainer MsgCcrGetJoinableRoomIdArray. */
+        public MsgCcrGetJoinableRoomIdArray?: (NetMessage.IMsgCcrGetJoinableRoomIdArray|null);
 
-        /** MessageContainer MsgCcrGetJoinableRoomInfoList. */
-        public MsgCcrGetJoinableRoomInfoList?: (NetMessage.IMsgCcrGetJoinableRoomInfoList|null);
+        /** MessageContainer MsgCcrGetRoomStaticInfo. */
+        public MsgCcrGetRoomStaticInfo?: (NetMessage.IMsgCcrGetRoomStaticInfo|null);
+
+        /** MessageContainer MsgCcrGetRoomPlayerInfo. */
+        public MsgCcrGetRoomPlayerInfo?: (NetMessage.IMsgCcrGetRoomPlayerInfo|null);
 
         /**
          * Creates a new MessageContainer instance using the specified properties.
@@ -40419,588 +40821,6 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMmReviewMap.S, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this S to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-    }
-
-    /** Properties of a MsgMmGetReviewingWarRuleList. */
-    interface IMsgMmGetReviewingWarRuleList {
-
-        /** MsgMmGetReviewingWarRuleList c */
-        c?: (NetMessage.MsgMmGetReviewingWarRuleList.IC|null);
-
-        /** MsgMmGetReviewingWarRuleList s */
-        s?: (NetMessage.MsgMmGetReviewingWarRuleList.IS|null);
-    }
-
-    /** Represents a MsgMmGetReviewingWarRuleList. */
-    class MsgMmGetReviewingWarRuleList implements IMsgMmGetReviewingWarRuleList {
-
-        /**
-         * Constructs a new MsgMmGetReviewingWarRuleList.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IMsgMmGetReviewingWarRuleList);
-
-        /** MsgMmGetReviewingWarRuleList c. */
-        public c?: (NetMessage.MsgMmGetReviewingWarRuleList.IC|null);
-
-        /** MsgMmGetReviewingWarRuleList s. */
-        public s?: (NetMessage.MsgMmGetReviewingWarRuleList.IS|null);
-
-        /**
-         * Creates a new MsgMmGetReviewingWarRuleList instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns MsgMmGetReviewingWarRuleList instance
-         */
-        public static create(properties?: NetMessage.IMsgMmGetReviewingWarRuleList): NetMessage.MsgMmGetReviewingWarRuleList;
-
-        /**
-         * Encodes the specified MsgMmGetReviewingWarRuleList message. Does not implicitly {@link NetMessage.MsgMmGetReviewingWarRuleList.verify|verify} messages.
-         * @param message MsgMmGetReviewingWarRuleList message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IMsgMmGetReviewingWarRuleList, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified MsgMmGetReviewingWarRuleList message, length delimited. Does not implicitly {@link NetMessage.MsgMmGetReviewingWarRuleList.verify|verify} messages.
-         * @param message MsgMmGetReviewingWarRuleList message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IMsgMmGetReviewingWarRuleList, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a MsgMmGetReviewingWarRuleList message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns MsgMmGetReviewingWarRuleList
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmGetReviewingWarRuleList;
-
-        /**
-         * Decodes a MsgMmGetReviewingWarRuleList message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MsgMmGetReviewingWarRuleList
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmGetReviewingWarRuleList;
-
-        /**
-         * Verifies a MsgMmGetReviewingWarRuleList message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MsgMmGetReviewingWarRuleList message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MsgMmGetReviewingWarRuleList
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmGetReviewingWarRuleList;
-
-        /**
-         * Creates a plain object from a MsgMmGetReviewingWarRuleList message. Also converts values to other types if specified.
-         * @param message MsgMmGetReviewingWarRuleList
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.MsgMmGetReviewingWarRuleList, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MsgMmGetReviewingWarRuleList to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    namespace MsgMmGetReviewingWarRuleList {
-
-        /** Properties of a C. */
-        interface IC {
-        }
-
-        /** Represents a C. */
-        class C implements IC {
-
-            /**
-             * Constructs a new C.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgMmGetReviewingWarRuleList.IC);
-
-            /**
-             * Creates a new C instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns C instance
-             */
-            public static create(properties?: NetMessage.MsgMmGetReviewingWarRuleList.IC): NetMessage.MsgMmGetReviewingWarRuleList.C;
-
-            /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmGetReviewingWarRuleList.C.verify|verify} messages.
-             * @param message C message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgMmGetReviewingWarRuleList.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmGetReviewingWarRuleList.C.verify|verify} messages.
-             * @param message C message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgMmGetReviewingWarRuleList.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a C message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns C
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmGetReviewingWarRuleList.C;
-
-            /**
-             * Decodes a C message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns C
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmGetReviewingWarRuleList.C;
-
-            /**
-             * Verifies a C message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a C message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns C
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmGetReviewingWarRuleList.C;
-
-            /**
-             * Creates a plain object from a C message. Also converts values to other types if specified.
-             * @param message C
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgMmGetReviewingWarRuleList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this C to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a S. */
-        interface IS {
-
-            /** S errorCode */
-            errorCode?: (number|null);
-
-            /** S dataList */
-            dataList?: (Structure.IDataForReviewWarRule[]|null);
-        }
-
-        /** Represents a S. */
-        class S implements IS {
-
-            /**
-             * Constructs a new S.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgMmGetReviewingWarRuleList.IS);
-
-            /** S errorCode. */
-            public errorCode: number;
-
-            /** S dataList. */
-            public dataList: Structure.IDataForReviewWarRule[];
-
-            /**
-             * Creates a new S instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns S instance
-             */
-            public static create(properties?: NetMessage.MsgMmGetReviewingWarRuleList.IS): NetMessage.MsgMmGetReviewingWarRuleList.S;
-
-            /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmGetReviewingWarRuleList.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgMmGetReviewingWarRuleList.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmGetReviewingWarRuleList.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgMmGetReviewingWarRuleList.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a S message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmGetReviewingWarRuleList.S;
-
-            /**
-             * Decodes a S message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmGetReviewingWarRuleList.S;
-
-            /**
-             * Verifies a S message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a S message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns S
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmGetReviewingWarRuleList.S;
-
-            /**
-             * Creates a plain object from a S message. Also converts values to other types if specified.
-             * @param message S
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgMmGetReviewingWarRuleList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this S to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-    }
-
-    /** Properties of a MsgMmReviewWarRule. */
-    interface IMsgMmReviewWarRule {
-
-        /** MsgMmReviewWarRule c */
-        c?: (NetMessage.MsgMmReviewWarRule.IC|null);
-
-        /** MsgMmReviewWarRule s */
-        s?: (NetMessage.MsgMmReviewWarRule.IS|null);
-    }
-
-    /** Represents a MsgMmReviewWarRule. */
-    class MsgMmReviewWarRule implements IMsgMmReviewWarRule {
-
-        /**
-         * Constructs a new MsgMmReviewWarRule.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IMsgMmReviewWarRule);
-
-        /** MsgMmReviewWarRule c. */
-        public c?: (NetMessage.MsgMmReviewWarRule.IC|null);
-
-        /** MsgMmReviewWarRule s. */
-        public s?: (NetMessage.MsgMmReviewWarRule.IS|null);
-
-        /**
-         * Creates a new MsgMmReviewWarRule instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns MsgMmReviewWarRule instance
-         */
-        public static create(properties?: NetMessage.IMsgMmReviewWarRule): NetMessage.MsgMmReviewWarRule;
-
-        /**
-         * Encodes the specified MsgMmReviewWarRule message. Does not implicitly {@link NetMessage.MsgMmReviewWarRule.verify|verify} messages.
-         * @param message MsgMmReviewWarRule message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IMsgMmReviewWarRule, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified MsgMmReviewWarRule message, length delimited. Does not implicitly {@link NetMessage.MsgMmReviewWarRule.verify|verify} messages.
-         * @param message MsgMmReviewWarRule message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IMsgMmReviewWarRule, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a MsgMmReviewWarRule message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns MsgMmReviewWarRule
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmReviewWarRule;
-
-        /**
-         * Decodes a MsgMmReviewWarRule message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MsgMmReviewWarRule
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmReviewWarRule;
-
-        /**
-         * Verifies a MsgMmReviewWarRule message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MsgMmReviewWarRule message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MsgMmReviewWarRule
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmReviewWarRule;
-
-        /**
-         * Creates a plain object from a MsgMmReviewWarRule message. Also converts values to other types if specified.
-         * @param message MsgMmReviewWarRule
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.MsgMmReviewWarRule, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MsgMmReviewWarRule to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    namespace MsgMmReviewWarRule {
-
-        /** Properties of a C. */
-        interface IC {
-
-            /** C submitterUserId */
-            submitterUserId?: (number|null);
-
-            /** C submitTimestamp */
-            submitTimestamp?: (number|null);
-
-            /** C isAccept */
-            isAccept?: (boolean|null);
-
-            /** C reviewComment */
-            reviewComment?: (string|null);
-        }
-
-        /** Represents a C. */
-        class C implements IC {
-
-            /**
-             * Constructs a new C.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgMmReviewWarRule.IC);
-
-            /** C submitterUserId. */
-            public submitterUserId: number;
-
-            /** C submitTimestamp. */
-            public submitTimestamp: number;
-
-            /** C isAccept. */
-            public isAccept: boolean;
-
-            /** C reviewComment. */
-            public reviewComment: string;
-
-            /**
-             * Creates a new C instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns C instance
-             */
-            public static create(properties?: NetMessage.MsgMmReviewWarRule.IC): NetMessage.MsgMmReviewWarRule.C;
-
-            /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmReviewWarRule.C.verify|verify} messages.
-             * @param message C message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgMmReviewWarRule.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmReviewWarRule.C.verify|verify} messages.
-             * @param message C message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgMmReviewWarRule.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a C message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns C
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmReviewWarRule.C;
-
-            /**
-             * Decodes a C message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns C
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmReviewWarRule.C;
-
-            /**
-             * Verifies a C message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a C message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns C
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmReviewWarRule.C;
-
-            /**
-             * Creates a plain object from a C message. Also converts values to other types if specified.
-             * @param message C
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgMmReviewWarRule.C, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this C to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a S. */
-        interface IS {
-
-            /** S errorCode */
-            errorCode?: (number|null);
-
-            /** S isAccept */
-            isAccept?: (boolean|null);
-        }
-
-        /** Represents a S. */
-        class S implements IS {
-
-            /**
-             * Constructs a new S.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgMmReviewWarRule.IS);
-
-            /** S errorCode. */
-            public errorCode: number;
-
-            /** S isAccept. */
-            public isAccept: boolean;
-
-            /**
-             * Creates a new S instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns S instance
-             */
-            public static create(properties?: NetMessage.MsgMmReviewWarRule.IS): NetMessage.MsgMmReviewWarRule.S;
-
-            /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmReviewWarRule.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgMmReviewWarRule.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmReviewWarRule.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgMmReviewWarRule.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a S message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmReviewWarRule.S;
-
-            /**
-             * Decodes a S message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmReviewWarRule.S;
-
-            /**
-             * Verifies a S message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a S message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns S
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmReviewWarRule.S;
-
-            /**
-             * Creates a plain object from a S message. Also converts values to other types if specified.
-             * @param message S
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgMmReviewWarRule.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -58319,8 +58139,8 @@ export declare namespace NetMessage {
             /** S roomId */
             roomId?: (number|null);
 
-            /** S playerIndex */
-            playerIndex?: (number|null);
+            /** S exitType */
+            exitType?: (number|null);
         }
 
         /** Represents a S. */
@@ -58338,8 +58158,8 @@ export declare namespace NetMessage {
             /** S roomId. */
             public roomId: number;
 
-            /** S playerIndex. */
-            public playerIndex: number;
+            /** S exitType. */
+            public exitType: number;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -58692,103 +58512,388 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgMfrGetRoomInfo. */
-    interface IMsgMfrGetRoomInfo {
+    /** Properties of a MsgMfrGetJoinableRoomIdArray. */
+    interface IMsgMfrGetJoinableRoomIdArray {
 
-        /** MsgMfrGetRoomInfo c */
-        c?: (NetMessage.MsgMfrGetRoomInfo.IC|null);
+        /** MsgMfrGetJoinableRoomIdArray c */
+        c?: (NetMessage.MsgMfrGetJoinableRoomIdArray.IC|null);
 
-        /** MsgMfrGetRoomInfo s */
-        s?: (NetMessage.MsgMfrGetRoomInfo.IS|null);
+        /** MsgMfrGetJoinableRoomIdArray s */
+        s?: (NetMessage.MsgMfrGetJoinableRoomIdArray.IS|null);
     }
 
-    /** Represents a MsgMfrGetRoomInfo. */
-    class MsgMfrGetRoomInfo implements IMsgMfrGetRoomInfo {
+    /** Represents a MsgMfrGetJoinableRoomIdArray. */
+    class MsgMfrGetJoinableRoomIdArray implements IMsgMfrGetJoinableRoomIdArray {
 
         /**
-         * Constructs a new MsgMfrGetRoomInfo.
+         * Constructs a new MsgMfrGetJoinableRoomIdArray.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgMfrGetRoomInfo);
+        constructor(properties?: NetMessage.IMsgMfrGetJoinableRoomIdArray);
 
-        /** MsgMfrGetRoomInfo c. */
-        public c?: (NetMessage.MsgMfrGetRoomInfo.IC|null);
+        /** MsgMfrGetJoinableRoomIdArray c. */
+        public c?: (NetMessage.MsgMfrGetJoinableRoomIdArray.IC|null);
 
-        /** MsgMfrGetRoomInfo s. */
-        public s?: (NetMessage.MsgMfrGetRoomInfo.IS|null);
+        /** MsgMfrGetJoinableRoomIdArray s. */
+        public s?: (NetMessage.MsgMfrGetJoinableRoomIdArray.IS|null);
 
         /**
-         * Creates a new MsgMfrGetRoomInfo instance using the specified properties.
+         * Creates a new MsgMfrGetJoinableRoomIdArray instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgMfrGetRoomInfo instance
+         * @returns MsgMfrGetJoinableRoomIdArray instance
          */
-        public static create(properties?: NetMessage.IMsgMfrGetRoomInfo): NetMessage.MsgMfrGetRoomInfo;
+        public static create(properties?: NetMessage.IMsgMfrGetJoinableRoomIdArray): NetMessage.MsgMfrGetJoinableRoomIdArray;
 
         /**
-         * Encodes the specified MsgMfrGetRoomInfo message. Does not implicitly {@link NetMessage.MsgMfrGetRoomInfo.verify|verify} messages.
-         * @param message MsgMfrGetRoomInfo message or plain object to encode
+         * Encodes the specified MsgMfrGetJoinableRoomIdArray message. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomIdArray.verify|verify} messages.
+         * @param message MsgMfrGetJoinableRoomIdArray message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgMfrGetRoomInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgMfrGetJoinableRoomIdArray, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgMfrGetRoomInfo message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetRoomInfo.verify|verify} messages.
-         * @param message MsgMfrGetRoomInfo message or plain object to encode
+         * Encodes the specified MsgMfrGetJoinableRoomIdArray message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomIdArray.verify|verify} messages.
+         * @param message MsgMfrGetJoinableRoomIdArray message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgMfrGetRoomInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgMfrGetJoinableRoomIdArray, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgMfrGetRoomInfo message from the specified reader or buffer.
+         * Decodes a MsgMfrGetJoinableRoomIdArray message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgMfrGetRoomInfo
+         * @returns MsgMfrGetJoinableRoomIdArray
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetRoomInfo;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetJoinableRoomIdArray;
 
         /**
-         * Decodes a MsgMfrGetRoomInfo message from the specified reader or buffer, length delimited.
+         * Decodes a MsgMfrGetJoinableRoomIdArray message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgMfrGetRoomInfo
+         * @returns MsgMfrGetJoinableRoomIdArray
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetRoomInfo;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetJoinableRoomIdArray;
 
         /**
-         * Verifies a MsgMfrGetRoomInfo message.
+         * Verifies a MsgMfrGetJoinableRoomIdArray message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgMfrGetRoomInfo message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgMfrGetJoinableRoomIdArray message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgMfrGetRoomInfo
+         * @returns MsgMfrGetJoinableRoomIdArray
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetRoomInfo;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetJoinableRoomIdArray;
 
         /**
-         * Creates a plain object from a MsgMfrGetRoomInfo message. Also converts values to other types if specified.
-         * @param message MsgMfrGetRoomInfo
+         * Creates a plain object from a MsgMfrGetJoinableRoomIdArray message. Also converts values to other types if specified.
+         * @param message MsgMfrGetJoinableRoomIdArray
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgMfrGetRoomInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgMfrGetJoinableRoomIdArray, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgMfrGetRoomInfo to JSON.
+         * Converts this MsgMfrGetJoinableRoomIdArray to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgMfrGetRoomInfo {
+    namespace MsgMfrGetJoinableRoomIdArray {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C roomFilter */
+            roomFilter?: (MultiFreeRoom.IRoomFilter|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMfrGetJoinableRoomIdArray.IC);
+
+            /** C roomFilter. */
+            public roomFilter?: (MultiFreeRoom.IRoomFilter|null);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgMfrGetJoinableRoomIdArray.IC): NetMessage.MsgMfrGetJoinableRoomIdArray.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomIdArray.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMfrGetJoinableRoomIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomIdArray.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMfrGetJoinableRoomIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetJoinableRoomIdArray.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetJoinableRoomIdArray.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetJoinableRoomIdArray.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMfrGetJoinableRoomIdArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S roomIdArray */
+            roomIdArray?: (number[]|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMfrGetJoinableRoomIdArray.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S roomIdArray. */
+            public roomIdArray: number[];
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMfrGetJoinableRoomIdArray.IS): NetMessage.MsgMfrGetJoinableRoomIdArray.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomIdArray.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMfrGetJoinableRoomIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomIdArray.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMfrGetJoinableRoomIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetJoinableRoomIdArray.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetJoinableRoomIdArray.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetJoinableRoomIdArray.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMfrGetJoinableRoomIdArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMfrGetRoomStaticInfo. */
+    interface IMsgMfrGetRoomStaticInfo {
+
+        /** MsgMfrGetRoomStaticInfo c */
+        c?: (NetMessage.MsgMfrGetRoomStaticInfo.IC|null);
+
+        /** MsgMfrGetRoomStaticInfo s */
+        s?: (NetMessage.MsgMfrGetRoomStaticInfo.IS|null);
+    }
+
+    /** Represents a MsgMfrGetRoomStaticInfo. */
+    class MsgMfrGetRoomStaticInfo implements IMsgMfrGetRoomStaticInfo {
+
+        /**
+         * Constructs a new MsgMfrGetRoomStaticInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMfrGetRoomStaticInfo);
+
+        /** MsgMfrGetRoomStaticInfo c. */
+        public c?: (NetMessage.MsgMfrGetRoomStaticInfo.IC|null);
+
+        /** MsgMfrGetRoomStaticInfo s. */
+        public s?: (NetMessage.MsgMfrGetRoomStaticInfo.IS|null);
+
+        /**
+         * Creates a new MsgMfrGetRoomStaticInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMfrGetRoomStaticInfo instance
+         */
+        public static create(properties?: NetMessage.IMsgMfrGetRoomStaticInfo): NetMessage.MsgMfrGetRoomStaticInfo;
+
+        /**
+         * Encodes the specified MsgMfrGetRoomStaticInfo message. Does not implicitly {@link NetMessage.MsgMfrGetRoomStaticInfo.verify|verify} messages.
+         * @param message MsgMfrGetRoomStaticInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMfrGetRoomStaticInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMfrGetRoomStaticInfo message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetRoomStaticInfo.verify|verify} messages.
+         * @param message MsgMfrGetRoomStaticInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMfrGetRoomStaticInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMfrGetRoomStaticInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMfrGetRoomStaticInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetRoomStaticInfo;
+
+        /**
+         * Decodes a MsgMfrGetRoomStaticInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMfrGetRoomStaticInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetRoomStaticInfo;
+
+        /**
+         * Verifies a MsgMfrGetRoomStaticInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMfrGetRoomStaticInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMfrGetRoomStaticInfo
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetRoomStaticInfo;
+
+        /**
+         * Creates a plain object from a MsgMfrGetRoomStaticInfo message. Also converts values to other types if specified.
+         * @param message MsgMfrGetRoomStaticInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMfrGetRoomStaticInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMfrGetRoomStaticInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMfrGetRoomStaticInfo {
 
         /** Properties of a C. */
         interface IC {
@@ -58804,7 +58909,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMfrGetRoomInfo.IC);
+            constructor(properties?: NetMessage.MsgMfrGetRoomStaticInfo.IC);
 
             /** C roomId. */
             public roomId: number;
@@ -58814,23 +58919,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgMfrGetRoomInfo.IC): NetMessage.MsgMfrGetRoomInfo.C;
+            public static create(properties?: NetMessage.MsgMfrGetRoomStaticInfo.IC): NetMessage.MsgMfrGetRoomStaticInfo.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMfrGetRoomInfo.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMfrGetRoomStaticInfo.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMfrGetRoomInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMfrGetRoomStaticInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetRoomInfo.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetRoomStaticInfo.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMfrGetRoomInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMfrGetRoomStaticInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -58840,7 +58945,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetRoomInfo.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetRoomStaticInfo.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -58849,7 +58954,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetRoomInfo.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetRoomStaticInfo.C;
 
             /**
              * Verifies a C message.
@@ -58863,7 +58968,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetRoomInfo.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetRoomStaticInfo.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -58871,7 +58976,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMfrGetRoomInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMfrGetRoomStaticInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -58889,8 +58994,8 @@ export declare namespace NetMessage {
             /** S roomId */
             roomId?: (number|null);
 
-            /** S roomInfo */
-            roomInfo?: (MultiFreeRoom.IMfrRoomInfo|null);
+            /** S roomStaticInfo */
+            roomStaticInfo?: (MultiFreeRoom.IMfrRoomStaticInfo|null);
         }
 
         /** Represents a S. */
@@ -58900,7 +59005,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMfrGetRoomInfo.IS);
+            constructor(properties?: NetMessage.MsgMfrGetRoomStaticInfo.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -58908,31 +59013,31 @@ export declare namespace NetMessage {
             /** S roomId. */
             public roomId: number;
 
-            /** S roomInfo. */
-            public roomInfo?: (MultiFreeRoom.IMfrRoomInfo|null);
+            /** S roomStaticInfo. */
+            public roomStaticInfo?: (MultiFreeRoom.IMfrRoomStaticInfo|null);
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgMfrGetRoomInfo.IS): NetMessage.MsgMfrGetRoomInfo.S;
+            public static create(properties?: NetMessage.MsgMfrGetRoomStaticInfo.IS): NetMessage.MsgMfrGetRoomStaticInfo.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMfrGetRoomInfo.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMfrGetRoomStaticInfo.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMfrGetRoomInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMfrGetRoomStaticInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetRoomInfo.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetRoomStaticInfo.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMfrGetRoomInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMfrGetRoomStaticInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -58942,7 +59047,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetRoomInfo.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetRoomStaticInfo.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -58951,7 +59056,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetRoomInfo.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetRoomStaticInfo.S;
 
             /**
              * Verifies a S message.
@@ -58965,7 +59070,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetRoomInfo.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetRoomStaticInfo.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -58973,7 +59078,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMfrGetRoomInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMfrGetRoomStaticInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -58983,109 +59088,109 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgMfrGetJoinableRoomInfoList. */
-    interface IMsgMfrGetJoinableRoomInfoList {
+    /** Properties of a MsgMfrGetRoomPlayerInfo. */
+    interface IMsgMfrGetRoomPlayerInfo {
 
-        /** MsgMfrGetJoinableRoomInfoList c */
-        c?: (NetMessage.MsgMfrGetJoinableRoomInfoList.IC|null);
+        /** MsgMfrGetRoomPlayerInfo c */
+        c?: (NetMessage.MsgMfrGetRoomPlayerInfo.IC|null);
 
-        /** MsgMfrGetJoinableRoomInfoList s */
-        s?: (NetMessage.MsgMfrGetJoinableRoomInfoList.IS|null);
+        /** MsgMfrGetRoomPlayerInfo s */
+        s?: (NetMessage.MsgMfrGetRoomPlayerInfo.IS|null);
     }
 
-    /** Represents a MsgMfrGetJoinableRoomInfoList. */
-    class MsgMfrGetJoinableRoomInfoList implements IMsgMfrGetJoinableRoomInfoList {
+    /** Represents a MsgMfrGetRoomPlayerInfo. */
+    class MsgMfrGetRoomPlayerInfo implements IMsgMfrGetRoomPlayerInfo {
 
         /**
-         * Constructs a new MsgMfrGetJoinableRoomInfoList.
+         * Constructs a new MsgMfrGetRoomPlayerInfo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgMfrGetJoinableRoomInfoList);
+        constructor(properties?: NetMessage.IMsgMfrGetRoomPlayerInfo);
 
-        /** MsgMfrGetJoinableRoomInfoList c. */
-        public c?: (NetMessage.MsgMfrGetJoinableRoomInfoList.IC|null);
+        /** MsgMfrGetRoomPlayerInfo c. */
+        public c?: (NetMessage.MsgMfrGetRoomPlayerInfo.IC|null);
 
-        /** MsgMfrGetJoinableRoomInfoList s. */
-        public s?: (NetMessage.MsgMfrGetJoinableRoomInfoList.IS|null);
+        /** MsgMfrGetRoomPlayerInfo s. */
+        public s?: (NetMessage.MsgMfrGetRoomPlayerInfo.IS|null);
 
         /**
-         * Creates a new MsgMfrGetJoinableRoomInfoList instance using the specified properties.
+         * Creates a new MsgMfrGetRoomPlayerInfo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgMfrGetJoinableRoomInfoList instance
+         * @returns MsgMfrGetRoomPlayerInfo instance
          */
-        public static create(properties?: NetMessage.IMsgMfrGetJoinableRoomInfoList): NetMessage.MsgMfrGetJoinableRoomInfoList;
+        public static create(properties?: NetMessage.IMsgMfrGetRoomPlayerInfo): NetMessage.MsgMfrGetRoomPlayerInfo;
 
         /**
-         * Encodes the specified MsgMfrGetJoinableRoomInfoList message. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomInfoList.verify|verify} messages.
-         * @param message MsgMfrGetJoinableRoomInfoList message or plain object to encode
+         * Encodes the specified MsgMfrGetRoomPlayerInfo message. Does not implicitly {@link NetMessage.MsgMfrGetRoomPlayerInfo.verify|verify} messages.
+         * @param message MsgMfrGetRoomPlayerInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgMfrGetJoinableRoomInfoList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgMfrGetRoomPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgMfrGetJoinableRoomInfoList message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomInfoList.verify|verify} messages.
-         * @param message MsgMfrGetJoinableRoomInfoList message or plain object to encode
+         * Encodes the specified MsgMfrGetRoomPlayerInfo message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetRoomPlayerInfo.verify|verify} messages.
+         * @param message MsgMfrGetRoomPlayerInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgMfrGetJoinableRoomInfoList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgMfrGetRoomPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgMfrGetJoinableRoomInfoList message from the specified reader or buffer.
+         * Decodes a MsgMfrGetRoomPlayerInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgMfrGetJoinableRoomInfoList
+         * @returns MsgMfrGetRoomPlayerInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetJoinableRoomInfoList;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetRoomPlayerInfo;
 
         /**
-         * Decodes a MsgMfrGetJoinableRoomInfoList message from the specified reader or buffer, length delimited.
+         * Decodes a MsgMfrGetRoomPlayerInfo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgMfrGetJoinableRoomInfoList
+         * @returns MsgMfrGetRoomPlayerInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetJoinableRoomInfoList;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetRoomPlayerInfo;
 
         /**
-         * Verifies a MsgMfrGetJoinableRoomInfoList message.
+         * Verifies a MsgMfrGetRoomPlayerInfo message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgMfrGetJoinableRoomInfoList message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgMfrGetRoomPlayerInfo message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgMfrGetJoinableRoomInfoList
+         * @returns MsgMfrGetRoomPlayerInfo
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetJoinableRoomInfoList;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetRoomPlayerInfo;
 
         /**
-         * Creates a plain object from a MsgMfrGetJoinableRoomInfoList message. Also converts values to other types if specified.
-         * @param message MsgMfrGetJoinableRoomInfoList
+         * Creates a plain object from a MsgMfrGetRoomPlayerInfo message. Also converts values to other types if specified.
+         * @param message MsgMfrGetRoomPlayerInfo
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgMfrGetJoinableRoomInfoList, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgMfrGetRoomPlayerInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgMfrGetJoinableRoomInfoList to JSON.
+         * Converts this MsgMfrGetRoomPlayerInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgMfrGetJoinableRoomInfoList {
+    namespace MsgMfrGetRoomPlayerInfo {
 
         /** Properties of a C. */
         interface IC {
 
-            /** C roomFilter */
-            roomFilter?: (MultiFreeRoom.IRoomFilter|null);
+            /** C roomId */
+            roomId?: (number|null);
         }
 
         /** Represents a C. */
@@ -59095,33 +59200,33 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMfrGetJoinableRoomInfoList.IC);
+            constructor(properties?: NetMessage.MsgMfrGetRoomPlayerInfo.IC);
 
-            /** C roomFilter. */
-            public roomFilter?: (MultiFreeRoom.IRoomFilter|null);
+            /** C roomId. */
+            public roomId: number;
 
             /**
              * Creates a new C instance using the specified properties.
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgMfrGetJoinableRoomInfoList.IC): NetMessage.MsgMfrGetJoinableRoomInfoList.C;
+            public static create(properties?: NetMessage.MsgMfrGetRoomPlayerInfo.IC): NetMessage.MsgMfrGetRoomPlayerInfo.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomInfoList.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMfrGetRoomPlayerInfo.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMfrGetJoinableRoomInfoList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMfrGetRoomPlayerInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomInfoList.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetRoomPlayerInfo.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMfrGetJoinableRoomInfoList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMfrGetRoomPlayerInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -59131,7 +59236,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetJoinableRoomInfoList.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetRoomPlayerInfo.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -59140,7 +59245,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetJoinableRoomInfoList.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetRoomPlayerInfo.C;
 
             /**
              * Verifies a C message.
@@ -59154,7 +59259,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetJoinableRoomInfoList.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetRoomPlayerInfo.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -59162,7 +59267,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMfrGetJoinableRoomInfoList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMfrGetRoomPlayerInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -59177,8 +59282,11 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S roomInfoList */
-            roomInfoList?: (MultiFreeRoom.IMfrRoomInfo[]|null);
+            /** S roomId */
+            roomId?: (number|null);
+
+            /** S roomPlayerInfo */
+            roomPlayerInfo?: (MultiFreeRoom.IMfrRoomPlayerInfo|null);
         }
 
         /** Represents a S. */
@@ -59188,36 +59296,39 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMfrGetJoinableRoomInfoList.IS);
+            constructor(properties?: NetMessage.MsgMfrGetRoomPlayerInfo.IS);
 
             /** S errorCode. */
             public errorCode: number;
 
-            /** S roomInfoList. */
-            public roomInfoList: MultiFreeRoom.IMfrRoomInfo[];
+            /** S roomId. */
+            public roomId: number;
+
+            /** S roomPlayerInfo. */
+            public roomPlayerInfo?: (MultiFreeRoom.IMfrRoomPlayerInfo|null);
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgMfrGetJoinableRoomInfoList.IS): NetMessage.MsgMfrGetJoinableRoomInfoList.S;
+            public static create(properties?: NetMessage.MsgMfrGetRoomPlayerInfo.IS): NetMessage.MsgMfrGetRoomPlayerInfo.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomInfoList.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMfrGetRoomPlayerInfo.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMfrGetJoinableRoomInfoList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMfrGetRoomPlayerInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetJoinableRoomInfoList.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetRoomPlayerInfo.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMfrGetJoinableRoomInfoList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMfrGetRoomPlayerInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -59227,7 +59338,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetJoinableRoomInfoList.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetRoomPlayerInfo.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -59236,7 +59347,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetJoinableRoomInfoList.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetRoomPlayerInfo.S;
 
             /**
              * Verifies a S message.
@@ -59250,7 +59361,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetJoinableRoomInfoList.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetRoomPlayerInfo.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -59258,7 +59369,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMfrGetJoinableRoomInfoList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMfrGetRoomPlayerInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -59474,9 +59585,6 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S userId */
-            userId?: (number|null);
-
             /** S roomId */
             roomId?: (number|null);
 
@@ -59498,9 +59606,6 @@ export declare namespace NetMessage {
 
             /** S errorCode. */
             public errorCode: number;
-
-            /** S userId. */
-            public userId: number;
 
             /** S roomId. */
             public roomId: number;
@@ -59583,103 +59688,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgMfrDeleteRoomByPlayer. */
-    interface IMsgMfrDeleteRoomByPlayer {
+    /** Properties of a MsgMfrDeleteRoom. */
+    interface IMsgMfrDeleteRoom {
 
-        /** MsgMfrDeleteRoomByPlayer c */
-        c?: (NetMessage.MsgMfrDeleteRoomByPlayer.IC|null);
+        /** MsgMfrDeleteRoom c */
+        c?: (NetMessage.MsgMfrDeleteRoom.IC|null);
 
-        /** MsgMfrDeleteRoomByPlayer s */
-        s?: (NetMessage.MsgMfrDeleteRoomByPlayer.IS|null);
+        /** MsgMfrDeleteRoom s */
+        s?: (NetMessage.MsgMfrDeleteRoom.IS|null);
     }
 
-    /** Represents a MsgMfrDeleteRoomByPlayer. */
-    class MsgMfrDeleteRoomByPlayer implements IMsgMfrDeleteRoomByPlayer {
+    /** Represents a MsgMfrDeleteRoom. */
+    class MsgMfrDeleteRoom implements IMsgMfrDeleteRoom {
 
         /**
-         * Constructs a new MsgMfrDeleteRoomByPlayer.
+         * Constructs a new MsgMfrDeleteRoom.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgMfrDeleteRoomByPlayer);
+        constructor(properties?: NetMessage.IMsgMfrDeleteRoom);
 
-        /** MsgMfrDeleteRoomByPlayer c. */
-        public c?: (NetMessage.MsgMfrDeleteRoomByPlayer.IC|null);
+        /** MsgMfrDeleteRoom c. */
+        public c?: (NetMessage.MsgMfrDeleteRoom.IC|null);
 
-        /** MsgMfrDeleteRoomByPlayer s. */
-        public s?: (NetMessage.MsgMfrDeleteRoomByPlayer.IS|null);
+        /** MsgMfrDeleteRoom s. */
+        public s?: (NetMessage.MsgMfrDeleteRoom.IS|null);
 
         /**
-         * Creates a new MsgMfrDeleteRoomByPlayer instance using the specified properties.
+         * Creates a new MsgMfrDeleteRoom instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgMfrDeleteRoomByPlayer instance
+         * @returns MsgMfrDeleteRoom instance
          */
-        public static create(properties?: NetMessage.IMsgMfrDeleteRoomByPlayer): NetMessage.MsgMfrDeleteRoomByPlayer;
+        public static create(properties?: NetMessage.IMsgMfrDeleteRoom): NetMessage.MsgMfrDeleteRoom;
 
         /**
-         * Encodes the specified MsgMfrDeleteRoomByPlayer message. Does not implicitly {@link NetMessage.MsgMfrDeleteRoomByPlayer.verify|verify} messages.
-         * @param message MsgMfrDeleteRoomByPlayer message or plain object to encode
+         * Encodes the specified MsgMfrDeleteRoom message. Does not implicitly {@link NetMessage.MsgMfrDeleteRoom.verify|verify} messages.
+         * @param message MsgMfrDeleteRoom message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgMfrDeleteRoomByPlayer, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgMfrDeleteRoom, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgMfrDeleteRoomByPlayer message, length delimited. Does not implicitly {@link NetMessage.MsgMfrDeleteRoomByPlayer.verify|verify} messages.
-         * @param message MsgMfrDeleteRoomByPlayer message or plain object to encode
+         * Encodes the specified MsgMfrDeleteRoom message, length delimited. Does not implicitly {@link NetMessage.MsgMfrDeleteRoom.verify|verify} messages.
+         * @param message MsgMfrDeleteRoom message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgMfrDeleteRoomByPlayer, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgMfrDeleteRoom, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgMfrDeleteRoomByPlayer message from the specified reader or buffer.
+         * Decodes a MsgMfrDeleteRoom message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgMfrDeleteRoomByPlayer
+         * @returns MsgMfrDeleteRoom
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrDeleteRoomByPlayer;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrDeleteRoom;
 
         /**
-         * Decodes a MsgMfrDeleteRoomByPlayer message from the specified reader or buffer, length delimited.
+         * Decodes a MsgMfrDeleteRoom message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgMfrDeleteRoomByPlayer
+         * @returns MsgMfrDeleteRoom
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrDeleteRoomByPlayer;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrDeleteRoom;
 
         /**
-         * Verifies a MsgMfrDeleteRoomByPlayer message.
+         * Verifies a MsgMfrDeleteRoom message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgMfrDeleteRoomByPlayer message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgMfrDeleteRoom message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgMfrDeleteRoomByPlayer
+         * @returns MsgMfrDeleteRoom
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrDeleteRoomByPlayer;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrDeleteRoom;
 
         /**
-         * Creates a plain object from a MsgMfrDeleteRoomByPlayer message. Also converts values to other types if specified.
-         * @param message MsgMfrDeleteRoomByPlayer
+         * Creates a plain object from a MsgMfrDeleteRoom message. Also converts values to other types if specified.
+         * @param message MsgMfrDeleteRoom
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgMfrDeleteRoomByPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgMfrDeleteRoom, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgMfrDeleteRoomByPlayer to JSON.
+         * Converts this MsgMfrDeleteRoom to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgMfrDeleteRoomByPlayer {
+    namespace MsgMfrDeleteRoom {
 
         /** Properties of a C. */
         interface IC {
@@ -59695,7 +59800,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMfrDeleteRoomByPlayer.IC);
+            constructor(properties?: NetMessage.MsgMfrDeleteRoom.IC);
 
             /** C roomId. */
             public roomId: number;
@@ -59705,23 +59810,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgMfrDeleteRoomByPlayer.IC): NetMessage.MsgMfrDeleteRoomByPlayer.C;
+            public static create(properties?: NetMessage.MsgMfrDeleteRoom.IC): NetMessage.MsgMfrDeleteRoom.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMfrDeleteRoomByPlayer.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMfrDeleteRoom.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMfrDeleteRoomByPlayer.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMfrDeleteRoom.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMfrDeleteRoomByPlayer.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMfrDeleteRoom.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMfrDeleteRoomByPlayer.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMfrDeleteRoom.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -59731,7 +59836,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrDeleteRoomByPlayer.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrDeleteRoom.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -59740,7 +59845,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrDeleteRoomByPlayer.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrDeleteRoom.C;
 
             /**
              * Verifies a C message.
@@ -59754,7 +59859,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrDeleteRoomByPlayer.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrDeleteRoom.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -59762,7 +59867,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMfrDeleteRoomByPlayer.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMfrDeleteRoom.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -59788,7 +59893,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMfrDeleteRoomByPlayer.IS);
+            constructor(properties?: NetMessage.MsgMfrDeleteRoom.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -59801,23 +59906,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgMfrDeleteRoomByPlayer.IS): NetMessage.MsgMfrDeleteRoomByPlayer.S;
+            public static create(properties?: NetMessage.MsgMfrDeleteRoom.IS): NetMessage.MsgMfrDeleteRoom.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMfrDeleteRoomByPlayer.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMfrDeleteRoom.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMfrDeleteRoomByPlayer.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMfrDeleteRoom.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMfrDeleteRoomByPlayer.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMfrDeleteRoom.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMfrDeleteRoomByPlayer.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMfrDeleteRoom.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -59827,7 +59932,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrDeleteRoomByPlayer.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrDeleteRoom.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -59836,7 +59941,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrDeleteRoomByPlayer.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrDeleteRoom.S;
 
             /**
              * Verifies a S message.
@@ -59850,7 +59955,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrDeleteRoomByPlayer.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrDeleteRoom.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -59858,196 +59963,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMfrDeleteRoomByPlayer.S, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this S to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-    }
-
-    /** Properties of a MsgMfrDeleteRoomByServer. */
-    interface IMsgMfrDeleteRoomByServer {
-
-        /** MsgMfrDeleteRoomByServer s */
-        s?: (NetMessage.MsgMfrDeleteRoomByServer.IS|null);
-    }
-
-    /** Represents a MsgMfrDeleteRoomByServer. */
-    class MsgMfrDeleteRoomByServer implements IMsgMfrDeleteRoomByServer {
-
-        /**
-         * Constructs a new MsgMfrDeleteRoomByServer.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IMsgMfrDeleteRoomByServer);
-
-        /** MsgMfrDeleteRoomByServer s. */
-        public s?: (NetMessage.MsgMfrDeleteRoomByServer.IS|null);
-
-        /**
-         * Creates a new MsgMfrDeleteRoomByServer instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns MsgMfrDeleteRoomByServer instance
-         */
-        public static create(properties?: NetMessage.IMsgMfrDeleteRoomByServer): NetMessage.MsgMfrDeleteRoomByServer;
-
-        /**
-         * Encodes the specified MsgMfrDeleteRoomByServer message. Does not implicitly {@link NetMessage.MsgMfrDeleteRoomByServer.verify|verify} messages.
-         * @param message MsgMfrDeleteRoomByServer message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IMsgMfrDeleteRoomByServer, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified MsgMfrDeleteRoomByServer message, length delimited. Does not implicitly {@link NetMessage.MsgMfrDeleteRoomByServer.verify|verify} messages.
-         * @param message MsgMfrDeleteRoomByServer message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IMsgMfrDeleteRoomByServer, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a MsgMfrDeleteRoomByServer message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns MsgMfrDeleteRoomByServer
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrDeleteRoomByServer;
-
-        /**
-         * Decodes a MsgMfrDeleteRoomByServer message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MsgMfrDeleteRoomByServer
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrDeleteRoomByServer;
-
-        /**
-         * Verifies a MsgMfrDeleteRoomByServer message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MsgMfrDeleteRoomByServer message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MsgMfrDeleteRoomByServer
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrDeleteRoomByServer;
-
-        /**
-         * Creates a plain object from a MsgMfrDeleteRoomByServer message. Also converts values to other types if specified.
-         * @param message MsgMfrDeleteRoomByServer
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.MsgMfrDeleteRoomByServer, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MsgMfrDeleteRoomByServer to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    namespace MsgMfrDeleteRoomByServer {
-
-        /** Properties of a S. */
-        interface IS {
-
-            /** S errorCode */
-            errorCode?: (number|null);
-
-            /** S roomId */
-            roomId?: (number|null);
-        }
-
-        /** Represents a S. */
-        class S implements IS {
-
-            /**
-             * Constructs a new S.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgMfrDeleteRoomByServer.IS);
-
-            /** S errorCode. */
-            public errorCode: number;
-
-            /** S roomId. */
-            public roomId: number;
-
-            /**
-             * Creates a new S instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns S instance
-             */
-            public static create(properties?: NetMessage.MsgMfrDeleteRoomByServer.IS): NetMessage.MsgMfrDeleteRoomByServer.S;
-
-            /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMfrDeleteRoomByServer.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgMfrDeleteRoomByServer.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMfrDeleteRoomByServer.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgMfrDeleteRoomByServer.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a S message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrDeleteRoomByServer.S;
-
-            /**
-             * Decodes a S message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrDeleteRoomByServer.S;
-
-            /**
-             * Verifies a S message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a S message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns S
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrDeleteRoomByServer.S;
-
-            /**
-             * Creates a plain object from a S message. Also converts values to other types if specified.
-             * @param message S
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgMfrDeleteRoomByServer.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMfrDeleteRoom.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -60260,9 +60176,6 @@ export declare namespace NetMessage {
             /** S roomId */
             roomId?: (number|null);
 
-            /** S playerIndex */
-            playerIndex?: (number|null);
-
             /** S isReady */
             isReady?: (boolean|null);
         }
@@ -60281,9 +60194,6 @@ export declare namespace NetMessage {
 
             /** S roomId. */
             public roomId: number;
-
-            /** S playerIndex. */
-            public playerIndex: number;
 
             /** S isReady. */
             public isReady: boolean;
@@ -60563,11 +60473,8 @@ export declare namespace NetMessage {
             /** S roomId */
             roomId?: (number|null);
 
-            /** S targetPlayerIndex */
-            targetPlayerIndex?: (number|null);
-
-            /** S targetUserId */
-            targetUserId?: (number|null);
+            /** S playerIndex */
+            playerIndex?: (number|null);
         }
 
         /** Represents a S. */
@@ -60585,11 +60492,8 @@ export declare namespace NetMessage {
             /** S roomId. */
             public roomId: number;
 
-            /** S targetPlayerIndex. */
-            public targetPlayerIndex: number;
-
-            /** S targetUserId. */
-            public targetUserId: number;
+            /** S playerIndex. */
+            public playerIndex: number;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -60654,201 +60558,6 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMfrDeletePlayer.S, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this S to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-    }
-
-    /** Properties of a MsgMfrGetOwnerPlayerIndex. */
-    interface IMsgMfrGetOwnerPlayerIndex {
-
-        /** MsgMfrGetOwnerPlayerIndex s */
-        s?: (NetMessage.MsgMfrGetOwnerPlayerIndex.IS|null);
-    }
-
-    /** Represents a MsgMfrGetOwnerPlayerIndex. */
-    class MsgMfrGetOwnerPlayerIndex implements IMsgMfrGetOwnerPlayerIndex {
-
-        /**
-         * Constructs a new MsgMfrGetOwnerPlayerIndex.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IMsgMfrGetOwnerPlayerIndex);
-
-        /** MsgMfrGetOwnerPlayerIndex s. */
-        public s?: (NetMessage.MsgMfrGetOwnerPlayerIndex.IS|null);
-
-        /**
-         * Creates a new MsgMfrGetOwnerPlayerIndex instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns MsgMfrGetOwnerPlayerIndex instance
-         */
-        public static create(properties?: NetMessage.IMsgMfrGetOwnerPlayerIndex): NetMessage.MsgMfrGetOwnerPlayerIndex;
-
-        /**
-         * Encodes the specified MsgMfrGetOwnerPlayerIndex message. Does not implicitly {@link NetMessage.MsgMfrGetOwnerPlayerIndex.verify|verify} messages.
-         * @param message MsgMfrGetOwnerPlayerIndex message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IMsgMfrGetOwnerPlayerIndex, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified MsgMfrGetOwnerPlayerIndex message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetOwnerPlayerIndex.verify|verify} messages.
-         * @param message MsgMfrGetOwnerPlayerIndex message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IMsgMfrGetOwnerPlayerIndex, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a MsgMfrGetOwnerPlayerIndex message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns MsgMfrGetOwnerPlayerIndex
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetOwnerPlayerIndex;
-
-        /**
-         * Decodes a MsgMfrGetOwnerPlayerIndex message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MsgMfrGetOwnerPlayerIndex
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetOwnerPlayerIndex;
-
-        /**
-         * Verifies a MsgMfrGetOwnerPlayerIndex message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MsgMfrGetOwnerPlayerIndex message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MsgMfrGetOwnerPlayerIndex
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetOwnerPlayerIndex;
-
-        /**
-         * Creates a plain object from a MsgMfrGetOwnerPlayerIndex message. Also converts values to other types if specified.
-         * @param message MsgMfrGetOwnerPlayerIndex
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.MsgMfrGetOwnerPlayerIndex, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MsgMfrGetOwnerPlayerIndex to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    namespace MsgMfrGetOwnerPlayerIndex {
-
-        /** Properties of a S. */
-        interface IS {
-
-            /** S errorCode */
-            errorCode?: (number|null);
-
-            /** S roomId */
-            roomId?: (number|null);
-
-            /** S ownerPlayerIndex */
-            ownerPlayerIndex?: (number|null);
-        }
-
-        /** Represents a S. */
-        class S implements IS {
-
-            /**
-             * Constructs a new S.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgMfrGetOwnerPlayerIndex.IS);
-
-            /** S errorCode. */
-            public errorCode: number;
-
-            /** S roomId. */
-            public roomId: number;
-
-            /** S ownerPlayerIndex. */
-            public ownerPlayerIndex: number;
-
-            /**
-             * Creates a new S instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns S instance
-             */
-            public static create(properties?: NetMessage.MsgMfrGetOwnerPlayerIndex.IS): NetMessage.MsgMfrGetOwnerPlayerIndex.S;
-
-            /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMfrGetOwnerPlayerIndex.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgMfrGetOwnerPlayerIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMfrGetOwnerPlayerIndex.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgMfrGetOwnerPlayerIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a S message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMfrGetOwnerPlayerIndex.S;
-
-            /**
-             * Decodes a S message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMfrGetOwnerPlayerIndex.S;
-
-            /**
-             * Verifies a S message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a S message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns S
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMfrGetOwnerPlayerIndex.S;
-
-            /**
-             * Creates a plain object from a S message. Also converts values to other types if specified.
-             * @param message S
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgMfrGetOwnerPlayerIndex.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -62060,8 +61769,8 @@ export declare namespace NetMessage {
             /** S roomId */
             roomId?: (number|null);
 
-            /** S playerIndex */
-            playerIndex?: (number|null);
+            /** S exitType */
+            exitType?: (number|null);
         }
 
         /** Represents a S. */
@@ -62079,8 +61788,8 @@ export declare namespace NetMessage {
             /** S roomId. */
             public roomId: number;
 
-            /** S playerIndex. */
-            public playerIndex: number;
+            /** S exitType. */
+            public exitType: number;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -62154,103 +61863,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgCcrGetJoinedRoomInfoList. */
-    interface IMsgCcrGetJoinedRoomInfoList {
+    /** Properties of a MsgCcrGetJoinedRoomIdArray. */
+    interface IMsgCcrGetJoinedRoomIdArray {
 
-        /** MsgCcrGetJoinedRoomInfoList c */
-        c?: (NetMessage.MsgCcrGetJoinedRoomInfoList.IC|null);
+        /** MsgCcrGetJoinedRoomIdArray c */
+        c?: (NetMessage.MsgCcrGetJoinedRoomIdArray.IC|null);
 
-        /** MsgCcrGetJoinedRoomInfoList s */
-        s?: (NetMessage.MsgCcrGetJoinedRoomInfoList.IS|null);
+        /** MsgCcrGetJoinedRoomIdArray s */
+        s?: (NetMessage.MsgCcrGetJoinedRoomIdArray.IS|null);
     }
 
-    /** Represents a MsgCcrGetJoinedRoomInfoList. */
-    class MsgCcrGetJoinedRoomInfoList implements IMsgCcrGetJoinedRoomInfoList {
+    /** Represents a MsgCcrGetJoinedRoomIdArray. */
+    class MsgCcrGetJoinedRoomIdArray implements IMsgCcrGetJoinedRoomIdArray {
 
         /**
-         * Constructs a new MsgCcrGetJoinedRoomInfoList.
+         * Constructs a new MsgCcrGetJoinedRoomIdArray.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgCcrGetJoinedRoomInfoList);
+        constructor(properties?: NetMessage.IMsgCcrGetJoinedRoomIdArray);
 
-        /** MsgCcrGetJoinedRoomInfoList c. */
-        public c?: (NetMessage.MsgCcrGetJoinedRoomInfoList.IC|null);
+        /** MsgCcrGetJoinedRoomIdArray c. */
+        public c?: (NetMessage.MsgCcrGetJoinedRoomIdArray.IC|null);
 
-        /** MsgCcrGetJoinedRoomInfoList s. */
-        public s?: (NetMessage.MsgCcrGetJoinedRoomInfoList.IS|null);
+        /** MsgCcrGetJoinedRoomIdArray s. */
+        public s?: (NetMessage.MsgCcrGetJoinedRoomIdArray.IS|null);
 
         /**
-         * Creates a new MsgCcrGetJoinedRoomInfoList instance using the specified properties.
+         * Creates a new MsgCcrGetJoinedRoomIdArray instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgCcrGetJoinedRoomInfoList instance
+         * @returns MsgCcrGetJoinedRoomIdArray instance
          */
-        public static create(properties?: NetMessage.IMsgCcrGetJoinedRoomInfoList): NetMessage.MsgCcrGetJoinedRoomInfoList;
+        public static create(properties?: NetMessage.IMsgCcrGetJoinedRoomIdArray): NetMessage.MsgCcrGetJoinedRoomIdArray;
 
         /**
-         * Encodes the specified MsgCcrGetJoinedRoomInfoList message. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomInfoList.verify|verify} messages.
-         * @param message MsgCcrGetJoinedRoomInfoList message or plain object to encode
+         * Encodes the specified MsgCcrGetJoinedRoomIdArray message. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomIdArray.verify|verify} messages.
+         * @param message MsgCcrGetJoinedRoomIdArray message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgCcrGetJoinedRoomInfoList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgCcrGetJoinedRoomIdArray, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgCcrGetJoinedRoomInfoList message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomInfoList.verify|verify} messages.
-         * @param message MsgCcrGetJoinedRoomInfoList message or plain object to encode
+         * Encodes the specified MsgCcrGetJoinedRoomIdArray message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomIdArray.verify|verify} messages.
+         * @param message MsgCcrGetJoinedRoomIdArray message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgCcrGetJoinedRoomInfoList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgCcrGetJoinedRoomIdArray, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgCcrGetJoinedRoomInfoList message from the specified reader or buffer.
+         * Decodes a MsgCcrGetJoinedRoomIdArray message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgCcrGetJoinedRoomInfoList
+         * @returns MsgCcrGetJoinedRoomIdArray
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinedRoomInfoList;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinedRoomIdArray;
 
         /**
-         * Decodes a MsgCcrGetJoinedRoomInfoList message from the specified reader or buffer, length delimited.
+         * Decodes a MsgCcrGetJoinedRoomIdArray message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgCcrGetJoinedRoomInfoList
+         * @returns MsgCcrGetJoinedRoomIdArray
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinedRoomInfoList;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinedRoomIdArray;
 
         /**
-         * Verifies a MsgCcrGetJoinedRoomInfoList message.
+         * Verifies a MsgCcrGetJoinedRoomIdArray message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgCcrGetJoinedRoomInfoList message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgCcrGetJoinedRoomIdArray message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgCcrGetJoinedRoomInfoList
+         * @returns MsgCcrGetJoinedRoomIdArray
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinedRoomInfoList;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinedRoomIdArray;
 
         /**
-         * Creates a plain object from a MsgCcrGetJoinedRoomInfoList message. Also converts values to other types if specified.
-         * @param message MsgCcrGetJoinedRoomInfoList
+         * Creates a plain object from a MsgCcrGetJoinedRoomIdArray message. Also converts values to other types if specified.
+         * @param message MsgCcrGetJoinedRoomIdArray
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgCcrGetJoinedRoomInfoList, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgCcrGetJoinedRoomIdArray, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgCcrGetJoinedRoomInfoList to JSON.
+         * Converts this MsgCcrGetJoinedRoomIdArray to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgCcrGetJoinedRoomInfoList {
+    namespace MsgCcrGetJoinedRoomIdArray {
 
         /** Properties of a C. */
         interface IC {
@@ -62263,30 +61972,30 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgCcrGetJoinedRoomInfoList.IC);
+            constructor(properties?: NetMessage.MsgCcrGetJoinedRoomIdArray.IC);
 
             /**
              * Creates a new C instance using the specified properties.
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgCcrGetJoinedRoomInfoList.IC): NetMessage.MsgCcrGetJoinedRoomInfoList.C;
+            public static create(properties?: NetMessage.MsgCcrGetJoinedRoomIdArray.IC): NetMessage.MsgCcrGetJoinedRoomIdArray.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomInfoList.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomIdArray.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgCcrGetJoinedRoomInfoList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgCcrGetJoinedRoomIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomInfoList.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomIdArray.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgCcrGetJoinedRoomInfoList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgCcrGetJoinedRoomIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -62296,7 +62005,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinedRoomInfoList.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinedRoomIdArray.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -62305,7 +62014,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinedRoomInfoList.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinedRoomIdArray.C;
 
             /**
              * Verifies a C message.
@@ -62319,7 +62028,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinedRoomInfoList.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinedRoomIdArray.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -62327,7 +62036,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgCcrGetJoinedRoomInfoList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgCcrGetJoinedRoomIdArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -62342,8 +62051,8 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S roomInfoList */
-            roomInfoList?: (CoopCustomRoom.ICcrRoomInfo[]|null);
+            /** S roomIdArray */
+            roomIdArray?: (number[]|null);
         }
 
         /** Represents a S. */
@@ -62353,36 +62062,36 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgCcrGetJoinedRoomInfoList.IS);
+            constructor(properties?: NetMessage.MsgCcrGetJoinedRoomIdArray.IS);
 
             /** S errorCode. */
             public errorCode: number;
 
-            /** S roomInfoList. */
-            public roomInfoList: CoopCustomRoom.ICcrRoomInfo[];
+            /** S roomIdArray. */
+            public roomIdArray: number[];
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgCcrGetJoinedRoomInfoList.IS): NetMessage.MsgCcrGetJoinedRoomInfoList.S;
+            public static create(properties?: NetMessage.MsgCcrGetJoinedRoomIdArray.IS): NetMessage.MsgCcrGetJoinedRoomIdArray.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomInfoList.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomIdArray.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgCcrGetJoinedRoomInfoList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgCcrGetJoinedRoomIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomInfoList.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinedRoomIdArray.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgCcrGetJoinedRoomInfoList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgCcrGetJoinedRoomIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -62392,7 +62101,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinedRoomInfoList.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinedRoomIdArray.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -62401,7 +62110,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinedRoomInfoList.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinedRoomIdArray.S;
 
             /**
              * Verifies a S message.
@@ -62415,7 +62124,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinedRoomInfoList.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinedRoomIdArray.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -62423,7 +62132,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgCcrGetJoinedRoomInfoList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgCcrGetJoinedRoomIdArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -62433,103 +62142,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgCcrGetRoomInfo. */
-    interface IMsgCcrGetRoomInfo {
+    /** Properties of a MsgCcrGetRoomStaticInfo. */
+    interface IMsgCcrGetRoomStaticInfo {
 
-        /** MsgCcrGetRoomInfo c */
-        c?: (NetMessage.MsgCcrGetRoomInfo.IC|null);
+        /** MsgCcrGetRoomStaticInfo c */
+        c?: (NetMessage.MsgCcrGetRoomStaticInfo.IC|null);
 
-        /** MsgCcrGetRoomInfo s */
-        s?: (NetMessage.MsgCcrGetRoomInfo.IS|null);
+        /** MsgCcrGetRoomStaticInfo s */
+        s?: (NetMessage.MsgCcrGetRoomStaticInfo.IS|null);
     }
 
-    /** Represents a MsgCcrGetRoomInfo. */
-    class MsgCcrGetRoomInfo implements IMsgCcrGetRoomInfo {
+    /** Represents a MsgCcrGetRoomStaticInfo. */
+    class MsgCcrGetRoomStaticInfo implements IMsgCcrGetRoomStaticInfo {
 
         /**
-         * Constructs a new MsgCcrGetRoomInfo.
+         * Constructs a new MsgCcrGetRoomStaticInfo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgCcrGetRoomInfo);
+        constructor(properties?: NetMessage.IMsgCcrGetRoomStaticInfo);
 
-        /** MsgCcrGetRoomInfo c. */
-        public c?: (NetMessage.MsgCcrGetRoomInfo.IC|null);
+        /** MsgCcrGetRoomStaticInfo c. */
+        public c?: (NetMessage.MsgCcrGetRoomStaticInfo.IC|null);
 
-        /** MsgCcrGetRoomInfo s. */
-        public s?: (NetMessage.MsgCcrGetRoomInfo.IS|null);
+        /** MsgCcrGetRoomStaticInfo s. */
+        public s?: (NetMessage.MsgCcrGetRoomStaticInfo.IS|null);
 
         /**
-         * Creates a new MsgCcrGetRoomInfo instance using the specified properties.
+         * Creates a new MsgCcrGetRoomStaticInfo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgCcrGetRoomInfo instance
+         * @returns MsgCcrGetRoomStaticInfo instance
          */
-        public static create(properties?: NetMessage.IMsgCcrGetRoomInfo): NetMessage.MsgCcrGetRoomInfo;
+        public static create(properties?: NetMessage.IMsgCcrGetRoomStaticInfo): NetMessage.MsgCcrGetRoomStaticInfo;
 
         /**
-         * Encodes the specified MsgCcrGetRoomInfo message. Does not implicitly {@link NetMessage.MsgCcrGetRoomInfo.verify|verify} messages.
-         * @param message MsgCcrGetRoomInfo message or plain object to encode
+         * Encodes the specified MsgCcrGetRoomStaticInfo message. Does not implicitly {@link NetMessage.MsgCcrGetRoomStaticInfo.verify|verify} messages.
+         * @param message MsgCcrGetRoomStaticInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgCcrGetRoomInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgCcrGetRoomStaticInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgCcrGetRoomInfo message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetRoomInfo.verify|verify} messages.
-         * @param message MsgCcrGetRoomInfo message or plain object to encode
+         * Encodes the specified MsgCcrGetRoomStaticInfo message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetRoomStaticInfo.verify|verify} messages.
+         * @param message MsgCcrGetRoomStaticInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgCcrGetRoomInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgCcrGetRoomStaticInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgCcrGetRoomInfo message from the specified reader or buffer.
+         * Decodes a MsgCcrGetRoomStaticInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgCcrGetRoomInfo
+         * @returns MsgCcrGetRoomStaticInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetRoomInfo;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetRoomStaticInfo;
 
         /**
-         * Decodes a MsgCcrGetRoomInfo message from the specified reader or buffer, length delimited.
+         * Decodes a MsgCcrGetRoomStaticInfo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgCcrGetRoomInfo
+         * @returns MsgCcrGetRoomStaticInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetRoomInfo;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetRoomStaticInfo;
 
         /**
-         * Verifies a MsgCcrGetRoomInfo message.
+         * Verifies a MsgCcrGetRoomStaticInfo message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgCcrGetRoomInfo message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgCcrGetRoomStaticInfo message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgCcrGetRoomInfo
+         * @returns MsgCcrGetRoomStaticInfo
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetRoomInfo;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetRoomStaticInfo;
 
         /**
-         * Creates a plain object from a MsgCcrGetRoomInfo message. Also converts values to other types if specified.
-         * @param message MsgCcrGetRoomInfo
+         * Creates a plain object from a MsgCcrGetRoomStaticInfo message. Also converts values to other types if specified.
+         * @param message MsgCcrGetRoomStaticInfo
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgCcrGetRoomInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgCcrGetRoomStaticInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgCcrGetRoomInfo to JSON.
+         * Converts this MsgCcrGetRoomStaticInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgCcrGetRoomInfo {
+    namespace MsgCcrGetRoomStaticInfo {
 
         /** Properties of a C. */
         interface IC {
@@ -62545,7 +62254,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgCcrGetRoomInfo.IC);
+            constructor(properties?: NetMessage.MsgCcrGetRoomStaticInfo.IC);
 
             /** C roomId. */
             public roomId: number;
@@ -62555,23 +62264,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgCcrGetRoomInfo.IC): NetMessage.MsgCcrGetRoomInfo.C;
+            public static create(properties?: NetMessage.MsgCcrGetRoomStaticInfo.IC): NetMessage.MsgCcrGetRoomStaticInfo.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCcrGetRoomInfo.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCcrGetRoomStaticInfo.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgCcrGetRoomInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgCcrGetRoomStaticInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetRoomInfo.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetRoomStaticInfo.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgCcrGetRoomInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgCcrGetRoomStaticInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -62581,7 +62290,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetRoomInfo.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetRoomStaticInfo.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -62590,7 +62299,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetRoomInfo.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetRoomStaticInfo.C;
 
             /**
              * Verifies a C message.
@@ -62604,7 +62313,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetRoomInfo.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetRoomStaticInfo.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -62612,7 +62321,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgCcrGetRoomInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgCcrGetRoomStaticInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -62630,8 +62339,8 @@ export declare namespace NetMessage {
             /** S roomId */
             roomId?: (number|null);
 
-            /** S roomInfo */
-            roomInfo?: (CoopCustomRoom.ICcrRoomInfo|null);
+            /** S roomStaticInfo */
+            roomStaticInfo?: (CoopCustomRoom.ICcrRoomStaticInfo|null);
         }
 
         /** Represents a S. */
@@ -62641,7 +62350,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgCcrGetRoomInfo.IS);
+            constructor(properties?: NetMessage.MsgCcrGetRoomStaticInfo.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -62649,31 +62358,31 @@ export declare namespace NetMessage {
             /** S roomId. */
             public roomId: number;
 
-            /** S roomInfo. */
-            public roomInfo?: (CoopCustomRoom.ICcrRoomInfo|null);
+            /** S roomStaticInfo. */
+            public roomStaticInfo?: (CoopCustomRoom.ICcrRoomStaticInfo|null);
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgCcrGetRoomInfo.IS): NetMessage.MsgCcrGetRoomInfo.S;
+            public static create(properties?: NetMessage.MsgCcrGetRoomStaticInfo.IS): NetMessage.MsgCcrGetRoomStaticInfo.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrGetRoomInfo.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrGetRoomStaticInfo.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgCcrGetRoomInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgCcrGetRoomStaticInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetRoomInfo.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetRoomStaticInfo.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgCcrGetRoomInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgCcrGetRoomStaticInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -62683,7 +62392,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetRoomInfo.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetRoomStaticInfo.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -62692,7 +62401,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetRoomInfo.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetRoomStaticInfo.S;
 
             /**
              * Verifies a S message.
@@ -62706,7 +62415,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetRoomInfo.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetRoomStaticInfo.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -62714,7 +62423,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgCcrGetRoomInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgCcrGetRoomStaticInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -62724,103 +62433,394 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgCcrGetJoinableRoomInfoList. */
-    interface IMsgCcrGetJoinableRoomInfoList {
+    /** Properties of a MsgCcrGetRoomPlayerInfo. */
+    interface IMsgCcrGetRoomPlayerInfo {
 
-        /** MsgCcrGetJoinableRoomInfoList c */
-        c?: (NetMessage.MsgCcrGetJoinableRoomInfoList.IC|null);
+        /** MsgCcrGetRoomPlayerInfo c */
+        c?: (NetMessage.MsgCcrGetRoomPlayerInfo.IC|null);
 
-        /** MsgCcrGetJoinableRoomInfoList s */
-        s?: (NetMessage.MsgCcrGetJoinableRoomInfoList.IS|null);
+        /** MsgCcrGetRoomPlayerInfo s */
+        s?: (NetMessage.MsgCcrGetRoomPlayerInfo.IS|null);
     }
 
-    /** Represents a MsgCcrGetJoinableRoomInfoList. */
-    class MsgCcrGetJoinableRoomInfoList implements IMsgCcrGetJoinableRoomInfoList {
+    /** Represents a MsgCcrGetRoomPlayerInfo. */
+    class MsgCcrGetRoomPlayerInfo implements IMsgCcrGetRoomPlayerInfo {
 
         /**
-         * Constructs a new MsgCcrGetJoinableRoomInfoList.
+         * Constructs a new MsgCcrGetRoomPlayerInfo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgCcrGetJoinableRoomInfoList);
+        constructor(properties?: NetMessage.IMsgCcrGetRoomPlayerInfo);
 
-        /** MsgCcrGetJoinableRoomInfoList c. */
-        public c?: (NetMessage.MsgCcrGetJoinableRoomInfoList.IC|null);
+        /** MsgCcrGetRoomPlayerInfo c. */
+        public c?: (NetMessage.MsgCcrGetRoomPlayerInfo.IC|null);
 
-        /** MsgCcrGetJoinableRoomInfoList s. */
-        public s?: (NetMessage.MsgCcrGetJoinableRoomInfoList.IS|null);
+        /** MsgCcrGetRoomPlayerInfo s. */
+        public s?: (NetMessage.MsgCcrGetRoomPlayerInfo.IS|null);
 
         /**
-         * Creates a new MsgCcrGetJoinableRoomInfoList instance using the specified properties.
+         * Creates a new MsgCcrGetRoomPlayerInfo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgCcrGetJoinableRoomInfoList instance
+         * @returns MsgCcrGetRoomPlayerInfo instance
          */
-        public static create(properties?: NetMessage.IMsgCcrGetJoinableRoomInfoList): NetMessage.MsgCcrGetJoinableRoomInfoList;
+        public static create(properties?: NetMessage.IMsgCcrGetRoomPlayerInfo): NetMessage.MsgCcrGetRoomPlayerInfo;
 
         /**
-         * Encodes the specified MsgCcrGetJoinableRoomInfoList message. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomInfoList.verify|verify} messages.
-         * @param message MsgCcrGetJoinableRoomInfoList message or plain object to encode
+         * Encodes the specified MsgCcrGetRoomPlayerInfo message. Does not implicitly {@link NetMessage.MsgCcrGetRoomPlayerInfo.verify|verify} messages.
+         * @param message MsgCcrGetRoomPlayerInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgCcrGetJoinableRoomInfoList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgCcrGetRoomPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgCcrGetJoinableRoomInfoList message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomInfoList.verify|verify} messages.
-         * @param message MsgCcrGetJoinableRoomInfoList message or plain object to encode
+         * Encodes the specified MsgCcrGetRoomPlayerInfo message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetRoomPlayerInfo.verify|verify} messages.
+         * @param message MsgCcrGetRoomPlayerInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgCcrGetJoinableRoomInfoList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgCcrGetRoomPlayerInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgCcrGetJoinableRoomInfoList message from the specified reader or buffer.
+         * Decodes a MsgCcrGetRoomPlayerInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgCcrGetJoinableRoomInfoList
+         * @returns MsgCcrGetRoomPlayerInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinableRoomInfoList;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetRoomPlayerInfo;
 
         /**
-         * Decodes a MsgCcrGetJoinableRoomInfoList message from the specified reader or buffer, length delimited.
+         * Decodes a MsgCcrGetRoomPlayerInfo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgCcrGetJoinableRoomInfoList
+         * @returns MsgCcrGetRoomPlayerInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinableRoomInfoList;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetRoomPlayerInfo;
 
         /**
-         * Verifies a MsgCcrGetJoinableRoomInfoList message.
+         * Verifies a MsgCcrGetRoomPlayerInfo message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgCcrGetJoinableRoomInfoList message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgCcrGetRoomPlayerInfo message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgCcrGetJoinableRoomInfoList
+         * @returns MsgCcrGetRoomPlayerInfo
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinableRoomInfoList;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetRoomPlayerInfo;
 
         /**
-         * Creates a plain object from a MsgCcrGetJoinableRoomInfoList message. Also converts values to other types if specified.
-         * @param message MsgCcrGetJoinableRoomInfoList
+         * Creates a plain object from a MsgCcrGetRoomPlayerInfo message. Also converts values to other types if specified.
+         * @param message MsgCcrGetRoomPlayerInfo
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgCcrGetJoinableRoomInfoList, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgCcrGetRoomPlayerInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgCcrGetJoinableRoomInfoList to JSON.
+         * Converts this MsgCcrGetRoomPlayerInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgCcrGetJoinableRoomInfoList {
+    namespace MsgCcrGetRoomPlayerInfo {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C roomId */
+            roomId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgCcrGetRoomPlayerInfo.IC);
+
+            /** C roomId. */
+            public roomId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgCcrGetRoomPlayerInfo.IC): NetMessage.MsgCcrGetRoomPlayerInfo.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCcrGetRoomPlayerInfo.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgCcrGetRoomPlayerInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetRoomPlayerInfo.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgCcrGetRoomPlayerInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetRoomPlayerInfo.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetRoomPlayerInfo.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetRoomPlayerInfo.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgCcrGetRoomPlayerInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S roomId */
+            roomId?: (number|null);
+
+            /** S roomPlayerInfo */
+            roomPlayerInfo?: (CoopCustomRoom.ICcrRoomPlayerInfo|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgCcrGetRoomPlayerInfo.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S roomId. */
+            public roomId: number;
+
+            /** S roomPlayerInfo. */
+            public roomPlayerInfo?: (CoopCustomRoom.ICcrRoomPlayerInfo|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgCcrGetRoomPlayerInfo.IS): NetMessage.MsgCcrGetRoomPlayerInfo.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrGetRoomPlayerInfo.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgCcrGetRoomPlayerInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetRoomPlayerInfo.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgCcrGetRoomPlayerInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetRoomPlayerInfo.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetRoomPlayerInfo.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetRoomPlayerInfo.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgCcrGetRoomPlayerInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgCcrGetJoinableRoomIdArray. */
+    interface IMsgCcrGetJoinableRoomIdArray {
+
+        /** MsgCcrGetJoinableRoomIdArray c */
+        c?: (NetMessage.MsgCcrGetJoinableRoomIdArray.IC|null);
+
+        /** MsgCcrGetJoinableRoomIdArray s */
+        s?: (NetMessage.MsgCcrGetJoinableRoomIdArray.IS|null);
+    }
+
+    /** Represents a MsgCcrGetJoinableRoomIdArray. */
+    class MsgCcrGetJoinableRoomIdArray implements IMsgCcrGetJoinableRoomIdArray {
+
+        /**
+         * Constructs a new MsgCcrGetJoinableRoomIdArray.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgCcrGetJoinableRoomIdArray);
+
+        /** MsgCcrGetJoinableRoomIdArray c. */
+        public c?: (NetMessage.MsgCcrGetJoinableRoomIdArray.IC|null);
+
+        /** MsgCcrGetJoinableRoomIdArray s. */
+        public s?: (NetMessage.MsgCcrGetJoinableRoomIdArray.IS|null);
+
+        /**
+         * Creates a new MsgCcrGetJoinableRoomIdArray instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgCcrGetJoinableRoomIdArray instance
+         */
+        public static create(properties?: NetMessage.IMsgCcrGetJoinableRoomIdArray): NetMessage.MsgCcrGetJoinableRoomIdArray;
+
+        /**
+         * Encodes the specified MsgCcrGetJoinableRoomIdArray message. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomIdArray.verify|verify} messages.
+         * @param message MsgCcrGetJoinableRoomIdArray message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgCcrGetJoinableRoomIdArray, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgCcrGetJoinableRoomIdArray message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomIdArray.verify|verify} messages.
+         * @param message MsgCcrGetJoinableRoomIdArray message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgCcrGetJoinableRoomIdArray, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgCcrGetJoinableRoomIdArray message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgCcrGetJoinableRoomIdArray
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinableRoomIdArray;
+
+        /**
+         * Decodes a MsgCcrGetJoinableRoomIdArray message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgCcrGetJoinableRoomIdArray
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinableRoomIdArray;
+
+        /**
+         * Verifies a MsgCcrGetJoinableRoomIdArray message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgCcrGetJoinableRoomIdArray message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgCcrGetJoinableRoomIdArray
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinableRoomIdArray;
+
+        /**
+         * Creates a plain object from a MsgCcrGetJoinableRoomIdArray message. Also converts values to other types if specified.
+         * @param message MsgCcrGetJoinableRoomIdArray
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgCcrGetJoinableRoomIdArray, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgCcrGetJoinableRoomIdArray to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgCcrGetJoinableRoomIdArray {
 
         /** Properties of a C. */
         interface IC {
@@ -62836,7 +62836,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgCcrGetJoinableRoomInfoList.IC);
+            constructor(properties?: NetMessage.MsgCcrGetJoinableRoomIdArray.IC);
 
             /** C roomFilter. */
             public roomFilter?: (CoopCustomRoom.IRoomFilter|null);
@@ -62846,23 +62846,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgCcrGetJoinableRoomInfoList.IC): NetMessage.MsgCcrGetJoinableRoomInfoList.C;
+            public static create(properties?: NetMessage.MsgCcrGetJoinableRoomIdArray.IC): NetMessage.MsgCcrGetJoinableRoomIdArray.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomInfoList.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomIdArray.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgCcrGetJoinableRoomInfoList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgCcrGetJoinableRoomIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomInfoList.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomIdArray.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgCcrGetJoinableRoomInfoList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgCcrGetJoinableRoomIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -62872,7 +62872,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinableRoomInfoList.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinableRoomIdArray.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -62881,7 +62881,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinableRoomInfoList.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinableRoomIdArray.C;
 
             /**
              * Verifies a C message.
@@ -62895,7 +62895,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinableRoomInfoList.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinableRoomIdArray.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -62903,7 +62903,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgCcrGetJoinableRoomInfoList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgCcrGetJoinableRoomIdArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -62918,8 +62918,8 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S roomInfoList */
-            roomInfoList?: (CoopCustomRoom.ICcrRoomInfo[]|null);
+            /** S roomIdArray */
+            roomIdArray?: (number[]|null);
         }
 
         /** Represents a S. */
@@ -62929,36 +62929,36 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgCcrGetJoinableRoomInfoList.IS);
+            constructor(properties?: NetMessage.MsgCcrGetJoinableRoomIdArray.IS);
 
             /** S errorCode. */
             public errorCode: number;
 
-            /** S roomInfoList. */
-            public roomInfoList: CoopCustomRoom.ICcrRoomInfo[];
+            /** S roomIdArray. */
+            public roomIdArray: number[];
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgCcrGetJoinableRoomInfoList.IS): NetMessage.MsgCcrGetJoinableRoomInfoList.S;
+            public static create(properties?: NetMessage.MsgCcrGetJoinableRoomIdArray.IS): NetMessage.MsgCcrGetJoinableRoomIdArray.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomInfoList.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomIdArray.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgCcrGetJoinableRoomInfoList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgCcrGetJoinableRoomIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomInfoList.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetJoinableRoomIdArray.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgCcrGetJoinableRoomInfoList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgCcrGetJoinableRoomIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -62968,7 +62968,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinableRoomInfoList.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetJoinableRoomIdArray.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -62977,7 +62977,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinableRoomInfoList.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetJoinableRoomIdArray.S;
 
             /**
              * Verifies a S message.
@@ -62991,7 +62991,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinableRoomInfoList.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetJoinableRoomIdArray.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -62999,7 +62999,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgCcrGetJoinableRoomInfoList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgCcrGetJoinableRoomIdArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -63348,103 +63348,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgCcrDeleteRoomByPlayer. */
-    interface IMsgCcrDeleteRoomByPlayer {
+    /** Properties of a MsgCcrDeleteRoom. */
+    interface IMsgCcrDeleteRoom {
 
-        /** MsgCcrDeleteRoomByPlayer c */
-        c?: (NetMessage.MsgCcrDeleteRoomByPlayer.IC|null);
+        /** MsgCcrDeleteRoom c */
+        c?: (NetMessage.MsgCcrDeleteRoom.IC|null);
 
-        /** MsgCcrDeleteRoomByPlayer s */
-        s?: (NetMessage.MsgCcrDeleteRoomByPlayer.IS|null);
+        /** MsgCcrDeleteRoom s */
+        s?: (NetMessage.MsgCcrDeleteRoom.IS|null);
     }
 
-    /** Represents a MsgCcrDeleteRoomByPlayer. */
-    class MsgCcrDeleteRoomByPlayer implements IMsgCcrDeleteRoomByPlayer {
+    /** Represents a MsgCcrDeleteRoom. */
+    class MsgCcrDeleteRoom implements IMsgCcrDeleteRoom {
 
         /**
-         * Constructs a new MsgCcrDeleteRoomByPlayer.
+         * Constructs a new MsgCcrDeleteRoom.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgCcrDeleteRoomByPlayer);
+        constructor(properties?: NetMessage.IMsgCcrDeleteRoom);
 
-        /** MsgCcrDeleteRoomByPlayer c. */
-        public c?: (NetMessage.MsgCcrDeleteRoomByPlayer.IC|null);
+        /** MsgCcrDeleteRoom c. */
+        public c?: (NetMessage.MsgCcrDeleteRoom.IC|null);
 
-        /** MsgCcrDeleteRoomByPlayer s. */
-        public s?: (NetMessage.MsgCcrDeleteRoomByPlayer.IS|null);
+        /** MsgCcrDeleteRoom s. */
+        public s?: (NetMessage.MsgCcrDeleteRoom.IS|null);
 
         /**
-         * Creates a new MsgCcrDeleteRoomByPlayer instance using the specified properties.
+         * Creates a new MsgCcrDeleteRoom instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgCcrDeleteRoomByPlayer instance
+         * @returns MsgCcrDeleteRoom instance
          */
-        public static create(properties?: NetMessage.IMsgCcrDeleteRoomByPlayer): NetMessage.MsgCcrDeleteRoomByPlayer;
+        public static create(properties?: NetMessage.IMsgCcrDeleteRoom): NetMessage.MsgCcrDeleteRoom;
 
         /**
-         * Encodes the specified MsgCcrDeleteRoomByPlayer message. Does not implicitly {@link NetMessage.MsgCcrDeleteRoomByPlayer.verify|verify} messages.
-         * @param message MsgCcrDeleteRoomByPlayer message or plain object to encode
+         * Encodes the specified MsgCcrDeleteRoom message. Does not implicitly {@link NetMessage.MsgCcrDeleteRoom.verify|verify} messages.
+         * @param message MsgCcrDeleteRoom message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgCcrDeleteRoomByPlayer, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgCcrDeleteRoom, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgCcrDeleteRoomByPlayer message, length delimited. Does not implicitly {@link NetMessage.MsgCcrDeleteRoomByPlayer.verify|verify} messages.
-         * @param message MsgCcrDeleteRoomByPlayer message or plain object to encode
+         * Encodes the specified MsgCcrDeleteRoom message, length delimited. Does not implicitly {@link NetMessage.MsgCcrDeleteRoom.verify|verify} messages.
+         * @param message MsgCcrDeleteRoom message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgCcrDeleteRoomByPlayer, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgCcrDeleteRoom, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgCcrDeleteRoomByPlayer message from the specified reader or buffer.
+         * Decodes a MsgCcrDeleteRoom message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgCcrDeleteRoomByPlayer
+         * @returns MsgCcrDeleteRoom
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrDeleteRoomByPlayer;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrDeleteRoom;
 
         /**
-         * Decodes a MsgCcrDeleteRoomByPlayer message from the specified reader or buffer, length delimited.
+         * Decodes a MsgCcrDeleteRoom message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgCcrDeleteRoomByPlayer
+         * @returns MsgCcrDeleteRoom
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrDeleteRoomByPlayer;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrDeleteRoom;
 
         /**
-         * Verifies a MsgCcrDeleteRoomByPlayer message.
+         * Verifies a MsgCcrDeleteRoom message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgCcrDeleteRoomByPlayer message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgCcrDeleteRoom message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgCcrDeleteRoomByPlayer
+         * @returns MsgCcrDeleteRoom
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrDeleteRoomByPlayer;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrDeleteRoom;
 
         /**
-         * Creates a plain object from a MsgCcrDeleteRoomByPlayer message. Also converts values to other types if specified.
-         * @param message MsgCcrDeleteRoomByPlayer
+         * Creates a plain object from a MsgCcrDeleteRoom message. Also converts values to other types if specified.
+         * @param message MsgCcrDeleteRoom
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgCcrDeleteRoomByPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgCcrDeleteRoom, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgCcrDeleteRoomByPlayer to JSON.
+         * Converts this MsgCcrDeleteRoom to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgCcrDeleteRoomByPlayer {
+    namespace MsgCcrDeleteRoom {
 
         /** Properties of a C. */
         interface IC {
@@ -63460,7 +63460,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgCcrDeleteRoomByPlayer.IC);
+            constructor(properties?: NetMessage.MsgCcrDeleteRoom.IC);
 
             /** C roomId. */
             public roomId: number;
@@ -63470,23 +63470,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgCcrDeleteRoomByPlayer.IC): NetMessage.MsgCcrDeleteRoomByPlayer.C;
+            public static create(properties?: NetMessage.MsgCcrDeleteRoom.IC): NetMessage.MsgCcrDeleteRoom.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCcrDeleteRoomByPlayer.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCcrDeleteRoom.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgCcrDeleteRoomByPlayer.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgCcrDeleteRoom.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCcrDeleteRoomByPlayer.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCcrDeleteRoom.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgCcrDeleteRoomByPlayer.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgCcrDeleteRoom.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -63496,7 +63496,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrDeleteRoomByPlayer.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrDeleteRoom.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -63505,7 +63505,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrDeleteRoomByPlayer.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrDeleteRoom.C;
 
             /**
              * Verifies a C message.
@@ -63519,7 +63519,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrDeleteRoomByPlayer.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrDeleteRoom.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -63527,7 +63527,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgCcrDeleteRoomByPlayer.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgCcrDeleteRoom.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -63553,7 +63553,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgCcrDeleteRoomByPlayer.IS);
+            constructor(properties?: NetMessage.MsgCcrDeleteRoom.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -63566,23 +63566,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgCcrDeleteRoomByPlayer.IS): NetMessage.MsgCcrDeleteRoomByPlayer.S;
+            public static create(properties?: NetMessage.MsgCcrDeleteRoom.IS): NetMessage.MsgCcrDeleteRoom.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrDeleteRoomByPlayer.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrDeleteRoom.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgCcrDeleteRoomByPlayer.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgCcrDeleteRoom.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrDeleteRoomByPlayer.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrDeleteRoom.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgCcrDeleteRoomByPlayer.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgCcrDeleteRoom.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -63592,7 +63592,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrDeleteRoomByPlayer.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrDeleteRoom.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -63601,7 +63601,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrDeleteRoomByPlayer.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrDeleteRoom.S;
 
             /**
              * Verifies a S message.
@@ -63615,7 +63615,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrDeleteRoomByPlayer.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrDeleteRoom.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -63623,196 +63623,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgCcrDeleteRoomByPlayer.S, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this S to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-    }
-
-    /** Properties of a MsgCcrDeleteRoomByServer. */
-    interface IMsgCcrDeleteRoomByServer {
-
-        /** MsgCcrDeleteRoomByServer s */
-        s?: (NetMessage.MsgCcrDeleteRoomByServer.IS|null);
-    }
-
-    /** Represents a MsgCcrDeleteRoomByServer. */
-    class MsgCcrDeleteRoomByServer implements IMsgCcrDeleteRoomByServer {
-
-        /**
-         * Constructs a new MsgCcrDeleteRoomByServer.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IMsgCcrDeleteRoomByServer);
-
-        /** MsgCcrDeleteRoomByServer s. */
-        public s?: (NetMessage.MsgCcrDeleteRoomByServer.IS|null);
-
-        /**
-         * Creates a new MsgCcrDeleteRoomByServer instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns MsgCcrDeleteRoomByServer instance
-         */
-        public static create(properties?: NetMessage.IMsgCcrDeleteRoomByServer): NetMessage.MsgCcrDeleteRoomByServer;
-
-        /**
-         * Encodes the specified MsgCcrDeleteRoomByServer message. Does not implicitly {@link NetMessage.MsgCcrDeleteRoomByServer.verify|verify} messages.
-         * @param message MsgCcrDeleteRoomByServer message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IMsgCcrDeleteRoomByServer, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified MsgCcrDeleteRoomByServer message, length delimited. Does not implicitly {@link NetMessage.MsgCcrDeleteRoomByServer.verify|verify} messages.
-         * @param message MsgCcrDeleteRoomByServer message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IMsgCcrDeleteRoomByServer, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a MsgCcrDeleteRoomByServer message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns MsgCcrDeleteRoomByServer
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrDeleteRoomByServer;
-
-        /**
-         * Decodes a MsgCcrDeleteRoomByServer message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MsgCcrDeleteRoomByServer
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrDeleteRoomByServer;
-
-        /**
-         * Verifies a MsgCcrDeleteRoomByServer message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MsgCcrDeleteRoomByServer message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MsgCcrDeleteRoomByServer
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrDeleteRoomByServer;
-
-        /**
-         * Creates a plain object from a MsgCcrDeleteRoomByServer message. Also converts values to other types if specified.
-         * @param message MsgCcrDeleteRoomByServer
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.MsgCcrDeleteRoomByServer, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MsgCcrDeleteRoomByServer to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    namespace MsgCcrDeleteRoomByServer {
-
-        /** Properties of a S. */
-        interface IS {
-
-            /** S errorCode */
-            errorCode?: (number|null);
-
-            /** S roomId */
-            roomId?: (number|null);
-        }
-
-        /** Represents a S. */
-        class S implements IS {
-
-            /**
-             * Constructs a new S.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgCcrDeleteRoomByServer.IS);
-
-            /** S errorCode. */
-            public errorCode: number;
-
-            /** S roomId. */
-            public roomId: number;
-
-            /**
-             * Creates a new S instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns S instance
-             */
-            public static create(properties?: NetMessage.MsgCcrDeleteRoomByServer.IS): NetMessage.MsgCcrDeleteRoomByServer.S;
-
-            /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrDeleteRoomByServer.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgCcrDeleteRoomByServer.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrDeleteRoomByServer.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgCcrDeleteRoomByServer.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a S message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrDeleteRoomByServer.S;
-
-            /**
-             * Decodes a S message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrDeleteRoomByServer.S;
-
-            /**
-             * Verifies a S message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a S message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns S
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrDeleteRoomByServer.S;
-
-            /**
-             * Creates a plain object from a S message. Also converts values to other types if specified.
-             * @param message S
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgCcrDeleteRoomByServer.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgCcrDeleteRoom.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -64025,9 +63836,6 @@ export declare namespace NetMessage {
             /** S roomId */
             roomId?: (number|null);
 
-            /** S playerIndex */
-            playerIndex?: (number|null);
-
             /** S isReady */
             isReady?: (boolean|null);
         }
@@ -64046,9 +63854,6 @@ export declare namespace NetMessage {
 
             /** S roomId. */
             public roomId: number;
-
-            /** S playerIndex. */
-            public playerIndex: number;
 
             /** S isReady. */
             public isReady: boolean;
@@ -64328,11 +64133,8 @@ export declare namespace NetMessage {
             /** S roomId */
             roomId?: (number|null);
 
-            /** S targetPlayerIndex */
-            targetPlayerIndex?: (number|null);
-
-            /** S targetUserId */
-            targetUserId?: (number|null);
+            /** S playerIndex */
+            playerIndex?: (number|null);
         }
 
         /** Represents a S. */
@@ -64350,11 +64152,8 @@ export declare namespace NetMessage {
             /** S roomId. */
             public roomId: number;
 
-            /** S targetPlayerIndex. */
-            public targetPlayerIndex: number;
-
-            /** S targetUserId. */
-            public targetUserId: number;
+            /** S playerIndex. */
+            public playerIndex: number;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -64746,201 +64545,6 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgCcrSetSelfSettings.S, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this S to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-    }
-
-    /** Properties of a MsgCcrGetOwnerPlayerIndex. */
-    interface IMsgCcrGetOwnerPlayerIndex {
-
-        /** MsgCcrGetOwnerPlayerIndex s */
-        s?: (NetMessage.MsgCcrGetOwnerPlayerIndex.IS|null);
-    }
-
-    /** Represents a MsgCcrGetOwnerPlayerIndex. */
-    class MsgCcrGetOwnerPlayerIndex implements IMsgCcrGetOwnerPlayerIndex {
-
-        /**
-         * Constructs a new MsgCcrGetOwnerPlayerIndex.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IMsgCcrGetOwnerPlayerIndex);
-
-        /** MsgCcrGetOwnerPlayerIndex s. */
-        public s?: (NetMessage.MsgCcrGetOwnerPlayerIndex.IS|null);
-
-        /**
-         * Creates a new MsgCcrGetOwnerPlayerIndex instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns MsgCcrGetOwnerPlayerIndex instance
-         */
-        public static create(properties?: NetMessage.IMsgCcrGetOwnerPlayerIndex): NetMessage.MsgCcrGetOwnerPlayerIndex;
-
-        /**
-         * Encodes the specified MsgCcrGetOwnerPlayerIndex message. Does not implicitly {@link NetMessage.MsgCcrGetOwnerPlayerIndex.verify|verify} messages.
-         * @param message MsgCcrGetOwnerPlayerIndex message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IMsgCcrGetOwnerPlayerIndex, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified MsgCcrGetOwnerPlayerIndex message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetOwnerPlayerIndex.verify|verify} messages.
-         * @param message MsgCcrGetOwnerPlayerIndex message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IMsgCcrGetOwnerPlayerIndex, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a MsgCcrGetOwnerPlayerIndex message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns MsgCcrGetOwnerPlayerIndex
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetOwnerPlayerIndex;
-
-        /**
-         * Decodes a MsgCcrGetOwnerPlayerIndex message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MsgCcrGetOwnerPlayerIndex
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetOwnerPlayerIndex;
-
-        /**
-         * Verifies a MsgCcrGetOwnerPlayerIndex message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MsgCcrGetOwnerPlayerIndex message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MsgCcrGetOwnerPlayerIndex
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetOwnerPlayerIndex;
-
-        /**
-         * Creates a plain object from a MsgCcrGetOwnerPlayerIndex message. Also converts values to other types if specified.
-         * @param message MsgCcrGetOwnerPlayerIndex
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.MsgCcrGetOwnerPlayerIndex, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MsgCcrGetOwnerPlayerIndex to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    namespace MsgCcrGetOwnerPlayerIndex {
-
-        /** Properties of a S. */
-        interface IS {
-
-            /** S errorCode */
-            errorCode?: (number|null);
-
-            /** S roomId */
-            roomId?: (number|null);
-
-            /** S ownerPlayerIndex */
-            ownerPlayerIndex?: (number|null);
-        }
-
-        /** Represents a S. */
-        class S implements IS {
-
-            /**
-             * Constructs a new S.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgCcrGetOwnerPlayerIndex.IS);
-
-            /** S errorCode. */
-            public errorCode: number;
-
-            /** S roomId. */
-            public roomId: number;
-
-            /** S ownerPlayerIndex. */
-            public ownerPlayerIndex: number;
-
-            /**
-             * Creates a new S instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns S instance
-             */
-            public static create(properties?: NetMessage.MsgCcrGetOwnerPlayerIndex.IS): NetMessage.MsgCcrGetOwnerPlayerIndex.S;
-
-            /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCcrGetOwnerPlayerIndex.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgCcrGetOwnerPlayerIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCcrGetOwnerPlayerIndex.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgCcrGetOwnerPlayerIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a S message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCcrGetOwnerPlayerIndex.S;
-
-            /**
-             * Decodes a S message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCcrGetOwnerPlayerIndex.S;
-
-            /**
-             * Verifies a S message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a S message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns S
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCcrGetOwnerPlayerIndex.S;
-
-            /**
-             * Creates a plain object from a S message. Also converts values to other types if specified.
-             * @param message S
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgCcrGetOwnerPlayerIndex.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

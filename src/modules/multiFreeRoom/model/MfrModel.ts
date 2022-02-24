@@ -14,39 +14,48 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MfrModel {
-    import IMfrRoomInfo                             = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
+    import IMfrRoomStaticInfo                       = ProtoTypes.MultiFreeRoom.IMfrRoomStaticInfo;
+    import IMfrRoomPlayerInfo                       = ProtoTypes.MultiFreeRoom.IMfrRoomPlayerInfo;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
 
-    const _roomInfoAccessor = Helpers.createCachedDataAccessor<number, IMfrRoomInfo>({
-        reqData : (roomId: number) => MfrProxy.reqMfrGetRoomInfo(roomId),
+    const _roomStaticInfoAccessor = Helpers.createCachedDataAccessor<number, IMfrRoomStaticInfo>({
+        reqData : (roomId: number) => MfrProxy.reqMfrGetRoomStaticInfo(roomId),
+    });
+    const _roomPlayerInfoAccessor = Helpers.createCachedDataAccessor<number, IMfrRoomPlayerInfo>({
+        reqData : (roomId: number) => MfrProxy.reqMfrGetRoomPlayerInfo(roomId),
     });
 
-    const _unjoinedRoomIdSet    = new Set<number>();
+    const _joinableRoomIdSet    = new Set<number>();
     const _joinedRoomIdSet      = new Set<number>();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for rooms.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getRoomInfo(roomId: number): Promise<IMfrRoomInfo | null> {
-        return _roomInfoAccessor.getData(roomId);
+    export function getRoomStaticInfo(roomId: number): Promise<IMfrRoomStaticInfo | null> {
+        return _roomStaticInfoAccessor.getData(roomId);
     }
-    function setRoomInfo(roomId: number, info: IMfrRoomInfo | null): void {
-        _roomInfoAccessor.setData(roomId, info);
+    export function setRoomStaticInfo(roomId: number, info: IMfrRoomStaticInfo | null): void {
+        _roomStaticInfoAccessor.setData(roomId, info);
     }
 
-    export function setJoinableRoomInfoList(infoList: IMfrRoomInfo[]): void {
-        _unjoinedRoomIdSet.clear();
-        for (const roomInfo of infoList || []) {
-            const roomId = Helpers.getExisted(roomInfo.roomId);
-            _unjoinedRoomIdSet.add(roomId);
-            setRoomInfo(roomId, roomInfo);
+    export function getRoomPlayerInfo(roomId: number): Promise<IMfrRoomPlayerInfo | null> {
+        return _roomPlayerInfoAccessor.getData(roomId);
+    }
+    export function setRoomPlayerInfo(roomId: number, info: IMfrRoomPlayerInfo | null): void {
+        _roomPlayerInfoAccessor.setData(roomId, info);
+    }
+
+    export function setJoinableRoomIdArray(roomIdArray: number[]): void {
+        _joinableRoomIdSet.clear();
+        for (const roomId of roomIdArray || []) {
+            _joinableRoomIdSet.add(roomId);
         }
     }
     export function getUnjoinedRoomIdSet(): Set<number> {
-        return _unjoinedRoomIdSet;
+        return _joinableRoomIdSet;
     }
 
     export function setJoinedRoomIdArray(roomIdArray: number[]): void {
@@ -59,101 +68,8 @@ namespace MfrModel {
         return _joinedRoomIdSet;
     }
 
-    export function updateOnMsgMfrGetRoomInfo(data: ProtoTypes.NetMessage.MsgMfrGetRoomInfo.IS): void {
-        const roomInfo  = data.roomInfo ?? null;
-        const roomId    = Helpers.getExisted(data.roomId);
-        setRoomInfo(roomId, roomInfo);
-
-        if (roomInfo == null) {
-            _unjoinedRoomIdSet.delete(roomId);
-            _joinedRoomIdSet.delete(roomId);
-        }
-    }
-    export async function updateOnMsgMfrDeletePlayer(data: ProtoTypes.NetMessage.MsgMfrDeletePlayer.IS): Promise<void> {
-        const roomId    = Helpers.getExisted(data.roomId);
-        const roomInfo  = await getRoomInfo(roomId);
-        if (roomInfo) {
-            const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
-            const playerData        = playerDataList.find(v => v.playerIndex === data.targetPlayerIndex);
-            Helpers.deleteElementFromArray(playerDataList, playerData);
-
-            if ((playerData) && (playerData.userId === UserModel.getSelfUserId())) {
-                _unjoinedRoomIdSet.add(roomId);
-                _joinedRoomIdSet.delete(roomId);
-            }
-        }
-    }
-    export async function updateOnMsgMfrSetReady(data: ProtoTypes.NetMessage.MsgMfrSetReady.IS): Promise<void> {
-        Helpers.getExisted((await getRoomInfo(Helpers.getExisted(data.roomId)))?.playerDataList?.find(v => v.playerIndex === data.playerIndex)).isReady = data.isReady;
-    }
-    export async function updateOnMsgMfrSetSelfSettings(data: ProtoTypes.NetMessage.MsgMfrSetSelfSettings.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
-        if (roomInfo) {
-            const oldPlayerIndex                = data.oldPlayerIndex;
-            const newPlayerIndex                = data.newPlayerIndex;
-            const playerDataInRoom              = Helpers.getExisted(roomInfo.playerDataList?.find(v => v.playerIndex === oldPlayerIndex));
-            const playerDataInWar               = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.playerManager?.players?.find(v => v.playerIndex === newPlayerIndex));
-            playerDataInRoom.coId               = data.coId;
-            playerDataInRoom.unitAndTileSkinId  = playerDataInWar.unitAndTileSkinId;
-            playerDataInRoom.playerIndex        = newPlayerIndex;
-            if ((oldPlayerIndex !== newPlayerIndex) && (roomInfo.ownerPlayerIndex === oldPlayerIndex)) {
-                roomInfo.ownerPlayerIndex = newPlayerIndex;
-            }
-        }
-    }
-    export async function updateOnMsgMfrGetOwnerPlayerIndex(data: ProtoTypes.NetMessage.MsgMfrGetOwnerPlayerIndex.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
-        if (roomInfo) {
-            roomInfo.ownerPlayerIndex = data.ownerPlayerIndex;
-        }
-    }
-    export async function updateOnMsgMfrJoinRoom(data: ProtoTypes.NetMessage.MsgMfrJoinRoom.IS): Promise<void> {
-        const roomInfo          = Helpers.getExisted(await getRoomInfo(Helpers.getExisted(data.roomId)));
-        const playerIndex       = data.playerIndex;
-        const playerDataInWar   = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.playerManager?.players?.find(v => v.playerIndex === playerIndex));
-        if (!roomInfo.playerDataList) {
-            roomInfo.playerDataList = [{
-                playerIndex         : playerIndex,
-                userId              : data.userId,
-                isReady             : data.isReady,
-                coId                : playerDataInWar.coId,
-                unitAndTileSkinId   : playerDataInWar.unitAndTileSkinId,
-            }];
-        } else {
-            const playerDataArrayInRoom = roomInfo.playerDataList;
-            Helpers.deleteElementFromArray(playerDataArrayInRoom, playerDataArrayInRoom.find(v => v.playerIndex === playerIndex));
-            playerDataArrayInRoom.push({
-                playerIndex         : playerIndex,
-                userId              : data.userId,
-                isReady             : data.isReady,
-                coId                : playerDataInWar.coId,
-                unitAndTileSkinId   : playerDataInWar.unitAndTileSkinId,
-            });
-        }
-    }
-    export async function updateOnMsgMfrExitRoom(data: ProtoTypes.NetMessage.MsgMfrExitRoom.IS): Promise<void> {
-        const roomId    = Helpers.getExisted(data.roomId);
-        const roomInfo  = await getRoomInfo(roomId);
-        if (roomInfo) {
-            const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
-            const playerData        = playerDataList.find(v => v.playerIndex === data.playerIndex);
-            Helpers.deleteElementFromArray(playerDataList, playerData);
-
-            if ((playerData) && (playerData.userId === UserModel.getSelfUserId())) {
-                _unjoinedRoomIdSet.add(roomId);
-                _joinedRoomIdSet.delete(roomId);
-            }
-        }
-    }
-    export function updateOnMsgMfrDeleteRoomByServer(data: ProtoTypes.NetMessage.MsgMfrDeleteRoomByServer.IS): void {
-        const roomId = Helpers.getExisted(data.roomId);
-        setRoomInfo(roomId, null);
-        _unjoinedRoomIdSet.delete(roomId);
-        _joinedRoomIdSet.delete(roomId);
-    }
-
     export async function checkIsRed(): Promise<boolean> {
-        for (const roomId of _joinedRoomIdSet) {
+        for (const roomId of getJoinedRoomIdSet()) {
             if (await checkIsRedForRoom(roomId)) {
                 return true;
             }
@@ -161,19 +77,22 @@ namespace MfrModel {
         return false;
     }
     export async function checkIsRedForRoom(roomId: number): Promise<boolean> {
-        const roomInfo = await getRoomInfo(roomId);
-        if (roomInfo) {
+        const [roomStaticInfo, roomPlayerInfo] = await Promise.all([
+            getRoomStaticInfo(roomId),
+            getRoomPlayerInfo(roomId),
+        ]);
+        if ((roomPlayerInfo) && (roomStaticInfo)) {
             const selfUserId        = UserModel.getSelfUserId();
-            const playerDataList    = roomInfo.playerDataList || [];
+            const playerDataList    = roomPlayerInfo.playerDataList || [];
             const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
             if ((selfPlayerData) && (!selfPlayerData.isReady)) {
                 return true;
             }
 
-            if ((playerDataList.length === WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon?.warRule)))    &&
-                (playerDataList.every(v => v.isReady))                                                                                                                          &&
-                (selfPlayerData)                                                                                                                                                &&
-                (roomInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
+            if ((playerDataList.length === WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon?.warRule)))  &&
+                (playerDataList.every(v => v.isReady))                                                                                                                              &&
+                (selfPlayerData)                                                                                                                                                    &&
+                (roomPlayerInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
             ) {
                 return true;
             }
@@ -181,31 +100,37 @@ namespace MfrModel {
         return false;
     }
     export async function checkCanStartGame(roomId: number): Promise<boolean> {
-        const roomInfo = await getRoomInfo(roomId);
-        if (!roomInfo) {
+        const [roomStaticInfo, roomPlayerInfo] = await Promise.all([
+            getRoomStaticInfo(roomId),
+            getRoomPlayerInfo(roomId),
+        ]);
+        if ((roomStaticInfo == null) || (roomPlayerInfo == null)) {
             return false;
         }
 
         const selfUserId        = UserModel.getSelfUserId();
-        const playerDataList    = roomInfo.playerDataList || [];
+        const playerDataList    = roomPlayerInfo.playerDataList || [];
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
-            && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
-            && (playerDataList.length === WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon?.warRule)))
+            && (selfPlayerData.playerIndex === roomPlayerInfo.ownerPlayerIndex)
+            && (playerDataList.length === WarRuleHelpers.getPlayersCountUnneutral(Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon?.warRule)))
             && (playerDataList.every(v => v.isReady));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function createDataForCommonWarPlayerInfoPage(roomId: number): Promise<OpenDataForCommonWarPlayerInfoPage> {
-        const roomInfo = await getRoomInfo(roomId);
-        if (roomInfo == null) {
+        const [roomStaticInfo, roomPlayerInfo] = await Promise.all([
+            getRoomStaticInfo(roomId),
+            getRoomPlayerInfo(roomId),
+        ]);
+        if ((roomStaticInfo == null) || (roomPlayerInfo == null)) {
             return null;
         }
 
-        const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon);
+        const settingsForCommon     = Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon);
         const warRule               = Helpers.getExisted(settingsForCommon.warRule);
         const playersCountUnneutral = WarRuleHelpers.getPlayersCountUnneutral(warRule);
-        const playerDataList        = roomInfo.playerDataList || [];
+        const playerDataList        = roomPlayerInfo.playerDataList || [];
         const playerInfoArray       : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const playerData    = playerDataList.find(v => v.playerIndex === playerIndex);
@@ -227,7 +152,7 @@ namespace MfrModel {
         return {
             configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
             playersCountUnneutral,
-            roomOwnerPlayerIndex    : Helpers.getExisted(roomInfo.ownerPlayerIndex),
+            roomOwnerPlayerIndex    : Helpers.getExisted(roomPlayerInfo.ownerPlayerIndex),
             callbackOnExitRoom      : () => MfrProxy.reqMfrExitRoom(roomId),
             callbackOnDeletePlayer  : (playerIndex) => MfrProxy.reqMfrDeletePlayer(roomId, playerIndex),
             playerInfoArray,
@@ -235,7 +160,7 @@ namespace MfrModel {
     }
 
     export async function createDataForCommonWarBasicSettingsPage(roomId: number, showPassword: boolean): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const roomInfo = await getRoomInfo(roomId);
+        const roomInfo = await getRoomStaticInfo(roomId);
         if (roomInfo == null) {
             return { dataArrayForListSettings: [] };
         }
@@ -328,7 +253,7 @@ namespace MfrModel {
     }
 
     export async function createDataForCommonWarAdvancedSettingsPage(roomId: number): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-        const roomInfo = await getRoomInfo(roomId);
+        const roomInfo = await getRoomStaticInfo(roomId);
         if (roomInfo == null) {
             return null;
         }

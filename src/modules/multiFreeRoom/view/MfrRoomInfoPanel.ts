@@ -86,16 +86,10 @@ namespace TwnsMfrRoomInfoPanel {
                 { ui: this._btnChat,        callback: this._onTouchedBtnChat },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMfrGetRoomInfo,          callback: this._onNotifyMsgMfrGetRoomInfo },
-                { type: NotifyType.MsgMfrSetSelfSettings,      callback: this._onNotifyMsgMfrSetSelfSettings },
-                { type: NotifyType.MsgMfrSetReady,             callback: this._onNotifyMsgMfrSetReady },
-                { type: NotifyType.MsgMfrExitRoom,             callback: this._onNotifyMsgMfrExitRoom },
-                { type: NotifyType.MsgMfrDeleteRoomByServer,   callback: this._onNotifyMsgMfrDeleteRoomByServer },
-                { type: NotifyType.MsgMfrStartWar,             callback: this._onNotifyMsgMfrStartWar },
-                { type: NotifyType.MsgMfrDeletePlayer,         callback: this._onNotifyMsgMfrDeletePlayer },
-                { type: NotifyType.MsgMfrGetOwnerPlayerIndex,  callback: this._onNotifyMsgMfrGetOwnerPlayerIndex },
-                { type: NotifyType.MsgMfrJoinRoom,             callback: this._onNotifyMsgMfrJoinRoom },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMfrGetRoomPlayerInfo,     callback: this._onNotifyMsgMfrGetRoomPlayerInfo },
+                { type: NotifyType.MsgMfrGetRoomStaticInfo,     callback: this._onNotifyMsgMfrGetRoomStaticInfo },
+                { type: NotifyType.MsgMfrExitRoom,              callback: this._onNotifyMsgMfrExitRoom },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
@@ -148,19 +142,22 @@ namespace TwnsMfrRoomInfoPanel {
         }
 
         private async _onTouchedBtnChooseCo(): Promise<void> {
-            const roomId    = this._getOpenData().roomId;
-            const roomInfo  = await MfrModel.getRoomInfo(roomId);
-            if (roomInfo == null) {
+            const roomId                            = this._getOpenData().roomId;
+            const [roomStaticInfo, roomPlayerInfo]  = await Promise.all([
+                MfrModel.getRoomStaticInfo(roomId),
+                MfrModel.getRoomPlayerInfo(roomId),
+            ]);
+            if ((roomStaticInfo == null) || (roomPlayerInfo == null)) {
                 return;
             }
 
             const selfUserId        = UserModel.getSelfUserId();
-            const selfPlayerData    = roomInfo.playerDataList?.find(v => v.userId === selfUserId);
+            const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === selfUserId);
             if (selfPlayerData != null) {
                 if (selfPlayerData.isReady) {
                     FloatText.show(Lang.getText(LangTextType.A0128));
                 } else {
-                    const settingsForCommon = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon);
+                    const settingsForCommon = Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon);
                     const playerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                         currentCoId         : selfPlayerData.coId ?? null,
@@ -196,7 +193,7 @@ namespace TwnsMfrRoomInfoPanel {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                     content : Lang.getText(LangTextType.A0149),
                     callback: () => {
-                        MfrProxy.reqMfrDeleteRoomByPlayer(roomId);
+                        MfrProxy.reqMfrDeleteRoom(roomId);
                     },
                 });
             }
@@ -221,92 +218,53 @@ namespace TwnsMfrRoomInfoPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyMsgMfrGetRoomInfo(e: egret.Event): void {
-            const data = e.data as NetMessage.MsgMfrGetRoomInfo.IS;
-            if (data.roomId === this._getOpenData().roomId) {
+        private _onNotifyMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
+            const data = e.data as NetMessage.MsgMfrGetRoomPlayerInfo.IS;
+            if (data.roomId !== this._getOpenData().roomId) {
+                return;
+            }
+
+            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId());
+            if (!data.roomPlayerInfo?.playerDataList?.some(v => v.userId === selfUserId)) {
+                this.close();
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMyRoomListPanel, void 0);
+            } else {
                 this._updateGroupButton();
                 this._updateBtnChooseCo();
-                this._updateCommonWarMapInfoPage();
                 this._updateCommonWarPlayerInfoPage();
+            }
+        }
+
+        private _onNotifyMsgMfrGetRoomStaticInfo(e: egret.Event): void {
+            const data = e.data as NetMessage.MsgMfrGetRoomStaticInfo.IS;
+            if (data.roomId !== this._getOpenData().roomId) {
+                return;
+            }
+
+            if (data.roomStaticInfo == null) {
+                FloatText.show(Lang.getText(LangTextType.A0019));
+                this.close();
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMyRoomListPanel, void 0);
+            } else {
+                this._updateCommonWarMapInfoPage();
                 this._updateCommonWarBasicSettingsPage();
                 this._updateCommonWarAdvancedSettingsPage();
             }
         }
 
-        private _onNotifyMsgMfrSetSelfSettings(e: egret.Event): void {
-            const data = e.data as NetMessage.MsgMfrSetSelfSettings.IS;
-            if (data.roomId === this._getOpenData().roomId) {
-                this._updateGroupButton();
-                this._updateBtnChooseCo();
-                this._updateCommonWarPlayerInfoPage();
-            }
-        }
-
-        private _onNotifyMsgMfrSetReady(e: egret.Event): void {
-            const data = e.data as NetMessage.MsgMfrSetReady.IS;
-            if (data.roomId === this._getOpenData().roomId) {
-                this._updateGroupButton();
-                this._updateCommonWarPlayerInfoPage();
-            }
-        }
-
         private async _onNotifyMsgMfrExitRoom(e: egret.Event): Promise<void> {
-            const roomId = (e.data as NetMessage.MsgMfrExitRoom.IS).roomId;
+            const data      = e.data as NetMessage.MsgMfrExitRoom.IS;
+            const roomId    = data.roomId;
             if (roomId === this._getOpenData().roomId) {
-                const selfUserId = UserModel.getSelfUserId();
-                if ((await MfrModel.getRoomInfo(roomId))?.playerDataList?.find(v => v.userId === selfUserId)) {
-                    this._updateGroupButton();
-                    this._updateCommonWarPlayerInfoPage();
-                } else {
-                    FloatText.show(Lang.getText(LangTextType.A0016));
-                    this.close();
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMyRoomListPanel, void 0);
-                }
-            }
-        }
-
-        private _onNotifyMsgMfrDeleteRoomByServer(e: egret.Event): void {
-            const data = e.data as NetMessage.MsgMfrDeleteRoomByServer.IS;
-            if (data.roomId === this._getOpenData().roomId) {
-                FloatText.show(Lang.getText(LangTextType.A0019));
-                this.close();
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMyRoomListPanel, void 0);
-            }
-        }
-
-        private _onNotifyMsgMfrStartWar(e: egret.Event): void {
-            const data = e.data as NetMessage.MsgMfrStartWar.IS;
-            if (data.roomId === this._getOpenData().roomId) {
-                this.close();
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMyRoomListPanel, void 0);
-            }
-        }
-
-        private _onNotifyMsgMfrDeletePlayer(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrDeletePlayer.IS;
-            if (data.roomId === this._getOpenData().roomId) {
-                if (data.targetUserId !== UserModel.getSelfUserId()) {
-                    this._updateCommonWarPlayerInfoPage();
-                } else {
+                const exitRoomType = data.exitType;
+                if (exitRoomType === Types.ExitRoomType.DeletedByRoomOwner) {
                     FloatText.show(Lang.getText(LangTextType.A0127));
-                    this.close();
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMyRoomListPanel, void 0);
+                } else if (exitRoomType === Types.ExitRoomType.SelfExit) {
+                    FloatText.show(Lang.getText(LangTextType.A0016));
                 }
-            }
-        }
 
-        private _onNotifyMsgMfrGetOwnerPlayerIndex(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetOwnerPlayerIndex.IS;
-            if (data.roomId === this._getOpenData().roomId) {
-                this._updateGroupButton();
-                this._updateCommonWarPlayerInfoPage();
-            }
-        }
-
-        private _onNotifyMsgMfrJoinRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrJoinRoom.IS;
-            if (data.roomId === this._getOpenData().roomId) {
-                this._updateCommonWarPlayerInfoPage();
+                this.close();
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrMyRoomListPanel, void 0);
             }
         }
 
@@ -315,7 +273,7 @@ namespace TwnsMfrRoomInfoPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private async _initSclPlayerIndex(): Promise<void> {
             const roomId                = this._getOpenData().roomId;
-            const playersCountUnneutral = Helpers.getExisted((await MfrModel.getRoomInfo(roomId))?.settingsForMfw?.initialWarData?.playerManager?.players).length - 1;
+            const playersCountUnneutral = Helpers.getExisted((await MfrModel.getRoomStaticInfo(roomId))?.settingsForMfw?.initialWarData?.playerManager?.players).length - 1;
             const dataArray             : DataForPlayerIndexRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataArray.push({
@@ -367,21 +325,25 @@ namespace TwnsMfrRoomInfoPanel {
         }
 
         private async _updateBtnChooseCo(): Promise<void> {
-            const roomInfo = await MfrModel.getRoomInfo(this._getOpenData().roomId);
-            if (roomInfo == null) {
+            const roomId                            = this._getOpenData().roomId;
+            const [roomStaticInfo, roomPlayerInfo]  = await Promise.all([
+                MfrModel.getRoomStaticInfo(roomId),
+                MfrModel.getRoomPlayerInfo(roomId),
+            ]);
+            if ((roomStaticInfo == null) || (roomPlayerInfo == null)) {
                 return;
             }
 
             const userId            = UserModel.getSelfUserId();
-            const selfPlayerData    = roomInfo.playerDataList?.find(v => v.userId === userId);
+            const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === userId);
             if (selfPlayerData) {
-                this._btnChooseCo.label = ConfigManager.getCoBasicCfg(Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon?.configVersion), Helpers.getExisted(selfPlayerData.coId)).name;
+                this._btnChooseCo.label = ConfigManager.getCoBasicCfg(Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon?.configVersion), Helpers.getExisted(selfPlayerData.coId)).name;
             }
         }
 
         private async _updateGroupButton(): Promise<void> {
             const roomId            = this._getOpenData().roomId;
-            const roomInfo          = Helpers.getExisted(await MfrModel.getRoomInfo(roomId));
+            const roomInfo          = Helpers.getExisted(await MfrModel.getRoomPlayerInfo(roomId));
             const ownerInfo         = roomInfo.playerDataList?.find(v => v.playerIndex === roomInfo.ownerPlayerIndex);
             const isSelfOwner       = (!!ownerInfo) && (ownerInfo.userId === UserModel.getSelfUserId());
             const btnStartGame      = this._btnStartGame;
@@ -419,7 +381,7 @@ namespace TwnsMfrRoomInfoPanel {
         }
 
         private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const warData = (await MfrModel.getRoomInfo(this._getOpenData().roomId))?.settingsForMfw?.initialWarData;
+            const warData = (await MfrModel.getRoomStaticInfo(this._getOpenData().roomId))?.settingsForMfw?.initialWarData;
             return warData == null
                 ? {}
                 : { warInfo: { warData, players: null } };
@@ -520,9 +482,9 @@ namespace TwnsMfrRoomInfoPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMfrGetRoomInfo,      callback: this._onNotifyMsgMfrGetRoomInfo },
-                { type: NotifyType.MsgMfrSetSelfSettings,  callback: this._onNotifyMsgMfrSetSelfSettings },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMfrGetRoomPlayerInfo,     callback: this._onNotifyMsgMfrGetRoomPlayerInfo },
+                { type: NotifyType.MsgMfrSetSelfSettings,       callback: this._onNotifyMsgMfrSetSelfSettings },
             ]);
         }
 
@@ -532,15 +494,18 @@ namespace TwnsMfrRoomInfoPanel {
         }
 
         public async onItemTapEvent(): Promise<void> {
-            const data      = this._getData();
-            const roomId    = data.roomId;
-            const roomInfo  = data ? await MfrModel.getRoomInfo(roomId) : null;
-            if (roomInfo == null) {
+            const data                              = this._getData();
+            const roomId                            = data.roomId;
+            const [roomStaticInfo, roomPlayerInfo]  = await Promise.all([
+                MfrModel.getRoomStaticInfo(roomId),
+                MfrModel.getRoomPlayerInfo(roomId),
+            ]);
+            if ((roomStaticInfo == null) || (roomPlayerInfo == null)) {
                 return;
             }
 
             const selfUserId        = UserModel.getSelfUserId();
-            const playerDataList    = Helpers.getExisted(roomInfo.playerDataList);
+            const playerDataList    = Helpers.getExisted(roomPlayerInfo.playerDataList);
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             if (selfPlayerData == null) {
                 return;
@@ -558,7 +523,7 @@ namespace TwnsMfrRoomInfoPanel {
                     FloatText.show(Lang.getText(LangTextType.A0202));
                 }
             } else {
-                const settingsForCommon     = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon);
+                const settingsForCommon     = Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon);
                 const currCoId              = Helpers.getExisted(selfPlayerData.coId);
                 const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : Helpers.getExisted(settingsForCommon.warRule),
@@ -575,8 +540,8 @@ namespace TwnsMfrRoomInfoPanel {
         private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
-        private _onNotifyMsgMfrGetRoomInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomInfo.IS;
+        private _onNotifyMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateState();
@@ -592,7 +557,7 @@ namespace TwnsMfrRoomInfoPanel {
 
         private async _updateLabelName(): Promise<void> {
             const data      = this._getData();
-            const roomInfo  = await MfrModel.getRoomInfo(data.roomId);
+            const roomInfo  = await MfrModel.getRoomStaticInfo(data.roomId);
             if (roomInfo == null) {
                 return;
             }
@@ -603,9 +568,9 @@ namespace TwnsMfrRoomInfoPanel {
         }
         private async _updateState(): Promise<void> {
             const data              = this._getData();
-            const roomInfo          = await MfrModel.getRoomInfo(data.roomId);
+            const roomPlayerInfo    = await MfrModel.getRoomPlayerInfo(data.roomId);
             const selfUserId        = UserModel.getSelfUserId();
-            const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
+            const playerDataList    = roomPlayerInfo ? roomPlayerInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             this.currentState       = ((selfPlayerData) && (data.playerIndex === selfPlayerData.playerIndex)) ? `down` : `up`;
         }
@@ -620,8 +585,8 @@ namespace TwnsMfrRoomInfoPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.MsgMfrGetRoomInfo,      callback: this._onNotifyMsgMfrGetRoomInfo },
-                { type: NotifyType.MsgMfrSetSelfSettings,  callback: this._onNotifyMsgMfrSetSelfSettings },
+                { type: NotifyType.MsgMfrGetRoomPlayerInfo,     callback: this._onNotifyMsgMfrGetRoomPlayerInfo },
+                { type: NotifyType.MsgMfrSetSelfSettings,       callback: this._onNotifyMsgMfrSetSelfSettings },
             ]);
         }
 
@@ -629,8 +594,8 @@ namespace TwnsMfrRoomInfoPanel {
             this._updateImgColor();
         }
 
-        private _onNotifyMsgMfrGetRoomInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomInfo.IS;
+        private _onNotifyMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateImgColor();
             }
@@ -646,9 +611,9 @@ namespace TwnsMfrRoomInfoPanel {
             const data = this.data;
             if (data) {
                 const skinId            = data.skinId;
-                const roomInfo          = data ? await MfrModel.getRoomInfo(data.roomId) : null;
+                const roomPlayerInfo    = data ? await MfrModel.getRoomPlayerInfo(data.roomId) : null;
                 const selfUserId        = UserModel.getSelfUserId();
-                const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
+                const playerDataList    = roomPlayerInfo ? roomPlayerInfo.playerDataList : null;
                 const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
                 this._imgColor.source   = WarCommonHelpers.getImageSourceForSkinId(skinId, (!!selfPlayerData) && (selfPlayerData.unitAndTileSkinId === skinId));
             }
@@ -665,9 +630,9 @@ namespace TwnsMfrRoomInfoPanel {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMfrGetRoomInfo,  callback: this._onNotifyMsgMfrGetRoomInfo },
-                { type: NotifyType.MsgMfrSetReady,     callback: this._onNotifyMsgMfrSetReady },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMfrGetRoomPlayerInfo,     callback: this._onNotifyMsgMfrGetRoomPlayerInfo },
+                { type: NotifyType.MsgMfrSetReady,              callback: this._onNotifyMsgMfrSetReady },
             ]);
         }
 
@@ -680,9 +645,9 @@ namespace TwnsMfrRoomInfoPanel {
             const data              = this._getData();
             const isReady           = data.isReady;
             const roomId            = data.roomId;
-            const roomInfo          = await MfrModel.getRoomInfo(roomId);
+            const roomPlayerInfo    = await MfrModel.getRoomPlayerInfo(roomId);
             const selfUserId        = UserModel.getSelfUserId();
-            const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
+            const playerDataList    = roomPlayerInfo ? roomPlayerInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             if ((selfPlayerData) && (selfPlayerData.isReady !== isReady)) {
                 MfrProxy.reqMfrSetReady(roomId, isReady);
@@ -691,8 +656,8 @@ namespace TwnsMfrRoomInfoPanel {
         private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
-        private _onNotifyMsgMfrGetRoomInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomInfo.IS;
+        private _onNotifyMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateStateAndImgRed();
@@ -712,10 +677,10 @@ namespace TwnsMfrRoomInfoPanel {
         }
         private async _updateStateAndImgRed(): Promise<void> {
             const data              = this._getData();
-            const roomInfo          = await MfrModel.getRoomInfo(data.roomId);
+            const roomPlayerInfo    = await MfrModel.getRoomPlayerInfo(data.roomId);
             const isReady           = data.isReady;
             const selfUserId        = UserModel.getSelfUserId();
-            const playerDataList    = roomInfo ? roomInfo.playerDataList : null;
+            const playerDataList    = roomPlayerInfo ? roomPlayerInfo.playerDataList : null;
             const selfPlayerData    = playerDataList ? playerDataList.find(v => v.userId === selfUserId) : null;
             const isSelected        = (!!selfPlayerData) && (isReady === selfPlayerData.isReady);
             this.currentState       = isSelected ? `down` : `up`;
