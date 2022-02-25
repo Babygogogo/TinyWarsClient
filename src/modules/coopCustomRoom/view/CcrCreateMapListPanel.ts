@@ -178,7 +178,7 @@ namespace TwnsCcrCreateMapListPanel {
                     const mapTag            = mapBriefData.mapTag || {};
                     const realMapName       = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
                     const rating            = await WarMapModel.getAverageRating(mapId);
-                    const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId);
+                    const actualPlayedTimes = await WarMapModel.getTotalPlayedTimes(mapId);
                     if ((!mapBriefData.ruleAvailability?.canCcw)                                                ||
                         (!mapExtraData.isEnabled)                                                               ||
                         ((mapName) && (!realMapName.toLowerCase().includes(mapName)))                           ||

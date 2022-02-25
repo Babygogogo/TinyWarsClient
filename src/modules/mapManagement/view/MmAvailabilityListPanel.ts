@@ -157,7 +157,7 @@ namespace TwnsMmAvailabilityListPanel {
 
                     const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
                     const averageRating     = await WarMapModel.getAverageRating(mapId);
-                    const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId);
+                    const actualPlayedTimes = await WarMapModel.getTotalPlayedTimes(mapId);
                     if ((!mapBriefData.mapExtraData?.isEnabled)                                                                 ||
                         ((mapNameForFilter) && (!mapName.toLowerCase().includes(mapNameForFilter)))                             ||
                         ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                    ||
@@ -187,7 +187,7 @@ namespace TwnsMmAvailabilityListPanel {
             this._labelDesigner.text        = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
             this._labelPlayersCount.text    = Lang.getFormattedText(LangTextType.F0002, mapRawData.playersCountUnneutral);
             this._labelRating.text          = Lang.getFormattedText(LangTextType.F0003, rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
+            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMapModel.getTotalPlayedTimes(mapId));
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);

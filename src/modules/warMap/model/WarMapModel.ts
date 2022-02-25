@@ -80,17 +80,12 @@ namespace WarMapModel {
     export async function getDesignerName(mapId: number): Promise<string | null> {
         return (await getRawData(mapId))?.designerName ?? null;
     }
-    export async function getMultiPlayerTotalPlayedTimes(mapId: number): Promise<number> {
+    export async function getTotalPlayedTimes(mapId: number): Promise<number> {
         const mapBriefData  = Helpers.getExisted(await getBriefData(mapId));
-        const complexInfo   = mapBriefData.mapExtraData?.mapComplexInfo;
         let totalTimes      = 0;
-        for (const info of complexInfo ? complexInfo.warStatisticsArray || [] : []) {
-            if ((info.warType === WarType.McwFog) ||
-                (info.warType === WarType.McwStd) ||
-                (info.warType === WarType.MrwFog) ||
-                (info.warType === WarType.MrwStd)
-            ) {
-                totalTimes += info.totalPlayedTimes || 0;
+        for (const statisticsForRule of mapBriefData.mapExtraData?.mapWarStatistics?.statisticsForRuleArray ?? []) {
+            for (const info of statisticsForRule.statisticsForTurnArray ?? []) {
+                totalTimes += info.totalGames ?? 0;
             }
         }
 

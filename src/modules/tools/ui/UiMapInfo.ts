@@ -165,7 +165,7 @@ namespace TwnsUiMapInfo {
                 labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
                 labelRaters.text        = `(${await WarMapModel.getTotalRatersCount(mapId)})`;
                 labelMyRating.text      = myRating != null ? `${myRating}` : Lang.getText(LangTextType.B0001);
-                labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)}`;
+                labelPlayedTimes.text   = `${await WarMapModel.getTotalPlayedTimes(mapId)}`;
                 labelMapSize.text       = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
                 btnSetMyRating.visible  = true;
                 this._listTile.bindData(generateDataForListTile(Helpers.getExisted(mapRawData.tileDataArray)));

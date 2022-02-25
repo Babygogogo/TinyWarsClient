@@ -163,7 +163,7 @@ namespace TwnsMcrCreateMapListPanel {
                     const mapTag            = mapBriefData.mapTag || {};
                     const realMapName       = Helpers.getExisted(await WarMapModel.getMapNameInCurrentLanguage(mapId));
                     const rating            = await WarMapModel.getAverageRating(mapId);
-                    const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId);
+                    const actualPlayedTimes = await WarMapModel.getTotalPlayedTimes(mapId);
                     if ((!mapBriefData.ruleAvailability?.canMcw)                                                            ||
                         (!mapExtraData.isEnabled)                                                                           ||
                         ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
