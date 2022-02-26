@@ -69,6 +69,7 @@
 		"resource/skins/common/CommonInputPanel.exml",
 		"resource/skins/component/textInput/TextInput003.exml",
 		"resource/skins/common/CommonJoinRoomPasswordPanel.exml",
+		"resource/skins/common/CommonMapWarStatisticsPanel.exml",
 		"resource/skins/common/CommonModifyWarRuleNamePanel.exml",
 		"resource/skins/common/CommonRankListPanel.exml",
 		"resource/skins/common/CommonServerStatusPanel.exml",

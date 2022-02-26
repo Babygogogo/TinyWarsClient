@@ -81,6 +81,7 @@ namespace TwnsPanelConfig {
         CommonInputPanel                    : PanelConfig<TwnsCommonInputPanel.OpenData>;
         CommonInputIntegerPanel             : PanelConfig<TwnsCommonInputIntegerPanel.OpenData>;
         CommonJoinRoomPasswordPanel         : PanelConfig<TwnsCommonJoinRoomPasswordPanel.OpenData>;
+        CommonMapWarStatisticsPanel         : PanelConfig<TwnsCommonMapWarStatisticsPanel.OpenData>;
         CommonModifyWarRuleNamePanel        : PanelConfig<TwnsCommonModifyWarRuleNamePanel.OpenData>;
         CommonRankListPanel                 : PanelConfig<TwnsCommonRankListPanel.OpenData>;
         CommonServerStatusPanel             : PanelConfig<TwnsCommonServerStatusPanel.OpenData>;
@@ -674,6 +675,12 @@ namespace TwnsPanelConfig {
             CommonJoinRoomPasswordPanel: {
                 cls         : TwnsCommonJoinRoomPasswordPanel?.CommonJoinRoomPasswordPanel,
                 skinName    : `resource/skins/common/CommonJoinRoomPasswordPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            CommonMapWarStatisticsPanel: {
+                cls         : TwnsCommonMapWarStatisticsPanel?.CommonMapWarStatisticsPanel,
+                skinName    : `resource/skins/common/CommonMapWarStatisticsPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 

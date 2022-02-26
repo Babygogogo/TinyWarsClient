@@ -4275,6 +4275,17 @@ export const enum ServerErrorCode {
     MapManager_UpdateMapWarStatistics_0008,
     MapManager_UpdateMapWarStatistics_0009,
 
+    MapManager_UpdateMapWarStatisticsWithReplayInfo_0000,
+    MapManager_UpdateMapWarStatisticsWithReplayInfo_0001,
+    MapManager_UpdateMapWarStatisticsWithReplayInfo_0002,
+    MapManager_UpdateMapWarStatisticsWithReplayInfo_0003,
+    MapManager_UpdateMapWarStatisticsWithReplayInfo_0004,
+    MapManager_UpdateMapWarStatisticsWithReplayInfo_0005,
+    MapManager_UpdateMapWarStatisticsWithReplayInfo_0006,
+    MapManager_UpdateMapWarStatisticsWithReplayInfo_0007,
+    MapManager_UpdateMapWarStatisticsWithReplayInfo_0008,
+    MapManager_UpdateMapWarStatisticsWithReplayInfo_0009,
+
     MapManager_UpdateOnSetMapEnabled_0000,
     MapManager_UpdateOnSetMapEnabled_0001,
     MapManager_UpdateOnSetMapEnabled_0002,

@@ -84,6 +84,7 @@ namespace TwnsBwDamagePreviewPanel {
             const allCommandTowers      = allTiles.filter(v => v.getType() === Types.TileType.CommandTower);
             const attackerUnit          = Helpers.getExisted(actionPlanner.getFocusUnit());
             const attackerPlayer        = attackerUnit.getPlayer();
+            const attackerGridIndex     = actionPlanner.getMovePathDestination();
             const attackerPlayerIndex   = attackerUnit.getPlayerIndex();
             const attackerArmorType     = attackerUnit.getArmorType();
             const defenderArmorType     = defenderUnit.getArmorType();
@@ -93,6 +94,24 @@ namespace TwnsBwDamagePreviewPanel {
             const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const canSeeHiddenInfo1     = (!hasFog) || (watcherTeamIndexes.has(attackerPlayer.getTeamIndex()));
             const canSeeHiddenInfo2     = (!hasFog) || (watcherTeamIndexes.has(defenderPlayer.getTeamIndex()));
+            const coSkillType1          = attackerPlayer.getCoUsingSkillType();
+            const coSkillType2          = defenderPlayer.getCoUsingSkillType();
+            const getIsAffectedByCo1    = Helpers.createLazyFunc((): boolean => {
+                if (attackerUnit.getHasLoadedCo()) {
+                    return true;
+                }
+
+                const distance = GridIndexHelpers.getMinDistance(attackerGridIndex, attackerPlayer.getCoGridIndexListOnMap());
+                return (distance != null) && (distance <= attackerPlayer.getCoZoneRadius());
+            });
+            const getIsAffectedByCo2    = Helpers.createLazyFunc((): boolean => {
+                if (defenderUnit.getHasLoadedCo()) {
+                    return true;
+                }
+
+                const distance = GridIndexHelpers.getMinDistance(defenderGridIndex, defenderPlayer.getCoGridIndexListOnMap());
+                return (distance != null) && (distance <= defenderPlayer.getCoZoneRadius());
+            });
 
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageCalculatorPanel, {
                 data: {
@@ -100,7 +119,9 @@ namespace TwnsBwDamagePreviewPanel {
                     weatherType     : war.getWeatherManager().getCurrentWeatherType(),
                     attackerData    : {
                         coId            : attackerPlayer.getCoId(),
-                        coSkillType     : attackerPlayer.getCoUsingSkillType(),
+                        coSkillType     : attackerPlayer.checkCoIsUsingActiveSkill()
+                            ? coSkillType1
+                            : (getIsAffectedByCo1() ? Types.CoSkillType.Passive : null),
                         unitType        : attackerUnit.getUnitType(),
                         unitHp          : attackerUnit.getCurrentHp(),
                         unitWeaponType  : (attackerUnit.getPrimaryWeaponBaseDamage(defenderArmorType) != null)
@@ -110,7 +131,7 @@ namespace TwnsBwDamagePreviewPanel {
                                 : null
                             ),
                         unitPromotion   : attackerUnit.getCurrentPromotion(),
-                        tileType        : tileMap.getTile(actionPlanner.getMovePathDestination()).getType(),
+                        tileType        : tileMap.getTile(attackerGridIndex).getType(),
                         towersCount     : allCommandTowers.filter(v => v.getPlayerIndex() === attackerPlayerIndex).length,
                         offenseBonus    : commonSettingsManager.getSettingsAttackPowerModifier(attackerPlayerIndex),
                         upperLuck       : commonSettingsManager.getSettingsLuckUpperLimit(attackerPlayerIndex),
@@ -120,7 +141,9 @@ namespace TwnsBwDamagePreviewPanel {
                     },
                     defenderData    : {
                         coId            : defenderPlayer.getCoId(),
-                        coSkillType     : defenderPlayer.getCoUsingSkillType(),
+                        coSkillType     : defenderPlayer.checkCoIsUsingActiveSkill()
+                            ? coSkillType2
+                            : (getIsAffectedByCo2() ? Types.CoSkillType.Passive : null),
                         unitType        : defenderUnit.getUnitType(),
                         unitHp          : defenderUnit.getCurrentHp(),
                         unitWeaponType  : (defenderUnit.getPrimaryWeaponBaseDamage(attackerArmorType) != null)

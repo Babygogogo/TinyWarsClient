@@ -25806,6 +25806,9 @@ export declare namespace Replay {
         /** ReplayBriefInfo totalRaters */
         totalRaters?: (number|null);
 
+        /** ReplayBriefInfo isDraw */
+        isDraw?: (boolean|null);
+
         /** ReplayBriefInfo playerInfoList */
         playerInfoList?: (Structure.IWarPlayerInfo[]|null);
     }
@@ -25848,6 +25851,9 @@ export declare namespace Replay {
 
         /** ReplayBriefInfo totalRaters. */
         public totalRaters: number;
+
+        /** ReplayBriefInfo isDraw. */
+        public isDraw: boolean;
 
         /** ReplayBriefInfo playerInfoList. */
         public playerInfoList: Structure.IWarPlayerInfo[];

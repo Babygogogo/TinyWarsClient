@@ -1324,6 +1324,10 @@ namespace TwnsLangCommonText {
             `目前无人观战`,
             `There is no spectator.`,
         ],
+        [LangTextType.A0302]: [
+            `没有可用的统计数据`,
+            `No statistics available.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -4815,6 +4819,14 @@ namespace TwnsLangCommonText {
         [LangTextType.B0875]: [
             `我收到的观战请求`,
             `Incoming Requests`,
+        ],
+        [LangTextType.B0876]: [
+            `统计`,
+            `Statistics`,
+        ],
+        [LangTextType.B0877]: [
+            `总局数`,
+            `Games`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
