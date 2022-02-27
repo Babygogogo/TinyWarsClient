@@ -603,6 +603,18 @@ namespace TwnsMeWarMenuPanel {
                     },
                 };
             }
+
+            // (async () => {
+            //     const war = Helpers.getExisted(MeModel.getWar());
+            //     war.stopRunning();
+            //     await war.initWithMapEditorData({
+            //         mapRawData  : JSON.parse(await navigator.clipboard.readText()),
+            //         slotIndex   : war.getMapSlotIndex(),
+            //     });
+            //     war.setIsMapModified(true);
+            //     war.startRunning()
+            //         .startRunningView();
+            // })();
         }
         private _createCommandExportToClipboard(): DataForCommandRenderer | null {
             return {

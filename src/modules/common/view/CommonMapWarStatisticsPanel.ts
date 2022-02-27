@@ -94,7 +94,7 @@ namespace TwnsCommonMapWarStatisticsPanel {
                 return;
             }
 
-            const nextWarType = await getNextWarType(this._warType, mapId, nextRuleId);
+            const nextWarType = await getNextWarType(WarType.Undefined, mapId, nextRuleId);
             if (nextWarType == null) {
                 FloatText.show(Lang.getText(LangTextType.A0302));
                 return;

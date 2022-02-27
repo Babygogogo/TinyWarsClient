@@ -61,7 +61,8 @@ namespace WarRobot {
         globalDefenseBonuses    : Map<number, number>;
         luckValues              : Map<number, number>;
         bestActionDict          : Map<BwUnit, IWarActionContainer>;
-        getAndTickRandomInteger : () => number;
+        getCachedMoveCost       : (unit: BwUnit, tile: BwTile) => number | null;
+        // getAndTickRandomInteger : () => number;
     };
 
     const _IS_NEED_VISIBILITY = true;
@@ -365,13 +366,13 @@ namespace WarRobot {
 
         const playerIndexInTurn     = war.getPlayerIndexInTurn();
         const unitsInfoDict         = await getUnitsInfoDict(war);
-        const randomNumberManager   = war.getRandomNumberManager();
-        const isNeedSeedRandom      = randomNumberManager.getIsNeedSeedRandom();
-        const getRandomIntegerArray = Helpers.createLazyFunc(() => {
-            return randomNumberManager.getSeedRandomCurrentState().S ?? [];
-        });
-        let randomIndex             = 0;
-
+        // const randomNumberManager   = war.getRandomNumberManager();
+        // const isNeedSeedRandom      = randomNumberManager.getIsNeedSeedRandom();
+        // const getRandomIntegerArray = Helpers.createLazyFunc(() => {
+        //     return randomNumberManager.getSeedRandomCurrentState().S ?? [];
+        // });
+        // let randomIndex             = 0;
+        const moveCostDict          = new Map<BwUnit, Map<BwTile, number | null>>();
         return {
             war,
             playerIndexInTurn,
@@ -383,20 +384,32 @@ namespace WarRobot {
             globalDefenseBonuses    : await getGlobalDefenseBonuses(war),
             luckValues              : await getLuckValues(war),
             bestActionDict          : new Map(),
-            getAndTickRandomInteger : () => {
-                if (!isNeedSeedRandom) {
-                    return Math.floor(Math.random() * 256);
+            // getAndTickRandomInteger : () => {
+            //     if (!isNeedSeedRandom) {
+            //         return Math.floor(Math.random() * 256);
+            //     }
+
+            //     const array     = getRandomIntegerArray();
+            //     const length    = array.length;
+            //     if (!length) {
+            //         return 0;
+            //     } else {
+            //         const integer   = array[randomIndex];
+            //         randomIndex     = (randomIndex + 1) % length;
+            //         return integer;
+            //     }
+            // },
+            getCachedMoveCost       : (unit, tile) => {
+                if (!moveCostDict.has(unit)) {
+                    moveCostDict.set(unit, new Map());
                 }
 
-                const array     = getRandomIntegerArray();
-                const length    = array.length;
-                if (!length) {
-                    return 0;
-                } else {
-                    const integer   = array[randomIndex];
-                    randomIndex     = (randomIndex + 1) % length;
-                    return integer;
+                const subMap = Helpers.getExisted(moveCostDict.get(unit), ClientErrorCode.SpwRobot_GetCachedMoveCost_00);
+                if (!subMap.has(tile)) {
+                    subMap.set(tile, tile.getMoveCostByUnit(unit));
                 }
+
+                return subMap.get(tile) ?? null;
             },
         };
     }
@@ -548,9 +561,19 @@ namespace WarRobot {
             if (score1 !== score2) {
                 return score1 > score2 ? data1 : data2;
             } else {
-                return commonParams.getAndTickRandomInteger() % 2 === 0 ? data1 : data2;
+                // return commonParams.getAndTickRandomInteger() % 2 === 0 ? data1 : data2;
+                return commonParams.war.getExecutedActionManager().getExecutedActionsCount() % 2 === 0 ? data1 : data2;
             }
         }
+    }
+    function getBestScoreAndAction(dataArray: (ScoreAndAction | null)[], commonParams: CommonParams): ScoreAndAction | null {
+        let bestData: ScoreAndAction | null = null;
+        for (const newData of dataArray) {
+            if (newData != null) {
+                bestData = getBetterScoreAndAction(bestData, newData, commonParams);
+            }
+        }
+        return bestData;
     }
 
     async function getReachableArea({ commonParams, unit, passableGridIndex, blockedGridIndex }: {
@@ -571,7 +594,7 @@ namespace WarRobot {
             origin          : unitGridIndex,
             maxMoveCost     : Math.min(moveRange, currentFuel),
             mapSize,
-            moveCostGetter  : (gridIndex: GridIndex) => {
+            moveCostGetter  : gridIndex => {
                 const tile = tileMap.getTile(gridIndex);
                 if ((!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))                            ||
                     ((blockedGridIndex) && (GridIndexHelpers.checkIsEqual(gridIndex, blockedGridIndex)))
@@ -579,13 +602,13 @@ namespace WarRobot {
                     return null;
                 } else {
                     if ((passableGridIndex) && (GridIndexHelpers.checkIsEqual(gridIndex, passableGridIndex))) {
-                        return tile ? tile.getMoveCostByUnit(unit) : null;
+                        return commonParams.getCachedMoveCost(unit, tile);
                     } else {
                         const existingUnit = unitMap.getUnitOnMap(gridIndex);
                         if ((existingUnit) && (existingUnit.getTeamIndex() != unit.getTeamIndex())) {
                             return null;
                         } else {
-                            return tile ? tile.getMoveCostByUnit(unit) : null;
+                            return commonParams.getCachedMoveCost(unit, tile);
                         }
                     }
                 }
@@ -753,8 +776,8 @@ namespace WarRobot {
                 continue;
             }
 
-            const attackBonus   = globalOffenseBonus + promotionAttackBonus;
-            const movableArea   = WarCommonHelpers.createMovableArea({
+            await Helpers.checkAndCallLater();
+            const movableArea = WarCommonHelpers.createMovableArea({
                 origin          : beginningGridIndex,
                 maxMoveCost     : Math.min(attackerFinalMoveRange, fuel),
                 mapSize,
@@ -766,12 +789,13 @@ namespace WarRobot {
                         if ((existingUnit) && (existingUnit !== targetUnit) && (existingUnit.getTeamIndex() != attackerTeamIndex)) {
                             return null;
                         } else {
-                            const tile = tileMap.getTile(gridIndex);
-                            return tile ? tile.getMoveCostByUnit(attacker) : null;
+                            return commonParams.getCachedMoveCost(attacker, tileMap.getTile(gridIndex));
                         }
                     }
                 },
             });
+
+            await Helpers.checkAndCallLater();
             const attackableArea = WarCommonHelpers.createAttackableAreaForUnit({
                 movableArea,
                 mapSize,
@@ -784,6 +808,8 @@ namespace WarRobot {
                 }
             });
 
+            await Helpers.checkAndCallLater();
+            const attackBonus = globalOffenseBonus + promotionAttackBonus;
             for (let x = 0; x < mapWidth; ++x) {
                 const column = attackableArea[x];
                 if (column == null) {
@@ -971,7 +997,9 @@ namespace WarRobot {
         const mapSize           = commonParams.mapSize;
         const tileMap           = war.getTileMap();
         const attackerTeamIndex = attackerUnit.getTeamIndex();
-        const movableArea       = WarCommonHelpers.createMovableArea({
+
+        await Helpers.checkAndCallLater();
+        const movableArea = WarCommonHelpers.createMovableArea({
             origin          : gridIndex,
             maxMoveCost     : attackerUnit.getFinalMoveRange(),
             mapSize,
@@ -983,11 +1011,13 @@ namespace WarRobot {
                     if ((existingUnit) && (existingUnit.getTeamIndex() != attackerTeamIndex)) {
                         return null;
                     } else {
-                        return tileMap.getTile(g).getMoveCostByUnit(attackerUnit);
+                        return commonParams.getCachedMoveCost(attackerUnit, tileMap.getTile(g));
                     }
                 }
             },
         });
+
+        await Helpers.checkAndCallLater();
         const attackableArea = WarCommonHelpers.createAttackableAreaForUnit({
             movableArea,
             mapSize,
@@ -999,6 +1029,7 @@ namespace WarRobot {
             }
         });
 
+        await Helpers.checkAndCallLater();
         const scalerForUnitValueRatio   = Math.pow(Math.max(1, commonParams.unitValueRatio), 1);
         const mapWidth                  = mapSize.width;
         const mapHeight                 = mapSize.height;
@@ -1342,6 +1373,8 @@ namespace WarRobot {
             }
         }
 
+        await Helpers.checkAndCallLater();
+
         const moveType      = unit.getMoveType();
         const movableArea   = WarCommonHelpers.createMovableArea({
             origin          : gridIndex,
@@ -1655,7 +1688,7 @@ namespace WarRobot {
         producingGridIndex          : GridIndex;
         producingUnitType           : UnitType;
         idleFactoriesCount          : number;
-        getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => number | null;
+        getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => Promise<number | null>;
     }): Promise<number | null> {
         await Helpers.checkAndCallLater();
 
@@ -1714,7 +1747,7 @@ namespace WarRobot {
                 maxMoveCost     : Number.MAX_SAFE_INTEGER,
                 mapSize,
                 moveCostGetter  : g => {
-                    return tileMap.getTile(g).getMoveCostByUnit(producingUnit);
+                    return commonParams.getCachedMoveCost(producingUnit, tileMap.getTile(g));
                 },
             });
         });
@@ -1763,7 +1796,7 @@ namespace WarRobot {
             if (unit.getCfgMaxAttackRange()) {
                 const baseDamage = unit.getBaseDamage(producingUnit.getArmorType());
                 if (baseDamage != null) {
-                    const turnsCount = getMinTurnsCountForAttack(unit, producingGridIndex);
+                    const turnsCount = await getMinTurnsCountForAttack(unit, producingGridIndex);
                     if (turnsCount != null) {
                         const damage    = Math.min(baseDamage * WarCommonHelpers.getNormalizedHp(unitCurrentHp) / unit.getNormalizedMaxHp(), producingUnitCurrentHp);
                         score           += -damage * productionCost / 1000 / Math.max(1, unitValueRatio) / turnsCount;
@@ -1851,7 +1884,7 @@ namespace WarRobot {
         const { war, visibleUnits, mapSize }    = commonParams;
         const launchUnitId                      = unit.getLoaderUnitId() == null ? null : unit.getUnitId();
         const unitMap                           = war.getUnitMap();
-        let bestScoreAndAction                  : ScoreAndAction | null = null;
+        const promiseArray                      : Promise<ScoreAndAction>[] = [];
         for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: gridIndex, minDistance: minRange, maxDistance: maxRange, mapSize })) {
             const targetUnit = unitMap.getUnitOnMap(targetGridIndex);
             if ((_IS_NEED_VISIBILITY) && (targetUnit != null) && (!visibleUnits.has(targetUnit))) {
@@ -1861,18 +1894,17 @@ namespace WarRobot {
                 continue;
             }
 
-            const battleDamageInfoArray = WarDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
-            const score                 = await getScoreForActionUnitAttack({
-                commonParams,
-                focusUnit           : unit,
-                focusUnitGridIndex  : gridIndex,
-                battleDamageInfoArray,
-            });
+            promiseArray.push((async () => {
+                await Helpers.checkAndCallLater();
 
-            bestScoreAndAction = getBetterScoreAndAction(
-                bestScoreAndAction,
-                {
-                    score,
+                const battleDamageInfoArray = WarDamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
+                return {
+                    score   : await getScoreForActionUnitAttack({
+                        commonParams,
+                        focusUnit               : unit,
+                        focusUnitGridIndex      : gridIndex,
+                        battleDamageInfoArray,
+                    }),
                     action  : unitMap.getUnitOnMap(targetGridIndex) != null
                         ? { WarActionUnitAttackUnit: {
                             path        : {
@@ -1892,12 +1924,11 @@ namespace WarRobot {
                             targetGridIndex,
                             launchUnitId,
                         }, },
-                },
-                commonParams
-            );
+                };
+            })());
         }
 
-        return bestScoreAndAction;
+        return getBestScoreAndAction(await Promise.all(promiseArray), commonParams);
     }
 
     async function getScoreAndActionUnitCaptureTile(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
@@ -1968,10 +1999,10 @@ namespace WarRobot {
                 const existingUnit = unitMap.getUnitOnMap(v);
                 return (existingUnit == null) || (existingUnit == unit);
             })
-            .map(v => tileMap.getTile(v))
-            .sort(() => commonParams.getAndTickRandomInteger() % 2 === 0 ? -1 : 1);
+            .map(v => tileMap.getTile(v));
+            // .sort(() => commonParams.getAndTickRandomInteger() % 2 === 0 ? -1 : 1);
         const loadedUnitArray   = unit.getLoadedUnits()
-            .filter(v => loaderTile.getMoveCostByUnit(v) != null)
+            .filter(v => commonParams.getCachedMoveCost(v, loaderTile) != null)
             .sort((v1, v2) => {
                 const hp1 = v1.getCurrentHp();
                 const hp2 = v2.getCurrentHp();
@@ -1984,7 +2015,7 @@ namespace WarRobot {
 
         const dropDestinations: ProtoTypes.Structure.IDropDestination[] = [];
         for (const loadedUnit of loadedUnitArray) {
-            const index = targetTileArray.findIndex(v => v.getMoveCostByUnit(loadedUnit) != null);
+            const index = targetTileArray.findIndex(v => commonParams.getCachedMoveCost(loadedUnit, v) != null);
             if (index >= 0) {
                 dropDestinations.push({
                     unitId      : loadedUnit.getUnitId(),
@@ -2088,13 +2119,11 @@ namespace WarRobot {
         }
 
         const flareMaxRange     = Helpers.getExisted(unit.getFlareMaxRange(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitLaunchFlare_00);
-        let bestScoreAndAction  : ScoreAndAction | null = null;
+        const promiseArray      : Promise<ScoreAndAction | null>[] = [];
         for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: gridIndex, minDistance: 0, maxDistance: flareMaxRange, mapSize })) {
-            const score         = await getScoreForActionUnitLaunchFlare(commonParams, unit, targetGridIndex);
-            bestScoreAndAction  = getBetterScoreAndAction(
-                bestScoreAndAction,
-                {
-                    score,
+            promiseArray.push((async () => {
+                return {
+                    score   : await getScoreForActionUnitLaunchFlare(commonParams, unit, targetGridIndex),
                     action  : { WarActionUnitLaunchFlare: {
                         path        : {
                             nodes           : pathNodes,
@@ -2104,12 +2133,11 @@ namespace WarRobot {
                         launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                         targetGridIndex,
                     } },
-                },
-                commonParams
-            );
+                };
+            })());
         }
 
-        return bestScoreAndAction;
+        return getBestScoreAndAction(await Promise.all(promiseArray), commonParams);
     }
 
     async function getScoreAndActionUnitSurface(unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
@@ -2171,6 +2199,8 @@ namespace WarRobot {
     }
 
     async function getScoreAndActionUnitUseCoSkill(commonParams: CommonParams, unit: BwUnit, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {
+        await Helpers.checkAndCallLater();
+
         const war               = commonParams.war;
         const playerIndexInTurn = commonParams.playerIndexInTurn;
         const unitsInfo         = Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_00);
@@ -2244,7 +2274,7 @@ namespace WarRobot {
             return null;
         }
 
-        const resultArray = Helpers.getNonNullElements(await Promise.all([
+        return getBestScoreAndAction(await Promise.all([
             getScoreAndActionUnitAttack(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitCaptureTile(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitDive(unit, gridIndex, pathNodes),
@@ -2255,15 +2285,40 @@ namespace WarRobot {
             getScoreAndActionUnitWait(unit, pathNodes),
             getScoreAndActionUnitLoadCo(unit, pathNodes),
             getScoreAndActionUnitUseCoSkill(commonParams, unit, pathNodes),
-        ]));
-
-        let bestScoreAndAction: ScoreAndAction | null = null;
-        for (const scoreAndAction of resultArray) {
-            bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction, commonParams);
-        }
-
-        return bestScoreAndAction;
+        ]), commonParams);
     }
+    // function getActionType(action: IWarActionContainer): number {
+    //     if      (action.WarActionPlayerDeleteUnit)          { return 1; }
+    //     else if (action.WarActionPlayerEndTurn)             { return 2; }
+    //     else if (action.WarActionPlayerProduceUnit)         { return 3; }
+    //     else if (action.WarActionPlayerSurrender)           { return 4; }
+    //     else if (action.WarActionPlayerVoteForDraw)         { return 5; }
+    //     else if (action.WarActionPlayerUseCoSkill)          { return 6; }
+    //     else if (action.WarActionSystemBeginTurn)           { return 7; }
+    //     else if (action.WarActionSystemCallWarEvent)        { return 8; }
+    //     else if (action.WarActionSystemDestroyPlayerForce)  { return 9; }
+    //     else if (action.WarActionSystemEndWar)              { return 10; }
+    //     else if (action.WarActionSystemEndTurn)             { return 11; }
+    //     else if (action.WarActionSystemHandleBootPlayer)    { return 12; }
+    //     else if (action.WarActionSystemVoteForDraw)         { return 13; }
+    //     else if (action.WarActionUnitAttackTile)            { return 14; }
+    //     else if (action.WarActionUnitAttackUnit)            { return 15; }
+    //     else if (action.WarActionUnitBeLoaded)              { return 16; }
+    //     else if (action.WarActionUnitBuildTile)             { return 17; }
+    //     else if (action.WarActionUnitCaptureTile)           { return 18; }
+    //     else if (action.WarActionUnitDive)                  { return 19; }
+    //     else if (action.WarActionUnitDropUnit)              { return 20; }
+    //     else if (action.WarActionUnitJoinUnit)              { return 21; }
+    //     else if (action.WarActionUnitLaunchFlare)           { return 22; }
+    //     else if (action.WarActionUnitLaunchSilo)            { return 23; }
+    //     else if (action.WarActionUnitLoadCo)                { return 24; }
+    //     else if (action.WarActionUnitProduceUnit)           { return 25; }
+    //     else if (action.WarActionUnitSupplyUnit)            { return 26; }
+    //     else if (action.WarActionUnitSurface)               { return 27; }
+    //     else if (action.WarActionUnitUseCoSkill)            { return 28; }
+    //     else if (action.WarActionUnitWait)                  { return 29; }
+    //     else                                                { throw Helpers.newError(`WarRobot.getActionType() invalid action.`, ClientErrorCode.SpwRobot_GetActionType_00); }
+    // }
 
     async function getBestScoreAndActionForCandidateUnit(commonParams: CommonParams, candidateUnit: BwUnit): Promise<ScoreAndAction | null> {
         await Helpers.checkAndCallLater();
@@ -2279,7 +2334,7 @@ namespace WarRobot {
         const scoreDictForThreatEnemy   = new Map<BwUnit, number>();
         // const scoreMapForDistance       = await _createScoreMapForDistance(candidateUnit);
         const { width: mapWidth, height: mapHeight }    = commonParams.mapSize;
-        let bestScoreAndAction                          : ScoreAndAction | null = null;
+        const promiseArray                              : Promise<ScoreAndAction | null>[] = [];
         for (let x = 0; x < mapWidth; ++x) {
             if (reachableArea[x] == null) {
                 continue;
@@ -2291,44 +2346,42 @@ namespace WarRobot {
                 }
 
                 const gridIndex: GridIndex = { x, y };
-                if (GridIndexHelpers.checkIsEqual(gridIndex, originGridIndex)) {
-                    if (candidateUnit.getLoaderUnitId() != null) {
-                        continue;
+                promiseArray.push((async (): Promise<ScoreAndAction | null> => {
+                    if (GridIndexHelpers.checkIsEqual(gridIndex, originGridIndex)) {
+                        if (candidateUnit.getLoaderUnitId() != null) {
+                            return null;
+                        }
+                    } else {
+                        const aiMode = candidateUnit.getAiMode();
+                        if (aiMode === UnitAiMode.NoMove) {
+                            return null;
+                        }
                     }
-                } else {
-                    const aiMode = candidateUnit.getAiMode();
-                    if (aiMode === UnitAiMode.NoMove) {
-                        continue;
+
+                    const pathNodes         = WarCommonHelpers.createShortestMovePath(reachableArea, gridIndex);
+                    const scoreAndAction    = await getBestScoreAndActionForUnitAndPath(commonParams, candidateUnit, gridIndex, pathNodes);
+                    if (scoreAndAction == null) {
+                        return null;
                     }
-                }
 
-                const pathNodes         = WarCommonHelpers.createShortestMovePath(reachableArea, gridIndex);
-                const scoreAndAction    = await getBestScoreAndActionForUnitAndPath(commonParams, candidateUnit, gridIndex, pathNodes);
-                if (scoreAndAction == null) {
-                    continue;
-                }
-
-                const action            = scoreAndAction.action;
-                const scoreForMovePath  = await getScoreForMovePath(commonParams, candidateUnit, pathNodes);
-                const scoreForPosition  = await getScoreForPosition({
-                    commonParams,
-                    unit                    : candidateUnit,
-                    gridIndex,
-                    damageMap               : ((action.WarActionUnitDive) || ((candidateUnit.getIsDiving()) && (!action.WarActionUnitSurface))) ? damageMapForDive : damageMapForSurface,
-                    scoreDictForThreatEnemy,
-                });
-                bestScoreAndAction  = getBetterScoreAndAction(
-                    bestScoreAndAction,
-                    {
-                        action,
+                    const action            = scoreAndAction.action;
+                    const scoreForMovePath  = await getScoreForMovePath(commonParams, candidateUnit, pathNodes);
+                    const scoreForPosition  = await getScoreForPosition({
+                        commonParams,
+                        unit                    : candidateUnit,
+                        gridIndex,
+                        damageMap               : ((action.WarActionUnitDive) || ((candidateUnit.getIsDiving()) && (!action.WarActionUnitSurface))) ? damageMapForDive : damageMapForSurface,
+                        scoreDictForThreatEnemy,
+                    });
+                    return {
                         score   : scoreAndAction.score + scoreForMovePath + scoreForPosition,
-                    },
-                    commonParams
-                );
+                        action,
+                    };
+                })());
             }
         }
 
-        return bestScoreAndAction;
+        return getBestScoreAndAction(await Promise.all(promiseArray), commonParams);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2338,7 +2391,7 @@ namespace WarRobot {
         commonParams                : CommonParams;
         gridIndex                   : GridIndex;
         idleFactoriesCount          : number;
-        getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => number | null;
+        getMinTurnsCountForAttack   : (attackerUnit: BwUnit, targetGridIndex: GridIndex) => Promise<number | null>;
     }): Promise<ScoreAndAction | null> {
         await Helpers.checkAndCallLater();
 
@@ -2415,7 +2468,7 @@ namespace WarRobot {
         const maxAttackRangeDict            = new Map<BwUnit, number | null>();
         const moveRangeDict                 = new Map<BwUnit, number>();
         const movableAreaDict               = new Map<BwUnit, MovableArea>();
-        const rawGetMinTurnsCountForAttack  = (attackerUnit: BwUnit, targetGridIndex: GridIndex) => {
+        const rawGetMinTurnsCountForAttack  = async (attackerUnit: BwUnit, targetGridIndex: GridIndex) => {
             if (!maxAttackRangeDict.has(attackerUnit)) {
                 maxAttackRangeDict.set(attackerUnit, attackerUnit.getFinalMaxAttackRange());
             }
@@ -2426,12 +2479,13 @@ namespace WarRobot {
             }
 
             if (!movableAreaDict.has(attackerUnit)) {
+                await Helpers.checkAndCallLater();
                 movableAreaDict.set(attackerUnit, WarCommonHelpers.createMovableArea({
                     origin          : attackerUnit.getGridIndex(),
                     maxMoveCost     : Number.MAX_SAFE_INTEGER,
                     mapSize,
                     moveCostGetter  : g => {
-                        return tileMap.getTile(g).getMoveCostByUnit(attackerUnit);
+                        return commonParams.getCachedMoveCost(attackerUnit, tileMap.getTile(g));
                     },
                 }));
             }
@@ -2460,36 +2514,31 @@ namespace WarRobot {
             }
         };
         const minTurnsCountDict         = new Map<BwUnit, Map<number, number | null>>();
-        const getMinTurnsCountForAttack = (attackerUnit: BwUnit, targetGridIndex: GridIndex) => {
+        const getMinTurnsCountForAttack = async (attackerUnit: BwUnit, targetGridIndex: GridIndex) => {
             const gridId = GridIndexHelpers.getGridId(targetGridIndex, mapSize);
             if (!minTurnsCountDict.has(attackerUnit)) {
-                minTurnsCountDict.set(attackerUnit, new Map([[gridId, rawGetMinTurnsCountForAttack(attackerUnit, targetGridIndex)]]));
+                minTurnsCountDict.set(attackerUnit, new Map([[gridId, await rawGetMinTurnsCountForAttack(attackerUnit, targetGridIndex)]]));
             } else {
                 const dict = Helpers.getExisted(minTurnsCountDict.get(attackerUnit), ClientErrorCode.SpwRobot_GetBestActionPlayerProduceUnit_02);
                 if (!dict.has(gridId)) {
-                    dict.set(gridId, rawGetMinTurnsCountForAttack(attackerUnit, targetGridIndex));
+                    dict.set(gridId, await rawGetMinTurnsCountForAttack(attackerUnit, targetGridIndex));
                 }
             }
 
             return minTurnsCountDict.get(attackerUnit)?.get(gridId) ?? null;
         };
 
-        let bestScoreAndAction: ScoreAndAction | null = null;
+        const promiseArray: Promise<ScoreAndAction | null>[] = [];
         for (const gridIndex of idleBuildingPosList) {
-            const scoreAndAction = await getBestScoreAndActionPlayerProduceUnitWithGridIndex({
+            promiseArray.push(getBestScoreAndActionPlayerProduceUnitWithGridIndex({
                 commonParams,
                 gridIndex,
                 idleFactoriesCount,
                 getMinTurnsCountForAttack,
-            });
-            if (scoreAndAction == null) {
-                continue;
-            }
-
-            bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction, commonParams);
+            }));
         }
 
-        return bestScoreAndAction ? bestScoreAndAction.action : null;
+        return getBestScoreAndAction(await Promise.all(promiseArray), commonParams)?.action ?? null;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2624,483 +2673,483 @@ namespace WarRobot {
         return null;
     }
 
-    // Phase 2: 让能占领建筑的部队进行占领（若当前最佳操作不是占领则跳过）
-    // Phase 2: 操作能占领建筑的部队
-    async function getCandidateUnitsForPhase2(commonParams: CommonParams): Promise<BwUnit[]> {
-        await Helpers.checkAndCallLater();
+    // // Phase 2: 让能占领建筑的部队进行占领（若当前最佳操作不是占领则跳过）
+    // // Phase 2: 操作能占领建筑的部队
+    // async function getCandidateUnitsForPhase2(commonParams: CommonParams): Promise<BwUnit[]> {
+    //     await Helpers.checkAndCallLater();
 
-        const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const war               = commonParams.war;
-        const unitMap           = war.getUnitMap();
-        const units             : BwUnit[] = [];
-        for (const unit of unitMap.getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())                         &&
-                (unit.checkIsCapturer())
-            ) {
-                units.push(unit);
-            }
-        }
-        for (const unit of unitMap.getAllUnitsLoaded()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())                         &&
-                (unit.checkIsCapturer())
-            ) {
-                const loaderUnit = unit.getLoaderUnit();
-                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
-                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
-                    (loaderUnit.checkCanAiDoAction())                               &&
-                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
-                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
-                ) {
-                    units.push(unit);
-                }
-            }
-        }
+    //     const playerIndexInTurn = commonParams.playerIndexInTurn;
+    //     const war               = commonParams.war;
+    //     const unitMap           = war.getUnitMap();
+    //     const units             : BwUnit[] = [];
+    //     for (const unit of unitMap.getAllUnitsOnMap()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())                         &&
+    //             (unit.checkIsCapturer())
+    //         ) {
+    //             units.push(unit);
+    //         }
+    //     }
+    //     for (const unit of unitMap.getAllUnitsLoaded()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())                         &&
+    //             (unit.checkIsCapturer())
+    //         ) {
+    //             const loaderUnit = unit.getLoaderUnit();
+    //             if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+    //                 (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+    //                 (loaderUnit.checkCanAiDoAction())                               &&
+    //                 (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+    //                 (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+    //             ) {
+    //                 units.push(unit);
+    //             }
+    //         }
+    //     }
 
-        const tileMap = war.getTileMap();
-        return units.sort((v1, v2) => {
-            const capturePoint1 = tileMap.getTile(v1.getGridIndex()).getCurrentCapturePoint() ?? Number.MAX_SAFE_INTEGER;
-            const capturePoint2 = tileMap.getTile(v2.getGridIndex()).getCurrentCapturePoint() ?? Number.MAX_SAFE_INTEGER;
-            if (capturePoint1 != capturePoint2) {
-                return capturePoint1 - capturePoint2;
-            }
+    //     const tileMap = war.getTileMap();
+    //     return units.sort((v1, v2) => {
+    //         const capturePoint1 = tileMap.getTile(v1.getGridIndex()).getCurrentCapturePoint() ?? Number.MAX_SAFE_INTEGER;
+    //         const capturePoint2 = tileMap.getTile(v2.getGridIndex()).getCurrentCapturePoint() ?? Number.MAX_SAFE_INTEGER;
+    //         if (capturePoint1 != capturePoint2) {
+    //             return capturePoint1 - capturePoint2;
+    //         }
 
-            const hp1 = v1.getCurrentHp();
-            const hp2 = v2.getCurrentHp();
-            if (hp1 !== hp2) {
-                return hp2 - hp1;
-            } else {
-                return v1.getUnitId() - v2.getUnitId();
-            }
-        });
-    }
-    async function getActionForPhase2(commonParams: CommonParams): Promise<IWarActionContainer | null> {
-        await Helpers.checkAndCallLater();
+    //         const hp1 = v1.getCurrentHp();
+    //         const hp2 = v2.getCurrentHp();
+    //         if (hp1 !== hp2) {
+    //             return hp2 - hp1;
+    //         } else {
+    //             return v1.getUnitId() - v2.getUnitId();
+    //         }
+    //     });
+    // }
+    // async function getActionForPhase2(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+    //     await Helpers.checkAndCallLater();
 
-        const bestActionDict = commonParams.bestActionDict;
-        for (const unit of await getCandidateUnitsForPhase2(commonParams)) {
-            {
-                const existingBestAction = bestActionDict.get(unit);
-                if (existingBestAction) {
-                    // if (existingBestAction.WarActionUnitCaptureTile) {
-                    //     return existingBestAction;
-                    // }
-                    // continue;
-                    return existingBestAction;
-                }
-            }
+    //     const bestActionDict = commonParams.bestActionDict;
+    //     for (const unit of await getCandidateUnitsForPhase2(commonParams)) {
+    //         {
+    //             const existingBestAction = bestActionDict.get(unit);
+    //             if (existingBestAction) {
+    //                 // if (existingBestAction.WarActionUnitCaptureTile) {
+    //                 //     return existingBestAction;
+    //                 // }
+    //                 // continue;
+    //                 return existingBestAction;
+    //             }
+    //         }
 
-            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
-            if (action == null) {
-                continue;
-            }
+    //         const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+    //         if (action == null) {
+    //             continue;
+    //         }
 
-            bestActionDict.set(unit, action);
-            // if (action.WarActionUnitCaptureTile) {
-            //     return action;
-            // }
-            return action;
-        }
+    //         bestActionDict.set(unit, action);
+    //         // if (action.WarActionUnitCaptureTile) {
+    //         //     return action;
+    //         // }
+    //         return action;
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
-    // Phase 3: 让远程部队开火（若当前最佳操作不是开火则跳过）
-    // Phase 3: 操作远程部队
-    async function getCandidateUnitsForPhase3(commonParams: CommonParams): Promise<BwUnit[]> {
-        await Helpers.checkAndCallLater();
+    // // Phase 3: 让远程部队开火（若当前最佳操作不是开火则跳过）
+    // // Phase 3: 操作远程部队
+    // async function getCandidateUnitsForPhase3(commonParams: CommonParams): Promise<BwUnit[]> {
+    //     await Helpers.checkAndCallLater();
 
-        const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const unitMap           = commonParams.war.getUnitMap();
-        const units             : BwUnit[] = [];
-        for (const unit of unitMap.getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())
-            ) {
-                const maxAttackRange = unit.getFinalMaxAttackRange();
-                if ((maxAttackRange == null) || (maxAttackRange <= 1)) {
-                    continue;
-                }
+    //     const playerIndexInTurn = commonParams.playerIndexInTurn;
+    //     const unitMap           = commonParams.war.getUnitMap();
+    //     const units             : BwUnit[] = [];
+    //     for (const unit of unitMap.getAllUnitsOnMap()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())
+    //         ) {
+    //             const maxAttackRange = unit.getFinalMaxAttackRange();
+    //             if ((maxAttackRange == null) || (maxAttackRange <= 1)) {
+    //                 continue;
+    //             }
 
-                units.push(unit);
-            }
-        }
-        for (const unit of unitMap.getAllUnitsLoaded()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())
-            ) {
-                const maxAttackRange = unit.getFinalMaxAttackRange();
-                if ((maxAttackRange == null) || (maxAttackRange <= 1) || (!unit.checkCanAttackAfterMove())) {
-                    continue;
-                }
+    //             units.push(unit);
+    //         }
+    //     }
+    //     for (const unit of unitMap.getAllUnitsLoaded()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())
+    //         ) {
+    //             const maxAttackRange = unit.getFinalMaxAttackRange();
+    //             if ((maxAttackRange == null) || (maxAttackRange <= 1) || (!unit.checkCanAttackAfterMove())) {
+    //                 continue;
+    //             }
 
-                const loaderUnit = unit.getLoaderUnit();
-                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
-                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
-                    (loaderUnit.checkCanAiDoAction())                               &&
-                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
-                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
-                ) {
-                    units.push(unit);
-                }
-            }
-        }
+    //             const loaderUnit = unit.getLoaderUnit();
+    //             if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+    //                 (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+    //                 (loaderUnit.checkCanAiDoAction())                               &&
+    //                 (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+    //                 (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+    //             ) {
+    //                 units.push(unit);
+    //             }
+    //         }
+    //     }
 
-        return units.sort((v1, v2) => {
-            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
-            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
-            if (cost1 !== cost2) {
-                return cost2 - cost1;
-            }
+    //     return units.sort((v1, v2) => {
+    //         const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+    //         const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+    //         if (cost1 !== cost2) {
+    //             return cost2 - cost1;
+    //         }
 
-            return v1.getUnitId() - v2.getUnitId();
-        });
-    }
-    async function getActionForPhase3(commonParams: CommonParams): Promise<IWarActionContainer | null> {
-        await Helpers.checkAndCallLater();
+    //         return v1.getUnitId() - v2.getUnitId();
+    //     });
+    // }
+    // async function getActionForPhase3(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+    //     await Helpers.checkAndCallLater();
 
-        const bestActionDict = commonParams.bestActionDict;
-        for (const unit of await getCandidateUnitsForPhase3(commonParams)) {
-            {
-                const existingBestAction = bestActionDict.get(unit);
-                if (existingBestAction) {
-                    // if ((existingBestAction.WarActionUnitAttackTile) || (existingBestAction.WarActionUnitAttackUnit)) {
-                    //     return existingBestAction;
-                    // }
-                    // continue;
-                    return existingBestAction;
-                }
-            }
+    //     const bestActionDict = commonParams.bestActionDict;
+    //     for (const unit of await getCandidateUnitsForPhase3(commonParams)) {
+    //         {
+    //             const existingBestAction = bestActionDict.get(unit);
+    //             if (existingBestAction) {
+    //                 // if ((existingBestAction.WarActionUnitAttackTile) || (existingBestAction.WarActionUnitAttackUnit)) {
+    //                 //     return existingBestAction;
+    //                 // }
+    //                 // continue;
+    //                 return existingBestAction;
+    //             }
+    //         }
 
-            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
-            if (action == null) {
-                continue;
-            }
+    //         const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+    //         if (action == null) {
+    //             continue;
+    //         }
 
-            bestActionDict.set(unit, action);
-            // if ((action.WarActionUnitAttackTile) || (action.WarActionUnitAttackUnit)) {
-            //     return action;
-            // }
-            return action;
-        }
+    //         bestActionDict.set(unit, action);
+    //         // if ((action.WarActionUnitAttackTile) || (action.WarActionUnitAttackUnit)) {
+    //         //     return action;
+    //         // }
+    //         return action;
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
-    // Phase 4: 让近程部队开火（若当前最佳操作不是开火则跳过；优先顺序是大飞机-车辆和小飞机-步兵？）
-    // Phase 4: 操作近程部队
-    async function getCandidateUnitsForPhase4(commonParams: CommonParams): Promise<BwUnit[]> {
-        await Helpers.checkAndCallLater();
+    // // Phase 4: 让近程部队开火（若当前最佳操作不是开火则跳过；优先顺序是大飞机-车辆和小飞机-步兵？）
+    // // Phase 4: 操作近程部队
+    // async function getCandidateUnitsForPhase4(commonParams: CommonParams): Promise<BwUnit[]> {
+    //     await Helpers.checkAndCallLater();
 
-        const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const unitMap           = commonParams.war.getUnitMap();
-        const units             : BwUnit[] = [];
-        for (const unit of unitMap.getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())
-            ) {
-                const maxAttackRange = unit.getFinalMaxAttackRange();
-                if ((maxAttackRange == null) || (maxAttackRange > 1)) {
-                    continue;
-                }
+    //     const playerIndexInTurn = commonParams.playerIndexInTurn;
+    //     const unitMap           = commonParams.war.getUnitMap();
+    //     const units             : BwUnit[] = [];
+    //     for (const unit of unitMap.getAllUnitsOnMap()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())
+    //         ) {
+    //             const maxAttackRange = unit.getFinalMaxAttackRange();
+    //             if ((maxAttackRange == null) || (maxAttackRange > 1)) {
+    //                 continue;
+    //             }
 
-                units.push(unit);
-            }
-        }
-        for (const unit of unitMap.getAllUnitsLoaded()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())
-            ) {
-                const maxAttackRange = unit.getFinalMaxAttackRange();
-                if ((maxAttackRange == null) || (maxAttackRange > 1) || (!unit.checkCanAttackAfterMove())) {
-                    continue;
-                }
+    //             units.push(unit);
+    //         }
+    //     }
+    //     for (const unit of unitMap.getAllUnitsLoaded()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())
+    //         ) {
+    //             const maxAttackRange = unit.getFinalMaxAttackRange();
+    //             if ((maxAttackRange == null) || (maxAttackRange > 1) || (!unit.checkCanAttackAfterMove())) {
+    //                 continue;
+    //             }
 
-                const loaderUnit = unit.getLoaderUnit();
-                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
-                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
-                    (loaderUnit.checkCanAiDoAction())                               &&
-                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
-                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
-                ) {
-                    units.push(unit);
-                }
-            }
-        }
+    //             const loaderUnit = unit.getLoaderUnit();
+    //             if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+    //                 (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+    //                 (loaderUnit.checkCanAiDoAction())                               &&
+    //                 (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+    //                 (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+    //             ) {
+    //                 units.push(unit);
+    //             }
+    //         }
+    //     }
 
-        return units.sort((v1, v2) => {
-            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
-            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
-            if (cost1 !== cost2) {
-                return cost2 - cost1;
-            }
+    //     return units.sort((v1, v2) => {
+    //         const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+    //         const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+    //         if (cost1 !== cost2) {
+    //             return cost2 - cost1;
+    //         }
 
-            return v1.getUnitId() - v2.getUnitId();
-        });
-    }
-    async function getActionForPhase4(commonParams: CommonParams): Promise<IWarActionContainer | null> {
-        await Helpers.checkAndCallLater();
+    //         return v1.getUnitId() - v2.getUnitId();
+    //     });
+    // }
+    // async function getActionForPhase4(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+    //     await Helpers.checkAndCallLater();
 
-        const bestActionDict = commonParams.bestActionDict;
-        for (const unit of await getCandidateUnitsForPhase4(commonParams)) {
-            {
-                const existingBestAction = bestActionDict.get(unit);
-                if (existingBestAction) {
-                    // if ((existingBestAction.WarActionUnitAttackTile) || (existingBestAction.WarActionUnitAttackUnit)) {
-                    //     return existingBestAction;
-                    // }
-                    // continue;
-                    return existingBestAction;
-                }
-            }
+    //     const bestActionDict = commonParams.bestActionDict;
+    //     for (const unit of await getCandidateUnitsForPhase4(commonParams)) {
+    //         {
+    //             const existingBestAction = bestActionDict.get(unit);
+    //             if (existingBestAction) {
+    //                 // if ((existingBestAction.WarActionUnitAttackTile) || (existingBestAction.WarActionUnitAttackUnit)) {
+    //                 //     return existingBestAction;
+    //                 // }
+    //                 // continue;
+    //                 return existingBestAction;
+    //             }
+    //         }
 
-            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
-            if (action == null) {
-                continue;
-            }
+    //         const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+    //         if (action == null) {
+    //             continue;
+    //         }
 
-            bestActionDict.set(unit, action);
-            // if ((action.WarActionUnitAttackTile) || (action.WarActionUnitAttackUnit)) {
-            //     return action;
-            // }
-            return action;
-        }
+    //         bestActionDict.set(unit, action);
+    //         // if ((action.WarActionUnitAttackTile) || (action.WarActionUnitAttackUnit)) {
+    //         //     return action;
+    //         // }
+    //         return action;
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
-    // Phase 5: 操作只能卸载而不能弹射装载物的运输部队
-    async function getCandidateUnitsForPhase5(commonParams: CommonParams): Promise<BwUnit[]> {
-        await Helpers.checkAndCallLater();
+    // // Phase 5: 操作只能卸载而不能弹射装载物的运输部队
+    // async function getCandidateUnitsForPhase5(commonParams: CommonParams): Promise<BwUnit[]> {
+    //     await Helpers.checkAndCallLater();
 
-        const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const unitMap           = commonParams.war.getUnitMap();
-        const units             : BwUnit[] = [];
-        for (const unit of unitMap.getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())                         &&
-                (unit.getMaxLoadUnitsCount())                       &&
-                (!unit.checkCanLaunchLoadedUnit())
-            ) {
-                units.push(unit);
-            }
-        }
-        for (const unit of unitMap.getAllUnitsLoaded()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())                         &&
-                (unit.getMaxLoadUnitsCount())                       &&
-                (!unit.checkCanLaunchLoadedUnit())
-            ) {
-                const loaderUnit = unit.getLoaderUnit();
-                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
-                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
-                    (loaderUnit.checkCanAiDoAction())                               &&
-                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
-                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
-                ) {
-                    units.push(unit);
-                }
-            }
-        }
+    //     const playerIndexInTurn = commonParams.playerIndexInTurn;
+    //     const unitMap           = commonParams.war.getUnitMap();
+    //     const units             : BwUnit[] = [];
+    //     for (const unit of unitMap.getAllUnitsOnMap()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())                         &&
+    //             (unit.getMaxLoadUnitsCount())                       &&
+    //             (!unit.checkCanLaunchLoadedUnit())
+    //         ) {
+    //             units.push(unit);
+    //         }
+    //     }
+    //     for (const unit of unitMap.getAllUnitsLoaded()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())                         &&
+    //             (unit.getMaxLoadUnitsCount())                       &&
+    //             (!unit.checkCanLaunchLoadedUnit())
+    //         ) {
+    //             const loaderUnit = unit.getLoaderUnit();
+    //             if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+    //                 (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+    //                 (loaderUnit.checkCanAiDoAction())                               &&
+    //                 (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+    //                 (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+    //             ) {
+    //                 units.push(unit);
+    //             }
+    //         }
+    //     }
 
-        return units.sort((v1, v2) => {
-            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
-            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
-            if (cost1 !== cost2) {
-                return cost1 - cost2;
-            }
+    //     return units.sort((v1, v2) => {
+    //         const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+    //         const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+    //         if (cost1 !== cost2) {
+    //             return cost1 - cost2;
+    //         }
 
-            return v1.getUnitId() - v2.getUnitId();
-        });
-    }
-    async function getActionForPhase5(commonParams: CommonParams): Promise<IWarActionContainer | null> {
-        await Helpers.checkAndCallLater();
+    //         return v1.getUnitId() - v2.getUnitId();
+    //     });
+    // }
+    // async function getActionForPhase5(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+    //     await Helpers.checkAndCallLater();
 
-        const bestActionDict = commonParams.bestActionDict;
-        for (const unit of await getCandidateUnitsForPhase5(commonParams)) {
-            {
-                const existingBestAction = bestActionDict.get(unit);
-                if (existingBestAction) {
-                    return existingBestAction;
-                }
-            }
+    //     const bestActionDict = commonParams.bestActionDict;
+    //     for (const unit of await getCandidateUnitsForPhase5(commonParams)) {
+    //         {
+    //             const existingBestAction = bestActionDict.get(unit);
+    //             if (existingBestAction) {
+    //                 return existingBestAction;
+    //             }
+    //         }
 
-            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
-            if (action == null) {
-                continue;
-            }
+    //         const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+    //         if (action == null) {
+    //             continue;
+    //         }
 
-            bestActionDict.set(unit, action);
-            return action;
-        }
+    //         bestActionDict.set(unit, action);
+    //         return action;
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
-    // Phase 6: 操作剩余近程、且不能弹射装载物的部队
-    async function getCandidateUnitsForPhase6(commonParams: CommonParams): Promise<BwUnit[]> {
-        await Helpers.checkAndCallLater();
+    // // Phase 6: 操作剩余近程、且不能弹射装载物的部队
+    // async function getCandidateUnitsForPhase6(commonParams: CommonParams): Promise<BwUnit[]> {
+    //     await Helpers.checkAndCallLater();
 
-        const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const unitMap           = commonParams.war.getUnitMap();
-        const units             : BwUnit[] = [];
-        for (const unit of unitMap.getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())                         &&
-                (!unit.checkCanLaunchLoadedUnit())
-            ) {
-                const maxAttackRange = unit.getFinalMaxAttackRange();
-                if ((maxAttackRange == null) || (maxAttackRange > 1)) {
-                    continue;
-                }
+    //     const playerIndexInTurn = commonParams.playerIndexInTurn;
+    //     const unitMap           = commonParams.war.getUnitMap();
+    //     const units             : BwUnit[] = [];
+    //     for (const unit of unitMap.getAllUnitsOnMap()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())                         &&
+    //             (!unit.checkCanLaunchLoadedUnit())
+    //         ) {
+    //             const maxAttackRange = unit.getFinalMaxAttackRange();
+    //             if ((maxAttackRange == null) || (maxAttackRange > 1)) {
+    //                 continue;
+    //             }
 
-                units.push(unit);
-            }
-        }
-        for (const unit of unitMap.getAllUnitsLoaded()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())                         &&
-                (!unit.checkCanLaunchLoadedUnit())
-            ) {
-                const maxAttackRange = unit.getFinalMaxAttackRange();
-                if ((maxAttackRange == null) || (maxAttackRange > 1)) {
-                    continue;
-                }
+    //             units.push(unit);
+    //         }
+    //     }
+    //     for (const unit of unitMap.getAllUnitsLoaded()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())                         &&
+    //             (!unit.checkCanLaunchLoadedUnit())
+    //         ) {
+    //             const maxAttackRange = unit.getFinalMaxAttackRange();
+    //             if ((maxAttackRange == null) || (maxAttackRange > 1)) {
+    //                 continue;
+    //             }
 
-                const loaderUnit = unit.getLoaderUnit();
-                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
-                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
-                    (loaderUnit.checkCanAiDoAction())                               &&
-                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
-                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
-                ) {
-                    units.push(unit);
-                }
-            }
-        }
+    //             const loaderUnit = unit.getLoaderUnit();
+    //             if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+    //                 (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+    //                 (loaderUnit.checkCanAiDoAction())                               &&
+    //                 (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+    //                 (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+    //             ) {
+    //                 units.push(unit);
+    //             }
+    //         }
+    //     }
 
-        return units.sort((v1, v2) => {
-            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
-            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
-            if (cost1 !== cost2) {
-                return cost1 - cost2;
-            }
+    //     return units.sort((v1, v2) => {
+    //         const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+    //         const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+    //         if (cost1 !== cost2) {
+    //             return cost1 - cost2;
+    //         }
 
-            return v1.getUnitId() - v2.getUnitId();
-        });
-    }
-    async function getActionForPhase6(commonParams: CommonParams): Promise<IWarActionContainer | null> {
-        await Helpers.checkAndCallLater();
+    //         return v1.getUnitId() - v2.getUnitId();
+    //     });
+    // }
+    // async function getActionForPhase6(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+    //     await Helpers.checkAndCallLater();
 
-        const bestActionDict = commonParams.bestActionDict;
-        for (const unit of await getCandidateUnitsForPhase6(commonParams)) {
-            {
-                const existingBestAction = bestActionDict.get(unit);
-                if (existingBestAction) {
-                    return existingBestAction;
-                }
-            }
+    //     const bestActionDict = commonParams.bestActionDict;
+    //     for (const unit of await getCandidateUnitsForPhase6(commonParams)) {
+    //         {
+    //             const existingBestAction = bestActionDict.get(unit);
+    //             if (existingBestAction) {
+    //                 return existingBestAction;
+    //             }
+    //         }
 
-            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
-            if (action == null) {
-                continue;
-            }
+    //         const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+    //         if (action == null) {
+    //             continue;
+    //         }
 
-            bestActionDict.set(unit, action);
-            return action;
-        }
+    //         bestActionDict.set(unit, action);
+    //         return action;
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
-    // Phase 7: 操作剩余远程、且不能弹射装载物的部队
-    async function getCandidateUnitsForPhase7(commonParams: CommonParams): Promise<BwUnit[]> {
-        await Helpers.checkAndCallLater();
+    // // Phase 7: 操作剩余远程、且不能弹射装载物的部队
+    // async function getCandidateUnitsForPhase7(commonParams: CommonParams): Promise<BwUnit[]> {
+    //     await Helpers.checkAndCallLater();
 
-        const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const unitMap           = commonParams.war.getUnitMap();
-        const units             : BwUnit[] = [];
-        for (const unit of unitMap.getAllUnitsOnMap()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())                         &&
-                (!unit.checkCanLaunchLoadedUnit())
-            ) {
-                const maxAttackRange = unit.getFinalMaxAttackRange();
-                if ((maxAttackRange == null) || (maxAttackRange <= 1)) {
-                    continue;
-                }
+    //     const playerIndexInTurn = commonParams.playerIndexInTurn;
+    //     const unitMap           = commonParams.war.getUnitMap();
+    //     const units             : BwUnit[] = [];
+    //     for (const unit of unitMap.getAllUnitsOnMap()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())                         &&
+    //             (!unit.checkCanLaunchLoadedUnit())
+    //         ) {
+    //             const maxAttackRange = unit.getFinalMaxAttackRange();
+    //             if ((maxAttackRange == null) || (maxAttackRange <= 1)) {
+    //                 continue;
+    //             }
 
-                units.push(unit);
-            }
-        }
-        for (const unit of unitMap.getAllUnitsLoaded()) {
-            if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
-                (unit.getActionState() === UnitActionState.Idle)    &&
-                (unit.checkCanAiDoAction())                         &&
-                (!unit.checkCanLaunchLoadedUnit())
-            ) {
-                const maxAttackRange = unit.getFinalMaxAttackRange();
-                if ((maxAttackRange == null) || (maxAttackRange <= 1)) {
-                    continue;
-                }
+    //             units.push(unit);
+    //         }
+    //     }
+    //     for (const unit of unitMap.getAllUnitsLoaded()) {
+    //         if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
+    //             (unit.getActionState() === UnitActionState.Idle)    &&
+    //             (unit.checkCanAiDoAction())                         &&
+    //             (!unit.checkCanLaunchLoadedUnit())
+    //         ) {
+    //             const maxAttackRange = unit.getFinalMaxAttackRange();
+    //             if ((maxAttackRange == null) || (maxAttackRange <= 1)) {
+    //                 continue;
+    //             }
 
-                const loaderUnit = unit.getLoaderUnit();
-                if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
-                    (loaderUnit.getActionState() === UnitActionState.Idle)          &&
-                    (loaderUnit.checkCanAiDoAction())                               &&
-                    (loaderUnit.checkCanLaunchLoadedUnit())                         &&
-                    (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
-                ) {
-                    units.push(unit);
-                }
-            }
-        }
+    //             const loaderUnit = unit.getLoaderUnit();
+    //             if ((loaderUnit?.getPlayerIndex() === playerIndexInTurn)            &&
+    //                 (loaderUnit.getActionState() === UnitActionState.Idle)          &&
+    //                 (loaderUnit.checkCanAiDoAction())                               &&
+    //                 (loaderUnit.checkCanLaunchLoadedUnit())                         &&
+    //                 (unitMap.getUnitOnMap(loaderUnit.getGridIndex()) === loaderUnit)
+    //             ) {
+    //                 units.push(unit);
+    //             }
+    //         }
+    //     }
 
-        return units.sort((v1, v2) => {
-            const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
-            const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
-            if (cost1 !== cost2) {
-                return cost1 - cost2;
-            }
+    //     return units.sort((v1, v2) => {
+    //         const cost1 = v1.getProductionCfgCost() * v1.getCurrentHp();
+    //         const cost2 = v2.getProductionCfgCost() * v2.getCurrentHp();
+    //         if (cost1 !== cost2) {
+    //             return cost1 - cost2;
+    //         }
 
-            return v1.getUnitId() - v2.getUnitId();
-        });
-    }
-    async function getActionForPhase7(commonParams: CommonParams): Promise<IWarActionContainer | null> {
-        await Helpers.checkAndCallLater();
+    //         return v1.getUnitId() - v2.getUnitId();
+    //     });
+    // }
+    // async function getActionForPhase7(commonParams: CommonParams): Promise<IWarActionContainer | null> {
+    //     await Helpers.checkAndCallLater();
 
-        const bestActionDict = commonParams.bestActionDict;
-        for (const unit of await getCandidateUnitsForPhase7(commonParams)) {
-            {
-                const existingBestAction = bestActionDict.get(unit);
-                if (existingBestAction) {
-                    return existingBestAction;
-                }
-            }
+    //     const bestActionDict = commonParams.bestActionDict;
+    //     for (const unit of await getCandidateUnitsForPhase7(commonParams)) {
+    //         {
+    //             const existingBestAction = bestActionDict.get(unit);
+    //             if (existingBestAction) {
+    //                 return existingBestAction;
+    //             }
+    //         }
 
-            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
-            if (action == null) {
-                continue;
-            }
+    //         const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+    //         if (action == null) {
+    //             continue;
+    //         }
 
-            bestActionDict.set(unit, action);
-            return action;
-        }
+    //         bestActionDict.set(unit, action);
+    //         return action;
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
     // Phase 8: 操作剩余任意部队
     async function getCandidateUnitsForPhase8(commonParams: CommonParams): Promise<BwUnit[]> {
@@ -3147,25 +3196,45 @@ namespace WarRobot {
     async function getActionForPhase8(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         await Helpers.checkAndCallLater();
 
-        const bestActionDict = commonParams.bestActionDict;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // const bestActionDict = commonParams.bestActionDict;
+        // for (const unit of await getCandidateUnitsForPhase8(commonParams)) {
+        //     {
+        //         const existingBestAction = bestActionDict.get(unit);
+        //         if (existingBestAction) {
+        //             return existingBestAction;
+        //         }
+        //     }
+
+        //     const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
+        //     if (action == null) {
+        //         continue;
+        //     }
+
+        //     bestActionDict.set(unit, action);
+        //     return action;
+        // }
+
+        // return null;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // const promiseArray: Promise<ScoreAndAction | null>[] = [];
+        // for (const unit of await getCandidateUnitsForPhase8(commonParams)) {
+        //     promiseArray.push(getBestScoreAndActionForCandidateUnit(commonParams, unit));
+        // }
+
+        // return (getBestScoreAndAction(await Promise.all(promiseArray), commonParams))?.action ?? null;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        let bestScoreAndAction: ScoreAndAction | null = null;
         for (const unit of await getCandidateUnitsForPhase8(commonParams)) {
-            {
-                const existingBestAction = bestActionDict.get(unit);
-                if (existingBestAction) {
-                    return existingBestAction;
-                }
+            const newData = await getBestScoreAndActionForCandidateUnit(commonParams, unit);
+            if (newData) {
+                bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, newData, commonParams);
             }
-
-            const action = (await getBestScoreAndActionForCandidateUnit(commonParams, unit))?.action;
-            if (action == null) {
-                continue;
-            }
-
-            bestActionDict.set(unit, action);
-            return action;
         }
 
-        return null;
+        return bestScoreAndAction?.action ?? null;
     }
 
     // Phase 4: move the air combat units.
@@ -3261,12 +3330,12 @@ namespace WarRobot {
 
     const funcArray = [
         getActionForPhase1,
-        getActionForPhase2,
-        getActionForPhase3,
-        getActionForPhase4,
-        getActionForPhase5,
-        getActionForPhase6,
-        getActionForPhase7,
+        // getActionForPhase2,
+        // getActionForPhase3,
+        // getActionForPhase4,
+        // getActionForPhase5,
+        // getActionForPhase6,
+        // getActionForPhase7,
         getActionForPhase8,
         getActionForPhase9,
         getActionForPhase11,

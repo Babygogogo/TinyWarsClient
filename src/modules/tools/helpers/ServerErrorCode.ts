@@ -6721,6 +6721,17 @@ export const enum ServerErrorCode {
     SpwRobot_GetLuckValue_0008,
     SpwRobot_GetLuckValue_0009,
 
+    SpwRobot_GetCachedMoveCost_0000,
+    SpwRobot_GetCachedMoveCost_0001,
+    SpwRobot_GetCachedMoveCost_0002,
+    SpwRobot_GetCachedMoveCost_0003,
+    SpwRobot_GetCachedMoveCost_0004,
+    SpwRobot_GetCachedMoveCost_0005,
+    SpwRobot_GetCachedMoveCost_0006,
+    SpwRobot_GetCachedMoveCost_0007,
+    SpwRobot_GetCachedMoveCost_0008,
+    SpwRobot_GetCachedMoveCost_0009,
+
     SpwRobot_GetScoreForThreat_0000,
     SpwRobot_GetScoreForThreat_0001,
     SpwRobot_GetScoreForThreat_0002,
