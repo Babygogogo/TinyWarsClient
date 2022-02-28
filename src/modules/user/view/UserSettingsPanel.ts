@@ -68,7 +68,7 @@ namespace TwnsUserSettingsPanel {
         private readonly _btnComplaint!             : TwnsUiButton.UiButton;
         private readonly _btnUnitsInfo!             : TwnsUiButton.UiButton;
         private readonly _btnChangeLog!             : TwnsUiButton.UiButton;
-        private readonly _btnSetPrivilege!          : TwnsUiButton.UiButton;
+        private readonly _btnGameManagement!        : TwnsUiButton.UiButton;
         private readonly _btnMapManagement!         : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
@@ -97,7 +97,7 @@ namespace TwnsUserSettingsPanel {
                 { ui: this._btnComplaint,           callback: this._onTouchedBtnComplaint },
                 { ui: this._btnUnitsInfo,           callback: this._onTouchedBtnUnitsInfo },
                 { ui: this._btnChangeLog,           callback: this._onTouchedBtnChangeLog },
-                { ui: this._btnSetPrivilege,        callback: this._onTouchedBtnSetPrivilege },
+                { ui: this._btnGameManagement,      callback: this._onTouchedBtnGameManagement },
                 { ui: this._btnMapManagement,       callback: this._onTouchedBtnMapManagement },
             ]);
             this._setIsTouchMaskEnabled();
@@ -297,9 +297,8 @@ namespace TwnsUserSettingsPanel {
         private _onTouchedBtnChangeLog(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ChangeLogPanel, void 0);
         }
-        private _onTouchedBtnSetPrivilege(): void {
-            const selfUserId = Helpers.getExisted(UserModel.getSelfUserId(), ClientErrorCode.UserSettingsPanel_OnTouchedBtnSetPrivilege_00);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserSetPrivilegePanel, { userId: selfUserId });
+        private _onTouchedBtnGameManagement(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.UserGameManagementPanel, void 0);
         }
         private _onTouchedBtnMapManagement(): void {
             TwnsPanelManager.closeAllPanelsExcept([
@@ -360,7 +359,7 @@ namespace TwnsUserSettingsPanel {
             group.addChild(this._btnComplaint);
             group.addChild(this._btnChangeGameVersion);
             if (UserModel.getIsSelfAdmin()) {
-                group.addChild(this._btnSetPrivilege);
+                group.addChild(this._btnGameManagement);
             }
             if ((UserModel.getIsSelfAdmin()) || (UserModel.getIsSelfMapCommittee())) {
                 group.addChild(this._btnMapManagement);
@@ -380,7 +379,7 @@ namespace TwnsUserSettingsPanel {
             this._updateBtnSetStageScaler();
             this._updateBtnUnitsInfo();
             this._updateBtnChangeLog();
-            this._updateBtnSetPrivilege();
+            this._updateBtnGameManagement();
             this._updateBtnServerStatus();
             this._updateBtnComplaint();
             this._updateBtnMapManagement();
@@ -419,8 +418,8 @@ namespace TwnsUserSettingsPanel {
         private _updateBtnChangeLog(): void {
             this._btnChangeLog.label = Lang.getText(LangTextType.B0457);
         }
-        private _updateBtnSetPrivilege(): void {
-            this._btnSetPrivilege.label = Lang.getText(LangTextType.B0460);
+        private _updateBtnGameManagement(): void {
+            this._btnGameManagement.label = Lang.getText(LangTextType.B0878);
         }
         private _updateBtnServerStatus(): void {
             this._btnServerStatus.label = Lang.getText(LangTextType.B0327);

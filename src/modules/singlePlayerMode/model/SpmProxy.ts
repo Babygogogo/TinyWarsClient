@@ -31,6 +31,7 @@ namespace SpmProxy {
             { msgCode: NetMessageCodes.MsgSpmGetRankList,                   callback: _onMsgSpmGetRankList },
             { msgCode: NetMessageCodes.MsgSpmValidateSrw,                   callback: _onMsgSpmValidateSrw },
             { msgCode: NetMessageCodes.MsgSpmGetReplayData,                 callback: _onMsgSpmGetReplayData },
+            { msgCode: NetMessageCodes.MsgSpmDeleteAllScoreAndReplay,       callback: _onMsgSpmDeleteAllScoreAndReplay },
         ], null);
     }
 
@@ -198,6 +199,19 @@ namespace SpmProxy {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmGetReplayData.IS;
         await SpmModel.updateOnMsgSpmGetReplayData(data);
         Notify.dispatch(NotifyType.MsgSpmGetReplayData, data);
+    }
+
+    export function reqSpmDeleteAllScoreAndReplay(): void {
+        NetManager.send({
+            MsgSpmDeleteAllScoreAndReplay: { c: {
+            } },
+        });
+    }
+    function _onMsgSpmDeleteAllScoreAndReplay(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmDeleteAllScoreAndReplay.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(NotifyType.MsgSpmDeleteAllScoreAndReplay, data);
+        }
     }
 }
 

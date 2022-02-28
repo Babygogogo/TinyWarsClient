@@ -3133,8 +3133,8 @@ namespace TwnsLangCommonText {
             `Complaint`,
         ],
         [LangTextType.B0454]: [
-            `新增日志`,
-            `Add Log`,
+            `新增消息`,
+            `Add Message`,
         ],
         [LangTextType.B0455]: [
             `中文`,
@@ -4827,6 +4827,22 @@ namespace TwnsLangCommonText {
         [LangTextType.B0877]: [
             `总局数`,
             `Games`,
+        ],
+        [LangTextType.B0878]: [
+            `游戏管理`,
+            `Game Management`,
+        ],
+        [LangTextType.B0879]: [
+            `清除单人模式榜单`,
+            `Delete All SP Rank`,
+        ],
+        [LangTextType.B0880]: [
+            `管理广播信息`,
+            `Manage Broadcast`,
+        ],
+        [LangTextType.B0881]: [
+            `广播信息`,
+            `Broadcast`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -28,6 +28,8 @@ namespace TwnsPanelConfig {
         BwWarInfoPanel                      : PanelConfig<TwnsBwWarInfoPanel.OpenData>;
         BwWarPanel                          : PanelConfig<TwnsBwWarPanel.OpenData>;
 
+        BroadcastAddMessagePanel            : PanelConfig<TwnsBroadcastAddMessagePanel.OpenData>;
+        BroadcastMessageListPanel           : PanelConfig<TwnsBroadcastMessageListPanel.OpenData>;
         BroadcastPanel                      : PanelConfig<TwnsBroadcastPanel.OpenData>;
 
         ChangeLogAddPanel                   : PanelConfig<TwnsChangeLogAddPanel.OpenData>;
@@ -191,6 +193,7 @@ namespace TwnsPanelConfig {
 
         UserChangeDiscordIdPanel            : PanelConfig<TwnsUserChangeDiscordIdPanel.OpenData>;
         UserChangeNicknamePanel             : PanelConfig<TwnsUserChangeNicknamePanel.OpenData>;
+        UserGameManagementPanel             : PanelConfig<TwnsUserGameManagementPanel.OpenData>;
         UserLoginBackgroundPanel            : PanelConfig<TwnsUserLoginBackgroundPanel.OpenData>;
         UserLoginPanel                      : PanelConfig<TwnsUserLoginPanel.OpenData>;
         UserOnlineUsersPanel                : PanelConfig<TwnsUserOnlineUsersPanel.OpenData>;
@@ -374,6 +377,18 @@ namespace TwnsPanelConfig {
             },
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
+            BroadcastAddMessagePanel: {
+                cls         : TwnsBroadcastAddMessagePanel?.BroadcastAddMessagePanel,
+                skinName    : `resource/skins/broadcast/BroadcastAddMessagePanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
+            BroadcastMessageListPanel: {
+                cls         : TwnsBroadcastMessageListPanel?.BroadcastMessageListPanel,
+                skinName    : `resource/skins/broadcast/BroadcastMessageListPanel.exml`,
+                layer       : LayerType.Hud0,
+            },
+
             BroadcastPanel: {
                 cls         : TwnsBroadcastPanel?.BroadcastPanel,
                 skinName    : `resource/skins/broadcast/BroadcastPanel.exml`,
@@ -1291,6 +1306,12 @@ namespace TwnsPanelConfig {
                 cls         : TwnsUserChangeNicknamePanel?.UserChangeNicknamePanel,
                 skinName    : `resource/skins/user/UserChangeNicknamePanel.exml`,
                 layer       : LayerType.Hud1,
+            },
+
+            UserGameManagementPanel: {
+                cls         : TwnsUserGameManagementPanel?.UserGameManagementPanel,
+                skinName    : `resource/skins/user/UserGameManagementPanel.exml`,
+                layer       : LayerType.Hud0,
             },
 
             UserLoginBackgroundPanel: {

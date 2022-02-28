@@ -28275,6 +28275,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgSpmGetReplayData */
         MsgSpmGetReplayData?: (NetMessage.IMsgSpmGetReplayData|null);
 
+        /** MessageContainer MsgSpmDeleteAllScoreAndReplay */
+        MsgSpmDeleteAllScoreAndReplay?: (NetMessage.IMsgSpmDeleteAllScoreAndReplay|null);
+
         /** MessageContainer MsgMrrSetMaxConcurrentCount */
         MsgMrrSetMaxConcurrentCount?: (NetMessage.IMsgMrrSetMaxConcurrentCount|null);
 
@@ -28296,8 +28299,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMrrSetSelfSettings */
         MsgMrrSetSelfSettings?: (NetMessage.IMsgMrrSetSelfSettings|null);
 
-        /** MessageContainer MsgBroadcastGetMessageList */
-        MsgBroadcastGetMessageList?: (NetMessage.IMsgBroadcastGetMessageList|null);
+        /** MessageContainer MsgBroadcastGetAllMessageIdArray */
+        MsgBroadcastGetAllMessageIdArray?: (NetMessage.IMsgBroadcastGetAllMessageIdArray|null);
 
         /** MessageContainer MsgBroadcastAddMessage */
         MsgBroadcastAddMessage?: (NetMessage.IMsgBroadcastAddMessage|null);
@@ -28307,6 +28310,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgBroadcastDoBroadcast */
         MsgBroadcastDoBroadcast?: (NetMessage.IMsgBroadcastDoBroadcast|null);
+
+        /** MessageContainer MsgBroadcastGetMessageData */
+        MsgBroadcastGetMessageData?: (NetMessage.IMsgBroadcastGetMessageData|null);
 
         /** MessageContainer MsgChangeLogGetMessageList */
         MsgChangeLogGetMessageList?: (NetMessage.IMsgChangeLogGetMessageList|null);
@@ -28657,6 +28663,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgSpmGetReplayData. */
         public MsgSpmGetReplayData?: (NetMessage.IMsgSpmGetReplayData|null);
 
+        /** MessageContainer MsgSpmDeleteAllScoreAndReplay. */
+        public MsgSpmDeleteAllScoreAndReplay?: (NetMessage.IMsgSpmDeleteAllScoreAndReplay|null);
+
         /** MessageContainer MsgMrrSetMaxConcurrentCount. */
         public MsgMrrSetMaxConcurrentCount?: (NetMessage.IMsgMrrSetMaxConcurrentCount|null);
 
@@ -28678,8 +28687,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMrrSetSelfSettings. */
         public MsgMrrSetSelfSettings?: (NetMessage.IMsgMrrSetSelfSettings|null);
 
-        /** MessageContainer MsgBroadcastGetMessageList. */
-        public MsgBroadcastGetMessageList?: (NetMessage.IMsgBroadcastGetMessageList|null);
+        /** MessageContainer MsgBroadcastGetAllMessageIdArray. */
+        public MsgBroadcastGetAllMessageIdArray?: (NetMessage.IMsgBroadcastGetAllMessageIdArray|null);
 
         /** MessageContainer MsgBroadcastAddMessage. */
         public MsgBroadcastAddMessage?: (NetMessage.IMsgBroadcastAddMessage|null);
@@ -28689,6 +28698,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgBroadcastDoBroadcast. */
         public MsgBroadcastDoBroadcast?: (NetMessage.IMsgBroadcastDoBroadcast|null);
+
+        /** MessageContainer MsgBroadcastGetMessageData. */
+        public MsgBroadcastGetMessageData?: (NetMessage.IMsgBroadcastGetMessageData|null);
 
         /** MessageContainer MsgChangeLogGetMessageList. */
         public MsgChangeLogGetMessageList?: (NetMessage.IMsgChangeLogGetMessageList|null);
@@ -30264,103 +30276,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgBroadcastGetMessageList. */
-    interface IMsgBroadcastGetMessageList {
+    /** Properties of a MsgBroadcastGetAllMessageIdArray. */
+    interface IMsgBroadcastGetAllMessageIdArray {
 
-        /** MsgBroadcastGetMessageList c */
-        c?: (NetMessage.MsgBroadcastGetMessageList.IC|null);
+        /** MsgBroadcastGetAllMessageIdArray c */
+        c?: (NetMessage.MsgBroadcastGetAllMessageIdArray.IC|null);
 
-        /** MsgBroadcastGetMessageList s */
-        s?: (NetMessage.MsgBroadcastGetMessageList.IS|null);
+        /** MsgBroadcastGetAllMessageIdArray s */
+        s?: (NetMessage.MsgBroadcastGetAllMessageIdArray.IS|null);
     }
 
-    /** Represents a MsgBroadcastGetMessageList. */
-    class MsgBroadcastGetMessageList implements IMsgBroadcastGetMessageList {
+    /** Represents a MsgBroadcastGetAllMessageIdArray. */
+    class MsgBroadcastGetAllMessageIdArray implements IMsgBroadcastGetAllMessageIdArray {
 
         /**
-         * Constructs a new MsgBroadcastGetMessageList.
+         * Constructs a new MsgBroadcastGetAllMessageIdArray.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgBroadcastGetMessageList);
+        constructor(properties?: NetMessage.IMsgBroadcastGetAllMessageIdArray);
 
-        /** MsgBroadcastGetMessageList c. */
-        public c?: (NetMessage.MsgBroadcastGetMessageList.IC|null);
+        /** MsgBroadcastGetAllMessageIdArray c. */
+        public c?: (NetMessage.MsgBroadcastGetAllMessageIdArray.IC|null);
 
-        /** MsgBroadcastGetMessageList s. */
-        public s?: (NetMessage.MsgBroadcastGetMessageList.IS|null);
+        /** MsgBroadcastGetAllMessageIdArray s. */
+        public s?: (NetMessage.MsgBroadcastGetAllMessageIdArray.IS|null);
 
         /**
-         * Creates a new MsgBroadcastGetMessageList instance using the specified properties.
+         * Creates a new MsgBroadcastGetAllMessageIdArray instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgBroadcastGetMessageList instance
+         * @returns MsgBroadcastGetAllMessageIdArray instance
          */
-        public static create(properties?: NetMessage.IMsgBroadcastGetMessageList): NetMessage.MsgBroadcastGetMessageList;
+        public static create(properties?: NetMessage.IMsgBroadcastGetAllMessageIdArray): NetMessage.MsgBroadcastGetAllMessageIdArray;
 
         /**
-         * Encodes the specified MsgBroadcastGetMessageList message. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageList.verify|verify} messages.
-         * @param message MsgBroadcastGetMessageList message or plain object to encode
+         * Encodes the specified MsgBroadcastGetAllMessageIdArray message. Does not implicitly {@link NetMessage.MsgBroadcastGetAllMessageIdArray.verify|verify} messages.
+         * @param message MsgBroadcastGetAllMessageIdArray message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgBroadcastGetMessageList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgBroadcastGetAllMessageIdArray, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgBroadcastGetMessageList message, length delimited. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageList.verify|verify} messages.
-         * @param message MsgBroadcastGetMessageList message or plain object to encode
+         * Encodes the specified MsgBroadcastGetAllMessageIdArray message, length delimited. Does not implicitly {@link NetMessage.MsgBroadcastGetAllMessageIdArray.verify|verify} messages.
+         * @param message MsgBroadcastGetAllMessageIdArray message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgBroadcastGetMessageList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgBroadcastGetAllMessageIdArray, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgBroadcastGetMessageList message from the specified reader or buffer.
+         * Decodes a MsgBroadcastGetAllMessageIdArray message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgBroadcastGetMessageList
+         * @returns MsgBroadcastGetAllMessageIdArray
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgBroadcastGetMessageList;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgBroadcastGetAllMessageIdArray;
 
         /**
-         * Decodes a MsgBroadcastGetMessageList message from the specified reader or buffer, length delimited.
+         * Decodes a MsgBroadcastGetAllMessageIdArray message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgBroadcastGetMessageList
+         * @returns MsgBroadcastGetAllMessageIdArray
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgBroadcastGetMessageList;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgBroadcastGetAllMessageIdArray;
 
         /**
-         * Verifies a MsgBroadcastGetMessageList message.
+         * Verifies a MsgBroadcastGetAllMessageIdArray message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgBroadcastGetMessageList message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgBroadcastGetAllMessageIdArray message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgBroadcastGetMessageList
+         * @returns MsgBroadcastGetAllMessageIdArray
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgBroadcastGetMessageList;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgBroadcastGetAllMessageIdArray;
 
         /**
-         * Creates a plain object from a MsgBroadcastGetMessageList message. Also converts values to other types if specified.
-         * @param message MsgBroadcastGetMessageList
+         * Creates a plain object from a MsgBroadcastGetAllMessageIdArray message. Also converts values to other types if specified.
+         * @param message MsgBroadcastGetAllMessageIdArray
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgBroadcastGetMessageList, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgBroadcastGetAllMessageIdArray, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgBroadcastGetMessageList to JSON.
+         * Converts this MsgBroadcastGetAllMessageIdArray to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgBroadcastGetMessageList {
+    namespace MsgBroadcastGetAllMessageIdArray {
 
         /** Properties of a C. */
         interface IC {
@@ -30373,30 +30385,30 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgBroadcastGetMessageList.IC);
+            constructor(properties?: NetMessage.MsgBroadcastGetAllMessageIdArray.IC);
 
             /**
              * Creates a new C instance using the specified properties.
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgBroadcastGetMessageList.IC): NetMessage.MsgBroadcastGetMessageList.C;
+            public static create(properties?: NetMessage.MsgBroadcastGetAllMessageIdArray.IC): NetMessage.MsgBroadcastGetAllMessageIdArray.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageList.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgBroadcastGetAllMessageIdArray.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgBroadcastGetMessageList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgBroadcastGetAllMessageIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageList.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgBroadcastGetAllMessageIdArray.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgBroadcastGetMessageList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgBroadcastGetAllMessageIdArray.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -30406,7 +30418,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgBroadcastGetMessageList.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgBroadcastGetAllMessageIdArray.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -30415,7 +30427,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgBroadcastGetMessageList.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgBroadcastGetAllMessageIdArray.C;
 
             /**
              * Verifies a C message.
@@ -30429,7 +30441,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgBroadcastGetMessageList.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgBroadcastGetAllMessageIdArray.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -30437,7 +30449,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgBroadcastGetMessageList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgBroadcastGetAllMessageIdArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -30452,8 +30464,8 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S messageList */
-            messageList?: (Broadcast.IBroadcastMessage[]|null);
+            /** S messageIdArray */
+            messageIdArray?: (number[]|null);
         }
 
         /** Represents a S. */
@@ -30463,36 +30475,36 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgBroadcastGetMessageList.IS);
+            constructor(properties?: NetMessage.MsgBroadcastGetAllMessageIdArray.IS);
 
             /** S errorCode. */
             public errorCode: number;
 
-            /** S messageList. */
-            public messageList: Broadcast.IBroadcastMessage[];
+            /** S messageIdArray. */
+            public messageIdArray: number[];
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgBroadcastGetMessageList.IS): NetMessage.MsgBroadcastGetMessageList.S;
+            public static create(properties?: NetMessage.MsgBroadcastGetAllMessageIdArray.IS): NetMessage.MsgBroadcastGetAllMessageIdArray.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageList.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgBroadcastGetAllMessageIdArray.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgBroadcastGetMessageList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgBroadcastGetAllMessageIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageList.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgBroadcastGetAllMessageIdArray.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgBroadcastGetMessageList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgBroadcastGetAllMessageIdArray.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -30502,7 +30514,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgBroadcastGetMessageList.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgBroadcastGetAllMessageIdArray.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -30511,7 +30523,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgBroadcastGetMessageList.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgBroadcastGetAllMessageIdArray.S;
 
             /**
              * Verifies a S message.
@@ -30525,7 +30537,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgBroadcastGetMessageList.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgBroadcastGetAllMessageIdArray.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -30533,7 +30545,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgBroadcastGetMessageList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgBroadcastGetAllMessageIdArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -31389,6 +31401,297 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgBroadcastDoBroadcast.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgBroadcastGetMessageData. */
+    interface IMsgBroadcastGetMessageData {
+
+        /** MsgBroadcastGetMessageData c */
+        c?: (NetMessage.MsgBroadcastGetMessageData.IC|null);
+
+        /** MsgBroadcastGetMessageData s */
+        s?: (NetMessage.MsgBroadcastGetMessageData.IS|null);
+    }
+
+    /** Represents a MsgBroadcastGetMessageData. */
+    class MsgBroadcastGetMessageData implements IMsgBroadcastGetMessageData {
+
+        /**
+         * Constructs a new MsgBroadcastGetMessageData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgBroadcastGetMessageData);
+
+        /** MsgBroadcastGetMessageData c. */
+        public c?: (NetMessage.MsgBroadcastGetMessageData.IC|null);
+
+        /** MsgBroadcastGetMessageData s. */
+        public s?: (NetMessage.MsgBroadcastGetMessageData.IS|null);
+
+        /**
+         * Creates a new MsgBroadcastGetMessageData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgBroadcastGetMessageData instance
+         */
+        public static create(properties?: NetMessage.IMsgBroadcastGetMessageData): NetMessage.MsgBroadcastGetMessageData;
+
+        /**
+         * Encodes the specified MsgBroadcastGetMessageData message. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageData.verify|verify} messages.
+         * @param message MsgBroadcastGetMessageData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgBroadcastGetMessageData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgBroadcastGetMessageData message, length delimited. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageData.verify|verify} messages.
+         * @param message MsgBroadcastGetMessageData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgBroadcastGetMessageData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgBroadcastGetMessageData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgBroadcastGetMessageData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgBroadcastGetMessageData;
+
+        /**
+         * Decodes a MsgBroadcastGetMessageData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgBroadcastGetMessageData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgBroadcastGetMessageData;
+
+        /**
+         * Verifies a MsgBroadcastGetMessageData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgBroadcastGetMessageData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgBroadcastGetMessageData
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgBroadcastGetMessageData;
+
+        /**
+         * Creates a plain object from a MsgBroadcastGetMessageData message. Also converts values to other types if specified.
+         * @param message MsgBroadcastGetMessageData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgBroadcastGetMessageData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgBroadcastGetMessageData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgBroadcastGetMessageData {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C messageId */
+            messageId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgBroadcastGetMessageData.IC);
+
+            /** C messageId. */
+            public messageId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgBroadcastGetMessageData.IC): NetMessage.MsgBroadcastGetMessageData.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageData.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgBroadcastGetMessageData.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageData.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgBroadcastGetMessageData.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgBroadcastGetMessageData.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgBroadcastGetMessageData.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgBroadcastGetMessageData.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgBroadcastGetMessageData.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S messageId */
+            messageId?: (number|null);
+
+            /** S messageData */
+            messageData?: (Broadcast.IBroadcastMessage|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgBroadcastGetMessageData.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S messageId. */
+            public messageId: number;
+
+            /** S messageData. */
+            public messageData?: (Broadcast.IBroadcastMessage|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgBroadcastGetMessageData.IS): NetMessage.MsgBroadcastGetMessageData.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageData.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgBroadcastGetMessageData.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgBroadcastGetMessageData.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgBroadcastGetMessageData.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgBroadcastGetMessageData.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgBroadcastGetMessageData.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgBroadcastGetMessageData.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgBroadcastGetMessageData.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -55995,6 +56298,279 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgSpmGetReplayData.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgSpmDeleteAllScoreAndReplay. */
+    interface IMsgSpmDeleteAllScoreAndReplay {
+
+        /** MsgSpmDeleteAllScoreAndReplay c */
+        c?: (NetMessage.MsgSpmDeleteAllScoreAndReplay.IC|null);
+
+        /** MsgSpmDeleteAllScoreAndReplay s */
+        s?: (NetMessage.MsgSpmDeleteAllScoreAndReplay.IS|null);
+    }
+
+    /** Represents a MsgSpmDeleteAllScoreAndReplay. */
+    class MsgSpmDeleteAllScoreAndReplay implements IMsgSpmDeleteAllScoreAndReplay {
+
+        /**
+         * Constructs a new MsgSpmDeleteAllScoreAndReplay.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgSpmDeleteAllScoreAndReplay);
+
+        /** MsgSpmDeleteAllScoreAndReplay c. */
+        public c?: (NetMessage.MsgSpmDeleteAllScoreAndReplay.IC|null);
+
+        /** MsgSpmDeleteAllScoreAndReplay s. */
+        public s?: (NetMessage.MsgSpmDeleteAllScoreAndReplay.IS|null);
+
+        /**
+         * Creates a new MsgSpmDeleteAllScoreAndReplay instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgSpmDeleteAllScoreAndReplay instance
+         */
+        public static create(properties?: NetMessage.IMsgSpmDeleteAllScoreAndReplay): NetMessage.MsgSpmDeleteAllScoreAndReplay;
+
+        /**
+         * Encodes the specified MsgSpmDeleteAllScoreAndReplay message. Does not implicitly {@link NetMessage.MsgSpmDeleteAllScoreAndReplay.verify|verify} messages.
+         * @param message MsgSpmDeleteAllScoreAndReplay message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgSpmDeleteAllScoreAndReplay, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgSpmDeleteAllScoreAndReplay message, length delimited. Does not implicitly {@link NetMessage.MsgSpmDeleteAllScoreAndReplay.verify|verify} messages.
+         * @param message MsgSpmDeleteAllScoreAndReplay message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgSpmDeleteAllScoreAndReplay, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgSpmDeleteAllScoreAndReplay message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgSpmDeleteAllScoreAndReplay
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmDeleteAllScoreAndReplay;
+
+        /**
+         * Decodes a MsgSpmDeleteAllScoreAndReplay message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgSpmDeleteAllScoreAndReplay
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmDeleteAllScoreAndReplay;
+
+        /**
+         * Verifies a MsgSpmDeleteAllScoreAndReplay message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgSpmDeleteAllScoreAndReplay message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgSpmDeleteAllScoreAndReplay
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmDeleteAllScoreAndReplay;
+
+        /**
+         * Creates a plain object from a MsgSpmDeleteAllScoreAndReplay message. Also converts values to other types if specified.
+         * @param message MsgSpmDeleteAllScoreAndReplay
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgSpmDeleteAllScoreAndReplay, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgSpmDeleteAllScoreAndReplay to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgSpmDeleteAllScoreAndReplay {
+
+        /** Properties of a C. */
+        interface IC {
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgSpmDeleteAllScoreAndReplay.IC);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgSpmDeleteAllScoreAndReplay.IC): NetMessage.MsgSpmDeleteAllScoreAndReplay.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgSpmDeleteAllScoreAndReplay.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgSpmDeleteAllScoreAndReplay.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgSpmDeleteAllScoreAndReplay.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgSpmDeleteAllScoreAndReplay.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmDeleteAllScoreAndReplay.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmDeleteAllScoreAndReplay.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmDeleteAllScoreAndReplay.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgSpmDeleteAllScoreAndReplay.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgSpmDeleteAllScoreAndReplay.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgSpmDeleteAllScoreAndReplay.IS): NetMessage.MsgSpmDeleteAllScoreAndReplay.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgSpmDeleteAllScoreAndReplay.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgSpmDeleteAllScoreAndReplay.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgSpmDeleteAllScoreAndReplay.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgSpmDeleteAllScoreAndReplay.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmDeleteAllScoreAndReplay.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmDeleteAllScoreAndReplay.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmDeleteAllScoreAndReplay.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgSpmDeleteAllScoreAndReplay.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

@@ -37,6 +37,7 @@ namespace CommonConstants {
     export const AdminUserId                            = 1000001;
     export const NameListMaxLength                      = 5;
 
+    export const BroadcastTextMaxLength                 = 150;
     export const ChangeLogTextMaxLength                 = 200;
     export const ChangeLogTextListMaxLength             = 2;
     export const ChangeLogMessageListMaxLength          = 100;

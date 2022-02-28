@@ -143,7 +143,8 @@ namespace TwnsNotifyType {
         MsgCommonGetServerStatus,
         MsgCommonGetRankList,
 
-        MsgBroadcastGetMessageList,
+        MsgBroadcastGetAllMessageIdArray,
+        MsgBroadcastGetMessageData,
         MsgBroadcastAddMessage,
         MsgBroadcastDeleteMessage,
         MsgBroadcastDoBroadcast,
@@ -326,6 +327,7 @@ namespace TwnsNotifyType {
         MsgSpmValidateSrw,
         MsgSpmGetReplayData,
         MsgSpmGetReplayDataFailed,
+        MsgSpmDeleteAllScoreAndReplay,
     }
 }
 

@@ -68,6 +68,16 @@ namespace TwnsWarMapView {
     }
 
     class TileMapView extends egret.DisplayObjectContainer {
+        private readonly _borderLayer           = new egret.DisplayObjectContainer();
+        private readonly _imgCornerUL           = new TwnsUiImage.UiImage(`uncompressedCorner0000`);
+        private readonly _imgCornerUR           = new TwnsUiImage.UiImage(`uncompressedCorner0001`);
+        private readonly _imgCornerDR           = new TwnsUiImage.UiImage(`uncompressedCorner0002`);
+        private readonly _imgCornerDL           = new TwnsUiImage.UiImage(`uncompressedCorner0003`);
+        private readonly _imgBorderU            = new TwnsUiImage.UiImage(`uncompressedBorder0000`);
+        private readonly _imgBorderR            = new TwnsUiImage.UiImage(`uncompressedBorder0001`);
+        private readonly _imgBorderD            = new TwnsUiImage.UiImage(`uncompressedBorder0002`);
+        private readonly _imgBorderL            = new TwnsUiImage.UiImage(`uncompressedBorder0003`);
+
         private readonly _baseLayer             = new TileBaseLayer();
         private readonly _decoratorLayer        = new TileDecoratorLayer();
         private readonly _gridBorderLayer       = new egret.DisplayObjectContainer();
@@ -81,6 +91,7 @@ namespace TwnsWarMapView {
         public constructor() {
             super();
 
+            this._initBorderLayer();
             this._gridBorderLayer.alpha = 0.3;
             this.addChild(this._baseLayer);
             this.addChild(this._decoratorLayer);
@@ -94,6 +105,7 @@ namespace TwnsWarMapView {
             this._decoratorLayer.updateWithTileDataList(dataList, players);
             this._objectLayer.updateWithTileDataList(dataList, players);
             this._resetGridBorderLayer(dataList);
+            this._updateBorderLayer(dataList);
         }
         public clear(): void {
             this.showTileMap([]);
@@ -127,7 +139,7 @@ namespace TwnsWarMapView {
             const borderHeight                              = mapHeight * GRID_HEIGHT;
             const gridBorderLayer                           = this._gridBorderLayer;
             gridBorderLayer.removeChildren();
-            for (let x = 0; x <= mapWidth; ++x) {
+            for (let x = 1; x < mapWidth; ++x) {
                 const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                 img.smoothing   = false;
                 img.width       = 1;
@@ -135,7 +147,7 @@ namespace TwnsWarMapView {
                 img.x           = (x * GRID_WIDTH) - 0.5;
                 gridBorderLayer.addChild(img);
             }
-            for (let y = 0; y <= mapHeight; ++y) {
+            for (let y = 1; y < mapHeight; ++y) {
                 const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                 img.smoothing   = false;
                 img.width       = borderWidth;
@@ -147,6 +159,92 @@ namespace TwnsWarMapView {
         }
         private _updateGridBorderLayerVisible(): void {
             this._gridBorderLayer.visible = UserModel.getSelfSettingsIsShowGridBorder();
+        }
+
+        private _initBorderLayer(): void {
+            const borderLayer       = this._borderLayer;
+            const imgCornerUL       = this._imgCornerUL;
+            const imgCornerUR       = this._imgCornerUR;
+            const imgCornerDL       = this._imgCornerDL;
+            const imgCornerDR       = this._imgCornerDR;
+            const imgBorderU        = this._imgBorderU;
+            const imgBorderD        = this._imgBorderD;
+            const imgBorderL        = this._imgBorderL;
+            const imgBorderR        = this._imgBorderR;
+            imgCornerUL.smoothing   = false;
+            imgCornerUR.smoothing   = false;
+            imgCornerDL.smoothing   = false;
+            imgCornerDR.smoothing   = false;
+            imgBorderU.smoothing    = false;
+            imgBorderD.smoothing    = false;
+            imgBorderL.smoothing    = false;
+            imgBorderR.smoothing    = false;
+            borderLayer.addChild(imgBorderU);
+            borderLayer.addChild(imgBorderD);
+            borderLayer.addChild(imgBorderL);
+            borderLayer.addChild(imgBorderR);
+            borderLayer.addChild(imgCornerUL);
+            borderLayer.addChild(imgCornerUR);
+            borderLayer.addChild(imgCornerDL);
+            borderLayer.addChild(imgCornerDR);
+            this.addChild(borderLayer);
+        }
+
+        private _updateBorderLayer(tileDataArray: ISerialTile[]): void {
+            const mapSize           = getMapSize(tileDataArray);
+            const horizontalPixels  = mapSize.width * GRID_WIDTH;
+            const verticalPixels    = mapSize.height * GRID_HEIGHT;
+            {
+                const imgCornerUL   = this._imgCornerUL;
+                imgCornerUL.x       = -4;
+                imgCornerUL.y       = -4;
+            }
+
+            {
+                const imgCornerUR   = this._imgCornerUR;
+                imgCornerUR.x       = horizontalPixels;
+                imgCornerUR.y       = -4;
+            }
+
+            {
+                const imgCornerDR   = this._imgCornerDR;
+                imgCornerDR.x       = horizontalPixels;
+                imgCornerDR.y       = verticalPixels;
+            }
+
+            {
+                const imgCornerDL   = this._imgCornerDL;
+                imgCornerDL.x       = -4;
+                imgCornerDL.y       = verticalPixels;
+            }
+
+            {
+                const imgBorderU    = this._imgBorderU;
+                imgBorderU.x        = -0.5;
+                imgBorderU.y        = -4;
+                imgBorderU.width    = horizontalPixels + 1;
+            }
+
+            {
+                const imgBorderR    = this._imgBorderR;
+                imgBorderR.x        = horizontalPixels;
+                imgBorderR.y        = -0.5;
+                imgBorderR.height   = verticalPixels + 1;
+            }
+
+            {
+                const imgBorderD    = this._imgBorderD;
+                imgBorderD.x        = -0.5;
+                imgBorderD.y        = verticalPixels;
+                imgBorderD.width    = horizontalPixels + 1;
+            }
+
+            {
+                const imgBorderL    = this._imgBorderL;
+                imgBorderL.x        = -4;
+                imgBorderL.y        = -0.5;
+                imgBorderL.height   = verticalPixels + 1;
+            }
         }
     }
 

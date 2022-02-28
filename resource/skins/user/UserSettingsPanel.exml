@@ -82,7 +82,7 @@
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
-                    <TwnsUiButton:UiButton id="_btnSetPrivilege" label="设置权限" y="360" x="256"
+                    <TwnsUiButton:UiButton id="_btnGameManagement" label="设置权限" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
                     <TwnsUiButton:UiButton id="_btnMapManagement" label="管理地图" y="360" x="256"
                                            skinName="Skins.Component.Button.ButtonBlack001" />
