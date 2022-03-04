@@ -4,7 +4,7 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing" xmlns:TwnsUiTextInput="TwnsUiTextInput.*">
     <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
                          scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="560" height="330" horizontalCenter="0" verticalCenter="0">
+    <e:Group id="_group" width="560" height="430" horizontalCenter="0" verticalCenter="0">
         <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
                              alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
         <TwnsUiLabel:UiLabel id="_labelTitle" text="标题" textColor="0xffffff" y="10" size="24" horizontalCenter="0"
@@ -40,6 +40,63 @@
                     </e:Skin>
                 </TwnsUiButton:skinName>
             </TwnsUiTextInput:UiTextInput>
+        </e:Group>
+        <e:Group x="20" y="270">
+            <e:Group x="0" y="0">
+                <TwnsUiButton:UiButton label="Duration" x="0" y="0"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" id="_btnStartTime"
+                                       width="100" />
+                <TwnsUiLabel:UiLabel id="_labelStartTime" text="9999/99/99 99:99:99" textColor="0xFFFFFF" size="14"
+                                     textAlign="center" wordWrap="true" x="0" y="0" />
+                <e:Group x="241" y="2">
+                    <e:Group x="-12" y="-12">
+                        <TwnsUiButton:UiButton label="Month" x="-198" y="-14"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                               id="_btnStartTimeYear" width="80" />
+                        <TwnsUiButton:UiButton label="Month" x="-132" y="-7"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                               id="_btnStartTimeMonth" width="80" />
+                        <TwnsUiButton:UiButton label="Month" x="-66" y="-4"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                               id="_btnStartTimeDay" width="80" />
+                        <e:layout>
+                            <e:HorizontalLayout/>
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="-6" y="-6">
+                        <TwnsUiButton:UiButton label="Month" x="-198" y="-14"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                               id="_btnStartTimeHour" width="80" />
+                        <TwnsUiButton:UiButton label="Month" x="-132" y="-7"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                               id="_btnStartTimeMinute" width="80" />
+                        <TwnsUiButton:UiButton label="Month" x="-66" y="-4"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                               id="_btnStartTimeSecond" width="80" />
+                        <e:layout>
+                            <e:HorizontalLayout/>
+                        </e:layout>
+                    </e:Group>
+                    <e:layout>
+                        <e:VerticalLayout/>
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="0" y="39">
+                <TwnsUiButton:UiButton id="_btnDuration" label="Duration" x="0" y="0"
+                                       skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100" />
+                <TwnsUiLabel:UiLabel id="_labelDuration" text="提示" textColor="0xFFFFFF" size="14" textAlign="center"
+                                     wordWrap="true" x="195" y="53" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
         </e:Group>
         <TwnsUiLabel:UiLabel id="_labelTip" text="提示" textColor="0xFFFFFF" size="14" textAlign="center" wordWrap="true"
                              horizontalCenter="0" bottom="44" locked="true" />

@@ -4844,6 +4844,26 @@ namespace TwnsLangCommonText {
             `广播信息`,
             `Broadcast`,
         ],
+        [LangTextType.B0882]: [
+            `开始时间`,
+            `Start Time`,
+        ],
+        [LangTextType.B0883]: [
+            `持续时间`,
+            `Duration`,
+        ],
+        [LangTextType.B0884]: [
+            `时`,
+            `Hour`,
+        ],
+        [LangTextType.B0885]: [
+            `分`,
+            `Minute`,
+        ],
+        [LangTextType.B0886]: [
+            `秒`,
+            `Second`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
