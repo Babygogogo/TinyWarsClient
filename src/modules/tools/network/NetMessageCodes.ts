@@ -128,4 +128,6 @@ MsgCcrGetJoinedRoomIdArray = 348,
 MsgCcrGetJoinableRoomIdArray = 349,
 MsgCcrGetRoomStaticInfo = 350,
 MsgCcrGetRoomPlayerInfo = 351,
+MsgLbSpmOverallGetTopDataArray = 360,
+MsgLbSpmOverallGetSingleData = 361,
 }}

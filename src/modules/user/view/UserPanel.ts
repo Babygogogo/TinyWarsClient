@@ -281,11 +281,11 @@ namespace TwnsUserPanel {
             this._labelFogRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
         }
         private async _updateComponentsForSpmRank(): Promise<void> {
-            const rankInfo                      = (await UserModel.getUserPublicInfo(this._getOpenData().userId))?.userSpmOverallRankInfo;
-            const score                         = rankInfo?.currentScore ?? 0;
+            const rankInfo                      = await TinyWarsNamespace.LeaderboardModel.getSpmOverallSingleData(this._getOpenData().userId);
+            const score                         = rankInfo?.score ?? 0;
             this._labelSpmRankScore.text        = score > 0 ? Helpers.formatString(`%.2f`, score) : `--`;
 
-            const rank                          = rankInfo?.currentRank ?? 0;
+            const rank                          = rankInfo?.rank ?? 0;
             const isRankValid                   = (rank > 0) && (score > 0);
             this._labelSpmRankRank.text         = isRankValid ? `${rank}` : `--`;
             this._labelSpmRankRankSuffix.text   = isRankValid ? Helpers.getSuffixForRank(rank) || `` : ``;

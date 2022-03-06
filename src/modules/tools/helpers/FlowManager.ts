@@ -133,6 +133,7 @@ namespace FlowManager {
         CommonModel.init();
         BroadcastProxy.init();
         ChangeLogProxy.init();
+        TinyWarsNamespace.LeaderboardProxy.init();
         TwnsPanelConfig.init();
 
         _removeLoadingDom();

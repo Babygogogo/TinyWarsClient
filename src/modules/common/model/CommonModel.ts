@@ -27,7 +27,6 @@ namespace CommonModel {
     const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileObjectType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
 
     let _mrwRankArray: IDataForMrwPlayerRank[] | null = null;
-    let _spmOverallRankArray: number[] | null = null;
 
     export function init(): void {
         updateOnUnitAndTileTextureVersionChanged();
@@ -272,13 +271,6 @@ namespace CommonModel {
     }
     export function getMrwRankList(): IDataForMrwPlayerRank[] | null {
         return _mrwRankArray;
-    }
-
-    export function setSpmOverallRankArray(rankArray: number[]): void {
-        _spmOverallRankArray = rankArray;
-    }
-    export function getSpmOverallRankArray(): number[] | null {
-        return _spmOverallRankArray;
     }
 }
 

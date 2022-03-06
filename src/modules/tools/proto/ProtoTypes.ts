@@ -26451,8 +26451,8 @@ export declare namespace User {
         /** UserRankInfo mrwArray */
         mrwArray?: (User.UserRankInfo.IUserMrwRankInfo[]|null);
 
-        /** UserRankInfo spmOverallInfo */
-        spmOverallInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
+        /** UserRankInfo deprecatedSpmOverallInfo */
+        deprecatedSpmOverallInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
     }
 
     /** Represents a UserRankInfo. */
@@ -26467,8 +26467,8 @@ export declare namespace User {
         /** UserRankInfo mrwArray. */
         public mrwArray: User.UserRankInfo.IUserMrwRankInfo[];
 
-        /** UserRankInfo spmOverallInfo. */
-        public spmOverallInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
+        /** UserRankInfo deprecatedSpmOverallInfo. */
+        public deprecatedSpmOverallInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
 
         /**
          * Creates a new UserRankInfo instance using the specified properties.
@@ -27668,9 +27668,6 @@ export declare namespace User {
 
         /** UserPublicInfo userMpwStatisticsArray */
         userMpwStatisticsArray?: (User.UserWarStatistics.IUserMpwStatistics[]|null);
-
-        /** UserPublicInfo userSpmOverallRankInfo */
-        userSpmOverallRankInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
     }
 
     /** Represents a UserPublicInfo. */
@@ -27720,9 +27717,6 @@ export declare namespace User {
 
         /** UserPublicInfo userMpwStatisticsArray. */
         public userMpwStatisticsArray: User.UserWarStatistics.IUserMpwStatistics[];
-
-        /** UserPublicInfo userSpmOverallRankInfo. */
-        public userSpmOverallRankInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
 
         /**
          * Creates a new UserPublicInfo instance using the specified properties.
@@ -27925,6 +27919,282 @@ export declare namespace User {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+}
+
+/** Properties of a Leaderboard. */
+export declare interface ILeaderboard {
+}
+
+/** Represents a Leaderboard. */
+export declare class Leaderboard implements ILeaderboard {
+
+    /**
+     * Constructs a new Leaderboard.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: ILeaderboard);
+
+    /**
+     * Creates a new Leaderboard instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns Leaderboard instance
+     */
+    public static create(properties?: ILeaderboard): Leaderboard;
+
+    /**
+     * Encodes the specified Leaderboard message. Does not implicitly {@link Leaderboard.verify|verify} messages.
+     * @param message Leaderboard message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: ILeaderboard, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified Leaderboard message, length delimited. Does not implicitly {@link Leaderboard.verify|verify} messages.
+     * @param message Leaderboard message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: ILeaderboard, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a Leaderboard message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns Leaderboard
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Leaderboard;
+
+    /**
+     * Decodes a Leaderboard message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns Leaderboard
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Leaderboard;
+
+    /**
+     * Verifies a Leaderboard message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a Leaderboard message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns Leaderboard
+     */
+    public static fromObject(object: { [k: string]: any }): Leaderboard;
+
+    /**
+     * Creates a plain object from a Leaderboard message. Also converts values to other types if specified.
+     * @param message Leaderboard
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: Leaderboard, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this Leaderboard to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+export declare namespace Leaderboard {
+
+    /** Properties of a LeaderboardSpmOverall. */
+    interface ILeaderboardSpmOverall {
+
+        /** LeaderboardSpmOverall dataArray */
+        dataArray?: (Leaderboard.LeaderboardSpmOverall.ISingleData[]|null);
+    }
+
+    /** Represents a LeaderboardSpmOverall. */
+    class LeaderboardSpmOverall implements ILeaderboardSpmOverall {
+
+        /**
+         * Constructs a new LeaderboardSpmOverall.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Leaderboard.ILeaderboardSpmOverall);
+
+        /** LeaderboardSpmOverall dataArray. */
+        public dataArray: Leaderboard.LeaderboardSpmOverall.ISingleData[];
+
+        /**
+         * Creates a new LeaderboardSpmOverall instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns LeaderboardSpmOverall instance
+         */
+        public static create(properties?: Leaderboard.ILeaderboardSpmOverall): Leaderboard.LeaderboardSpmOverall;
+
+        /**
+         * Encodes the specified LeaderboardSpmOverall message. Does not implicitly {@link Leaderboard.LeaderboardSpmOverall.verify|verify} messages.
+         * @param message LeaderboardSpmOverall message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Leaderboard.ILeaderboardSpmOverall, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified LeaderboardSpmOverall message, length delimited. Does not implicitly {@link Leaderboard.LeaderboardSpmOverall.verify|verify} messages.
+         * @param message LeaderboardSpmOverall message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Leaderboard.ILeaderboardSpmOverall, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a LeaderboardSpmOverall message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns LeaderboardSpmOverall
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Leaderboard.LeaderboardSpmOverall;
+
+        /**
+         * Decodes a LeaderboardSpmOverall message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns LeaderboardSpmOverall
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Leaderboard.LeaderboardSpmOverall;
+
+        /**
+         * Verifies a LeaderboardSpmOverall message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a LeaderboardSpmOverall message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns LeaderboardSpmOverall
+         */
+        public static fromObject(object: { [k: string]: any }): Leaderboard.LeaderboardSpmOverall;
+
+        /**
+         * Creates a plain object from a LeaderboardSpmOverall message. Also converts values to other types if specified.
+         * @param message LeaderboardSpmOverall
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Leaderboard.LeaderboardSpmOverall, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this LeaderboardSpmOverall to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace LeaderboardSpmOverall {
+
+        /** Properties of a SingleData. */
+        interface ISingleData {
+
+            /** SingleData userId */
+            userId?: (number|null);
+
+            /** SingleData score */
+            score?: (number|null);
+        }
+
+        /** Represents a SingleData. */
+        class SingleData implements ISingleData {
+
+            /**
+             * Constructs a new SingleData.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: Leaderboard.LeaderboardSpmOverall.ISingleData);
+
+            /** SingleData userId. */
+            public userId: number;
+
+            /** SingleData score. */
+            public score: number;
+
+            /**
+             * Creates a new SingleData instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns SingleData instance
+             */
+            public static create(properties?: Leaderboard.LeaderboardSpmOverall.ISingleData): Leaderboard.LeaderboardSpmOverall.SingleData;
+
+            /**
+             * Encodes the specified SingleData message. Does not implicitly {@link Leaderboard.LeaderboardSpmOverall.SingleData.verify|verify} messages.
+             * @param message SingleData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: Leaderboard.LeaderboardSpmOverall.ISingleData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified SingleData message, length delimited. Does not implicitly {@link Leaderboard.LeaderboardSpmOverall.SingleData.verify|verify} messages.
+             * @param message SingleData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: Leaderboard.LeaderboardSpmOverall.ISingleData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a SingleData message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns SingleData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Leaderboard.LeaderboardSpmOverall.SingleData;
+
+            /**
+             * Decodes a SingleData message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns SingleData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Leaderboard.LeaderboardSpmOverall.SingleData;
+
+            /**
+             * Verifies a SingleData message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a SingleData message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns SingleData
+             */
+            public static fromObject(object: { [k: string]: any }): Leaderboard.LeaderboardSpmOverall.SingleData;
+
+            /**
+             * Creates a plain object from a SingleData message. Also converts values to other types if specified.
+             * @param message SingleData
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: Leaderboard.LeaderboardSpmOverall.SingleData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this SingleData to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 }
 
@@ -28394,6 +28664,12 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgCcrGetRoomPlayerInfo */
         MsgCcrGetRoomPlayerInfo?: (NetMessage.IMsgCcrGetRoomPlayerInfo|null);
+
+        /** MessageContainer MsgLbSpmOverallGetTopDataArray */
+        MsgLbSpmOverallGetTopDataArray?: (NetMessage.IMsgLbSpmOverallGetTopDataArray|null);
+
+        /** MessageContainer MsgLbSpmOverallGetSingleData */
+        MsgLbSpmOverallGetSingleData?: (NetMessage.IMsgLbSpmOverallGetSingleData|null);
     }
 
     /** Represents a MessageContainer. */
@@ -28782,6 +29058,12 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgCcrGetRoomPlayerInfo. */
         public MsgCcrGetRoomPlayerInfo?: (NetMessage.IMsgCcrGetRoomPlayerInfo|null);
+
+        /** MessageContainer MsgLbSpmOverallGetTopDataArray. */
+        public MsgLbSpmOverallGetTopDataArray?: (NetMessage.IMsgLbSpmOverallGetTopDataArray|null);
+
+        /** MessageContainer MsgLbSpmOverallGetSingleData. */
+        public MsgLbSpmOverallGetSingleData?: (NetMessage.IMsgLbSpmOverallGetSingleData|null);
 
         /**
          * Creates a new MessageContainer instance using the specified properties.
@@ -30181,9 +30463,6 @@ export declare namespace NetMessage {
 
             /** S mrwRankDataArray */
             mrwRankDataArray?: (Structure.IDataForMrwPlayerRank[]|null);
-
-            /** S spmOverallRankArray */
-            spmOverallRankArray?: (number[]|null);
         }
 
         /** Represents a S. */
@@ -30200,9 +30479,6 @@ export declare namespace NetMessage {
 
             /** S mrwRankDataArray. */
             public mrwRankDataArray: Structure.IDataForMrwPlayerRank[];
-
-            /** S spmOverallRankArray. */
-            public spmOverallRankArray: number[];
 
             /**
              * Creates a new S instance using the specified properties.
@@ -65712,6 +65988,678 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgCcrStartWar.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgLbSpmOverallGetTopDataArray. */
+    interface IMsgLbSpmOverallGetTopDataArray {
+
+        /** MsgLbSpmOverallGetTopDataArray c */
+        c?: (NetMessage.MsgLbSpmOverallGetTopDataArray.IC|null);
+
+        /** MsgLbSpmOverallGetTopDataArray s */
+        s?: (NetMessage.MsgLbSpmOverallGetTopDataArray.IS|null);
+    }
+
+    /** Represents a MsgLbSpmOverallGetTopDataArray. */
+    class MsgLbSpmOverallGetTopDataArray implements IMsgLbSpmOverallGetTopDataArray {
+
+        /**
+         * Constructs a new MsgLbSpmOverallGetTopDataArray.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgLbSpmOverallGetTopDataArray);
+
+        /** MsgLbSpmOverallGetTopDataArray c. */
+        public c?: (NetMessage.MsgLbSpmOverallGetTopDataArray.IC|null);
+
+        /** MsgLbSpmOverallGetTopDataArray s. */
+        public s?: (NetMessage.MsgLbSpmOverallGetTopDataArray.IS|null);
+
+        /**
+         * Creates a new MsgLbSpmOverallGetTopDataArray instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgLbSpmOverallGetTopDataArray instance
+         */
+        public static create(properties?: NetMessage.IMsgLbSpmOverallGetTopDataArray): NetMessage.MsgLbSpmOverallGetTopDataArray;
+
+        /**
+         * Encodes the specified MsgLbSpmOverallGetTopDataArray message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetTopDataArray.verify|verify} messages.
+         * @param message MsgLbSpmOverallGetTopDataArray message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgLbSpmOverallGetTopDataArray, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgLbSpmOverallGetTopDataArray message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetTopDataArray.verify|verify} messages.
+         * @param message MsgLbSpmOverallGetTopDataArray message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgLbSpmOverallGetTopDataArray, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgLbSpmOverallGetTopDataArray message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgLbSpmOverallGetTopDataArray
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetTopDataArray;
+
+        /**
+         * Decodes a MsgLbSpmOverallGetTopDataArray message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgLbSpmOverallGetTopDataArray
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetTopDataArray;
+
+        /**
+         * Verifies a MsgLbSpmOverallGetTopDataArray message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgLbSpmOverallGetTopDataArray message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgLbSpmOverallGetTopDataArray
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetTopDataArray;
+
+        /**
+         * Creates a plain object from a MsgLbSpmOverallGetTopDataArray message. Also converts values to other types if specified.
+         * @param message MsgLbSpmOverallGetTopDataArray
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgLbSpmOverallGetTopDataArray, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgLbSpmOverallGetTopDataArray to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgLbSpmOverallGetTopDataArray {
+
+        /** Properties of a C. */
+        interface IC {
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgLbSpmOverallGetTopDataArray.IC);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgLbSpmOverallGetTopDataArray.IC): NetMessage.MsgLbSpmOverallGetTopDataArray.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetTopDataArray.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgLbSpmOverallGetTopDataArray.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetTopDataArray.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgLbSpmOverallGetTopDataArray.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetTopDataArray.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetTopDataArray.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetTopDataArray.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgLbSpmOverallGetTopDataArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S dataArray */
+            dataArray?: (Leaderboard.LeaderboardSpmOverall.ISingleData[]|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgLbSpmOverallGetTopDataArray.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S dataArray. */
+            public dataArray: Leaderboard.LeaderboardSpmOverall.ISingleData[];
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgLbSpmOverallGetTopDataArray.IS): NetMessage.MsgLbSpmOverallGetTopDataArray.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetTopDataArray.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgLbSpmOverallGetTopDataArray.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetTopDataArray.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgLbSpmOverallGetTopDataArray.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetTopDataArray.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetTopDataArray.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetTopDataArray.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgLbSpmOverallGetTopDataArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgLbSpmOverallGetSingleData. */
+    interface IMsgLbSpmOverallGetSingleData {
+
+        /** MsgLbSpmOverallGetSingleData c */
+        c?: (NetMessage.MsgLbSpmOverallGetSingleData.IC|null);
+
+        /** MsgLbSpmOverallGetSingleData s */
+        s?: (NetMessage.MsgLbSpmOverallGetSingleData.IS|null);
+    }
+
+    /** Represents a MsgLbSpmOverallGetSingleData. */
+    class MsgLbSpmOverallGetSingleData implements IMsgLbSpmOverallGetSingleData {
+
+        /**
+         * Constructs a new MsgLbSpmOverallGetSingleData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgLbSpmOverallGetSingleData);
+
+        /** MsgLbSpmOverallGetSingleData c. */
+        public c?: (NetMessage.MsgLbSpmOverallGetSingleData.IC|null);
+
+        /** MsgLbSpmOverallGetSingleData s. */
+        public s?: (NetMessage.MsgLbSpmOverallGetSingleData.IS|null);
+
+        /**
+         * Creates a new MsgLbSpmOverallGetSingleData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgLbSpmOverallGetSingleData instance
+         */
+        public static create(properties?: NetMessage.IMsgLbSpmOverallGetSingleData): NetMessage.MsgLbSpmOverallGetSingleData;
+
+        /**
+         * Encodes the specified MsgLbSpmOverallGetSingleData message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.verify|verify} messages.
+         * @param message MsgLbSpmOverallGetSingleData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgLbSpmOverallGetSingleData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgLbSpmOverallGetSingleData message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.verify|verify} messages.
+         * @param message MsgLbSpmOverallGetSingleData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgLbSpmOverallGetSingleData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgLbSpmOverallGetSingleData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgLbSpmOverallGetSingleData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetSingleData;
+
+        /**
+         * Decodes a MsgLbSpmOverallGetSingleData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgLbSpmOverallGetSingleData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetSingleData;
+
+        /**
+         * Verifies a MsgLbSpmOverallGetSingleData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgLbSpmOverallGetSingleData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgLbSpmOverallGetSingleData
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetSingleData;
+
+        /**
+         * Creates a plain object from a MsgLbSpmOverallGetSingleData message. Also converts values to other types if specified.
+         * @param message MsgLbSpmOverallGetSingleData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgLbSpmOverallGetSingleData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgLbSpmOverallGetSingleData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgLbSpmOverallGetSingleData {
+
+        /** Properties of a Data. */
+        interface IData {
+
+            /** Data userId */
+            userId?: (number|null);
+
+            /** Data rank */
+            rank?: (number|null);
+
+            /** Data score */
+            score?: (number|null);
+        }
+
+        /** Represents a Data. */
+        class Data implements IData {
+
+            /**
+             * Constructs a new Data.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IData);
+
+            /** Data userId. */
+            public userId: number;
+
+            /** Data rank. */
+            public rank: number;
+
+            /** Data score. */
+            public score: number;
+
+            /**
+             * Creates a new Data instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Data instance
+             */
+            public static create(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IData): NetMessage.MsgLbSpmOverallGetSingleData.Data;
+
+            /**
+             * Encodes the specified Data message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.Data.verify|verify} messages.
+             * @param message Data message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgLbSpmOverallGetSingleData.IData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified Data message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.Data.verify|verify} messages.
+             * @param message Data message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgLbSpmOverallGetSingleData.IData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a Data message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns Data
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetSingleData.Data;
+
+            /**
+             * Decodes a Data message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns Data
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetSingleData.Data;
+
+            /**
+             * Verifies a Data message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Data message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Data
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetSingleData.Data;
+
+            /**
+             * Creates a plain object from a Data message. Also converts values to other types if specified.
+             * @param message Data
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgLbSpmOverallGetSingleData.Data, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Data to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C userId */
+            userId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IC);
+
+            /** C userId. */
+            public userId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IC): NetMessage.MsgLbSpmOverallGetSingleData.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgLbSpmOverallGetSingleData.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgLbSpmOverallGetSingleData.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetSingleData.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetSingleData.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetSingleData.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgLbSpmOverallGetSingleData.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S userId */
+            userId?: (number|null);
+
+            /** S data */
+            data?: (NetMessage.MsgLbSpmOverallGetSingleData.IData|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S userId. */
+            public userId: number;
+
+            /** S data. */
+            public data?: (NetMessage.MsgLbSpmOverallGetSingleData.IData|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IS): NetMessage.MsgLbSpmOverallGetSingleData.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgLbSpmOverallGetSingleData.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgLbSpmOverallGetSingleData.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetSingleData.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetSingleData.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetSingleData.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgLbSpmOverallGetSingleData.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

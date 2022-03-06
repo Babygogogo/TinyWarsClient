@@ -140,6 +140,8 @@
 		"bin-debug/modules/halfwayReplayWar/view/HrwReplayProgressPanel.js",
 		"bin-debug/modules/halfwayReplayWar/view/HrwTopPanel.js",
 		"bin-debug/modules/halfwayReplayWar/view/HrwWarMenuPanel.js",
+		"bin-debug/modules/leaderboard/model/LeaderboardModel.js",
+		"bin-debug/modules/leaderboard/model/LeaderboardProxy.js",
 		"bin-debug/modules/lobby/model/LobbyModel.js",
 		"bin-debug/modules/lobby/view/LobbyBackgroundPanel.js",
 		"bin-debug/modules/lobby/view/LobbyBottomPanel.js",
@@ -226,8 +228,8 @@
 		"bin-debug/modules/multiFreeRoom/view/MfrJoinRoomListPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrMainMenuPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrMyRoomListPanel.js",
-		"bin-debug/modules/multiFreeRoom/view/MfrRoomInfoPanel.js",
 		"bin-debug/modules/baseWar/view/BwTileMapView.js",
+		"bin-debug/modules/multiFreeRoom/view/MfrSearchRoomPanel.js",
 		"bin-debug/modules/baseWar/view/BwTileView.js",
 		"bin-debug/modules/multiFreeWar/view/MfwMyWarListPanel.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwActionPlanner.js",
@@ -440,6 +442,6 @@
 		"bin-debug/modules/watchWar/view/WwMakeRequestDetailPanel.js",
 		"bin-debug/modules/watchWar/view/WwMakeRequestWarsPanel.js",
 		"bin-debug/modules/watchWar/view/WwOngoingWarsPanel.js",
-		"bin-debug/modules/multiFreeRoom/view/MfrSearchRoomPanel.js"
+		"bin-debug/modules/multiFreeRoom/view/MfrRoomInfoPanel.js"
 	]
 }

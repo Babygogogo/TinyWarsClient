@@ -328,6 +328,9 @@ namespace TwnsNotifyType {
         MsgSpmGetReplayData,
         MsgSpmGetReplayDataFailed,
         MsgSpmDeleteAllScoreAndReplay,
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        MsgLbSpmOverallGetTopDataArray,
     }
 }
 

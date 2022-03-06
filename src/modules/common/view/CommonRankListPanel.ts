@@ -155,12 +155,18 @@ namespace TwnsCommonRankListPanel {
             this._listFog.bindData(dataList);
         }
 
-        private _updateComponentsForSpm(): void {
+        private async _updateComponentsForSpm(): Promise<void> {
             const dataArray: DataForSpmUserRenderer[] = [];
-            for (const userId of CommonModel.getSpmOverallRankArray() || []) {
+            for (const data of await TinyWarsNamespace.LeaderboardModel.getSpmOverallTopDataArray() ?? []) {
+                const length    = dataArray.length;
+                const score     = Helpers.getExisted(data.score);
                 dataArray.push({
-                    rank    : dataArray.length + 1,
-                    userId,
+                    index   : length + 1,
+                    userId  : Helpers.getExisted(data.userId),
+                    score,
+                    rank    : length === 0
+                        ? 1
+                        : (score === dataArray[length - 1].score ? dataArray[length - 1].rank : length + 1),
                 });
             }
 
@@ -264,8 +270,10 @@ namespace TwnsCommonRankListPanel {
     }
 
     type DataForSpmUserRenderer = {
+        index       : number;
         rank        : number;
         userId      : number;
+        score       : number;
     };
     class SpmUserRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSpmUserRenderer> {
         private readonly _group!            : eui.Group;
@@ -296,22 +304,17 @@ namespace TwnsCommonRankListPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private async _updateView(): Promise<void> {
-            const data = this.data;
-            if (!data) {
-                return;
-            }
-
+            const data              = this._getData();
             const rank              = data.rank;
             const labelNickname     = this._labelNickname;
             const labelScore        = this._labelScore;
             labelNickname.text      = Lang.getText(LangTextType.B0029);
-            labelScore.text         = ``;
+            labelScore.text         = `${data.score}`;
             this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
-            this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
+            this._imgBg.alpha       = data.index % 2 == 1 ? 0.2 : 0.5;
 
-            const userInfo      = Helpers.getExisted(await UserModel.getUserPublicInfo(data.userId));
-            labelNickname.text  = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
-            labelScore.text     = `${Helpers.formatString("%.2f", userInfo.userSpmOverallRankInfo?.currentScore ?? 0)}`;
+            const userInfo          = await UserModel.getUserPublicInfo(data.userId);
+            labelNickname.text      = userInfo?.nickname || CommonConstants.ErrorTextForUndefined;
         }
     }
 }

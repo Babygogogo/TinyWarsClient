@@ -4649,6 +4649,17 @@ export const enum ServerErrorCode {
     BroadcastManager_AddMessage_0008,
     BroadcastManager_AddMessage_0009,
 
+    LeaderboardSpmOverall_MsgInit_0000,
+    LeaderboardSpmOverall_MsgInit_0001,
+    LeaderboardSpmOverall_MsgInit_0002,
+    LeaderboardSpmOverall_MsgInit_0003,
+    LeaderboardSpmOverall_MsgInit_0004,
+    LeaderboardSpmOverall_MsgInit_0005,
+    LeaderboardSpmOverall_MsgInit_0006,
+    LeaderboardSpmOverall_MsgInit_0007,
+    LeaderboardSpmOverall_MsgInit_0008,
+    LeaderboardSpmOverall_MsgInit_0009,
+
     BwWar_Init_0000,
     BwWar_Init_0001,
     BwWar_Init_0002,
@@ -9823,6 +9834,17 @@ export const enum ServerErrorCode {
     ExeUserGetOnlineState_ExeWithSocket_0007,
     ExeUserGetOnlineState_ExeWithSocket_0008,
     ExeUserGetOnlineState_ExeWithSocket_0009,
+
+    ExeLbSpmOverallGetSingleData_ExeWithSocket_0000,
+    ExeLbSpmOverallGetSingleData_ExeWithSocket_0001,
+    ExeLbSpmOverallGetSingleData_ExeWithSocket_0002,
+    ExeLbSpmOverallGetSingleData_ExeWithSocket_0003,
+    ExeLbSpmOverallGetSingleData_ExeWithSocket_0004,
+    ExeLbSpmOverallGetSingleData_ExeWithSocket_0005,
+    ExeLbSpmOverallGetSingleData_ExeWithSocket_0006,
+    ExeLbSpmOverallGetSingleData_ExeWithSocket_0007,
+    ExeLbSpmOverallGetSingleData_ExeWithSocket_0008,
+    ExeLbSpmOverallGetSingleData_ExeWithSocket_0009,
 
     MsgUserGetSettings0000,
 
