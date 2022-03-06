@@ -53,6 +53,7 @@ namespace TwnsBwWar {
         public abstract getField(): TwnsBwField.BwField;
         public abstract getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager;
         public abstract getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager;
+        public abstract getBootRestTime(playerIndex: number): number | null;
         public abstract getSettingsBootTimerParams(): number[];
         public abstract getIsExecuteActionsWithExtraData(): boolean;
         public abstract updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void;

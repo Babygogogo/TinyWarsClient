@@ -21,7 +21,8 @@ namespace TwnsMeAddWarEventToRulePanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        warRule     : ProtoTypes.WarRule.IWarRule;
+        warRule         : ProtoTypes.WarRule.IWarRule;
+        warEventArray   : ProtoTypes.WarEvent.IWarEvent[];
     };
     export class MeAddWarEventToRulePanel extends TwnsUiPanel.UiPanel<OpenData>{
         private readonly _listWarEvent!     : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
@@ -63,11 +64,14 @@ namespace TwnsMeAddWarEventToRulePanel {
             this._btnClose.label        = Lang.getText(LangTextType.B0146);
         }
         private _updateListMessageAndLabelNoMessage(): void {
-            const dataArray : DataForWarEventRenderer[] = [];
-            const warRule   = this._getOpenData().warRule;
-            for (const warEvent of Helpers.getExisted(MeModel.getWar()).getWarEventManager().getWarEventFullData()?.eventArray || []) {
+            const openData      = this._getOpenData();
+            const warRule       = openData.warRule;
+            const warEventArray = openData.warEventArray;
+            const dataArray     : DataForWarEventRenderer[] = [];
+            for (const warEvent of warEventArray) {
                 dataArray.push({
-                    warEventId  : Helpers.getExisted(warEvent.eventId),
+                    warEventId      : Helpers.getExisted(warEvent.eventId),
+                    warEventArray,
                     warRule,
                 });
             }
@@ -78,8 +82,9 @@ namespace TwnsMeAddWarEventToRulePanel {
     }
 
     type DataForWarEventRenderer = {
-        warEventId  : number;
-        warRule     : ProtoTypes.WarRule.IWarRule;
+        warEventId      : number;
+        warEventArray   : ProtoTypes.WarEvent.IWarEvent[];
+        warRule         : ProtoTypes.WarRule.IWarRule;
     };
     class WarEventRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventRenderer> {
         private readonly _labelId!      : TwnsUiLabel.UiLabel;
@@ -138,7 +143,7 @@ namespace TwnsMeAddWarEventToRulePanel {
         private _updateLabelName(): void {
             if (this._checkHasData()) {
                 const data              = this._getData();
-                this._labelName.text    = Lang.getLanguageText({ textArray: Helpers.getExisted(MeModel.getWar()).getWarEventManager().getWarEvent(data.warEventId).eventNameArray }) ?? CommonConstants.ErrorTextForUndefined;
+                this._labelName.text    = Lang.getLanguageText({ textArray: data.warEventArray.find(v => v.eventId === data.warEventId)?.eventNameArray }) ?? CommonConstants.ErrorTextForUndefined;
             }
         }
 

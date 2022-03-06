@@ -24,8 +24,10 @@ namespace MpwProxy {
             { msgCode: NetMessageCodes.MsgMpwCommonBroadcastGameStart,      callback: _onMsgMpwCommonBroadcastGameStart },
             { msgCode: NetMessageCodes.MsgMpwCommonHandleBoot,              callback: _onMsgMpwCommonHandleBoot },
             { msgCode: NetMessageCodes.MsgMpwCommonContinueWar,             callback: _onMsgMpwCommonContinueWar },
-            { msgCode: NetMessageCodes.MsgMpwCommonGetMyWarInfoList,        callback: _onMsgMpwCommonGetMyWarInfoList },
+            { msgCode: NetMessageCodes.MsgMpwCommonGetMyWarIdArray,         callback: _onMsgMpwCommonGetMyWarIdArray },
             { msgCode: NetMessageCodes.MsgMpwCommonSyncWar,                 callback: _onMsgMpwCommonSyncWar },
+            { msgCode: NetMessageCodes.MsgMpwCommonGetWarSettings,          callback: _onMsgMpwCommonGetWarSettings },
+            { msgCode: NetMessageCodes.MsgMpwCommonGetWarProgressInfo,      callback: _onMsgMpwCommonGetWarProgressInfo },
             { msgCode: NetMessageCodes.MsgMpwGetHalfwayReplayData,          callback: _onMsgMpwGetHalfwayReplayData },
 
             { msgCode: NetMessageCodes.MsgMpwExecuteWarAction,              callback: _onMsgMpwExecuteWarAction },
@@ -61,15 +63,15 @@ namespace MpwProxy {
         }
     }
 
-    export function reqMpwCommonGetMyWarInfoList(): void {
+    export function reqMpwCommonGetMyWarIdArray(): void {
         NetManager.send({
-            MsgMpwCommonGetMyWarInfoList: { c: {} },
+            MsgMpwCommonGetMyWarIdArray: { c: {} },
         });
     }
-    function _onMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-        MpwModel.setAllMyWarInfoList(data.infos || []);
-        Notify.dispatch(NotifyType.MsgMpwCommonGetMyWarInfoList, data);
+    function _onMsgMpwCommonGetMyWarIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwCommonGetMyWarIdArray.IS;
+        MpwModel.setAllMyWarIdArray(data.warIdArray || []);
+        Notify.dispatch(NotifyType.MsgMpwCommonGetMyWarIdArray, data);
     }
 
     export function reqMpwCommonSyncWar(war: TwnsBwWar.BwWar, requestType: Types.SyncWarRequestType): void {
@@ -87,6 +89,32 @@ namespace MpwProxy {
             MpwModel.updateOnPlayerSyncWar(data);
             Notify.dispatch(NotifyType.MsgMpwCommonSyncWar);
         }
+    }
+
+    export function reqMpwCommonGetWarSettings(warId: number): void {
+        NetManager.send({
+            MsgMpwCommonGetWarSettings: { c: {
+                warId
+            } },
+        });
+    }
+    function _onMsgMpwCommonGetWarSettings(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwCommonGetWarSettings.IS;
+        MpwModel.updateOnMsgMpwCommonGetWarSettings(data);
+        Notify.dispatch(NotifyType.MsgMpwCommonGetWarSettings, data);
+    }
+
+    export function reqMpwCommonGetWarProgressInfo(warId: number): void {
+        NetManager.send({
+            MsgMpwCommonGetWarProgressInfo: { c: {
+                warId
+            } },
+        });
+    }
+    function _onMsgMpwCommonGetWarProgressInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
+        MpwModel.updateOnMsgMpwCommonGetWarProgressInfo(data);
+        Notify.dispatch(NotifyType.MsgMpwCommonGetWarProgressInfo, data);
     }
 
     export function reqMpwGetHalfwayReplayData(warId: number): void {

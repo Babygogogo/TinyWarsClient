@@ -753,12 +753,12 @@ namespace TwnsBwTurnManager {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseResetVisionForCurrentPlayerWithExtraData(data: IWarActionPlayerEndTurn, isFastExecute: boolean): void {
             const war = this.getWar();
-            war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
+            war.getFogMap().resetMapFromPathsForPlayerWithEncodedData(war.getPlayerIndexInTurn());
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         private _runPhaseResetVisionForCurrentPlayerWithoutExtraData(isFastExecute: boolean): void {
             const war = this.getWar();
-            war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
+            war.getFogMap().resetMapFromPathsForPlayerWithEncodedData(war.getPlayerIndexInTurn());
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -832,6 +832,7 @@ namespace TwnsBwTurnManager {
             const war       = this.getWar();
             const player    = war.getPlayerInTurn();
             player.setHasVotedForDraw(false);
+            player.setHasTakenManualAction(false);
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1057,7 +1058,7 @@ namespace TwnsBwTurnManager {
 
         {
             const { deltaFund, deltaEnergyPercentage } = data;
-            if (deltaFund ?? deltaEnergyPercentage) {
+            if (deltaFund || deltaEnergyPercentage) {
                 for (const player of war.getPlayerManager().getAllPlayers()) {
                     const teamIndex = player.getTeamIndex();
                     if (((canAffectSelf) && (player.getPlayerIndex() === playerIndexInTurn))    ||
@@ -1088,8 +1089,8 @@ namespace TwnsBwTurnManager {
         }
         {
             const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
-            if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
-                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(tile.getGridIndex(), 0, Helpers.getExisted(data.radius, ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01), unitMap.getMapSize())) {
+            if (deltaHp || deltaFuelPercentage || deltaPrimaryAmmoPercentage) {
+                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: tile.getGridIndex(), minDistance: 0, maxDistance: Helpers.getExisted(data.radius, ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_01), mapSize: unitMap.getMapSize() })) {
                     const unit = unitMap.getUnitOnMap(gridIndex);
                     if (unit == null) {
                         continue;
@@ -1203,7 +1204,7 @@ namespace TwnsBwTurnManager {
 
             {
                 const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
-                if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
+                if (deltaHp || deltaFuelPercentage || deltaPrimaryAmmoPercentage) {
                     if (deltaFuelPercentage) {
                         if (deltaFuelPercentage < 0) {
                             unit.setCurrentFuel(Math.max(
@@ -1358,7 +1359,7 @@ namespace TwnsBwTurnManager {
         const affectedUnits         = new Set<TwnsBwUnit.BwUnit>();
         {
             const { deltaHp, deltaFuelPercentage, deltaPrimaryAmmoPercentage } = data;
-            if (deltaHp ?? deltaFuelPercentage ?? deltaPrimaryAmmoPercentage) {
+            if (deltaHp || deltaFuelPercentage || deltaPrimaryAmmoPercentage) {
                 for (const unit of candidateUnitArray) {
                     if (deltaFuelPercentage) {
                         if (deltaFuelPercentage < 0) {

@@ -235,6 +235,8 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithExtraData(action.WeaSetPlayerState, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithExtraData(action.WeaSetUnitState, isFastExecute); }
+            else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithExtraData(action.WeaSetTileType, isFastExecute); }
+            else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithExtraData(action.WeaSetTileState, isFastExecute); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -258,6 +260,8 @@ namespace TwnsBwWarEventManager {
             else if (action.WeaSetPlayerState)                  { await this._callActionSetPlayerStateWithoutExtraData(action.WeaSetPlayerState, isFastExecute); }
             else if (action.WeaSetPlayerCoEnergy)               { await this._callActionSetPlayerCoEnergyWithoutExtraData(action.WeaSetPlayerCoEnergy, isFastExecute); }
             else if (action.WeaSetUnitState)                    { await this._callActionSetUnitStateWithoutExtraData(action.WeaSetUnitState, isFastExecute); }
+            else if (action.WeaSetTileType)                     { await this._callActionSetTileTypeWithoutExtraData(action.WeaSetTileType, isFastExecute); }
+            else if (action.WeaSetTileState)                    { await this._callActionSetTileStateWithoutExtraData(action.WeaSetTileState, isFastExecute); }
             else {
                 throw Helpers.newError(`Invalid action.`);
             }
@@ -345,6 +349,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
+                    configVersion   : this._getWar().getConfigVersion(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -357,6 +362,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
+                    configVersion   : this._getWar().getConfigVersion(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -438,6 +444,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
+                    configVersion   : this._getWar().getConfigVersion(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -450,6 +457,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
+                    configVersion   : this._getWar().getConfigVersion(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -868,6 +876,166 @@ namespace TwnsBwWarEventManager {
                         if (!isFastExecute) {
                             unit.updateView();
                         }
+                    }
+                }
+            }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetTileTypeWithExtraData(action: WarEvent.IWeaSetTileType, isFastExecute: boolean): Promise<void> {
+            // nothing to do
+        }
+        private async _callActionSetTileTypeWithoutExtraData(action: WarEvent.IWeaSetTileType, isFastExecute: boolean): Promise<void> {
+            const war                       = this._getWar();
+            const configVersion             = war.getConfigVersion();
+            const actTileData               = Helpers.getExisted(action.actTileData, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_00);
+            const rawActBaseType            = Helpers.getExisted(actTileData.baseType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_01);
+            const rawActObjectType          = Helpers.getExisted(actTileData.objectType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_02);
+            const actDestroyUnit            = action.actDestroyUnit;
+            const actIsModifyTileBase       = (action.actIsModifyTileBase) || (action.actIsModifyTileBase == null);
+            const actIsModifyTileDecorator  = (action.actIsModifyTileDecorator) || (action.actIsModifyTileDecorator == null);
+            const actIsModifyTileObject     = (action.actIsModifyTileObject) || (action.actIsModifyTileObject == null);
+            const conIsHighlighted          = action.conIsHighlighted;
+            const conLocationIdArray        = action.conLocationIdArray ?? [];
+            const conGridIndexArray         = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_03)) ?? [];
+            const unitMap                   = war.getUnitMap();
+            const tileMap                   = war.getTileMap();
+            const mapSize                   = tileMap.getMapSize();
+            const mapWidth                  = mapSize.width;
+            const mapHeight                 = mapSize.height;
+            for (let x = 0; x < mapWidth; ++x) {
+                for (let y = 0; y < mapHeight; ++y) {
+                    const gridIndex : Types.GridIndex = { x, y };
+                    const tile      = tileMap.getTile(gridIndex);
+                    if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
+                        ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
+                        ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
+                    ) {
+                        continue;
+                    }
+
+                    const actBaseType   = actIsModifyTileBase ? rawActBaseType : tile.getBaseType();
+                    const actObjectType = actIsModifyTileObject ? rawActObjectType : tile.getObjectType();
+                    if (unitMap.getUnitOnMap(gridIndex)) {
+                        if (actDestroyUnit) {
+                            WarDestructionHelpers.destroyUnitOnMap(war, gridIndex, !isFastExecute);
+                        } else if (ConfigManager.getTileTemplateCfg(configVersion, actBaseType, actObjectType).maxHp != null) {
+                            continue;
+                        }
+                    }
+
+                    const tileData: ProtoTypes.WarSerialization.ISerialTile = {
+                        gridIndex,
+                        playerIndex         : actIsModifyTileObject ? actTileData.playerIndex : tile.getPlayerIndex(),
+                        baseType            : actBaseType,
+                        baseShapeId         : actIsModifyTileBase ? actTileData.baseShapeId : tile.getBaseShapeId(),
+                        decoratorType       : actIsModifyTileDecorator ? actTileData.decoratorType : tile.getDecoratorType(),
+                        decoratorShapeId    : actIsModifyTileDecorator ? actTileData.decoratorShapeId : tile.getDecoratorShapeId(),
+                        objectType          : actObjectType,
+                        objectShapeId       : actIsModifyTileObject ? actTileData.objectShapeId : tile.getObjectShapeId(),
+                        locationFlags       : tile.getLocationFlags(),
+                        isHighlighted       : tile.getIsHighlighted(),
+                    };
+                    tile.init(tileData, configVersion);
+                    tile.startRunning(war);
+
+                    if (!isFastExecute) {
+                        tile.flushDataToView();
+                    }
+                }
+            }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        private async _callActionSetTileStateWithExtraData(action: WarEvent.IWeaSetTileState, isFastExecute: boolean): Promise<void> {
+            // nothing to do
+        }
+        private async _callActionSetTileStateWithoutExtraData(action: WarEvent.IWeaSetTileState, isFastExecute: boolean): Promise<void> {
+            const war                                   = this._getWar();
+            const tileMap                               = war.getTileMap();
+            const mapSize                               = tileMap.getMapSize();
+            const mapWidth                              = mapSize.width;
+            const mapHeight                             = mapSize.height;
+            const conIsHighlighted                      = action.conIsHighlighted;
+            const conLocationIdArray                    = action.conLocationIdArray ?? [];
+            const conGridIndexArray                     = action.conGridIndexArray?.map(v => Helpers.getExisted(GridIndexHelpers.convertGridIndex(v), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_00)) ?? [];
+            const actHpMultiplierPercentage             = action.actHpMultiplierPercentage;
+            const actHpDeltaValue                       = action.actHpDeltaValue;
+            const actBuildPointMultiplierPercentage     = action.actBuildPointMultiplierPercentage;
+            const actBuildPointDeltaValue               = action.actBuildPointDeltaValue;
+            const actCapturePointMultiplierPercentage   = action.actCapturePointMultiplierPercentage;
+            const actCapturePointDeltaValue             = action.actCapturePointDeltaValue;
+            const actAddLocationIdArray                 = action.actAddLocationIdArray ?? [];
+            const actDeleteLocationIdArray              = action.actDeleteLocationIdArray ?? [];
+            const actIsHighlighted                      = action.actIsHighlighted;
+            for (let x = 0; x < mapWidth; ++x) {
+                for (let y = 0; y < mapHeight; ++y) {
+                    const gridIndex : Types.GridIndex = { x, y };
+                    const tile      = tileMap.getTile(gridIndex);
+                    if (((conIsHighlighted != null) && (tile.getIsHighlighted() !== conIsHighlighted))                              ||
+                        ((conGridIndexArray.length) && (!conGridIndexArray.some(v => GridIndexHelpers.checkIsEqual(v, gridIndex)))) ||
+                        ((conLocationIdArray.length) && (!conLocationIdArray.some(v => tile.getHasLocationFlag(v))))
+                    ) {
+                        continue;
+                    }
+
+                    {
+                        const currentHp = tile.getCurrentHp();
+                        if ((currentHp != null)                                                 &&
+                            ((actHpMultiplierPercentage != null) || (actHpDeltaValue != null))
+                        ) {
+                            tile.setCurrentHp(Helpers.getValueInRange({
+                                minValue    : 0,
+                                maxValue    : Helpers.getExisted(tile.getMaxHp(), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_01),
+                                rawValue    : Math.floor(currentHp * (actHpMultiplierPercentage ?? 100) / 100 + (actHpDeltaValue ?? 0)),
+                            }));
+                        }
+                    }
+
+                    {
+                        const currentBuildPoint = tile.getCurrentBuildPoint();
+                        if ((currentBuildPoint != null)                                                         &&
+                            ((actBuildPointDeltaValue != null) || (actBuildPointMultiplierPercentage != null))
+                        ) {
+                            tile.setCurrentBuildPoint(Helpers.getValueInRange({
+                                minValue    : 0,
+                                maxValue    : Helpers.getExisted(tile.getMaxBuildPoint(), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_02),
+                                rawValue    : Math.floor(currentBuildPoint * (actBuildPointMultiplierPercentage ?? 100) / 100 + (actBuildPointDeltaValue ?? 0)),
+                            }));
+                        }
+                    }
+
+                    {
+                        const currentCapturePoint = tile.getCurrentCapturePoint();
+                        if ((currentCapturePoint != null)                                                           &&
+                            ((actCapturePointDeltaValue != null) || (actCapturePointMultiplierPercentage != null))
+                        ) {
+                            tile.setCurrentCapturePoint(Helpers.getValueInRange({
+                                minValue    : 0,
+                                maxValue    : Helpers.getExisted(tile.getMaxCapturePoint(), ClientErrorCode.BwWarEventManager_CallActionSetTileStateWithoutExtraData_03),
+                                rawValue    : Math.floor(currentCapturePoint * (actCapturePointMultiplierPercentage ?? 100) / 100 + (actCapturePointDeltaValue ?? 0)),
+                            }));
+                        }
+                    }
+
+                    if (actAddLocationIdArray.length) {
+                        for (const locationId of actAddLocationIdArray) {
+                            tile.setHasLocationFlag(locationId, true);
+                        }
+                    }
+
+                    if (actDeleteLocationIdArray.length) {
+                        for (const locationId of actDeleteLocationIdArray) {
+                            tile.setHasLocationFlag(locationId, false);
+                        }
+                    }
+
+                    if (actIsHighlighted != null) {
+                        tile.setIsHighlighted(actIsHighlighted);
+                    }
+
+                    if (!isFastExecute) {
+                        tile.flushDataToView();
                     }
                 }
             }
@@ -1431,27 +1599,24 @@ namespace TwnsBwWarEventManager {
 
         for (let distance = 0; distance <= maxDistance; ++distance) {
             const gridIndex = GridIndexHelpers.getGridsWithinDistance(
-                origin,
-                distance,
-                distance,
-                mapSize,
-                (g): boolean => {
-                    if (unitMap.getUnitOnMap(g)) {
-                        return false;
-                    }
+                {
+                    origin, minDistance: distance, maxDistance: distance, mapSize, predicate: (g): boolean => {
+                        if (unitMap.getUnitOnMap(g)) {
+                            return false;
+                        }
 
-                    const tile = tileMap.getTile(g);
-                    if (tile.getMaxHp() != null) {
-                        return false;
-                    }
+                        const tile = tileMap.getTile(g);
+                        if (tile.getMaxHp() != null) {
+                            return false;
+                        }
 
-                    if ((needMovableTile) && (tile.getMoveCostByMoveType(moveType) == null)) {
-                        return false;
-                    }
+                        if ((needMovableTile) && (tile.getMoveCostByMoveType(moveType) == null)) {
+                            return false;
+                        }
 
-                    return true;
-                }
-            )[0];
+                        return true;
+                    }
+                }            )[0];
             if (gridIndex) {
                 return gridIndex;
             }

@@ -26,7 +26,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsScrCreateSettingsPanel {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
-    import CommonConfirmPanel                       = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import ScrCreateAdvancedSettingsPage            = TwnsScrCreateAdvancedSettingsPage.ScrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -223,7 +222,12 @@ namespace TwnsScrCreateSettingsPanel {
                         currentValue    : ScrCreateModel.getSaveSlotIndex(),
                         warRule,
                         callbackOnModify: () => {
-                            TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateSaveSlotsPanel, void 0);
+                            TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmCreateSaveSlotsPanel, {
+                                currentSlotIndex    : ScrCreateModel.getSaveSlotIndex(),
+                                callback            : slotIndex => {
+                                    ScrCreateModel.setSaveSlotIndex(slotIndex);
+                                },
+                            });
                         },
                     },
                     {

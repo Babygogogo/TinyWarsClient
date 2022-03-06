@@ -139,35 +139,59 @@ namespace SpwModel {
     function checkAndEndWar(war: BwWar): boolean {
         if (!war.getIsEnded()) {
             return false;
+        }
+        // TODO: show panels for srw.
+
+        const callback = () => FlowManager.gotoLobby();
+        if (war.getDrawVoteManager().checkIsDraw()) {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                title   : Lang.getText(LangTextType.B0088),
+                content : Lang.getText(LangTextType.A0030),
+                callback,
+            });
         } else {
-            // TODO: show panels for srw.
-            const callback = () => FlowManager.gotoLobby();
-            if (war.getDrawVoteManager().checkIsDraw()) {
+            const humanPlayerArray = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
+            if (humanPlayerArray.length <= 0) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                     title   : Lang.getText(LangTextType.B0088),
-                    content : Lang.getText(LangTextType.A0030),
+                    content : Lang.getText(LangTextType.A0035),
                     callback,
                 });
             } else {
-                const humanPlayerList = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
-                if (humanPlayerList.length <= 0) {
+                if (humanPlayerArray.every(v => v.getAliveState() === Types.PlayerAliveState.Dead)) {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
                         title   : Lang.getText(LangTextType.B0088),
-                        content : Lang.getText(LangTextType.A0035),
+                        content : Lang.getText(LangTextType.A0023),
                         callback,
                     });
                 } else {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
-                        title   : Lang.getText(LangTextType.B0088),
-                        content : humanPlayerList.some(v => v.getAliveState() === Types.PlayerAliveState.Alive)
-                            ? Lang.getText(LangTextType.A0022)
-                            : Lang.getText(LangTextType.A0023),
-                        callback,
-                    });
+                    if (war instanceof SrwWar) {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                            title   : Lang.getText(LangTextType.B0088),
+                            content : Lang.getFormattedText(LangTextType.F0127, war.calculateTotalScore()),
+                            callback: () => {
+                                callback();
+
+                                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                                    content : Lang.getText(LangTextType.A0277),
+                                    callback: () => {
+                                        SpmProxy.reqSpmValidateSrw(war);
+                                    },
+                                });
+                            },
+                        });
+                    } else {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonAlertPanel, {
+                            title   : Lang.getText(LangTextType.B0088),
+                            content : Lang.getText(LangTextType.A0022),
+                            callback,
+                        });
+                    }
                 }
             }
-            return true;
         }
+
+        return true;
     }
 
     async function checkAndHandleSystemActions(war: BwWar): Promise<boolean> {
@@ -199,17 +223,6 @@ namespace SpwModel {
             return true;
         }
 
-        // Handle the booted players (make them dying).
-        if (war.checkIsBoot()) {
-            if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_00);
-            }
-
-            await handleSystemHandleBootPlayer(war);
-            await checkAndHandleSystemActions(war);
-            return true;
-        }
-
         // Handle the dying players (destroy force).
         const playersCount = playerManager.getTotalPlayersCount(false);
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
@@ -221,13 +234,51 @@ namespace SpwModel {
             }
         }
 
+        // Handle turns limit.
+        const playerInTurn      = playerManager.getPlayerInTurn();
+        const hasVotedForDraw   = playerInTurn.getHasVotedForDraw();
+        if (war.getTurnManager().getTurnIndex() > war.getCommonSettingManager().getTurnsLimit()) {
+            if (!hasVotedForDraw) {
+                await handleSystemVoteForDraw(war, true);
+                await checkAndHandleSystemActions(war);
+                return true;
+            } else {
+                await handleSystemEndTurn(war);
+                await checkAndHandleSystemActions(war);
+                return true;
+            }
+        }
+
+        // Handle the booted players (make them dying or end turn).
+        const remainingVotesForDraw = war.getDrawVoteManager().getRemainingVotes();
+        if (war.checkIsBoot()) {
+            if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
+                throw Helpers.newError(`SpwModel.checkAndHandleSystemActions() invalid turn phase code: ${turnPhaseCode}.`, ClientErrorCode.SpwModel_CheckAndHandleSystemAction_00);
+            }
+
+            if (!playerInTurn.getHasTakenManualAction()) {
+                await handleSystemHandleBootPlayer(war);
+                await checkAndHandleSystemActions(war);
+                return true;
+            } else {
+                if ((remainingVotesForDraw) && (!hasVotedForDraw)) {
+                    await handleSystemVoteForDraw(war, false);
+                    await checkAndHandleSystemActions(war);
+                    return true;
+                } else {
+                    await handleSystemEndTurn(war);
+                    await checkAndHandleSystemActions(war);
+                    return true;
+                }
+            }
+        }
+
         // Handle system vote for draw.
-        const playerInTurn = playerManager.getPlayerInTurn();
-        if ((war.getDrawVoteManager().getRemainingVotes())                                                      &&
-            (!playerInTurn.getHasVotedForDraw())                                                                &&
+        if ((remainingVotesForDraw)                                                                             &&
+            (!hasVotedForDraw)                                                                                  &&
             ((playerInTurn.checkIsNeutral()) || (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead))
         ) {
-            await handleSystemVoteForDraw(war);
+            await handleSystemVoteForDraw(war, true);
             await checkAndHandleSystemActions(war);
             return true;
         }
@@ -271,11 +322,11 @@ namespace SpwModel {
             },
         });
     }
-    async function handleSystemVoteForDraw(war: BwWar): Promise<void> {
+    async function handleSystemVoteForDraw(war: BwWar, isAgree: boolean): Promise<void> {
         await reviseAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemVoteForDraw  : {
-                isAgree : true,
+                isAgree,
             },
         });
     }

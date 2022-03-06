@@ -17,6 +17,7 @@ namespace TwnsMeSymmetryPanel {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
     import SymmetryType = Types.SymmetryType;
+    import GridIndex    = Types.GridIndex;
 
     export type OpenData = void;
     export class MeSymmetryPanel extends TwnsUiPanel.UiPanel<OpenData> {
@@ -55,6 +56,26 @@ namespace TwnsMeSymmetryPanel {
         private readonly _imgUpRightDownLeft!           : TwnsUiImage.UiImage;
         private readonly _labelUpRightDownLeftAuto!     : TwnsUiLabel.UiLabel;
 
+        private readonly _labelFill1!                   : TwnsUiLabel.UiLabel;
+        private readonly _btnUpDown1!                   : TwnsUiButton.UiButton;
+        private readonly _btnDownUp1!                   : TwnsUiButton.UiButton;
+        private readonly _btnLeftRight1!                : TwnsUiButton.UiButton;
+        private readonly _btnRightLeft1!                : TwnsUiButton.UiButton;
+        private readonly _btnUpLeftDownRight1!          : TwnsUiButton.UiButton;
+        private readonly _btnDownRightUpLeft1!          : TwnsUiButton.UiButton;
+        private readonly _btnUpRightDownLeft1!          : TwnsUiButton.UiButton;
+        private readonly _btnDownLeftUpRight1!          : TwnsUiButton.UiButton;
+
+        private readonly _labelFill2!                   : TwnsUiLabel.UiLabel;
+        private readonly _btnUpDown2!                   : TwnsUiButton.UiButton;
+        private readonly _btnDownUp2!                   : TwnsUiButton.UiButton;
+        private readonly _btnLeftRight2!                : TwnsUiButton.UiButton;
+        private readonly _btnRightLeft2!                : TwnsUiButton.UiButton;
+        private readonly _btnUpLeftDownRight2!          : TwnsUiButton.UiButton;
+        private readonly _btnDownRightUpLeft2!          : TwnsUiButton.UiButton;
+        private readonly _btnUpRightDownLeft2!          : TwnsUiButton.UiButton;
+        private readonly _btnDownLeftUpRight2!          : TwnsUiButton.UiButton;
+
         private _asymmetricalCounters   : MeUtility.AsymmetricalCounters | null = null;
 
         protected _onOpening(): void {
@@ -67,6 +88,24 @@ namespace TwnsMeSymmetryPanel {
                 { ui: this._groupRotationalBox,         callback: this._onTouchedGroupRotationalBox },
                 { ui: this._groupUpLeftDownRightBox,    callback: this._onTouchedGroupUpLeftDownRightBox },
                 { ui: this._groupUpRightDownLeftBox,    callback: this._onTouchedGroupUpRightDownLeftBox },
+
+                { ui: this._btnUpDown1,                 callback: this._onTouchedBtnUpDown1 },
+                { ui: this._btnDownUp1,                 callback: this._onTouchedBtnDownUp1 },
+                { ui: this._btnLeftRight1,              callback: this._onTouchedBtnLeftRight1 },
+                { ui: this._btnRightLeft1,              callback: this._onTouchedBtnRightLeft1 },
+                { ui: this._btnUpLeftDownRight1,        callback: this._onTouchedBtnUpLeftDownRight1 },
+                { ui: this._btnDownRightUpLeft1,        callback: this._onTouchedBtnDownRightUpLeft1 },
+                { ui: this._btnUpRightDownLeft1,        callback: this._onTouchedBtnUpRightDownLeft1 },
+                { ui: this._btnDownLeftUpRight1,        callback: this._onTouchedBtnDownLeftUpRight1 },
+
+                { ui: this._btnUpDown2,                 callback: this._onTouchedBtnUpDown2 },
+                { ui: this._btnDownUp2,                 callback: this._onTouchedBtnDownUp2 },
+                { ui: this._btnLeftRight2,              callback: this._onTouchedBtnLeftRight2 },
+                { ui: this._btnRightLeft2,              callback: this._onTouchedBtnRightLeft2 },
+                { ui: this._btnUpLeftDownRight2,        callback: this._onTouchedBtnUpLeftDownRight2 },
+                { ui: this._btnDownRightUpLeft2,        callback: this._onTouchedBtnDownRightUpLeft2 },
+                { ui: this._btnUpRightDownLeft2,        callback: this._onTouchedBtnUpRightDownLeft2 },
+                { ui: this._btnDownLeftUpRight2,        callback: this._onTouchedBtnDownLeftUpRight2 },
             ]);
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
@@ -136,6 +175,352 @@ namespace TwnsMeSymmetryPanel {
             this._updateGroupBoxes();
         }
 
+        private _onTouchedBtnUpDown1(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0864),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const war           = this._getWar();
+                    const mapSize       = war.getTileMap().getMapSize();
+                    const mapWidth      = mapSize.width;
+                    const mapHeight     = mapSize.height;
+                    for (let x = 0; x < mapWidth; ++x) {
+                        for (let y = Math.floor((mapHeight + 1) / 2); y < mapHeight; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.UpToDown);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnDownUp1(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0865),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const war           = this._getWar();
+                    const mapSize       = war.getTileMap().getMapSize();
+                    const mapWidth      = mapSize.width;
+                    const mapHeight     = mapSize.height;
+                    for (let x = 0; x < mapWidth; ++x) {
+                        for (let y = Math.floor(mapHeight / 2) - 1; y >= 0; --y) {
+                            autoFillTile(war, { x, y }, SymmetryType.UpToDown);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnLeftRight1(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0866),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const war           = this._getWar();
+                    const mapSize       = war.getTileMap().getMapSize();
+                    const mapWidth      = mapSize.width;
+                    const mapHeight     = mapSize.height;
+                    for (let x = Math.floor((mapWidth + 1) / 2); x < mapWidth; ++x) {
+                        for (let y = 0; y < mapHeight; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.LeftToRight);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnRightLeft1(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0867),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const war           = this._getWar();
+                    const mapSize       = war.getTileMap().getMapSize();
+                    const mapWidth      = mapSize.width;
+                    const mapHeight     = mapSize.height;
+                    for (let x = Math.floor(mapWidth / 2) - 1; x >= 0; --x) {
+                        for (let y = 0; y < mapHeight; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.LeftToRight);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnUpLeftDownRight1(): void {
+            const war           = this._getWar();
+            const mapSize       = war.getTileMap().getMapSize();
+            const mapWidth      = mapSize.width;
+            const mapHeight     = mapSize.height;
+            if (mapWidth !== mapHeight) {
+                FloatText.show(Lang.getText(LangTextType.A0295));
+                return;
+            }
+
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0868),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    for (let x = 1; x < mapWidth; ++x) {
+                        for (let y = mapHeight - x; y < mapHeight; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.UpLeftToDownRight);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnDownRightUpLeft1(): void {
+            const war           = this._getWar();
+            const mapSize       = war.getTileMap().getMapSize();
+            const mapWidth      = mapSize.width;
+            const mapHeight     = mapSize.height;
+            if (mapWidth !== mapHeight) {
+                FloatText.show(Lang.getText(LangTextType.A0295));
+                return;
+            }
+
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0869),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    for (let x = 0; x < mapWidth - 1; ++x) {
+                        for (let y = 0; y < mapWidth - x - 1; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.UpLeftToDownRight);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnUpRightDownLeft1(): void {
+            const war           = this._getWar();
+            const mapSize       = war.getTileMap().getMapSize();
+            const mapWidth      = mapSize.width;
+            const mapHeight     = mapSize.height;
+            if (mapWidth !== mapHeight) {
+                FloatText.show(Lang.getText(LangTextType.A0295));
+                return;
+            }
+
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0870),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    for (let x = 0; x < mapWidth - 1; ++x) {
+                        for (let y = x + 1; y < mapHeight; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.UpRightToDownLeft);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnDownLeftUpRight1(): void {
+            const war           = this._getWar();
+            const mapSize       = war.getTileMap().getMapSize();
+            const mapWidth      = mapSize.width;
+            const mapHeight     = mapSize.height;
+            if (mapWidth !== mapHeight) {
+                FloatText.show(Lang.getText(LangTextType.A0295));
+                return;
+            }
+
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0871),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    for (let x = 1; x < mapWidth; ++x) {
+                        for (let y = 0; y < x; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.UpRightToDownLeft);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+
+        private _onTouchedBtnUpDown2(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0864),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const war           = this._getWar();
+                    const mapSize       = war.getTileMap().getMapSize();
+                    const mapWidth      = mapSize.width;
+                    const mapHeight     = mapSize.height;
+                    for (let x = 0; x < mapWidth; ++x) {
+                        for (let y = Math.floor((mapHeight + 1) / 2); y < mapHeight; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.Rotation);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnDownUp2(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0865),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const war           = this._getWar();
+                    const mapSize       = war.getTileMap().getMapSize();
+                    const mapWidth      = mapSize.width;
+                    const mapHeight     = mapSize.height;
+                    for (let x = 0; x < mapWidth; ++x) {
+                        for (let y = Math.floor(mapHeight / 2) - 1; y >= 0; --y) {
+                            autoFillTile(war, { x, y }, SymmetryType.Rotation);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnLeftRight2(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0866),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const war           = this._getWar();
+                    const mapSize       = war.getTileMap().getMapSize();
+                    const mapWidth      = mapSize.width;
+                    const mapHeight     = mapSize.height;
+                    for (let x = Math.floor((mapWidth + 1) / 2); x < mapWidth; ++x) {
+                        for (let y = 0; y < mapHeight; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.Rotation);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnRightLeft2(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0867),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    const war           = this._getWar();
+                    const mapSize       = war.getTileMap().getMapSize();
+                    const mapWidth      = mapSize.width;
+                    const mapHeight     = mapSize.height;
+                    for (let x = Math.floor(mapWidth / 2) - 1; x >= 0; --x) {
+                        for (let y = 0; y < mapHeight; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.Rotation);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnUpLeftDownRight2(): void {
+            const war           = this._getWar();
+            const mapSize       = war.getTileMap().getMapSize();
+            const mapWidth      = mapSize.width;
+            const mapHeight     = mapSize.height;
+            if (mapWidth !== mapHeight) {
+                FloatText.show(Lang.getText(LangTextType.A0295));
+                return;
+            }
+
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0868),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    for (let x = 1; x < mapWidth; ++x) {
+                        for (let y = mapHeight - x; y < mapHeight; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.Rotation);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnDownRightUpLeft2(): void {
+            const war           = this._getWar();
+            const mapSize       = war.getTileMap().getMapSize();
+            const mapWidth      = mapSize.width;
+            const mapHeight     = mapSize.height;
+            if (mapWidth !== mapHeight) {
+                FloatText.show(Lang.getText(LangTextType.A0295));
+                return;
+            }
+
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0869),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    for (let x = 0; x < mapWidth - 1; ++x) {
+                        for (let y = 0; y < mapWidth - x - 1; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.Rotation);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnUpRightDownLeft2(): void {
+            const war           = this._getWar();
+            const mapSize       = war.getTileMap().getMapSize();
+            const mapWidth      = mapSize.width;
+            const mapHeight     = mapSize.height;
+            if (mapWidth !== mapHeight) {
+                FloatText.show(Lang.getText(LangTextType.A0295));
+                return;
+            }
+
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0870),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    for (let x = 0; x < mapWidth - 1; ++x) {
+                        for (let y = x + 1; y < mapHeight; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.Rotation);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+        private _onTouchedBtnDownLeftUpRight2(): void {
+            const war           = this._getWar();
+            const mapSize       = war.getTileMap().getMapSize();
+            const mapWidth      = mapSize.width;
+            const mapHeight     = mapSize.height;
+            if (mapWidth !== mapHeight) {
+                FloatText.show(Lang.getText(LangTextType.A0295));
+                return;
+            }
+
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0871),
+                content : Lang.getText(LangTextType.A0225),
+                callback: () => {
+                    for (let x = 1; x < mapWidth; ++x) {
+                        for (let y = 0; y < x; ++y) {
+                            autoFillTile(war, { x, y }, SymmetryType.Rotation);
+                        }
+                    }
+
+                    this.close();
+                },
+            });
+        }
+
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
@@ -151,6 +536,24 @@ namespace TwnsMeSymmetryPanel {
             this._labelRotationalAuto.text          = Lang.getText(LangTextType.B0307);
             this._labelUpLeftDownRightAuto.text     = Lang.getText(LangTextType.B0307);
             this._labelUpRightDownLeftAuto.text     = Lang.getText(LangTextType.B0307);
+            this._labelFill1.text                   = Lang.getText(LangTextType.B0862);
+            this._labelFill2.text                   = Lang.getText(LangTextType.B0863);
+            this._btnUpDown1.label                  = Lang.getText(LangTextType.B0864);
+            this._btnDownUp1.label                  = Lang.getText(LangTextType.B0865);
+            this._btnLeftRight1.label               = Lang.getText(LangTextType.B0866);
+            this._btnRightLeft1.label               = Lang.getText(LangTextType.B0867);
+            this._btnUpLeftDownRight1.label         = Lang.getText(LangTextType.B0868);
+            this._btnDownRightUpLeft1.label         = Lang.getText(LangTextType.B0869);
+            this._btnUpRightDownLeft1.label         = Lang.getText(LangTextType.B0870);
+            this._btnDownLeftUpRight1.label         = Lang.getText(LangTextType.B0871);
+            this._btnUpDown2.label                  = Lang.getText(LangTextType.B0864);
+            this._btnDownUp2.label                  = Lang.getText(LangTextType.B0865);
+            this._btnLeftRight2.label               = Lang.getText(LangTextType.B0866);
+            this._btnRightLeft2.label               = Lang.getText(LangTextType.B0867);
+            this._btnUpLeftDownRight2.label         = Lang.getText(LangTextType.B0868);
+            this._btnDownRightUpLeft2.label         = Lang.getText(LangTextType.B0869);
+            this._btnUpRightDownLeft2.label         = Lang.getText(LangTextType.B0870);
+            this._btnDownLeftUpRight2.label         = Lang.getText(LangTextType.B0871);
         }
 
         private _updateGroupBoxes(): void {
@@ -254,6 +657,32 @@ namespace TwnsMeSymmetryPanel {
                 this._imgUpRightDownLeft.visible        = war.getDrawer().getSymmetricalDrawType() === SymmetryType.UpRightToDownLeft;
             }
         }
+    }
+
+    function autoFillTile(war: TwnsBwWar.BwWar, dstGridIndex: GridIndex, symmetryType: SymmetryType): void {
+        const tileMap               = war.getTileMap();
+        const dstTile               = tileMap.getTile(dstGridIndex);
+        const srcTile               = tileMap.getTile(Helpers.getExisted(MeUtility.getSymmetricalGridIndex(dstGridIndex, symmetryType, tileMap.getMapSize())));
+        const tileData              = Helpers.deepClone(srcTile.serialize());
+        const decoratorType         = srcTile.getDecoratorType();
+        const decoratorShapeId      = srcTile.getDecoratorShapeId();
+        const objectType            = srcTile.getObjectType();
+        tileData.gridIndex          = dstGridIndex;
+        tileData.isHighlighted      = dstTile.getIsHighlighted();
+        tileData.locationFlags      = dstTile.getLocationFlags();
+        tileData.baseShapeId        = ConfigManager.getSymmetricalTileBaseShapeId(srcTile.getBaseType(), srcTile.getBaseShapeId(), symmetryType);
+        tileData.objectType         = ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType);
+        tileData.objectShapeId      = ConfigManager.getSymmetricalTileObjectShapeId(objectType, srcTile.getObjectShapeId(), symmetryType);
+        if ((decoratorType != null) && (decoratorShapeId != null)) {
+            tileData.decoratorShapeId = ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType);
+        }
+
+        if ((srcTile.getMaxHp() !== null) && (war.getUnitMap().getUnitOnMap(dstGridIndex))) {
+            WarDestructionHelpers.destroyUnitOnMap(war, dstGridIndex, true);
+        }
+        dstTile.init(tileData, war.getConfigVersion());
+        dstTile.startRunning(war);
+        dstTile.flushDataToView();
     }
 }
 

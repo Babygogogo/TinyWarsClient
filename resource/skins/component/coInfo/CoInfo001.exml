@@ -4,8 +4,8 @@
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing" class="Skins.Component.CoInfo.CoInfo001">
     <e:Group id="_group" horizontalCenter="0" verticalCenter="0" width="360" height="400">
         <e:Group left="0" right="0" top="0" bottom="0">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2"
-                                 left="0" right="0" top="38" bottom="0" />
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
             <e:Group y="0" left="0" right="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
                                      source="uncompressedColorGrey0001" y="0" left="0" right="0" />
@@ -80,7 +80,7 @@
                             <e:itemRendererSkinName>
                                 <e:Skin width="320">
                                     <TwnsUiLabel:UiLabel id="_labelDesc" text="技能描述" size="14" left="0" right="0"
-                                                         wordWrap="true" lineSpacing="1.5"/>
+                                                         wordWrap="true" lineSpacing="1.5" />
                                 </e:Skin>
                             </e:itemRendererSkinName>
                             <e:layout>
@@ -116,11 +116,25 @@
                     </e:layout>
                 </e:List>
             </TwnsUiScrollList:UiScrollList>
-            <e:Group right="20" bottom="20" locked="true">
-                <TwnsUiLabel:UiLabel id="_labelDesignerTitle" text="Designer" x="71" y="59" bold="true" size="16" />
-                <TwnsUiLabel:UiLabel id="_labelDesigner" text="???" x="81" y="69" size="14" />
+            <e:Group right="20" bottom="20">
+                <e:Group x="0" y="0">
+                    <TwnsUiLabel:UiLabel id="_labelArtDesignerTitle" text="Designer" x="-69" y="-34" bold="true"
+                                         size="14" />
+                    <TwnsUiLabel:UiLabel id="_labelArtDesigner" text="???" x="-24" y="-16" size="12" />
+                    <e:layout>
+                        <e:VerticalLayout gap="2" horizontalAlign="right" />
+                    </e:layout>
+                </e:Group>
+                <e:Group x="10" y="10">
+                    <TwnsUiLabel:UiLabel id="_labelDataDesignerTitle" text="Designer" x="-69" y="-34" bold="true"
+                                         size="14" />
+                    <TwnsUiLabel:UiLabel id="_labelDataDesigner" text="???" x="-24" y="-16" size="12" />
+                    <e:layout>
+                        <e:VerticalLayout gap="2" horizontalAlign="right" />
+                    </e:layout>
+                </e:Group>
                 <e:layout>
-                    <e:VerticalLayout horizontalAlign="right" gap="2" />
+                    <e:VerticalLayout horizontalAlign="right" />
                 </e:layout>
             </e:Group>
         </e:Group>

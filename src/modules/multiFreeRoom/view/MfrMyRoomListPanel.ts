@@ -58,16 +58,9 @@ namespace TwnsMfrMyRoomListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MfrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyMfrJoinedPreviewingRoomIdChanged },
-                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,         callback: this._onNotifyMsgMfrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMfrCreateRoom,                    callback: this._onNotifyMsgCreateRoom },
-                { type: NotifyType.MsgMfrDeleteRoomByServer,            callback: this._onNotifyMsgMfrDeleteRoomByServer },
-                { type: NotifyType.MsgMfrJoinRoom,                      callback: this._onNotifyMsgMfrJoinRoom },
-                { type: NotifyType.MsgMfrDeletePlayer,                  callback: this._onNotifyMsgMfrDeletePlayer },
-                { type: NotifyType.MsgMfrExitRoom,                      callback: this._onNotifyMsgMfrExitRoom },
-                { type: NotifyType.MsgMfrGetRoomInfo,                   callback: this._onNotifyMsgMfrGetRoomInfo },
-                { type: NotifyType.MsgMfrSetSelfSettings,               callback: this._onNotifyMsgMfrSetSelfSettings },
-                { type: NotifyType.MsgMfrSetReady,                      callback: this._onNotifyMsgMfrSetReady },
-                { type: NotifyType.MsgMfrGetOwnerPlayerIndex,           callback: this._onNotifyMsgMfrGetOwnerPlayerIndex },
+                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onNotifyMsgMfrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMfrGetRoomStaticInfo,             callback: this._onNotifyMsgMfrGetRoomStaticInfo },
+                { type: NotifyType.MsgMfrGetRoomPlayerInfo,             callback: this._onNotifyMsgMfrGetRoomPlayerInfo },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -84,7 +77,7 @@ namespace TwnsMfrMyRoomListPanel {
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
 
-            MfrProxy.reqMfrGetJoinedRoomInfoList();
+            MfrProxy.reqMfrGetJoinedRoomIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -107,66 +100,17 @@ namespace TwnsMfrMyRoomListPanel {
             this._updateComponentsForPreviewingRoomInfo();
         }
 
-        private _onNotifyMsgCreateRoom(): void {
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgMfrDeleteRoomByServer(): void {
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgMfrJoinRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrJoinRoom.IS;
-            if (data.roomId === MfrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgMfrDeletePlayer(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrDeletePlayer.IS;
-            if (data.roomId === MfrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgMfrExitRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrExitRoom.IS;
-            if (data.roomId === MfrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-
-            this._updateGroupRoomList();
-        }
-
-        private _onNotifyMsgMfrGetRoomInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomInfo.IS;
+        private _onNotifyMsgMfrGetRoomStaticInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomStaticInfo.IS;
             if (data.roomId === MfrJoinModel.getJoinedPreviewingRoomId()) {
                 this._updateComponentsForPreviewingRoomInfo();
             }
         }
 
-        private _onNotifyMsgMfrSetSelfSettings(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrSetSelfSettings.IS;
+        private _onNotifyMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
             if (data.roomId === MfrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-        }
-
-        private _onNotifyMsgMfrSetReady(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrSetReady.IS;
-            if (data.roomId === MfrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
-            }
-        }
-
-        private _onNotifyMsgMfrGetOwnerPlayerIndex(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetOwnerPlayerIndex.IS;
-            if (data.roomId === MfrJoinModel.getJoinedPreviewingRoomId()) {
-                this._updateCommonWarPlayerInfoPage();
+                this._updateComponentsForPreviewingRoomInfo();
             }
         }
 
@@ -305,7 +249,7 @@ namespace TwnsMfrMyRoomListPanel {
             const roomId    = MfrJoinModel.getJoinedPreviewingRoomId();
             const warData   = roomId == null
                 ? null
-                : (await MfrModel.getRoomInfo(roomId))?.settingsForMfw?.initialWarData;
+                : (await MfrModel.getRoomStaticInfo(roomId))?.settingsForMfw?.initialWarData;
 
             return warData == null
                 ? null
@@ -426,7 +370,7 @@ namespace TwnsMfrMyRoomListPanel {
 
             const roomId            = this._getData().roomId;
             this._imgRed.visible    = await MfrModel.checkIsRedForRoom(roomId);
-            this._labelName.text    = (await MfrModel.getRoomInfo(roomId))?.settingsForMfw?.warName || `#${roomId}`;
+            this._labelName.text    = (await MfrModel.getRoomStaticInfo(roomId))?.settingsForMfw?.warName || `#${roomId}`;
         }
 
         private _onNotifyMfrJoinedPreviewingRoomIdChanged(): void {

@@ -134,26 +134,36 @@ namespace TwnsMmTagListPanel {
             (mapNameForFilter)  && (mapNameForFilter = mapNameForFilter.toLowerCase());
             (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
-            for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
-                const averageRating     = await WarMapModel.getAverageRating(mapId);
-                const actualPlayedTimes = await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId);
-                if ((!mapBriefData.mapExtraData?.isEnabled)                                                                 ||
-                    ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
-                    ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                    ||
-                    ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                               ||
-                    ((playedTimes != null) && (actualPlayedTimes < playedTimes))                                            ||
-                    ((minRating != null) && ((averageRating == null) || (averageRating < minRating)))
-                ) {
-                    continue;
-                } else {
-                    data.push({
-                        mapId,
-                        mapName,
-                        panel   : this,
-                    });
-                }
+            const promiseArray: Promise<void>[] = [];
+            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+                promiseArray.push((async () => {
+                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    if (mapBriefData == null) {
+                        return;
+                    }
+
+                    const mapName           = Helpers.getExisted(Lang.getLanguageText({ textArray: mapBriefData.mapNameArray }));
+                    const averageRating     = await WarMapModel.getAverageRating(mapId);
+                    const actualPlayedTimes = await WarMapModel.getTotalPlayedTimes(mapId);
+                    if ((!mapBriefData.mapExtraData?.isEnabled)                                                                 ||
+                        ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
+                        ((mapDesigner) && (!mapBriefData.designerName?.toLowerCase().includes(mapDesigner)))                    ||
+                        ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                               ||
+                        ((playedTimes != null) && (actualPlayedTimes < playedTimes))                                            ||
+                        ((minRating != null) && ((averageRating == null) || (averageRating < minRating)))
+                    ) {
+                        return;
+                    } else {
+                        data.push({
+                            mapId,
+                            mapName,
+                            panel   : this,
+                        });
+                    }
+                })());
             }
+
+            await Promise.all(promiseArray);
             return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
@@ -164,7 +174,7 @@ namespace TwnsMmTagListPanel {
             this._labelDesigner.text        = Lang.getFormattedText(LangTextType.F0001, mapRawData.designerName);
             this._labelPlayersCount.text    = Lang.getFormattedText(LangTextType.F0002, mapRawData.playersCountUnneutral);
             this._labelRating.text          = Lang.getFormattedText(LangTextType.F0003, rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
+            this._labelPlayedTimes.text     = Lang.getFormattedText(LangTextType.F0004, await WarMapModel.getTotalPlayedTimes(mapId));
             this._groupInfo.visible         = true;
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);

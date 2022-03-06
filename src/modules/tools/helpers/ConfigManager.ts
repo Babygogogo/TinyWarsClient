@@ -633,6 +633,9 @@ namespace ConfigManager {
         return Helpers.getExisted(cfgDict[tileType], ClientErrorCode.ConfigManager_GetMoveCostCfgByTileType_01);
     }
 
+    export function getTileBaseTypeByTileType(type: TileType): TileBaseType {
+        return Helpers.getExisted(CommonConstants.TileTypeToTileBaseType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
+    }
     export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
         return Helpers.getExisted(CommonConstants.TileTypeToTileObjectType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }
@@ -757,6 +760,9 @@ namespace ConfigManager {
 
     export function getCoBasicCfg(version: string, coId: number): CoBasicCfg {
         return Helpers.getExisted(getAllCoBasicCfgDict(version)[coId], ClientErrorCode.ConfigManager_GetCoBasicCfg_00);
+    }
+    export function checkHasCo(version: string, coId: number): boolean {
+        return getAllCoBasicCfgDict(version)[coId] != null;
     }
     export function getAllCoBasicCfgDict(version: string): { [coId: number]: CoBasicCfg } {
         return Helpers.getExisted(_ALL_CONFIGS.get(version)?.CoBasic, ClientErrorCode.ConfigManager_GetAllCoBasicCfgDict_00);
@@ -918,7 +924,7 @@ namespace ConfigManager {
         } else {
             const idArray: number[] = [];
             for (const cfg of getEnabledCoArray(version)) {
-                if (cfg.designer !== "Intelligent Systems") {
+                if (cfg.dataDesigner !== "Intelligent Systems") {
                     idArray.push(cfg.coId);
                 }
             }
@@ -926,15 +932,18 @@ namespace ConfigManager {
             return idArray;
         }
     }
+    export function checkIsOriginCo(version: string, coId: number): boolean {
+        return getCoBasicCfg(version, coId).dataDesigner === `Intelligent Systems`;
+    }
 
-    export function getCoBustImageSource(coId: number): string {
-        return `coBust${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    export function getCoBustImageSource(version: string, coId: number): string {
+        return `coBust${Helpers.getNumText(Helpers.getExisted(getCoBasicCfg(version, coId).image), 4)}`;
     }
-    export function getCoHeadImageSource(coId: number): string {
-        return `coHead${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    export function getCoHeadImageSource(version: string, coId: number): string {
+        return `coHead${Helpers.getNumText(Helpers.getExisted(getCoBasicCfg(version, coId).image), 4)}`;
     }
-    export function getCoEyeImageSource(coId: number, isAlive: boolean): string {
-        return `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    export function getCoEyeImageSource(version: string, coId: number, isAlive: boolean): string {
+        return `coEye${isAlive ? `Normal` : `Grey`}${Helpers.getNumText(Helpers.getExisted(getCoBasicCfg(version, coId).image), 4)}`;
     }
     export function getDialogueBackgroundImage(backgroundId: number): string {
         return `resource/assets/texture/background/dialogueBackground${Helpers.getNumText(backgroundId, 4)}.jpg`;
@@ -997,8 +1006,11 @@ namespace ConfigManager {
         const shapeIdList   = cfg ? cfg.get(shapeId) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }
+    export function getSymmetricalTileObjectType(objectType: TileObjectType, symmetryType: Types.SymmetryType): TileObjectType {
+        return Helpers.getExisted(CommonConstants.TileObjectTypeSymmetry.get(objectType))[symmetryType];
+    }
     export function getSymmetricalTileObjectShapeId(objectType: TileObjectType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
-        const cfg           = CommonConstants.TileObjectSymmetry.get(objectType);
+        const cfg           = CommonConstants.TileObjectShapeSymmetry.get(objectType);
         const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }

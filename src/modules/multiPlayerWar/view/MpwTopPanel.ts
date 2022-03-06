@@ -30,7 +30,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMpwTopPanel {
-    import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
@@ -58,6 +57,7 @@ namespace TwnsMpwTopPanel {
         private readonly _groupPlayer!          : eui.Group;
         private readonly _labelPlayer!          : TwnsUiLabel.UiLabel;
         private readonly _labelPlayerState!     : TwnsUiLabel.UiLabel;
+        private readonly _labelTurnIndex!       : TwnsUiLabel.UiLabel;
 
         private readonly _groupInfo!            : eui.Group;
         private readonly _labelCurrEnergy!      : TwnsUiLabel.UiLabel;
@@ -73,6 +73,7 @@ namespace TwnsMpwTopPanel {
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.TimeTick,                        callback: this._onNotifyTimeTick },
                 { type: NotifyType.BwPlayerFundChanged,             callback: this._onNotifyBwPlayerFundChanged },
+                { type: NotifyType.BwTurnIndexChanged,              callback: this._onNotifyBwTurnIndexChanged },
                 { type: NotifyType.BwPlayerIndexInTurnChanged,      callback: this._onNotifyBwPlayerIndexInTurnChanged },
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
@@ -130,6 +131,9 @@ namespace TwnsMpwTopPanel {
         }
         private _onNotifyBwPlayerFundChanged(): void {
             this._updateLabelFundAndAddFund();
+        }
+        private _onNotifyBwTurnIndexChanged(): void {
+            this._updateLabelTurnIndex();
         }
         private _onNotifyBwPlayerIndexInTurnChanged(): void {
             const war = this._getOpenData().war;
@@ -240,6 +244,7 @@ namespace TwnsMpwTopPanel {
             this._updateImgSkinAndCo();
             this._updateLabelPlayerState();
             this._updateLabelPlayer();
+            this._updateLabelTurnIndex();
             this._updateLabelWeather();
             this._updateGroupTimer();
             this._updateLabelFundAndAddFund();
@@ -248,8 +253,9 @@ namespace TwnsMpwTopPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            // nothing to do
             this._updateLabelWeather();
+            this._updateLabelPlayerState();
+            this._updateLabelTurnIndex();
         }
 
         private _updateListPlayer(): void {
@@ -279,6 +285,10 @@ namespace TwnsMpwTopPanel {
             this._labelPlayer.text  = `${await player.getNickname()}`;
         }
 
+        private _updateLabelTurnIndex(): void {
+            this._labelTurnIndex.text = `${Lang.getText(LangTextType.B0191)} ${this._getOpenData().war.getTurnManager().getTurnIndex()}`;
+        }
+
         private _updateLabelWeather(): void {
             this._labelWeather.text = Lang.getWeatherName(this._getOpenData().war.getWeatherManager().getCurrentWeatherType());
         }
@@ -286,7 +296,7 @@ namespace TwnsMpwTopPanel {
         private _updateGroupTimer(): void {
             const war       = this._getOpenData().war;
             const group     = this._groupTimer;
-            const restTime  = war ? war.getBootRestTime() : null;
+            const restTime  = war ? war.getBootRestTime(war.getPlayerIndexInTurn()) : null;
             if (restTime == null) {
                 group.visible = false;
             } else {
@@ -317,9 +327,10 @@ namespace TwnsMpwTopPanel {
         }
 
         private _updateImgSkinAndCo(): void {
-            const player            = this._getOpenData().war.getPlayerInTurn();
+            const war               = this._getOpenData().war;
+            const player            = war.getPlayerInTurn();
             this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source      = ConfigManager.getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgCo.source      = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
         }
 
         private _updateLabelEnergy(): void {
@@ -401,9 +412,10 @@ namespace TwnsMpwTopPanel {
 
         protected _onDataChanged(): void {
             const data              = this._getData();
-            const player            = data.war.getPlayer(data.playerIndex);
+            const war               = data.war;
+            const player            = war.getPlayer(data.playerIndex);
             this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source      = ConfigManager.getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgCo.source      = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
             this._updateImgOnlineState();
             this._updateLabelFundAndAddFund();
             this._updateLabelEnergy();

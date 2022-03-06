@@ -22,7 +22,7 @@ namespace TwnsWwMakeRequestDetailPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+        warId   : number;
     };
     export class WwMakeRequestDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!   : TwnsUiLabel.UiLabel;
@@ -48,7 +48,7 @@ namespace TwnsWwMakeRequestDetailPanel {
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            this._dataForListPlayer = this._generateDataForListPlayer();
+            this._dataForListPlayer = await this._generateDataForListPlayer();
             this._updateView();
         }
         protected _onClosing(): void {
@@ -72,9 +72,9 @@ namespace TwnsWwMakeRequestDetailPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnConfirm(): void {
-            const warId = this._getOpenData().watchInfo.warInfo?.warId;
-            if (warId == null) {
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            const warId = this._getOpenData().warId;
+            if (await WwModel.getWatchOutgoingInfo(warId) == null) {
                 this.close();
                 return;
             }
@@ -115,18 +115,22 @@ namespace TwnsWwMakeRequestDetailPanel {
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
         }
 
-        private _generateDataForListPlayer(): DataForPlayerRenderer[] {
-            const openData          = this._getOpenData().watchInfo;
-            const warInfo           = openData.warInfo;
-            const configVersion     = warInfo?.settingsForCommon?.configVersion;
+        private async _generateDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
+            const warId         = this._getOpenData().warId;
+            const outgoingInfo  = await WwModel.getWatchOutgoingInfo(warId);
+            if (outgoingInfo == null) {
+                return [];
+            }
+
+            const configVersion = (await MpwModel.getWarSettings(warId))?.settingsForCommon?.configVersion;
             if (configVersion == null) {
                 return [];
             }
 
-            const selfUserId        = Helpers.getExisted(UserModel.getSelfUserId());
-            const ongoingDstUserIds = openData.ongoingDstUserIds || [];
-            const requestDstUserIds = openData.requestDstUserIds || [];
-            const playerInfoList    = warInfo?.playerInfoList || [];
+            const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
+            const ongoingDstUserIdArray = outgoingInfo.ongoingDstUserIdArray || [];
+            const requestDstUserIdArray = outgoingInfo.requestDstUserIdArray || [];
+            const playerInfoList        = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
 
             const dataList: DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playerInfoList.length; ++playerIndex) {
@@ -140,8 +144,8 @@ namespace TwnsWwMakeRequestDetailPanel {
                     continue;
                 }
 
-                const isRequested   = requestDstUserIds.indexOf(userId) >= 0;
-                const isWatching    = ongoingDstUserIds.indexOf(userId) >= 0;
+                const isRequested   = requestDstUserIdArray.indexOf(userId) >= 0;
+                const isWatching    = ongoingDstUserIdArray.indexOf(userId) >= 0;
                 dataList.push({
                     panel           : this,
                     configVersion,

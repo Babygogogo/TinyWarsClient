@@ -25,40 +25,46 @@ namespace TwnsLobbyPanel {
 
     export type OpenData = void;
     export class LobbyPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        private readonly _groupTips!        : eui.Group;
-        private readonly _groupWelcome!     : eui.Group;
-        private readonly _labelTips0!       : TwnsUiLabel.UiLabel;
-        private readonly _labelTips1!       : TwnsUiLabel.UiLabel;
-        private readonly _groupQq!          : eui.Group;
-        private readonly _labelTips2!       : TwnsUiLabel.UiLabel;
-        private readonly _labelTips3!       : TwnsUiLabel.UiLabel;
-        private readonly _groupDiscord!     : eui.Group;
-        private readonly _labelTips4!       : TwnsUiLabel.UiLabel;
-        private readonly _labelTips5!       : TwnsUiLabel.UiLabel;
-        private readonly _groupGithub!      : eui.Group;
-        private readonly _labelTips6!       : TwnsUiLabel.UiLabel;
-        private readonly _labelTips7!       : TwnsUiLabel.UiLabel;
+        private readonly _groupTips!            : eui.Group;
+        private readonly _groupWelcome!         : eui.Group;
+        private readonly _labelTips0!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips1!           : TwnsUiLabel.UiLabel;
+        private readonly _groupQq!              : eui.Group;
+        private readonly _labelTips2!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips3!           : TwnsUiLabel.UiLabel;
+        private readonly _groupDiscord!         : eui.Group;
+        private readonly _labelTips4!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips5!           : TwnsUiLabel.UiLabel;
+        private readonly _groupGithub!          : eui.Group;
+        private readonly _labelTips6!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips7!           : TwnsUiLabel.UiLabel;
+        private readonly _groupSwitchVersion!   : eui.Group;
+        private readonly _labelTips8!           : TwnsUiLabel.UiLabel;
+        private readonly _labelTips9!           : TwnsUiLabel.UiLabel;
 
-        private readonly _group!            : eui.Group;
-        private readonly _btnSinglePlayer!  : TwnsUiButton.UiButton;
-        private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
-        private readonly _btnRanking!       : TwnsUiButton.UiButton;
+        private readonly _group!                : eui.Group;
+        private readonly _btnSinglePlayer!      : TwnsUiButton.UiButton;
+        private readonly _btnMultiPlayer!       : TwnsUiButton.UiButton;
+        private readonly _btnRanking!           : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
             this._setUiListenerArray([
                 { ui: this._groupDiscord,       callback: this._onTouchedGroupDiscord },
                 { ui: this._groupGithub,        callback: this._onTouchedGroupGithub },
+                { ui: this._groupSwitchVersion, callback: this._onTouchedGroupSwitchVersion },
                 { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
                 { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgUserLogout,                  callback: this._onMsgUserLogout },
-                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,    callback: this._onMsgMfrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,    callback: this._onMsgCcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onMsgMcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgCcrGetJoinedRoomIdArray,          callback: this._onMsgCcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
+                { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
             ]);
 
             this._updateComponentsForLanguage();
@@ -97,6 +103,18 @@ namespace TwnsLobbyPanel {
             }
         }
 
+        private _onTouchedGroupSwitchVersion(): void {
+            if (window?.open) {
+                const isTest = (CommonConstants.GameVersion as any) === Types.GameVersion.Legacy;
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                    content : Lang.getFormattedText(LangTextType.F0065, Lang.getText(isTest ? LangTextType.B0854 : LangTextType.B0854)),
+                    callback: () => {
+                        window.open(isTest ? CommonConstants.TestVersionUrl : CommonConstants.LegacyVersionUrl);
+                    },
+                });
+            }
+        }
+
         private _onTouchedBtnMultiPlayer(): void {
             this.close();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.McrMainMenuPanel, void 0);
@@ -116,20 +134,29 @@ namespace TwnsLobbyPanel {
             this.close();
         }
 
-        private _onMsgMcrGetJoinedRoomInfoList(): void {
+        private _onMsgMcrGetJoinedRoomIdArray(): void {
             this._updateBtnMultiPlayer();
         }
 
-        private _onMsgMfrGetJoinedRoomInfoList(): void {
+        private _onMsgMfrGetJoinedRoomIdArray(): void {
             this._updateBtnMultiPlayer();
         }
 
-        private _onMsgCcrGetJoinedRoomInfoList(): void {
+        private _onMsgCcrGetJoinedRoomIdArray(): void {
             this._updateBtnMultiPlayer();
         }
 
-        private _onMsgMrrGetMyRoomPublicInfoList(): void {
+        private _onMsgMrrGetJoinedRoomIdArray(): void {
             this._updateBtnRanking();
+        }
+
+        private _onMsgMpwCommonGetWarProgressInfo(): void {
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
+        }
+
+        private _onMsgMpwWatchGetRequestedWarIdArray(): void {
+            this._updateBtnMultiPlayer();
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -184,17 +211,23 @@ namespace TwnsLobbyPanel {
             Helpers.resetTween({
                 obj         : this._groupQq,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 66,
+                waitTime    : 50,
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
                 obj         : this._groupDiscord,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 132,
+                waitTime    : 100,
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
                 obj         : this._groupGithub,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 150,
+                endProps    : { alpha: 1, left: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupSwitchVersion,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
@@ -218,30 +251,45 @@ namespace TwnsLobbyPanel {
         }
 
         private async _updateComponentsForLanguage(): Promise<void> {
-            this._labelTips0.text   = Lang.getText(LangTextType.A0195);
-            this._labelTips1.text   = ` `;
-            this._labelTips2.text   = `${Lang.getText(LangTextType.B0537)}:`;
-            this._labelTips3.text   = `368142455`;
-            this._labelTips4.text   = `${Lang.getText(LangTextType.B0538)}:`;
-            this._labelTips5.text   = CommonConstants.DiscordUrl;
-            this._labelTips6.text   = `${Lang.getText(LangTextType.B0539)}:`;
-            this._labelTips7.text   = CommonConstants.GithubUrl;
+            this._labelTips0.text       = Lang.getText(LangTextType.A0195);
+            this._labelTips1.text       = ` `;
+            this._labelTips2.text       = `${Lang.getText(LangTextType.B0537)}:`;
+            this._labelTips3.text       = `368142455`;
+            this._labelTips4.text       = `${Lang.getText(LangTextType.B0538)}:`;
+            this._labelTips5.textFlow   = [{
+                text    : CommonConstants.DiscordUrl,
+                style   : { underline: true },
+            }];
+            this._labelTips6.text       = `${Lang.getText(LangTextType.B0539)}:`;
+            this._labelTips7.textFlow   = [{
+                text    : CommonConstants.GithubUrl,
+                style   : { underline: true },
+            }];
+
+            const labelTips8    = this._labelTips8;
+            const labelTips9    = this._labelTips9;
+            if ((CommonConstants.GameVersion as any) === Types.GameVersion.Legacy) {
+                labelTips8.text     = `${Lang.getText(LangTextType.B0854)}:`;
+                labelTips9.textFlow = [{
+                    text    : CommonConstants.TestVersionUrl,
+                    style   : { underline: true },
+                }];
+            } else {
+                labelTips8.text     = `${Lang.getText(LangTextType.B0853)}:`;
+                labelTips9.textFlow = [{
+                    text    : CommonConstants.LegacyVersionUrl,
+                    style   : { underline: true },
+                }];
+            }
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {
-            this._btnMultiPlayer.setRedVisible(
-                (MpwModel.checkIsRedForMyMcwWars()) ||
-                (MpwModel.checkIsRedForMyMfwWars()) ||
-                (MpwModel.checkIsRedForMyCcwWars()) ||
-                (await McrModel.checkIsRed())       ||
-                (await MfrModel.checkIsRed())       ||
-                (await CcrModel.checkIsRed())
-            );
+            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MpwModel.checkIsRedForMyMrwWars()) ||
                 (await MrrModel.checkIsRed())
             );
         }

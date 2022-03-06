@@ -86,7 +86,6 @@ namespace TwnsMeWarRulePanel {
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MeWarRuleNameChanged,       callback: this._onNotifyMeWarRuleNameChanged },
                 { type: NotifyType.MeWarEventIdArrayChanged,   callback: this._onNotifyMeWarEventIdArrayChanged },
             ]);
             this._setUiListenerArray([
@@ -112,7 +111,6 @@ namespace TwnsMeWarRulePanel {
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listWarEvent.setItemRenderer(WarEventRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
@@ -155,10 +153,6 @@ namespace TwnsMeWarRulePanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
-        }
-
-        private _onNotifyMeWarRuleNameChanged(): void {
-            this._updateLabelRuleName(this._selectedRule);
         }
 
         private _onNotifyMeWarEventIdArrayChanged(): void {
@@ -224,7 +218,12 @@ namespace TwnsMeWarRulePanel {
         private _onTouchedBtnModifyRuleName(): void {
             const rule = this._selectedRule;
             if ((rule) && (!this._getWar().getIsReviewingMap())) {
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.MeModifyRuleNamePanel, { ruleId: Helpers.getExisted(rule.ruleId) });
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonModifyWarRuleNamePanel, {
+                    rule,
+                    callback    : () => {
+                        this._updateLabelRuleName(rule);
+                    }
+                });
             }
         }
 
@@ -293,6 +292,7 @@ namespace TwnsMeWarRulePanel {
             if (warRule) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.MeAddWarEventToRulePanel, {
                     warRule,
+                    warEventArray   : this._getWar().getWarEventManager().getWarEventFullData()?.eventArray ?? [],
                 });
             }
         }
@@ -686,8 +686,10 @@ namespace TwnsMeWarRulePanel {
                 this._createDataVisionRangeModifier(warRule, playerRule, isReviewing),
                 this._createDataLuckLowerLimit(warRule, playerRule, isReviewing),
                 this._createDataLuckUpperLimit(warRule, playerRule, isReviewing),
+                this._createDataIsControlledByAiInCcw(warRule, playerRule, isReviewing),
                 this._createDataAiCoIdInCcw(warRule, playerRule, isReviewing),
-                this._createDataAiControlInCcw(warRule, playerRule, isReviewing),
+                this._createDataIsControlledByAiInSrw(warRule, playerRule, isReviewing),
+                this._createDataAiCoIdInSrw(warRule, playerRule, isReviewing),
             ];
         }
         private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule): DataForInfoRenderer {
@@ -738,21 +740,15 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0178),
-                            currentValue    : "" + currValue,
-                            maxChars        : 7,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    WarRuleHelpers.setInitialFund(warRule, Helpers.getExisted(playerRule.playerIndex), value);
-                                    this._updateView();
-                                }
+                                WarRuleHelpers.setInitialFund(warRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                this._updateView();
                             },
                         });
                     }
@@ -769,21 +765,15 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
                         const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0179),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    WarRuleHelpers.setIncomeMultiplier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
-                                    this._updateView();
-                                }
+                                WarRuleHelpers.setIncomeMultiplier(warRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                this._updateView();
                             },
                         });
                     },
@@ -800,21 +790,15 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0180),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    WarRuleHelpers.setEnergyAddPctOnLoadCo(warRule, Helpers.getExisted(playerRule.playerIndex), value);
-                                    this._updateView();
-                                }
+                                WarRuleHelpers.setEnergyAddPctOnLoadCo(warRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                this._updateView();
                             },
                         });
                     },
@@ -831,24 +815,18 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
                         const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0181),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    WarRuleHelpers.setEnergyGrowthMultiplier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
-                                    this._updateView();
-                                }
+                                WarRuleHelpers.setEnergyGrowthMultiplier(warRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                this._updateView();
                             },
                         });
-                },
+                    },
             };
         }
         private _createDataMoveRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -862,21 +840,15 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0182),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    WarRuleHelpers.setMoveRangeModifier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
-                                    this._updateView();
-                                }
+                                WarRuleHelpers.setMoveRangeModifier(warRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                this._updateView();
                             },
                         });
                 },
@@ -893,21 +865,15 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
                         const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0183),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    WarRuleHelpers.setAttackPowerModifier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
-                                    this._updateView();
-                                }
+                                WarRuleHelpers.setAttackPowerModifier(warRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                this._updateView();
                             },
                         });
                 },
@@ -924,21 +890,15 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
                         const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0184),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    WarRuleHelpers.setVisionRangeModifier(warRule, Helpers.getExisted(playerRule.playerIndex), value);
-                                    this._updateView();
-                                }
+                                WarRuleHelpers.setVisionRangeModifier(warRule, Helpers.getExisted(playerRule.playerIndex), panel.getInputValue());
+                                this._updateView();
                             },
                         });
                 },
@@ -956,27 +916,22 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0189),
-                            currentValue    : "" + currValue,
-                            maxChars        : 4,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                const value         = panel.getInputValue();
+                                const upperLimit    = WarRuleHelpers.getLuckUpperLimit(warRule, playerIndex);
+                                if (value <= upperLimit) {
+                                    WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
                                 } else {
-                                    const upperLimit = WarRuleHelpers.getLuckUpperLimit(warRule, playerIndex);
-                                    if (value <= upperLimit) {
-                                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
-                                    } else {
-                                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
-                                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, upperLimit);
-                                    }
-                                    this._updateView();
+                                    WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
+                                    WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, upperLimit);
                                 }
+                                this._updateView();
                             },
                         });
                 },
@@ -994,33 +949,28 @@ namespace TwnsMeWarRulePanel {
                     : () => {
                         const minValue      = CommonConstants.WarRuleLuckMinLimit;
                         const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0190),
-                            currentValue    : "" + currValue,
-                            maxChars        : 4,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                const value         = panel.getInputValue();
+                                const lowerLimit    = WarRuleHelpers.getLuckLowerLimit(warRule, playerIndex);
+                                if (value >= lowerLimit) {
+                                    WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
                                 } else {
-                                    const lowerLimit = WarRuleHelpers.getLuckLowerLimit(warRule, playerIndex);
-                                    if (value >= lowerLimit) {
-                                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, value);
-                                    } else {
-                                        WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
-                                        WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
-                                    }
-                                    this._updateView();
+                                    WarRuleHelpers.setLuckLowerLimit(warRule, playerIndex, value);
+                                    WarRuleHelpers.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
                                 }
+                                this._updateView();
                             },
                         });
                 },
             };
         }
-        private _createDataAiCoIdInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataIsControlledByAiInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const isControlledByAi = playerRule.fixedCoIdInCcw != null;
             return {
                 titleText               : Lang.getText(LangTextType.B0645),
@@ -1044,7 +994,7 @@ namespace TwnsMeWarRulePanel {
                     },
             };
         }
-        private _createDataAiControlInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataAiCoIdInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const coId          = playerRule.fixedCoIdInCcw;
             const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
             return {
@@ -1068,6 +1018,60 @@ namespace TwnsMeWarRulePanel {
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {
                                 WarRuleHelpers.setFixedCoIdInCcw(warRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
+                                this._updateView();
+                            },
+                        });
+                    },
+            };
+        }
+        private _createDataIsControlledByAiInSrw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const isControlledByAi = playerRule.fixedCoIdInSrw != null;
+            return {
+                titleText               : Lang.getText(LangTextType.B0816),
+                infoText                : Lang.getText(isControlledByAi ? LangTextType.B0012 : LangTextType.B0013),
+                infoColor               : isControlledByAi ? 0x00FF00 : 0xFFFFFF,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        if (!warRule.ruleAvailability?.canSrw) {
+                            FloatText.show(Lang.getText(LangTextType.A0276));
+                            return;
+                        }
+
+                        const playerIndex = Helpers.getExisted(playerRule.playerIndex);
+                        if (isControlledByAi) {
+                            WarRuleHelpers.setFixedCoIdInSrw(warRule, playerIndex, null);
+                        } else {
+                            WarRuleHelpers.setFixedCoIdInSrw(warRule, playerIndex, CommonConstants.CoEmptyId);
+                        }
+                        this._updateView();
+                    },
+            };
+        }
+        private _createDataAiCoIdInSrw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const coId          = playerRule.fixedCoIdInSrw;
+            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            return {
+                titleText               : Lang.getText(LangTextType.B0815),
+                infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),
+                infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
+                callbackOnTouchedTitle  : isReviewing
+                    ? null
+                    : () => {
+                        if (!warRule.ruleAvailability?.canSrw) {
+                            FloatText.show(Lang.getText(LangTextType.A0276));
+                            return;
+                        }
+
+                        const coIdArray: number[] = [];
+                        for (const cfg of ConfigManager.getEnabledCoArray(configVersion)) {
+                            coIdArray.push(cfg.coId);
+                        }
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                            currentCoId         : playerRule.fixedCoIdInSrw ?? null,
+                            availableCoIdArray  : coIdArray,
+                            callbackOnConfirm   : (newCoId: number) => {
+                                WarRuleHelpers.setFixedCoIdInSrw(warRule, Helpers.getExisted(playerRule.playerIndex), newCoId);
                                 this._updateView();
                             },
                         });

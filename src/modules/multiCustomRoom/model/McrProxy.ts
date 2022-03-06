@@ -7,6 +7,7 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 // import McrJoinModel         from "./McrJoinModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace McrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = ProtoTypes.NetMessage;
@@ -14,19 +15,18 @@ namespace McrProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgMcrCreateRoom,                 callback: _onMsgMcrCreateRoom },
-            { msgCode: NetMessageCodes.MsgMcrJoinRoom,                   callback: _onMsgMcrJoinRoom },
-            { msgCode: NetMessageCodes.MsgMcrDeleteRoomByPlayer,         callback: _onMsgMcrDeleteRoomByPlayer },
-            { msgCode: NetMessageCodes.MsgMcrDeleteRoomByServer,         callback: _onMsgMcrDeleteRoomByServer },
-            { msgCode: NetMessageCodes.MsgMcrExitRoom,                   callback: _onMsgMcrExitRoom },
-            { msgCode: NetMessageCodes.MsgMcrDeletePlayer,               callback: _onMsgMcrDeletePlayer },
-            { msgCode: NetMessageCodes.MsgMcrSetReady,                   callback: _onMsgMcrSetReady },
-            { msgCode: NetMessageCodes.MsgMcrSetSelfSettings,            callback: _onMsgMcrSetSelfSettings },
-            { msgCode: NetMessageCodes.MsgMcrGetOwnerPlayerIndex,        callback: _onMsgMcrGetOwnerPlayerIndex },
-            { msgCode: NetMessageCodes.MsgMcrGetRoomInfo,                callback: _onMsgMcrGetRoomInfo },
-            { msgCode: NetMessageCodes.MsgMcrGetJoinableRoomInfoList,    callback: _onMsgMcrGetJoinableRoomInfoList },
-            { msgCode: NetMessageCodes.MsgMcrGetJoinedRoomInfoList,      callback: _onMsgMcrGetJoinedRoomInfoList },
-            { msgCode: NetMessageCodes.MsgMcrStartWar,                   callback: _onMsgMcrStartWar },
+            { msgCode: NetMessageCodes.MsgMcrCreateRoom,                callback: _onMsgMcrCreateRoom },
+            { msgCode: NetMessageCodes.MsgMcrJoinRoom,                  callback: _onMsgMcrJoinRoom },
+            { msgCode: NetMessageCodes.MsgMcrDeleteRoom,                callback: _onMsgMcrDeleteRoom },
+            { msgCode: NetMessageCodes.MsgMcrExitRoom,                  callback: _onMsgMcrExitRoom },
+            { msgCode: NetMessageCodes.MsgMcrDeletePlayer,              callback: _onMsgMcrDeletePlayer },
+            { msgCode: NetMessageCodes.MsgMcrSetReady,                  callback: _onMsgMcrSetReady },
+            { msgCode: NetMessageCodes.MsgMcrSetSelfSettings,           callback: _onMsgMcrSetSelfSettings },
+            { msgCode: NetMessageCodes.MsgMcrGetRoomStaticInfo,         callback: _onMsgMcrGetRoomStaticInfo },
+            { msgCode: NetMessageCodes.MsgMcrGetRoomPlayerInfo,         callback: _onMsgMcrGetRoomPlayerInfo },
+            { msgCode: NetMessageCodes.MsgMcrGetJoinableRoomIdArray,    callback: _onMsgMcrGetJoinableRoomIdArray },
+            { msgCode: NetMessageCodes.MsgMcrGetJoinedRoomIdArray,      callback: _onMsgMcrGetJoinedRoomIdArray },
+            { msgCode: NetMessageCodes.MsgMcrStartWar,                  callback: _onMsgMcrStartWar },
         ], null);
     }
 
@@ -50,31 +50,21 @@ namespace McrProxy {
     async function _onMsgMcrJoinRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrJoinRoom.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrJoinRoom(data);
             Notify.dispatch(NotifyType.MsgMcrJoinRoom, data);
         }
     }
 
-    export function reqMcrDeleteRoomByPlayer(roomId: number): void {
+    export function reqMcrDeleteRoom(roomId: number): void {
         NetManager.send({
-            MsgMcrDeleteRoomByPlayer: { c: {
+            MsgMcrDeleteRoom: { c: {
                 roomId,
             } },
         });
     }
-    function _onMsgMcrDeleteRoomByPlayer(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrDeleteRoomByPlayer.IS;
+    function _onMsgMcrDeleteRoom(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrDeleteRoom.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrDeleteRoomByPlayer, data);
-        }
-    }
-
-    function _onMsgMcrDeleteRoomByServer(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrDeleteRoomByServer.IS;
-        if (!data.errorCode) {
-            McrModel.updateOnMsgMcrDeleteRoomByServer(data);
-            McrJoinModel.updateOnMsgMcrDeleteRoomByServer();
-            Notify.dispatch(NotifyType.MsgMcrDeleteRoomByServer, data);
+            Notify.dispatch(NotifyType.MsgMcrDeleteRoom, data);
         }
     }
 
@@ -88,7 +78,6 @@ namespace McrProxy {
     async function _onMsgMcrExitRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrExitRoom.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrExitRoom(data);
             Notify.dispatch(NotifyType.MsgMcrExitRoom, data);
         }
     }
@@ -116,7 +105,6 @@ namespace McrProxy {
     async function _onMsgMcrDeletePlayer(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrDeletePlayer.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrDeletePlayer(data);
             Notify.dispatch(NotifyType.MsgMcrDeletePlayer, data);
         }
     }
@@ -132,7 +120,6 @@ namespace McrProxy {
     async function _onMsgMcrSetReady(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrSetReady.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrSetReady(data);
             Notify.dispatch(NotifyType.MsgMcrSetReady, data);
         }
     }
@@ -145,62 +132,68 @@ namespace McrProxy {
     async function _onMsgMcrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrSetSelfSettings.IS;
         if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrSetSelfSettings(data);
             Notify.dispatch(NotifyType.MsgMcrSetSelfSettings, data);
         }
     }
 
-    async function _onMsgMcrGetOwnerPlayerIndex(e: egret.Event): Promise<void> {
-        const data = e.data as NetMessage.MsgMcrGetOwnerPlayerIndex.IS;
-        if (!data.errorCode) {
-            await McrModel.updateOnMsgMcrGetOwnerPlayerIndex(data);
-            Notify.dispatch(NotifyType.MsgMcrGetOwnerPlayerIndex, data);
-        }
-    }
-
-    export function reqMcrGetRoomInfo(roomId: number): void {
+    export function reqMcrGetRoomStaticInfo(roomId: number): void {
         NetManager.send({
-            MsgMcrGetRoomInfo: { c: {
+            MsgMcrGetRoomStaticInfo: { c: {
                 roomId,
             }, },
         });
     }
-    function _onMsgMcrGetRoomInfo(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
-        if (data.errorCode) {
-            Notify.dispatch(NotifyType.MsgMcrGetRoomInfoFailed, data);
-        } else {
-            McrModel.updateOnMsgMcrGetRoomInfo(data);
-            Notify.dispatch(NotifyType.MsgMcrGetRoomInfo, data);
+    function _onMsgMcrGetRoomStaticInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrGetRoomStaticInfo.IS;
+        if (!data.errorCode) {
+            McrModel.setRoomStaticInfo(Helpers.getExisted(data.roomId), data.roomStaticInfo ?? null);
+            Notify.dispatch(NotifyType.MsgMcrGetRoomStaticInfo, data);
         }
     }
 
-    export function reqMcrGetJoinableRoomInfoList(): void {
+    export function reqMcrGetRoomPlayerInfo(roomId: number): void {
         NetManager.send({
-            MsgMcrGetJoinableRoomInfoList: { c: {
+            MsgMcrGetRoomPlayerInfo: { c: {
+                roomId,
             }, },
         });
     }
-    function _onMsgMcrGetJoinableRoomInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetJoinableRoomInfoList.IS;
+    function _onMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrGetRoomPlayerInfo.IS;
         if (!data.errorCode) {
-            McrModel.setJoinableRoomInfoList(data.roomInfoList || []);
-            McrJoinModel.updateOnMsgMcrGetJoinableRoomInfoList();
-            Notify.dispatch(NotifyType.MsgMcrGetJoinableRoomInfoList, data);
+            McrModel.setRoomPlayerInfo(Helpers.getExisted(data.roomId), data.roomPlayerInfo ?? null);
+            Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfo, data);
         }
     }
 
-    export function reqMcrGetJoinedRoomInfoList(): void {
+    export function reqMcrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<ProtoTypes.MultiCustomRoom.IRoomFilter>): void {
         NetManager.send({
-            MsgMcrGetJoinedRoomInfoList: { c: {
+            MsgMcrGetJoinableRoomIdArray: { c: {
+                roomFilter,
+            }, },
+        });
+    }
+    function _onMsgMcrGetJoinableRoomIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrGetJoinableRoomIdArray.IS;
+        if (!data.errorCode) {
+            McrModel.setJoinableRoomIdArray(data.roomIdArray || []);
+            McrJoinModel.updateOnMsgMcrGetJoinableRoomIdArray();
+            Notify.dispatch(NotifyType.MsgMcrGetJoinableRoomIdArray, data);
+        }
+    }
+
+    export function reqMcrGetJoinedRoomIdArray(): void {
+        NetManager.send({
+            MsgMcrGetJoinedRoomIdArray: { c: {
             }, }
         });
     }
-    function _onMsgMcrGetJoinedRoomInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetJoinedRoomInfoList.IS;
+    function _onMsgMcrGetJoinedRoomIdArray(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrGetJoinedRoomIdArray.IS;
         if (!data.errorCode) {
-            McrModel.setJoinedRoomInfoList(data.roomInfoList || []);
-            Notify.dispatch(NotifyType.MsgMcrGetJoinedRoomInfoList, data);
+            McrModel.setJoinedRoomIdArray(data.roomIdArray || []);
+            McrJoinModel.updateOnMsgMcrGetJoinedRoomIdArray();
+            Notify.dispatch(NotifyType.MsgMcrGetJoinedRoomIdArray, data);
         }
     }
 

@@ -57,7 +57,9 @@ namespace TwnsCcrMainMenuPanel {
                 { ui: this._btnFreeMode,        callback: this._onTouchedBtnFreeMode },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
+                { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
             ]);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -119,6 +121,16 @@ namespace TwnsCcrMainMenuPanel {
 
         private _onMsgUserLogout(): void {
             this.close();
+        }
+        private _onMsgMpwCommonGetWarProgressInfo(): void {
+            this._updateBtnContinueWar();
+            this._updateBtnNormalMode();
+            this._updateBtnFreeMode();
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
+        }
+        private _onMsgMpwWatchGetRequestedWarIdArray(): void {
+            this._updateBtnMultiPlayer();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -213,10 +225,28 @@ namespace TwnsCcrMainMenuPanel {
         }
 
         private async _updateView(): Promise<void> {
+            this._updateBtnContinueWar();
+            this._updateBtnNormalMode();
+            this._updateBtnFreeMode();
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
+
             this._btnMyRoom.setRedVisible(await CcrModel.checkIsRed());
-            this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyCcwWars());
-            this._btnNormalMode.setRedVisible(MpwModel.checkIsRedForMyMcwWars() || await McrModel.checkIsRed());
-            this._btnFreeMode.setRedVisible(MpwModel.checkIsRedForMyMfwWars() || await MfrModel.checkIsRed());
+        }
+        private async _updateBtnContinueWar(): Promise<void> {
+            this._btnContinueWar.setRedVisible(await MpwModel.checkIsRedForMyCcwWars());
+        }
+        private async _updateBtnNormalMode(): Promise<void> {
+            this._btnNormalMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiCustomMode());
+        }
+        private async _updateBtnFreeMode(): Promise<void> {
+            this._btnFreeMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiFreeMode());
+        }
+        private async _updateBtnMultiPlayer(): Promise<void> {
+            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
+        }
+        private async _updateBtnRanking(): Promise<void> {
+            this._btnRanking.setRedVisible(await TwnsLobbyModel.checkIsRedForRanking());
         }
     }
 }

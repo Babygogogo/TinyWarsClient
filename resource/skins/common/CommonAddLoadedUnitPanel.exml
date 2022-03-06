@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTextInput="TwnsUiTextInput.*"
+        xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*"
+        xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group width="760" horizontalCenter="0" height="260" verticalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" top="0" bottom="0" right="0" locked="true" />
+        <TwnsUiLabel:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
+                             horizontalCenter="0" locked="true" />
+        <e:Group y="40" horizontalCenter="0">
+            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                                 anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
+            <e:Group left="0" right="0" top="0">
+                <e:Group y="-69" left="0" right="0" x="-158" width="750">
+                    <TwnsUiLabel:UiLabel id="_labelError" text="error" size="16" textColor="0xffffff" verticalCenter="0"
+                                         x="10" />
+                </e:Group>
+                <e:Group width="750" x="345" y="88">
+                    <e:Group x="261" y="0">
+                        <TwnsUiButton:UiButton id="_btnUnitType" label="Unit Type"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100"
+                                               right="0" top="0" x="10" y="10" />
+                        <TwnsUiLabel:UiLabel id="_labelUnitType" text="Transport Copter" size="18" textColor="0xFFFFFF"
+                                             x="0" y="12" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="508" y="10">
+                        <TwnsUiButton:UiButton id="_btnAiMode" label="A.I. Mode"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100"
+                                               right="0" top="0" x="10" y="10" />
+                        <TwnsUiLabel:UiLabel id="_labelAiMode" text="Transport Copter" size="18" textColor="0xFFFFFF"
+                                             x="0" y="12" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:layout>
+                        <e:HorizontalLayout gap="40" />
+                    </e:layout>
+                </e:Group>
+                <e:Group width="750" x="355" y="98">
+                    <e:Group x="271" y="10">
+                        <TwnsUiButton:UiButton id="_btnActionState" label="Action State"
+                                               skinName="Skins.Component.Button.ButtonSelfAdaption001" width="100"
+                                               right="0" top="0" x="10" y="10" />
+                        <TwnsUiLabel:UiLabel id="_labelActionState" text="Idle" size="18" textColor="0xFFFFFF" x="0"
+                                             y="12" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="10" y="-26">
+                        <TwnsUiLabel:UiLabel id="_labelHp" text="HP" size="18" textColor="0xFFFFFF" x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputHp" width="40" x="58" y="0" anchorOffsetX="0"
+                                                     anchorOffsetY="0" maxChars="20">
+                            <TwnsUiButton:skinName>
+                                <e:Skin width="100" height="30">
+                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
+                                    <e:EditableText id="textDisplay" size="20" left="0" right="0" height="30"
+                                                    textColor="0xffffff" />
+                                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0"
+                                             text="" height="30" textColor="0x808080" />
+                                </e:Skin>
+                            </TwnsUiButton:skinName>
+                        </TwnsUiTextInput:UiTextInput>
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="20" y="-16">
+                        <TwnsUiLabel:UiLabel id="_labelFuel" text="Fuel" size="18" textColor="0xFFFFFF" x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputFuel" width="40" x="58" y="0" anchorOffsetX="0"
+                                                     anchorOffsetY="0" maxChars="20">
+                            <TwnsUiButton:skinName>
+                                <e:Skin width="100" height="30">
+                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
+                                    <e:EditableText id="textDisplay" size="20" left="0" right="0" height="30"
+                                                    textColor="0xffffff" />
+                                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0"
+                                             text="" height="30" textColor="0x808080" />
+                                </e:Skin>
+                            </TwnsUiButton:skinName>
+                        </TwnsUiTextInput:UiTextInput>
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="30" y="-6">
+                        <TwnsUiLabel:UiLabel id="_labelPromotion" text="Promotion" size="18" textColor="0xFFFFFF" x="0"
+                                             y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputPromotion" width="40" x="58" y="0" anchorOffsetX="0"
+                                                     anchorOffsetY="0" maxChars="20">
+                            <TwnsUiButton:skinName>
+                                <e:Skin width="100" height="30">
+                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
+                                    <e:EditableText id="textDisplay" size="20" left="0" right="0" height="30"
+                                                    textColor="0xffffff" />
+                                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0"
+                                             text="" height="30" textColor="0x808080" />
+                                </e:Skin>
+                            </TwnsUiButton:skinName>
+                        </TwnsUiTextInput:UiTextInput>
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group id="_groupHasLoadedCo" right="0" top="0">
+                        <e:Group x="0" y="0">
+                            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5"
+                                                 source="common0005" />
+                            <TwnsUiImage:UiImage id="_imgHasLoadedCo" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                                                 x="0" source="common0006" y="0" />
+                        </e:Group>
+                        <TwnsUiLabel:UiLabel id="_labelHasLoadedCo" text="Has Loaded CO" size="18" textColor="0xFFFFFF"
+                                             x="10" y="10" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:layout>
+                        <e:HorizontalLayout gap="30" />
+                    </e:layout>
+                </e:Group>
+                <e:Group width="750" x="355" y="98">
+                    <e:Group id="_groupPrimaryAmmo" x="0" y="-72">
+                        <TwnsUiLabel:UiLabel id="_labelPrimaryAmmo" text="Primary Ammo" size="18" textColor="0xFFFFFF"
+                                             x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputPrimaryAmmo" width="40" x="58" y="0" anchorOffsetX="0"
+                                                     anchorOffsetY="0" maxChars="20">
+                            <TwnsUiButton:skinName>
+                                <e:Skin width="100" height="30">
+                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
+                                    <e:EditableText id="textDisplay" size="20" left="0" right="0" height="30"
+                                                    textColor="0xffffff" />
+                                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0"
+                                             text="" height="30" textColor="0x808080" />
+                                </e:Skin>
+                            </TwnsUiButton:skinName>
+                        </TwnsUiTextInput:UiTextInput>
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group id="_groupFlareAmmo" x="0" y="-36">
+                        <TwnsUiLabel:UiLabel id="_labelFlareAmmo" text="Flare Ammo" size="18" textColor="0xFFFFFF" x="0"
+                                             y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputFlareAmmo" width="40" x="58" y="0" anchorOffsetX="0"
+                                                     anchorOffsetY="0" maxChars="20">
+                            <TwnsUiButton:skinName>
+                                <e:Skin width="100" height="30">
+                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
+                                    <e:EditableText id="textDisplay" size="20" left="0" right="0" height="30"
+                                                    textColor="0xffffff" />
+                                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0"
+                                             text="" height="30" textColor="0x808080" />
+                                </e:Skin>
+                            </TwnsUiButton:skinName>
+                        </TwnsUiTextInput:UiTextInput>
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group id="_groupIsDiving" right="0" top="0">
+                        <e:Group x="0" y="0">
+                            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5"
+                                                 source="common0005" />
+                            <TwnsUiImage:UiImage id="_imgIsDiving" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                                                 source="common0006" y="0" />
+                        </e:Group>
+                        <TwnsUiLabel:UiLabel id="_labelIsDiving" text="Is Diving" size="18" textColor="0xFFFFFF" x="10"
+                                             y="10" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:layout>
+                        <e:HorizontalLayout gap="40" paddingLeft="10" />
+                    </e:layout>
+                </e:Group>
+                <e:Group width="750" x="365" y="108">
+                    <e:Group id="_groupBuildMaterial" x="0" y="-72">
+                        <TwnsUiLabel:UiLabel id="_labelBuildMaterial" text="Build Material" size="18"
+                                             textColor="0xFFFFFF" x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputBuildMaterial" width="40" x="58" y="0" anchorOffsetX="0"
+                                                     anchorOffsetY="0" maxChars="20">
+                            <TwnsUiButton:skinName>
+                                <e:Skin width="100" height="30">
+                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
+                                    <e:EditableText id="textDisplay" size="20" left="0" right="0" height="30"
+                                                    textColor="0xffffff" />
+                                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0"
+                                             text="" height="30" textColor="0x808080" />
+                                </e:Skin>
+                            </TwnsUiButton:skinName>
+                        </TwnsUiTextInput:UiTextInput>
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group id="_groupProduceMaterial" x="0" y="-36">
+                        <TwnsUiLabel:UiLabel id="_labelProduceMaterial" text="ProduceMaterial" size="18"
+                                             textColor="0xFFFFFF" x="0" y="12" />
+                        <TwnsUiTextInput:UiTextInput id="_inputProduceMaterial" width="40" x="58" y="0"
+                                                     anchorOffsetX="0" anchorOffsetY="0" maxChars="20">
+                            <TwnsUiButton:skinName>
+                                <e:Skin width="100" height="30">
+                                    <e:Image source="uncompressedColorPink0000" left="0" right="0" y="27" />
+                                    <e:EditableText id="textDisplay" size="20" left="0" right="0" height="30"
+                                                    textColor="0xffffff" />
+                                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0"
+                                             text="" height="30" textColor="0x808080" />
+                                </e:Skin>
+                            </TwnsUiButton:skinName>
+                        </TwnsUiTextInput:UiTextInput>
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <e:layout>
+                        <e:HorizontalLayout gap="40" paddingLeft="10" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout paddingTop="6" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
+        <e:Group horizontalCenter="0" bottom="10">
+            <TwnsUiButton:UiButton id="_btnConfirm" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                   width="120" x="0" y="0" />
+            <TwnsUiButton:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                   width="120" x="0" y="0" />
+            <e:layout>
+                <e:HorizontalLayout gap="60" />
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

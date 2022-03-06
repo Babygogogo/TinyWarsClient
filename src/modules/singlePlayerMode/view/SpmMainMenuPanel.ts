@@ -24,6 +24,7 @@ namespace TwnsSpmMainMenuPanel {
     export class SpmMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupLeft!            : eui.Group;
         private readonly _btnCampaign!          : TwnsUiButton.UiButton;
+        private readonly _btnCreateWarRoom!     : TwnsUiButton.UiButton;
         private readonly _btnCreateCustomWar!   : TwnsUiButton.UiButton;
         private readonly _btnContinueWar!       : TwnsUiButton.UiButton;
 
@@ -37,15 +38,18 @@ namespace TwnsSpmMainMenuPanel {
                 { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
                 { ui: this._btnCampaign,        callback: this._onTouchedBtnCampaign },
+                { ui: this._btnCreateWarRoom,   callback: this._onTouchedBtnCreateWarRoom },
                 { ui: this._btnCreateCustomWar, callback: this._onTouchedBtnCreateCustomWar },
                 { ui: this._btnContinueWar,     callback: this._onTouchedBtnContinueWar },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.MsgUserLogout,                   callback: this._onMsgUserLogout },
-                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,     callback: this._onMsgMcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,     callback: this._onMsgMfrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,     callback: this._onMsgCcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,   callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onMsgMcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgCcrGetJoinedRoomIdArray,         callback: this._onMsgCcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
+                { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
             ]);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -74,6 +78,12 @@ namespace TwnsSpmMainMenuPanel {
         private _onTouchedBtnCampaign(): void {
             FloatText.show(Lang.getText(LangTextType.A0053));
         }
+        private _onTouchedBtnCreateWarRoom(): void {
+            this.close();
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
+            TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.SrrCreateMapListPanel, null);
+        }
         private _onTouchedBtnCreateCustomWar(): void {
             this.close();
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
@@ -87,10 +97,10 @@ namespace TwnsSpmMainMenuPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.SpmWarListPanel, void 0);
         }
 
-        private _onMsgMcrGetJoinedRoomInfoList(): void {
+        private _onMsgMcrGetJoinedRoomIdArray(): void {
             this._updateBtnMultiPlayer();
         }
-        private _onMsgMfrGetJoinedRoomInfoList(): void {
+        private _onMsgMfrGetJoinedRoomIdArray(): void {
             this._updateBtnMultiPlayer();
         }
         private _onMsgCcrGetJoinedRoomInfoList(): void {
@@ -99,24 +109,24 @@ namespace TwnsSpmMainMenuPanel {
         private _onMsgMrrGetMyRoomPublicInfoList(): void {
             this._updateBtnRanking();
         }
+        private _onMsgMpwCommonGetWarProgressInfo(): void {
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
+        }
+        private _onMsgMpwWatchGetRequestedWarIdArray(): void {
+            this._updateBtnMultiPlayer();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private async _updateBtnMultiPlayer(): Promise<void> {
-            this._btnMultiPlayer.setRedVisible(
-                (MpwModel.checkIsRedForMyMcwWars()) ||
-                (MpwModel.checkIsRedForMyMfwWars()) ||
-                (MpwModel.checkIsRedForMyCcwWars()) ||
-                (await McrModel.checkIsRed())       ||
-                (await MfrModel.checkIsRed())       ||
-                (await CcrModel.checkIsRed())
-            );
+            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MpwModel.checkIsRedForMyMrwWars())   ||
                 (await MrrModel.checkIsRed())
             );
         }
@@ -156,9 +166,15 @@ namespace TwnsSpmMainMenuPanel {
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
+                obj         : this._btnCreateWarRoom,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 66,
+                endProps    : { alpha: 1, left: 0 },
+            });
+            Helpers.resetTween({
                 obj         : this._btnCreateCustomWar,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 100,
+                waitTime    : 133,
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({

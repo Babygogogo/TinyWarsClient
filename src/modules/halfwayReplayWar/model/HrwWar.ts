@@ -45,6 +45,7 @@ namespace TwnsHrwWar {
         private _settingsForCcw?                    : ProtoTypes.WarSettings.ISettingsForCcw | null;
         private _watcherTeamIndexes?                : Set<number>;
 
+        private _pauseTimeMs                        = 1000;
         private _isAutoReplay                       = false;
         private _nextActionId                       = 0;
         private _checkpointIdsForNextActionId       = new Map<number, number>();
@@ -142,7 +143,8 @@ namespace TwnsHrwWar {
             const nickname      = await this.getPlayerInTurn().getNickname();
             const playerIndex   = this.getPlayerIndexInTurn();
             const suffix        = this._getDescSuffix();
-            if (!action.extraData?.isAgree) {
+            const isAgree       = action.extraData ? action.extraData.isAgree : action.isAgree;
+            if (!isAgree) {
                 return `${Lang.getFormattedText(LangTextType.F0017, playerIndex, nickname)} ${suffix}`;
             } else {
                 if (this.getDrawVoteManager().getRemainingVotes()) {
@@ -284,6 +286,9 @@ namespace TwnsHrwWar {
             return null;
         }
 
+        public getBootRestTime(): number | null {
+            return null;
+        }
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }
@@ -320,6 +325,13 @@ namespace TwnsHrwWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public getPauseTimeMs(): number {
+            return this._pauseTimeMs;
+        }
+        public setPauseTimeMs(time: number): void {
+            this._pauseTimeMs = time;
+        }
+
         public getNextActionId(): number {
             return this._nextActionId;
         }
@@ -513,7 +525,7 @@ namespace TwnsHrwWar {
                     if ((!this.checkIsInEnd()) && (this.getIsAutoReplay()) && (!this.getIsExecutingAction()) && (this.getIsRunning())) {
                         this._doExecuteAction(this.getNextAction(), isFastExecute);
                     }
-                }, null, 1000);
+                }, null, this.getPauseTimeMs());
             }
         }
     }

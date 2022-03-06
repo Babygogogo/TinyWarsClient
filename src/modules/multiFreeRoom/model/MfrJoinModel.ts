@@ -7,10 +7,12 @@
 // import TwnsNotifyType       from "../../tools/notify/NotifyType";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MfrJoinModel {
-    import NotifyType       = TwnsNotifyType.NotifyType;
-    import IMfrRoomInfo     = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import NotifyType           = TwnsNotifyType.NotifyType;
+    import IMfrRoomStaticInfo   = ProtoTypes.MultiFreeRoom.IMfrRoomStaticInfo;
+    import IMfrRoomPlayerInfo   = ProtoTypes.MultiFreeRoom.IMfrRoomPlayerInfo;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     type DataForJoinRoom    = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
 
@@ -24,13 +26,13 @@ namespace MfrJoinModel {
     function getData(): DataForJoinRoom {
         return _dataForJoinRoom;
     }
-    export function getFastJoinData(roomInfo: IMfrRoomInfo): DataForJoinRoom | null {
-        const playerIndex = generateAvailablePlayerIndexArray(roomInfo)[0];
+    export function getFastJoinData(roomStaticInfo: IMfrRoomStaticInfo, roomPlayerInfo: IMfrRoomPlayerInfo): DataForJoinRoom | null {
+        const playerIndex = generateAvailablePlayerIndexArray(roomStaticInfo, roomPlayerInfo)[0];
         if (playerIndex == null) {
             return null;
         } else {
             return {
-                roomId          : roomInfo.roomId,
+                roomId          : roomStaticInfo.roomId,
                 isReady         : false,
                 playerIndex,
             };
@@ -57,10 +59,10 @@ namespace MfrJoinModel {
         }
     }
 
-    function generateAvailablePlayerIndexArray(roomInfo: IMfrRoomInfo): number[] {
-        const playerDataArray   = Helpers.getExisted(roomInfo.playerDataList);
+    function generateAvailablePlayerIndexArray(roomStaticInfo: IMfrRoomStaticInfo, roomPlayerInfo: IMfrRoomPlayerInfo): number[] {
+        const playerDataArray   = Helpers.getExisted(roomPlayerInfo.playerDataList);
         const indexArray        : number[] = [];
-        for (const player of Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.playerManager?.players)) {
+        for (const player of Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.playerManager?.players)) {
             const playerIndex = Helpers.getExisted(player.playerIndex);
             if ((player.aliveState !== Types.PlayerAliveState.Dead)         &&
                 (playerIndex !== CommonConstants.WarNeutralPlayerIndex)     &&

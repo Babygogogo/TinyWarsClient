@@ -19,9 +19,8 @@
 // import TwnsUiTextInput          from "../../tools/ui/UiTextInput";
 // import McrCreateModel           from "../model/McrCreateModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMcrCreateAdvancedSettingsPage {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;

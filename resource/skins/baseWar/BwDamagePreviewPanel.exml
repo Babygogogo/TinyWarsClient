@@ -2,12 +2,12 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
         xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
         xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_group" width="150" height="60" y="240" x="405">
+    <e:Group id="_group" width="160" height="60" y="240" x="405">
         <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.9" left="0" right="0" top="0" bottom="0"
                              source="uncompressedColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
         <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorWhite0000" height="1"
-                             verticalCenter="-0.5" left="0" right="0" />
-        <e:Group horizontalCenter="0" verticalCenter="1">
+                             verticalCenter="-0.5" left="0" right="20" smoothing="false" />
+        <e:Group verticalCenter="1" x="10">
             <e:Group x="0" y="0">
                 <TwnsUiLabel:UiLabel id="_labelAttackTitle" text="Deal:" x="0" y="0" size="18" stroke="1"
                                      strokeColor="0xFFFFFF" textColor="0x000000" />
@@ -19,5 +19,6 @@
                 <TwnsUiLabel:UiLabel text="100 / 100" x="50" id="_labelCounterValue" size="18" top="0" />
             </e:Group>
         </e:Group>
+        <TwnsUiImage:UiImage source="commonIcon0023" verticalCenter="0" right="4" scaleX="0.3" scaleY="0.3" />
     </e:Group>
 </e:Skin>

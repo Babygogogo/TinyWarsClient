@@ -13,6 +13,7 @@
 // import UserModel            from "../../user/model/UserModel";
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace ScrCreateModel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;

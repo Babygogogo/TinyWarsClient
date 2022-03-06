@@ -745,10 +745,38 @@ namespace TwnsMpwActionPlanner {
                     if (this.getUnitForPreviewingMovableArea() !== unit) {
                         return State.PreviewingUnitMovableArea;
                     } else {
+                        return State.PreviewingUnitVisibleArea;
+                    }
+                }
+            }
+        }
+        protected _getNextStateOnTapWhenPreviewingUnitVisibleArea(gridIndex: GridIndex): State {
+            const turnManager       = this._getTurnManager();
+            const unit              = this._getUnitMap().getUnitOnMap(gridIndex);
+            const selfPlayerIndex   = this._getPlayerIndexLoggedIn();
+            const isSelfInTurn      = (turnManager.getPlayerIndexInTurn() === selfPlayerIndex) && (turnManager.getPhaseCode() === TurnPhaseCode.Main);
+            if (!unit) {
+                const tile = this._getTileMap().getTile(gridIndex);
+                if ((isSelfInTurn) && (selfPlayerIndex != null) && (tile.checkIsUnitProducerForPlayer(selfPlayerIndex))) {
+                    return State.ChoosingProductionTarget;
+                } else {
+                    if (tile.checkIsMapWeapon()) {
+                        return State.PreviewingTileAttackableArea;
+                    } else {
+                        return State.Idle;
+                    }
+                }
+            } else {
+                if ((isSelfInTurn) && ((unit.getActionState() === UnitState.Idle) && (unit.getPlayerIndex() === selfPlayerIndex))) {
+                    return State.MakingMovePath;
+                } else {
+                    if (this.getUnitForPreviewingVisibleArea() !== unit) {
+                        return State.PreviewingUnitVisibleArea;
+                    } else {
                         if (unit.checkHasWeapon()) {
                             return State.PreviewingUnitAttackableArea;
                         } else {
-                            return State.Idle;
+                            return State.PreviewingUnitMovableArea;
                         }
                     }
                 }

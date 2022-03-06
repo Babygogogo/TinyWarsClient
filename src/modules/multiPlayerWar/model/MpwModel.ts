@@ -36,19 +36,27 @@ namespace MpwModel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
-    import IMpwWarInfo                              = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarActionContainer                      = ProtoTypes.WarAction.IWarActionContainer;
     import IWarRule                                 = ProtoTypes.WarRule.IWarRule;
+    import IMpwWarSettings                          = ProtoTypes.MultiPlayerWar.IMpwWarSettings;
+    import IMpwWarProgressInfo                      = ProtoTypes.MultiPlayerWar.IMpwWarProgressInfo;
+    import ISettingsForCommon                       = ProtoTypes.WarSettings.ISettingsForCommon;
     import ISettingsForMcw                          = ProtoTypes.WarSettings.ISettingsForMcw;
     import ISettingsForCcw                          = ProtoTypes.WarSettings.ISettingsForCcw;
     import ISettingsForMrw                          = ProtoTypes.WarSettings.ISettingsForMrw;
     import ISettingsForMfw                          = ProtoTypes.WarSettings.ISettingsForMfw;
     import ISerialWar                               = ProtoTypes.WarSerialization.ISerialWar;
+    import MsgMpwCommonGetWarSettingsIs             = ProtoTypes.NetMessage.MsgMpwCommonGetWarSettings.IS;
+    import MsgMpwCommonGetWarProgressInfoIs         = ProtoTypes.NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
-    let _allWarInfoList         : IMpwWarInfo[] = [];
+    const _NOTIFY_LISTENERS     : Notify.Listener[] = [
+        { type: NotifyType.MsgMpwWatchGetIncomingInfo,      callback: _onNotifyMsgMpwWatchGetIncomingInfo },
+        { type: NotifyType.MsgMpwWatchGetOutgoingInfo,      callback: _onNotifyMsgMpwWatchGetOutgoingInfo },
+    ];
+    let _allMyWarIdArray        : number[] = [];
     let _mcwPreviewingWarId     : number | null = null;
     let _mrwPreviewingWarId     : number | null = null;
     let _mfwPreviewingWarId     : number | null = null;
@@ -58,29 +66,47 @@ namespace MpwModel {
     const _cachedActions        : IWarActionContainer[] = [];
 
     export function init(): void {
-        // nothing to do.
+        Notify.addEventListeners(_NOTIFY_LISTENERS);
     }
 
-    export function setAllMyWarInfoList(infoList: IMpwWarInfo[]): void {
-        _allWarInfoList = infoList || [];
+    export function setAllMyWarIdArray(idArray: number[]): void {
+        _allMyWarIdArray = idArray || [];
     }
-    function getAllMyWarInfoList(): IMpwWarInfo[] {
-        return _allWarInfoList;
+    export async function getMyMcwWarIdArray(): Promise<number[]> {
+        const warIdArray: number[] = [];
+        for (const warId of _allMyWarIdArray) {
+            if ((await getWarSettings(warId))?.settingsForMcw) {
+                warIdArray.push(warId);
+            }
+        }
+        return warIdArray;
     }
-    export function getMyMcwWarInfoArray(): IMpwWarInfo[] {
-        return getAllMyWarInfoList().filter(v => v.settingsForMcw != null);
+    export async function getMyMrwWarIdArray(): Promise<number[]> {
+        const warIdArray: number[] = [];
+        for (const warId of _allMyWarIdArray) {
+            if ((await getWarSettings(warId))?.settingsForMrw) {
+                warIdArray.push(warId);
+            }
+        }
+        return warIdArray;
     }
-    export function getMyMrwWarInfoArray(): IMpwWarInfo[] {
-        return getAllMyWarInfoList().filter(v => v.settingsForMrw != null);
+    export async function getMyMfwWarIdArray(): Promise<number[]> {
+        const warIdArray: number[] = [];
+        for (const warId of _allMyWarIdArray) {
+            if ((await getWarSettings(warId))?.settingsForMfw) {
+                warIdArray.push(warId);
+            }
+        }
+        return warIdArray;
     }
-    export function getMyMfwWarInfoArray(): IMpwWarInfo[] {
-        return getAllMyWarInfoList().filter(v => v.settingsForMfw != null);
-    }
-    export function getMyCcwWarInfoArray(): IMpwWarInfo[] {
-        return getAllMyWarInfoList().filter(v => v.settingsForCcw != null);
-    }
-    export function getMyWarInfo(warId: number): IMpwWarInfo | null {
-        return getAllMyWarInfoList().find(v => v.warId === warId) ?? null;
+    export async function getMyCcwWarIdArray(): Promise<number[]> {
+        const warIdArray: number[] = [];
+        for (const warId of _allMyWarIdArray) {
+            if ((await getWarSettings(warId))?.settingsForCcw) {
+                warIdArray.push(warId);
+            }
+        }
+        return warIdArray;
     }
 
     export function getMcwPreviewingWarId(): number | null {
@@ -123,52 +149,90 @@ namespace MpwModel {
         }
     }
 
-    export function checkIsRedForMyMcwWars(): boolean {
-        return checkIsRedForMyWars(getMyMcwWarInfoArray());
+    export async function checkIsRedForMyMcwWars(): Promise<boolean> {
+        return checkIsRedForMyWars(await getMyMcwWarIdArray());
     }
-    export function checkIsRedForMyMrwWars(): boolean {
-        return checkIsRedForMyWars(getMyMrwWarInfoArray());
+    export async function checkIsRedForMyMrwWars(): Promise<boolean> {
+        return checkIsRedForMyWars(await getMyMrwWarIdArray());
     }
-    export function checkIsRedForMyMfwWars(): boolean {
-        return checkIsRedForMyWars(getMyMfwWarInfoArray());
+    export async function checkIsRedForMyMfwWars(): Promise<boolean> {
+        return checkIsRedForMyWars(await getMyMfwWarIdArray());
     }
-    export function checkIsRedForMyCcwWars(): boolean {
-        return checkIsRedForMyWars(getMyCcwWarInfoArray());
+    export async function checkIsRedForMyCcwWars(): Promise<boolean> {
+        return checkIsRedForMyWars(await getMyCcwWarIdArray());
     }
-    export function checkIsRedForMyWar(warInfo: IMpwWarInfo | null): boolean {
-        if (warInfo == null) {
+    export function checkIsRedForMyWar(progressInfo: IMpwWarProgressInfo | null): boolean {
+        if (progressInfo == null) {
             return false;
         } else {
             const selfUserId = UserModel.getSelfUserId();
-            return (warInfo.playerInfoList || []).some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
+            return (progressInfo.playerInfoList || []).some(v => (v.playerIndex === progressInfo.playerIndexInTurn) && (v.userId === selfUserId));
         }
     }
-    function checkIsRedForMyWars(wars: IMpwWarInfo[]): boolean {
-        return wars.some(warInfo => checkIsRedForMyWar(warInfo));
+    async function checkIsRedForMyWars(warIdArray: number[]): Promise<boolean> {
+        for (const warId of warIdArray) {
+            const warProgressInfo = await getWarProgressInfo(warId);
+            if (checkIsRedForMyWar(warProgressInfo)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for war settings.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    const _warSettingsAccessor = Helpers.createCachedDataAccessor<number, IMpwWarSettings>({
+        reqData : (warId: number) => MpwProxy.reqMpwCommonGetWarSettings(warId),
+    });
+
+    export function getWarSettings(warId: number): Promise<IMpwWarSettings | null> {
+        return _warSettingsAccessor.getData(warId);
+    }
+
+    export async function updateOnMsgMpwCommonGetWarSettings(data: MsgMpwCommonGetWarSettingsIs): Promise<void> {
+        _warSettingsAccessor.setData(Helpers.getExisted(data.warId), data.warSettings ?? null);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for war progress info.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    const _warProgressInfoGetter = Helpers.createCachedDataAccessor<number, IMpwWarProgressInfo>({
+        reqData : (warId: number) => MpwProxy.reqMpwCommonGetWarProgressInfo(warId),
+    });
+
+    export function getWarProgressInfo(warId: number): Promise<IMpwWarProgressInfo | null> {
+        return _warProgressInfoGetter.getData(warId);
+    }
+
+    export async function updateOnMsgMpwCommonGetWarProgressInfo(data: MsgMpwCommonGetWarProgressInfoIs): Promise<void> {
+        _warProgressInfoGetter.setData(Helpers.getExisted(data.warId), data.warProgressInfo ?? null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function createDataForCommonWarBasicSettingsPage(warId: number | null): Promise<OpenDataForCommonWarBasicSettingsPage> {
-        const warInfo = warId == null ? null : getMyWarInfo(warId);
+        const warInfo = warId == null ? null : await getWarSettings(warId);
         if (warInfo == null) {
             return null;
         }
 
-        const warRule                                                               = Helpers.getExisted(warInfo.settingsForCommon?.warRule);
+        const settingsForCommon                                                     = Helpers.getExisted(warInfo.settingsForCommon);
+        const warRule                                                               = Helpers.getExisted(settingsForCommon.warRule);
         const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
         if (settingsForMcw) {
-            return await createDataForCommonWarBasicSettingsPageForMcw(warRule, settingsForMcw);
+            return await createDataForCommonWarBasicSettingsPageForMcw(warRule, settingsForCommon, settingsForMcw);
         } else if (settingsForCcw) {
-            return await createDataForCommonWarBasicSettingsPageForCcw(warRule, settingsForCcw);
+            return await createDataForCommonWarBasicSettingsPageForCcw(warRule, settingsForCommon, settingsForCcw);
         } else if (settingsForMrw) {
-            return await createDataForCommonWarBasicSettingsPageForMrw(warRule, settingsForMrw);
+            return await createDataForCommonWarBasicSettingsPageForMrw(warRule, settingsForCommon, settingsForMrw);
         } else if (settingsForMfw) {
-            return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForMfw);
+            return await createDataForCommonWarBasicSettingsPageForMfw(warRule, settingsForCommon, settingsForMfw);
         } else {
             throw Helpers.newError(`Invalid warInfo.`);
         }
     }
-    async function createDataForCommonWarBasicSettingsPageForMcw(warRule: IWarRule, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMcw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMcw: ISettingsForMcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForMcw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -216,6 +280,12 @@ namespace MpwModel {
                     callbackOnModify: null,
                 },
                 {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
@@ -251,7 +321,7 @@ namespace MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForCcw(warRule: IWarRule, settingsForCcw: ISettingsForCcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForCcw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForCcw: ISettingsForCcw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForCcw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -299,6 +369,12 @@ namespace MpwModel {
                     callbackOnModify: null,
                 },
                 {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
@@ -334,7 +410,7 @@ namespace MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForMrw(warRule: IWarRule, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMrw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMrw: ISettingsForMrw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = CommonConstants.WarBootTimerDefaultParams;
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -360,6 +436,12 @@ namespace MpwModel {
                 {
                     settingsType    : WarBasicSettingsType.Weather,
                     currentValue    : null,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
                     warRule,
                     callbackOnModify: null,
                 },
@@ -399,7 +481,7 @@ namespace MpwModel {
 
         return openData;
     }
-    async function createDataForCommonWarBasicSettingsPageForMfw(warRule: IWarRule, settingsForMfw: ISettingsForMfw): Promise<OpenDataForCommonWarBasicSettingsPage> {
+    async function createDataForCommonWarBasicSettingsPageForMfw(warRule: IWarRule, settingsForCommon: ISettingsForCommon, settingsForMfw: ISettingsForMfw): Promise<OpenDataForCommonWarBasicSettingsPage> {
         const bootTimerParams   = Helpers.getExisted(settingsForMfw.bootTimerParams);
         const timerType         = bootTimerParams[0] as Types.BootTimerType;
         const openData          : OpenDataForCommonWarBasicSettingsPage = {
@@ -441,6 +523,12 @@ namespace MpwModel {
                     callbackOnModify: null,
                 },
                 {
+                    settingsType    : WarBasicSettingsType.TurnsLimit,
+                    currentValue    : settingsForCommon.turnsLimit ?? CommonConstants.WarMaxTurnsLimit,
+                    warRule,
+                    callbackOnModify: null,
+                },
+                {
                     settingsType    : WarBasicSettingsType.TimerType,
                     currentValue    : timerType,
                     warRule,
@@ -478,7 +566,7 @@ namespace MpwModel {
     }
 
     export async function createDataForCommonWarAdvancedSettingsPage(warId: number | null): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-        const warInfo = warId == null ? null : getMyWarInfo(warId);
+        const warInfo = warId == null ? null : await getWarSettings(warId);
         if (warInfo == null) {
             return null;
         }
@@ -518,15 +606,20 @@ namespace MpwModel {
     }
 
     export async function createDataForCommonWarPlayerInfoPage(warId: number | null): Promise<OpenDataForCommonWarPlayerInfoPage> {
-        const warInfo = warId == null ? null : getMyWarInfo(warId);
-        if (warInfo == null) {
+        const warSettings = warId == null ? null : await getWarSettings(warId);
+        if (warSettings == null) {
             return null;
         }
 
-        const settingsForCommon = Helpers.getExisted(warInfo.settingsForCommon);
+        const warProgressInfo = warId == null ? null : await getWarProgressInfo(warId);
+        if (warProgressInfo == null) {
+            return null;
+        }
+
+        const settingsForCommon = Helpers.getExisted(warSettings.settingsForCommon);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
-        for (const playerInfo of warInfo.playerInfoList || []) {
+        for (const playerInfo of warProgressInfo.playerInfoList || []) {
             const playerIndex   = Helpers.getExisted(playerInfo.playerIndex);
             const userId        = playerInfo.userId ?? null;
             playerInfoArray.push({
@@ -537,7 +630,7 @@ namespace MpwModel {
                 coId                : Helpers.getExisted(playerInfo.coId),
                 unitAndTileSkinId   : Helpers.getExisted(playerInfo.unitAndTileSkinId),
                 isReady             : null,
-                isInTurn            : playerIndex === warInfo.playerIndexInTurn,
+                isInTurn            : playerIndex === warProgressInfo.playerIndexInTurn,
                 isDefeat            : !playerInfo.isAlive,
             });
         }
@@ -582,6 +675,57 @@ namespace MpwModel {
     }
     function _setWar(war: MpwWar | null): void {
         _war = war;
+    }
+
+    function _onNotifyMsgMpwWatchGetIncomingInfo(e: egret.Event): void {
+        const data  = e.data as ProtoTypes.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
+        const war   = getWar();
+        if (war?.getWarId() !== Helpers.getExisted(data.warId)) {
+            return;
+        }
+
+        const player = war.getPlayerLoggedIn();
+        if (player == null) {
+            return;
+        }
+
+        const info = data.incomingInfo;
+        player.setWatchOngoingSrcUserIds(info?.ongoingSrcUserIdArray ?? []);
+        player.setWatchRequestSrcUserIds(info?.requestSrcUserIdArray ?? []);
+    }
+    function _onNotifyMsgMpwWatchGetOutgoingInfo(e: egret.Event): void {
+        const data  = e.data as ProtoTypes.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
+        const war   = getWar();
+        if (war?.getWarId() !== Helpers.getExisted(data.warId)) {
+            return;
+        }
+
+        const info = data.outgoingInfo;
+        if (info == null) {
+            return;
+        }
+
+        const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
+        const ongoingDstUserIdArray = info.ongoingDstUserIdArray ?? [];
+        const requestDstUserIdArray = info.requestDstUserIdArray ?? [];
+        for (const [, player] of war.getPlayerManager().getAllPlayersDict()) {
+            const userId = player.getUserId();
+            if (userId == null) {
+                continue;
+            }
+
+            if (ongoingDstUserIdArray.indexOf(userId) >= 0) {
+                player.addWatchOngoingSrcUserId(selfUserId);
+            } else {
+                player.removeWatchOngoingSrcUserId(selfUserId);
+            }
+
+            if (requestDstUserIdArray.indexOf(userId) >= 0) {
+                player.addWatchRequestSrcUserId(selfUserId);
+            } else {
+                player.removeWatchRequestSrcUserId(selfUserId);
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

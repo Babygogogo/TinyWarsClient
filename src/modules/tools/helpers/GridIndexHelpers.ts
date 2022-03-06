@@ -125,7 +125,13 @@ namespace GridIndexHelpers {
         return Direction.Undefined;
     }
 
-    export function getGridsWithinDistance(origin: GridIndex, minDistance: number, maxDistance: number, mapSize: MapSize, predicate?: (g: GridIndex) => boolean): GridIndex[] {
+    export function getGridsWithinDistance({ origin, minDistance, maxDistance, mapSize, predicate }: {
+        origin      : GridIndex;
+        minDistance : number;
+        maxDistance : number;
+        mapSize     : MapSize;
+        predicate?  : (g: GridIndex) => boolean;
+    }): GridIndex[] {
         const grids: GridIndex[] = [];
         if ((minDistance == 0)                  &&
             (maxDistance >= minDistance)        &&

@@ -253,6 +253,8 @@ namespace TwnsMeChooseTileBasePanel {
                                 playerIndex     : tile.getPlayerIndex(),
                                 baseShapeId     : dataForDrawTileBase.shapeId,
                                 baseType        : dataForDrawTileBase.baseType,
+                                locationFlags   : tile.getLocationFlags(),
+                                isHighlighted   : tile.getIsHighlighted(),
                             }, configVersion);
                             tile.startRunning(war);
                             tile.flushDataToView();

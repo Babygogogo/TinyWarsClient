@@ -59,7 +59,7 @@ namespace TwnsMrrMyRoomListPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MrrJoinedPreviewingRoomIdChanged,    callback: this._onNotifyMrrJoinedPreviewingRoomIdChanged },
-                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,       callback: this._onNotifyMsgMrrGetMyRoomPublicInfoList },
+                { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onNotifyMsgMrrGetJoinedRoomIdArray },
                 { type: NotifyType.MsgMrrDeleteRoomByServer,            callback: this._onNotifyMsgMrrDeleteRoomByServer },
                 { type: NotifyType.MsgMrrGetRoomPublicInfo,             callback: this._onNotifyMsgMrrGetRoomPublicInfo },
                 { type: NotifyType.MsgMrrSetSelfSettings,               callback: this._onNotifyMsgMrrSetSelfSettings },
@@ -80,7 +80,7 @@ namespace TwnsMrrMyRoomListPanel {
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
 
-            MrrProxy.reqMrrGetMyRoomPublicInfoList();
+            MrrProxy.reqMrrGetJoinedRoomIdArray();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -97,7 +97,7 @@ namespace TwnsMrrMyRoomListPanel {
             this._updateComponentsForPreviewingRoomInfo();
         }
 
-        private _onNotifyMsgMrrGetMyRoomPublicInfoList(): void {
+        private _onNotifyMsgMrrGetJoinedRoomIdArray(): void {
             this._hasReceivedData = true;
             this._updateGroupRoomList();
             this._updateComponentsForPreviewingRoomInfo();
@@ -182,7 +182,7 @@ namespace TwnsMrrMyRoomListPanel {
             this._btnNextStep.label         = Lang.getText(LangTextType.B0398);
         }
 
-        private _updateGroupRoomList(): void {
+        private async _updateGroupRoomList(): Promise<void> {
             const labelLoading  = this._labelLoading;
             const labelNoRoom   = this._labelNoRoom;
             const listRoom      = this._listRoom;
@@ -192,7 +192,7 @@ namespace TwnsMrrMyRoomListPanel {
                 listRoom.clear();
 
             } else {
-                const dataArray         = this._createDataForListRoom();
+                const dataArray         = await this._createDataForListRoom();
                 const roomId            = MrrModel.getPreviewingRoomId();
                 labelLoading.visible    = false;
                 labelNoRoom.visible     = !dataArray.length;
@@ -219,9 +219,9 @@ namespace TwnsMrrMyRoomListPanel {
             }
         }
 
-        private _createDataForListRoom(): DataForRoomRenderer[] {
+        private async _createDataForListRoom(): Promise<DataForRoomRenderer[]> {
             const dataArray: DataForRoomRenderer[] = [];
-            for (const roomId of MrrModel.getMyRoomIdArray()) {
+            for (const roomId of await MrrModel.getJoinedRoomIdArray() ?? []) {
                 dataArray.push({
                     roomId,
                 });

@@ -27,8 +27,10 @@ namespace TwnsUiCoInfo {
         private readonly _labelCoName!                      : TwnsUiLabel.UiLabel;
         private readonly _groupInfo!                        : eui.Group;
         private readonly _groupZoneInfo!                    : eui.Group;
-        private readonly _labelDesignerTitle!               : TwnsUiLabel.UiLabel;
-        private readonly _labelDesigner!                    : TwnsUiLabel.UiLabel;
+        private readonly _labelArtDesignerTitle!            : TwnsUiLabel.UiLabel;
+        private readonly _labelArtDesigner!                 : TwnsUiLabel.UiLabel;
+        private readonly _labelDataDesignerTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _labelDataDesigner!                : TwnsUiLabel.UiLabel;
         private readonly _imgCoPortrait!                    : TwnsUiImage.UiImage;
         private readonly _labelBoardCostPercentageTitle!    : TwnsUiLabel.UiLabel;
         private readonly _labelBoardCostPercentage!         : TwnsUiLabel.UiLabel;
@@ -106,7 +108,8 @@ namespace TwnsUiCoInfo {
                 return;
             }
 
-            this._labelDesignerTitle.text               = `${Lang.getText(LangTextType.B0163)}:`;
+            this._labelArtDesignerTitle.text            = `${Lang.getText(LangTextType.B0839)}:`;
+            this._labelDataDesignerTitle.text           = `${Lang.getText(LangTextType.B0840)}:`;
             this._labelBoardCostPercentageTitle.text    = `${Lang.getText(LangTextType.B0164)}:`;
             this._labelZoneRadiusTitle.text             = `${Lang.getText(LangTextType.B0165)}:`;
             this._labelEnergyBarTitle.text              = `${Lang.getText(LangTextType.B0166)}:`;
@@ -123,12 +126,13 @@ namespace TwnsUiCoInfo {
                 return;
             }
 
-            const coId                  = coData.coId;
-            const configVersion         = coData.configVersion;
-            const cfg                   = ConfigManager.getCoBasicCfg(configVersion, coId);
-            this._imgCoPortrait.source  = ConfigManager.getCoBustImageSource(coId);
-            this._labelCoName.text      = cfg.name;
-            this._labelDesigner.text    = cfg.designer ?? ``;
+            const coId                      = coData.coId;
+            const configVersion             = coData.configVersion;
+            const cfg                       = ConfigManager.getCoBasicCfg(configVersion, coId);
+            this._imgCoPortrait.source      = ConfigManager.getCoBustImageSource(configVersion, coId);
+            this._labelCoName.text          = cfg.name;
+            this._labelArtDesigner.text     = cfg.artDesigner ?? ``;
+            this._labelDataDesigner.text    = cfg.dataDesigner ?? ``;
 
             const coType        = ConfigManager.getCoType(configVersion, coId);
             const groupZoneInfo = this._groupZoneInfo;

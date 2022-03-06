@@ -34,6 +34,8 @@ namespace TwnsBwPlayer {
         private _coCurrentEnergy?           : number;
         private _coUsingSkillType?          : Types.CoSkillType;
         private _coIsDestroyedInTurn?       : boolean;
+        private _coPowerActivatedCount?     : number;
+        private _hasTakenManualAction?      : boolean;
         private _watchOngoingSrcUserIds?    : Set<number>;
         private _watchRequestSrcUserIds?    : Set<number>;
 
@@ -106,8 +108,10 @@ namespace TwnsBwPlayer {
             this._setUnitAndTileSkinId(unitAndTileSkinId);
             this.setCoId(coId);
             this.setCoCurrentEnergy(coCurrentEnergy);
-            this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
-            this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
+            this._setCoPowerActivatedCount(data.coPowerActivatedCount ?? 0);
+            this.setHasTakenManualAction(data.hasTakenManualAction ?? false);
+            this.setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
+            this.setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
         }
 
         public startRunning(war: TwnsBwWar.BwWar): void {
@@ -127,6 +131,8 @@ namespace TwnsBwPlayer {
                 userId                      : this.getUserId(),
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
+                coPowerActivatedCount       : this.getCoPowerActivatedCount(),
+                hasTakenManualAction        : this.getHasTakenManualAction(),
                 watchRequestSrcUserIdArray  : [...(this.getWatchRequestSrcUserIds() || [])],
                 watchOngoingSrcUserIdArray  : [...(this.getWatchOngoingSrcUserIds() || [])],
             };
@@ -147,6 +153,8 @@ namespace TwnsBwPlayer {
                 userId                      : playerIndex > 0 ? UserModel.getSelfUserId() : null,
                 coId                        : this.getCoId(),
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
+                coPowerActivatedCount       : this.getCoPowerActivatedCount(),
+                hasTakenManualAction        : this.getHasTakenManualAction(),
                 watchRequestSrcUserIdArray  : [],
                 watchOngoingSrcUserIdArray  : []
             };
@@ -207,7 +215,7 @@ namespace TwnsBwPlayer {
             return Helpers.getExisted(this._restTimeToBoot);
         }
 
-        private _setWatchOngoingSrcUserIds(list: number[]): void {
+        public setWatchOngoingSrcUserIds(list: number[]): void {
             this._watchOngoingSrcUserIds = new Set(list);
         }
         public getWatchOngoingSrcUserIds(): Set<number> {
@@ -220,7 +228,7 @@ namespace TwnsBwPlayer {
             this.getWatchOngoingSrcUserIds().delete(userId);
         }
 
-        private _setWatchRequestSrcUserIds(list: number[]): void {
+        public setWatchRequestSrcUserIds(list: number[]): void {
             this._watchRequestSrcUserIds = new Set(list);
         }
         public getWatchRequestSrcUserIds(): Set<number> {
@@ -272,8 +280,7 @@ namespace TwnsBwPlayer {
             return Helpers.getExisted(this._coCurrentEnergy);
         }
         public getCoMaxEnergy(): number {
-            const config = this._getCoBasicCfg();
-            return config ? WarCommonHelpers.getCoMaxEnergy(config) : 0;
+            return this._getRevisedEnergy(WarCommonHelpers.getCoMaxEnergy(this._getCoBasicCfg()));
         }
         public getCoZoneExpansionEnergyList(): number[] | null {
             const cfg = this._getCoBasicCfg();
@@ -282,12 +289,51 @@ namespace TwnsBwPlayer {
         public getCoPowerEnergy(): number | null {
             const energyList    = this._getCoBasicCfg().powerEnergyList;
             const energy        = energyList ? energyList[0] : null;
-            return (energy != null) && (energy >= 0) ? energy : null;
+            if ((energy == null) || (energy < 0)) {
+                return null;
+            } else {
+                return this._getRevisedEnergy(energy);
+            }
         }
         public getCoSuperPowerEnergy(): number | null {
             const energyList    = this._getCoBasicCfg().powerEnergyList;
             const energy        = energyList ? energyList[1] : null;
-            return (energy != null) && (energy >= 0) ? energy : null;
+            if ((energy == null) || (energy < 0)) {
+                return null;
+            } else {
+                return this._getRevisedEnergy(energy);
+            }
+        }
+        private _getRevisedEnergy(energy: number): number {
+            const energyType = this.getCoEnergyType();
+            if (energyType === Types.CoEnergyType.Dor) {
+                return energy;
+            } else if (energyType === Types.CoEnergyType.Trilogy) {
+                const cfg = Helpers.getExisted(this.getGlobalCoEnergyParameters(), ClientErrorCode.BwPlayer_GetRevisedEnergy_00);
+                return Math.floor(energy * (Math.min(cfg[1], this.getCoPowerActivatedCount()) * cfg[0] + 100) / 100);
+            } else {
+                throw Helpers.newError(`Invalid energyType: ${energyType}`, ClientErrorCode.BwPlayer_GetRevisedEnergy_01);
+            }
+        }
+
+        public getGlobalCoEnergyParameters(): Types.Undefinable<number[]> {
+            return this._getCoBasicCfg().globalCoEnergyParameters;
+        }
+        public getCoEnergyType(): Types.CoEnergyType {
+            return Helpers.getExisted(this._getCoBasicCfg().energyType, ClientErrorCode.BwPlayer_GetCoEnergyType_00);
+        }
+        public getCoPowerActivatedCount(): number {
+            return Helpers.getExisted(this._coPowerActivatedCount, ClientErrorCode.BwPlayer_GetCoPowerActivatedCount_00);
+        }
+        private _setCoPowerActivatedCount(count: number): void {
+            this._coPowerActivatedCount = count;
+        }
+
+        public getHasTakenManualAction(): boolean {
+            return Helpers.getExisted(this._hasTakenManualAction);
+        }
+        public setHasTakenManualAction(hasTaken: boolean): void {
+            this._hasTakenManualAction = hasTaken;
         }
 
         public getCoZoneRadius(): number {
@@ -373,6 +419,10 @@ namespace TwnsBwPlayer {
                 return false;
             }
         }
+        public checkCanGetEnergyWithBattle(): boolean {
+            return (!!this._getCoBasicCfg().canGetEnergyWithBattleOnPowerSkills)
+                || (!this.checkCoIsUsingActiveSkill());
+        }
 
         public updateOnUseCoSkill(skillType: Types.CoSkillType): void {
             const currentEnergy = this.getCoCurrentEnergy();
@@ -388,6 +438,7 @@ namespace TwnsBwPlayer {
                 throw Helpers.newError(`Invalid skillType: ${skillType}`, ClientErrorCode.BwPlayer_UpdateOnUseCoSkill_02);
             }
 
+            this._setCoPowerActivatedCount(this.getCoPowerActivatedCount() + 1);
             this.setCoUsingSkillType(skillType);
         }
 

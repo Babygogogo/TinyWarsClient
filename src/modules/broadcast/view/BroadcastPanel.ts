@@ -25,9 +25,9 @@ namespace TwnsBroadcastPanel {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.TimeTick,                   callback: this._onNotifyTimeTick },
-                { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgBroadcastGetMessageList, callback: this._onMsgBroadcastGetMessageList },
+                { type: NotifyType.TimeTick,                            callback: this._onNotifyTimeTick },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgBroadcastGetAllMessageIdArray,    callback: this._onMsgBroadcastGetAllMessageIdArray },
             ]);
 
             this.touchEnabled   = false;
@@ -42,13 +42,13 @@ namespace TwnsBroadcastPanel {
             // nothing to do
         }
 
-        private _onNotifyTimeTick(): void {
-            const messageList   = BroadcastModel.getOngoingMessageList();
-            const ongoingSet    = this._ongoingMessageIdSet;
-            if ((messageList.length !== ongoingSet.size)                                ||
-                (messageList.some(v => !ongoingSet.has(Helpers.getExisted(v.messageId))))
+        private async _onNotifyTimeTick(): Promise<void> {
+            const messageIdArray    = await BroadcastModel.getOngoingMessageIdArray();
+            const ongoingSet        = this._ongoingMessageIdSet;
+            if ((messageIdArray.length !== ongoingSet.size)     ||
+                (messageIdArray.some(v => !ongoingSet.has(v)))
             ) {
-                this._resetComponentsForLamp(messageList);
+                this._resetComponentsForLamp(messageIdArray);
             }
         }
 
@@ -56,22 +56,22 @@ namespace TwnsBroadcastPanel {
             this._resetView();
         }
 
-        private _onMsgBroadcastGetMessageList(): void {
+        private _onMsgBroadcastGetAllMessageIdArray(): void {
             this._resetView();
         }
 
-        private _resetView(): void {
-            this._resetComponentsForLamp(BroadcastModel.getOngoingMessageList());
+        private async _resetView(): Promise<void> {
+            this._resetComponentsForLamp(await BroadcastModel.getOngoingMessageIdArray());
         }
 
-        private _resetComponentsForLamp(messageList: ProtoTypes.Broadcast.IBroadcastMessage[]): void {
+        private async _resetComponentsForLamp(messageIdArray: number[]): Promise<void> {
             const ongoingSet = this._ongoingMessageIdSet;
             ongoingSet.clear();
 
             const textList: string[] = [];
-            for (const message of messageList) {
-                ongoingSet.add(Helpers.getExisted(message.messageId));
-                textList.push(Lang.getLanguageText({ textArray: message.textList }) ?? CommonConstants.ErrorTextForUndefined);
+            for (const messageId of messageIdArray) {
+                ongoingSet.add(messageId);
+                textList.push(Lang.getLanguageText({ textArray: (await BroadcastModel.getMessageData(messageId))?.textList }) ?? CommonConstants.ErrorTextForUndefined);
             }
 
             const group = this._groupLamp;

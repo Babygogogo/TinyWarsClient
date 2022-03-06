@@ -45,7 +45,9 @@ namespace TwnsWwMainMenuPanel {
                 { ui: this._btnBack,            callback: this._onTouchedBtnBack },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.MsgUserLogout,      callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
+                { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
             ]);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -104,12 +106,36 @@ namespace TwnsWwMainMenuPanel {
         private _onMsgUserLogout(): void {
             this.close();
         }
+        private _onMsgMpwCommonGetWarProgressInfo(): void {
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
+        }
+        private _onMsgMpwWatchGetRequestedWarIdArray(): void {
+            this._updateBtnHandleRequest();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._btnHandleRequest.setRedVisible(!!WwModel.getWatchRequestedWarInfos()?.length);
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
+            this._updateBtnHandleRequest();
+        }
+
+        private async _updateBtnMultiPlayer(): Promise<void> {
+            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
+        }
+
+        private async _updateBtnRanking(): Promise<void> {
+            this._btnRanking.setRedVisible(
+                (await MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MrrModel.checkIsRed())
+            );
+        }
+
+        private _updateBtnHandleRequest(): void {
+            this._btnHandleRequest.setRedVisible(!!WwModel.getRequestedWarIdArray()?.length);
         }
 
         protected async _showOpenAnimation(): Promise<void> {

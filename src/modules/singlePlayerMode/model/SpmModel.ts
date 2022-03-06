@@ -7,13 +7,35 @@
 // import ProtoManager     from "../../tools/proto/ProtoManager";
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace SpmModel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
-    import NetMessage           = ProtoTypes.NetMessage;
-    import SpmWarSaveSlotData   = Types.SpmWarSaveSlotData;
+    import NotifyType               = TwnsNotifyType.NotifyType;
+    import LangTextType             = TwnsLangTextType.LangTextType;
+    import NetMessage               = ProtoTypes.NetMessage;
+    import SpmWarSaveSlotData       = Types.SpmWarSaveSlotData;
+    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import ISpmRankInfoForRule      = NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule;
+    import MsgSpmGetRankListIs      = NetMessage.MsgSpmGetRankList.IS;
+    import MsgSpmGetReplayDataIs    = NetMessage.MsgSpmGetReplayData.IS;
 
     export function init(): void {
-        // nothing to do
+        Notify.addEventListeners([
+            { type: NotifyType.MsgSpmValidateSrw,   callback: _onNotifyMsgSpmValidateSrw, },
+        ], null);
+    }
+
+    function _onNotifyMsgSpmValidateSrw(e: egret.Event): void {
+        const data      = e.data as ProtoTypes.NetMessage.MsgSpmValidateSrw.IS;
+        const status    = data.status;
+        if (status === Types.SpmValidateSrwStatus.ConfigVersionNotLatest) {
+            FloatText.show(Lang.getText(LangTextType.A0278));
+        } else if (status === Types.SpmValidateSrwStatus.ScoreNotHighest) {
+            FloatText.show(Lang.getText(LangTextType.A0279));
+        } else if (status === Types.SpmValidateSrwStatus.ScoreTooLow) {
+            FloatText.show(Lang.getText(LangTextType.A0281));
+        } else {
+            FloatText.show(Lang.getText(LangTextType.A0280));
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,8 +144,92 @@ namespace SpmModel {
             slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
     }
-    export function updateOnMsgSpmValidateSrw(data: NetMessage.MsgSpmValidateSrw.IS): void {
-        getSlotDict().delete(Helpers.getExisted(data.slotIndex));
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for rank list.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    const _rankDataGetter = Helpers.createCachedDataAccessor<number, ISpmRankInfoForRule[]>({
+        reqData : (mapId: number) => SpmProxy.reqSpmGetRankList(mapId),
+    });
+
+    export function getRankData(mapId: number): Promise<ISpmRankInfoForRule[] | null> {
+        return _rankDataGetter.getData(mapId);
+    }
+
+    export function updateOnMsgSpmGetRankList(data: MsgSpmGetRankListIs): void {
+        _rankDataGetter.setData(Helpers.getExisted(data.mapId), data.infoArray ?? []);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for replay data.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    const _replayDataAccessor = Helpers.createCachedDataAccessor<number, ISerialWar>({
+        reqData : (rankId: number) => SpmProxy.reqSpmGetReplayData(rankId),
+    });
+
+    export function getReplayData(rankId: number): Promise<ISerialWar | null> {
+        return _replayDataAccessor.getData(rankId);
+    }
+    async function decodeAndReviseReplayData(encodedWar: Types.Undefinable<Uint8Array>): Promise<ISerialWar | null> {
+        if (encodedWar == null) {
+            return null;
+        }
+
+        const warData = ProtoManager.decodeAsSerialWar(encodedWar);
+        if (warData.field == null) {
+            warData.field = {
+                fogMap  : {
+                    forceFogCode: Types.ForceFogCode.None,
+                },
+            };
+        }
+
+        if (warData.turnManager == null) {
+            warData.turnManager = {
+                turnIndex       : CommonConstants.WarFirstTurnIndex,
+                turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
+                playerIndex     : CommonConstants.WarNeutralPlayerIndex,
+                enterTurnTime   : 0,
+            };
+        }
+
+        const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
+        const mapRawData        = await WarMapModel.getRawData(Helpers.getExisted(warData.settingsForSrw?.mapId));
+        if (settingsForCommon.warRule == null) {
+            if (mapRawData == null) {
+                return null;
+            }
+
+            const ruleId    = Helpers.getExisted(settingsForCommon.presetWarRuleId);
+            const warRule   = mapRawData.warRuleArray?.find(v => v.ruleId === ruleId);
+            if (warRule == null) {
+                return null;
+            }
+
+            settingsForCommon.warRule = Helpers.deepClone(warRule);
+        }
+
+        if (warData.warEventManager == null) {
+            warData.warEventManager = {
+                warEventFullData    : WarEventHelper.trimAndCloneWarEventFullData(mapRawData?.warEventFullData, settingsForCommon.warRule.warEventIdArray),
+                calledCountList     : [],
+            };
+        }
+
+        for (const playerData of warData.playerManager?.players ?? []) {
+            playerData.fund                 ??= 0;
+            playerData.hasVotedForDraw      ??= false;
+            playerData.aliveState           ??= Types.PlayerAliveState.Alive;
+            playerData.restTimeToBoot       ??= 0;
+            playerData.coIsDestroyedInTurn  ??= false;
+            playerData.coUsingSkillType     ??= Types.CoSkillType.Passive;
+        }
+
+        return warData;
+    }
+
+    export async function updateOnMsgSpmGetReplayData(data: MsgSpmGetReplayDataIs): Promise<void> {
+        _replayDataAccessor.setData(Helpers.getExisted(data.rankId), await decodeAndReviseReplayData(data.encodedWar));
     }
 }
 

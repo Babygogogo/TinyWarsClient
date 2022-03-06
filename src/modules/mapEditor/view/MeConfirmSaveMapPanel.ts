@@ -61,13 +61,20 @@ namespace TwnsMeConfirmSaveMapPanel {
                 labelReviewDescTitle.visible    = false;
                 labelReviewDesc.text            = Lang.getText(LangTextType.A0261);
 
+            } else if (mapRawData.warRuleArray?.some(v => !checkIsValidAvailability(v.ruleAvailability))) {
+                this._mapRawData                = mapRawData;
+                btnConfirm.visible              = true;
+                groupNeedReview.visible         = false;
+                labelReviewDescTitle.visible    = true;
+                labelReviewDesc.text            = Lang.getText(LangTextType.A0298);
+
             } else {
                 const errorCode                 = await MeUtility.getErrorCodeForMapRawData(mapRawData);
                 this._mapRawData                = mapRawData;
                 btnConfirm.visible              = true;
                 groupNeedReview.visible         = !errorCode;
                 labelReviewDescTitle.visible    = !!errorCode;
-                labelReviewDesc.text            = errorCode ? Lang.getErrorText(errorCode) : ``;
+                labelReviewDesc.text            = errorCode ? Lang.getErrorText(errorCode) : Lang.getText(LangTextType.A0285);
             }
         }
         protected _onClosing(): void {
@@ -121,14 +128,25 @@ namespace TwnsMeConfirmSaveMapPanel {
             this._btnCancel.label           = Lang.getText(LangTextType.B0154);
             this._labelTitle.text           = Lang.getText(LangTextType.B0088);
             this._labelReviewDescTitle.text = Lang.getText(LangTextType.A0083);
-            this._labelReviewDesc.text      = Lang.getText(LangTextType.A0083);
             this._labelNeedReview.text      = Lang.getText(LangTextType.B0289);
-            this._labelContent.setRichText(Lang.getText(LangTextType.A0082));
+            this._labelContent.text         = Lang.getText(LangTextType.A0082);
         }
 
         private _updateImgNeedReview(): void {
             this._imgNeedReview.visible = this._needReview;
         }
+    }
+
+    function checkIsValidAvailability(ruleAvailability: Types.Undefinable<ProtoTypes.WarRule.IRuleAvailability>): boolean {
+        if (ruleAvailability == null) {
+            return false;
+        }
+
+        return !!((ruleAvailability.canCcw)
+            || (ruleAvailability.canMcw)
+            || (ruleAvailability.canMrw)
+            || (ruleAvailability.canScw)
+            || (ruleAvailability.canSrw));
     }
 }
 

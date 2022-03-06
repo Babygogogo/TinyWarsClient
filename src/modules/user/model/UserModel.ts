@@ -16,6 +16,7 @@ namespace UserModel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NetMessage           = ProtoTypes.NetMessage;
     import IUserPublicInfo      = ProtoTypes.User.IUserPublicInfo;
+    import IUserBriefInfo       = ProtoTypes.User.IUserBriefInfo;
     import IUserSettings        = ProtoTypes.User.IUserSettings;
     import IUserSelfInfo        = ProtoTypes.User.IUserSelfInfo;
     import IUserPrivilege       = ProtoTypes.User.IUserPrivilege;
@@ -25,8 +26,12 @@ namespace UserModel {
     let _selfInfo                   : IUserSelfInfo | null = null;
     let _selfAccount                : string;
     let _selfPassword               : string | null = null;
-    const _userPublicInfoDict       = new Map<number, IUserPublicInfo | null>();
-    const _userPublicInfoRequests   = new Map<number, ((info: NetMessage.MsgUserGetPublicInfo.IS) => void)[]>();
+    const _userPublicInfoAccessor   = Helpers.createCachedDataAccessor<number, IUserPublicInfo>({
+        reqData                     : (userId: number) => UserProxy.reqUserGetPublicInfo(userId),
+    });
+    const _userBriefInfoAccessor    = Helpers.createCachedDataAccessor<number, IUserBriefInfo>({
+        reqData                     : (userId: number) => UserProxy.reqUserGetBriefInfo(userId),
+    });
 
     export function init(): void {
         Notify.addEventListeners([
@@ -99,6 +104,9 @@ namespace UserModel {
         return (!!privilege)
             && ((!!privilege.isAdmin) || (!!privilege.isChangeLogEditor));
     }
+    export function getIsSelfChatManager(): boolean {
+        return !!getSelfUserPrivilege()?.isChatManager;
+    }
 
     export function getSelfNickname(): string | null {
         const info = getSelfInfo();
@@ -135,63 +143,17 @@ namespace UserModel {
     }
 
     export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | null> {
-        if (userId == null) {
-            return new Promise((resolve) => resolve(null));
-        }
-
-        const localData = _userPublicInfoDict.get(userId);
-        if (localData) {
-            return new Promise(resolve => resolve(localData));
-        }
-
-        if (_userPublicInfoRequests.has(userId)) {
-            return new Promise((resolve) => {
-                Helpers.getExisted(_userPublicInfoRequests.get(userId)).push(info => resolve(info.userPublicInfo ?? null));
-            });
-        }
-
-        new Promise<void>((resolve) => {
-            const callbackOnSucceed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
-                if (data.userId === userId) {
-                    Notify.removeEventListener(NotifyType.MsgUserGetPublicInfo,        callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgUserGetPublicInfoFailed,  callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_userPublicInfoRequests.get(userId))) {
-                        cb(data);
-                    }
-                    _userPublicInfoRequests.delete(userId);
-
-                    resolve();
-                }
-            };
-            const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
-                if (data.userId === userId) {
-                    Notify.removeEventListener(NotifyType.MsgUserGetPublicInfo,        callbackOnSucceed);
-                    Notify.removeEventListener(NotifyType.MsgUserGetPublicInfoFailed,  callbackOnFailed);
-
-                    for (const cb of Helpers.getExisted(_userPublicInfoRequests.get(userId))) {
-                        cb(data);
-                    }
-                    _userPublicInfoRequests.delete(userId);
-
-                    resolve();
-                }
-            };
-
-            Notify.addEventListener(NotifyType.MsgUserGetPublicInfo,       callbackOnSucceed);
-            Notify.addEventListener(NotifyType.MsgUserGetPublicInfoFailed, callbackOnFailed);
-
-            UserProxy.reqUserGetPublicInfo(userId);
-        });
-
-        return new Promise((resolve) => {
-            _userPublicInfoRequests.set(userId, [info => resolve(info.userPublicInfo ?? null)]);
-        });
+        return _userPublicInfoAccessor.getData(userId);
     }
-    export function setUserPublicInfo(info: IUserPublicInfo): void {
-        _userPublicInfoDict.set(Helpers.getExisted(info.userId), info);
+    export function setUserPublicInfo(userId: number, info: IUserPublicInfo | null): void {
+        _userPublicInfoAccessor.setData(userId, info);
+    }
+
+    export function getUserBriefInfo(userId: number): Promise<IUserBriefInfo | null> {
+        return _userBriefInfoAccessor.getData(userId);
+    }
+    export function setUserBriefInfo(userId: number, info: IUserBriefInfo | null): void {
+        _userBriefInfoAccessor.setData(userId, info);
     }
 
     export async function getUserNickname(userId: number): Promise<string | null> {
@@ -224,20 +186,47 @@ namespace UserModel {
         return getSelfSettings()?.isAutoScrollMap ?? true;
     }
 
-    export function getSelfSettingsUnitOpacity(): number {
-        return getSelfSettings()?.unitOpacity ?? 100;
+    export function getSelfSettingsOpacitySettings(): ProtoTypes.User.IUserOpacitySettings | null {
+        return getSelfSettings()?.opacitySettings ?? null;
+    }
+    export function setSelfSettingsOpacitySettings(opacitySettings: ProtoTypes.User.IUserOpacitySettings): void {
+        const selfSettings = getSelfSettings();
+        if (selfSettings == null) {
+            return;
+        }
+
+        selfSettings.opacitySettings = opacitySettings;
+        Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
     }
     export function reqTickSelfSettingsUnitOpacity(): void {
-        const opacity = getSelfSettingsUnitOpacity();
-        if (opacity === 100) {
-            UserProxy.reqUserSetSettings({ unitOpacity: 75 });
-        } else if (opacity === 75) {
-            UserProxy.reqUserSetSettings({ unitOpacity: 50 });
-        } else if (opacity === 50) {
-            UserProxy.reqUserSetSettings({ unitOpacity: 0 });
+        const unitOpacity = getSelfSettingsOpacitySettings()?.unitOpacity;
+        if ((unitOpacity === 100) || (unitOpacity == null)) {
+            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 75 } });
+        } else if (unitOpacity === 75) {
+            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 50 } });
+        } else if (unitOpacity === 50) {
+            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 0 } });
         } else {
-            UserProxy.reqUserSetSettings({ unitOpacity: 100 });
+            UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 100 } });
         }
+    }
+    function mergeSelfSettingsOpacitySettings(newOpacitySettings: ProtoTypes.User.IUserOpacitySettings): void {
+        const selfSettings = getSelfSettings();
+        if (selfSettings == null) {
+            return;
+        }
+
+        const currentOpacitySettings = selfSettings.opacitySettings;
+        if (currentOpacitySettings == null) {
+            selfSettings.opacitySettings = Helpers.deepClone(newOpacitySettings);
+        } else {
+            currentOpacitySettings.tileBaseOpacity      = newOpacitySettings.tileBaseOpacity ?? currentOpacitySettings.tileBaseOpacity;
+            currentOpacitySettings.tileDecoratorOpacity = newOpacitySettings.tileDecoratorOpacity ?? currentOpacitySettings.tileDecoratorOpacity;
+            currentOpacitySettings.tileObjectOpacity    = newOpacitySettings.tileObjectOpacity ?? currentOpacitySettings.tileObjectOpacity;
+            currentOpacitySettings.unitOpacity          = newOpacitySettings.unitOpacity ?? currentOpacitySettings.unitOpacity;
+        }
+
+        Notify.dispatch(NotifyType.UserSettingsOpacitySettingsChanged);
     }
 
     export function updateOnMsgUserLogin(data: NetMessage.MsgUserLogin.IS): void {
@@ -273,13 +262,12 @@ namespace UserModel {
 
         const oldIsShowGridBorder   = getSelfSettingsIsShowGridBorder();
         const oldVersion            = getSelfSettingsTextureVersion();
-        const oldUnitOpacity        = getSelfSettingsUnitOpacity();
         const oldIsAutoScrollMap    = getSelfSettingsIsAutoScrollMap();
         (newSettings.isSetPathMode != null)             && (selfSettings.isSetPathMode = newSettings.isSetPathMode);
         (newSettings.isShowGridBorder != null)          && (selfSettings.isShowGridBorder = newSettings.isShowGridBorder);
         (newSettings.unitAndTileTextureVersion != null) && (selfSettings.unitAndTileTextureVersion = newSettings.unitAndTileTextureVersion);
-        (newSettings.unitOpacity != null)               && (selfSettings.unitOpacity = newSettings.unitOpacity);
         (newSettings.isAutoScrollMap != null)           && (selfSettings.isAutoScrollMap = newSettings.isAutoScrollMap);
+        (newSettings.opacitySettings != null)           && (mergeSelfSettingsOpacitySettings(newSettings.opacitySettings));
 
         if (oldVersion !== getSelfSettingsTextureVersion()) {
             CommonModel.updateOnUnitAndTileTextureVersionChanged();
@@ -287,9 +275,6 @@ namespace UserModel {
         }
         if (oldIsShowGridBorder !== getSelfSettingsIsShowGridBorder()) {
             Notify.dispatch(NotifyType.UserSettingsIsShowGridBorderChanged);
-        }
-        if (oldUnitOpacity !== getSelfSettingsUnitOpacity()) {
-            Notify.dispatch(NotifyType.UserSettingsUnitOpacityChanged);
         }
         if (oldIsAutoScrollMap !== getSelfSettingsIsAutoScrollMap()) {
             Notify.dispatch(NotifyType.UserSettingsIsAutoScrollMapChanged);

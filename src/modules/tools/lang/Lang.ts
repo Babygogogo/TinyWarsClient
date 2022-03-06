@@ -278,12 +278,16 @@ namespace Lang {
             case Types.WarType.Me       : return getText(LangTextType.B0419);
             case Types.WarType.MrwStd   : return getText(LangTextType.B0415);
             case Types.WarType.MrwFog   : return getText(LangTextType.B0416);
+            case Types.WarType.MfwStd   : return getText(LangTextType.B0812);
+            case Types.WarType.MfwFog   : return getText(LangTextType.B0813);
             case Types.WarType.ScwStd   : return getText(LangTextType.B0610);
             case Types.WarType.ScwFog   : return getText(LangTextType.B0611);
             case Types.WarType.SfwStd   : return getText(LangTextType.B0612);
             case Types.WarType.SfwFog   : return getText(LangTextType.B0613);
             case Types.WarType.CcwStd   : return getText(LangTextType.B0725);
             case Types.WarType.CcwFog   : return getText(LangTextType.B0726);
+            case Types.WarType.SrwStd   : return getText(LangTextType.B0257);
+            case Types.WarType.SrwFog   : return getText(LangTextType.B0817);
             default                     : return null;
         }
     }
@@ -297,6 +301,7 @@ namespace Lang {
             case Types.WarBasicSettingsType.WarRuleTitle            : return getText(LangTextType.B0318);
             case Types.WarBasicSettingsType.HasFog                  : return getText(LangTextType.B0020);
             case Types.WarBasicSettingsType.Weather                 : return getText(LangTextType.B0705);
+            case Types.WarBasicSettingsType.TurnsLimit              : return getText(LangTextType.B0842);
             case Types.WarBasicSettingsType.TimerType               : return getText(LangTextType.B0574);
             case Types.WarBasicSettingsType.TimerRegularParam       : return getText(LangTextType.B0021);
             case Types.WarBasicSettingsType.TimerIncrementalParam1  : return getText(LangTextType.B0389);
@@ -452,6 +457,8 @@ namespace Lang {
         switch (type) {
             case WarEventActionType.AddUnit                         : return getText(LangTextType.B0617);
             case WarEventActionType.SetUnitState                    : return getText(LangTextType.B0806);
+            case WarEventActionType.SetTileType                     : return getText(LangTextType.B0825);
+            case WarEventActionType.SetTileState                    : return getText(LangTextType.B0861);
             case WarEventActionType.Dialogue                        : return getText(LangTextType.B0674);
             case WarEventActionType.SetViewpoint                    : return getText(LangTextType.B0713);
             case WarEventActionType.SetWeather                      : return getText(LangTextType.B0715);

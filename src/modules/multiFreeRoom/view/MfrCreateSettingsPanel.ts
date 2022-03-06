@@ -293,6 +293,18 @@ namespace TwnsMfrCreateSettingsPanel {
                         callbackOnModify: null,
                     },
                     {
+                        settingsType    : WarBasicSettingsType.TurnsLimit,
+                        currentValue    : MfrCreateModel.getTurnsLimit(),
+                        warRule,
+                        callbackOnModify: (newValue: string | number | null) => {
+                            if (typeof newValue !== "number") {
+                                throw Helpers.newError(`Invalid newValue: ${newValue}`);
+                            }
+                            MfrCreateModel.setTurnsLimit(newValue);
+                            this._updateCommonWarBasicSettingsPage();
+                        },
+                    },
+                    {
                         settingsType    : WarBasicSettingsType.TimerType,
                         currentValue    : timerType,
                         warRule,

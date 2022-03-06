@@ -28,6 +28,8 @@ namespace CommonConstants {
 
     export const DiscordUrl                             = `https://discord.gg/jdtRpY9`;
     export const GithubUrl                              = `https://github.com/Babygogogo/TinyWarsClient`;
+    export const LegacyVersionUrl                       = `https://tinywars.online/game/legacy`;
+    export const TestVersionUrl                         = `https://tinywars.online/game/test`;
 
     export const ErrorTextForLang                       = `LangErr`;
     export const ErrorTextForUndefined                  = `UndefErr`;
@@ -35,6 +37,7 @@ namespace CommonConstants {
     export const AdminUserId                            = 1000001;
     export const NameListMaxLength                      = 5;
 
+    export const BroadcastTextMaxLength                 = 150;
     export const ChangeLogTextMaxLength                 = 200;
     export const ChangeLogTextListMaxLength             = 2;
     export const ChangeLogMessageListMaxLength          = 100;
@@ -67,7 +70,7 @@ namespace CommonConstants {
     export const WarEventActionSetPlayerCoEnergyMaxMultiplierPercentage = 10000;
     export const WarEventActionSetPlayerCoEnergyMaxDeltaPercentage      = 100;
 
-    export const MapEditorSlotMaxCountForNormal         = 3;
+    export const MapEditorSlotMaxCountForNormal         = 5;
     export const MapEditorSlotMaxCountForCommittee      = 100;
     export const MapEditorAutoSaveMinTime               = 180;
     export const MapEditorAutoSaveMaxTime               = 1800;
@@ -116,6 +119,8 @@ namespace CommonConstants {
     export const WarBootTimerRegularDefaultValue        = 3600 * 24 * 3;
     export const WarBootTimerIncrementalMaxLimit        = 3600 * 24;
     export const WarBootTimerDefaultParams              = [Types.BootTimerType.Regular, WarBootTimerRegularDefaultValue];
+    export const WarMaxTurnsLimit                       = 80;
+    export const WarMinTurnsLimit                       = 20;
 
     export const WarRuleFirstId                             = 0;
     export const WarRuleNameMaxLength                       = 15;
@@ -305,6 +310,52 @@ namespace CommonConstants {
         ])],
     ]);
 
+    export const TileTypeToTileBaseType = new Map<TileType, TileBaseType>([
+        [TileType.Airport,              TileBaseType.Plain],
+        [TileType.Beach,                TileBaseType.Beach],
+        [TileType.BridgeOnBeach,        TileBaseType.Beach],
+        [TileType.BridgeOnPlain,        TileBaseType.Plain],
+        [TileType.BridgeOnRiver,        TileBaseType.River],
+        [TileType.BridgeOnSea,          TileBaseType.Sea],
+        [TileType.City,                 TileBaseType.Plain],
+        [TileType.CommandTower,         TileBaseType.Plain],
+        [TileType.EmptySilo,            TileBaseType.Plain],
+        [TileType.Factory,              TileBaseType.Plain],
+        [TileType.Fire,                 TileBaseType.Plain],
+        [TileType.Pipe,                 TileBaseType.Plain],
+        [TileType.Headquarters,         TileBaseType.Plain],
+        [TileType.Meteor,               TileBaseType.Plain],
+        [TileType.MistOnBeach,          TileBaseType.Beach],
+        [TileType.MistOnPlain,          TileBaseType.Plain],
+        [TileType.MistOnRiver,          TileBaseType.River],
+        [TileType.MistOnSea,            TileBaseType.Sea],
+        [TileType.Mountain,             TileBaseType.Plain],
+        [TileType.Plain,                TileBaseType.Plain],
+        [TileType.Plasma,               TileBaseType.Plain],
+        [TileType.Radar,                TileBaseType.Plain],
+        [TileType.Reef,                 TileBaseType.Sea],
+        [TileType.River,                TileBaseType.River],
+        [TileType.Road,                 TileBaseType.Plain],
+        [TileType.Rough,                TileBaseType.Sea],
+        [TileType.Ruins,                TileBaseType.Plain],
+        [TileType.Sea,                  TileBaseType.Sea],
+        [TileType.Seaport,              TileBaseType.Sea],
+        [TileType.Silo,                 TileBaseType.Plain],
+        [TileType.TempAirport,          TileBaseType.Plain],
+        [TileType.TempSeaport,          TileBaseType.Plain],
+        [TileType.Wasteland,            TileBaseType.Plain],
+        [TileType.Wood,                 TileBaseType.Plain],
+        [TileType.Crystal,              TileBaseType.Plain],
+        [TileType.CustomCrystal,        TileBaseType.Plain],
+        [TileType.CannonUp,             TileBaseType.Plain],
+        [TileType.CannonDown,           TileBaseType.Plain],
+        [TileType.CannonLeft,           TileBaseType.Plain],
+        [TileType.CannonRight,          TileBaseType.Plain],
+        [TileType.CustomCannon,         TileBaseType.Plain],
+        [TileType.LaserTurret,          TileBaseType.Plain],
+        [TileType.CustomLaserTurret,    TileBaseType.Plain],
+        [TileType.PipeJoint,            TileBaseType.Plain],
+    ]);
     export const TileTypeToTileObjectType = new Map<TileType, TileObjectType>([
         [TileType.Airport,              TileObjectType.Airport],
         [TileType.Beach,                TileObjectType.Empty],
@@ -686,7 +737,46 @@ namespace CommonConstants {
             [   46, [   46,     46,     46,     46,     46, ]],
         ])],
     ]);
-    export const TileObjectSymmetry = new Map<TileObjectType, Map<number, number[]>>([
+    export const TileObjectTypeSymmetry = new Map<TileObjectType, TileObjectType[]>([
+        // 类型                                 上下翻转                            左下右上                            左右翻转                            左上右下                                逆时针180  // 图块变换
+        [ TileObjectType.Empty,             [ TileObjectType.Empty,             TileObjectType.Empty,               TileObjectType.Empty,               TileObjectType.Empty,               TileObjectType.Empty                ] ],
+        [ TileObjectType.Road,              [ TileObjectType.Road,              TileObjectType.Road,                TileObjectType.Road,                TileObjectType.Road,                TileObjectType.Road                 ] ],
+        [ TileObjectType.Bridge,            [ TileObjectType.Bridge,            TileObjectType.Bridge,              TileObjectType.Bridge,              TileObjectType.Bridge,              TileObjectType.Bridge               ] ],
+        [ TileObjectType.Wood,              [ TileObjectType.Wood,              TileObjectType.Wood,                TileObjectType.Wood,                TileObjectType.Wood,                TileObjectType.Wood                 ] ],
+        [ TileObjectType.Mountain,          [ TileObjectType.Mountain,          TileObjectType.Mountain,            TileObjectType.Mountain,            TileObjectType.Mountain,            TileObjectType.Mountain             ] ],
+        [ TileObjectType.Wasteland,         [ TileObjectType.Wasteland,         TileObjectType.Wasteland,           TileObjectType.Wasteland,           TileObjectType.Wasteland,           TileObjectType.Wasteland            ] ],
+        [ TileObjectType.Ruins,             [ TileObjectType.Ruins,             TileObjectType.Ruins,               TileObjectType.Ruins,               TileObjectType.Ruins,               TileObjectType.Ruins                ] ],
+        [ TileObjectType.Fire,              [ TileObjectType.Fire,              TileObjectType.Fire,                TileObjectType.Fire,                TileObjectType.Fire,                TileObjectType.Fire                 ] ],
+        [ TileObjectType.Rough,             [ TileObjectType.Rough,             TileObjectType.Rough,               TileObjectType.Rough,               TileObjectType.Rough,               TileObjectType.Rough                ] ],
+        [ TileObjectType.Mist,              [ TileObjectType.Mist,              TileObjectType.Mist,                TileObjectType.Mist,                TileObjectType.Mist,                TileObjectType.Mist                 ] ],
+        [ TileObjectType.Reef,              [ TileObjectType.Reef,              TileObjectType.Reef,                TileObjectType.Reef,                TileObjectType.Reef,                TileObjectType.Reef                 ] ],
+        [ TileObjectType.Plasma,            [ TileObjectType.Plasma,            TileObjectType.Plasma,              TileObjectType.Plasma,              TileObjectType.Plasma,              TileObjectType.Plasma               ] ],
+        [ TileObjectType.Meteor,            [ TileObjectType.Meteor,            TileObjectType.Meteor,              TileObjectType.Meteor,              TileObjectType.Meteor,              TileObjectType.Meteor               ] ],
+        [ TileObjectType.Silo,              [ TileObjectType.Silo,              TileObjectType.Silo,                TileObjectType.Silo,                TileObjectType.Silo,                TileObjectType.Silo                 ] ],
+        [ TileObjectType.EmptySilo,         [ TileObjectType.EmptySilo,         TileObjectType.EmptySilo,           TileObjectType.EmptySilo,           TileObjectType.EmptySilo,           TileObjectType.EmptySilo            ] ],
+        [ TileObjectType.Headquarters,      [ TileObjectType.Headquarters,      TileObjectType.Headquarters,        TileObjectType.Headquarters,        TileObjectType.Headquarters,        TileObjectType.Headquarters         ] ],
+        [ TileObjectType.City,              [ TileObjectType.City,              TileObjectType.City,                TileObjectType.City,                TileObjectType.City,                TileObjectType.City                 ] ],
+        [ TileObjectType.CommandTower,      [ TileObjectType.CommandTower,      TileObjectType.CommandTower,        TileObjectType.CommandTower,        TileObjectType.CommandTower,        TileObjectType.CommandTower         ] ],
+        [ TileObjectType.Radar,             [ TileObjectType.Radar,             TileObjectType.Radar,               TileObjectType.Radar,               TileObjectType.Radar,               TileObjectType.Radar                ] ],
+        [ TileObjectType.Factory,           [ TileObjectType.Factory,           TileObjectType.Factory,             TileObjectType.Factory,             TileObjectType.Factory,             TileObjectType.Factory              ] ],
+        [ TileObjectType.Airport,           [ TileObjectType.Airport,           TileObjectType.Airport,             TileObjectType.Airport,             TileObjectType.Airport,             TileObjectType.Airport              ] ],
+        [ TileObjectType.Seaport,           [ TileObjectType.Seaport,           TileObjectType.Seaport,             TileObjectType.Seaport,             TileObjectType.Seaport,             TileObjectType.Seaport              ] ],
+        [ TileObjectType.TempAirport,       [ TileObjectType.TempAirport,       TileObjectType.TempAirport,         TileObjectType.TempAirport,         TileObjectType.TempAirport,         TileObjectType.TempAirport          ] ],
+        [ TileObjectType.TempSeaport,       [ TileObjectType.TempSeaport,       TileObjectType.TempSeaport,         TileObjectType.TempSeaport,         TileObjectType.TempSeaport,         TileObjectType.TempSeaport          ] ],
+        [ TileObjectType.Pipe,              [ TileObjectType.Pipe,              TileObjectType.Pipe,                TileObjectType.Pipe,                TileObjectType.Pipe,                TileObjectType.Pipe                 ] ],
+        [ TileObjectType.Crystal,           [ TileObjectType.Crystal,           TileObjectType.Crystal,             TileObjectType.Crystal,             TileObjectType.Crystal,             TileObjectType.Crystal              ] ],
+        [ TileObjectType.CustomCrystal,     [ TileObjectType.CustomCrystal,     TileObjectType.CustomCrystal,       TileObjectType.CustomCrystal,       TileObjectType.CustomCrystal,       TileObjectType.CustomCrystal        ] ],
+        [ TileObjectType.CannonUp,          [ TileObjectType.CannonDown,        TileObjectType.CannonLeft,          TileObjectType.CannonUp,            TileObjectType.CannonRight,         TileObjectType.CannonDown           ] ],
+        [ TileObjectType.CannonDown,        [ TileObjectType.CannonUp,          TileObjectType.CannonRight,         TileObjectType.CannonDown,          TileObjectType.CannonLeft,          TileObjectType.CannonUp             ] ],
+        [ TileObjectType.CannonLeft,        [ TileObjectType.CannonLeft,        TileObjectType.CannonUp,            TileObjectType.CannonRight,         TileObjectType.CannonDown,          TileObjectType.CannonRight          ] ],
+        [ TileObjectType.CannonRight,       [ TileObjectType.CannonRight,       TileObjectType.CannonDown,          TileObjectType.CannonLeft,          TileObjectType.CannonUp,            TileObjectType.CannonLeft           ] ],
+        [ TileObjectType.CustomCannon,      [ TileObjectType.CustomCannon,      TileObjectType.CustomCannon,        TileObjectType.CustomCannon,        TileObjectType.CustomCannon,        TileObjectType.CustomCannon         ] ],
+        [ TileObjectType.LaserTurret,       [ TileObjectType.LaserTurret,       TileObjectType.LaserTurret,         TileObjectType.LaserTurret,         TileObjectType.LaserTurret,         TileObjectType.LaserTurret          ] ],
+        [ TileObjectType.CustomLaserTurret, [ TileObjectType.CustomLaserTurret, TileObjectType.CustomLaserTurret,   TileObjectType.CustomLaserTurret,   TileObjectType.CustomLaserTurret,   TileObjectType.CustomLaserTurret    ] ],
+        [ TileObjectType.PipeJoint,         [ TileObjectType.PipeJoint,         TileObjectType.PipeJoint,           TileObjectType.PipeJoint,           TileObjectType.PipeJoint,           TileObjectType.PipeJoint            ] ],
+
+    ]);
+    export const TileObjectShapeSymmetry = new Map<TileObjectType, Map<number, number[]>>([
         // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
         [TileObjectType.Empty, new Map([
             [   0,  [   0,      0,      0,      0,      0,  ]],

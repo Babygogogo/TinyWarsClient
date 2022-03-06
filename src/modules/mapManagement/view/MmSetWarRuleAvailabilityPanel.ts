@@ -14,15 +14,15 @@
 // import TwnsMmWarRulePanel       from "./MmWarRulePanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMmAvailabilityChangePanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
+namespace TwnsMmSetWarRuleAvailabilityPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
         mapId   : number;
+        ruleId  : number;
     };
-    export class MmAvailabilityChangePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MmSetWarRuleAvailabilityPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupMcw!     : eui.Group;
         private readonly _labelMcw!     : TwnsUiLabel.UiLabel;
         private readonly _imgMcw!       : TwnsUiImage.UiImage;
@@ -39,17 +39,10 @@ namespace TwnsMmAvailabilityChangePanel {
         private readonly _labelSrw!     : TwnsUiLabel.UiLabel;
         private readonly _imgSrw!       : TwnsUiImage.UiImage;
 
-        private readonly _groupMrwStd!  : eui.Group;
-        private readonly _labelMrwStd!  : TwnsUiLabel.UiLabel;
-        private readonly _imgMrwStd!    : TwnsUiImage.UiImage;
+        private readonly _groupMrw!     : eui.Group;
+        private readonly _labelMrw!     : TwnsUiLabel.UiLabel;
+        private readonly _imgMrw!       : TwnsUiImage.UiImage;
 
-        private readonly _groupMrwFog!  : eui.Group;
-        private readonly _labelMrwFog!  : TwnsUiLabel.UiLabel;
-        private readonly _imgMrwFog!    : TwnsUiImage.UiImage;
-
-        private readonly _btnDelete!    : TwnsUiButton.UiButton;
-        private readonly _btnWarRule!   : TwnsUiButton.UiButton;
-        private readonly _btnRename!    : TwnsUiButton.UiButton;
         private readonly _btnCancel!    : TwnsUiButton.UiButton;
         private readonly _btnConfirm!   : TwnsUiButton.UiButton;
 
@@ -59,20 +52,15 @@ namespace TwnsMmAvailabilityChangePanel {
             ]);
             this._setUiListenerArray([
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
-                { ui: this._btnDelete,      callback: this._onTouchedBtnDelete },
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
-                { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
-                { ui: this._btnRename,      callback: this._onTouchedBtnRename },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
                 { ui: this._groupCcw,       callback: this._onTouchedGroupCcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
                 { ui: this._groupSrw,       callback: this._onTouchedGroupSrw },
-                { ui: this._groupMrwStd,    callback: this._onTouchedGroupMrwStd },
-                { ui: this._groupMrwFog,    callback: this._onTouchedGroupMrwFog },
+                { ui: this._groupMrw,       callback: this._onTouchedGroupMrw },
             ]);
             this._setIsTouchMaskEnabled();
-
-            this._btnDelete.setTextColor(0xFF0000);
+            this._setIsCloseOnTouchedMask();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateComponentsForLanguage();
@@ -86,40 +74,37 @@ namespace TwnsMmAvailabilityChangePanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnConfirm(): void {
-            WarMapProxy.reqMmSetMapAvailability(this._getOpenData().mapId, {
-                canMcw      : this._imgMcw.visible,
-                canCcw      : this._imgCcw.visible,
-                canScw      : this._imgScw.visible,
-                canSrw      : this._imgSrw.visible,
-                canMrwStd   : this._imgMrwStd.visible,
-                canMrwFog   : this._imgMrwFog.visible,
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            const openData      = this._getOpenData();
+            const mapId         = openData.mapId;
+            const ruleId        = openData.ruleId;
+            const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapId));
+            const warRule       = Helpers.getExisted(Helpers.deepClone(mapRawData.warRuleArray?.find(v => v.ruleId === ruleId)));
+            const availability  : ProtoTypes.WarRule.IRuleAvailability = {
+                canMcw  : this._imgMcw.visible,
+                canCcw  : this._imgCcw.visible,
+                canScw  : this._imgScw.visible,
+                canSrw  : this._imgSrw.visible,
+                canMrw  : this._imgMrw.visible,
+            };
+            warRule.ruleAvailability    = availability;
+            const errorCode             = WarRuleHelpers.getErrorCodeForWarRule({
+                rule                    : warRule,
+                playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
+                configVersion           : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+                allWarEventIdArray      : Helpers.getNonNullElements(mapRawData.warEventFullData?.eventArray?.map(v => v.eventId) ?? []),
             });
-            this.close();
-        }
-
-        private _onTouchedBtnDelete(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
-                content : Lang.getText(LangTextType.A0080),
-                callback: () => {
-                    WarMapProxy.reqMmSetMapEnabled(this._getOpenData().mapId, false);
-                    this.close();
-                },
-            });
-        }
-
-        private async _onTouchedBtnWarRule(): Promise<void> {
-            const mapRawData = await WarMapModel.getRawData(this._getOpenData().mapId);
-            if (mapRawData == null) {
-                throw Helpers.newError(`MmAvailabilityChangePanel._onTouchedBtnWarRule() empty mapRawData.`);
+            if (errorCode) {
+                FloatText.show(Lang.getErrorText(errorCode));
+                return;
             }
 
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, mapRawData);
+            WarMapProxy.reqMmSetWarRuleAvailability({
+                mapId,
+                ruleId,
+                availability,
+            });
             this.close();
-        }
-
-        private _onTouchedBtnRename(): void {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmMapRenamePanel, { mapId: this._getOpenData().mapId });
         }
 
         private _onTouchedBtnCancel(): void {
@@ -138,44 +123,30 @@ namespace TwnsMmAvailabilityChangePanel {
         private _onTouchedGroupSrw(): void {
             this._imgSrw.visible = !this._imgSrw.visible;
         }
-        private _onTouchedGroupMrwStd(): void {
-            this._imgMrwStd.visible = !this._imgMrwStd.visible;
-        }
-        private _onTouchedGroupMrwFog(): void {
-            this._imgMrwFog.visible = !this._imgMrwFog.visible;
+        private _onTouchedGroupMrw(): void {
+            this._imgMrw.visible = !this._imgMrw.visible;
         }
 
         private async _updateImages(): Promise<void> {
-            const briefData     = await WarMapModel.getBriefData(this._getOpenData().mapId);
-            const extraData     = briefData ? briefData.mapExtraData : null;
-            const complexInfo   = extraData ? extraData.mapComplexInfo : null;
-            const availability  = complexInfo ? complexInfo.mapAvailability : null;
-            if (availability == null) {
-                throw Helpers.newError(`MmAvailabilityChangePanel._updateImages() empty availability.`);
-            }
-
-            this._imgMcw.visible        = !!availability.canMcw;
-            this._imgCcw.visible        = !!availability.canCcw;
-            this._imgScw.visible        = !!availability.canScw;
-            this._imgSrw.visible        = !!availability.canSrw;
-            this._imgMrwStd.visible     = !!availability.canMrwStd;
-            this._imgMrwFog.visible     = !!availability.canMrwFog;
+            const openData          = this._getOpenData();
+            const availability      = (await WarMapModel.getRawData(openData.mapId))?.warRuleArray?.find(v => v.ruleId === openData.ruleId)?.ruleAvailability ?? {};
+            this._imgMcw.visible    = !!availability.canMcw;
+            this._imgCcw.visible    = !!availability.canCcw;
+            this._imgScw.visible    = !!availability.canScw;
+            this._imgSrw.visible    = !!availability.canSrw;
+            this._imgMrw.visible    = !!availability.canMrw;
         }
 
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label   = Lang.getText(LangTextType.B0154);
             this._btnConfirm.label  = Lang.getText(LangTextType.B0026);
-            this._btnDelete.label   = Lang.getText(LangTextType.B0270);
-            this._btnWarRule.label  = Lang.getText(LangTextType.B0314);
-            this._btnRename.label   = Lang.getText(LangTextType.B0708);
             this._labelMcw.text     = Lang.getText(LangTextType.B0200);
             this._labelCcw.text     = Lang.getText(LangTextType.B0619);
-            this._labelMrwStd.text  = Lang.getText(LangTextType.B0404);
-            this._labelMrwFog.text  = Lang.getText(LangTextType.B0408);
+            this._labelMrw.text     = Lang.getText(LangTextType.B0404);
             this._labelScw.text     = Lang.getText(LangTextType.B0409);
             this._labelSrw.text     = Lang.getText(LangTextType.B0614);
         }
     }
 }
 
-// export default TwnsMmAvailabilityChangePanel;
+// export default TwnsMmSetWarRuleAvailabilityPanel;

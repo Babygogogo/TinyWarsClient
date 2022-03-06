@@ -45,12 +45,14 @@ namespace TwnsMrrMainMenuPanel {
                 { ui: this._btnPreviewFogMaps,  callback: this._onTouchedBtnPreviewFogMaps },
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.MsgUserLogout,                   callback: this._onMsgUserLogout },
-                { type: NotifyType.MsgMrrGetRoomPublicInfo,         callback: this._onMsgMrrGetRoomPublicInfo },
-                { type: NotifyType.MsgMrrGetMyRoomPublicInfoList,   callback: this._onMsgMrrGetMyRoomPublicInfoList },
-                { type: NotifyType.MsgMcrGetJoinedRoomInfoList,     callback: this._onMsgMcrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgMfrGetJoinedRoomInfoList,     callback: this._onMsgMfrGetJoinedRoomInfoList },
-                { type: NotifyType.MsgCcrGetJoinedRoomInfoList,     callback: this._onMsgCcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
+                { type: NotifyType.MsgMrrGetRoomPublicInfo,             callback: this._onMsgMrrGetRoomPublicInfo },
+                { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMcrGetJoinedRoomIdArray,          callback: this._onMsgMcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgCcrGetJoinedRoomIdArray,         callback: this._onMsgCcrGetJoinedRoomInfoList },
+                { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
+                { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
             ]);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
@@ -105,16 +107,24 @@ namespace TwnsMrrMainMenuPanel {
         private _onMsgMrrGetRoomPublicInfo(): void {
             this._updateComponentsForRed();
         }
-        private _onMsgMrrGetMyRoomPublicInfoList(): void {
+        private _onMsgMrrGetJoinedRoomIdArray(): void {
             this._updateComponentsForRed();
         }
-        private _onMsgMcrGetJoinedRoomInfoList(): void {
+        private _onMsgMcrGetJoinedRoomIdArray(): void {
             this._updateBtnMultiPlayer();
         }
         private _onMsgMfrGetJoinedRoomInfoList(): void {
             this._updateBtnMultiPlayer();
         }
         private _onMsgCcrGetJoinedRoomInfoList(): void {
+            this._updateBtnMultiPlayer();
+        }
+        private _onMsgMpwCommonGetWarProgressInfo(): void {
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
+            this._updateBtnContinueWar();
+        }
+        private _onMsgMpwWatchGetRequestedWarIdArray(): void {
             this._updateBtnMultiPlayer();
         }
 
@@ -128,27 +138,24 @@ namespace TwnsMrrMainMenuPanel {
         private async _updateComponentsForRed(): Promise<void> {
             this._updateBtnMultiPlayer();
             this._updateBtnRanking();
+            this._updateBtnContinueWar();
 
             this._btnMyRoom.setRedVisible(await MrrModel.checkIsRed());
-            this._btnContinueWar.setRedVisible(MpwModel.checkIsRedForMyMrwWars());
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {
-            this._btnMultiPlayer.setRedVisible(
-                (MpwModel.checkIsRedForMyMcwWars()) ||
-                (MpwModel.checkIsRedForMyMfwWars()) ||
-                (MpwModel.checkIsRedForMyCcwWars()) ||
-                (await McrModel.checkIsRed())       ||
-                (await MfrModel.checkIsRed())       ||
-                (await CcrModel.checkIsRed())
-            );
+            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MpwModel.checkIsRedForMyMrwWars()) ||
                 (await MrrModel.checkIsRed())
             );
+        }
+
+        private async _updateBtnContinueWar(): Promise<void> {
+            this._btnContinueWar.setRedVisible(await MpwModel.checkIsRedForMyMrwWars());
         }
 
         protected async _showOpenAnimation(): Promise<void> {

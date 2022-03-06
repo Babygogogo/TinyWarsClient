@@ -171,6 +171,9 @@ namespace TwnsTwWar {
             return false;
         }
 
+        public getBootRestTime(): number | null {
+            return null;
+        }
         public getSettingsBootTimerParams(): number[] {
             return [Types.BootTimerType.NoBoot];
         }
@@ -197,7 +200,7 @@ namespace TwnsTwWar {
             seedRandomInitialState  : seedRandomState,
             seedRandomCurrentState  : seedRandomState,
             warEventManager         : {
-                warEventFullData    : WarEventHelper.trimWarEventFullData(mapRawData.warEventFullData, warRule.warEventIdArray),
+                warEventFullData    : WarEventHelper.trimAndCloneWarEventFullData(mapRawData.warEventFullData, warRule.warEventIdArray),
                 calledCountList     : [],
             },
         };
@@ -291,6 +294,7 @@ namespace TwnsTwWar {
             coId                        : data.coId,
             coCurrentEnergy             : null,
             coUsingSkillType            : Types.CoSkillType.Passive,
+            coPowerActivatedCount       : null,
             coIsDestroyedInTurn         : false,
             watchOngoingSrcUserIdArray  : null,
             watchRequestSrcUserIdArray  : null,

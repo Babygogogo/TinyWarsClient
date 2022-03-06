@@ -14,8 +14,8 @@
 // import WarRuleHelpers           from "../../tools/warHelpers/WarRuleHelpers";
 // import MfrCreateModel           from "../model/MfrCreateModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMfrCreateAdvancedSettingsPage {
-    import CommonHelpPanel  = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import PlayerRuleType   = Types.PlayerRuleType;
@@ -33,8 +33,8 @@ namespace TwnsMfrCreateAdvancedSettingsPage {
 
         protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgMfrGetRoomInfo,  callback: this._onNotifyMsgMfrGetRoomInfo },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgMfrGetRoomStaticInfo,     callback: this._onNotifyMsgMfrGetRoomStaticInfo },
             ]);
             this._listSetting.setItemRenderer(SettingRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
@@ -56,7 +56,7 @@ namespace TwnsMfrCreateAdvancedSettingsPage {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyMsgMfrGetRoomInfo(): void {
+        private _onNotifyMsgMfrGetRoomStaticInfo(): void {
             this._updateListPlayer();
         }
 

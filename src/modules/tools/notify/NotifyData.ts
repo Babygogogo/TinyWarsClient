@@ -15,13 +15,15 @@ namespace NotifyData {
     export type BwCoIdChanged               = TwnsBwPlayer.BwPlayer;
     export type BwCursorGridIndexChanged    = TwnsBwCursor.BwCursor;
     export type BwTileLocationFlagSet       = TwnsBwTile.BwTile;
+    export type BwTileIsHighlightChanged    = TwnsBwTile.BwTile;
     export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
     export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
     export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };
     export type BwFieldDragged              = { previous: Types.Point, current: Types.Point };
-    export type MeUnitChanged               = { gridIndex: GridIndex };
+    export type BwUnitChanged               = { gridIndex: GridIndex };
     export type MeTileChanged               = { gridIndex: GridIndex };
     export type ScrCreatePlayerInfoChanged  = { playerIndex: number };
+    export type SrrCreatePlayerInfoChanged  = { playerIndex: number };
 }
 
 // export default NotifyData;

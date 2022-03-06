@@ -23,10 +23,10 @@ namespace TwnsBwUnitMapView {
         private readonly _layerForGround    = new egret.DisplayObjectContainer();
         private readonly _layerForAir       = new egret.DisplayObjectContainer();
         private readonly _notifyListeners   = [
-            { type: NotifyType.UnitAnimationTick,               callback: this._onNotifyUnitAnimationTick },
-            { type: NotifyType.UnitStateIndicatorTick,          callback: this._onNotifyUnitStateIndicatorTick },
-            { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
-            { type: NotifyType.UserSettingsUnitOpacityChanged,  callback: this._onNotifyUserSettingsUnitOpacityChanged },
+            { type: NotifyType.UnitAnimationTick,                   callback: this._onNotifyUnitAnimationTick },
+            { type: NotifyType.UnitStateIndicatorTick,              callback: this._onNotifyUnitStateIndicatorTick },
+            { type: NotifyType.BwActionPlannerStateSet,             callback: this._onNotifyBwActionPlannerStateChanged },
+            { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
         ];
 
         private _unitMap    : TwnsBwUnitMap.BwUnitMap | null = null;
@@ -166,6 +166,10 @@ namespace TwnsBwUnitMapView {
                 this._resetVisibleForAllUnitsOnMap();
                 Helpers.getExisted(actionPlanner.getUnitForPreviewingMovableArea()).setViewVisible(false);
 
+            } else if (state === ActionPlannerState.PreviewingUnitVisibleArea) {
+                this._resetVisibleForAllUnitsOnMap();
+                Helpers.getExisted(actionPlanner.getUnitForPreviewingVisibleArea()).setViewVisible(false);
+
             } else if (state === ActionPlannerState.PreviewingTileAttackableArea) {
                 this._resetVisibleForAllUnitsOnMap();
 
@@ -174,7 +178,7 @@ namespace TwnsBwUnitMapView {
             }
         }
 
-        private _onNotifyUserSettingsUnitOpacityChanged(): void {
+        private _onNotifyUserSettingsOpacitySettingsChanged(): void {
             this._updateOpacityForAllLayers();
         }
 
@@ -243,7 +247,7 @@ namespace TwnsBwUnitMapView {
         }
 
         private _updateOpacityForAllLayers(): void {
-            const opacity               = UserModel.getSelfSettingsUnitOpacity() / 100;
+            const opacity               = (UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100) / 100;
             this._layerForAir.alpha     = opacity;
             this._layerForGround.alpha  = opacity;
             this._layerForNaval.alpha   = opacity;

@@ -49,6 +49,7 @@ namespace TwnsBwTileBriefPanel {
                 { type: NotifyType.BwActionPlannerStateSet,     callback: this._onNotifyBwActionPlannerStateChanged },
                 { type: NotifyType.MeTileChanged,               callback: this._onNotifyMeTileChanged },
                 { type: NotifyType.TileAnimationTick,           callback: this._onNotifyTileAnimationTick },
+                { type: NotifyType.BwTileIsHighlightedChanged,  callback: this._onNotifyTileIsHighlightedChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this, callback: this._onTouchedThis, },
@@ -59,6 +60,7 @@ namespace TwnsBwTileBriefPanel {
             conTileView.addChild(tileView.getImgBase());
             conTileView.addChild(tileView.getImgDecorator());
             conTileView.addChild(tileView.getImgObject());
+            conTileView.addChild(tileView.getImgHighlight());
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -101,6 +103,9 @@ namespace TwnsBwTileBriefPanel {
         private _onNotifyTileAnimationTick(): void {
             this._tileView.updateView();
         }
+        private _onNotifyTileIsHighlightedChanged(): void {
+            this._updateTileView();
+        }
 
         private _onTouchedThis(): void {
             const war   = this._getOpenData().war;
@@ -113,20 +118,13 @@ namespace TwnsBwTileBriefPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const war       = this._getOpenData().war;
-            const gridIndex = war.getCursor().getGridIndex();
-            const tile      = war.getTileMap().getTile(gridIndex);
-            const tileView  = this._tileView;
-            tileView.setData({
-                tileData    : tile.serialize(),
-                hasFog      : tile.getHasFog(),
-                skinId      : tile.getSkinId(),
-                themeType   : tile.getTileThemeType(),
-            });
-            tileView.updateView();
+            const war                   = this._getOpenData().war;
+            const gridIndex             = war.getCursor().getGridIndex();
+            const tile                  = war.getTileMap().getTile(gridIndex);
             this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
             this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
             this._labelName.text        = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
+            this._updateTileView();
 
             if (tile.getCurrentHp() != null) {
                 this._imgState.visible      = true;
@@ -147,6 +145,19 @@ namespace TwnsBwTileBriefPanel {
                 this._imgState.visible      = false;
                 this._labelState.visible    = false;
             }
+        }
+
+        private _updateTileView(): void {
+            const war       = this._getOpenData().war;
+            const tile      = war.getTileMap().getTile(war.getCursor().getGridIndex());
+            const tileView  = this._tileView;
+            tileView.setData({
+                tileData    : tile.serialize(),
+                hasFog      : tile.getHasFog(),
+                skinId      : tile.getSkinId(),
+                themeType   : tile.getTileThemeType(),
+            });
+            tileView.updateView();
         }
 
         // private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {

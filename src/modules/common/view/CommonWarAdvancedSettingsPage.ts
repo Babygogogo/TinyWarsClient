@@ -14,8 +14,8 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 // import TwnsUiTabPage            from "../../tools/ui/UiTabPage";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonWarAdvancedSettingsPage {
-    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;

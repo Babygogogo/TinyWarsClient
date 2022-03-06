@@ -7,13 +7,13 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace CommonModel {
-    import UnitType             = Types.UnitType;
-    import TileThemeType        = Types.TileThemeType;
-    import TileBaseType         = Types.TileBaseType;
-    import TileDecoratorType    = Types.TileDecoratorType;
-    import TileObjectType       = Types.TileObjectType;
-    import TextureVersion       = Types.UnitAndTileTextureVersion;
-    import IDataForPlayerRank   = ProtoTypes.Structure.IDataForPlayerRank;
+    import UnitType                 = Types.UnitType;
+    import TileThemeType            = Types.TileThemeType;
+    import TileBaseType             = Types.TileBaseType;
+    import TileDecoratorType        = Types.TileDecoratorType;
+    import TileObjectType           = Types.TileObjectType;
+    import TextureVersion           = Types.UnitAndTileTextureVersion;
+    import IDataForMrwPlayerRank    = ProtoTypes.Structure.IDataForMrwPlayerRank;
 
     type FrameCfg = {
         source  : string | null;
@@ -26,7 +26,8 @@ namespace CommonModel {
     const _tileDecoratorImageSourceDict = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileDecoratorType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
     const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<TileThemeType, Map<number, Map<TileObjectType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>>();
 
-    let _rankList: IDataForPlayerRank[] | null = null;
+    let _mrwRankArray: IDataForMrwPlayerRank[] | null = null;
+    let _spmOverallRankArray: number[] | null = null;
 
     export function init(): void {
         updateOnUnitAndTileTextureVersionChanged();
@@ -266,11 +267,18 @@ namespace CommonModel {
         return Helpers.getExisted(cfg.source);
     }
 
-    export function setRankList(rankList: IDataForPlayerRank[]): void {
-        _rankList = rankList;
+    export function setMrwRankArray(rankList: IDataForMrwPlayerRank[]): void {
+        _mrwRankArray = rankList;
     }
-    export function getRankList(): IDataForPlayerRank[] | null {
-        return _rankList;
+    export function getMrwRankList(): IDataForMrwPlayerRank[] | null {
+        return _mrwRankArray;
+    }
+
+    export function setSpmOverallRankArray(rankArray: number[]): void {
+        _spmOverallRankArray = rankArray;
+    }
+    export function getSpmOverallRankArray(): number[] | null {
+        return _spmOverallRankArray;
     }
 }
 

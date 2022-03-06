@@ -26,6 +26,7 @@ namespace MeUtility {
     import MeWar                = TwnsMeWar.MeWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import GridIndex            = Types.GridIndex;
+    import TileType             = Types.TileType;
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
     import SymmetryType         = Types.SymmetryType;
@@ -260,6 +261,7 @@ namespace MeUtility {
             coId                        : 0,
             coCurrentEnergy             : null,
             coUsingSkillType            : Types.CoSkillType.Passive,
+            coPowerActivatedCount       : null,
             coIsDestroyedInTurn         : false,
             watchRequestSrcUserIdArray  : [],
             watchOngoingSrcUserIdArray  : [],
@@ -323,15 +325,31 @@ namespace MeUtility {
         return tileList;
     }
     function getNewUnitDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialUnit[] {
-        const unitList: ISerialUnit[] = [];
+        const unitDataArray: ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
             const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex));
             if ((gridIndex.x < newWidth) && (gridIndex.y < newHeight)) {
-                unitList.push(unitData);
+                unitDataArray.push(unitData);
             }
         }
 
-        return unitList;
+        const allUnitsDict  = new Map<number, { unit: ISerialUnit, newUnitId: number }>();
+        let nextUnitId      = 0;
+        for (const unit of unitDataArray) {
+            allUnitsDict.set(Helpers.getExisted(unit.unitId), { unit, newUnitId: nextUnitId } );
+            ++nextUnitId;
+        }
+        for (const [, value] of allUnitsDict) {
+            const unit  = value.unit;
+            unit.unitId = value.newUnitId;
+
+            const loaderUnitId = unit.loaderUnitId;
+            if (loaderUnitId != null) {
+                unit.loaderUnitId = Helpers.getExisted(allUnitsDict.get(loaderUnitId)).newUnitId;
+            }
+        }
+
+        return unitDataArray;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -523,7 +541,7 @@ namespace MeUtility {
         const objectType    = tile1.getObjectType();
         const decoratorType = tile1.getDecoratorType();
         return (baseType === tile2.getBaseType())
-            && (objectType === tile2.getObjectType())
+            && (ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType) === tile2.getObjectType())
             && (decoratorType == tile2.getDecoratorType())
             && (ConfigManager.checkIsTileBaseSymmetrical({
                 baseType,
@@ -548,31 +566,39 @@ namespace MeUtility {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getAutoRoadShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
         const { x, y }      = gridIndex;
-        const isAdjacent4   = checkIsRoadOrBridge(tileMap, { x: x - 1, y }) ? 1 : 0;
-        const isAdjacent3   = checkIsRoadOrBridge(tileMap, { x: x + 1, y }) ? 1 : 0;
-        const isAdjacent2   = checkIsRoadOrBridge(tileMap, { x, y: y + 1 }) ? 1 : 0;
-        const isAdjacent1   = checkIsRoadOrBridge(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        const isAdjacent4   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x, y: y - 1 }) ? 1 : 0;
         return TileRoadAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     export function getAutoBridgeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
         const { x, y }      = gridIndex;
-        const isAdjacent4   = checkIsRoadOrBridge(tileMap, { x: x - 1, y }) ? 1 : 0;
-        const isAdjacent3   = checkIsRoadOrBridge(tileMap, { x: x + 1, y }) ? 1 : 0;
-        const isAdjacent2   = checkIsRoadOrBridge(tileMap, { x, y: y + 1 }) ? 1 : 0;
-        const isAdjacent1   = checkIsRoadOrBridge(tileMap, { x, y: y - 1 }) ? 1 : 0;
+        const isAdjacent4   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x - 1, y }) ? 1 : 0;
+        const isAdjacent3   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x + 1, y }) ? 1 : 0;
+        const isAdjacent2   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x, y: y + 1 }) ? 1 : 0;
+        const isAdjacent1   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x, y: y - 1 }) ? 1 : 0;
         return TileBridgeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    function checkIsRoadOrBridge(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
-        if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
+    function checkCanRoadOrBridgeLinkToTile(tileMap: TwnsBwTileMap.BwTileMap, gridIndex1: GridIndex, gridIndex2: GridIndex): boolean {
+        if (!GridIndexHelpers.checkIsInsideMap(gridIndex2, tileMap.getMapSize())) {
             return true;
         }
 
-        const tileType = tileMap.getTile(gridIndex).getType();
-        return (tileType === Types.TileType.BridgeOnBeach)
-            || (tileType === Types.TileType.BridgeOnPlain)
-            || (tileType === Types.TileType.BridgeOnRiver)
-            || (tileType === Types.TileType.BridgeOnSea)
-            || (tileType === Types.TileType.Road);
+        const tile2         = tileMap.getTile(gridIndex2);
+        const objectType2   = tile2.getObjectType();
+        if ((objectType2 === TileObjectType.Bridge) || (objectType2 === TileObjectType.Road)) {
+            return true;
+        }
+
+        const baseType1 = tileMap.getTile(gridIndex1).getBaseType();
+        if ((baseType1 === TileBaseType.River) || (baseType1 === TileBaseType.Sea)) {
+            if (tile2.getMoveCostByMoveType(Types.MoveType.Tank) != null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     export function getAutoPlasmaShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
@@ -581,7 +607,7 @@ namespace MeUtility {
         const isAdjacent3           = checkIsPlasma(tileMap, { x: x + 1, y }) ? 1 : 0;
         const isAdjacent2           = checkIsPlasma(tileMap, { x, y: y + 1 }) ? 1 : 0;
         const isAdjacent1           = checkIsPlasma(tileMap, { x, y: y - 1 }) ? 1 : 0;
-        const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === Types.TileType.Meteor);
+        const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === TileType.Meteor);
         return Helpers.getExisted(TilePlasmaAutoShapeIdMap.get(isAdjacentToMeteor))[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
     function checkIsPlasma(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
@@ -590,7 +616,7 @@ namespace MeUtility {
         }
 
         const tileType = tileMap.getTile(gridIndex).getType();
-        return (tileType === Types.TileType.Plasma);
+        return (tileType === TileType.Plasma);
     }
 
     export function getAutoPipeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {

@@ -43,6 +43,7 @@ namespace TwnsBwTileDetailPanel {
         Hp,
         CapturePoint,
         BuildPoint,
+        IsHighlighted,
 
         CrystalRadius,
         CrystalPriority,
@@ -102,6 +103,7 @@ namespace TwnsBwTileDetailPanel {
                 { type: NotifyType.LanguageChanged,                 callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.BwActionPlannerStateChanged,     callback: this._onNotifyBwPlannerStateChanged },
                 { type: NotifyType.TileAnimationTick,               callback: this._onNotifyTileAnimationTick },
+                { type: NotifyType.BwTileIsHighlightedChanged,      callback: this._onNotifyTileIsHighlightedChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,                               callback: this.close },
@@ -117,6 +119,7 @@ namespace TwnsBwTileDetailPanel {
             conTileView.addChild(tileView.getImgBase());
             conTileView.addChild(tileView.getImgDecorator());
             conTileView.addChild(tileView.getImgObject());
+            conTileView.addChild(tileView.getImgHighlight());
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
             this._updateView();
@@ -137,13 +140,17 @@ namespace TwnsBwTileDetailPanel {
         private _onNotifyTileAnimationTick(): void {
             this._tileView.updateView();
         }
+        private _onNotifyTileIsHighlightedChanged(): void {
+            this._updateTileView();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
-            this._updateTileViewAndLabelName();
+            this._updateLabelName();
+            this._updateTileView();
             this._updateListInfo();
         }
 
@@ -153,13 +160,16 @@ namespace TwnsBwTileDetailPanel {
             this._updateListMoveCost();
         }
 
-        private _updateTileViewAndLabelName(): void {
+        private _updateLabelName(): void {
             const data              = this._getOpenData();
             const tile              = data.tile;
             this._labelName.text    = Lang.getTileName(tile.getType()) ?? CommonConstants.ErrorTextForUndefined;
             this._labelName1.text   = Lang.getTileName(tile.getType(), Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
+        }
 
-            const tileView = this._tileView;
+        private _updateTileView(): void {
+            const tile      = this._getOpenData().tile;
+            const tileView  = this._tileView;
             tileView.setData({
                 tileData    : tile.serialize(),
                 hasFog      : tile.getHasFog(),
@@ -185,6 +195,7 @@ namespace TwnsBwTileDetailPanel {
                 createInfoHp(war, tile),
                 createInfoCapturePoint(war, tile),
                 createInfoBuildPoint(war, tile),
+                createInfoIsHighlighted(war, tile),
                 createInfoCrystalRadius(war, tile),
                 createInfoCrystalPriority(war, tile),
                 createInfoCrystalCanAffectSelf(war, tile),
@@ -329,6 +340,7 @@ namespace TwnsBwTileDetailPanel {
             else if (infoType === TileInfoType.Hp)                                      { this._modifyAsHp(); }
             else if (infoType === TileInfoType.CapturePoint)                            { this._modifyAsCapturePoint(); }
             else if (infoType === TileInfoType.BuildPoint)                              { this._modifyAsBuildPoint(); }
+            else if (infoType === TileInfoType.IsHighlighted)                           { this._modifyAsIsHighlighted(); }
             else if (infoType === TileInfoType.CrystalRadius)                           { this._modifyAsCrystalRadius(); }
             else if (infoType === TileInfoType.CrystalPriority)                         { this._modifyAsCrystalPriority(); }
             else if (infoType === TileInfoType.CrystalCanAffectSelf)                    { this._modifyAsCrystalCanAffectSelf(); }
@@ -387,6 +399,7 @@ namespace TwnsBwTileDetailPanel {
             else if (infoType === TileInfoType.Hp)                                      { this._updateViewAsHp(); }
             else if (infoType === TileInfoType.CapturePoint)                            { this._updateViewAsCapturePoint(); }
             else if (infoType === TileInfoType.BuildPoint)                              { this._updateViewAsBuildPoint(); }
+            else if (infoType === TileInfoType.IsHighlighted)                           { this._updateViewAsIsHighlighted(); }
             else if (infoType === TileInfoType.CrystalRadius)                           { this._updateViewAsCrystalRadius(); }
             else if (infoType === TileInfoType.CrystalPriority)                         { this._updateViewAsCrystalPriority(); }
             else if (infoType === TileInfoType.CrystalCanAffectSelf)                    { this._updateViewAsCrystalCanAffectSelf(); }
@@ -520,6 +533,13 @@ namespace TwnsBwTileDetailPanel {
             this._labelValue.text       = `${currentValue} / ${tile.getMaxBuildPoint()}`;
             this._groupExtra.visible    = false;
             this._imgModify.visible     = (WarCommonHelpers.checkCanCheatInWar(war.getWarType())) && (currentValue != null);
+        }
+        private _updateViewAsIsHighlighted(): void {
+            const { tile, war }         = this._getData();
+            this._labelTitle.text       = Lang.getText(LangTextType.B0847);
+            this._labelValue.text       = Lang.getText(tile.getIsHighlighted() ? LangTextType.B0012 : LangTextType.B0013);
+            this._groupExtra.visible    = false;
+            this._imgModify.visible     = WarCommonHelpers.checkCanCheatInWar(war.getWarType());
         }
         private _updateViewAsCrystalRadius(): void {
             const { tile, war }         = this._getData();
@@ -819,22 +839,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCurrentHp();
             const minValue  = 1;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0339),
-                currentValue    : "" + currValue,
-                maxChars        : 3,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCurrentHp(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCurrentHp(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -848,22 +862,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCurrentCapturePoint();
             const minValue  = 1;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0361),
-                currentValue    : "" + currValue,
-                maxChars        : 3,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCurrentCapturePoint(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCurrentCapturePoint(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -877,25 +885,29 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCurrentBuildPoint();
             const minValue  = 1;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0362),
-                currentValue    : "" + currValue,
-                maxChars        : 3,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCurrentBuildPoint(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCurrentBuildPoint(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+        }
+        private _modifyAsIsHighlighted(): void {
+            const { tile, war } = this._getData();
+            if (!WarCommonHelpers.checkCanCheatInWar(war.getWarType())) {
+                return;
+            }
+
+            tile.setIsHighlighted(!tile.getIsHighlighted());
+            tile.flushDataToView();
+            this._updateView();
         }
         private _modifyAsCrystalRadius(): void {
             const { tile, war } = this._getData();
@@ -905,22 +917,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomCrystalData()?.radius;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0734),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCrystalRadius(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCrystalRadius(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -933,22 +939,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomCrystalData()?.priority;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0739),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCrystalPriority(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCrystalPriority(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -996,22 +996,16 @@ namespace TwnsBwTileDetailPanel {
             }
 
             const currValue = tile.getCustomCrystalData()?.deltaFund;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0738),
-                currentValue    : "" + currValue,
-                maxChars        : 9,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue        : 10000000,
+                maxValue        : -10000000,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if (isNaN(value)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCrystalDeltaFund(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCrystalDeltaFund(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1025,22 +1019,16 @@ namespace TwnsBwTileDetailPanel {
             const currValue = tile.getCustomCrystalData()?.deltaEnergyPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0730),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCrystalDeltaEnergyPercentage(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCrystalDeltaEnergyPercentage(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1054,22 +1042,16 @@ namespace TwnsBwTileDetailPanel {
             const currValue = tile.getCustomCrystalData()?.deltaHp;
             const minValue  = -WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
             const maxValue  = WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0731),
-                currentValue    : "" + currValue,
-                maxChars        : 3,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCrystalDeltaHp(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCrystalDeltaHp(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1083,22 +1065,16 @@ namespace TwnsBwTileDetailPanel {
             const currValue = tile.getCustomCrystalData()?.deltaFuelPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0732),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCrystalDeltaFuelPercentage(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCrystalDeltaFuelPercentage(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1112,22 +1088,16 @@ namespace TwnsBwTileDetailPanel {
             const currValue = tile.getCustomCrystalData()?.deltaPrimaryAmmoPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0733),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCrystalDeltaPrimaryAmmoPercentage(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCrystalDeltaPrimaryAmmoPercentage(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1140,22 +1110,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomCannonData()?.rangeForUp;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0742)})`,
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCannonRangeForUp(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCannonRangeForUp(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1168,22 +1132,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomCannonData()?.rangeForRight;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0743)})`,
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCannonRangeForRight(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCannonRangeForRight(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1196,22 +1154,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomCannonData()?.rangeForDown;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0744)})`,
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCannonRangeForDown(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCannonRangeForDown(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1224,22 +1176,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomCannonData()?.rangeForLeft;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0745)})`,
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCannonRangeForLeft(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCannonRangeForLeft(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1252,22 +1198,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomCannonData()?.priority;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0739),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCannonPriority(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCannonPriority(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1280,22 +1220,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomCannonData()?.maxTargetCount;
             const minValue  = 1;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0746),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${Lang.getText(LangTextType.B0141)})`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCannonMaxTargetCount(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCannonMaxTargetCount(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1345,22 +1279,16 @@ namespace TwnsBwTileDetailPanel {
             const currValue = tile.getCustomCannonData()?.deltaHp;
             const minValue  = -WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
             const maxValue  = WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0731),
-                currentValue    : "" + currValue,
-                maxChars        : 3,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCannonDeltaHp(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCannonDeltaHp(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1374,22 +1302,16 @@ namespace TwnsBwTileDetailPanel {
             const currValue = tile.getCustomCannonData()?.deltaFuelPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0732),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCannonDeltaFuelPercentage(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCannonDeltaFuelPercentage(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1403,22 +1325,16 @@ namespace TwnsBwTileDetailPanel {
             const currValue = tile.getCustomCannonData()?.deltaPrimaryAmmoPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0733),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomCannonDeltaPrimaryAmmoPercentage(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomCannonDeltaPrimaryAmmoPercentage(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1431,22 +1347,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomLaserTurretData()?.rangeForUp;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0742)})`,
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomLaserTurretRangeForUp(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomLaserTurretRangeForUp(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1459,22 +1369,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomLaserTurretData()?.rangeForRight;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0743)})`,
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomLaserTurretRangeForRight(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomLaserTurretRangeForRight(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1487,22 +1391,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomLaserTurretData()?.rangeForDown;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0744)})`,
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomLaserTurretRangeForDown(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomLaserTurretRangeForDown(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1515,22 +1413,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomLaserTurretData()?.rangeForLeft;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : `${Lang.getText(LangTextType.B0696)}(${Lang.getText(LangTextType.B0745)})`,
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomLaserTurretRangeForLeft(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomLaserTurretRangeForLeft(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1543,22 +1435,16 @@ namespace TwnsBwTileDetailPanel {
 
             const currValue = tile.getCustomLaserTurretData()?.priority;
             const minValue  = 0;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0739),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue        : 9999,
                 tips            : ``,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomLaserTurretPriority(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomLaserTurretPriority(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1608,22 +1494,16 @@ namespace TwnsBwTileDetailPanel {
             const currValue = tile.getCustomLaserTurretData()?.deltaHp;
             const minValue  = -WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
             const maxValue  = WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0731),
-                currentValue    : "" + currValue,
-                maxChars        : 3,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomLaserTurretDeltaHp(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomLaserTurretDeltaHp(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1637,22 +1517,16 @@ namespace TwnsBwTileDetailPanel {
             const currValue = tile.getCustomLaserTurretData()?.deltaFuelPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0732),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomLaserTurretDeltaFuelPercentage(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomLaserTurretDeltaFuelPercentage(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1666,22 +1540,16 @@ namespace TwnsBwTileDetailPanel {
             const currValue = tile.getCustomLaserTurretData()?.deltaPrimaryAmmoPercentage;
             const minValue  = -100;
             const maxValue  = 100;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0733),
-                currentValue    : "" + currValue,
-                maxChars        : 4,
-                charRestrict    : "0-9\\-",
+                currentValue    : currValue ?? 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        tile.setCustomLaserTurretDeltaPrimaryAmmoPercentage(value);
-                        tile.flushDataToView();
-                        this._updateView();
-                    }
+                    tile.setCustomLaserTurretDeltaPrimaryAmmoPercentage(panel.getInputValue());
+                    tile.flushDataToView();
+                    this._updateView();
                 },
             });
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
@@ -1854,6 +1722,14 @@ namespace TwnsBwTileDetailPanel {
                 war,
                 tile,
             };
+    }
+    function createInfoIsHighlighted(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+        return {
+            index       : 0,
+            infoType    : TileInfoType.IsHighlighted,
+            war,
+            tile,
+        };
     }
     function createInfoCrystalRadius(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getCustomCrystalData() == null)

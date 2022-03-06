@@ -315,7 +315,6 @@ namespace SoundManager {
             const audioBuffer   = await loadAudioBuffer(path).catch(err => {
                 // CompatibilityHelpers.showError(err); throw err;
                 Logger.error(`SoundManager._playBgmForNormal() loadAudioBuffer error: ${(err as Error).message}.`);
-                return;
             });
             if (!audioBuffer) {
                 // throw Helpers.newError(`SoundManager._playBgmForNormal() empty audioBuffer.`);
@@ -324,7 +323,9 @@ namespace SoundManager {
             }
 
             cacheDict.set(bgmCode, audioBuffer);
-            _doPlayBgmForNormal(audioBuffer, params);
+            if (bgmCode === getPlayingBgmCode()) {
+                _doPlayBgmForNormal(audioBuffer, params);
+            }
         }
     }
     function _doPlayBgmForNormal(buffer: AudioBuffer, params: BgmParams): void {

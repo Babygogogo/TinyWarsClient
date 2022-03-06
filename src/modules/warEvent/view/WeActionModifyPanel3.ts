@@ -69,6 +69,7 @@ namespace TwnsWeActionModifyPanel3 {
             this._listDialogue.setItemRenderer(DialogueRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
+            this._getAction().dataArray ??= [];
             this._updateView();
         }
         protected _onClosing(): void {
@@ -88,7 +89,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnAddDialogue(): void {
-            const dialogueArray = Helpers.getExisted(this._getOpenData().action.WeaDialogue?.dataArray);
+            const dialogueArray = Helpers.getExisted(this._getAction().dataArray);
             if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
@@ -98,11 +99,10 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnClear(): void {
-            const openData = this._getOpenData();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
-                    Helpers.getExisted(openData.action.WeaDialogue?.dataArray).length = 0;
+                    Helpers.getExisted(this._getAction().dataArray).length = 0;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             });
@@ -120,14 +120,16 @@ namespace TwnsWeActionModifyPanel3 {
         private _onTouchedBtnPlay(): void {
             const openData          = this._getOpenData();
             const action            = openData.action;
+            const war               = openData.war;
             const dialogueAction    = Helpers.getExisted(action.WeaDialogue);
-            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, openData.war);
+            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, war);
             if (errorTip) {
                 FloatText.show(errorTip);
                 return;
             }
 
             TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
+                configVersion   : war.getConfigVersion(),
                 actionData      : dialogueAction,
                 callbackOnClose : () => {
                     // nothing to do
@@ -137,7 +139,7 @@ namespace TwnsWeActionModifyPanel3 {
 
         private _onTouchedBtnBackground(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WeDialogueBackgroundPanel, {
-                action: Helpers.getExisted(this._getOpenData().action.WeaDialogue),
+                action: this._getAction(),
             });
         }
 
@@ -162,7 +164,7 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _updateComponentsForBackground(): void {
-            this._labelBackground.text = `${this._getOpenData().action.WeaDialogue?.backgroundId}`;
+            this._labelBackground.text = `${this._getAction().backgroundId}`;
         }
 
         private _updateComponentsForDialogues(): void {
@@ -185,6 +187,10 @@ namespace TwnsWeActionModifyPanel3 {
             const currCount = dataArray.length;
             label.text      = `${Lang.getText(LangTextType.B0675)}: ${currCount} / ${maxCount}`;
             label.textColor = ((currCount <= maxCount) && (currCount > 0)) ? ColorValue.White : ColorValue.Red;
+        }
+
+        private _getAction(): ProtoTypes.WarEvent.IWeaDialogue {
+            return Helpers.getExisted(this._getOpenData().action.WeaDialogue);
         }
     }
 

@@ -71,6 +71,9 @@ namespace TwnsMeTopPanel {
         private readonly _btnSettings!                  : TwnsUiButton.UiButton;
         private readonly _btnMenu!                      : TwnsUiButton.UiButton;
 
+        private readonly _labelLocationTitle!           : TwnsUiLabel.UiLabel;
+        private readonly _labelLocation!                : TwnsUiLabel.UiLabel;
+
         private _unitView   = new TwnsBwUnitView.BwUnitView();
         private _tileView   = new TwnsMeTileSimpleView.MeTileSimpleView();
 
@@ -87,6 +90,8 @@ namespace TwnsMeTopPanel {
                 { type: NotifyType.BwCoEnergyChanged,               callback: this._onNotifyBwCoEnergyChanged },
                 { type: NotifyType.BwCoUsingSkillTypeChanged,       callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: NotifyType.BwActionPlannerStateSet,         callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: NotifyType.BwCursorGridIndexChanged,        callback: this._onNotifyBwCursorGridIndexChanged },
+                { type: NotifyType.BwTileLocationFlagSet,           callback: this._onNotifyBwTileLocationFlatSet },
                 { type: NotifyType.MsgMeSubmitMap,                  callback: this._onMsgMeSubmitMap },
                 { type: NotifyType.MsgMmReviewMap,                  callback: this._onMsgMmReviewMap },
             ]);
@@ -193,6 +198,12 @@ namespace TwnsMeTopPanel {
         private _onNotifyBwActionPlannerStateChanged(): void {
             this._updateGroupModePreview();
             this._updateGroupModeDeleteTileObject();
+        }
+        private _onNotifyBwCursorGridIndexChanged(): void {
+            this._updateLabelLocation();
+        }
+        private _onNotifyBwTileLocationFlatSet(): void {
+            this._updateLabelLocation();
         }
         private _onMsgMeSubmitMap(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMeSubmitMap.IS;
@@ -339,6 +350,7 @@ namespace TwnsMeTopPanel {
             this._updateGroupModeDeleteTileObject();
             this._updateGroupModeDrawLocation();
             this._updateGroupModeDeleteLocation();
+            this._updateLabelLocation();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -364,6 +376,7 @@ namespace TwnsMeTopPanel {
             this._btnSymmetry.label                 = Lang.getText(LangTextType.B0306);
             this._btnSettings.label                 = Lang.getText(LangTextType.B0560);
             this._btnMenu.label                     = Lang.getText(LangTextType.B0155);
+            this._labelLocationTitle.text           = `${Lang.getText(LangTextType.B0764)}:`;
         }
 
         private _resetGroupLeftButtons(): void {
@@ -527,6 +540,12 @@ namespace TwnsMeTopPanel {
 
         private _updateGroupModeDeleteLocation(): void {
             this._groupModeDeleteLocation.visible = !this._getWar().getIsReviewingMap();
+        }
+
+        private _updateLabelLocation(): void {
+            const war                   = this._getWar();
+            const locationIdArray       = war.getTileMap().getTile(war.getCursor().getGridIndex()).getHasLocationFlagArray();
+            this._labelLocation.text    = locationIdArray.length ? locationIdArray.join(` /`) : `--`;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

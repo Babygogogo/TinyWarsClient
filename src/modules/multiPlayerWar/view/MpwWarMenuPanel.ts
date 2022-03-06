@@ -43,6 +43,7 @@ namespace TwnsMpwWarMenuPanel {
         private readonly _btnReplay!            : TwnsUiButton.UiButton;
         private readonly _btnUnitOpacity!       : TwnsUiButton.UiButton;
         private readonly _btnMapRating!         : TwnsUiButton.UiButton;
+        private readonly _btnSpectate!          : TwnsUiButton.UiButton;
         private readonly _btnSetDraw!           : TwnsUiButton.UiButton;
         private readonly _btnSurrender!         : TwnsUiButton.UiButton;
         private readonly _btnGotoWarList!       : TwnsUiButton.UiButton;
@@ -52,11 +53,12 @@ namespace TwnsMpwWarMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: NotifyType.UserSettingsUnitOpacityChanged,      callback: this._onNotifyUserSettingsUnitOpacityChanged },
+                { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyMsgUserSettingsOpacitySettingsChanged },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onNotifyMsgSpmCreateSfw },
                 { type: NotifyType.MsgMpwGetHalfwayReplayData,          callback: this._onNotifyMsgMpwGetHalfwayReplayData },
                 { type: NotifyType.MsgMpwGetHalfwayReplayDataFailed,    callback: this._onNotifyMsgMpwGetHalfwayReplayDataFailed },
                 { type: NotifyType.MsgUserSetMapRating,                 callback: this._onNotifyMsgUserSetMapRating },
+                { type: NotifyType.MsgMpwWatchGetIncomingInfo,          callback: this._onNotifyMsgMpwWatchGetIncomingInfo },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnClose,                                   callback: this.close },
@@ -69,6 +71,7 @@ namespace TwnsMpwWarMenuPanel {
                 { ui: this._btnReplay,                                  callback: this._onTouchedBtnReplay },
                 { ui: this._btnUnitOpacity,                             callback: this._onTouchedBtnUnitOpacity },
                 { ui: this._btnMapRating,                               callback: this._onTouchedBtnMapRating },
+                { ui: this._btnSpectate,                                callback: this._onTouchedBtnSpectate },
                 { ui: this._btnSetDraw,                                 callback: this._onTouchedBtnSetDraw },
                 { ui: this._btnSurrender,                               callback: this._onTouchedBtnSurrender },
                 { ui: this._btnGotoWarList,                             callback: this._onTouchedBtnGotoWarList },
@@ -97,7 +100,7 @@ namespace TwnsMpwWarMenuPanel {
         private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._updateView();
         }
-        private _onNotifyUserSettingsUnitOpacityChanged(): void {
+        private _onNotifyMsgUserSettingsOpacitySettingsChanged(): void {
             this._updateBtnUnitOpacity();
         }
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
@@ -122,6 +125,9 @@ namespace TwnsMpwWarMenuPanel {
         }
         private _onNotifyMsgUserSetMapRating(): void {
             this._updateBtnMapRating();
+        }
+        private _onNotifyMsgMpwWatchGetIncomingInfo(): void {
+            this._updateBtnSpectate();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,22 +265,20 @@ namespace TwnsMpwWarMenuPanel {
             const mapId     = Helpers.getExisted(this._getWar().getMapId());
             const minValue  = CommonConstants.MapMinRating;
             const maxValue  = CommonConstants.MapMaxRating;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0363),
-                currentValue    : `${UserModel.getMapRating(mapId) || 0}`,
-                maxChars        : 2,
-                charRestrict    : "0-9",
+                currentValue    : UserModel.getMapRating(mapId) || 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]\n${Lang.getText(LangTextType.A0238)}`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        UserProxy.reqUserSetMapRating(mapId, value);
-                    }
+                    UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
                 },
             });
+        }
+
+        private _onTouchedBtnSpectate(): void {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MpwSpectatePanel, void 0);
         }
 
         private _onTouchedBtnSetDraw(): void {
@@ -406,6 +410,8 @@ namespace TwnsMpwWarMenuPanel {
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
+
+            this._updateBtnSpectate();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -416,17 +422,24 @@ namespace TwnsMpwWarMenuPanel {
             this._btnDeleteUnit.label   = Lang.getText(LangTextType.B0081);
             this._btnSimulation.label   = Lang.getText(LangTextType.B0325);
             this._btnFreeMode.label     = Lang.getText(LangTextType.B0557);
+            this._btnSpectate.label     = Lang.getText(LangTextType.B0872);
             this._btnSetPath.label      = Lang.getText(LangTextType.B0430);
-            this._btnSetDraw.label      = Lang.getText(LangTextType.B0690);
             this._btnSurrender.label    = Lang.getText(LangTextType.B0055);
             this._btnGotoWarList.label  = Lang.getText(LangTextType.B0652);
             this._btnGotoLobby.label    = Lang.getText(LangTextType.B0054);
+            this._updateBtnSetDraw();
             this._updateBtnUnitOpacity();
             this._updateBtnMapRating();
         }
 
+        private _updateBtnSetDraw(): void {
+            this._btnSetDraw.label = this._getWar().getDrawVoteManager().getRemainingVotes() == null
+                ? Lang.getText(LangTextType.B0690)
+                : Lang.getText(LangTextType.B0841);
+        }
+
         private _updateBtnUnitOpacity(): void {
-            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${UserModel.getSelfSettingsUnitOpacity()}%`;
+            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100}%`;
         }
 
         private _updateBtnMapRating(): void {
@@ -438,6 +451,11 @@ namespace TwnsMpwWarMenuPanel {
                 btn.visible = true;
                 btn.label   = `${Lang.getText(LangTextType.B0804)}: ${UserModel.getMapRating(mapId) ?? `--`}`;
             }
+        }
+
+        private async _updateBtnSpectate(): Promise<void> {
+            const info = await WwModel.getWatchIncomingInfo(Helpers.getExisted(this._getWar().getWarId()));
+            this._btnSpectate.setRedVisible(!!info?.requestSrcUserIdArray?.length);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

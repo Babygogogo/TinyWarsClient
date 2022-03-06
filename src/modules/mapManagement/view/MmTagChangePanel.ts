@@ -64,7 +64,9 @@ namespace TwnsMmTagChangePanel {
         }
 
         private async _onTouchedBtnWarRule(): Promise<void> {
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, Helpers.getExisted(await WarMapModel.getRawData(this._getOpenData().mapId)));
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MmWarRulePanel, {
+                mapRawData      : Helpers.getExisted(await WarMapModel.getRawData(this._getOpenData().mapId)),
+            });
             this.close();
         }
 

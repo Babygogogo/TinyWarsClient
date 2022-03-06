@@ -8,12 +8,12 @@
         <e:Group id="_groupPlayer" x="0" verticalCenter="0" locked="true">
             <TwnsUiImage:UiImage source="icon_person_001" x="0" y="0" scaleX="0.8" scaleY="0.8" />
             <TwnsUiLabel:UiLabel id="_labelPlayer" text="玩家名居然能有十个字(红)" size="16" x="10" textColor="0xffffff" y="12"
-                                 maxTextWidth="320" />
+                                 maxTextWidth="180" />
             <e:layout>
                 <e:HorizontalLayout verticalAlign="middle" gap="0" />
             </e:layout>
         </e:Group>
-        <e:Group x="270" verticalCenter="0" locked="true">
+        <e:Group x="220" verticalCenter="0" locked="true">
             <TwnsUiImage:UiImage x="0" y="0" scaleX="0.8" scaleY="0.8" source="icon_fund_001" />
             <TwnsUiLabel:UiLabel id="_labelFund" text="999999" size="16" x="330" textColor="0xffffff" y="2"
                                  maxTextWidth="100" />
@@ -21,7 +21,7 @@
                 <e:HorizontalLayout gap="0" verticalAlign="middle" />
             </e:layout>
         </e:Group>
-        <e:Group id="_groupCo" x="370" verticalCenter="0" locked="true">
+        <e:Group id="_groupCo" x="320" verticalCenter="0" locked="true">
             <e:Group x="0" y="0">
                 <TwnsUiImage:UiImage x="0" y="0" scaleX="0.8" scaleY="0.8" source="icon_person_002" />
                 <TwnsUiLabel:UiLabel id="_labelCo" text="Greyfield" size="16" x="38" textColor="0xFFFFFF" y="0"
@@ -51,6 +51,20 @@
             </e:layout>
         </e:Group>
         <e:Group top="0" bottom="0" right="0">
+            <e:Group id="_groupPauseTime" x="-62" width="80" height="40" y="10">
+                <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                                     anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0" x="10" y="10"
+                                     locked="true" />
+                <e:Group horizontalCenter="0" verticalCenter="0">
+                    <TwnsUiLabel:UiLabel id="_labelPauseTimeTitle" text="Pause Time" size="12" x="0"
+                                         textColor="0xFFFFFF" y="14" maxTextWidth="200" />
+                    <TwnsUiLabel:UiLabel id="_labelPauseTime" text="Action" size="12" x="0" textColor="0xFFFFFF" y="0"
+                                         maxTextWidth="200" />
+                    <e:layout>
+                        <e:VerticalLayout gap="2" />
+                    </e:layout>
+                </e:Group>
+            </e:Group>
             <e:Group id="_groupProgress" x="-72" width="80" height="40" y="0">
                 <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0"
                                      anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0" x="10" y="10"

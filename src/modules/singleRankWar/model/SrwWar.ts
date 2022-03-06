@@ -98,9 +98,7 @@ namespace TwnsSrwWar {
         }
 
         public calculateTotalScore(): number {
-            // TODO
-            FloatText.show("SrwWar.calculateTotalScore() TODO!");
-            return 0;
+            return 100_000 - (this.getTurnManager().getTurnIndex() - 1) * 1000 - this.getExecutedActionManager().getExecutedActionsCount();
         }
     }
 }

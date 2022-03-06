@@ -1,6 +1,7 @@
 
 // import TwnsNotifyType   from "./NotifyType";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Notify {
     import NotifyType       = TwnsNotifyType.NotifyType;
 

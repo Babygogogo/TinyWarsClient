@@ -56,8 +56,12 @@ namespace LocalStorage {
         storage.setItem(KEY_LANGUAGE, "" + language);
     }
     export function getLanguageType(): Types.LanguageType {
-        const data = storage.getItem(KEY_LANGUAGE);
-        return data ? parseInt(data) || Types.LanguageType.Chinese : Types.LanguageType.Chinese;
+        const t = parseInt(storage.getItem(KEY_LANGUAGE));
+        if ((t === Types.LanguageType.English) || (t === Types.LanguageType.Chinese)) {
+            return t;
+        } else {
+            return Types.LanguageType.English;
+        }
     }
 
     export function setShowTileAnimation(show: boolean): void {

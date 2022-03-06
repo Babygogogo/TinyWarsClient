@@ -18,7 +18,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonWarBasicSettingsPage {
-    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType = Types.WarBasicSettingsType;
@@ -112,6 +111,8 @@ namespace TwnsCommonWarBasicSettingsPage {
                 this._modifyAsHasFog();
             } else if (settingsType === WarBasicSettingsType.Weather) {
                 this._modifyAsWeather();
+            } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
+                this._modifyAsTurnsLimit();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 this._modifyAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
@@ -139,6 +140,11 @@ namespace TwnsCommonWarBasicSettingsPage {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                     title  : Lang.getText(LangTextType.B0705),
                     content: Lang.getText(LangTextType.R0009),
+                });
+            } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
+                    title  : Lang.getText(LangTextType.B0842),
+                    content: Lang.getText(LangTextType.R0012),
                 });
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
@@ -171,6 +177,8 @@ namespace TwnsCommonWarBasicSettingsPage {
                 this._updateViewAsHasFog();
             } else if (settingsType === WarBasicSettingsType.Weather) {
                 this._updateViewAsWeather();
+            } else if (settingsType === WarBasicSettingsType.TurnsLimit) {
+                this._updateViewAsTurnsLimit();
             } else if (settingsType === WarBasicSettingsType.TimerType) {
                 this._updateViewAsTimerType();
             } else if (settingsType === WarBasicSettingsType.TimerRegularParam) {
@@ -211,8 +219,9 @@ namespace TwnsCommonWarBasicSettingsPage {
             const data              = this._getData();
             const warRule           = data.warRule;
             const labelValue        = this._labelValue;
-            labelValue.text         = Lang.getWarRuleNameInLanguage(warRule) || CommonConstants.ErrorTextForUndefined;
-            labelValue.textColor    = warRule.ruleId == null ? 0xFFFF00 : 0xFFFFFF;
+            const ruleId            = warRule.ruleId;
+            labelValue.text         = `${ruleId == null ? `` : `(#${ruleId}) `}${Lang.getWarRuleNameInLanguage(warRule) || CommonConstants.ErrorTextForUndefined}`;
+            labelValue.textColor    = ruleId == null ? 0xFFFF00 : 0xFFFFFF;
             this._btnHelp.visible   = false;
         }
         private _updateViewAsHasFog(): void {
@@ -229,6 +238,11 @@ namespace TwnsCommonWarBasicSettingsPage {
             const labelValue        = this._labelValue;
             labelValue.text         = Lang.getWeatherName(weatherType);
             labelValue.textColor    = weatherType === Types.WeatherType.Clear ? 0xFFFFFF: 0xFFFF00;
+            this._btnHelp.visible   = true;
+        }
+        private _updateViewAsTurnsLimit(): void {
+            const data              = this._getData();
+            this._labelValue.text   = `${data.currentValue ?? CommonConstants.WarMaxTurnsLimit}`;
             this._btnHelp.visible   = true;
         }
         private _updateViewAsTimerType(): void {
@@ -348,6 +362,26 @@ namespace TwnsCommonWarBasicSettingsPage {
                 });
             }
         }
+        private _modifyAsTurnsLimit(): void {
+            const data          = this._getData();
+            const callback      = Helpers.getExisted(data.callbackOnModify);
+            const minValue      = CommonConstants.WarMinTurnsLimit;
+            const maxValue      = CommonConstants.WarMaxTurnsLimit;
+            const currentValue  = Number(data.currentValue) || maxValue;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                title           : Lang.getText(LangTextType.B0842),
+                currentValue,
+                minValue,
+                maxValue,
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
+                callback        : panel => {
+                    const value = panel.getInputValue();
+                    if (value !== currentValue) {
+                        callback(value);
+                    }
+                },
+            });
+        }
         private _modifyAsTimerType(): void {
             const data      = this._getData();
             const callback  = Helpers.getExisted(data.callbackOnModify);
@@ -363,22 +397,17 @@ namespace TwnsCommonWarBasicSettingsPage {
             const callback      = Helpers.getExisted(data.callbackOnModify);
             const minValue      = 1;
             const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
-            const currentValue  = data.currentValue;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            const currentValue  = Number(data.currentValue) ?? 0;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0389),
-                currentValue    : `${currentValue}`,
-                maxChars        : 5,
-                charRestrict    : `0-9`,
+                currentValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        if (value !== currentValue) {
-                            callback(value);
-                        }
+                    const value = panel.getInputValue();
+                    if (value !== currentValue) {
+                        callback(value);
                     }
                 },
             });
@@ -388,22 +417,17 @@ namespace TwnsCommonWarBasicSettingsPage {
             const callback      = Helpers.getExisted(data.callbackOnModify);
             const minValue      = 0;
             const maxValue      = CommonConstants.WarBootTimerIncrementalMaxLimit;
-            const currentValue  = data.currentValue;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            const currentValue  = Number(data.currentValue) ?? 0;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0390),
-                currentValue    : `${currentValue}`,
-                maxChars        : 5,
-                charRestrict    : `0-9`,
+                currentValue,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}] (${Lang.getText(LangTextType.B0017)})`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        if (value !== currentValue) {
-                            callback(value);
-                        }
+                    const value = panel.getInputValue();
+                    if (value !== currentValue) {
+                        callback(value);
                     }
                 },
             });

@@ -230,9 +230,10 @@ namespace TwnsCommonWarPlayerInfoPage {
                 imgCoHead.source    = ``;
                 imgCoInfo.visible   = false;
             } else {
-                const coCfg         = ConfigManager.getCoBasicCfg(data.configVersion, coId);
+                const configVersion = data.configVersion;
+                const coCfg         = ConfigManager.getCoBasicCfg(configVersion, coId);
                 labelCo.text        = coCfg.name;
-                imgCoHead.source    = ConfigManager.getCoHeadImageSource(coId);
+                imgCoHead.source    = ConfigManager.getCoHeadImageSource(configVersion, coId);
                 imgCoInfo.visible   = (coId !== CommonConstants.CoEmptyId);
             }
 

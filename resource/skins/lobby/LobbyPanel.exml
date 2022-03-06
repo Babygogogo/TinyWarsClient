@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" right="60" verticalCenter="0" scaleX="0.9" scaleY="0.9">
         <e:Group x="168" y="43">
             <TwnsUiButton:UiButton id="_btnMultiPlayer" label="" top="0" right="0">
@@ -42,45 +43,56 @@
     <e:Group id="_groupTips" verticalCenter="0" left="60">
         <e:Group x="71" y="51">
             <e:Group id="_groupWelcome" left="0" top="0">
-                <TwnsUiLabel:UiLabel id="_labelTips0" text="感谢您游玩Tiny Wars!" textColor="0xffffff" size="22" bold="true" y="0"
-                                x="0" />
-                <TwnsUiLabel:UiLabel id="_labelTips1" text="Thank you for playing Tiny Wars!" size="18" y="10" x="10"
-                                textColor="0xaaaaaa" />
+                <TwnsUiLabel:UiLabel id="_labelTips0" text="感谢您游玩Tiny Wars!" textColor="0xffffff" size="24" bold="true"
+                                     y="0" x="0" />
+                <TwnsUiLabel:UiLabel id="_labelTips1" text="Thank you for playing Tiny Wars!" size="6" y="10" x="10"
+                                     textColor="0xaaaaaa" />
                 <e:layout>
-                    <e:VerticalLayout gap="4" />
+                    <e:VerticalLayout gap="2" />
                 </e:layout>
             </e:Group>
         </e:Group>
         <e:Group x="81" y="61">
             <e:Group id="_groupQq" left="0" x="0" top="0">
-                <TwnsUiLabel:UiLabel id="_labelTips2" text="感谢您游玩Tiny Wars!" textColor="0xFFFFFF" size="22" bold="true" y="0"
-                                x="0" />
-                <TwnsUiLabel:UiLabel id="_labelTips3" text="Thank you for playing Tiny Wars!" textColor="0xAAAAAA" size="18"
-                                y="10" x="10" />
+                <TwnsUiLabel:UiLabel id="_labelTips2" text="感谢您游玩Tiny Wars!" textColor="0xFFFFFF" size="20" bold="true"
+                                     y="0" x="0" />
+                <TwnsUiLabel:UiLabel id="_labelTips3" text="Thank you for playing Tiny Wars!" textColor="0xAAAAAA"
+                                     size="16" y="10" x="10" />
                 <e:layout>
-                    <e:VerticalLayout gap="4" />
+                    <e:VerticalLayout gap="2" />
                 </e:layout>
             </e:Group>
         </e:Group>
         <e:Group x="91" y="71">
             <e:Group id="_groupDiscord" left="0" x="0" top="0">
-                <TwnsUiLabel:UiLabel id="_labelTips4" text="感谢您游玩Tiny Wars!" textColor="0xFFFFFF" size="22" bold="true" y="0"
-                                x="0" />
-                <TwnsUiLabel:UiLabel id="_labelTips5" text="Thank you for playing Tiny Wars!" textColor="0xAAAAAA" size="18"
-                                y="10" x="10" />
+                <TwnsUiLabel:UiLabel id="_labelTips4" text="感谢您游玩Tiny Wars!" textColor="0xFFFFFF" size="20" bold="true"
+                                     y="0" x="0" />
+                <TwnsUiLabel:UiLabel id="_labelTips5" text="Thank you for playing Tiny Wars!" textColor="0xAAAAAA"
+                                     size="16" y="10" x="10" />
                 <e:layout>
-                    <e:VerticalLayout gap="4" />
+                    <e:VerticalLayout gap="2" />
                 </e:layout>
             </e:Group>
         </e:Group>
         <e:Group x="101" y="81">
             <e:Group id="_groupGithub" left="0" top="0">
-                <TwnsUiLabel:UiLabel id="_labelTips6" text="感谢您游玩Tiny Wars!" textColor="0xFFFFFF" size="22" bold="true" y="0"
-                                x="0" />
-                <TwnsUiLabel:UiLabel id="_labelTips7" text="Thank you for playing Tiny Wars!" textColor="0xAAAAAA" size="18"
-                                y="10" x="10" />
+                <TwnsUiLabel:UiLabel id="_labelTips6" text="感谢您游玩Tiny Wars!" textColor="0xFFFFFF" size="20" bold="true"
+                                     y="0" x="0" />
+                <TwnsUiLabel:UiLabel id="_labelTips7" text="Thank you for playing Tiny Wars!" textColor="0xAAAAAA"
+                                     size="16" y="10" x="10" />
                 <e:layout>
-                    <e:VerticalLayout gap="4" />
+                    <e:VerticalLayout gap="2" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
+        <e:Group x="111" y="91">
+            <e:Group id="_groupSwitchVersion" left="0" top="0">
+                <TwnsUiLabel:UiLabel id="_labelTips8" text="感谢您游玩Tiny Wars!" textColor="0xFFFFFF" size="20" bold="true"
+                                     y="0" x="0" />
+                <TwnsUiLabel:UiLabel id="_labelTips9" text="Thank you for playing Tiny Wars!" textColor="0xAAAAAA"
+                                     size="16" y="10" x="10" />
+                <e:layout>
+                    <e:VerticalLayout gap="2" />
                 </e:layout>
             </e:Group>
         </e:Group>

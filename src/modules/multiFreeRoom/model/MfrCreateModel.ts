@@ -56,6 +56,13 @@ namespace MfrCreateModel {
         return Helpers.getExisted(getData().settingsForMfw);
     }
 
+    export function getTurnsLimit(): number {
+        return getInitialWarData().settingsForCommon?.turnsLimit ?? CommonConstants.WarMaxTurnsLimit;
+    }
+    export function setTurnsLimit(turnsLimit: number): void {
+        Helpers.getExisted(getInitialWarData().settingsForCommon).turnsLimit = turnsLimit;
+    }
+
     export function getInitialWarData(): ISerialWar {
         return Helpers.getExisted(getSettingsForMfw().initialWarData);
     }
@@ -128,7 +135,7 @@ namespace MfrCreateModel {
     export function tickBootTimerType(): void {
         const params = getBootTimerParams();
         if ((params) && (params[0] === BootTimerType.Regular)) {
-            setBootTimerParams([BootTimerType.Incremental, 60 * 15, 15]);
+            setBootTimerParams([BootTimerType.Incremental, 60 * 15, 10]);
         } else {
             setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         }

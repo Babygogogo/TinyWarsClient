@@ -191,21 +191,15 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                     this._confirmUseCustomRule(() => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
                         const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0178),
-                            currentValue    : "" + currValue,
-                            maxChars        : 7,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    MeMfwModel.setInitialFund(playerIndex, value);
-                                    this._updateView();
-                                }
+                                MeMfwModel.setInitialFund(playerIndex, panel.getInputValue());
+                                this._updateView();
                             },
                         });
                     });
@@ -222,21 +216,15 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0179),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    MeMfwModel.setIncomeMultiplier(playerIndex, value);
-                                    this._updateView();
-                                }
+                                MeMfwModel.setIncomeMultiplier(playerIndex, panel.getInputValue());
+                                this._updateView();
                             },
                         });
                     });
@@ -253,21 +241,15 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0180),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    MeMfwModel.setEnergyAddPctOnLoadCo(playerIndex, value);
-                                    this._updateView();
-                                }
+                                MeMfwModel.setEnergyAddPctOnLoadCo(playerIndex, panel.getInputValue());
+                                this._updateView();
                             },
                         });
                     });
@@ -284,21 +266,15 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0181),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    MeMfwModel.setEnergyGrowthMultiplier(playerIndex, value);
-                                    this._updateView();
-                                }
+                                MeMfwModel.setEnergyGrowthMultiplier(playerIndex, panel.getInputValue());
+                                this._updateView();
                             },
                         });
                     });
@@ -315,21 +291,15 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0182),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    MeMfwModel.setMoveRangeModifier(playerIndex, value);
-                                    this._updateView();
-                                }
+                                MeMfwModel.setMoveRangeModifier(playerIndex, panel.getInputValue());
+                                this._updateView();
                             },
                         });
                     });
@@ -346,21 +316,15 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0183),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    MeMfwModel.setAttackPowerModifier(playerIndex, value);
-                                    this._updateView();
-                                }
+                                MeMfwModel.setAttackPowerModifier(playerIndex, panel.getInputValue());
+                                this._updateView();
                             },
                         });
                     });
@@ -377,21 +341,15 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0184),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
-                                } else {
-                                    MeMfwModel.setVisionRangeModifier(playerIndex, value);
-                                    this._updateView();
-                                }
+                                MeMfwModel.setVisionRangeModifier(playerIndex, panel.getInputValue());
+                                this._updateView();
                             },
                         });
                     });
@@ -408,27 +366,22 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0189),
-                            currentValue    : "" + currValue,
-                            maxChars        : 4,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                const value         = panel.getInputValue();
+                                const upperLimit    = MeMfwModel.getLuckUpperLimit(playerIndex);
+                                if (value <= upperLimit) {
+                                    MeMfwModel.setLuckLowerLimit(playerIndex, value);
                                 } else {
-                                    const upperLimit = MeMfwModel.getLuckUpperLimit(playerIndex);
-                                    if (value <= upperLimit) {
-                                        MeMfwModel.setLuckLowerLimit(playerIndex, value);
-                                    } else {
-                                        MeMfwModel.setLuckUpperLimit(playerIndex, value);
-                                        MeMfwModel.setLuckLowerLimit(playerIndex, upperLimit);
-                                    }
-                                    this._updateView();
+                                    MeMfwModel.setLuckUpperLimit(playerIndex, value);
+                                    MeMfwModel.setLuckLowerLimit(playerIndex, upperLimit);
                                 }
+                                this._updateView();
                             },
                         });
                     });
@@ -445,27 +398,22 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                        TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                             title           : Lang.getText(LangTextType.B0190),
-                            currentValue    : "" + currValue,
-                            maxChars        : 4,
-                            charRestrict    : "0-9\\-",
+                            currentValue    : currValue,
+                            minValue,
+                            maxValue,
                             tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                             callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(LangTextType.A0098));
+                                const value         = panel.getInputValue();
+                                const lowerLimit    = MeMfwModel.getLuckLowerLimit(playerIndex);
+                                if (value >= lowerLimit) {
+                                    MeMfwModel.setLuckUpperLimit(playerIndex, value);
                                 } else {
-                                    const lowerLimit = MeMfwModel.getLuckLowerLimit(playerIndex);
-                                    if (value >= lowerLimit) {
-                                        MeMfwModel.setLuckUpperLimit(playerIndex, value);
-                                    } else {
-                                        MeMfwModel.setLuckLowerLimit(playerIndex, value);
-                                        MeMfwModel.setLuckUpperLimit(playerIndex, lowerLimit);
-                                    }
-                                    this._updateView();
+                                    MeMfwModel.setLuckLowerLimit(playerIndex, value);
+                                    MeMfwModel.setLuckUpperLimit(playerIndex, lowerLimit);
                                 }
+                                this._updateView();
                             },
                         });
                     });

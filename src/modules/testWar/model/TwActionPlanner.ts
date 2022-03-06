@@ -95,6 +95,9 @@ namespace TwnsTwActionPlanner {
         protected _getNextStateOnTapWhenPreviewingUnitMovableArea(gridIndex: GridIndex): State {
             return State.Idle;
         }
+        protected _getNextStateOnTapWhenPreviewingUnitVisibleArea(gridIndex: GridIndex): State {
+            return State.Idle;
+        }
         protected _getNextStateOnTapWhenPreviewingTileAttackableArea(gridIndex: GridIndex): State {
             return State.Idle;
         }

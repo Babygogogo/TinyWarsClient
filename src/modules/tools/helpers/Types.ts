@@ -531,6 +531,7 @@ namespace Types {
         ChoosingProductionTarget,
         PreviewingUnitAttackableArea,
         PreviewingUnitMovableArea,
+        PreviewingUnitVisibleArea,
         PreviewingTileAttackableArea,
 
         RequestingPlayerActivateSkill,
@@ -771,6 +772,9 @@ namespace Types {
         SetPlayerCoEnergy,
 
         SetUnitState,
+
+        SetTileType,
+        SetTileState,
     }
 
     // eslint-disable-next-line no-shadow
@@ -805,6 +809,7 @@ namespace Types {
         TimerRegularParam,
         TimerIncrementalParam1,
         TimerIncrementalParam2,
+        TurnsLimit,
         SpmSaveSlotIndex,
         SpmSaveSlotComment,
     }
@@ -814,6 +819,12 @@ namespace Types {
         Undefined   = 0,
         Zoned       = 1,
         Global      = 2,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export const enum CoEnergyType {
+        Dor         = 1,
+        Trilogy     = 2,
     }
 
     // eslint-disable-next-line no-shadow
@@ -835,6 +846,20 @@ namespace Types {
         NotGreaterThan,
         LessThan,
         NotLessThan,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export const enum SpmValidateSrwStatus {
+        Succeed,
+        ConfigVersionNotLatest,
+        ScoreNotHighest,
+        ScoreTooLow,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export const enum ExitRoomType {
+        SelfExit            = 1,
+        DeletedByRoomOwner  = 2,
     }
 }
 

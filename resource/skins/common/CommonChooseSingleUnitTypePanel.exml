@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <TwnsUiImage:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="uncompressedColorTransparent0001"
+                         scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="640" horizontalCenter="0" height="380" verticalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0" locked="true">
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
+                                       verticalCenter="0" right="30" />
+            </e:Group>
+        </e:Group>
+        <TwnsUiScrollList:UiScrollList id="_listType" bottom="8" top="50" horizontalCenter="0">
+            <e:List>
+                <e:itemRendererSkinName>
+                    <e:Skin currentState="up" states="down,up" width="150" height="40">
+                        <e:Group left="0" right="0" top="0" bottom="0">
+                            <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2"
+                                                 anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
+                                                 top="0" bottom="0" locked="true" />
+                            <e:Group id="_conUnitView" x="4" y="2" scaleX="1.5" scaleY="1.5" />
+                            <TwnsUiLabel:UiLabel id="_labelType" text="日期" size="16" textColor="0xffffff" x="42"
+                                                 verticalCenter="0" maxTextWidth="100" />
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:TileLayout orientation="rows" requestedColumnCount="4" />
+                </e:layout>
+            </e:List>
+        </TwnsUiScrollList:UiScrollList>
+    </e:Group>
+</e:Skin>

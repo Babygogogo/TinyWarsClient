@@ -15,7 +15,10 @@ namespace TwnsBwTileView {
     import TileDecoratorType    = Types.TileDecoratorType;
     import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
 
-    const { height: GRID_HEIGHT } = CommonConstants.GridSize;
+    const {
+        height  : GRID_HEIGHT,
+        width   : GRID_WIDTH,
+    } = CommonConstants.GridSize;
 
     export type DataForTileView = {
         tileData    : ISerialTile;
@@ -27,21 +30,29 @@ namespace TwnsBwTileView {
         private readonly _imgBase       = new TwnsUiImage.UiImage();
         private readonly _imgDecorator  = new TwnsUiImage.UiImage();
         private readonly _imgObject     = new TwnsUiImage.UiImage();
+        private readonly _imgHighlight  = new TwnsUiImage.UiImage(`uncompressedColorWhite0000`);
 
         private _data   : DataForTileView | null = null;
 
         public constructor() {
-            const imgBase               = this._imgBase;
+            const imgBase               = this.getImgBase();
             imgBase.smoothing           = false;
             imgBase.anchorOffsetY       = GRID_HEIGHT;
 
-            const imgDecorator          = this._imgDecorator;
+            const imgDecorator          = this.getImgDecorator();
             imgDecorator.smoothing      = false;
             imgDecorator.anchorOffsetY  = GRID_HEIGHT;
 
-            const imgObject             = this._imgObject;
+            const imgObject             = this.getImgObject();
             imgObject.smoothing         = false;
             imgObject.anchorOffsetY     = GRID_HEIGHT * 2;
+
+            const imgHighlight          = this.getImgHighlight();
+            imgHighlight.smoothing      = false;
+            imgHighlight.width          = GRID_WIDTH;
+            imgHighlight.height         = GRID_HEIGHT;
+            imgHighlight.alpha          = 0.6;
+            imgHighlight.anchorOffsetY  = GRID_HEIGHT;
         }
 
         public setData(data: DataForTileView): void {
@@ -114,8 +125,13 @@ namespace TwnsBwTileView {
                     });
                 }
             }
+
+            this.getImgHighlight().visible = !!tileData.isHighlighted;
         }
 
+        public getImgHighlight(): TwnsUiImage.UiImage {
+            return this._imgHighlight;
+        }
         public getImgObject(): TwnsUiImage.UiImage {
             return this._imgObject;
         }

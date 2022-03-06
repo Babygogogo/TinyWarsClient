@@ -16,7 +16,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeImportPanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
@@ -63,15 +62,27 @@ namespace TwnsMeImportPanel {
         }
 
         private async _createDataForListMap(): Promise<DataForMapRenderer[]> {
-            const dataList: DataForMapRenderer[] = [];
-            for (const [mapFileName] of WarMapModel.getBriefDataDict()) {
-                dataList.push({
-                    mapId: mapFileName,
-                    mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapFileName) ?? CommonConstants.ErrorTextForUndefined,
-                    panel       : this,
-                });
+            const dataArray     : DataForMapRenderer[] = [];
+            const promiseArray  : Promise<void>[] = [];
+            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+                promiseArray.push((async () => {
+                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    if (mapBriefData == null) {
+                        return;
+                    }
+
+                    if (mapBriefData.mapExtraData?.isEnabled) {
+                        dataArray.push({
+                            mapId,
+                            mapName     : await WarMapModel.getMapNameInCurrentLanguage(mapId) ?? CommonConstants.ErrorTextForUndefined,
+                            panel       : this,
+                        });
+                    }
+                })());
             }
-            return dataList.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
+
+            await Promise.all(promiseArray);
+            return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
         private async _updateListMap(): Promise<void> {
@@ -91,18 +102,19 @@ namespace TwnsMeImportPanel {
 
         protected _onDataChanged(): void {
             const data              = this._getData();
-            this._labelName.text    = data.mapName;
+            this._labelName.text    = `#${data.mapId} ${data.mapName}`;
         }
 
         public onItemTapEvent(): void {
-            const data = this._getData();
+            const data  = this._getData();
+            const mapId = data.mapId;
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
-                content : Lang.getText(LangTextType.A0095) + `\n"${data.mapName}"`,
+                content : Lang.getText(LangTextType.A0095) + `\n#${mapId} ${data.mapName}`,
                 callback: async () => {
                     const war = Helpers.getExisted(MeModel.getWar());
                     war.stopRunning();
                     await war.initWithMapEditorData({
-                        mapRawData  : await WarMapModel.getRawData(data.mapId),
+                        mapRawData  : await WarMapModel.getRawData(mapId),
                         slotIndex   : war.getMapSlotIndex(),
                     });
                     war.setIsMapModified(true);

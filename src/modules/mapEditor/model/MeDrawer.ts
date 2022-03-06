@@ -223,6 +223,8 @@ namespace TwnsMeDrawer {
                         objectShapeId   : shapeId,
                         baseType        : tile.getBaseType(),
                         baseShapeId     : tile.getBaseShapeId(),
+                        locationFlags   : tile.getLocationFlags(),
+                        isHighlighted   : tile.getIsHighlighted(),
                     }, configVersion);
                     tile.startRunning(war);
                     tile.flushDataToView();
@@ -255,6 +257,8 @@ namespace TwnsMeDrawer {
                         objectShapeId   : shapeId,
                         baseType        : tile.getBaseType(),
                         baseShapeId     : tile.getBaseShapeId(),
+                        locationFlags   : tile.getLocationFlags(),
+                        isHighlighted   : tile.getIsHighlighted(),
                     }, configVersion);
                     tile.startRunning(war);
                     tile.flushDataToView();
@@ -282,6 +286,8 @@ namespace TwnsMeDrawer {
                         objectShapeId   : shapeId,
                         baseType        : tile.getBaseType(),
                         baseShapeId     : tile.getBaseShapeId(),
+                        locationFlags   : tile.getLocationFlags(),
+                        isHighlighted   : tile.getIsHighlighted(),
                     }, configVersion);
                     tile.startRunning(war);
                     tile.flushDataToView();
@@ -309,6 +315,8 @@ namespace TwnsMeDrawer {
                         objectShapeId   : shapeId,
                         baseType        : tile.getBaseType(),
                         baseShapeId     : tile.getBaseShapeId(),
+                        locationFlags   : tile.getLocationFlags(),
+                        isHighlighted   : tile.getIsHighlighted(),
                     }, configVersion);
                     tile.startRunning(war);
                     tile.flushDataToView();
@@ -335,6 +343,8 @@ namespace TwnsMeDrawer {
                     baseShapeId     : tile.getBaseShapeId(),
                     decoratorType,
                     decoratorShapeId,
+                    locationFlags   : tile.getLocationFlags(),
+                    isHighlighted   : tile.getIsHighlighted(),
                 }, configVersion);
                 tile.startRunning(war);
                 tile.flushDataToView();
@@ -398,6 +408,8 @@ namespace TwnsMeDrawer {
                 decoratorShapeId: tile.getDecoratorShapeId(),
                 baseType,
                 baseShapeId,
+                locationFlags   : tile.getLocationFlags(),
+                isHighlighted   : tile.getIsHighlighted(),
             }, configVersion);
             tile.startRunning(war);
             tile.flushDataToView();
@@ -417,6 +429,8 @@ namespace TwnsMeDrawer {
                     decoratorShapeId: t2.getDecoratorShapeId(),
                     baseType        : baseType,
                     baseShapeId     : ConfigManager.getSymmetricalTileBaseShapeId(baseType, baseShapeId, symmetryType),
+                    locationFlags   : t2.getLocationFlags(),
+                    isHighlighted   : t2.getIsHighlighted(),
                 }, configVersion);
                 t2.startRunning(war);
                 t2.flushDataToView();
@@ -441,6 +455,8 @@ namespace TwnsMeDrawer {
                 baseShapeId     : tile.getBaseShapeId(),
                 decoratorType,
                 decoratorShapeId,
+                locationFlags   : tile.getLocationFlags(),
+                isHighlighted   : tile.getIsHighlighted(),
             }, configVersion);
             tile.startRunning(war);
             tile.flushDataToView();
@@ -460,6 +476,8 @@ namespace TwnsMeDrawer {
                     baseShapeId     : t2.getBaseShapeId(),
                     decoratorType,
                     decoratorShapeId: ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType),
+                    locationFlags   : t2.getLocationFlags(),
+                    isHighlighted   : t2.getIsHighlighted(),
                 }, configVersion);
                 t2.startRunning(war);
                 t2.flushDataToView();
@@ -493,6 +511,8 @@ namespace TwnsMeDrawer {
                 playerIndex,
                 objectType,
                 objectShapeId,
+                locationFlags   : tile.getLocationFlags(),
+                isHighlighted   : tile.getIsHighlighted(),
             }, configVersion);
             tile.startRunning(war);
             tile.flushDataToView();
@@ -516,6 +536,8 @@ namespace TwnsMeDrawer {
                     playerIndex,
                     objectType,
                     objectShapeId   : ConfigManager.getSymmetricalTileObjectShapeId(objectType, objectShapeId, symmetryType),
+                    locationFlags   : t2.getLocationFlags(),
+                    isHighlighted   : t2.getIsHighlighted(),
                 }, configVersion);
                 t2.startRunning(war);
                 t2.flushDataToView();
@@ -549,7 +571,7 @@ namespace TwnsMeDrawer {
             unitMap.setUnitOnMap(unit);
             unitMap.setNextUnitId(unitId + 1);
 
-            Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as NotifyData.MeUnitChanged);
+            Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as NotifyData.BwUnitChanged);
         }
         private _handleDeleteTileDecorator(gridIndex: GridIndex): void {
             const tileMap   = this._getWar().getTileMap();
@@ -590,7 +612,7 @@ namespace TwnsMeDrawer {
         private _handleDeleteUnit(gridIndex: GridIndex): void {
             if (this._getWar().getUnitMap().getUnitOnMap(gridIndex)) {
                 WarDestructionHelpers.destroyUnitOnMap(this._getWar(), gridIndex, true);
-                Notify.dispatch(NotifyType.MeUnitChanged, { gridIndex } as NotifyData.MeUnitChanged);
+                Notify.dispatch(NotifyType.BwUnitChanged, { gridIndex } as NotifyData.BwUnitChanged);
             }
         }
         private _handleAddTileToLocation(gridIndex: GridIndex): void {

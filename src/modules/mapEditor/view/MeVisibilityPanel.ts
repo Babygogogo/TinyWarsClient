@@ -99,8 +99,17 @@ namespace TwnsMeVisibilityPanel {
             }
         }
         private _onTouchedBtnHideAllLocations(): void {
-            const tileMap = this._getWar().getTileMap();
+            const war           = this._getWar();
+            const tileMap       = war.getTileMap();
+            const drawer        = war.getDrawer();
+            const drawerMode    = drawer.getMode();
             for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+                if (((drawerMode === Types.MapEditorDrawerMode.AddTileToLocation) && (drawer.getDataForAddTileToLocation()?.locationIdArray.some(v => v === locationId)))           ||
+                    ((drawerMode === Types.MapEditorDrawerMode.DeleteTileFromLocation) && (drawer.getDataForDeleteTileFromLocation()?.locationIdArray.some(v => v === locationId)))
+                ) {
+                    continue;
+                }
+
                 tileMap.setIsLocationVisible(locationId, false);
             }
         }

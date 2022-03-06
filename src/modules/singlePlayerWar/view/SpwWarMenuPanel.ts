@@ -58,7 +58,7 @@ namespace TwnsSpwWarMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: NotifyType.UserSettingsUnitOpacityChanged,      callback: this._onNotifyUserSettingsUnitOpacityChanged },
+                { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
                 { type: NotifyType.MsgSpmSaveScw,                       callback: this._onMsgSpmSaveScw },
                 { type: NotifyType.MsgSpmSaveSfw,                       callback: this._onMsgSpmSaveSfw },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onMsgSpmCreateSfw },
@@ -109,7 +109,7 @@ namespace TwnsSpwWarMenuPanel {
             this._updateView();
         }
 
-        private _onNotifyUserSettingsUnitOpacityChanged(): void {
+        private _onNotifyUserSettingsOpacitySettingsChanged(): void {
             this._updateBtnUnitOpacity();
         }
 
@@ -302,20 +302,14 @@ namespace TwnsSpwWarMenuPanel {
             const mapId     = Helpers.getExisted(this._getWar().getMapId());
             const minValue  = CommonConstants.MapMinRating;
             const maxValue  = CommonConstants.MapMaxRating;
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0363),
-                currentValue    : `${UserModel.getMapRating(mapId) || 0}`,
-                maxChars        : 2,
-                charRestrict    : "0-9",
+                currentValue    : UserModel.getMapRating(mapId) || 0,
+                minValue,
+                maxValue,
                 tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                 callback        : panel => {
-                    const text  = panel.getInputText();
-                    const value = text ? Number(text) : NaN;
-                    if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                        FloatText.show(Lang.getText(LangTextType.A0098));
-                    } else {
-                        UserProxy.reqUserSetMapRating(mapId, value);
-                    }
+                    UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
                 },
             });
         }
@@ -416,16 +410,22 @@ namespace TwnsSpwWarMenuPanel {
             this._btnFreeMode.label     = Lang.getText(LangTextType.B0557);
             this._btnSetPath.label      = Lang.getText(LangTextType.B0430);
             this._btnDeleteGame.label   = Lang.getText(LangTextType.B0420);
-            this._btnSetDraw.label      = Lang.getText(LangTextType.B0690);
             this._btnSurrender.label    = Lang.getText(LangTextType.B0055);
             this._btnGotoWarList.label  = Lang.getText(LangTextType.B0652);
             this._btnGotoLobby.label    = Lang.getText(LangTextType.B0054);
+            this._updateBtnSetDraw();
             this._updateBtnUnitOpacity();
             this._updateBtnMapRating();
         }
 
+        private _updateBtnSetDraw(): void {
+            this._btnSetDraw.label = this._getWar().getDrawVoteManager().getRemainingVotes() == null
+                ? Lang.getText(LangTextType.B0690)
+                : Lang.getText(LangTextType.B0841);
+        }
+
         private _updateBtnUnitOpacity(): void {
-            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${UserModel.getSelfSettingsUnitOpacity()}%`;
+            this._btnUnitOpacity.label = `${Lang.getText(LangTextType.B0747)}: ${UserModel.getSelfSettingsOpacitySettings()?.unitOpacity ?? 100}%`;
         }
 
         private _updateBtnMapRating(): void {

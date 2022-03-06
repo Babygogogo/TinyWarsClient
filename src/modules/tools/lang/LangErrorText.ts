@@ -124,13 +124,13 @@ namespace TwnsLangErrorText {
             "用户不存在，获取user public info失败。",
             "The user doesn't exist thus fail to get its public info.",
         ],
-        [ServerErrorCode.MsgMpwCommonContinueWar0001]: [
+        [ServerErrorCode.ExeMpwCommonContinueWar_ExeWithSocket_0001]: [
             `战局不存在`,
             `The game doesn't exist.`,
         ],
-        [ServerErrorCode.MsgMpwCommonContinueWar0003]: [
-            `您未参与该战局，或已经被击败`,
-            `You have not joined the game, or you have been defeated.`,
+        [ServerErrorCode.ExeMpwCommonContinueWar_ExeWithSocket_0002]: [
+            `您未参与该战局`,
+            `You have not joined the game.`,
         ],
         [ServerErrorCode.ExeCcrCreateRoom_DoExecute_0019]: [
             `AI玩家的颜色设置不合法`,
@@ -156,15 +156,11 @@ namespace TwnsLangErrorText {
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
         ],
-        [ServerErrorCode.MsgMpwWatchMakeRequest0005]: [
-            `该玩家已战败，无法观战`,
-            `The target player has been defeated in the game.`
-        ],
-        [ServerErrorCode.MsgMpwWatchMakeRequest0006]: [
+        [ServerErrorCode.MsgMpwWatchMakeRequest_ExeWithSocket_0004]: [
             `已请求观战该玩家`,
             `You have already requested to watch the player.`,
         ],
-        [ServerErrorCode.MsgMpwWatchMakeRequest0007]: [
+        [ServerErrorCode.MsgMpwWatchMakeRequest_ExeWithSocket_0005]: [
             `观战请求已被接受`,
             `The request has already been accepted.`,
         ],
@@ -188,11 +184,19 @@ namespace TwnsLangErrorText {
             `此战局未有回放步骤数据（或数据已丢失），无法即时回放`,
             `Failed to replay this war because there is no data or some of the data has been lost.`,
         ],
+        [ServerErrorCode.MsgSpmCreateSrw0020]: [
+            `各个玩家使用的势力颜色必须互不相同`,
+            `Players can't use the same color.`,
+        ],
         [ServerErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,
             `The server is under maintenance.`,
         ],
 
+        [ClientErrorCode.BwPlayerManager_Init_03]: [
+            `势力颜色不合法`,
+            `The colors of the forces are invalid.`,
+        ],
         [ClientErrorCode.MapRawDataValidation04]: [
             `势力数量不合法`,
             `The number of the forces is not valid.`,
@@ -214,8 +218,8 @@ namespace TwnsLangErrorText {
             `There is a redundant event condition node. Please delete it via the 'Delete Redundancy' button if you don't need it.`,
         ],
         [ClientErrorCode.WarEventFullDataValidation12]: [
-            `存在未被引用的事件`,
-            `There is a redundant event.`,
+            `存在未被任何规则使用的事件`,
+            `There is a redundant event that is not used in any rules.`,
         ],
         [ClientErrorCode.WarRuleValidation02]: [
             `尚未设置预设规则的可用性`,
@@ -232,6 +236,14 @@ namespace TwnsLangErrorText {
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_13]: [
             `您禁用了不存在的CO`,
             `You can't ban a non-existing CO.`,
+        ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_20]: [
+            `挑战模式下，至少要有一个势力由AI控制`,
+            `There must be at least 1 A.I. player in the War Room Mode.`,
+        ],
+        [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_21]: [
+            `挑战模式下，必须有且只有一个队伍的势力由玩家控制`,
+            `There must be one team that controlled by human player in the War Room Mode.`,
         ],
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_22]: [
             `合作模式下，至少要有一个势力由AI控制`,

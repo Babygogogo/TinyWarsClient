@@ -41,6 +41,8 @@ namespace TwnsUiMapInfo {
         private readonly _groupMapInfo!             : eui.Group;
         private readonly _labelMapName!             : TwnsUiLabel.UiLabel;
         private readonly _labelDesigner!            : TwnsUiLabel.UiLabel;
+        private readonly _labelMapIdTitle!          : TwnsUiLabel.UiLabel;
+        private readonly _labelMapId!               : TwnsUiLabel.UiLabel;
         private readonly _labelRatingTitle!         : TwnsUiLabel.UiLabel;
         private readonly _labelRating!              : TwnsUiLabel.UiLabel;
         private readonly _labelRaters!              : TwnsUiLabel.UiLabel;
@@ -48,8 +50,12 @@ namespace TwnsUiMapInfo {
         private readonly _labelMyRatingTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelMyRating!            : TwnsUiLabel.UiLabel;
         private readonly _imgSetMyRating!           : TwnsUiImage.UiImage;
+
+        private readonly _groupWarStatistics!       : eui.Group;
         private readonly _labelPlayedTimesTitle!    : TwnsUiLabel.UiLabel;
         private readonly _labelPlayedTimes!         : TwnsUiLabel.UiLabel;
+        private readonly _imgWarStatistics!         : TwnsUiImage.UiImage;
+
         private readonly _labelPlayersCountTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelPlayersCount!        : TwnsUiLabel.UiLabel;
         private readonly _labelMapSizeTitle!        : TwnsUiLabel.UiLabel;
@@ -64,7 +70,8 @@ namespace TwnsUiMapInfo {
                 { type: NotifyType.MsgMapGetBriefData,  callback: this._onNotifyMsgMapGetBriefData },
             ]);
             this._setUiListenerArray([
-                { ui: this._groupMyRating,              callback: this._onTouchedBtnSetMyRating },
+                { ui: this._groupMyRating,              callback: this._onTouchedGroupMyRating },
+                { ui: this._groupWarStatistics,         callback: this._onTouchedGroupWarStatistics },
             ]);
             this._listTile.setItemRenderer(TileRenderer);
 
@@ -94,27 +101,28 @@ namespace TwnsUiMapInfo {
                 this._updateComponentsForMapInfo();
             }
         }
-        private _onTouchedBtnSetMyRating(): void {
+        private _onTouchedGroupMyRating(): void {
             const mapId = this._data?.mapInfo?.mapId;
             if (mapId != null) {
                 const minValue = CommonConstants.MapMinRating;
                 const maxValue = CommonConstants.MapMaxRating;
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                     title           : Lang.getText(LangTextType.B0363),
-                    currentValue    : `${UserModel.getMapRating(mapId) || 0}`,
-                    maxChars        : 2,
-                    charRestrict    : "0-9",
+                    currentValue    : UserModel.getMapRating(mapId) || 0,
+                    minValue,
+                    maxValue,
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]\n${Lang.getText(LangTextType.A0238)}`,
                     callback        : panel => {
-                        const text  = panel.getInputText();
-                        const value = text ? Number(text) : NaN;
-                        if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                            FloatText.show(Lang.getText(LangTextType.A0098));
-                        } else {
-                            UserProxy.reqUserSetMapRating(mapId, value);
-                        }
+                        UserProxy.reqUserSetMapRating(mapId, panel.getInputValue());
                     },
                 });
+                SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
+            }
+        }
+        private _onTouchedGroupWarStatistics(): void {
+            const mapId = this._data?.mapInfo?.mapId;
+            if (mapId != null) {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonMapWarStatisticsPanel, { mapId });
                 SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             }
         }
@@ -124,6 +132,7 @@ namespace TwnsUiMapInfo {
             this._labelPlayedTimesTitle.text    = Lang.getText(LangTextType.B0565);
             this._labelMapSizeTitle.text        = Lang.getText(LangTextType.B0300);
             this._labelRatingTitle.text         = Lang.getText(LangTextType.B0364);
+            this._labelMapIdTitle.text          = Lang.getText(LangTextType.B0821);
             this._labelMyRatingTitle.text       = Lang.getText(LangTextType.B0363);
             this._updateLabelDesigner();
         }
@@ -133,41 +142,47 @@ namespace TwnsUiMapInfo {
 
             const data              = this._data;
             const labelMapName      = this._labelMapName;
+            const labelMapId        = this._labelMapId;
             const labelPlayersCount = this._labelPlayersCount;
             const labelRating       = this._labelRating;
             const labelRaters       = this._labelRaters;
             const labelMyRating     = this._labelMyRating;
             const labelPlayedTimes  = this._labelPlayedTimes;
             const labelMapSize      = this._labelMapSize;
-            const btnSetMyRating    = this._imgSetMyRating;
+            const imgSetMyRating    = this._imgSetMyRating;
+            const imgWarStatistics  = this._imgWarStatistics;
 
             if (data == null) {
-                labelMapName.text       = `--`;
-                labelPlayersCount.text  = `--`;
-                labelRating.text        = `--`;
-                labelRaters.text        = `(--)`;
-                labelMyRating.text      = `--`;
-                labelPlayedTimes.text   = `--`;
-                labelMapSize.text       = `--`;
-                btnSetMyRating.visible  = false;
+                labelMapName.text           = `--`;
+                labelMapId.text             = `--`;
+                labelPlayersCount.text      = `--`;
+                labelRating.text            = `--`;
+                labelRaters.text            = `(--)`;
+                labelMyRating.text          = `--`;
+                labelPlayedTimes.text       = `--`;
+                labelMapSize.text           = `--`;
+                imgSetMyRating.visible      = false;
+                imgWarStatistics.visible    = false;
 
                 return;
             }
 
             const mapInfo = data.mapInfo;
             if (mapInfo) {
-                const mapId             = mapInfo.mapId;
-                const mapRawData        = Helpers.getExisted(await WarMapModel.getRawData(mapId));
-                const rating            = await WarMapModel.getAverageRating(mapId);
-                const myRating          = UserModel.getMapRating(mapId);
-                labelMapName.text       = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
-                labelPlayersCount.text  = `${mapRawData.playersCountUnneutral}`;
-                labelRating.text        = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
-                labelRaters.text        = `(${await WarMapModel.getTotalRatersCount(mapId)})`;
-                labelMyRating.text      = myRating != null ? `${myRating}` : Lang.getText(LangTextType.B0001);
-                labelPlayedTimes.text   = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)}`;
-                labelMapSize.text       = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
-                btnSetMyRating.visible  = true;
+                const mapId                 = mapInfo.mapId;
+                const mapRawData            = Helpers.getExisted(await WarMapModel.getRawData(mapId));
+                const rating                = await WarMapModel.getAverageRating(mapId);
+                const myRating              = UserModel.getMapRating(mapId);
+                labelMapName.text           = await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined;
+                labelMapId.text             = `${mapId}`;
+                labelPlayersCount.text      = `${mapRawData.playersCountUnneutral}`;
+                labelRating.text            = rating != null ? rating.toFixed(2) : Lang.getText(LangTextType.B0001);
+                labelRaters.text            = `(${await WarMapModel.getTotalRatersCount(mapId)})`;
+                labelMyRating.text          = myRating != null ? `${myRating}` : Lang.getText(LangTextType.B0001);
+                labelPlayedTimes.text       = `${await WarMapModel.getTotalPlayedTimes(mapId)}`;
+                labelMapSize.text           = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
+                imgSetMyRating.visible      = true;
+                imgWarStatistics.visible    = true;
                 this._listTile.bindData(generateDataForListTile(Helpers.getExisted(mapRawData.tileDataArray)));
 
                 return;
@@ -175,15 +190,17 @@ namespace TwnsUiMapInfo {
 
             const warData = data.warData;
             if (warData) {
-                const tileMapData       = Helpers.getExisted(warData.field?.tileMap);
-                const mapSize           = WarCommonHelpers.getMapSize(tileMapData);
-                labelMapName.text       = `--`;
-                labelPlayersCount.text  = `${Helpers.getExisted(warData.playerManager?.players).length - 1}`;
-                labelRating.text        = `--`;
-                labelRaters.text        = `(--)`;
-                labelPlayedTimes.text   = `--`;
-                labelMapSize.text       = `${mapSize.width} x ${mapSize.height}`;
-                btnSetMyRating.visible  = false;
+                const tileMapData           = Helpers.getExisted(warData.field?.tileMap);
+                const mapSize               = WarCommonHelpers.getMapSize(tileMapData);
+                labelMapName.text           = `--`;
+                labelMapId.text             = `--`;
+                labelPlayersCount.text      = `${Helpers.getExisted(warData.playerManager?.players).length - 1}`;
+                labelRating.text            = `--`;
+                labelRaters.text            = `(--)`;
+                labelPlayedTimes.text       = `--`;
+                labelMapSize.text           = `${mapSize.width} x ${mapSize.height}`;
+                imgSetMyRating.visible      = false;
+                imgWarStatistics.visible    = false;
                 this._listTile.bindData(generateDataForListTile(Helpers.getExisted(tileMapData.tiles)));
 
                 return;

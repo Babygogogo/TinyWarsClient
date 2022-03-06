@@ -10,6 +10,9 @@
     <meta name="screen-orientation" content="portrait" />
     <meta name="x5-fullscreen" content="true" />
     <meta name="360-fullscreen" content="true" />
+    <meta name="description" content="The web version of Advance Wars: Days of Ruin / Dark Conflict.">
+    <link rel="shortcut icon" href="https://tinywars.online/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://tinywars.online/favicon.ico" type="image/x-icon">
 
     <style>
         html, body {
@@ -114,14 +117,14 @@
             </div>
             <div id="loadingContent" class="fullWidth">
                 <div id="loadingTxt">
-                    Now loading...<br>
+                    Welcome to the web version of Advance Wars: Days of Ruin / Dark Conflict.<br>
                     <font color="#f69638" size="1">
                         <script>
                             function sclick() {
                                 location.href = "";
                             }
                         </script>
-                        <span id="loadingDesTxt">Get stuck? <a class="clickme" href="javascript:sclick();">Touch me to refresh</a></span>
+                        <span id="loadingDesTxt">Now loading... Get stuck? <a class="clickme" href="javascript:sclick();">Touch me to refresh</a></span>
                     </font>
                 </div>
                 <div id="loadingBarCon">
@@ -133,6 +136,8 @@
 <script>
     window.CLIENT_VERSION   = "DEVELOP";
     window.GAME_SERVER_PORT = 4000;
+
+    document.getElementById("logoCon").style.backgroundImage = "url(" + "resource/assets/texture/background/loadingIcon.png" + ")";
 
     var loadScript = function (list, callback) {
         var loaded = 0;

@@ -57,14 +57,6 @@ namespace TwnsMmRejectMapPanel {
                 modifiedTime    : war.getMapModifiedTime(),
                 isAccept        : false,
                 reviewComment   : this._inputReason.text,
-                availability    : {
-                    canMcw      : false,
-                    canCcw      : false,
-                    canMrwStd   : false,
-                    canMrwFog   : false,
-                    canScw      : false,
-                    canSrw      : false,
-                },
             });
             this.close();
         }

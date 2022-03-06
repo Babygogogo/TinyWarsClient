@@ -50,7 +50,7 @@ namespace TwnsLangCommonText {
             "The network connection is not stable.",
         ],
         [LangTextType.A0010]: [
-            "没有符合条件的地图，请更换条件再试",
+            "没有符合条件的地图",
             "No maps found.",
         ],
         [LangTextType.A0011]: [
@@ -981,7 +981,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0233]: [
             `已有的地形装饰物会被覆盖。您确定要自动填充吗？`,
-            `The current tile decorators will be overwritten. Are you sure to auto fill?`,
+            `The current tile decorations will be overwritten. Are you sure to auto fill?`,
         ],
         [LangTextType.A0234]: [
             `导出失败，请使用chrome浏览器重试`,
@@ -1151,6 +1151,183 @@ namespace TwnsLangCommonText {
                 `Defeated: players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
             ].join(`\n`),
         ],
+        [LangTextType.A0273]: [
+            `当前无法进行此操作，请稍后再试`,
+            `This operation is currently unavailable, please retry it later.`,
+        ],
+        [LangTextType.A0274]: [
+            `此部队已满载`,
+            `The unit is fully loaded.`,
+        ],
+        [LangTextType.A0275]: [
+            `无法访问系统剪贴板`,
+            `Failed to access the system clipboard.`,
+        ],
+        [LangTextType.A0276]: [
+            `此规则已被设定为不可用于挑战模式，因此无法修改此选项。`,
+            `The war rule is not available for the War Room mode. Please change that first.`,
+        ],
+        [LangTextType.A0277]: [
+            [
+                `恭喜通关！您是否希望以此战局数据参与全服排行？`,
+                `\n`,
+                `注：`,
+                `1. 服务器将花费一定时间来验证数据的合法性，所以排名可能不会立刻刷新。`,
+                `2. 若您曾经提交过分数更高的记录，则该记录仍将保留，此次提交将被自动忽略。`,
+            ].join(`\n`),
+            [
+                `Do you want to participate the server-wide ranking with the replay data?`,
+                `\n`,
+                `Note:`,
+                `1. It will take some time for the server to validate the data, therefore the ranking may not be updated very soon.`,
+                `2. If there is a better record of yours, that record will be kept, and this new record will be ignored.`,
+            ].join(`\n`),
+        ],
+        [LangTextType.A0278]: [
+            `数据版本太旧，无法参与排行`,
+            `The data is deprecated.`,
+        ],
+        [LangTextType.A0279]: [
+            `已有分数更高的通关数据`,
+            `There is an existing and better replay data.`,
+        ],
+        [LangTextType.A0280]: [
+            `已成功提交回放数据，请耐心等候`,
+            `The data is successfully submitted for validation.`,
+        ],
+        [LangTextType.A0281]: [
+            `分数太低，无法参与排行`,
+            `The score is too low.`,
+        ],
+        [LangTextType.A0282]: [
+            [
+                `您确定要提交此规则、作为本地图的全新规则吗？`,
+                ``,
+                `注：`,
+                `1. 请务必检查各项设定，确保正确无误。`,
+                `2. 此操作不会影响地图已有的各个规则。`,
+                `3. 操作前请尽可能与地图原作者联系，使其清楚并同意新增此规则。`,
+            ].join(`\n`),
+            [
+                `Do you want to submit this rule as a brand new rule for this map?`,
+                ``,
+                `Note:`,
+                `1. Please be sure to check all settings to ensure that they are correct.`,
+                `2. This operation will not affect the existing rules of the map.`,
+                `3. Before operation, please contact the original author of the map as much as possible to make him/her clear and agree to add this rule.`,
+            ].join(`\n`),
+        ],
+        [LangTextType.A0283]: [
+            `已成功新增规则`,
+            `The rule is added successfully.`,
+        ],
+        [LangTextType.A0284]: [
+            `摧毁地块上的部队。`,
+            `Destroy units on the tiles.`,
+        ],
+        [LangTextType.A0285]: [
+            [
+                `若您希望地图进入游戏正式图池以供其他玩家游玩，您必须提审地图，并等待地图审核小组审核通过。`,
+                `但是，本游戏对地图质量有一定要求。在对游戏机制有足够深入的理解之前，您的地图可能无法过审。`,
+                ``,
+                `不过，您可以通过菜单中的自由模式选项，直接使用本地图建立多人游戏，而无需通过审核。`,
+            ].join("\n"),
+            [
+                `If you want the map to enter the official map pool of the game for other players to play, you must submit the map and wait for the approval of the Map Committee.`,
+                `However, this game has certain requirements for map quality. Your map may not be accepted until you have a deep enough understanding of the game mechanism.`,
+                ``,
+                `Still, you can directly use this map to establish a multiplayer game through the free mode option in the menu without approval.`,
+            ].join("\n"),
+        ],
+        [LangTextType.A0286]: [
+            `此操作无法撤销。您确定要继续吗？`,
+            `This operation can not be undone. Are you sure to continue?`,
+        ],
+        [LangTextType.A0287]: [
+            `已成功修改规则可用性`,
+            `The rule availability is modified successfully.`,
+        ],
+        [LangTextType.A0288]: [
+            `已保存当前状态`,
+            `The current state is saved successfully.`,
+        ],
+        [LangTextType.A0289]: [
+            `尚未保存任何状态`,
+            `There is no saved state.`,
+        ],
+        [LangTextType.A0290]: [
+            `值越大，则自动回放时每个动作之间的停顿时间越长。`,
+            `The higher the value, the longer the pause time between each action during automatic playback.`,
+        ],
+        [LangTextType.A0291]: [
+            `必须保留最少一个规则`,
+            `There must be at least one rule.`,
+        ],
+        [LangTextType.A0292]: [
+            [
+                `您确定要删除此规则吗？`,
+                ``,
+                `注：`,
+                `1. 若此规则曾用于单机挑战模式，则相关排名、分数、回放将被清除。`,
+                `2. 多人模式相关数据不会变化，回放也会保留。`,
+            ].join(`\n`),
+            [
+                `Are you sure to delete this rule?`,
+                ``,
+                `Note:`,
+                `1. If this rule has been used in the war room mode, the relevant ranking, score and replay will be cleared.`,
+                `2. The data related to multiplayer mode will not change, and the replays will be kept.`,
+            ].join(`\n`),
+        ],
+        [LangTextType.A0293]: [
+            `已成功删除规则`,
+            `The rule is deleted successfully.`,
+        ],
+        [LangTextType.A0294]: [
+            `添加区域和删除区域所指定的ID有重合`,
+            `Some ID specified by the "Add to Location" and the "Del from Location" coincide.`,
+        ],
+        [LangTextType.A0295]: [
+            `地图长宽必须相同才能使用此功能`,
+            `The width and height of the map is not the same.`,
+        ],
+        [LangTextType.A0296]: [
+            [
+                `此地图包含可用于多人排位赛的规则。请仔细检查各项设定，确保没有质量问题。`,
+                ``,
+                `您确定要过审此地图吗?`,
+            ].join(`\n`),
+            [
+                `This map contains rules that can be used for multiplayer ranked matches. Please check the settings carefully to ensure that there are no quality problems.`,
+                ``,
+                `Are you sure to accept this map?`,
+            ].join(`\n`),
+            ``,
+        ],
+        [LangTextType.A0297]: [
+            `无法获取观战信息`,
+            `Failed to load the spectating data.`,
+        ],
+        [LangTextType.A0298]: [
+            `尚未设置预设规则的可用性`,
+            `The availability of the preset rule has not been set.`,
+        ],
+        [LangTextType.A0299]: [
+            `您已向所有玩家发送过观战请求`,
+            `You have already made requests to all players.`,
+        ],
+        [LangTextType.A0300]: [
+            `暂未收到观战请求`,
+            `There is no incoming request.`,
+        ],
+        [LangTextType.A0301]: [
+            `目前无人观战`,
+            `There is no spectator.`,
+        ],
+        [LangTextType.A0302]: [
+            `没有可用的统计数据`,
+            `No statistics available.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1160,8 +1337,8 @@ namespace TwnsLangCommonText {
             "Create Rooms",
         ],
         [LangTextType.B0001]: [
-            "无",
-            "None",
+            `无`,
+            `None`,
         ],
         [LangTextType.B0002]: [
             "基本设置",
@@ -1204,8 +1381,8 @@ namespace TwnsLangCommonText {
             "Team D",
         ],
         [LangTextType.B0012]: [
-            "是",
-            "Yes",
+            `是`,
+            `Yes`,
         ],
         [LangTextType.B0013]: [
             "否",
@@ -1985,7 +2162,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0207]: [
             `发起请求`,
-            `Make Request`,
+            `Make Requests`,
         ],
         [LangTextType.B0208]: [
             `处理请求`,
@@ -2184,8 +2361,8 @@ namespace TwnsLangCommonText {
             `COM`,
         ],
         [LangTextType.B0257]: [
-            `War Room`,
-            `War Room`,
+            `挑战模式明战`,
+            `War Room Std`,
         ],
         [LangTextType.B0258]: [
             `选择`,
@@ -2349,11 +2526,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0302]: [
             `地形基底`,
-            `Tile Bases`,
+            `Tile Base`,
         ],
         [LangTextType.B0303]: [
             `地形物体`,
-            `Tile Objects`,
+            `Tile Object`,
         ],
         [LangTextType.B0304]: [
             `部队`,
@@ -2456,8 +2633,8 @@ namespace TwnsLangCommonText {
             `Accounts`,
         ],
         [LangTextType.B0329]: [
-            `在线总时长`,
-            `Online Time`,
+            `玩家在线总时长`,
+            `Users' Online Time`,
         ],
         [LangTextType.B0330]: [
             `新增账号数`,
@@ -2801,18 +2978,18 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0415]: [
             `排位明战`,
-            `Rank Std`,
+            `Ranked Std`,
         ],
         [LangTextType.B0416]: [
             `排位雾战`,
-            `Rank FoW`,
+            `Ranked FoW`,
         ],
         [LangTextType.B0417]: [
-            `自由明战`,
+            `自定义明战`,
             `Custom Std`,
         ],
         [LangTextType.B0418]: [
-            `自由雾战`,
+            `自定义雾战`,
             `Custom FoW`,
         ],
         [LangTextType.B0419]: [
@@ -2885,7 +3062,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0436]: [
             `排位积分榜`,
-            `Rank List`,
+            `Leaderboard`,
         ],
         [LangTextType.B0437]: [
             `标准`,
@@ -2956,8 +3133,8 @@ namespace TwnsLangCommonText {
             `Complaint`,
         ],
         [LangTextType.B0454]: [
-            `新增日志`,
-            `Add Log`,
+            `新增消息`,
+            `Add Message`,
         ],
         [LangTextType.B0455]: [
             `中文`,
@@ -3596,8 +3773,8 @@ namespace TwnsLangCommonText {
             `Simulation FoW`,
         ],
         [LangTextType.B0614]: [
-            `单人排位游戏`,
-            `SP Ranking Games`,
+            `挑战模式`,
+            `War Room`,
         ],
         [LangTextType.B0615]: [
             `替换动作`,
@@ -3785,11 +3962,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0661]: [
             `删除地形装饰物`,
-            `Del Tile Decorator`,
+            `Del Tile Decoration`,
         ],
         [LangTextType.B0662]: [
             `绘制地形装饰物`,
-            `Draw Tile Decorator`,
+            `Draw Tile Decoration`,
         ],
         [LangTextType.B0663]: [
             `陆地边角`,
@@ -3797,7 +3974,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0664]: [
             `地形装饰物`,
-            `Tile Decorator`,
+            `Tile Decoration`,
         ],
         [LangTextType.B0665]: [
             `跳过`,
@@ -3900,7 +4077,7 @@ namespace TwnsLangCommonText {
             `Buildings and Income`,
         ],
         [LangTextType.B0690]: [
-            `和局`,
+            `求和`,
             `Set Draw`,
         ],
         [LangTextType.B0691]: [
@@ -4383,6 +4560,310 @@ namespace TwnsLangCommonText {
             `修改玩家状态`,
             `Set Players' State`,
         ],
+        [LangTextType.B0811]: [
+            `装载部队`,
+            `Load a Unit`,
+        ],
+        [LangTextType.B0812]: [
+            `自由模式明战`,
+            `Free Std`,
+        ],
+        [LangTextType.B0813]: [
+            `自由模式雾战`,
+            `Free FoW`,
+        ],
+        [LangTextType.B0814]: [
+            `房间ID`,
+            `Room ID`,
+        ],
+        [LangTextType.B0815]: [
+            `挑战模式中AI的CO`,
+            `CO for A.I. in War Room`,
+        ],
+        [LangTextType.B0816]: [
+            `挑战模式中由AI控制`,
+            `Controlled by A.I. in War Room`,
+        ],
+        [LangTextType.B0817]: [
+            `挑战模式雾战`,
+            `War Room FoW`,
+        ],
+        [LangTextType.B0818]: [
+            `挑战`,
+            `WR`,
+        ],
+        [LangTextType.B0819]: [
+            `挑战模式总积分`,
+            `War Room Overall Score`,
+        ],
+        [LangTextType.B0820]: [
+            `挑战模式总排名`,
+            `War Room Overall Rank`,
+        ],
+        [LangTextType.B0821]: [
+            `地图ID`,
+            `Map ID`,
+        ],
+        [LangTextType.B0822]: [
+            `我的积分`,
+            `My Score`,
+        ],
+        [LangTextType.B0823]: [
+            `新增规则`,
+            `Add Rules`,
+        ],
+        [LangTextType.B0824]: [
+            `作为新规则提交`,
+            `Submit as a New Rule`,
+        ],
+        [LangTextType.B0825]: [
+            `设置地形类型`,
+            `Set Terrains' Type`,
+        ],
+        [LangTextType.B0826]: [
+            `摧毁部队`,
+            `Destroy Units`,
+        ],
+        [LangTextType.B0827]: [
+            `不透明度设置`,
+            `Opacity Settings`,
+        ],
+        [LangTextType.B0828]: [
+            `伤害计算器`,
+            `Damage Calculator`,
+        ],
+        [LangTextType.B0829]: [
+            `无技能`,
+            `No Skill`,
+        ],
+        [LangTextType.B0830]: [
+            `武器`,
+            `Weapon`,
+        ],
+        [LangTextType.B0831]: [
+            `进攻方`,
+            `Attacker`,
+        ],
+        [LangTextType.B0832]: [
+            `防守方`,
+            `Defender`,
+        ],
+        [LangTextType.B0833]: [
+            `指挥塔数量`,
+            `Towers`,
+        ],
+        [LangTextType.B0834]: [
+            `城市数量`,
+            `Cities`,
+        ],
+        [LangTextType.B0835]: [
+            `交换攻防双方`,
+            `Switch Attacker & Defender`,
+        ],
+        [LangTextType.B0836]: [
+            `无法进攻`,
+            `Can't attack.`,
+        ],
+        [LangTextType.B0837]: [
+            `反击`,
+            `Counter`,
+        ],
+        [LangTextType.B0838]: [
+            `删除信息`,
+            `Delete Message`,
+        ],
+        [LangTextType.B0839]: [
+            `美术设计`,
+            `Art Designer`,
+        ],
+        [LangTextType.B0840]: [
+            `数值设计`,
+            `Numerical Setup`,
+        ],
+        [LangTextType.B0841]: [
+            `处理他人求和`,
+            `Handle Draw`,
+        ],
+        [LangTextType.B0842]: [
+            `回合数限制`,
+            `Turns Limit`,
+        ],
+        [LangTextType.B0843]: [
+            `修改可用性`,
+            `Modify Availability`,
+        ],
+        [LangTextType.B0844]: [
+            `保存`,
+            `Save`,
+        ],
+        [LangTextType.B0845]: [
+            `读取`,
+            `Load`,
+        ],
+        [LangTextType.B0846]: [
+            `停顿时间`,
+            `Pause Time`,
+        ],
+        [LangTextType.B0847]: [
+            `高亮`,
+            `Highlight`,
+        ],
+        [LangTextType.B0848]: [
+            `已高亮`,
+            `is Highlighted`,
+        ],
+        [LangTextType.B0849]: [
+            `未高亮`,
+            `is Not Highlighted`,
+        ],
+        [LangTextType.B0850]: [
+            `修改基底`,
+            `Modify Base`,
+        ],
+        [LangTextType.B0851]: [
+            `修改装饰物`,
+            `Modify Decoration`,
+        ],
+        [LangTextType.B0852]: [
+            `修改物体`,
+            `Modify Object`,
+        ],
+        [LangTextType.B0853]: [
+            `Legacy版(毁灭之日)`,
+            `Legacy Version (AW DoR)`,
+        ],
+        [LangTextType.B0854]: [
+            `Test版(老三代平衡版)`,
+            `Test Version (AW 1/2/DS rebalanced)`,
+        ],
+        [LangTextType.B0855]: [
+            `当前宽高及格子数`,
+            `Current W/H/Grids`,
+        ],
+        [LangTextType.B0856]: [
+            `新的宽高及格子数`,
+            `New W/H/Grids`,
+        ],
+        [LangTextType.B0857]: [
+            `顶部增减行数`,
+            `Add/Delete Top Lines`,
+        ],
+        [LangTextType.B0858]: [
+            `底部增减行数`,
+            `Add/Delete Bottom Lines`,
+        ],
+        [LangTextType.B0859]: [
+            `左方增减行数`,
+            `Add/Delete Left Lines`,
+        ],
+        [LangTextType.B0860]: [
+            `右方增减行数`,
+            `Add/Delete Right Lines`,
+        ],
+        [LangTextType.B0861]: [
+            `设置地形状态`,
+            `Set Terrains' State`,
+        ],
+        [LangTextType.B0862]: [
+            `填充地形(轴对称)`,
+            `Fill Terrains (Mirroring)`,
+        ],
+        [LangTextType.B0863]: [
+            `填充地形(旋转对称)`,
+            `Fill Terrains (Rotational)`,
+        ],
+        [LangTextType.B0864]: [
+            `从上到下`,
+            `From Up To Down`,
+        ],
+        [LangTextType.B0865]: [
+            `从下到上`,
+            `From Down To Up`,
+        ],
+        [LangTextType.B0866]: [
+            `从左到右`,
+            `From Left To Right`,
+        ],
+        [LangTextType.B0867]: [
+            `从右到左`,
+            `From Right To Left`,
+        ],
+        [LangTextType.B0868]: [
+            `从左上到右下`,
+            `From UL To DR`,
+        ],
+        [LangTextType.B0869]: [
+            `从右下到左上`,
+            `From DR To UL`,
+        ],
+        [LangTextType.B0870]: [
+            `从右上到左下`,
+            `From UR To DL`,
+        ],
+        [LangTextType.B0871]: [
+            `从左下到右上`,
+            `From DL to UR`,
+        ],
+        [LangTextType.B0872]: [
+            `观战`,
+            `Spectate`,
+        ],
+        [LangTextType.B0873]: [
+            `游戏观战者`,
+            `Game Spectators`,
+        ],
+        [LangTextType.B0874]: [
+            `我的观战者`,
+            `My Spectators`,
+        ],
+        [LangTextType.B0875]: [
+            `我收到的观战请求`,
+            `Incoming Requests`,
+        ],
+        [LangTextType.B0876]: [
+            `统计`,
+            `Statistics`,
+        ],
+        [LangTextType.B0877]: [
+            `总局数`,
+            `Games`,
+        ],
+        [LangTextType.B0878]: [
+            `游戏管理`,
+            `Game Management`,
+        ],
+        [LangTextType.B0879]: [
+            `清除单人模式榜单`,
+            `Delete All SP Rank`,
+        ],
+        [LangTextType.B0880]: [
+            `管理广播信息`,
+            `Manage Broadcast`,
+        ],
+        [LangTextType.B0881]: [
+            `广播信息`,
+            `Broadcast`,
+        ],
+        [LangTextType.B0882]: [
+            `开始时间`,
+            `Start Time`,
+        ],
+        [LangTextType.B0883]: [
+            `持续时间`,
+            `Duration`,
+        ],
+        [LangTextType.B0884]: [
+            `时`,
+            `Hour`,
+        ],
+        [LangTextType.B0885]: [
+            `分`,
+            `Minute`,
+        ],
+        [LangTextType.B0886]: [
+            `秒`,
+            `Second`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [LangTextType.B1000]: [
@@ -4599,7 +5080,7 @@ namespace TwnsLangCommonText {
             `WarTank`,
         ],
         [LangTextType.B1209]: [
-            `自走炮`,
+            `自行火炮`,
             `Artillery`,
         ],
         [LangTextType.B1210]: [
@@ -4663,7 +5144,7 @@ namespace TwnsLangCommonText {
             `Lander`,
         ],
         [LangTextType.B1225]: [
-            `炮舰`,
+            `炮艇`,
             `Gunboat`,
         ],
 
@@ -4764,7 +5245,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0023]: [
             `地图的总格子数必须小于等于%d`,
-            `The number of the tiles must be less than or equal to %d.`,
+            `The number of the grids must be less than or equal to %d.`,
         ],
         [LangTextType.F0024]: [
             `修改时间: %s`,
@@ -5178,6 +5659,18 @@ namespace TwnsLangCommonText {
             `找到玩家序号为 %s%s 的所有玩家，并修改他们的属性。`,
             `Get all players that is %s%s, then modify their states.`,
         ],
+        [LangTextType.F0127]: [
+            `恭喜您获得本局的胜利！本次得分：%s\n\n即将回到大厅…`,
+            `You win! Score: %s.`,
+        ],
+        [LangTextType.F0128]: [
+            `找到坐标为 %s%s 的所有地块，并修改其属性。`,
+            `Get all terrains that the coordinate is %s%s, then modify their states.`,
+        ],
+        [LangTextType.F0129]: [
+            `找到坐标为 %s%s 的所有地块，并修改其类型。`,
+            `Get all terrains that the coordinate is %s%s, then modify their type.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.
@@ -5407,6 +5900,7 @@ namespace TwnsLangCommonText {
                 `Rainy: force FoW, all tiles' vision become 0, and all units' vision become 1.`,
             ].join(`\n`),
         ],
+
         [LangTextType.R0010]: [
             [
                 `A.I.模式会决定了此部队被A.I.操作时的行动方式，具体如下：`,
@@ -5421,6 +5915,40 @@ namespace TwnsLangCommonText {
                 `0(Normal): The unit will do anything the A.I. thinks appropriate.`,
                 `1(Standby): The unit will do nothing util an enemy unit enters it's attackable area.`,
                 `2(No Move): The unit will not move away from the current grid, but will do anything else.`,
+            ].join(`\n`),
+        ],
+
+        [LangTextType.R0011]: [
+            [
+                `在挑战模式中，您每次通过任意关卡，系统都会计算此次的关卡得分，并上传到服务器，与全服玩家进行排名比拼。`,
+                ``,
+                `挑战模式还包含一个总排行榜。您通过的关卡越多，单个关卡的排名越高，则您在总榜的分数和排名也越高。`,
+                ``,
+                `注：`,
+                `1. 关卡得分仅与您通关时所经过的回合数、以及总动作数（包括我方和AI的动作）有关，与其他所有因素（如敌我战损）都无关。`,
+                `分数 = 100000 - (回合数 - 1) * 1000 - 动作数`,
+                `2. 您可以多次挑战同一个关卡，系统将保留得分最高的通关记录。`,
+                `3. 部分地图可能包含不止一个的挑战规则，每个规则都有独立的排行榜，且同样计入总榜分数。`,
+            ].join(`\n`),
+            [
+                `In the War Room mode, every time you pass any level, the system will calculate the level score and upload it to the server for ranking competition with other players.`,
+                ``,
+                `The War Room mode also includes an overall leaderboard. The more levels you pass, the higher the ranking of a single level, the higher your score and ranking in the overall leaderboard.`,
+                ``,
+                `Note:`,
+                `1. The level score is only related to the number of rounds you have passed and the total number of actions (including the ones of yours and the A.I.'s), and has nothing to do with all other factors (such as the battle loss of the enemy and ourselves).`,
+                `score = 100000 - (turns - 1) * 1000 - actions`,
+                `2. You can challenge the same level many times, and the system will keep the clearance record with the highest score.`,
+                `3. Some maps may contain more than one challenge rule. Each rule has an independent leaderboard and is also included in the score for the overall leaderboard.`,
+            ].join(`\n`),
+        ],
+
+        [LangTextType.R0012]: [
+            [
+                `若回合数超过了回合限制，则本局游戏将自动以和局结束。`,
+            ].join(`\n`),
+            [
+                `If there is no winner by the time the turn limit has been exceeded, the game will be considered a Draw.`,
             ].join(`\n`),
         ],
     };

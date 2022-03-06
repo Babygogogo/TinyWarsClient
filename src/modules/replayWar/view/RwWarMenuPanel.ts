@@ -176,8 +176,8 @@ namespace TwnsRwWarMenuPanel {
         private async _updateGroupInfo(): Promise<void> {
             const war                   = this._getWar();
             const mapId                 = war.getMapId();
-            this._labelMapName.text     = await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----";
-            this._labelMapDesigner.text = await WarMapModel.getDesignerName(mapId) || "----";
+            this._labelMapName.text     = mapId == null ? `----` : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----");
+            this._labelMapDesigner.text = mapId == null ? `----` : (await WarMapModel.getDesignerName(mapId) || "----");
             this._labelWarId.text       = `${war.getReplayId()}`;
             this._labelTurnIndex.text   = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text    = `${war.getNextActionId()} / ${war.getExecutedActionManager().getExecutedActionsCount()}`;
@@ -242,20 +242,16 @@ namespace TwnsRwWarMenuPanel {
             return {
                 name    : Lang.getText(LangTextType.B0365),
                 callback: () => {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                    const minValue = CommonConstants.ReplayMinRating;
+                    const maxValue = CommonConstants.ReplayMaxRating;
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                         title           : `${Lang.getText(LangTextType.B0365)}`,
-                        currentValue    : "",
-                        maxChars        : 2,
-                        charRestrict    : "0-9",
-                        tips            : `${Lang.getText(LangTextType.B0319)}: [${CommonConstants.ReplayMinRating}, ${CommonConstants.ReplayMaxRating}]`,
+                        currentValue    : 5,
+                        minValue,
+                        maxValue,
+                        tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
-                            const text  = panel.getInputText();
-                            const value = Number(text);
-                            if ((!text) || (isNaN(value)) || (value > CommonConstants.ReplayMaxRating) || (value < CommonConstants.ReplayMinRating)) {
-                                FloatText.show(Lang.getText(LangTextType.A0098));
-                            } else {
-                                RwProxy.reqReplaySetRating(this._getWar().getReplayId(), value);
-                            }
+                            RwProxy.reqReplaySetRating(this._getWar().getReplayId(), panel.getInputValue());
                         },
                     });
                 },

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group id="_group" right="0" left="0" height="500" verticalCenter="0">
+        <TwnsUiImage:UiImage source="uncompressedRectangle0007" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                             alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
+        <TwnsUiScrollList:UiScrollList id="_listCategory" left="0" right="0" top="10" bottom="50">
+            <e:List>
+                <e:itemRendererSkinName>
+                    <e:Skin width="940">
+                        <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                            <TwnsUiLabel:UiLabel id="_labelCategory" text="部队名五字" size="12" textColor="0xffffff"
+                                                 horizontalCenter="-430" y="16" />
+                            <TwnsUiScrollList:UiScrollList id="_listTileObject" left="80" right="0">
+                                <e:List requireSelection="true" scaleX="0.65" scaleY="0.65">
+                                    <e:itemRendererSkinName>
+                                        <e:Skin width="80" height="80">
+                                            <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                                                <TwnsUiLabel:UiLabel id="_labelName" text="部队名五字" size="12"
+                                                                     textColor="0xffffff" horizontalCenter="0" />
+                                                <e:Group id="_conTileView" scaleX="1.8" scaleY="1.8" x="20"
+                                                         touchChildren="false" touchEnabled="false" bottom="10" />
+                                            </e:Group>
+                                        </e:Skin>
+                                    </e:itemRendererSkinName>
+                                    <e:layout>
+                                        <e:TileLayout orientation="rows" verticalGap="10" paddingTop="4"
+                                                      requestedColumnCount="15" columnAlign="justifyUsingGap" />
+                                    </e:layout>
+                                </e:List>
+                            </TwnsUiScrollList:UiScrollList>
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:VerticalLayout gap="20" paddingTop="4" horizontalAlign="center" />
+                </e:layout>
+            </e:List>
+        </TwnsUiScrollList:UiScrollList>
+        <e:Group right="10" bottom="10">
+            <TwnsUiButton:UiButton id="_btnCancel" label="取消" width="90" x="-960" y="-500" scaleX="1" scaleY="1"
+                                   skinName="Skins.Component.Button.ButtonSelfAdaption001"></TwnsUiButton:UiButton>
+            <e:layout>
+                <e:HorizontalLayout gap="20" />
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

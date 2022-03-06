@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"  xmlns:TwnsUiButton="TwnsUiButton.*"
-        xmlns:w="http://ns.egret.com/wing">
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*"
+        xmlns:TwnsUiScrollList="TwnsUiScrollList.*" xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*"
+        xmlns:TwnsUiButton="TwnsUiButton.*" xmlns:w="http://ns.egret.com/wing">
     <TwnsUiImage:UiImage id="_imgMask" anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
-                    source="uncompressedColorTransparent0001" scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="640" height="430" horizontalCenter="0" verticalCenter="0">
+                         source="uncompressedColorTransparent0001" scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="920" height="430" horizontalCenter="0" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0" locked="true">
-            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001" scale9Grid="1,1,2,2"
-                            left="0" right="0" top="38" bottom="0" />
+            <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" source="uncompressedColorBlack0001"
+                                 scale9Grid="1,1,2,2" left="0" right="0" top="38" bottom="0" />
             <e:Group y="0" left="0" right="0">
                 <TwnsUiImage:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
-                                source="uncompressedColorGrey0001" y="0" left="0" right="0" />
+                                     source="uncompressedColorGrey0001" y="0" left="0" right="0" />
                 <TwnsUiLabel:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
-                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001" verticalCenter="0"
-                                 right="30" />
+                <TwnsUiButton:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001"
+                                       verticalCenter="0" right="30" />
             </e:Group>
         </e:Group>
-        <e:Group top="60" horizontalCenter="-150">
+        <e:Group top="60" x="20" locked="true">
             <e:Group y="0" left="0" right="0" height="26">
-                <TwnsUiImage:UiImage scale9Grid="1,1,2,2" source="uncompressedColorBlue0000" left="0" right="0" top="0" bottom="0" />
+                <TwnsUiImage:UiImage scale9Grid="1,1,2,2" source="uncompressedColorBlue0000" left="0" right="0" top="0"
+                                     bottom="0" />
                 <TwnsUiLabel:UiLabel id="_labelStdTitle" text="明战" textColor="0xFFFFFF" size="14" verticalCenter="0"
-                                bold="true" x="20" />
+                                     bold="true" x="20" />
                 <TwnsUiLabel:UiLabel id="_labelStdNickname" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="60"
-                                verticalCenter="0" />
+                                     verticalCenter="0" />
                 <TwnsUiLabel:UiLabel id="_labelStdScore" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="230"
-                                verticalCenter="0" y="16" />
+                                     verticalCenter="0" y="16" />
             </e:Group>
             <e:Scroller height="320" y="26" left="0" right="0">
                 <e:Group>
@@ -32,14 +34,15 @@
                             <e:itemRendererSkinName>
                                 <e:Skin width="280" height="26">
                                     <e:Group left="0" right="0" top="0" bottom="0">
-                                        <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0000" left="0" right="0"
-                                                        top="0" bottom="0" scale9Grid="1,1,2,2" />
+                                        <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0000" left="0"
+                                                             right="0" top="0" bottom="0" scale9Grid="1,1,2,2" />
                                         <TwnsUiLabel:UiLabel id="_labelIndex" text="1st" textColor="0xFFFFFF" size="14"
-                                                        maxTextWidth="170" verticalCenter="0" x="20" />
-                                        <TwnsUiLabel:UiLabel id="_labelNickname" text="aaa" textColor="0xFFFFFF" size="14"
-                                                        maxTextWidth="170" verticalCenter="0" x="60" y="16" />
+                                                             maxTextWidth="170" verticalCenter="0" x="20" />
+                                        <TwnsUiLabel:UiLabel id="_labelNickname" text="aaa" textColor="0xFFFFFF"
+                                                             size="14" maxTextWidth="170" verticalCenter="0" x="60"
+                                                             y="16" />
                                         <TwnsUiLabel:UiLabel id="_labelScore" text="9999" textColor="0xFFFFFF" size="14"
-                                                        maxTextWidth="170" verticalCenter="0" x="230" y="26" />
+                                                             maxTextWidth="170" verticalCenter="0" x="230" y="26" />
                                     </e:Group>
                                 </e:Skin>
                             </e:itemRendererSkinName>
@@ -56,16 +59,16 @@
             </e:Scroller>
             <TwnsUiLabel:UiLabel id="_labelStdNoData" text="暂无数据" size="22" horizontalCenter="0" y="150" />
         </e:Group>
-        <e:Group top="60" horizontalCenter="150" x="30" y="70">
+        <e:Group top="60" x="320" y="70">
             <e:Group y="0" left="0" right="0" height="26">
                 <TwnsUiImage:UiImage scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0"
-                                source="uncompressedColorPurple0000" />
+                                     source="uncompressedColorPurple0000" />
                 <TwnsUiLabel:UiLabel id="_labelFogTitle" text="明战" textColor="0xFFFFFF" size="14" verticalCenter="0"
-                                bold="true" x="20" />
+                                     bold="true" x="20" />
                 <TwnsUiLabel:UiLabel id="_labelFogNickname" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="60"
-                                verticalCenter="0" />
+                                     verticalCenter="0" />
                 <TwnsUiLabel:UiLabel id="_labelFogScore" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="230"
-                                verticalCenter="0" y="16" />
+                                     verticalCenter="0" y="16" />
             </e:Group>
             <e:Scroller height="320" y="26" left="0" right="0">
                 <e:Group>
@@ -74,14 +77,15 @@
                             <e:itemRendererSkinName>
                                 <e:Skin width="280" height="26">
                                     <e:Group left="0" right="0" top="0" bottom="0">
-                                        <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0000" left="0" right="0"
-                                                        top="0" bottom="0" scale9Grid="1,1,2,2" />
+                                        <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0000" left="0"
+                                                             right="0" top="0" bottom="0" scale9Grid="1,1,2,2" />
                                         <TwnsUiLabel:UiLabel id="_labelIndex" text="1st" textColor="0xFFFFFF" size="14"
-                                                        maxTextWidth="170" verticalCenter="0" x="20" />
-                                        <TwnsUiLabel:UiLabel id="_labelNickname" text="aaa" textColor="0xFFFFFF" size="14"
-                                                        maxTextWidth="170" verticalCenter="0" x="60" y="16" />
+                                                             maxTextWidth="170" verticalCenter="0" x="20" />
+                                        <TwnsUiLabel:UiLabel id="_labelNickname" text="aaa" textColor="0xFFFFFF"
+                                                             size="14" maxTextWidth="170" verticalCenter="0" x="60"
+                                                             y="16" />
                                         <TwnsUiLabel:UiLabel id="_labelScore" text="9999" textColor="0xFFFFFF" size="14"
-                                                        maxTextWidth="170" verticalCenter="0" x="230" y="26" />
+                                                             maxTextWidth="170" verticalCenter="0" x="230" y="26" />
                                     </e:Group>
                                 </e:Skin>
                             </e:itemRendererSkinName>
@@ -94,6 +98,47 @@
                 </e:Group>
             </e:Scroller>
             <TwnsUiLabel:UiLabel id="_labelFogNoData" text="暂无数据" size="22" horizontalCenter="0" y="150" />
+        </e:Group>
+        <e:Group top="60" x="620" y="80">
+            <e:Group y="0" left="0" right="0" height="26">
+                <TwnsUiImage:UiImage left="0" right="0" top="0" bottom="0" source="uncompressedColorBlue0000"
+                                     scale9Grid="1,1,1,1" />
+                <TwnsUiLabel:UiLabel id="_labelSpmTitle" text="明战" size="14" verticalCenter="0" bold="true" x="20"
+                                     textColor="0xFFFFFF" />
+                <TwnsUiLabel:UiLabel id="_labelSpmNickname" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="60"
+                                     verticalCenter="0" />
+                <TwnsUiLabel:UiLabel id="_labelSpmScore" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="230"
+                                     verticalCenter="0" y="16" />
+            </e:Group>
+            <e:Scroller height="320" y="26" left="0" right="0">
+                <e:Group>
+                    <TwnsUiScrollList:UiScrollList id="_listSpm" y="0" x="0">
+                        <e:List>
+                            <e:itemRendererSkinName>
+                                <e:Skin width="280" height="26">
+                                    <e:Group left="0" right="0" top="0" bottom="0">
+                                        <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0000" left="0"
+                                                             right="0" top="0" bottom="0" scale9Grid="1,1,2,2" />
+                                        <TwnsUiLabel:UiLabel id="_labelIndex" text="1st" textColor="0xFFFFFF" size="14"
+                                                             maxTextWidth="170" verticalCenter="0" x="20" />
+                                        <TwnsUiLabel:UiLabel id="_labelNickname" text="aaa" textColor="0xFFFFFF"
+                                                             size="14" maxTextWidth="170" verticalCenter="0" x="60"
+                                                             y="16" />
+                                        <TwnsUiLabel:UiLabel id="_labelScore" text="9999.99" textColor="0xFFFFFF"
+                                                             size="14" maxTextWidth="50" verticalCenter="0" x="230"
+                                                             y="26" />
+                                    </e:Group>
+                                </e:Skin>
+                            </e:itemRendererSkinName>
+                        </e:List>
+                    </TwnsUiScrollList:UiScrollList>
+                    <TwnsUiImage:UiImage height="1" y="259" width="280" x="0" source="uncompressedColorBlue0000" />
+                    <e:layout>
+                        <e:VerticalLayout gap="0" />
+                    </e:layout>
+                </e:Group>
+            </e:Scroller>
+            <TwnsUiLabel:UiLabel id="_labelSpmNoData" text="暂无数据" size="22" horizontalCenter="0" y="150" />
         </e:Group>
     </e:Group>
 </e:Skin>

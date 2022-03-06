@@ -187,30 +187,30 @@ namespace TwnsMrrPreviewMapListPanel {
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const hasFog        = this._getOpenData().hasFog;
-            const promiseArray  : Promise<ProtoTypes.Map.IMapRawData | null>[] = [];
-            for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapExtraData = mapBriefData.mapExtraData;
-                if (!mapExtraData?.isEnabled) {
-                    continue;
-                }
+            const promiseArray: Promise<ProtoTypes.Map.IMapRawData | null>[] = [];
+            for (const mapId of WarMapModel.getEnabledMapIdArray()) {
+                promiseArray.push((async (): Promise<ProtoTypes.Map.IMapRawData | null> => {
+                    const mapBriefData = await WarMapModel.getBriefData(mapId);
+                    if (mapBriefData == null) {
+                        return null;
+                    }
 
-                const mapAvailability = Helpers.getExisted(mapExtraData.mapComplexInfo?.mapAvailability);
-                if (((hasFog) && (mapAvailability.canMrwFog))   ||
-                    ((!hasFog) && (mapAvailability.canMrwStd))
-                ) {
-                    promiseArray.push(WarMapModel.getRawData(mapId));
-                }
+                    if ((mapBriefData.mapExtraData?.isEnabled)  &&
+                        (mapBriefData.ruleAvailability?.canMrw)
+                    ) {
+                        return await WarMapModel.getRawData(mapId);
+                    }
+
+                    return null;
+                })());
             }
 
+            const hasFog    = this._getOpenData().hasFog;
             const dataArray : DataForMapNameRenderer[] = [];
             for (const mapRawData of await Promise.all(promiseArray)) {
-                if ((mapRawData) &&
-                    (mapRawData.warRuleArray?.some(v => {
-                        return (v.ruleAvailability?.canMrw)
-                            && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
-                    }))
-                ) {
+                if (mapRawData?.warRuleArray?.some(v => {
+                    return (v.ruleAvailability?.canMrw) && (hasFog === v.ruleForGlobalParams?.hasFogByDefault);
+                })) {
                     dataArray.push({
                         mapId   : Helpers.getExisted(mapRawData.mapId),
                         mapName : Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || CommonConstants.ErrorTextForUndefined,
@@ -274,6 +274,12 @@ namespace TwnsMrrPreviewMapListPanel {
                     {
                         settingsType    : WarBasicSettingsType.Weather,
                         currentValue    : null,
+                        warRule,
+                        callbackOnModify: null,
+                    },
+                    {
+                        settingsType    : WarBasicSettingsType.TurnsLimit,
+                        currentValue    : CommonConstants.WarMaxTurnsLimit,
                         warRule,
                         callbackOnModify: null,
                     },

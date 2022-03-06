@@ -42,6 +42,7 @@ namespace TwnsBwTile {
         private _currentBuildPoint?     : number | null;
         private _currentCapturePoint?   : number | null;
         private _locationFlags?         : number;
+        private _isHighlighted?         : boolean;
 
         private _customCrystalData?     : ITileCustomCrystalData | null;
         private _customCannonData?      : ITileCustomCannonData | null;
@@ -66,6 +67,20 @@ namespace TwnsBwTile {
             this.flushDataToView();
         }
 
+        public getErrorCodeForTileData(data: ISerialTile, playersCountUnneutral: number): ClientErrorCode {
+            const playerIndex = data.playerIndex;
+            if ((playerIndex != null) && (playerIndex > playersCountUnneutral)) {
+                return ClientErrorCode.BwTile_GetErrorCodeForTileData_00;
+            }
+
+            try {
+                this.init(data, Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+            } catch (e) {
+                return (e as Types.CustomError).errorCode ?? ClientErrorCode.BwTile_GetErrorCodeForTileData_01;
+            }
+
+            return ClientErrorCode.NoError;
+        }
         public deserialize(data: ISerialTile, configVersion: string): void {
             const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(data.gridIndex), ClientErrorCode.BwTile_Deserialize_00);
             const gridX     = gridIndex.x;
@@ -192,6 +207,7 @@ namespace TwnsBwTile {
             this.setCurrentBuildPoint(currentBuildPoint ?? (templateCfg.maxBuildPoint ?? null));
             this.setCurrentCapturePoint(currentCapturePoint ?? (templateCfg.maxCapturePoint ?? null));
             this._setLocationFlags(data.locationFlags ?? 0);
+            this.setIsHighlighted(data.isHighlighted ?? false);
 
             this._setCustomCrystalData(customCrystalData);
             this._setCustomCannonData(customCannonData);
@@ -230,8 +246,11 @@ namespace TwnsBwTile {
             const decoratorShapeId = this.getDecoratorShapeId();
             (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
 
-            const locationFlags = this._getLocationFlags();
+            const locationFlags = this.getLocationFlags();
             (locationFlags !== 0) && (data.locationFlags = locationFlags);
+
+            const isHighlighted = this.getIsHighlighted();
+            (isHighlighted) && (data.isHighlighted = isHighlighted);
 
             return data;
         }
@@ -271,8 +290,11 @@ namespace TwnsBwTile {
                 const decoratorShapeId = this.getDecoratorShapeId();
                 (decoratorShapeId !== 0) && (data.decoratorShapeId = decoratorShapeId);
 
-                const locationFlags = this._getLocationFlags();
+                const locationFlags = this.getLocationFlags();
                 (locationFlags !== 0) && (data.locationFlags = locationFlags);
+
+                const isHighlighted = this.getIsHighlighted();
+                (isHighlighted) && (data.isHighlighted = isHighlighted);
 
                 return data;
             }
@@ -461,32 +483,54 @@ namespace TwnsBwTile {
         private _setLocationFlags(flags: number): void {
             this._locationFlags = flags;
         }
-        private _getLocationFlags(): number {
+        public getLocationFlags(): number {
             return Helpers.getExisted(this._locationFlags, ClientErrorCode.BwTile_GetLocationFlags_00);
         }
 
         /** @param locationId range: [1-30] */
         public getHasLocationFlag(locationId: number): boolean {
-            return !!((this._getLocationFlags() >> (locationId - 1)) & 1);
+            return !!((this.getLocationFlags() >> (locationId - 1)) & 1);
         }
         /** @param locationId range: [1-30] */
         public setHasLocationFlag(locationId: number, hasFlag: boolean): void {
             if (hasFlag) {
-                this._setLocationFlags(this._getLocationFlags() | (1 << (locationId - 1)));
+                this._setLocationFlags(this.getLocationFlags() | (1 << (locationId - 1)));
             } else {
-                this._setLocationFlags(this._getLocationFlags() & ~(1 << (locationId - 1)));
+                this._setLocationFlags(this.getLocationFlags() & ~(1 << (locationId - 1)));
             }
             Notify.dispatch(TwnsNotifyType.NotifyType.BwTileLocationFlagSet, this as NotifyData.BwTileLocationFlagSet);
         }
         public setHasLocationFlagArray(locationIdArray: number[], hasFlag: boolean): void {
             for (const locationId of locationIdArray) {
                 if (hasFlag) {
-                    this._setLocationFlags(this._getLocationFlags() | (1 << (locationId - 1)));
+                    this._setLocationFlags(this.getLocationFlags() | (1 << (locationId - 1)));
                 } else {
-                    this._setLocationFlags(this._getLocationFlags() & ~(1 << (locationId - 1)));
+                    this._setLocationFlags(this.getLocationFlags() & ~(1 << (locationId - 1)));
                 }
             }
             Notify.dispatch(TwnsNotifyType.NotifyType.BwTileLocationFlagSet, this as NotifyData.BwTileLocationFlagSet);
+        }
+        public getHasLocationFlagArray(): number[] {
+            const locationIdArray: number[] = [];
+            for (let locationId = CommonConstants.MapMinLocationId; locationId <= CommonConstants.MapMaxLocationId; ++locationId) {
+                if (this.getHasLocationFlag(locationId)) {
+                    locationIdArray.push(locationId);
+                }
+            }
+            return locationIdArray;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // Functions for highlight.
+        ////////////////////////////////////////////////////////////////////////////////
+        public getIsHighlighted(): boolean {
+            return Helpers.getExisted(this._isHighlighted);
+        }
+        public setIsHighlighted(isHighlighted: boolean): void {
+            if (this._isHighlighted !== isHighlighted) {
+                this._isHighlighted = isHighlighted;
+                Notify.dispatch(TwnsNotifyType.NotifyType.BwTileIsHighlightedChanged, this as NotifyData.BwTileIsHighlightChanged);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -560,6 +604,8 @@ namespace TwnsBwTile {
                 objectShapeId   : objectType === this.getObjectType() ? this.getObjectShapeId() : null,
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
+                locationFlags   : this.getLocationFlags(),
+                isHighlighted   : this.getIsHighlighted(),
             }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }
@@ -574,6 +620,8 @@ namespace TwnsBwTile {
                 objectShapeId   : getNewObjectShapeIdOnObjectDestroyed(this.getObjectType(), this.getObjectShapeId()),
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
+                locationFlags   : this.getLocationFlags(),
+                isHighlighted   : this.getIsHighlighted(),
             }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }
@@ -592,6 +640,8 @@ namespace TwnsBwTile {
                 objectShapeId   : null,
                 decoratorType   : this.getDecoratorType(),
                 decoratorShapeId: this.getDecoratorShapeId(),
+                locationFlags   : this.getLocationFlags(),
+                isHighlighted   : this.getIsHighlighted(),
             }, this.getConfigVersion());
             this.startRunning(this.getWar());
         }
@@ -717,13 +767,14 @@ namespace TwnsBwTile {
             return this._getTemplateCfg().repairAmount ?? null;
         }
 
-        public getNormalizedRepairHpModifier(): number {
+        public getNormalizedRepairAmountAndCostModifier(): { amountModifier: number, costMultiplierPct: number } {
             const player                    = this.getPlayer();
             const configVersion             = this.getConfigVersion();
             const gridIndex                 = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
-            let totalModifier               = 0;
+            let amountModifier              = 0;
+            let costMultiplierPct           = 100;
             for (const skillId of player.getCoCurrentSkills()) {
                 const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfRepairAmountBonus;
                 if ((cfg)                                               &&
@@ -734,11 +785,12 @@ namespace TwnsBwTile {
                         coZoneRadius,
                     }))
                 ) {
-                    totalModifier += cfg[1];
+                    amountModifier      += cfg[1];
+                    costMultiplierPct   = costMultiplierPct * cfg[3] / 100;
                 }
             }
 
-            return totalModifier;
+            return { amountModifier, costMultiplierPct };
         }
 
         public checkCanRepairUnit(unit: TwnsBwUnit.BwUnit): boolean {
@@ -766,14 +818,17 @@ namespace TwnsBwTile {
                 throw Helpers.newError(`Empty cfgNormalizedRepairHp`);
             }
 
-            const productionCost        = unit.getProductionFinalCost();
+            const modifier              = this.getNormalizedRepairAmountAndCostModifier();
+            const productionCost        = Math.floor(unit.getProductionFinalCost() * modifier.costMultiplierPct / 100);
             const currentHp             = unit.getCurrentHp();
             const normalizedMaxHp       = unit.getNormalizedMaxHp();
             const normalizedCurrentHp   = WarCommonHelpers.getNormalizedHp(currentHp);
             const normalizedRepairHp    = Math.min(
                 normalizedMaxHp - normalizedCurrentHp,
-                cfgNormalizedRepairHp + this.getNormalizedRepairHpModifier(),
-                Math.floor(Math.max(0, unit.getPlayer().getFund()) * normalizedMaxHp / productionCost)
+                cfgNormalizedRepairHp + modifier.amountModifier,
+                productionCost > 0
+                    ? Math.floor(Math.max(0, unit.getPlayer().getFund()) * normalizedMaxHp / productionCost)
+                    : Number.MAX_SAFE_INTEGER,
             );
             return {
                 hp  : (normalizedRepairHp + normalizedCurrentHp) * CommonConstants.UnitHpNormalizer - currentHp,

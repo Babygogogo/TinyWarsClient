@@ -90,7 +90,8 @@ namespace TwnsMpwWar {
         public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | null> {
             const nickname      = await this.getPlayerInTurn().getNickname();
             const playerIndex   = this.getPlayerIndexInTurn();
-            if (!action.isAgree) {
+            const isAgree       = action.extraData ? action.extraData.isAgree : action.isAgree;
+            if (!isAgree) {
                 return Lang.getFormattedText(LangTextType.F0017, playerIndex, nickname);
             } else {
                 if (this.getDrawVoteManager().getRemainingVotes()) {
@@ -176,12 +177,16 @@ namespace TwnsMpwWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getBootRestTime(): number | null {
-            const player = this.getPlayerInTurn();
-            if (player.getPlayerIndex() === 0) {
+        public getBootRestTime(playerIndex: number): number | null {
+            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
                 return null;
             } else {
-                return (this.getEnterTurnTime() + player.getRestTimeToBoot() - Timer.getServerTimestamp()) || null;
+                const restTime = this.getPlayer(playerIndex).getRestTimeToBoot();
+                if (playerIndex === this.getPlayerIndexInTurn()) {
+                    return (this.getEnterTurnTime() + restTime - Timer.getServerTimestamp()) || null;
+                } else {
+                    return restTime;
+                }
             }
         }
 

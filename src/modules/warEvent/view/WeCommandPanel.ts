@@ -122,21 +122,15 @@ namespace TwnsWeCommandPanel {
                 const minValue  = 1;
                 const maxValue  = CommonConstants.WarEventMaxCallCountInPlayerTurn;
                 const eventData = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.eventArray?.find(v => v.eventId === data.eventId));
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                     title           : Lang.getText(LangTextType.B0476),
-                    charRestrict    : `0-9`,
+                    currentValue    : eventData.maxCallCountInPlayerTurn ?? 1,
+                    minValue,
+                    maxValue,
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                    maxChars        : 3,
-                    currentValue    : `${eventData.maxCallCountInPlayerTurn}`,
                     callback        : (panel) => {
-                        const text  = panel.getInputText();
-                        const value = text ? Number(text) : NaN;
-                        if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                            FloatText.show(Lang.getText(LangTextType.A0098));
-                        } else {
-                            eventData.maxCallCountInPlayerTurn = value;
-                            Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                        }
+                        eventData.maxCallCountInPlayerTurn = panel.getInputValue();
+                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     },
                 });
             }
@@ -147,21 +141,15 @@ namespace TwnsWeCommandPanel {
                 const minValue  = 1;
                 const maxValue  = CommonConstants.WarEventMaxCallCountTotal;
                 const eventData = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData()?.eventArray?.find(v => v.eventId === data.eventId));
-                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputPanel, {
+                TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                     title           : Lang.getText(LangTextType.B0477),
-                    charRestrict    : `0-9`,
+                    currentValue    : eventData.maxCallCountTotal ?? 1,
+                    minValue,
+                    maxValue,
                     tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
-                    maxChars        : 3,
-                    currentValue    : `${eventData.maxCallCountTotal}`,
                     callback        : (panel) => {
-                        const text  = panel.getInputText();
-                        const value = text ? Number(text) : NaN;
-                        if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                            FloatText.show(Lang.getText(LangTextType.A0098));
-                        } else {
-                            eventData.maxCallCountTotal = value;
-                            Notify.dispatch(NotifyType.WarEventFullDataChanged);
-                        }
+                        eventData.maxCallCountTotal = panel.getInputValue();
+                        Notify.dispatch(NotifyType.WarEventFullDataChanged);
                     },
                 });
             }

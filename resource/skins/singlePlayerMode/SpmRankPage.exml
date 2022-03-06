@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:TwnsUiTab="TwnsUiTab.*" xmlns:TwnsUiScrollList="TwnsUiScrollList.*"
+        xmlns:TwnsUiLabel="TwnsUiLabel.*" xmlns:TwnsUiImage="TwnsUiImage.*" xmlns:TwnsUiButton="TwnsUiButton.*"
+        xmlns:w="http://ns.egret.com/wing" width="193" height="253">
+    <e:Group left="0" right="0" top="0" bottom="0">
+        <TwnsUiScrollList:UiScrollList id="_listRule" left="0" right="20" top="0" bottom="20">
+            <e:List>
+                <e:itemRendererSkinName>
+                    <e:Skin width="300" height="320" currentState="up" states="up,down">
+                        <e:Group left="0" right="0" top="0" bottom="0">
+                            <e:Group top="0" bottom="0" left="0" right="0">
+                                <e:Group x="20" height="30" y="0">
+                                    <TwnsUiLabel:UiLabel id="_labelMyScoreTitle" text="明战" textColor="0xFFFFFF"
+                                                         size="14" x="0" y="0" bold="true" />
+                                    <TwnsUiLabel:UiLabel id="_labelMyScore" text="明战" textColor="0xFFFFFF" size="14"
+                                                         x="10" y="0" />
+                                    <e:layout>
+                                        <e:HorizontalLayout verticalAlign="middle" gap="10" />
+                                    </e:layout>
+                                </e:Group>
+                                <e:Group y="30" left="0" right="0" height="26">
+                                    <TwnsUiImage:UiImage scale9Grid="1,1,2,2" source="uncompressedColorBlue0000"
+                                                         left="0" right="0" top="0" bottom="0" />
+                                    <TwnsUiLabel:UiLabel id="_labelStdTitle" text="明战" textColor="0xFFFFFF" size="14"
+                                                         verticalCenter="0" bold="true" x="20" />
+                                    <TwnsUiLabel:UiLabel id="_labelStdNickname" text="明战" textColor="0xFFFFFF" size="14"
+                                                         bold="true" x="60" verticalCenter="0" />
+                                    <TwnsUiLabel:UiLabel id="_labelStdScore" text="明战" textColor="0xFFFFFF" size="14"
+                                                         bold="true" x="230" verticalCenter="0" y="16" />
+                                </e:Group>
+                                <TwnsUiScrollList:UiScrollList id="_listStd" top="56" bottom="0" left="0" right="0">
+                                    <e:List>
+                                        <e:itemRendererSkinName>
+                                            <e:Skin width="300" height="26">
+                                                <e:Group left="0" right="0" top="0" bottom="0">
+                                                    <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0000"
+                                                                         left="0" right="0" top="0" bottom="0"
+                                                                         scale9Grid="1,1,2,2" />
+                                                    <TwnsUiLabel:UiLabel id="_labelIndex" text="1st"
+                                                                         textColor="0xFFFFFF" size="14"
+                                                                         maxTextWidth="170" verticalCenter="0" x="20" />
+                                                    <TwnsUiLabel:UiLabel id="_labelNickname" text="aaa"
+                                                                         textColor="0xFFFFFF" size="14"
+                                                                         maxTextWidth="170" verticalCenter="0" x="60"
+                                                                         y="16" />
+                                                    <e:Group id="_groupScore" left="230" right="0" top="0" bottom="0">
+                                                        <TwnsUiLabel:UiLabel id="_labelScore" text="9999"
+                                                                             textColor="0xFFFFFF" size="14"
+                                                                             maxTextWidth="170" x="0" verticalCenter="0" />
+                                                        <TwnsUiImage:UiImage id="_imgReplay" source="icon_replay_001"
+                                                                             width="20" height="20" x="46"
+                                                                             verticalCenter="0" />
+                                                    </e:Group>
+                                                    <TwnsUiImage:UiImage id="_imgBottomLine"
+                                                                         source="uncompressedColorBlue0000" left="0"
+                                                                         right="0" height="1" bottom="0"
+                                                                         smoothing="false" />
+                                                </e:Group>
+                                            </e:Skin>
+                                        </e:itemRendererSkinName>
+                                        <e:layout>
+                                            <e:VerticalLayout gap="0" />
+                                        </e:layout>
+                                    </e:List>
+                                </TwnsUiScrollList:UiScrollList>
+                                <TwnsUiLabel:UiLabel id="_labelStdNoData" text="暂无数据" size="22" horizontalCenter="0"
+                                                     y="150" />
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:HorizontalLayout gap="10" verticalAlign="contentJustify" />
+                </e:layout>
+            </e:List>
+        </TwnsUiScrollList:UiScrollList>
+    </e:Group>
+</e:Skin>

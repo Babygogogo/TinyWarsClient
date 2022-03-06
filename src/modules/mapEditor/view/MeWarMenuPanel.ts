@@ -357,7 +357,8 @@ namespace TwnsMeWarMenuPanel {
             return Helpers.getNonNullElements([
                 this._createCommandClear(),
                 this._createCommandResize(),
-                this._createCommandOffset(),
+                this._createCommandSimulation(),
+                this._createCommandCreateMfr(),
                 this._createCommandChat(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandGotoMapListPanel(),
@@ -368,8 +369,6 @@ namespace TwnsMeWarMenuPanel {
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
             return Helpers.getNonNullElements([
                 this._createCommandAutoSaveMap(),
-                this._createCommandSimulation(),
-                this._createCommandCreateMfr(),
                 this._createCommandImport(),
                 this._createCommandImportFromClipboard(),
                 this._createCommandExportToClipboard(),
@@ -560,18 +559,6 @@ namespace TwnsMeWarMenuPanel {
                 };
             }
         }
-        private _createCommandOffset(): DataForCommandRenderer | null {
-            if (this._getWar().getIsReviewingMap()) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(LangTextType.B0293),
-                    callback: () => {
-                        TwnsPanelManager.open(TwnsPanelConfig.Dict.MeOffsetPanel, void 0);
-                    },
-                };
-            }
-        }
         private _createCommandImport(): DataForCommandRenderer | null {
             if (this._getWar().getIsReviewingMap()) {
                 return null;
@@ -592,6 +579,11 @@ namespace TwnsMeWarMenuPanel {
                 return {
                     name    : Lang.getText(LangTextType.B0681),
                     callback: () => {
+                        if (navigator?.clipboard?.readText == null) {
+                            FloatText.show(Lang.getText(LangTextType.A0275));
+                            return;
+                        }
+
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0237),
                             callback: async () => {
@@ -611,11 +603,28 @@ namespace TwnsMeWarMenuPanel {
                     },
                 };
             }
+
+            // (async () => {
+            //     const war = Helpers.getExisted(MeModel.getWar());
+            //     war.stopRunning();
+            //     await war.initWithMapEditorData({
+            //         mapRawData  : JSON.parse(await navigator.clipboard.readText()),
+            //         slotIndex   : war.getMapSlotIndex(),
+            //     });
+            //     war.setIsMapModified(true);
+            //     war.startRunning()
+            //         .startRunningView();
+            // })();
         }
         private _createCommandExportToClipboard(): DataForCommandRenderer | null {
             return {
                 name    : Lang.getText(LangTextType.B0680),
                 callback: () => {
+                    if (navigator?.clipboard?.writeText == null) {
+                        FloatText.show(Lang.getText(LangTextType.A0275));
+                        return;
+                    }
+
                     navigator.clipboard.writeText(JSON.stringify(this._getWar().serializeForMap()));
 
                     FloatText.show(Lang.getText(LangTextType.A0235));

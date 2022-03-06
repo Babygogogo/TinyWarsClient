@@ -20,7 +20,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
     import NotifyType   = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+        warId: number;
     };
     export class WwDeleteWatcherDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!           : TwnsUiLabel.UiLabel;
@@ -48,7 +48,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
             this._listPlayer.setItemRenderer(RequesterRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            this._dataForListPlayer = this._generateDataForListPlayer();
+            this._dataForListPlayer = await this._generateDataForListPlayer();
             this._updateView();
         }
         protected _onClosing(): void {
@@ -75,7 +75,13 @@ namespace TwnsWwDeleteWatcherDetailPanel {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnConfirm(): void {
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            const warId = this._getOpenData().warId;
+            if (await WwModel.getWatchIncomingInfo(warId) == null) {
+                this.close();
+                return;
+            }
+
             const deleteUserIds : number[] = [];
             for (const data of this._dataForListPlayer || []) {
                 if (data.isDelete) {
@@ -83,8 +89,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
                 }
             }
             if (deleteUserIds.length) {
-                const warId = this._getOpenData().watchInfo.warInfo?.warId;
-                (warId != null) && (WwProxy.reqWatchDeleteWatcher(warId, deleteUserIds));
+                WwProxy.reqWatchDeleteWatcher(warId, deleteUserIds);
             }
             this.close();
         }
@@ -107,18 +112,18 @@ namespace TwnsWwDeleteWatcherDetailPanel {
             this._btnCancel.label               = Lang.getText(LangTextType.B0154);
         }
 
-        private _generateDataForListPlayer(): DataForRequesterRenderer[] {
-            const openData          = this._getOpenData().watchInfo;
-            const playerInfoList    = openData.warInfo?.playerInfoList || [];
+        private async _generateDataForListPlayer(): Promise<DataForRequesterRenderer[]> {
+            const warId             = this._getOpenData().warId;
+            const playerInfoList    = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of openData.requesterInfos || []) {
+            for (const info of (await WwModel.getWatchIncomingInfo(warId))?.srcUserInfoArray || []) {
                 const userId = info.userId;
                 if (userId != null) {
                     dataList.push({
                         panel           : this,
                         userId,
                         isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
-                        isOpponent      : playerInfoList.some(v => v.userId === userId),
+                        isOpponent      : !!playerInfoList?.some(v => v.userId === userId),
                         isDelete        : false,
                     });
                 }

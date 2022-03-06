@@ -65,6 +65,7 @@ namespace TwnsWeActionModifyPanel6 {
             this._listDialogue.setItemRenderer(DialogueRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
+            this._getAction().dataArray ??= [];
             this._updateView();
         }
         protected _onClosing(): void {
@@ -83,7 +84,7 @@ namespace TwnsWeActionModifyPanel6 {
         }
 
         private _onTouchedBtnAddDialogue(): void {
-            const dialogueArray = Helpers.getExisted(this._getOpenData().action.WeaSimpleDialogue?.dataArray);
+            const dialogueArray = Helpers.getExisted(this._getAction().dataArray);
             if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
@@ -93,11 +94,10 @@ namespace TwnsWeActionModifyPanel6 {
         }
 
         private _onTouchedBtnClear(): void {
-            const openData = this._getOpenData();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0190),
                 callback: () => {
-                    Helpers.getExisted(openData.action.WeaSimpleDialogue?.dataArray).length = 0;
+                    Helpers.getExisted(this._getAction().dataArray).length = 0;
                     Notify.dispatch(NotifyType.WarEventFullDataChanged);
                 }
             });
@@ -123,6 +123,7 @@ namespace TwnsWeActionModifyPanel6 {
             }
 
             TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
+                configVersion   : openData.war.getConfigVersion(),
                 actionData      : dialogueAction,
                 callbackOnClose : () => {
                     // nothing to do
@@ -168,6 +169,10 @@ namespace TwnsWeActionModifyPanel6 {
             const currCount = dataArray.length;
             label.text      = `${Lang.getText(LangTextType.B0675)}: ${currCount} / ${maxCount}`;
             label.textColor = ((currCount <= maxCount) && (currCount > 0)) ? ColorValue.White : ColorValue.Red;
+        }
+
+        private _getAction(): ProtoTypes.WarEvent.IWeaSimpleDialogue {
+            return Helpers.getExisted(this._getOpenData().action.WeaSimpleDialogue);
         }
     }
 

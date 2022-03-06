@@ -69,7 +69,8 @@ namespace TwnsSpwWar {
         public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | null> {
             const nickname      = await this.getPlayerInTurn().getNickname();
             const playerIndex   = this.getPlayerIndexInTurn();
-            if (!action.isAgree) {
+            const isAgree       = action.extraData ? action.extraData.isAgree : action.isAgree;
+            if (!isAgree) {
                 return Lang.getFormattedText(LangTextType.F0017, playerIndex, nickname);
             } else {
                 if (this.getDrawVoteManager().getRemainingVotes()) {
@@ -167,6 +168,10 @@ namespace TwnsSpwWar {
 
         public getIsExecuteActionsWithExtraData(): boolean {
             return false;
+        }
+
+        public getBootRestTime(): number | null {
+            return null;
         }
 
         public setSaveSlotIndex(slotIndex: number): void {

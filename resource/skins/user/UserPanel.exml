@@ -18,8 +18,7 @@
         </e:Group>
         <e:Group y="50" left="30">
             <e:Group x="0" y="0">
-                <TwnsUiImage:UiImage id="_imgAvatar" x="10" y="10" scale9Grid="1,1,2,2" source="userAvatar0001"
-                                     scaleX="0.44" scaleY="0.44" />
+                <TwnsUiImage:UiImage id="_imgAvatar" x="10" y="10" source="userAvatar0001" scaleX="0.44" scaleY="0.44" />
                 <e:Group x="90" y="6">
                     <TwnsUiButton:UiButton id="_btnChat" label="聊天" skinName="Skins.Component.Button.ButtonYellow001"
                                            width="100" left="0" top="0" />
@@ -138,7 +137,7 @@
                     </e:Group>
                 </e:Group>
                 <e:Group x="0" y="40">
-                    <e:Group x="0" y="0">
+                    <e:Group x="0" y="0" locked="true">
                         <TwnsUiImage:UiImage alpha="0.8" scale9Grid="1,1,2,2" source="uncompressedColorBlue0000"
                                              width="360" height="26" y="0" x="0" />
                         <TwnsUiLabel:UiLabel id="_labelHistoryStd" text="明战" textColor="0xFFFFFF" size="14"
@@ -155,20 +154,20 @@
                     <TwnsUiScrollList:UiScrollList id="_sclHistoryStd" x="0" y="26">
                         <e:List>
                             <e:itemRendererSkinName>
-                                <e:Skin width="360" height="26">
+                                <e:Skin width="360" height="20">
                                     <e:Group left="0" right="0" top="0" bottom="0">
                                         <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0000" left="0"
                                                              right="0" top="0" bottom="0" scale9Grid="1,1,2,2" />
-                                        <TwnsUiLabel:UiLabel id="_labelType" text="2人明战" textColor="0xFFFFFF" size="14"
+                                        <TwnsUiLabel:UiLabel id="_labelType" text="2人明战" textColor="0xFFFFFF" size="12"
                                                              maxTextWidth="170" verticalCenter="1"
                                                              horizontalCenter="-140" />
-                                        <TwnsUiLabel:UiLabel id="_labelWin" text="100" textColor="0xFFFFFF" size="14"
+                                        <TwnsUiLabel:UiLabel id="_labelWin" text="100" textColor="0xFFFFFF" size="12"
                                                              verticalCenter="1" horizontalCenter="-70" />
-                                        <TwnsUiLabel:UiLabel id="_labelLose" text="100" textColor="0xFFFFFF" size="14"
+                                        <TwnsUiLabel:UiLabel id="_labelLose" text="100" textColor="0xFFFFFF" size="12"
                                                              verticalCenter="1" horizontalCenter="0" />
-                                        <TwnsUiLabel:UiLabel id="_labelDraw" text="100" textColor="0xFFFFFF" size="14"
+                                        <TwnsUiLabel:UiLabel id="_labelDraw" text="100" textColor="0xFFFFFF" size="12"
                                                              verticalCenter="1" horizontalCenter="70" />
-                                        <TwnsUiLabel:UiLabel id="_labelRatio" text="100%" textColor="0xFFFFFF" size="14"
+                                        <TwnsUiLabel:UiLabel id="_labelRatio" text="100%" textColor="0xFFFFFF" size="12"
                                                              verticalCenter="1" horizontalCenter="140" />
                                         <TwnsUiImage:UiImage id="_imgBottom" left="0" right="0" height="1" bottom="0"
                                                              source="uncompressedColorBlue0000" />
@@ -228,20 +227,20 @@
                     <TwnsUiScrollList:UiScrollList id="_sclHistoryFog" x="0" y="26">
                         <e:List>
                             <e:itemRendererSkinName>
-                                <e:Skin width="360" height="26">
+                                <e:Skin width="360" height="20">
                                     <e:Group left="0" right="0" top="0" bottom="0">
                                         <TwnsUiImage:UiImage id="_imgBg" source="uncompressedColorBlack0000" left="0"
                                                              right="0" top="0" bottom="0" scale9Grid="1,1,2,2" />
-                                        <TwnsUiLabel:UiLabel id="_labelType" text="2人明战" textColor="0xFFFFFF" size="14"
+                                        <TwnsUiLabel:UiLabel id="_labelType" text="2人明战" textColor="0xFFFFFF" size="12"
                                                              maxTextWidth="170" verticalCenter="1"
                                                              horizontalCenter="-140" />
-                                        <TwnsUiLabel:UiLabel id="_labelWin" text="100" textColor="0xFFFFFF" size="14"
+                                        <TwnsUiLabel:UiLabel id="_labelWin" text="100" textColor="0xFFFFFF" size="12"
                                                              verticalCenter="1" horizontalCenter="-70" />
-                                        <TwnsUiLabel:UiLabel id="_labelLose" text="100" textColor="0xFFFFFF" size="14"
+                                        <TwnsUiLabel:UiLabel id="_labelLose" text="100" textColor="0xFFFFFF" size="12"
                                                              verticalCenter="1" horizontalCenter="0" />
-                                        <TwnsUiLabel:UiLabel id="_labelDraw" text="100" textColor="0xFFFFFF" size="14"
+                                        <TwnsUiLabel:UiLabel id="_labelDraw" text="100" textColor="0xFFFFFF" size="12"
                                                              verticalCenter="1" horizontalCenter="70" />
-                                        <TwnsUiLabel:UiLabel id="_labelRatio" text="100%" textColor="0xFFFFFF" size="14"
+                                        <TwnsUiLabel:UiLabel id="_labelRatio" text="100%" textColor="0xFFFFFF" size="12"
                                                              verticalCenter="1" horizontalCenter="140" />
                                         <TwnsUiImage:UiImage id="_imgBottom" left="0" right="0" height="1" bottom="0"
                                                              source="uncompressedColorPurple0000" />
@@ -253,6 +252,35 @@
                             </e:layout>
                         </e:List>
                     </TwnsUiScrollList:UiScrollList>
+                </e:Group>
+            </e:Group>
+            <e:Group x="10" y="10">
+                <e:Group left="0" top="0">
+                    <e:Group x="0" y="0">
+                        <TwnsUiLabel:UiLabel id="_labelSpmRankScoreTitle" text="明战排位积分:" size="12" x="0" y="0"
+                                             textColor="0xFFFFFF" />
+                        <TwnsUiLabel:UiLabel id="_labelSpmRankScore" text="9999(预备役)" size="20" x="60" y="0"
+                                             textColor="0x34A7DE" bold="true" />
+                        <e:layout>
+                            <e:VerticalLayout gap="4" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="150" y="0">
+                        <TwnsUiLabel:UiLabel id="_labelSpmRankRankTitle" text="明战排位" size="12" x="0" y="0"
+                                             textColor="0xFFFFFF" />
+                        <e:Group x="0" y="21">
+                            <TwnsUiLabel:UiLabel id="_labelSpmRankRank" text="1" size="20" x="0" y="16"
+                                                 textColor="0x34A7DE" bold="true" />
+                            <TwnsUiLabel:UiLabel id="_labelSpmRankRankSuffix" text="st" size="12" x="0" y="0"
+                                                 textColor="0xAAAAAA" />
+                            <e:layout>
+                                <e:HorizontalLayout verticalAlign="bottom" gap="0" />
+                            </e:layout>
+                        </e:Group>
+                        <e:layout>
+                            <e:VerticalLayout gap="4" />
+                        </e:layout>
+                    </e:Group>
                 </e:Group>
             </e:Group>
             <e:layout>

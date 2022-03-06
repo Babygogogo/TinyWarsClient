@@ -40,7 +40,9 @@ namespace TwnsCommonDamageChartPanel {
         IsDiver,
         LoadUnit,
     }
-    export type OpenData = void;
+    export type OpenData = {
+        configVersion   : string;
+    };
     export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _groupList!            : eui.Group;
@@ -387,7 +389,7 @@ namespace TwnsCommonDamageChartPanel {
 
         private _createDataForListUnit(): DataForUnitRenderer[] {
             const data          : DataForUnitRenderer[] = [];
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const configVersion = this._getOpenData().configVersion;
             const unitTypes     = ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All);
             for (let index = 0; index < unitTypes.length; ++index) {
                 data.push({

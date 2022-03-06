@@ -181,4 +181,13 @@
             </e:layout>
         </e:Group>
     </e:Group>
+    <e:Group horizontalCenter="0" top="2">
+        <TwnsUiLabel:UiLabel id="_labelLocationTitle" size="12" textAlign="center" text="Location:" textColor="0xFFFFFF"
+                             stroke="2" x="0" y="0" />
+        <TwnsUiLabel:UiLabel id="_labelLocation" size="12" textAlign="center" text="99/99/99" textColor="0xFFFFFF"
+                             stroke="2" x="55" y="0" />
+        <e:layout>
+            <e:HorizontalLayout verticalAlign="middle" />
+        </e:layout>
+    </e:Group>
 </e:Skin>

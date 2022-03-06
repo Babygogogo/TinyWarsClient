@@ -10,6 +10,7 @@
 // import WarRuleHelpers       from "../../tools/warHelpers/WarRuleHelpers";
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace McrCreateModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import BootTimerType    = Types.BootTimerType;
@@ -26,7 +27,9 @@ namespace McrCreateModel {
     export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
 
     const _dataForCreateRoom: DataForCreateRoom = {
-        settingsForCommon       : {},
+        settingsForCommon       : {
+            turnsLimit          : CommonConstants.WarMaxTurnsLimit,
+        },
         settingsForMcw          : {},
 
         selfCoId                : CommonConstants.CoEmptyId,
@@ -45,6 +48,7 @@ namespace McrCreateModel {
         setWarPassword("");
         setWarComment("");
         setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
+        setTurnsLimit(CommonConstants.WarMaxTurnsLimit);
         setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
         await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canMcw)?.ruleId));
     }
@@ -151,6 +155,13 @@ namespace McrCreateModel {
         }
     }
 
+    export function getTurnsLimit(): number {
+        return Helpers.getExisted(getSettingsForCommon().turnsLimit);
+    }
+    export function setTurnsLimit(turnsLimit: number): void {
+        getSettingsForCommon().turnsLimit = turnsLimit;
+    }
+
     export function setWarName(name: string | null): void {
         getSettingsForMcw().warName = name;
     }
@@ -228,7 +239,7 @@ namespace McrCreateModel {
     export function tickBootTimerType(): void {
         const params = getBootTimerParams();
         if ((params) && (params[0] === BootTimerType.Regular)) {
-            setBootTimerParams([BootTimerType.Incremental, 60 * 15, 15]);
+            setBootTimerParams([BootTimerType.Incremental, 60 * 15, 10]);
         } else {
             setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
         }

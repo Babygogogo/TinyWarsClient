@@ -7,9 +7,11 @@
 // import TwnsBwTileMapView            from "./BwTileMapView";
 // import TwnsBwUnitMapView            from "./BwUnitMapView";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwFieldView {
     export class BwFieldView extends egret.DisplayObjectContainer {
         private _field?                 : TwnsBwField.BwField;
+
         private _tileMapView?           : TwnsBwTileMapView.BwTileMapView;
         private _actionPlannerView?     : TwnsBwActionPlannerView.BwActionPlannerView;
         private _unitMapView?           : TwnsBwUnitMapView.BwUnitMapView;

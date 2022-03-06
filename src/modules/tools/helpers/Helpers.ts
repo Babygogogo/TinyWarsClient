@@ -187,6 +187,27 @@ namespace Helpers {
         }
     }
 
+    /**
+     * 对于某个key，如果其中一个obj不包含它，而另一个obj包含它但值为null/undefined，则依然认为这两个obj相同
+     */
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    export function checkIsSameValue(obj1: any, obj2: any): boolean {
+        const type = typeof(obj1);
+        if (type !== typeof(obj2)) {
+            return false;
+        }
+        if (type !== "object") {
+            return obj1 == obj2;
+        }
+
+        const keys = Object.keys(obj1).filter(v => obj1[v] != null);
+        if (keys.length !== Object.keys(obj2).filter(v => obj2[v] != null).length) {
+            return false;
+        }
+
+        return keys.every(v => checkIsSameValue(obj1[v], obj2[v]));
+    }
+
     export function checkIsEmptyObject(obj: { [key: string]: any }): boolean {
         for (const k in obj) {
             return false;
@@ -441,6 +462,11 @@ namespace Helpers {
             });
         }
     }
+    export function wait(timeMs: number): Promise<void> {
+        return new Promise<void>(resolve => {
+            egret.setTimeout(resolve, null, timeMs);
+        });
+    }
     export function createLazyFunc<T>(func: () => T): () => T {
         let hasCalled   = false;
         let result      : T;
@@ -452,10 +478,136 @@ namespace Helpers {
             return result;
         };
     }
-    export function wait(timeMs: number): Promise<void> {
-        return new Promise<void>(resolve => {
-            egret.setTimeout(resolve, null, timeMs);
-        });
+    // export function createCachedDataGetter<DataType, NetMessageType>({ dataDict, dataExpireTime = 999999, notifyTypeForSucceed, notifyTypeForFail, checkIsTargetMessage, reqData }: {
+    //     dataDict                : Map<number, DataType | null>;
+    //     dataExpireTime?         : number;
+    //     notifyTypeForSucceed    : TwnsNotifyType.NotifyType;
+    //     notifyTypeForFail       : TwnsNotifyType.NotifyType;
+    //     checkIsTargetMessage    : (msg: NetMessageType, key: number) => boolean;
+    //     reqData                 : (key: number) => void;
+    // }): (key: number) => Promise<DataType | null> {
+    //     const requestDict           = new Map<number, (() => void)[]>();
+    //     const requestTimestampDict  = new Map<number, number>();
+    //     const dataTimestampDict     = new Map<number, number>();
+
+    //     return (key: number): Promise<DataType | null> => {
+    //         const serverTimestamp = Timer.getServerTimestamp();
+    //         if ((dataDict.has(key))                                                     &&
+    //             (serverTimestamp - (dataTimestampDict.get(key) ?? 0) <= dataExpireTime)
+    //         ) {
+    //             return new Promise<DataType | null>(resolve => resolve(dataDict.get(key) ?? null));
+    //         }
+
+    //         if ((requestDict.has(key))                                          &&
+    //             (serverTimestamp - (requestTimestampDict.get(key) ?? 0) <= 10)
+    //         ) {
+    //             return new Promise<DataType | null>(resolve => {
+    //                 getExisted(requestDict.get(key)).push(() => {
+    //                     resolve(dataDict.get(key) ?? null);
+    //                 });
+    //             });
+    //         }
+
+    //         return new Promise<DataType | null>(resolve => {
+    //             if (requestDict.has(key)) {
+    //                 getExisted(requestDict.get(key)).push(() => {
+    //                     resolve(dataDict.get(key) ?? null);
+    //                 });
+
+    //             } else {
+    //                 const callbackOnSucceeded = (e: egret.Event): void => {
+    //                     if (checkIsTargetMessage(e.data, key)) {
+    //                         Notify.removeEventListener(notifyTypeForSucceed,    callbackOnSucceeded);
+    //                         Notify.removeEventListener(notifyTypeForFail,       callbackOnFailed);
+
+    //                         dataTimestampDict.set(key, Timer.getServerTimestamp());
+
+    //                         for (const cb of getExisted(requestDict.get(key))) {
+    //                             cb();
+    //                         }
+    //                         requestDict.delete(key);
+    //                     }
+    //                 };
+    //                 const callbackOnFailed = (e: egret.Event): void => {
+    //                     if (checkIsTargetMessage(e.data, key)) {
+    //                         Notify.removeEventListener(notifyTypeForSucceed,    callbackOnSucceeded);
+    //                         Notify.removeEventListener(notifyTypeForFail,       callbackOnFailed);
+
+    //                         for (const cb of getExisted(requestDict.get(key))) {
+    //                             cb();
+    //                         }
+    //                         requestDict.delete(key);
+    //                     }
+    //                 };
+    //                 Notify.addEventListener(notifyTypeForSucceed,   callbackOnSucceeded);
+    //                 Notify.addEventListener(notifyTypeForFail,      callbackOnFailed);
+
+    //                 requestDict.set(key, [() => {
+    //                     resolve(dataDict.get(key) ?? null);
+    //                 }]);
+    //             }
+
+    //             requestTimestampDict.set(key, serverTimestamp);
+    //             reqData(key);
+    //         });
+    //     };
+    // }
+    export function createCachedDataAccessor<KeyType, DataType>({ dataExpireTime = 999999, reqData }: {
+        dataExpireTime?     : number;
+        reqData             : (key: KeyType) => void;
+    }): {
+        getData     : (key: KeyType) => Promise<DataType | null>;
+        setData     : (key: KeyType, data: DataType | null) => void;
+    } {
+        const dataDict              = new Map<KeyType, DataType | null>();
+        const dataTimestampDict     = new Map<KeyType, number>();
+        const requestDict           = new Map<KeyType, (() => void)[]>();
+        const requestTimestampDict  = new Map<KeyType, number>();
+
+        return {
+            getData: (key: KeyType): Promise<DataType | null> => {
+                const serverTimestamp = Timer.getServerTimestamp();
+                if ((dataDict.has(key))                                                     &&
+                    (serverTimestamp - (dataTimestampDict.get(key) ?? 0) <= dataExpireTime)
+                ) {
+                    return new Promise<DataType | null>(resolve => resolve(dataDict.get(key) ?? null));
+                }
+
+                if ((requestDict.has(key))                                          &&
+                    (serverTimestamp - (requestTimestampDict.get(key) ?? 0) <= 10)
+                ) {
+                    return new Promise<DataType | null>(resolve => {
+                        getExisted(requestDict.get(key)).push(() => {
+                            resolve(dataDict.get(key) ?? null);
+                        });
+                    });
+                }
+
+                return new Promise<DataType | null>(resolve => {
+                    if (requestDict.has(key)) {
+                        getExisted(requestDict.get(key)).push(() => {
+                            resolve(dataDict.get(key) ?? null);
+                        });
+                    } else {
+                        requestDict.set(key, [() => {
+                            resolve(dataDict.get(key) ?? null);
+                        }]);
+                    }
+
+                    requestTimestampDict.set(key, serverTimestamp);
+                    reqData(key);
+                });
+            },
+            setData : (key: KeyType, data: DataType | null): void => {
+                dataTimestampDict.set(key, Timer.getServerTimestamp());
+                dataDict.set(key, data);
+
+                for (const cb of requestDict.get(key) ?? []) {
+                    cb();
+                }
+                requestDict.delete(key);
+            },
+        };
     }
 
     function getColorMatrix(color: Types.ColorType, value = 100): number[] | null {
@@ -543,6 +695,15 @@ namespace Helpers {
         const error     : Types.CustomError = new Error(msg);
         error.errorCode = errorCode;
         return error;
+    }
+
+    export async function checkIsAnyPromiseTrue(promiseArray: (Promise<boolean> | boolean)[]): Promise<boolean> {
+        for (const promise of promiseArray) {
+            if (await promise) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

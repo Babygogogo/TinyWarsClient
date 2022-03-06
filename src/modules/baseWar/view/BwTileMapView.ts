@@ -17,19 +17,32 @@ namespace TwnsBwTileMapView {
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
     export class BwTileMapView extends egret.DisplayObjectContainer {
-        private readonly _tileViewArray     : TwnsBwTileView.BwTileView[] = [];
-        private readonly _baseLayer         = new egret.DisplayObjectContainer();
-        private readonly _decoratorLayer    = new egret.DisplayObjectContainer();
-        private readonly _gridBorderLayer   = new egret.DisplayObjectContainer();
-        private readonly _objectLayer       = new egret.DisplayObjectContainer();
-        private readonly _locationLayer     = new egret.DisplayObjectContainer();
-        private readonly _coZoneContainer   = new egret.DisplayObjectContainer();
-        private readonly _coZoneImageDict   = new Map<number, TwnsUiImage.UiImage[][]>();
+        private readonly _borderLayer               = new egret.DisplayObjectContainer();
+        private readonly _imgCornerUL               = new TwnsUiImage.UiImage(`uncompressedCorner0000`);
+        private readonly _imgCornerUR               = new TwnsUiImage.UiImage(`uncompressedCorner0001`);
+        private readonly _imgCornerDR               = new TwnsUiImage.UiImage(`uncompressedCorner0002`);
+        private readonly _imgCornerDL               = new TwnsUiImage.UiImage(`uncompressedCorner0003`);
+        private readonly _imgBorderU                = new TwnsUiImage.UiImage(`uncompressedBorder0000`);
+        private readonly _imgBorderR                = new TwnsUiImage.UiImage(`uncompressedBorder0001`);
+        private readonly _imgBorderD                = new TwnsUiImage.UiImage(`uncompressedBorder0002`);
+        private readonly _imgBorderL                = new TwnsUiImage.UiImage(`uncompressedBorder0003`);
+
+        private readonly _tileViewArray             : TwnsBwTileView.BwTileView[] = [];
+        private readonly _baseLayer                 = new egret.DisplayObjectContainer();
+        private readonly _decoratorLayer            = new egret.DisplayObjectContainer();
+        private readonly _gridBorderLayer           = new egret.DisplayObjectContainer();
+        private readonly _objectLayer               = new egret.DisplayObjectContainer();
+        private readonly _highlightLayer            = new egret.DisplayObjectContainer();
+        private readonly _locationLayer             = new egret.DisplayObjectContainer();
+        private readonly _coZoneContainer           = new egret.DisplayObjectContainer();
+        private readonly _coZoneAreaImageDict       = new Map<number, TwnsUiImage.UiImage[][]>();
+        private readonly _coZoneBorderImageArray    : TwnsUiImage.UiImage[] = [];
 
         private readonly _notifyListeners   = [
             { type: NotifyType.TileAnimationTick,                   callback: this._onNotifyTileAnimationTick },
             { type: NotifyType.UserSettingsIsShowGridBorderChanged, callback: this._onNotifyIsShowGridBorderChanged },
             { type: NotifyType.BwTileLocationFlagSet,               callback: this._onNotifyBwTileLocationFlagSet },
+            { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
         ];
 
         private _tileMap?: TwnsBwTileMap.BwTileMap;
@@ -37,14 +50,18 @@ namespace TwnsBwTileMapView {
         public constructor() {
             super();
 
+            this._initBorderLayer();
             this.addChild(this._baseLayer);
             this.addChild(this._decoratorLayer);
             this.addChild(this._gridBorderLayer);
             this.addChild(this._objectLayer);
+            this.addChild(this._highlightLayer);
             this.addChild(this._locationLayer);
             this.addChild(this._coZoneContainer);
             this._locationLayer.alpha   = 0.6;
             this._gridBorderLayer.alpha = 0.3;
+
+            this._updateOpacityForTileLayers();
         }
 
         public init(tileMap: TwnsBwTileMap.BwTileMap): void {
@@ -55,10 +72,12 @@ namespace TwnsBwTileMapView {
                 const baseLayer         = this._baseLayer;
                 const decoratorLayer    = this._decoratorLayer;
                 const objectLayer       = this._objectLayer;
+                const highlightLayer    = this._highlightLayer;
                 tileViewArray.length    = 0;
                 baseLayer.removeChildren();
                 decoratorLayer.removeChildren();
                 objectLayer.removeChildren();
+                highlightLayer.removeChildren();
 
                 for (const tile of tileMap.getAllTiles()) {
                     const view  = tile.getView();
@@ -86,6 +105,13 @@ namespace TwnsBwTileMapView {
                         imgObject.y     = y;
                         objectLayer.addChild(imgObject);
                     }
+
+                    {
+                        const imgHighlight  = view.getImgHighlight();
+                        imgHighlight.x      = x;
+                        imgHighlight.y      = y;
+                        objectLayer.addChild(imgHighlight);
+                    }
                 }
             }
 
@@ -95,7 +121,7 @@ namespace TwnsBwTileMapView {
                 const borderHeight      = mapHeight * GRID_HEIGHT;
                 const gridBorderLayer   = this._gridBorderLayer;
                 gridBorderLayer.removeChildren();
-                for (let x = 0; x <= mapWidth; ++x) {
+                for (let x = 1; x < mapWidth; ++x) {
                     const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                     img.smoothing   = false;
                     img.width       = 1;
@@ -103,7 +129,7 @@ namespace TwnsBwTileMapView {
                     img.x           = (x * GRID_WIDTH) - 0.5;
                     gridBorderLayer.addChild(img);
                 }
-                for (let y = 0; y <= mapHeight; ++y) {
+                for (let y = 1; y < mapHeight; ++y) {
                     const img       = new TwnsUiImage.UiImage(`uncompressedColorBlack0000`);
                     img.smoothing   = false;
                     img.width       = borderWidth;
@@ -130,6 +156,8 @@ namespace TwnsBwTileMapView {
                     }
                 }
             }
+
+            this._updateBorderLayer();
         }
         public fastInit(tileMap: TwnsBwTileMap.BwTileMap): void {
             this._tileMap = tileMap;
@@ -193,70 +221,129 @@ namespace TwnsBwTileMapView {
         }
 
         private _initCoZoneContainer(): void {
-            const container                                 = this._coZoneContainer;
-            const imageDict                                 = this._coZoneImageDict;
-            const tileMap                                   = Helpers.getExisted(this._tileMap);
-            const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
-            const playerManager                             = tileMap.getWar().getPlayerManager();
-            const playersCount                              = playerManager.getTotalPlayersCount(false);
+            const container     = this._coZoneContainer;
+            const tileMap       = Helpers.getExisted(this._tileMap);
+            const mapSize       = tileMap.getMapSize();
+            const mapWidth      = mapSize.width;
+            const mapHeight     = mapSize.height;
+            const playerManager = tileMap.getWar().getPlayerManager();
+            const playersCount  = playerManager.getTotalPlayersCount(false);
 
-            for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
-                if (!imageDict.has(playerIndex)) {
-                    imageDict.set(playerIndex, []);
-                }
-
-                const imgSource = `c08_t03_s${Helpers.getNumText(playerManager.getPlayer(playerIndex).getUnitAndTileSkinId())}_f01`;
-                const matrix    = Helpers.getExisted(imageDict.get(playerIndex));
-                for (let x = 0; x < mapWidth; ++x) {
-                    if (matrix[x] == null) {
-                        matrix[x] = [];
+            {
+                const imageDict = this._coZoneAreaImageDict;
+                for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
+                    if (!imageDict.has(playerIndex)) {
+                        imageDict.set(playerIndex, []);
                     }
 
-                    const column = matrix[x];
-                    for (let y = 0; y < mapHeight; ++y) {
-                        if (column[y] == null) {
-                            const img       = new TwnsUiImage.UiImage(imgSource);
-                            img.smoothing   = false;
-                            img.x           = GRID_WIDTH * x;
-                            img.y           = GRID_HEIGHT * y;
-                            column[y]       = img;
-                            container.addChild(img);
+                    const imgSource = `c08_t03_s${Helpers.getNumText(playerManager.getPlayer(playerIndex).getUnitAndTileSkinId())}_f01`;
+                    const matrix    = Helpers.getExisted(imageDict.get(playerIndex));
+                    for (let x = 0; x < mapWidth; ++x) {
+                        if (matrix[x] == null) {
+                            matrix[x] = [];
                         }
-                        column[y].source = imgSource;
+
+                        const column = matrix[x];
+                        for (let y = 0; y < mapHeight; ++y) {
+                            if (column[y] == null) {
+                                const img       = new TwnsUiImage.UiImage(imgSource);
+                                img.smoothing   = false;
+                                img.x           = GRID_WIDTH * x;
+                                img.y           = GRID_HEIGHT * y;
+                                column[y]       = img;
+                                container.addChild(img);
+                            }
+                            column[y].source = imgSource;
+                        }
+
+                        for (let y = mapHeight; y < column.length; ++y) {
+                            const img = column[y];
+                            (img) && (img.parent) && (img.parent.removeChild(img));
+                        }
+                        column.length = mapHeight;
                     }
 
-                    for (let y = mapHeight; y < column.length; ++y) {
-                        const img = column[y];
-                        (img) && (img.parent) && (img.parent.removeChild(img));
+                    for (let x = mapWidth; x < matrix.length; ++x) {
+                        for (const img of matrix[x] || []) {
+                            (img) && (img.parent) && (img.parent.removeChild(img));
+                        }
                     }
-                    column.length = mapHeight;
+                    matrix.length = mapWidth;
                 }
 
-                for (let x = mapWidth; x < matrix.length; ++x) {
-                    for (const img of matrix[x] || []) {
-                        (img) && (img.parent) && (img.parent.removeChild(img));
+                for (let playerIndex = playersCount + 1; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+                    for (const column of imageDict.get(playerIndex) || []) {
+                        for (const img of column || []) {
+                            (img) && (img.parent) && (img.parent.removeChild(img));
+                        }
                     }
+                    imageDict.delete(playerIndex);
                 }
-                matrix.length = mapWidth;
             }
 
-            for (let playerIndex = playersCount + 1; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
-                for (const column of imageDict.get(playerIndex) || []) {
-                    for (const img of column || []) {
-                        (img) && (img.parent) && (img.parent.removeChild(img));
+            {
+                const imgArray  = this._coZoneBorderImageArray;
+                const imgsCount = (mapWidth + 1) * mapHeight + (mapHeight + 1) * mapWidth;
+                for (let i = imgsCount; i < imgArray.length; ++i) {
+                    const img = imgArray[i];
+                    (img) && (img.parent) && (img.parent.removeChild(img));
+                }
+                imgArray.length = imgsCount;
+
+                let i = 0;
+                for (let y = 0; y <= mapHeight; ++y) {
+                    for (let x = 0; x < mapWidth; ++x) {
+                        if (imgArray[i] == null) {
+                            const img       = new TwnsUiImage.UiImage(`uncompressedColorWhite0000`);
+                            imgArray[i]     = img;
+                            img.smoothing   = false;
+                            container.addChild(img);
+                        }
+
+                        const img   = imgArray[i];
+                        img.height  = 2;
+                        img.width   = GRID_WIDTH - 2;
+                        img.x       = x * GRID_WIDTH + 1;
+                        img.y       = y * GRID_HEIGHT - 1;
+
+                        ++i;
                     }
                 }
-                imageDict.delete(playerIndex);
+                for (let y = 0; y < mapHeight; ++y) {
+                    for (let x = 0; x <= mapWidth; ++x) {
+                        if (imgArray[i] == null) {
+                            const img       = new TwnsUiImage.UiImage(`uncompressedColorWhite0000`);
+                            imgArray[i]     = img;
+                            img.smoothing   = false;
+                            container.addChild(img);
+                        }
+
+                        const img   = imgArray[i];
+                        img.width   = 2;
+                        img.height  = GRID_HEIGHT - 2;
+                        img.x       = x * GRID_WIDTH - 1;
+                        img.y       = y * GRID_HEIGHT + 1;
+
+                        ++i;
+                    }
+                }
             }
         }
         public updateCoZone(): void {
-            const tileMap                                   = Helpers.getExisted(this._tileMap);
-            const war                                       = tileMap.getWar();
-            const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
-            const playerManager                             = war.getPlayerManager();
-            const playersCount                              = playerManager.getTotalPlayersCount(false);
-            const watcherTeamIndexes                        = playerManager.getAliveWatcherTeamIndexesForSelf();
-            const unitMap                                   = war.getUnitMap();
+            const tileMap               = Helpers.getExisted(this._tileMap);
+            const war                   = tileMap.getWar();
+            const mapSize               = tileMap.getMapSize();
+            const mapWidth              = mapSize.width;
+            const mapHeight             = mapSize.height;
+            const playerManager         = war.getPlayerManager();
+            const playersCount          = playerManager.getTotalPlayersCount(false);
+            const watcherTeamIndexes    = playerManager.getAliveWatcherTeamIndexesForSelf();
+            const unitMap               = war.getUnitMap();
+            const areaImgDict           = this._coZoneAreaImageDict;
+            const borderImgArray        = this._coZoneBorderImageArray;
+            for (const img of borderImgArray) {
+                img.visible = false;
+            }
 
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 const player        = war.getPlayer(playerIndex);
@@ -269,17 +356,39 @@ namespace TwnsBwTileMapView {
                             && (WarVisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex,
-                                unitType: unit.getUnitType(),
-                                isDiving: unit.getIsDiving(),
-                                unitPlayerIndex: playerIndex,
-                                observerTeamIndexes: watcherTeamIndexes
+                                unitType            : unit.getUnitType(),
+                                isDiving            : unit.getIsDiving(),
+                                unitPlayerIndex     : playerIndex,
+                                observerTeamIndexes : watcherTeamIndexes,
                             }));
                     });
 
-                const matrix = Helpers.getExisted(this._coZoneImageDict.get(playerIndex));
+                const matrix = Helpers.getExisted(areaImgDict.get(playerIndex));
                 for (let x = 0; x < mapWidth; ++x) {
                     for (let y = 0; y < mapHeight; ++y) {
                         matrix[x][y].visible = (gridIndexList.length > 0) && (radius >= GridIndexHelpers.getMinDistance({ x, y }, gridIndexList));
+                    }
+                }
+
+                for (const coGridIndex of gridIndexList) {
+                    const { x: coX, y: coY } = coGridIndex;
+                    for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: coGridIndex, minDistance: radius, maxDistance: radius, mapSize })) {
+                        const { x, y }  = gridIndex;
+                        const deltaX = x - coX;
+                        if (deltaX >= 0) {
+                            borderImgArray[y * (mapWidth + 1) + x + 1 + (mapHeight + 1) * mapWidth].visible = true;
+                        }
+                        if (deltaX <= 0) {
+                            borderImgArray[y * (mapWidth + 1) + x + (mapHeight + 1) * mapWidth].visible = true;
+                        }
+
+                        const deltaY = y - coY;
+                        if (deltaY >= 0) {
+                            borderImgArray[(y + 1) * mapWidth + x].visible = true;
+                        }
+                        if (deltaY <= 0) {
+                            borderImgArray[y * mapWidth + x].visible = true;
+                        }
                     }
                 }
             }
@@ -321,8 +430,110 @@ namespace TwnsBwTileMapView {
             img.visible = false;
         }
 
+        private _onNotifyUserSettingsOpacitySettingsChanged(): void {
+            this._updateOpacityForTileLayers();
+        }
+
         private _updateGridBorderLayerVisible(): void {
             this._gridBorderLayer.visible = UserModel.getSelfSettingsIsShowGridBorder();
+        }
+
+        private _updateOpacityForTileLayers(): void {
+            const opacitySettings       = UserModel.getSelfSettingsOpacitySettings();
+            this._baseLayer.alpha       = (opacitySettings?.tileBaseOpacity ?? 100) / 100;
+            this._objectLayer.alpha     = (opacitySettings?.tileObjectOpacity ?? 100) / 100;
+            this._decoratorLayer.alpha  = (opacitySettings?.tileDecoratorOpacity ?? 100) / 100;
+        }
+
+        private _initBorderLayer(): void {
+            const borderLayer       = this._borderLayer;
+            const imgCornerUL       = this._imgCornerUL;
+            const imgCornerUR       = this._imgCornerUR;
+            const imgCornerDL       = this._imgCornerDL;
+            const imgCornerDR       = this._imgCornerDR;
+            const imgBorderU        = this._imgBorderU;
+            const imgBorderD        = this._imgBorderD;
+            const imgBorderL        = this._imgBorderL;
+            const imgBorderR        = this._imgBorderR;
+            imgCornerUL.smoothing   = false;
+            imgCornerUR.smoothing   = false;
+            imgCornerDL.smoothing   = false;
+            imgCornerDR.smoothing   = false;
+            imgBorderU.smoothing    = false;
+            imgBorderD.smoothing    = false;
+            imgBorderL.smoothing    = false;
+            imgBorderR.smoothing    = false;
+            borderLayer.addChild(imgBorderU);
+            borderLayer.addChild(imgBorderD);
+            borderLayer.addChild(imgBorderL);
+            borderLayer.addChild(imgBorderR);
+            borderLayer.addChild(imgCornerUL);
+            borderLayer.addChild(imgCornerUR);
+            borderLayer.addChild(imgCornerDL);
+            borderLayer.addChild(imgCornerDR);
+            this.addChild(borderLayer);
+        }
+
+        private _updateBorderLayer(): void {
+            const tileMap = this._tileMap;
+            if (tileMap == null) {
+                return;
+            }
+
+            const mapSize           = tileMap.getMapSize();
+            const horizontalPixels  = mapSize.width * GRID_WIDTH;
+            const verticalPixels    = mapSize.height * GRID_HEIGHT;
+            {
+                const imgCornerUL   = this._imgCornerUL;
+                imgCornerUL.x       = -4;
+                imgCornerUL.y       = -4;
+            }
+
+            {
+                const imgCornerUR   = this._imgCornerUR;
+                imgCornerUR.x       = horizontalPixels;
+                imgCornerUR.y       = -4;
+            }
+
+            {
+                const imgCornerDR   = this._imgCornerDR;
+                imgCornerDR.x       = horizontalPixels;
+                imgCornerDR.y       = verticalPixels;
+            }
+
+            {
+                const imgCornerDL   = this._imgCornerDL;
+                imgCornerDL.x       = -4;
+                imgCornerDL.y       = verticalPixels;
+            }
+
+            {
+                const imgBorderU    = this._imgBorderU;
+                imgBorderU.x        = -0.5;
+                imgBorderU.y        = -4;
+                imgBorderU.width    = horizontalPixels + 1;
+            }
+
+            {
+                const imgBorderR    = this._imgBorderR;
+                imgBorderR.x        = horizontalPixels;
+                imgBorderR.y        = -0.5;
+                imgBorderR.height   = verticalPixels + 1;
+            }
+
+            {
+                const imgBorderD    = this._imgBorderD;
+                imgBorderD.x        = -0.5;
+                imgBorderD.y        = verticalPixels;
+                imgBorderD.width    = horizontalPixels + 1;
+            }
+
+            {
+                const imgBorderL    = this._imgBorderL;
+                imgBorderL.x        = -4;
+                imgBorderL.y        = -0.5;
+                imgBorderL.height   = verticalPixels + 1;
+            }
         }
     }
 }

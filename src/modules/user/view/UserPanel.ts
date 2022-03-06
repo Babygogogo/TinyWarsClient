@@ -46,6 +46,11 @@ namespace TwnsUserPanel {
         private readonly _labelFogRankRankTitle!    : TwnsUiLabel.UiLabel;
         private readonly _labelFogRankRank!         : TwnsUiLabel.UiLabel;
         private readonly _labelFogRankRankSuffix!   : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankScoreTitle!   : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankScore!        : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankRankTitle!    : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankRank!         : TwnsUiLabel.UiLabel;
+        private readonly _labelSpmRankRankSuffix!   : TwnsUiLabel.UiLabel;
 
         private readonly _labelRegisterTimeTitle!   : TwnsUiLabel.UiLabel;
         private readonly _labelRegisterTime1!       : TwnsUiLabel.UiLabel;
@@ -221,6 +226,8 @@ namespace TwnsUserPanel {
             this._labelStdRankRankTitle.text    = Lang.getText(LangTextType.B0546);
             this._labelFogRankScoreTitle.text   = Lang.getText(LangTextType.B0199);
             this._labelFogRankRankTitle.text    = Lang.getText(LangTextType.B0547);
+            this._labelSpmRankScoreTitle.text   = Lang.getText(LangTextType.B0819);
+            this._labelSpmRankRankTitle.text    = Lang.getText(LangTextType.B0820);
             this._labelUserIdTitle.text         = Lang.getText(LangTextType.B0640);
             this._labelRegisterTimeTitle.text   = Lang.getText(LangTextType.B0194);
             this._labelLastLoginTimeTitle.text  = Lang.getText(LangTextType.B0195);
@@ -242,6 +249,7 @@ namespace TwnsUserPanel {
             this._updateLabelTitle();
             this._updateComponentsForStdRank();
             this._updateComponentsForFogRank();
+            this._updateComponentsForSpmRank();
             this._updateSclHistoryStd();
             this._updateSclHistoryFog();
         }
@@ -271,6 +279,16 @@ namespace TwnsUserPanel {
             const rank                          = data ? data.currentRank : null;
             this._labelFogRankRank.text         = rank == null ? `--` : `${rank}`;
             this._labelFogRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
+        }
+        private async _updateComponentsForSpmRank(): Promise<void> {
+            const rankInfo                      = (await UserModel.getUserPublicInfo(this._getOpenData().userId))?.userSpmOverallRankInfo;
+            const score                         = rankInfo?.currentScore ?? 0;
+            this._labelSpmRankScore.text        = score > 0 ? Helpers.formatString(`%.2f`, score) : `--`;
+
+            const rank                          = rankInfo?.currentRank ?? 0;
+            const isRankValid                   = (rank > 0) && (score > 0);
+            this._labelSpmRankRank.text         = isRankValid ? `${rank}` : `--`;
+            this._labelSpmRankRankSuffix.text   = isRankValid ? Helpers.getSuffixForRank(rank) || `` : ``;
         }
         private _updateSclHistoryStd(): void {
             const userId    = this._getOpenData().userId;

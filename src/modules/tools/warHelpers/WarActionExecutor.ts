@@ -131,6 +131,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExePlayerDeleteUnit(war, action)
             : await normalExePlayerDeleteUnit(war, action);
@@ -154,8 +155,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerDeleteUnit(war: BwWar, action: IWarActionPlayerDeleteUnit): Promise<void> {
-        const desc = await war.getDescForExePlayerDeleteUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExePlayerDeleteUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -187,6 +188,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExePlayerEndTurn(war, action)
             : await normalExePlayerEndTurn(war, action);
@@ -205,6 +207,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExePlayerProduceUnit(war, action)
             : await normalExePlayerProduceUnit(war, action);
@@ -214,8 +217,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExePlayerProduceUnit(war: BwWar, action: IWarActionPlayerProduceUnit): Promise<void> {
-        const desc = await war.getDescForExePlayerProduceUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExePlayerProduceUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         handlePlayerProduceUnit(war, action);
         war.updateTilesAndUnitsOnVisibilityChanged(false);
@@ -292,6 +295,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExePlayerSurrender(war, action)
             : await normalExePlayerSurrender(war, action);
@@ -335,6 +339,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerVoteForDraw(war: BwWar, action: IWarActionPlayerVoteForDraw, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExePlayerVoteForDraw(war, action)
             : await normalExePlayerVoteForDraw(war, action);
@@ -352,8 +357,9 @@ namespace WarActionExecutor {
             playerInTurn.setHasVotedForDraw(true);
         }
 
-        const drawVoteManager = war.getDrawVoteManager();
-        if (!action.isAgree) {
+        const drawVoteManager   = war.getDrawVoteManager();
+        const isAgree           = actionExtraData ? actionExtraData.isAgree : action.isAgree;
+        if (!isAgree) {
             drawVoteManager.setRemainingVotes(null);
         } else {
             drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || drawVoteManager.getMaxVotes()) - 1);
@@ -384,8 +390,9 @@ namespace WarActionExecutor {
             playerInTurn.setHasVotedForDraw(true);
         }
 
-        const drawVoteManager = war.getDrawVoteManager();
-        if (!action.isAgree) {
+        const drawVoteManager   = war.getDrawVoteManager();
+        const isAgree           = actionExtraData ? actionExtraData.isAgree : action.isAgree;
+        if (!isAgree) {
             drawVoteManager.setRemainingVotes(null);
         } else {
             drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || drawVoteManager.getMaxVotes()) - 1);
@@ -394,6 +401,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerUseCoSkill(war: BwWar, action: IWarActionPlayerUseCoSkill, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExePlayerUseCoSkill(war, action)
             : await normalExePlayerUseCoSkill(war, action);
@@ -542,9 +550,12 @@ namespace WarActionExecutor {
             const nickname = await playerInTurn.getNickname();
             await new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBeginTurnPanel, {
+                    configVersion       : war.getConfigVersion(),
                     playerIndex,
                     teamIndex           : playerInTurn.getTeamIndex(),
                     nickname,
+                    coId                : playerInTurn.getCoId(),
+                    unitAndTileSkinId   : playerInTurn.getUnitAndTileSkinId(),
                     callbackOnFinish    : () => resolve(),
                 });
             });
@@ -573,8 +584,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<void> {
-        const desc = await war.getDescForExeSystemCallWarEvent(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeSystemCallWarEvent(action);
+        // (desc) && (FloatText.show(desc));
 
         const warEventManager   = war.getWarEventManager();
         const actionExtraData   = action.extraData;
@@ -610,8 +621,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeSystemDestroyPlayerForce(war: BwWar, action: IWarActionSystemDestroyPlayerForce): Promise<void> {
-        const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeSystemDestroyPlayerForce(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -772,6 +783,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitAttackTile(war, action)
             : await normalExeUnitAttackTile(war, action);
@@ -859,6 +871,7 @@ namespace WarActionExecutor {
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            targetCfgProductionCost     : unit2.getProductionCfgCost(),
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
@@ -908,8 +921,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitAttackTile(war: BwWar, action: IWarActionUnitAttackTile): Promise<void> {
-        const desc = await war.getDescForExeUnitAttackTile(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitAttackTile(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -1023,6 +1036,7 @@ namespace WarActionExecutor {
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            targetCfgProductionCost     : unit2.getProductionCfgCost(),
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
@@ -1107,6 +1121,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitAttackUnit(war, action)
             : await normalExeUnitAttackUnit(war, action);
@@ -1194,6 +1209,7 @@ namespace WarActionExecutor {
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            targetCfgProductionCost     : unit2.getProductionCfgCost(),
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
@@ -1243,8 +1259,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitAttackUnit(war: BwWar, action: IWarActionUnitAttackUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitAttackUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitAttackUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const warView           = war.getView();
         const gridVisualEffect  = war.getGridVisualEffect();
@@ -1376,6 +1392,7 @@ namespace WarActionExecutor {
                             attackerPlayer              : player1,
                             targetPlayer                : player2,
                             targetLostNormalizedHp      : unitLostNormalizedHp2,
+                            targetCfgProductionCost     : unit2.getProductionCfgCost(),
                             isAttackerInAttackerCoZone  : isInCoZone1,
                             isTargetInTargetCoZone      : (unit2.getHasLoadedCo()) || (player2.checkIsInCoZone(unitGridIndex2, coGridIndexArray2)),
                         });
@@ -1459,6 +1476,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitBeLoaded(war, action)
             : await normalExeUnitBeLoaded(war, action);
@@ -1490,8 +1508,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitBeLoaded(war: BwWar, action: IWarActionUnitBeLoaded): Promise<void> {
-        const desc = await war.getDescForExeUnitBeLoaded(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitBeLoaded(action);
+        // (desc) && (FloatText.show(desc));
 
         const unitMap           = war.getUnitMap();
         const actionExtraData   = action.extraData;
@@ -1561,6 +1579,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitBuildTile(war, action)
             : await normalExeUnitBuildTile(war, action);
@@ -1608,8 +1627,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitBuildTile(war: BwWar, action: IWarActionUnitBuildTile): Promise<void> {
-        const desc = await war.getDescForExeUnitBuildTile(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitBuildTile(action);
+        // (desc) && (FloatText.show(desc));
 
         const unitMap           = war.getUnitMap();
         const actionExtraData   = action.extraData;
@@ -1673,6 +1692,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitCaptureTile(war, action)
             : await normalExeUnitCaptureTile(war, action);
@@ -1723,8 +1743,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitCaptureTile(war: BwWar, action: IWarActionUnitCaptureTile): Promise<void> {
-        const desc = await war.getDescForExeUnitCaptureTile(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitCaptureTile(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData   = action.extraData;
         const unitMap           = war.getUnitMap();
@@ -1839,6 +1859,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitDive(war: BwWar, action: IWarActionUnitDive, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitDive(war, action)
             : await normalExeUnitDive(war, action);
@@ -1866,8 +1887,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitDive(war: BwWar, action: IWarActionUnitDive): Promise<void> {
-        const desc = await war.getDescForExeUnitDive(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitDive(action);
+        // (desc) && (FloatText.show(desc));
 
         const gridVisualEffect  = war.getGridVisualEffect();
         const actionExtraData   = action.extraData;
@@ -1932,6 +1953,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitDropUnit(war, action)
             : await normalExeUnitDropUnit(war, action);
@@ -1978,8 +2000,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitDropUnit(war: BwWar, action: IWarActionUnitDropUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitDropUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitDropUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData   = action.extraData;
         const gridVisualEffect  = war.getGridVisualEffect();
@@ -2082,6 +2104,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitJoinUnit(war, action)
             : await normalExeUnitJoinUnit(war, action);
@@ -2180,8 +2203,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitJoinUnit(war: BwWar, action: IWarActionUnitJoinUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitJoinUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitJoinUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const unitMap           = war.getUnitMap();
         const actionExtraData   = action.extraData;
@@ -2315,6 +2338,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitLaunchFlare(war, action)
             : await normalExeUnitLaunchFlare(war, action);
@@ -2353,8 +2377,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLaunchFlare(war: BwWar, action: IWarActionUnitLaunchFlare): Promise<void> {
-        const desc = await war.getDescForExeUnitLaunchFlare(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitLaunchFlare(action);
+        // (desc) && (FloatText.show(desc));
 
         const gridVisualEffect  = war.getGridVisualEffect();
         const mapSize           = war.getTileMap().getMapSize();
@@ -2373,7 +2397,7 @@ namespace WarActionExecutor {
             const targetGridIndex   = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
             if (targetGridIndex) {
                 const flareRadius = Helpers.getExisted(actionExtraData.flareRadius, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_01);
-                for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, mapSize)) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize })) {
                     gridVisualEffect.showEffectFlare(grid);
                 }
             }
@@ -2417,7 +2441,7 @@ namespace WarActionExecutor {
                     throw Helpers.newError(`Empty targetGridIndex.`, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchFlare_03);
                 }
 
-                for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, mapSize)) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: flareRadius, mapSize })) {
                     gridVisualEffect.showEffectFlare(grid);
                 }
             }
@@ -2430,6 +2454,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitLaunchSilo(war, action)
             : await normalExeUnitLaunchSilo(war, action);
@@ -2463,7 +2488,7 @@ namespace WarActionExecutor {
                     playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 });
 
-                const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, unitMap.getMapSize());
+                const targetGrids   = GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize: unitMap.getMapSize() });
                 const targetUnits   : BwUnit[] = [];
                 for (const grid of targetGrids) {
                     const unit = unitMap.getUnitOnMap(grid);
@@ -2477,8 +2502,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLaunchSilo(war: BwWar, action: IWarActionUnitLaunchSilo): Promise<void> {
-        const desc = await war.getDescForExeUnitLaunchSilo(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitLaunchSilo(action);
+        // (desc) && (FloatText.show(desc));
 
         const gridVisualEffect  = war.getGridVisualEffect();
         const unitMap           = war.getUnitMap();
@@ -2495,7 +2520,7 @@ namespace WarActionExecutor {
 
             const targetGridIndex = GridIndexHelpers.convertGridIndex(actionExtraData.targetGridIndex);
             if (targetGridIndex) {
-                for (const grid of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, mapSize)) {
+                for (const grid of GridIndexHelpers.getGridsWithinDistance({ origin: targetGridIndex, minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize })) {
                     gridVisualEffect.showEffectSiloExplosion(grid);
                 }
             }
@@ -2533,7 +2558,7 @@ namespace WarActionExecutor {
                 });
 
                 const targetGridIndex   = GridIndexHelpers.convertGridIndex(action.targetGridIndex);
-                const targetGrids       = GridIndexHelpers.getGridsWithinDistance(Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), 0, CommonConstants.SiloRadius, mapSize);
+                const targetGrids       = GridIndexHelpers.getGridsWithinDistance({ origin: Helpers.getExisted(targetGridIndex, ClientErrorCode.WarActionExecutor_NormalExeUnitLaunchSilo_01), minDistance: 0, maxDistance: CommonConstants.SiloRadius, mapSize });
                 const targetUnits       : BwUnit[] = [];
                 for (const grid of targetGrids) {
                     const unit = unitMap.getUnitOnMap(grid);
@@ -2566,6 +2591,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitLoadCo(war, action)
             : await normalExeUnitLoadCo(war, action);
@@ -2607,8 +2633,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitLoadCo(war: BwWar, action: IWarActionUnitLoadCo): Promise<void> {
-        const desc = await war.getDescForExeUnitLoadCo(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitLoadCo(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -2666,6 +2692,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitProduceUnit(war, action)
             : await normalExeUnitProduceUnit(war, action);
@@ -2716,8 +2743,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitProduceUnit(war: BwWar, action: IWarActionUnitProduceUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitProduceUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitProduceUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -2818,6 +2845,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitSupplyUnit(war, action)
             : await normalExeUnitSupplyUnit(war, action);
@@ -2864,8 +2892,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitSupplyUnit(war: BwWar, action: IWarActionUnitSupplyUnit): Promise<void> {
-        const desc = await war.getDescForExeUnitSupplyUnit(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitSupplyUnit(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -2941,6 +2969,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitSurface(war: BwWar, action: IWarActionUnitSurface, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitSurface(war, action)
             : await normalExeUnitSurface(war, action);
@@ -2968,8 +2997,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitSurface(war: BwWar, action: IWarActionUnitSurface): Promise<void> {
-        const desc = await war.getDescForExeUnitSurface(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitSurface(action);
+        // (desc) && (FloatText.show(desc));
 
         const gridVisualEffect  = war.getGridVisualEffect();
         const actionExtraData   = action.extraData;
@@ -3034,6 +3063,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitUseCoSkill(war: BwWar, action: IWarActionUnitUseCoSkill, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitUseCoSkill(war, action)
             : await normalExeUnitUseCoSkill(war, action);
@@ -3202,6 +3232,7 @@ namespace WarActionExecutor {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeUnitWait(war: BwWar, action: IWarActionUnitWait, isFast: boolean): Promise<void> {
+        war.getPlayerInTurn().setHasTakenManualAction(true);
         isFast
             ? await fastExeUnitWait(war, action)
             : await normalExeUnitWait(war, action);
@@ -3227,8 +3258,8 @@ namespace WarActionExecutor {
         war.updateTilesAndUnitsOnVisibilityChanged(true);
     }
     async function normalExeUnitWait(war: BwWar, action: IWarActionUnitWait): Promise<void> {
-        const desc = await war.getDescForExeUnitWait(action);
-        (desc) && (FloatText.show(desc));
+        // const desc = await war.getDescForExeUnitWait(action);
+        // (desc) && (FloatText.show(desc));
 
         const actionExtraData = action.extraData;
         if (actionExtraData) {
@@ -3392,11 +3423,12 @@ namespace WarActionExecutor {
 
         attackerPlayer.setFund(Math.floor(currentFund + addFund));
     }
-    function handleEnergyForUnitAttackUnit({ war, attackerPlayer, targetPlayer, targetLostNormalizedHp, isAttackerInAttackerCoZone, isTargetInTargetCoZone }: {
+    function handleEnergyForUnitAttackUnit({ war, attackerPlayer, targetPlayer, targetLostNormalizedHp, targetCfgProductionCost, isAttackerInAttackerCoZone, isTargetInTargetCoZone }: {
         war                         : BwWar;
         attackerPlayer              : BwPlayer;
         targetPlayer                : BwPlayer;
         targetLostNormalizedHp      : number;
+        targetCfgProductionCost     : number;
         isAttackerInAttackerCoZone  : boolean;
         isTargetInTargetCoZone      : boolean;
     }): void {
@@ -3406,33 +3438,61 @@ namespace WarActionExecutor {
 
         const commonSettingManager  = war.getCommonSettingManager();
         const configVersion         = war.getConfigVersion();
-        if (!attackerPlayer.checkCoIsUsingActiveSkill()) {
-            const coType1 = attackerPlayer.getCoType();
-            if (((coType1 === Types.CoType.Zoned) && (isAttackerInAttackerCoZone)) ||
-                (coType1 === Types.CoType.Global)
-            ) {
-                const playerIndex1  = attackerPlayer.getPlayerIndex();
-                const multiplier1   = Helpers.getExisted(playerIndex1 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex1), ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00);
-                const energy1       = attackerPlayer.getCoCurrentEnergy();
+        if (attackerPlayer.checkCanGetEnergyWithBattle()) {
+            const coEnergyType1 = attackerPlayer.getCoEnergyType();
+            if (coEnergyType1 === Types.CoEnergyType.Trilogy) {
+                const multiplier1       = commonSettingManager.getSettingsEnergyGrowthMultiplier(attackerPlayer.getPlayerIndex());
+                const energyParameters1 = Helpers.getExisted(attackerPlayer.getGlobalCoEnergyParameters());
                 attackerPlayer.setCoCurrentEnergy(Math.min(
                     attackerPlayer.getCoMaxEnergy(),
-                    energy1 + Math.floor(targetLostNormalizedHp * multiplier1 * ConfigManager.getSystemEnergyGrowthMultiplierForAttacker(configVersion) / 100),
+                    attackerPlayer.getCoCurrentEnergy() + Math.floor(targetLostNormalizedHp * targetCfgProductionCost * multiplier1 * energyParameters1[2] / 100 / 10 / 100),
                 ));
+
+            } else if (coEnergyType1 === Types.CoEnergyType.Dor) {
+                const coType1 = attackerPlayer.getCoType();
+                if (((coType1 === Types.CoType.Zoned) && (isAttackerInAttackerCoZone)) ||
+                    (coType1 === Types.CoType.Global)
+                ) {
+                    const playerIndex1  = attackerPlayer.getPlayerIndex();
+                    const multiplier1   = commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex1);
+                    const energy1       = attackerPlayer.getCoCurrentEnergy();
+                    attackerPlayer.setCoCurrentEnergy(Math.min(
+                        attackerPlayer.getCoMaxEnergy(),
+                        energy1 + Math.floor(targetLostNormalizedHp * multiplier1 * ConfigManager.getSystemEnergyGrowthMultiplierForAttacker(configVersion) / 100),
+                    ));
+                }
+
+            } else {
+                throw Helpers.newError(`Invalid coEnergyType1: ${coEnergyType1}`, ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_00);
             }
         }
 
-        if (!targetPlayer.checkCoIsUsingActiveSkill()) {
-            const coType2 = targetPlayer.getCoType();
-            if (((coType2 === Types.CoType.Zoned) && (isTargetInTargetCoZone)) ||
-                (coType2 === Types.CoType.Global)
-            ) {
-                const playerIndex2  = targetPlayer.getPlayerIndex();
-                const multiplier2   = Helpers.getExisted(playerIndex2 == null ? null : commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex2), ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01);
-                const energy2       = targetPlayer.getCoCurrentEnergy();
+        if (targetPlayer.checkCanGetEnergyWithBattle()) {
+            const coEnergyType2 = targetPlayer.getCoEnergyType();
+            if (coEnergyType2 === Types.CoEnergyType.Trilogy) {
+                const multiplier2       = commonSettingManager.getSettingsEnergyGrowthMultiplier(targetPlayer.getPlayerIndex());
+                const energyParameters2 = Helpers.getExisted(targetPlayer.getGlobalCoEnergyParameters());
                 targetPlayer.setCoCurrentEnergy(Math.min(
                     targetPlayer.getCoMaxEnergy(),
-                    energy2 + Math.floor(targetLostNormalizedHp * multiplier2 * ConfigManager.getSystemEnergyGrowthMultiplierForDefender(configVersion) / 100),
+                    targetPlayer.getCoCurrentEnergy() + Math.floor(targetLostNormalizedHp * targetCfgProductionCost * multiplier2 * energyParameters2[3] / 100 / 10 / 100),
                 ));
+
+            } else if (coEnergyType2 === Types.CoEnergyType.Dor) {
+                const coType2 = targetPlayer.getCoType();
+                if (((coType2 === Types.CoType.Zoned) && (isTargetInTargetCoZone)) ||
+                    (coType2 === Types.CoType.Global)
+                ) {
+                    const playerIndex2  = targetPlayer.getPlayerIndex();
+                    const multiplier2   = commonSettingManager.getSettingsEnergyGrowthMultiplier(playerIndex2);
+                    const energy2       = targetPlayer.getCoCurrentEnergy();
+                    targetPlayer.setCoCurrentEnergy(Math.min(
+                        targetPlayer.getCoMaxEnergy(),
+                        energy2 + Math.floor(targetLostNormalizedHp * multiplier2 * ConfigManager.getSystemEnergyGrowthMultiplierForDefender(configVersion) / 100),
+                    ));
+                }
+
+            } else {
+                throw Helpers.newError(`Invalid coEnergyType2: ${coEnergyType2}`, ClientErrorCode.BwWarActionExecutor_HandleEnergyForUnitAttackUnit_01);
             }
         }
     }

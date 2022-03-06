@@ -88,7 +88,7 @@ namespace WarCommonHelpers {
                         const movableGrid = movableArea[moveX][moveY];
                         if (movableGrid) {
                             const moveGridIndex = { x: moveX, y: moveY };
-                            for (const attackGridIndex of GridIndexHelpers.getGridsWithinDistance(moveGridIndex, minAttackRange, maxAttackRange, mapSize)) {
+                            for (const attackGridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: moveGridIndex, minDistance: minAttackRange, maxDistance: maxAttackRange, mapSize })) {
                                 const { x: attackX, y: attackY } = attackGridIndex;
                                 if (checkCanAttack(moveGridIndex, attackGridIndex)) {
                                     area[attackX] = area[attackX] || [];
@@ -130,7 +130,7 @@ namespace WarCommonHelpers {
         };
 
         if ((tileType === TileType.Crystal) || (tileType === TileType.CustomCrystal)) {
-            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(tileGridIndex, 0, Helpers.getExisted(tile.getCustomCrystalData()?.radius), mapSize)) {
+            for (const gridIndex of GridIndexHelpers.getGridsWithinDistance({ origin: tileGridIndex, minDistance: 0, maxDistance: Helpers.getExisted(tile.getCustomCrystalData()?.radius), mapSize })) {
                 addGrid(gridIndex.x, gridIndex.y);
             }
 
@@ -1173,7 +1173,7 @@ namespace WarCommonHelpers {
             return WarType.Undefined;
         }
     }
-    export function getWarTypeByMpwWarInfo(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo): WarType {
+    export function getWarTypeByMpwWarSettings(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarSettings): WarType {
         const warRule   = warInfo.settingsForCommon?.warRule;
         const hasFog    = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
         if (hasFog == null) {

@@ -22,34 +22,37 @@
 namespace TwnsHrwTopPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import CommonCoListPanel    = TwnsCommonCoListPanel.CommonCoListPanel;
 
     export type OpenData = {
         war : TwnsHrwWar.HrwWar;
     };
     export class HrwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
-        private readonly _groupPlayer!      : eui.Group;
-        private readonly _labelPlayer!      : TwnsUiLabel.UiLabel;
-        private readonly _labelFund!        : TwnsUiLabel.UiLabel;
+        private readonly _groupPlayer!          : eui.Group;
+        private readonly _labelPlayer!          : TwnsUiLabel.UiLabel;
+        private readonly _labelFund!            : TwnsUiLabel.UiLabel;
 
-        private readonly _groupProgress!    : eui.Group;
-        private readonly _labelTurnTitle!   : TwnsUiLabel.UiLabel;
-        private readonly _labelTurn!        : TwnsUiLabel.UiLabel;
-        private readonly _labelActionTitle! : TwnsUiLabel.UiLabel;
-        private readonly _labelAction!      : TwnsUiLabel.UiLabel;
+        private readonly _groupPauseTime!       : eui.Group;
+        private readonly _labelPauseTimeTitle!  : TwnsUiLabel.UiLabel;
+        private readonly _labelPauseTime!       : TwnsUiLabel.UiLabel;
 
-        private readonly _groupCo!          : eui.Group;
-        private readonly _labelCo!          : TwnsUiLabel.UiLabel;
-        private readonly _labelCurrEnergy!  : TwnsUiLabel.UiLabel;
-        private readonly _labelPowerEnergy! : TwnsUiLabel.UiLabel;
-        private readonly _labelZoneEnergy!  : TwnsUiLabel.UiLabel;
-        private readonly _btnChat!          : TwnsUiButton.UiButton;
-        private readonly _btnFastRewind!    : TwnsUiButton.UiButton;
-        private readonly _btnFastForward!   : TwnsUiButton.UiButton;
-        private readonly _btnPlay!          : TwnsUiButton.UiButton;
-        private readonly _btnPause!         : TwnsUiButton.UiButton;
-        private readonly _btnUnitList!      : TwnsUiButton.UiButton;
-        private readonly _btnMenu!          : TwnsUiButton.UiButton;
+        private readonly _groupProgress!        : eui.Group;
+        private readonly _labelTurnTitle!       : TwnsUiLabel.UiLabel;
+        private readonly _labelTurn!            : TwnsUiLabel.UiLabel;
+        private readonly _labelActionTitle!     : TwnsUiLabel.UiLabel;
+        private readonly _labelAction!          : TwnsUiLabel.UiLabel;
+
+        private readonly _groupCo!              : eui.Group;
+        private readonly _labelCo!              : TwnsUiLabel.UiLabel;
+        private readonly _labelCurrEnergy!      : TwnsUiLabel.UiLabel;
+        private readonly _labelPowerEnergy!     : TwnsUiLabel.UiLabel;
+        private readonly _labelZoneEnergy!      : TwnsUiLabel.UiLabel;
+        private readonly _btnChat!              : TwnsUiButton.UiButton;
+        private readonly _btnFastRewind!        : TwnsUiButton.UiButton;
+        private readonly _btnFastForward!       : TwnsUiButton.UiButton;
+        private readonly _btnPlay!              : TwnsUiButton.UiButton;
+        private readonly _btnPause!             : TwnsUiButton.UiButton;
+        private readonly _btnUnitList!          : TwnsUiButton.UiButton;
+        private readonly _btnMenu!              : TwnsUiButton.UiButton;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -68,6 +71,7 @@ namespace TwnsHrwTopPanel {
             this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
+                { ui: this._groupPauseTime,     callback: this._onTouchedGroupPauseTime },
                 { ui: this._groupProgress,      callback: this._onTouchedGroupProgress },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnFastRewind,      callback: this._onTouchedBtnFastRewind },
@@ -136,6 +140,22 @@ namespace TwnsHrwTopPanel {
             const war = this._getWar();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoListPanel, { war });
             TwnsPanelManager.close(TwnsPanelConfig.Dict.HrwWarMenuPanel);
+        }
+        private _onTouchedGroupPauseTime(): void {
+            const war       = this._getWar();
+            const minValue  = 0;
+            const maxValue  = 5000;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
+                title           : Lang.getText(LangTextType.B0846),
+                minValue,
+                maxValue,
+                currentValue    : war.getPauseTimeMs(),
+                tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}](ms)\n${Lang.getText(LangTextType.A0290)}`,
+                callback        : panel => {
+                    war.setPauseTimeMs(panel.getInputValue());
+                    this._updateLabelPauseTime();
+                },
+            });
         }
         private _onTouchedGroupProgress(): void {
             const war = this._getWar();
@@ -219,6 +239,7 @@ namespace TwnsHrwTopPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             this._updateComponentsForLanguage();
+            this._updateLabelPauseTime();
             this._updateLabelTurn();
             this._updateLabelAction();
             this._updateLabelPlayer();
@@ -230,8 +251,13 @@ namespace TwnsHrwTopPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTurnTitle.text   = Lang.getText(LangTextType.B0091);
-            this._labelActionTitle.text = Lang.getText(LangTextType.B0090);
+            this._labelTurnTitle.text       = Lang.getText(LangTextType.B0091);
+            this._labelActionTitle.text     = Lang.getText(LangTextType.B0090);
+            this._labelPauseTimeTitle.text  = Lang.getText(LangTextType.B0846);
+        }
+
+        private _updateLabelPauseTime(): void {
+            this._labelPauseTime.text = `${this._getWar().getPauseTimeMs()}`;
         }
 
         private _updateLabelTurn(): void {
