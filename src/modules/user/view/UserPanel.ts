@@ -281,14 +281,14 @@ namespace TwnsUserPanel {
             this._labelFogRankRankSuffix.text   = Helpers.getSuffixForRank(rank) || ``;
         }
         private async _updateComponentsForSpmRank(): Promise<void> {
-            const rankInfo                      = await TinyWarsNamespace.LeaderboardModel.getSpmOverallSingleData(this._getOpenData().userId);
-            const score                         = rankInfo?.score ?? 0;
-            this._labelSpmRankScore.text        = score > 0 ? Helpers.formatString(`%.2f`, score) : `--`;
+            const userId                        = this._getOpenData().userId;
+            const rankScore                     = (await UserModel.getUserPublicInfo(userId))?.spmOverallRankScore ?? 0;
+            const rankIndex                     = (await TinyWarsNamespace.LeaderboardModel.getSpmOverallRankIndex(userId)) ?? 0;
+            this._labelSpmRankScore.text        = rankScore > 0 ? Helpers.formatString(`%.2f`, rankScore) : `--`;
 
-            const rank                          = rankInfo?.rank ?? 0;
-            const isRankValid                   = (rank > 0) && (score > 0);
-            this._labelSpmRankRank.text         = isRankValid ? `${rank}` : `--`;
-            this._labelSpmRankRankSuffix.text   = isRankValid ? Helpers.getSuffixForRank(rank) || `` : ``;
+            const isRankValid                   = (rankIndex > 0) && (rankScore > 0);
+            this._labelSpmRankRank.text         = isRankValid ? `${rankIndex}` : `--`;
+            this._labelSpmRankRankSuffix.text   = isRankValid ? Helpers.getSuffixForRank(rankIndex) || `` : ``;
         }
         private _updateSclHistoryStd(): void {
             const userId    = this._getOpenData().userId;

@@ -26451,8 +26451,8 @@ export declare namespace User {
         /** UserRankInfo mrwArray */
         mrwArray?: (User.UserRankInfo.IUserMrwRankInfo[]|null);
 
-        /** UserRankInfo deprecatedSpmOverallInfo */
-        deprecatedSpmOverallInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
+        /** UserRankInfo spmOverallInfo */
+        spmOverallInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
     }
 
     /** Represents a UserRankInfo. */
@@ -26467,8 +26467,8 @@ export declare namespace User {
         /** UserRankInfo mrwArray. */
         public mrwArray: User.UserRankInfo.IUserMrwRankInfo[];
 
-        /** UserRankInfo deprecatedSpmOverallInfo. */
-        public deprecatedSpmOverallInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
+        /** UserRankInfo spmOverallInfo. */
+        public spmOverallInfo?: (User.UserRankInfo.IUserSpmOverallRankInfo|null);
 
         /**
          * Creates a new UserRankInfo instance using the specified properties.
@@ -26660,11 +26660,11 @@ export declare namespace User {
         /** Properties of a UserSpmOverallRankInfo. */
         interface IUserSpmOverallRankInfo {
 
-            /** UserSpmOverallRankInfo currentScore */
-            currentScore?: (number|null);
+            /** UserSpmOverallRankInfo rankScore */
+            rankScore?: (number|null);
 
-            /** UserSpmOverallRankInfo currentRank */
-            currentRank?: (number|null);
+            /** UserSpmOverallRankInfo deprecatedCurrentRankIndex */
+            deprecatedCurrentRankIndex?: (number|null);
         }
 
         /** Represents a UserSpmOverallRankInfo. */
@@ -26676,11 +26676,11 @@ export declare namespace User {
              */
             constructor(properties?: User.UserRankInfo.IUserSpmOverallRankInfo);
 
-            /** UserSpmOverallRankInfo currentScore. */
-            public currentScore: number;
+            /** UserSpmOverallRankInfo rankScore. */
+            public rankScore: number;
 
-            /** UserSpmOverallRankInfo currentRank. */
-            public currentRank: number;
+            /** UserSpmOverallRankInfo deprecatedCurrentRankIndex. */
+            public deprecatedCurrentRankIndex: number;
 
             /**
              * Creates a new UserSpmOverallRankInfo instance using the specified properties.
@@ -27668,6 +27668,9 @@ export declare namespace User {
 
         /** UserPublicInfo userMpwStatisticsArray */
         userMpwStatisticsArray?: (User.UserWarStatistics.IUserMpwStatistics[]|null);
+
+        /** UserPublicInfo spmOverallRankScore */
+        spmOverallRankScore?: (number|null);
     }
 
     /** Represents a UserPublicInfo. */
@@ -27717,6 +27720,9 @@ export declare namespace User {
 
         /** UserPublicInfo userMpwStatisticsArray. */
         public userMpwStatisticsArray: User.UserWarStatistics.IUserMpwStatistics[];
+
+        /** UserPublicInfo spmOverallRankScore. */
+        public spmOverallRankScore: number;
 
         /**
          * Creates a new UserPublicInfo instance using the specified properties.
@@ -28668,8 +28674,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgLbSpmOverallGetTopDataArray */
         MsgLbSpmOverallGetTopDataArray?: (NetMessage.IMsgLbSpmOverallGetTopDataArray|null);
 
-        /** MessageContainer MsgLbSpmOverallGetSingleData */
-        MsgLbSpmOverallGetSingleData?: (NetMessage.IMsgLbSpmOverallGetSingleData|null);
+        /** MessageContainer MsgLbSpmOverallGetRankIndex */
+        MsgLbSpmOverallGetRankIndex?: (NetMessage.IMsgLbSpmOverallGetRankIndex|null);
     }
 
     /** Represents a MessageContainer. */
@@ -29062,8 +29068,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgLbSpmOverallGetTopDataArray. */
         public MsgLbSpmOverallGetTopDataArray?: (NetMessage.IMsgLbSpmOverallGetTopDataArray|null);
 
-        /** MessageContainer MsgLbSpmOverallGetSingleData. */
-        public MsgLbSpmOverallGetSingleData?: (NetMessage.IMsgLbSpmOverallGetSingleData|null);
+        /** MessageContainer MsgLbSpmOverallGetRankIndex. */
+        public MsgLbSpmOverallGetRankIndex?: (NetMessage.IMsgLbSpmOverallGetRankIndex|null);
 
         /**
          * Creates a new MessageContainer instance using the specified properties.
@@ -66276,205 +66282,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgLbSpmOverallGetSingleData. */
-    interface IMsgLbSpmOverallGetSingleData {
+    /** Properties of a MsgLbSpmOverallGetRankIndex. */
+    interface IMsgLbSpmOverallGetRankIndex {
 
-        /** MsgLbSpmOverallGetSingleData c */
-        c?: (NetMessage.MsgLbSpmOverallGetSingleData.IC|null);
+        /** MsgLbSpmOverallGetRankIndex c */
+        c?: (NetMessage.MsgLbSpmOverallGetRankIndex.IC|null);
 
-        /** MsgLbSpmOverallGetSingleData s */
-        s?: (NetMessage.MsgLbSpmOverallGetSingleData.IS|null);
+        /** MsgLbSpmOverallGetRankIndex s */
+        s?: (NetMessage.MsgLbSpmOverallGetRankIndex.IS|null);
     }
 
-    /** Represents a MsgLbSpmOverallGetSingleData. */
-    class MsgLbSpmOverallGetSingleData implements IMsgLbSpmOverallGetSingleData {
+    /** Represents a MsgLbSpmOverallGetRankIndex. */
+    class MsgLbSpmOverallGetRankIndex implements IMsgLbSpmOverallGetRankIndex {
 
         /**
-         * Constructs a new MsgLbSpmOverallGetSingleData.
+         * Constructs a new MsgLbSpmOverallGetRankIndex.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgLbSpmOverallGetSingleData);
+        constructor(properties?: NetMessage.IMsgLbSpmOverallGetRankIndex);
 
-        /** MsgLbSpmOverallGetSingleData c. */
-        public c?: (NetMessage.MsgLbSpmOverallGetSingleData.IC|null);
+        /** MsgLbSpmOverallGetRankIndex c. */
+        public c?: (NetMessage.MsgLbSpmOverallGetRankIndex.IC|null);
 
-        /** MsgLbSpmOverallGetSingleData s. */
-        public s?: (NetMessage.MsgLbSpmOverallGetSingleData.IS|null);
+        /** MsgLbSpmOverallGetRankIndex s. */
+        public s?: (NetMessage.MsgLbSpmOverallGetRankIndex.IS|null);
 
         /**
-         * Creates a new MsgLbSpmOverallGetSingleData instance using the specified properties.
+         * Creates a new MsgLbSpmOverallGetRankIndex instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgLbSpmOverallGetSingleData instance
+         * @returns MsgLbSpmOverallGetRankIndex instance
          */
-        public static create(properties?: NetMessage.IMsgLbSpmOverallGetSingleData): NetMessage.MsgLbSpmOverallGetSingleData;
+        public static create(properties?: NetMessage.IMsgLbSpmOverallGetRankIndex): NetMessage.MsgLbSpmOverallGetRankIndex;
 
         /**
-         * Encodes the specified MsgLbSpmOverallGetSingleData message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.verify|verify} messages.
-         * @param message MsgLbSpmOverallGetSingleData message or plain object to encode
+         * Encodes the specified MsgLbSpmOverallGetRankIndex message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetRankIndex.verify|verify} messages.
+         * @param message MsgLbSpmOverallGetRankIndex message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgLbSpmOverallGetSingleData, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgLbSpmOverallGetRankIndex, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgLbSpmOverallGetSingleData message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.verify|verify} messages.
-         * @param message MsgLbSpmOverallGetSingleData message or plain object to encode
+         * Encodes the specified MsgLbSpmOverallGetRankIndex message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetRankIndex.verify|verify} messages.
+         * @param message MsgLbSpmOverallGetRankIndex message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgLbSpmOverallGetSingleData, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgLbSpmOverallGetRankIndex, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgLbSpmOverallGetSingleData message from the specified reader or buffer.
+         * Decodes a MsgLbSpmOverallGetRankIndex message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgLbSpmOverallGetSingleData
+         * @returns MsgLbSpmOverallGetRankIndex
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetSingleData;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetRankIndex;
 
         /**
-         * Decodes a MsgLbSpmOverallGetSingleData message from the specified reader or buffer, length delimited.
+         * Decodes a MsgLbSpmOverallGetRankIndex message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgLbSpmOverallGetSingleData
+         * @returns MsgLbSpmOverallGetRankIndex
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetSingleData;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetRankIndex;
 
         /**
-         * Verifies a MsgLbSpmOverallGetSingleData message.
+         * Verifies a MsgLbSpmOverallGetRankIndex message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgLbSpmOverallGetSingleData message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgLbSpmOverallGetRankIndex message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgLbSpmOverallGetSingleData
+         * @returns MsgLbSpmOverallGetRankIndex
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetSingleData;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetRankIndex;
 
         /**
-         * Creates a plain object from a MsgLbSpmOverallGetSingleData message. Also converts values to other types if specified.
-         * @param message MsgLbSpmOverallGetSingleData
+         * Creates a plain object from a MsgLbSpmOverallGetRankIndex message. Also converts values to other types if specified.
+         * @param message MsgLbSpmOverallGetRankIndex
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgLbSpmOverallGetSingleData, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgLbSpmOverallGetRankIndex, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgLbSpmOverallGetSingleData to JSON.
+         * Converts this MsgLbSpmOverallGetRankIndex to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgLbSpmOverallGetSingleData {
-
-        /** Properties of a Data. */
-        interface IData {
-
-            /** Data userId */
-            userId?: (number|null);
-
-            /** Data rank */
-            rank?: (number|null);
-
-            /** Data score */
-            score?: (number|null);
-        }
-
-        /** Represents a Data. */
-        class Data implements IData {
-
-            /**
-             * Constructs a new Data.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IData);
-
-            /** Data userId. */
-            public userId: number;
-
-            /** Data rank. */
-            public rank: number;
-
-            /** Data score. */
-            public score: number;
-
-            /**
-             * Creates a new Data instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns Data instance
-             */
-            public static create(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IData): NetMessage.MsgLbSpmOverallGetSingleData.Data;
-
-            /**
-             * Encodes the specified Data message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.Data.verify|verify} messages.
-             * @param message Data message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgLbSpmOverallGetSingleData.IData, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified Data message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.Data.verify|verify} messages.
-             * @param message Data message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgLbSpmOverallGetSingleData.IData, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a Data message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns Data
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetSingleData.Data;
-
-            /**
-             * Decodes a Data message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns Data
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetSingleData.Data;
-
-            /**
-             * Verifies a Data message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a Data message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Data
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetSingleData.Data;
-
-            /**
-             * Creates a plain object from a Data message. Also converts values to other types if specified.
-             * @param message Data
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgLbSpmOverallGetSingleData.Data, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Data to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
+    namespace MsgLbSpmOverallGetRankIndex {
 
         /** Properties of a C. */
         interface IC {
@@ -66490,7 +66394,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IC);
+            constructor(properties?: NetMessage.MsgLbSpmOverallGetRankIndex.IC);
 
             /** C userId. */
             public userId: number;
@@ -66500,23 +66404,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IC): NetMessage.MsgLbSpmOverallGetSingleData.C;
+            public static create(properties?: NetMessage.MsgLbSpmOverallGetRankIndex.IC): NetMessage.MsgLbSpmOverallGetRankIndex.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetRankIndex.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgLbSpmOverallGetSingleData.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgLbSpmOverallGetRankIndex.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetRankIndex.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgLbSpmOverallGetSingleData.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgLbSpmOverallGetRankIndex.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -66526,7 +66430,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetSingleData.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetRankIndex.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -66535,7 +66439,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetSingleData.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetRankIndex.C;
 
             /**
              * Verifies a C message.
@@ -66549,7 +66453,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetSingleData.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetRankIndex.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -66557,7 +66461,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgLbSpmOverallGetSingleData.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgLbSpmOverallGetRankIndex.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -66575,8 +66479,8 @@ export declare namespace NetMessage {
             /** S userId */
             userId?: (number|null);
 
-            /** S data */
-            data?: (NetMessage.MsgLbSpmOverallGetSingleData.IData|null);
+            /** S rankIndex */
+            rankIndex?: (number|null);
         }
 
         /** Represents a S. */
@@ -66586,7 +66490,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IS);
+            constructor(properties?: NetMessage.MsgLbSpmOverallGetRankIndex.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -66594,31 +66498,31 @@ export declare namespace NetMessage {
             /** S userId. */
             public userId: number;
 
-            /** S data. */
-            public data?: (NetMessage.MsgLbSpmOverallGetSingleData.IData|null);
+            /** S rankIndex. */
+            public rankIndex: number;
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgLbSpmOverallGetSingleData.IS): NetMessage.MsgLbSpmOverallGetSingleData.S;
+            public static create(properties?: NetMessage.MsgLbSpmOverallGetRankIndex.IS): NetMessage.MsgLbSpmOverallGetRankIndex.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetRankIndex.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgLbSpmOverallGetSingleData.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgLbSpmOverallGetRankIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetSingleData.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgLbSpmOverallGetRankIndex.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgLbSpmOverallGetSingleData.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgLbSpmOverallGetRankIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -66628,7 +66532,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetSingleData.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgLbSpmOverallGetRankIndex.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -66637,7 +66541,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetSingleData.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgLbSpmOverallGetRankIndex.S;
 
             /**
              * Verifies a S message.
@@ -66651,7 +66555,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetSingleData.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgLbSpmOverallGetRankIndex.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -66659,7 +66563,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgLbSpmOverallGetSingleData.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgLbSpmOverallGetRankIndex.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

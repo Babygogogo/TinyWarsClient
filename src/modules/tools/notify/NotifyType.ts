@@ -331,6 +331,7 @@ namespace TwnsNotifyType {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgLbSpmOverallGetTopDataArray,
+        MsgLbSpmOverallGetRankIndex,
     }
 }
 

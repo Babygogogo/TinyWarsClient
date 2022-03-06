@@ -309,7 +309,7 @@ namespace TwnsCommonRankListPanel {
             const labelNickname     = this._labelNickname;
             const labelScore        = this._labelScore;
             labelNickname.text      = Lang.getText(LangTextType.B0029);
-            labelScore.text         = `${data.score}`;
+            labelScore.text         = `${Helpers.formatString(`%.2f`, data.score)}`;
             this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = data.index % 2 == 1 ? 0.2 : 0.5;
 

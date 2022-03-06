@@ -8,7 +8,7 @@ namespace TinyWarsNamespace.LeaderboardProxy {
     export function init(): void {
         NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgLbSpmOverallGetTopDataArray,  callback: _onMsgLbSpmOverallGetTopDataArray, },
-            { msgCode: NetMessageCodes.MsgLbSpmOverallGetSingleData,    callback: _onMsgLbSpmOverallGetSingleData, },
+            { msgCode: NetMessageCodes.MsgLbSpmOverallGetRankIndex,     callback: _onMsgLbSpmOverallGetRankIndex, },
         ]);
     }
 
@@ -24,16 +24,16 @@ namespace TinyWarsNamespace.LeaderboardProxy {
         }
     }
 
-    export function reqLbSpmOverallGetSingleData(userId: number): void {
-        NetManager.send({ MsgLbSpmOverallGetSingleData: { c: {
+    export function reqLbSpmOverallGetRankIndex(userId: number): void {
+        NetManager.send({ MsgLbSpmOverallGetRankIndex: { c: {
             userId,
         } } });
     }
-    function _onMsgLbSpmOverallGetSingleData(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgLbSpmOverallGetSingleData.IS;
+    function _onMsgLbSpmOverallGetRankIndex(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgLbSpmOverallGetRankIndex.IS;
         if (!data.errorCode) {
-            LeaderboardModel.setSpmOverallSingleData(Helpers.getExisted(data.userId), data.data ?? null);
-            Notify.dispatch(NotifyType.MsgLbSpmOverallGetTopDataArray, data);
+            LeaderboardModel.setSpmOverallRankIndex(Helpers.getExisted(data.userId), data.rankIndex ?? null);
+            Notify.dispatch(NotifyType.MsgLbSpmOverallGetRankIndex, data);
         }
     }
 }

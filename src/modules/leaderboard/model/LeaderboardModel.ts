@@ -1,14 +1,13 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWarsNamespace.LeaderboardModel {
-    import ISpmOverallSingleData            = ProtoTypes.Leaderboard.LeaderboardSpmOverall.ISingleData;
-    import ISpmOverallSingleDataWithRank    = ProtoTypes.NetMessage.MsgLbSpmOverallGetSingleData.IData;
+    import ISpmOverallSingleData    = ProtoTypes.Leaderboard.LeaderboardSpmOverall.ISingleData;
 
     const _spmOverallTopDataArrayAccessor = Helpers.createCachedDataAccessor<null, ISpmOverallSingleData[]>({
         reqData: () => LeaderboardProxy.reqLbSpmOverallGetTopDataArray(),
     });
-    const _spmOverallSingleDataAccessor = Helpers.createCachedDataAccessor<number, ISpmOverallSingleDataWithRank>({
-        reqData: (userId: number) => LeaderboardProxy.reqLbSpmOverallGetSingleData(userId),
+    const _spmOverallRankIndexAccessor = Helpers.createCachedDataAccessor<number, number>({
+        reqData: (userId: number) => LeaderboardProxy.reqLbSpmOverallGetRankIndex(userId),
     });
 
     export function getSpmOverallTopDataArray(): Promise<ISpmOverallSingleData[] | null> {
@@ -18,10 +17,10 @@ namespace TinyWarsNamespace.LeaderboardModel {
         _spmOverallTopDataArrayAccessor.setData(null, dataArray);
     }
 
-    export function getSpmOverallSingleData(userId: number): Promise<ISpmOverallSingleDataWithRank | null> {
-        return _spmOverallSingleDataAccessor.getData(userId);
+    export function getSpmOverallRankIndex(userId: number): Promise<number | null> {
+        return _spmOverallRankIndexAccessor.getData(userId);
     }
-    export function setSpmOverallSingleData(userId: number, data: ISpmOverallSingleDataWithRank | null): void {
-        _spmOverallSingleDataAccessor.setData(userId, data);
+    export function setSpmOverallRankIndex(userId: number, data: number | null): void {
+        _spmOverallRankIndexAccessor.setData(userId, data);
     }
 }
