@@ -252,10 +252,11 @@ namespace TwnsNotifyType {
         MsgMrrDeleteRoomByServer,
 
         MsgReplayGetReplayIdArray,
-        MsgReplayGetInfo,
+        MsgReplayGetBriefInfo,
         MsgReplayGetData,
         MsgReplayGetDataFailed,
-        MsgReplaySetRating,
+        MsgReplayGetSelfRating,
+        MsgReplaySetSelfRating,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgMpwCommonGetMyWarIdArray,

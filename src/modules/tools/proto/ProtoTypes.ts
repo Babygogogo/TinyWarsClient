@@ -25677,102 +25677,6 @@ export declare namespace Replay {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a ReplayInfo. */
-    interface IReplayInfo {
-
-        /** ReplayInfo replayBriefInfo */
-        replayBriefInfo?: (Replay.IReplayBriefInfo|null);
-
-        /** ReplayInfo myRating */
-        myRating?: (number|null);
-    }
-
-    /** Represents a ReplayInfo. */
-    class ReplayInfo implements IReplayInfo {
-
-        /**
-         * Constructs a new ReplayInfo.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: Replay.IReplayInfo);
-
-        /** ReplayInfo replayBriefInfo. */
-        public replayBriefInfo?: (Replay.IReplayBriefInfo|null);
-
-        /** ReplayInfo myRating. */
-        public myRating: number;
-
-        /**
-         * Creates a new ReplayInfo instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns ReplayInfo instance
-         */
-        public static create(properties?: Replay.IReplayInfo): Replay.ReplayInfo;
-
-        /**
-         * Encodes the specified ReplayInfo message. Does not implicitly {@link Replay.ReplayInfo.verify|verify} messages.
-         * @param message ReplayInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: Replay.IReplayInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified ReplayInfo message, length delimited. Does not implicitly {@link Replay.ReplayInfo.verify|verify} messages.
-         * @param message ReplayInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: Replay.IReplayInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a ReplayInfo message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns ReplayInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Replay.ReplayInfo;
-
-        /**
-         * Decodes a ReplayInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ReplayInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Replay.ReplayInfo;
-
-        /**
-         * Verifies a ReplayInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a ReplayInfo message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ReplayInfo
-         */
-        public static fromObject(object: { [k: string]: any }): Replay.ReplayInfo;
-
-        /**
-         * Creates a plain object from a ReplayInfo message. Also converts values to other types if specified.
-         * @param message ReplayInfo
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: Replay.ReplayInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ReplayInfo to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
     /** Properties of a ReplayBriefInfo. */
     interface IReplayBriefInfo {
 
@@ -28413,8 +28317,11 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMmDeleteWarRule */
         MsgMmDeleteWarRule?: (NetMessage.IMsgMmDeleteWarRule|null);
 
-        /** MessageContainer MsgReplaySetRating */
-        MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
+        /** MessageContainer MsgReplaySetSelfRating */
+        MsgReplaySetSelfRating?: (NetMessage.IMsgReplaySetSelfRating|null);
+
+        /** MessageContainer MsgReplayGetSelfRating */
+        MsgReplayGetSelfRating?: (NetMessage.IMsgReplayGetSelfRating|null);
 
         /** MessageContainer MsgReplayGetReplayIdArray */
         MsgReplayGetReplayIdArray?: (NetMessage.IMsgReplayGetReplayIdArray|null);
@@ -28422,8 +28329,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgReplayGetData */
         MsgReplayGetData?: (NetMessage.IMsgReplayGetData|null);
 
-        /** MessageContainer MsgReplayGetInfo */
-        MsgReplayGetInfo?: (NetMessage.IMsgReplayGetInfo|null);
+        /** MessageContainer MsgReplayGetBriefInfo */
+        MsgReplayGetBriefInfo?: (NetMessage.IMsgReplayGetBriefInfo|null);
 
         /** MessageContainer MsgMcrCreateRoom */
         MsgMcrCreateRoom?: (NetMessage.IMsgMcrCreateRoom|null);
@@ -28807,8 +28714,11 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMmDeleteWarRule. */
         public MsgMmDeleteWarRule?: (NetMessage.IMsgMmDeleteWarRule|null);
 
-        /** MessageContainer MsgReplaySetRating. */
-        public MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
+        /** MessageContainer MsgReplaySetSelfRating. */
+        public MsgReplaySetSelfRating?: (NetMessage.IMsgReplaySetSelfRating|null);
+
+        /** MessageContainer MsgReplayGetSelfRating. */
+        public MsgReplayGetSelfRating?: (NetMessage.IMsgReplayGetSelfRating|null);
 
         /** MessageContainer MsgReplayGetReplayIdArray. */
         public MsgReplayGetReplayIdArray?: (NetMessage.IMsgReplayGetReplayIdArray|null);
@@ -28816,8 +28726,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgReplayGetData. */
         public MsgReplayGetData?: (NetMessage.IMsgReplayGetData|null);
 
-        /** MessageContainer MsgReplayGetInfo. */
-        public MsgReplayGetInfo?: (NetMessage.IMsgReplayGetInfo|null);
+        /** MessageContainer MsgReplayGetBriefInfo. */
+        public MsgReplayGetBriefInfo?: (NetMessage.IMsgReplayGetBriefInfo|null);
 
         /** MessageContainer MsgMcrCreateRoom. */
         public MsgMcrCreateRoom?: (NetMessage.IMsgMcrCreateRoom|null);
@@ -42897,103 +42807,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgReplaySetRating. */
-    interface IMsgReplaySetRating {
+    /** Properties of a MsgReplaySetSelfRating. */
+    interface IMsgReplaySetSelfRating {
 
-        /** MsgReplaySetRating c */
-        c?: (NetMessage.MsgReplaySetRating.IC|null);
+        /** MsgReplaySetSelfRating c */
+        c?: (NetMessage.MsgReplaySetSelfRating.IC|null);
 
-        /** MsgReplaySetRating s */
-        s?: (NetMessage.MsgReplaySetRating.IS|null);
+        /** MsgReplaySetSelfRating s */
+        s?: (NetMessage.MsgReplaySetSelfRating.IS|null);
     }
 
-    /** Represents a MsgReplaySetRating. */
-    class MsgReplaySetRating implements IMsgReplaySetRating {
+    /** Represents a MsgReplaySetSelfRating. */
+    class MsgReplaySetSelfRating implements IMsgReplaySetSelfRating {
 
         /**
-         * Constructs a new MsgReplaySetRating.
+         * Constructs a new MsgReplaySetSelfRating.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgReplaySetRating);
+        constructor(properties?: NetMessage.IMsgReplaySetSelfRating);
 
-        /** MsgReplaySetRating c. */
-        public c?: (NetMessage.MsgReplaySetRating.IC|null);
+        /** MsgReplaySetSelfRating c. */
+        public c?: (NetMessage.MsgReplaySetSelfRating.IC|null);
 
-        /** MsgReplaySetRating s. */
-        public s?: (NetMessage.MsgReplaySetRating.IS|null);
+        /** MsgReplaySetSelfRating s. */
+        public s?: (NetMessage.MsgReplaySetSelfRating.IS|null);
 
         /**
-         * Creates a new MsgReplaySetRating instance using the specified properties.
+         * Creates a new MsgReplaySetSelfRating instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgReplaySetRating instance
+         * @returns MsgReplaySetSelfRating instance
          */
-        public static create(properties?: NetMessage.IMsgReplaySetRating): NetMessage.MsgReplaySetRating;
+        public static create(properties?: NetMessage.IMsgReplaySetSelfRating): NetMessage.MsgReplaySetSelfRating;
 
         /**
-         * Encodes the specified MsgReplaySetRating message. Does not implicitly {@link NetMessage.MsgReplaySetRating.verify|verify} messages.
-         * @param message MsgReplaySetRating message or plain object to encode
+         * Encodes the specified MsgReplaySetSelfRating message. Does not implicitly {@link NetMessage.MsgReplaySetSelfRating.verify|verify} messages.
+         * @param message MsgReplaySetSelfRating message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgReplaySetRating, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgReplaySetSelfRating, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgReplaySetRating message, length delimited. Does not implicitly {@link NetMessage.MsgReplaySetRating.verify|verify} messages.
-         * @param message MsgReplaySetRating message or plain object to encode
+         * Encodes the specified MsgReplaySetSelfRating message, length delimited. Does not implicitly {@link NetMessage.MsgReplaySetSelfRating.verify|verify} messages.
+         * @param message MsgReplaySetSelfRating message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgReplaySetRating, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgReplaySetSelfRating, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgReplaySetRating message from the specified reader or buffer.
+         * Decodes a MsgReplaySetSelfRating message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgReplaySetRating
+         * @returns MsgReplaySetSelfRating
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplaySetRating;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplaySetSelfRating;
 
         /**
-         * Decodes a MsgReplaySetRating message from the specified reader or buffer, length delimited.
+         * Decodes a MsgReplaySetSelfRating message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgReplaySetRating
+         * @returns MsgReplaySetSelfRating
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplaySetRating;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplaySetSelfRating;
 
         /**
-         * Verifies a MsgReplaySetRating message.
+         * Verifies a MsgReplaySetSelfRating message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgReplaySetRating message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgReplaySetSelfRating message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgReplaySetRating
+         * @returns MsgReplaySetSelfRating
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplaySetRating;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplaySetSelfRating;
 
         /**
-         * Creates a plain object from a MsgReplaySetRating message. Also converts values to other types if specified.
-         * @param message MsgReplaySetRating
+         * Creates a plain object from a MsgReplaySetSelfRating message. Also converts values to other types if specified.
+         * @param message MsgReplaySetSelfRating
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgReplaySetRating, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgReplaySetSelfRating, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgReplaySetRating to JSON.
+         * Converts this MsgReplaySetSelfRating to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgReplaySetRating {
+    namespace MsgReplaySetSelfRating {
 
         /** Properties of a C. */
         interface IC {
@@ -43012,7 +42922,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgReplaySetRating.IC);
+            constructor(properties?: NetMessage.MsgReplaySetSelfRating.IC);
 
             /** C replayId. */
             public replayId: number;
@@ -43025,23 +42935,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgReplaySetRating.IC): NetMessage.MsgReplaySetRating.C;
+            public static create(properties?: NetMessage.MsgReplaySetSelfRating.IC): NetMessage.MsgReplaySetSelfRating.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgReplaySetRating.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgReplaySetSelfRating.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgReplaySetRating.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgReplaySetSelfRating.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgReplaySetRating.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgReplaySetSelfRating.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgReplaySetRating.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgReplaySetSelfRating.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -43051,7 +42961,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplaySetRating.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplaySetSelfRating.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -43060,7 +42970,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplaySetRating.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplaySetSelfRating.C;
 
             /**
              * Verifies a C message.
@@ -43074,7 +42984,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplaySetRating.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplaySetSelfRating.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -43082,7 +42992,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgReplaySetRating.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgReplaySetSelfRating.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -43099,6 +43009,9 @@ export declare namespace NetMessage {
 
             /** S replayId */
             replayId?: (number|null);
+
+            /** S rating */
+            rating?: (number|null);
         }
 
         /** Represents a S. */
@@ -43108,7 +43021,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgReplaySetRating.IS);
+            constructor(properties?: NetMessage.MsgReplaySetSelfRating.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -43116,28 +43029,31 @@ export declare namespace NetMessage {
             /** S replayId. */
             public replayId: number;
 
+            /** S rating. */
+            public rating: number;
+
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgReplaySetRating.IS): NetMessage.MsgReplaySetRating.S;
+            public static create(properties?: NetMessage.MsgReplaySetSelfRating.IS): NetMessage.MsgReplaySetSelfRating.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgReplaySetRating.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgReplaySetSelfRating.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgReplaySetRating.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgReplaySetSelfRating.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgReplaySetRating.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgReplaySetSelfRating.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgReplaySetRating.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgReplaySetSelfRating.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -43147,7 +43063,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplaySetRating.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplaySetSelfRating.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -43156,7 +43072,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplaySetRating.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplaySetSelfRating.S;
 
             /**
              * Verifies a S message.
@@ -43170,7 +43086,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplaySetRating.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplaySetSelfRating.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -43178,7 +43094,298 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgReplaySetRating.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgReplaySetSelfRating.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgReplayGetSelfRating. */
+    interface IMsgReplayGetSelfRating {
+
+        /** MsgReplayGetSelfRating c */
+        c?: (NetMessage.MsgReplayGetSelfRating.IC|null);
+
+        /** MsgReplayGetSelfRating s */
+        s?: (NetMessage.MsgReplayGetSelfRating.IS|null);
+    }
+
+    /** Represents a MsgReplayGetSelfRating. */
+    class MsgReplayGetSelfRating implements IMsgReplayGetSelfRating {
+
+        /**
+         * Constructs a new MsgReplayGetSelfRating.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgReplayGetSelfRating);
+
+        /** MsgReplayGetSelfRating c. */
+        public c?: (NetMessage.MsgReplayGetSelfRating.IC|null);
+
+        /** MsgReplayGetSelfRating s. */
+        public s?: (NetMessage.MsgReplayGetSelfRating.IS|null);
+
+        /**
+         * Creates a new MsgReplayGetSelfRating instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgReplayGetSelfRating instance
+         */
+        public static create(properties?: NetMessage.IMsgReplayGetSelfRating): NetMessage.MsgReplayGetSelfRating;
+
+        /**
+         * Encodes the specified MsgReplayGetSelfRating message. Does not implicitly {@link NetMessage.MsgReplayGetSelfRating.verify|verify} messages.
+         * @param message MsgReplayGetSelfRating message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgReplayGetSelfRating, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgReplayGetSelfRating message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetSelfRating.verify|verify} messages.
+         * @param message MsgReplayGetSelfRating message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgReplayGetSelfRating, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgReplayGetSelfRating message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgReplayGetSelfRating
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetSelfRating;
+
+        /**
+         * Decodes a MsgReplayGetSelfRating message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgReplayGetSelfRating
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetSelfRating;
+
+        /**
+         * Verifies a MsgReplayGetSelfRating message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgReplayGetSelfRating message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgReplayGetSelfRating
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetSelfRating;
+
+        /**
+         * Creates a plain object from a MsgReplayGetSelfRating message. Also converts values to other types if specified.
+         * @param message MsgReplayGetSelfRating
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgReplayGetSelfRating, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgReplayGetSelfRating to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgReplayGetSelfRating {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C replayId */
+            replayId?: (number|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgReplayGetSelfRating.IC);
+
+            /** C replayId. */
+            public replayId: number;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgReplayGetSelfRating.IC): NetMessage.MsgReplayGetSelfRating.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgReplayGetSelfRating.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgReplayGetSelfRating.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetSelfRating.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgReplayGetSelfRating.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetSelfRating.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetSelfRating.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetSelfRating.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgReplayGetSelfRating.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S replayId */
+            replayId?: (number|null);
+
+            /** S rating */
+            rating?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgReplayGetSelfRating.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S replayId. */
+            public replayId: number;
+
+            /** S rating. */
+            public rating: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgReplayGetSelfRating.IS): NetMessage.MsgReplayGetSelfRating.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgReplayGetSelfRating.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgReplayGetSelfRating.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetSelfRating.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgReplayGetSelfRating.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetSelfRating.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetSelfRating.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetSelfRating.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgReplayGetSelfRating.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -43764,103 +43971,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgReplayGetInfo. */
-    interface IMsgReplayGetInfo {
+    /** Properties of a MsgReplayGetBriefInfo. */
+    interface IMsgReplayGetBriefInfo {
 
-        /** MsgReplayGetInfo c */
-        c?: (NetMessage.MsgReplayGetInfo.IC|null);
+        /** MsgReplayGetBriefInfo c */
+        c?: (NetMessage.MsgReplayGetBriefInfo.IC|null);
 
-        /** MsgReplayGetInfo s */
-        s?: (NetMessage.MsgReplayGetInfo.IS|null);
+        /** MsgReplayGetBriefInfo s */
+        s?: (NetMessage.MsgReplayGetBriefInfo.IS|null);
     }
 
-    /** Represents a MsgReplayGetInfo. */
-    class MsgReplayGetInfo implements IMsgReplayGetInfo {
+    /** Represents a MsgReplayGetBriefInfo. */
+    class MsgReplayGetBriefInfo implements IMsgReplayGetBriefInfo {
 
         /**
-         * Constructs a new MsgReplayGetInfo.
+         * Constructs a new MsgReplayGetBriefInfo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgReplayGetInfo);
+        constructor(properties?: NetMessage.IMsgReplayGetBriefInfo);
 
-        /** MsgReplayGetInfo c. */
-        public c?: (NetMessage.MsgReplayGetInfo.IC|null);
+        /** MsgReplayGetBriefInfo c. */
+        public c?: (NetMessage.MsgReplayGetBriefInfo.IC|null);
 
-        /** MsgReplayGetInfo s. */
-        public s?: (NetMessage.MsgReplayGetInfo.IS|null);
+        /** MsgReplayGetBriefInfo s. */
+        public s?: (NetMessage.MsgReplayGetBriefInfo.IS|null);
 
         /**
-         * Creates a new MsgReplayGetInfo instance using the specified properties.
+         * Creates a new MsgReplayGetBriefInfo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgReplayGetInfo instance
+         * @returns MsgReplayGetBriefInfo instance
          */
-        public static create(properties?: NetMessage.IMsgReplayGetInfo): NetMessage.MsgReplayGetInfo;
+        public static create(properties?: NetMessage.IMsgReplayGetBriefInfo): NetMessage.MsgReplayGetBriefInfo;
 
         /**
-         * Encodes the specified MsgReplayGetInfo message. Does not implicitly {@link NetMessage.MsgReplayGetInfo.verify|verify} messages.
-         * @param message MsgReplayGetInfo message or plain object to encode
+         * Encodes the specified MsgReplayGetBriefInfo message. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.verify|verify} messages.
+         * @param message MsgReplayGetBriefInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgReplayGetInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgReplayGetBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgReplayGetInfo message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetInfo.verify|verify} messages.
-         * @param message MsgReplayGetInfo message or plain object to encode
+         * Encodes the specified MsgReplayGetBriefInfo message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.verify|verify} messages.
+         * @param message MsgReplayGetBriefInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgReplayGetInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgReplayGetBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgReplayGetInfo message from the specified reader or buffer.
+         * Decodes a MsgReplayGetBriefInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgReplayGetInfo
+         * @returns MsgReplayGetBriefInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetInfo;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetBriefInfo;
 
         /**
-         * Decodes a MsgReplayGetInfo message from the specified reader or buffer, length delimited.
+         * Decodes a MsgReplayGetBriefInfo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgReplayGetInfo
+         * @returns MsgReplayGetBriefInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetInfo;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetBriefInfo;
 
         /**
-         * Verifies a MsgReplayGetInfo message.
+         * Verifies a MsgReplayGetBriefInfo message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgReplayGetInfo message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgReplayGetBriefInfo message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgReplayGetInfo
+         * @returns MsgReplayGetBriefInfo
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetInfo;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetBriefInfo;
 
         /**
-         * Creates a plain object from a MsgReplayGetInfo message. Also converts values to other types if specified.
-         * @param message MsgReplayGetInfo
+         * Creates a plain object from a MsgReplayGetBriefInfo message. Also converts values to other types if specified.
+         * @param message MsgReplayGetBriefInfo
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgReplayGetInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgReplayGetBriefInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgReplayGetInfo to JSON.
+         * Converts this MsgReplayGetBriefInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgReplayGetInfo {
+    namespace MsgReplayGetBriefInfo {
 
         /** Properties of a C. */
         interface IC {
@@ -43876,7 +44083,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgReplayGetInfo.IC);
+            constructor(properties?: NetMessage.MsgReplayGetBriefInfo.IC);
 
             /** C replayId. */
             public replayId: number;
@@ -43886,23 +44093,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgReplayGetInfo.IC): NetMessage.MsgReplayGetInfo.C;
+            public static create(properties?: NetMessage.MsgReplayGetBriefInfo.IC): NetMessage.MsgReplayGetBriefInfo.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgReplayGetInfo.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgReplayGetInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgReplayGetBriefInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetInfo.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgReplayGetInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgReplayGetBriefInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -43912,7 +44119,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetInfo.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetBriefInfo.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -43921,7 +44128,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetInfo.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetBriefInfo.C;
 
             /**
              * Verifies a C message.
@@ -43935,7 +44142,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetInfo.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetBriefInfo.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -43943,7 +44150,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgReplayGetInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgReplayGetBriefInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -43961,8 +44168,8 @@ export declare namespace NetMessage {
             /** S replayId */
             replayId?: (number|null);
 
-            /** S replayInfo */
-            replayInfo?: (Replay.IReplayInfo|null);
+            /** S replayBriefInfo */
+            replayBriefInfo?: (Replay.IReplayBriefInfo|null);
         }
 
         /** Represents a S. */
@@ -43972,7 +44179,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgReplayGetInfo.IS);
+            constructor(properties?: NetMessage.MsgReplayGetBriefInfo.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -43980,31 +44187,31 @@ export declare namespace NetMessage {
             /** S replayId. */
             public replayId: number;
 
-            /** S replayInfo. */
-            public replayInfo?: (Replay.IReplayInfo|null);
+            /** S replayBriefInfo. */
+            public replayBriefInfo?: (Replay.IReplayBriefInfo|null);
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgReplayGetInfo.IS): NetMessage.MsgReplayGetInfo.S;
+            public static create(properties?: NetMessage.MsgReplayGetBriefInfo.IS): NetMessage.MsgReplayGetBriefInfo.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgReplayGetInfo.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgReplayGetInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgReplayGetBriefInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetInfo.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgReplayGetInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgReplayGetBriefInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -44014,7 +44221,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetInfo.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetBriefInfo.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -44023,7 +44230,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetInfo.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetBriefInfo.S;
 
             /**
              * Verifies a S message.
@@ -44037,7 +44244,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetInfo.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetBriefInfo.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -44045,7 +44252,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgReplayGetInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgReplayGetBriefInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

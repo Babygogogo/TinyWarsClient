@@ -47,8 +47,9 @@ namespace TwnsRwReplayWarInfoPage {
             this._setUiListenerArray([
             ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgReplayGetInfo,    callback: this._onNotifyMsgReplayGetInfo },
+                { type: NotifyType.LanguageChanged,         callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgReplayGetBriefInfo,   callback: this._onNotifyMsgReplayGetBriefInfo },
+                { type: NotifyType.MsgReplayGetSelfRating,  callback: this._onNotifyMsgReplayGetSelfRating },
             ]);
             this.left       = 0;
             this.right      = 0;
@@ -56,7 +57,8 @@ namespace TwnsRwReplayWarInfoPage {
             this.bottom     = 0;
 
             this._updateComponentsForLanguage();
-            this._updateComponentsForReplayInfo();
+            this._updateComponentsForReplayBriefInfo();
+            this._updateLabelMyRating();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -66,11 +68,19 @@ namespace TwnsRwReplayWarInfoPage {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyMsgReplayGetInfo(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.NetMessage.MsgReplayGetInfo.IS;
+        private _onNotifyMsgReplayGetBriefInfo(e: egret.Event): void {
+            const data      = e.data as ProtoTypes.NetMessage.MsgReplayGetBriefInfo.IS;
             const replayId  = this._getOpenData()?.replayId;
             if ((replayId != null) && (replayId === data.replayId)) {
-                this._updateComponentsForReplayInfo();
+                this._updateComponentsForReplayBriefInfo();
+            }
+        }
+
+        private _onNotifyMsgReplayGetSelfRating(e: egret.Event): void {
+            const data      = e.data as ProtoTypes.NetMessage.MsgReplayGetSelfRating.IS;
+            const replayId  = this._getOpenData()?.replayId;
+            if ((replayId != null) && (replayId === data.replayId)) {
+                this._updateLabelMyRating();
             }
         }
 
@@ -86,61 +96,57 @@ namespace TwnsRwReplayWarInfoPage {
             this._labelEndTimeTitle.text            = Lang.getText(LangTextType.B0601);
         }
 
-        private _updateComponentsForReplayInfo(): void {
+        private _updateComponentsForReplayBriefInfo(): void {
             this._updateLabelWarType();
             this._updateLabelGlobalRating();
-            this._updateLabelMyRating();
             this._updateLabelMapName();
             this._updateLabelTurnIndex();
             this._updateLabelEndTime();
         }
 
         private async _updateLabelWarType(): Promise<void> {
-            const replayInfo        = await this._getReplayInfo();
-            this._labelWarType.text = replayInfo ? Lang.getWarTypeName(Helpers.getExisted(replayInfo.replayBriefInfo?.warType)) ?? CommonConstants.ErrorTextForUndefined : `??`;
+            const replayBriefInfo   = await this._getReplayBriefInfo();
+            this._labelWarType.text = replayBriefInfo ? Lang.getWarTypeName(Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined : `??`;
         }
 
         private async _updateLabelGlobalRating(): Promise<void> {
-            const replayInfo                = await this._getReplayInfo();
-            const replayBriefInfo           = replayInfo ? replayInfo.replayBriefInfo : null;
+            const replayBriefInfo           = await this._getReplayBriefInfo();
             const raters                    = replayBriefInfo ? replayBriefInfo.totalRaters : null;
             this._labelGlobalRating.text    = raters ? (Helpers.getExisted(replayBriefInfo?.totalRating) / raters).toFixed(2) : Lang.getText(LangTextType.B0001);
         }
 
         private async _updateLabelMyRating(): Promise<void> {
-            const replayInfo            = await this._getReplayInfo();
-            const rating                = replayInfo ? replayInfo.myRating : null;
+            const replayId              = this._getOpenData()?.replayId;
+            const rating                = replayId == null ? null : await RwModel.getReplaySelfRating(replayId);
             this._labelMyRating.text    = rating == null ? Lang.getText(LangTextType.B0001) : `${rating}`;
         }
 
         private async _updateLabelMapName(): Promise<void> {
-            const mapId             = (await this._getReplayInfo())?.replayBriefInfo?.mapId;
+            const mapId             = (await this._getReplayBriefInfo())?.mapId;
             this._labelMapName.text = mapId == null
                 ? `----`
                 : (await WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateLabelTurnIndex(): Promise<void> {
-            const replayInfo            = await this._getReplayInfo();
-            const replayBriefInfo       = replayInfo?.replayBriefInfo;
+            const replayBriefInfo       = await this._getReplayBriefInfo();
             this._labelTurnIndex.text   = replayBriefInfo
                 ? `${replayBriefInfo.turnIndex}, ${replayBriefInfo.executedActionsCount}`
                 : `??`;
         }
 
         private async _updateLabelEndTime(): Promise<void> {
-            const replayInfo        = await this._getReplayInfo();
-            const replayBriefInfo   = replayInfo ? replayInfo.replayBriefInfo : null;
+            const replayBriefInfo   = await this._getReplayBriefInfo();
             this._labelEndTime.text = replayBriefInfo
                 ? Helpers.getTimestampShortText(Helpers.getExisted(replayBriefInfo.warEndTime))
                 : `??`;
         }
 
-        private async _getReplayInfo(): Promise<ProtoTypes.Replay.IReplayInfo | null> {
+        private async _getReplayBriefInfo(): Promise<ProtoTypes.Replay.IReplayBriefInfo | null> {
             const replayId = this._getOpenData()?.replayId;
             return replayId == null
                 ? null
-                : await RwModel.getReplayInfo(replayId);
+                : await RwModel.getReplayBriefInfo(replayId);
         }
     }
 }

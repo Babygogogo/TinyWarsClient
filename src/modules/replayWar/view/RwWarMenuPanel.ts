@@ -72,7 +72,7 @@ namespace TwnsRwWarMenuPanel {
                 { type: NotifyType.BwActionPlannerStateSet,             callback: this._onNotifyMcwPlannerStateChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onNotifyMsgSpmCreateSfw },
-                { type: NotifyType.MsgReplaySetRating,                  callback: this._onMsgReplaySetRating },
+                { type: NotifyType.MsgReplaySetSelfRating,              callback: this._onMsgReplaySetRating },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -251,7 +251,7 @@ namespace TwnsRwWarMenuPanel {
                         maxValue,
                         tips            : `${Lang.getText(LangTextType.B0319)}: [${minValue}, ${maxValue}]`,
                         callback        : panel => {
-                            RwProxy.reqReplaySetRating(this._getWar().getReplayId(), panel.getInputValue());
+                            RwProxy.reqReplaySetSelfRating(this._getWar().getReplayId(), panel.getInputValue());
                         },
                     });
                 },

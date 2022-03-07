@@ -240,7 +240,7 @@ namespace TwnsRwReplayListPanel {
                 return {};
             }
 
-            const mapId = (await RwModel.getReplayInfo(replayId))?.replayBriefInfo?.mapId;
+            const mapId = (await RwModel.getReplayBriefInfo(replayId))?.mapId;
             if (mapId != null) {
                 return { mapInfo: { mapId } };
             } else {
@@ -260,13 +260,12 @@ namespace TwnsRwReplayListPanel {
                 return null;
             }
 
-            const replayInfo = await RwModel.getReplayInfo(replayId);
-            if (replayInfo == null) {
+            const replayBriefInfo = await RwModel.getReplayBriefInfo(replayId);
+            if (replayBriefInfo == null) {
                 return null;
             }
 
-            const replayBriefInfo   = Helpers.getExisted(replayInfo.replayBriefInfo);
-            const playerInfoArray   : TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
+            const playerInfoArray: TwnsCommonWarPlayerInfoPage.PlayerInfo[] = [];
             for (const playerInfo of replayBriefInfo.playerInfoList || []) {
                 const userId = playerInfo.userId ?? null;
                 playerInfoArray.push({
@@ -390,8 +389,7 @@ namespace TwnsRwReplayListPanel {
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const replayInfo        = await RwModel.getReplayInfo(this._getData().replayId);
-            const replayBriefInfo   = replayInfo ? replayInfo.replayBriefInfo : null;
+            const replayBriefInfo   = await RwModel.getReplayBriefInfo(this._getData().replayId);
             const labelId           = this._labelId;
             const labelType         = this._labelType;
             const labelName         = this._labelName;
