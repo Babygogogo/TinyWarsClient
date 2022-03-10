@@ -316,6 +316,7 @@
 		"bin-debug/modules/tools/helpers/NoSleepManager.js",
 		"bin-debug/modules/chat/view/ChatPanel.js",
 		"bin-debug/modules/tools/helpers/PanelManager.js",
+		"bin-debug/modules/tools/helpers/ResVersionController.js",
 		"bin-debug/modules/tools/helpers/SeedRandom.js",
 		"bin-debug/modules/common/model/CommonModel.js",
 		"bin-debug/modules/tools/helpers/Sha1Generator.js",

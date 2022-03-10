@@ -51,8 +51,9 @@ namespace SpwModel {
             unloadWar();
         }
 
-        const war = createWarByWarData(warData);
-        await war.init(warData);
+        const data  = Helpers.deepClone(warData);
+        const war   = createWarByWarData(data);
+        await war.init(data);
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);
