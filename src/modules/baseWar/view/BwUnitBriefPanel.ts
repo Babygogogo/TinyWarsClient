@@ -126,7 +126,10 @@ namespace TwnsBwUnitBriefPanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
             for (let i = 0; i < this._cellList.length; ++i) {
                 if (this._cellList[i] === e.currentTarget) {
-                    TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitDetailPanel, { unit: this._unitList[i] });
+                    TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitDetailPanel, {
+                        unit        : this._unitList[i],
+                        canDelete   : this._getOpenData().war.getCanCheat(),
+                    });
                     return;
                 }
             }

@@ -87,7 +87,8 @@ namespace TwnsBwProduceUnitPanel {
             const data = this._listUnit.getSelectedData();
             if (data) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwUnitDetailPanel, {
-                    unit  : data.unit,
+                    unit        : data.unit,
+                    canDelete   : false,
                 });
             }
         }

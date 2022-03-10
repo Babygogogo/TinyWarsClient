@@ -1,7 +1,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWarsNamespace {
-    let resHashDict: { [k: string]: string } = {};
+    const RES_NAME_DICT: { [rawName: string]: string } = {};
 
     export class ResVersionController implements RES.VersionController {
         public init(): Promise<void> {
@@ -9,7 +9,12 @@ namespace TinyWarsNamespace {
                 const request = new XMLHttpRequest();
                 request.open(`GET`, `resource/ResHashDict.${window.CLIENT_VERSION}.json`);
                 request.onload = () => {
-                    resHashDict = JSON.parse(request.responseText);
+                    const hashDict = JSON.parse(request.responseText);
+                    for (const rawName in hashDict) {
+                        const indexForDot           = rawName.lastIndexOf(`.`);
+                        const index                 = (indexForDot >= 0 ? indexForDot : rawName.lastIndexOf(`/`)) + 1;
+                        RES_NAME_DICT[rawName]    = `${rawName.slice(0, index)}${hashDict[rawName]}.${rawName.slice(index)}`;
+                    }
                     resolve();
                 };
                 request.send(null);
@@ -17,14 +22,7 @@ namespace TinyWarsNamespace {
         }
 
         public getVirtualUrl(url: string): string {
-            const hashValue = resHashDict[url];
-            if (!hashValue) {
-                return url;
-            } else {
-                const indexForDot   = url.lastIndexOf(`.`);
-                const index         = (indexForDot >= 0 ? indexForDot : url.lastIndexOf(`/`)) + 1;
-                return `${url.slice(0, index)}${hashValue}.${url.slice(index)}`;
-            }
+            return RES_NAME_DICT[url] ?? url;
         }
     }
 }

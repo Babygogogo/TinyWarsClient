@@ -54,7 +54,8 @@ namespace TwnsBwUnitDetailPanel {
     }
 
     export type OpenData = {
-        unit: BwUnit;
+        unit        : BwUnit;
+        canDelete   : boolean;
     };
     export class BwUnitDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
@@ -233,8 +234,7 @@ namespace TwnsBwUnitDetailPanel {
         }
 
         private _updateButtons(): void {
-            const war               = this._getOpenData().unit.getWar();
-            this._btnDelete.visible = war.getCanCheat();
+            this._btnDelete.visible = this._getOpenData().canDelete;
         }
 
         private _createInfoHp(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer {
