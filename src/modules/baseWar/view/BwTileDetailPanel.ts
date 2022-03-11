@@ -999,8 +999,8 @@ namespace TwnsBwTileDetailPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonInputIntegerPanel, {
                 title           : Lang.getText(LangTextType.B0738),
                 currentValue    : currValue ?? 0,
-                minValue        : 10000000,
-                maxValue        : -10000000,
+                minValue        : -10000000,
+                maxValue        : 10000000,
                 tips            : ``,
                 callback        : panel => {
                     tile.setCustomCrystalDeltaFund(panel.getInputValue());

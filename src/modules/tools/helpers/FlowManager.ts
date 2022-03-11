@@ -96,7 +96,7 @@ namespace FlowManager {
         doStartGame(stage);
     }
     async function doStartGame(stage: egret.Stage): Promise<void> {
-        RES.registerVersionController(new TinyWarsNamespace.ResVersionController());
+        await TinyWarsNamespace.ResVersionController.init();
         CompatibilityHelpers.init();
         NetManager.addListeners(_NET_EVENTS);
         Notify.addEventListeners(_NOTIFY_EVENTS);
