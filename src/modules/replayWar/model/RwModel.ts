@@ -12,17 +12,17 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace RwModel {
     import NetMessage           = ProtoTypes.NetMessage;
-    import IReplayBriefInfo     = ProtoTypes.Replay.IReplayBriefInfo;
+    import IReplayInfo          = ProtoTypes.Replay.IReplayInfo;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
     import MsgReplayGetDataIs   = NetMessage.MsgReplayGetData.IS;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import RwWar                = TwnsRwWar.RwWar;
 
-    let _replayIdArray              : number[] | null = null;
-    let _previewingReplayId         : number | null = null;
-    let _war                        : RwWar | null = null;
-    const _replayBriefInfoAccessor  = Helpers.createCachedDataAccessor<number, IReplayBriefInfo>({
-        reqData: (replayId: number) => RwProxy.reqReplayGetBriefInfo(replayId),
+    let _replayIdArray          : number[] | null = null;
+    let _previewingReplayId     : number | null = null;
+    let _war                    : RwWar | null = null;
+    const _replayInfoAccessor   = Helpers.createCachedDataAccessor<number, IReplayInfo>({
+        reqData: (replayId: number) => RwProxy.reqReplayGetReplayInfo(replayId),
     });
     const _replaySelfRatingAccessor = Helpers.createCachedDataAccessor<number, number>({
         reqData: (replayId: number) => RwProxy.reqReplayGetSelfRating(replayId),
@@ -39,11 +39,11 @@ namespace RwModel {
         return _replayIdArray;
     }
 
-    export function getReplayBriefInfo(replayId: number): Promise<IReplayBriefInfo | null> {
-        return _replayBriefInfoAccessor.getData(replayId);
+    export function getReplayInfo(replayId: number): Promise<IReplayInfo | null> {
+        return _replayInfoAccessor.getData(replayId);
     }
-    export function setReplayBriefInfo(replayId: number, replayInfo: IReplayBriefInfo | null): void {
-        _replayBriefInfoAccessor.setData(replayId, replayInfo);
+    export function setReplayInfo(replayId: number, replayInfo: IReplayInfo | null): void {
+        _replayInfoAccessor.setData(replayId, replayInfo);
     }
 
     export function getReplaySelfRating(replayId: number): Promise<number | null> {

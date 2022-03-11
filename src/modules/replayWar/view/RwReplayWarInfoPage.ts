@@ -69,7 +69,7 @@ namespace TwnsRwReplayWarInfoPage {
         }
 
         private _onNotifyMsgReplayGetBriefInfo(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.NetMessage.MsgReplayGetBriefInfo.IS;
+            const data      = e.data as ProtoTypes.NetMessage.MsgReplayGetReplayInfo.IS;
             const replayId  = this._getOpenData()?.replayId;
             if ((replayId != null) && (replayId === data.replayId)) {
                 this._updateComponentsForReplayBriefInfo();
@@ -105,12 +105,12 @@ namespace TwnsRwReplayWarInfoPage {
         }
 
         private async _updateLabelWarType(): Promise<void> {
-            const replayBriefInfo   = await this._getReplayBriefInfo();
+            const replayBriefInfo   = await this._getReplayInfo();
             this._labelWarType.text = replayBriefInfo ? Lang.getWarTypeName(Helpers.getExisted(replayBriefInfo.warType)) ?? CommonConstants.ErrorTextForUndefined : `??`;
         }
 
         private async _updateLabelGlobalRating(): Promise<void> {
-            const replayBriefInfo           = await this._getReplayBriefInfo();
+            const replayBriefInfo           = await this._getReplayInfo();
             const raters                    = replayBriefInfo ? replayBriefInfo.totalRaters : null;
             this._labelGlobalRating.text    = raters ? (Helpers.getExisted(replayBriefInfo?.totalRating) / raters).toFixed(2) : Lang.getText(LangTextType.B0001);
         }
@@ -122,31 +122,31 @@ namespace TwnsRwReplayWarInfoPage {
         }
 
         private async _updateLabelMapName(): Promise<void> {
-            const mapId             = (await this._getReplayBriefInfo())?.mapId;
+            const mapId             = (await this._getReplayInfo())?.mapId;
             this._labelMapName.text = mapId == null
                 ? `----`
                 : (await WarMapModel.getMapNameInCurrentLanguage(mapId)) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _updateLabelTurnIndex(): Promise<void> {
-            const replayBriefInfo       = await this._getReplayBriefInfo();
+            const replayBriefInfo       = await this._getReplayInfo();
             this._labelTurnIndex.text   = replayBriefInfo
                 ? `${replayBriefInfo.turnIndex}, ${replayBriefInfo.executedActionsCount}`
                 : `??`;
         }
 
         private async _updateLabelEndTime(): Promise<void> {
-            const replayBriefInfo   = await this._getReplayBriefInfo();
+            const replayBriefInfo   = await this._getReplayInfo();
             this._labelEndTime.text = replayBriefInfo
                 ? Helpers.getTimestampShortText(Helpers.getExisted(replayBriefInfo.warEndTime))
                 : `??`;
         }
 
-        private async _getReplayBriefInfo(): Promise<ProtoTypes.Replay.IReplayBriefInfo | null> {
+        private async _getReplayInfo(): Promise<ProtoTypes.Replay.IReplayInfo | null> {
             const replayId = this._getOpenData()?.replayId;
             return replayId == null
                 ? null
-                : await RwModel.getReplayBriefInfo(replayId);
+                : await RwModel.getReplayInfo(replayId);
         }
     }
 }

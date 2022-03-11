@@ -240,7 +240,7 @@ namespace TwnsRwReplayListPanel {
                 return {};
             }
 
-            const mapId = (await RwModel.getReplayBriefInfo(replayId))?.mapId;
+            const mapId = (await RwModel.getReplayInfo(replayId))?.mapId;
             if (mapId != null) {
                 return { mapInfo: { mapId } };
             } else {
@@ -260,7 +260,7 @@ namespace TwnsRwReplayListPanel {
                 return null;
             }
 
-            const replayBriefInfo = await RwModel.getReplayBriefInfo(replayId);
+            const replayBriefInfo = await RwModel.getReplayInfo(replayId);
             if (replayBriefInfo == null) {
                 return null;
             }
@@ -389,7 +389,7 @@ namespace TwnsRwReplayListPanel {
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const replayBriefInfo   = await RwModel.getReplayBriefInfo(this._getData().replayId);
+            const replayBriefInfo   = await RwModel.getReplayInfo(this._getData().replayId);
             const labelId           = this._labelId;
             const labelType         = this._labelType;
             const labelName         = this._labelName;

@@ -25677,157 +25677,157 @@ export declare namespace Replay {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a ReplayBriefInfo. */
-    interface IReplayBriefInfo {
+    /** Properties of a ReplayInfo. */
+    interface IReplayInfo {
 
-        /** ReplayBriefInfo replayId */
+        /** ReplayInfo replayId */
         replayId?: (number|null);
 
-        /** ReplayBriefInfo configVersion */
+        /** ReplayInfo configVersion */
         configVersion?: (string|null);
 
-        /** ReplayBriefInfo warType */
+        /** ReplayInfo warType */
         warType?: (number|null);
 
-        /** ReplayBriefInfo mapId */
+        /** ReplayInfo mapId */
         mapId?: (number|null);
 
-        /** ReplayBriefInfo hasFog */
+        /** ReplayInfo hasFog */
         hasFog?: (boolean|null);
 
-        /** ReplayBriefInfo turnIndex */
+        /** ReplayInfo turnIndex */
         turnIndex?: (number|null);
 
-        /** ReplayBriefInfo executedActionsCount */
+        /** ReplayInfo executedActionsCount */
         executedActionsCount?: (number|null);
 
-        /** ReplayBriefInfo warEndTime */
+        /** ReplayInfo warEndTime */
         warEndTime?: (number|null);
 
-        /** ReplayBriefInfo totalRating */
+        /** ReplayInfo totalRating */
         totalRating?: (number|null);
 
-        /** ReplayBriefInfo totalRaters */
+        /** ReplayInfo totalRaters */
         totalRaters?: (number|null);
 
-        /** ReplayBriefInfo isDraw */
+        /** ReplayInfo isDraw */
         isDraw?: (boolean|null);
 
-        /** ReplayBriefInfo playerInfoList */
+        /** ReplayInfo playerInfoList */
         playerInfoList?: (Structure.IWarPlayerInfo[]|null);
     }
 
-    /** Represents a ReplayBriefInfo. */
-    class ReplayBriefInfo implements IReplayBriefInfo {
+    /** Represents a ReplayInfo. */
+    class ReplayInfo implements IReplayInfo {
 
         /**
-         * Constructs a new ReplayBriefInfo.
+         * Constructs a new ReplayInfo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: Replay.IReplayBriefInfo);
+        constructor(properties?: Replay.IReplayInfo);
 
-        /** ReplayBriefInfo replayId. */
+        /** ReplayInfo replayId. */
         public replayId: number;
 
-        /** ReplayBriefInfo configVersion. */
+        /** ReplayInfo configVersion. */
         public configVersion: string;
 
-        /** ReplayBriefInfo warType. */
+        /** ReplayInfo warType. */
         public warType: number;
 
-        /** ReplayBriefInfo mapId. */
+        /** ReplayInfo mapId. */
         public mapId: number;
 
-        /** ReplayBriefInfo hasFog. */
+        /** ReplayInfo hasFog. */
         public hasFog: boolean;
 
-        /** ReplayBriefInfo turnIndex. */
+        /** ReplayInfo turnIndex. */
         public turnIndex: number;
 
-        /** ReplayBriefInfo executedActionsCount. */
+        /** ReplayInfo executedActionsCount. */
         public executedActionsCount: number;
 
-        /** ReplayBriefInfo warEndTime. */
+        /** ReplayInfo warEndTime. */
         public warEndTime: number;
 
-        /** ReplayBriefInfo totalRating. */
+        /** ReplayInfo totalRating. */
         public totalRating: number;
 
-        /** ReplayBriefInfo totalRaters. */
+        /** ReplayInfo totalRaters. */
         public totalRaters: number;
 
-        /** ReplayBriefInfo isDraw. */
+        /** ReplayInfo isDraw. */
         public isDraw: boolean;
 
-        /** ReplayBriefInfo playerInfoList. */
+        /** ReplayInfo playerInfoList. */
         public playerInfoList: Structure.IWarPlayerInfo[];
 
         /**
-         * Creates a new ReplayBriefInfo instance using the specified properties.
+         * Creates a new ReplayInfo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns ReplayBriefInfo instance
+         * @returns ReplayInfo instance
          */
-        public static create(properties?: Replay.IReplayBriefInfo): Replay.ReplayBriefInfo;
+        public static create(properties?: Replay.IReplayInfo): Replay.ReplayInfo;
 
         /**
-         * Encodes the specified ReplayBriefInfo message. Does not implicitly {@link Replay.ReplayBriefInfo.verify|verify} messages.
-         * @param message ReplayBriefInfo message or plain object to encode
+         * Encodes the specified ReplayInfo message. Does not implicitly {@link Replay.ReplayInfo.verify|verify} messages.
+         * @param message ReplayInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: Replay.IReplayBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: Replay.IReplayInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified ReplayBriefInfo message, length delimited. Does not implicitly {@link Replay.ReplayBriefInfo.verify|verify} messages.
-         * @param message ReplayBriefInfo message or plain object to encode
+         * Encodes the specified ReplayInfo message, length delimited. Does not implicitly {@link Replay.ReplayInfo.verify|verify} messages.
+         * @param message ReplayInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: Replay.IReplayBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: Replay.IReplayInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a ReplayBriefInfo message from the specified reader or buffer.
+         * Decodes a ReplayInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns ReplayBriefInfo
+         * @returns ReplayInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Replay.ReplayBriefInfo;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Replay.ReplayInfo;
 
         /**
-         * Decodes a ReplayBriefInfo message from the specified reader or buffer, length delimited.
+         * Decodes a ReplayInfo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns ReplayBriefInfo
+         * @returns ReplayInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Replay.ReplayBriefInfo;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Replay.ReplayInfo;
 
         /**
-         * Verifies a ReplayBriefInfo message.
+         * Verifies a ReplayInfo message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a ReplayBriefInfo message from a plain object. Also converts values to their respective internal types.
+         * Creates a ReplayInfo message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns ReplayBriefInfo
+         * @returns ReplayInfo
          */
-        public static fromObject(object: { [k: string]: any }): Replay.ReplayBriefInfo;
+        public static fromObject(object: { [k: string]: any }): Replay.ReplayInfo;
 
         /**
-         * Creates a plain object from a ReplayBriefInfo message. Also converts values to other types if specified.
-         * @param message ReplayBriefInfo
+         * Creates a plain object from a ReplayInfo message. Also converts values to other types if specified.
+         * @param message ReplayInfo
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: Replay.ReplayBriefInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: Replay.ReplayInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this ReplayBriefInfo to JSON.
+         * Converts this ReplayInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -28329,8 +28329,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgReplayGetData */
         MsgReplayGetData?: (NetMessage.IMsgReplayGetData|null);
 
-        /** MessageContainer MsgReplayGetBriefInfo */
-        MsgReplayGetBriefInfo?: (NetMessage.IMsgReplayGetBriefInfo|null);
+        /** MessageContainer MsgReplayGetReplayInfo */
+        MsgReplayGetReplayInfo?: (NetMessage.IMsgReplayGetReplayInfo|null);
 
         /** MessageContainer MsgMcrCreateRoom */
         MsgMcrCreateRoom?: (NetMessage.IMsgMcrCreateRoom|null);
@@ -28726,8 +28726,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgReplayGetData. */
         public MsgReplayGetData?: (NetMessage.IMsgReplayGetData|null);
 
-        /** MessageContainer MsgReplayGetBriefInfo. */
-        public MsgReplayGetBriefInfo?: (NetMessage.IMsgReplayGetBriefInfo|null);
+        /** MessageContainer MsgReplayGetReplayInfo. */
+        public MsgReplayGetReplayInfo?: (NetMessage.IMsgReplayGetReplayInfo|null);
 
         /** MessageContainer MsgMcrCreateRoom. */
         public MsgMcrCreateRoom?: (NetMessage.IMsgMcrCreateRoom|null);
@@ -43971,103 +43971,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgReplayGetBriefInfo. */
-    interface IMsgReplayGetBriefInfo {
+    /** Properties of a MsgReplayGetReplayInfo. */
+    interface IMsgReplayGetReplayInfo {
 
-        /** MsgReplayGetBriefInfo c */
-        c?: (NetMessage.MsgReplayGetBriefInfo.IC|null);
+        /** MsgReplayGetReplayInfo c */
+        c?: (NetMessage.MsgReplayGetReplayInfo.IC|null);
 
-        /** MsgReplayGetBriefInfo s */
-        s?: (NetMessage.MsgReplayGetBriefInfo.IS|null);
+        /** MsgReplayGetReplayInfo s */
+        s?: (NetMessage.MsgReplayGetReplayInfo.IS|null);
     }
 
-    /** Represents a MsgReplayGetBriefInfo. */
-    class MsgReplayGetBriefInfo implements IMsgReplayGetBriefInfo {
+    /** Represents a MsgReplayGetReplayInfo. */
+    class MsgReplayGetReplayInfo implements IMsgReplayGetReplayInfo {
 
         /**
-         * Constructs a new MsgReplayGetBriefInfo.
+         * Constructs a new MsgReplayGetReplayInfo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgReplayGetBriefInfo);
+        constructor(properties?: NetMessage.IMsgReplayGetReplayInfo);
 
-        /** MsgReplayGetBriefInfo c. */
-        public c?: (NetMessage.MsgReplayGetBriefInfo.IC|null);
+        /** MsgReplayGetReplayInfo c. */
+        public c?: (NetMessage.MsgReplayGetReplayInfo.IC|null);
 
-        /** MsgReplayGetBriefInfo s. */
-        public s?: (NetMessage.MsgReplayGetBriefInfo.IS|null);
+        /** MsgReplayGetReplayInfo s. */
+        public s?: (NetMessage.MsgReplayGetReplayInfo.IS|null);
 
         /**
-         * Creates a new MsgReplayGetBriefInfo instance using the specified properties.
+         * Creates a new MsgReplayGetReplayInfo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgReplayGetBriefInfo instance
+         * @returns MsgReplayGetReplayInfo instance
          */
-        public static create(properties?: NetMessage.IMsgReplayGetBriefInfo): NetMessage.MsgReplayGetBriefInfo;
+        public static create(properties?: NetMessage.IMsgReplayGetReplayInfo): NetMessage.MsgReplayGetReplayInfo;
 
         /**
-         * Encodes the specified MsgReplayGetBriefInfo message. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.verify|verify} messages.
-         * @param message MsgReplayGetBriefInfo message or plain object to encode
+         * Encodes the specified MsgReplayGetReplayInfo message. Does not implicitly {@link NetMessage.MsgReplayGetReplayInfo.verify|verify} messages.
+         * @param message MsgReplayGetReplayInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgReplayGetBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgReplayGetReplayInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgReplayGetBriefInfo message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.verify|verify} messages.
-         * @param message MsgReplayGetBriefInfo message or plain object to encode
+         * Encodes the specified MsgReplayGetReplayInfo message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetReplayInfo.verify|verify} messages.
+         * @param message MsgReplayGetReplayInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgReplayGetBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgReplayGetReplayInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgReplayGetBriefInfo message from the specified reader or buffer.
+         * Decodes a MsgReplayGetReplayInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgReplayGetBriefInfo
+         * @returns MsgReplayGetReplayInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetBriefInfo;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetReplayInfo;
 
         /**
-         * Decodes a MsgReplayGetBriefInfo message from the specified reader or buffer, length delimited.
+         * Decodes a MsgReplayGetReplayInfo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgReplayGetBriefInfo
+         * @returns MsgReplayGetReplayInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetBriefInfo;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetReplayInfo;
 
         /**
-         * Verifies a MsgReplayGetBriefInfo message.
+         * Verifies a MsgReplayGetReplayInfo message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgReplayGetBriefInfo message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgReplayGetReplayInfo message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgReplayGetBriefInfo
+         * @returns MsgReplayGetReplayInfo
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetBriefInfo;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetReplayInfo;
 
         /**
-         * Creates a plain object from a MsgReplayGetBriefInfo message. Also converts values to other types if specified.
-         * @param message MsgReplayGetBriefInfo
+         * Creates a plain object from a MsgReplayGetReplayInfo message. Also converts values to other types if specified.
+         * @param message MsgReplayGetReplayInfo
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgReplayGetBriefInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgReplayGetReplayInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgReplayGetBriefInfo to JSON.
+         * Converts this MsgReplayGetReplayInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgReplayGetBriefInfo {
+    namespace MsgReplayGetReplayInfo {
 
         /** Properties of a C. */
         interface IC {
@@ -44083,7 +44083,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgReplayGetBriefInfo.IC);
+            constructor(properties?: NetMessage.MsgReplayGetReplayInfo.IC);
 
             /** C replayId. */
             public replayId: number;
@@ -44093,23 +44093,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgReplayGetBriefInfo.IC): NetMessage.MsgReplayGetBriefInfo.C;
+            public static create(properties?: NetMessage.MsgReplayGetReplayInfo.IC): NetMessage.MsgReplayGetReplayInfo.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgReplayGetReplayInfo.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgReplayGetBriefInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgReplayGetReplayInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetReplayInfo.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgReplayGetBriefInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgReplayGetReplayInfo.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -44119,7 +44119,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetBriefInfo.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetReplayInfo.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -44128,7 +44128,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetBriefInfo.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetReplayInfo.C;
 
             /**
              * Verifies a C message.
@@ -44142,7 +44142,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetBriefInfo.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetReplayInfo.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -44150,7 +44150,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgReplayGetBriefInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgReplayGetReplayInfo.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -44168,8 +44168,8 @@ export declare namespace NetMessage {
             /** S replayId */
             replayId?: (number|null);
 
-            /** S replayBriefInfo */
-            replayBriefInfo?: (Replay.IReplayBriefInfo|null);
+            /** S replayInfo */
+            replayInfo?: (Replay.IReplayInfo|null);
         }
 
         /** Represents a S. */
@@ -44179,7 +44179,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgReplayGetBriefInfo.IS);
+            constructor(properties?: NetMessage.MsgReplayGetReplayInfo.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -44187,31 +44187,31 @@ export declare namespace NetMessage {
             /** S replayId. */
             public replayId: number;
 
-            /** S replayBriefInfo. */
-            public replayBriefInfo?: (Replay.IReplayBriefInfo|null);
+            /** S replayInfo. */
+            public replayInfo?: (Replay.IReplayInfo|null);
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgReplayGetBriefInfo.IS): NetMessage.MsgReplayGetBriefInfo.S;
+            public static create(properties?: NetMessage.MsgReplayGetReplayInfo.IS): NetMessage.MsgReplayGetReplayInfo.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgReplayGetReplayInfo.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgReplayGetBriefInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgReplayGetReplayInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetBriefInfo.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgReplayGetReplayInfo.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgReplayGetBriefInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgReplayGetReplayInfo.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -44221,7 +44221,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetBriefInfo.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgReplayGetReplayInfo.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -44230,7 +44230,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetBriefInfo.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgReplayGetReplayInfo.S;
 
             /**
              * Verifies a S message.
@@ -44244,7 +44244,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetBriefInfo.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgReplayGetReplayInfo.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -44252,7 +44252,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgReplayGetBriefInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgReplayGetReplayInfo.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

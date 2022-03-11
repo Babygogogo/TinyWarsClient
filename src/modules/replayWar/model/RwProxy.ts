@@ -16,7 +16,7 @@ namespace RwProxy {
         NetManager.addListeners([
             { msgCode: NetMessageCodes.MsgReplayGetReplayIdArray,   callback: _onMsgReplayGetReplayIdArray },
             { msgCode: NetMessageCodes.MsgReplayGetData,            callback: _onMsgReplayGetData },
-            { msgCode: NetMessageCodes.MsgReplayGetBriefInfo,       callback: _onMsgReplayGetBriefInfo },
+            { msgCode: NetMessageCodes.MsgReplayGetReplayInfo,      callback: _onMsgReplayGetReplayInfo },
             { msgCode: NetMessageCodes.MsgReplayGetSelfRating,      callback: _onMsgReplayGetSelfRating },
             { msgCode: NetMessageCodes.MsgReplaySetSelfRating,      callback: _onMsgReplaySetSelfRating },
         ], null);
@@ -52,17 +52,17 @@ namespace RwProxy {
         }
     }
 
-    export function reqReplayGetBriefInfo(replayId: number): void {
+    export function reqReplayGetReplayInfo(replayId: number): void {
         NetManager.send({
-            MsgReplayGetBriefInfo: { c: {
+            MsgReplayGetReplayInfo: { c: {
                 replayId,
             }, },
         });
     }
-    function _onMsgReplayGetBriefInfo(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgReplayGetBriefInfo.IS;
+    function _onMsgReplayGetReplayInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgReplayGetReplayInfo.IS;
         if (!data.errorCode) {
-            RwModel.setReplayBriefInfo(Helpers.getExisted(data.replayId), data.replayBriefInfo ?? null);
+            RwModel.setReplayInfo(Helpers.getExisted(data.replayId), data.replayInfo ?? null);
             Notify.dispatch(NotifyType.MsgReplayGetBriefInfo, data);
         }
     }
