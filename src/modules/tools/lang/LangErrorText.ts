@@ -164,6 +164,10 @@ namespace TwnsLangErrorText {
             `观战请求已被接受`,
             `The request has already been accepted.`,
         ],
+        [ServerErrorCode.MsgMpwWatchHandleRequest_ExeWithSocket_0006]: [
+            `该观战请求不存在或已经失效`,
+            `The request doesn't exist or has expired.`,
+        ],
         [ServerErrorCode.ExeMfrCreateRoom_DoExecute_0018]: [
             `您已创建了许多未开始的房间，请删除部分后重试`,
             `You have created too many rooms simultaneously.`,
@@ -187,6 +191,10 @@ namespace TwnsLangErrorText {
         [ServerErrorCode.MsgSpmCreateSrw0020]: [
             `各个玩家使用的势力颜色必须互不相同`,
             `Players can't use the same color.`,
+        ],
+        [ServerErrorCode.ActorReplayManager_ReplayManagerSendFilteredReplayIdArray_0000]: [
+            `您的请求过于频繁，请稍后重试`,
+            `Your query requests are too frequent. Please retry later.`,
         ],
         [ServerErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,

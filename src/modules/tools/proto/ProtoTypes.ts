@@ -22538,6 +22538,15 @@ export declare namespace MultiCustomRoom {
 
         /** RoomFilter hasFog */
         hasFog?: (boolean|null);
+
+        /** RoomFilter userIdInRoom */
+        userIdInRoom?: (number|null);
+
+        /** RoomFilter userIdNotInRoom */
+        userIdNotInRoom?: (number|null);
+
+        /** RoomFilter isJoinable */
+        isJoinable?: (boolean|null);
     }
 
     /** Represents a RoomFilter. */
@@ -22563,6 +22572,15 @@ export declare namespace MultiCustomRoom {
 
         /** RoomFilter hasFog. */
         public hasFog: boolean;
+
+        /** RoomFilter userIdInRoom. */
+        public userIdInRoom: number;
+
+        /** RoomFilter userIdNotInRoom. */
+        public userIdNotInRoom: number;
+
+        /** RoomFilter isJoinable. */
+        public isJoinable: boolean;
 
         /**
          * Creates a new RoomFilter instance using the specified properties.
