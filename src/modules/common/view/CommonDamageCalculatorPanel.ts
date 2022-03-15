@@ -1107,11 +1107,10 @@ namespace TwnsCommonDamageCalculatorPanel {
     function getDefenseBonusMultiplier(calculatorData: CalculatorData): number {
         const configVersion         = calculatorData.configVersion;
         const defenderData          = calculatorData.defenderData;
-        const defenderTileType      = defenderData.tileType;
-        const amountFromTile        = getTileDefenseAmountForUnit(configVersion, defenderData.unitType, defenderData.unitHp, defenderTileType);
+        const amountFromTile        = getTileDefenseAmountForUnit(configVersion, defenderData.unitType, defenderData.unitHp, defenderData.tileType);
         const amountFromPromotion   = ConfigManager.getUnitPromotionDefenseBonus(configVersion, defenderData.unitPromotion);
         const amountFromCo          = getDefenseModifierByCo(calculatorData);
-        const amountFromGlobalTiles = defenderData.towersCount * (ConfigManager.getTileTemplateCfgByType(configVersion, defenderTileType).globalDefenseBonus ?? 0);
+        const amountFromGlobalTiles = defenderData.towersCount * (ConfigManager.getTileTemplateCfgByType(configVersion, TileType.CommandTower).globalDefenseBonus ?? 0);
 
         return WarDamageCalculator.getDamageMultiplierForDefenseBonus(amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles);
     }

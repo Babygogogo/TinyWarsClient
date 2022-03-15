@@ -52,6 +52,8 @@ namespace TwnsBwSimpleDialoguePanel {
             this._imgTouchMask.touchEnabled = true;
         }
         protected async _updateOnOpenDataChanged(oldOpenData: OpenData | null): Promise<void> {
+            this._updateComponentsForLanguage();
+
             if (oldOpenData) {
                 oldOpenData.callbackOnClose();
             }

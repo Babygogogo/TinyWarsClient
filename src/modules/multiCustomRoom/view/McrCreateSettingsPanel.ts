@@ -78,6 +78,7 @@ namespace TwnsMcrCreateSettingsPanel {
                 { type: NotifyType.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.McrCreateSelfCoIdChanged,   callback: this._onNotifyMcrCreateSelfCoIdChanged },
                 { type: NotifyType.MsgMcrCreateRoom,           callback: this._onNotifyMsgMcrCreateRoom },
+                { type: NotifyType.MsgMcrCreateRoomFailed,     callback: this._onNotifyMsgMcrCreateRoomFailed },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
@@ -153,6 +154,9 @@ namespace TwnsMcrCreateSettingsPanel {
         }
         private _onNotifyMsgMcrCreateRoom(): void {
             FloatText.show(Lang.getText(LangTextType.A0015));
+            FlowManager.gotoLobby();
+        }
+        private _onNotifyMsgMcrCreateRoomFailed(): void {
             FlowManager.gotoLobby();
         }
 

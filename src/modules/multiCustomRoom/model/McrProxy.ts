@@ -39,6 +39,8 @@ namespace McrProxy {
         const data = e.data as NetMessage.MsgMcrCreateRoom.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgMcrCreateRoom, data);
+        } else {
+            Notify.dispatch(NotifyType.MsgMcrCreateRoomFailed, data);
         }
     }
 

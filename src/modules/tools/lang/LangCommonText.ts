@@ -70,8 +70,8 @@ namespace TwnsLangCommonText {
             "Network went wrong. Please try again later or refresh the browser.",
         ],
         [LangTextType.A0015]: [
-            "已成功创建战局，请等待其他玩家加入",
-            "The war is created successfully.",
+            "已成功创建房间，请等待其他玩家加入",
+            "The room has been created successfully. Please wait for other players to join.",
         ],
         [LangTextType.A0016]: [
             "已成功退出房间",
@@ -107,15 +107,15 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0024]: [
             `您确定要结束回合吗？`,
-            `Are you sure to end your turn?`,
+            `Are you sure you want to end your turn?`,
         ],
         [LangTextType.A0025]: [
             `您确定要返回大厅吗？`,
-            `Are you sure to go to the lobby?`,
+            `Are you sure you want to go to the lobby?`,
         ],
         [LangTextType.A0026]: [
             `您确定要投降吗？`,
-            `Are you sure to resign?`,
+            `Are you sure you want to resign?`,
         ],
         [LangTextType.A0027]: [
             `请先选中您想要删除的部队，再进行此操作`,
@@ -127,7 +127,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0029]: [
             `是否确定要删除此部队？`,
-            `Are you sure to delete the selected unit?`,
+            `Are you sure you want to delete the selected unit?`,
         ],
         [LangTextType.A0030]: [
             `所有玩家都已同意和局，战局结束！\n即将回到大厅...`,
@@ -135,15 +135,15 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0031]: [
             `您确定要求和吗？`,
-            `Are you sure to request a drawn game?`,
+            `Are you sure you want to request a drawn game?`,
         ],
         [LangTextType.A0032]: [
             `您确定要同意和局吗？`,
-            `Are you sure to agree the request from your opponent for a drawn game?`,
+            `Are you sure you want to agree the request from your opponent for a drawn game?`,
         ],
         [LangTextType.A0033]: [
             `您确定要拒绝和局吗？`,
-            `Are you sure to decline the request from your opponent for a drawn game?`,
+            `Are you sure you want to decline the request from your opponent for a drawn game?`,
         ],
         [LangTextType.A0034]: [
             `已有玩家求和，请先决定是否同意（通过菜单选项操作）`,
@@ -215,11 +215,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0051]: [
             `是否确定要创建战局？`,
-            `Are you sure to create the game?`,
+            `Are you sure you want to create the game?`,
         ],
         [LangTextType.A0052]: [
             `是否确定要加入战局？`,
-            `Are you sure to join the game?`,
+            `Are you sure you want to join the game?`,
         ],
         [LangTextType.A0053]: [
             `该功能正在开发中，敬请期待`,
@@ -227,11 +227,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0054]: [
             `您确定要发动CO POWER吗？`,
-            `Are you sure to activate the CO POWER?`,
+            `Are you sure you want to activate the CO POWER?`,
         ],
         [LangTextType.A0055]: [
             `当前有其他操作可选。您确定要直接待机吗？`,
-            `Another action is available. Are you sure to make the unit wait?`,
+            `Another action is available. Are you sure you want to make the unit wait?`,
         ],
         [LangTextType.A0056]: [
             `未知错误，请拖动截图发给作者，谢谢`,
@@ -239,11 +239,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0057]: [
             `禁用此项会清空您当前选择的CO（您可以重新选择一个）。确定要禁用吗？`,
-            `You have chosen a CO that is banned by your current selection. Are you sure to continue the ban?`,
+            `You have chosen a CO that is banned by your current selection. Are you sure you want to continue the ban?`,
         ],
         [LangTextType.A0058]: [
             `您确定要发动SUPER POWER吗？`,
-            `Are you sure to activate the SUPER POWER?`,
+            `Are you sure you want to activate the SUPER POWER?`,
         ],
         [LangTextType.A0059]: [
             `已成功修改地图可用性`,
@@ -299,15 +299,15 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0070]: [
             `您选择的存档位置非空，其内容将被覆盖。确定要继续创建战局吗？`,
-            `The save slot is not empty and will be overwritten. Are you sure to create the game?`,
+            `The save slot is not empty and will be overwritten. Are you sure you want to create the game?`,
         ],
         [LangTextType.A0071]: [
             `您的存档将被覆盖。确定要存档吗？`,
-            `Your save slot will be overwritten. Are you sure to continue?`,
+            `Your save slot will be overwritten. Are you sure you want to continue?`,
         ],
         [LangTextType.A0072]: [
             `您当前的进度将会丢失。确定要读档吗？`,
-            `Your current progress will be lost. Are you sure to continue?`,
+            `Your current progress will be lost. Are you sure you want to continue?`,
         ],
         [LangTextType.A0073]: [
             `已成功存档`,
@@ -315,7 +315,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0074]: [
             `确定要重新载入所有地图吗？`,
-            `Are you sure to reload all maps?`,
+            `Are you sure you want to reload all maps?`,
         ],
         [LangTextType.A0075]: [
             `地图重载成功`,
@@ -367,7 +367,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0082]: [
             `确定要保存此地图吗？`,
-            `Are you sure to save the map?`,
+            `Are you sure you want to save the map?`,
         ],
         [LangTextType.A0083]: [
             `此地图存在以下问题，暂不能提审，但可以正常保存以备后续编辑。`,
@@ -375,7 +375,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0084]: [
             `您已提审过其他地图。若提审此地图，则其他地图将被自动撤销提审。确定要继续吗？`,
-            `You have submitted some other maps for review. If you submit this map, the submitted maps will not be reviewed. Are you sure to continue?`,
+            `You have submitted some other maps for review. If you submit this map, the submitted maps will not be reviewed. Are you sure you want to continue?`,
         ],
         [LangTextType.A0085]: [
             `已成功保存地图`,
@@ -395,15 +395,15 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0089]: [
             `您确定要填充整个地图吗？`,
-            `Are you sure to fill the map?`,
+            `Are you sure you want to fill the map?`,
         ],
         [LangTextType.A0090]: [
             `您确定要让过审此地图吗？`,
-            `Are you sure to accept the map?`,
+            `Are you sure you want to accept the map?`,
         ],
         [LangTextType.A0091]: [
             `您确定要拒审此地图吗？`,
-            `Are you sure to reject the map?`,
+            `Are you sure you want to reject the map?`,
         ],
         [LangTextType.A0092]: [
             `您已成功过审该地图。`,
@@ -419,7 +419,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0095]: [
             `您确定要导入此地图吗？`,
-            `Are you sure to import this map?`,
+            `Are you sure you want to import this map?`,
         ],
         [LangTextType.A0096]: [
             `至少需要保留一个预设规则`,
@@ -427,7 +427,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0097]: [
             `确定要删除这个预设规则吗？`,
-            `Are you sure to delete this preset rule?`,
+            `Are you sure you want to delete this preset rule?`,
         ],
         [LangTextType.A0098]: [
             `输入的值无效，请重试`,
@@ -447,7 +447,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0102]: [
             `这是一局自定义规则的游戏，请确保您已经理解了所有的规则设定。\n确定要加入这局游戏吗？`,
-            `Please make sure that you have recognized all the custom rules before joining this game.\nAre you sure to continue?`,
+            `Please make sure that you have recognized all the custom rules before joining this game.\nAre you sure you want to continue?`,
         ],
         [LangTextType.A0103]: [
             `有玩家正在进行操作，请等待该操作结束后重试`,
@@ -471,7 +471,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0108]: [
             `开启作弊模式后，您可以随意修改战局上的各种数据。开启作弊模式后，将无法再取消。\n确定要开启吗？`,
-            `You can modify most of the game data if cheating is enabled. However, you can't disable it after enabling it.\nAre you sure to continue?`,
+            `You can modify most of the game data if cheating is enabled. However, you can't disable it after enabling it.\nAre you sure you want to continue?`,
         ],
         [LangTextType.A0109]: [
             `请先把CO搭载到部队上`,
@@ -479,11 +479,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0110]: [
             `您确定要让AI来控制这个势力吗？`,
-            `Are you sure to make the A.I. to take control of the force?`,
+            `Are you sure you want to make the A.I. to take control of the force?`,
         ],
         [LangTextType.A0111]: [
             `您确定要自行控制这个势力吗？`,
-            `Are you sure to take control of the force?`,
+            `Are you sure you want to take control of the force?`,
         ],
         [LangTextType.A0112]: [
             `有棋子正在移动中，请稍候再试`,
@@ -491,11 +491,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0113]: [
             `您确定要切换该部队的行动状态吗？`,
-            `Are you sure to switch the unit's action state?`,
+            `Are you sure you want to switch the unit's action state?`,
         ],
         [LangTextType.A0114]: [
             `您确定要切换该部队的下潜状态吗？`,
-            `Are you sure to switch the unit's diving state?`,
+            `Are you sure you want to switch the unit's diving state?`,
         ],
         [LangTextType.A0115]: [
             `请联系babygogogo以解决问题`,
@@ -543,7 +543,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0126]: [
             `您确定要退出此房间吗？`,
-            `Are you sure to exit the room?`,
+            `Are you sure you want to exit the room?`,
         ],
         [LangTextType.A0127]: [
             `您已被请出此房间。`,
@@ -555,7 +555,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0129]: [
             `您确定要使用自定义规则吗？`,
-            `Are you sure to use a custom rule?`,
+            `Are you sure you want to use a custom rule?`,
         ],
         [LangTextType.A0130]: [
             `您必须保留"无CO"选项。`,
@@ -587,19 +587,19 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0137]: [
             `进入准备状态后，您将无法再次修改CO和势力颜色设定。确定要继续吗？`,
-            `You can't change your CO and color settings after being ready. Are you sure to continue?`,
+            `You can't change your CO and color settings after being ready. Are you sure you want to continue?`,
         ],
         [LangTextType.A0138]: [
             `确定要禁用这些CO吗？`,
-            `Are you sure to ban these COs?`,
+            `Are you sure you want to ban these COs?`,
         ],
         [LangTextType.A0139]: [
             `确定要不禁用任何CO吗？`,
-            `Are you sure to ban no CO?`,
+            `Are you sure you want to ban no CO?`,
         ],
         [LangTextType.A0140]: [
             `确定要删除当前存档吗？（注：其他存档不受影响；您可以继续游玩当前游戏并存档）`,
-            `Are you sure to clear the current save slot?`,
+            `Are you sure you want to clear the current save slot?`,
         ],
         [LangTextType.A0141]: [
             `已成功删除存档。`,
@@ -611,7 +611,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0143]: [
             `此地图已被修改，确定不保存直接退出吗？`,
-            `The map has been modified. Are you sure to exit anyway?`,
+            `The map has been modified. Are you sure you want to exit anyway?`,
         ],
         [LangTextType.A0144]: [
             `请输入存档备注以便于区分，可留空`,
@@ -635,7 +635,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0149]: [
             `您确定要删除此房间吗？`,
-            `Are you sure to delete this room?`
+            `Are you sure you want to delete this room?`
         ],
         [LangTextType.A0150]: [
             `正在加载图片\n请耐心等候`,
@@ -723,11 +723,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0171]: [
             `您确定要删除事件吗？`,
-            `Are you sure to delete this event?`,
+            `Are you sure you want to delete this event?`,
         ],
         [LangTextType.A0172]: [
             `您确定要删除该条件节点吗？`,
-            `Are you sure to delete the condition node?`,
+            `Are you sure you want to delete the condition node?`,
         ],
         [LangTextType.A0173]: [
             `条件节点数量已达上限`,
@@ -739,11 +739,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0175]: [
             `您确定要删除该条件吗？`,
-            `Are you sure to delete the condition?`,
+            `Are you sure you want to delete the condition?`,
         ],
         [LangTextType.A0176]: [
             `您确定要删除该动作吗？`,
-            `Are you sure to delete the action?`,
+            `Are you sure you want to delete the action?`,
         ],
         [LangTextType.A0177]: [
             `此动作数据出错，请删除`,
@@ -791,7 +791,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0188]: [
             `未被引用的条件节点、条件、动作都将被删除。您确定要继续吗？`,
-            `All of the unused condition nodes, conditions and actions will be deleted. Are you sure to continue?`,
+            `All of the unused condition nodes, conditions and actions will be deleted. Are you sure you want to continue?`,
         ],
         [LangTextType.A0189]: [
             `此动作已包含太多部队`,
@@ -799,7 +799,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0190]: [
             `您确定要清空所有部队吗？`,
-            `Are you sure to delete all the units?`,
+            `Are you sure you want to delete all the units?`,
         ],
         [LangTextType.A0191]: [
             `此动作包含的部队的数量不合法`,
@@ -843,7 +843,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0201]: [
             `将离开战局并前往创建自由模式房间的页面。\n您确定要继续吗？`,
-            `You have to leave the war scene (you can enter it again later) in order to create the free mode room.\nAre you sure to continue?`,
+            `You have to leave the war scene (you can enter it again later) in order to create the free mode room.\nAre you sure you want to continue?`,
         ],
         [LangTextType.A0202]: [
             `已有其他玩家选择该势力`,
@@ -859,7 +859,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0205]: [
             `无法撤销准备状态`,
-            `It's not allowed to cancel the "ready" state.`,
+            `You can't cancel when in the 'ready' state.`,
         ],
         [LangTextType.A0206]: [
             [
@@ -869,8 +869,8 @@ namespace TwnsLangCommonText {
                 `注：正式开局前，您的对手不会知道您选择了哪个CO。`,
             ].join(`\n`),
             [
-                `Once you're ready, you can not undo nor change your CO and/or color.`,
-                `Are you sure to continue?`,
+                `Once you're ready, you cannot un-ready nor change your CO/color.`,
+                `Are you sure you want to continue?`,
                 ``,
                 `Tips: Your opponent(s) will not know which CO you have chosen until the game starts.`,
             ].join(`\n`),
@@ -881,7 +881,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0208]: [
             `您确定要不使用任何CO吗？`,
-            `Are you sure to use no CO?`,
+            `Are you sure you want to use no CO?`,
         ],
         [LangTextType.A0209]: [
             `排位模式下无法修改势力`,
@@ -909,11 +909,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0215]: [
             `"即将战败"状态下，玩家无法行动。除非有其他事件把玩家状态改为"存活"，否则系统将自动清除所有该玩家的部队，建筑将变为中立，且状态将变为已战败。`,
-            `In the Being Defeated state, players can not do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
+            `In the Being Defeated state, players cannot do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
         ],
         [LangTextType.A0216]: [
             `"已战败"状态下，玩家无法行动。如果玩家是直接从存活状态切换到已战败状态，则其部队和建筑所有权都会残留。`,
-            `In the Defeated state, players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
+            `In the Defeated state, players cannot do anything. If his/her previous state is Alive, his/her troops will remain.`,
         ],
         [LangTextType.A0217]: [
             `所有数值设定与《高级战争：毁灭之日》保持一致。`,
@@ -949,11 +949,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0225]: [
             `您确定要继续吗？`,
-            `Are you sure to continue?`,
+            `Are you sure you want to continue?`,
         ],
         [LangTextType.A0226]: [
             `您确定要跳过剧情吗？`,
-            `Are you sure to skip the story?`,
+            `Are you sure you want to skip the story?`,
         ],
         [LangTextType.A0227]: [
             `此动作包含的对话数量不合法`,
@@ -981,7 +981,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0233]: [
             `已有的地形装饰物会被覆盖。您确定要自动填充吗？`,
-            `The current tile decorations will be overwritten. Are you sure to auto fill?`,
+            `The current tile decorations will be overwritten. Are you sure you want to auto fill?`,
         ],
         [LangTextType.A0234]: [
             `导出失败，请使用chrome浏览器重试`,
@@ -997,7 +997,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0237]: [
             `当前的地图数据将被覆盖（但存档不受影响）。您确定要继续导入吗？`,
-            `The current map data will be overwritten, but the saved data will not be affected. Are you sure to import?`,
+            `The current map data will be overwritten, but the saved data will not be affected. Are you sure you want to import?`,
         ],
         [LangTextType.A0238]: [
             `您对地图的评分越高，该地图在您参与的排位赛中的出现率也越高。`,
@@ -1021,7 +1021,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0243]: [
             `您确定要切换CO搭载状态吗？`,
-            `Are you sure to switch the CO onboard state?`,
+            `Are you sure you want to switch the CO onboard state?`,
         ],
         [LangTextType.A0244]: [
             `已成功保存并提审地图`,
@@ -1029,7 +1029,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0245]: [
             `您已提审此地图的上一个版本。\n若继续保存此地图（不论是否提审），则上一个版本会被自动撤销提审。\n\n确定要继续吗？`,
-            `You have submitted the previous version of this map for review.\nIf you continue saving this map, the submitted version will not be reviewed.\n\nAre you sure to continue?`,
+            `You have submitted the previous version of this map for review.\nIf you continue saving this map, the submitted version will not be reviewed.\n\nAre you sure you want to continue?`,
         ],
         [LangTextType.A0246]: [
             `请填写自动保存的时间间隔，单位为秒。\n若当前地图已被提审，则自动保存功能将失效。\n您可以不填写时间间隔，以此禁用自动保存功能。`,
@@ -1045,7 +1045,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0249]: [
             `您将离开战局模式并进入回放（您可以随时返回）。\n确定要继续吗？`,
-            `You have to leave the war scene (you can enter it again later).\nAre you sure to continue?`,
+            `You have to leave the war scene (you can enter it again later).\nAre you sure you want to continue?`,
         ],
         [LangTextType.A0250]: [
             `指定坐标不合法`,
@@ -1077,7 +1077,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0257]: [
             `您确定要切换该部队的A.I.模式吗？`,
-            `Are you sure to switch the unit's A.I. mode?`,
+            `Are you sure you want to switch the unit's A.I. mode?`,
         ],
         [LangTextType.A0258]: [
             `此动作指定的对话背景不合法`,
@@ -1085,11 +1085,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0259]: [
             `已绘制的道路和桥梁的造型将被覆盖，但覆盖结果可能不会完全符合您的预期。\n建议您先保存地图再进行此操作。\n确定要调整吗？`,
-            `The drawn roads and bridges will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure to adjust them?`
+            `The drawn roads and bridges will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure you want to adjust them?`
         ],
         [LangTextType.A0260]: [
             `已绘制的等离子、超级等离子的造型将被覆盖，但覆盖结果可能不会完全符合您的预期。\n建议您先保存地图再进行此操作。\n确定要调整吗？`,
-            `The drawn (super) plasmas will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure to adjust them?`
+            `The drawn (super) plasmas will be overwritten, however the results may not meet your expectations completely.\nIt's recommended that you save this map before continuing.\nAre you sure you want to adjust them?`
         ],
         [LangTextType.A0261]: [
             `地图文件体积太大，无法保存`,
@@ -1146,9 +1146,9 @@ namespace TwnsLangCommonText {
             [
                 `Alive: players can do anything as usual. It's possible to make a (Being) Defeated player Alive again.`,
                 ``,
-                `Being Defeated: players can not do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
+                `Being Defeated: players cannot do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
                 ``,
-                `Defeated: players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
+                `Defeated: players cannot do anything. If his/her previous state is Alive, his/her troops will remain.`,
             ].join(`\n`),
         ],
         [LangTextType.A0273]: [
@@ -1241,7 +1241,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0286]: [
             `此操作无法撤销。您确定要继续吗？`,
-            `This operation can not be undone. Are you sure to continue?`,
+            `This operation cannot be undone. Are you sure you want to continue?`,
         ],
         [LangTextType.A0287]: [
             `已成功修改规则可用性`,
@@ -1272,7 +1272,7 @@ namespace TwnsLangCommonText {
                 `2. 多人模式相关数据不会变化，回放也会保留。`,
             ].join(`\n`),
             [
-                `Are you sure to delete this rule?`,
+                `Are you sure you want to delete this rule?`,
                 ``,
                 `Note:`,
                 `1. If this rule has been used in the war room mode, the relevant ranking, score and replay will be cleared.`,
@@ -1300,7 +1300,7 @@ namespace TwnsLangCommonText {
             [
                 `This map contains rules that can be used for multiplayer ranked matches. Please check the settings carefully to ensure that there are no quality problems.`,
                 ``,
-                `Are you sure to accept this map?`,
+                `Are you sure you want to accept this map?`,
             ].join(`\n`),
             ``,
         ],
@@ -2126,11 +2126,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0198]: [
             `明战排位积分`,
-            `Std Rank Score`,
+            `Std Rating`,
         ],
         [LangTextType.B0199]: [
             `雾战排位积分`,
-            `FoW Rank Score`,
+            `FoW Rating`,
         ],
         [LangTextType.B0200]: [
             `多人自由对战`,
@@ -2702,7 +2702,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0346]: [
             `移动后攻击`,
-            `Run & hit`,
+            `Move & Atk`,
         ],
         [LangTextType.B0347]: [
             `建筑材料`,
@@ -2970,7 +2970,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0413]: [
             `设定战局数量`,
-            `Set Games Number`,
+            `Set Number of Games`,
         ],
         [LangTextType.B0414]: [
             `房间状态`,
@@ -5269,7 +5269,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0029]: [
             `您确定要踢掉玩家"%s"吗？`,
-            `Are you sure to kick off the player '%s'?`,
+            `Are you sure you want to kick off the player '%s'?`,
         ],
         [LangTextType.F0030]: [
             `%s (p%d) 回合结束。`,
@@ -5285,7 +5285,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0033]: [
             `启用SetPath模式后，在指定部队移动路线时，您需要连续点击两次目标格子才能呼出操作菜单。这会增加操作量，但同时也便于指定移动路线，这在雾战中尤其有用。\n您确定要启用吗？\n（当前状态：%s）`,
-            `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure to enable it? \n(Current status: %s)`,
+            `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure you want to enable it? \n(Current status: %s)`,
         ],
         [LangTextType.F0034]: [
             `最多输入%d个字符，请检查`,
@@ -5393,7 +5393,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0060]: [
             `当前正在使用条件节点%s。确定要用新的空节点代替它吗？`,
-            `The condition node %s is being used. Are you sure to replace it by a new empty one?`,
+            `The condition node %s is being used. Are you sure you want to replace it by a new empty one?`,
         ],
         [LangTextType.F0061]: [
             `此条件节点中包含了重复的节点%s。请删除重复的节点。`,
@@ -5441,7 +5441,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0072]: [
             `您确定要修改 P%d 的所属队伍吗？`,
-            `Are you sure to modify the team of P%d?`,
+            `Are you sure you want to modify the team of P%d?`,
         ],
         [LangTextType.F0073]: [
             `当前天气：%s（默认：%s）。`,
@@ -5481,11 +5481,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.F0082]: [
             `您将同意%d人的观战请求，同时拒绝%d人的观战请求。\n您确定要继续吗？`,
-            `You are going to accept %d players' requests while declining %d players' ones.\nAre you sure to continue?`,
+            `You are going to accept %d players' requests while declining %d players' ones.\nAre you sure you want to continue?`,
         ],
         [LangTextType.F0083]: [
             `您将向%d个玩家发起观战请求。\n您确定要继续吗？`,
-            `You are going to send requests to %d players.\nAre you sure to continue?`,
+            `You are going to send requests to %d players.\nAre you sure you want to continue?`,
         ],
         [LangTextType.F0084]: [
             `%s 已成功创建`,

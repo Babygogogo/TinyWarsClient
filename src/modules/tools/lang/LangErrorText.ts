@@ -114,7 +114,7 @@ namespace TwnsLangErrorText {
         ],
         [ServerErrorCode.ExeChatAddMessage_ExeWithSocket_0005]: [
             `您说话太频繁了，请稍后再试`,
-            `You talk too often. Please retry later.`,
+            `Please wait a moment before sending another message.`,
         ],
         [ServerErrorCode.MsgMapGetRawData0001]: [
             "地图不存在，获取raw data失败。",
@@ -192,6 +192,26 @@ namespace TwnsLangErrorText {
             `各个玩家使用的势力颜色必须互不相同`,
             `Players can't use the same color.`,
         ],
+        [ServerErrorCode.ActorMcrRoom_McrStartCreateWar_0006]: [
+            `尚有玩家未准备就绪`,
+            `Some players are not ready.`,
+        ],
+        [ServerErrorCode.ActorMcrRoom_McrStartExitRoom_0004]: [
+            `您是房间里的最后一位玩家，不能直接退出房间`,
+            `You are the last player in the room. You can't exit the room directly.`,
+        ],
+        [ServerErrorCode.ActorMcrRoomCreator_McrStartCheckAndCreateRoom_0000]: [
+            `您已加入了许多未开战的房间，请退出部分房间后重试`,
+            `You have joined too many rooms, please exit some of them.`,
+        ],
+        [ServerErrorCode.ActorMcrRoomManager_McrStartSendJoinedRoomIdArray_0000]: [
+            `您的请求过于频繁，请稍后重试`,
+            `Your query requests are too frequent. Please retry later.`,
+        ],
+        [ServerErrorCode.ActorMcrRoomManager_McrStartSendJoinableRoomIdArray_0000]: [
+            `您的请求过于频繁，请稍后重试`,
+            `Your query requests are too frequent. Please retry later.`,
+        ],
         [ServerErrorCode.ActorReplayManager_ReplayManagerSendFilteredReplayIdArray_0000]: [
             `您的请求过于频繁，请稍后重试`,
             `Your query requests are too frequent. Please retry later.`,
@@ -235,7 +255,7 @@ namespace TwnsLangErrorText {
         ],
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_02]: [
             `势力的队伍设置不合法`,
-            `The team settings is invalid.`,
+            `The team settings are invalid.`,
         ],
         [ClientErrorCode.WarRuleHelpers_GetErrorCodeForRuleForPlayers_12]: [
             `不能禁用“无CO”`,

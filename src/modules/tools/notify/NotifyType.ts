@@ -204,6 +204,7 @@ namespace TwnsNotifyType {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgMcrCreateRoom,
+        MsgMcrCreateRoomFailed,
         MsgMcrGetRoomStaticInfo,
         MsgMcrGetRoomPlayerInfo,
         MsgMcrGetJoinedRoomIdArray,

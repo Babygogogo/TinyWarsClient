@@ -160,7 +160,13 @@ namespace McrModel {
             configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
             playersCountUnneutral,
             roomOwnerPlayerIndex    : Helpers.getExisted(roomPlayerInfo.ownerPlayerIndex),
-            callbackOnExitRoom      : () => McrProxy.reqMcrExitRoom(roomId),
+            callbackOnExitRoom      : () => {
+                if ((roomPlayerInfo.playerDataList?.filter(v => v.userId != null).length ?? 0) > 1) {
+                    McrProxy.reqMcrExitRoom(roomId);
+                } else {
+                    McrProxy.reqMcrDeleteRoom(roomId);
+                }
+            },
             callbackOnDeletePlayer  : (playerIndex) => McrProxy.reqMcrDeletePlayer(roomId, playerIndex),
             playerInfoArray,
         };
