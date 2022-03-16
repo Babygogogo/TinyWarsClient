@@ -2842,7 +2842,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0381]: [
             `暂无消息`,
-            `No Message`,
+            `No Messages`,
         ],
         [LangTextType.B0382]: [
             `发送`,
@@ -4106,7 +4106,7 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.B0697]: [
             `可移动后攻击`,
-            `Run & Hit`,
+            `Move & Atk`,
         ],
         [LangTextType.B0698]: [
             `搭载部队`,

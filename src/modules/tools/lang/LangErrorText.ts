@@ -212,6 +212,10 @@ namespace TwnsLangErrorText {
             `您的请求过于频繁，请稍后重试`,
             `Your query requests are too frequent. Please retry later.`,
         ],
+        [ServerErrorCode.ActorCcrRoomCreator_CcrStartCheckAndCreateRoom_0000]: [
+            `您已加入了许多未开战的房间，请退出部分房间后重试`,
+            `You have joined too many rooms, please exit some of them.`,
+        ],
         [ServerErrorCode.ActorReplayManager_ReplayManagerSendFilteredReplayIdArray_0000]: [
             `您的请求过于频繁，请稍后重试`,
             `Your query requests are too frequent. Please retry later.`,
