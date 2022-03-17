@@ -63,11 +63,11 @@ namespace TwnsLangCommonText {
         ],
         [LangTextType.A0013]: [
             "发生网络错误，请重新登陆。",
-            "Network went wrong. Please re-login.",
+            "Connection failed. Please re-login.",
         ],
         [LangTextType.A0014]: [
             "发生网络错误，请稍后再试。亦可尝试刷新浏览器。",
-            "Network went wrong. Please try again later or refresh the browser.",
+            "Connection failed. Please try again later or refresh the browser.",
         ],
         [LangTextType.A0015]: [
             "已成功创建房间，请等待其他玩家加入",

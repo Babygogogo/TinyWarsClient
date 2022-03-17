@@ -153,7 +153,7 @@ namespace MfrProxy {
         }
     }
 
-    export function reqMfrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<ProtoTypes.MultiFreeRoom.IRoomFilter>): void {
+    export function reqMfrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<ProtoTypes.MultiFreeRoom.IMfrRoomFilter>): void {
         NetManager.send({
             MsgMfrGetJoinableRoomIdArray: { c: {
                 roomFilter,

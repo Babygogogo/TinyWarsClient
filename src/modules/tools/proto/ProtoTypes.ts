@@ -22521,133 +22521,133 @@ export declare class MultiCustomRoom implements IMultiCustomRoom {
 
 export declare namespace MultiCustomRoom {
 
-    /** Properties of a RoomFilter. */
-    interface IRoomFilter {
+    /** Properties of a McrRoomFilter. */
+    interface IMcrRoomFilter {
 
-        /** RoomFilter roomId */
+        /** McrRoomFilter roomId */
         roomId?: (number|null);
 
-        /** RoomFilter mapName */
+        /** McrRoomFilter mapName */
         mapName?: (string|null);
 
-        /** RoomFilter userNickname */
+        /** McrRoomFilter userNickname */
         userNickname?: (string|null);
 
-        /** RoomFilter coName */
+        /** McrRoomFilter coName */
         coName?: (string|null);
 
-        /** RoomFilter hasFog */
+        /** McrRoomFilter hasFog */
         hasFog?: (boolean|null);
 
-        /** RoomFilter userIdInRoom */
+        /** McrRoomFilter userIdInRoom */
         userIdInRoom?: (number|null);
 
-        /** RoomFilter userIdNotInRoom */
+        /** McrRoomFilter userIdNotInRoom */
         userIdNotInRoom?: (number|null);
 
-        /** RoomFilter isJoinable */
+        /** McrRoomFilter isJoinable */
         isJoinable?: (boolean|null);
     }
 
-    /** Represents a RoomFilter. */
-    class RoomFilter implements IRoomFilter {
+    /** Represents a McrRoomFilter. */
+    class McrRoomFilter implements IMcrRoomFilter {
 
         /**
-         * Constructs a new RoomFilter.
+         * Constructs a new McrRoomFilter.
          * @param [properties] Properties to set
          */
-        constructor(properties?: MultiCustomRoom.IRoomFilter);
+        constructor(properties?: MultiCustomRoom.IMcrRoomFilter);
 
-        /** RoomFilter roomId. */
+        /** McrRoomFilter roomId. */
         public roomId: number;
 
-        /** RoomFilter mapName. */
+        /** McrRoomFilter mapName. */
         public mapName: string;
 
-        /** RoomFilter userNickname. */
+        /** McrRoomFilter userNickname. */
         public userNickname: string;
 
-        /** RoomFilter coName. */
+        /** McrRoomFilter coName. */
         public coName: string;
 
-        /** RoomFilter hasFog. */
+        /** McrRoomFilter hasFog. */
         public hasFog: boolean;
 
-        /** RoomFilter userIdInRoom. */
+        /** McrRoomFilter userIdInRoom. */
         public userIdInRoom: number;
 
-        /** RoomFilter userIdNotInRoom. */
+        /** McrRoomFilter userIdNotInRoom. */
         public userIdNotInRoom: number;
 
-        /** RoomFilter isJoinable. */
+        /** McrRoomFilter isJoinable. */
         public isJoinable: boolean;
 
         /**
-         * Creates a new RoomFilter instance using the specified properties.
+         * Creates a new McrRoomFilter instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns RoomFilter instance
+         * @returns McrRoomFilter instance
          */
-        public static create(properties?: MultiCustomRoom.IRoomFilter): MultiCustomRoom.RoomFilter;
+        public static create(properties?: MultiCustomRoom.IMcrRoomFilter): MultiCustomRoom.McrRoomFilter;
 
         /**
-         * Encodes the specified RoomFilter message. Does not implicitly {@link MultiCustomRoom.RoomFilter.verify|verify} messages.
-         * @param message RoomFilter message or plain object to encode
+         * Encodes the specified McrRoomFilter message. Does not implicitly {@link MultiCustomRoom.McrRoomFilter.verify|verify} messages.
+         * @param message McrRoomFilter message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: MultiCustomRoom.IRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: MultiCustomRoom.IMcrRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified RoomFilter message, length delimited. Does not implicitly {@link MultiCustomRoom.RoomFilter.verify|verify} messages.
-         * @param message RoomFilter message or plain object to encode
+         * Encodes the specified McrRoomFilter message, length delimited. Does not implicitly {@link MultiCustomRoom.McrRoomFilter.verify|verify} messages.
+         * @param message McrRoomFilter message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: MultiCustomRoom.IRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: MultiCustomRoom.IMcrRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a RoomFilter message from the specified reader or buffer.
+         * Decodes a McrRoomFilter message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns RoomFilter
+         * @returns McrRoomFilter
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiCustomRoom.RoomFilter;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiCustomRoom.McrRoomFilter;
 
         /**
-         * Decodes a RoomFilter message from the specified reader or buffer, length delimited.
+         * Decodes a McrRoomFilter message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns RoomFilter
+         * @returns McrRoomFilter
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiCustomRoom.RoomFilter;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiCustomRoom.McrRoomFilter;
 
         /**
-         * Verifies a RoomFilter message.
+         * Verifies a McrRoomFilter message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a RoomFilter message from a plain object. Also converts values to their respective internal types.
+         * Creates a McrRoomFilter message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns RoomFilter
+         * @returns McrRoomFilter
          */
-        public static fromObject(object: { [k: string]: any }): MultiCustomRoom.RoomFilter;
+        public static fromObject(object: { [k: string]: any }): MultiCustomRoom.McrRoomFilter;
 
         /**
-         * Creates a plain object from a RoomFilter message. Also converts values to other types if specified.
-         * @param message RoomFilter
+         * Creates a plain object from a McrRoomFilter message. Also converts values to other types if specified.
+         * @param message McrRoomFilter
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: MultiCustomRoom.RoomFilter, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: MultiCustomRoom.McrRoomFilter, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this RoomFilter to JSON.
+         * Converts this McrRoomFilter to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -23082,109 +23082,127 @@ export declare class MultiFreeRoom implements IMultiFreeRoom {
 
 export declare namespace MultiFreeRoom {
 
-    /** Properties of a RoomFilter. */
-    interface IRoomFilter {
+    /** Properties of a MfrRoomFilter. */
+    interface IMfrRoomFilter {
 
-        /** RoomFilter roomId */
+        /** MfrRoomFilter roomId */
         roomId?: (number|null);
 
-        /** RoomFilter userNickname */
+        /** MfrRoomFilter userNickname */
         userNickname?: (string|null);
 
-        /** RoomFilter coName */
+        /** MfrRoomFilter coName */
         coName?: (string|null);
 
-        /** RoomFilter hasFog */
+        /** MfrRoomFilter hasFog */
         hasFog?: (boolean|null);
+
+        /** MfrRoomFilter userIdInRoom */
+        userIdInRoom?: (number|null);
+
+        /** MfrRoomFilter userIdNotInRoom */
+        userIdNotInRoom?: (number|null);
+
+        /** MfrRoomFilter isJoinable */
+        isJoinable?: (boolean|null);
     }
 
-    /** Represents a RoomFilter. */
-    class RoomFilter implements IRoomFilter {
+    /** Represents a MfrRoomFilter. */
+    class MfrRoomFilter implements IMfrRoomFilter {
 
         /**
-         * Constructs a new RoomFilter.
+         * Constructs a new MfrRoomFilter.
          * @param [properties] Properties to set
          */
-        constructor(properties?: MultiFreeRoom.IRoomFilter);
+        constructor(properties?: MultiFreeRoom.IMfrRoomFilter);
 
-        /** RoomFilter roomId. */
+        /** MfrRoomFilter roomId. */
         public roomId: number;
 
-        /** RoomFilter userNickname. */
+        /** MfrRoomFilter userNickname. */
         public userNickname: string;
 
-        /** RoomFilter coName. */
+        /** MfrRoomFilter coName. */
         public coName: string;
 
-        /** RoomFilter hasFog. */
+        /** MfrRoomFilter hasFog. */
         public hasFog: boolean;
 
+        /** MfrRoomFilter userIdInRoom. */
+        public userIdInRoom: number;
+
+        /** MfrRoomFilter userIdNotInRoom. */
+        public userIdNotInRoom: number;
+
+        /** MfrRoomFilter isJoinable. */
+        public isJoinable: boolean;
+
         /**
-         * Creates a new RoomFilter instance using the specified properties.
+         * Creates a new MfrRoomFilter instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns RoomFilter instance
+         * @returns MfrRoomFilter instance
          */
-        public static create(properties?: MultiFreeRoom.IRoomFilter): MultiFreeRoom.RoomFilter;
+        public static create(properties?: MultiFreeRoom.IMfrRoomFilter): MultiFreeRoom.MfrRoomFilter;
 
         /**
-         * Encodes the specified RoomFilter message. Does not implicitly {@link MultiFreeRoom.RoomFilter.verify|verify} messages.
-         * @param message RoomFilter message or plain object to encode
+         * Encodes the specified MfrRoomFilter message. Does not implicitly {@link MultiFreeRoom.MfrRoomFilter.verify|verify} messages.
+         * @param message MfrRoomFilter message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: MultiFreeRoom.IRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: MultiFreeRoom.IMfrRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified RoomFilter message, length delimited. Does not implicitly {@link MultiFreeRoom.RoomFilter.verify|verify} messages.
-         * @param message RoomFilter message or plain object to encode
+         * Encodes the specified MfrRoomFilter message, length delimited. Does not implicitly {@link MultiFreeRoom.MfrRoomFilter.verify|verify} messages.
+         * @param message MfrRoomFilter message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: MultiFreeRoom.IRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: MultiFreeRoom.IMfrRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a RoomFilter message from the specified reader or buffer.
+         * Decodes a MfrRoomFilter message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns RoomFilter
+         * @returns MfrRoomFilter
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiFreeRoom.RoomFilter;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiFreeRoom.MfrRoomFilter;
 
         /**
-         * Decodes a RoomFilter message from the specified reader or buffer, length delimited.
+         * Decodes a MfrRoomFilter message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns RoomFilter
+         * @returns MfrRoomFilter
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiFreeRoom.RoomFilter;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiFreeRoom.MfrRoomFilter;
 
         /**
-         * Verifies a RoomFilter message.
+         * Verifies a MfrRoomFilter message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a RoomFilter message from a plain object. Also converts values to their respective internal types.
+         * Creates a MfrRoomFilter message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns RoomFilter
+         * @returns MfrRoomFilter
          */
-        public static fromObject(object: { [k: string]: any }): MultiFreeRoom.RoomFilter;
+        public static fromObject(object: { [k: string]: any }): MultiFreeRoom.MfrRoomFilter;
 
         /**
-         * Creates a plain object from a RoomFilter message. Also converts values to other types if specified.
-         * @param message RoomFilter
+         * Creates a plain object from a MfrRoomFilter message. Also converts values to other types if specified.
+         * @param message MfrRoomFilter
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: MultiFreeRoom.RoomFilter, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: MultiFreeRoom.MfrRoomFilter, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this RoomFilter to JSON.
+         * Converts this MfrRoomFilter to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -23607,133 +23625,133 @@ export declare class CoopCustomRoom implements ICoopCustomRoom {
 
 export declare namespace CoopCustomRoom {
 
-    /** Properties of a RoomFilter. */
-    interface IRoomFilter {
+    /** Properties of a CcrRoomFilter. */
+    interface ICcrRoomFilter {
 
-        /** RoomFilter roomId */
+        /** CcrRoomFilter roomId */
         roomId?: (number|null);
 
-        /** RoomFilter mapName */
+        /** CcrRoomFilter mapName */
         mapName?: (string|null);
 
-        /** RoomFilter userNickname */
+        /** CcrRoomFilter userNickname */
         userNickname?: (string|null);
 
-        /** RoomFilter coName */
+        /** CcrRoomFilter coName */
         coName?: (string|null);
 
-        /** RoomFilter hasFog */
+        /** CcrRoomFilter hasFog */
         hasFog?: (boolean|null);
 
-        /** RoomFilter userIdInRoom */
+        /** CcrRoomFilter userIdInRoom */
         userIdInRoom?: (number|null);
 
-        /** RoomFilter userIdNotInRoom */
+        /** CcrRoomFilter userIdNotInRoom */
         userIdNotInRoom?: (number|null);
 
-        /** RoomFilter isJoinable */
+        /** CcrRoomFilter isJoinable */
         isJoinable?: (boolean|null);
     }
 
-    /** Represents a RoomFilter. */
-    class RoomFilter implements IRoomFilter {
+    /** Represents a CcrRoomFilter. */
+    class CcrRoomFilter implements ICcrRoomFilter {
 
         /**
-         * Constructs a new RoomFilter.
+         * Constructs a new CcrRoomFilter.
          * @param [properties] Properties to set
          */
-        constructor(properties?: CoopCustomRoom.IRoomFilter);
+        constructor(properties?: CoopCustomRoom.ICcrRoomFilter);
 
-        /** RoomFilter roomId. */
+        /** CcrRoomFilter roomId. */
         public roomId: number;
 
-        /** RoomFilter mapName. */
+        /** CcrRoomFilter mapName. */
         public mapName: string;
 
-        /** RoomFilter userNickname. */
+        /** CcrRoomFilter userNickname. */
         public userNickname: string;
 
-        /** RoomFilter coName. */
+        /** CcrRoomFilter coName. */
         public coName: string;
 
-        /** RoomFilter hasFog. */
+        /** CcrRoomFilter hasFog. */
         public hasFog: boolean;
 
-        /** RoomFilter userIdInRoom. */
+        /** CcrRoomFilter userIdInRoom. */
         public userIdInRoom: number;
 
-        /** RoomFilter userIdNotInRoom. */
+        /** CcrRoomFilter userIdNotInRoom. */
         public userIdNotInRoom: number;
 
-        /** RoomFilter isJoinable. */
+        /** CcrRoomFilter isJoinable. */
         public isJoinable: boolean;
 
         /**
-         * Creates a new RoomFilter instance using the specified properties.
+         * Creates a new CcrRoomFilter instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns RoomFilter instance
+         * @returns CcrRoomFilter instance
          */
-        public static create(properties?: CoopCustomRoom.IRoomFilter): CoopCustomRoom.RoomFilter;
+        public static create(properties?: CoopCustomRoom.ICcrRoomFilter): CoopCustomRoom.CcrRoomFilter;
 
         /**
-         * Encodes the specified RoomFilter message. Does not implicitly {@link CoopCustomRoom.RoomFilter.verify|verify} messages.
-         * @param message RoomFilter message or plain object to encode
+         * Encodes the specified CcrRoomFilter message. Does not implicitly {@link CoopCustomRoom.CcrRoomFilter.verify|verify} messages.
+         * @param message CcrRoomFilter message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: CoopCustomRoom.IRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: CoopCustomRoom.ICcrRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified RoomFilter message, length delimited. Does not implicitly {@link CoopCustomRoom.RoomFilter.verify|verify} messages.
-         * @param message RoomFilter message or plain object to encode
+         * Encodes the specified CcrRoomFilter message, length delimited. Does not implicitly {@link CoopCustomRoom.CcrRoomFilter.verify|verify} messages.
+         * @param message CcrRoomFilter message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: CoopCustomRoom.IRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: CoopCustomRoom.ICcrRoomFilter, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a RoomFilter message from the specified reader or buffer.
+         * Decodes a CcrRoomFilter message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns RoomFilter
+         * @returns CcrRoomFilter
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CoopCustomRoom.RoomFilter;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CoopCustomRoom.CcrRoomFilter;
 
         /**
-         * Decodes a RoomFilter message from the specified reader or buffer, length delimited.
+         * Decodes a CcrRoomFilter message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns RoomFilter
+         * @returns CcrRoomFilter
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CoopCustomRoom.RoomFilter;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CoopCustomRoom.CcrRoomFilter;
 
         /**
-         * Verifies a RoomFilter message.
+         * Verifies a CcrRoomFilter message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a RoomFilter message from a plain object. Also converts values to their respective internal types.
+         * Creates a CcrRoomFilter message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns RoomFilter
+         * @returns CcrRoomFilter
          */
-        public static fromObject(object: { [k: string]: any }): CoopCustomRoom.RoomFilter;
+        public static fromObject(object: { [k: string]: any }): CoopCustomRoom.CcrRoomFilter;
 
         /**
-         * Creates a plain object from a RoomFilter message. Also converts values to other types if specified.
-         * @param message RoomFilter
+         * Creates a plain object from a CcrRoomFilter message. Also converts values to other types if specified.
+         * @param message CcrRoomFilter
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: CoopCustomRoom.RoomFilter, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: CoopCustomRoom.CcrRoomFilter, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this RoomFilter to JSON.
+         * Converts this CcrRoomFilter to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -45855,7 +45873,7 @@ export declare namespace NetMessage {
         interface IC {
 
             /** C roomFilter */
-            roomFilter?: (MultiCustomRoom.IRoomFilter|null);
+            roomFilter?: (MultiCustomRoom.IMcrRoomFilter|null);
         }
 
         /** Represents a C. */
@@ -45868,7 +45886,7 @@ export declare namespace NetMessage {
             constructor(properties?: NetMessage.MsgMcrGetJoinableRoomIdArray.IC);
 
             /** C roomFilter. */
-            public roomFilter?: (MultiCustomRoom.IRoomFilter|null);
+            public roomFilter?: (MultiCustomRoom.IMcrRoomFilter|null);
 
             /**
              * Creates a new C instance using the specified properties.
@@ -60021,7 +60039,7 @@ export declare namespace NetMessage {
         interface IC {
 
             /** C roomFilter */
-            roomFilter?: (MultiFreeRoom.IRoomFilter|null);
+            roomFilter?: (MultiFreeRoom.IMfrRoomFilter|null);
         }
 
         /** Represents a C. */
@@ -60034,7 +60052,7 @@ export declare namespace NetMessage {
             constructor(properties?: NetMessage.MsgMfrGetJoinableRoomIdArray.IC);
 
             /** C roomFilter. */
-            public roomFilter?: (MultiFreeRoom.IRoomFilter|null);
+            public roomFilter?: (MultiFreeRoom.IMfrRoomFilter|null);
 
             /**
              * Creates a new C instance using the specified properties.
@@ -64233,7 +64251,7 @@ export declare namespace NetMessage {
         interface IC {
 
             /** C roomFilter */
-            roomFilter?: (CoopCustomRoom.IRoomFilter|null);
+            roomFilter?: (CoopCustomRoom.ICcrRoomFilter|null);
         }
 
         /** Represents a C. */
@@ -64246,7 +64264,7 @@ export declare namespace NetMessage {
             constructor(properties?: NetMessage.MsgCcrGetJoinableRoomIdArray.IC);
 
             /** C roomFilter. */
-            public roomFilter?: (CoopCustomRoom.IRoomFilter|null);
+            public roomFilter?: (CoopCustomRoom.ICcrRoomFilter|null);
 
             /**
              * Creates a new C instance using the specified properties.

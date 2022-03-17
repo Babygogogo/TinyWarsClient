@@ -153,7 +153,7 @@ namespace CcrProxy {
         }
     }
 
-    export function reqCcrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<ProtoTypes.CoopCustomRoom.IRoomFilter>): void {
+    export function reqCcrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<ProtoTypes.CoopCustomRoom.ICcrRoomFilter>): void {
         NetManager.send({
             MsgCcrGetJoinableRoomIdArray: { c: {
                 roomFilter,
