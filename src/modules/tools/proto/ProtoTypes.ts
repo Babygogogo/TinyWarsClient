@@ -24498,6 +24498,150 @@ export declare namespace MultiPlayerWar {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a MpwFilter. */
+    interface IMpwFilter {
+
+        /** MpwFilter warId */
+        warId?: (number|null);
+
+        /** MpwFilter mapName */
+        mapName?: (string|null);
+
+        /** MpwFilter userNickname */
+        userNickname?: (string|null);
+
+        /** MpwFilter coName */
+        coName?: (string|null);
+
+        /** MpwFilter userIdInWar */
+        userIdInWar?: (number|null);
+
+        /** MpwFilter watchBeRequestedUserId */
+        watchBeRequestedUserId?: (number|null);
+
+        /** MpwFilter watchBeWatchedUserId */
+        watchBeWatchedUserId?: (number|null);
+
+        /** MpwFilter watchOngoingSrcUserId */
+        watchOngoingSrcUserId?: (number|null);
+
+        /** MpwFilter watchRequestableSrcUserId */
+        watchRequestableSrcUserId?: (number|null);
+
+        /** MpwFilter playersCountUnneutral */
+        playersCountUnneutral?: (number|null);
+    }
+
+    /** Represents a MpwFilter. */
+    class MpwFilter implements IMpwFilter {
+
+        /**
+         * Constructs a new MpwFilter.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: MultiPlayerWar.IMpwFilter);
+
+        /** MpwFilter warId. */
+        public warId: number;
+
+        /** MpwFilter mapName. */
+        public mapName: string;
+
+        /** MpwFilter userNickname. */
+        public userNickname: string;
+
+        /** MpwFilter coName. */
+        public coName: string;
+
+        /** MpwFilter userIdInWar. */
+        public userIdInWar: number;
+
+        /** MpwFilter watchBeRequestedUserId. */
+        public watchBeRequestedUserId: number;
+
+        /** MpwFilter watchBeWatchedUserId. */
+        public watchBeWatchedUserId: number;
+
+        /** MpwFilter watchOngoingSrcUserId. */
+        public watchOngoingSrcUserId: number;
+
+        /** MpwFilter watchRequestableSrcUserId. */
+        public watchRequestableSrcUserId: number;
+
+        /** MpwFilter playersCountUnneutral. */
+        public playersCountUnneutral: number;
+
+        /**
+         * Creates a new MpwFilter instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MpwFilter instance
+         */
+        public static create(properties?: MultiPlayerWar.IMpwFilter): MultiPlayerWar.MpwFilter;
+
+        /**
+         * Encodes the specified MpwFilter message. Does not implicitly {@link MultiPlayerWar.MpwFilter.verify|verify} messages.
+         * @param message MpwFilter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: MultiPlayerWar.IMpwFilter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MpwFilter message, length delimited. Does not implicitly {@link MultiPlayerWar.MpwFilter.verify|verify} messages.
+         * @param message MpwFilter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: MultiPlayerWar.IMpwFilter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MpwFilter message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MpwFilter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): MultiPlayerWar.MpwFilter;
+
+        /**
+         * Decodes a MpwFilter message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MpwFilter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): MultiPlayerWar.MpwFilter;
+
+        /**
+         * Verifies a MpwFilter message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MpwFilter message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MpwFilter
+         */
+        public static fromObject(object: { [k: string]: any }): MultiPlayerWar.MpwFilter;
+
+        /**
+         * Creates a plain object from a MpwFilter message. Also converts values to other types if specified.
+         * @param message MpwFilter
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: MultiPlayerWar.MpwFilter, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MpwFilter to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a MpwWarSettings. */
     interface IMpwWarSettings {
 
@@ -48065,6 +48209,9 @@ export declare namespace NetMessage {
         /** Properties of a S. */
         interface IS {
 
+            /** S errorCode */
+            errorCode?: (number|null);
+
             /** S warIdArray */
             warIdArray?: (number[]|null);
         }
@@ -48077,6 +48224,9 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              */
             constructor(properties?: NetMessage.MsgMpwCommonGetMyWarIdArray.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
 
             /** S warIdArray. */
             public warIdArray: number[];
