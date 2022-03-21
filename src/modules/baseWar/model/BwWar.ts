@@ -122,6 +122,7 @@ namespace TwnsBwWar {
             });
 
             this._setWarId(data.warId ?? null);
+            this.setIsEnded(!!data.isEnded);
         }
 
         protected _initView(): void {
@@ -145,6 +146,7 @@ namespace TwnsBwWar {
                 settingsForSfw              : null,
 
                 warId                       : this.getWarId(),
+                isEnded                     : false,
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
                 executedActions             : [],
@@ -167,6 +169,7 @@ namespace TwnsBwWar {
                 settingsForSfw              : null,
 
                 warId                       : this.getWarId(),
+                isEnded                     : false,
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
                 executedActions             : [],

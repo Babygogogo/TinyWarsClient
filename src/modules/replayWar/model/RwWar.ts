@@ -214,6 +214,7 @@ namespace TwnsRwWar {
                     settingsForScw              : null,
 
                     warId                       : null,
+                    isEnded                     : this.getIsEnded(),
                     seedRandomInitialState      : Helpers.getExisted(randomNumberManager.getSeedRandomInitialState()),
                     seedRandomCurrentState      : randomNumberManager.getSeedRandomCurrentState(),
                     executedActions             : null,

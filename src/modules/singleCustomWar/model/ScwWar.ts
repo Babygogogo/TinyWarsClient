@@ -28,6 +28,7 @@ namespace TwnsScwWar {
                 settingsForScw              : this._getSettingsForScw(),
 
                 warId                       : this.getWarId(),
+                isEnded                     : this.getIsEnded(),
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
                 executedActions             : [],

@@ -31,6 +31,7 @@ namespace TwnsSrwWar {
                 settingsForSrw              : this._getSettingsForSrw(),
 
                 warId                       : this.getWarId(),
+                isEnded                     : this.getIsEnded(),
                 seedRandomInitialState      : Helpers.getExisted(randomNumberManager.getSeedRandomInitialState()),
                 seedRandomCurrentState      : randomNumberManager.getSeedRandomCurrentState(),
                 executedActions             : this.getExecutedActionManager().getAllExecutedActions(),
@@ -50,6 +51,7 @@ namespace TwnsSrwWar {
                 settingsForSrw,
 
                 warId                       : null,
+                isEnded                     : null,
                 seedRandomInitialState      : Helpers.getExisted(this.getRandomNumberManager().getSeedRandomInitialState()),
                 seedRandomCurrentState      : null,
                 executedActions             : this.getExecutedActionManager().getAllExecutedActions(),

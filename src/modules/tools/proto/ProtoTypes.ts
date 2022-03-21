@@ -13898,6 +13898,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar halfwayReplayActionArray */
         halfwayReplayActionArray?: (WarSerialization.IHalfwayReplayAction[]|null);
+
+        /** SerialWar isEnded */
+        isEnded?: (boolean|null);
     }
 
     /** Represents a SerialWar. */
@@ -13965,6 +13968,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar halfwayReplayActionArray. */
         public halfwayReplayActionArray: WarSerialization.IHalfwayReplayAction[];
+
+        /** SerialWar isEnded. */
+        public isEnded: boolean;
 
         /**
          * Creates a new SerialWar instance using the specified properties.

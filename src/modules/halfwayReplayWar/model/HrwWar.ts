@@ -234,6 +234,7 @@ namespace TwnsHrwWar {
                     settingsForScw              : null,
 
                     warId                       : null,
+                    isEnded                     : this.getIsEnded(),
                     seedRandomInitialState      : null,
                     seedRandomCurrentState      : null,
                     executedActions             : null,

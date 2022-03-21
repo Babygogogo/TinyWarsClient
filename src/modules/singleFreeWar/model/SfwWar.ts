@@ -29,6 +29,7 @@ namespace TwnsSfwWar {
                 settingsForSfw              : this._getSettingsForSfw(),
 
                 warId                       : this.getWarId(),
+                isEnded                     : this.getIsEnded(),
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
                 executedActions             : [],

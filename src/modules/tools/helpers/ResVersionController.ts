@@ -20,9 +20,9 @@ namespace TinyWarsNamespace.ResVersionController {
             request.onload = () => {
                 const hashDict = JSON.parse(request.responseText);
                 for (const rawName in hashDict) {
-                    const indexForDot           = rawName.lastIndexOf(`.`);
-                    const index                 = (indexForDot >= 0 ? indexForDot : rawName.lastIndexOf(`/`)) + 1;
-                    RES_NAME_DICT[rawName]    = `${rawName.slice(0, index)}${hashDict[rawName]}.${rawName.slice(index)}`;
+                    const indexForDot       = rawName.lastIndexOf(`.`);
+                    const index             = (indexForDot >= 0 ? indexForDot : rawName.lastIndexOf(`/`)) + 1;
+                    RES_NAME_DICT[rawName]  = `${rawName.slice(0, index)}${hashDict[rawName]}.${rawName.slice(index)}`;
                 }
                 RES.registerVersionController(new VersionController());
 

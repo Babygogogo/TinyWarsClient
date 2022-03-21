@@ -192,6 +192,7 @@ namespace TwnsTwWar {
             },
 
             warId                   : -1,
+            isEnded                 : false,
             executedActions         : [],
             remainingVotesForDraw   : null,
             playerManager           : dataForPlayerManager,

@@ -213,6 +213,7 @@ namespace MeUtility {
             settingsForMcw          : null,
             settingsForScw          : null,
             warId                   : null,
+            isEnded                 : false,
             seedRandomInitialState  : null,
             seedRandomCurrentState  : null,
             executedActions         : null,
