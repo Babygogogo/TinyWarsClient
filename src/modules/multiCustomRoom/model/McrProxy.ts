@@ -167,10 +167,16 @@ namespace McrProxy {
         });
     }
     function _onMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+        const data      = e.data as NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+        const roomId    = data.roomId;
         if (!data.errorCode) {
-            McrModel.setRoomPlayerInfo(Helpers.getExisted(data.roomId), data.roomPlayerInfo ?? null);
+            McrModel.setRoomPlayerInfo(Helpers.getExisted(roomId), data.roomPlayerInfo ?? null);
             Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfo, data);
+        } else {
+            if (roomId != null) {
+                McrModel.setRoomPlayerInfo(roomId, data.roomPlayerInfo ?? null);
+            }
+            Notify.dispatch(NotifyType.MsgMcrGetRoomPlayerInfoFailed, data);
         }
     }
 
