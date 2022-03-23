@@ -28,7 +28,7 @@ namespace WarRobot {
     import CoSkillType          = Types.CoSkillType;
     import BwUnit               = TwnsBwUnit.BwUnit;
     import BwTile               = TwnsBwTile.BwTile;
-    import BwWar                = TwnsBwWar.BwWar;
+    import BwWar                = Twns.BaseWar.BwWar;
 
     type AttackInfo = {
         baseDamage      : number | null | undefined;

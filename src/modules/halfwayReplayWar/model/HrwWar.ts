@@ -33,7 +33,7 @@ namespace TwnsHrwWar {
         nextActionId: number;
     };
 
-    export class HrwWar extends TwnsBwWar.BwWar {
+    export class HrwWar extends Twns.BaseWar.BwWar {
         private readonly _playerManager         = new TwnsHrwPlayerManager.HrwPlayerManager();
         private readonly _field                 = new TwnsHrwField.HrwField();
         private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
@@ -237,7 +237,7 @@ namespace TwnsHrwWar {
                     isEnded                     : this.getIsEnded(),
                     seedRandomInitialState      : null,
                     seedRandomCurrentState      : null,
-                    executedActions             : null,
+                    executedActionManager       : null,
                     remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                     weatherManager              : this.getWeatherManager().serialize(),
                     warEventManager             : Helpers.deepClone(this.getWarEventManager().serialize()),
@@ -381,7 +381,7 @@ namespace TwnsHrwWar {
                 playerIndex,
             }];
 
-            const allActionArray    = this.getExecutedActionManager().getAllExecutedActions();
+            const allActionArray    = this.getExecutedActionManager().getAllExecutedActionArray();
             const maxPlayerIndex    = this.getPlayerManager().getTotalPlayersCount(false);
             const actionsCount      = allActionArray.length;
             for (let i = 1; i < actionsCount; ++i) {

@@ -283,7 +283,7 @@ namespace TwnsUserPanel {
         private async _updateComponentsForSpmRank(): Promise<void> {
             const userId                        = this._getOpenData().userId;
             const rankScore                     = (await UserModel.getUserPublicInfo(userId))?.spmOverallRankScore ?? 0;
-            const rankIndex                     = (await TinyWarsNamespace.LeaderboardModel.getSpmOverallRankIndex(userId)) ?? 0;
+            const rankIndex                     = (await Twns.LeaderboardModel.getSpmOverallRankIndex(userId)) ?? 0;
             this._labelSpmRankScore.text        = rankScore > 0 ? Helpers.formatString(`%.2f`, rankScore) : `--`;
 
             const isRankValid                   = (rankIndex > 0) && (rankScore > 0);

@@ -1,6 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWarsNamespace.ResVersionController {
+namespace Twns.ResVersionController {
     const RES_NAME_DICT: { [rawName: string]: string } = {};
 
     class VersionController implements RES.VersionController {

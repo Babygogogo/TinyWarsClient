@@ -21,7 +21,7 @@ namespace TwnsWeActionModifyPanel23 {
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                    = TwnsBwWar.BwWar;
+    import BwWar                    = Twns.BaseWar.BwWar;
 
     export type OpenData = {
         war         : BwWar;

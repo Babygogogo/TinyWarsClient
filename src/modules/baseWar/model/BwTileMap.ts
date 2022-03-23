@@ -22,7 +22,7 @@ namespace TwnsBwTileMap {
         private _map?                   : TwnsBwTile.BwTile[][];
         private _mapSize?               : MapSize;
         private _locationVisibleFlags   = 0;
-        private _war?                   : TwnsBwWar.BwWar;
+        private _war?                   : Twns.BaseWar.BwWar;
 
         private readonly _view  = new TwnsBwTileMapView.BwTileMapView();
 
@@ -93,7 +93,7 @@ namespace TwnsBwTileMap {
             this.getView().fastInit(this);
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
             this._forEachTile(tile => tile.startRunning(war));
         }
@@ -139,10 +139,10 @@ namespace TwnsBwTileMap {
             return { tiles: tilesData };
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: Twns.BaseWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): TwnsBwWar.BwWar {
+        public getWar(): Twns.BaseWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 

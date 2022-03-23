@@ -21,7 +21,7 @@ namespace WarActionReviser {
     import WarAction            = ProtoTypes.WarAction;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
-    import BwWar                = TwnsBwWar.BwWar;
+    import BwWar                = Twns.BaseWar.BwWar;
 
     export function revise(war: BwWar, rawAction: IWarActionContainer): IWarActionContainer {
         if (Object.keys(rawAction).length !== 2) {

@@ -21,7 +21,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwUnitBriefPanel {
-    import BwWar                = TwnsBwWar.BwWar;
+    import BwWar                = Twns.BaseWar.BwWar;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import BwUnit               = TwnsBwUnit.BwUnit;
 

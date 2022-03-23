@@ -10,7 +10,7 @@
 namespace TwnsBwDrawVoteManager {
     import ISerialPlayerManager = ProtoTypes.WarSerialization.ISerialPlayerManager;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                = TwnsBwWar.BwWar;
+    import BwWar                = Twns.BaseWar.BwWar;
 
     export class BwDrawVoteManager {
         private _remainingVotes?    : number | null;

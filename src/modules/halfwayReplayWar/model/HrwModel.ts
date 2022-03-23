@@ -64,7 +64,12 @@ namespace HrwModel {
                 warData.field                   = Helpers.deepClone(initialWarData.field);
             }
         }
-        warData.executedActions = generateExecutedActions(warData);
+
+        const executedActionArray       = generateExecutedActions(warData);
+        warData.executedActionManager   = {
+            executedActionArray,
+            executedActionsCount    : executedActionArray.length,
+        };
 
         const war = new TwnsHrwWar.HrwWar();
         await war.init(warData);
@@ -85,7 +90,7 @@ namespace HrwModel {
     }
 
     function generateExecutedActions(warData: WarSerialization.ISerialWar): IWarActionContainer[] {
-        const halfwayReplayActionArray      = warData.halfwayReplayActionArray ?? [];
+        const halfwayReplayActionArray      = warData.executedActionManager?.halfwayReplayActionArray ?? [];
         const actionsCount                  = halfwayReplayActionArray[0]?.actionArray?.length ?? 0;
         const rearrangedHalfwayActionArray  : IWarActionContainer[][] = new Array(actionsCount);
         const teamsCount                    = halfwayReplayActionArray.length;

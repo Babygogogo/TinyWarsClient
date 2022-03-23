@@ -122,7 +122,7 @@ namespace TwnsMeChooseLocationPanel {
     }
 
     type DataForLocationRenderer = {
-        war         : TwnsBwWar.BwWar;
+        war         : Twns.BaseWar.BwWar;
         locationId  : number;
     };
     class LocationRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLocationRenderer> {

@@ -28,7 +28,7 @@ namespace TwnsBwTileBriefPanel {
     // const _CELL_WIDTH           = 80;
 
     export type OpenData = {
-        war : TwnsBwWar.BwWar;
+        war : Twns.BaseWar.BwWar;
     };
     export class BwTileBriefPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!            : eui.Group;

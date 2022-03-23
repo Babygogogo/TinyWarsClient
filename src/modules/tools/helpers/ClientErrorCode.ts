@@ -1729,6 +1729,17 @@ namespace TwnsClientErrorCode {
         BwTurnManager_GenerateCandidateUnitArrayForLaserTurret_08,
         BwTurnManager_GenerateCandidateUnitArrayForLaserTurret_09,
 
+        BwExecutedActionManager_AddExecutedAction_00,
+        BwExecutedActionManager_AddExecutedAction_01,
+        BwExecutedActionManager_AddExecutedAction_02,
+        BwExecutedActionManager_AddExecutedAction_03,
+        BwExecutedActionManager_AddExecutedAction_04,
+        BwExecutedActionManager_AddExecutedAction_05,
+        BwExecutedActionManager_AddExecutedAction_06,
+        BwExecutedActionManager_AddExecutedAction_07,
+        BwExecutedActionManager_AddExecutedAction_08,
+        BwExecutedActionManager_AddExecutedAction_09,
+
         MapRawDataValidation00,
         MapRawDataValidation01,
         MapRawDataValidation02,

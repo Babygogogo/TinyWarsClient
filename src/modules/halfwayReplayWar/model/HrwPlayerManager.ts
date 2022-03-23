@@ -10,8 +10,8 @@ namespace TwnsHrwPlayerManager {
 
         public initWatcherTeamIndexes(warData: ProtoTypes.WarSerialization.ISerialWar): void {
             const teamIndexes = new Set<number>();
-            for (const a of warData.halfwayReplayActionArray ?? []) {
-                teamIndexes.add(Helpers.getExisted(a.teamIndex, ClientErrorCode.HrwPlayerManager_InitWatcherTeamIndexes_00));
+            for (const data of warData.executedActionManager?.halfwayReplayActionArray ?? []) {
+                teamIndexes.add(Helpers.getExisted(data.teamIndex, ClientErrorCode.HrwPlayerManager_InitWatcherTeamIndexes_00));
             }
             this._watcherTeamIndexes = teamIndexes;
         }

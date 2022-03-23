@@ -6,7 +6,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwWarPanel {
     export type OpenData = {
-        war: TwnsBwWar.BwWar;
+        war: Twns.BaseWar.BwWar;
     };
     export class BwWarPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _group!    : eui.Group;

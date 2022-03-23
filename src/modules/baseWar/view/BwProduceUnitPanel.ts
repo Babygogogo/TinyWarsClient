@@ -30,7 +30,7 @@ namespace TwnsBwProduceUnitPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import UnitType             = Types.UnitType;
     import GridIndex            = Types.GridIndex;
-    import BwWar                = TwnsBwWar.BwWar;
+    import BwWar                = Twns.BaseWar.BwWar;
 
     export type OpenData = {
         gridIndex   : GridIndex;

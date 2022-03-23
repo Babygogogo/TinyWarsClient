@@ -19,7 +19,7 @@ namespace TwnsBwUnitMap {
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwUnitMap {
-        private _war?           : TwnsBwWar.BwWar;
+        private _war?           : Twns.BaseWar.BwWar;
         private _nextUnitId?    : number;
         private _map?           : (TwnsBwUnit.BwUnit | null)[][];
         private _mapSize?       : Types.MapSize;
@@ -127,7 +127,7 @@ namespace TwnsBwUnitMap {
             this.init({ data, configVersion, mapSize, playersCountUnneutral });
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
             this._forEachUnitOnMap(unit => unit.startRunning(war));
             this._forEachUnitLoaded(unit => unit.startRunning(war));
@@ -208,10 +208,10 @@ namespace TwnsBwUnitMap {
             return this._view;
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: Twns.BaseWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): TwnsBwWar.BwWar {
+        public getWar(): Twns.BaseWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 

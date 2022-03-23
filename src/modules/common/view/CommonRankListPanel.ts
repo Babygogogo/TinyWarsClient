@@ -157,7 +157,7 @@ namespace TwnsCommonRankListPanel {
 
         private async _updateComponentsForSpm(): Promise<void> {
             const dataArray: DataForSpmUserRenderer[] = [];
-            for (const data of await TinyWarsNamespace.LeaderboardModel.getSpmOverallTopDataArray() ?? []) {
+            for (const data of await Twns.LeaderboardModel.getSpmOverallTopDataArray() ?? []) {
                 const length    = dataArray.length;
                 const score     = Helpers.getExisted(data.score);
                 dataArray.push({

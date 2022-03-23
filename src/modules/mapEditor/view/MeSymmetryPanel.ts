@@ -659,7 +659,7 @@ namespace TwnsMeSymmetryPanel {
         }
     }
 
-    function autoFillTile(war: TwnsBwWar.BwWar, dstGridIndex: GridIndex, symmetryType: SymmetryType): void {
+    function autoFillTile(war: Twns.BaseWar.BwWar, dstGridIndex: GridIndex, symmetryType: SymmetryType): void {
         const tileMap               = war.getTileMap();
         const dstTile               = tileMap.getTile(dstGridIndex);
         const srcTile               = tileMap.getTile(Helpers.getExisted(MeUtility.getSymmetricalGridIndex(dstGridIndex, symmetryType, tileMap.getMapSize())));

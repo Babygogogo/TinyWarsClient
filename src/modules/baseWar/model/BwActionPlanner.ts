@@ -34,7 +34,7 @@ namespace TwnsBwActionPlanner {
     import ShortSfxCode     = Types.ShortSfxCode;
     import BwUnit           = TwnsBwUnit.BwUnit;
     import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
-    import BwWar            = TwnsBwWar.BwWar;
+    import BwWar            = Twns.BaseWar.BwWar;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     type ChosenUnitForDrop = {

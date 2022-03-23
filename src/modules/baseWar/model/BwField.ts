@@ -17,7 +17,7 @@ namespace TwnsBwField {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import ISerialField         = ProtoTypes.WarSerialization.ISerialField;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
-    import BwWar                = TwnsBwWar.BwWar;
+    import BwWar                = Twns.BaseWar.BwWar;
     import BwCursor             = TwnsBwCursor.BwCursor;
     import BwFogMap             = TwnsBwFogMap.BwFogMap;
     import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;

@@ -12,7 +12,7 @@ namespace TwnsBwCommonSettingManager {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwCommonSettingManager {
-        private _war?               : TwnsBwWar.BwWar;
+        private _war?               : Twns.BaseWar.BwWar;
         private _settingsForCommon? : ISettingsForCommon;
 
         public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
@@ -47,14 +47,14 @@ namespace TwnsBwCommonSettingManager {
             return this.serializeForCreateSfw();
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: Twns.BaseWar.BwWar): void {
             this._war = war;
         }
-        protected _getWar(): TwnsBwWar.BwWar {
+        protected _getWar(): Twns.BaseWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 

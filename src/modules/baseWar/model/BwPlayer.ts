@@ -39,7 +39,7 @@ namespace TwnsBwPlayer {
         private _watchOngoingSrcUserIds?    : Set<number>;
         private _watchRequestSrcUserIds?    : Set<number>;
 
-        private _war?                       : TwnsBwWar.BwWar;
+        private _war?                       : Twns.BaseWar.BwWar;
 
         public init(data: ISerialPlayer, configVersion: string): void {
             const fund              = Helpers.getExisted(data.fund, ClientErrorCode.BwPlayer_Init_00);
@@ -114,7 +114,7 @@ namespace TwnsBwPlayer {
             this.setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
         }
 
@@ -163,10 +163,10 @@ namespace TwnsBwPlayer {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: Twns.BaseWar.BwWar): void {
             this._war = war;
         }
-        private _getWar(): TwnsBwWar.BwWar {
+        private _getWar(): Twns.BaseWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 

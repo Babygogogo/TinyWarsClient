@@ -4,7 +4,7 @@
 
 namespace TwnsTwFogMap {
     import BwFogMap = TwnsBwFogMap.BwFogMap;
-    import BwWar    = TwnsBwWar.BwWar;
+    import BwWar    = Twns.BaseWar.BwWar;
 
     export class TwFogMap extends BwFogMap {
         public startRunning(war: BwWar): void {

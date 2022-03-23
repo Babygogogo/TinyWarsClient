@@ -2,56 +2,75 @@
 // import Helpers                      from "../../tools/helpers/Helpers";
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 
-namespace TwnsBwExecutedActionManager {
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.BaseWar {
+    import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
+    import IWarActionContainer          = ProtoTypes.WarAction.IWarActionContainer;
+    import ISerialExecutedActionManager = ProtoTypes.WarSerialization.ISerialExecutedActionManager;
 
     export class BwExecutedActionManager {
-        private _isNeedReplay?      : boolean;
-        private _executedActions?   : IWarActionContainer[];
+        private _isNeedExecutedActions? : boolean;
+        private _executedActionArray?   : IWarActionContainer[];
+        private _executedActionsCount   = 0;
 
-        public init(isNeedExecutedAction: boolean, executedActions: IWarActionContainer[]): void {
-            this._setIsNeedReplay(isNeedExecutedAction);
-            if (isNeedExecutedAction) {
-                this._setAllExecutedActions(executedActions);
-            } else {
-                this._setAllExecutedActions(new Array(executedActions.length).fill({}));
-            }
+        public init({ isNeedExecutedActions, data }: {
+            isNeedExecutedActions: boolean;
+            data                : Types.Undefinable<ISerialExecutedActionManager>;
+        }): void {
+            this._setIsNeedExecutedActions(isNeedExecutedActions);
+
+            const executedActionArray = data?.executedActionArray ?? [];
+            this._setAllExecutedActionArray(executedActionArray);
+            this._setExecutedActionsCount(data?.executedActionsCount ?? executedActionArray.length);
         }
 
-        private _setIsNeedReplay(isNeedReplay: boolean): void {
-            this._isNeedReplay = isNeedReplay;
+        public serialize(): ISerialExecutedActionManager {
+            return {
+                executedActionArray         : this.getAllExecutedActionArray(),
+                executedActionsCount        : this.getExecutedActionsCount(),
+            };
         }
-        private _getIsNeedReplay(): boolean {
-            return Helpers.getExisted(this._isNeedReplay);
+        public serializeForSrwValidation(): ISerialExecutedActionManager {
+            return {
+                executedActionArray         : this.getAllExecutedActionArray(),
+                executedActionsCount        : null,
+            };
         }
 
+        private _setIsNeedExecutedActions(isNeedReplay: boolean): void {
+            this._isNeedExecutedActions = isNeedReplay;
+        }
+        private _getIsNeedExecutedActions(): boolean {
+            return Helpers.getExisted(this._isNeedExecutedActions);
+        }
+
+        private _setExecutedActionsCount(count: number): void {
+            this._executedActionsCount = count;
+        }
         public getExecutedActionsCount(): number {
-            return this.getAllExecutedActions().length;
+            return this._executedActionsCount;
         }
 
-        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
-            this._executedActions = actions;
+        private _setAllExecutedActionArray(actions: IWarActionContainer[]): void {
+            this._executedActionArray = actions;
         }
-        public getAllExecutedActions(): IWarActionContainer[] {
-            return Helpers.getExisted(this._executedActions);
+        public getAllExecutedActionArray(): IWarActionContainer[] {
+            return Helpers.getExisted(this._executedActionArray);
         }
 
-        public generateEmptyExecutedActions(): IWarActionContainer[] {
-            return (new Array<IWarActionContainer>(this.getExecutedActionsCount())).fill({});
-        }
         public getExecutedAction(actionId: number): IWarActionContainer {
-            return this.getAllExecutedActions()[actionId];
+            return this.getAllExecutedActionArray()[actionId];
         }
         public addExecutedAction(rawAction: IWarActionContainer): void {
-            if (rawAction.actionId !== this.getExecutedActionsCount()) {
-                throw Helpers.newError(`Invalid actionId: ${rawAction.actionId}`);
+            const executedActionsCount = this.getExecutedActionsCount();
+            if (rawAction.actionId !== executedActionsCount) {
+                throw Helpers.newError(`Invalid actionId: ${rawAction.actionId}`, ClientErrorCode.BwExecutedActionManager_AddExecutedAction_00);
             }
 
-            const executedActions = this.getAllExecutedActions();
-            if (this._getIsNeedReplay()) {
-                executedActions.push(Helpers.deepClone(rawAction));
-            } else {
-                executedActions.push(executedActions[executedActions.length - 1] || {});
+            this._setExecutedActionsCount(executedActionsCount + 1);
+
+            if (this._getIsNeedExecutedActions()) {
+                this.getAllExecutedActionArray().push(Helpers.deepClone(rawAction));
             }
         }
     }

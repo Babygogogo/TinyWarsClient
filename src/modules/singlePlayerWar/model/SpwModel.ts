@@ -30,7 +30,7 @@ namespace SpwModel {
     import WarSerialization         = ProtoTypes.WarSerialization;
     import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
     import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-    import BwWar                    = TwnsBwWar.BwWar;
+    import BwWar                    = Twns.BaseWar.BwWar;
 
     let _war: SpwWar | null = null;
 

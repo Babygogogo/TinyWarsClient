@@ -216,7 +216,7 @@ namespace MeUtility {
             isEnded                 : false,
             seedRandomInitialState  : null,
             seedRandomCurrentState  : null,
-            executedActions         : null,
+            executedActionManager   : null,
             remainingVotesForDraw   : null,
             warEventManager         : {
                 warEventFullData    : mapRawData.warEventFullData,
@@ -823,7 +823,7 @@ namespace MeUtility {
             return warEventError;
         }
 
-        return await new TwnsTwWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData);
+        return await new Twns.TestWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData);
     }
     function getErrorCodeForMapDesigner(mapDesigner: Types.Undefinable<string>): ClientErrorCode {
         if ((mapDesigner == null)                                       ||

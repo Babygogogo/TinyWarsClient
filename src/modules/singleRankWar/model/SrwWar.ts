@@ -34,13 +34,13 @@ namespace TwnsSrwWar {
                 isEnded                     : this.getIsEnded(),
                 seedRandomInitialState      : Helpers.getExisted(randomNumberManager.getSeedRandomInitialState()),
                 seedRandomCurrentState      : randomNumberManager.getSeedRandomCurrentState(),
-                executedActions             : this.getExecutedActionManager().getAllExecutedActions(),
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 weatherManager              : this.getWeatherManager().serialize(),
                 warEventManager             : this.getWarEventManager().serialize(),
                 playerManager               : this.getPlayerManager().serialize(),
                 turnManager                 : this.getTurnManager().serialize(),
                 field                       : this.getField().serialize(),
+                executedActionManager       : this.getExecutedActionManager().serialize(),
             };
         }
         public serializeForValidation(): ISerialWar {
@@ -54,13 +54,13 @@ namespace TwnsSrwWar {
                 isEnded                     : null,
                 seedRandomInitialState      : Helpers.getExisted(this.getRandomNumberManager().getSeedRandomInitialState()),
                 seedRandomCurrentState      : null,
-                executedActions             : this.getExecutedActionManager().getAllExecutedActions(),
                 remainingVotesForDraw       : null,
                 weatherManager              : null,
                 warEventManager             : null,
                 playerManager               : this.getPlayerManager().serialize(),
                 turnManager                 : null,
                 field                       : null,
+                executedActionManager       : this.getExecutedActionManager().serializeForSrwValidation(),
             };
         }
 

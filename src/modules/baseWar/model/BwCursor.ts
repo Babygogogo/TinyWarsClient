@@ -20,7 +20,7 @@ namespace TwnsBwCursor {
         private _isMovableByTouches = true;
         private readonly _view      = new TwnsBwCursorView.BwCursorView();
 
-        private _war?               : TwnsBwWar.BwWar;
+        private _war?               : Twns.BaseWar.BwWar;
 
         private _notifyListeners: Notify.Listener[] = [
             { type: NotifyType.BwCursorTapped,              callback: this._onNotifyBwCursorTapped },
@@ -38,7 +38,7 @@ namespace TwnsBwCursor {
             this.getView().fastInit(this);
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             this._war = war;
 
             Notify.addEventListeners(this._notifyListeners, this, false, 10);
@@ -77,7 +77,7 @@ namespace TwnsBwCursor {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWar(): TwnsBwWar.BwWar {
+        public getWar(): Twns.BaseWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 

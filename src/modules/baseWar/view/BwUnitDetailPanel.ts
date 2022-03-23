@@ -237,7 +237,7 @@ namespace TwnsBwUnitDetailPanel {
             this._btnDelete.visible = this._getOpenData().canDelete;
         }
 
-        private _createInfoHp(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoHp(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Hp,
@@ -245,7 +245,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoProductionCost(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoProductionCost(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.ProductionCost,
@@ -253,7 +253,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoMovement(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoMovement(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Movement,
@@ -261,7 +261,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoFuel(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoFuel(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Fuel,
@@ -269,7 +269,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoPromotion(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoPromotion(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Promotion,
@@ -277,7 +277,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoAttackRange(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoAttackRange(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getMinAttackRange() == null
                 ? null
                 : {
@@ -287,7 +287,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoVision(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoVision(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Vision,
@@ -295,7 +295,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoPrimaryWeaponAmmo(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoPrimaryWeaponAmmo(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getPrimaryWeaponMaxAmmo() == null
                 ? null
                 : {
@@ -305,7 +305,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoBuildMaterial(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoBuildMaterial(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getMaxBuildMaterial() == null
                 ? null
                 : {
@@ -315,7 +315,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoProduceMaterial(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoProduceMaterial(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getMaxProduceMaterial() == null
                 ? null
                 : {
@@ -325,7 +325,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoFlareAmmo(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoFlareAmmo(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getFlareMaxAmmo() == null
                 ? null
                 : {
@@ -335,7 +335,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoActionState(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoActionState(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.ActionState,
@@ -343,7 +343,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoDiving(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoDiving(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return !unit.checkIsDiver()
                 ? null
                 : {
@@ -353,7 +353,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoHasLoadedCo(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoHasLoadedCo(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.HasLoadedCo,
@@ -361,7 +361,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoLoadUnit(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoLoadUnit(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getLoadUnitCategory() == null
                 ? null
                 : {
@@ -371,7 +371,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoAiMode(war: TwnsBwWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoAiMode(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return ((war.getWarType() !== Types.WarType.Me) && (unit.getPlayer().getUserId() != null))
                 ? null
                 : {
@@ -454,7 +454,7 @@ namespace TwnsBwUnitDetailPanel {
     type DataForInfoRenderer = {
         index       : number;
         infoType    : UnitInfoType;
-        war         : TwnsBwWar.BwWar;
+        war         : Twns.BaseWar.BwWar;
         unit        : BwUnit;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {

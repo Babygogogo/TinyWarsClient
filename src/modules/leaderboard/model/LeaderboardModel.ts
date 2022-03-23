@@ -1,6 +1,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWarsNamespace.LeaderboardModel {
+namespace Twns.LeaderboardModel {
     import ISpmOverallSingleData    = ProtoTypes.Leaderboard.LeaderboardSpmOverall.ISingleData;
 
     const _spmOverallTopDataArrayAccessor = Helpers.createCachedDataAccessor<null, ISpmOverallSingleData[]>({

@@ -51,7 +51,7 @@ namespace TwnsBwUnit {
         private _aiMode?                    : UnitAiMode | null;
 
         private readonly _view              = new TwnsBwUnitView.BwUnitView();
-        private _war?                       : TwnsBwWar.BwWar;
+        private _war?                       : Twns.BaseWar.BwWar;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
@@ -95,7 +95,7 @@ namespace TwnsBwUnit {
             this.getView().init(this);
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             if (war.getConfigVersion() !== this.getConfigVersion()) {
                 throw Helpers.newError(`BwUnit.startRunning() invalid configVersion.`);
                 return;
@@ -169,10 +169,10 @@ namespace TwnsBwUnit {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: Twns.BaseWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): TwnsBwWar.BwWar {
+        public getWar(): Twns.BaseWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 

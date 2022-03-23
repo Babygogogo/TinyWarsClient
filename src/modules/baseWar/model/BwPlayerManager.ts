@@ -13,7 +13,7 @@ namespace TwnsBwPlayerManager {
     import ISerialPlayer            = WarSerialization.ISerialPlayer;
     import PlayerAliveState         = Types.PlayerAliveState;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                    = TwnsBwWar.BwWar;
+    import BwWar                    = Twns.BaseWar.BwWar;
 
     export abstract class BwPlayerManager {
         private _players        = new Map<number, TwnsBwPlayer.BwPlayer>();

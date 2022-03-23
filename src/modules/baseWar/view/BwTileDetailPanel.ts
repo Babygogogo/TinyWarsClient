@@ -303,7 +303,7 @@ namespace TwnsBwTileDetailPanel {
         index       : number;
         infoType    : TileInfoType;
         tile        : BwTile;
-        war         : TwnsBwWar.BwWar;
+        war         : Twns.BaseWar.BwWar;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
         private readonly _imgBg!            : TwnsUiImage.UiImage;
@@ -1616,7 +1616,7 @@ namespace TwnsBwTileDetailPanel {
         }
     }
 
-    function createInfoDefenseBonus(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer {
+    function createInfoDefenseBonus(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer {
         return {
             index       : 0,
             infoType    : TileInfoType.DefenseBonus,
@@ -1624,7 +1624,7 @@ namespace TwnsBwTileDetailPanel {
             tile,
         };
     }
-    function createInfoIncome(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoIncome(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         const income = tile.getCfgIncome();
         return income == 0
             ? null
@@ -1635,7 +1635,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoVision(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoVision(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getCfgVisionRange() == 0) && (!tile.checkIsVisionEnabledForAllPlayers()) && (tile.getMaxCapturePoint() == null))
             ? null
             : {
@@ -1645,7 +1645,7 @@ namespace TwnsBwTileDetailPanel {
                 tile
             };
     }
-    function createInfoHideUnitCategory(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer {
+    function createInfoHideUnitCategory(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer {
         return {
             index       : 0,
             infoType    : TileInfoType.HideUnitCategory,
@@ -1653,7 +1653,7 @@ namespace TwnsBwTileDetailPanel {
             tile,
         };
     }
-    function createInfoIsDefeatOnCapture(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoIsDefeatOnCapture(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return !tile.checkIsDefeatOnCapture()
             ? null
             : {
@@ -1663,7 +1663,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoProduceUnitCategory(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoProduceUnitCategory(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return tile.getCfgProduceUnitCategory() == null
             ? null
             : {
@@ -1673,7 +1673,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoGlobalBonus(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoGlobalBonus(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getGlobalAttackBonus() == null) && (tile.getGlobalDefenseBonus() == null))
             ? null
             : {
@@ -1683,7 +1683,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoRepairUnitCategory(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoRepairUnitCategory(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getRepairUnitCategory() == null)
             ? null
             : {
@@ -1693,7 +1693,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoHp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoHp(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getMaxHp() == null)
             ? null
             : {
@@ -1703,7 +1703,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCapturePoint(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCapturePoint(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getMaxCapturePoint() == null)
             ? null
             : {
@@ -1713,7 +1713,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoBuildPoint(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoBuildPoint(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getMaxBuildPoint() == null)
             ? null
             : {
@@ -1723,7 +1723,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoIsHighlighted(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoIsHighlighted(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return {
             index       : 0,
             infoType    : TileInfoType.IsHighlighted,
@@ -1731,7 +1731,7 @@ namespace TwnsBwTileDetailPanel {
             tile,
         };
     }
-    function createInfoCrystalRadius(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalRadius(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getCustomCrystalData() == null)
             ? null
             : {
@@ -1741,7 +1741,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalPriority(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalPriority(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCrystal)
             ? null
             : {
@@ -1751,7 +1751,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalCanAffectSelf(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalCanAffectSelf(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCrystal)
             ? null
             : {
@@ -1761,7 +1761,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalCanAffectAlly(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalCanAffectAlly(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCrystal)
             ? null
             : {
@@ -1771,7 +1771,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalCanAffectEnemy(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalCanAffectEnemy(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCrystal)
             ? null
             : {
@@ -1781,7 +1781,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalDeltaFund(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalDeltaFund(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCrystal)
             ? null
             : {
@@ -1791,7 +1791,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalDeltaEnergyPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalDeltaEnergyPercentage(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCrystal)
             ? null
             : {
@@ -1801,7 +1801,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalDeltaHp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalDeltaHp(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getCustomCrystalData() == null)
             ? null
             : {
@@ -1811,7 +1811,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalDeltaFuelPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalDeltaFuelPercentage(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCrystal)
             ? null
             : {
@@ -1821,7 +1821,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCrystalDeltaPrimaryAmmoPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCrystalDeltaPrimaryAmmoPercentage(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCrystal)
             ? null
             : {
@@ -1831,7 +1831,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonRangeForUp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonRangeForUp(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getType() !== Types.TileType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForUp))
             ? null
             : {
@@ -1841,7 +1841,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonRangeForDown(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonRangeForDown(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getType() !== Types.TileType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForDown))
             ? null
             : {
@@ -1851,7 +1851,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonRangeForLeft(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonRangeForLeft(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getType() !== Types.TileType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForLeft))
             ? null
             : {
@@ -1861,7 +1861,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonRangeForRight(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonRangeForRight(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getType() !== Types.TileType.CustomCannon) && (!tile.getCustomCannonData()?.rangeForRight))
             ? null
             : {
@@ -1871,7 +1871,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonPriority(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonPriority(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCannon)
             ? null
             : {
@@ -1881,7 +1881,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonMaxTargetCount(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonMaxTargetCount(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCannon)
             ? null
             : {
@@ -1891,7 +1891,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonCanAffectSelf(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonCanAffectSelf(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCannon)
             ? null
             : {
@@ -1901,7 +1901,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonCanAffectAlly(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonCanAffectAlly(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCannon)
             ? null
             : {
@@ -1911,7 +1911,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonCanAffectEnemy(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonCanAffectEnemy(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCannon)
             ? null
             : {
@@ -1921,7 +1921,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonDeltaHp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonDeltaHp(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getCustomCannonData() == null)
             ? null
             : {
@@ -1931,7 +1931,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonDeltaFuelPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonDeltaFuelPercentage(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCannon)
             ? null
             : {
@@ -1941,7 +1941,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoCannonDeltaPrimaryAmmoPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoCannonDeltaPrimaryAmmoPercentage(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomCannon)
             ? null
             : {
@@ -1951,7 +1951,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretRangeForUp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretRangeForUp(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getType() !== Types.TileType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForUp))
             ? null
             : {
@@ -1961,7 +1961,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretRangeForDown(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretRangeForDown(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getType() !== Types.TileType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForDown))
             ? null
             : {
@@ -1971,7 +1971,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretRangeForLeft(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretRangeForLeft(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getType() !== Types.TileType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForLeft))
             ? null
             : {
@@ -1981,7 +1981,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretRangeForRight(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretRangeForRight(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return ((tile.getType() !== Types.TileType.CustomLaserTurret) && (!tile.getCustomLaserTurretData()?.rangeForRight))
             ? null
             : {
@@ -1991,7 +1991,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretPriority(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretPriority(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomLaserTurret)
             ? null
             : {
@@ -2001,7 +2001,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretCanAffectSelf(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretCanAffectSelf(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomLaserTurret)
             ? null
             : {
@@ -2011,7 +2011,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretCanAffectAlly(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretCanAffectAlly(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomLaserTurret)
             ? null
             : {
@@ -2021,7 +2021,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretCanAffectEnemy(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretCanAffectEnemy(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomLaserTurret)
             ? null
             : {
@@ -2031,7 +2031,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretDeltaHp(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretDeltaHp(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getCustomLaserTurretData() == null)
             ? null
             : {
@@ -2041,7 +2041,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretDeltaFuelPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretDeltaFuelPercentage(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomLaserTurret)
             ? null
             : {
@@ -2051,7 +2051,7 @@ namespace TwnsBwTileDetailPanel {
                 tile,
             };
     }
-    function createInfoLaserTurretDeltaPrimaryAmmoPercentage(war: TwnsBwWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
+    function createInfoLaserTurretDeltaPrimaryAmmoPercentage(war: Twns.BaseWar.BwWar, tile: BwTile): DataForInfoRenderer | null {
         return (tile.getType() !== Types.TileType.CustomLaserTurret)
             ? null
             : {

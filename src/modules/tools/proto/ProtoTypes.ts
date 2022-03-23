@@ -13839,6 +13839,114 @@ export declare namespace WarSerialization {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a SerialExecutedActionManager. */
+    interface ISerialExecutedActionManager {
+
+        /** SerialExecutedActionManager executedActionsCount */
+        executedActionsCount?: (number|null);
+
+        /** SerialExecutedActionManager executedActionArray */
+        executedActionArray?: (WarAction.IWarActionContainer[]|null);
+
+        /** SerialExecutedActionManager halfwayReplayActionsCount */
+        halfwayReplayActionsCount?: (number|null);
+
+        /** SerialExecutedActionManager halfwayReplayActionArray */
+        halfwayReplayActionArray?: (WarSerialization.IHalfwayReplayAction[]|null);
+    }
+
+    /** Represents a SerialExecutedActionManager. */
+    class SerialExecutedActionManager implements ISerialExecutedActionManager {
+
+        /**
+         * Constructs a new SerialExecutedActionManager.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ISerialExecutedActionManager);
+
+        /** SerialExecutedActionManager executedActionsCount. */
+        public executedActionsCount: number;
+
+        /** SerialExecutedActionManager executedActionArray. */
+        public executedActionArray: WarAction.IWarActionContainer[];
+
+        /** SerialExecutedActionManager halfwayReplayActionsCount. */
+        public halfwayReplayActionsCount: number;
+
+        /** SerialExecutedActionManager halfwayReplayActionArray. */
+        public halfwayReplayActionArray: WarSerialization.IHalfwayReplayAction[];
+
+        /**
+         * Creates a new SerialExecutedActionManager instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SerialExecutedActionManager instance
+         */
+        public static create(properties?: WarSerialization.ISerialExecutedActionManager): WarSerialization.SerialExecutedActionManager;
+
+        /**
+         * Encodes the specified SerialExecutedActionManager message. Does not implicitly {@link WarSerialization.SerialExecutedActionManager.verify|verify} messages.
+         * @param message SerialExecutedActionManager message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ISerialExecutedActionManager, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified SerialExecutedActionManager message, length delimited. Does not implicitly {@link WarSerialization.SerialExecutedActionManager.verify|verify} messages.
+         * @param message SerialExecutedActionManager message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ISerialExecutedActionManager, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a SerialExecutedActionManager message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SerialExecutedActionManager
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.SerialExecutedActionManager;
+
+        /**
+         * Decodes a SerialExecutedActionManager message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SerialExecutedActionManager
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.SerialExecutedActionManager;
+
+        /**
+         * Verifies a SerialExecutedActionManager message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SerialExecutedActionManager message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SerialExecutedActionManager
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.SerialExecutedActionManager;
+
+        /**
+         * Creates a plain object from a SerialExecutedActionManager message. Also converts values to other types if specified.
+         * @param message SerialExecutedActionManager
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.SerialExecutedActionManager, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SerialExecutedActionManager to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a SerialWar. */
     interface ISerialWar {
 
@@ -13875,8 +13983,8 @@ export declare namespace WarSerialization {
         /** SerialWar seedRandomCurrentState */
         seedRandomCurrentState?: (Structure.ISeedRandomState|null);
 
-        /** SerialWar executedActions */
-        executedActions?: (WarAction.IWarActionContainer[]|null);
+        /** SerialWar deprecatedExecutedActions */
+        deprecatedExecutedActions?: (WarAction.IWarActionContainer[]|null);
 
         /** SerialWar remainingVotesForDraw */
         remainingVotesForDraw?: (number|null);
@@ -13896,11 +14004,14 @@ export declare namespace WarSerialization {
         /** SerialWar weatherManager */
         weatherManager?: (WarSerialization.ISerialWeatherManager|null);
 
-        /** SerialWar halfwayReplayActionArray */
-        halfwayReplayActionArray?: (WarSerialization.IHalfwayReplayAction[]|null);
+        /** SerialWar deprecatedHalfwayReplayActionArray */
+        deprecatedHalfwayReplayActionArray?: (WarSerialization.IHalfwayReplayAction[]|null);
 
         /** SerialWar isEnded */
         isEnded?: (boolean|null);
+
+        /** SerialWar executedActionManager */
+        executedActionManager?: (WarSerialization.ISerialExecutedActionManager|null);
     }
 
     /** Represents a SerialWar. */
@@ -13945,8 +14056,8 @@ export declare namespace WarSerialization {
         /** SerialWar seedRandomCurrentState. */
         public seedRandomCurrentState?: (Structure.ISeedRandomState|null);
 
-        /** SerialWar executedActions. */
-        public executedActions: WarAction.IWarActionContainer[];
+        /** SerialWar deprecatedExecutedActions. */
+        public deprecatedExecutedActions: WarAction.IWarActionContainer[];
 
         /** SerialWar remainingVotesForDraw. */
         public remainingVotesForDraw: number;
@@ -13966,11 +14077,14 @@ export declare namespace WarSerialization {
         /** SerialWar weatherManager. */
         public weatherManager?: (WarSerialization.ISerialWeatherManager|null);
 
-        /** SerialWar halfwayReplayActionArray. */
-        public halfwayReplayActionArray: WarSerialization.IHalfwayReplayAction[];
+        /** SerialWar deprecatedHalfwayReplayActionArray. */
+        public deprecatedHalfwayReplayActionArray: WarSerialization.IHalfwayReplayAction[];
 
         /** SerialWar isEnded. */
         public isEnded: boolean;
+
+        /** SerialWar executedActionManager. */
+        public executedActionManager?: (WarSerialization.ISerialExecutedActionManager|null);
 
         /**
          * Creates a new SerialWar instance using the specified properties.

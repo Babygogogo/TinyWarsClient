@@ -19,7 +19,7 @@ namespace WarCoSkillHelpers {
     import Structure            = ProtoTypes.Structure;
     import IDataForUseCoSkill   = Structure.IDataForUseCoSkill;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
-    import BwWar                = TwnsBwWar.BwWar;
+    import BwWar                = Twns.BaseWar.BwWar;
     import ICoSkillCfg          = ProtoTypes.Config.ICoSkillCfg;
 
     type DamageMaps = {

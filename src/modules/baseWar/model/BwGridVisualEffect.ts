@@ -30,7 +30,7 @@ namespace TwnsBwGridVisualEffect {
             this.getView().fastInit(this);
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             Notify.addEventListeners(this._notifyListeners, this, false, 1);
         }
         public startRunningView(): void {
