@@ -23,7 +23,7 @@ namespace Twns.TestWar {
     import ISerialWar           = WarSerialization.ISerialWar;
     import IMapRawData          = ProtoTypes.Map.IMapRawData;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                = Twns.BaseWar.BwWar;
+    import BwWar                = BaseWar.BwWar;
 
     export class TwWar extends BwWar {
         private readonly _playerManager         = new TwPlayerManager();
@@ -207,7 +207,6 @@ namespace Twns.TestWar {
                 executedActionArray         : [],
                 executedActionsCount        : 0,
                 halfwayReplayActionArray    : [],
-                halfwayReplayActionsCount   : 0,
             },
         };
     }

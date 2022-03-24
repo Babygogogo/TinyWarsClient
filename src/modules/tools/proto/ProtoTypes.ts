@@ -13848,8 +13848,8 @@ export declare namespace WarSerialization {
         /** SerialExecutedActionManager executedActionArray */
         executedActionArray?: (WarAction.IWarActionContainer[]|null);
 
-        /** SerialExecutedActionManager halfwayReplayActionsCount */
-        halfwayReplayActionsCount?: (number|null);
+        /** SerialExecutedActionManager deprecatedHalfwayReplayActionsCount */
+        deprecatedHalfwayReplayActionsCount?: (number|null);
 
         /** SerialExecutedActionManager halfwayReplayActionArray */
         halfwayReplayActionArray?: (WarSerialization.IHalfwayReplayAction[]|null);
@@ -13870,8 +13870,8 @@ export declare namespace WarSerialization {
         /** SerialExecutedActionManager executedActionArray. */
         public executedActionArray: WarAction.IWarActionContainer[];
 
-        /** SerialExecutedActionManager halfwayReplayActionsCount. */
-        public halfwayReplayActionsCount: number;
+        /** SerialExecutedActionManager deprecatedHalfwayReplayActionsCount. */
+        public deprecatedHalfwayReplayActionsCount: number;
 
         /** SerialExecutedActionManager halfwayReplayActionArray. */
         public halfwayReplayActionArray: WarSerialization.IHalfwayReplayAction[];

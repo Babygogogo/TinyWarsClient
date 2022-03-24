@@ -65,11 +65,7 @@ namespace HrwModel {
             }
         }
 
-        const executedActionArray       = generateExecutedActions(warData);
-        warData.executedActionManager   = {
-            executedActionArray,
-            executedActionsCount    : executedActionArray.length,
-        };
+        Helpers.getExisted(warData.executedActionManager).executedActionArray = generateExecutedActions(warData);
 
         const war = new TwnsHrwWar.HrwWar();
         await war.init(warData);
