@@ -25,7 +25,7 @@
 // import TwnsBwWarEventManager        from "./BwWarEventManager";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwWar {
+namespace Twns.BaseWar {
     import WarAction                = ProtoTypes.WarAction;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
@@ -33,7 +33,7 @@ namespace TwnsBwWar {
     export abstract class BwWar {
         private readonly _weatherManager        = new TwnsBwWeatherManager.BwWeatherManager();
         private readonly _turnManager           = new TwnsBwTurnManager.BwTurnManager();
-        private readonly _executedActionManager = new TwnsBwExecutedActionManager.BwExecutedActionManager();
+        private readonly _executedActionManager = new BaseWar.BwExecutedActionManager();
         private readonly _randomNumberManager   = new TwnsBwRandomNumberManager.BwRandomNumberManager();
         private readonly _drawVoteManager       = new TwnsBwDrawVoteManager.BwDrawVoteManager();
         private readonly _view                  = new TwnsBwWarView.BwWarView();
@@ -108,7 +108,10 @@ namespace TwnsBwWar {
                 initialState    : data.seedRandomInitialState,
                 currentState    : data.seedRandomCurrentState,
             });
-            this.getExecutedActionManager().init(this.getIsNeedExecutedAction(), data.executedActions || []);
+            this.getExecutedActionManager().init({
+                isNeedExecutedActions   : this.getIsNeedExecutedAction(),
+                data                    : data.executedActionManager,
+            });
 
             const playerManager = this.getPlayerManager();
             playerManager.init(data.playerManager, configVersion);
@@ -149,7 +152,7 @@ namespace TwnsBwWar {
                 isEnded                     : false,
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
-                executedActions             : [],
+                executedActionManager       : null,
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 weatherManager              : this.getWeatherManager().serializeForCreateSfw(),
                 warEventManager             : this.getWarEventManager().serializeForCreateSfw(),
@@ -172,7 +175,7 @@ namespace TwnsBwWar {
                 isEnded                     : false,
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
-                executedActions             : [],
+                executedActionManager       : null,
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 weatherManager              : this.getWeatherManager().serializeForCreateMfr(),
                 warEventManager             : this.getWarEventManager().serializeForCreateMfr(),
@@ -344,7 +347,7 @@ namespace TwnsBwWar {
         public getRandomNumberManager(): TwnsBwRandomNumberManager.BwRandomNumberManager {
             return this._randomNumberManager;
         }
-        public getExecutedActionManager(): TwnsBwExecutedActionManager.BwExecutedActionManager {
+        public getExecutedActionManager(): BaseWar.BwExecutedActionManager {
             return this._executedActionManager;
         }
     }

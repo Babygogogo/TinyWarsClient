@@ -21,7 +21,7 @@ namespace TwnsCommonCoListPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        war     : TwnsBwWar.BwWar;
+        war     : Twns.BaseWar.BwWar;
     };
     export class CommonCoListPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!      : TwnsUiImage.UiImage;

@@ -71,7 +71,7 @@ namespace TwnsBwWarView {
             this.addChild(weatherContainer);
         }
 
-        public init(war: TwnsBwWar.BwWar): void {
+        public init(war: Twns.BaseWar.BwWar): void {
             const gridSize          = CommonConstants.GridSize;
             const mapSize           = war.getTileMap().getMapSize();
             const fieldContainer    = this._fieldContainer;
@@ -87,7 +87,7 @@ namespace TwnsBwWarView {
             this._weatherContainer.addChild(war.getWeatherManager().getView());
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        public fastInit(war: TwnsBwWar.BwWar): void {
+        public fastInit(war: Twns.BaseWar.BwWar): void {
             // nothing to do
         }
 
@@ -222,7 +222,7 @@ namespace TwnsBwWarView {
         container.bottom    = 0;
     }
 
-    function getPadding(war: TwnsBwWar.BwWar): Padding {
+    function getPadding(war: Twns.BaseWar.BwWar): Padding {
         if (war instanceof TwnsRwWar.RwWar) {
             return Helpers.getExisted(PADDINGS.get(PaddingType.Replay));
         } else if (war instanceof TwnsMeWar.MeWar) {

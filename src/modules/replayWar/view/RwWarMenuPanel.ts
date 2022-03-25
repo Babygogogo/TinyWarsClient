@@ -324,7 +324,7 @@ namespace TwnsRwWarMenuPanel {
                         return;
                     }
 
-                    const errorCode = await (new TwnsTwWar.TwWar()).getErrorCodeForInit(warData);
+                    const errorCode = await (new Twns.TestWar.TwWar()).getErrorCodeForInit(warData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;

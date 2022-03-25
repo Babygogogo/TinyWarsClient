@@ -7,7 +7,7 @@ namespace TwnsSpwFogMap {
     import BwFogMap = TwnsBwFogMap.BwFogMap;
 
     export class SpwFogMap extends BwFogMap {
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
 
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();

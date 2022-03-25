@@ -23,7 +23,7 @@ namespace TwnsBwWarEventManager {
     import ICustomCounter                   = ProtoTypes.WarSerialization.ICustomCounter;
     import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
     import BwUnitMap                        = TwnsBwUnitMap.BwUnitMap;
-    import BwWar                            = TwnsBwWar.BwWar;
+    import BwWar                            = Twns.BaseWar.BwWar;
 
     export class BwWarEventManager {
         private _war?                   : BwWar;

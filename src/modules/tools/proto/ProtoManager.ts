@@ -22,7 +22,7 @@ namespace ProtoManager {
 
     export function init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            protobuf.load(TinyWarsNamespace.ResVersionController.getResVirtualUrl(PROTO_FILENAME)).then(
+            protobuf.load(Twns.ResVersionController.getResVirtualUrl(PROTO_FILENAME)).then(
                 protoRoot => {
                     if (!protoRoot) {
                         reject("no root!");

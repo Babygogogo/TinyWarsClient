@@ -31,7 +31,7 @@ namespace TwnsWeActionModifyPanel3 {
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import BwWar                    = TwnsBwWar.BwWar;
+    import BwWar                    = Twns.BaseWar.BwWar;
 
     export type OpenData = {
         war         : BwWar;

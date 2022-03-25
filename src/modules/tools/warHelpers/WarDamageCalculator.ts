@@ -17,7 +17,7 @@ namespace WarDamageCalculator {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwUnit               = TwnsBwUnit.BwUnit;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
-    import BwWar                = TwnsBwWar.BwWar;
+    import BwWar                = Twns.BaseWar.BwWar;
     import BwTile               = TwnsBwTile.BwTile;
 
     function checkIsInAttackRange(

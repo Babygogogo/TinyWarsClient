@@ -19,7 +19,7 @@ namespace TwnsBwFogMap {
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                    = TwnsBwWar.BwWar;
+    import BwWar                    = Twns.BaseWar.BwWar;
 
     export abstract class BwFogMap {
         private _forceFogCode?              : ForceFogCode;

@@ -31,13 +31,13 @@ namespace TwnsScwWar {
                 isEnded                     : this.getIsEnded(),
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
-                executedActions             : [],
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 weatherManager              : this.getWeatherManager().serialize(),
                 warEventManager             : this.getWarEventManager().serialize(),
                 playerManager               : this.getPlayerManager().serialize(),
                 turnManager                 : this.getTurnManager().serialize(),
                 field                       : this.getField().serialize(),
+                executedActionManager       : null,
             };
         }
 

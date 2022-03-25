@@ -24,7 +24,7 @@
 namespace TwnsBwUnitListPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import BwWar            = TwnsBwWar.BwWar;
+    import BwWar            = Twns.BaseWar.BwWar;
     import BwCursor         = TwnsBwCursor.BwCursor;
 
     export type OpenData = {

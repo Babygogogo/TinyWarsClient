@@ -215,7 +215,7 @@ namespace SoundManager {
         // playRandomCoBgm();
         playBgm(BgmCode.Co0000);
     }
-    export function playCoBgmWithWar(war: TwnsBwWar.BwWar, force: boolean): void {
+    export function playCoBgmWithWar(war: Twns.BaseWar.BwWar, force: boolean): void {
         const player = war.getPlayerInTurn();
         if ((player.checkIsNeutral()) && (!force)) {
             return;

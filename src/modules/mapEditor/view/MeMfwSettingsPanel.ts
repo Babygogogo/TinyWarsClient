@@ -73,7 +73,7 @@ namespace TwnsMeMfwSettingsPanel {
         private async _onTouchedBtnConfirm(): Promise<void> {
             MeMfwModel.reviseWarRuleForAi();
             const warData   = MeMfwModel.getWarData();
-            const errorCode = await (new TwnsTwWar.TwWar().getErrorCodeForInit(warData));
+            const errorCode = await (new Twns.TestWar.TwWar().getErrorCodeForInit(warData));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {

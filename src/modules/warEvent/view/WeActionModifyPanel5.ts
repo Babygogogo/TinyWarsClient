@@ -19,7 +19,7 @@ namespace TwnsWeActionModifyPanel5 {
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import BwWar                    = TwnsBwWar.BwWar;
+    import BwWar                    = Twns.BaseWar.BwWar;
     import WeatherType              = Types.WeatherType;
 
     export type OpenData = {

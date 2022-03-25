@@ -40,7 +40,7 @@ namespace WarEventHelper {
     import IWarEventCondition       = WarEvent.IWarEventCondition;
     import IWarEventConditionNode   = WarEvent.IWarEventConditionNode;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                    = TwnsBwWar.BwWar;
+    import BwWar                    = Twns.BaseWar.BwWar;
 
     const CONDITION_TYPE_ARRAY = [
         // ConditionType.WecTurnIndexEqualTo,

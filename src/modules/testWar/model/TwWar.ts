@@ -15,7 +15,7 @@
 // import TwnsTwPlayerManager          from "./TwPlayerManager";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsTwWar {
+namespace Twns.TestWar {
     import BwWarEventManager    = TwnsBwWarEventManager.BwWarEventManager;
     import TwPlayerManager      = TwnsTwPlayerManager.TwPlayerManager;
     import TwField              = TwnsTwField.TwField;
@@ -23,7 +23,7 @@ namespace TwnsTwWar {
     import ISerialWar           = WarSerialization.ISerialWar;
     import IMapRawData          = ProtoTypes.Map.IMapRawData;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import BwWar                = TwnsBwWar.BwWar;
+    import BwWar                = BaseWar.BwWar;
 
     export class TwWar extends BwWar {
         private readonly _playerManager         = new TwPlayerManager();
@@ -193,7 +193,6 @@ namespace TwnsTwWar {
 
             warId                   : -1,
             isEnded                 : false,
-            executedActions         : [],
             remainingVotesForDraw   : null,
             playerManager           : dataForPlayerManager,
             turnManager             : _createInitialTurnData(),
@@ -203,6 +202,11 @@ namespace TwnsTwWar {
             warEventManager         : {
                 warEventFullData    : WarEventHelper.trimAndCloneWarEventFullData(mapRawData.warEventFullData, warRule.warEventIdArray),
                 calledCountList     : [],
+            },
+            executedActionManager   : {
+                executedActionArray         : [],
+                executedActionsCount        : 0,
+                halfwayReplayActionArray    : [],
             },
         };
     }

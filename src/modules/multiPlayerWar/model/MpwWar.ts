@@ -21,7 +21,7 @@ namespace TwnsMpwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarAction                = ProtoTypes.WarAction;
 
-    export abstract class MpwWar extends TwnsBwWar.BwWar {
+    export abstract class MpwWar extends Twns.BaseWar.BwWar {
         private readonly _playerManager         = new TwnsMpwPlayerManager.MpwPlayerManager();
         private readonly _field                 = new TwnsMpwField.MpwField();
         private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();

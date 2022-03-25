@@ -21,7 +21,7 @@ namespace TwnsBwUnitActionsPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import UnitActionType   = Types.UnitActionType;
-    import BwWar            = TwnsBwWar.BwWar;
+    import BwWar            = Twns.BaseWar.BwWar;
 
     export type OpenData = {
         war         : BwWar;

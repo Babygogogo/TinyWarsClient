@@ -31,7 +31,7 @@ namespace TwnsCommonAddLoadedUnitPanel {
     import LangTextType             = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
-        war         : TwnsBwWar.BwWar;
+        war         : Twns.BaseWar.BwWar;
         loaderUnit  : TwnsBwUnit.BwUnit;
         callback    : (unitData: ProtoTypes.WarSerialization.ISerialUnit) => void;
     };
@@ -433,7 +433,7 @@ namespace TwnsCommonAddLoadedUnitPanel {
 
     function getErrorTipsForAddUnit({ unitData, war }: {
         unitData    : ProtoTypes.WarSerialization.ISerialUnit;
-        war         : TwnsBwWar.BwWar;
+        war         : Twns.BaseWar.BwWar;
     }): string | null {
         const configVersion = war.getConfigVersion();
         const unitCfg       = ConfigManager.getUnitTemplateCfg(configVersion, Helpers.getExisted(unitData.unitType));

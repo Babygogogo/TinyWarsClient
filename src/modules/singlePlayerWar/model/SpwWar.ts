@@ -19,7 +19,7 @@ namespace TwnsSpwWar {
     import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
     import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
 
-    export abstract class SpwWar extends TwnsBwWar.BwWar {
+    export abstract class SpwWar extends Twns.BaseWar.BwWar {
         private readonly _playerManager         = new TwnsSpwPlayerManager.SpwPlayerManager();
         private readonly _field                 = new TwnsSpwField.SpwField();
         private readonly _commonSettingManager  = new BwCommonSettingManager();

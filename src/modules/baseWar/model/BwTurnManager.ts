@@ -32,7 +32,7 @@ namespace TwnsBwTurnManager {
         private _phaseCode?          : TurnPhaseCode;
         private _enterTurnTime?      : number;
 
-        private _war?                   : TwnsBwWar.BwWar;
+        private _war?                   : Twns.BaseWar.BwWar;
         private _hasUnitOnBeginningTurn = false;
 
         public init(data: Types.Undefinable<ISerialTurnManager>, playersCountUnneutral: number): void {
@@ -64,7 +64,7 @@ namespace TwnsBwTurnManager {
             this.init(data, playersCountUnneutral);
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
         }
 
@@ -83,10 +83,10 @@ namespace TwnsBwTurnManager {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: Twns.BaseWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): TwnsBwWar.BwWar {
+        public getWar(): Twns.BaseWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -1011,7 +1011,7 @@ namespace TwnsBwTurnManager {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function handleMapWeaponTileCrystalWithExtraData(data: IWarActionSystemBeginTurn, war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+    async function handleMapWeaponTileCrystalWithExtraData(data: IWarActionSystemBeginTurn, war: Twns.BaseWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
         const gridVisualEffect  = war.getGridVisualEffect();
         const tileGridIndex     = tile.getGridIndex();
         if (!isFastExecute) {
@@ -1040,7 +1040,7 @@ namespace TwnsBwTurnManager {
             await Helpers.wait(400);
         }
     }
-    async function handleMapWeaponTileCrystalWithoutExtraData(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+    async function handleMapWeaponTileCrystalWithoutExtraData(war: Twns.BaseWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
         const gridVisualEffect  = war.getGridVisualEffect();
         const tileGridIndex     = tile.getGridIndex();
         if (!isFastExecute) {
@@ -1174,7 +1174,7 @@ namespace TwnsBwTurnManager {
         }
     }
 
-    async function handleMapWeaponTileCannonWithExtraData(data: IWarActionSystemBeginTurn, war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+    async function handleMapWeaponTileCannonWithExtraData(data: IWarActionSystemBeginTurn, war: Twns.BaseWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
         const gridVisualEffect  = war.getGridVisualEffect();
         const tileGridIndex     = tile.getGridIndex();
         if (!isFastExecute) {
@@ -1183,7 +1183,7 @@ namespace TwnsBwTurnManager {
             await Helpers.wait(400);
         }
     }
-    async function handleMapWeaponTileCannonWithoutExtraData(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+    async function handleMapWeaponTileCannonWithoutExtraData(war: Twns.BaseWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
         const gridVisualEffect  = war.getGridVisualEffect();
         const tileGridIndex     = tile.getGridIndex();
         if (!isFastExecute) {
@@ -1267,7 +1267,7 @@ namespace TwnsBwTurnManager {
             }
         }
     }
-    function generateCandidateUnitArrayForCannon(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile): TwnsBwUnit.BwUnit[] {
+    function generateCandidateUnitArrayForCannon(war: Twns.BaseWar.BwWar, tile: TwnsBwTile.BwTile): TwnsBwUnit.BwUnit[] {
         const data              = Helpers.getExisted(tile.getCustomCannonData(), ClientErrorCode.BwTurnManager_GenerateCandidateUnitArrayForCannon_00);
         const playerIndexInTurn = tile.getPlayerIndex();
         const teamIndexInTurn   = tile.getTeamIndex();
@@ -1316,7 +1316,7 @@ namespace TwnsBwTurnManager {
         return candidateUnitArray;
     }
 
-    async function handleMapWeaponTileLaserTurretWithExtraData(data: IWarActionSystemBeginTurn, war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+    async function handleMapWeaponTileLaserTurretWithExtraData(data: IWarActionSystemBeginTurn, war: Twns.BaseWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
         const gridVisualEffect  = war.getGridVisualEffect();
         const tileGridIndex     = tile.getGridIndex();
         if (!isFastExecute) {
@@ -1345,7 +1345,7 @@ namespace TwnsBwTurnManager {
             await Helpers.wait(400);
         }
     }
-    async function handleMapWeaponTileLaserTurretWithoutExtraData(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
+    async function handleMapWeaponTileLaserTurretWithoutExtraData(war: Twns.BaseWar.BwWar, tile: TwnsBwTile.BwTile, isFastExecute: boolean): Promise<void> {
         const gridVisualEffect  = war.getGridVisualEffect();
         const tileGridIndex     = tile.getGridIndex();
         if (!isFastExecute) {
@@ -1432,7 +1432,7 @@ namespace TwnsBwTurnManager {
             await Helpers.wait(400);
         }
     }
-    function generateCandidateUnitArrayForLaserTurret(war: TwnsBwWar.BwWar, tile: TwnsBwTile.BwTile): TwnsBwUnit.BwUnit[] {
+    function generateCandidateUnitArrayForLaserTurret(war: Twns.BaseWar.BwWar, tile: TwnsBwTile.BwTile): TwnsBwUnit.BwUnit[] {
         const data              = Helpers.getExisted(tile.getCustomLaserTurretData(), ClientErrorCode.BwTurnManager_GenerateCandidateUnitArrayForLaserTurret_00);
         const playerIndexInTurn = tile.getPlayerIndex();
         const teamIndexInTurn   = tile.getTeamIndex();

@@ -16,7 +16,7 @@
 namespace TwnsBwDamagePreviewPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import LangTextType     = TwnsLangTextType.LangTextType;
-    import BwWar            = TwnsBwWar.BwWar;
+    import BwWar            = Twns.BaseWar.BwWar;
 
     export type OpenData = {
         war: BwWar;

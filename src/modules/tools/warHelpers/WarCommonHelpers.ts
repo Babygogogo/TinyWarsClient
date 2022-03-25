@@ -265,7 +265,7 @@ namespace WarCommonHelpers {
     }
 
     export function getRevisedPath({ war, rawPath, launchUnitId }: {
-        war             : TwnsBwWar.BwWar;
+        war             : Twns.BaseWar.BwWar;
         rawPath         : Types.Undefinable<ProtoTypes.Structure.IMovePath>;
         launchUnitId    : Types.Undefinable<number>;
     }): Types.MovePath {
@@ -354,7 +354,7 @@ namespace WarCommonHelpers {
         };
     }
 
-    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: TwnsBwWar.BwWar, rawPath: GridIndex[]): boolean {
+    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: Twns.BaseWar.BwWar, rawPath: GridIndex[]): boolean {
         if (rawPath.length == 1) {
             return false;
         } else {
@@ -632,7 +632,7 @@ namespace WarCommonHelpers {
      * You must call unitMap.addUnitOnMap() or unitMap.addUnitLoaded() after calling this function.
      */
     export function moveUnit({ war, pathNodes, launchUnitId, fuelConsumption }: {
-        war             : TwnsBwWar.BwWar;
+        war             : Twns.BaseWar.BwWar;
         pathNodes       : GridIndex[];
         launchUnitId    : Types.Undefinable<number>;
         fuelConsumption : number;
@@ -664,7 +664,7 @@ namespace WarCommonHelpers {
         }
     }
     export async function moveExtraUnit({ war, movingUnitAndPath, aiming, deleteViewAfterMoving }: {
-        war                     : TwnsBwWar.BwWar;
+        war                     : Twns.BaseWar.BwWar;
         movingUnitAndPath       : Types.Undefinable<ProtoTypes.Structure.IMovingUnitAndPath>;
         aiming                  : GridIndex | null;
         deleteViewAfterMoving   : boolean;
@@ -833,7 +833,7 @@ namespace WarCommonHelpers {
      * @return the war view is vibrated or not
      */
     export function handleCommonExtraDataForWarActions({ war, commonExtraData, isFastExecute }: {
-        war                 : TwnsBwWar.BwWar;
+        war                 : Twns.BaseWar.BwWar;
         commonExtraData     : ProtoTypes.Structure.ICommonExtraDataForWarAction;
         isFastExecute       : boolean;
     }): boolean {
@@ -1037,7 +1037,7 @@ namespace WarCommonHelpers {
         return gridIndex.x * mapHeight + gridIndex.y;
     }
 
-    export function getIdleBuildingGridIndex(war: TwnsBwWar.BwWar): Types.GridIndex | null {
+    export function getIdleBuildingGridIndex(war: Twns.BaseWar.BwWar): Types.GridIndex | null {
         const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const tileMap                   = field.getTileMap();
@@ -1080,7 +1080,7 @@ namespace WarCommonHelpers {
 
         return null;
     }
-    export function getIdleUnitGridIndex(war: TwnsBwWar.BwWar): Types.GridIndex | null {
+    export function getIdleUnitGridIndex(war: Twns.BaseWar.BwWar): Types.GridIndex | null {
         const playerIndex               = war.getPlayerIndexInTurn();
         const field                     = war.getField();
         const unitMap                   = field.getUnitMap();

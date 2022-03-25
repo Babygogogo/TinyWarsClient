@@ -23,7 +23,7 @@ namespace TwnsMeWar {
     import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
     import ILanguageText            = ProtoTypes.Structure.ILanguageText;
 
-    export class MeWar extends TwnsBwWar.BwWar {
+    export class MeWar extends Twns.BaseWar.BwWar {
         private readonly _playerManager         = new TwnsMePlayerManager.MePlayerManager();
         private readonly _field                 = new TwnsMeField.MeField();
         private readonly _commonSettingManager  = new TwnsMeCommonSettingManager.MeCommonSettingManager();
@@ -60,14 +60,14 @@ namespace TwnsMeWar {
             this.setMapTag(mapRawData.mapTag || {});
         }
 
-        public startRunning(): TwnsBwWar.BwWar {
+        public startRunning(): Twns.BaseWar.BwWar {
             super.startRunning();
 
             this.getDrawer().startRunning(this);
 
             return this;
         }
-        public stopRunning(): TwnsBwWar.BwWar {
+        public stopRunning(): Twns.BaseWar.BwWar {
             super.stopRunning();
 
             this.getDrawer().stopRunning();

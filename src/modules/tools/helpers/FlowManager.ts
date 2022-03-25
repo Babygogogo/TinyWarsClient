@@ -96,7 +96,7 @@ namespace FlowManager {
         doStartGame(stage);
     }
     async function doStartGame(stage: egret.Stage): Promise<void> {
-        await TinyWarsNamespace.ResVersionController.init();
+        await Twns.ResVersionController.init();
         CompatibilityHelpers.init();
         NetManager.addListeners(_NET_EVENTS);
         Notify.addEventListeners(_NOTIFY_EVENTS);
@@ -134,7 +134,7 @@ namespace FlowManager {
         CommonModel.init();
         BroadcastProxy.init();
         ChangeLogProxy.init();
-        TinyWarsNamespace.LeaderboardProxy.init();
+        Twns.LeaderboardProxy.init();
         TwnsPanelConfig.init();
 
         _removeLoadingDom();

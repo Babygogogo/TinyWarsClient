@@ -63,7 +63,7 @@ namespace WarActionExecutor {
     import BwPlayer                             = TwnsBwPlayer.BwPlayer;
     import BwUnit                               = TwnsBwUnit.BwUnit;
     import BwTile                               = TwnsBwTile.BwTile;
-    import BwWar                                = TwnsBwWar.BwWar;
+    import BwWar                                = Twns.BaseWar.BwWar;
     import NotifyType                           = TwnsNotifyType.NotifyType;
 
     type ResultForHandleDestructionForTile = {

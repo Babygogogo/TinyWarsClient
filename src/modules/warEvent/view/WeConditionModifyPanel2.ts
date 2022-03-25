@@ -23,7 +23,7 @@ namespace TwnsWeConditionModifyPanel2 {
     import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
 
     export type OpenData = {
-        war         : TwnsBwWar.BwWar;
+        war         : Twns.BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };

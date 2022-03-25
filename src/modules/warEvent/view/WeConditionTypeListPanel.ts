@@ -22,7 +22,7 @@ namespace TwnsWeConditionTypeListPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
-        war         : TwnsBwWar.BwWar;
+        war         : Twns.BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
@@ -83,7 +83,7 @@ namespace TwnsWeConditionTypeListPanel {
     }
 
     type DataForTypeRenderer = {
-        war             : TwnsBwWar.BwWar;
+        war             : Twns.BaseWar.BwWar;
         fullData        : ProtoTypes.Map.IWarEventFullData;
         newConditionType: ConditionType;
         condition       : IWarEventCondition;

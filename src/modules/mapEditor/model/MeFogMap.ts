@@ -37,7 +37,7 @@ namespace TwnsMeFogMap {
             };
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
 
             for (const tile of war.getTileMap().getAllTiles()) {

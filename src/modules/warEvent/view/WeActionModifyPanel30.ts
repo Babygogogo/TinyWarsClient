@@ -22,7 +22,7 @@ namespace TwnsWeActionModifyPanel30 {
     import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
 
     export type OpenData = {
-        war         : TwnsBwWar.BwWar;
+        war         : Twns.BaseWar.BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };

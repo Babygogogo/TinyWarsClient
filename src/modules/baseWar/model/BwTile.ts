@@ -50,7 +50,7 @@ namespace TwnsBwTile {
 
         private readonly _view  = new TwnsBwTileView.BwTileView();
         private _hasFog         = false;
-        private _war?           : TwnsBwWar.BwWar;
+        private _war?           : Twns.BaseWar.BwWar;
 
         public init(data: ISerialTile, configVersion: string): void {
             this.deserialize(data, configVersion);
@@ -60,7 +60,7 @@ namespace TwnsBwTile {
             this.init(data, configVersion);
         }
 
-        public startRunning(war: TwnsBwWar.BwWar): void {
+        public startRunning(war: Twns.BaseWar.BwWar): void {
             this._setWar(war);
         }
         public startRunningView(): void {
@@ -303,10 +303,10 @@ namespace TwnsBwTile {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: TwnsBwWar.BwWar): void {
+        private _setWar(war: Twns.BaseWar.BwWar): void {
             this._war = war;
         }
-        public getWar(): TwnsBwWar.BwWar {
+        public getWar(): Twns.BaseWar.BwWar {
             return Helpers.getExisted(this._war);
         }
 

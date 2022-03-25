@@ -54,7 +54,7 @@ namespace TwnsBwWarInfoPanel {
     }
 
     export type OpenData = {
-        war : TwnsBwWar.BwWar;
+        war : Twns.BaseWar.BwWar;
     };
     export class BwWarInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
@@ -242,7 +242,7 @@ namespace TwnsBwWarInfoPanel {
     // PlayerRenderer
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForPlayerRenderer = {
-        war             : TwnsBwWar.BwWar;
+        war             : Twns.BaseWar.BwWar;
         playerIndex     : number;
         playerRule      : IDataForPlayerRule;
         infoTypeArray   : InfoType[];
@@ -302,7 +302,7 @@ namespace TwnsBwWarInfoPanel {
     // InfoRenderer
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForInfoRenderer = {
-        war                 : TwnsBwWar.BwWar;
+        war                 : Twns.BaseWar.BwWar;
         infoType            : InfoType;
         playerIndex         : number;
         playerRenderer      : PlayerRenderer;
@@ -960,7 +960,7 @@ namespace TwnsBwWarInfoPanel {
             default                                 : return null;
         }
     }
-    function checkCanModifyPlayerInfo(war: TwnsBwWar.BwWar): boolean {
+    function checkCanModifyPlayerInfo(war: Twns.BaseWar.BwWar): boolean {
         const warType = war.getWarType();
         return (warType === Types.WarType.ScwFog)
             || (warType === Types.WarType.ScwStd)

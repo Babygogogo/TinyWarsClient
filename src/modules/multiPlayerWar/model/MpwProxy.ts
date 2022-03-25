@@ -74,7 +74,7 @@ namespace MpwProxy {
         Notify.dispatch(NotifyType.MsgMpwCommonGetMyWarIdArray, data);
     }
 
-    export function reqMpwCommonSyncWar(war: TwnsBwWar.BwWar, requestType: Types.SyncWarRequestType): void {
+    export function reqMpwCommonSyncWar(war: Twns.BaseWar.BwWar, requestType: Types.SyncWarRequestType): void {
         NetManager.send({
             MsgMpwCommonSyncWar: { c: {
                 warId               : war.getWarId(),
@@ -147,7 +147,7 @@ namespace MpwProxy {
         }
     }
 
-    export function reqMpwExecuteWarAction(war: TwnsBwWar.BwWar, actionContainer: ProtoTypes.WarAction.IWarActionContainer): void {
+    export function reqMpwExecuteWarAction(war: Twns.BaseWar.BwWar, actionContainer: ProtoTypes.WarAction.IWarActionContainer): void {
         NetManager.send({
             MsgMpwExecuteWarAction: { c: {
                 warId           : war.getWarId(),
