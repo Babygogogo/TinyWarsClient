@@ -952,7 +952,7 @@ namespace CommonConstants {
         ])],
     ]);
 
-    export const TileDefaultCrystalData: ProtoTypes.WarSerialization.ITileCustomCrystalData = {
+    export const TileDefaultCrystalData: CommonProto.WarSerialization.ITileCustomCrystalData = {
         radius                      : 2,
         priority                    : 0,
 
@@ -967,7 +967,7 @@ namespace CommonConstants {
         deltaFuelPercentage         : 100,
         deltaPrimaryAmmoPercentage  : 100,
     };
-    export const TileDefaultCannonUpData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
+    export const TileDefaultCannonUpData: CommonProto.WarSerialization.ITileCustomCannonData = {
         rangeForDown                : 0,
         rangeForLeft                : 0,
         rangeForRight               : 0,
@@ -984,7 +984,7 @@ namespace CommonConstants {
         deltaFuelPercentage         : 0,
         deltaPrimaryAmmoPercentage  : 0,
     };
-    export const TileDefaultCannonDownData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
+    export const TileDefaultCannonDownData: CommonProto.WarSerialization.ITileCustomCannonData = {
         rangeForDown                : 4,
         rangeForLeft                : 0,
         rangeForRight               : 0,
@@ -1001,7 +1001,7 @@ namespace CommonConstants {
         deltaFuelPercentage         : 0,
         deltaPrimaryAmmoPercentage  : 0,
     };
-    export const TileDefaultCannonLeftData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
+    export const TileDefaultCannonLeftData: CommonProto.WarSerialization.ITileCustomCannonData = {
         rangeForDown                : 0,
         rangeForLeft                : 4,
         rangeForRight               : 0,
@@ -1018,7 +1018,7 @@ namespace CommonConstants {
         deltaFuelPercentage         : 0,
         deltaPrimaryAmmoPercentage  : 0,
     };
-    export const TileDefaultCannonRightData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
+    export const TileDefaultCannonRightData: CommonProto.WarSerialization.ITileCustomCannonData = {
         rangeForDown                : 0,
         rangeForLeft                : 0,
         rangeForRight               : 4,
@@ -1035,7 +1035,7 @@ namespace CommonConstants {
         deltaFuelPercentage         : 0,
         deltaPrimaryAmmoPercentage  : 0,
     };
-    export const TileDefaultCustomCannonData: ProtoTypes.WarSerialization.ITileCustomCannonData = {
+    export const TileDefaultCustomCannonData: CommonProto.WarSerialization.ITileCustomCannonData = {
         rangeForDown                : 4,
         rangeForLeft                : 4,
         rangeForRight               : 4,
@@ -1052,7 +1052,7 @@ namespace CommonConstants {
         deltaFuelPercentage         : 0,
         deltaPrimaryAmmoPercentage  : 0,
     };
-    export const TileDefaultCustomLaserTurretData: ProtoTypes.WarSerialization.ITileCustomLaserTurretData = {
+    export const TileDefaultCustomLaserTurretData: CommonProto.WarSerialization.ITileCustomLaserTurretData = {
         rangeForDown                : 9999,
         rangeForLeft                : 9999,
         rangeForRight               : 9999,

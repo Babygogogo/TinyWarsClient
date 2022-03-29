@@ -27,8 +27,8 @@
 namespace TwnsWeActionModifyPanel6 {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ColorValue               = Types.ColorValue;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import BwWar                    = Twns.BaseWar.BwWar;
 
@@ -171,7 +171,7 @@ namespace TwnsWeActionModifyPanel6 {
             label.textColor = ((currCount <= maxCount) && (currCount > 0)) ? ColorValue.White : ColorValue.Red;
         }
 
-        private _getAction(): ProtoTypes.WarEvent.IWeaSimpleDialogue {
+        private _getAction(): CommonProto.WarEvent.IWeaSimpleDialogue {
             return Helpers.getExisted(this._getOpenData().action.WeaSimpleDialogue);
         }
     }
@@ -179,7 +179,7 @@ namespace TwnsWeActionModifyPanel6 {
     type DataForDialogueRenderer = {
         war             : BwWar;
         action          : IWarEventAction;
-        dataForDialogue : ProtoTypes.WarEvent.WeaSimpleDialogue.IDataForDialogue;
+        dataForDialogue : CommonProto.WarEvent.WeaSimpleDialogue.IDataForDialogue;
     };
     class DialogueRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForDialogueRenderer> {
         private readonly _labelError!           : TwnsUiLabel.UiLabel;

@@ -37,8 +37,8 @@ namespace TwnsMeWarRulePanel {
     import MeWar                    = TwnsMeWar.MeWar;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarRule                 = ProtoTypes.WarRule.IWarRule;
-    import IDataForPlayerRule       = ProtoTypes.WarRule.IDataForPlayerRule;
+    import IWarRule                 = CommonProto.WarRule.IWarRule;
+    import IDataForPlayerRule       = CommonProto.WarRule.IDataForPlayerRule;
 
     export type OpenData = void;
     export class MeWarRulePanel extends TwnsUiPanel.UiPanel<OpenData> {
@@ -298,7 +298,7 @@ namespace TwnsMeWarRulePanel {
         }
 
         private _onTouchedBtnTestWarEvent(): void {
-            const testData: ProtoTypes.Map.IWarEventFullData = {
+            const testData: CommonProto.Map.IWarEventFullData = {
                 conditionArray: [                        // 条件列表
                     {
                         WecCommonData: {

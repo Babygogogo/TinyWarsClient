@@ -1560,7 +1560,7 @@ namespace TwnsBwTileDetailPanel {
         index           : number;
         configVersion   : string;
         unitType        : UnitType;
-        tileCfg         : ProtoTypes.Config.ITileTemplateCfg;
+        tileCfg         : CommonProto.Config.ITileTemplateCfg;
         playerIndex     : number;
     };
     class MoveCostRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMoveRangeRenderer> {

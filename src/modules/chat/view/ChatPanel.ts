@@ -32,7 +32,7 @@ namespace TwnsChatPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ChatCategory         = Types.ChatMessageToCategory;
     import ChatChannel          = Types.ChatChannel;
-    import NetMessage           = ProtoTypes.NetMessage;
+    import NetMessage           = CommonProto.NetMessage;
 
     export type OpenData = {
         toUserId?       : number | null;
@@ -514,7 +514,7 @@ namespace TwnsChatPanel {
         }
     }
 
-    function getLatestTimestamp(index: number, msgList: ProtoTypes.Chat.IChatMessage[] | null): { index: number, timestamp: number } {
+    function getLatestTimestamp(index: number, msgList: CommonProto.Chat.IChatMessage[] | null): { index: number, timestamp: number } {
         let timestamp = 0;
         for (const msg of msgList || []) {
             timestamp = Math.max(timestamp, Helpers.getExisted(msg.timestamp));
@@ -661,7 +661,7 @@ namespace TwnsChatPanel {
     }
 
     type DataForMessageRenderer = {
-        message: ProtoTypes.Chat.IChatMessage;
+        message: CommonProto.Chat.IChatMessage;
     };
     class MessageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMessageRenderer> {
         private readonly _imgAvatar!    : TwnsUiImage.UiImage;

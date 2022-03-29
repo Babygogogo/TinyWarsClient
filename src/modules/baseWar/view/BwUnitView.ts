@@ -269,7 +269,7 @@ namespace TwnsBwUnitView {
             });
         }
         public moveAlongExtraPath({ path, aiming, deleteViewAfterMoving }: {
-            path                    : ProtoTypes.Structure.IGridIndexAndPathInfo[];
+            path                    : CommonProto.Structure.IGridIndexAndPathInfo[];
             aiming                  : GridIndex | null;
             deleteViewAfterMoving   : boolean;
         }): Promise<void> {

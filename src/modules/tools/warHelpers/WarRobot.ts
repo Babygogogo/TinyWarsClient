@@ -16,7 +16,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarRobot {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
+    import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
     import WeaponType           = Types.WeaponType;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
@@ -1486,7 +1486,7 @@ namespace WarRobot {
         commonParams            : CommonParams;
         focusUnit               : BwUnit;
         focusUnitGridIndex      : GridIndex;
-        battleDamageInfoArray   : ProtoTypes.Structure.IBattleDamageInfo[];
+        battleDamageInfoArray   : CommonProto.Structure.IBattleDamageInfo[];
     }): Promise<number> {
         await Helpers.checkAndCallLater();
 
@@ -1614,7 +1614,7 @@ namespace WarRobot {
         return unit.checkIsFuelInShort() ? -10 : 10;
     }
 
-    async function getScoreForActionUnitDropUnit(unit: BwUnit, dropDestinations: ProtoTypes.Structure.IDropDestination[]): Promise<number> {
+    async function getScoreForActionUnitDropUnit(unit: BwUnit, dropDestinations: CommonProto.Structure.IDropDestination[]): Promise<number> {
         await Helpers.checkAndCallLater();
 
         return dropDestinations.length * 100;
@@ -2013,7 +2013,7 @@ namespace WarRobot {
                 }
             });
 
-        const dropDestinations: ProtoTypes.Structure.IDropDestination[] = [];
+        const dropDestinations: CommonProto.Structure.IDropDestination[] = [];
         for (const loadedUnit of loadedUnitArray) {
             const index = targetTileArray.findIndex(v => commonParams.getCachedMoveCost(loadedUnit, v) != null);
             if (index >= 0) {

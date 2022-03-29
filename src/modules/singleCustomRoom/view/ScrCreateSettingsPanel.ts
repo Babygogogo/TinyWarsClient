@@ -127,7 +127,7 @@ namespace TwnsScrCreateSettingsPanel {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMsgSpmCreateScw(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateScw.IS;
+            const data = e.data as CommonProto.NetMessage.MsgSpmCreateScw.IS;
             FlowManager.gotoSinglePlayerWar({
                 warData         : Helpers.getExisted(data.warData),
                 slotExtraData   : Helpers.getExisted(data.extraData),

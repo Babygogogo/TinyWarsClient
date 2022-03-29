@@ -32,9 +32,9 @@ namespace WarEventHelper {
     import ConditionType            = Types.WarEventConditionType;
     import ActionType               = Types.WarEventActionType;
     import PlayerAliveState         = Types.PlayerAliveState;
-    import WarEvent                 = ProtoTypes.WarEvent;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IMapRawData              = ProtoTypes.Map.IMapRawData;
+    import WarEvent                 = CommonProto.WarEvent;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IMapRawData              = CommonProto.Map.IMapRawData;
     import IWarEvent                = WarEvent.IWarEvent;
     import IWarEventAction          = WarEvent.IWarEventAction;
     import IWarEventCondition       = WarEvent.IWarEventCondition;
@@ -457,7 +457,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsEveryWarEventInUse(eventDict: WarEventDict, warRuleArray: ProtoTypes.WarRule.IWarRule[]): boolean {  // DONE
+    function checkIsEveryWarEventInUse(eventDict: WarEventDict, warRuleArray: CommonProto.WarRule.IWarRule[]): boolean {  // DONE
         for (const [eventId] of eventDict) {
             let isInUse = false;
             for (const warRule of warRuleArray) {
@@ -525,7 +525,7 @@ namespace WarEventHelper {
             || (checkIsValidWeaSetTileState(action.WeaSetTileState, mapSize));
         }
     function checkIsValidWeaAddUnit({ action, configVersion, mapSize, playersCountUnneutral }: {
-        action                  : Types.Undefinable<ProtoTypes.WarEvent.IWeaAddUnit>;
+        action                  : Types.Undefinable<CommonProto.WarEvent.IWeaAddUnit>;
         configVersion           : string;
         mapSize                 : Types.MapSize;
         playersCountUnneutral   : number;
@@ -568,7 +568,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaDialogue(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDialogue>): boolean {
+    function checkIsValidWeaDialogue(action: Types.Undefinable<CommonProto.WarEvent.IWeaDialogue>): boolean {
         if (action == null) {
             return false;
         }
@@ -610,7 +610,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidDataForCoDialogue(data: ProtoTypes.WarEvent.WeaDialogue.IDataForCoDialogue): boolean {
+    function checkIsValidDataForCoDialogue(data: CommonProto.WarEvent.WeaDialogue.IDataForCoDialogue): boolean {
         const configVersion = ConfigManager.getLatestConfigVersion();
         if (configVersion == null) {
             return false;
@@ -654,7 +654,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidDataForAside(data: ProtoTypes.WarEvent.WeaDialogue.IDataForAside): boolean {
+    function checkIsValidDataForAside(data: CommonProto.WarEvent.WeaDialogue.IDataForAside): boolean {
         if (!Helpers.checkIsValidLanguageTextArray({
             list            : data.textArray,
             minTextLength   : 1,
@@ -666,7 +666,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetViewpoint(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetViewpoint>, mapSize: Types.MapSize): boolean {
+    function checkIsValidWeaSetViewpoint(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetViewpoint>, mapSize: Types.MapSize): boolean {
         if (action == null) {
             return false;
         }
@@ -675,7 +675,7 @@ namespace WarEventHelper {
         return (gridIndex != null)
             && (GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize));
     }
-    function checkIsValidWeaSetWeather(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetWeather>): boolean {
+    function checkIsValidWeaSetWeather(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetWeather>): boolean {
         if (action == null) {
             return false;
         }
@@ -685,7 +685,7 @@ namespace WarEventHelper {
             && (ConfigManager.checkIsValidWeatherType(weatherType))
             && (action.weatherTurnsCount != null);
     }
-    function checkIsValidWeaSimpleDialogue(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSimpleDialogue>): boolean {
+    function checkIsValidWeaSimpleDialogue(action: Types.Undefinable<CommonProto.WarEvent.IWeaSimpleDialogue>): boolean {
         if (action == null) {
             return false;
         }
@@ -715,7 +715,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaPlayBgm(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaPlayBgm>): boolean {
+    function checkIsValidWeaPlayBgm(action: Types.Undefinable<CommonProto.WarEvent.IWeaPlayBgm>): boolean {
         if (action == null) {
             return false;
         }
@@ -727,7 +727,7 @@ namespace WarEventHelper {
         const bgmCode = action.bgmCode;
         return (bgmCode != null) && (bgmCode <= Types.BgmCode.Co9999);
     }
-    function checkIsValidWeaSetForceFogCode(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetForceFogCode>): boolean {
+    function checkIsValidWeaSetForceFogCode(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetForceFogCode>): boolean {
         if (action == null) {
             return false;
         }
@@ -737,7 +737,7 @@ namespace WarEventHelper {
             && (ConfigManager.checkIsValidForceFogCode(forceFogCode))
             && (action.turnsCount != null);
     }
-    function checkIsValidWeaSetCustomCounter(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetCustomCounter>): boolean {
+    function checkIsValidWeaSetCustomCounter(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetCustomCounter>): boolean {
         if (action == null) {
             return false;
         }
@@ -771,7 +771,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaDeprecatedSetPlayerAliveState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerAliveState>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaDeprecatedSetPlayerAliveState(action: Types.Undefinable<CommonProto.WarEvent.IWeaDeprecatedSetPlayerAliveState>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -797,7 +797,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaDeprecatedSetPlayerFund(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerFund>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaDeprecatedSetPlayerFund(action: Types.Undefinable<CommonProto.WarEvent.IWeaDeprecatedSetPlayerFund>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -823,7 +823,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaDeprecatedSetPlayerCoEnergy(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaDeprecatedSetPlayerCoEnergy(action: Types.Undefinable<CommonProto.WarEvent.IWeaDeprecatedSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -849,7 +849,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetPlayerAliveState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerAliveState>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetPlayerAliveState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetPlayerAliveState>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -872,7 +872,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetPlayerState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerState>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetPlayerState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetPlayerState>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -931,7 +931,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetPlayerCoEnergy(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetPlayerCoEnergy(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetPlayerCoEnergy>, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -947,7 +947,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetUnitState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetUnitState>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetUnitState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetUnitState>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -1047,7 +1047,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetTileType(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetTileType>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+    function checkIsValidWeaSetTileType(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetTileType>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
         if (action == null) {
             return false;
         }
@@ -1081,7 +1081,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWeaSetTileState(action: Types.Undefinable<ProtoTypes.WarEvent.IWeaSetTileState>, mapSize: Types.MapSize): boolean {
+    function checkIsValidWeaSetTileState(action: Types.Undefinable<CommonProto.WarEvent.IWeaSetTileState>, mapSize: Types.MapSize): boolean {
         if (action == null) {
             return false;
         }
@@ -1132,7 +1132,7 @@ namespace WarEventHelper {
 
     function checkIsValidWarEventCondition({ condition, mapRawData }: {  // DONE
         condition   : IWarEventCondition;
-        mapRawData  : ProtoTypes.Map.IMapRawData;
+        mapRawData  : CommonProto.Map.IMapRawData;
     }): boolean {
         if (Object.keys(condition).length !== 2) {
             return false;
@@ -1175,22 +1175,22 @@ namespace WarEventHelper {
             || (checkIsValidWecUnitPresence(condition.WecUnitPresence, mapSize, playersCountUnneutral))
             || (checkIsValidWecCustomCounter(condition.WecCustomCounter));
     }
-    function checkIsValidWecEventCalledCountTotalEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecEventCalledCountTotalEqualTo>): boolean {
+    function checkIsValidWecEventCalledCountTotalEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCountTotalEqualTo>): boolean {
         return (condition != null)
             && (condition.countEqualTo != null)
             && (condition.eventIdEqualTo != null);
     }
-    function checkIsValidWecEventCalledCountTotalGreaterThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecEventCalledCountTotalGreaterThan>): boolean {
+    function checkIsValidWecEventCalledCountTotalGreaterThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCountTotalGreaterThan>): boolean {
         return (condition != null)
             && (condition.countGreaterThan != null)
             && (condition.eventIdEqualTo != null);
     }
-    function checkIsValidWecEventCalledCountTotalLessThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecEventCalledCountTotalLessThan>): boolean {
+    function checkIsValidWecEventCalledCountTotalLessThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCountTotalLessThan>): boolean {
         return (condition != null)
             && (condition.countLessThan != null)
             && (condition.eventIdEqualTo != null);
     }
-    function checkIsValidWecEventCalledCount(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecEventCalledCount>, fullData: Types.Undefinable<IWarEventFullData>): boolean {
+    function checkIsValidWecEventCalledCount(condition: Types.Undefinable<CommonProto.WarEvent.IWecEventCalledCount>, fullData: Types.Undefinable<IWarEventFullData>): boolean {
         if (condition == null) {
             return false;
         }
@@ -1239,7 +1239,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWecPlayerAliveStateEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerAliveStateEqualTo>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecPlayerAliveStateEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerAliveStateEqualTo>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1260,7 +1260,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWecPlayerState(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerState>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecPlayerState(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerState>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1341,19 +1341,19 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWecTurnIndexEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnIndexEqualTo>): boolean {
+    function checkIsValidWecTurnIndexEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexEqualTo>): boolean {
         return (condition != null)
             && (condition.valueEqualTo != null);
     }
-    function checkIsValidWecTurnIndexGreaterThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnIndexGreaterThan>): boolean {
+    function checkIsValidWecTurnIndexGreaterThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexGreaterThan>): boolean {
         return (condition != null)
             && (condition.valueGreaterThan != null);
     }
-    function checkIsValidWecTurnIndexLessThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnIndexLessThan>): boolean {
+    function checkIsValidWecTurnIndexLessThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexLessThan>): boolean {
         return (condition != null)
             && (condition.valueLessThan != null);
     }
-    function checkIsValidWecTurnIndexRemainderEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnIndexRemainderEqualTo>): boolean {
+    function checkIsValidWecTurnIndexRemainderEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnIndexRemainderEqualTo>): boolean {
         if (condition == null) {
             return false;
         }
@@ -1364,7 +1364,7 @@ namespace WarEventHelper {
             && (remainderEqualTo != null)
             && (remainderEqualTo < divider);
     }
-    function checkIsValidWecTurnAndPlayer(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnAndPlayer>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecTurnAndPlayer(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnAndPlayer>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1422,7 +1422,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWecPlayerIndexInTurnEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerIndexInTurnEqualTo>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecPlayerIndexInTurnEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnEqualTo>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1432,7 +1432,7 @@ namespace WarEventHelper {
             && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
             && (valueEqualTo <= playersCountUnneutral);
     }
-    function checkIsValidWecPlayerIndexInTurnGreaterThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerIndexInTurnGreaterThan>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecPlayerIndexInTurnGreaterThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnGreaterThan>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1442,7 +1442,7 @@ namespace WarEventHelper {
             && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
             && (valueEqualTo <= playersCountUnneutral);
     }
-    function checkIsValidWecPlayerIndexInTurnLessThan(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecPlayerIndexInTurnLessThan>, playersCountUnneutral: number): boolean {
+    function checkIsValidWecPlayerIndexInTurnLessThan(condition: Types.Undefinable<CommonProto.WarEvent.IWecPlayerIndexInTurnLessThan>, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1452,7 +1452,7 @@ namespace WarEventHelper {
             && (valueEqualTo >= CommonConstants.WarNeutralPlayerIndex)
             && (valueEqualTo <= playersCountUnneutral);
     }
-    function checkIsValidWecTurnPhaseEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTurnPhaseEqualTo>): boolean {
+    function checkIsValidWecTurnPhaseEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTurnPhaseEqualTo>): boolean {
         if (condition == null) {
             return false;
         }
@@ -1461,7 +1461,7 @@ namespace WarEventHelper {
         return (value === Types.TurnPhaseCode.Main)
             || (value === Types.TurnPhaseCode.WaitBeginTurn);
     }
-    function checkIsValidWecWeatherAndFog(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecWeatherAndFog>): boolean {
+    function checkIsValidWecWeatherAndFog(condition: Types.Undefinable<CommonProto.WarEvent.IWecWeatherAndFog>): boolean {
         if (condition == null) {
             return false;
         }
@@ -1472,7 +1472,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWecTilePlayerIndexEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTilePlayerIndexEqualTo>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+    function checkIsValidWecTilePlayerIndexEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTilePlayerIndexEqualTo>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1484,7 +1484,7 @@ namespace WarEventHelper {
             && (gridIndex != null)
             && (GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize));
     }
-    function checkIsValidWecTileTypeEqualTo(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTileTypeEqualTo>, mapSize: Types.MapSize): boolean {
+    function checkIsValidWecTileTypeEqualTo(condition: Types.Undefinable<CommonProto.WarEvent.IWecTileTypeEqualTo>, mapSize: Types.MapSize): boolean {
         if (condition == null) {
             return false;
         }
@@ -1496,7 +1496,7 @@ namespace WarEventHelper {
             && (gridIndex != null)
             && (GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize));
     }
-    function checkIsValidWecTilePresence(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecTilePresence>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+    function checkIsValidWecTilePresence(condition: Types.Undefinable<CommonProto.WarEvent.IWecTilePresence>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1583,7 +1583,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWecUnitPresence(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecUnitPresence>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
+    function checkIsValidWecUnitPresence(condition: Types.Undefinable<CommonProto.WarEvent.IWecUnitPresence>, mapSize: Types.MapSize, playersCountUnneutral: number): boolean {
         if (condition == null) {
             return false;
         }
@@ -1671,7 +1671,7 @@ namespace WarEventHelper {
 
         return true;
     }
-    function checkIsValidWecCustomCounter(condition: Types.Undefinable<ProtoTypes.WarEvent.IWecCustomCounter>): boolean {
+    function checkIsValidWecCustomCounter(condition: Types.Undefinable<CommonProto.WarEvent.IWecCustomCounter>): boolean {
         if (condition == null) {
             return false;
         }
@@ -3339,7 +3339,7 @@ namespace WarEventHelper {
         const mapSize               = war.getTileMap().getMapSize();
         const configVersion         = war.getConfigVersion();
         const playersCountUnneutral = war.getPlayersCountUnneutral();
-        const validator             = (v: ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit) => {
+        const validator             = (v: CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit) => {
             const unitData = Helpers.getExisted(v.unitData);
             return (v.canBeBlockedByUnit != null)
                 && (v.needMovableTile != null)
@@ -5022,7 +5022,7 @@ namespace WarEventHelper {
             }
         }
     }
-    export function getDefaultAddUnitData(): ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit {
+    export function getDefaultAddUnitData(): CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit {
         return {
             canBeBlockedByUnit  : true,
             needMovableTile     : true,
@@ -5033,7 +5033,7 @@ namespace WarEventHelper {
             },
         };
     }
-    export function getDefaultCoDialogueData(): ProtoTypes.WarEvent.WeaDialogue.IDataForDialogue {
+    export function getDefaultCoDialogueData(): CommonProto.WarEvent.WeaDialogue.IDataForDialogue {
         return {
             dataForCoDialogue: {
                 coId        : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))[0],
@@ -5044,7 +5044,7 @@ namespace WarEventHelper {
             },
         };
     }
-    export function getDefaultAsideData(): ProtoTypes.WarEvent.WeaDialogue.IDataForDialogue {
+    export function getDefaultAsideData(): CommonProto.WarEvent.WeaDialogue.IDataForDialogue {
         return {
             dataForAside: {
                 textArray   : [
@@ -5053,7 +5053,7 @@ namespace WarEventHelper {
             },
         };
     }
-    export function getDefaultSimpleCoDialogueData(): ProtoTypes.WarEvent.WeaSimpleDialogue.IDataForDialogue {
+    export function getDefaultSimpleCoDialogueData(): CommonProto.WarEvent.WeaSimpleDialogue.IDataForDialogue {
         return {
             dataForCoDialogue: {
                 coId        : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))[0],

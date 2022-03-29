@@ -53,7 +53,7 @@ namespace TwnsCommonServerStatusPanel {
         }
 
         private _onMsgCommonGetServerStatus(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCommonGetServerStatus.IS;
+            const data = e.data as CommonProto.NetMessage.MsgCommonGetServerStatus.IS;
 
             this._labelAccounts.text        = "" + data.totalAccounts;
 

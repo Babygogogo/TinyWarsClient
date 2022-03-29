@@ -132,7 +132,7 @@ namespace TwnsSrrCreateSettingsPanel {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMsgSpmCreateSrw(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSrw.IS;
+            const data = e.data as CommonProto.NetMessage.MsgSpmCreateSrw.IS;
             FlowManager.gotoSinglePlayerWar({
                 warData         : Helpers.getExisted(data.warData),
                 slotExtraData   : Helpers.getExisted(data.extraData),

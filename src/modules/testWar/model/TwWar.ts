@@ -19,9 +19,9 @@ namespace Twns.TestWar {
     import BwWarEventManager    = TwnsBwWarEventManager.BwWarEventManager;
     import TwPlayerManager      = TwnsTwPlayerManager.TwPlayerManager;
     import TwField              = TwnsTwField.TwField;
-    import WarSerialization     = ProtoTypes.WarSerialization;
+    import WarSerialization     = CommonProto.WarSerialization;
     import ISerialWar           = WarSerialization.ISerialWar;
-    import IMapRawData          = ProtoTypes.Map.IMapRawData;
+    import IMapRawData          = CommonProto.Map.IMapRawData;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                = BaseWar.BwWar;
 

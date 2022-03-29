@@ -16,8 +16,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeConditionTypeListPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition   = ProtoTypes.WarEvent.IWarEventCondition;
+    import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition   = CommonProto.WarEvent.IWarEventCondition;
     import ConditionType        = Types.WarEventConditionType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
@@ -84,7 +84,7 @@ namespace TwnsWeConditionTypeListPanel {
 
     type DataForTypeRenderer = {
         war             : Twns.BaseWar.BwWar;
-        fullData        : ProtoTypes.Map.IWarEventFullData;
+        fullData        : CommonProto.Map.IWarEventFullData;
         newConditionType: ConditionType;
         condition       : IWarEventCondition;
     };

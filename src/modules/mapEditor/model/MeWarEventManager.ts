@@ -7,8 +7,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWarEventManager {
     import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
-    import ISerialWarEventManager   = ProtoTypes.WarSerialization.ISerialWarEventManager;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
+    import ISerialWarEventManager   = CommonProto.WarSerialization.ISerialWarEventManager;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
 
     export class MeWarEventManager extends BwWarEventManager {
         public init(data: ISerialWarEventManager): void {

@@ -19,7 +19,7 @@ namespace TwnsBwDialoguePanel {
 
     export type OpenData = {
         configVersion   : string;
-        actionData      : ProtoTypes.WarEvent.IWeaDialogue;
+        actionData      : CommonProto.WarEvent.IWeaDialogue;
         callbackOnClose : () => void;
     };
     export class BwDialoguePanel extends TwnsUiPanel.UiPanel<OpenData> {

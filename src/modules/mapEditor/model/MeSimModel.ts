@@ -6,8 +6,8 @@
 // import UserModel        from "../../user/model/UserModel";
 
 namespace MeSimModel {
-    import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
-    import IMapRawData                      = ProtoTypes.Map.IMapRawData;
+    import ISerialWar                       = CommonProto.WarSerialization.ISerialWar;
+    import IMapRawData                      = CommonProto.Map.IMapRawData;
 
     let _mapRawData : IMapRawData;
     let _warData    : ISerialWar;
@@ -39,7 +39,7 @@ namespace MeSimModel {
         return teamIndexSet.size > 1;
     }
 
-    export function getWarRule(): ProtoTypes.WarRule.IWarRule {
+    export function getWarRule(): CommonProto.WarRule.IWarRule {
         return Helpers.getExisted(getWarData().settingsForCommon?.warRule);
     }
 
@@ -75,7 +75,7 @@ namespace MeSimModel {
         }
     }
 
-    function getPlayer(playerIndex: number): ProtoTypes.WarSerialization.ISerialPlayer {
+    function getPlayer(playerIndex: number): CommonProto.WarSerialization.ISerialPlayer {
         return Helpers.getExisted(getWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex));
     }
 

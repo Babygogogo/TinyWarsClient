@@ -13,7 +13,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTileMap {
     import MapSize          = Types.MapSize;
-    import WarSerialization = ProtoTypes.WarSerialization;
+    import WarSerialization = CommonProto.WarSerialization;
     import ISerialTileMap   = WarSerialization.ISerialTileMap;
     import ISerialTile      = WarSerialization.ISerialTile;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;

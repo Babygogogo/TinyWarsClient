@@ -16,11 +16,11 @@ namespace WarCoSkillHelpers {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwPlayer             = TwnsBwPlayer.BwPlayer;
     import GridIndex            = Types.GridIndex;
-    import Structure            = ProtoTypes.Structure;
+    import Structure            = CommonProto.Structure;
     import IDataForUseCoSkill   = Structure.IDataForUseCoSkill;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
     import BwWar                = Twns.BaseWar.BwWar;
-    import ICoSkillCfg          = ProtoTypes.Config.ICoSkillCfg;
+    import ICoSkillCfg          = CommonProto.Config.ICoSkillCfg;
 
     type DamageMaps = {
         hpMap               : number[][];

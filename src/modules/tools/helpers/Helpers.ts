@@ -8,9 +8,9 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Helpers {
     import ColorType            = Types.ColorType;
-    import ILanguageText        = ProtoTypes.Structure.ILanguageText;
-    import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
+    import ILanguageText        = CommonProto.Structure.ILanguageText;
+    import IMessageContainer    = CommonProto.NetMessage.IMessageContainer;
+    import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 

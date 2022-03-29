@@ -6,12 +6,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwRandomNumberManager {
-    import ISeedRandomState = ProtoTypes.Structure.ISeedRandomState;
+    import ISeedRandomState = CommonProto.Structure.ISeedRandomState;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwRandomNumberManager {
         private _isNeedSeedRandom?          : boolean;
-        private _seedRandomInitialState?    : ProtoTypes.Structure.ISeedRandomState | null;
+        private _seedRandomInitialState?    : CommonProto.Structure.ISeedRandomState | null;
         private _randomNumberGenerator?     : seedrandom.prng | null;
 
         public init({ isNeedSeedRandom, initialState, currentState }: {
@@ -57,14 +57,14 @@ namespace TwnsBwRandomNumberManager {
             return Helpers.getExisted(this._getRandomNumberGenerator())();
         }
 
-        public getSeedRandomCurrentState(): ProtoTypes.Structure.ISeedRandomState {
+        public getSeedRandomCurrentState(): CommonProto.Structure.ISeedRandomState {
             return Helpers.getExisted(this._getRandomNumberGenerator()).state();
         }
 
-        private _setSeedRandomInitialState(state: ProtoTypes.Structure.ISeedRandomState): void {
+        private _setSeedRandomInitialState(state: CommonProto.Structure.ISeedRandomState): void {
             this._seedRandomInitialState = state;
         }
-        public getSeedRandomInitialState(): ProtoTypes.Structure.ISeedRandomState | null {
+        public getSeedRandomInitialState(): CommonProto.Structure.ISeedRandomState | null {
             return Helpers.getDefined(this._seedRandomInitialState, ClientErrorCode.BwRandomNumberManager_GetSeedRandomInitialState_00);
         }
     }

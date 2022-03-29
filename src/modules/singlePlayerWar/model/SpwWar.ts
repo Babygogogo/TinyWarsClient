@@ -15,8 +15,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import WarAction                = ProtoTypes.WarAction;
-    import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+    import WarAction                = CommonProto.WarAction;
+    import ISpmWarSaveSlotExtraData = CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
     import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
 
     export abstract class SpwWar extends Twns.BaseWar.BwWar {
@@ -28,7 +28,7 @@ namespace TwnsSpwWar {
         private _saveSlotIndex?     : number;
         private _saveSlotExtraData? : ISpmWarSaveSlotExtraData;
 
-        public abstract serialize(): ProtoTypes.WarSerialization.ISerialWar;
+        public abstract serialize(): CommonProto.WarSerialization.ISerialWar;
 
         public updateTilesAndUnitsOnVisibilityChanged(isFastExecute: boolean): void {
             const teamIndexes   = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();

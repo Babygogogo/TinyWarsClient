@@ -20,8 +20,8 @@ namespace TwnsCommonWarAdvancedSettingsPage {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;
     import WarType              = Types.WarType;
-    import IWarRule             = ProtoTypes.WarRule.IWarRule;
-    import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
+    import IWarRule             = CommonProto.WarRule.IWarRule;
+    import IDataForPlayerRule   = CommonProto.WarRule.IDataForPlayerRule;
 
     export type OpenDataForCommonWarAdvancedSettingsPage = {
         warRule         : IWarRule;

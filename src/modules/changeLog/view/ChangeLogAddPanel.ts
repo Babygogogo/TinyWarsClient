@@ -17,7 +17,7 @@
 namespace TwnsChangeLogAddPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import ILanguageText    = CommonProto.Structure.ILanguageText;
 
     export type OpenData = void;
     export class ChangeLogAddPanel extends TwnsUiPanel.UiPanel<OpenData> {

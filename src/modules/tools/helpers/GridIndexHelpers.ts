@@ -18,7 +18,7 @@ namespace GridIndexHelpers {
         { offset: { x:  0, y:  1 }, direction: Direction.Down,  clockwiseOffset: { x:  1, y: -1 }, },
     ];
 
-    export function convertGridIndex(raw: Types.Undefinable<ProtoTypes.Structure.IGridIndex>): GridIndex | null {
+    export function convertGridIndex(raw: Types.Undefinable<CommonProto.Structure.IGridIndex>): GridIndex | null {
         return ((!raw) || (raw.x == null) || (raw.y == null))
             ? null
             : raw as GridIndex;
@@ -85,7 +85,7 @@ namespace GridIndexHelpers {
         return (g1.x === g2.x) && (g1.y === g2.y);
     }
 
-    export function checkIsInsideMap(g: ProtoTypes.Structure.IGridIndex, mapSize: MapSize): boolean {
+    export function checkIsInsideMap(g: CommonProto.Structure.IGridIndex, mapSize: MapSize): boolean {
         const { x, y } = g;
         return (x != null)
             && (y != null)

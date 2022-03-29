@@ -11,7 +11,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace ChatProxy {
-    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
     import NotifyType       = TwnsNotifyType.NotifyType;
 

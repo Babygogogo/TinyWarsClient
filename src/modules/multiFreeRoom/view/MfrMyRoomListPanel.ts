@@ -101,14 +101,14 @@ namespace TwnsMfrMyRoomListPanel {
         }
 
         private _onNotifyMsgMfrGetRoomStaticInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomStaticInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMfrGetRoomStaticInfo.IS;
             if (data.roomId === MfrJoinModel.getJoinedPreviewingRoomId()) {
                 this._updateComponentsForPreviewingRoomInfo();
             }
         }
 
         private _onNotifyMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
             if (data.roomId === MfrJoinModel.getJoinedPreviewingRoomId()) {
                 this._updateComponentsForPreviewingRoomInfo();
             }

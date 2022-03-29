@@ -87,7 +87,7 @@ namespace TwnsMeMfwSettingsPanel {
         }
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
+            const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {

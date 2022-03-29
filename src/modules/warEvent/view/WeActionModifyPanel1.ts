@@ -27,8 +27,8 @@
 namespace TwnsWeActionModifyPanel1 {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ColorValue               = Types.ColorValue;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import FocusEvent               = egret.FocusEvent;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
@@ -152,7 +152,7 @@ namespace TwnsWeActionModifyPanel1 {
     type DataForUnitRenderer = {
         war             : TwnsMeWar.MeWar;
         action          : IWarEventAction;
-        dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
+        dataForAddUnit  : CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {
         private readonly _btnDelete!                : TwnsUiButton.UiButton;
@@ -604,7 +604,7 @@ namespace TwnsWeActionModifyPanel1 {
     }
 
     function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
-        dataForAddUnit  : ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
+        dataForAddUnit  : CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit;
         war             : TwnsMeWar.MeWar;
     }): string | null {
         if (dataForAddUnit.canBeBlockedByUnit == null) {

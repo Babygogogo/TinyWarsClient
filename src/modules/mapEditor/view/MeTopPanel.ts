@@ -206,7 +206,7 @@ namespace TwnsMeTopPanel {
             this._updateLabelLocation();
         }
         private _onMsgMeSubmitMap(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMeSubmitMap.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMeSubmitMap.IS;
             if (!data.needReview) {
                 FloatText.show(Lang.getText(LangTextType.A0085));
             } else {
@@ -222,7 +222,7 @@ namespace TwnsMeTopPanel {
             this._getWar().setIsMapModified(false);
         }
         private _onMsgMmReviewMap(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMmReviewMap.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMmReviewMap.IS;
             if (data.isAccept) {
                 FloatText.show(Lang.getText(LangTextType.A0092));
             } else {

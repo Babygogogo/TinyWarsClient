@@ -15,12 +15,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwWarEventManager {
-    import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
-    import IDataForWarEventCalledCount      = ProtoTypes.WarSerialization.IDataForWarEventCalledCount;
-    import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
-    import WarEvent                         = ProtoTypes.WarEvent;
-    import IWarActionSystemCallWarEvent     = ProtoTypes.WarAction.IWarActionSystemCallWarEvent;
-    import ICustomCounter                   = ProtoTypes.WarSerialization.ICustomCounter;
+    import ISerialWarEventManager           = CommonProto.WarSerialization.ISerialWarEventManager;
+    import IDataForWarEventCalledCount      = CommonProto.WarSerialization.IDataForWarEventCalledCount;
+    import IWarEventFullData                = CommonProto.Map.IWarEventFullData;
+    import WarEvent                         = CommonProto.WarEvent;
+    import IWarActionSystemCallWarEvent     = CommonProto.WarAction.IWarActionSystemCallWarEvent;
+    import ICustomCounter                   = CommonProto.WarSerialization.ICustomCounter;
     import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
     import BwUnitMap                        = TwnsBwUnitMap.BwUnitMap;
     import BwWar                            = Twns.BaseWar.BwWar;
@@ -924,7 +924,7 @@ namespace TwnsBwWarEventManager {
                         }
                     }
 
-                    const tileData: ProtoTypes.WarSerialization.ISerialTile = {
+                    const tileData: CommonProto.WarSerialization.ISerialTile = {
                         gridIndex,
                         playerIndex         : actIsModifyTileObject ? actTileData.playerIndex : tile.getPlayerIndex(),
                         baseType            : actBaseType,

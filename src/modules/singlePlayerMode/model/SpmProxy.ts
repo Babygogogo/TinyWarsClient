@@ -41,7 +41,7 @@ namespace SpmProxy {
         });
     }
     function _onMsgSpmGetWarSaveSlotFullDataArray(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS;
         if (!data.errorCode) {
             SpmModel.updateOnMsgSpmGetWarSaveSlotFullDataArray(data);
             Notify.dispatch(NotifyType.MsgSpmGetWarSaveSlotFullDataArray, data);
@@ -54,7 +54,7 @@ namespace SpmProxy {
         });
     }
     function _onMsgSpmCreateScw(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateScw.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmCreateScw.IS;
         if (!data.errorCode) {
             SpmModel.updateOnMsgSpmCreateScw(data);
             Notify.dispatch(NotifyType.MsgSpmCreateScw, data);
@@ -63,8 +63,8 @@ namespace SpmProxy {
 
     export function reqSpmCreateSfw({ slotIndex, slotExtraData, warData }: {
         slotIndex       : number;
-        slotExtraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-        warData         : ProtoTypes.WarSerialization.ISerialWar;
+        slotExtraData   : CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+        warData         : CommonProto.WarSerialization.ISerialWar;
     }): void {
         NetManager.send({
             MsgSpmCreateSfw: { c: {
@@ -75,20 +75,20 @@ namespace SpmProxy {
         });
     }
     function _onMsgSpmCreateSfw(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
         if (!data.errorCode) {
             SpmModel.updateOnMsgSpmCreateSfw(data);
             Notify.dispatch(NotifyType.MsgSpmCreateSfw, data);
         }
     }
 
-    export function reqSpmCreateSrw(data: ProtoTypes.NetMessage.MsgSpmCreateSrw.IC): void {
+    export function reqSpmCreateSrw(data: CommonProto.NetMessage.MsgSpmCreateSrw.IC): void {
         NetManager.send({
             MsgSpmCreateSrw: { c: data },
         });
     }
     function _onMsgSpmCreateSrw(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSrw.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmCreateSrw.IS;
         if (!data.errorCode) {
             SpmModel.updateOnMsgSpmCreateSrw(data);
             Notify.dispatch(NotifyType.MsgSpmCreateSrw, data);
@@ -105,7 +105,7 @@ namespace SpmProxy {
         });
     }
     function _onMsgSpmSaveScw(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmSaveScw.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmSaveScw.IS;
         if (!data.errorCode) {
             SpmModel.updateOnMsgSpmSaveScw(data);
             Notify.dispatch(NotifyType.MsgSpmSaveScw, data);
@@ -122,7 +122,7 @@ namespace SpmProxy {
         });
     }
     function _onMsgSpmSaveSfw(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmSaveSfw.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmSaveSfw.IS;
         if (!data.errorCode) {
             SpmModel.updateOnMsgSpmSaveSfw(data);
             Notify.dispatch(NotifyType.MsgSpmSaveSfw, data);
@@ -139,7 +139,7 @@ namespace SpmProxy {
         });
     }
     function _onMsgSpmSaveSrw(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmSaveSrw.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmSaveSrw.IS;
         if (!data.errorCode) {
             SpmModel.updateOnMsgSpmSaveSrw(data);
             Notify.dispatch(NotifyType.MsgSpmSaveSrw, data);
@@ -154,7 +154,7 @@ namespace SpmProxy {
         });
     }
     function _onMsgSpmDeleteWarSaveSlot(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmDeleteWarSaveSlot.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmDeleteWarSaveSlot.IS;
         if (!data.errorCode) {
             SpmModel.updateOnMsgSpmDeleteWarSaveSlot(Helpers.getExisted(data.slotIndex));
             Notify.dispatch(NotifyType.MsgSpmDeleteWarSaveSlot, data);
@@ -169,7 +169,7 @@ namespace SpmProxy {
         });
     }
     function _onMsgSpmGetRankList(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmGetRankList.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmGetRankList.IS;
         SpmModel.updateOnMsgSpmGetRankList(data);
         Notify.dispatch(NotifyType.MsgSpmGetRankList, data);
     }
@@ -182,7 +182,7 @@ namespace SpmProxy {
         });
     }
     function _onMsgSpmValidateSrw(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmValidateSrw.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmValidateSrw.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgSpmValidateSrw, data);
         }
@@ -196,7 +196,7 @@ namespace SpmProxy {
         });
     }
     async function _onMsgSpmGetReplayData(e: egret.Event): Promise<void> {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmGetReplayData.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmGetReplayData.IS;
         await SpmModel.updateOnMsgSpmGetReplayData(data);
         Notify.dispatch(NotifyType.MsgSpmGetReplayData, data);
     }
@@ -208,7 +208,7 @@ namespace SpmProxy {
         });
     }
     function _onMsgSpmDeleteAllScoreAndReplay(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgSpmDeleteAllScoreAndReplay.IS;
+        const data = e.data as CommonProto.NetMessage.MsgSpmDeleteAllScoreAndReplay.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgSpmDeleteAllScoreAndReplay, data);
         }

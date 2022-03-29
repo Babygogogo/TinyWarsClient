@@ -60,7 +60,7 @@ namespace TwnsUserRegisterPanel {
         }
 
         private _onMsgUserRegister(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgUserRegister.IS;
+            const data = e.data as CommonProto.NetMessage.MsgUserRegister.IS;
             FloatText.show(Lang.getText(LangTextType.A0004));
 
             const account   = Helpers.getExisted(data.account, ClientErrorCode.UserRegisterPanel_OnMsgUserRegister_00);

@@ -21,8 +21,8 @@ namespace TwnsMeAddWarEventToRulePanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        warRule         : ProtoTypes.WarRule.IWarRule;
-        warEventArray   : ProtoTypes.WarEvent.IWarEvent[];
+        warRule         : CommonProto.WarRule.IWarRule;
+        warEventArray   : CommonProto.WarEvent.IWarEvent[];
     };
     export class MeAddWarEventToRulePanel extends TwnsUiPanel.UiPanel<OpenData>{
         private readonly _listWarEvent!     : TwnsUiScrollList.UiScrollList<DataForWarEventRenderer>;
@@ -83,8 +83,8 @@ namespace TwnsMeAddWarEventToRulePanel {
 
     type DataForWarEventRenderer = {
         warEventId      : number;
-        warEventArray   : ProtoTypes.WarEvent.IWarEvent[];
-        warRule         : ProtoTypes.WarRule.IWarRule;
+        warEventArray   : CommonProto.WarEvent.IWarEvent[];
+        warRule         : CommonProto.WarRule.IWarRule;
     };
     class WarEventRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarEventRenderer> {
         private readonly _labelId!      : TwnsUiLabel.UiLabel;

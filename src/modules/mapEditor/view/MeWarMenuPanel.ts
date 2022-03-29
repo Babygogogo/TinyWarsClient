@@ -118,7 +118,7 @@ namespace TwnsMeWarMenuPanel {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onMsgSpmCreateSfw(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
+            const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
@@ -132,7 +132,7 @@ namespace TwnsMeWarMenuPanel {
         }
 
         private _onNotifyMsgUserSetMapEditorAutoSaveTime(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgUserSetMapEditorAutoSaveTime.IS;
+            const data = e.data as CommonProto.NetMessage.MsgUserSetMapEditorAutoSaveTime.IS;
             FloatText.show(Lang.getText(data.time == null ? LangTextType.A0248 : LangTextType.A0247));
         }
 

@@ -66,7 +66,7 @@ namespace TwnsCommonWarBasicSettingsPage {
     type DataForSettingsRenderer = {
         settingsType    : WarBasicSettingsType;
         currentValue    : number | string | null;
-        warRule         : ProtoTypes.WarRule.IWarRule;
+        warRule         : CommonProto.WarRule.IWarRule;
         callbackOnModify: ((newValue: string | number | null) => void) | null;
     };
     class SettingsRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForSettingsRenderer> {

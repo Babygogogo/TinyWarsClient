@@ -12,8 +12,8 @@
 namespace MeModel {
     import MeWar            = TwnsMeWar.MeWar;
     import MapReviewStatus  = Types.MapReviewStatus;
-    import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
+    import IMapRawData      = CommonProto.Map.IMapRawData;
+    import IMapEditorData   = CommonProto.Map.IMapEditorData;
 
     const MAP_DICT  = new Map<number, IMapEditorData>();
     let _war        : MeWar | null = null;

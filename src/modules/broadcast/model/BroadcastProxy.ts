@@ -9,7 +9,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace BroadcastProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import ILanguageText    = CommonProto.Structure.ILanguageText;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
@@ -32,7 +32,7 @@ namespace BroadcastProxy {
         });
     }
     function _onMsgBroadcastAddMessage(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgBroadcastAddMessage.IS;
+        const data = e.data as CommonProto.NetMessage.MsgBroadcastAddMessage.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgBroadcastAddMessage, data);
         }
@@ -46,7 +46,7 @@ namespace BroadcastProxy {
         });
     }
     function _onMsgBroadcastDeleteMessage(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgBroadcastDeleteMessage.IS;
+        const data = e.data as CommonProto.NetMessage.MsgBroadcastDeleteMessage.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgBroadcastDeleteMessage, data);
         }
@@ -59,7 +59,7 @@ namespace BroadcastProxy {
         });
     }
     function _onMsgBroadcastDoBroadcast(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgBroadcastDoBroadcast.IS;
+        const data = e.data as CommonProto.NetMessage.MsgBroadcastDoBroadcast.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgBroadcastDoBroadcast, data);
         }
@@ -70,7 +70,7 @@ namespace BroadcastProxy {
         } }, });
     }
     function _onMsgBroadcastGetAllMessageIdArray(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgBroadcastGetAllMessageIdArray.IS;
+        const data = e.data as CommonProto.NetMessage.MsgBroadcastGetAllMessageIdArray.IS;
         if (!data.errorCode) {
             BroadcastModel.setAllMessageIdArray(data.messageIdArray || []);
             Notify.dispatch(NotifyType.MsgBroadcastGetAllMessageIdArray, data);
@@ -83,7 +83,7 @@ namespace BroadcastProxy {
         } } });
     }
     function _onMsgBroadcastGetMessageData(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgBroadcastGetMessageData.IS;
+        const data = e.data as CommonProto.NetMessage.MsgBroadcastGetMessageData.IS;
         if (!data.errorCode) {
             BroadcastModel.setMessageData(Helpers.getExisted(data.messageId), data.messageData ?? null);
             Notify.dispatch(NotifyType.MsgBroadcastGetMessageData, data);

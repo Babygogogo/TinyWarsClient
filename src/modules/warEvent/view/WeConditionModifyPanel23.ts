@@ -19,8 +19,8 @@
 namespace TwnsWeConditionModifyPanel23 {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
     export type OpenData = {
         war         : Twns.BaseWar.BwWar;
@@ -233,7 +233,7 @@ namespace TwnsWeConditionModifyPanel23 {
             this._labelEventsCountComparator.text   = Lang.getValueComparatorName(comparator) ?? CommonConstants.ErrorTextForUndefined;
         }
 
-        private _getCondition(): ProtoTypes.WarEvent.IWecEventCalledCount {
+        private _getCondition(): CommonProto.WarEvent.IWecEventCalledCount {
             return Helpers.getExisted(this._getOpenData().condition.WecEventCalledCount);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {

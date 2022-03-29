@@ -29,7 +29,7 @@ namespace TwnsWeDialogueBackgroundPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        action  : ProtoTypes.WarEvent.IWeaDialogue;
+        action  : CommonProto.WarEvent.IWeaDialogue;
     };
     export class WeDialogueBackgroundPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
@@ -129,7 +129,7 @@ namespace TwnsWeDialogueBackgroundPanel {
 
     type DataForBackgroundRenderer = {
         backgroundId            : number;
-        action                  : ProtoTypes.WarEvent.IWeaDialogue;
+        action                  : CommonProto.WarEvent.IWeaDialogue;
         panel                   : WeDialogueBackgroundPanel;
     };
     class BackgroundRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForBackgroundRenderer> {

@@ -110,7 +110,7 @@ namespace TwnsMcrJoinRoomListPanel {
         }
 
         private _onNotifyMsgMcrJoinRoom(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.NetMessage.MsgMcrJoinRoom.IS;
+            const data      = e.data as CommonProto.NetMessage.MsgMcrJoinRoom.IS;
             const roomId    = Helpers.getExisted(data.roomId);
             this.close();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.McrRoomInfoPanel, { roomId });
@@ -118,14 +118,14 @@ namespace TwnsMcrJoinRoomListPanel {
         }
 
         private _onNotifyMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
             if (data.roomId === McrJoinModel.getTargetRoomId()) {
                 this._updateComponentsForTargetRoomInfo();
             }
         }
 
         private _onNotifyMsgMcrGetRoomStaticInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomStaticInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMcrGetRoomStaticInfo.IS;
             if (data.roomId === McrJoinModel.getTargetRoomId()) {
                 this._updateComponentsForTargetRoomInfo();
             }

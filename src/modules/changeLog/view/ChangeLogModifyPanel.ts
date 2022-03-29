@@ -18,7 +18,7 @@
 namespace TwnsChangeLogModifyPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import ILanguageText    = CommonProto.Structure.ILanguageText;
 
     export type OpenData = {
         messageId   : number;

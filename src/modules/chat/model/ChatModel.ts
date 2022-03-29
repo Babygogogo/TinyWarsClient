@@ -10,7 +10,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace ChatModel {
     import ChatCategory     = Types.ChatMessageToCategory;
-    import IChatMessage     = ProtoTypes.Chat.IChatMessage;
+    import IChatMessage     = CommonProto.Chat.IChatMessage;
 
     type MessageDict                    = Map<number, IChatMessage[]>;
     const _allMessageDict               = new Map<ChatCategory, MessageDict>();
@@ -106,13 +106,13 @@ namespace ChatModel {
         return message ? message.timestamp || 0 : 0;
     }
 
-    export function resetAllReadProgress(list: ProtoTypes.Chat.IChatReadProgress[]): void {
+    export function resetAllReadProgress(list: CommonProto.Chat.IChatReadProgress[]): void {
         _allProgressDict.clear();
         for (const p of list || []) {
             setReadProgress(p);
         }
     }
-    export function setReadProgress(progress: ProtoTypes.Chat.IChatReadProgress): void {
+    export function setReadProgress(progress: CommonProto.Chat.IChatReadProgress): void {
         const toCategory    = Helpers.getExisted(progress.toCategory);
         const toTarget      = Helpers.getExisted(progress.toTarget);
         const timestamp     = Helpers.getExisted(progress.timestamp);

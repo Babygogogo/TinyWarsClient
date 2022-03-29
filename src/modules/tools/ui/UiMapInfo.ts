@@ -31,7 +31,7 @@ namespace TwnsUiMapInfo {
         mapInfo?    : {
             mapId           : number;
         };
-        warData?    : ProtoTypes.WarSerialization.ISerialWar;
+        warData?    : CommonProto.WarSerialization.ISerialWar;
     };
 
     export class UiMapInfo extends TwnsUiComponent.UiComponent {
@@ -90,13 +90,13 @@ namespace TwnsUiMapInfo {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMsgUserSetMapRating(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgUserSetMapRating.IS;
+            const data = e.data as CommonProto.NetMessage.MsgUserSetMapRating.IS;
             if (data.mapId === this._data?.mapInfo?.mapId) {
                 this._updateComponentsForMapInfo();
             }
         }
         private _onNotifyMsgMapGetBriefData(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMapGetBriefData.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMapGetBriefData.IS;
             if (data.mapId === this._data?.mapInfo?.mapId) {
                 this._updateComponentsForMapInfo();
             }
@@ -231,7 +231,7 @@ namespace TwnsUiMapInfo {
         }
     }
 
-    function generateDataForListTile(tileDataArray: ProtoTypes.WarSerialization.ISerialTile[]): DataForTileRenderer[] {
+    function generateDataForListTile(tileDataArray: CommonProto.WarSerialization.ISerialTile[]): DataForTileRenderer[] {
         const tileCountDict = new Map<TileType, number>();
         for (const tile of tileDataArray || []) {
             const tileType = ConfigManager.getTileType(Helpers.getExisted(tile.baseType), Helpers.getExisted(tile.objectType));

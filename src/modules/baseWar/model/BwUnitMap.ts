@@ -13,7 +13,7 @@
 
 namespace TwnsBwUnitMap {
     import GridIndex        = Types.GridIndex;
-    import WarSerialization = ProtoTypes.WarSerialization;
+    import WarSerialization = CommonProto.WarSerialization;
     import ISerialUnitMap   = WarSerialization.ISerialUnitMap;
     import ISerialUnit      = WarSerialization.ISerialUnit;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;

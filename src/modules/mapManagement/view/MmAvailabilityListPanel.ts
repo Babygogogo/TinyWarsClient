@@ -232,7 +232,7 @@ namespace TwnsMmAvailabilityListPanel {
         }
 
         private _onNotifyMsgMmSetMapName(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMmSetMapName.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMmSetMapName.IS;
             if (data.mapId === this._getData().mapId) {
                 this._updateView();
             }

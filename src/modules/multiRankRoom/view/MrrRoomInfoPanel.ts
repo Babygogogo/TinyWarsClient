@@ -41,7 +41,7 @@ namespace TwnsMrrRoomInfoPanel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
-    import NetMessage                               = ProtoTypes.NetMessage;
+    import NetMessage                               = CommonProto.NetMessage;
 
     export type OpenData = {
         roomId  : number;
@@ -561,14 +561,14 @@ namespace TwnsMrrRoomInfoPanel {
             this._updateLabelName();
         }
         private _onNotifyMsgMrrGetRoomPublicInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMrrGetRoomPublicInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateState();
             }
         }
         private _onNotifyMsgMrrSetSelfSettings(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrSetSelfSettings.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMrrSetSelfSettings.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateState();
@@ -703,13 +703,13 @@ namespace TwnsMrrRoomInfoPanel {
             this._updateLabelName();
         }
         private _onNotifyMsgMrrGetRoomPublicInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMrrGetRoomPublicInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateStateAndImgRed();
             }
         }
         private _onNotifyMsgMrrSetSelfSettings(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrSetSelfSettings.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMrrSetSelfSettings.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateStateAndImgRed();
             }

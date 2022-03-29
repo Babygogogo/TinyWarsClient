@@ -18,8 +18,8 @@
 namespace TwnsWeActionModifyPanel41 {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
 
     export type OpenData = {
         war         : Twns.BaseWar.BwWar;
@@ -423,7 +423,7 @@ namespace TwnsWeActionModifyPanel41 {
             }
         }
 
-        private _getAction(): ProtoTypes.WarEvent.IWeaSetTileState {
+        private _getAction(): CommonProto.WarEvent.IWeaSetTileState {
             return Helpers.getExisted(this._getOpenData().action.WeaSetTileState);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {

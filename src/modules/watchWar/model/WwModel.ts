@@ -14,10 +14,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WwModel {
-    import IMpwWatchIncomingInfo                    = ProtoTypes.MultiPlayerWar.IMpwWatchIncomingInfo;
-    import IMpwWatchOutgoingInfo                    = ProtoTypes.MultiPlayerWar.IMpwWatchOutgoingInfo;
-    import MsgMpwWatchGetIncomingInfoIs             = ProtoTypes.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
-    import MsgMpwWatchGetOutgoingInfoIs             = ProtoTypes.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
+    import IMpwWatchIncomingInfo                    = CommonProto.MultiPlayerWar.IMpwWatchIncomingInfo;
+    import IMpwWatchOutgoingInfo                    = CommonProto.MultiPlayerWar.IMpwWatchOutgoingInfo;
+    import MsgMpwWatchGetIncomingInfoIs             = CommonProto.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
+    import MsgMpwWatchGetOutgoingInfoIs             = CommonProto.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
     import OpenDataForWarCommonMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;

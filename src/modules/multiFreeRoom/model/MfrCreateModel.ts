@@ -11,9 +11,9 @@
 namespace MfrCreateModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import BootTimerType    = Types.BootTimerType;
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
+    import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
 
-    export type DataForJoinRoom = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
+    export type DataForJoinRoom = CommonProto.NetMessage.MsgMfrJoinRoom.IC;
 
     const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day
@@ -22,7 +22,7 @@ namespace MfrCreateModel {
         60 * 60 * 24 * 7,   // 7 days
     ];
 
-    type DataForCreateRoom  = ProtoTypes.NetMessage.MsgMfrCreateRoom.IC;
+    type DataForCreateRoom  = CommonProto.NetMessage.MsgMfrCreateRoom.IC;
 
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForMfw          : {},
@@ -49,10 +49,10 @@ namespace MfrCreateModel {
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
     }
-    export function getWarRule(): ProtoTypes.WarRule.IWarRule {
+    export function getWarRule(): CommonProto.WarRule.IWarRule {
         return Helpers.getExisted(getInitialWarData().settingsForCommon?.warRule);
     }
-    function getSettingsForMfw(): ProtoTypes.WarSettings.ISettingsForMfw {
+    function getSettingsForMfw(): CommonProto.WarSettings.ISettingsForMfw {
         return Helpers.getExisted(getData().settingsForMfw);
     }
 
@@ -104,7 +104,7 @@ namespace MfrCreateModel {
     export function getSelfPlayerIndex(): number {
         return Helpers.getExisted(getData().selfPlayerIndex);
     }
-    export function getSelfPlayerData(): ProtoTypes.WarSerialization.ISerialPlayer {
+    export function getSelfPlayerData(): CommonProto.WarSerialization.ISerialPlayer {
         const playerIndex = getSelfPlayerIndex();
         return Helpers.getExisted(getInitialWarData().playerManager?.players?.find(v => v.playerIndex === playerIndex));
     }

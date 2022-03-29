@@ -417,7 +417,7 @@ namespace Lang {
         }
     }
 
-    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | null {
+    export function getWarRuleNameInLanguage(warRule: CommonProto.WarRule.IWarRule): string | null {
         if (warRule.ruleId == null) {
             return getText(LangTextType.B0321);
         } else {
@@ -553,7 +553,7 @@ namespace Lang {
         }
     }
     export function getLanguageText({ textArray, languageType = getCurrentLanguageType(), useAlternate = true }: {
-        textArray       : Types.Undefinable<ProtoTypes.Structure.ILanguageText[]>;
+        textArray       : Types.Undefinable<CommonProto.Structure.ILanguageText[]>;
         languageType?   : LanguageType;
         useAlternate?   : boolean;
     }): string | null {
@@ -571,7 +571,7 @@ namespace Lang {
                 : null;
         }
     }
-    export function concatLanguageTextList(textList: Types.Undefinable<ProtoTypes.Structure.ILanguageText[]>): string {
+    export function concatLanguageTextList(textList: Types.Undefinable<CommonProto.Structure.ILanguageText[]>): string {
         const strList: string[] = [];
         for (const data of textList || []) {
             strList.push(data.text || `??`);
@@ -597,7 +597,7 @@ namespace Lang {
             return null;
         }
     }
-    export async function getGameStartDesc(data: ProtoTypes.NetMessage.MsgMpwCommonBroadcastGameStart.IS): Promise<string> {
+    export async function getGameStartDesc(data: CommonProto.NetMessage.MsgMpwCommonBroadcastGameStart.IS): Promise<string> {
         const playerArray   : string[] = [];
         let playerIndex     = CommonConstants.WarFirstPlayerIndex;
         for (const playerInfo of data.playerInfoList || []) {

@@ -18,8 +18,8 @@
 namespace TwnsWarMapView {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import MapSize          = Types.MapSize;
-    import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import WarSerialization = ProtoTypes.WarSerialization;
+    import IMapRawData      = CommonProto.Map.IMapRawData;
+    import WarSerialization = CommonProto.WarSerialization;
     import ISerialWar       = WarSerialization.ISerialWar;
     import ISerialTile      = WarSerialization.ISerialTile;
     import ISerialPlayer    = WarSerialization.ISerialPlayer;

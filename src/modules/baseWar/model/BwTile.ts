@@ -20,10 +20,10 @@ namespace TwnsBwTile {
     import TileDecoratorType            = Types.TileDecoratorType;
     import TileBaseType                 = Types.TileBaseType;
     import TileTemplateCfg              = Types.TileTemplateCfg;
-    import ITileCustomCrystalData       = ProtoTypes.WarSerialization.ITileCustomCrystalData;
-    import ITileCustomCannonData        = ProtoTypes.WarSerialization.ITileCustomCannonData;
-    import ITileCustomLaserTurretData   = ProtoTypes.WarSerialization.ITileCustomLaserTurretData;
-    import ISerialTile                  = ProtoTypes.WarSerialization.ISerialTile;
+    import ITileCustomCrystalData       = CommonProto.WarSerialization.ITileCustomCrystalData;
+    import ITileCustomCannonData        = CommonProto.WarSerialization.ITileCustomCannonData;
+    import ITileCustomLaserTurretData   = CommonProto.WarSerialization.ITileCustomLaserTurretData;
+    import ISerialTile                  = CommonProto.WarSerialization.ISerialTile;
     import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwTile {

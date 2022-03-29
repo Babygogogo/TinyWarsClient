@@ -8,7 +8,7 @@
 namespace TwnsMePlayerManager {
     import BwPlayerManager      = TwnsBwPlayerManager.BwPlayerManager;
     import MeField              = TwnsMeField.MeField;
-    import WarSerialization     = ProtoTypes.WarSerialization;
+    import WarSerialization     = CommonProto.WarSerialization;
     import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
 

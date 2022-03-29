@@ -12,23 +12,23 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace HrwModel {
     import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
-    import WarAction                    = ProtoTypes.WarAction;
-    import WarSerialization             = ProtoTypes.WarSerialization;
+    import WarAction                    = CommonProto.WarAction;
+    import WarSerialization             = CommonProto.WarSerialization;
     import IWarActionContainer          = WarAction.IWarActionContainer;
-    import IMovingUnitAndPath           = ProtoTypes.Structure.IMovingUnitAndPath;
-    import ICommonExtraDataForWarAction = ProtoTypes.Structure.ICommonExtraDataForWarAction;
+    import IMovingUnitAndPath           = CommonProto.Structure.IMovingUnitAndPath;
+    import ICommonExtraDataForWarAction = CommonProto.Structure.ICommonExtraDataForWarAction;
 
-    let _replayData         : ProtoTypes.NetMessage.MsgReplayGetData.IS | null = null;
+    let _replayData         : CommonProto.NetMessage.MsgReplayGetData.IS | null = null;
     let _war                : TwnsHrwWar.HrwWar | null = null;
 
     export function init(): void {
         // nothing to do
     }
 
-    export function setReplayData(data: ProtoTypes.NetMessage.MsgReplayGetData.IS): void {
+    export function setReplayData(data: CommonProto.NetMessage.MsgReplayGetData.IS): void {
         _replayData = data;
     }
-    export function getReplayData(): ProtoTypes.NetMessage.MsgReplayGetData.IS | null {
+    export function getReplayData(): CommonProto.NetMessage.MsgReplayGetData.IS | null {
         return _replayData;
     }
 
@@ -451,7 +451,7 @@ namespace HrwModel {
                     return 1;
                 }
             });
-            const mergedPath: ProtoTypes.Structure.IGridIndexAndPathInfo[] = [];
+            const mergedPath: CommonProto.Structure.IGridIndexAndPathInfo[] = [];
             for (const data of array) {
                 for (const pathNode of data.path ?? []) {
                     mergedPath.push(pathNode);

@@ -15,7 +15,7 @@ namespace TwnsBwFogMap {
     import GridIndex                = Types.GridIndex;
     import MapSize                  = Types.MapSize;
     import Visibility               = Types.Visibility;
-    import WarSerialization         = ProtoTypes.WarSerialization;
+    import WarSerialization         = CommonProto.WarSerialization;
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;

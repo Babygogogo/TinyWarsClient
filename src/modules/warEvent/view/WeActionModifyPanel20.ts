@@ -17,8 +17,8 @@
 namespace TwnsWeActionModifyPanel20 {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import PlayerAliveState         = Types.PlayerAliveState;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                    = Twns.BaseWar.BwWar;
@@ -141,7 +141,7 @@ namespace TwnsWeActionModifyPanel20 {
             this._labelTips.text = getTipsForPlayerAliveState(Helpers.getExisted(this._getAction().playerAliveState)) || CommonConstants.ErrorTextForUndefined;
         }
 
-        private _getAction(): ProtoTypes.WarEvent.IWeaDeprecatedSetPlayerAliveState {
+        private _getAction(): CommonProto.WarEvent.IWeaDeprecatedSetPlayerAliveState {
             return Helpers.getExisted(this._getOpenData().action.WeaDeprecatedSetPlayerAliveState);
         }
     }

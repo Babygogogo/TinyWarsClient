@@ -10,7 +10,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MeProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
@@ -49,7 +49,7 @@ namespace MeProxy {
         }
     }
 
-    export function reqMeSubmitMap(slotIndex: number, mapRawData: ProtoTypes.Map.IMapRawData, needReview: boolean): void {
+    export function reqMeSubmitMap(slotIndex: number, mapRawData: CommonProto.Map.IMapRawData, needReview: boolean): void {
         NetManager.send({
             MsgMeSubmitMap: { c: {
                 slotIndex,

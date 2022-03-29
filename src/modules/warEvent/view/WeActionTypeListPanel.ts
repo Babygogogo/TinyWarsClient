@@ -17,8 +17,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionTypeListPanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction      = ProtoTypes.WarEvent.IWarEventAction;
+    import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction      = CommonProto.WarEvent.IWarEventAction;
     import ActionType           = Types.WarEventActionType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
@@ -87,7 +87,7 @@ namespace TwnsWeActionTypeListPanel {
 
     type DataForTypeRenderer = {
         war             : Twns.BaseWar.BwWar;
-        fullData        : ProtoTypes.Map.IWarEventFullData;
+        fullData        : CommonProto.Map.IWarEventFullData;
         newActionType   : ActionType;
         action          : IWarEventAction;
     };

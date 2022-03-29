@@ -69,7 +69,7 @@ namespace TwnsRwReplayWarInfoPage {
         }
 
         private _onNotifyMsgReplayGetBriefInfo(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.NetMessage.MsgReplayGetReplayInfo.IS;
+            const data      = e.data as CommonProto.NetMessage.MsgReplayGetReplayInfo.IS;
             const replayId  = this._getOpenData()?.replayId;
             if ((replayId != null) && (replayId === data.replayId)) {
                 this._updateComponentsForReplayBriefInfo();
@@ -77,7 +77,7 @@ namespace TwnsRwReplayWarInfoPage {
         }
 
         private _onNotifyMsgReplayGetSelfRating(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.NetMessage.MsgReplayGetSelfRating.IS;
+            const data      = e.data as CommonProto.NetMessage.MsgReplayGetSelfRating.IS;
             const replayId  = this._getOpenData()?.replayId;
             if ((replayId != null) && (replayId === data.replayId)) {
                 this._updateLabelMyRating();
@@ -142,7 +142,7 @@ namespace TwnsRwReplayWarInfoPage {
                 : `??`;
         }
 
-        private async _getReplayInfo(): Promise<ProtoTypes.Replay.IReplayInfo | null> {
+        private async _getReplayInfo(): Promise<CommonProto.Replay.IReplayInfo | null> {
             const replayId = this._getOpenData()?.replayId;
             return replayId == null
                 ? null

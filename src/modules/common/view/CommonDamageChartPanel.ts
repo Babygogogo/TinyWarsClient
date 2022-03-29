@@ -254,35 +254,35 @@ namespace TwnsCommonDamageChartPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Util functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _createInfoHp(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoHp(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 index           : 0,
                 infoType        : UnitInfoType.Hp,
                 unitTemplateCfg,
             };
         }
-        private _createInfoProductionCost(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoProductionCost(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.ProductionCost,
                 unitTemplateCfg,
             };
         }
-        private _createInfoMovement(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoMovement(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Movement,
                 unitTemplateCfg,
             };
         }
-        private _createInfoFuel(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoFuel(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Fuel,
                 unitTemplateCfg,
             };
         }
-        private _createInfoAttackRange(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoAttackRange(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
             return unitTemplateCfg.minAttackRange == null
                 ? null
                 : {
@@ -291,14 +291,14 @@ namespace TwnsCommonDamageChartPanel {
                     unitTemplateCfg,
                 };
         }
-        private _createInfoVision(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoVision(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Vision,
                 unitTemplateCfg,
             };
         }
-        private _createInfoPrimaryWeaponAmmo(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoPrimaryWeaponAmmo(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
             return unitTemplateCfg.primaryWeaponMaxAmmo == null
                 ? null
                 : {
@@ -307,7 +307,7 @@ namespace TwnsCommonDamageChartPanel {
                     unitTemplateCfg,
                 };
         }
-        private _createInfoBuildMaterial(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoBuildMaterial(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
             return unitTemplateCfg.maxBuildMaterial == null
                 ? null
                 : {
@@ -316,7 +316,7 @@ namespace TwnsCommonDamageChartPanel {
                     unitTemplateCfg,
                 };
         }
-        private _createInfoProduceMaterial(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoProduceMaterial(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
             return unitTemplateCfg.maxProduceMaterial == null
                 ? null
                 : {
@@ -325,7 +325,7 @@ namespace TwnsCommonDamageChartPanel {
                     unitTemplateCfg,
                 };
         }
-        private _createInfoFlareAmmo(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoFlareAmmo(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
             return unitTemplateCfg.flareMaxAmmo == null
                 ? null
                 : {
@@ -334,7 +334,7 @@ namespace TwnsCommonDamageChartPanel {
                     unitTemplateCfg,
                 };
         }
-        private _createInfoIsDiver(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoIsDiver(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
             return !unitTemplateCfg.diveCfgs
                 ? null
                 : {
@@ -343,7 +343,7 @@ namespace TwnsCommonDamageChartPanel {
                     unitTemplateCfg,
                 };
         }
-        private _createInfoLoadUnit(unitTemplateCfg: ProtoTypes.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
+        private _createInfoLoadUnit(unitTemplateCfg: CommonProto.Config.IUnitTemplateCfg): DataForInfoRenderer | null {
             return unitTemplateCfg.loadUnitCategory == null
                 ? null
                 : {
@@ -438,7 +438,7 @@ namespace TwnsCommonDamageChartPanel {
     type DataForInfoRenderer = {
         index           : number;
         infoType        : UnitInfoType;
-        unitTemplateCfg : ProtoTypes.Config.IUnitTemplateCfg;
+        unitTemplateCfg : CommonProto.Config.IUnitTemplateCfg;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
         private readonly _imgBg!            : TwnsUiImage.UiImage;

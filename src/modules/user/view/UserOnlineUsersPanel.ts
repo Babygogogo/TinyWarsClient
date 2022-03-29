@@ -34,7 +34,7 @@ namespace TwnsUserOnlineUsersPanel {
         private readonly _listUser!             : TwnsUiScrollList.UiScrollList<DataForUserRenderer>;
         private readonly _labelLoading!         : TwnsUiLabel.UiLabel;
 
-        private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUserIdArray.IS | null = null;
+        private _msg        : CommonProto.NetMessage.MsgUserGetOnlineUserIdArray.IS | null = null;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([

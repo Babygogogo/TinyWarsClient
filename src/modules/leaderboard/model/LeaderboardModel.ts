@@ -1,7 +1,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.LeaderboardModel {
-    import ISpmOverallSingleData    = ProtoTypes.Leaderboard.LeaderboardSpmOverall.ISingleData;
+    import ISpmOverallSingleData    = CommonProto.Leaderboard.LeaderboardSpmOverall.ISingleData;
 
     const _spmOverallTopDataArrayAccessor = Helpers.createCachedDataAccessor<null, ISpmOverallSingleData[]>({
         reqData: () => LeaderboardProxy.reqLbSpmOverallGetTopDataArray(),

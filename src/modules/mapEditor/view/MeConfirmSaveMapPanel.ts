@@ -31,7 +31,7 @@ namespace TwnsMeConfirmSaveMapPanel {
         private readonly _btnCancel!            : TwnsUiButton.UiButton;
         private readonly _btnConfirm!           : TwnsUiButton.UiButton;
 
-        private _mapRawData : ProtoTypes.Map.IMapRawData | null = null;
+        private _mapRawData : CommonProto.Map.IMapRawData | null = null;
         private _needReview = false;
 
         protected _onOpening(): void {
@@ -137,7 +137,7 @@ namespace TwnsMeConfirmSaveMapPanel {
         }
     }
 
-    function checkIsValidAvailability(ruleAvailability: Types.Undefinable<ProtoTypes.WarRule.IRuleAvailability>): boolean {
+    function checkIsValidAvailability(ruleAvailability: Types.Undefinable<CommonProto.WarRule.IRuleAvailability>): boolean {
         if (ruleAvailability == null) {
             return false;
         }

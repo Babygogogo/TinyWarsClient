@@ -429,20 +429,20 @@ namespace ConfigManager {
         return ((new Set(unitTypeArray)).size === unitTypeArray.length)
             && (unitTypeArray.every(v => checkIsValidUnitType(v)));
     }
-    export function checkIsValidCustomCrystalData(data: ProtoTypes.WarSerialization.ITileCustomCrystalData): boolean {
+    export function checkIsValidCustomCrystalData(data: CommonProto.WarSerialization.ITileCustomCrystalData): boolean {
         return (data.radius != null)
             && (data.priority != null)
             && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
             && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage ?? data.deltaFund ?? data.deltaEnergyPercentage) != null);
     }
-    export function checkIsValidCustomCannonData(data: ProtoTypes.WarSerialization.ITileCustomCannonData): boolean {
+    export function checkIsValidCustomCannonData(data: CommonProto.WarSerialization.ITileCustomCannonData): boolean {
         return (!!(data.rangeForDown ?? data.rangeForLeft ?? data.rangeForRight ?? data.rangeForUp))
             && (data.priority != null)
             && (!!data.maxTargetCount)
             && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
             && ((data.deltaFuelPercentage ?? data.deltaHp ?? data.deltaPrimaryAmmoPercentage) != null);
     }
-    export function checkIsValidCustomLaserTurretData(data: ProtoTypes.WarSerialization.ITileCustomLaserTurretData): boolean {
+    export function checkIsValidCustomLaserTurretData(data: CommonProto.WarSerialization.ITileCustomLaserTurretData): boolean {
         return (!!(data.rangeForDown ?? data.rangeForLeft ?? data.rangeForRight ?? data.rangeForUp))
             && (data.priority != null)
             && ((data.canAffectAlly ?? data.canAffectEnemy ?? data.canAffectSelf) != null)
@@ -464,7 +464,7 @@ namespace ConfigManager {
         return ((new Set(teamIndexArray)).size === teamIndexArray.length)
             && (teamIndexArray.every(v => checkIsValidTeamIndex(v, playersCountUnneutral)));
     }
-    export function checkIsValidGridIndexSubset(gridIndexArray: ProtoTypes.Structure.IGridIndex[], mapSize: Types.MapSize): boolean {
+    export function checkIsValidGridIndexSubset(gridIndexArray: CommonProto.Structure.IGridIndex[], mapSize: Types.MapSize): boolean {
         const gridIdSet = new Set<number>();
         for (const g of gridIndexArray) {
             const gridIndex = GridIndexHelpers.convertGridIndex(g);
@@ -501,7 +501,7 @@ namespace ConfigManager {
         return (idArray.every(v => checkIsValidCustomCounterId(v)))
             && (new Set(idArray).size === idArray.length);
     }
-    export function checkIsValidCustomCounterArray(customCounterArray: ProtoTypes.WarSerialization.ICustomCounter[]): boolean {
+    export function checkIsValidCustomCounterArray(customCounterArray: CommonProto.WarSerialization.ICustomCounter[]): boolean {
         const counterIdSet = new Set<number>();
         for (const data of customCounterArray) {
             const counterId     = data.customCounterId;

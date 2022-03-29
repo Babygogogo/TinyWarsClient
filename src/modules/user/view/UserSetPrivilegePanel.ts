@@ -79,7 +79,7 @@ namespace TwnsUserSetPrivilegePanel {
         }
 
         private _onNotifyMsgUserGetPublicInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgUserGetPublicInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgUserGetPublicInfo.IS;
             if (data.userId === this._getUserId()) {
                 const userPublicInfo                = Helpers.getExisted(data.userPublicInfo);
                 const userPrivilege                 = Helpers.getExisted(userPublicInfo.userPrivilege);

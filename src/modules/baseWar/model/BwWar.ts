@@ -26,8 +26,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
-    import WarAction                = ProtoTypes.WarAction;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import WarAction                = CommonProto.WarAction;
+    import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
     export abstract class BwWar {
@@ -284,7 +284,7 @@ namespace Twns.BaseWar {
             return this.getCommonSettingManager().getConfigVersion();
         }
 
-        public getWarRule(): ProtoTypes.WarRule.IWarRule {
+        public getWarRule(): CommonProto.WarRule.IWarRule {
             return this.getCommonSettingManager().getWarRule();
         }
 

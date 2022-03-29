@@ -8,8 +8,8 @@
 
 namespace ChangeLogProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import NetMessage       = CommonProto.NetMessage;
+    import ILanguageText    = CommonProto.Structure.ILanguageText;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
@@ -28,7 +28,7 @@ namespace ChangeLogProxy {
         });
     }
     function _onMsgChangeLogAddMessage(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgChangeLogAddMessage.IS;
+        const data = e.data as CommonProto.NetMessage.MsgChangeLogAddMessage.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgChangeLogAddMessage, data);
         }
@@ -43,7 +43,7 @@ namespace ChangeLogProxy {
         });
     }
     function _onMsgChangeLogModifyMessage(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgChangeLogModifyMessage.IS;
+        const data = e.data as CommonProto.NetMessage.MsgChangeLogModifyMessage.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgChangeLogModifyMessage, data);
         }

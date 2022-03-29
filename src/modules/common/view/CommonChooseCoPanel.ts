@@ -187,7 +187,7 @@ namespace TwnsCommonChooseCoPanel {
     }
 
     type DataForCoRenderer = {
-        coBasicCfg  : ProtoTypes.Config.ICoBasicCfg;
+        coBasicCfg  : CommonProto.Config.ICoBasicCfg;
         index       : number;
         panel       : CommonChooseCoPanel;
     };

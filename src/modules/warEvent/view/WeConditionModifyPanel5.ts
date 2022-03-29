@@ -18,8 +18,8 @@
 namespace TwnsWeConditionModifyPanel5 {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
     export type OpenData = {
         war         : Twns.BaseWar.BwWar;

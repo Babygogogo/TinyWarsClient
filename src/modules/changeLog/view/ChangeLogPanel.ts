@@ -134,7 +134,7 @@ namespace TwnsChangeLogPanel {
         }
     }
 
-    type DataForMessageRenderer = ProtoTypes.ChangeLog.IChangeLogMessage;
+    type DataForMessageRenderer = CommonProto.ChangeLog.IChangeLogMessage;
     class MessageRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForMessageRenderer> {
         private readonly _labelIndex!   : TwnsUiLabel.UiLabel;
         private readonly _labelContent! : TwnsUiLabel.UiLabel;

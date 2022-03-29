@@ -6,7 +6,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace BroadcastModel {
-    import IBroadcastMessage    = ProtoTypes.Broadcast.IBroadcastMessage;
+    import IBroadcastMessage    = CommonProto.Broadcast.IBroadcastMessage;
 
     const _allMessageIdArray    : number[] = [];
     const _messageDataAccessor  = Helpers.createCachedDataAccessor<number, IBroadcastMessage>({

@@ -172,7 +172,7 @@ namespace TwnsMpwTopPanel {
             this._updateBtnChat();
         }
         private _onNotifyMsgUserGetOnlineState(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgUserGetOnlineState.IS;
+            const data = e.data as CommonProto.NetMessage.MsgUserGetOnlineState.IS;
             if (data.userId === this._getOpenData().war.getPlayerInTurn().getUserId()) {
                 this._updateLabelPlayerState();
             }

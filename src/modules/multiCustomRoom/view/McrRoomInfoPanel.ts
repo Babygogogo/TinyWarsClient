@@ -39,7 +39,7 @@ namespace TwnsMcrRoomInfoPanel {
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
-    import NetMessage                               = ProtoTypes.NetMessage;
+    import NetMessage                               = CommonProto.NetMessage;
 
     export type OpenData = {
         roomId  : number;
@@ -549,7 +549,7 @@ namespace TwnsMcrRoomInfoPanel {
             this._updateLabelName();
         }
         private _onNotifyMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateState();
@@ -629,7 +629,7 @@ namespace TwnsMcrRoomInfoPanel {
             }
         }
         private _onNotifyMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateImgColor();
             }
@@ -685,14 +685,14 @@ namespace TwnsMcrRoomInfoPanel {
             this._updateLabelName();
         }
         private _onNotifyMsgMcrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMcrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateStateAndImgRed();
             }
         }
         private _onNotifyMsgMcrSetReady(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMcrSetReady.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMcrSetReady.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateStateAndImgRed();

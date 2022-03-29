@@ -13,7 +13,7 @@ namespace CommonModel {
     import TileDecoratorType        = Types.TileDecoratorType;
     import TileObjectType           = Types.TileObjectType;
     import TextureVersion           = Types.UnitAndTileTextureVersion;
-    import IDataForMrwPlayerRank    = ProtoTypes.Structure.IDataForMrwPlayerRank;
+    import IDataForMrwPlayerRank    = CommonProto.Structure.IDataForMrwPlayerRank;
 
     type FrameCfg = {
         source  : string | null;

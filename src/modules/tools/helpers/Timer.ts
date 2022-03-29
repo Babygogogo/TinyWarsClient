@@ -133,7 +133,7 @@ namespace Timer {
     }
 
     function _onMsgCommonHeartbeat(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgCommonHeartbeat.IS;
+        const data = e.data as CommonProto.NetMessage.MsgCommonHeartbeat.IS;
         if (data.counter === _heartbeatCounter) {
             _isHeartbeatAnswered = true;
             ++_heartbeatCounter;

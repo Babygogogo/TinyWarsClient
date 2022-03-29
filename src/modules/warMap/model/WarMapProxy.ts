@@ -10,7 +10,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarMapProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
@@ -66,7 +66,7 @@ namespace WarMapProxy {
     export function reqMmSetWarRuleAvailability({ mapId, ruleId, availability }: {
         mapId       : number;
         ruleId      : number;
-        availability: ProtoTypes.WarRule.IRuleAvailability;
+        availability: CommonProto.WarRule.IRuleAvailability;
     }): void {
         NetManager.send({
             MsgMmSetWarRuleAvailability: { c: {
@@ -136,7 +136,7 @@ namespace WarMapProxy {
         }
     }
 
-    export function reqMmSetMapTag(mapId: number, mapTag: ProtoTypes.Map.IDataForMapTag | null): void {
+    export function reqMmSetMapTag(mapId: number, mapTag: CommonProto.Map.IDataForMapTag | null): void {
         NetManager.send({ MsgMmSetMapTag: { c: {
             mapId,
             mapTag,
@@ -149,7 +149,7 @@ namespace WarMapProxy {
         }
     }
 
-    export function reqMmSetMapName(mapId: number, mapNameArray: ProtoTypes.Structure.ILanguageText[]): void {
+    export function reqMmSetMapName(mapId: number, mapNameArray: CommonProto.Structure.ILanguageText[]): void {
         NetManager.send({ MsgMmSetMapName: { c: {
             mapId,
             mapNameArray,
@@ -163,7 +163,7 @@ namespace WarMapProxy {
         }
     }
 
-    export function reqMmAddWarRule(mapId: number, warRule: ProtoTypes.WarRule.IWarRule): void {
+    export function reqMmAddWarRule(mapId: number, warRule: CommonProto.WarRule.IWarRule): void {
         NetManager.send({
             MsgMmAddWarRule: { c: {
                 mapId,

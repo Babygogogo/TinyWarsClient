@@ -25,7 +25,7 @@
 namespace TwnsSrrCreateMapListPanel {
     import LangTextType                     = TwnsLangTextType.LangTextType;
     import NotifyType                       = TwnsNotifyType.NotifyType;
-    import IDataForMapTag                   = ProtoTypes.Map.IDataForMapTag;
+    import IDataForMapTag                   = CommonProto.Map.IDataForMapTag;
     import OpenDataForCommonWarMapInfoPage  = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForSpmRankPage           = TwnsSpmRankPage.OpenData;
 

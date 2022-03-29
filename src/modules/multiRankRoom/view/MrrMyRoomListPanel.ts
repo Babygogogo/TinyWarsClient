@@ -108,21 +108,21 @@ namespace TwnsMrrMyRoomListPanel {
         }
 
         private _onNotifyMsgMrrGetRoomPublicInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMrrGetRoomPublicInfo.IS;
             if (data.roomId === MrrModel.getPreviewingRoomId()) {
                 this._updateComponentsForPreviewingRoomInfo();
             }
         }
 
         private _onNotifyMsgMrrSetSelfSettings(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrSetSelfSettings.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMrrSetSelfSettings.IS;
             if (data.roomId === MrrModel.getPreviewingRoomId()) {
                 this._updateCommonWarPlayerInfoPage();
             }
         }
 
         private _onNotifyMsgMrrSetBannedCoIdList(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrSetBannedCoIdList.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS;
             if (data.roomId === MrrModel.getPreviewingRoomId()) {
                 this._updateCommonWarPlayerInfoPage();
             }

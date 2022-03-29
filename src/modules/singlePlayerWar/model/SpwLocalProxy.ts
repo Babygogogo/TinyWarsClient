@@ -7,7 +7,7 @@
 namespace SpwLocalProxy {
     import GridIndex    = Types.GridIndex;
     import UnitType     = Types.UnitType;
-    import IMovePath    = ProtoTypes.Structure.IMovePath;
+    import IMovePath    = CommonProto.Structure.IMovePath;
     import BwWar        = Twns.BaseWar.BwWar;
 
     export function reqPlayerDeleteUnit(war: BwWar, gridIndex: GridIndex): void {

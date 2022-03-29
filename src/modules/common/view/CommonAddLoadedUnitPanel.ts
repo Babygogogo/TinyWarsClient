@@ -33,7 +33,7 @@ namespace TwnsCommonAddLoadedUnitPanel {
     export type OpenData = {
         war         : Twns.BaseWar.BwWar;
         loaderUnit  : TwnsBwUnit.BwUnit;
-        callback    : (unitData: ProtoTypes.WarSerialization.ISerialUnit) => void;
+        callback    : (unitData: CommonProto.WarSerialization.ISerialUnit) => void;
     };
     export class CommonAddLoadedUnitPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelTitle!               : TwnsUiLabel.UiLabel;
@@ -84,7 +84,7 @@ namespace TwnsCommonAddLoadedUnitPanel {
         private readonly _labelProduceMaterial!     : TwnsUiLabel.UiLabel;
         private readonly _inputProduceMaterial!     : TwnsUiTextInput.UiTextInput;
 
-        private _unitData?  : ProtoTypes.WarSerialization.ISerialUnit;
+        private _unitData?  : CommonProto.WarSerialization.ISerialUnit;
 
         protected _onOpening(): void {
             this._setUiListenerArray([
@@ -426,13 +426,13 @@ namespace TwnsCommonAddLoadedUnitPanel {
                 loaderUnitId: loaderUnit.getUnitId(),
             };
         }
-        private _getUnitData(): ProtoTypes.WarSerialization.ISerialUnit {
+        private _getUnitData(): CommonProto.WarSerialization.ISerialUnit {
             return Helpers.getExisted(this._unitData);
         }
     }
 
     function getErrorTipsForAddUnit({ unitData, war }: {
-        unitData    : ProtoTypes.WarSerialization.ISerialUnit;
+        unitData    : CommonProto.WarSerialization.ISerialUnit;
         war         : Twns.BaseWar.BwWar;
     }): string | null {
         const configVersion = war.getConfigVersion();

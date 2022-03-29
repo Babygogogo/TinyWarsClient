@@ -19,8 +19,8 @@ namespace TwnsCommonWarMapInfoPage {
             mapId   : number;
         };
         warInfo?    : {
-            warData     : ProtoTypes.WarSerialization.ISerialWar;
-            players     : Types.Undefinable<ProtoTypes.WarSerialization.ISerialPlayer[]>;
+            warData     : CommonProto.WarSerialization.ISerialWar;
+            players     : Types.Undefinable<CommonProto.WarSerialization.ISerialPlayer[]>;
         };
     } | null;
     export class CommonWarMapInfoPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonMapInfoPage> {

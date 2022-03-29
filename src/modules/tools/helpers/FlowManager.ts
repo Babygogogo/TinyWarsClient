@@ -188,7 +188,7 @@ namespace FlowManager {
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
-    export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
+    export async function gotoMultiPlayerWar(data: CommonProto.WarSerialization.ISerialWar): Promise<void> {
         const war = await MpwModel.loadWar(data);
         RwModel.unloadWar();
         HrwModel.unloadWar();
@@ -209,7 +209,7 @@ namespace FlowManager {
 
         SoundManager.playCoBgmWithWar(war, true);
     }
-    export async function gotoReplayWar(warData: ProtoTypes.WarSerialization.ISerialWar, replayId: number): Promise<void> {
+    export async function gotoReplayWar(warData: CommonProto.WarSerialization.ISerialWar, replayId: number): Promise<void> {
         const war = await RwModel.loadWar(warData, replayId);
         HrwModel.unloadWar();
         MpwModel.unloadWar();
@@ -229,7 +229,7 @@ namespace FlowManager {
 
         SoundManager.playCoBgmWithWar(war, true);
     }
-    export async function gotoHalfwayReplayWar(warData: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
+    export async function gotoHalfwayReplayWar(warData: CommonProto.WarSerialization.ISerialWar): Promise<void> {
         const war = await HrwModel.loadWar(warData);
         RwModel.unloadWar();
         MpwModel.unloadWar();
@@ -251,8 +251,8 @@ namespace FlowManager {
     }
     export async function gotoSinglePlayerWar({ warData, slotIndex, slotExtraData }: {
         slotIndex       : number;
-        slotExtraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-        warData         : ProtoTypes.WarSerialization.ISerialWar;
+        slotExtraData   : CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+        warData         : CommonProto.WarSerialization.ISerialWar;
     }): Promise<void> {
         const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData });
         MpwModel.unloadWar();
@@ -276,7 +276,7 @@ namespace FlowManager {
 
         await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
     }
-    export async function gotoMapEditorWar(mapRawData: Types.Undefinable<ProtoTypes.Map.IMapRawData>, slotIndex: number, isReview: boolean): Promise<void> {
+    export async function gotoMapEditorWar(mapRawData: Types.Undefinable<CommonProto.Map.IMapRawData>, slotIndex: number, isReview: boolean): Promise<void> {
         const war = await MeModel.loadWar(mapRawData, slotIndex, isReview);
         MpwModel.unloadWar();
         SpwModel.unloadWar();
@@ -323,7 +323,7 @@ namespace FlowManager {
         TwnsPanelManager.open(TwnsPanelConfig.Dict.WwOngoingWarsPanel, void 0);
     }
 
-    export function gotoMfrCreateSettingsPanel(warData: ProtoTypes.WarSerialization.ISerialWar): void {
+    export function gotoMfrCreateSettingsPanel(warData: CommonProto.WarSerialization.ISerialWar): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         HrwModel.unloadWar();
@@ -393,7 +393,7 @@ namespace FlowManager {
     }
 
     function _onMsgMpwCommonContinueWar(e: egret.Event): void {
-        const data      = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
+        const data      = e.data as CommonProto.NetMessage.MsgMpwCommonContinueWar.IS;
         const warData   = Helpers.getExisted(data.war, ClientErrorCode.FlowManager_OnMsgMpwCommonContinueWar_00);
         gotoMultiPlayerWar(warData);
     }

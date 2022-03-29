@@ -11,9 +11,9 @@
 namespace SpmModel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import NetMessage               = ProtoTypes.NetMessage;
+    import NetMessage               = CommonProto.NetMessage;
     import SpmWarSaveSlotData       = Types.SpmWarSaveSlotData;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import ISpmRankInfoForRule      = NetMessage.MsgSpmGetRankList.ISpmRankInfoForRule;
     import MsgSpmGetRankListIs      = NetMessage.MsgSpmGetRankList.IS;
     import MsgSpmGetReplayDataIs    = NetMessage.MsgSpmGetReplayData.IS;
@@ -25,7 +25,7 @@ namespace SpmModel {
     }
 
     function _onNotifyMsgSpmValidateSrw(e: egret.Event): void {
-        const data      = e.data as ProtoTypes.NetMessage.MsgSpmValidateSrw.IS;
+        const data      = e.data as CommonProto.NetMessage.MsgSpmValidateSrw.IS;
         const status    = data.status;
         if (status === Types.SpmValidateSrwStatus.ConfigVersionNotLatest) {
             FloatText.show(Lang.getText(LangTextType.A0278));
@@ -50,8 +50,8 @@ namespace SpmModel {
     }
     function setSlotData({ slotIndex, warData, slotExtraData }: {
         slotIndex       : number;
-        warData         : ProtoTypes.WarSerialization.ISerialWar;
-        slotExtraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+        warData         : CommonProto.WarSerialization.ISerialWar;
+        slotExtraData   : CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
     }): void {
         getSlotDict().set(slotIndex, {
             slotIndex,

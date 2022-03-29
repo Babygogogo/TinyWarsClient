@@ -20,7 +20,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeMapListPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
+    import IMapEditorData   = CommonProto.Map.IMapEditorData;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     export type OpenData = void;

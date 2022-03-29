@@ -10,7 +10,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MrrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {

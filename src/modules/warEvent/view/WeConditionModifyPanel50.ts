@@ -19,8 +19,8 @@
 namespace TwnsWeConditionModifyPanel50 {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
     export type OpenData = {
         war         : Twns.BaseWar.BwWar;
@@ -141,7 +141,7 @@ namespace TwnsWeConditionModifyPanel50 {
             this._labelHasFogCurrently.text = hasFogCurrently != null ? Lang.getText(hasFogCurrently ? LangTextType.B0431 : LangTextType.B0432) : Lang.getText(LangTextType.B0776);
         }
 
-        private _getCondition(): ProtoTypes.WarEvent.IWecWeatherAndFog {
+        private _getCondition(): CommonProto.WarEvent.IWecWeatherAndFog {
             return Helpers.getExisted(this._getOpenData().condition.WecWeatherAndFog);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {

@@ -27,9 +27,9 @@ namespace SpwModel {
     import SrwWar                   = TwnsSrwWar.SrwWar;
     import SpwPlayerManager         = TwnsSpwPlayerManager.SpwPlayerManager;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import WarSerialization         = ProtoTypes.WarSerialization;
-    import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
-    import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+    import WarSerialization         = CommonProto.WarSerialization;
+    import IWarActionContainer      = CommonProto.WarAction.IWarActionContainer;
+    import ISpmWarSaveSlotExtraData = CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
     import BwWar                    = Twns.BaseWar.BwWar;
 
     let _war: SpwWar | null = null;
@@ -360,7 +360,7 @@ namespace SpwModel {
         war.getExecutedActionManager().addExecutedAction(revisedAction);
     }
 
-    function createWarByWarData(warData: ProtoTypes.WarSerialization.ISerialWar): SpwWar {
+    function createWarByWarData(warData: CommonProto.WarSerialization.ISerialWar): SpwWar {
         if (warData.settingsForScw) {
             return new ScwWar();
         } else if (warData.settingsForSfw) {

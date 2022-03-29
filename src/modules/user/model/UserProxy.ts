@@ -11,7 +11,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace UserProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
@@ -180,14 +180,14 @@ namespace UserProxy {
         }
     }
 
-    export function reqUserSetPrivilege(userId: number, userPrivilege: ProtoTypes.User.IUserPrivilege): void {
+    export function reqUserSetPrivilege(userId: number, userPrivilege: CommonProto.User.IUserPrivilege): void {
         NetManager.send({ MsgUserSetPrivilege: { c: {
             userId,
             userPrivilege,
         } } });
     }
     async function _onMsgUserSetPrivilege(e: egret.Event): Promise<void> {
-        const data = e.data as ProtoTypes.NetMessage.MsgUserSetPrivilege.IS;
+        const data = e.data as CommonProto.NetMessage.MsgUserSetPrivilege.IS;
         if (!data.errorCode) {
             UserModel.updateOnMsgUserSetPrivilege(data);
             Notify.dispatch(NotifyType.MsgUserSetPrivilege, data);
@@ -201,19 +201,19 @@ namespace UserProxy {
         } } });
     }
     function _onMsgUserSetPassword(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgUserSetPassword.IS;
+        const data = e.data as CommonProto.NetMessage.MsgUserSetPassword.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgUserSetPassword, data);
         }
     }
 
-    export function reqUserSetSettings(userSettings: ProtoTypes.User.IUserSettings): void {
+    export function reqUserSetSettings(userSettings: CommonProto.User.IUserSettings): void {
         NetManager.send({ MsgUserSetSettings: { c: {
             userSettings,
         } } });
     }
     function _onMsgUserSetSettings(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgUserSetSettings.IS;
+        const data = e.data as CommonProto.NetMessage.MsgUserSetSettings.IS;
         if (!data.errorCode) {
             UserModel.updateOnMsgUserSetSettings(data);
             Notify.dispatch(NotifyType.MsgUserSetSettings, data);
@@ -227,7 +227,7 @@ namespace UserProxy {
         } } });
     }
     function _onMsgUserSetMapRating(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgUserSetMapRating.IS;
+        const data = e.data as CommonProto.NetMessage.MsgUserSetMapRating.IS;
         if (!data.errorCode) {
             UserModel.updateOnMsgUserSetMapRating(data);
             Notify.dispatch(NotifyType.MsgUserSetMapRating, data);

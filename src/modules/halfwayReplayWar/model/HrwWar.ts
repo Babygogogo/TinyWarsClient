@@ -23,9 +23,9 @@ namespace TwnsHrwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import WarType                  = Types.WarType;
-    import WarAction                = ProtoTypes.WarAction;
+    import WarAction                = CommonProto.WarAction;
     import IWarActionContainer      = WarAction.IWarActionContainer;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
 
     type CheckpointData = {
@@ -39,10 +39,10 @@ namespace TwnsHrwWar {
         private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
         private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
 
-        private _settingsForMcw?                    : ProtoTypes.WarSettings.ISettingsForMcw | null;
-        private _settingsForMfw?                    : ProtoTypes.WarSettings.ISettingsForMfw | null;
-        private _settingsForMrw?                    : ProtoTypes.WarSettings.ISettingsForMrw | null;
-        private _settingsForCcw?                    : ProtoTypes.WarSettings.ISettingsForCcw | null;
+        private _settingsForMcw?                    : CommonProto.WarSettings.ISettingsForMcw | null;
+        private _settingsForMfw?                    : CommonProto.WarSettings.ISettingsForMfw | null;
+        private _settingsForMrw?                    : CommonProto.WarSettings.ISettingsForMrw | null;
+        private _settingsForCcw?                    : CommonProto.WarSettings.ISettingsForCcw | null;
         private _watcherTeamIndexes?                : Set<number>;
 
         private _pauseTimeMs                        = 1000;
@@ -298,28 +298,28 @@ namespace TwnsHrwWar {
             return true;
         }
 
-        private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw | null {
+        private _getSettingsForMcw(): CommonProto.WarSettings.ISettingsForMcw | null {
             return Helpers.getDefined(this._settingsForMcw, ClientErrorCode.HrwWar_GetSettingsForMcw_00);
         }
-        private _setSettingsForMcw(value: ProtoTypes.WarSettings.ISettingsForMcw | null): void {
+        private _setSettingsForMcw(value: CommonProto.WarSettings.ISettingsForMcw | null): void {
             this._settingsForMcw = value;
         }
-        private _getSettingsForMfw(): ProtoTypes.WarSettings.ISettingsForMfw | null {
+        private _getSettingsForMfw(): CommonProto.WarSettings.ISettingsForMfw | null {
             return Helpers.getDefined(this._settingsForMfw, ClientErrorCode.HrwWar_GetSettingsForScw_00);
         }
-        private _setSettingsForMfw(value: ProtoTypes.WarSettings.ISettingsForMfw | null): void {
+        private _setSettingsForMfw(value: CommonProto.WarSettings.ISettingsForMfw | null): void {
             this._settingsForMfw = value;
         }
-        private _getSettingsForMrw(): ProtoTypes.WarSettings.ISettingsForMrw | null {
+        private _getSettingsForMrw(): CommonProto.WarSettings.ISettingsForMrw | null {
             return Helpers.getDefined(this._settingsForMrw, ClientErrorCode.HrwWar_GetSettingsForMrw_00);
         }
-        private _setSettingsForMrw(value: ProtoTypes.WarSettings.ISettingsForMrw | null): void {
+        private _setSettingsForMrw(value: CommonProto.WarSettings.ISettingsForMrw | null): void {
             this._settingsForMrw = value;
         }
-        private _getSettingsForCcw(): ProtoTypes.WarSettings.ISettingsForCcw | null {
+        private _getSettingsForCcw(): CommonProto.WarSettings.ISettingsForCcw | null {
             return Helpers.getDefined(this._settingsForCcw, ClientErrorCode.HrwWar_GetSettingsForCcw_00);
         }
-        private _setSettingsForCcw(value: ProtoTypes.WarSettings.ISettingsForCcw | null): void {
+        private _setSettingsForCcw(value: CommonProto.WarSettings.ISettingsForCcw | null): void {
             this._settingsForCcw = value;
         }
 

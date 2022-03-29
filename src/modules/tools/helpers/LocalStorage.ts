@@ -44,10 +44,10 @@ namespace LocalStorage {
         return (value == null) || (value === VALUE_TRUE);
     }
 
-    export function setMapRawData(mapId: number, data: ProtoTypes.Map.IMapRawData): void {
+    export function setMapRawData(mapId: number, data: CommonProto.Map.IMapRawData): void {
         storage.setItem(KEY_MAP_RAW_DATA_PREFIX + mapId, JSON.stringify(data));
     }
-    export function getMapRawData(mapId: number): ProtoTypes.Map.IMapRawData | null {
+    export function getMapRawData(mapId: number): CommonProto.Map.IMapRawData | null {
         const data = storage.getItem(KEY_MAP_RAW_DATA_PREFIX + mapId);
         return data ? JSON.parse(data) : null;
     }

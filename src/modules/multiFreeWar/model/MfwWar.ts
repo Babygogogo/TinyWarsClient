@@ -7,8 +7,8 @@
 
 namespace TwnsMfwWar {
     import MpwWar           = TwnsMpwWar.MpwWar;
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForMfw  = ProtoTypes.WarSettings.ISettingsForMfw;
+    import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
+    import ISettingsForMfw  = CommonProto.WarSettings.ISettingsForMfw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class MfwWar extends MpwWar {

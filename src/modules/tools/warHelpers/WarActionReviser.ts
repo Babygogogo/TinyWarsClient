@@ -17,8 +17,8 @@ namespace WarActionReviser {
     import GridIndex            = Types.GridIndex;
     import DropDestination      = Types.DropDestination;
     import PlayerAliveState     = Types.PlayerAliveState;
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
-    import WarAction            = ProtoTypes.WarAction;
+    import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
+    import WarAction            = CommonProto.WarAction;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
     import BwWar                = Twns.BaseWar.BwWar;

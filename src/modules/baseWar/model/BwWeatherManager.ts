@@ -4,7 +4,7 @@ namespace TwnsBwWeatherManager {
     import WeatherType              = Types.WeatherType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import ISerialWeatherManager    = ProtoTypes.WarSerialization.ISerialWeatherManager;
+    import ISerialWeatherManager    = CommonProto.WarSerialization.ISerialWeatherManager;
 
     export class BwWeatherManager {
         private _forceWeatherType?      : WeatherType | null;

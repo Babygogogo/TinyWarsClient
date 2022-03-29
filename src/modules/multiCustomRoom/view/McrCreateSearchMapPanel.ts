@@ -42,7 +42,7 @@ namespace TwnsMcrCreateSearchMapPanel {
         private readonly _labelTagFog!              : TwnsUiLabel.UiLabel;
         private readonly _btnTagFog!                : TwnsUiButton.UiButton;
 
-        private _mapTag         : ProtoTypes.Map.IDataForMapTag = {};
+        private _mapTag         : CommonProto.Map.IDataForMapTag = {};
 
         protected _onOpening(): void {
             this._setUiListenerArray([

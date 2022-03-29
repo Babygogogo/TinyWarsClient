@@ -163,7 +163,7 @@ namespace TwnsWwMakeRequestDetailPanel {
     type DataForPlayerRenderer = {
         panel           : WwMakeRequestDetailPanel;
         configVersion   : string;
-        playerInfo      : ProtoTypes.Structure.IWarPlayerInfo;
+        playerInfo      : CommonProto.Structure.IWarPlayerInfo;
         isRequested     : boolean;
         isWatching      : boolean;
         isRequesting    : boolean;

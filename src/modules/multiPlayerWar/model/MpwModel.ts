@@ -36,18 +36,18 @@ namespace MpwModel {
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
-    import IWarActionContainer                      = ProtoTypes.WarAction.IWarActionContainer;
-    import IWarRule                                 = ProtoTypes.WarRule.IWarRule;
-    import IMpwWarSettings                          = ProtoTypes.MultiPlayerWar.IMpwWarSettings;
-    import IMpwWarProgressInfo                      = ProtoTypes.MultiPlayerWar.IMpwWarProgressInfo;
-    import ISettingsForCommon                       = ProtoTypes.WarSettings.ISettingsForCommon;
-    import ISettingsForMcw                          = ProtoTypes.WarSettings.ISettingsForMcw;
-    import ISettingsForCcw                          = ProtoTypes.WarSettings.ISettingsForCcw;
-    import ISettingsForMrw                          = ProtoTypes.WarSettings.ISettingsForMrw;
-    import ISettingsForMfw                          = ProtoTypes.WarSettings.ISettingsForMfw;
-    import ISerialWar                               = ProtoTypes.WarSerialization.ISerialWar;
-    import MsgMpwCommonGetWarSettingsIs             = ProtoTypes.NetMessage.MsgMpwCommonGetWarSettings.IS;
-    import MsgMpwCommonGetWarProgressInfoIs         = ProtoTypes.NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
+    import IWarActionContainer                      = CommonProto.WarAction.IWarActionContainer;
+    import IWarRule                                 = CommonProto.WarRule.IWarRule;
+    import IMpwWarSettings                          = CommonProto.MultiPlayerWar.IMpwWarSettings;
+    import IMpwWarProgressInfo                      = CommonProto.MultiPlayerWar.IMpwWarProgressInfo;
+    import ISettingsForCommon                       = CommonProto.WarSettings.ISettingsForCommon;
+    import ISettingsForMcw                          = CommonProto.WarSettings.ISettingsForMcw;
+    import ISettingsForCcw                          = CommonProto.WarSettings.ISettingsForCcw;
+    import ISettingsForMrw                          = CommonProto.WarSettings.ISettingsForMrw;
+    import ISettingsForMfw                          = CommonProto.WarSettings.ISettingsForMfw;
+    import ISerialWar                               = CommonProto.WarSerialization.ISerialWar;
+    import MsgMpwCommonGetWarSettingsIs             = CommonProto.NetMessage.MsgMpwCommonGetWarSettings.IS;
+    import MsgMpwCommonGetWarProgressInfoIs         = CommonProto.NetMessage.MsgMpwCommonGetWarProgressInfo.IS;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -62,7 +62,7 @@ namespace MpwModel {
     let _mfwPreviewingWarId     : number | null = null;
     let _ccwPreviewingWarId     : number | null = null;
     let _war                    : MpwWar | null = null;
-    let _cachedSyncWarData      : ProtoTypes.NetMessage.MsgMpwCommonSyncWar.IS | null = null;
+    let _cachedSyncWarData      : CommonProto.NetMessage.MsgMpwCommonSyncWar.IS | null = null;
     const _cachedActions        : IWarActionContainer[] = [];
 
     export function init(): void {
@@ -678,7 +678,7 @@ namespace MpwModel {
     }
 
     function _onNotifyMsgMpwWatchGetIncomingInfo(e: egret.Event): void {
-        const data  = e.data as ProtoTypes.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
+        const data  = e.data as CommonProto.NetMessage.MsgMpwWatchGetIncomingInfo.IS;
         const war   = getWar();
         if (war?.getWarId() !== Helpers.getExisted(data.warId)) {
             return;
@@ -694,7 +694,7 @@ namespace MpwModel {
         player.setWatchRequestSrcUserIds(info?.requestSrcUserIdArray ?? []);
     }
     function _onNotifyMsgMpwWatchGetOutgoingInfo(e: egret.Event): void {
-        const data  = e.data as ProtoTypes.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
+        const data  = e.data as CommonProto.NetMessage.MsgMpwWatchGetOutgoingInfo.IS;
         const war   = getWar();
         if (war?.getWarId() !== Helpers.getExisted(data.warId)) {
             return;
@@ -731,7 +731,7 @@ namespace MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Handlers for war actions that McwProxy receives.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function updateOnPlayerSyncWar(data: ProtoTypes.NetMessage.MsgMpwCommonSyncWar.IS): void {
+    export function updateOnPlayerSyncWar(data: CommonProto.NetMessage.MsgMpwCommonSyncWar.IS): void {
         const war = getWar();
         if ((war) && (war.getWarId() === data.warId)) {
             _cachedSyncWarData = data;
@@ -910,7 +910,7 @@ namespace MpwModel {
         }
     }
 
-    function createWarByWarData(data: ProtoTypes.WarSerialization.ISerialWar): MpwWar {
+    function createWarByWarData(data: CommonProto.WarSerialization.ISerialWar): MpwWar {
         if (data.settingsForMcw) {
             return new McwWar();
         } else if (data.settingsForMrw) {

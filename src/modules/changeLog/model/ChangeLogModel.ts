@@ -2,7 +2,7 @@
 // import ProtoTypes       from "../../tools/proto/ProtoTypes";
 
 namespace ChangeLogModel {
-    import IChangeLogMessage    = ProtoTypes.ChangeLog.IChangeLogMessage;
+    import IChangeLogMessage    = CommonProto.ChangeLog.IChangeLogMessage;
 
     let _messageList: IChangeLogMessage[] | null = null;
 

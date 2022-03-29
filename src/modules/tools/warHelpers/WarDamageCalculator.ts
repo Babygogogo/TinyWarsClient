@@ -13,7 +13,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace WarDamageCalculator {
     import GridIndex            = Types.GridIndex;
-    import IBattleDamageInfo    = ProtoTypes.Structure.IBattleDamageInfo;
+    import IBattleDamageInfo    = CommonProto.Structure.IBattleDamageInfo;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwUnit               = TwnsBwUnit.BwUnit;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;

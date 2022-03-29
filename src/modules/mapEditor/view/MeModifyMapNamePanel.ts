@@ -18,7 +18,7 @@
 namespace TwnsMeModifyMapNamePanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import ILanguageText    = CommonProto.Structure.ILanguageText;
 
     export type OpenData = void;
     export class MeModifyMapNamePanel extends TwnsUiPanel.UiPanel<OpenData> {

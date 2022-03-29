@@ -19,8 +19,8 @@
 namespace TwnsWeConditionModifyPanel40 {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
     export type OpenData = {
         war         : Twns.BaseWar.BwWar;
@@ -420,7 +420,7 @@ namespace TwnsWeConditionModifyPanel40 {
             this._inputUnitsCount.text = `${this._getCondition().unitsCount}`;
         }
 
-        private _getCondition(): ProtoTypes.WarEvent.IWecUnitPresence {
+        private _getCondition(): CommonProto.WarEvent.IWecUnitPresence {
             return Helpers.getExisted(this._getOpenData().condition.WecUnitPresence);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {

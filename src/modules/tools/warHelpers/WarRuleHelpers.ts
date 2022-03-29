@@ -14,16 +14,16 @@ namespace WarRuleHelpers {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import LanguageType         = Types.LanguageType;
     import BootTimerType        = Types.BootTimerType;
-    import WarSettings          = ProtoTypes.WarSettings;
-    import WarRule              = ProtoTypes.WarRule;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
+    import WarSettings          = CommonProto.WarSettings;
+    import WarRule              = CommonProto.WarRule;
+    import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
     import ISettingsForCommon   = WarSettings.ISettingsForCommon;
     import IRuleForGlobalParams = WarRule.IRuleForGlobalParams;
     import IRuleForPlayers      = WarRule.IRuleForPlayers;
     import IDataForPlayerRule   = WarRule.IDataForPlayerRule;
     import IWarRule             = WarRule.IWarRule;
 
-    const DEFAULT_PLAYER_RULE: ProtoTypes.WarRule.IDataForPlayerRule = {
+    const DEFAULT_PLAYER_RULE: CommonProto.WarRule.IDataForPlayerRule = {
         playerIndex             : CommonConstants.WarNeutralPlayerIndex,
         teamIndex               : 0,
         attackPowerModifier     : 0,

@@ -12,7 +12,7 @@
 namespace MrrSelfSettingsModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
+    import IMrrRoomInfo     = CommonProto.MultiRankRoom.IMrrRoomInfo;
 
     let _roomId             : number | null;
     let _coId               : number | null;

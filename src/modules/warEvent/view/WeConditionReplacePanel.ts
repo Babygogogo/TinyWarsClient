@@ -18,7 +18,7 @@
 namespace TwnsWeConditionReplacePanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
+    import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
 
     export type OpenData = {
         fullData        : IWarEventFullData;

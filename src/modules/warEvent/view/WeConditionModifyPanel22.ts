@@ -18,8 +18,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeConditionModifyPanel22 {
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
     export type OpenData = {

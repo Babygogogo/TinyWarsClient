@@ -16,7 +16,7 @@
 namespace TwnsMmWarRuleAvailableCoPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import WarRule          = ProtoTypes.WarRule;
+    import WarRule          = CommonProto.WarRule;
 
     export type OpenData = {
         playerRule      : WarRule.IDataForPlayerRule;

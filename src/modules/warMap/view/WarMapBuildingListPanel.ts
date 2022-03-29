@@ -20,7 +20,7 @@ namespace TwnsWarMapBuildingListPanel {
 
     export type OpenData = {
         configVersion           : string;
-        tileDataArray           : ProtoTypes.WarSerialization.ISerialTile[];
+        tileDataArray           : CommonProto.WarSerialization.ISerialTile[];
         playersCountUnneutral   : number;
     };
     export class WarMapBuildingListPanel extends TwnsUiPanel.UiPanel<OpenData> {

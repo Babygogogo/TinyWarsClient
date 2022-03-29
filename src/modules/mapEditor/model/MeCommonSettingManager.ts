@@ -8,7 +8,7 @@
 
 namespace TwnsMeCommonSettingManager {
     import MeWar                = TwnsMeWar.MeWar;
-    import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
+    import ISettingsForCommon   = CommonProto.WarSettings.ISettingsForCommon;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     export class MeCommonSettingManager extends TwnsBwCommonSettingManager.BwCommonSettingManager {

@@ -20,8 +20,8 @@ namespace TwnsBwTurnManager {
     import NotifyType                   = TwnsNotifyType.NotifyType;
     import TurnPhaseCode                = Types.TurnPhaseCode;
     import TurnAndPlayerIndex           = Types.TurnAndPlayerIndex;
-    import ISerialTurnManager           = ProtoTypes.WarSerialization.ISerialTurnManager;
-    import WarAction                    = ProtoTypes.WarAction;
+    import ISerialTurnManager           = CommonProto.WarSerialization.ISerialTurnManager;
+    import WarAction                    = CommonProto.WarAction;
     import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
     import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;

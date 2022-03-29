@@ -19,7 +19,7 @@ namespace TwnsWeNodeReplacePanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
+    import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
 
     export type OpenData = {
         eventId         : number;

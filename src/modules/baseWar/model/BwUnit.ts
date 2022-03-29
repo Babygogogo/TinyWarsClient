@@ -25,7 +25,7 @@ namespace TwnsBwUnit {
     import MoveType             = Types.MoveType;
     import GridIndex            = Types.GridIndex;
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
-    import ISerialUnit          = ProtoTypes.WarSerialization.ISerialUnit;
+    import ISerialUnit          = CommonProto.WarSerialization.ISerialUnit;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwUnit {
@@ -310,7 +310,7 @@ namespace TwnsBwUnit {
             return this._getTemplateCfg()?.isAffectedByLuck === 1;
         }
 
-        public updateByRepairData(data: ProtoTypes.Structure.IDataForModifyUnit): void {
+        public updateByRepairData(data: CommonProto.Structure.IDataForModifyUnit): void {
             if (data.deltaHp) {
                 const hp = this.getCurrentHp();
                 if (hp == null) {

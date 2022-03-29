@@ -28,7 +28,7 @@ namespace WarCommonHelpers {
     import CoSkillAreaType  = Types.CoSkillAreaType;
     import ISerialUnit      = WarSerialization.ISerialUnit;
     import ISerialWar       = WarSerialization.ISerialWar;
-    import WarSerialization = ProtoTypes.WarSerialization;
+    import WarSerialization = CommonProto.WarSerialization;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     type AvailableMovableGrid = {
@@ -266,7 +266,7 @@ namespace WarCommonHelpers {
 
     export function getRevisedPath({ war, rawPath, launchUnitId }: {
         war             : Twns.BaseWar.BwWar;
-        rawPath         : Types.Undefinable<ProtoTypes.Structure.IMovePath>;
+        rawPath         : Types.Undefinable<CommonProto.Structure.IMovePath>;
         launchUnitId    : Types.Undefinable<number>;
     }): Types.MovePath {
         if (rawPath == null) {
@@ -665,7 +665,7 @@ namespace WarCommonHelpers {
     }
     export async function moveExtraUnit({ war, movingUnitAndPath, aiming, deleteViewAfterMoving }: {
         war                     : Twns.BaseWar.BwWar;
-        movingUnitAndPath       : Types.Undefinable<ProtoTypes.Structure.IMovingUnitAndPath>;
+        movingUnitAndPath       : Types.Undefinable<CommonProto.Structure.IMovingUnitAndPath>;
         aiming                  : GridIndex | null;
         deleteViewAfterMoving   : boolean;
     }): Promise<TwnsBwUnitView.BwUnitView | null> {
@@ -834,7 +834,7 @@ namespace WarCommonHelpers {
      */
     export function handleCommonExtraDataForWarActions({ war, commonExtraData, isFastExecute }: {
         war                 : Twns.BaseWar.BwWar;
-        commonExtraData     : ProtoTypes.Structure.ICommonExtraDataForWarAction;
+        commonExtraData     : CommonProto.Structure.ICommonExtraDataForWarAction;
         isFastExecute       : boolean;
     }): boolean {
         const playerIndexInTurn = war.getPlayerIndexInTurn();
@@ -1173,7 +1173,7 @@ namespace WarCommonHelpers {
             return WarType.Undefined;
         }
     }
-    export function getWarTypeByMpwWarSettings(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarSettings): WarType {
+    export function getWarTypeByMpwWarSettings(warInfo: CommonProto.MultiPlayerWar.IMpwWarSettings): WarType {
         const warRule   = warInfo.settingsForCommon?.warRule;
         const hasFog    = warRule ? WarRuleHelpers.getHasFogByDefault(warRule) : null;
         if (hasFog == null) {
@@ -1212,7 +1212,7 @@ namespace WarCommonHelpers {
         return playerIndexSet.size;
     }
 
-    export function getCoMaxEnergy(coConfig: ProtoTypes.Config.ICoBasicCfg): number {
+    export function getCoMaxEnergy(coConfig: CommonProto.Config.ICoBasicCfg): number {
         const expansionArray = coConfig.zoneExpansionEnergyList || [];
         return Math.max(
             expansionArray[expansionArray.length - 1] || 0,
@@ -1284,7 +1284,7 @@ namespace WarCommonHelpers {
     // Other validators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getErrorCodeForUnitDataIgnoringUnitId({ unitData, mapSize, playersCountUnneutral, configVersion }: {
-        unitData                : ProtoTypes.WarSerialization.ISerialUnit;
+        unitData                : CommonProto.WarSerialization.ISerialUnit;
         configVersion           : string;
         mapSize                 : Types.Undefinable<Types.MapSize>;
         playersCountUnneutral   : Types.Undefinable<number>;

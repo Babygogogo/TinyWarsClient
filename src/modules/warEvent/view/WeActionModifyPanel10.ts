@@ -16,8 +16,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel10 {
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import BwWar                    = Twns.BaseWar.BwWar;
 
@@ -129,7 +129,7 @@ namespace TwnsWeActionModifyPanel10 {
             this._inputTurns.text = `${this.getAction().turnsCount}`;
         }
 
-        private getAction(): ProtoTypes.WarEvent.IWeaSetForceFogCode {
+        private getAction(): CommonProto.WarEvent.IWeaSetForceFogCode {
             return Helpers.getExisted(this._getOpenData().action.WeaSetForceFogCode);
         }
     }

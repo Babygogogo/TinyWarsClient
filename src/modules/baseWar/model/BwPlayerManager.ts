@@ -8,7 +8,7 @@
 // import TwnsBwWar            from "./BwWar";
 
 namespace TwnsBwPlayerManager {
-    import WarSerialization         = ProtoTypes.WarSerialization;
+    import WarSerialization         = CommonProto.WarSerialization;
     import ISerialPlayerManager     = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer            = WarSerialization.ISerialPlayer;
     import PlayerAliveState         = Types.PlayerAliveState;

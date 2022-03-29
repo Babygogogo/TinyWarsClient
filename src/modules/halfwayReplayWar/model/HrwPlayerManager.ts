@@ -8,7 +8,7 @@ namespace TwnsHrwPlayerManager {
     export class HrwPlayerManager extends TwnsBwPlayerManager.BwPlayerManager {
         private _watcherTeamIndexes?    : Set<number>;
 
-        public initWatcherTeamIndexes(warData: ProtoTypes.WarSerialization.ISerialWar): void {
+        public initWatcherTeamIndexes(warData: CommonProto.WarSerialization.ISerialWar): void {
             const teamIndexes = new Set<number>();
             for (const data of warData.executedActionManager?.halfwayReplayActionArray ?? []) {
                 teamIndexes.add(Helpers.getExisted(data.teamIndex, ClientErrorCode.HrwPlayerManager_InitWatcherTeamIndexes_00));

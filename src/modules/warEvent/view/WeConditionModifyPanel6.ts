@@ -19,8 +19,8 @@
 namespace TwnsWeConditionModifyPanel6 {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
     export type OpenData = {
         war         : Twns.BaseWar.BwWar;
@@ -240,7 +240,7 @@ namespace TwnsWeConditionModifyPanel6 {
             this._labelPlayerIndex.text = playerIndexArray?.length ? playerIndexArray.map(v => `P${v}`).join(`, `) : Lang.getText(LangTextType.B0776);
         }
 
-        private _getCondition(): ProtoTypes.WarEvent.IWecTurnAndPlayer {
+        private _getCondition(): CommonProto.WarEvent.IWecTurnAndPlayer {
             return Helpers.getExisted(this._getOpenData().condition.WecTurnAndPlayer);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {

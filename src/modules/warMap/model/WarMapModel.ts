@@ -11,9 +11,9 @@
 namespace WarMapModel {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import WarType              = Types.WarType;
-    import IMapRawData          = ProtoTypes.Map.IMapRawData;
-    import IMapBriefData        = ProtoTypes.Map.IMapBriefData;
-    import IMapEditorData       = ProtoTypes.Map.IMapEditorData;
+    import IMapRawData          = CommonProto.Map.IMapRawData;
+    import IMapBriefData        = CommonProto.Map.IMapBriefData;
+    import IMapEditorData       = CommonProto.Map.IMapEditorData;
 
     let _reviewingMaps          : IMapEditorData[];
     const _enabledMapIdArray    : number[] = [];
@@ -43,7 +43,7 @@ namespace WarMapModel {
         return _briefDataGetter.getData(mapId);
     }
 
-    export async function updateOnSetMapName(data: ProtoTypes.NetMessage.MsgMmSetMapName.IS): Promise<void> {
+    export async function updateOnSetMapName(data: CommonProto.NetMessage.MsgMmSetMapName.IS): Promise<void> {
         const mapId         = Helpers.getExisted(data.mapId, ClientErrorCode.WarMapModel_UpdateOnSetMapName_00);
         const mapNameArray  = Helpers.getExisted(data.mapNameArray, ClientErrorCode.WarMapModel_UpdateOnSetMapName_01);
         const mapBriefData  = await getBriefData(mapId);
@@ -52,19 +52,19 @@ namespace WarMapModel {
         const mapRawData = await getRawData(mapId);
         (mapRawData) && (mapRawData.mapNameArray = mapNameArray);
     }
-    export async function updateOnAddWarRule(data: ProtoTypes.NetMessage.MsgMmAddWarRule.IS): Promise<void> {
+    export async function updateOnAddWarRule(data: CommonProto.NetMessage.MsgMmAddWarRule.IS): Promise<void> {
         const mapId     = Helpers.getExisted(data.mapId);
         const warRule   = Helpers.getExisted(data.warRule);
         Helpers.getExisted((await getRawData(mapId))?.warRuleArray).push(warRule);
     }
-    export async function updateOnDeleteWarRule(data: ProtoTypes.NetMessage.MsgMmDeleteWarRule.IS): Promise<void> {
+    export async function updateOnDeleteWarRule(data: CommonProto.NetMessage.MsgMmDeleteWarRule.IS): Promise<void> {
         const mapId         = Helpers.getExisted(data.mapId);
         const ruleId        = Helpers.getExisted(data.ruleId);
         const warRuleArray  = Helpers.getExisted((await getRawData(mapId))?.warRuleArray);
         const index         = warRuleArray.findIndex(v => v.ruleId === ruleId);
         (index >= 0) && (warRuleArray.splice(index, 1));
     }
-    export async function updateOnSetWarRuleAvailability(data: ProtoTypes.NetMessage.MsgMmSetWarRuleAvailability.IS): Promise<void> {
+    export async function updateOnSetWarRuleAvailability(data: CommonProto.NetMessage.MsgMmSetWarRuleAvailability.IS): Promise<void> {
         const warRule               = Helpers.getExisted((await getRawData(Helpers.getExisted(data.mapId)))?.warRuleArray?.find(v => v.ruleId === data.ruleId));
         warRule.ruleAvailability    = data.availability;
     }

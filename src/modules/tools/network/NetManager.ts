@@ -35,7 +35,7 @@ namespace NetManager {
     };
 
     class NetMessageDispatcher extends egret.EventDispatcher {
-        public dispatchWithContainer(container: ProtoTypes.NetMessage.IMessageContainer): void {
+        public dispatchWithContainer(container: CommonProto.NetMessage.IMessageContainer): void {
             const messageName   = Helpers.getMessageName(container);
             const message       = container[messageName];
             const messageData   = Helpers.getExisted(message ? message.s : null, ClientErrorCode.NetManager_NetMessageDispatcher_DispatchWithContainer_00);
@@ -88,7 +88,7 @@ namespace NetManager {
         }
     }
 
-    export function send(container: ProtoTypes.NetMessage.IMessageContainer): void {
+    export function send(container: CommonProto.NetMessage.IMessageContainer): void {
         if ((!_socket) || (!_socket.connected)) {
             const errorText = Lang.getText(LangTextType.A0014);
             (errorText) && (FloatText.show(errorText));

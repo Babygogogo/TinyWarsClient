@@ -784,7 +784,7 @@ namespace TwnsSpwActionPlanner {
             }
         }
 
-        private _generateIMovePath(): ProtoTypes.Structure.IMovePath {
+        private _generateIMovePath(): CommonProto.Structure.IMovePath {
             const movePath = this.getMovePath();
             return {
                 nodes           : movePath,

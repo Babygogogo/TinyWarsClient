@@ -10,11 +10,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace McrJoinModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import IMcrRoomStaticInfo   = ProtoTypes.MultiCustomRoom.IMcrRoomStaticInfo;
-    import IMcrRoomPlayerInfo   = ProtoTypes.MultiCustomRoom.IMcrRoomPlayerInfo;
+    import IMcrRoomStaticInfo   = CommonProto.MultiCustomRoom.IMcrRoomStaticInfo;
+    import IMcrRoomPlayerInfo   = CommonProto.MultiCustomRoom.IMcrRoomPlayerInfo;
 
-    export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMcrCreateRoom.IC;
-    export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
+    export type DataForCreateRoom   = CommonProto.NetMessage.MsgMcrCreateRoom.IC;
+    export type DataForJoinRoom     = CommonProto.NetMessage.MsgMcrJoinRoom.IC;
 
     let _targetRoomId               : number | null = null;
     let _joinedPreviewingRoomId     : number | null = null;

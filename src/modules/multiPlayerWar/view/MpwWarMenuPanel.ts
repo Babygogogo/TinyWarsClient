@@ -104,7 +104,7 @@ namespace TwnsMpwWarMenuPanel {
             this._updateBtnUnitOpacity();
         }
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
+            const data = e.data as CommonProto.NetMessage.MsgSpmCreateSfw.IS;
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0107),
                 callback: () => {
@@ -117,7 +117,7 @@ namespace TwnsMpwWarMenuPanel {
             });
         }
         private _onNotifyMsgMpwGetHalfwayReplayData(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMpwGetHalfwayReplayData.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMpwGetHalfwayReplayData.IS;
             FlowManager.gotoHalfwayReplayWar(Helpers.deepClone(Helpers.getExisted(data.warData)));
         }
         private _onNotifyMsgMpwGetHalfwayReplayDataFailed(): void {

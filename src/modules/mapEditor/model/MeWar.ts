@@ -16,12 +16,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWar {
-    import WarAction                = ProtoTypes.WarAction;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
-    import IWarRule                 = ProtoTypes.WarRule.IWarRule;
-    import IMapRawData              = ProtoTypes.Map.IMapRawData;
-    import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
-    import ILanguageText            = ProtoTypes.Structure.ILanguageText;
+    import WarAction                = CommonProto.WarAction;
+    import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
+    import IWarRule                 = CommonProto.WarRule.IWarRule;
+    import IMapRawData              = CommonProto.Map.IMapRawData;
+    import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
+    import ILanguageText            = CommonProto.Structure.ILanguageText;
 
     export class MeWar extends Twns.BaseWar.BwWar {
         private readonly _playerManager         = new TwnsMePlayerManager.MePlayerManager();
@@ -46,7 +46,7 @@ namespace TwnsMeWar {
 
             this._initView();
         }
-        public async initWithMapEditorData(data: ProtoTypes.Map.IMapEditorData): Promise<void> {
+        public async initWithMapEditorData(data: CommonProto.Map.IMapEditorData): Promise<void> {
             const warData = MeUtility.createISerialWar(data);
             await this.init(warData);
 

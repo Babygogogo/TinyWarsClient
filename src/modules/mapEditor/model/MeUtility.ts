@@ -32,8 +32,8 @@ namespace MeUtility {
     import SymmetryType         = Types.SymmetryType;
     import LanguageType         = Types.LanguageType;
     import TileDecoratorType    = Types.TileDecoratorType;
-    import IMapRawData          = ProtoTypes.Map.IMapRawData;
-    import WarSerialization     = ProtoTypes.WarSerialization;
+    import IMapRawData          = CommonProto.Map.IMapRawData;
+    import WarSerialization     = CommonProto.WarSerialization;
     import ISerialTile          = WarSerialization.ISerialTile;
     import ISerialUnit          = WarSerialization.ISerialUnit;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
@@ -187,7 +187,7 @@ namespace MeUtility {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function createISerialWar(data: ProtoTypes.Map.IMapEditorData): WarSerialization.ISerialWar {
+    export function createISerialWar(data: CommonProto.Map.IMapEditorData): WarSerialization.ISerialWar {
         const mapRawData        = Helpers.getExisted(data.mapRawData);
         const warRuleArray      = mapRawData.warRuleArray;
         const unitDataArray     = mapRawData.unitDataArray || [];
@@ -835,7 +835,7 @@ namespace MeUtility {
             return ClientErrorCode.NoError;
         }
     }
-    function getErrorCodeForMapNameArray(mapNameList: Types.Undefinable<ProtoTypes.Structure.ILanguageText[]>): ClientErrorCode {
+    function getErrorCodeForMapNameArray(mapNameList: Types.Undefinable<CommonProto.Structure.ILanguageText[]>): ClientErrorCode {
         if (!Helpers.checkIsValidLanguageTextArray({
             list            : mapNameList,
             maxTextLength   : CommonConstants.MapMaxNameLength,
@@ -847,7 +847,7 @@ namespace MeUtility {
 
         return ClientErrorCode.NoError;
     }
-    function getErrorCodeForUnitArray(unitArray: Types.Undefinable<ProtoTypes.WarSerialization.ISerialUnit[]>): ClientErrorCode {
+    function getErrorCodeForUnitArray(unitArray: Types.Undefinable<CommonProto.WarSerialization.ISerialUnit[]>): ClientErrorCode {
         if (!WarCommonHelpers.checkIsUnitIdCompact(unitArray)) {
             return ClientErrorCode.MapRawDataValidation03;
         }

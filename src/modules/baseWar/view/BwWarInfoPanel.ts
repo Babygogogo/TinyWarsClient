@@ -30,7 +30,7 @@ namespace TwnsBwWarInfoPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
+    import IDataForPlayerRule   = CommonProto.WarRule.IDataForPlayerRule;
 
     // eslint-disable-next-line no-shadow
     enum InfoType {

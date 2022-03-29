@@ -80,7 +80,7 @@ namespace TwnsMmSetWarRuleAvailabilityPanel {
             const ruleId        = openData.ruleId;
             const mapRawData    = Helpers.getExisted(await WarMapModel.getRawData(mapId));
             const warRule       = Helpers.getExisted(Helpers.deepClone(mapRawData.warRuleArray?.find(v => v.ruleId === ruleId)));
-            const availability  : ProtoTypes.WarRule.IRuleAvailability = {
+            const availability  : CommonProto.WarRule.IRuleAvailability = {
                 canMcw  : this._imgMcw.visible,
                 canCcw  : this._imgCcw.visible,
                 canScw  : this._imgScw.visible,

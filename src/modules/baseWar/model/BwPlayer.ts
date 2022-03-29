@@ -19,7 +19,7 @@ namespace TwnsBwPlayer {
     import PlayerAliveState = Types.PlayerAliveState;
     import CoSkillType      = Types.CoSkillType;
     import CoType           = Types.CoType;
-    import ISerialPlayer    = ProtoTypes.WarSerialization.ISerialPlayer;
+    import ISerialPlayer    = CommonProto.WarSerialization.ISerialPlayer;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwPlayer {
@@ -488,7 +488,7 @@ namespace TwnsBwPlayer {
             return modifier;
         }
 
-        private _getCoBasicCfg(): ProtoTypes.Config.ICoBasicCfg {
+        private _getCoBasicCfg(): CommonProto.Config.ICoBasicCfg {
             return ConfigManager.getCoBasicCfg(this._getWar().getConfigVersion(), this.getCoId());
         }
     }

@@ -25,7 +25,7 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
     import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
+    import ISerialWar           = CommonProto.WarSerialization.ISerialWar;
 
     export type OpenData = ISerialWar;
 

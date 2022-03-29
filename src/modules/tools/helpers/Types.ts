@@ -7,23 +7,23 @@ namespace Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Config types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export interface SystemCfg extends ProtoTypes.Config.ISystemCfg {
+    export interface SystemCfg extends CommonProto.Config.ISystemCfg {
         energyGrowthMultiplierArray: number[];
     }
-    export interface TileCategoryCfg extends ProtoTypes.Config.ITileCategoryCfg {
+    export interface TileCategoryCfg extends CommonProto.Config.ITileCategoryCfg {
         category: TileCategory;
     }
-    export interface UnitCategoryCfg extends ProtoTypes.Config.IUnitCategoryCfg {
+    export interface UnitCategoryCfg extends CommonProto.Config.IUnitCategoryCfg {
         category: UnitCategory;
     }
-    export interface TileTemplateCfg extends ProtoTypes.Config.ITileTemplateCfg {
+    export interface TileTemplateCfg extends CommonProto.Config.ITileTemplateCfg {
         version             : string;
         type                : TileType;
         defenseAmount       : number;
         defenseUnitCategory : UnitCategory;
         visionRange         : number;
     }
-    export interface UnitTemplateCfg extends ProtoTypes.Config.IUnitTemplateCfg {
+    export interface UnitTemplateCfg extends CommonProto.Config.IUnitTemplateCfg {
         version                 : string;
         type                    : UnitType;
         maxHp                   : number;
@@ -36,37 +36,37 @@ namespace Types {
         productionCost          : number;
         visionRange             : number;
     }
-    export interface DamageChartCfg extends ProtoTypes.Config.IDamageChartCfg {
+    export interface DamageChartCfg extends CommonProto.Config.IDamageChartCfg {
         attackerType: UnitType;
         armorType   : ArmorType;
         weaponType  : WeaponType;
     }
-    export interface MoveCostCfg extends ProtoTypes.Config.IMoveCostCfg {
+    export interface MoveCostCfg extends CommonProto.Config.IMoveCostCfg {
         tileType    : TileType;
         moveType    : MoveType;
     }
-    export interface UnitPromotionCfg extends ProtoTypes.Config.IUnitPromotionCfg {
+    export interface UnitPromotionCfg extends CommonProto.Config.IUnitPromotionCfg {
         promotion   : number;
         attackBonus : number;
         defenseBonus: number;
     }
-    export interface VisionBonusCfg extends ProtoTypes.Config.IVisionBonusCfg {
+    export interface VisionBonusCfg extends CommonProto.Config.IVisionBonusCfg {
         unitType    : UnitType;
         tileType    : TileType;
         visionBonus : number;
     }
-    export interface BuildableTileCfg extends ProtoTypes.Config.IBuildableTileCfg {
+    export interface BuildableTileCfg extends CommonProto.Config.IBuildableTileCfg {
         unitType        : UnitType;
         srcBaseType     : TileBaseType;
         srcObjectType   : TileObjectType;
         dstBaseType     : TileBaseType;
         dstObjectType   : TileObjectType;
     }
-    export interface PlayerRankCfg extends ProtoTypes.Config.PlayerRankCfg {
+    export interface PlayerRankCfg extends CommonProto.Config.PlayerRankCfg {
         minScore    : number;
         rank        : number;
     }
-    export interface CoBasicCfg extends ProtoTypes.Config.ICoBasicCfg {
+    export interface CoBasicCfg extends CommonProto.Config.ICoBasicCfg {
         coId                : number;
         name                : string;
         tier                : number;
@@ -74,20 +74,20 @@ namespace Types {
         boardCostPercentage : number;
         maxLoadCount        : number;
     }
-    export interface CoSkillCfg extends ProtoTypes.Config.ICoSkillCfg {
+    export interface CoSkillCfg extends CommonProto.Config.ICoSkillCfg {
         skillId     : number;
         name        : string;
     }
-    export interface WeatherCfg extends ProtoTypes.Config.IWeatherCfg {
+    export interface WeatherCfg extends CommonProto.Config.IWeatherCfg {
         weatherType : number;
     }
-    export interface WeatherCategoryCfg extends ProtoTypes.Config.IWeatherCategoryCfg {
+    export interface WeatherCategoryCfg extends CommonProto.Config.IWeatherCategoryCfg {
         category: WeatherCategory;
     }
-    export interface UserAvatarCfg extends ProtoTypes.Config.IUserAvatarCfg {
+    export interface UserAvatarCfg extends CommonProto.Config.IUserAvatarCfg {
         avatarId    : number;
     }
-    export interface FullConfig extends ProtoTypes.Config.FullConfig {
+    export interface FullConfig extends CommonProto.Config.FullConfig {
         System          : SystemCfg;
         TileCategory    : TileCategoryCfg[];
         UnitCategory    : UnitCategoryCfg[];
@@ -187,13 +187,13 @@ namespace Types {
         TrueVision      = 2,
     }
 
-    export interface WarMapUnitViewData extends ProtoTypes.WarSerialization.ISerialUnit {
+    export interface WarMapUnitViewData extends CommonProto.WarSerialization.ISerialUnit {
         skinId?             : number;
         hasLoadedUnit?      : boolean;
         coUsingSkillType?   : CoSkillType;
     }
 
-    export interface WarMapTileViewData extends ProtoTypes.WarSerialization.ISerialTile {
+    export interface WarMapTileViewData extends CommonProto.WarSerialization.ISerialTile {
         skinId  : number | null;
     }
 
@@ -208,8 +208,8 @@ namespace Types {
 
     export type SpmWarSaveSlotData = {
         slotIndex   : number;
-        extraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-        warData     : ProtoTypes.WarSerialization.ISerialWar;
+        extraData   : CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+        warData     : CommonProto.WarSerialization.ISerialWar;
     };
 
     export type ReplayCheckpointInfo = {

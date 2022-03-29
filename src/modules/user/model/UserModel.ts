@@ -14,12 +14,12 @@
 namespace UserModel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
-    import NetMessage           = ProtoTypes.NetMessage;
-    import IUserPublicInfo      = ProtoTypes.User.IUserPublicInfo;
-    import IUserBriefInfo       = ProtoTypes.User.IUserBriefInfo;
-    import IUserSettings        = ProtoTypes.User.IUserSettings;
-    import IUserSelfInfo        = ProtoTypes.User.IUserSelfInfo;
-    import IUserPrivilege       = ProtoTypes.User.IUserPrivilege;
+    import NetMessage           = CommonProto.NetMessage;
+    import IUserPublicInfo      = CommonProto.User.IUserPublicInfo;
+    import IUserBriefInfo       = CommonProto.User.IUserBriefInfo;
+    import IUserSettings        = CommonProto.User.IUserSettings;
+    import IUserSelfInfo        = CommonProto.User.IUserSelfInfo;
+    import IUserPrivilege       = CommonProto.User.IUserPrivilege;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     let _isLoggedIn                 = false;
@@ -59,7 +59,7 @@ namespace UserModel {
     export function getSelfInfo(): IUserSelfInfo | null {
         return _selfInfo;
     }
-    function getSelfUserComplexInfo(): ProtoTypes.User.IUserComplexInfo | null {
+    function getSelfUserComplexInfo(): CommonProto.User.IUserComplexInfo | null {
         const selfInfo = getSelfInfo();
         return selfInfo ? selfInfo.userComplexInfo ?? null : null;
     }
@@ -160,10 +160,10 @@ namespace UserModel {
         const info = await getUserPublicInfo(userId);
         return info ? info.nickname ?? null : null;
     }
-    export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserRankInfo.IUserMrwRankInfo | null> {
+    export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<CommonProto.User.UserRankInfo.IUserMrwRankInfo | null> {
         return (await getUserPublicInfo(userId))?.userMrwRankInfoArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
-    export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserWarStatistics.IUserMpwStatistics | null> {
+    export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<CommonProto.User.UserWarStatistics.IUserMpwStatistics | null> {
         return (await getUserPublicInfo(userId))?.userMpwStatisticsArray?.find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount)) ?? null;
     }
     export function getMapRating(mapId: number): number | null {
@@ -186,10 +186,10 @@ namespace UserModel {
         return getSelfSettings()?.isAutoScrollMap ?? true;
     }
 
-    export function getSelfSettingsOpacitySettings(): ProtoTypes.User.IUserOpacitySettings | null {
+    export function getSelfSettingsOpacitySettings(): CommonProto.User.IUserOpacitySettings | null {
         return getSelfSettings()?.opacitySettings ?? null;
     }
-    export function setSelfSettingsOpacitySettings(opacitySettings: ProtoTypes.User.IUserOpacitySettings): void {
+    export function setSelfSettingsOpacitySettings(opacitySettings: CommonProto.User.IUserOpacitySettings): void {
         const selfSettings = getSelfSettings();
         if (selfSettings == null) {
             return;
@@ -210,7 +210,7 @@ namespace UserModel {
             UserProxy.reqUserSetSettings({ opacitySettings: { unitOpacity: 100 } });
         }
     }
-    function mergeSelfSettingsOpacitySettings(newOpacitySettings: ProtoTypes.User.IUserOpacitySettings): void {
+    function mergeSelfSettingsOpacitySettings(newOpacitySettings: CommonProto.User.IUserOpacitySettings): void {
         const selfSettings = getSelfSettings();
         if (selfSettings == null) {
             return;

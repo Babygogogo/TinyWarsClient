@@ -13,7 +13,7 @@ namespace TwnsBwTileView {
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
     import TileDecoratorType    = Types.TileDecoratorType;
-    import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
+    import ISerialTile          = CommonProto.WarSerialization.ISerialTile;
 
     const {
         height  : GRID_HEIGHT,

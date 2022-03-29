@@ -21,7 +21,7 @@
 namespace TwnsMmReviewListPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
+    import IMapEditorData   = CommonProto.Map.IMapEditorData;
 
     export type OpenData = void;
     export class MmReviewListPanel extends TwnsUiPanel.UiPanel<OpenData> {

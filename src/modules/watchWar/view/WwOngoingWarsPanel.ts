@@ -114,7 +114,7 @@ namespace TwnsWwOngoingWarsPanel {
         }
 
         private _onNotifyMsgMpwWatchContinueWar(e: egret.Event): void {
-            FlowManager.gotoMultiPlayerWar(Helpers.getExisted((e.data as ProtoTypes.NetMessage.MsgMpwWatchContinueWar.IS).war, ClientErrorCode.WwOngoingWarsPanel_OnNotifyMsgMpwWatchContinueWar_00));
+            FlowManager.gotoMultiPlayerWar(Helpers.getExisted((e.data as CommonProto.NetMessage.MsgMpwWatchContinueWar.IS).war, ClientErrorCode.WwOngoingWarsPanel_OnNotifyMsgMpwWatchContinueWar_00));
         }
 
         private _onNotifyMsgMpwWatchContinueWarFailed(): void {

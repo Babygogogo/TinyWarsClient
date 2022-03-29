@@ -19,11 +19,11 @@
 namespace TwnsMmWarRulePanel {
     import LangTextType                 = TwnsLangTextType.LangTextType;
     import NotifyType                   = TwnsNotifyType.NotifyType;
-    import IWarRule                     = ProtoTypes.WarRule.IWarRule;
-    import IDataForPlayerRule           = ProtoTypes.WarRule.IDataForPlayerRule;
+    import IWarRule                     = CommonProto.WarRule.IWarRule;
+    import IDataForPlayerRule           = CommonProto.WarRule.IDataForPlayerRule;
 
     export type OpenData = {
-        mapRawData  : ProtoTypes.Map.IMapRawData;
+        mapRawData  : CommonProto.Map.IMapRawData;
     };
     export class MmWarRulePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _labelMenuTitle!       : TwnsUiLabel.UiLabel;
@@ -896,7 +896,7 @@ namespace TwnsMmWarRulePanel {
 
     type DataForWarEventRenderer = {
         panel               : MmWarRulePanel;
-        warEventFullData    : Types.Undefinable<ProtoTypes.Map.IWarEventFullData>;
+        warEventFullData    : Types.Undefinable<CommonProto.Map.IWarEventFullData>;
         warEventId          : number;
         warRule             : IWarRule;
     };

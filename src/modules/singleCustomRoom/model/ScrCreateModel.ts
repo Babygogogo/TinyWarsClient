@@ -17,10 +17,10 @@
 namespace ScrCreateModel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IDataForPlayerRule       = ProtoTypes.WarRule.IDataForPlayerRule;
-    import IDataForPlayerInRoom     = ProtoTypes.Structure.IDataForPlayerInRoom;
+    import IDataForPlayerRule       = CommonProto.WarRule.IDataForPlayerRule;
+    import IDataForPlayerInRoom     = CommonProto.Structure.IDataForPlayerInRoom;
 
-    export type DataForCreateWar    = ProtoTypes.NetMessage.MsgSpmCreateScw.IC;
+    export type DataForCreateWar    = CommonProto.NetMessage.MsgSpmCreateScw.IC;
 
     export function init(): void {
         // nothing to do
@@ -53,10 +53,10 @@ namespace ScrCreateModel {
         Helpers.getExisted(getData().settingsForScw).mapId = mapId;
     }
 
-    export async function getMapBriefData(): Promise<ProtoTypes.Map.IMapBriefData> {
+    export async function getMapBriefData(): Promise<CommonProto.Map.IMapBriefData> {
         return Helpers.getExisted(await WarMapModel.getBriefData(getMapId()));
     }
-    export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
+    export async function getMapRawData(): Promise<CommonProto.Map.IMapRawData> {
         return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
     }
 
@@ -78,10 +78,10 @@ namespace ScrCreateModel {
     export function getData(): DataForCreateWar {
         return _dataForCreateWar;
     }
-    export function getSettingsForCommon(): ProtoTypes.WarSettings.ISettingsForCommon {
+    export function getSettingsForCommon(): CommonProto.WarSettings.ISettingsForCommon {
         return Helpers.getExisted(getData().settingsForCommon);
     }
-    export function getWarRule(): ProtoTypes.WarRule.IWarRule {
+    export function getWarRule(): CommonProto.WarRule.IWarRule {
         return Helpers.getExisted(getSettingsForCommon().warRule);
     }
 

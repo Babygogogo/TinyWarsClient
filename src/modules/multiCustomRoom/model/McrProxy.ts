@@ -10,7 +10,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace McrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
@@ -180,7 +180,7 @@ namespace McrProxy {
         }
     }
 
-    export function reqMcrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<ProtoTypes.MultiCustomRoom.IMcrRoomFilter>): void {
+    export function reqMcrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<CommonProto.MultiCustomRoom.IMcrRoomFilter>): void {
         NetManager.send({
             MsgMcrGetJoinableRoomIdArray: { c: {
                 roomFilter,

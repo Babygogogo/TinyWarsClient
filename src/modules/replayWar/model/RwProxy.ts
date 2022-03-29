@@ -9,7 +9,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace RwProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
@@ -22,7 +22,7 @@ namespace RwProxy {
         ], null);
     }
 
-    export function reqReplayGetReplayIdArray(replayFilter: ProtoTypes.Replay.IReplayFilter | null): void {
+    export function reqReplayGetReplayIdArray(replayFilter: CommonProto.Replay.IReplayFilter | null): void {
         NetManager.send({
             MsgReplayGetReplayIdArray: { c: {
                 replayFilter,

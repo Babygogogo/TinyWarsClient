@@ -16,7 +16,7 @@
 namespace MpwProxy {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import NetMessage           = ProtoTypes.NetMessage;
+    import NetMessage           = CommonProto.NetMessage;
     import NetMessageCodes      = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
@@ -147,7 +147,7 @@ namespace MpwProxy {
         }
     }
 
-    export function reqMpwExecuteWarAction(war: Twns.BaseWar.BwWar, actionContainer: ProtoTypes.WarAction.IWarActionContainer): void {
+    export function reqMpwExecuteWarAction(war: Twns.BaseWar.BwWar, actionContainer: CommonProto.WarAction.IWarActionContainer): void {
         NetManager.send({
             MsgMpwExecuteWarAction: { c: {
                 warId           : war.getWarId(),

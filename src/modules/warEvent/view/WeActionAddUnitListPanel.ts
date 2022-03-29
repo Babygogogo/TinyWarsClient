@@ -17,7 +17,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionAddUnitListPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import IDataForAddUnit  = ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
+    import IDataForAddUnit  = CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     export type OpenData = {

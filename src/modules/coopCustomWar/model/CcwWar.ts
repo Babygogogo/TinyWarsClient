@@ -6,8 +6,8 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 namespace TwnsCcwWar {
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForCcw  = ProtoTypes.WarSettings.ISettingsForCcw;
+    import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
+    import ISettingsForCcw  = CommonProto.WarSettings.ISettingsForCcw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
     import MpwWar           = TwnsMpwWar.MpwWar;
 

@@ -37,7 +37,7 @@ namespace TwnsUiZoomableMap {
             this.clearMap();
         }
 
-        public showMapByMapData(map: ProtoTypes.Map.IMapRawData): void {
+        public showMapByMapData(map: CommonProto.Map.IMapRawData): void {
             const mapView = this._mapView;
             mapView.showMapByMapData(map);
 
@@ -46,7 +46,7 @@ namespace TwnsUiZoomableMap {
             zoom.setContentHeight(mapView.height);
             zoom.setContentScale(0, true);
         }
-        public showMapByWarData(data: ProtoTypes.WarSerialization.ISerialWar, players: Types.Undefinable<ProtoTypes.WarSerialization.ISerialPlayer[]>): void {
+        public showMapByWarData(data: CommonProto.WarSerialization.ISerialWar, players: Types.Undefinable<CommonProto.WarSerialization.ISerialPlayer[]>): void {
             const mapView = this._mapView;
             mapView.showMapByWarData(data, players);
 

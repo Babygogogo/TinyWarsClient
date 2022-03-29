@@ -20,7 +20,7 @@ namespace MrrModel {
     import ClientErrorCode                          = TwnsClientErrorCode.ClientErrorCode;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
-    import IMrrRoomInfo                             = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
+    import IMrrRoomInfo                             = CommonProto.MultiRankRoom.IMrrRoomInfo;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
@@ -60,7 +60,7 @@ namespace MrrModel {
         return _joinedRoomIdArrayAccessor.getData(null);
     }
 
-    export async function updateOnMsgMrrGetRoomPublicInfo(data: ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS): Promise<void> {
+    export async function updateOnMsgMrrGetRoomPublicInfo(data: CommonProto.NetMessage.MsgMrrGetRoomPublicInfo.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
         const roomInfo  = data.roomInfo ?? null;
         setRoomInfo(roomId, roomInfo);
@@ -69,7 +69,7 @@ namespace MrrModel {
             await MrrSelfSettingsModel.resetData(roomId);
         }
     }
-    export async function updateOnMsgMrrSetBannedCoIdList(data: ProtoTypes.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
+    export async function updateOnMsgMrrSetBannedCoIdList(data: CommonProto.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
         const roomId    = Helpers.getExisted(data.roomId);
         const roomInfo  = await getRoomInfo(roomId);
         if (!roomInfo) {
@@ -97,7 +97,7 @@ namespace MrrModel {
             }
         }
     }
-    export async function updateOnMsgMrrSetSelfSettings(data: ProtoTypes.NetMessage.MsgMrrSetSelfSettings.IS): Promise<void> {
+    export async function updateOnMsgMrrSetSelfSettings(data: CommonProto.NetMessage.MsgMrrSetSelfSettings.IS): Promise<void> {
         const roomInfo = await getRoomInfo(Helpers.getExisted(data.roomId));
         if (!roomInfo) {
             return;
@@ -134,7 +134,7 @@ namespace MrrModel {
             }
         }
     }
-    export function updateOnMsgMrrDeleteRoomByServer(data: ProtoTypes.NetMessage.MsgMrrDeleteRoomByServer.IS): void {
+    export function updateOnMsgMrrDeleteRoomByServer(data: CommonProto.NetMessage.MsgMrrDeleteRoomByServer.IS): void {
         setRoomInfo(Helpers.getExisted(data.roomId), null);
     }
 

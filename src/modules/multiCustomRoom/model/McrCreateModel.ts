@@ -23,8 +23,8 @@ namespace McrCreateModel {
         60 * 60 * 24 * 7,   // 7 days
     ];
 
-    export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMcrCreateRoom.IC;
-    export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMcrJoinRoom.IC;
+    export type DataForCreateRoom   = CommonProto.NetMessage.MsgMcrCreateRoom.IC;
+    export type DataForJoinRoom     = CommonProto.NetMessage.MsgMcrJoinRoom.IC;
 
     const _dataForCreateRoom: DataForCreateRoom = {
         settingsForCommon       : {
@@ -37,7 +37,7 @@ namespace McrCreateModel {
         selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
     };
 
-    export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
+    export async function getMapRawData(): Promise<CommonProto.Map.IMapRawData> {
         return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
     }
 
@@ -55,17 +55,17 @@ namespace McrCreateModel {
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
     }
-    export function getSettingsForCommon(): ProtoTypes.WarSettings.ISettingsForCommon {
+    export function getSettingsForCommon(): CommonProto.WarSettings.ISettingsForCommon {
         return Helpers.getExisted(getData().settingsForCommon);
     }
-    export function getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw {
+    export function getSettingsForMcw(): CommonProto.WarSettings.ISettingsForMcw {
         return Helpers.getExisted(getData().settingsForMcw);
     }
 
-    export function getWarRule(): ProtoTypes.WarRule.IWarRule {
+    export function getWarRule(): CommonProto.WarRule.IWarRule {
         return Helpers.getExisted(getSettingsForCommon().warRule);
     }
-    function setWarRule(warRule: ProtoTypes.WarRule.IWarRule) {
+    function setWarRule(warRule: CommonProto.WarRule.IWarRule) {
         getSettingsForCommon().warRule = warRule;
     }
 

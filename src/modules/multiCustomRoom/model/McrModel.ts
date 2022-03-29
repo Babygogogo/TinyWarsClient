@@ -15,8 +15,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace McrModel {
-    import IMcrRoomStaticInfo                       = ProtoTypes.MultiCustomRoom.IMcrRoomStaticInfo;
-    import IMcrRoomPlayerInfo                       = ProtoTypes.MultiCustomRoom.IMcrRoomPlayerInfo;
+    import IMcrRoomStaticInfo                       = CommonProto.MultiCustomRoom.IMcrRoomStaticInfo;
+    import IMcrRoomPlayerInfo                       = CommonProto.MultiCustomRoom.IMcrRoomPlayerInfo;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;

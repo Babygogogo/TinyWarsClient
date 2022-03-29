@@ -16,14 +16,14 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace CcrModel {
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
-    import ICcrRoomStaticInfo                       = ProtoTypes.CoopCustomRoom.ICcrRoomStaticInfo;
-    import ICcrRoomPlayerInfo                       = ProtoTypes.CoopCustomRoom.ICcrRoomPlayerInfo;
+    import ICcrRoomStaticInfo                       = CommonProto.CoopCustomRoom.ICcrRoomStaticInfo;
+    import ICcrRoomPlayerInfo                       = CommonProto.CoopCustomRoom.ICcrRoomPlayerInfo;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
 
-    export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgCcrCreateRoom.IC;
-    export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgCcrJoinRoom.IC;
+    export type DataForCreateRoom   = CommonProto.NetMessage.MsgCcrCreateRoom.IC;
+    export type DataForJoinRoom     = CommonProto.NetMessage.MsgCcrJoinRoom.IC;
 
     const _roomStaticInfoAccessor = Helpers.createCachedDataAccessor<number, ICcrRoomStaticInfo>({
         reqData : (roomId: number) => CcrProxy.reqCcrGetRoomStaticInfo(roomId),

@@ -11,9 +11,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace RwModel {
-    import NetMessage           = ProtoTypes.NetMessage;
-    import IReplayInfo          = ProtoTypes.Replay.IReplayInfo;
-    import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
+    import NetMessage           = CommonProto.NetMessage;
+    import IReplayInfo          = CommonProto.Replay.IReplayInfo;
+    import ISerialWar           = CommonProto.WarSerialization.ISerialWar;
     import MsgReplayGetDataIs   = NetMessage.MsgReplayGetData.IS;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import RwWar                = TwnsRwWar.RwWar;

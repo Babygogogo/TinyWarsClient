@@ -13,7 +13,7 @@
 		"libs/modules/mouse/mouse.js"
 	],
 	"game": [
-		"bin-debug/modules/tools/proto/ProtoTypes.js",
+		"bin-debug/modules/tools/proto/CommonProto.js",
 		"bin-debug/modules/tools/helpers/Types.js",
 		"bin-debug/modules/tools/helpers/ClientErrorCode.js",
 		"bin-debug/modules/baseWar/model/BwUnit.js",
@@ -333,8 +333,8 @@
 		"bin-debug/modules/tools/notify/Notify.js",
 		"bin-debug/modules/tools/notify/NotifyData.js",
 		"bin-debug/modules/common/view/CommonChangeVersionPanel.js",
-		"bin-debug/modules/tools/proto/ProtoManager.js",
 		"bin-debug/modules/common/view/CommonChooseCoPanel.js",
+		"bin-debug/modules/tools/proto/ProtoManager.js",
 		"bin-debug/modules/tools/res/ResAutoRelease.js",
 		"bin-debug/modules/tools/res/ResManager.js",
 		"bin-debug/modules/tools/ui/UiButton.js",

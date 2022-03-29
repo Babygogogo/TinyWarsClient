@@ -19,7 +19,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeAvailableCoPanel {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import WarRule          = ProtoTypes.WarRule;
+    import WarRule          = CommonProto.WarRule;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     export type OpenData = {

@@ -16,8 +16,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeActionModifyPanel24 {
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
+    import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
+    import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import BwWar                    = Twns.BaseWar.BwWar;
 
@@ -415,7 +415,7 @@ namespace TwnsWeActionModifyPanel24 {
             this._inputActCoEnergyMultiplierPct.text    = `${value == null ? `` : value}`;
         }
 
-        private _getAction(): ProtoTypes.WarEvent.IWeaSetPlayerState {
+        private _getAction(): CommonProto.WarEvent.IWeaSetPlayerState {
             return Helpers.getExisted(this._getOpenData().action.WeaSetPlayerState);
         }
         private _setInnerTouchMaskEnabled(isEnabled: boolean): void {

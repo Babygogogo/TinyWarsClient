@@ -14,7 +14,7 @@ namespace CcrCreateModel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import BootTimerType            = Types.BootTimerType;
 
-    export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgCcrCreateRoom.IC;
+    export type DataForCreateRoom   = CommonProto.NetMessage.MsgCcrCreateRoom.IC;
 
     const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day
@@ -35,7 +35,7 @@ namespace CcrCreateModel {
         aiSkinInfoArray         : [],
     };
 
-    export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
+    export async function getMapRawData(): Promise<CommonProto.Map.IMapRawData> {
         return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
     }
 
@@ -53,13 +53,13 @@ namespace CcrCreateModel {
     export function getData(): DataForCreateRoom {
         return _dataForCreateRoom;
     }
-    export function getSettingsForCommon(): ProtoTypes.WarSettings.ISettingsForCommon {
+    export function getSettingsForCommon(): CommonProto.WarSettings.ISettingsForCommon {
         return Helpers.getExisted(getData().settingsForCommon);
     }
-    function getSettingsForCcw(): ProtoTypes.WarSettings.ISettingsForCcw {
+    function getSettingsForCcw(): CommonProto.WarSettings.ISettingsForCcw {
         return Helpers.getExisted(getData().settingsForCcw);
     }
-    export function getWarRule(): ProtoTypes.WarRule.IWarRule {
+    export function getWarRule(): CommonProto.WarRule.IWarRule {
         return Helpers.getExisted(getSettingsForCommon().warRule);
     }
 
@@ -223,7 +223,7 @@ namespace CcrCreateModel {
             });
         }
     }
-    function getAiSkinInfoArray(): ProtoTypes.NetMessage.MsgCcrCreateRoom.IAiSkinInfo[] {
+    function getAiSkinInfoArray(): CommonProto.NetMessage.MsgCcrCreateRoom.IAiSkinInfo[] {
         return Helpers.getExisted(getData().aiSkinInfoArray);
     }
     export function getAiSkinId(playerIndex: number): number {

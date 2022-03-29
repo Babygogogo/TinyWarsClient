@@ -28,7 +28,7 @@ namespace WarActionExecutor {
     import UnitActionState                      = Types.UnitActionState;
     import MovePath                             = Types.MovePath;
     import TileType                             = Types.TileType;
-    import WarAction                            = ProtoTypes.WarAction;
+    import WarAction                            = CommonProto.WarAction;
     import IWarActionContainer                  = WarAction.IWarActionContainer;
     import IWarActionPlayerDeleteUnit           = WarAction.IWarActionPlayerDeleteUnit;
     import IWarActionPlayerEndTurn              = WarAction.IWarActionPlayerEndTurn;

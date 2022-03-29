@@ -18,10 +18,10 @@
 namespace TwnsCommonModifyWarRuleNamePanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import ILanguageText    = CommonProto.Structure.ILanguageText;
 
     export type OpenData = {
-        rule        : ProtoTypes.WarRule.IWarRule;
+        rule        : CommonProto.WarRule.IWarRule;
         callback    : () => void;
     };
     export class CommonModifyWarRuleNamePanel extends TwnsUiPanel.UiPanel<OpenData> {

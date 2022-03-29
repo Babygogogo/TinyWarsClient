@@ -5,8 +5,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.BaseWar {
     import ClientErrorCode              = TwnsClientErrorCode.ClientErrorCode;
-    import IWarActionContainer          = ProtoTypes.WarAction.IWarActionContainer;
-    import ISerialExecutedActionManager = ProtoTypes.WarSerialization.ISerialExecutedActionManager;
+    import IWarActionContainer          = CommonProto.WarAction.IWarActionContainer;
+    import ISerialExecutedActionManager = CommonProto.WarSerialization.ISerialExecutedActionManager;
 
     export class BwExecutedActionManager {
         private _isNeedExecutedActions? : boolean;

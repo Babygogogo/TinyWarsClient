@@ -9,7 +9,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MfrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
@@ -29,7 +29,7 @@ namespace MfrProxy {
         ], null);
     }
 
-    export function reqCreateRoom(param: ProtoTypes.NetMessage.MsgMfrCreateRoom.IC): void {
+    export function reqCreateRoom(param: CommonProto.NetMessage.MsgMfrCreateRoom.IC): void {
         NetManager.send({
             MsgMfrCreateRoom: { c: param },
         });
@@ -41,7 +41,7 @@ namespace MfrProxy {
         }
     }
 
-    export function reqMfrJoinRoom(param: ProtoTypes.NetMessage.MsgMfrJoinRoom.IC): void {
+    export function reqMfrJoinRoom(param: CommonProto.NetMessage.MsgMfrJoinRoom.IC): void {
         NetManager.send({
             MsgMfrJoinRoom: { c: param },
         });
@@ -153,7 +153,7 @@ namespace MfrProxy {
         }
     }
 
-    export function reqMfrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<ProtoTypes.MultiFreeRoom.IMfrRoomFilter>): void {
+    export function reqMfrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<CommonProto.MultiFreeRoom.IMfrRoomFilter>): void {
         NetManager.send({
             MsgMfrGetJoinableRoomIdArray: { c: {
                 roomFilter,

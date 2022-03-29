@@ -39,7 +39,7 @@ namespace TwnsCcrRoomInfoPanel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
-    import NetMessage                               = ProtoTypes.NetMessage;
+    import NetMessage                               = CommonProto.NetMessage;
 
     export type OpenData = {
         roomId  : number;
@@ -537,13 +537,13 @@ namespace TwnsCcrRoomInfoPanel {
             this._updateLabelName();
         }
         private _onNotifyMsgCcrGetRoomStaticInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomStaticInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgCcrGetRoomStaticInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
             }
         }
         private _onNotifyMsgCcrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgCcrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateState();
             }
@@ -623,7 +623,7 @@ namespace TwnsCcrRoomInfoPanel {
             }
         }
         private _onNotifyMsgCcrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgCcrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateImgColor();
             }
@@ -678,7 +678,7 @@ namespace TwnsCcrRoomInfoPanel {
             this._updateLabelName();
         }
         private _onNotifyMsgCcrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgCcrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgCcrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateStateAndImgRed();
             }

@@ -25,7 +25,7 @@
 namespace TwnsScrCreateMapListPanel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
-    import IDataForMapTag           = ProtoTypes.Map.IDataForMapTag;
+    import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
 
     type FiltersForMapList = {
         mapName?        : string | null;

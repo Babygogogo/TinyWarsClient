@@ -15,7 +15,7 @@
 
 namespace TwnsBwField {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import ISerialField         = ProtoTypes.WarSerialization.ISerialField;
+    import ISerialField         = CommonProto.WarSerialization.ISerialField;
     import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
     import BwWar                = Twns.BaseWar.BwWar;
     import BwCursor             = TwnsBwCursor.BwCursor;

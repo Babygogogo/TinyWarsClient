@@ -14,8 +14,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MfrModel {
-    import IMfrRoomStaticInfo                       = ProtoTypes.MultiFreeRoom.IMfrRoomStaticInfo;
-    import IMfrRoomPlayerInfo                       = ProtoTypes.MultiFreeRoom.IMfrRoomPlayerInfo;
+    import IMfrRoomStaticInfo                       = CommonProto.MultiFreeRoom.IMfrRoomStaticInfo;
+    import IMfrRoomPlayerInfo                       = CommonProto.MultiFreeRoom.IMfrRoomPlayerInfo;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;

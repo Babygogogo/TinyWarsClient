@@ -50,7 +50,7 @@ namespace TwnsUserSetOpacityPanel {
         private readonly _btnDefault!                   : TwnsUiButton.UiButton;
         private readonly _btnConfirm!                   : TwnsUiButton.UiButton;
 
-        private _prevOpacitySettings                    : ProtoTypes.User.IUserOpacitySettings = {};
+        private _prevOpacitySettings                    : CommonProto.User.IUserOpacitySettings = {};
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([

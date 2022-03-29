@@ -189,7 +189,7 @@ namespace TwnsSrrCreatePlayerInfoPage {
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
         }
 
-        private _getPlayerData(): ProtoTypes.Structure.IDataForPlayerInRoom {
+        private _getPlayerData(): CommonProto.Structure.IDataForPlayerInRoom {
             return SrrCreateModel.getPlayerInfo(this._getData().playerIndex);
         }
     }

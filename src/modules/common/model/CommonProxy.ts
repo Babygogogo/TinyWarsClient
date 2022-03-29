@@ -10,7 +10,7 @@
 
 namespace CommonProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import NetMessage       = ProtoTypes.NetMessage;
+    import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
 
     export function init(): void {
@@ -31,18 +31,18 @@ namespace CommonProxy {
         });
     }
     function _onMsgCommonHeartbeat(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgCommonHeartbeat.IS;
+        const data = e.data as CommonProto.NetMessage.MsgCommonHeartbeat.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgCommonHeartbeat, data);
         }
     }
 
     function _onMsgCommonError(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgCommonError.IS;
+        const data = e.data as CommonProto.NetMessage.MsgCommonError.IS;
     }
 
     function _onMsgCommonLatestConfigVersion(e: egret.Event): void {
-        const data      = e.data as ProtoTypes.NetMessage.MsgCommonLatestConfigVersion.IS;
+        const data      = e.data as CommonProto.NetMessage.MsgCommonLatestConfigVersion.IS;
         const version   = Helpers.getExisted(data.version);
         ConfigManager.setLatestFormalVersion(version);
         ConfigManager.loadConfig(version);

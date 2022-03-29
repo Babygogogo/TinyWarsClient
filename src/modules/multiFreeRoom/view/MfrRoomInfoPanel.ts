@@ -37,7 +37,7 @@ namespace TwnsMfrRoomInfoPanel {
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
-    import NetMessage                               = ProtoTypes.NetMessage;
+    import NetMessage                               = CommonProto.NetMessage;
 
     export type OpenData = {
         roomId  : number;
@@ -541,14 +541,14 @@ namespace TwnsMfrRoomInfoPanel {
             this._updateLabelName();
         }
         private _onNotifyMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateState();
             }
         }
         private _onNotifyMsgMfrSetSelfSettings(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrSetSelfSettings.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMfrSetSelfSettings.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateState();
@@ -595,13 +595,13 @@ namespace TwnsMfrRoomInfoPanel {
         }
 
         private _onNotifyMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateImgColor();
             }
         }
         private _onNotifyMsgMfrSetSelfSettings(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrSetSelfSettings.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMfrSetSelfSettings.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateImgColor();
             }
@@ -657,14 +657,14 @@ namespace TwnsMfrRoomInfoPanel {
             this._updateLabelName();
         }
         private _onNotifyMsgMfrGetRoomPlayerInfo(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMfrGetRoomPlayerInfo.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateStateAndImgRed();
             }
         }
         private _onNotifyMsgMfrSetReady(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMfrSetReady.IS;
+            const data = e.data as CommonProto.NetMessage.MsgMfrSetReady.IS;
             if (data.roomId === this._getData().roomId) {
                 this._updateLabelName();
                 this._updateStateAndImgRed();

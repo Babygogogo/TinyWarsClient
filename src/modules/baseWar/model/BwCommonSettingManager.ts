@@ -8,7 +8,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwCommonSettingManager {
-    import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
+    import ISettingsForCommon   = CommonProto.WarSettings.ISettingsForCommon;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     export class BwCommonSettingManager {
@@ -67,7 +67,7 @@ namespace TwnsBwCommonSettingManager {
         public getTurnsLimit(): number {
             return this.getSettingsForCommon().turnsLimit ?? CommonConstants.WarMaxTurnsLimit;
         }
-        public getWarRule(): ProtoTypes.WarRule.IWarRule {
+        public getWarRule(): CommonProto.WarRule.IWarRule {
             return Helpers.getExisted(this.getSettingsForCommon().warRule);
         }
         public getConfigVersion(): string {

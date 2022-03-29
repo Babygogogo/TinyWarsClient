@@ -6,7 +6,7 @@
 // import TwnsMeField      from "./MeField";
 
 namespace TwnsMeFogMap {
-    import WarSerialization         = ProtoTypes.WarSerialization;
+    import WarSerialization         = CommonProto.WarSerialization;
     import ISerialFogMap            = WarSerialization.ISerialFogMap;
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
 

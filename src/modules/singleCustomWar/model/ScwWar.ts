@@ -8,8 +8,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsScwWar {
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForScw  = ProtoTypes.WarSettings.ISettingsForScw;
+    import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
+    import ISettingsForScw  = CommonProto.WarSettings.ISettingsForScw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
     export class ScwWar extends TwnsSpwWar.SpwWar {
