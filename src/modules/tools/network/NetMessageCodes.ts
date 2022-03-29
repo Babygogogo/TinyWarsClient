@@ -2,12 +2,12 @@
 namespace TwnsNetMessageCodes {
 // eslint-disable-next-line no-shadow
 export enum NetMessageCodes {
-MsgCommonHeartbeat = 0,
-MsgCommonError = 1,
-MsgCommonServerDisconnect = 2,
-MsgCommonLatestConfigVersion = 3,
-MsgCommonGetServerStatus = 4,
-MsgCommonGetRankList = 5,
+MsgCommonHeartbeat = 1,
+MsgCommonError = 2,
+MsgCommonServerDisconnect = 3,
+MsgCommonLatestConfigVersion = 4,
+MsgCommonGetServerStatus = 5,
+MsgCommonGetRankList = 6,
 MsgUserRegister = 20,
 MsgUserLogin = 21,
 MsgUserLogout = 22,
