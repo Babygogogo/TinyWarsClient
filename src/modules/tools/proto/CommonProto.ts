@@ -100,6 +100,9 @@ declare namespace CommonProto {
 
             /** SystemCfg dialogueBackgroundMaxId */
             dialogueBackgroundMaxId?: (number|null);
+
+            /** SystemCfg isUnitHpRoundedUpWhenHealed */
+            isUnitHpRoundedUpWhenHealed?: (number|null);
         }
 
         /** Represents a SystemCfg. */
@@ -119,6 +122,9 @@ declare namespace CommonProto {
 
             /** SystemCfg dialogueBackgroundMaxId. */
             public dialogueBackgroundMaxId: number;
+
+            /** SystemCfg isUnitHpRoundedUpWhenHealed. */
+            public isUnitHpRoundedUpWhenHealed: number;
 
             /**
              * Creates a new SystemCfg instance using the specified properties.

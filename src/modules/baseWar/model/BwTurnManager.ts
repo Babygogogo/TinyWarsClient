@@ -1050,6 +1050,7 @@ namespace TwnsBwTurnManager {
         }
 
         const unitMap           = war.getUnitMap();
+        const configVersion     = war.getConfigVersion();
         const playerIndexInTurn = tile.getPlayerIndex();
         const teamIndexInTurn   = tile.getTeamIndex();
         const data              = Helpers.getExisted(tile.getCustomCrystalData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCrystal_00);
@@ -1135,13 +1136,27 @@ namespace TwnsBwTurnManager {
                         }
 
                         if (deltaHp) {
-                            unit.setCurrentHp(Math.max(
-                                1,
-                                Math.min(
-                                    unit.getMaxHp(),
-                                    unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
-                                ),
-                            ));
+                            if (ConfigManager.getSystemIsUnitHpRoundedUpWhenHealed(configVersion)) {
+                                if (deltaHp > 0) {
+                                    unit.setCurrentHp(Math.min(
+                                        unit.getMaxHp(),
+                                        (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
+                                    );
+                                } else {
+                                    unit.setCurrentHp(Math.max(
+                                        1,
+                                        unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                    ));
+                                }
+                            } else {
+                                unit.setCurrentHp(Math.max(
+                                    1,
+                                    Math.min(
+                                        unit.getMaxHp(),
+                                        unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                    ),
+                                ));
+                            }
                         }
 
                         affectedUnits.add(unit);
@@ -1192,6 +1207,7 @@ namespace TwnsBwTurnManager {
             await Helpers.wait(400);
         }
 
+        const configVersion         = war.getConfigVersion();
         const data                  = Helpers.getExisted(tile.getCustomCannonData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileCannon_00);
         const getCandidateUnitArray = Helpers.createLazyFunc(() => generateCandidateUnitArrayForCannon(war, tile));
         const maxTargetCount        = data.maxTargetCount ?? 0;
@@ -1239,13 +1255,27 @@ namespace TwnsBwTurnManager {
                     }
 
                     if (deltaHp) {
-                        unit.setCurrentHp(Math.max(
-                            1,
-                            Math.min(
-                                unit.getMaxHp(),
-                                unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
-                            ),
-                        ));
+                        if (ConfigManager.getSystemIsUnitHpRoundedUpWhenHealed(configVersion)) {
+                            if (deltaHp > 0) {
+                                unit.setCurrentHp(Math.min(
+                                    unit.getMaxHp(),
+                                    (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
+                                );
+                            } else {
+                                unit.setCurrentHp(Math.max(
+                                    1,
+                                    unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                ));
+                            }
+                        } else {
+                            unit.setCurrentHp(Math.max(
+                                1,
+                                Math.min(
+                                    unit.getMaxHp(),
+                                    unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                ),
+                            ));
+                        }
                     }
 
                     affectedUnits.add(unit);
@@ -1354,6 +1384,7 @@ namespace TwnsBwTurnManager {
             await Helpers.wait(400);
         }
 
+        const configVersion         = war.getConfigVersion();
         const data                  = Helpers.getExisted(tile.getCustomLaserTurretData(), ClientErrorCode.BwTurnManager_HandleMapWeaponTileLaserTurret_00);
         const candidateUnitArray    = generateCandidateUnitArrayForLaserTurret(war, tile);
         const affectedUnits         = new Set<TwnsBwUnit.BwUnit>();
@@ -1395,13 +1426,27 @@ namespace TwnsBwTurnManager {
                     }
 
                     if (deltaHp) {
-                        unit.setCurrentHp(Math.max(
-                            1,
-                            Math.min(
-                                unit.getMaxHp(),
-                                unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
-                            ),
-                        ));
+                        if (ConfigManager.getSystemIsUnitHpRoundedUpWhenHealed(configVersion)) {
+                            if (deltaHp > 0) {
+                                unit.setCurrentHp(Math.min(
+                                    unit.getMaxHp(),
+                                    (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
+                                );
+                            } else {
+                                unit.setCurrentHp(Math.max(
+                                    1,
+                                    unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                ));
+                            }
+                        } else {
+                            unit.setCurrentHp(Math.max(
+                                1,
+                                Math.min(
+                                    unit.getMaxHp(),
+                                    unit.getCurrentHp() + deltaHp * CommonConstants.UnitHpNormalizer
+                                ),
+                            ));
+                        }
                     }
 
                     affectedUnits.add(unit);

@@ -231,7 +231,8 @@ namespace WarCoSkillHelpers {
             const playerIndex   = player.getPlayerIndex();
             const zoneRadius    = player.getCoZoneRadius();
             const category      = cfg[1];
-            const modifier      = cfg[2] * CommonConstants.UnitHpNormalizer;
+            const deltaHp       = cfg[2];
+            const modifier      = deltaHp * CommonConstants.UnitHpNormalizer;
             for (const unit of unitMap.getAllUnits()) {
                 const unitType  = unit.getUnitType();
                 const gridIndex = unit.getGridIndex();
@@ -246,13 +247,27 @@ namespace WarCoSkillHelpers {
                         coZoneRadius            : zoneRadius,
                     }))
                 ) {
-                    unit.setCurrentHp(Math.max(
-                        1,
-                        Math.min(
-                            maxHp,
-                            currentHp + modifier
-                        ),
-                    ));
+                    if (ConfigManager.getSystemIsUnitHpRoundedUpWhenHealed(configVersion)) {
+                        if (deltaHp > 0) {
+                            unit.setCurrentHp(Math.min(
+                                maxHp,
+                                (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
+                            );
+                        } else {
+                            unit.setCurrentHp(Math.max(
+                                1,
+                                currentHp + modifier
+                            ));
+                        }
+                    } else {
+                        unit.setCurrentHp(Math.max(
+                            1,
+                            Math.min(
+                                maxHp,
+                                currentHp + modifier
+                            ),
+                        ));
+                    }
                     (!isFastExecute) && (unit.updateView());
                 }
             }
@@ -280,7 +295,8 @@ namespace WarCoSkillHelpers {
             const tileMap       = war.getTileMap();
             const unitCategory  = cfg[1];
             const tileCategory  = cfg[2];
-            const modifier      = cfg[3] * CommonConstants.UnitHpNormalizer;
+            const deltaHp       = cfg[3];
+            const modifier      = deltaHp * CommonConstants.UnitHpNormalizer;
             for (const unit of war.getUnitMap().getAllUnits()) {
                 const unitType  = unit.getUnitType();
                 const gridIndex = unit.getGridIndex();
@@ -297,13 +313,27 @@ namespace WarCoSkillHelpers {
                         coZoneRadius            : zoneRadius,
                     }))
                 ) {
-                    unit.setCurrentHp(Math.max(
-                        1,
-                        Math.min(
-                            maxHp,
-                            currentHp + modifier
-                        ),
-                    ));
+                    if (ConfigManager.getSystemIsUnitHpRoundedUpWhenHealed(configVersion)) {
+                        if (deltaHp > 0) {
+                            unit.setCurrentHp(Math.min(
+                                maxHp,
+                                (unit.getNormalizedCurrentHp() + deltaHp) * CommonConstants.UnitHpNormalizer)
+                            );
+                        } else {
+                            unit.setCurrentHp(Math.max(
+                                1,
+                                currentHp + modifier
+                            ));
+                        }
+                    } else {
+                        unit.setCurrentHp(Math.max(
+                            1,
+                            Math.min(
+                                maxHp,
+                                currentHp + modifier
+                            ),
+                        ));
+                    }
                     (!isFastExecute) && (unit.updateView());
                 }
             }

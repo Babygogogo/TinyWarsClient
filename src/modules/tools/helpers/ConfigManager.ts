@@ -311,6 +311,9 @@ namespace ConfigManager {
     export function getSystemDialogueBackgroundMaxId(version: string): number {
         return Helpers.getExisted(getSystemCfg(version).dialogueBackgroundMaxId, ClientErrorCode.ConfigManager_GetSystemDialogueBackgroundMaxId_00);
     }
+    export function getSystemIsUnitHpRoundedUpWhenHealed(version: string): boolean {
+        return !!getSystemCfg(version).isUnitHpRoundedUpWhenHealed;
+    }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
         const mapping = Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);

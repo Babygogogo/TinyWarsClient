@@ -117,10 +117,11 @@ namespace TwnsWwHandleRequestDetailPanel {
         private async _generateDataForListPlayer(): Promise<DataForRequesterRenderer[]> {
             const warId             = this._getOpenData().warId;
             const playerInfoList    = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList;
+            const watchInfo         = await WwModel.getWatchIncomingInfo(warId);
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of (await WwModel.getWatchIncomingInfo(warId))?.srcUserInfoArray || []) {
-                const userId = info.userId;
-                if (userId != null) {
+            for (const userId of watchInfo?.requestSrcUserIdArray || []) {
+                const info = watchInfo?.srcUserInfoArray?.find(v => v.userId === userId);
+                if (info != null) {
                     dataList.push({
                         panel           : this,
                         userId,

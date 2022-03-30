@@ -2152,14 +2152,21 @@ namespace WarActionExecutor {
                     player.setFund(player.getFund() + joinIncome);
                 }
 
-                const joinedNormalizedHp = Math.min(
-                    focusUnit.getNormalizedMaxHp(),
-                    focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
-                );
-                focusUnit.setCurrentHp(Math.max(
-                    (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
-                    Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
-                ));
+                if (ConfigManager.getSystemIsUnitHpRoundedUpWhenHealed(focusUnit.getConfigVersion())) {
+                    focusUnit.setCurrentHp(Math.min(
+                        focusUnit.getMaxHp(),
+                        (focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()) * CommonConstants.UnitHpNormalizer,
+                    ));
+                } else {
+                    const joinedNormalizedHp = Math.min(
+                        focusUnit.getNormalizedMaxHp(),
+                        focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
+                    );
+                    focusUnit.setCurrentHp(Math.max(
+                        (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
+                        Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
+                    ));
+                }
 
                 focusUnit.setCurrentFuel(Math.min(
                     focusUnit.getMaxFuel(),
@@ -2275,14 +2282,21 @@ namespace WarActionExecutor {
                     player.setFund(player.getFund() + joinIncome);
                 }
 
-                const joinedNormalizedHp = Math.min(
-                    focusUnit.getNormalizedMaxHp(),
-                    focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
-                );
-                focusUnit.setCurrentHp(Math.max(
-                    (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
-                    Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
-                ));
+                if (ConfigManager.getSystemIsUnitHpRoundedUpWhenHealed(focusUnit.getConfigVersion())) {
+                    focusUnit.setCurrentHp(Math.min(
+                        focusUnit.getMaxHp(),
+                        (focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()) * CommonConstants.UnitHpNormalizer,
+                    ));
+                } else {
+                    const joinedNormalizedHp = Math.min(
+                        focusUnit.getNormalizedMaxHp(),
+                        focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()
+                    );
+                    focusUnit.setCurrentHp(Math.max(
+                        (joinedNormalizedHp - 1) * CommonConstants.UnitHpNormalizer + 1,
+                        Math.min(focusUnit.getCurrentHp() + targetUnit.getCurrentHp(), focusUnit.getMaxHp())
+                    ));
+                }
 
                 focusUnit.setCurrentFuel(Math.min(
                     focusUnit.getMaxFuel(),
