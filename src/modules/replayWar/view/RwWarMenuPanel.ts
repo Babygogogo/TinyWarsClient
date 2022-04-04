@@ -415,15 +415,27 @@ namespace TwnsRwWarMenuPanel {
         private readonly _listInfo!     : TwnsUiScrollList.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected async _onDataChanged(): Promise<void> {
+        protected _onDataChanged(): void {
+            this._updateView();
+        }
+
+        private _onNotifyLanguageChanged(): void {
+            this._updateView();
+        }
+
+        private async _updateView(): Promise<void> {
             const data                  = this._getData();
             const war                   = data.war;
             const player                = data.player;
             this._labelName.text        = await player.getNickname();
             this._labelName.textColor   = player === war.getPlayerInTurn() ? 0x00FF00 : 0xFFFFFF;
+            this._labelLost.text        = Lang.getText(LangTextType.B0472);
             this._labelForce.text       = `${Lang.getPlayerForceName(player.getPlayerIndex())}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
                 + `  ${player === war.getPlayerInTurn() ? Lang.getText(LangTextType.B0086) : ""}`;

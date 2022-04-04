@@ -992,9 +992,11 @@ namespace WarCommonHelpers {
             }
         }
 
-        if ((!isFastExecute) && (playerArrayAfterAction.some(v => v.playerIndex === playerIndexInTurn))) {
+        if ((!isFastExecute) && (playerArrayAfterAction.length)) {
             for (const unit of unitMap.getAllUnitsOnMap()) {
-                if ((!updatedViewUnits.has(unit)) && (unit.getPlayerIndex() === playerIndexInTurn)) {
+                if ((!updatedViewUnits.has(unit))                                               &&
+                    (playerArrayAfterAction.some(v => v.playerIndex === unit.getPlayerIndex()))
+                ) {
                     unit.updateView();
                 }
             }
