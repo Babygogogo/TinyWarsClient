@@ -20,10 +20,11 @@ namespace NetManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Constants.
     ////////////////////////////////////////////////////////////////////////////////
-    const PROTOCOL  = window.location.protocol.indexOf("http:") === 0 ? "ws" : "wss";
-    const HOST_NAME = window.location.hostname;
-    const FULL_URL  = `${PROTOCOL}://${HOST_NAME}:${window.GAME_SERVER_PORT}`;
-    // const FULL_URL  = `wss://www.tinywars.online:${4002}`;
+    const USE_SIGNALR   = false;
+    const PROTOCOL      = window.location.protocol.indexOf("http:") === 0 ? "ws" : "wss";
+    const HOST_NAME     = window.location.hostname;
+    const FULL_URL      = `${PROTOCOL}://${HOST_NAME}:${window.GAME_SERVER_PORT}`;
+    // const FULL_URL  = `wss://www.tinywars.online:${4000}`;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Type definitions.
@@ -49,21 +50,14 @@ namespace NetManager {
             }
             this.dispatchEventWith(messageName, false, messageData);
         }
-
-        // public addListener(code: NetMessageCodes, callback: () => void, thisObject: any): void {
-        //     this.addEventListener(NetMessageCodes[code], callback, thisObject);
-        // }
-
-        // public removeListener(code: NetMessageCodes, callback: () => void, thisObject: any): void {
-        //     this.removeEventListener(NetMessageCodes[code], callback, thisObject);
-        // }
     }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Local variables.
     ////////////////////////////////////////////////////////////////////////////////
-    let _socket             : egret.WebSocket | null = null;
-    let _canAutoReconnect   = true;
+    let _webSocketConnection    : egret.WebSocket | null = null;
+    let _signalRConnection      : signalR.HubConnection | null = null;
+    let _canAutoReconnect       = true;
 
     const dispatcher = new NetMessageDispatcher();
 
@@ -71,7 +65,7 @@ namespace NetManager {
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
     export function init(): void {
-        resetSocket();
+        resetConnection();
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -89,15 +83,28 @@ namespace NetManager {
     }
 
     export function send(container: CommonProto.NetMessage.IMessageContainer): void {
-        if ((!_socket) || (!_socket.connected)) {
-            const errorText = Lang.getText(LangTextType.A0014);
-            (errorText) && (FloatText.show(errorText));
+        if (USE_SIGNALR) {
+            const connection = _signalRConnection;
+            if ((!connection) || (connection.state !== signalR.HubConnectionState.Connected)) {
+                FloatText.show(Lang.getText(LangTextType.A0014));
+            } else {
+                const messageName = Helpers.getMessageName(container);
+                const encodedData = ProtoManager.encodeAsMessageContainer(container);
+                Logger.log("%cNetManager send: ", "background:#97FF4F;", messageName, ", length: ", encodedData.byteLength, "\n", container[messageName]);
+                connection.send("C", encodedData);
+            }
+
         } else {
-            const messageName = Helpers.getMessageName(container);
-            const encodedData = ProtoManager.encodeAsMessageContainer(container);
-            Logger.log("%cNetManager send: ", "background:#97FF4F;", messageName, ", length: ", encodedData.byteLength, "\n", container[messageName]);
-            _socket.writeBytes(new egret.ByteArray(encodedData));
-            _socket.flush();
+            const connection = _webSocketConnection;
+            if ((!connection) || (!connection.connected)) {
+                FloatText.show(Lang.getText(LangTextType.A0014));
+            } else {
+                const messageName = Helpers.getMessageName(container);
+                const encodedData = ProtoManager.encodeAsMessageContainer(container);
+                Logger.log("%cNetManager send: ", "background:#97FF4F;", messageName, ", length: ", encodedData.byteLength, "\n", container[messageName]);
+                connection.writeBytes(new egret.ByteArray(encodedData));
+                connection.flush();
+            }
         }
     }
 
@@ -108,60 +115,86 @@ namespace NetManager {
         _canAutoReconnect = can;
     }
 
-    function resetSocket(): void {
-        destroySocket();
-        initSocket();
+    function resetConnection(): void {
+        destroyConnection();
+        initConnection();
     }
-    function initSocket(): void {
-        if (!_socket) {
-            _socket         = new egret.WebSocket();
-            _socket.type    = egret.WebSocket.TYPE_BINARY;
-            _socket.addEventListener(egret.Event.CONNECT,               onSocketConnect,    null);
-            _socket.addEventListener(egret.Event.CLOSE,                 onSocketClose,      null);
-            _socket.addEventListener(egret.ProgressEvent.SOCKET_DATA,   onSocketData,       null);
+    function initConnection(): void {
+        if (USE_SIGNALR) {
+            if (_signalRConnection == null) {
+                const connection = new signalR.HubConnectionBuilder()
+                    .withUrl(`${FULL_URL}/hub`, {
+                        skipNegotiation : true,
+                        transport       : signalR.HttpTransportType.WebSockets,
+                    })
+                    .withHubProtocol(new signalR.protocols.msgpack.MessagePackHubProtocol())
+                    .build();
+                connection.onclose(() => onSignalRConnectionClosed(connection));
+                connection.on("S", (data) => onSignalRData(connection, data));
 
-            setCanAutoReconnect(true);
-            _socket.connectByUrl(FULL_URL);
+                setCanAutoReconnect(true);
+                connection.start().then(
+                    () => onSignalRConnectionOpened(connection),
+                    () => onSignalRConnectionClosed(connection),
+                );
+
+                _signalRConnection = connection;
+            }
+
+        } else {
+            if (_webSocketConnection == null) {
+                const connection    = new egret.WebSocket();
+                connection.type     = egret.WebSocket.TYPE_BINARY;
+                connection.addEventListener(egret.Event.CONNECT,               onWebSocketConnectionOpened,   null);
+                connection.addEventListener(egret.Event.CLOSE,                 onWebSocketConnectionClosed,   null);
+                connection.addEventListener(egret.ProgressEvent.SOCKET_DATA,   onWebSocketData,               null);
+
+                setCanAutoReconnect(true);
+                connection.connectByUrl(FULL_URL);
+
+                _webSocketConnection = connection;
+            }
         }
     }
-    function destroySocket(): void {
-        if (_socket) {
-            _socket.removeEventListener(egret.Event.CONNECT,                onSocketConnect,    null);
-            _socket.removeEventListener(egret.Event.CLOSE,                  onSocketClose,      null);
-            _socket.removeEventListener(egret.ProgressEvent.SOCKET_DATA,    onSocketData,       null);
-            _socket.close();
+    function destroyConnection(): void {
+        if (_webSocketConnection) {
+            _webSocketConnection.removeEventListener(egret.Event.CONNECT,                onWebSocketConnectionOpened,   null);
+            _webSocketConnection.removeEventListener(egret.Event.CLOSE,                  onWebSocketConnectionClosed,   null);
+            _webSocketConnection.removeEventListener(egret.ProgressEvent.SOCKET_DATA,    onWebSocketData,               null);
+            _webSocketConnection.close();
 
-            _socket = null;
+            _webSocketConnection = null;
         }
+        // if (_signalRConnection) {
+        //     _signalRConnection.off("S");
+        //     _signalRConnection.stop();
+
+        //     _signalRConnection = null;
+        // }
     }
 
-    function onSocketConnect(): void {
-        const successText = Lang.getText(LangTextType.A0007);
-        (successText) && (FloatText.show(successText));
+    function onWebSocketConnectionOpened(): void {
+        FloatText.show(Lang.getText(LangTextType.A0007));
 
         Notify.dispatch(NotifyType.NetworkConnected);
     }
-    function onSocketClose(): void {
+    function onWebSocketConnectionClosed(): void {
         Notify.dispatch(NotifyType.NetworkDisconnected);
         if (!checkCanAutoReconnect()) {
             // FloatText.show(Lang.getText(Lang.Type.A0013));
         } else {
-            const tips = Lang.getText(LangTextType.A0008);
-            (tips) && (FloatText.show(tips));
+            FloatText.show(Lang.getText(LangTextType.A0008));
 
-            if (_socket == null) {
-                throw Helpers.newError(`NetManager.onSocketClose() empty _socket.`, ClientErrorCode.NetManager_OnSocketClose_00);
-            }
-            _socket.connectByUrl(FULL_URL);
+            Helpers.getExisted(_webSocketConnection, ClientErrorCode.NetManager_OnSocketClose_00).connectByUrl(FULL_URL);
         }
     }
-    function onSocketData(): void {
-        if (_socket == null) {
+    function onWebSocketData(): void {
+        if (_webSocketConnection == null) {
             throw Helpers.newError(`NetManager.onSocketData() empty _socket.`, ClientErrorCode.NetManager_OnSocketData_00);
         }
 
         const data = new egret.ByteArray();
-        _socket.readBytes(data);
+        _webSocketConnection.readBytes(data);
 
         const container     = ProtoManager.decodeAsMessageContainer(data.rawBuffer);
         const messageName   = Helpers.getMessageName(container);
@@ -172,6 +205,45 @@ namespace NetManager {
         }
 
         dispatcher.dispatchWithContainer(container);
+    }
+
+    function onSignalRConnectionOpened(connection: signalR.HubConnection): void {
+        if (connection === _signalRConnection) {
+            FloatText.show(Lang.getText(LangTextType.A0007));
+
+            Notify.dispatch(NotifyType.NetworkConnected);
+        } else {
+            connection.off("S");
+            connection.stop();
+        }
+    }
+    function onSignalRConnectionClosed(connection: signalR.HubConnection): void {
+        if (connection === _signalRConnection) {
+            Notify.dispatch(NotifyType.NetworkDisconnected);
+            if (!checkCanAutoReconnect()) {
+                // FloatText.show(Lang.getText(Lang.Type.A0013));
+            } else {
+                FloatText.show(Lang.getText(LangTextType.A0008));
+
+                connection.start().then(
+                    () => onSignalRConnectionOpened(connection),
+                    () => onSignalRConnectionClosed(connection),
+                );
+            }
+        }
+    }
+    function onSignalRData(connection: signalR.HubConnection, data: Uint8Array): void {
+        if (connection === _signalRConnection) {
+            const container     = ProtoManager.decodeAsMessageContainer(data);
+            const messageName   = Helpers.getMessageName(container);
+            Logger.log("%cNetManager receive: ", "background:#FFD777", messageName, ", length: ", data.length, "\n", container[messageName]);
+
+            if (container.MsgCommonServerDisconnect) {
+                setCanAutoReconnect(false);
+            }
+
+            dispatcher.dispatchWithContainer(container);
+        }
     }
 }
 
