@@ -9,7 +9,6 @@
 		"libs/modules/promise/promise.js",
 		"libs/modules/socket/socket.js",
 		"libs/modules/ProtobufJs/ProtobufJs.js",
-		"libs/modules/signalR/signalR.js",
 		"libs/modules/NoSleep/NoSleep.js",
 		"libs/modules/mouse/mouse.js"
 	],

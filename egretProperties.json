@@ -41,10 +41,6 @@
 			"path": "../TinyWarsExternals/ClientDependencies/libs/ProtobufJs"
 		},
 		{
-			"name": "signalR",
-			"path": "../TinyWarsExternals/ClientDependencies/libs/signalR"
-		},
-		{
 			"name": "NoSleep",
 			"path": "../TinyWarsExternals/ClientDependencies/libs/NoSleep"
 		},

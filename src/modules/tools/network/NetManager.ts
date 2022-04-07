@@ -56,7 +56,7 @@ namespace NetManager {
     // Local variables.
     ////////////////////////////////////////////////////////////////////////////////
     let _webSocketConnection    : egret.WebSocket | null = null;
-    let _signalRConnection      : signalR.HubConnection | null = null;
+    // let _signalRConnection      : signalR.HubConnection | null = null;
     let _canAutoReconnect       = true;
 
     const dispatcher = new NetMessageDispatcher();
@@ -84,15 +84,15 @@ namespace NetManager {
 
     export function send(container: CommonProto.NetMessage.IMessageContainer): void {
         if (USE_SIGNALR) {
-            const connection = _signalRConnection;
-            if ((!connection) || (connection.state !== signalR.HubConnectionState.Connected)) {
-                FloatText.show(Lang.getText(LangTextType.A0014));
-            } else {
-                const messageName = Helpers.getMessageName(container);
-                const encodedData = ProtoManager.encodeAsMessageContainer(container);
-                Logger.log("%cNetManager send: ", "background:#97FF4F;", messageName, ", length: ", encodedData.byteLength, "\n", container[messageName]);
-                connection.send("C", encodedData);
-            }
+            // const connection = _signalRConnection;
+            // if ((!connection) || (connection.state !== signalR.HubConnectionState.Connected)) {
+            //     FloatText.show(Lang.getText(LangTextType.A0014));
+            // } else {
+            //     const messageName = Helpers.getMessageName(container);
+            //     const encodedData = ProtoManager.encodeAsMessageContainer(container);
+            //     Logger.log("%cNetManager send: ", "background:#97FF4F;", messageName, ", length: ", encodedData.byteLength, "\n", container[messageName]);
+            //     connection.send("C", encodedData);
+            // }
 
         } else {
             const connection = _webSocketConnection;
@@ -121,25 +121,25 @@ namespace NetManager {
     }
     function initConnection(): void {
         if (USE_SIGNALR) {
-            if (_signalRConnection == null) {
-                const connection = new signalR.HubConnectionBuilder()
-                    .withUrl(`${FULL_URL}/hub`, {
-                        skipNegotiation : true,
-                        transport       : signalR.HttpTransportType.WebSockets,
-                    })
-                    .withHubProtocol(new signalR.protocols.msgpack.MessagePackHubProtocol())
-                    .build();
-                connection.onclose(() => onSignalRConnectionClosed(connection));
-                connection.on("S", (data) => onSignalRData(connection, data));
+            // if (_signalRConnection == null) {
+            //     const connection = new signalR.HubConnectionBuilder()
+            //         .withUrl(`${FULL_URL}/hub`, {
+            //             skipNegotiation : true,
+            //             transport       : signalR.HttpTransportType.WebSockets,
+            //         })
+            //         .withHubProtocol(new signalR.protocols.msgpack.MessagePackHubProtocol())
+            //         .build();
+            //     connection.onclose(() => onSignalRConnectionClosed(connection));
+            //     connection.on("S", (data) => onSignalRData(connection, data));
 
-                setCanAutoReconnect(true);
-                connection.start().then(
-                    () => onSignalRConnectionOpened(connection),
-                    () => onSignalRConnectionClosed(connection),
-                );
+            //     setCanAutoReconnect(true);
+            //     connection.start().then(
+            //         () => onSignalRConnectionOpened(connection),
+            //         () => onSignalRConnectionClosed(connection),
+            //     );
 
-                _signalRConnection = connection;
-            }
+            //     _signalRConnection = connection;
+            // }
 
         } else {
             if (_webSocketConnection == null) {
@@ -207,44 +207,44 @@ namespace NetManager {
         dispatcher.dispatchWithContainer(container);
     }
 
-    function onSignalRConnectionOpened(connection: signalR.HubConnection): void {
-        if (connection === _signalRConnection) {
-            FloatText.show(Lang.getText(LangTextType.A0007));
+    // function onSignalRConnectionOpened(connection: signalR.HubConnection): void {
+    //     if (connection === _signalRConnection) {
+    //         FloatText.show(Lang.getText(LangTextType.A0007));
 
-            Notify.dispatch(NotifyType.NetworkConnected);
-        } else {
-            connection.off("S");
-            connection.stop();
-        }
-    }
-    function onSignalRConnectionClosed(connection: signalR.HubConnection): void {
-        if (connection === _signalRConnection) {
-            Notify.dispatch(NotifyType.NetworkDisconnected);
-            if (!checkCanAutoReconnect()) {
-                // FloatText.show(Lang.getText(Lang.Type.A0013));
-            } else {
-                FloatText.show(Lang.getText(LangTextType.A0008));
+    //         Notify.dispatch(NotifyType.NetworkConnected);
+    //     } else {
+    //         connection.off("S");
+    //         connection.stop();
+    //     }
+    // }
+    // function onSignalRConnectionClosed(connection: signalR.HubConnection): void {
+    //     if (connection === _signalRConnection) {
+    //         Notify.dispatch(NotifyType.NetworkDisconnected);
+    //         if (!checkCanAutoReconnect()) {
+    //             // FloatText.show(Lang.getText(Lang.Type.A0013));
+    //         } else {
+    //             FloatText.show(Lang.getText(LangTextType.A0008));
 
-                connection.start().then(
-                    () => onSignalRConnectionOpened(connection),
-                    () => onSignalRConnectionClosed(connection),
-                );
-            }
-        }
-    }
-    function onSignalRData(connection: signalR.HubConnection, data: Uint8Array): void {
-        if (connection === _signalRConnection) {
-            const container     = ProtoManager.decodeAsMessageContainer(data);
-            const messageName   = Helpers.getMessageName(container);
-            Logger.log("%cNetManager receive: ", "background:#FFD777", messageName, ", length: ", data.length, "\n", container[messageName]);
+    //             connection.start().then(
+    //                 () => onSignalRConnectionOpened(connection),
+    //                 () => onSignalRConnectionClosed(connection),
+    //             );
+    //         }
+    //     }
+    // }
+    // function onSignalRData(connection: signalR.HubConnection, data: Uint8Array): void {
+    //     if (connection === _signalRConnection) {
+    //         const container     = ProtoManager.decodeAsMessageContainer(data);
+    //         const messageName   = Helpers.getMessageName(container);
+    //         Logger.log("%cNetManager receive: ", "background:#FFD777", messageName, ", length: ", data.length, "\n", container[messageName]);
 
-            if (container.MsgCommonServerDisconnect) {
-                setCanAutoReconnect(false);
-            }
+    //         if (container.MsgCommonServerDisconnect) {
+    //             setCanAutoReconnect(false);
+    //         }
 
-            dispatcher.dispatchWithContainer(container);
-        }
-    }
+    //         dispatcher.dispatchWithContainer(container);
+    //     }
+    // }
 }
 
 // export default NetManager;

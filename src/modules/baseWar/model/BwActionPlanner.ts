@@ -1903,10 +1903,10 @@ namespace TwnsBwActionPlanner {
             dataList.push(...this._getActionUnitCapture());
             dataList.push(...this._getActionUnitDive());
             dataList.push(...this._getActionUnitSurface());
-            dataList.push(...this._getActionUnitBuildTile());
             dataList.push(...this._getActionUnitSupply());
             dataList.push(...this._getActionsUnitLaunchUnit());
             dataList.push(...this._getActionsUnitDropUnit());
+            dataList.push(...this._getActionUnitBuildTile());
             dataList.push(...this._getActionUnitLaunchFlare());
             dataList.push(...this._getActionUnitLaunchSilo());
             dataList.push(...this._getActionUnitProduceUnit());
