@@ -197,7 +197,7 @@ namespace TwnsMpwWar {
         public getPlayerIndexLoggedIn(): number | null {
             return this.getPlayerManager().getPlayerIndexLoggedIn();
         }
-        public getPlayerLoggedIn(): TwnsBwPlayer.BwPlayer | null {
+        public getPlayerLoggedIn(): Twns.BaseWar.BwPlayer | null {
             return this.getPlayerManager().getPlayerLoggedIn();
         }
     }

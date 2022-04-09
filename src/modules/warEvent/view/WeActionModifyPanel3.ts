@@ -24,21 +24,21 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel3 {
+namespace Twns.WarEvent {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import ColorValue               = Types.ColorValue;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventAction          = CommonProto.WarEvent.IWarEventAction;
     import LangTextType             = TwnsLangTextType.LangTextType;
-    import BwWar                    = Twns.BaseWar.BwWar;
+    import BwWar                    = BaseWar.BwWar;
 
-    export type OpenData = {
+    export type OpenDataForWeActionModifyPanel3 = {
         war         : BwWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel3 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel3 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel3> {
         private readonly _btnBack!              : TwnsUiButton.UiButton;
         private readonly _btnType!              : TwnsUiButton.UiButton;
         private readonly _btnPlay!              : TwnsUiButton.UiButton;
@@ -93,7 +93,7 @@ namespace TwnsWeActionModifyPanel3 {
             if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
-                dialogueArray.push(WarEventHelper.getDefaultCoDialogueData());
+                dialogueArray.push(WarEventHelper.getDefaultCoDialogueData(this._getOpenData().war.getGameConfig()));
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -129,7 +129,7 @@ namespace TwnsWeActionModifyPanel3 {
             }
 
             TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
-                configVersion   : war.getConfigVersion(),
+                gameConfig      : war.getGameConfig(),
                 actionData      : dialogueAction,
                 callbackOnClose : () => {
                     // nothing to do
@@ -139,7 +139,8 @@ namespace TwnsWeActionModifyPanel3 {
 
         private _onTouchedBtnBackground(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WeDialogueBackgroundPanel, {
-                action: this._getAction(),
+                action      : this._getAction(),
+                gameConfig  : this._getOpenData().war.getGameConfig(),
             });
         }
 
@@ -247,14 +248,15 @@ namespace TwnsWeActionModifyPanel3 {
         // callbacks
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnChangeType(): void {
-            const dataForDialogue = this._getData().dataForDialogue;
+            const data              = this._getData();
+            const dataForDialogue   = data.dataForDialogue;
 
             {
                 const dataForAside = dataForDialogue.dataForAside;
                 if (dataForAside) {
                     delete dataForDialogue.dataForAside;
                     dataForDialogue.dataForCoDialogue = {
-                        coId        : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))[0],
+                        coId        : data.war.getGameConfig().getCoIdArrayForDialogue()[0],
                         side        : Types.WarEventActionDialogueSide.Left,
                         textArray   : dataForAside.textArray,
                     };
@@ -284,7 +286,7 @@ namespace TwnsWeActionModifyPanel3 {
             if (dialogueArray.length > CommonConstants.WarEventActionDialogueMaxCount) {
                 FloatText.show(Lang.getText(LangTextType.A0228));
             } else {
-                dialogueArray.splice(dialogueArray.indexOf(data.dataForDialogue), 0, WarEventHelper.getDefaultCoDialogueData());
+                dialogueArray.splice(dialogueArray.indexOf(data.dataForDialogue), 0, WarEventHelper.getDefaultCoDialogueData(data.war.getGameConfig()));
                 Notify.dispatch(NotifyType.WarEventFullDataChanged);
             }
         }
@@ -323,11 +325,12 @@ namespace TwnsWeActionModifyPanel3 {
         }
 
         private _onTouchedBtnCo(): void {
-            const dataForCoDialogue = this._getData().dataForDialogue.dataForCoDialogue;
+            const data              = this._getData();
+            const dataForCoDialogue = data.dataForDialogue.dataForCoDialogue;
             if (dataForCoDialogue) {
                 const currentCoId = dataForCoDialogue.coId ?? null;
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
-                    availableCoIdArray  : ConfigManager.getCoIdArrayForDialogue(Helpers.getExisted(ConfigManager.getLatestConfigVersion())),
+                    availableCoIdArray  : data.war.getGameConfig().getCoIdArrayForDialogue(),
                     currentCoId,
                     callbackOnConfirm   : coId => {
                         if (coId !== currentCoId) {
@@ -503,7 +506,8 @@ namespace TwnsWeActionModifyPanel3 {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const dataForDialogue   = this._getData().dataForDialogue;
+            const data              = this._getData();
+            const dataForDialogue   = data.dataForDialogue;
             const dataForCoDialogue = dataForDialogue.dataForCoDialogue;
             const groupCoDialogue   = this._groupCoDialogue;
             if (dataForCoDialogue == null) {
@@ -511,7 +515,7 @@ namespace TwnsWeActionModifyPanel3 {
             } else {
                 groupCoDialogue.visible     = true;
                 this._imgLeftSide.visible   = dataForCoDialogue.side === Types.WarEventActionDialogueSide.Left;
-                this._labelCo.text          = ConfigManager.getCoNameAndTierText(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Helpers.getExisted(dataForCoDialogue.coId));
+                this._labelCo.text          = data.war.getGameConfig().getCoNameAndTierText(Helpers.getExisted(dataForCoDialogue.coId)) ?? CommonConstants.ErrorTextForUndefined;
             }
 
             {

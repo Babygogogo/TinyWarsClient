@@ -6,21 +6,21 @@
 // import TwnsTwFogMap         from "./TwFogMap";
 
 namespace TwnsTwField {
-    import BwField          = TwnsBwField.BwField;
+    import BwField          = Twns.BaseWar.BwField;
     import TwFogMap         = TwnsTwFogMap.TwFogMap;
     import TwActionPlanner  = TwnsTwActionPlanner.TwActionPlanner;
-    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+    import BwUnitMap        = Twns.BaseWar.BwUnitMap;
 
     export class TwField extends BwField {
         private readonly _fogMap        = new TwFogMap();
-        private readonly _tileMap       = new TwnsBwTileMap.BwTileMap();
+        private readonly _tileMap       = new Twns.BaseWar.BwTileMap();
         private readonly _unitMap       = new BwUnitMap();
         private readonly _actionPlanner = new TwActionPlanner();
 
         public getFogMap(): TwFogMap {
             return this._fogMap;
         }
-        public getTileMap(): TwnsBwTileMap.BwTileMap {
+        public getTileMap(): Twns.BaseWar.BwTileMap {
             return this._tileMap;
         }
         public getUnitMap(): BwUnitMap {

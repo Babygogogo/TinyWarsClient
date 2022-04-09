@@ -135,8 +135,8 @@ namespace TwnsCommonDamageCalculatorPanel {
         private readonly _labelDefendTitle!     : TwnsUiLabel.UiLabel;
         private readonly _labelDefendDamage!    : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView1             = new TwnsWarMapUnitView.WarMapUnitView();
-        private readonly _unitView2             = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView1             = new Twns.WarMap.WarMapUnitView();
+        private readonly _unitView2             = new Twns.WarMap.WarMapUnitView();
         private readonly _tileView1             = new TwnsMeTileSimpleView.MeTileSimpleView();
         private readonly _tileView2             = new TwnsMeTileSimpleView.MeTileSimpleView();
 

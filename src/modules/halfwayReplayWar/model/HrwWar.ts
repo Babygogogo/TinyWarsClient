@@ -451,7 +451,7 @@ namespace TwnsHrwWar {
 
             const checkpointData        = Helpers.getExisted(this._getCheckpointData(checkpointId));
             const warData               = checkpointData.warData;
-            const configVersion         = this.getConfigVersion();
+            const configVersion         = this.getGameConfig();
             const playersCountUnneutral = this.getPlayerManager().getTotalPlayersCount(false);
             this.setNextActionId(checkpointData.nextActionId);
             this.getWeatherManager().fastInit(warData.weatherManager);
@@ -460,7 +460,7 @@ namespace TwnsHrwWar {
             this.getWarEventManager().fastInit(Helpers.getExisted(warData.warEventManager));
             this.getField().fastInit({
                 data                    : Helpers.getExisted(warData.field),
-                configVersion,
+                gameConfig: configVersion,
                 playersCountUnneutral,
             });
             this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw ?? null);

@@ -121,7 +121,7 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
         private readonly _conUnitView!  : eui.Group;
         private readonly _labelType!    : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView      = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView      = new Twns.WarMap.WarMapUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

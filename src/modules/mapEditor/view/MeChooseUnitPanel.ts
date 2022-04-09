@@ -195,13 +195,13 @@ namespace TwnsMeChooseUnitPanel {
             this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
 
             const unitView  = this._unitView;
-            const unit      = new TwnsBwUnit.BwUnit();
+            const unit      = new Twns.BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType,
                 playerIndex : dataForDrawUnit.playerIndex,
-            }, war.getConfigVersion());
+            }, war.getGameConfig());
             unit.startRunning(war);
             unitView.init(unit);
             unitView.startRunningView();

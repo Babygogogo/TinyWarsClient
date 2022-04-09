@@ -13,12 +13,13 @@
 // import TwnsBwWar            from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwPlayer {
+namespace Twns.BaseWar {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import GridIndex        = Types.GridIndex;
     import PlayerAliveState = Types.PlayerAliveState;
     import CoSkillType      = Types.CoSkillType;
     import CoType           = Types.CoType;
+    import GameConfig       = Config.GameConfig;
     import ISerialPlayer    = CommonProto.WarSerialization.ISerialPlayer;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
@@ -39,9 +40,9 @@ namespace TwnsBwPlayer {
         private _watchOngoingSrcUserIds?    : Set<number>;
         private _watchRequestSrcUserIds?    : Set<number>;
 
-        private _war?                       : Twns.BaseWar.BwWar;
+        private _war?                       : BwWar;
 
-        public init(data: ISerialPlayer, configVersion: string): void {
+        public init(data: ISerialPlayer, gameConfig: GameConfig): void {
             const fund              = Helpers.getExisted(data.fund, ClientErrorCode.BwPlayer_Init_00);
             const hasVotedForDraw   = Helpers.getExisted(data.hasVotedForDraw, ClientErrorCode.BwPlayer_Init_01);
             const aliveState        = data.aliveState as PlayerAliveState;
@@ -71,7 +72,7 @@ namespace TwnsBwPlayer {
             }
 
             const coId              = Helpers.getExisted(data.coId, ClientErrorCode.BwPlayer_Init_07);
-            const coConfig          = ConfigManager.getCoBasicCfg(configVersion, coId);
+            const coConfig          = gameConfig.getCoBasicCfg(coId);
             const coUsingSkillType  = data.coUsingSkillType as CoSkillType;
             if ((coUsingSkillType !== CoSkillType.Passive)  &&
                 (coUsingSkillType !== CoSkillType.Power)    &&
@@ -114,7 +115,7 @@ namespace TwnsBwPlayer {
             this.setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
         }
 
-        public startRunning(war: Twns.BaseWar.BwWar): void {
+        public startRunning(war: BwWar): void {
             this._setWar(war);
         }
 
@@ -163,10 +164,10 @@ namespace TwnsBwPlayer {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: Twns.BaseWar.BwWar): void {
+        private _setWar(war: BwWar): void {
             this._war = war;
         }
-        private _getWar(): Twns.BaseWar.BwWar {
+        private _getWar(): BwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -386,9 +387,9 @@ namespace TwnsBwPlayer {
             if ((!currentSkills) || (!currentSkills.length)) {
                 return true;
             } else {
-                const version = this._getWar().getConfigVersion();
+                const gameConfig = this._getWar().getGameConfig();
                 for (const skillId of currentSkills) {
-                    if (ConfigManager.getCoSkillCfg(version, skillId).showZone) {
+                    if (gameConfig.getCoSkillCfg(skillId)?.showZone) {
                         return true;
                     }
                 }
@@ -467,13 +468,13 @@ namespace TwnsBwPlayer {
             }
 
             const coZoneRadius              = this.getCoZoneRadius();
-            const configVersion             = this._getWar()?.getConfigVersion();
+            const gameConfig                = this._getWar().getGameConfig();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => this.getCoGridIndexListOnMap());
             let modifier                    = 1;
             for (const skillId of this.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfUnitCost;
-                if ((cfg)                                                                           &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitCost;
+                if ((cfg)                                                                   &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coSkillAreaType         : cfg[0],
@@ -489,7 +490,7 @@ namespace TwnsBwPlayer {
         }
 
         private _getCoBasicCfg(): CommonProto.Config.ICoBasicCfg {
-            return ConfigManager.getCoBasicCfg(this._getWar().getConfigVersion(), this.getCoId());
+            return Helpers.getExisted(this._getWar().getGameConfig().getCoBasicCfg(this.getCoId()));
         }
     }
 }

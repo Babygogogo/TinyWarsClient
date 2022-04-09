@@ -31,7 +31,7 @@ namespace TwnsCommonCoInfoPanel {
 
             const openData = this._getOpenData();
             this._uiCoInfo.setCoData({
-                configVersion   : openData.configVersion,
+                gameConfig   : openData.configVersion,
                 coId            : openData.coId,
             });
         }

@@ -32,8 +32,8 @@ namespace TwnsBwActionPlanner {
     import MovePathNode     = Types.MovePathNode;
     import UnitActionType   = Types.UnitActionType;
     import ShortSfxCode     = Types.ShortSfxCode;
-    import BwUnit           = TwnsBwUnit.BwUnit;
-    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+    import BwUnit           = Twns.BaseWar.BwUnit;
+    import BwUnitMap        = Twns.BaseWar.BwUnitMap;
     import BwWar            = Twns.BaseWar.BwWar;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
@@ -70,7 +70,7 @@ namespace TwnsBwActionPlanner {
         private _movePath                   : MovePathNode[] = [];
 
         private _unitsForPreviewAttack      = new Map<number, BwUnit>();
-        private _tilesForPreviewAttack      = new Set<TwnsBwTile.BwTile>();
+        private _tilesForPreviewAttack      = new Set<Twns.BaseWar.BwTile>();
         private _areaForPreviewAttack       : AttackableArea = [];
         private _unitForPreviewMove         : BwUnit | null = null;
         private _areaForPreviewMove         : MovableArea | null = null;
@@ -113,7 +113,7 @@ namespace TwnsBwActionPlanner {
         protected _getUnitMap(): BwUnitMap {
             return this._getWar().getUnitMap();
         }
-        protected _getTileMap(): TwnsBwTileMap.BwTileMap {
+        protected _getTileMap(): Twns.BaseWar.BwTileMap {
             return this._getWar().getTileMap();
         }
         protected _getTurnManager(): TwnsBwTurnManager.BwTurnManager {
@@ -1484,7 +1484,7 @@ namespace TwnsBwActionPlanner {
         public getUnitsForPreviewingAttackableArea(): Map<number, BwUnit> {
             return this._unitsForPreviewAttack;
         }
-        public getTilesForPreviewingAttackableArea(): Set<TwnsBwTile.BwTile> {
+        public getTilesForPreviewingAttackableArea(): Set<Twns.BaseWar.BwTile> {
             return this._tilesForPreviewAttack;
         }
 
@@ -1541,7 +1541,7 @@ namespace TwnsBwActionPlanner {
                 }
             }
         }
-        private _addTileForPreviewAttackableArea(tile: TwnsBwTile.BwTile): void {
+        private _addTileForPreviewAttackableArea(tile: Twns.BaseWar.BwTile): void {
             const mapSize   = this.getMapSize();
             const newArea   = WarCommonHelpers.createAttackableAreaForTile(tile, mapSize);
             this.getTilesForPreviewingAttackableArea().add(tile);

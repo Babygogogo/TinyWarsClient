@@ -20,7 +20,7 @@ namespace TwnsRwReplayProgressPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
-        war: TwnsRwWar.RwWar;
+        war: Twns.ReplayWar.RwWar;
     };
     export class RwReplayProgressPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;

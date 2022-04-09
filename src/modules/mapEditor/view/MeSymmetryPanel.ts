@@ -680,7 +680,7 @@ namespace TwnsMeSymmetryPanel {
         if ((srcTile.getMaxHp() !== null) && (war.getUnitMap().getUnitOnMap(dstGridIndex))) {
             WarDestructionHelpers.destroyUnitOnMap(war, dstGridIndex, true);
         }
-        dstTile.init(tileData, war.getConfigVersion());
+        dstTile.init(tileData, war.getGameConfig());
         dstTile.startRunning(war);
         dstTile.flushDataToView();
     }

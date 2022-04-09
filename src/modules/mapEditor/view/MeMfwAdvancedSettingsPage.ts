@@ -158,7 +158,7 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                         currentCoId         : coId,
                         availableCoIdArray  : MeMfwModel.getIsControlledByHuman(playerIndex)
-                            ? WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule: MeMfwModel.getWarRule(), playerIndex, configVersion })
+                            ? WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule: MeMfwModel.getWarRule(), playerIndex, gameConfig: configVersion })
                             : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                         callbackOnConfirm   : newCoId => {
                             if (newCoId !== coId) {

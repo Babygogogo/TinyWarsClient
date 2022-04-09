@@ -191,7 +191,7 @@ namespace TwnsSpwWar {
         public getHumanPlayerIndexes(): number[] {
             return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayerIndexes();
         }
-        public getHumanPlayers(): TwnsBwPlayer.BwPlayer[] {
+        public getHumanPlayers(): Twns.BaseWar.BwPlayer[] {
             return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayers();
         }
     }

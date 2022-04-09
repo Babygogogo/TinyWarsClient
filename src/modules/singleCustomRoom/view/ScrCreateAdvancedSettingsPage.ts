@@ -223,7 +223,7 @@ namespace TwnsScrCreateAdvancedSettingsPage {
         private readonly _inputValue!   : TwnsUiTextInput.UiTextInput;
         private readonly _labelValue!   : TwnsUiLabel.UiLabel;
 
-        private _callbackForTouchLabelValue     : (() => void) | null = null;
+        private _callbackForTouchLabelValue     : (() => void | Promise<void>) | null = null;
         private _callbackForFocusOutInputValue  : (() => void) | null = null;
 
         protected _onOpened(): void {
@@ -320,14 +320,14 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => {
-                const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            this._callbackForTouchLabelValue    = async () => {
+                const gameConfig    = await ConfigManager.getGameConfig(ScrCreateModel.getConfigVersion());
                 const selfCoId      = ScrCreateModel.getCoId(playerIndex);
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
                     playerIndex,
-                    configVersion,
+                    gameConfig,
                     bannedCoIdArray     : ScrCreateModel.getBannedCoIdArray(playerIndex) || [],
-                    fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                    fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
                     maxBanCount         : null,
                     selfCoId,
                     callbackOnConfirm   : (bannedCoIdSet) => {

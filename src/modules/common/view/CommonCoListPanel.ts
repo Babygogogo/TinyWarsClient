@@ -96,7 +96,7 @@ namespace TwnsCommonCoListPanel {
 
         private _initGroupCoNames(): void {
             const war               = this._getOpenData().war;
-            const configVersion     = war.getConfigVersion();
+            const configVersion     = war.getGameConfig();
             const rendererArray     = this._renderersForCoNames;
             rendererArray.length    = 0;
 
@@ -138,7 +138,7 @@ namespace TwnsCommonCoListPanel {
                 } else {
                     renderer.setIsSelected(true);
                     this._uiCoInfo.setCoData({
-                        configVersion   : this._getOpenData().war.getConfigVersion(),
+                        gameConfig   : this._getOpenData().war.getGameConfig(),
                         coId            : Helpers.getExisted(renderer.getCoId()),
                     });
                 }

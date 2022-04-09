@@ -526,7 +526,7 @@ namespace TwnsMmWarRulePanel {
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
-                        configVersion,
+                        gameConfig: configVersion,
                         playerIndex         : Helpers.getExisted(playerRule.playerIndex),
                         bannedCoIdArray,
                         fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),

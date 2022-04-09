@@ -266,7 +266,7 @@ namespace TwnsSpwActionPlanner {
             }
         }
 
-        protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
+        protected _checkCanControlUnit(unit: Twns.BaseWar.BwUnit): boolean {
             const playerInTurn = this._getWar().getPlayerInTurn();
             return (unit.getPlayerIndex() === playerInTurn.getPlayerIndex())
                 && (playerInTurn.getUserId() != null);
@@ -723,7 +723,7 @@ namespace TwnsSpwActionPlanner {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: TwnsBwUnit.BwUnit): number | null {
+        protected _getMoveCost(targetGridIndex: GridIndex, movingUnit: Twns.BaseWar.BwUnit): number | null {
             if (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, this.getMapSize())) {
                 return null;
             } else {
@@ -738,7 +738,7 @@ namespace TwnsSpwActionPlanner {
             }
         }
 
-        protected _addUnitForPreviewAttackableArea(unit: TwnsBwUnit.BwUnit): void {
+        protected _addUnitForPreviewAttackableArea(unit: Twns.BaseWar.BwUnit): void {
             const canAttackAfterMove    = unit.checkCanAttackAfterMove();
             const beginningGridIndex    = unit.getGridIndex();
             const hasAmmo               = (!!unit.getPrimaryWeaponCurrentAmmo()) || (unit.checkHasSecondaryWeapon());

@@ -9,7 +9,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwBeginTurnPanel {
     export type OpenData = {
-        configVersion       : string;
+        gameConfig          : Twns.Config.GameConfig;
         playerIndex         : number;
         teamIndex           : number;
         nickname            : string;
@@ -46,7 +46,7 @@ namespace TwnsBwBeginTurnPanel {
             this._labelNickname.text    = openData.nickname;
             this._labelTurnStart.text   = Lang.getText(TwnsLangTextType.LangTextType.B0679);
             this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoHeadFrame(openData.unitAndTileSkinId);
-            this._imgCo.source          = ConfigManager.getCoHeadImageSource(openData.configVersion, openData.coId);
+            this._imgCo.source          = openData.gameConfig.getCoHeadImageSource(openData.coId) ?? CommonConstants.ErrorTextForUndefined;
         }
         protected _onClosing(): void {
             this._clearTimeoutForClose();

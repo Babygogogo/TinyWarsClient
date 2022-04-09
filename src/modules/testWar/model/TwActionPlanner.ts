@@ -62,7 +62,7 @@ namespace TwnsTwActionPlanner {
             // nothing to do
         }
 
-        protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
+        protected _checkCanControlUnit(unit: Twns.BaseWar.BwUnit): boolean {
             const playerInTurn = this._getWar().getPlayerInTurn();
             return (unit.getPlayerIndex() === playerInTurn.getPlayerIndex())
                 && (playerInTurn.getUserId() != null);

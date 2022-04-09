@@ -26,8 +26,8 @@ namespace WarRobot {
     import UnitActionState      = Types.UnitActionState;
     import UnitAiMode           = Types.UnitAiMode;
     import CoSkillType          = Types.CoSkillType;
-    import BwUnit               = TwnsBwUnit.BwUnit;
-    import BwTile               = TwnsBwTile.BwTile;
+    import BwUnit               = Twns.BaseWar.BwUnit;
+    import BwTile               = Twns.BaseWar.BwTile;
     import BwWar                = Twns.BaseWar.BwWar;
 
     type AttackInfo = {
@@ -1709,7 +1709,7 @@ namespace WarRobot {
         const playerIndexInTurn = commonParams.playerIndexInTurn;
         const tileMap           = war.getTileMap();
         const tileType          = tileMap.getTile(producingGridIndex).getType();
-        const configVersion     = war.getConfigVersion();
+        const gameConfig        = war.getGameConfig();
         const player            = war.getPlayerManager().getPlayer(playerIndexInTurn);
         const producingUnit     = new BwUnit();
         producingUnit.init({
@@ -1717,7 +1717,7 @@ namespace WarRobot {
             unitType    : producingUnitType,
             gridIndex   : producingGridIndex,
             playerIndex : playerIndexInTurn,
-        }, configVersion);
+        }, gameConfig);
         producingUnit.startRunning(war);
 
         const productionCost    = producingUnit.getProductionFinalCost();
@@ -1727,14 +1727,14 @@ namespace WarRobot {
         }
 
         if (producingUnitType !== UnitType.Infantry) {
-            const unitCfg               = ConfigManager.getUnitTemplateCfg(configVersion, UnitType.Infantry);
+            const unitCfg               = Helpers.getExisted(war.getGameConfig().getUnitTemplateCfg(UnitType.Infantry), ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_00);
             const restFactoriesCount    = tileType === TileType.Factory ? idleFactoriesCount - 1 : idleFactoriesCount;
             if (restFactoriesCount * unitCfg.productionCost > restFund) {
                 return null;
             }
         }
 
-        let score                           = Helpers.getExisted(_PRODUCTION_CANDIDATES[tileType][producingUnitType], ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_00);
+        let score                           = Helpers.getExisted(_PRODUCTION_CANDIDATES[tileType][producingUnitType], ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_01);
         const producingTeamIndex            = producingUnit.getTeamIndex();
         const producingUnitCurrentHp        = producingUnit.getCurrentHp();
         const producingUnitMaxAttackRange   = producingUnit.getFinalMaxAttackRange();
@@ -2205,12 +2205,12 @@ namespace WarRobot {
         const playerIndexInTurn = commonParams.playerIndexInTurn;
         const unitsInfo         = Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_00);
         const player            = war.getPlayer(playerIndexInTurn);
-        const configVersion     = war.getConfigVersion();
         const idleUnitsCount    = unitsInfo.idleCountOnMap;
         const allUnitsCount     = unitsInfo.allCountOnMap;
+        const gameConfig        = war.getGameConfig();
 
         if (unit.checkCanUseCoSkill(CoSkillType.SuperPower)) {
-            const canResetState = player.getCoSkills(CoSkillType.SuperPower).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+            const canResetState = player.getCoSkills(CoSkillType.SuperPower).map(v => gameConfig.getCoSkillCfg(v)).some(v => v?.selfUnitActionState != null);
             if (((canResetState) && (idleUnitsCount > 0))                       ||
                 ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
             ) {
@@ -2232,7 +2232,7 @@ namespace WarRobot {
         }
 
         if (unit.checkCanUseCoSkill(Types.CoSkillType.Power)) {
-            const canResetState = player.getCoSkills(CoSkillType.Power).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+            const canResetState = player.getCoSkills(CoSkillType.Power).map(v => gameConfig.getCoSkillCfg(v)).some(v => v?.selfUnitActionState != null);
             if ((player.getCoCurrentEnergy() > Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetScoreAndActionUnitUseCoSkill_01) * 1.1)  ||
                 ((canResetState) && (idleUnitsCount > 0))                       ||
                 ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
@@ -2402,7 +2402,7 @@ namespace WarRobot {
         }
 
         let bestScoreAndUnitType: { score: number, unitType: UnitType } | null = null;
-        for (const unitType of ConfigManager.getUnitTypesByCategory(war.getConfigVersion(), unitCategory)) {
+        for (const unitType of war.getGameConfig().getUnitTypesByCategory(unitCategory) ?? []) {
             const score = await getScoreForActionPlayerProduceUnit({
                 commonParams,
                 producingGridIndex          : gridIndex,
@@ -2606,7 +2606,6 @@ namespace WarRobot {
     async function getActionForPhase1(commonParams: CommonParams): Promise<IWarActionContainer | null> {
         const war               = commonParams.war;
         const playerIndexInTurn = commonParams.playerIndexInTurn;
-        const configVersion     = war.getConfigVersion();
         const player            = war.getPlayer(playerIndexInTurn);
         const coType            = player.getCoType();
 
@@ -2614,8 +2613,9 @@ namespace WarRobot {
             const unitsInfo         = Helpers.getExisted(commonParams.unitsInfoDict.get(playerIndexInTurn), ClientErrorCode.SpwRobot_GetActionForPhase1_00);
             const allUnitsCount     = unitsInfo.allCountOnMap;
             const idleUnitsCount    = unitsInfo.idleCountOnMap;
+            const gameConfig        = war.getGameConfig();
             if (player.checkCanUseCoSkill(CoSkillType.SuperPower)) {
-                const canResetState = player.getCoSkills(CoSkillType.SuperPower).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+                const canResetState = player.getCoSkills(CoSkillType.SuperPower).map(v => gameConfig.getCoSkillCfg(v)).some(v => v?.selfUnitActionState != null);
                 if (((canResetState) && (idleUnitsCount > 0))                       ||
                     ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))
                 ) {
@@ -2629,7 +2629,7 @@ namespace WarRobot {
                 }
 
             } else if (player.checkCanUseCoSkill(Types.CoSkillType.Power)) {
-                const canResetState = player.getCoSkills(CoSkillType.Power).map(v => ConfigManager.getCoSkillCfg(configVersion, v)).some(v => v.selfUnitActionState);
+                const canResetState = player.getCoSkills(CoSkillType.Power).map(v => gameConfig.getCoSkillCfg(v)).some(v => v?.selfUnitActionState != null);
                 if ((player.getCoCurrentEnergy() > Helpers.getExisted(player.getCoPowerEnergy(), ClientErrorCode.SpwRobot_GetActionForPhase1_01) * 1.1)   ||
                     ((canResetState) && (idleUnitsCount > 0))                                                                                               ||
                     ((!canResetState) && (idleUnitsCount < allUnitsCount * 0.85))

@@ -8,7 +8,8 @@ namespace Types {
     // Config types.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export interface SystemCfg extends CommonProto.Config.ISystemCfg {
-        energyGrowthMultiplierArray: number[];
+        energyGrowthMultiplierArray : number[];
+        dialogueBackgroundMaxId     : number;
     }
     export interface TileCategoryCfg extends CommonProto.Config.ITileCategoryCfg {
         category: TileCategory;
@@ -17,14 +18,12 @@ namespace Types {
         category: UnitCategory;
     }
     export interface TileTemplateCfg extends CommonProto.Config.ITileTemplateCfg {
-        version             : string;
         type                : TileType;
         defenseAmount       : number;
         defenseUnitCategory : UnitCategory;
         visionRange         : number;
     }
     export interface UnitTemplateCfg extends CommonProto.Config.IUnitTemplateCfg {
-        version                 : string;
         type                    : UnitType;
         maxHp                   : number;
         armorType               : ArmorType;
@@ -191,6 +190,7 @@ namespace Types {
         skinId?             : number;
         hasLoadedUnit?      : boolean;
         coUsingSkillType?   : CoSkillType;
+        config              : Twns.Config.GameConfig;
     }
 
     export interface WarMapTileViewData extends CommonProto.WarSerialization.ISerialTile {

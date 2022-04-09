@@ -131,6 +131,11 @@ namespace TwnsScrCreatePlayerInfoPage {
         }
 
         private async _onTouchedBtnChangeCo(): Promise<void> {
+            const roomInfo  = ScrCreateModel.getData();
+            if (!roomInfo) {
+                return;
+            }
+
             const playerIndex   = this._getData().playerIndex;
             const currentCoId   = ScrCreateModel.getCoId(playerIndex);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
@@ -138,7 +143,7 @@ namespace TwnsScrCreatePlayerInfoPage {
                 availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : ScrCreateModel.getWarRule(),
                     playerIndex,
-                    configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+                    gameConfig      : await ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
@@ -187,10 +192,10 @@ namespace TwnsScrCreatePlayerInfoPage {
                 : Lang.getText(LangTextType.B0031);
 
             const coId                  = Helpers.getExisted(playerData.coId);
-            const configVersion         = Helpers.getExisted(settingsForCommon.configVersion);
-            const coCfg                 = ConfigManager.getCoBasicCfg(Helpers.getExisted(configVersion), coId);
+            const gameConfig            = await ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
-            this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(configVersion, coId);
+            this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
         }
 

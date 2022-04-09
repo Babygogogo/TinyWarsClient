@@ -740,13 +740,13 @@ namespace TwnsMeWarMenuPanel {
             this._labelNum.text    = "" + data.count;
 
             const war   = Helpers.getExisted(MeModel.getWar());
-            const unit  = new TwnsBwUnit.BwUnit();
+            const unit  = new Twns.BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : dataForDrawUnit.unitType,
                 playerIndex : dataForDrawUnit.playerIndex,
-            }, war.getConfigVersion());
+            }, war.getGameConfig());
             unit.startRunning(war);
 
             const unitView = this._unitView;

@@ -24,6 +24,7 @@ namespace Twns.TestWar {
     import IMapRawData          = CommonProto.Map.IMapRawData;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                = BaseWar.BwWar;
+    import GameConfig           = Config.GameConfig;
 
     export class TwWar extends BwWar {
         private readonly _playerManager         = new TwPlayerManager();
@@ -136,21 +137,21 @@ namespace Twns.TestWar {
             return null;
         }
 
-        public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data);
+        public async init(data: ISerialWar, gameConfig: GameConfig): Promise<void> {
+            this._baseInit(data, gameConfig);
         }
-        public async initByMapRawData(mapRawData: IMapRawData): Promise<void> {
-            await this.init(await _createDataForCreateTwWar(mapRawData));
+        public async initByMapRawData(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<void> {
+            await this.init(await _createDataForCreateTwWar(mapRawData), gameConfig);
         }
 
-        public async getErrorCodeForInit(data: ISerialWar): Promise<ClientErrorCode> {
-            return await this.init(data).catch(e => {
+        public async getErrorCodeForInit(data: ISerialWar, gameConfig: GameConfig): Promise<ClientErrorCode> {
+            return await this.init(data, gameConfig).catch(e => {
                 const error = e as Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInit_00;
             }) || ClientErrorCode.NoError;
         }
-        public async getErrorCodeForInitByMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-            return await this.initByMapRawData(mapRawData).catch(e => {
+        public async getErrorCodeForInitByMapRawData(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<ClientErrorCode> {
+            return await this.initByMapRawData(mapRawData, gameConfig).catch(e => {
                 const error = e as Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitByMapRawData_00;
             }) || ClientErrorCode.NoError;

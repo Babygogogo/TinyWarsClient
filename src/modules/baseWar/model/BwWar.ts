@@ -29,6 +29,7 @@ namespace Twns.BaseWar {
     import WarAction                = CommonProto.WarAction;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import GameConfig               = Config.GameConfig;
 
     export abstract class BwWar {
         private readonly _weatherManager        = new TwnsBwWeatherManager.BwWeatherManager();
@@ -38,19 +39,20 @@ namespace Twns.BaseWar {
         private readonly _drawVoteManager       = new TwnsBwDrawVoteManager.BwDrawVoteManager();
         private readonly _view                  = new TwnsBwWarView.BwWarView();
 
+        private _gameConfig             : GameConfig | null = null;
         private _warId                  : number | null = null;
         private _isRunning              = false;
         private _isExecutingAction      = false;
         private _isEnded                = false;
 
-        public abstract init(data: ISerialWar): Promise<void>;
+        public abstract init(data: ISerialWar, gameConfig: GameConfig): Promise<void>;
         public abstract getWarType(): Types.WarType;
         public abstract getMapId(): number | null;
         public abstract getIsNeedExecutedAction(): boolean;
         public abstract getIsNeedSeedRandom(): boolean;
         public abstract getCanCheat(): boolean;
-        public abstract getPlayerManager(): TwnsBwPlayerManager.BwPlayerManager;
-        public abstract getField(): TwnsBwField.BwField;
+        public abstract getPlayerManager(): Twns.BaseWar.BwPlayerManager;
+        public abstract getField(): Twns.BaseWar.BwField;
         public abstract getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager;
         public abstract getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager;
         public abstract getBootRestTime(playerIndex: number): number | null;
@@ -85,18 +87,19 @@ namespace Twns.BaseWar {
         public abstract getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | null>;
         public abstract getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | null>;
 
-        protected async _baseInit(data: ISerialWar): Promise<void> {
+        protected _baseInit(data: ISerialWar, gameConfig: GameConfig): void {
             const settingsForCommon = Helpers.getExisted(data.settingsForCommon, ClientErrorCode.BwWar_BaseInit_00);
             const configVersion     = Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.BwWar_BaseInit_01);
-            if (!await ConfigManager.checkIsVersionValid(configVersion)) {
+            if (configVersion !== gameConfig.getVersion()) {
                 throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwWar_BaseInit_02);
             }
 
+            this._setGameConfig(gameConfig);
             this.getWeatherManager().init(data.weatherManager);
             this.getDrawVoteManager().init(data.playerManager, data.remainingVotesForDraw);
 
             const dataForWarEventManager = data.warEventManager;
-            await this.getCommonSettingManager().init({
+            this.getCommonSettingManager().init({
                 settings                : settingsForCommon,
                 allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
                 playersCountUnneutral   : WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
@@ -120,7 +123,7 @@ namespace Twns.BaseWar {
             this.getTurnManager().init(data.turnManager, playersCountUnneutral);
             this.getField().init({
                 data                : data.field,
-                configVersion,
+                gameConfig: configVersion,
                 playersCountUnneutral,
             });
 
@@ -280,8 +283,11 @@ namespace Twns.BaseWar {
             return this._warId;
         }
 
-        public getConfigVersion(): string {
-            return this.getCommonSettingManager().getConfigVersion();
+        public getGameConfig(): Config.GameConfig {
+            return Helpers.getExisted(this._gameConfig);
+        }
+        private _setGameConfig(gameConfig: GameConfig): void {
+            this._gameConfig = gameConfig;
         }
 
         public getWarRule(): CommonProto.WarRule.IWarRule {
@@ -291,10 +297,10 @@ namespace Twns.BaseWar {
         public getPlayersCountUnneutral(): number {
             return this.getPlayerManager().getTotalPlayersCount(false);
         }
-        public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer {
+        public getPlayer(playerIndex: number): Twns.BaseWar.BwPlayer {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
-        public getPlayerInTurn(): TwnsBwPlayer.BwPlayer {
+        public getPlayerInTurn(): Twns.BaseWar.BwPlayer {
             return this.getPlayerManager().getPlayerInTurn();
         }
         public getPlayerIndexInTurn(): number {
@@ -311,10 +317,10 @@ namespace Twns.BaseWar {
         public getFogMap(): TwnsBwFogMap.BwFogMap {
             return this.getField().getFogMap();
         }
-        public getUnitMap(): TwnsBwUnitMap.BwUnitMap {
+        public getUnitMap(): Twns.BaseWar.BwUnitMap {
             return this.getField().getUnitMap();
         }
-        public getTileMap(): TwnsBwTileMap.BwTileMap {
+        public getTileMap(): Twns.BaseWar.BwTileMap {
             return this.getField().getTileMap();
         }
         public getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {

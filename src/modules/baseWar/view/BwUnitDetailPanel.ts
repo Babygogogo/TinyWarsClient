@@ -31,7 +31,7 @@ namespace TwnsBwUnitDetailPanel {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import UnitType                 = Types.UnitType;
     import TileType                 = Types.TileType;
-    import BwUnit                   = TwnsBwUnit.BwUnit;
+    import BwUnit                   = Twns.BaseWar.BwUnit;
 
     // eslint-disable-next-line no-shadow
     enum UnitInfoType {
@@ -77,7 +77,7 @@ namespace TwnsBwUnitDetailPanel {
         private readonly _labelMain2!           : TwnsUiLabel.UiLabel;
         private readonly _labelSub2!            : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView              = new Twns.WarMap.WarMapUnitView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -126,7 +126,7 @@ namespace TwnsBwUnitDetailPanel {
 
         private _onTouchedBtnUnitsInfo(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, {
-                configVersion   : this._getOpenData().unit.getConfigVersion(),
+                configVersion   : this._getOpenData().unit.getGameConfig(),
             });
             this.close();
         }
@@ -388,7 +388,7 @@ namespace TwnsBwUnitDetailPanel {
 
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
             const unit              = this._getOpenData().unit;
-            const configVersion     = unit.getConfigVersion();
+            const configVersion     = unit.getGameConfig();
             const attackUnitType    = unit.getUnitType();
             const playerIndex       = unit.getPlayerIndex();
 
@@ -1012,7 +1012,7 @@ namespace TwnsBwUnitDetailPanel {
                     const unitId    = unitMap.getNextUnitId();
                     const newUnit   = new BwUnit();
                     unitData.unitId = unitId;
-                    newUnit.init(unitData, war.getConfigVersion());
+                    newUnit.init(unitData, war.getGameConfig());
                     newUnit.startRunning(war);
                     newUnit.startRunningView();
 
@@ -1067,7 +1067,7 @@ namespace TwnsBwUnitDetailPanel {
         private readonly _group!                : eui.Group;
         private readonly _imgBg!                : TwnsUiImage.UiImage;
         private readonly _conView!              : eui.Group;
-        private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView              = new Twns.WarMap.WarMapUnitView();
         private readonly _tileView!             : TwnsUiImage.UiImage;
         private readonly _labelPrimaryAttack!   : TwnsUiLabel.UiLabel;
         private readonly _labelSecondaryAttack! : TwnsUiLabel.UiLabel;

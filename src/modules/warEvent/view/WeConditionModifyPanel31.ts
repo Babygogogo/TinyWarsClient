@@ -16,19 +16,19 @@
 // import TwnsWeConditionTypeListPanel from "./WeConditionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeConditionModifyPanel31 {
+namespace Twns.WarEvent {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
     import IWarEventCondition       = CommonProto.WarEvent.IWarEventCondition;
 
-    export type OpenData = {
-        war         : Twns.BaseWar.BwWar;
+    export type OpenDataForWeConditionModifyPanel31 = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     };
     /** WecPlayerIndexInTurnEqualTo */
-    export class WeConditionModifyPanel31 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeConditionModifyPanel31 extends TwnsUiPanel.UiPanel<OpenDataForWeConditionModifyPanel31> {
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnClose!         : TwnsUiButton.UiButton;
@@ -92,12 +92,12 @@ namespace TwnsWeConditionModifyPanel31 {
         private _onTouchedBtnTileType(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonHelpPanel, {
                 title   : Lang.getText(LangTextType.B0718),
-                content : generateDescForTileTypes(),
+                content : generateDescForTileTypes(this._getOpenData().war.getGameConfig()),
             });
         }
         private _onFocusOutInputTileType(): void {
             const value = parseInt(this._inputTileType.text);
-            if ((isNaN(value)) || (!ConfigManager.checkIsValidTileType(value))) {
+            if ((isNaN(value)) || (!this._getOpenData().war.getGameConfig().checkIsValidTileType(value))) {
                 this._updateComponentsForTileType();
             } else {
                 Helpers.getExisted(this._getCondition().WecTileTypeEqualTo).tileType = value;
@@ -181,17 +181,8 @@ namespace TwnsWeConditionModifyPanel31 {
         }
     }
 
-    function generateDescForTileTypes(): string {
-        const textArray: string[] = [];
-        for (let tileType = 0; ; ++tileType) {
-            if (ConfigManager.checkIsValidTileType(tileType)) {
-                textArray.push(`${tileType}: ${Lang.getTileName(tileType)}`);
-            } else {
-                break;
-            }
-        }
-
-        return textArray.join(`\n`);
+    function generateDescForTileTypes(gameConfig: Config.GameConfig): string {
+        return gameConfig.getTileTypesByCategory(Types.TileCategory.All)?.map(tileType => `${tileType}: ${Lang.getTileName(tileType)}`).join(`\n`) ?? ``;
     }
 }
 

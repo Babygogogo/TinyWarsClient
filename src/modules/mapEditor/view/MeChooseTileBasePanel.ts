@@ -244,7 +244,7 @@ namespace TwnsMeChooseTileBasePanel {
                     content : Lang.getText(LangTextType.A0089),
                     callback: () => {
                         const war           = Helpers.getExisted(MeModel.getWar());
-                        const configVersion = war.getConfigVersion();
+                        const configVersion = war.getGameConfig();
                         for (const tile of war.getTileMap().getAllTiles()) {
                             tile.init({
                                 gridIndex       : tile.getGridIndex(),

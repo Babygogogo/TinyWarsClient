@@ -15,7 +15,7 @@
 // import TwnsWarMapUnitView   from "./WarMapUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWarMapView {
+namespace Twns.WarMap {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import MapSize          = Types.MapSize;
     import IMapRawData      = CommonProto.Map.IMapRawData;
@@ -23,6 +23,7 @@ namespace TwnsWarMapView {
     import ISerialWar       = WarSerialization.ISerialWar;
     import ISerialTile      = WarSerialization.ISerialTile;
     import ISerialPlayer    = WarSerialization.ISerialPlayer;
+    import GameConfig       = Config.GameConfig;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -37,16 +38,17 @@ namespace TwnsWarMapView {
             this.addChild(this._unitMapView);
         }
 
-        public showMapByMapData(mapRawData: IMapRawData): void {
+        public showMapByMapData(mapRawData: IMapRawData, config: GameConfig): void {
             this.width  = GRID_WIDTH  * Helpers.getExisted(mapRawData.mapWidth);
             this.height = GRID_HEIGHT * Helpers.getExisted(mapRawData.mapHeight);
             this._tileMapView.showTileMap(Helpers.getExisted(mapRawData.tileDataArray));
             this._unitMapView.showUnitMap({
                 unitDataArray   : mapRawData.unitDataArray || [],
                 players         : null,
+                config,
             });
         }
-        public showMapByWarData(warData: ISerialWar, players?: Types.Undefinable<ISerialPlayer[]>): void {
+        public showMapByWarData(warData: ISerialWar, config: GameConfig, players?: Types.Undefinable<ISerialPlayer[]>): void {
             const field     = Helpers.getExisted(warData.field);
             const tileMap   = Helpers.getExisted(field.tileMap);
             const mapSize   = WarCommonHelpers.getMapSize(tileMap);
@@ -58,6 +60,7 @@ namespace TwnsWarMapView {
             this._unitMapView.showUnitMap({
                 unitDataArray   : field.unitMap?.units || [],
                 players,
+                config,
             });
         }
 
@@ -407,7 +410,7 @@ namespace TwnsWarMapView {
     }
 
     class WarMapUnitMapView extends egret.DisplayObjectContainer {
-        private readonly _unitViews             : TwnsWarMapUnitView.WarMapUnitView[] = [];
+        private readonly _unitViews             : WarMapUnitView[] = [];
         private readonly _airLayer              = new egret.DisplayObjectContainer();
         private readonly _groundLayer           = new egret.DisplayObjectContainer();
         private readonly _seaLayer              = new egret.DisplayObjectContainer();
@@ -425,11 +428,12 @@ namespace TwnsWarMapView {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public showUnitMap({ unitDataArray, players }: {
+        public showUnitMap({ unitDataArray, players, config }: {
             unitDataArray   : WarSerialization.ISerialUnit[];
             players         : ISerialPlayer[] | null;
+            config          : GameConfig;
         }): void {
-            this._initWithDataList(_createUnitViewDataList({ unitDataArray, players }));
+            this._initWithDataList(_createUnitViewDataList({ unitDataArray, players, config }));
         }
         private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
             this.clear();
@@ -478,9 +482,9 @@ namespace TwnsWarMapView {
         }
         private _reviseZOrderForSingleLayer(layer: egret.DisplayObjectContainer): void {
             const unitsCount    = layer.numChildren;
-            const unitViews     : TwnsWarMapUnitView.WarMapUnitView[] = [];
+            const unitViews     : WarMapUnitView[] = [];
             for (let i = 0; i < unitsCount; ++i) {
-                unitViews.push(layer.getChildAt(i) as TwnsWarMapUnitView.WarMapUnitView);
+                unitViews.push(layer.getChildAt(i) as WarMapUnitView);
             }
             unitViews.sort((v1, v2): number => {
                 const g1 = Helpers.getExisted(GridIndexHelpers.convertGridIndex(v1.getUnitData()?.gridIndex));
@@ -497,13 +501,13 @@ namespace TwnsWarMapView {
 
         private _addUnit(data: Types.WarMapUnitViewData, tickCount: number): void {
             const unitType = Helpers.getExisted(data.unitType);
-            const view     = new TwnsWarMapUnitView.WarMapUnitView(data, tickCount);
+            const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
-            if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Air)) {
+            const config = data.config;
+            if (config.checkIsUnitTypeInCategory(unitType, Types.UnitCategory.Air)) {
                 this._airLayer.addChild(view);
-            } else if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Ground)) {
+            } else if (config.checkIsUnitTypeInCategory(unitType, Types.UnitCategory.Ground)) {
                 this._groundLayer.addChild(view);
             } else {
                 this._seaLayer.addChild(view);
@@ -511,9 +515,10 @@ namespace TwnsWarMapView {
         }
     }
 
-    function _createUnitViewDataList({ unitDataArray, players }: {
+    function _createUnitViewDataList({ unitDataArray, players, config }: {
         unitDataArray   : WarSerialization.ISerialUnit[];
         players         : ISerialPlayer[] | null;
+        config          : GameConfig;
     }): Types.WarMapUnitViewData[] {
         const dataArray: Types.WarMapUnitViewData[] = [];
         if (unitDataArray) {
@@ -521,7 +526,9 @@ namespace TwnsWarMapView {
             for (const unitData of unitDataArray) {
                 const loaderUnitId = unitData.loaderUnitId;
                 if (loaderUnitId == null) {
-                    dataArray.push(Helpers.deepClone(unitData));
+                    const data  = Helpers.deepClone(unitData) as Types.WarMapUnitViewData;
+                    data.config = config;
+                    dataArray.push(data);
                 } else {
                     loaderUnitIdSet.add(loaderUnitId);
                 }

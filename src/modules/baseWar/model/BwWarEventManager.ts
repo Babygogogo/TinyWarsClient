@@ -22,7 +22,7 @@ namespace TwnsBwWarEventManager {
     import IWarActionSystemCallWarEvent     = CommonProto.WarAction.IWarActionSystemCallWarEvent;
     import ICustomCounter                   = CommonProto.WarSerialization.ICustomCounter;
     import ClientErrorCode                  = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnitMap                        = TwnsBwUnitMap.BwUnitMap;
+    import BwUnitMap                        = Twns.BaseWar.BwUnitMap;
     import BwWar                            = Twns.BaseWar.BwWar;
 
     export class BwWarEventManager {
@@ -283,7 +283,7 @@ namespace TwnsBwWarEventManager {
             const unitMap           = war.getUnitMap();
             const tileMap           = war.getTileMap();
             const playerManager     = war.getPlayerManager();
-            const configVersion     = war.getConfigVersion();
+            const configVersion     = war.getGameConfig();
             const mapSize           = unitMap.getMapSize();
             for (const data of unitArray) {
                 const unitData = Helpers.getExisted(data.unitData);
@@ -301,7 +301,7 @@ namespace TwnsBwWarEventManager {
                 if (WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
-                    configVersion,
+                    gameConfig: configVersion,
                     playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                 })) {
                     throw Helpers.newError(`Invalid unitData: ${JSON.stringify(unitData)}`);
@@ -332,7 +332,7 @@ namespace TwnsBwWarEventManager {
                 revisedUnitData.gridIndex   = gridIndex;
                 revisedUnitData.unitId      = unitId;
 
-                const unit = new TwnsBwUnit.BwUnit();
+                const unit = new Twns.BaseWar.BwUnit();
                 unit.init(revisedUnitData, configVersion);
 
                 unit.startRunning(war);
@@ -349,7 +349,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
-                    configVersion   : this._getWar().getConfigVersion(),
+                    gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -362,7 +362,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwDialoguePanel, {
-                    configVersion   : this._getWar().getConfigVersion(),
+                    gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -444,7 +444,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
-                    configVersion   : this._getWar().getConfigVersion(),
+                    gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -457,7 +457,7 @@ namespace TwnsBwWarEventManager {
 
             return new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwSimpleDialoguePanel, {
-                    configVersion   : this._getWar().getConfigVersion(),
+                    gameConfig   : this._getWar().getGameConfig(),
                     actionData      : action,
                     callbackOnClose : () => resolve(),
                 });
@@ -887,7 +887,7 @@ namespace TwnsBwWarEventManager {
         }
         private async _callActionSetTileTypeWithoutExtraData(action: WarEvent.IWeaSetTileType, isFastExecute: boolean): Promise<void> {
             const war                       = this._getWar();
-            const configVersion             = war.getConfigVersion();
+            const configVersion             = war.getGameConfig();
             const actTileData               = Helpers.getExisted(action.actTileData, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_00);
             const rawActBaseType            = Helpers.getExisted(actTileData.baseType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_01);
             const rawActObjectType          = Helpers.getExisted(actTileData.objectType, ClientErrorCode.BwWarEventManager_CallActionSetTileTypeWithoutExtraData_02);
@@ -1580,7 +1580,7 @@ namespace TwnsBwWarEventManager {
     function getGridIndexForAddUnit({ origin, unitMap, tileMap, moveType, needMovableTile, canBeBlockedByUnit }: {
         origin              : Types.GridIndex;
         unitMap             : BwUnitMap;
-        tileMap             : TwnsBwTileMap.BwTileMap;
+        tileMap             : Twns.BaseWar.BwTileMap;
         moveType            : Types.MoveType;
         needMovableTile     : boolean;
         canBeBlockedByUnit  : boolean;

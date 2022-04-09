@@ -142,7 +142,7 @@ namespace TwnsMfrCreateSettingsPanel {
                 availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : MfrCreateModel.getWarRule(),
                     playerIndex     : MfrCreateModel.getSelfPlayerIndex(),
-                    configVersion   : MfrCreateModel.getConfigVersion(),
+                    gameConfig   : MfrCreateModel.getConfigVersion(),
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
@@ -469,7 +469,7 @@ namespace TwnsMfrCreateSettingsPanel {
                     const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                         warRule         : creator.getWarRule(),
                         playerIndex,
-                        configVersion   : MfrCreateModel.getConfigVersion(),
+                        gameConfig   : MfrCreateModel.getConfigVersion(),
                     });
                     if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
                         creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));

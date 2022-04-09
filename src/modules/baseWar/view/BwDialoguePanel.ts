@@ -18,7 +18,7 @@ namespace TwnsBwDialoguePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
-        configVersion   : string;
+        gameConfig      : Twns.Config.GameConfig;
         actionData      : CommonProto.WarEvent.IWeaDialogue;
         callbackOnClose : () => void;
     };
@@ -180,8 +180,9 @@ namespace TwnsBwDialoguePanel {
             if (dataForCoDialogue) {
                 const { side, nameArray }   = dataForCoDialogue;
                 const coId                  = Helpers.getExisted(dataForCoDialogue.coId);
-                const coImageSource         = ConfigManager.getCoBustImageSource(openData.configVersion, coId);
-                const coName                = Lang.getLanguageText({ textArray: nameArray }) ?? ConfigManager.getCoNameAndTierText(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId);
+                const gameConfig            = openData.gameConfig;
+                const coImageSource         = gameConfig.getCoBustImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
+                const coName                = Lang.getLanguageText({ textArray: nameArray }) ?? gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined;
 
                 if (side === Types.WarEventActionDialogueSide.Left) {
                     groupName1.visible  = true;

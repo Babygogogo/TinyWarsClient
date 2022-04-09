@@ -19,6 +19,7 @@ namespace ScrCreateModel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IDataForPlayerRule       = CommonProto.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom     = CommonProto.Structure.IDataForPlayerInRoom;
+    import GameConfig               = Twns.Config.GameConfig;
 
     export type DataForCreateWar    = CommonProto.NetMessage.MsgSpmCreateScw.IC;
 
@@ -45,6 +46,7 @@ namespace ScrCreateModel {
 
         playerInfoList  : [],
     };
+    let _gameConfig     : GameConfig | null = null;
 
     export function getMapId(): number {
         return Helpers.getExisted(getData().settingsForScw?.mapId);
@@ -68,8 +70,10 @@ namespace ScrCreateModel {
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
+        const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
         setMapId(mapId);
-        setConfigVersion(Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+        setConfigVersion(configVersion);
+        setGameConfig(await ConfigManager.getGameConfig(configVersion));
         setSaveSlotIndex(SpmModel.getAvailableIndex());
         setSlotComment(null);
         setPlayerInfoList([]);
@@ -90,6 +94,13 @@ namespace ScrCreateModel {
     }
     export function getConfigVersion(): string {
         return Helpers.getExisted(getSettingsForCommon().configVersion);
+    }
+
+    function setGameConfig(config: GameConfig): void {
+        _gameConfig = config;
+    }
+    export function getGameConfig(): GameConfig {
+        return Helpers.getExisted(_gameConfig);
     }
 
     export async function resetDataByWarRuleId(ruleId: number | null): Promise<void> {
@@ -147,13 +158,13 @@ namespace ScrCreateModel {
         const oldPlayerInfoList = getPlayerInfoList();
         const settingsForCommon = Helpers.getExisted(data.settingsForCommon);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule);
-        const configVersion     = Helpers.getExisted(settingsForCommon.configVersion);
+        const gameConfig        = getGameConfig();
         const playersCount      = Helpers.getExisted((await getMapRawData()).playersCountUnneutral);
         const newPlayerInfoList : IDataForPlayerInRoom[] = [];
 
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             const oldInfo               = oldPlayerInfoList.find(v => v.playerIndex === playerIndex);
-            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, configVersion });
+            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, gameConfig });
             const newCoId               = WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
             if (oldInfo) {
                 const coId = Helpers.getExisted(oldInfo.coId);
@@ -274,7 +285,7 @@ namespace ScrCreateModel {
     }
 
     export function tickDefaultWeatherType(): void {
-        WarRuleHelpers.tickDefaultWeatherType(getWarRule(), getConfigVersion());
+        WarRuleHelpers.tickDefaultWeatherType(getWarRule(), getGameConfig());
     }
 
     export function setInitialFund(playerIndex: number, initialFund: number): void {

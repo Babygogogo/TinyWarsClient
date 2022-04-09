@@ -95,7 +95,7 @@ namespace CcrCreateModel {
         const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
             warRule,
             playerIndex     : selfPlayerIndex,
-            configVersion   : getConfigVersion(),
+            gameConfig   : getConfigVersion(),
         });
 
         settingsForCommon.warRule = Helpers.deepClone(warRule);

@@ -223,7 +223,7 @@ namespace TwnsBwWarView {
     }
 
     function getPadding(war: Twns.BaseWar.BwWar): Padding {
-        if (war instanceof TwnsRwWar.RwWar) {
+        if (war instanceof Twns.ReplayWar.RwWar) {
             return Helpers.getExisted(PADDINGS.get(PaddingType.Replay));
         } else if (war instanceof TwnsMeWar.MeWar) {
             return Helpers.getExisted(PADDINGS.get(PaddingType.MapEditor));

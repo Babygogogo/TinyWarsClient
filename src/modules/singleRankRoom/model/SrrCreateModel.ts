@@ -133,7 +133,7 @@ namespace SrrCreateModel {
         const oldPlayerInfoList     = getPlayerInfoList();
         const settingsForCommon     = Helpers.getExisted(data.settingsForCommon);
         const warRule               = Helpers.getExisted(settingsForCommon.warRule);
-        const configVersion         = Helpers.getExisted(settingsForCommon.configVersion);
+        const gameConfig            = await ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         const playersCount          = Helpers.getExisted((await getMapRawData()).playersCountUnneutral);
         const playerRuleDataArray   = Helpers.getExisted(warRule.ruleForPlayers?.playerRuleDataArray);
         const selfUserId            = UserModel.getSelfUserId();
@@ -142,7 +142,7 @@ namespace SrrCreateModel {
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             const coIdForAi             = playerRuleDataArray.find(v => v.playerIndex === playerIndex)?.fixedCoIdInSrw;
             const oldInfo               = oldPlayerInfoList.find(v => v.playerIndex === playerIndex);
-            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, configVersion });
+            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, gameConfig });
             const newCoId               = WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
             if (oldInfo) {
                 const coId = Helpers.getExisted(oldInfo.coId);

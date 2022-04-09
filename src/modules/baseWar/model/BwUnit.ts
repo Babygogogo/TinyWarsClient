@@ -14,7 +14,7 @@
 // import TwnsBwWar            from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnit {
+namespace Twns.BaseWar {
     import UnitActionState      = Types.UnitActionState;
     import ArmorType            = Types.ArmorType;
     import TileType             = Types.TileType;
@@ -27,8 +27,10 @@ namespace TwnsBwUnit {
     import UnitTemplateCfg      = Types.UnitTemplateCfg;
     import ISerialUnit          = CommonProto.WarSerialization.ISerialUnit;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import GameConfig           = Config.GameConfig;
 
     export class BwUnit {
+        private _gameConfig?                : GameConfig;
         private _templateCfg?               : UnitTemplateCfg;
         private _playerIndex?               : number;
         private _gridX?                     : number;
@@ -56,10 +58,10 @@ namespace TwnsBwUnit {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public init(unitData: ISerialUnit, configVersion: string): void {
+        public init(unitData: ISerialUnit, gameConfig: GameConfig): void {
             const validationError = WarCommonHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                 unitData,
-                configVersion,
+                gameConfig,
                 mapSize                 : null,
                 playersCountUnneutral   : null,
             });
@@ -71,9 +73,10 @@ namespace TwnsBwUnit {
             const unitType          = Helpers.getExisted(unitData.unitType, ClientErrorCode.BwUnit_Init_01) as UnitType;
             const unitId            = Helpers.getExisted(unitData.unitId, ClientErrorCode.BwUnit_Init_02);
             const gridIndex         = Helpers.getExisted(GridIndexHelpers.convertGridIndex(unitData.gridIndex), ClientErrorCode.BwUnit_Init_03);
-            const unitTemplateCfg   = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+            const unitTemplateCfg   = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType), ClientErrorCode.BwUnit_Init_04);
             this.setGridIndex(gridIndex);
             this.setUnitId(unitId);
+            this._setGameConfig(gameConfig);
             this._setTemplateCfg(unitTemplateCfg);
             this._setPlayerIndex(playerIndex);
 
@@ -96,9 +99,8 @@ namespace TwnsBwUnit {
         }
 
         public startRunning(war: Twns.BaseWar.BwWar): void {
-            if (war.getConfigVersion() !== this.getConfigVersion()) {
+            if (war.getGameConfig() !== this.getGameConfig().getVersion()) {
                 throw Helpers.newError(`BwUnit.startRunning() invalid configVersion.`);
-                return;
             }
 
             this._setWar(war);
@@ -176,6 +178,13 @@ namespace TwnsBwUnit {
             return Helpers.getExisted(this._war);
         }
 
+        public getGameConfig(): GameConfig {
+            return Helpers.getExisted(this._gameConfig);
+        }
+        private _setGameConfig(config: GameConfig): void {
+            this._gameConfig = config;
+        }
+
         private _setTemplateCfg(cfg: UnitTemplateCfg): void {
             this._templateCfg = cfg;
         }
@@ -183,29 +192,26 @@ namespace TwnsBwUnit {
             return Helpers.getExisted(this._templateCfg);
         }
 
-        public getConfigVersion(): string {
-            return this._getTemplateCfg().version;
-        }
         public getUnitType(): UnitType {
             return Helpers.getExisted(this._getTemplateCfg().type);
         }
         private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } } {
-            const configVersion = this.getConfigVersion();
+            const configVersion = this.getGameConfig();
             const unitType      = this.getUnitType();
             return ConfigManager.getDamageChartCfgs(configVersion, unitType);
         }
         private _getBuildableTileCfg(): { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } } | null {
-            const configVersion = this.getConfigVersion();
+            const configVersion = this.getGameConfig();
             const unitType      = this.getUnitType();
             return ConfigManager.getBuildableTileCfgs(configVersion, unitType);
         }
         private _getVisionBonusCfg(): { [tileType: number]: Types.VisionBonusCfg } | null {
-            const configVersion = this.getConfigVersion();
+            const configVersion = this.getGameConfig();
             const unitType      = this.getUnitType();
             return ConfigManager.getVisionBonusCfg(configVersion, unitType);
         }
 
-        public getPlayer(): TwnsBwPlayer.BwPlayer {
+        public getPlayer(): Twns.BaseWar.BwPlayer {
             return this.getWar().getPlayer(this.getPlayerIndex());
         }
 
@@ -413,7 +419,7 @@ namespace TwnsBwUnit {
                 return 0;
             }
 
-            const configVersion             = this.getConfigVersion();
+            const configVersion             = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
             const fund                      = player.getFund();
@@ -567,7 +573,7 @@ namespace TwnsBwUnit {
                 return 0;
             }
 
-            const configVersion = war.getConfigVersion();
+            const configVersion = war.getGameConfig();
             const unitType      = this.getUnitType();
             const selfTileType  = war.getTileMap().getTile(selfGridIndex).getType();
             const modifier      = offenseBonusCfg[2];
@@ -608,7 +614,7 @@ namespace TwnsBwUnit {
                 return 0;
             }
 
-            const configVersion             = this.getConfigVersion();
+            const configVersion             = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
             const selfTile                  = this.getWar().getTileMap().getTile(selfGridIndex);
@@ -671,7 +677,7 @@ namespace TwnsBwUnit {
 
         public getLuckLimitModifierByCo(selfGridIndex: GridIndex): { lower: number, upper: number } {
             const player                    = this.getPlayer();
-            const configVersion             = this.getConfigVersion();
+            const configVersion             = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
             const hasLoadedCo               = this.getHasLoadedCo();
@@ -706,7 +712,7 @@ namespace TwnsBwUnit {
         }
 
         public checkHasSecondaryWeapon(): boolean {
-            const configVersion = this.getConfigVersion();
+            const configVersion = this.getGameConfig();
             if (configVersion == null) {
                 throw Helpers.newError(`BwUnit.checkHasSecondaryWeapon() configVersion is null.`);
                 return false;
@@ -759,7 +765,7 @@ namespace TwnsBwUnit {
                 return 0;
             }
 
-            const configVersion             = this.getConfigVersion();
+            const configVersion             = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const selfGridIndex             = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
@@ -867,7 +873,7 @@ namespace TwnsBwUnit {
         public checkIsCapturer(): boolean {
             return this._getTemplateCfg()?.canCaptureTile === 1;
         }
-        public checkCanCaptureTile(tile: TwnsBwTile.BwTile): boolean {
+        public checkCanCaptureTile(tile: Twns.BaseWar.BwTile): boolean {
             return (this.checkIsCapturer())
                 && (this.getTeamIndex() !== tile.getTeamIndex())
                 && (tile.getMaxCapturePoint() != null);
@@ -884,7 +890,7 @@ namespace TwnsBwUnit {
                 return cfgAmount;
             }
 
-            const configVersion             = this.getConfigVersion();
+            const configVersion             = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
@@ -981,7 +987,7 @@ namespace TwnsBwUnit {
         }
         private _getFuelConsumptionModifierByCo(): number {
             const player                    = this.getPlayer();
-            const configVersion             = this.getConfigVersion();
+            const configVersion             = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const selfGridIndex             = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
@@ -1115,7 +1121,7 @@ namespace TwnsBwUnit {
                 throw Helpers.newError(`Empty produceUnitType.`);
             }
 
-            const cfgCost   = ConfigManager.getUnitTemplateCfg(this.getConfigVersion(), produceUnitType).productionCost;
+            const cfgCost   = ConfigManager.getUnitTemplateCfg(this.getGameConfig(), produceUnitType).productionCost;
             const modifier  = this.getPlayer().getUnitCostModifier(this.getGridIndex(), this.getHasLoadedCo(), produceUnitType);
             return Math.floor(cfgCost * modifier);
         }
@@ -1182,7 +1188,7 @@ namespace TwnsBwUnit {
                 return 0;
             }
 
-            const configVersion             = this.getConfigVersion();
+            const configVersion             = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const selfGridIndex             = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
@@ -1216,7 +1222,7 @@ namespace TwnsBwUnit {
                 return 0;
             }
 
-            const configVersion = war.getConfigVersion();
+            const configVersion = war.getGameConfig();
             const selfGridIndex = this.getGridIndex();
             const unitType      = this.getUnitType();
             const selfTileType  = war.getTileMap().getTile(selfGridIndex).getType();
@@ -1271,7 +1277,7 @@ namespace TwnsBwUnit {
         // Functions for promotion.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxPromotion(): number {
-            return ConfigManager.getUnitMaxPromotion(this.getConfigVersion());
+            return ConfigManager.getUnitMaxPromotion(this.getGameConfig());
         }
 
         public getCurrentPromotion(): number {
@@ -1295,17 +1301,17 @@ namespace TwnsBwUnit {
         }
 
         public getPromotionAttackBonus(): number {
-            return ConfigManager.getUnitPromotionAttackBonus(this.getConfigVersion(), this.getCurrentPromotion());
+            return ConfigManager.getUnitPromotionAttackBonus(this.getGameConfig(), this.getCurrentPromotion());
         }
 
         public getPromotionDefenseBonus(): number {
-            return ConfigManager.getUnitPromotionDefenseBonus(this.getConfigVersion(), this.getCurrentPromotion());
+            return ConfigManager.getUnitPromotionDefenseBonus(this.getGameConfig(), this.getCurrentPromotion());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for launch silo.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanLaunchSiloOnTile(tile: TwnsBwTile.BwTile): boolean {
+        public checkCanLaunchSiloOnTile(tile: Twns.BaseWar.BwTile): boolean {
             return (this._getTemplateCfg()?.canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
         }
 
@@ -1325,7 +1331,7 @@ namespace TwnsBwUnit {
         public checkIsTileBuilder(): boolean {
             return this._getBuildableTileCfg() != null;
         }
-        public checkCanBuildOnTile(tile: TwnsBwTile.BwTile): boolean {
+        public checkCanBuildOnTile(tile: Twns.BaseWar.BwTile): boolean {
             const tileObjectType = tile.getObjectType();
             if (tileObjectType == null) {
                 throw Helpers.newError(`BwUnit.checkCanBuildOnTile() tileObjectType is empty.`);
@@ -1415,7 +1421,7 @@ namespace TwnsBwUnit {
 
         public checkCanLoadUnit(unit: BwUnit): boolean {
             const cfg                   = this._getTemplateCfg();
-            const configVersion         = this.getConfigVersion();
+            const configVersion         = this.getGameConfig();
             const maxLoadUnitsCount     = this.getMaxLoadUnitsCount();
             const loadableTileCategory  = cfg.loadableTileCategory;
             const loadUnitCategory      = cfg.loadUnitCategory;
@@ -1433,7 +1439,7 @@ namespace TwnsBwUnit {
             const loadableTileCategory  = cfg.loadableTileCategory;
             return (cfg.canDropLoadedUnits === 1)
                 && (loadableTileCategory != null)
-                && (ConfigManager.checkIsTileTypeInCategory(this.getConfigVersion(), tileType, loadableTileCategory));
+                && (ConfigManager.checkIsTileTypeInCategory(this.getGameConfig(), tileType, loadableTileCategory));
         }
         public getCfgCanDropLoadedUnit(): boolean {
             return this._getTemplateCfg().loadableTileCategory != null;
@@ -1456,7 +1462,7 @@ namespace TwnsBwUnit {
 
         public getNormalizedRepairAmountAndCostModifier(): { amountModifier: number, costMultiplierPct: number } {
             const player                    = this.getPlayer();
-            const configVersion             = this.getConfigVersion();
+            const configVersion             = this.getGameConfig();
             const gridIndex                 = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
@@ -1621,7 +1627,7 @@ namespace TwnsBwUnit {
             const weatherManager        = war.getWeatherManager();
             const unitVisionFixedCfg    = weatherManager.getCurrentWeatherCfg().unitVisionFixed;
             if (unitVisionFixedCfg != null) {
-                const configVersion = war.getConfigVersion();
+                const configVersion = war.getGameConfig();
                 const unitType      = this.getUnitType();
                 const weatherType   = weatherManager.getCurrentWeatherType();
                 if ((ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, unitVisionFixedCfg[0])) &&
@@ -1675,7 +1681,7 @@ namespace TwnsBwUnit {
                 return 0;
             }
 
-            const configVersion             = this.getConfigVersion();
+            const configVersion             = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
@@ -1700,7 +1706,7 @@ namespace TwnsBwUnit {
         }
 
         public checkIsTrueVision(gridIndex: GridIndex): boolean {
-            const configVersion = this.getConfigVersion();
+            const configVersion = this.getGameConfig();
             if (configVersion == null) {
                 throw Helpers.newError(`BwUnit.checkIsTrueVision() configVersion is empty.`);
                 return false;
@@ -1820,7 +1826,7 @@ namespace TwnsBwUnit {
                 const category = tile.getLoadCoUnitCategory();
                 return category == null
                     ? false
-                    : ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), this.getUnitType(), category);
+                    : ConfigManager.checkIsUnitTypeInCategory(this.getGameConfig(), this.getUnitType(), category);
             }
         }
 
@@ -1850,7 +1856,7 @@ namespace TwnsBwUnit {
         }
 
         public getLoadCoCost(): number {
-            return Math.floor(ConfigManager.getCoBasicCfg(this.getConfigVersion(), this.getPlayer().getCoId()).boardCostPercentage * this.getProductionCfgCost() / 100);
+            return Math.floor(ConfigManager.getCoBasicCfg(this.getGameConfig(), this.getPlayer().getCoId()).boardCostPercentage * this.getProductionCfgCost() / 100);
         }
 
         ////////////////////////////////////////////////////////////////////////////////

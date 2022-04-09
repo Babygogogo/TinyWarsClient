@@ -66,7 +66,7 @@ namespace TwnsCommonDamageChartPanel {
 
         private _selectedIndex                  : number | null = null;
         private _dataForListUnit?               : DataForUnitRenderer[];
-        private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView              = new Twns.WarMap.WarMapUnitView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -641,7 +641,7 @@ namespace TwnsCommonDamageChartPanel {
         private readonly _group!                : eui.Group;
         private readonly _imgBg!                : TwnsUiImage.UiImage;
         private readonly _conView!              : eui.Group;
-        private readonly _unitView              = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView              = new Twns.WarMap.WarMapUnitView();
         private readonly _tileView!             : TwnsUiImage.UiImage;
         private readonly _labelPrimaryAttack!   : TwnsUiLabel.UiLabel;
         private readonly _labelSecondaryAttack! : TwnsUiLabel.UiLabel;

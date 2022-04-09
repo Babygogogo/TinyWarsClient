@@ -74,7 +74,7 @@ namespace TwnsUserLoginBackgroundPanel {
             const group = this._groupUnits;
             const tick  = Timer.getUnitAnimationTickCount();
             for (let i = group.numChildren - 1; i >= 0; --i) {
-                ((group.getChildAt(i) as eui.Component).getChildAt(0) as TwnsWarMapUnitView.WarMapUnitView).updateOnAnimationTick(tick);
+                ((group.getChildAt(i) as eui.Component).getChildAt(0) as Twns.WarMap.WarMapUnitView).updateOnAnimationTick(tick);
             }
         }
         private _onMsgCommonLatestConfigVersion(): void {

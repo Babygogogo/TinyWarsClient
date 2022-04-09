@@ -10,7 +10,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwFieldView {
     export class BwFieldView extends egret.DisplayObjectContainer {
-        private _field?                 : TwnsBwField.BwField;
+        private _field?                 : Twns.BaseWar.BwField;
 
         private _tileMapView?           : TwnsBwTileMapView.BwTileMapView;
         private _actionPlannerView?     : TwnsBwActionPlannerView.BwActionPlannerView;
@@ -18,7 +18,7 @@ namespace TwnsBwFieldView {
         private _cursorView?            : TwnsBwCursorView.BwCursorView;
         private _gridVisionEffectView?  : TwnsBwGridVisualEffectView.BwGridVisualEffectView;
 
-        public init(field: TwnsBwField.BwField): void {
+        public init(field: Twns.BaseWar.BwField): void {
             if (!this._field) {
                 this._field = field;
 
@@ -35,7 +35,7 @@ namespace TwnsBwFieldView {
                 this.addChild(this._gridVisionEffectView);
             }
         }
-        public fastInit(field: TwnsBwField.BwField): void {
+        public fastInit(field: Twns.BaseWar.BwField): void {
             this._field = field;
         }
 

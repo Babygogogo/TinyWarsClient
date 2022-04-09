@@ -2,7 +2,7 @@
 // import TwnsBwPlayerManager from "../../baseWar/model/BwPlayerManager";
 
 namespace TwnsRwPlayerManager {
-    import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;
+    import BwPlayerManager = Twns.BaseWar.BwPlayerManager;
 
     export class RwPlayerManager extends BwPlayerManager {
         public getAliveWatcherTeamIndexesForSelf(): Set<number> {

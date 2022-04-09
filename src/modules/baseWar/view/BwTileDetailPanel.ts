@@ -25,7 +25,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTileDetailPanel {
-    import BwTile           = TwnsBwTile.BwTile;
+    import BwTile           = Twns.BaseWar.BwTile;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import UnitType         = Types.UnitType;
@@ -245,7 +245,7 @@ namespace TwnsBwTileDetailPanel {
         private _createDataForListMoveCost(): DataForMoveRangeRenderer[] {
             const openData          = this._getOpenData();
             const tile              = openData.tile;
-            const configVersion     = tile.getConfigVersion();
+            const configVersion     = tile.getGameConfig();
             const tileCfg           = ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
             const playerIndex       = tile.getPlayerIndex() || 1;
 
@@ -1567,7 +1567,7 @@ namespace TwnsBwTileDetailPanel {
         private readonly _group!            : eui.Group;
         private readonly _imgBg!            : TwnsUiImage.UiImage;
         private readonly _conView!          : eui.Group;
-        private readonly _unitView          = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView          = new Twns.WarMap.WarMapUnitView();
         private readonly _labelMoveCost!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {

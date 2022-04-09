@@ -5,14 +5,14 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpwPlayerManager {
-    import BwPlayerManager  = TwnsBwPlayerManager.BwPlayerManager;
+    import BwPlayerManager  = Twns.BaseWar.BwPlayerManager;
 
     export class SpwPlayerManager extends BwPlayerManager {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getHumanPlayers(): TwnsBwPlayer.BwPlayer[] {
-            const players: TwnsBwPlayer.BwPlayer[] = [];
+        public getHumanPlayers(): Twns.BaseWar.BwPlayer[] {
+            const players: Twns.BaseWar.BwPlayer[] = [];
             for (const [, player] of this.getAllPlayersDict()) {
                 if (player.getUserId() != null) {
                     players.push(player);

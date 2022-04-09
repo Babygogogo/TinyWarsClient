@@ -194,7 +194,7 @@ namespace TwnsBwFogMap {
                 return false;
             } else {
                 const war               = this._getWar();
-                const weatherFogType    = ConfigManager.getWeatherCfg(war.getConfigVersion(), war.getWeatherManager().getCurrentWeatherType()).fog;
+                const weatherFogType    = ConfigManager.getWeatherCfg(war.getGameConfig(), war.getWeatherManager().getCurrentWeatherType()).fog;
                 if (weatherFogType === Types.WeatherFogType.Fog) {
                     return true;
                 } else if (weatherFogType === Types.WeatherFogType.NoFog) {
@@ -257,7 +257,7 @@ namespace TwnsBwFogMap {
                 }
             }
         }
-        public updateMapFromPathsByUnitAndPath(unit: TwnsBwUnit.BwUnit, path: GridIndex[]): void {
+        public updateMapFromPathsByUnitAndPath(unit: Twns.BaseWar.BwUnit, path: GridIndex[]): void {
             const playerIndex   = unit.getPlayerIndex();
             const mapSize       = this.getMapSize();
             const mapFromPath   = this._getMapFromPath(playerIndex);

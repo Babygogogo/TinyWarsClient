@@ -22,9 +22,9 @@
 namespace SpwModel {
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import SpwWar                   = TwnsSpwWar.SpwWar;
-    import ScwWar                   = TwnsScwWar.ScwWar;
-    import SfwWar                   = TwnsSfwWar.SfwWar;
-    import SrwWar                   = TwnsSrwWar.SrwWar;
+    import ScwWar                   = Twns.SingleCustomWar.ScwWar;
+    import SfwWar                   = Twns.SingleFreeWar.SfwWar;
+    import SrwWar                   = Twns.SingleRankWar.SrwWar;
     import SpwPlayerManager         = TwnsSpwPlayerManager.SpwPlayerManager;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarSerialization         = CommonProto.WarSerialization;
@@ -53,7 +53,7 @@ namespace SpwModel {
 
         const data  = Helpers.deepClone(warData);
         const war   = createWarByWarData(data);
-        await war.init(data);
+        await war.init(data, await ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);

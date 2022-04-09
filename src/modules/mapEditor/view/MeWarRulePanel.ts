@@ -210,7 +210,7 @@ namespace TwnsMeWarRulePanel {
             const rule  = this._selectedRule;
             const war   = this._getWar();
             if ((rule) && (!war.getIsReviewingMap())) {
-                WarRuleHelpers.tickDefaultWeatherType(rule, war.getConfigVersion());
+                WarRuleHelpers.tickDefaultWeatherType(rule, war.getGameConfig());
                 this._updateLabelWeather(rule);
             }
         }

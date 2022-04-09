@@ -552,7 +552,7 @@ namespace TwnsMpwActionPlanner {
             }
         }
 
-        protected _checkCanControlUnit(unit: TwnsBwUnit.BwUnit): boolean {
+        protected _checkCanControlUnit(unit: Twns.BaseWar.BwUnit): boolean {
             const war           = this._getWar();
             const playerInTurn  = war.getPlayerInTurn();
             return (playerInTurn.getUserId() === UserModel.getSelfUserId())

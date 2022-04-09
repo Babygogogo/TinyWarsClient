@@ -291,7 +291,7 @@ namespace TwnsHrwTopPanel {
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
-                this._labelCo.text  = `${coId == null ? "----" : ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
+                this._labelCo.text  = `${coId == null ? "----" : ConfigManager.getCoBasicCfg(war.getGameConfig(), coId).name}`;
 
                 const skillType = player.getCoUsingSkillType();
                 if (skillType === Types.CoSkillType.Power) {

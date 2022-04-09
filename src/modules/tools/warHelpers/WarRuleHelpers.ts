@@ -14,14 +14,13 @@ namespace WarRuleHelpers {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import LanguageType         = Types.LanguageType;
     import BootTimerType        = Types.BootTimerType;
-    import WarSettings          = CommonProto.WarSettings;
     import WarRule              = CommonProto.WarRule;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
-    import ISettingsForCommon   = WarSettings.ISettingsForCommon;
     import IRuleForGlobalParams = WarRule.IRuleForGlobalParams;
     import IRuleForPlayers      = WarRule.IRuleForPlayers;
     import IDataForPlayerRule   = WarRule.IDataForPlayerRule;
     import IWarRule             = WarRule.IWarRule;
+    import GameConfig           = Twns.Config.GameConfig;
 
     const DEFAULT_PLAYER_RULE: CommonProto.WarRule.IDataForPlayerRule = {
         playerIndex             : CommonConstants.WarNeutralPlayerIndex,
@@ -51,8 +50,8 @@ namespace WarRuleHelpers {
     export function setDefaultWeatherType(warRule: IWarRule, weatherType: Types.WeatherType): void {
         Helpers.getExisted(warRule.ruleForGlobalParams, ClientErrorCode.WarRuleHelpers_SetDefaultWeatherType_00).defaultWeatherType = weatherType;
     }
-    export function tickDefaultWeatherType(warRule: IWarRule, configVersion: string): void {
-        const typeArray     = ConfigManager.getAvailableWeatherTypes(configVersion);
+    export function tickDefaultWeatherType(warRule: IWarRule, gameConfig: GameConfig): void {
+        const typeArray     = gameConfig.getAvailableWeatherTypes();
         const weatherType   = getDefaultWeatherType(warRule);
         setDefaultWeatherType(warRule, typeArray[(typeArray.indexOf(weatherType) + 1) % typeArray.length]);
     }
@@ -133,15 +132,15 @@ namespace WarRuleHelpers {
     export function getBannedCoIdArray(warRule: IWarRule, playerIndex: number): number[] | null {
         return getPlayerRule(warRule, playerIndex).bannedCoIdArray ?? null;
     }
-    export function getAvailableCoIdArrayForPlayer({ warRule, playerIndex, configVersion }: {
+    export function getAvailableCoIdArrayForPlayer({ warRule, playerIndex, gameConfig }: {
         warRule         : IWarRule;
         playerIndex     : number;
-        configVersion   : string;
+        gameConfig      : GameConfig;
     }): number[] {
-        return getAvailableCoIdArray(configVersion, new Set<number>(getPlayerRule(warRule, playerIndex).bannedCoIdArray));
+        return getAvailableCoIdArray(gameConfig, new Set<number>(getPlayerRule(warRule, playerIndex).bannedCoIdArray));
     }
-    export function getAvailableCoIdArray(configVersion: string, bannedCoIdSet: Set<number>): number[] {
-        return ConfigManager.getEnabledCoArray(configVersion)
+    export function getAvailableCoIdArray(gameConfig: GameConfig, bannedCoIdSet: Set<number>): number[] {
+        return gameConfig.getEnabledCoArray()
             .map(v => v.coId)
             .filter(v => !bannedCoIdSet.has(v));
     }
@@ -260,11 +259,11 @@ namespace WarRuleHelpers {
         warEventIdArray.push(warEventId);
     }
 
-    export function getRandomCoIdWithSettingsForCommon(settingsForCommon: ISettingsForCommon, playerIndex: number): number {
+    export function getRandomCoIdWithSettingsForCommon(warRule: IWarRule, playerIndex: number, gameConfig: GameConfig): number {
         return getRandomCoIdWithCoIdList(getAvailableCoIdArrayForPlayer({
-            warRule         : Helpers.getExisted(settingsForCommon.warRule),
+            warRule,
             playerIndex,
-            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+            gameConfig,
         }));
     }
     export function getRandomCoIdWithCoIdList(coIdList: number[]): number {

@@ -200,7 +200,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
             if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                     currentCoId         : CcrCreateModel.getSelfCoId(),
-                    availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, configVersion }),
+                    availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, gameConfig: configVersion }),
                     callbackOnConfirm   : (coId) => {
                         if (coId !== CcrCreateModel.getSelfCoId()) {
                             CcrCreateModel.setSelfCoId(coId);

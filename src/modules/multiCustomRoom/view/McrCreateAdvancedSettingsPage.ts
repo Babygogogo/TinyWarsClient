@@ -324,7 +324,7 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
             this._callbackForTouchLabelValue    = () => TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
                 playerIndex,
-                configVersion,
+                gameConfig: configVersion,
                 fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                 bannedCoIdArray     : McrCreateModel.getBannedCoIdArray(playerIndex) || [],
                 maxBanCount         : null,

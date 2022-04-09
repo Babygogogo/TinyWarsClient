@@ -161,7 +161,7 @@ namespace TwnsMrrRoomInfoPanel {
             if (selfPlayerData) {
                 const configVersion = Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion);
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
-                    configVersion,
+                    gameConfig: configVersion,
                     playerIndex         : Helpers.getExisted(selfPlayerData.playerIndex),
                     maxBanCount         : ConfigManager.getSystemMaxBanCoCount(configVersion),
                     fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),

@@ -19,10 +19,11 @@
 namespace TwnsCommonBanCoPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
+    import GameConfig       = Twns.Config.GameConfig;
 
     export type OpenData = {
         playerIndex         : number;
-        configVersion       : string;
+        gameConfig          : GameConfig;
         bannedCoIdArray     : number[];
         fullCoIdArray       : number[];
         maxBanCount         : number | null;
@@ -273,10 +274,10 @@ namespace TwnsCommonBanCoPanel {
 
         private _initGroupCoNames(): void {
             const openData      = this._getOpenData();
-            const configVersion = openData.configVersion;
+            const gameConfig    = openData.gameConfig;
             const fullCoIdArray = [...new Set(openData.fullCoIdArray)].sort((v1, v2) => {
-                const name1 = ConfigManager.getCoNameAndTierText(configVersion, v1);
-                const name2 = ConfigManager.getCoNameAndTierText(configVersion, v2);
+                const name1 = gameConfig.getCoNameAndTierText(v1);
+                const name2 = gameConfig.getCoNameAndTierText(v2);
                 return (name1 || "").localeCompare(name2 || "", "zh");
             });
 
@@ -284,14 +285,14 @@ namespace TwnsCommonBanCoPanel {
             const groupCustomCoNames = this._groupCustomCoNames;
             for (const coId of fullCoIdArray) {
                 const renderer = new RendererForCoName();
-                renderer.setConfigVersion(configVersion);
+                renderer.setGameConfig(gameConfig);
                 renderer.setCoId(coId);
                 renderer.setIsAvailable(true);
 
                 renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoNameRenderer, this);
                 this._renderersForCoNames.push(renderer);
 
-                if (ConfigManager.checkIsOriginCo(configVersion, coId)) {
+                if (gameConfig.checkIsOriginCo(coId)) {
                     groupOriginCoNames.addChild(renderer);
                 } else {
                     groupCustomCoNames.addChild(renderer);
@@ -325,7 +326,7 @@ namespace TwnsCommonBanCoPanel {
             }
 
             this._uiCoInfo.setCoData({
-                configVersion   : this._getOpenData().configVersion,
+                gameConfig   : this._getOpenData().gameConfig,
                 coId,
             });
         }
@@ -417,7 +418,7 @@ namespace TwnsCommonBanCoPanel {
         private readonly _imgSelected!      : TwnsUiImage.UiImage;
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
 
-        private _configVersion  : string | null = null;
+        private _gameConfig     : GameConfig | null = null;
         private _coId           : number | null = null;
         private _isAvailable    : boolean | null = null;
 
@@ -431,8 +432,8 @@ namespace TwnsCommonBanCoPanel {
             this._updateView();
         }
 
-        public setConfigVersion(configVersion: string): void {
-            this._configVersion = configVersion;
+        public setGameConfig(config: GameConfig): void {
+            this._gameConfig = config;
         }
 
         public setCoId(coId: number): void {
@@ -459,7 +460,7 @@ namespace TwnsCommonBanCoPanel {
             const isAvailable           = !!this._isAvailable;
             this._imgSelected.visible   = isAvailable;
             this._imgUnselected.visible = !isAvailable;
-            this._labelName.text        = ConfigManager.getCoBasicCfg(Helpers.getExisted(this._configVersion), Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined;
+            this._labelName.text        = this._gameConfig?.getCoBasicCfg(Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined;
         }
     }
 }

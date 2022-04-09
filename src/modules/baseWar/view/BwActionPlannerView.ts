@@ -807,7 +807,7 @@ namespace TwnsBwActionPlannerView {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _addUnitView(unit: TwnsBwUnit.BwUnit, gridIndex: GridIndex, alpha = 1): void {
+        private _addUnitView(unit: Twns.BaseWar.BwUnit, gridIndex: GridIndex, alpha = 1): void {
             const view = new TwnsBwUnitView.BwUnitView().init(unit).startRunningView();
             // view.alpha = alpha;
             _resetUnitViewXy(view, gridIndex);

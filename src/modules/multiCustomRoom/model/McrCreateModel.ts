@@ -98,7 +98,7 @@ namespace McrCreateModel {
         const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
             warRule,
             playerIndex     : getSelfPlayerIndex(),
-            configVersion   : getConfigVersion(),
+            gameConfig   : getConfigVersion(),
         });
         if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
             setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
@@ -114,7 +114,7 @@ namespace McrCreateModel {
         const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
             warRule,
             playerIndex     : getSelfPlayerIndex(),
-            configVersion   : getConfigVersion(),
+            gameConfig   : getConfigVersion(),
         });
         if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
             setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));

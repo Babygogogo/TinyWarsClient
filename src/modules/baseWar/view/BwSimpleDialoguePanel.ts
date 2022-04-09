@@ -18,7 +18,7 @@ namespace TwnsBwSimpleDialoguePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
-        configVersion   : string;
+        gameConfig      : Twns.Config.GameConfig;
         actionData      : CommonProto.WarEvent.IWeaSimpleDialogue;
         callbackOnClose : () => void;
     };
@@ -172,12 +172,13 @@ namespace TwnsBwSimpleDialoguePanel {
             ++this._dialogueIndex;
 
             const openData              = this._getOpenData();
+            const gameConfig            = openData.gameConfig;
             const dataForCoDialogue     = Helpers.getExisted(Helpers.getExisted(openData.actionData.dataArray)[this._dialogueIndex].dataForCoDialogue);
             const groupCo1              = this._groupCo1;
             const groupCo2              = this._groupCo2;
             const coId                  = Helpers.getExisted(dataForCoDialogue.coId);
-            const coImageSource         = ConfigManager.getCoHeadImageSource(openData.configVersion, coId);
-            const coName                = Lang.getLanguageText({ textArray: dataForCoDialogue.nameArray }) ?? ConfigManager.getCoNameAndTierText(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId);
+            const coImageSource         = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
+            const coName                = Lang.getLanguageText({ textArray: dataForCoDialogue.nameArray }) ?? gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined;
             const side                  = dataForCoDialogue.side;
 
             if (side === Types.WarEventActionSimpleDialogueSide.Bottom) {

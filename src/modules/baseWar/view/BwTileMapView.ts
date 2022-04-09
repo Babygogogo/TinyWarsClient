@@ -45,7 +45,7 @@ namespace TwnsBwTileMapView {
             { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
         ];
 
-        private _tileMap?: TwnsBwTileMap.BwTileMap;
+        private _tileMap?: Twns.BaseWar.BwTileMap;
 
         public constructor() {
             super();
@@ -64,7 +64,7 @@ namespace TwnsBwTileMapView {
             this._updateOpacityForTileLayers();
         }
 
-        public init(tileMap: TwnsBwTileMap.BwTileMap): void {
+        public init(tileMap: Twns.BaseWar.BwTileMap): void {
             this._tileMap = tileMap;
 
             {
@@ -159,7 +159,7 @@ namespace TwnsBwTileMapView {
 
             this._updateBorderLayer();
         }
-        public fastInit(tileMap: TwnsBwTileMap.BwTileMap): void {
+        public fastInit(tileMap: Twns.BaseWar.BwTileMap): void {
             this._tileMap = tileMap;
         }
 

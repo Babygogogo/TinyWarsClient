@@ -250,7 +250,7 @@ namespace TwnsSpwTopPanel {
             const war               = this._getOpenData().war;
             const player            = war.getPlayerInTurn();
             this._imgSkin.source    = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source      = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgCo.source      = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelEnergy(): void {
@@ -377,7 +377,7 @@ namespace TwnsSpwTopPanel {
             const data          = this._getData();
             const war           = data.war;
             const player        = war.getPlayer(data.playerIndex);
-            this._imgCo.source  = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgCo.source  = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private _updateLabelFundAndAddFund(): void {

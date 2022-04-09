@@ -151,7 +151,7 @@ namespace TwnsCommonChooseCoPanel {
             }
 
             this._uiCoInfo.setCoData({
-                configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+                gameConfig   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
                 coId,
             });
         }

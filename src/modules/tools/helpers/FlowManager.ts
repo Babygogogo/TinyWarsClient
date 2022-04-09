@@ -83,7 +83,6 @@ namespace FlowManager {
         { msgCode: NetMessageCodes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
     ];
     const _NOTIFY_EVENTS = [
-        { type: NotifyType.ConfigLoaded,               callback: _onNotifyConfigLoaded },
         { type: NotifyType.NetworkConnected,           callback: _onNotifyNetworkConnected, },
         { type: NotifyType.MsgUserLogin,               callback: _onMsgUserLogin },
         { type: NotifyType.MsgUserLogout,              callback: _onMsgUserLogout },
@@ -346,12 +345,6 @@ namespace FlowManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function _onNotifyConfigLoaded(): void {
-        if (_checkCanFirstGoToLobby()) {
-            gotoLobby();
-        }
-    }
-
     function _onNotifyNetworkConnected(): void {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
@@ -406,8 +399,7 @@ namespace FlowManager {
         return (!_hasOnceWentToLobby)
             && (UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (configVersion != null)
-            && (!!ConfigManager.getCachedConfig(configVersion));
+            && (configVersion != null);
     }
 
     function _removeLoadingDom(): void {

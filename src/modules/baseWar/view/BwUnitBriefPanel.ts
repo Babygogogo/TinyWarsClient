@@ -23,7 +23,7 @@
 namespace TwnsBwUnitBriefPanel {
     import BwWar                = Twns.BaseWar.BwWar;
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import BwUnit               = TwnsBwUnit.BwUnit;
+    import BwUnit               = Twns.BaseWar.BwUnit;
 
     const _CELL_WIDTH           = 70;
 

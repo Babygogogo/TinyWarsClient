@@ -566,13 +566,13 @@ namespace TwnsMeTopPanel {
         }
         private _initUnitView(): void {
             const war   = this._getWar();
-            const unit  = new TwnsBwUnit.BwUnit();
+            const unit  = new Twns.BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : Types.UnitType.Infantry,
                 playerIndex : CommonConstants.WarFirstPlayerIndex,
-            }, this._getWar().getConfigVersion());
+            }, this._getWar().getGameConfig());
             unit.startRunning(war);
 
             this._unitView.init(unit);

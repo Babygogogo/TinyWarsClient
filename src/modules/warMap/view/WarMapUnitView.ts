@@ -11,7 +11,7 @@
 // import UserModel        from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWarMapUnitView {
+namespace Twns.WarMap {
     const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
     const IMG_UNIT_STATE_WIDTH                          = 10;
     const IMG_UNIT_STATE_HEIGHT                         = 12;
@@ -231,7 +231,8 @@ namespace TwnsWarMapUnitView {
         }
 
         private _getUnitTemplateCfg(): Types.UnitTemplateCfg {
-            return ConfigManager.getUnitTemplateCfg(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Helpers.getExisted(this.getUnitData()?.unitType));
+            const data = Helpers.getExisted(this.getUnitData());
+            return Helpers.getExisted(data.config.getUnitTemplateCfg(Helpers.getExisted(data.unitType)));
         }
         private _getSkinId(): number {
             const data = this.getUnitData();

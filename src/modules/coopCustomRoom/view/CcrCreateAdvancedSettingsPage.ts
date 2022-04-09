@@ -334,7 +334,7 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
                 const selfCoId      = playerIndex === CcrCreateModel.getSelfPlayerIndex() ? CcrCreateModel.getSelfCoId() : null;
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
                     playerIndex,
-                    configVersion,
+                    gameConfig: configVersion,
                     maxBanCount         : null,
                     fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                     bannedCoIdArray     : CcrCreateModel.getBannedCoIdArray(playerIndex) || [],

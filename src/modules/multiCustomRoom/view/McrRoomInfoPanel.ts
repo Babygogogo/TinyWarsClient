@@ -168,7 +168,7 @@ namespace TwnsMcrRoomInfoPanel {
                         availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                             warRule         : Helpers.getExisted(settingsForCommon.warRule),
                             playerIndex,
-                            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                            gameConfig   : Helpers.getExisted(settingsForCommon.configVersion),
                         }),
                         callbackOnConfirm   : (newCoId) => {
                             if (newCoId !== selfPlayerData.coId) {
@@ -535,7 +535,7 @@ namespace TwnsMcrRoomInfoPanel {
                 const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : Helpers.getExisted(settingsForCommon.warRule),
                     playerIndex     : newPlayerIndex,
-                    configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                    gameConfig   : Helpers.getExisted(settingsForCommon.configVersion),
                 });
                 McrProxy.reqMcrSetSelfSettings({
                     roomId,

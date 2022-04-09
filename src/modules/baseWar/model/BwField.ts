@@ -13,15 +13,15 @@
 // import TwnsBwUnitMap            from "./BwUnitMap";
 // import TwnsBwWar                from "./BwWar";
 
-namespace TwnsBwField {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.BaseWar {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import ISerialField         = CommonProto.WarSerialization.ISerialField;
-    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
-    import BwWar                = Twns.BaseWar.BwWar;
     import BwCursor             = TwnsBwCursor.BwCursor;
     import BwFogMap             = TwnsBwFogMap.BwFogMap;
     import BwGridVisualEffect   = TwnsBwGridVisualEffect.BwGridVisualEffect;
     import BwFieldView          = TwnsBwFieldView.BwFieldView;
+    import GameConfig           = Config.GameConfig;
 
     export abstract class BwField {
         private readonly _cursor            = new BwCursor();
@@ -29,13 +29,13 @@ namespace TwnsBwField {
         private readonly _view              = new BwFieldView();
 
         public abstract getFogMap(): BwFogMap;
-        public abstract getTileMap(): TwnsBwTileMap.BwTileMap;
+        public abstract getTileMap(): BwTileMap;
         public abstract getUnitMap(): BwUnitMap;
         public abstract getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner;
 
-        public init({ data, configVersion, playersCountUnneutral }: {
+        public init({ data, gameConfig, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialField>;
-            configVersion           : string;
+            gameConfig              : GameConfig;
             playersCountUnneutral   : number;
         }): void {
             if (data == null) {
@@ -56,7 +56,7 @@ namespace TwnsBwField {
             const tileMap = this.getTileMap();
             tileMap.init({
                 data                : data.tileMap,
-                configVersion,
+                gameConfig: gameConfig,
                 mapSize,
                 playersCountUnneutral
             });
@@ -64,7 +64,7 @@ namespace TwnsBwField {
             const unitMap = this.getUnitMap();
             unitMap.init({
                 data                : data.unitMap,
-                configVersion,
+                gameConfig: gameConfig,
                 mapSize,
                 playersCountUnneutral
             });
@@ -85,9 +85,9 @@ namespace TwnsBwField {
             this.getGridVisualEffect().init();
             this.getView().init(this);
         }
-        public fastInit({ data, configVersion, playersCountUnneutral }: {
+        public fastInit({ data, gameConfig, playersCountUnneutral }: {
             data                    : ISerialField;
-            configVersion           : string;
+            gameConfig              : GameConfig;
             playersCountUnneutral   : number;
         }): void {
             const mapSize = WarCommonHelpers.getMapSize(data.tileMap);
@@ -98,13 +98,13 @@ namespace TwnsBwField {
             });
             this.getTileMap().fastInit({
                 data                : data.tileMap,
-                configVersion,
+                gameConfig,
                 mapSize,
                 playersCountUnneutral,
             });
             this.getUnitMap().fastInit({
                 data                : data.unitMap,
-                configVersion,
+                gameConfig,
                 mapSize,
                 playersCountUnneutral,
             });

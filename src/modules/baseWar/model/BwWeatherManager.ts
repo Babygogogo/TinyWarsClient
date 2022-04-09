@@ -67,7 +67,7 @@ namespace TwnsBwWeatherManager {
             return this.getForceWeatherType() ?? this.getDefaultWeatherType();
         }
         public getCurrentWeatherCfg(): Types.WeatherCfg {
-            return ConfigManager.getWeatherCfg(this._getWar().getConfigVersion(), this.getCurrentWeatherType());
+            return ConfigManager.getWeatherCfg(this._getWar().getGameConfig(), this.getCurrentWeatherType());
         }
 
         public setForceWeatherType(type: WeatherType | null): void {

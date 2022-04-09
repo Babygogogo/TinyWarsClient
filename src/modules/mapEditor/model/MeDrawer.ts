@@ -56,7 +56,7 @@ namespace TwnsMeDrawer {
         private _drawTargetTileObjectData       : DataForDrawTileObject | null = null;
         private _drawTargetTileBaseData         : DataForDrawTileBase | null = null;
         private _drawTargetTileDecoratorData    : DataForDrawTileDecorator | null = null;
-        private _drawTargetUnit                 : TwnsBwUnit.BwUnit | null = null;
+        private _drawTargetUnit                 : Twns.BaseWar.BwUnit | null = null;
         private _dataForAddTileToLocation       : DataForAddTileToLocation | null = null;
         private _dataForDeleteTileFromLocation  : DataForDeleteTileFromLocation | null = null;
         private _symmetricalDrawType            = SymmetryType.None;
@@ -156,22 +156,22 @@ namespace TwnsMeDrawer {
 
         public setModeDrawUnit(data: DataForDrawUnit): void {
             const war   = this._getWar();
-            const unit  = new TwnsBwUnit.BwUnit();
+            const unit  = new Twns.BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : data.unitType,
                 playerIndex : data.playerIndex,
-            }, war.getConfigVersion());
+            }, war.getGameConfig());
             unit.startRunning(war);
 
             this._setDrawTargetUnit(unit);
             this._setMode(DrawerMode.DrawUnit);
         }
-        private _setDrawTargetUnit(unit: TwnsBwUnit.BwUnit): void {
+        private _setDrawTargetUnit(unit: Twns.BaseWar.BwUnit): void {
             this._drawTargetUnit = unit;
         }
-        public getDrawTargetUnit(): TwnsBwUnit.BwUnit | null {
+        public getDrawTargetUnit(): Twns.BaseWar.BwUnit | null {
             return this._drawTargetUnit;
         }
 
@@ -207,7 +207,7 @@ namespace TwnsMeDrawer {
         public autoAdjustRoads(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
-            const configVersion = war.getConfigVersion();
+            const configVersion = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 if (tile.getType() !== Types.TileType.Road) {
                     continue;
@@ -236,7 +236,7 @@ namespace TwnsMeDrawer {
         public autoAdjustBridges(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
-            const configVersion = war.getConfigVersion();
+            const configVersion = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 const tileType = tile.getType();
                 if ((tileType !== Types.TileType.BridgeOnBeach) &&
@@ -270,7 +270,7 @@ namespace TwnsMeDrawer {
         public autoAdjustPlasmas(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
-            const configVersion = war.getConfigVersion();
+            const configVersion = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 if (tile.getType() !== Types.TileType.Plasma) {
                     continue;
@@ -299,7 +299,7 @@ namespace TwnsMeDrawer {
         public autoAdjustPipes(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
-            const configVersion = war.getConfigVersion();
+            const configVersion = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 if (tile.getType() !== Types.TileType.Pipe) {
                     continue;
@@ -328,7 +328,7 @@ namespace TwnsMeDrawer {
         public autoFillTileDecorators(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
-            const configVersion = war.getConfigVersion();
+            const configVersion = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 const gridIndex         = tile.getGridIndex();
                 const targetBaseData    = MeUtility.getAutoTileDecoratorTypeAndShapeId(tileMap, gridIndex);
@@ -398,7 +398,7 @@ namespace TwnsMeDrawer {
             const targetBaseData    = Helpers.getExisted(this.getDrawTargetTileBaseData());
             const baseType          = targetBaseData.baseType;
             const baseShapeId       = targetBaseData.shapeId;
-            const configVersion     = war.getConfigVersion();
+            const configVersion     = war.getGameConfig();
             tile.init({
                 gridIndex       : tile.getGridIndex(),
                 playerIndex     : tile.getPlayerIndex(),
@@ -441,7 +441,7 @@ namespace TwnsMeDrawer {
         private _handleDrawTileDecorator(gridIndex: GridIndex): void {
             const war               = this._getWar();
             const tileMap           = war.getTileMap();
-            const configVersion     = war.getConfigVersion();
+            const configVersion     = war.getGameConfig();
             const tile              = tileMap.getTile(gridIndex);
             const targetBaseData    = Helpers.getExisted(this.getDrawTargetTileDecoratorData());
             const decoratorType     = targetBaseData.decoratorType;
@@ -487,7 +487,7 @@ namespace TwnsMeDrawer {
         }
         private _handleDrawTileObject(gridIndex: GridIndex): void {
             const war               = this._getWar();
-            const configVersion     = war.getConfigVersion();
+            const configVersion     = war.getGameConfig();
             const tileMap           = war.getTileMap();
             const unitMap           = war.getUnitMap();
             const tile              = tileMap.getTile(gridIndex);
@@ -558,13 +558,13 @@ namespace TwnsMeDrawer {
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
             const targetUnit    = Helpers.getExisted(this.getDrawTargetUnit());
-            const unit          = new TwnsBwUnit.BwUnit();
+            const unit          = new Twns.BaseWar.BwUnit();
             unit.init({
                 gridIndex,
                 playerIndex : targetUnit.getPlayerIndex(),
                 unitType    : targetUnit.getUnitType(),
                 unitId,
-            }, war.getConfigVersion());
+            }, war.getGameConfig());
             unit.startRunning(this._getWar());
             unit.startRunningView();
 

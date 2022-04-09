@@ -15,15 +15,13 @@ namespace TwnsBwCommonSettingManager {
         private _war?               : Twns.BaseWar.BwWar;
         private _settingsForCommon? : ISettingsForCommon;
 
-        public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
+        public init({ settings, allWarEventIdArray, playersCountUnneutral }: {
             settings                : ISettingsForCommon;
             allWarEventIdArray      : number[];
             playersCountUnneutral   : number;
-        }): Promise<void> {
+        }): void {
             const configVersion = settings.configVersion;
-            if ((configVersion == null)                                                                                                     ||
-                (!await ConfigManager.checkIsVersionValid(configVersion))
-            ) {
+            if (configVersion == null) {
                 throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwCommonSettingManager_Init_00);
             }
 
