@@ -260,7 +260,10 @@ namespace TwnsSrrCreateMapListPanel {
             const mapId = this._selectedMapId;
             return mapId == null
                 ? null
-                : { mapInfo: { mapId } };
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getLatestGameConfig(),
+                    mapInfo     : { mapId },
+                };
         }
 
         private _createDataForCommonWarPlayerInfoPage(): OpenDataForSpmRankPage {

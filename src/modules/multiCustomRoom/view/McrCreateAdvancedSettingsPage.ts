@@ -317,15 +317,15 @@ namespace TwnsMcrCreateAdvancedSettingsPage {
 
             const labelValue                    = this._labelValue;
             const currValue                     = (McrCreateModel.getBannedCoIdArray(playerIndex) || []).length;
-            const configVersion                 = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const gameConfig                    = McrCreateModel.getGameConfig();
             const selfCoId                      = playerIndex === McrCreateModel.getSelfPlayerIndex() ? McrCreateModel.getSelfCoId() : null;
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
             this._callbackForTouchLabelValue    = () => TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
                 playerIndex,
-                gameConfig: configVersion,
-                fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                gameConfig,
+                fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
                 bannedCoIdArray     : McrCreateModel.getBannedCoIdArray(playerIndex) || [],
                 maxBanCount         : null,
                 selfCoId,

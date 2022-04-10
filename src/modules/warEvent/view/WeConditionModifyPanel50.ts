@@ -85,6 +85,7 @@ namespace TwnsWeConditionModifyPanel50 {
         private _onTouchedBtnWeatherType(): void {
             const condition = this._getCondition();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseWeatherTypePanel, {
+                gameConfig              : this._getOpenData().war.getGameConfig(),
                 currentWeatherTypeArray : condition.weatherTypeArray ?? [],
                 callbackOnConfirm       : weatherTypeArray => {
                     condition.weatherTypeArray = weatherTypeArray;

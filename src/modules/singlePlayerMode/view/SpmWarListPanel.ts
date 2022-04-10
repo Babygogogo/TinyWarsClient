@@ -121,12 +121,12 @@ namespace TwnsSpmWarListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : this._createDataForCommonWarMapInfoPage(),
+                    pageData    : await this._createDataForCommonWarMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0224) },
                     pageClass   : TwnsCommonWarPlayerInfoPage.CommonWarPlayerInfoPage,
-                    pageData    : this._createDataForCommonWarPlayerInfoPage(),
+                    pageData    : await this._createDataForCommonWarPlayerInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -189,15 +189,15 @@ namespace TwnsSpmWarListPanel {
             }
         }
 
-        private _updateCommonWarMapInfoPage(): void {
+        private async _updateCommonWarMapInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, this._createDataForCommonWarMapInfoPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonWarMapInfoPage());
             }
         }
 
-        private _updateCommonWarPlayerInfoPage(): void {
+        private async _updateCommonWarPlayerInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(1, this._createDataForCommonWarPlayerInfoPage());
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarPlayerInfoPage());
             }
         }
 
@@ -224,30 +224,36 @@ namespace TwnsSpmWarListPanel {
             return dataArray;
         }
 
-        private _createDataForCommonWarMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+        private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const slotIndex = SpmModel.getPreviewingSlotIndex();
             const warData   = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex)?.warData;
             if (warData == null) {
-                return {};
+                return null;
             }
 
             const mapId = WarCommonHelpers.getMapId(warData);
             if (mapId != null) {
-                return { mapInfo: { mapId } };
+                return {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
+                    mapInfo     : { mapId },
+                };
             }
 
             const initialWarData = warData.settingsForSfw?.initialWarData;
             if (initialWarData) {
-                return { warInfo: {
-                    warData : initialWarData,
-                    players : warData.playerManager?.players,
-                } };
+                return {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
+                    warInfo     : {
+                        warData : initialWarData,
+                        players : warData.playerManager?.players,
+                    }
+                };
             } else {
-                return {};
+                return null;
             }
         }
 
-        private _createDataForCommonWarPlayerInfoPage(): OpenDataForCommonWarPlayerInfoPage {
+        private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
             const slotIndex = SpmModel.getPreviewingSlotIndex();
             const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
             const warData   = slotData?.warData;
@@ -275,7 +281,7 @@ namespace TwnsSpmWarListPanel {
             }
 
             return {
-                configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
+                gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
                 roomOwnerPlayerIndex    : null,
                 callbackOnDeletePlayer  : null,
@@ -344,9 +350,9 @@ namespace TwnsSpmWarListPanel {
 
             const settingsForCommon = Helpers.getExisted(warData.settingsForCommon);
             return {
-                configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
-                warRule         : Helpers.getExisted(settingsForCommon.warRule),
-                warType         : WarCommonHelpers.getWarType(warData),
+                gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+                warRule     : Helpers.getExisted(settingsForCommon.warRule),
+                warType     : WarCommonHelpers.getWarType(warData),
             };
         }
 

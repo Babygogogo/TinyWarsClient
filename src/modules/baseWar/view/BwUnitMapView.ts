@@ -225,12 +225,12 @@ namespace TwnsBwUnitMapView {
         }
 
         private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer {
-            const version = this._getUnitMap().getWar().getGameConfig();
-            if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
+            const gameConfig = this._getUnitMap().getWar().getGameConfig();
+            if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Air)) {
                 return this._layerForAir;
-            } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Ground)) {
+            } else if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Ground)) {
                 return this._layerForGround;
-            } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Naval)) {
+            } else if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Naval)) {
                 return this._layerForNaval;
             } else {
                 throw Helpers.newError(`Invalid unitType: ${unitType}`);

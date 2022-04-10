@@ -94,7 +94,7 @@ namespace CommonModel {
         const cfg = Helpers.getExisted(dict4.get(unitType));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = ConfigManager.getUnitImageSource(params);
+            cfg.source  = Twns.Config.ConfigManager.getUnitImageSource(params);
         }
 
         return Helpers.getExisted(cfg.source);
@@ -147,7 +147,7 @@ namespace CommonModel {
         const cfg = Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = ConfigManager.getTileBaseImageSource(params);
+            cfg.source  = Twns.Config.ConfigManager.getTileBaseImageSource(params);
         }
 
         return Helpers.getExisted(cfg.source);
@@ -207,7 +207,7 @@ namespace CommonModel {
         const cfg = Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = ConfigManager.getTileDecoratorImageSource(params);
+            cfg.source  = Twns.Config.ConfigManager.getTileDecoratorImageSource(params);
         }
 
         return Helpers.getExisted(cfg.source);
@@ -260,7 +260,7 @@ namespace CommonModel {
         const cfg = Helpers.getExisted(dict6.get(tickCount));
         if (cfg.tick !== tickCount) {
             cfg.tick    = tickCount;
-            cfg.source  = ConfigManager.getTileObjectImageSource(params);
+            cfg.source  = Twns.Config.ConfigManager.getTileObjectImageSource(params);
         }
 
         return Helpers.getExisted(cfg.source);

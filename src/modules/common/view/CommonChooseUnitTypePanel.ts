@@ -15,8 +15,10 @@ namespace TwnsCommonChooseUnitTypePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
     import UnitType     = Types.UnitType;
+    import GameConfig   = Twns.Config.GameConfig;
 
     export type OpenData = {
+        gameConfig              : GameConfig;
         currentUnitTypeArray    : UnitType[];
         callbackOnConfirm       : (unitTypeArray: UnitType[]) => void;
     };
@@ -83,7 +85,7 @@ namespace TwnsCommonChooseUnitTypePanel {
 
         private _updateListUnitType(): void {
             const dataArray : DataForUnitTypeRenderer[] = [];
-            for (const unitType of ConfigManager.getUnitTypesByCategory(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Types.UnitCategory.All)) {
+            for (const unitType of this._getOpenData().gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
                 dataArray.push({ unitType });
             }
 

@@ -19,7 +19,7 @@ namespace HrwModel {
     import ICommonExtraDataForWarAction = CommonProto.Structure.ICommonExtraDataForWarAction;
 
     let _replayData         : CommonProto.NetMessage.MsgReplayGetData.IS | null = null;
-    let _war                : TwnsHrwWar.HrwWar | null = null;
+    let _war                : Twns.HalfwayReplayWar.HrwWar | null = null;
 
     export function init(): void {
         // nothing to do
@@ -35,7 +35,7 @@ namespace HrwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar(warData: WarSerialization.ISerialWar): Promise<TwnsHrwWar.HrwWar> {
+    export async function loadWar(warData: WarSerialization.ISerialWar): Promise<Twns.HalfwayReplayWar.HrwWar> {
         if (_war) {
             Logger.warn(`HrwModel.loadWar() another war has been loaded already!`);
             unloadWar();
@@ -67,8 +67,8 @@ namespace HrwModel {
 
         Helpers.getExisted(warData.executedActionManager).executedActionArray = generateExecutedActions(warData);
 
-        const war = new TwnsHrwWar.HrwWar();
-        await war.init(warData);
+        const war = new Twns.HalfwayReplayWar.HrwWar();
+        await war.init(warData, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         _war = war;
         return _war;
@@ -81,7 +81,7 @@ namespace HrwModel {
         }
     }
 
-    export function getWar(): TwnsHrwWar.HrwWar | null {
+    export function getWar(): Twns.HalfwayReplayWar.HrwWar | null {
         return _war;
     }
 

@@ -179,7 +179,7 @@ namespace Twns.WarEvent {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._imgTarget.source = ConfigManager.getDialogueBackgroundImage(this._getData().backgroundId);
+            this._imgTarget.source = Twns.Config.ConfigManager.getDialogueBackgroundImage(this._getData().backgroundId);
         }
     }
 }

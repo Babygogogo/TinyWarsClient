@@ -115,6 +115,7 @@ namespace TwnsWeConditionModifyPanel32 {
         private _onTouchedBtnTileType(): void {
             const condition = this._getCondition();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseTileTypePanel, {
+                gameConfig              : this._getOpenData().war.getGameConfig(),
                 currentTileTypeArray    : condition.tileTypeArray ?? [],
                 callbackOnConfirm       : tileTypeArray => {
                     condition.tileTypeArray = tileTypeArray;

@@ -91,7 +91,7 @@ namespace TwnsMmSetWarRuleAvailabilityPanel {
             const errorCode             = WarRuleHelpers.getErrorCodeForWarRule({
                 rule                    : warRule,
                 playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
-                configVersion           : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+                gameConfig              : await Twns.Config.ConfigManager.getLatestGameConfig(),
                 allWarEventIdArray      : Helpers.getNonNullElements(mapRawData.warEventFullData?.eventArray?.map(v => v.eventId) ?? []),
             });
             if (errorCode) {

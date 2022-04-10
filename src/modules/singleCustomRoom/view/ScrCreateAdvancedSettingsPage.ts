@@ -320,8 +320,8 @@ namespace TwnsScrCreateAdvancedSettingsPage {
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = async () => {
-                const gameConfig    = await ConfigManager.getGameConfig(ScrCreateModel.getConfigVersion());
+            this._callbackForTouchLabelValue    = () => {
+                const gameConfig    = ScrCreateModel.getGameConfig();
                 const selfCoId      = ScrCreateModel.getCoId(playerIndex);
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
                     playerIndex,

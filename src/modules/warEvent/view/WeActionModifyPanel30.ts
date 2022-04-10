@@ -196,6 +196,7 @@ namespace TwnsWeActionModifyPanel30 {
         private _onTouchedBtnUnitType(): void {
             const action = this._getAction();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitTypePanel, {
+                gameConfig              : this._getOpenData().war.getGameConfig(),
                 currentUnitTypeArray    : action.conUnitTypeArray ?? [],
                 callbackOnConfirm       : unitTypeArray => {
                     action.conUnitTypeArray = unitTypeArray;

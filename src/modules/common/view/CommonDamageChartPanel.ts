@@ -24,6 +24,7 @@ namespace TwnsCommonDamageChartPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
+    import GameConfig       = Twns.Config.GameConfig;
 
     // eslint-disable-next-line no-shadow
     enum UnitInfoType {
@@ -41,7 +42,7 @@ namespace TwnsCommonDamageChartPanel {
         LoadUnit,
     }
     export type OpenData = {
-        configVersion   : string;
+        gameConfig   : GameConfig;
     };
     export class CommonDamageChartPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
@@ -203,6 +204,7 @@ namespace TwnsCommonDamageChartPanel {
                 this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
                 this._labelName1.text   = Lang.getUnitName(unitType, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
                 this._unitView.update({
+                    gameConfig      : this._getOpenData().gameConfig,
                     gridIndex       : { x: 0, y: 0 },
                     playerIndex     : CommonConstants.WarFirstPlayerIndex,
                     unitType,
@@ -221,9 +223,9 @@ namespace TwnsCommonDamageChartPanel {
             if (unitData == null) {
                 listInfo.clear();
             } else {
-                const configVersion     = unitData.configVersion;
+                const gameConfig        = unitData.gameConfig;
                 const unitType          = unitData.unitType;
-                const unitTemplateCfg   = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+                const unitTemplateCfg   = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType));
                 const dataArray         : DataForInfoRenderer[] = Helpers.getNonNullElements([
                     this._createInfoHp(unitTemplateCfg),
                     this._createInfoProductionCost(unitTemplateCfg),
@@ -359,24 +361,24 @@ namespace TwnsCommonDamageChartPanel {
             const dataForUnit       = (selectedIndex == null) || (dataArrayForUnit == null) ? null : dataArrayForUnit[selectedIndex];
             const dataArray         : DataForDamageRenderer[] = [];
             if (dataForUnit) {
-                const configVersion     = dataForUnit.configVersion;
+                const gameConfig        = dataForUnit.gameConfig;
                 const attackUnitType    = dataForUnit.unitType;
                 const playerIndex       = CommonConstants.WarFirstPlayerIndex;
                 let index               = 0;
-                for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
+                for (const targetUnitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
                     dataArray.push({
                         index,
-                        configVersion,
+                        gameConfig,
                         attackUnitType,
                         targetUnitType,
                         playerIndex,
                     });
                     ++index;
                 }
-                for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.DestroyableForDamageChart)) {
+                for (const targetTileType of gameConfig.getTileTypesByCategory(Types.TileCategory.DestroyableForDamageChart) ?? []) {
                     dataArray.push({
                         index,
-                        configVersion,
+                        gameConfig,
                         attackUnitType,
                         targetTileType,
                     });
@@ -389,11 +391,11 @@ namespace TwnsCommonDamageChartPanel {
 
         private _createDataForListUnit(): DataForUnitRenderer[] {
             const data          : DataForUnitRenderer[] = [];
-            const configVersion = this._getOpenData().configVersion;
-            const unitTypes     = ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All);
+            const gameConfig    = this._getOpenData().gameConfig;
+            const unitTypes     = gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? [];
             for (let index = 0; index < unitTypes.length; ++index) {
                 data.push({
-                    configVersion,
+                    gameConfig,
                     index,
                     unitType: unitTypes[index],
                     panel   : this,
@@ -409,7 +411,7 @@ namespace TwnsCommonDamageChartPanel {
     }
 
     type DataForUnitRenderer = {
-        configVersion   : string;
+        gameConfig      : GameConfig;
         unitType        : Types.UnitType;
         index           : number;
         panel           : CommonDamageChartPanel;
@@ -630,7 +632,7 @@ namespace TwnsCommonDamageChartPanel {
     }
 
     type DataForDamageRenderer = {
-        configVersion   : string;
+        gameConfig      : GameConfig;
         index           : number;
         attackUnitType  : UnitType;
         playerIndex?    : number;
@@ -680,28 +682,29 @@ namespace TwnsCommonDamageChartPanel {
             const data              = this._getData();
             this._imgBg.visible     = data.index % 2 === 1;
 
-            const configVersion     = data.configVersion;
+            const gameConfig        = data.gameConfig;
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;
             if (targetUnitType != null) {
                 this._unitView.visible = true;
                 this._tileView.visible = false;
                 this._unitView.update({
+                    gameConfig,
                     gridIndex       : { x: 0, y: 0 },
                     unitType        : targetUnitType,
                     playerIndex     : data.playerIndex,
                     actionState     : Types.UnitActionState.Idle,
                 }, Timer.getUnitAnimationTickCount());
 
-                const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
-                const targetArmorType           = ConfigManager.getUnitTemplateCfg(configVersion, targetUnitType).armorType;
+                const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
+                const targetArmorType           = Helpers.getExisted(gameConfig.getUnitTemplateCfg(targetUnitType)?.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
                 this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
                 this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;
 
-                const defendCfg                 = ConfigManager.getDamageChartCfgs(configVersion, targetUnitType);
-                const attackerArmorType         = ConfigManager.getUnitTemplateCfg(configVersion, attackUnitType).armorType;
+                const defendCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(targetUnitType));
+                const attackerArmorType         = Helpers.getExisted(gameConfig.getUnitTemplateCfg(attackUnitType)?.armorType);
                 const primaryDefendDamage       = defendCfg[attackerArmorType][Types.WeaponType.Primary].damage;
                 const secondaryDefendDamage     = defendCfg[attackerArmorType][Types.WeaponType.Secondary].damage;
                 this._labelPrimaryDefend.text   = primaryDefendDamage == null ? `--` : `${primaryDefendDamage}`;
@@ -712,8 +715,8 @@ namespace TwnsCommonDamageChartPanel {
                 this._tileView.visible = true;
 
                 const targetTileType            = Helpers.getExisted(data.targetTileType);
-                const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
-                const targetCfg                 = ConfigManager.getTileTemplateCfgByType(configVersion, targetTileType);
+                const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
+                const targetCfg                 = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(targetTileType));
                 const targetArmorType           = Helpers.getExisted(targetCfg.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
@@ -721,7 +724,7 @@ namespace TwnsCommonDamageChartPanel {
                     version     : UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                    objectType  : ConfigManager.getTileObjectTypeByTileType(targetTileType),
+                    objectType  : Twns.Config.ConfigManager.getTileObjectTypeByTileType(targetTileType),
                     isDark      : false,
                     shapeId     : 0,
                     tickCount   : Timer.getTileAnimationTickCount(),

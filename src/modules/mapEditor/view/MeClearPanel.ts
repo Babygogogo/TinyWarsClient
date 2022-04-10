@@ -76,10 +76,13 @@ namespace TwnsMeClearPanel {
             } else {
                 const war = Helpers.getExisted(MeModel.getWar());
                 war.stopRunning();
-                await war.initWithMapEditorData({
-                    mapRawData  : MeUtility.clearMap(war.serializeForMap(), width, height),
-                    slotIndex   : war.getMapSlotIndex(),
-                });
+                await war.initWithMapEditorData(
+                    {
+                        mapRawData  : MeUtility.clearMap(war.serializeForMap(), width, height),
+                        slotIndex   : war.getMapSlotIndex(),
+                    },
+                    war.getGameConfig()
+                );
                 war.setIsMapModified(true);
                 war.startRunning()
                     .startRunningView();

@@ -10,11 +10,14 @@
 // import TwnsUiZoomableMap    from "../../tools/ui/UiZoomableMap";
 // import WarMapModel          from "../../warMap/model/WarMapModel";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonWarMapInfoPage {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
+    import GameConfig       = Twns.Config.GameConfig;
 
     export type OpenDataForCommonMapInfoPage = {
+        gameConfig  : GameConfig;
         mapInfo?    : {
             mapId   : number;
         };
@@ -77,7 +80,7 @@ namespace TwnsCommonWarMapInfoPage {
 
                     const mapRawData = await WarMapModel.getRawData(mapId);
                     if (mapRawData) {
-                        zoomMap.showMapByMapData(mapRawData);
+                        zoomMap.showMapByMapData(mapRawData, openData.gameConfig);
                     } else {
                         zoomMap.clearMap();
                     }
@@ -87,7 +90,7 @@ namespace TwnsCommonWarMapInfoPage {
                     uiMapInfo.setData({
                         warData,
                     });
-                    zoomMap.showMapByWarData(warData, warInfo.players);
+                    zoomMap.showMapByWarData(warData, warInfo.players, openData.gameConfig);
 
                 } else {
                     uiMapInfo.setData(null);

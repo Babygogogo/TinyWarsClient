@@ -16,6 +16,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonWarAdvancedSettingsPage {
+    import GameConfig           = Twns.Config.GameConfig;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import PlayerRuleType       = Types.PlayerRuleType;
@@ -26,7 +27,7 @@ namespace TwnsCommonWarAdvancedSettingsPage {
     export type OpenDataForCommonWarAdvancedSettingsPage = {
         warRule         : IWarRule;
         warType         : WarType;
-        configVersion   : string;
+        gameConfig      : GameConfig;
     } | null;
     export class CommonWarAdvancedSettingsPage extends TwnsUiTabPage.UiTabPage<OpenDataForCommonWarAdvancedSettingsPage> {
         private readonly _scroller!         : eui.Scroller;
@@ -79,12 +80,12 @@ namespace TwnsCommonWarAdvancedSettingsPage {
                 return;
             }
 
-            const configVersion     = openData.configVersion;
+            const gameConfig        = openData.gameConfig;
             const playerRuleArray   = Helpers.getExisted(openData.warRule?.ruleForPlayers?.playerRuleDataArray);
             const dataArray         : DataForPlayerRenderer[] = [];
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playerRuleArray.length; ++playerIndex) {
                 dataArray.push({
-                    configVersion,
+                    gameConfig,
                     playerRule          : Helpers.getExisted(playerRuleArray.find(v => v.playerIndex === playerIndex)),
                     playerRuleTypeArray,
                 });
@@ -145,7 +146,7 @@ namespace TwnsCommonWarAdvancedSettingsPage {
     // PlayerRenderer
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForPlayerRenderer = {
-        configVersion       : string;
+        gameConfig          : GameConfig;
         playerRule          : IDataForPlayerRule;
         playerRuleTypeArray : PlayerRuleType[];
     };
@@ -172,11 +173,11 @@ namespace TwnsCommonWarAdvancedSettingsPage {
         private _createDataForListInfo(): DataForInfoRenderer[] {
             const data          = this._getData();
             const playerRule    = data.playerRule;
-            const configVersion = data.configVersion;
+            const gameConfig    = data.gameConfig;
             const dataArray     : DataForInfoRenderer[] = [];
             for (const playerRuleType of data.playerRuleTypeArray) {
                 dataArray.push({
-                    configVersion,
+                    gameConfig,
                     playerRule,
                     playerRuleType,
                 });
@@ -189,7 +190,7 @@ namespace TwnsCommonWarAdvancedSettingsPage {
     // InfoRenderer
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForInfoRenderer = {
-        configVersion   : string;
+        gameConfig      : GameConfig;
         playerRule      : IDataForPlayerRule;
         playerRuleType  : PlayerRuleType;
     };
@@ -313,7 +314,7 @@ namespace TwnsCommonWarAdvancedSettingsPage {
             const data              = this._getData();
             const coId              = data.playerRule.fixedCoIdInCcw;
             const labelValue        = this._labelValue;
-            labelValue.text         = coId == null ? `--` : ConfigManager.getCoNameAndTierText(data.configVersion, coId);
+            labelValue.text         = coId == null ? `--` : data.gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined;
             labelValue.textColor    = 0xFFFFFF;
         }
     }

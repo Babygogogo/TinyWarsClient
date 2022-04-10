@@ -26,12 +26,12 @@
 // import TwnsBwWar                    from "../model/BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwUnitDetailPanel {
+namespace Twns.BaseWar {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import UnitType                 = Types.UnitType;
     import TileType                 = Types.TileType;
-    import BwUnit                   = Twns.BaseWar.BwUnit;
+    import GameConfig               = Config.GameConfig;
 
     // eslint-disable-next-line no-shadow
     enum UnitInfoType {
@@ -53,11 +53,11 @@ namespace TwnsBwUnitDetailPanel {
         AiMode,
     }
 
-    export type OpenData = {
+    export type OpenDataForBwUnitDetailPanel = {
         unit        : BwUnit;
         canDelete   : boolean;
     };
-    export class BwUnitDetailPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class BwUnitDetailPanel extends TwnsUiPanel.UiPanel<OpenDataForBwUnitDetailPanel> {
         private readonly _imgMask!              : TwnsUiImage.UiImage;
         private readonly _group!                : eui.Group;
         private readonly _conUnitView!          : eui.Group;
@@ -77,7 +77,7 @@ namespace TwnsBwUnitDetailPanel {
         private readonly _labelMain2!           : TwnsUiLabel.UiLabel;
         private readonly _labelSub2!            : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView              = new Twns.WarMap.WarMapUnitView();
+        private readonly _unitView              = new WarMap.WarMapUnitView();
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -126,7 +126,7 @@ namespace TwnsBwUnitDetailPanel {
 
         private _onTouchedBtnUnitsInfo(): void {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, {
-                configVersion   : this._getOpenData().unit.getGameConfig(),
+                gameConfig  : this._getOpenData().unit.getGameConfig(),
             });
             this.close();
         }
@@ -197,6 +197,7 @@ namespace TwnsBwUnitDetailPanel {
             this._labelName.text    = Lang.getUnitName(unitType) ?? CommonConstants.ErrorTextForUndefined;
             this._labelName1.text   = Lang.getUnitName(unitType, Lang.getCurrentLanguageType() === Types.LanguageType.Chinese ? Types.LanguageType.English : Types.LanguageType.Chinese) ?? CommonConstants.ErrorTextForUndefined;
             this._unitView.update({
+                gameConfig      : unit.getGameConfig(),
                 gridIndex       : { x: 0, y: 0},
                 skinId          : unit.getSkinId(),
                 unitType        : unit.getUnitType(),
@@ -237,7 +238,7 @@ namespace TwnsBwUnitDetailPanel {
             this._btnDelete.visible = this._getOpenData().canDelete;
         }
 
-        private _createInfoHp(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoHp(war: BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Hp,
@@ -245,7 +246,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoProductionCost(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoProductionCost(war: BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.ProductionCost,
@@ -253,7 +254,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoMovement(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoMovement(war: BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Movement,
@@ -261,7 +262,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoFuel(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoFuel(war: BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Fuel,
@@ -269,7 +270,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoPromotion(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoPromotion(war: BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Promotion,
@@ -277,7 +278,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoAttackRange(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoAttackRange(war: BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getMinAttackRange() == null
                 ? null
                 : {
@@ -287,7 +288,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoVision(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoVision(war: BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.Vision,
@@ -295,7 +296,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoPrimaryWeaponAmmo(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoPrimaryWeaponAmmo(war: BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getPrimaryWeaponMaxAmmo() == null
                 ? null
                 : {
@@ -305,7 +306,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoBuildMaterial(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoBuildMaterial(war: BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getMaxBuildMaterial() == null
                 ? null
                 : {
@@ -315,7 +316,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoProduceMaterial(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoProduceMaterial(war: BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getMaxProduceMaterial() == null
                 ? null
                 : {
@@ -325,7 +326,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoFlareAmmo(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoFlareAmmo(war: BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getFlareMaxAmmo() == null
                 ? null
                 : {
@@ -335,7 +336,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoActionState(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer {
+        private _createInfoActionState(war: BwWar, unit: BwUnit): DataForInfoRenderer {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.ActionState,
@@ -343,7 +344,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoDiving(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoDiving(war: BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return !unit.checkIsDiver()
                 ? null
                 : {
@@ -353,7 +354,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoHasLoadedCo(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoHasLoadedCo(war: BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return {
                 index       : 0,
                 infoType    : UnitInfoType.HasLoadedCo,
@@ -361,7 +362,7 @@ namespace TwnsBwUnitDetailPanel {
                 unit,
             };
         }
-        private _createInfoLoadUnit(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoLoadUnit(war: BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return unit.getLoadUnitCategory() == null
                 ? null
                 : {
@@ -371,7 +372,7 @@ namespace TwnsBwUnitDetailPanel {
                     unit,
                 };
         }
-        private _createInfoAiMode(war: Twns.BaseWar.BwWar, unit: BwUnit): DataForInfoRenderer | null {
+        private _createInfoAiMode(war: BwWar, unit: BwUnit): DataForInfoRenderer | null {
             return ((war.getWarType() !== Types.WarType.Me) && (unit.getPlayer().getUserId() != null))
                 ? null
                 : {
@@ -388,15 +389,15 @@ namespace TwnsBwUnitDetailPanel {
 
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
             const unit              = this._getOpenData().unit;
-            const configVersion     = unit.getGameConfig();
+            const gameConfig        = unit.getGameConfig();
             const attackUnitType    = unit.getUnitType();
             const playerIndex       = unit.getPlayerIndex();
 
             const dataList  : DataForDamageRenderer[] = [];
             let index       = 0;
-            for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
+            for (const targetUnitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
                 dataList.push({
-                    configVersion,
+                    gameConfig,
                     index,
                     attackUnitType,
                     targetUnitType,
@@ -404,9 +405,9 @@ namespace TwnsBwUnitDetailPanel {
                 });
                 ++index;
             }
-            for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.DestroyableForDamageChart)) {
+            for (const targetTileType of gameConfig.getTileTypesByCategory(Types.TileCategory.DestroyableForDamageChart) ?? []) {
                 dataList.push({
-                    configVersion,
+                    gameConfig,
                     index,
                     attackUnitType,
                     targetTileType,
@@ -454,7 +455,7 @@ namespace TwnsBwUnitDetailPanel {
     type DataForInfoRenderer = {
         index       : number;
         infoType    : UnitInfoType;
-        war         : Twns.BaseWar.BwWar;
+        war         : BwWar;
         unit        : BwUnit;
     };
     class InfoRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForInfoRenderer> {
@@ -1056,7 +1057,7 @@ namespace TwnsBwUnitDetailPanel {
     }
 
     type DataForDamageRenderer = {
-        configVersion   : string;
+        gameConfig      : GameConfig;
         index           : number;
         attackUnitType  : UnitType;
         playerIndex?    : number;
@@ -1067,7 +1068,7 @@ namespace TwnsBwUnitDetailPanel {
         private readonly _group!                : eui.Group;
         private readonly _imgBg!                : TwnsUiImage.UiImage;
         private readonly _conView!              : eui.Group;
-        private readonly _unitView              = new Twns.WarMap.WarMapUnitView();
+        private readonly _unitView              = new WarMap.WarMapUnitView();
         private readonly _tileView!             : TwnsUiImage.UiImage;
         private readonly _labelPrimaryAttack!   : TwnsUiLabel.UiLabel;
         private readonly _labelSecondaryAttack! : TwnsUiLabel.UiLabel;
@@ -1103,28 +1104,29 @@ namespace TwnsBwUnitDetailPanel {
             const data              = this._getData();
             this._imgBg.visible     = data.index % 2 === 1;
 
-            const configVersion     = data.configVersion;
+            const gameConfig        = data.gameConfig;
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;
             if (targetUnitType != null) {
                 this._unitView.visible = true;
                 this._tileView.visible = false;
                 this._unitView.update({
+                    gameConfig,
                     gridIndex       : { x: 0, y: 0 },
                     unitType        : targetUnitType,
                     playerIndex     : data.playerIndex,
                     actionState     : Types.UnitActionState.Idle,
                 }, Timer.getUnitAnimationTickCount());
 
-                const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
-                const targetArmorType           = ConfigManager.getUnitTemplateCfg(configVersion, targetUnitType).armorType;
+                const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
+                const targetArmorType           = Helpers.getExisted(gameConfig.getUnitTemplateCfg(targetUnitType)?.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
                 this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
                 this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;
 
-                const defendCfg                 = ConfigManager.getDamageChartCfgs(configVersion, targetUnitType);
-                const attackerArmorType         = ConfigManager.getUnitTemplateCfg(configVersion, attackUnitType).armorType;
+                const defendCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(targetUnitType));
+                const attackerArmorType         = Helpers.getExisted(gameConfig.getUnitTemplateCfg(attackUnitType)?.armorType);
                 const primaryDefendDamage       = defendCfg[attackerArmorType][Types.WeaponType.Primary].damage;
                 const secondaryDefendDamage     = defendCfg[attackerArmorType][Types.WeaponType.Secondary].damage;
                 this._labelPrimaryDefend.text   = primaryDefendDamage == null ? `--` : `${primaryDefendDamage}`;
@@ -1135,8 +1137,8 @@ namespace TwnsBwUnitDetailPanel {
                 this._tileView.visible = true;
 
                 const targetTileType            = Helpers.getExisted(data.targetTileType);
-                const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
-                const targetCfg                 = ConfigManager.getTileTemplateCfgByType(configVersion, targetTileType);
+                const attackCfg                 = Helpers.getExisted(gameConfig.getDamageChartCfgs(attackUnitType));
+                const targetCfg                 = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(targetTileType));
                 const targetArmorType           = Helpers.getExisted(targetCfg.armorType);
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
@@ -1144,7 +1146,7 @@ namespace TwnsBwUnitDetailPanel {
                     version     : UserModel.getSelfSettingsTextureVersion(),
                     themeType   : Types.TileThemeType.Clear,
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
-                    objectType  : ConfigManager.getTileObjectTypeByTileType(targetTileType),
+                    objectType  : Twns.Config.ConfigManager.getTileObjectTypeByTileType(targetTileType),
                     isDark      : false,
                     shapeId     : 0,
                     tickCount   : Timer.getTileAnimationTickCount(),

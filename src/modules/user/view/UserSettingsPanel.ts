@@ -289,9 +289,9 @@ namespace TwnsUserSettingsPanel {
             this.close();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, { toUserId: CommonConstants.AdminUserId });
         }
-        private _onTouchedBtnUnitsInfo(): void {
+        private async _onTouchedBtnUnitsInfo(): Promise<void> {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, {
-                configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+                gameConfig  : await Twns.Config.ConfigManager.getLatestGameConfig(),
             });
         }
         private _onTouchedBtnChangeLog(): void {

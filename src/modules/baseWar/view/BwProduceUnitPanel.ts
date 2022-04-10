@@ -116,24 +116,24 @@ namespace TwnsBwProduceUnitPanel {
             const player            = tile.getPlayer();
             const currentFund       = player.getFund();
             const playerIndex       = player.getPlayerIndex();
-            const configVersion     = war.getGameConfig();
+            const gameConfig     = war.getGameConfig();
             const actionPlanner     = war.getActionPlanner();
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex) ?? null;
             const unitCategory      = Helpers.getExisted(skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory());
             const minNormalizedHp   = skillCfg ? WarCommonHelpers.getNormalizedHp(skillCfg[3]) : WarCommonHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
-            for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
+            for (const unitType of gameConfig.getUnitTypesByCategory(unitCategory) ?? []) {
                 const unit = new Twns.BaseWar.BwUnit();
                 unit.init({
                     gridIndex,
                     unitId      : -1,
                     unitType,
                     playerIndex,
-                }, configVersion);
+                }, gameConfig);
                 unit.startRunning(war);
 
                 const costModifier  = player.getUnitCostModifier(gridIndex, false, unitType);
-                const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
+                const cfgCost       = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
                 dataList.push({
                     unitType,
                     currentFund,

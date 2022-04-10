@@ -64,7 +64,7 @@ namespace TwnsMeVisibilityPanel {
             // nothing to do
         }
 
-        private _getWar(): TwnsMeWar.MeWar {
+        private _getWar(): Twns.MapEditor.MeWar {
             return Helpers.getExisted(MeModel.getWar());
         }
 
@@ -150,7 +150,7 @@ namespace TwnsMeVisibilityPanel {
     }
 
     type DataForLocationRenderer = {
-        war         : TwnsMeWar.MeWar;
+        war         : Twns.MapEditor.MeWar;
         locationId  : number;
     };
     class LocationRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForLocationRenderer> {

@@ -34,7 +34,7 @@
 namespace TwnsMeWarRulePanel {
     import BwWarEventManager        = TwnsBwWarEventManager.BwWarEventManager;
     import MeField                  = TwnsMeField.MeField;
-    import MeWar                    = TwnsMeWar.MeWar;
+    import MeWar                    = Twns.MapEditor.MeWar;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IWarRule                 = CommonProto.WarRule.IWarRule;
@@ -996,10 +996,10 @@ namespace TwnsMeWarRulePanel {
         }
         private _createDataAiCoIdInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const coId          = playerRule.fixedCoIdInCcw;
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const gameConfig    = Helpers.getExisted(MeModel.getWar()?.getGameConfig());
             return {
                 titleText               : Lang.getText(LangTextType.B0644),
-                infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),
+                infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
                 callbackOnTouchedTitle  : isReviewing
                     ? null
@@ -1010,10 +1010,11 @@ namespace TwnsMeWarRulePanel {
                         }
 
                         const coIdArray: number[] = [];
-                        for (const cfg of ConfigManager.getEnabledCoArray(configVersion)) {
+                        for (const cfg of gameConfig.getEnabledCoArray()) {
                             coIdArray.push(cfg.coId);
                         }
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                            gameConfig,
                             currentCoId         : playerRule.fixedCoIdInCcw ?? null,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {
@@ -1050,10 +1051,10 @@ namespace TwnsMeWarRulePanel {
         }
         private _createDataAiCoIdInSrw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             const coId          = playerRule.fixedCoIdInSrw;
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const gameConfig    = Helpers.getExisted(MeModel.getWar()?.getGameConfig());
             return {
                 titleText               : Lang.getText(LangTextType.B0815),
-                infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),
+                infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
                 callbackOnTouchedTitle  : isReviewing
                     ? null
@@ -1064,10 +1065,11 @@ namespace TwnsMeWarRulePanel {
                         }
 
                         const coIdArray: number[] = [];
-                        for (const cfg of ConfigManager.getEnabledCoArray(configVersion)) {
+                        for (const cfg of gameConfig.getEnabledCoArray()) {
                             coIdArray.push(cfg.coId);
                         }
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                            gameConfig,
                             currentCoId         : playerRule.fixedCoIdInSrw ?? null,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {

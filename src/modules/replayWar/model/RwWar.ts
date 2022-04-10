@@ -37,7 +37,7 @@ namespace Twns.ReplayWar {
     export class RwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new TwnsRwPlayerManager.RwPlayerManager();
         private readonly _field                 = new TwnsRwField.RwField();
-        private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
+        private readonly _commonSettingManager  = new Twns.BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
 
         private _settingsForMcw?                    : CommonProto.WarSettings.ISettingsForMcw | null;
@@ -82,7 +82,7 @@ namespace Twns.ReplayWar {
         public getPlayerManager(): TwnsRwPlayerManager.RwPlayerManager {
             return this._playerManager;
         }
-        public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
+        public getCommonSettingManager(): Twns.BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
         public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
@@ -461,7 +461,7 @@ namespace Twns.ReplayWar {
             this.getWarEventManager().fastInit(Helpers.getExisted(warData.warEventManager));
             this.getField().fastInit({
                 data                    : Helpers.getExisted(warData.field),
-                gameConfig: gameConfig,
+                gameConfig,
                 playersCountUnneutral,
             });
             this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw ?? null);

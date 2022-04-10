@@ -115,7 +115,7 @@ namespace TwnsBwDamagePreviewPanel {
 
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageCalculatorPanel, {
                 data: {
-                    configVersion   : war.getGameConfig(),
+                    gameConfig   : war.getGameConfig(),
                     weatherType     : war.getWeatherManager().getCurrentWeatherType(),
                     attackerData    : {
                         coId            : attackerPlayer.getCoId(),

@@ -237,20 +237,28 @@ namespace TwnsRwReplayListPanel {
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const replayId = RwModel.getPreviewingReplayId();
             if (replayId == null) {
-                return {};
+                return null;
             }
 
-            const mapId = (await RwModel.getReplayInfo(replayId))?.mapId;
+            const replayInfo    = Helpers.getExisted(await RwModel.getReplayInfo(replayId));
+            const mapId         = replayInfo.mapId;
+            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(replayInfo.configVersion));
             if (mapId != null) {
-                return { mapInfo: { mapId } };
+                return {
+                    gameConfig,
+                    mapInfo     : { mapId },
+                };
             } else {
                 const replayData = (await RwModel.getReplayData(replayId))?.settingsForMfw?.initialWarData;
                 return replayData == null
-                    ? {}
-                    : { warInfo: {
-                        warData : replayData,
-                        players : replayData.playerManager?.players
-                    } };
+                    ? null
+                    : {
+                        gameConfig,
+                        warInfo     : {
+                            warData : replayData,
+                            players : replayData.playerManager?.players
+                        }
+                    };
             }
         }
 
@@ -282,7 +290,7 @@ namespace TwnsRwReplayListPanel {
             }
 
             return {
-                configVersion           : Helpers.getExisted(replayBriefInfo.configVersion),
+                gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(replayBriefInfo.configVersion)),
                 playersCountUnneutral   : playerInfoArray.length,
                 roomOwnerPlayerIndex    : null,
                 callbackOnExitRoom      : null,

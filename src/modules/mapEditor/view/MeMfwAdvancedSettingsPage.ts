@@ -95,18 +95,18 @@ namespace TwnsMeMfwAdvancedSettingsPage {
             this._updateView();
         }
 
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             this._listInfo.visible  = true;
-            this._listInfo.bindData(this._createDataForListInfo());
+            this._listInfo.bindData(await this._createDataForListInfo());
         }
 
-        private _createDataForListInfo(): DataForInfoRenderer[] {
+        private async _createDataForListInfo(): Promise<DataForInfoRenderer[]> {
             const data          = this._getData();
             const playerIndex   = data.playerIndex;
             return [
                 this._createDataController(playerIndex),
                 this._createDataTeamIndex(playerIndex),
-                this._createDataCo(playerIndex),
+                await this._createDataCo(playerIndex),
                 this._createDataSkinId(playerIndex),
                 this._createDataInitialFund(playerIndex),
                 this._createDataIncomeMultiplier(playerIndex),
@@ -147,19 +147,20 @@ namespace TwnsMeMfwAdvancedSettingsPage {
                 },
             };
         }
-        private _createDataCo(playerIndex: number): DataForInfoRenderer {
+        private async _createDataCo(playerIndex: number): Promise<DataForInfoRenderer> {
             const coId          = MeMfwModel.getCoId(playerIndex);
-            const configVersion = Helpers.getExisted(MeMfwModel.getWarData().settingsForCommon?.configVersion);
+            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(MeMfwModel.getWarData().settingsForCommon?.configVersion));
             return {
                 titleText               : Lang.getText(LangTextType.B0425),
-                infoText                : ConfigManager.getCoNameAndTierText(configVersion, coId),
+                infoText                : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                        gameConfig,
                         currentCoId         : coId,
                         availableCoIdArray  : MeMfwModel.getIsControlledByHuman(playerIndex)
-                            ? WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule: MeMfwModel.getWarRule(), playerIndex, gameConfig: configVersion })
-                            : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                            ? WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule: MeMfwModel.getWarRule(), playerIndex, gameConfig })
+                            : gameConfig.getEnabledCoArray().map(v => v.coId),
                         callbackOnConfirm   : newCoId => {
                             if (newCoId !== coId) {
                                 MeMfwModel.setCoId(playerIndex, newCoId);

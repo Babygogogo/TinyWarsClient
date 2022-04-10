@@ -93,9 +93,9 @@ namespace TwnsMeChooseUnitPanel {
             this._labelRecentTitle.text = `${Lang.getText(LangTextType.B0372)}:`;
         }
 
-        private _createDataForListUnit(): DataForCategoryRenderer[] {
+        private async _createDataForListUnit(): Promise<DataForCategoryRenderer[]> {
             const mapping = new Map<number, DataForDrawUnit[]>();
-            for (const unitType of ConfigManager.getUnitTypesByCategory(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Types.UnitCategory.All)) {
+            for (const unitType of (await Twns.Config.ConfigManager.getLatestGameConfig()).getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
                 for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);
@@ -119,8 +119,8 @@ namespace TwnsMeChooseUnitPanel {
             return dataList;
         }
 
-        private _updateListCategory(): void {
-            const dataList = this._createDataForListUnit();
+        private async _updateListCategory(): Promise<void> {
+            const dataList = await this._createDataForListUnit();
             this._listCategory.bindData(dataList);
             this._listCategory.scrollVerticalTo(0);
         }

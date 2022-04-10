@@ -15,8 +15,10 @@ namespace TwnsCommonChooseTileTypePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
     import TileType     = Types.TileType;
+    import GameConfig   = Twns.Config.GameConfig;
 
     export type OpenData = {
+        gameConfig              : GameConfig;
         currentTileTypeArray    : TileType[];
         callbackOnConfirm       : (tileTypeArray: TileType[]) => void;
     };
@@ -83,7 +85,7 @@ namespace TwnsCommonChooseTileTypePanel {
 
         private _updateListTileType(): void {
             const dataArray : DataForTileTypeRenderer[] = [];
-            for (const tileType of ConfigManager.getTileTypesByCategory(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Types.TileCategory.All)) {
+            for (const tileType of this._getOpenData().gameConfig.getTileTypesByCategory(Types.TileCategory.All) ?? []) {
                 dataArray.push({ tileType });
             }
 

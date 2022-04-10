@@ -255,11 +255,15 @@ namespace TwnsMrrMyRoomListPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const roomId = MrrModel.getPreviewingRoomId();
-            const mapId = roomId == null ? null : (await MrrModel.getRoomInfo(roomId))?.settingsForMrw?.mapId;
+            const roomId    = MrrModel.getPreviewingRoomId();
+            const roomInfo  = roomId == null ? null : await MrrModel.getRoomInfo(roomId);
+            const mapId     = roomInfo?.settingsForMrw?.mapId;
             return mapId == null
                 ? null
-                : { mapInfo: { mapId } };
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    mapInfo     : { mapId }
+                };
         }
 
         private _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {

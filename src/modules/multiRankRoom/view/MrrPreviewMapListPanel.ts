@@ -116,7 +116,7 @@ namespace TwnsMrrPreviewMapListPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : this._createDataForCommonMapInfoPage(),
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0002) },
@@ -168,9 +168,9 @@ namespace TwnsMrrPreviewMapListPanel {
             }
         }
 
-        private _updateCommonMapInfoPage(): void {
+        private async _updateCommonMapInfoPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(0, this._createDataForCommonMapInfoPage());
+                this._tabSettings.updatePageData(0, await this._createDataForCommonMapInfoPage());
             }
         }
 
@@ -222,11 +222,14 @@ namespace TwnsMrrPreviewMapListPanel {
             return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
-        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const mapId = this._getPreviewingMapId();
             return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+                ? null
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getLatestGameConfig(),
+                    mapInfo     : { mapId },
+                };
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
@@ -336,9 +339,9 @@ namespace TwnsMrrPreviewMapListPanel {
             }
 
             return {
-                configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
-                warRule         : warRuleArray[0],
-                warType         : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+                gameConfig  : await Twns.Config.ConfigManager.getLatestGameConfig(),
+                warRule     : warRuleArray[0],
+                warType     : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };
         }
 

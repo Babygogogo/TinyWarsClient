@@ -329,8 +329,10 @@ namespace Twns.WarEvent {
             const dataForCoDialogue = data.dataForDialogue.dataForCoDialogue;
             if (dataForCoDialogue) {
                 const currentCoId = dataForCoDialogue.coId ?? null;
+                const gameConfig    = data.war.getGameConfig();
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
-                    availableCoIdArray  : data.war.getGameConfig().getCoIdArrayForDialogue(),
+                    gameConfig,
+                    availableCoIdArray  : gameConfig.getCoIdArrayForDialogue(),
                     currentCoId,
                     callbackOnConfirm   : coId => {
                         if (coId !== currentCoId) {
@@ -564,8 +566,8 @@ namespace Twns.WarEvent {
         }
 
         private _updateLabelError(): void {
-            const data      = this._getData().dataForDialogue;
-            const errorTips = WarEventHelper.getErrorTipForWeaDialogueData(data);
+            const data      = this._getData();
+            const errorTips = WarEventHelper.getErrorTipForWeaDialogueData(data.dataForDialogue, data.war.getGameConfig());
             const label     = this._labelError;
             if (errorTips) {
                 label.textColor = ColorValue.Red;

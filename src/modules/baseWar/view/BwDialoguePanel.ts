@@ -52,7 +52,7 @@ namespace TwnsBwDialoguePanel {
                 oldOpenData.callbackOnClose();
             }
 
-            this._imgBg.source          = ConfigManager.getDialogueBackgroundImage(this._getOpenData().actionData.backgroundId ?? 0);
+            this._imgBg.source          = Twns.Config.ConfigManager.getDialogueBackgroundImage(this._getOpenData().actionData.backgroundId ?? 0);
             this._groupName1.visible    = false;
             this._groupName2.visible    = false;
             this._imgCo1.source         = ``;

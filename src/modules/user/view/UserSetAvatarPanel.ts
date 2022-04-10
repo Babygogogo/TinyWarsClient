@@ -50,7 +50,7 @@ namespace Twns.User {
             this._sclAvatar.setItemRenderer(AvatarRenderer);
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            this._gameConfig = await ConfigManager.getLatestGameConfig();
+            this._gameConfig = await Twns.Config.ConfigManager.getLatestGameConfig();
             this._updateView();
         }
         protected _onClosing(): void {
@@ -114,7 +114,7 @@ namespace Twns.User {
         }
 
         private _updateImgAvatar(): void {
-            this._imgAvatar.source = ConfigManager.getUserAvatarImageSource(this._sclAvatar.getSelectedData()?.avatarId ?? UserModel.getSelfAvatarId() ?? 1);
+            this._imgAvatar.source = Twns.Config.ConfigManager.getUserAvatarImageSource(this._sclAvatar.getSelectedData()?.avatarId ?? UserModel.getSelfAvatarId() ?? 1);
         }
         private _updateSclAvatar(): void {
             const dataArray: DataForAvatarRenderer[] = [];
@@ -141,7 +141,7 @@ namespace Twns.User {
 
         protected async _onDataChanged(): Promise<void> {
             const data             = this._getData();
-            this._imgAvatar.source = ConfigManager.getUserAvatarImageSource(data.avatarId);
+            this._imgAvatar.source = Twns.Config.ConfigManager.getUserAvatarImageSource(data.avatarId);
         }
 
         public onItemTapEvent(): void {

@@ -8,31 +8,19 @@
 // import Types            from "./Types";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace ConfigManager {
+namespace Twns.Config.ConfigManager {
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import TileBaseType         = Types.TileBaseType;
     import TileDecoratorType    = Types.TileDecoratorType;
     import TileObjectType       = Types.TileObjectType;
     import TileType             = Types.TileType;
     import UnitType             = Types.UnitType;
-    import UnitCategory         = Types.UnitCategory;
-    import TileCategory         = Types.TileCategory;
-    import UnitTemplateCfg      = Types.UnitTemplateCfg;
-    import TileTemplateCfg      = Types.TileTemplateCfg;
-    import DamageChartCfg       = Types.DamageChartCfg;
-    import BuildableTileCfg     = Types.BuildableTileCfg;
-    import VisionBonusCfg       = Types.VisionBonusCfg;
-    import CoBasicCfg           = Types.CoBasicCfg;
-    import SystemCfg            = Types.SystemCfg;
-    import MoveCostCfg          = Types.MoveCostCfg;
-    import CoSkillCfg           = Types.CoSkillCfg;
-    import WeatherCfg           = Types.WeatherCfg;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Initializers.
     ////////////////////////////////////////////////////////////////////////////////
     let _latestConfigVersion    : string | null = null;
-    const _gameConfigAccessor   = Helpers.createCachedDataAccessor<string, Twns.Config.GameConfig>({
+    const _gameConfigAccessor   = Helpers.createCachedDataAccessor<string, GameConfig>({
         reqData : async (version: string) => {
             let rawConfig   : Types.FullConfig | null = null;
             const configBin = await RES.getResByUrl(
@@ -46,7 +34,7 @@ namespace ConfigManager {
             if (rawConfig == null) {
                 _gameConfigAccessor.setData(version, null);
             } else {
-                _gameConfigAccessor.setData(version, new Twns.Config.GameConfig(version, rawConfig));
+                _gameConfigAccessor.setData(version, new GameConfig(version, rawConfig));
             }
         },
     });
@@ -61,50 +49,19 @@ namespace ConfigManager {
     export function getLatestConfigVersion(): string | null {
         return _latestConfigVersion;
     }
-    export function setLatestFormalVersion(version: string): void {
+    export function setLatestConfigVersion(version: string): void {
         _latestConfigVersion = version;
     }
-    export async function getGameConfig(version: string): Promise<Twns.Config.GameConfig> {
+    export async function getGameConfig(version: string): Promise<GameConfig> {
         return Helpers.getExisted(await _gameConfigAccessor.getData(version));
     }
-    export async function getLatestGameConfig(): Promise<Twns.Config.GameConfig> {
+    export async function getLatestGameConfig(): Promise<GameConfig> {
         return await getGameConfig(Helpers.getExisted(getLatestConfigVersion()));
-    }
-
-    async function getSystemCfg(version: string): Promise<SystemCfg> {
-        return (await getGameConfig(version)).getSystemCfg();
-    }
-    export async function getSystemEnergyGrowthMultiplierForAttacker(version: string): Promise<number> {
-        return Helpers.getExisted((await getSystemCfg(version)).energyGrowthMultiplierArray[0], ClientErrorCode.ConfigManager_GetSystemEnergyGrowthMultiplierForAttacker_00);
-    }
-    export async function getSystemEnergyGrowthMultiplierForDefender(version: string): Promise<number> {
-        return Helpers.getExisted((await getSystemCfg(version)).energyGrowthMultiplierArray[1], ClientErrorCode.ConfigManager_GetSystemEnergyGrowthMultiplierForDefender_00);
-    }
-
-    export async function getSystemMaxBanCoCount(version: string): Promise<number> {
-        return Helpers.getExisted((await getSystemCfg(version)).maxBanCount, ClientErrorCode.ConfigManager_GetSystemMaxBanCoCount_00);
-    }
-    export async function getSystemDialogueBackgroundMaxId(version: string): Promise<number> {
-        return Helpers.getExisted((await getSystemCfg(version)).dialogueBackgroundMaxId, ClientErrorCode.ConfigManager_GetSystemDialogueBackgroundMaxId_00);
-    }
-    export async function getSystemIsUnitHpRoundedUpWhenHealed(version: string): Promise<boolean> {
-        return !!(await getSystemCfg(version)).isUnitHpRoundedUpWhenHealed;
     }
 
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
         const mapping = Helpers.getExisted(CommonConstants.TileTypeMapping.get(baseType), ClientErrorCode.ConfigManager_GetTileType_00);
         return Helpers.getExisted(mapping.get(objectType), ClientErrorCode.ConfigManager_GetTileType_01);
-    }
-
-    export async function getTileTemplateCfgByType(version: string, tileType: TileType): Promise<TileTemplateCfg | null> {
-        return (await getGameConfig(version)).getTileTemplateCfg(tileType);
-    }
-    export async function getTileTemplateCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): Promise<TileTemplateCfg | null> {
-        return await getTileTemplateCfgByType(version, getTileType(baseType, objectType));
-    }
-
-    export async function getTileTypesByCategory(version: string, category: TileCategory): Promise<TileType[] | null> {
-        return (await getGameConfig(version)).getTileTypesByCategory(category);
     }
 
     export function checkIsValidPlayerIndexForTile(playerIndex: number, baseType: TileBaseType, objectType: TileObjectType): boolean {
@@ -191,21 +148,6 @@ namespace ConfigManager {
     export function checkIsValidTurnPhaseCode(turnPhaseCode: Types.TurnPhaseCode): boolean {
         return (turnPhaseCode === Types.TurnPhaseCode.Main)
             || (turnPhaseCode === Types.TurnPhaseCode.WaitBeginTurn);
-    }
-    export async function checkIsValidWeatherType(version: string, weatherType: Types.WeatherType): Promise<boolean> {
-        const cfg = await getGameConfig(version);
-        return cfg ? cfg.checkIsValidWeatherType(weatherType) : false;
-    }
-    export async function checkIsValidTileType(version: string, tileType: Types.TileType): Promise<boolean> {
-        const cfg = await getGameConfig(version);
-        return cfg ? cfg.checkIsValidTileType(tileType) : false;
-    }
-    export async function checkIsValidUnitType(version: string, unitType: UnitType): Promise<boolean> {
-        const cfg = await getGameConfig(version);
-        return cfg ? cfg.checkIsValidUnitType(unitType): false;
-    }
-    export async function checkIsValidUnitTypeSubset(version: string, unitTypeArray: UnitType[]): Promise<boolean> {
-        return (await getGameConfig(version)).checkIsValidUnitTypeSubset(unitTypeArray) ?? false;
     }
     export function checkIsValidCustomCrystalData(data: CommonProto.WarSerialization.ITileCustomCrystalData): boolean {
         return (data.radius != null)
@@ -343,62 +285,6 @@ namespace ConfigManager {
             && (actionStateArray.every(v => checkIsValidUnitActionState(v)));
     }
 
-    export async function getUnitTemplateCfg(version: string, unitType: UnitType): Promise<UnitTemplateCfg> {
-        const cfg = await getGameConfig(version);
-        return Helpers.getExisted(cfg.getUnitTemplateCfg(unitType), ClientErrorCode.ConfigManager_GetUnitTemplateCfg_01);
-    }
-
-    export async function getUnitTypesByCategory(version: string, category: UnitCategory): Promise<UnitType[] | null> {
-        return (await getGameConfig(version)).getUnitTypesByCategory(category);
-    }
-
-    export async function checkIsUnitTypeInCategory(version: string, unitType: UnitType, category: UnitCategory): Promise<boolean> {
-        return (await getGameConfig(version)).checkIsUnitTypeInCategory(unitType, category);
-    }
-    export async function checkIsTileTypeInCategory(version: string, tileType: TileType, category: TileCategory): Promise<boolean> {
-        return (await getGameConfig(version)).checkIsTileTypeInCategory(tileType, category);
-    }
-
-    export async function getUnitMaxPromotion(version: string): Promise<number> {
-        return Helpers.getExisted((await getGameConfig(version))?.getUnitMaxPromotion(), ClientErrorCode.ConfigManager_GetUnitMaxPromotion_00);
-    }
-
-    export async function checkHasSecondaryWeapon(version: string, unitType: UnitType): Promise<boolean> {
-        return (await getGameConfig(version))?.checkHasSecondaryWeapon(unitType) ?? false;
-    }
-
-    export async function getUnitPromotionAttackBonus(version: string, promotion: number): Promise<number> {
-        const cfg = await getGameConfig(version);
-        return cfg.getUnitPromotionAttackBonus(promotion);
-    }
-    export async function getUnitPromotionDefenseBonus(version: string, promotion: number): Promise<number> {
-        const cfg = await getGameConfig(version);
-        return cfg.getUnitPromotionDefenseBonus(promotion);
-    }
-
-    export async function getDamageChartCfgs(version: string, attackerType: UnitType): Promise<{ [armorType: number]: { [weaponType: number]: DamageChartCfg } } | null> {
-        const cfg = await getGameConfig(version);
-        return cfg.getDamageChartCfgs(attackerType);
-    }
-
-    export async function getBuildableTileCfgs(version: string, unitType: UnitType): Promise<{ [srcBaseType: number]: { [srcObjectType: number]: BuildableTileCfg } } | null> {
-        const cfg = await getGameConfig(version);
-        return cfg.getBuildableTileCfgs(unitType);
-    }
-
-    export async function getVisionBonusCfg(version: string, unitType: UnitType): Promise<{ [tileType: number]: VisionBonusCfg } | null> {
-        const cfg = await getGameConfig(version);
-        return cfg.getVisionBonusCfg(unitType);
-    }
-
-    export function getMoveCostCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): Promise<{ [moveType: number]: MoveCostCfg } | null> {
-        return getMoveCostCfgByTileType(version, getTileType(baseType, objectType));
-    }
-    export async function getMoveCostCfgByTileType(version: string, tileType: TileType): Promise<{ [moveType: number]: MoveCostCfg } | null> {
-        const cfg = await getGameConfig(version);
-        return cfg.getMoveCostCfg(tileType);
-    }
-
     export function getTileBaseTypeByTileType(type: TileType): TileBaseType {
         return Helpers.getExisted(CommonConstants.TileTypeToTileBaseType.get(type), ClientErrorCode.ConfigManager_GetTileObjectTypeByTileType_00);
     }
@@ -505,85 +391,12 @@ namespace ConfigManager {
         return `unit_${textForVersion}_${textForType}_${textForDark}_${textForMoving}_${textForSkin}_${textForFrame}`;
     }
 
-    export async function getRankName(version: string, rankScore: number): Promise<string | null> {
-        const cfg = (await getGameConfig(version)).getPlayerRankCfg(rankScore);
-        return cfg ? Helpers.getExisted(Lang.getStringInCurrentLanguage(cfg.nameList)) : null;
-    }
-
-    export async function getCoBasicCfg(version: string, coId: number): Promise<CoBasicCfg | null> {
-        return (await getGameConfig(version)).getCoBasicCfg(coId) ?? null;
-    }
-    export async function checkHasCo(version: string, coId: number): Promise<boolean> {
-        return (await getGameConfig(version)).checkHasCo(coId);
-    }
-    export async function getCoNameAndTierText(version: string, coId: number): Promise<string | null> {
-        return (await getGameConfig(version)).getCoNameAndTierText(coId) ?? null;
-    }
-    export async function getCoType(version: string, coId: number): Promise<Types.CoType | null> {
-        return (await getGameConfig(version)).getCoType(coId) ?? null;
-    }
-
-    export async function getCoSkillCfg(version: string, skillId: number): Promise<CoSkillCfg | null> {
-        return (await getGameConfig(version)).getCoSkillCfg(skillId);
-    }
-    export async function getCoSkillArray(version: string, coId: number, skillType: Types.CoSkillType): Promise<number[] | null> {
-        return (await getGameConfig(version)).getCoSkillArray(coId, skillType);
-    }
-    export async function getCoSkillDescArray(version: string, coId: number, skillType: Types.CoSkillType): Promise<string[] | null> {
-        return (await getGameConfig(version)).getCoSkillDescArray(coId, skillType);
-    }
-
-    export async function getWeatherCfg(version: string, weatherType: Types.WeatherType): Promise<WeatherCfg | null> {
-        return (await getGameConfig(version)).getWeatherCfg(weatherType);
-    }
-    export async function getWeatherTypesByCategory(version: string, category: Types.WeatherCategory): Promise<Types.WeatherType[] | null> {
-        return (await getGameConfig(version)).getWeatherTypesByCategory(category);
-    }
-    export async function checkIsWeatherTypeInCategory(version: string, weatherType: Types.WeatherType, category: Types.WeatherCategory): Promise<boolean> {
-        return (await getGameConfig(version)).checkIsWeatherTypeInCategory(weatherType, category);
-    }
-    export async function getAvailableWeatherTypes(version: string): Promise<Types.WeatherType[]> {
-        return (await getGameConfig(version)).getAvailableWeatherTypes();
-    }
-
-    export async function getEnabledCoArray(version: string): Promise<CoBasicCfg[]> {
-        return (await getGameConfig(version)).getEnabledCoArray();
-    }
-    export async function getCoIdArrayForDialogue(version: string): Promise<number[]> {
-        return (await getGameConfig(version)).getCoIdArrayForDialogue();
-    }
-    export async function getCoTiers(version: string): Promise<number[]> {
-        return (await getGameConfig(version)).getCoTiers();
-    }
-
-    export async function getEnabledCoIdListInTier(version: string, tier: number): Promise<number[]> {
-        return (await getGameConfig(version)).getEnabledCoIdListInTier(tier);
-    }
-    export async function getEnabledCustomCoIdList(version: string): Promise<number[]> {
-        return (await getGameConfig(version)).getEnabledCustomCoIdList();
-    }
-    export async function checkIsOriginCo(version: string, coId: number): Promise<boolean> {
-        return (await getGameConfig(version)).checkIsOriginCo(coId);
-    }
-
-    export async function getCoBustImageSource(version: string, coId: number): Promise<string | null> {
-        return (await getGameConfig(version)).getCoBustImageSource(coId);
-    }
-    export async function getCoHeadImageSource(version: string, coId: number): Promise<string | null> {
-        return (await getGameConfig(version)).getCoHeadImageSource(coId);
-    }
-    export async function getCoEyeImageSource(version: string, coId: number, isAlive: boolean): Promise<string | null> {
-        return (await getGameConfig(version)).getCoEyeImageSource(coId, isAlive);
-    }
     export function getDialogueBackgroundImage(backgroundId: number): string {
         return `resource/assets/texture/background/dialogueBackground${Helpers.getNumText(backgroundId, 4)}.jpg`;
     }
 
     export function getUserAvatarImageSource(avatarId: number): string {
         return `userAvatar${Helpers.getNumText(avatarId, 4)}`;
-    }
-    export async function getAvailableUserAvatarIdArray(version: string): Promise<number[]> {
-        return (await getGameConfig(version)).getAvailableUserAvatarIdArray();
     }
 
     export function checkIsUnitDivingByDefaultWithTemplateCfg(templateCfg: Types.UnitTemplateCfg): boolean {

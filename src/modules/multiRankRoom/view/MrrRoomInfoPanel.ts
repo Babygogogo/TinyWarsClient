@@ -159,12 +159,12 @@ namespace TwnsMrrRoomInfoPanel {
             const userId            = UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList?.find(v => v.userId === userId) : null;
             if (selfPlayerData) {
-                const configVersion = Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion);
+                const gameConfig = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion));
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
-                    gameConfig: configVersion,
+                    gameConfig,
                     playerIndex         : Helpers.getExisted(selfPlayerData.playerIndex),
-                    maxBanCount         : ConfigManager.getSystemMaxBanCoCount(configVersion),
-                    fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                    maxBanCount         : gameConfig.getSystemCfg().maxBanCount,
+                    fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
                     bannedCoIdArray     : [],
                     selfCoId            : null,
                     callbackOnConfirm   : (bannedCoIdSet) => {
@@ -191,6 +191,7 @@ namespace TwnsMrrRoomInfoPanel {
                 } else {
                     const currentCoId = MrrSelfSettingsModel.getCoId();
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                        gameConfig          : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
                         currentCoId,
                         availableCoIdArray  : Helpers.getExisted(MrrSelfSettingsModel.getAvailableCoIdArray()),
                         callbackOnConfirm   : (newCoId) => {
@@ -333,10 +334,11 @@ namespace TwnsMrrRoomInfoPanel {
                     labelBanCo.text     = ``;
                 } else {
                     const coIdArray     = banCoData.bannedCoIdList || [];
+                    const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion));
                     btnBanCo.visible    = false;
                     btnBannedCo.visible = true;
                     labelBanCo.text     = coIdArray.length
-                        ? coIdArray.map(v => ConfigManager.getCoBasicCfg(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion), v).name).join(`\n`)
+                        ? coIdArray.map(v => gameConfig.getCoBasicCfg(v)?.name).join(`\n`)
                         : Lang.getText(LangTextType.B0001);
                 }
             }
@@ -357,7 +359,7 @@ namespace TwnsMrrRoomInfoPanel {
         private async _updateBtnChooseCo(): Promise<void> {
             const roomInfo          = await MrrModel.getRoomInfo(this._getOpenData().roomId);
             this._btnChooseCo.label = roomInfo
-                ? ConfigManager.getCoBasicCfg(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion), Helpers.getExisted(MrrSelfSettingsModel.getCoId())).name
+                ? (await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion))).getCoBasicCfg(Helpers.getExisted(MrrSelfSettingsModel.getCoId()))?.name ?? CommonConstants.ErrorTextForUndefined
                 : ``;
         }
 
@@ -432,10 +434,14 @@ namespace TwnsMrrRoomInfoPanel {
         }
 
         private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const mapId = (await MrrModel.getRoomInfo(this._getOpenData().roomId))?.settingsForMrw?.mapId;
+            const roomInfo  = await MrrModel.getRoomInfo(this._getOpenData().roomId);
+            const mapId     = roomInfo?.settingsForMrw?.mapId;
             return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+                ? null
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    mapInfo     : { mapId },
+                };
         }
 
         private _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {

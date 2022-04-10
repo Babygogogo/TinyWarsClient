@@ -90,7 +90,7 @@ namespace Twns.Config {
             return this.getSystemCfg().energyGrowthMultiplierArray[1];
         }
 
-        public getTileTemplateCfg(tileType: TileType): TileTemplateCfg | null {
+        public getTileTemplateCfgByType(tileType: TileType): TileTemplateCfg | null {
             return this._tileTemplateCfgDict.get(tileType) ?? null;
         }
         public checkIsValidTileType(tileType: TileType): boolean {
@@ -202,6 +202,10 @@ namespace Twns.Config {
             }
 
             return maxCfg;
+        }
+        public getRankName(rankScore: number): string | null {
+            const cfg = this.getPlayerRankCfg(rankScore);
+            return cfg ? Helpers.getExisted(Lang.getStringInCurrentLanguage(cfg.nameList)) : null;
         }
 
         public getAvailableUserAvatarIdArray(): number[] {

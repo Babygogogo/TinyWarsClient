@@ -15,8 +15,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeMfwBasicSettingsPage {
-    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonHelpPanel          = TwnsCommonHelpPanel.CommonHelpPanel;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
@@ -64,8 +62,8 @@ namespace TwnsMeMfwBasicSettingsPage {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnModifyWarRule(): void {
-            MeMfwModel.tickPresetWarRuleId();
+        private async _onTouchedBtnModifyWarRule(): Promise<void> {
+            await MeMfwModel.tickPresetWarRuleId();
             this._updateComponentsForWarRule();
         }
 
@@ -98,7 +96,7 @@ namespace TwnsMeMfwBasicSettingsPage {
         private async _onTouchedBtnBuildings(): Promise<void> {
             const mapRawData = MeMfwModel.getMapRawData();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WarMapBuildingListPanel, {
-                configVersion           : Helpers.getExisted(MeMfwModel.getWarData().settingsForCommon?.configVersion),
+                gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(MeMfwModel.getWarData().settingsForCommon?.configVersion)),
                 tileDataArray           : Helpers.getExisted(mapRawData.tileDataArray),
                 playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
             });

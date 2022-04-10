@@ -33,7 +33,7 @@ namespace Twns.BaseWar {
 
     export abstract class BwWar {
         private readonly _weatherManager        = new TwnsBwWeatherManager.BwWeatherManager();
-        private readonly _turnManager           = new TwnsBwTurnManager.BwTurnManager();
+        private readonly _turnManager           = new BwTurnManager();
         private readonly _executedActionManager = new BaseWar.BwExecutedActionManager();
         private readonly _randomNumberManager   = new TwnsBwRandomNumberManager.BwRandomNumberManager();
         private readonly _drawVoteManager       = new TwnsBwDrawVoteManager.BwDrawVoteManager();
@@ -51,9 +51,9 @@ namespace Twns.BaseWar {
         public abstract getIsNeedExecutedAction(): boolean;
         public abstract getIsNeedSeedRandom(): boolean;
         public abstract getCanCheat(): boolean;
-        public abstract getPlayerManager(): Twns.BaseWar.BwPlayerManager;
-        public abstract getField(): Twns.BaseWar.BwField;
-        public abstract getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager;
+        public abstract getPlayerManager(): BwPlayerManager;
+        public abstract getField(): BwField;
+        public abstract getCommonSettingManager(): BwCommonSettingManager;
         public abstract getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager;
         public abstract getBootRestTime(playerIndex: number): number | null;
         public abstract getSettingsBootTimerParams(): number[];
@@ -103,6 +103,7 @@ namespace Twns.BaseWar {
                 settings                : settingsForCommon,
                 allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(dataForWarEventManager?.warEventFullData),
                 playersCountUnneutral   : WarCommonHelpers.getPlayersCountUnneutral(data.playerManager),
+                gameConfig,
             });
 
             this.getWarEventManager().init(dataForWarEventManager);
@@ -117,13 +118,13 @@ namespace Twns.BaseWar {
             });
 
             const playerManager = this.getPlayerManager();
-            playerManager.init(data.playerManager, configVersion);
+            playerManager.init(data.playerManager, gameConfig);
 
             const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
             this.getTurnManager().init(data.turnManager, playersCountUnneutral);
             this.getField().init({
                 data                : data.field,
-                gameConfig: configVersion,
+                gameConfig,
                 playersCountUnneutral,
             });
 
@@ -297,10 +298,10 @@ namespace Twns.BaseWar {
         public getPlayersCountUnneutral(): number {
             return this.getPlayerManager().getTotalPlayersCount(false);
         }
-        public getPlayer(playerIndex: number): Twns.BaseWar.BwPlayer {
+        public getPlayer(playerIndex: number): BwPlayer {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
-        public getPlayerInTurn(): Twns.BaseWar.BwPlayer {
+        public getPlayerInTurn(): BwPlayer {
             return this.getPlayerManager().getPlayerInTurn();
         }
         public getPlayerIndexInTurn(): number {
@@ -311,16 +312,16 @@ namespace Twns.BaseWar {
             return (player != null) && (player.getUserId() != null);
         }
 
-        public getTurnManager(): TwnsBwTurnManager.BwTurnManager {
+        public getTurnManager(): BwTurnManager {
             return this._turnManager;
         }
         public getFogMap(): TwnsBwFogMap.BwFogMap {
             return this.getField().getFogMap();
         }
-        public getUnitMap(): Twns.BaseWar.BwUnitMap {
+        public getUnitMap(): BwUnitMap {
             return this.getField().getUnitMap();
         }
-        public getTileMap(): Twns.BaseWar.BwTileMap {
+        public getTileMap(): BwTileMap {
             return this.getField().getTileMap();
         }
         public getActionPlanner(): TwnsBwActionPlanner.BwActionPlanner {

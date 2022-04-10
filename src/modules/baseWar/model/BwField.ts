@@ -56,7 +56,7 @@ namespace Twns.BaseWar {
             const tileMap = this.getTileMap();
             tileMap.init({
                 data                : data.tileMap,
-                gameConfig: gameConfig,
+                gameConfig,
                 mapSize,
                 playersCountUnneutral
             });
@@ -64,7 +64,7 @@ namespace Twns.BaseWar {
             const unitMap = this.getUnitMap();
             unitMap.init({
                 data                : data.unitMap,
-                gameConfig: gameConfig,
+                gameConfig,
                 mapSize,
                 playersCountUnneutral
             });

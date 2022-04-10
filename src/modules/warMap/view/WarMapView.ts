@@ -504,7 +504,7 @@ namespace Twns.WarMap {
             const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
-            const config = data.config;
+            const config = data.gameConfig;
             if (config.checkIsUnitTypeInCategory(unitType, Types.UnitCategory.Air)) {
                 this._airLayer.addChild(view);
             } else if (config.checkIsUnitTypeInCategory(unitType, Types.UnitCategory.Ground)) {
@@ -527,7 +527,7 @@ namespace Twns.WarMap {
                 const loaderUnitId = unitData.loaderUnitId;
                 if (loaderUnitId == null) {
                     const data  = Helpers.deepClone(unitData) as Types.WarMapUnitViewData;
-                    data.config = config;
+                    data.gameConfig = config;
                     dataArray.push(data);
                 } else {
                     loaderUnitIdSet.add(loaderUnitId);

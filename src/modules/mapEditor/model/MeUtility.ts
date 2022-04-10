@@ -23,7 +23,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MeUtility {
     import BwTile               = Twns.BaseWar.BwTile;
-    import MeWar                = TwnsMeWar.MeWar;
+    import MeWar                = Twns.MapEditor.MeWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import GridIndex            = Types.GridIndex;
     import TileType             = Types.TileType;
@@ -206,7 +206,7 @@ namespace MeUtility {
 
         return {
             settingsForCommon   : {
-                configVersion   : ConfigManager.getLatestConfigVersion(),
+                configVersion   : Twns.Config.ConfigManager.getLatestConfigVersion(),
                 presetWarRuleId : warRule.ruleId,
                 warRule,
             },
@@ -542,21 +542,21 @@ namespace MeUtility {
         const objectType    = tile1.getObjectType();
         const decoratorType = tile1.getDecoratorType();
         return (baseType === tile2.getBaseType())
-            && (ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType) === tile2.getObjectType())
+            && (Twns.Config.ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType) === tile2.getObjectType())
             && (decoratorType == tile2.getDecoratorType())
-            && (ConfigManager.checkIsTileBaseSymmetrical({
+            && (Twns.Config.ConfigManager.checkIsTileBaseSymmetrical({
                 baseType,
                 shapeId1    : tile1.getBaseShapeId(),
                 shapeId2    : tile2.getBaseShapeId(),
                 symmetryType,
             }))
-            && (ConfigManager.checkIsTileObjectSymmetrical({
+            && (Twns.Config.ConfigManager.checkIsTileObjectSymmetrical({
                 objectType,
                 shapeId1    : tile1.getObjectShapeId(),
                 shapeId2    : tile2.getObjectShapeId(),
                 symmetryType,
             }))
-            && (ConfigManager.checkIsTileDecoratorSymmetrical({
+            && (Twns.Config.ConfigManager.checkIsTileDecoratorSymmetrical({
                 decoratorType,
                 shapeId1    : tile1.getDecoratorShapeId(),
                 shapeId2    : tile2.getDecoratorShapeId(),
@@ -783,8 +783,8 @@ namespace MeUtility {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function getErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-        const configVersion = ConfigManager.getLatestConfigVersion();
-        if (configVersion == null) {
+        const gameConfig = await Twns.Config.ConfigManager.getLatestGameConfig();
+        if (gameConfig == null) {
             return ClientErrorCode.MapRawDataValidation00;
         }
 
@@ -812,18 +812,18 @@ namespace MeUtility {
             ruleList                : mapRawData.warRuleArray,
             playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
             allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(mapRawData.warEventFullData),
-            configVersion,
+            gameConfig,
         });
         if (warRuleError) {
             return warRuleError;
         }
 
-        const warEventError = WarEventHelper.getErrorCodeForWarEventFullData(mapRawData);
+        const warEventError = WarEventHelper.getErrorCodeForWarEventFullData(mapRawData, gameConfig);
         if (warEventError) {
             return warEventError;
         }
 
-        return await new Twns.TestWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData);
+        return await new Twns.TestWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData, gameConfig);
     }
     function getErrorCodeForMapDesigner(mapDesigner: Types.Undefinable<string>): ClientErrorCode {
         if ((mapDesigner == null)                                       ||

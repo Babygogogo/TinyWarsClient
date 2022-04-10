@@ -33,7 +33,7 @@ namespace Twns.WarEvent {
     import LangTextType             = TwnsLangTextType.LangTextType;
 
     export type OpenDataForWeActionModifyPanel1 = {
-        war         : TwnsMeWar.MeWar;
+        war         : Twns.MapEditor.MeWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
@@ -150,7 +150,7 @@ namespace Twns.WarEvent {
     }
 
     type DataForUnitRenderer = {
-        war             : TwnsMeWar.MeWar;
+        war             : Twns.MapEditor.MeWar;
         action          : IWarEventAction;
         dataForAddUnit  : CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit;
     };
@@ -605,7 +605,7 @@ namespace Twns.WarEvent {
 
     function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
         dataForAddUnit  : CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit;
-        war             : TwnsMeWar.MeWar;
+        war             : Twns.MapEditor.MeWar;
     }): string | null {
         if (dataForAddUnit.canBeBlockedByUnit == null) {
             return Lang.getText(LangTextType.A0192);

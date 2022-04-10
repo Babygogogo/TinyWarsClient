@@ -70,10 +70,10 @@ namespace ScrCreateModel {
     }
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
-        const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+        const configVersion = Helpers.getExisted(Twns.Config.ConfigManager.getLatestConfigVersion());
         setMapId(mapId);
         setConfigVersion(configVersion);
-        setGameConfig(await ConfigManager.getGameConfig(configVersion));
+        setGameConfig(await Twns.Config.ConfigManager.getGameConfig(configVersion));
         setSaveSlotIndex(SpmModel.getAvailableIndex());
         setSlotComment(null);
         setPlayerInfoList([]);
@@ -92,10 +92,6 @@ namespace ScrCreateModel {
     function setConfigVersion(version: string): void {
         getSettingsForCommon().configVersion = version;
     }
-    export function getConfigVersion(): string {
-        return Helpers.getExisted(getSettingsForCommon().configVersion);
-    }
-
     function setGameConfig(config: GameConfig): void {
         _gameConfig = config;
     }

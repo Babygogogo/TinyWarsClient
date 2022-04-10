@@ -120,7 +120,7 @@ namespace TwnsSrrCreatePlayerInfoPage {
             const coId          = playerData ? playerData.coId : null;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    configVersion   : SrrCreateModel.getConfigVersion(),
+                    gameConfig      : SrrCreateModel.getGameConfig(),
                     coId,
                 });
             }
@@ -139,11 +139,12 @@ namespace TwnsSrrCreatePlayerInfoPage {
             const playerIndex   = this._getData().playerIndex;
             const currentCoId   = SrrCreateModel.getCoId(playerIndex);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                gameConfig          : SrrCreateModel.getGameConfig(),
                 currentCoId,
                 availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : SrrCreateModel.getWarRule(),
                     playerIndex,
-                    gameConfig      : await ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
+                    gameConfig      : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
@@ -187,7 +188,7 @@ namespace TwnsSrrCreatePlayerInfoPage {
                 : Lang.getText(LangTextType.B0031);
 
             const coId                  = Helpers.getExisted(playerData.coId);
-            const gameConfig            = await ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
             const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
             this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;

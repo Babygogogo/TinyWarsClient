@@ -102,7 +102,7 @@ namespace TwnsLobbyTopPanel {
         }
 
         private _updateImgAvatar(): void {
-            this._imgAvatar.source = ConfigManager.getUserAvatarImageSource(UserModel.getSelfAvatarId() ?? 1);
+            this._imgAvatar.source = Twns.Config.ConfigManager.getUserAvatarImageSource(UserModel.getSelfAvatarId() ?? 1);
         }
     }
 }

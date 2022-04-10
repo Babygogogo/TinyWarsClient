@@ -246,11 +246,15 @@ namespace TwnsCcrMyRoomListPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const roomId    = CcrJoinModel.getJoinedPreviewingRoomId();
-            const mapId     = roomId == null ? null : (await CcrModel.getRoomStaticInfo(roomId))?.settingsForCcw?.mapId;
+            const roomId            = CcrJoinModel.getJoinedPreviewingRoomId();
+            const roomStaticInfo    = roomId == null ? null : await CcrModel.getRoomStaticInfo(roomId);
+            const mapId             = roomStaticInfo?.settingsForCcw?.mapId;
             return mapId == null
                 ? null
-                : { mapInfo: { mapId } };
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomStaticInfo?.settingsForCommon?.configVersion)),
+                    mapInfo     : { mapId },
+                };
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {

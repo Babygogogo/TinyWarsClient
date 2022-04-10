@@ -29,7 +29,7 @@ namespace Twns.TestWar {
     export class TwWar extends BwWar {
         private readonly _playerManager         = new TwPlayerManager();
         private readonly _field                 = new TwField();
-        private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
+        private readonly _commonSettingManager  = new Twns.BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BwWarEventManager();
 
         public getCanCheat(): boolean {
@@ -41,7 +41,7 @@ namespace Twns.TestWar {
         public getField(): TwField {
             return this._field;
         }
-        public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
+        public getCommonSettingManager(): Twns.BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
         public getWarEventManager(): BwWarEventManager {
@@ -141,7 +141,7 @@ namespace Twns.TestWar {
             this._baseInit(data, gameConfig);
         }
         public async initByMapRawData(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<void> {
-            await this.init(await _createDataForCreateTwWar(mapRawData), gameConfig);
+            await this.init(await _createDataForCreateTwWar(mapRawData, gameConfig), gameConfig);
         }
 
         public async getErrorCodeForInit(data: ISerialWar, gameConfig: GameConfig): Promise<ClientErrorCode> {
@@ -180,14 +180,14 @@ namespace Twns.TestWar {
         }
     }
 
-    async function _createDataForCreateTwWar(mapRawData: IMapRawData): Promise<ISerialWar> {
-        const dataForPlayerManager  = await _createInitialPlayerManagerDataForTw(mapRawData);
+    async function _createDataForCreateTwWar(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<ISerialWar> {
+        const dataForPlayerManager  = await _createInitialPlayerManagerDataForTw(mapRawData, gameConfig);
         const fieldData             = await _createInitialFieldData(mapRawData);
         const warRule               = (mapRawData.warRuleArray || [])[0];
         const seedRandomState       = new Math.seedrandom("" + Math.random(), { state: true }).state();
         return {
             settingsForCommon       : {
-                configVersion       : ConfigManager.getLatestConfigVersion(),
+                configVersion       : Twns.Config.ConfigManager.getLatestConfigVersion(),
                 warRule,
                 presetWarRuleId     : warRule.ruleId,
             },
@@ -221,8 +221,7 @@ namespace Twns.TestWar {
         };
     }
 
-    async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData): Promise<WarSerialization.ISerialPlayerManager> {
-        const configVersion         = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+    async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<WarSerialization.ISerialPlayerManager> {
         const playersCountUnneutral = mapRawData.playersCountUnneutral;
         if ((playersCountUnneutral == null) || (playersCountUnneutral < 2)) {
             throw Helpers.newError(`Invalid playersCountUnneutral: ${playersCountUnneutral}`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_00);
@@ -242,7 +241,7 @@ namespace Twns.TestWar {
         const warRule           = (mapRawData.warRuleArray || [])[0];
         const ruleForPlayers    = Helpers.getExisted(warRule.ruleForPlayers);
         const ruleAvailability  = Helpers.getExisted(warRule.ruleAvailability);
-        if ((WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability })) ||
+        if ((WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, gameConfig, playersCountUnneutral, ruleAvailability })) ||
             ((ruleForPlayers.playerRuleDataArray || []).length !== playersCountUnneutral)
         ) {
             throw Helpers.newError(`Invalid ruleForPlayers.`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_01);

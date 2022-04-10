@@ -10,6 +10,7 @@ namespace Types {
     export interface SystemCfg extends CommonProto.Config.ISystemCfg {
         energyGrowthMultiplierArray : number[];
         dialogueBackgroundMaxId     : number;
+        maxBanCount                 : number;
     }
     export interface TileCategoryCfg extends CommonProto.Config.ITileCategoryCfg {
         category: TileCategory;
@@ -190,7 +191,7 @@ namespace Types {
         skinId?             : number;
         hasLoadedUnit?      : boolean;
         coUsingSkillType?   : CoSkillType;
-        config              : Twns.Config.GameConfig;
+        gameConfig              : Twns.Config.GameConfig;
     }
 
     export interface WarMapTileViewData extends CommonProto.WarSerialization.ISerialTile {

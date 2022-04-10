@@ -116,7 +116,7 @@ namespace TwnsBwActionPlanner {
         protected _getTileMap(): Twns.BaseWar.BwTileMap {
             return this._getWar().getTileMap();
         }
-        protected _getTurnManager(): TwnsBwTurnManager.BwTurnManager {
+        protected _getTurnManager(): Twns.BaseWar.BwTurnManager {
             return this._getWar().getTurnManager();
         }
         public getCursor(): TwnsBwCursor.BwCursor {

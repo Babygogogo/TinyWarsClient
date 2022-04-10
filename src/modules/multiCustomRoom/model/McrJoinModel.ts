@@ -19,16 +19,17 @@ namespace McrJoinModel {
     let _targetRoomId               : number | null = null;
     let _joinedPreviewingRoomId     : number | null = null;
 
-    export function getFastJoinData(roomStaticInfo: IMcrRoomStaticInfo, roomPlayerInfo: IMcrRoomPlayerInfo): DataForJoinRoom | null {
+    export async function getFastJoinData(roomStaticInfo: IMcrRoomStaticInfo, roomPlayerInfo: IMcrRoomPlayerInfo): Promise<DataForJoinRoom | null> {
         const playerIndex       = generateAvailablePlayerIndexList(roomStaticInfo, roomPlayerInfo)[0];
         const unitAndTileSkinId = generateAvailableSkinIdList(roomPlayerInfo)[0];
         if ((playerIndex == null) || (unitAndTileSkinId == null)) {
             return null;
         } else {
+            const settingsForCommon = Helpers.getExisted(roomStaticInfo.settingsForCommon);
             return {
                 roomId          : roomStaticInfo.roomId,
                 isReady         : false,
-                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(Helpers.getExisted(roomStaticInfo.settingsForCommon), playerIndex),
+                coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(Helpers.getExisted(settingsForCommon.warRule), playerIndex, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion))),
                 playerIndex,
                 unitAndTileSkinId,
             };

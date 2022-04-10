@@ -15,6 +15,7 @@ namespace McrCreateModel {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import BootTimerType    = Types.BootTimerType;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import GameConfig       = Twns.Config.GameConfig;
 
     const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day
@@ -36,6 +37,7 @@ namespace McrCreateModel {
         selfPlayerIndex         : CommonConstants.WarFirstPlayerIndex,
         selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
     };
+    let _gameConfig: GameConfig | null = null;
 
     export async function getMapRawData(): Promise<CommonProto.Map.IMapRawData> {
         return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
@@ -43,7 +45,8 @@ namespace McrCreateModel {
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+        setConfigVersion(Helpers.getExisted(Twns.Config.ConfigManager.getLatestConfigVersion()));
+        setGameConfig(await Twns.Config.ConfigManager.getLatestGameConfig());
         setWarName("");
         setWarPassword("");
         setWarComment("");
@@ -76,11 +79,14 @@ namespace McrCreateModel {
         getSettingsForMcw().mapId = mapId;
     }
 
-    export function getConfigVersion(): string {
-        return Helpers.getExisted(getSettingsForCommon().configVersion);
-    }
     function setConfigVersion(version: string): void {
         getSettingsForCommon().configVersion = version;
+    }
+    export function getGameConfig(): GameConfig {
+        return Helpers.getExisted(_gameConfig);
+    }
+    function setGameConfig(config: GameConfig): void {
+        _gameConfig = config;
     }
 
     export async function resetDataByWarRuleId(ruleId: number | null): Promise<void> {
@@ -98,7 +104,7 @@ namespace McrCreateModel {
         const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
             warRule,
             playerIndex     : getSelfPlayerIndex(),
-            gameConfig   : getConfigVersion(),
+            gameConfig      : getGameConfig(),
         });
         if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
             setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
@@ -114,7 +120,7 @@ namespace McrCreateModel {
         const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
             warRule,
             playerIndex     : getSelfPlayerIndex(),
-            gameConfig   : getConfigVersion(),
+            gameConfig      : getGameConfig(),
         });
         if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
             setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));
@@ -227,7 +233,7 @@ namespace McrCreateModel {
     }
 
     export function tickDefaultWeatherType(): void {
-        WarRuleHelpers.tickDefaultWeatherType(getWarRule(), getConfigVersion());
+        WarRuleHelpers.tickDefaultWeatherType(getWarRule(), getGameConfig());
     }
 
     export function setBootTimerParams(params: number[]): void {

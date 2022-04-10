@@ -102,7 +102,7 @@ namespace TwnsMfrCreatePlayerInfoPage {
             const coId              = initialWarData.playerManager?.players?.find(v => v.playerIndex === playerIndex)?.coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    configVersion   : Helpers.getExisted(initialWarData.settingsForCommon?.configVersion),
+                    gameConfig   : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(initialWarData.settingsForCommon?.configVersion)),
                     coId,
                 });
             }
@@ -135,10 +135,10 @@ namespace TwnsMfrCreatePlayerInfoPage {
             this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoHeadFrame(playerData.unitAndTileSkinId);
 
             const coId                  = Helpers.getExisted(playerData.coId);
-            const configVersion         = Helpers.getExisted(settingsForCommon.configVersion);
-            const coCfg                 = ConfigManager.getCoBasicCfg(Helpers.getExisted(configVersion), coId);
+            const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
-            this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(configVersion, coId);
+            this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
             const userInfo              = MfrCreateModel.getSelfPlayerIndex() === playerIndex ? await UserModel.getUserPublicInfo(Helpers.getExisted(UserModel.getSelfUserId())) : null;

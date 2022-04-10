@@ -678,7 +678,7 @@ namespace TwnsChatPanel {
 
             const userInfo = Helpers.getExisted(await UserModel.getUserPublicInfo(fromUserId));
             if ((this._getIsOpening()) && (data === this._getData())) {
-                this._imgAvatar.source  = ConfigManager.getUserAvatarImageSource(userInfo.avatarId ?? 1);
+                this._imgAvatar.source  = Twns.Config.ConfigManager.getUserAvatarImageSource(userInfo.avatarId ?? 1);
                 this._labelName.text    = `${userInfo.nickname || `???`}    (${Helpers.getTimestampShortText(Helpers.getExisted(message.timestamp))})`;
             }
         }

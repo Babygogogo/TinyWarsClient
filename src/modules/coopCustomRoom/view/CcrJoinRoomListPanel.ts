@@ -149,8 +149,8 @@ namespace TwnsCcrJoinRoomListPanel {
             ]);
             if ((roomStaticInfo != null) && (roomPlayerInfo != null)) {
                 const settingsForCcw    = Helpers.getExisted(roomStaticInfo.settingsForCcw);
-                const callback          = () => {
-                    const joinData = CcrJoinModel.getFastJoinData(roomStaticInfo, roomPlayerInfo);
+                const callback          = async () => {
+                    const joinData = await CcrJoinModel.getFastJoinData(roomStaticInfo, roomPlayerInfo);
                     if (joinData) {
                         CcrProxy.reqCcrJoinRoom(joinData);
                     } else {
@@ -291,11 +291,15 @@ namespace TwnsCcrJoinRoomListPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const roomId    = CcrJoinModel.getTargetRoomId();
-            const mapId     = roomId == null ? null : (await CcrModel.getRoomStaticInfo(roomId))?.settingsForCcw?.mapId;
+            const roomId            = CcrJoinModel.getTargetRoomId();
+            const roomStaticInfo    = roomId == null ? null : await CcrModel.getRoomStaticInfo(roomId);
+            const mapId             = roomStaticInfo?.settingsForCcw?.mapId;
             return mapId == null
                 ? null
-                : { mapInfo: { mapId } };
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomStaticInfo?.settingsForCommon?.configVersion)),
+                    mapInfo     : { mapId },
+                };
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {

@@ -102,14 +102,14 @@ namespace TwnsMeAvailableCoPanel {
             }
         }
 
-        private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
+        private async _onTouchedCoTierRenderer(e: egret.TouchEvent): Promise<void> {
             if (!this._getOpenData().isReviewing) {
                 const renderer      = e.currentTarget as RendererForCoTier;
                 const bannedCoIdSet = this._bannedCoIdSet;
-                const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+                const gameConfig    = await Twns.Config.ConfigManager.getLatestGameConfig();
                 const coIdList      = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getEnabledCustomCoIdList(configVersion)
-                    : ConfigManager.getEnabledCoIdListInTier(configVersion, Helpers.getExisted(renderer.getCoTier()));
+                    ? gameConfig.getEnabledCustomCoIdList()
+                    : gameConfig.getEnabledCoIdListInTier(Helpers.getExisted(renderer.getCoTier()));
 
                 if (renderer.getState() === CoTierState.Unavailable) {
                     for (const coId of coIdList) {
@@ -156,8 +156,8 @@ namespace TwnsMeAvailableCoPanel {
             this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._getOpenData().playerRule.playerIndex})`;
         }
 
-        private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))) {
+        private async _initGroupCoTiers(): Promise<void> {
+            for (const tier of (await Twns.Config.ConfigManager.getLatestGameConfig()).getCoTiers()) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -181,13 +181,13 @@ namespace TwnsMeAvailableCoPanel {
             this._renderersForCoTiers.length = 0;
         }
 
-        private _updateGroupCoTiers(): void {
+        private async _updateGroupCoTiers(): Promise<void> {
             const bannedCoIdSet = this._bannedCoIdSet;
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const gameConfig    = await Twns.Config.ConfigManager.getLatestGameConfig();
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getEnabledCustomCoIdList(configVersion)
-                    : ConfigManager.getEnabledCoIdListInTier(configVersion, Helpers.getExisted(renderer.getCoTier()));
+                    ? gameConfig.getEnabledCustomCoIdList()
+                    : gameConfig.getEnabledCoIdListInTier(Helpers.getExisted(renderer.getCoTier()));
 
                 if (includedCoIdList.every(coId => bannedCoIdSet.has(coId))) {
                     renderer.setState(CoTierState.Unavailable);
@@ -199,8 +199,8 @@ namespace TwnsMeAvailableCoPanel {
             }
         }
 
-        private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getEnabledCoArray(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))) {
+        private async _initGroupCoNames(): Promise<void> {
+            for (const cfg of (await Twns.Config.ConfigManager.getLatestGameConfig()).getEnabledCoArray()) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -292,11 +292,11 @@ namespace TwnsMeAvailableCoPanel {
             this.skinName = "resource/skins/component/checkBox/CheckBox1.exml";
         }
 
-        public setCoId(coId: number): void {
+        public async setCoId(coId: number): Promise<void> {
             this._coId = coId;
 
-            const cfg               = ConfigManager.getCoBasicCfg(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId);
-            this._labelName.text    = `${cfg.name} (T${cfg.tier})`;
+            const cfg               = (await Twns.Config.ConfigManager.getLatestGameConfig()).getCoBasicCfg(coId);
+            this._labelName.text    = `${cfg?.name}`;
         }
         public getCoId(): number | null {
             return this._coId;

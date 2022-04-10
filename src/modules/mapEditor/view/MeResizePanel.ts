@@ -125,10 +125,13 @@ namespace TwnsMeResizePanel {
 
             const tempData = MeUtility.resizeMap(war.serializeForMap(), width + Math.max(0, deltaLeft) + Math.max(0, deltaRight), height + Math.max(0, deltaTop) + Math.max(0, deltaBottom));
             war.stopRunning();
-            await war.initWithMapEditorData({
-                mapRawData  : MeUtility.resizeMap(MeUtility.addOffset(tempData, deltaLeft, deltaTop), newWidth, newHeight),
-                slotIndex   : war.getMapSlotIndex(),
-            });
+            await war.initWithMapEditorData(
+                {
+                    mapRawData  : MeUtility.resizeMap(MeUtility.addOffset(tempData, deltaLeft, deltaTop), newWidth, newHeight),
+                    slotIndex   : war.getMapSlotIndex(),
+                },
+                war.getGameConfig(),
+            );
             war.setIsMapModified(true);
             war.startRunning()
                 .startRunningView();

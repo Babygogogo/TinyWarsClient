@@ -158,6 +158,7 @@ namespace TwnsWeConditionModifyPanel40 {
         private _onTouchedBtnUnitType(): void {
             const condition = this._getCondition();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseUnitTypePanel, {
+                gameConfig              : this._getOpenData().war.getGameConfig(),
                 currentUnitTypeArray    : condition.unitTypeArray ?? [],
                 callbackOnConfirm       : unitTypeArray => {
                     condition.unitTypeArray = unitTypeArray;

@@ -179,7 +179,7 @@ namespace TwnsMmTagListPanel {
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1;});
-            this._zoomMap.showMapByMapData(mapRawData);
+            this._zoomMap.showMapByMapData(mapRawData, await Twns.Config.ConfigManager.getLatestGameConfig());
         }
     }
 

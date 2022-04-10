@@ -148,8 +148,8 @@ namespace TwnsMcrJoinRoomListPanel {
             const roomPlayerInfo = await McrModel.getRoomPlayerInfo(roomId);
             if ((roomStaticInfo) && (roomPlayerInfo)) {
                 const settingsForMcw    = Helpers.getExisted(roomStaticInfo.settingsForMcw);
-                const callback          = () => {
-                    const joinData = McrJoinModel.getFastJoinData(roomStaticInfo, roomPlayerInfo);
+                const callback          = async () => {
+                    const joinData = await McrJoinModel.getFastJoinData(roomStaticInfo, roomPlayerInfo);
                     if (joinData) {
                         McrProxy.reqMcrJoinRoom(joinData);
                     } else {
@@ -288,10 +288,14 @@ namespace TwnsMcrJoinRoomListPanel {
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForWarCommonMapInfoPage> {
             const roomId    = McrJoinModel.getTargetRoomId();
-            const mapId     = roomId == null ? null : (await McrModel.getRoomStaticInfo(roomId))?.settingsForMcw?.mapId;
+            const roomInfo  = roomId == null ? null : await McrModel.getRoomStaticInfo(roomId);
+            const mapId     = roomInfo?.settingsForMcw?.mapId;
             return mapId == null
                 ? null
-                : { mapInfo : { mapId, }, };
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    mapInfo     : { mapId, },
+                };
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {

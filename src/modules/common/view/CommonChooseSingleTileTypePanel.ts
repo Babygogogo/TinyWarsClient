@@ -173,8 +173,8 @@ namespace TwnsCommonChooseSingleTileTypePanel {
         private _updateTileView(): void {
             const data          = this._getData();
             const tileType      = data.newTileType;
-            const objectType    = ConfigManager.getTileObjectTypeByTileType(tileType);
-            const baseType      = ConfigManager.getTileBaseTypeByTileType(tileType);
+            const objectType    = Twns.Config.ConfigManager.getTileObjectTypeByTileType(tileType);
+            const baseType      = Twns.Config.ConfigManager.getTileBaseTypeByTileType(tileType);
             const playerIndex   = data.playerIndex;
 
             this._tileView.init({
@@ -184,7 +184,7 @@ namespace TwnsCommonChooseSingleTileTypePanel {
                 tileDecoratorShapeId: null,
                 tileObjectType      : objectType,
                 tileObjectShapeId   : 0,
-                playerIndex         : ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                playerIndex         : Twns.Config.ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType) ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
             });
         }
     }

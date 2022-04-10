@@ -197,7 +197,7 @@ namespace TwnsMcrCreateMapListPanel {
             } else {
                 zoomMap.visible     = true;
                 uiMapInfo.visible   = true;
-                zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
+                zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)), await Twns.Config.ConfigManager.getLatestGameConfig());
                 uiMapInfo.setData({
                     mapInfo: {
                         mapId,

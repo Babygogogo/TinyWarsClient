@@ -53,7 +53,7 @@ namespace SpwModel {
 
         const data  = Helpers.deepClone(warData);
         const war   = createWarByWarData(data);
-        await war.init(data, await ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
+        await war.init(data, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);

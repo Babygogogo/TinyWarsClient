@@ -194,7 +194,7 @@ namespace TwnsBwFogMap {
                 return false;
             } else {
                 const war               = this._getWar();
-                const weatherFogType    = ConfigManager.getWeatherCfg(war.getGameConfig(), war.getWeatherManager().getCurrentWeatherType()).fog;
+                const weatherFogType    = war.getGameConfig().getWeatherCfg(war.getWeatherManager().getCurrentWeatherType())?.fog;
                 if (weatherFogType === Types.WeatherFogType.Fog) {
                     return true;
                 } else if (weatherFogType === Types.WeatherFogType.NoFog) {

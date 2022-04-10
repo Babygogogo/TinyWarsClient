@@ -76,7 +76,7 @@ namespace Twns.WarMap {
 
             this._imgUnit.source = CommonModel.getCachedUnitImageSource({
                 version     : UserModel.getSelfSettingsTextureVersion(),
-                skinId      : data.skinId || ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex)),
+                skinId      : data.skinId || Twns.Config.ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex)),
                 unitType    : Helpers.getExisted(data.unitType),
                 isMoving    : false,
                 isDark      : this._isDark,
@@ -232,11 +232,11 @@ namespace Twns.WarMap {
 
         private _getUnitTemplateCfg(): Types.UnitTemplateCfg {
             const data = Helpers.getExisted(this.getUnitData());
-            return Helpers.getExisted(data.config.getUnitTemplateCfg(Helpers.getExisted(data.unitType)));
+            return Helpers.getExisted(data.gameConfig.getUnitTemplateCfg(Helpers.getExisted(data.unitType)));
         }
         private _getSkinId(): number {
             const data = this.getUnitData();
-            return data?.skinId ?? ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data?.playerIndex));
+            return data?.skinId ?? Twns.Config.ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data?.playerIndex));
         }
     }
 

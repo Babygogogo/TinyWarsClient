@@ -81,8 +81,9 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             this._labelAvailableCoTitle.text    = `${Lang.getText(LangTextType.B0238)} (P${this._getOpenData().playerRule.playerIndex})`;
         }
 
-        private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))) {
+        private async _initGroupCoTiers(): Promise<void> {
+            const gameConfig = await Twns.Config.ConfigManager.getLatestGameConfig();
+            for (const tier of gameConfig.getCoTiers()) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -104,13 +105,13 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             this._renderersForCoTiers.length = 0;
         }
 
-        private _updateGroupCoTiers(): void {
+        private async _updateGroupCoTiers(): Promise<void> {
             const bannedCoIdSet = this._bannedCoIdSet;
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const gameConfig    = await Twns.Config.ConfigManager.getLatestGameConfig();
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getEnabledCustomCoIdList(configVersion)
-                    : ConfigManager.getEnabledCoIdListInTier(configVersion, renderer.getCoTier());
+                    ? gameConfig.getEnabledCustomCoIdList()
+                    : gameConfig.getEnabledCoIdListInTier(renderer.getCoTier());
 
                 if (includedCoIdList.every(coId => !bannedCoIdSet.has(coId))) {
                     renderer.setState(CoTierState.AllAvailable);
@@ -122,8 +123,9 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             }
         }
 
-        private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getEnabledCoArray(Helpers.getExisted(ConfigManager.getLatestConfigVersion()))) {
+        private async _initGroupCoNames(): Promise<void> {
+            const gameConfig = await Twns.Config.ConfigManager.getLatestGameConfig();
+            for (const cfg of gameConfig.getEnabledCoArray()) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -214,10 +216,10 @@ namespace TwnsMmWarRuleAvailableCoPanel {
             this.skinName = "resource/skins/component/checkBox/CheckBox1.exml";
         }
 
-        public setCoId(coId: number): void {
+        public async setCoId(coId: number): Promise<void> {
             this._coId = coId;
 
-            this._labelName.text = `${ConfigManager.getCoBasicCfg(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId).name}`;
+            this._labelName.text = `${(await Twns.Config.ConfigManager.getLatestGameConfig()).getCoBasicCfg(coId)?.name}`;
         }
         public getCoId(): number {
             return Helpers.getExisted(this._coId);

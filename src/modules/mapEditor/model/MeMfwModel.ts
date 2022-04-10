@@ -72,7 +72,7 @@ namespace MeMfwModel {
         ruleAvailability.canMcw = !hasAiPlayer;
     }
 
-    function resetDataByPresetWarRuleId(ruleId: number | null): void {
+    async function resetDataByPresetWarRuleId(ruleId: number | null): Promise<void> {
         const settingsForCommon = Helpers.getExisted(getWarData().settingsForCommon);
         const mapRawData        = getMapRawData();
         const playersCount      = Helpers.getExisted(mapRawData.playersCountUnneutral);
@@ -84,8 +84,10 @@ namespace MeMfwModel {
         }
 
         setPresetWarRuleId(ruleId);
+
+        const gameConfig = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
-            setCoId(playerIndex, WarRuleHelpers.getRandomCoIdWithSettingsForCommon(settingsForCommon, playerIndex));
+            setCoId(playerIndex, WarRuleHelpers.getRandomCoIdWithSettingsForCommon(settingsForCommon.warRule, playerIndex, gameConfig));
         }
     }
     export function setPresetWarRuleId(ruleId: number | null): void {
@@ -95,12 +97,12 @@ namespace MeMfwModel {
     export function getPresetWarRuleId(): number | null {
         return getWarData().settingsForCommon?.presetWarRuleId ?? null;
     }
-    export function tickPresetWarRuleId(): void {
+    export async function tickPresetWarRuleId(): Promise<void> {
         const currWarRuleId = getPresetWarRuleId();
         if (currWarRuleId == null) {
-            resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
+            await resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
         } else {
-            resetDataByPresetWarRuleId((currWarRuleId + 1) % Helpers.getExisted(getMapRawData().warRuleArray).length);
+            await resetDataByPresetWarRuleId((currWarRuleId + 1) % Helpers.getExisted(getMapRawData().warRuleArray).length);
         }
     }
 

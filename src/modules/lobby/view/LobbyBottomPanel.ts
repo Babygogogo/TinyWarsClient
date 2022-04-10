@@ -74,9 +74,9 @@ namespace TwnsLobbyBottomPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.MeMapListPanel, void 0);
         }
 
-        private _onTouchedBtnGameData(): void {
+        private async _onTouchedBtnGameData(): Promise<void> {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonDamageChartPanel, {
-                configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+                gameConfig: await Twns.Config.ConfigManager.getLatestGameConfig(),
             });
         }
 

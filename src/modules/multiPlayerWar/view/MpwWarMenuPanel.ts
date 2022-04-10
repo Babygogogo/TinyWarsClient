@@ -204,7 +204,7 @@ namespace TwnsMpwWarMenuPanel {
             }
 
             const warData   = war.serializeForCreateMfr();
-            const errorCode = await (new Twns.TestWar.TwWar()).getErrorCodeForInit(warData);
+            const errorCode = await (new Twns.TestWar.TwWar()).getErrorCodeForInit(warData, war.getGameConfig());
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
                 return;

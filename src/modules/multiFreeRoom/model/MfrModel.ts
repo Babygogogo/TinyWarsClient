@@ -150,7 +150,7 @@ namespace MfrModel {
         }
 
         return {
-            configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
+            gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral,
             roomOwnerPlayerIndex    : Helpers.getExisted(roomPlayerInfo.ownerPlayerIndex),
             callbackOnExitRoom      : () => MfrProxy.reqMfrExitRoom(roomId),
@@ -261,9 +261,9 @@ namespace MfrModel {
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForMfw?.initialWarData?.settingsForCommon);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         return {
-            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+            gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             warRule,
-            warType         : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MfwFog : Types.WarType.MfwStd,
+            warType     : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MfwFog : Types.WarType.MfwStd,
         };
     }
 }

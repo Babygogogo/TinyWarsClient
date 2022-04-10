@@ -19,6 +19,7 @@
 namespace TwnsCommonCoListPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
+    import GameConfig           = Twns.Config.GameConfig;
 
     export type OpenData = {
         war     : Twns.BaseWar.BwWar;
@@ -96,7 +97,7 @@ namespace TwnsCommonCoListPanel {
 
         private _initGroupCoNames(): void {
             const war               = this._getOpenData().war;
-            const configVersion     = war.getGameConfig();
+            const gameConfig        = war.getGameConfig();
             const rendererArray     = this._renderersForCoNames;
             rendererArray.length    = 0;
 
@@ -107,7 +108,7 @@ namespace TwnsCommonCoListPanel {
 
                 const renderer = new RendererForCoName();
                 renderer.setData({
-                    configVersion,
+                    gameConfig,
                     coId        : player.getCoId(),
                     energy      : player.getCoCurrentEnergy(),
                     playerIndex : player.getPlayerIndex(),
@@ -180,7 +181,7 @@ namespace TwnsCommonCoListPanel {
         private readonly _imgSelected!      : TwnsUiImage.UiImage;
         private readonly _labelName!        : TwnsUiLabel.UiLabel;
 
-        private _configVersion  : string | null = null;
+        private _gameConfig     : GameConfig | null = null;
         private _coId           : number | null = null;
         private _energy         : number | null = null;
         private _playerIndex    : number | null = null;
@@ -196,13 +197,13 @@ namespace TwnsCommonCoListPanel {
             this._updateView();
         }
 
-        public setData({ configVersion, coId, energy, playerIndex }: {
-            configVersion   : string;
+        public setData({ gameConfig, coId, energy, playerIndex }: {
+            gameConfig      : GameConfig;
             coId            : number;
             energy          : number;
             playerIndex     : number;
         }): void {
-            this._configVersion = configVersion;
+            this._gameConfig    = gameConfig;
             this._coId          = coId;
             this._energy        = energy;
             this._playerIndex   = playerIndex;
@@ -228,7 +229,7 @@ namespace TwnsCommonCoListPanel {
             const isSelected            = !!this._isSelected;
             this._imgSelected.visible   = isSelected;
             this._imgUnselected.visible = !isSelected;
-            this._labelName.text        = `${ConfigManager.getCoBasicCfg(Helpers.getExisted(this._configVersion), Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined}(${this._energy})`;
+            this._labelName.text        = `${this._gameConfig?.getCoBasicCfg(Helpers.getExisted(this._coId))?.name || CommonConstants.ErrorTextForUndefined}(${this._energy})`;
         }
     }
 }

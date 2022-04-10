@@ -83,10 +83,11 @@ namespace FlowManager {
         { msgCode: NetMessageCodes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
     ];
     const _NOTIFY_EVENTS = [
-        { type: NotifyType.NetworkConnected,           callback: _onNotifyNetworkConnected, },
-        { type: NotifyType.MsgUserLogin,               callback: _onMsgUserLogin },
-        { type: NotifyType.MsgUserLogout,              callback: _onMsgUserLogout },
-        { type: NotifyType.MsgMpwCommonContinueWar,    callback: _onMsgMpwCommonContinueWar },
+        { type: NotifyType.NetworkConnected,                callback: _onNotifyNetworkConnected, },
+        { type: NotifyType.MsgUserLogin,                    callback: _onMsgUserLogin },
+        { type: NotifyType.MsgUserLogout,                   callback: _onMsgUserLogout },
+        { type: NotifyType.MsgMpwCommonContinueWar,         callback: _onMsgMpwCommonContinueWar },
+        { type: NotifyType.MsgCommonLatestConfigVersion,    callback: _onMsgCommonLatestConfigVersion },
     ];
 
     let _hasOnceWentToLobby = false;
@@ -105,7 +106,7 @@ namespace FlowManager {
 
         Lang.init();
         NoSleepManager.init();
-        ConfigManager.init();
+        Twns.Config.ConfigManager.init();
         NetManager.init();
         MpwProxy.init();
         MpwModel.init();
@@ -391,15 +392,20 @@ namespace FlowManager {
         gotoMultiPlayerWar(warData);
     }
 
+    function _onMsgCommonLatestConfigVersion(): void {
+        if (_checkCanFirstGoToLobby()) {
+            gotoLobby();
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Other private functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _checkCanFirstGoToLobby(): boolean {
-        const configVersion = ConfigManager.getLatestConfigVersion();
         return (!_hasOnceWentToLobby)
             && (UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (configVersion != null);
+            && (Twns.Config.ConfigManager.getLatestConfigVersion() != null);
     }
 
     function _removeLoadingDom(): void {

@@ -56,7 +56,7 @@ namespace TwnsMeChooseLocationPanel {
             // nothing to do
         }
 
-        private _getWar(): TwnsMeWar.MeWar {
+        private _getWar(): Twns.MapEditor.MeWar {
             return Helpers.getExisted(MeModel.getWar());
         }
 

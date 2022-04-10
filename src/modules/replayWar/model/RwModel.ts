@@ -101,7 +101,7 @@ namespace RwModel {
         }
 
         const war = new RwWar();
-        await war.init(warData, await ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
+        await war.init(warData, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         war.setReplayId(replayId);
         _war = war;

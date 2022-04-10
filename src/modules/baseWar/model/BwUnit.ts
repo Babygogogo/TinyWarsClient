@@ -53,7 +53,7 @@ namespace Twns.BaseWar {
         private _aiMode?                    : UnitAiMode | null;
 
         private readonly _view              = new TwnsBwUnitView.BwUnitView();
-        private _war?                       : Twns.BaseWar.BwWar;
+        private _war?                       : BwWar;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
@@ -98,9 +98,9 @@ namespace Twns.BaseWar {
             this.getView().init(this);
         }
 
-        public startRunning(war: Twns.BaseWar.BwWar): void {
-            if (war.getGameConfig() !== this.getGameConfig().getVersion()) {
-                throw Helpers.newError(`BwUnit.startRunning() invalid configVersion.`);
+        public startRunning(war: BwWar): void {
+            if (war.getGameConfig() !== this.getGameConfig()) {
+                throw Helpers.newError(`BwUnit.startRunning() invalid gameConfig.`);
             }
 
             this._setWar(war);
@@ -171,10 +171,10 @@ namespace Twns.BaseWar {
             return this.serializeForCreateSfw();
         }
 
-        private _setWar(war: Twns.BaseWar.BwWar): void {
+        private _setWar(war: BwWar): void {
             this._war = war;
         }
-        public getWar(): Twns.BaseWar.BwWar {
+        public getWar(): BwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -196,22 +196,16 @@ namespace Twns.BaseWar {
             return Helpers.getExisted(this._getTemplateCfg().type);
         }
         private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } } {
-            const configVersion = this.getGameConfig();
-            const unitType      = this.getUnitType();
-            return ConfigManager.getDamageChartCfgs(configVersion, unitType);
+            return Helpers.getExisted(this.getGameConfig().getDamageChartCfgs(this.getUnitType()));
         }
         private _getBuildableTileCfg(): { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } } | null {
-            const configVersion = this.getGameConfig();
-            const unitType      = this.getUnitType();
-            return ConfigManager.getBuildableTileCfgs(configVersion, unitType);
+            return this.getGameConfig().getBuildableTileCfgs(this.getUnitType());
         }
         private _getVisionBonusCfg(): { [tileType: number]: Types.VisionBonusCfg } | null {
-            const configVersion = this.getGameConfig();
-            const unitType      = this.getUnitType();
-            return ConfigManager.getVisionBonusCfg(configVersion, unitType);
+            return this.getGameConfig().getVisionBonusCfg(this.getUnitType());
         }
 
-        public getPlayer(): Twns.BaseWar.BwPlayer {
+        public getPlayer(): BwPlayer {
             return this.getWar().getPlayer(this.getPlayerIndex());
         }
 
@@ -419,7 +413,7 @@ namespace Twns.BaseWar {
                 return 0;
             }
 
-            const configVersion             = this.getGameConfig();
+            const gameConfig                = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
             const fund                      = player.getFund();
@@ -433,12 +427,12 @@ namespace Twns.BaseWar {
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifier                    = 0;
             for (const skillId of player.getCoCurrentSkills()) {
-                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                const skillCfg = gameConfig.getCoSkillCfg(skillId);
                 {
-                    const cfg = skillCfg.selfOffenseBonus;
-                    if ((cfg)                                                                           &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
-                        (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))  &&
+                    const cfg = skillCfg?.selfOffenseBonus;
+                    if ((cfg)                                                                   &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
+                        (gameConfig.checkIsTileTypeInCategory(selfTileType, cfg[2]))            &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -451,10 +445,10 @@ namespace Twns.BaseWar {
                 }
 
                 {
-                    const cfg = skillCfg.attackBonusByPromotion;
-                    if ((cfg)                                                                           &&
-                        (cfg[2] === promotion)                                                          &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                    const cfg = skillCfg?.attackBonusByPromotion;
+                    if ((cfg)                                                                   &&
+                        (cfg[2] === promotion)                                                  &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -467,9 +461,9 @@ namespace Twns.BaseWar {
                 }
 
                 {
-                    const cfg = skillCfg.selfOffenseBonusByFund;
-                    if ((cfg)                                                                           &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                    const cfg = skillCfg?.selfOffenseBonusByFund;
+                    if ((cfg)                                                                   &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -482,9 +476,9 @@ namespace Twns.BaseWar {
                 }
 
                 {
-                    const cfg = skillCfg.selfOffenseBonusByTileCount;
-                    if ((cfg)                                                                           &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                    const cfg = skillCfg?.selfOffenseBonusByTileCount;
+                    if ((cfg)                                                                   &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -504,7 +498,7 @@ namespace Twns.BaseWar {
                                     continue;
                                 }
 
-                                if (ConfigManager.checkIsTileTypeInCategory(configVersion, tile.getType(), tileCategory)) {
+                                if (gameConfig.checkIsTileTypeInCategory(tile.getType(), tileCategory)) {
                                     ++tileCount;
                                 }
                             }
@@ -516,9 +510,9 @@ namespace Twns.BaseWar {
                 }
 
                 {
-                    const cfg = skillCfg.selfOffenseBonusByTileDefense;
-                    if ((cfg)                                                                           &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                    const cfg = skillCfg?.selfOffenseBonusByTileDefense;
+                    if ((cfg)                                                                   &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -531,10 +525,10 @@ namespace Twns.BaseWar {
                 }
 
                 {
-                    const cfg = skillCfg.selfOffenseBonusByEnemyTileDefense;
-                    if ((cfg)                                                                           &&
-                        (targetUnit)                                                                    &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                    const cfg = skillCfg?.selfOffenseBonusByEnemyTileDefense;
+                    if ((cfg)                                                                   &&
+                        (targetUnit)                                                            &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -547,10 +541,10 @@ namespace Twns.BaseWar {
                 }
 
                 {
-                    const cfg = skillCfg.selfOffenseBonusByCounter;
-                    if ((cfg)                                                                           &&
-                        (isCounter)                                                                     &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                    const cfg = skillCfg?.selfOffenseBonusByCounter;
+                    if ((cfg)                                                                   &&
+                        (isCounter)                                                             &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -573,13 +567,13 @@ namespace Twns.BaseWar {
                 return 0;
             }
 
-            const configVersion = war.getGameConfig();
+            const gameConfig    = war.getGameConfig();
             const unitType      = this.getUnitType();
             const selfTileType  = war.getTileMap().getTile(selfGridIndex).getType();
             const modifier      = offenseBonusCfg[2];
-            if ((!modifier)                                                                                 ||
-                (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, offenseBonusCfg[0]))     ||
-                (!ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, offenseBonusCfg[1]))
+            if ((!modifier)                                                                 ||
+                (!gameConfig.checkIsUnitTypeInCategory(unitType, offenseBonusCfg[0]))       ||
+                (!gameConfig.checkIsTileTypeInCategory(selfTileType, offenseBonusCfg[1]))
             ) {
                 return 0;
             }
@@ -590,11 +584,11 @@ namespace Twns.BaseWar {
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of this.getPlayer().getCoCurrentSkills()) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfUnitIgnoreWeather;
-                if ((cfg)                                                                               &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))          &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))      &&
-                    (ConfigManager.checkIsWeatherTypeInCategory(configVersion, weatherType, cfg[3]))    &&
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitIgnoreWeather;
+                if ((cfg)                                                                   &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
+                    (gameConfig.checkIsTileTypeInCategory(selfTileType, cfg[2]))            &&
+                    (gameConfig.checkIsWeatherTypeInCategory(weatherType, cfg[3]))          &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -614,7 +608,7 @@ namespace Twns.BaseWar {
                 return 0;
             }
 
-            const configVersion             = this.getGameConfig();
+            const gameConfig                = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
             const selfTile                  = this.getWar().getTileMap().getTile(selfGridIndex);
@@ -624,12 +618,12 @@ namespace Twns.BaseWar {
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifier = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                const skillCfg = gameConfig.getCoSkillCfg(skillId);
                 {
-                    const cfg = skillCfg.selfDefenseBonus;
-                    if ((cfg)                                                                           &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
-                        (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))  &&
+                    const cfg = skillCfg?.selfDefenseBonus;
+                    if ((cfg)                                                                   &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
+                        (gameConfig.checkIsTileTypeInCategory(selfTileType, cfg[2]))            &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -642,10 +636,10 @@ namespace Twns.BaseWar {
                 }
 
                 {
-                    const cfg = skillCfg.defenseBonusByPromotion;
-                    if ((cfg)                                                                       &&
-                        (cfg[2] === promotion)                                                      &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))  &&
+                    const cfg = skillCfg?.defenseBonusByPromotion;
+                    if ((cfg)                                                                   &&
+                        (cfg[2] === promotion)                                                  &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -658,9 +652,9 @@ namespace Twns.BaseWar {
                 }
 
                 {
-                    const cfg = skillCfg.selfDefenseBonusByTileDefense;
-                    if ((cfg)                                                                           &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                    const cfg = skillCfg?.selfDefenseBonusByTileDefense;
+                    if ((cfg)                                                                   &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -677,7 +671,7 @@ namespace Twns.BaseWar {
 
         public getLuckLimitModifierByCo(selfGridIndex: GridIndex): { lower: number, upper: number } {
             const player                    = this.getPlayer();
-            const configVersion             = this.getGameConfig();
+            const gameConfig                = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
             const hasLoadedCo               = this.getHasLoadedCo();
@@ -685,14 +679,14 @@ namespace Twns.BaseWar {
             let lowerModifier               = 0;
             let upperModifier               = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                const skillCfg = gameConfig.getCoSkillCfg(skillId);
                 if (skillCfg == null) {
                     throw Helpers.newError(`Empty skillCfg.`);
                 }
 
                 const bonusCfg = skillCfg.selfLuckRangeBonus;
-                if ((bonusCfg)                                                                                                                        &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, bonusCfg[1]))                                                   &&
+                if ((bonusCfg)                                                                  &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, bonusCfg[1]))               &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : bonusCfg[0],
@@ -712,19 +706,7 @@ namespace Twns.BaseWar {
         }
 
         public checkHasSecondaryWeapon(): boolean {
-            const configVersion = this.getGameConfig();
-            if (configVersion == null) {
-                throw Helpers.newError(`BwUnit.checkHasSecondaryWeapon() configVersion is null.`);
-                return false;
-            }
-
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                throw Helpers.newError(`BwUnit.checkHasSecondaryWeapon() unitType is null.`);
-                return false;
-            }
-
-            return ConfigManager.checkHasSecondaryWeapon(configVersion, unitType);
+            return this.getGameConfig().checkHasSecondaryWeapon(this.getUnitType());
         }
 
         public getCfgSecondaryWeaponBaseDamage(armorType: ArmorType): number | null {
@@ -765,7 +747,7 @@ namespace Twns.BaseWar {
                 return 0;
             }
 
-            const configVersion             = this.getGameConfig();
+            const gameConfig                = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const selfGridIndex             = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
@@ -773,9 +755,9 @@ namespace Twns.BaseWar {
             const hasLoadedCo               = this.getHasLoadedCo();
             let modifier                    = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).maxAttackRangeBonus;
-                if ((cfg)                                                                       &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))  &&
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.maxAttackRangeBonus;
+                if ((cfg)                                                                   &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -873,7 +855,7 @@ namespace Twns.BaseWar {
         public checkIsCapturer(): boolean {
             return this._getTemplateCfg()?.canCaptureTile === 1;
         }
-        public checkCanCaptureTile(tile: Twns.BaseWar.BwTile): boolean {
+        public checkCanCaptureTile(tile: BwTile): boolean {
             return (this.checkIsCapturer())
                 && (this.getTeamIndex() !== tile.getTeamIndex())
                 && (tile.getMaxCapturePoint() != null);
@@ -890,22 +872,22 @@ namespace Twns.BaseWar {
                 return cfgAmount;
             }
 
-            const configVersion             = this.getGameConfig();
+            const gameConfig                = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             const hasLoadedCo               = this.getHasLoadedCo();
             let modifier                    = 100;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                const skillCfg = gameConfig.getCoSkillCfg(skillId);
                 if (skillCfg == null) {
                     throw Helpers.newError(`Empty skillCfg.`);
                 }
 
                 {
                     const cfg = skillCfg.selfCaptureAmount;
-                    if ((cfg)                                                                       &&
-                        (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))  &&
+                    if ((cfg)                                                                   &&
+                        (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                         ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                             gridIndex               : selfGridIndex,
                             coSkillAreaType         : cfg[0],
@@ -935,7 +917,7 @@ namespace Twns.BaseWar {
         }
 
         public checkIsDivingByDefault(): boolean {
-            return ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(this._getTemplateCfg());
+            return Twns.Config.ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(this._getTemplateCfg());
         }
 
         public checkIsDiver(): boolean {
@@ -987,7 +969,7 @@ namespace Twns.BaseWar {
         }
         private _getFuelConsumptionModifierByCo(): number {
             const player                    = this.getPlayer();
-            const configVersion             = this.getGameConfig();
+            const gameConfig                = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const selfGridIndex             = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
@@ -995,9 +977,9 @@ namespace Twns.BaseWar {
             const hasLoadedCo               = this.getHasLoadedCo();
             let modifier                    = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfFuelConsumption;
-                if ((cfg)                                                                           &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.selfFuelConsumption;
+                if ((cfg)                                                                   &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -1121,7 +1103,7 @@ namespace Twns.BaseWar {
                 throw Helpers.newError(`Empty produceUnitType.`);
             }
 
-            const cfgCost   = ConfigManager.getUnitTemplateCfg(this.getGameConfig(), produceUnitType).productionCost;
+            const cfgCost   = Helpers.getExisted(this.getGameConfig().getUnitTemplateCfg(produceUnitType)?.productionCost);
             const modifier  = this.getPlayer().getUnitCostModifier(this.getGridIndex(), this.getHasLoadedCo(), produceUnitType);
             return Math.floor(cfgCost * modifier);
         }
@@ -1188,7 +1170,7 @@ namespace Twns.BaseWar {
                 return 0;
             }
 
-            const configVersion             = this.getGameConfig();
+            const gameConfig                = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const selfGridIndex             = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
@@ -1197,10 +1179,10 @@ namespace Twns.BaseWar {
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let modifier                    = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfMoveRangeBonus;
-                if ((cfg)                                                                           &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, cfg[2]))      &&
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.selfMoveRangeBonus;
+                if ((cfg)                                                                   &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
+                    (gameConfig.checkIsTileTypeInCategory(tileType, cfg[2]))                &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -1222,14 +1204,14 @@ namespace Twns.BaseWar {
                 return 0;
             }
 
-            const configVersion = war.getGameConfig();
+            const gameConfig    = war.getGameConfig();
             const selfGridIndex = this.getGridIndex();
             const unitType      = this.getUnitType();
             const selfTileType  = war.getTileMap().getTile(selfGridIndex).getType();
             const modifier      = moveRangeBonus[2];
-            if ((!modifier)                                                                                 ||
-                (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, moveRangeBonus[0]))      ||
-                (!ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, moveRangeBonus[1]))
+            if ((!modifier)                                                                 ||
+                (!gameConfig.checkIsUnitTypeInCategory(unitType, moveRangeBonus[0]))        ||
+                (!gameConfig.checkIsTileTypeInCategory(selfTileType, moveRangeBonus[1]))
             ) {
                 return 0;
             }
@@ -1240,11 +1222,11 @@ namespace Twns.BaseWar {
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             for (const skillId of this.getPlayer().getCoCurrentSkills()) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfUnitIgnoreWeather;
-                if ((cfg)                                                                               &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))          &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, selfTileType, cfg[2]))      &&
-                    (ConfigManager.checkIsWeatherTypeInCategory(configVersion, weatherType, cfg[3]))    &&
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitIgnoreWeather;
+                if ((cfg)                                                                   &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
+                    (gameConfig.checkIsTileTypeInCategory(selfTileType, cfg[2]))            &&
+                    (gameConfig.checkIsWeatherTypeInCategory(weatherType, cfg[3]))          &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : selfGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -1277,7 +1259,7 @@ namespace Twns.BaseWar {
         // Functions for promotion.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxPromotion(): number {
-            return ConfigManager.getUnitMaxPromotion(this.getGameConfig());
+            return this.getGameConfig().getUnitMaxPromotion();
         }
 
         public getCurrentPromotion(): number {
@@ -1301,17 +1283,17 @@ namespace Twns.BaseWar {
         }
 
         public getPromotionAttackBonus(): number {
-            return ConfigManager.getUnitPromotionAttackBonus(this.getGameConfig(), this.getCurrentPromotion());
+            return this.getGameConfig().getUnitPromotionAttackBonus(this.getCurrentPromotion());
         }
 
         public getPromotionDefenseBonus(): number {
-            return ConfigManager.getUnitPromotionDefenseBonus(this.getGameConfig(), this.getCurrentPromotion());
+            return this.getGameConfig().getUnitPromotionDefenseBonus(this.getCurrentPromotion());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for launch silo.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkCanLaunchSiloOnTile(tile: Twns.BaseWar.BwTile): boolean {
+        public checkCanLaunchSiloOnTile(tile: BwTile): boolean {
             return (this._getTemplateCfg()?.canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
         }
 
@@ -1331,17 +1313,15 @@ namespace Twns.BaseWar {
         public checkIsTileBuilder(): boolean {
             return this._getBuildableTileCfg() != null;
         }
-        public checkCanBuildOnTile(tile: Twns.BaseWar.BwTile): boolean {
+        public checkCanBuildOnTile(tile: BwTile): boolean {
             const tileObjectType = tile.getObjectType();
             if (tileObjectType == null) {
                 throw Helpers.newError(`BwUnit.checkCanBuildOnTile() tileObjectType is empty.`);
-                return false;
             }
 
             const tileBaseType = tile.getBaseType();
             if (tileBaseType == null) {
                 throw Helpers.newError(`BwUnit.checkCanBuildOnTile() empty tileBaseType.`);
-                return false;
             }
 
             const material = this.getCurrentBuildMaterial();
@@ -1421,15 +1401,15 @@ namespace Twns.BaseWar {
 
         public checkCanLoadUnit(unit: BwUnit): boolean {
             const cfg                   = this._getTemplateCfg();
-            const configVersion         = this.getGameConfig();
+            const gameConfig            = this.getGameConfig();
             const maxLoadUnitsCount     = this.getMaxLoadUnitsCount();
             const loadableTileCategory  = cfg.loadableTileCategory;
             const loadUnitCategory      = cfg.loadUnitCategory;
             return (maxLoadUnitsCount != null)
                 && (loadableTileCategory != null)
                 && (loadUnitCategory != null)
-                && (ConfigManager.checkIsTileTypeInCategory(configVersion, this.getWar().getTileMap().getTile(this.getGridIndex()).getType(), loadableTileCategory))
-                && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), loadUnitCategory))
+                && (gameConfig.checkIsTileTypeInCategory(this.getWar().getTileMap().getTile(this.getGridIndex()).getType(), loadableTileCategory))
+                && (gameConfig.checkIsUnitTypeInCategory(unit.getUnitType(), loadUnitCategory))
                 && (this.getPlayerIndex() === unit.getPlayerIndex())
                 && (this.getLoadedUnitsCount() < maxLoadUnitsCount);
         }
@@ -1439,7 +1419,7 @@ namespace Twns.BaseWar {
             const loadableTileCategory  = cfg.loadableTileCategory;
             return (cfg.canDropLoadedUnits === 1)
                 && (loadableTileCategory != null)
-                && (ConfigManager.checkIsTileTypeInCategory(this.getGameConfig(), tileType, loadableTileCategory));
+                && (this.getGameConfig().checkIsTileTypeInCategory(tileType, loadableTileCategory));
         }
         public getCfgCanDropLoadedUnit(): boolean {
             return this._getTemplateCfg().loadableTileCategory != null;
@@ -1462,14 +1442,14 @@ namespace Twns.BaseWar {
 
         public getNormalizedRepairAmountAndCostModifier(): { amountModifier: number, costMultiplierPct: number } {
             const player                    = this.getPlayer();
-            const configVersion             = this.getGameConfig();
+            const gameConfig                = this.getGameConfig();
             const gridIndex                 = this.getGridIndex();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             let amountModifier              = 0;
             let costMultiplierPct           = 100;
             for (const skillId of player.getCoCurrentSkills()) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfRepairAmountBonus;
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.selfRepairAmountBonus;
                 if ((cfg)                                               &&
                     (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
@@ -1627,22 +1607,22 @@ namespace Twns.BaseWar {
             const weatherManager        = war.getWeatherManager();
             const unitVisionFixedCfg    = weatherManager.getCurrentWeatherCfg().unitVisionFixed;
             if (unitVisionFixedCfg != null) {
-                const configVersion = war.getGameConfig();
+                const gameConfig    = war.getGameConfig();
                 const unitType      = this.getUnitType();
                 const weatherType   = weatherManager.getCurrentWeatherType();
-                if ((ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, unitVisionFixedCfg[0])) &&
-                    (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, unitVisionFixedCfg[1]))
+                if ((gameConfig.checkIsUnitTypeInCategory(unitType, unitVisionFixedCfg[0])) &&
+                    (gameConfig.checkIsTileTypeInCategory(tileType, unitVisionFixedCfg[1]))
                 ) {
                     const player                    = this.getPlayer();
                     const coZoneRadius              = player.getCoZoneRadius();
                     const hasLoadedCo               = this.getHasLoadedCo();
                     const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
                     if (!player.getCoCurrentSkills().some(skillId => {
-                        const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfUnitIgnoreWeather;
+                        const skillCfg = gameConfig.getCoSkillCfg(skillId)?.selfUnitIgnoreWeather;
                         return (skillCfg != null)
-                            && (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, skillCfg[1]))
-                            && (ConfigManager.checkIsTileTypeInCategory(configVersion, tileType, skillCfg[2]))
-                            && (ConfigManager.checkIsWeatherTypeInCategory(configVersion, weatherType, skillCfg[3]))
+                            && (gameConfig.checkIsUnitTypeInCategory(unitType, skillCfg[1]))
+                            && (gameConfig.checkIsTileTypeInCategory(tileType, skillCfg[2]))
+                            && (gameConfig.checkIsWeatherTypeInCategory(weatherType, skillCfg[3]))
                             && ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                                 coZoneRadius,
                                 gridIndex,
@@ -1681,16 +1661,16 @@ namespace Twns.BaseWar {
                 return 0;
             }
 
-            const configVersion             = this.getGameConfig();
+            const gameConfig             = this.getGameConfig();
             const unitType                  = this.getUnitType();
             const coZoneRadius              = player.getCoZoneRadius();
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             const hasLoadedCo               = this.getHasLoadedCo();
             let modifier                    = 0;
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.unitVisionRangeBonus;
-                if ((cfg)                                                                       &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))  &&
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.unitVisionRangeBonus;
+                if ((cfg)                                                                   &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         coZoneRadius,
                         gridIndex               : selfGridIndex,
@@ -1706,24 +1686,9 @@ namespace Twns.BaseWar {
         }
 
         public checkIsTrueVision(gridIndex: GridIndex): boolean {
-            const configVersion = this.getGameConfig();
-            if (configVersion == null) {
-                throw Helpers.newError(`BwUnit.checkIsTrueVision() configVersion is empty.`);
-                return false;
-            }
-
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                throw Helpers.newError(`BwUnit.checkIsTrueVision() unitType is empty.`);
-                return false;
-            }
-
-            const player = this.getPlayer();
-            if (!player) {
-                throw Helpers.newError(`BwUnit.checkIsTrueVision() player is empty.`);
-                return false;
-            }
-
+            const gameConfig    = this.getGameConfig();
+            const unitType      = this.getUnitType();
+            const player        = this.getPlayer();
             if (!player.getCoId()) {
                 return false;
             }
@@ -1731,15 +1696,14 @@ namespace Twns.BaseWar {
             const coZoneRadius = player.getCoZoneRadius();
             if (coZoneRadius == null) {
                 throw Helpers.newError(`BwUnit.checkIsTrueVision() empty coZoneRadius.`);
-                return false;
             }
 
             const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
             const hasLoadedCo               = this.getHasLoadedCo();
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.unitTrueVision;
-                if ((cfg)                                                                                                                   &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))                                              &&
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.unitTrueVision;
+                if ((cfg)                                                                   &&
+                    (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))                &&
                     ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex,
                         coZoneRadius,
@@ -1826,7 +1790,7 @@ namespace Twns.BaseWar {
                 const category = tile.getLoadCoUnitCategory();
                 return category == null
                     ? false
-                    : ConfigManager.checkIsUnitTypeInCategory(this.getGameConfig(), this.getUnitType(), category);
+                    : this.getGameConfig().checkIsUnitTypeInCategory(this.getUnitType(), category);
             }
         }
 
@@ -1856,14 +1820,14 @@ namespace Twns.BaseWar {
         }
 
         public getLoadCoCost(): number {
-            return Math.floor(ConfigManager.getCoBasicCfg(this.getGameConfig(), this.getPlayer().getCoId()).boardCostPercentage * this.getProductionCfgCost() / 100);
+            return Math.floor(Helpers.getExisted(this.getGameConfig().getCoBasicCfg(this.getPlayer().getCoId())?.boardCostPercentage) * this.getProductionCfgCost() / 100);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for ai mode.
         ////////////////////////////////////////////////////////////////////////////////
         public setAiMode(aiMode: UnitAiMode): void {
-            if (!ConfigManager.checkIsValidUnitAiMode(aiMode)) {
+            if (!Twns.Config.ConfigManager.checkIsValidUnitAiMode(aiMode)) {
                 throw Helpers.newError(`Invalid aiMode: ${aiMode}`, ClientErrorCode.BwUnit_SetAiMode_00);
             }
 
@@ -1965,7 +1929,7 @@ namespace Twns.BaseWar {
     function getRevisedIsDiving(isDiving: Types.Undefinable<boolean>, unitTemplateCfg: UnitTemplateCfg): boolean {
         return isDiving != null
             ? isDiving
-            : ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(unitTemplateCfg);
+            : Twns.Config.ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(unitTemplateCfg);
     }
 }
 

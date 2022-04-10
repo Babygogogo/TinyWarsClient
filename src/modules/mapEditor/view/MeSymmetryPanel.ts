@@ -13,7 +13,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeSymmetryPanel {
-    import MeWar        = TwnsMeWar.MeWar;
+    import MeWar        = Twns.MapEditor.MeWar;
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
     import SymmetryType = Types.SymmetryType;
@@ -670,11 +670,11 @@ namespace TwnsMeSymmetryPanel {
         tileData.gridIndex          = dstGridIndex;
         tileData.isHighlighted      = dstTile.getIsHighlighted();
         tileData.locationFlags      = dstTile.getLocationFlags();
-        tileData.baseShapeId        = ConfigManager.getSymmetricalTileBaseShapeId(srcTile.getBaseType(), srcTile.getBaseShapeId(), symmetryType);
-        tileData.objectType         = ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType);
-        tileData.objectShapeId      = ConfigManager.getSymmetricalTileObjectShapeId(objectType, srcTile.getObjectShapeId(), symmetryType);
+        tileData.baseShapeId        = Twns.Config.ConfigManager.getSymmetricalTileBaseShapeId(srcTile.getBaseType(), srcTile.getBaseShapeId(), symmetryType);
+        tileData.objectType         = Twns.Config.ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType);
+        tileData.objectShapeId      = Twns.Config.ConfigManager.getSymmetricalTileObjectShapeId(objectType, srcTile.getObjectShapeId(), symmetryType);
         if ((decoratorType != null) && (decoratorShapeId != null)) {
-            tileData.decoratorShapeId = ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType);
+            tileData.decoratorShapeId = Twns.Config.ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType);
         }
 
         if ((srcTile.getMaxHp() !== null) && (war.getUnitMap().getUnitOnMap(dstGridIndex))) {

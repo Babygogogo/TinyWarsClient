@@ -9,9 +9,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsCommonCoInfoPanel {
     import NotifyType   = TwnsNotifyType.NotifyType;
+    import GameConfig   = Twns.Config.GameConfig;
 
     export type OpenData = {
-        configVersion   : string;
+        gameConfig      : GameConfig;
         coId            : number;
     };
     export class CommonCoInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
@@ -31,7 +32,7 @@ namespace TwnsCommonCoInfoPanel {
 
             const openData = this._getOpenData();
             this._uiCoInfo.setCoData({
-                gameConfig   : openData.configVersion,
+                gameConfig   : openData.gameConfig,
                 coId            : openData.coId,
             });
         }

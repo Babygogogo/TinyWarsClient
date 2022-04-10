@@ -23,7 +23,7 @@ namespace TwnsPanelConfig {
         BwTileDetailPanel                   : PanelConfig<TwnsBwTileDetailPanel.OpenData>;
         BwUnitActionsPanel                  : PanelConfig<TwnsBwUnitActionsPanel.OpenData>;
         BwUnitBriefPanel                    : PanelConfig<TwnsBwUnitBriefPanel.OpenData>;
-        BwUnitDetailPanel                   : PanelConfig<TwnsBwUnitDetailPanel.OpenData>;
+        BwUnitDetailPanel                   : PanelConfig<Twns.BaseWar.OpenDataForBwUnitDetailPanel>;
         BwUnitListPanel                     : PanelConfig<TwnsBwUnitListPanel.OpenData>;
         BwWarInfoPanel                      : PanelConfig<TwnsBwWarInfoPanel.OpenData>;
         BwWarPanel                          : PanelConfig<TwnsBwWarPanel.OpenData>;
@@ -348,7 +348,7 @@ namespace TwnsPanelConfig {
             },
 
             BwUnitDetailPanel: {
-                cls         : TwnsBwUnitDetailPanel?.BwUnitDetailPanel,
+                cls         : Twns.BaseWar?.BwUnitDetailPanel,
                 skinName    : `resource/skins/baseWar/BwUnitDetailPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,

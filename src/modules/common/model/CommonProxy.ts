@@ -46,7 +46,7 @@ namespace CommonProxy {
     function _onMsgCommonLatestConfigVersion(e: egret.Event): void {
         const data      = e.data as CommonProto.NetMessage.MsgCommonLatestConfigVersion.IS;
         const version   = Helpers.getExisted(data.version);
-        ConfigManager.setLatestFormalVersion(version);
+        Twns.Config.ConfigManager.setLatestConfigVersion(version);
 
         Notify.dispatch(NotifyType.MsgCommonLatestConfigVersion, data);
     }

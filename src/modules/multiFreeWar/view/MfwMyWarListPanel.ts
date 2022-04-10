@@ -230,11 +230,15 @@ namespace TwnsMfwMyWarListPanel {
         }
 
         private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const warId     = MpwModel.getMfwPreviewingWarId();
-            const warData   = warId == null ? null : (await MpwModel.getWarSettings(warId))?.settingsForMfw?.initialWarData;
+            const warId         = MpwModel.getMfwPreviewingWarId();
+            const warSettings   = warId == null ? null : await MpwModel.getWarSettings(warId);
+            const warData       = warSettings?.settingsForMfw?.initialWarData;
             return warData == null
-                ? {}
-                : { warInfo: { warData, players: null } };
+                ? null
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warSettings?.settingsForCommon?.configVersion)),
+                    warInfo     : { warData, players: null },
+                };
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {

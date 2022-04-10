@@ -13,6 +13,7 @@
 namespace CcrCreateModel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import BootTimerType            = Types.BootTimerType;
+    import GameConfig               = Twns.Config.GameConfig;
 
     export type DataForCreateRoom   = CommonProto.NetMessage.MsgCcrCreateRoom.IC;
 
@@ -34,6 +35,7 @@ namespace CcrCreateModel {
         selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
         aiSkinInfoArray         : [],
     };
+    let _gameConfig: GameConfig | null = null;
 
     export async function getMapRawData(): Promise<CommonProto.Map.IMapRawData> {
         return Helpers.getExisted(await WarMapModel.getRawData(getMapId()));
@@ -41,7 +43,8 @@ namespace CcrCreateModel {
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+        setConfigVersion(Helpers.getExisted(Twns.Config.ConfigManager.getLatestConfigVersion()));
+        setGameConfig(await Twns.Config.ConfigManager.getLatestGameConfig());
         setWarName("");
         setWarPassword("");
         setWarComment("");
@@ -73,8 +76,11 @@ namespace CcrCreateModel {
     function setConfigVersion(version: string): void {
         getSettingsForCommon().configVersion = version;
     }
-    function getConfigVersion(): string {
-        return Helpers.getExisted(getSettingsForCommon().configVersion);
+    function setGameConfig(config: GameConfig): void {
+        _gameConfig = config;
+    }
+    export function getGameConfig(): GameConfig {
+        return Helpers.getExisted(_gameConfig);
     }
 
     export async function resetDataByWarRuleId(ruleId: number): Promise<void> {
@@ -95,7 +101,7 @@ namespace CcrCreateModel {
         const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
             warRule,
             playerIndex     : selfPlayerIndex,
-            gameConfig   : getConfigVersion(),
+            gameConfig      : getGameConfig(),
         });
 
         settingsForCommon.warRule = Helpers.deepClone(warRule);
@@ -263,7 +269,7 @@ namespace CcrCreateModel {
     }
 
     export function tickDefaultWeatherType(): void {
-        WarRuleHelpers.tickDefaultWeatherType(getWarRule(), getConfigVersion());
+        WarRuleHelpers.tickDefaultWeatherType(getWarRule(), getGameConfig());
     }
 
     export function setBootTimerParams(params: number[]): void {

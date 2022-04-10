@@ -15,8 +15,10 @@ namespace TwnsCommonChooseWeatherTypePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
     import NotifyType   = TwnsNotifyType.NotifyType;
     import WeatherType  = Types.WeatherType;
+    import GameConfig   = Twns.Config.GameConfig;
 
     export type OpenData = {
+        gameConfig              : GameConfig;
         currentWeatherTypeArray : WeatherType[];
         callbackOnConfirm       : (weatherTypeArray: WeatherType[]) => void;
     };
@@ -84,7 +86,7 @@ namespace TwnsCommonChooseWeatherTypePanel {
         private _updateListLocation(): void {
             const openData  = this._getOpenData();
             const dataArray : DataForWeatherTypeRenderer[] = [];
-            for (const weatherType of ConfigManager.getWeatherTypesByCategory(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Types.WeatherCategory.All)) {
+            for (const weatherType of openData.gameConfig.getWeatherTypesByCategory(Types.WeatherCategory.All) ?? []) {
                 dataArray.push({ weatherType });
             }
 

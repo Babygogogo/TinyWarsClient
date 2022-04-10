@@ -14,7 +14,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMmAcceptMapPanel {
-    import MeWar        = TwnsMeWar.MeWar;
+    import MeWar        = Twns.MapEditor.MeWar;
     import NotifyType   = TwnsNotifyType.NotifyType;
     import LangTextType = TwnsLangTextType.LangTextType;
 

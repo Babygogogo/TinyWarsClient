@@ -209,10 +209,10 @@ namespace TwnsMmWarRulePanel {
             }
         }
 
-        private _onTouchedBtnModifyWeather(): void {
+        private async _onTouchedBtnModifyWeather(): Promise<void> {
             const rule  = this._selectedRule;
             if (rule) {
-                WarRuleHelpers.tickDefaultWeatherType(rule, Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+                WarRuleHelpers.tickDefaultWeatherType(rule, await Twns.Config.ConfigManager.getLatestGameConfig());
                 this._updateLabelWeather(rule);
             }
         }
@@ -468,11 +468,11 @@ namespace TwnsMmWarRulePanel {
             this._updateView();
         }
 
-        private _updateView(): void {
-            this._listInfo.bindData(this._createDataForListInfo());
+        private async _updateView(): Promise<void> {
+            this._listInfo.bindData(await this._createDataForListInfo());
         }
 
-        private _createDataForListInfo(): DataForInfoRenderer[] {
+        private async _createDataForListInfo(): Promise<DataForInfoRenderer[]> {
             const data          = this._getData();
             const warRule       = data.warRule;
             const playerRule    = data.playerRule;
@@ -480,7 +480,7 @@ namespace TwnsMmWarRulePanel {
             return [
                 this._createDataPlayerIndex(warRule, playerRule, isReviewing),
                 this._createDataTeamIndex(warRule, playerRule, isReviewing),
-                this._createDataBannedCoIdArray(warRule, playerRule, isReviewing),
+                await this._createDataBannedCoIdArray(warRule, playerRule, isReviewing),
                 this._createDataInitialFund(warRule, playerRule, isReviewing),
                 this._createDataIncomeMultiplier(warRule, playerRule, isReviewing),
                 this._createDataEnergyAddPctOnLoadCo(warRule, playerRule, isReviewing),
@@ -491,9 +491,9 @@ namespace TwnsMmWarRulePanel {
                 this._createDataLuckLowerLimit(warRule, playerRule, isReviewing),
                 this._createDataLuckUpperLimit(warRule, playerRule, isReviewing),
                 this._createDataIsControlledByAiInCcw(warRule, playerRule, isReviewing),
-                this._createDataAiCoIdInCcw(warRule, playerRule, isReviewing),
+                await this._createDataAiCoIdInCcw(warRule, playerRule, isReviewing),
                 this._createDataIsControlledByAiInSrw(warRule, playerRule, isReviewing),
-                this._createDataAiCoIdInSrw(warRule, playerRule, isReviewing),
+                await this._createDataAiCoIdInSrw(warRule, playerRule, isReviewing),
             ];
         }
         private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
@@ -517,19 +517,19 @@ namespace TwnsMmWarRulePanel {
                     },
             };
         }
-        private _createDataBannedCoIdArray(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private async _createDataBannedCoIdArray(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): Promise<DataForInfoRenderer> {
             const bannedCoIdArray   = playerRule.bannedCoIdArray ?? [];
-            const configVersion     = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const gameConfig        = await Twns.Config.ConfigManager.getLatestGameConfig();
             return {
                 titleText               : Lang.getText(LangTextType.B0403),
                 infoText                : `${bannedCoIdArray.length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
-                        gameConfig: configVersion,
+                        gameConfig,
                         playerIndex         : Helpers.getExisted(playerRule.playerIndex),
                         bannedCoIdArray,
-                        fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                        fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
                         maxBanCount         : null,
                         selfCoId            : null,
                         callbackOnConfirm   : bannedCoIdSet => {
@@ -808,12 +808,12 @@ namespace TwnsMmWarRulePanel {
                     },
             };
         }
-        private _createDataAiCoIdInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private async _createDataAiCoIdInCcw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): Promise<DataForInfoRenderer> {
             const coId          = playerRule.fixedCoIdInCcw;
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const gameConfig    = await Twns.Config.ConfigManager.getLatestGameConfig();
             return {
                 titleText               : Lang.getText(LangTextType.B0644),
-                infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),
+                infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
                 callbackOnTouchedTitle  : isReviewing
                     ? null
@@ -824,10 +824,11 @@ namespace TwnsMmWarRulePanel {
                         }
 
                         const coIdArray: number[] = [];
-                        for (const cfg of ConfigManager.getEnabledCoArray(configVersion)) {
+                        for (const cfg of gameConfig.getEnabledCoArray()) {
                             coIdArray.push(cfg.coId);
                         }
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                            gameConfig,
                             currentCoId         : playerRule.fixedCoIdInCcw ?? null,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {
@@ -862,12 +863,12 @@ namespace TwnsMmWarRulePanel {
                     },
             };
         }
-        private _createDataAiCoIdInSrw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private async _createDataAiCoIdInSrw(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): Promise<DataForInfoRenderer> {
             const coId          = playerRule.fixedCoIdInSrw;
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const gameConfig    = await Twns.Config.ConfigManager.getLatestGameConfig();
             return {
                 titleText               : Lang.getText(LangTextType.B0815),
-                infoText                : coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId),
+                infoText                : coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined,
                 infoColor               : coId == null ? 0xFFFFFF : 0x00FF00,
                 callbackOnTouchedTitle  : isReviewing
                     ? null
@@ -878,10 +879,11 @@ namespace TwnsMmWarRulePanel {
                         }
 
                         const coIdArray: number[] = [];
-                        for (const cfg of ConfigManager.getEnabledCoArray(configVersion)) {
+                        for (const cfg of gameConfig.getEnabledCoArray()) {
                             coIdArray.push(cfg.coId);
                         }
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                            gameConfig,
                             currentCoId         : playerRule.fixedCoIdInSrw ?? null,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId: number) => {

@@ -133,7 +133,7 @@ namespace TwnsMeMapListPanel {
 
             } else {
                 this._labelNoData.visible = false;
-                this._zoomMap.showMapByMapData(mapData);
+                this._zoomMap.showMapByMapData(mapData, await Twns.Config.ConfigManager.getLatestGameConfig());
             }
         }
     }
