@@ -68,7 +68,7 @@ namespace HrwModel {
         Helpers.getExisted(warData.executedActionManager).executedActionArray = generateExecutedActions(warData);
 
         const war = new Twns.HalfwayReplayWar.HrwWar();
-        await war.init(warData, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
+        war.init(warData, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         _war = war;
         return _war;

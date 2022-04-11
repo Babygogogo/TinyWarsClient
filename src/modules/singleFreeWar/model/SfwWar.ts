@@ -17,7 +17,7 @@ namespace Twns.SingleFreeWar {
     export class SfwWar extends SpwWar {
         private _settingsForSfw?    : ISettingsForSfw;
 
-        public async init(data: ISerialWar, gameConfig: GameConfig): Promise<void> {
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig);
             this._setSettingsForSfw(Helpers.getExisted(data.settingsForSfw, ClientErrorCode.SfwWar_Init_00));
 

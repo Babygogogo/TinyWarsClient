@@ -16,7 +16,7 @@ namespace Twns.MultiCustomWar {
     export class McwWar extends MpwWar {
         private _settingsForMcw?: ISettingsForMcw;
 
-        public async init(data: ISerialWar, gameConfig: GameConfig): Promise<void> {
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig);
             this._setSettingsForMcw(Helpers.getExisted(data.settingsForMcw, ClientErrorCode.McwWar_Init_00));
 

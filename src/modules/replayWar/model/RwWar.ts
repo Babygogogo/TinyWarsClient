@@ -53,7 +53,7 @@ namespace Twns.ReplayWar {
         private _checkpointIdsForNextActionId       = new Map<number, number>();
         private _checkpointDataListForCheckpointId  = new Map<number, CheckpointData>();
 
-        public async init(warData: ISerialWar, gameConfig: GameConfig): Promise<void> {
+        public init(warData: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(warData, gameConfig);
             this._setSettingsForMcw(warData.settingsForMcw ?? null);
             this._setSettingsForScw(warData.settingsForScw ?? null);

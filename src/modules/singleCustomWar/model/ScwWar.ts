@@ -16,7 +16,7 @@ namespace Twns.SingleCustomWar {
     export class ScwWar extends TwnsSpwWar.SpwWar {
         private _settingsForScw?    : ISettingsForScw;
 
-        public async init(data: ISerialWar, gameConfig: GameConfig): Promise<void> {
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig);
             this._setSettingsForScw(Helpers.getExisted(data.settingsForScw, ClientErrorCode.ScwWar_Init_00));
 

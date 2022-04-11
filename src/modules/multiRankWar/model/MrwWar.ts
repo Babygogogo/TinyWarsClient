@@ -17,7 +17,7 @@ namespace Twns.MultiRankWar {
     export class MrwWar extends MpwWar {
         private _settingsForMrw?    : ISettingsForMrw;
 
-        public async init(data: ISerialWar, gameConfig: GameConfig): Promise<void> {
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig);
             this._setSettingsForMrw(Helpers.getExisted(data.settingsForMrw, ClientErrorCode.MrwWar_Init_00));
 

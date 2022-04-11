@@ -16,7 +16,7 @@ namespace Twns.CoopCustomWar {
     export class CcwWar extends MpwWar {
         private _settingsForCcw?: ISettingsForCcw;
 
-        public async init(data: ISerialWar, gameConfig: GameConfig): Promise<void> {
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig);
             this._setSettingsForCcw(Helpers.getExisted(data.settingsForCcw, ClientErrorCode.CcwWar_Init_00));
 

@@ -18,7 +18,7 @@ namespace Twns.SingleRankWar {
     export class SrwWar extends SpwWar {
         private _settingsForSrw?    : ISettingsForSrw;
 
-        public async init(data: ISerialWar, gameConfig: GameConfig): Promise<void> {
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig);
             this._setSettingsForSrw(Helpers.getExisted(data.settingsForSrw, ClientErrorCode.SrwWar_Init_00));
 

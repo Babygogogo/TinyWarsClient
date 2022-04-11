@@ -45,7 +45,7 @@ namespace Twns.BaseWar {
         private _isExecutingAction      = false;
         private _isEnded                = false;
 
-        public abstract init(data: ISerialWar, gameConfig: GameConfig): Promise<void>;
+        public abstract init(data: ISerialWar, gameConfig: GameConfig): void;
         public abstract getWarType(): Types.WarType;
         public abstract getMapId(): number | null;
         public abstract getIsNeedExecutedAction(): boolean;

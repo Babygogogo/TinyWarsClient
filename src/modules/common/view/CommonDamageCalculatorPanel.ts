@@ -208,7 +208,8 @@ namespace TwnsCommonDamageCalculatorPanel {
             }
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            this._setCalculatorData(Helpers.deepClone(this._getOpenData().data) ?? await createDefaultCalculatorData());
+            const calculatorData = this._getOpenData().data;
+            this._setCalculatorData(calculatorData ? cloneCalculatorData(calculatorData) : await createDefaultCalculatorData());
             this._updateView();
         }
         protected _onClosing(): void {
@@ -511,13 +512,7 @@ namespace TwnsCommonDamageCalculatorPanel {
         }
 
         private _onTouchedBtnSaveState(): void {
-            const calculatorData = this._getCalculatorData();
-            _savedData = {
-                gameConfig      : calculatorData.gameConfig,
-                weatherType     : Helpers.deepClone(calculatorData.weatherType),
-                attackerData    : Helpers.deepClone(calculatorData.attackerData),
-                defenderData    : Helpers.deepClone(calculatorData.defenderData),
-            };
+            _savedData = cloneCalculatorData(this._getCalculatorData());
 
             FloatText.show(Lang.getText(LangTextType.A0288));
         }
@@ -526,12 +521,7 @@ namespace TwnsCommonDamageCalculatorPanel {
             if (savedData == null) {
                 FloatText.show(Lang.getText(LangTextType.A0289));
             } else {
-                this._setCalculatorData({
-                    gameConfig      : savedData.gameConfig,
-                    weatherType     : Helpers.deepClone(savedData.weatherType),
-                    attackerData    : Helpers.deepClone(savedData.attackerData),
-                    defenderData    : Helpers.deepClone(savedData.defenderData),
-                });
+                this._setCalculatorData(cloneCalculatorData(savedData));
                 this._updateView();
             }
         }
@@ -657,7 +647,7 @@ namespace TwnsCommonDamageCalculatorPanel {
                     continue;
                 }
 
-                const data                              = Helpers.deepClone(calculatorData);
+                const data                              = cloneCalculatorData(calculatorData);
                 [data.attackerData, data.defenderData]  = [data.defenderData, data.attackerData];
                 data.attackerData.unitHp                = unitHp;
                 counterDamageDict.set(normalizedHp, {
@@ -709,6 +699,15 @@ namespace TwnsCommonDamageCalculatorPanel {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    function cloneCalculatorData(data: CalculatorData): CalculatorData {
+        return {
+            gameConfig      : data.gameConfig,
+            weatherType     : Helpers.deepClone(data.weatherType),
+            attackerData    : Helpers.deepClone(data.attackerData),
+            defenderData    : Helpers.deepClone(data.defenderData),
+        };
+    }
+
     async function createDefaultCalculatorData(): Promise<CalculatorData> {
         return {
             gameConfig      : await Twns.Config.ConfigManager.getLatestGameConfig(),

@@ -655,7 +655,7 @@ namespace MpwModel {
         }
 
         const war = createWarByWarData(data);
-        await war.init(data, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
+        war.init(data, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         _setWar(war);
 

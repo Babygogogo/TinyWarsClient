@@ -41,15 +41,15 @@ namespace Twns.MapEditor {
         private _isMapModified      = false;
         private _mapTag?            : IDataForMapTag;
 
-        public async init(data: ISerialWar, gameConfig: GameConfig): Promise<void> {
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig);
             this.getDrawer().init();
 
             this._initView();
         }
-        public async initWithMapEditorData(data: CommonProto.Map.IMapEditorData, gameConfig: GameConfig): Promise<void> {
+        public initWithMapEditorData(data: CommonProto.Map.IMapEditorData, gameConfig: GameConfig): void {
             const warData = MeUtility.createISerialWar(data);
-            await this.init(warData, gameConfig);
+            this.init(warData, gameConfig);
 
             const mapRawData = Helpers.getExisted(data.mapRawData);
             this.setMapSlotIndex(Helpers.getExisted(data.slotIndex));

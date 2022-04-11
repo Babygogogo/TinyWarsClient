@@ -29,7 +29,7 @@ namespace Twns.TestWar {
     export class TwWar extends BwWar {
         private readonly _playerManager         = new TwPlayerManager();
         private readonly _field                 = new TwField();
-        private readonly _commonSettingManager  = new Twns.BaseWar.BwCommonSettingManager();
+        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BwWarEventManager();
 
         public getCanCheat(): boolean {
@@ -41,7 +41,7 @@ namespace Twns.TestWar {
         public getField(): TwField {
             return this._field;
         }
-        public getCommonSettingManager(): Twns.BaseWar.BwCommonSettingManager {
+        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
         public getWarEventManager(): BwWarEventManager {
@@ -137,18 +137,22 @@ namespace Twns.TestWar {
             return null;
         }
 
-        public async init(data: ISerialWar, gameConfig: GameConfig): Promise<void> {
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig);
         }
         public async initByMapRawData(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<void> {
-            await this.init(await _createDataForCreateTwWar(mapRawData, gameConfig), gameConfig);
+            this.init(await _createDataForCreateTwWar(mapRawData, gameConfig), gameConfig);
         }
 
         public async getErrorCodeForInit(data: ISerialWar, gameConfig: GameConfig): Promise<ClientErrorCode> {
-            return await this.init(data, gameConfig).catch(e => {
+            try {
+                this.init(data, gameConfig);
+            } catch(e) {
                 const error = e as Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInit_00;
-            }) || ClientErrorCode.NoError;
+            }
+
+            return ClientErrorCode.NoError;
         }
         public async getErrorCodeForInitByMapRawData(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<ClientErrorCode> {
             return await this.initByMapRawData(mapRawData, gameConfig).catch(e => {
@@ -187,7 +191,7 @@ namespace Twns.TestWar {
         const seedRandomState       = new Math.seedrandom("" + Math.random(), { state: true }).state();
         return {
             settingsForCommon       : {
-                configVersion       : Twns.Config.ConfigManager.getLatestConfigVersion(),
+                configVersion       : Config.ConfigManager.getLatestConfigVersion(),
                 warRule,
                 presetWarRuleId     : warRule.ruleId,
             },

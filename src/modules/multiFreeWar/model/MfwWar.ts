@@ -16,7 +16,7 @@ namespace Twns.MultiFreeWar {
     export class MfwWar extends MpwWar {
         private _settingsForMfw?    : ISettingsForMfw;
 
-        public async init(data: ISerialWar, gameConfig: GameConfig): Promise<void> {
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
             this._baseInit(data, gameConfig);
             this._setSettingsForMfw(Helpers.getExisted(data.settingsForMfw, ClientErrorCode.MfwWar_Init_00));
 
