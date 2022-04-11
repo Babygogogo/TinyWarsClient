@@ -110,7 +110,7 @@ namespace TwnsSrrCreateSettingsPanel {
             this.close();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.SrrCreateMapListPanel, null);
         }
-        private _onTouchedBtnConfirm(): void {
+        private async _onTouchedBtnConfirm(): Promise<void> {
             const data      = SrrCreateModel.getData();
             const callback  = () => {
                 SpmProxy.reqSpmCreateSrw(data);
@@ -118,7 +118,7 @@ namespace TwnsSrrCreateSettingsPanel {
                 this._resetTimeoutForBtnConfirm();
             };
 
-            if (SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
+            if (await SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
                 callback();
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {

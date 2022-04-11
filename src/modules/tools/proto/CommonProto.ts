@@ -25597,6 +25597,9 @@ declare namespace CommonProto {
 
             /** SpmWarSaveSlotExtraData slotComment */
             slotComment?: (string|null);
+
+            /** SpmWarSaveSlotExtraData timestamp */
+            timestamp?: (number|null);
         }
 
         /** Represents a SpmWarSaveSlotExtraData. */
@@ -25610,6 +25613,9 @@ declare namespace CommonProto {
 
             /** SpmWarSaveSlotExtraData slotComment. */
             public slotComment: string;
+
+            /** SpmWarSaveSlotExtraData timestamp. */
+            public timestamp: number;
 
             /**
              * Creates a new SpmWarSaveSlotExtraData instance using the specified properties.
@@ -28760,8 +28766,11 @@ declare namespace CommonProto {
             /** MessageContainer MsgSpmCreateSrw */
             MsgSpmCreateSrw?: (CommonProto.NetMessage.IMsgSpmCreateSrw|null);
 
-            /** MessageContainer MsgSpmGetWarSaveSlotFullDataArray */
-            MsgSpmGetWarSaveSlotFullDataArray?: (CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullDataArray|null);
+            /** MessageContainer MsgSpmGetWarSaveSlotIndexArray */
+            MsgSpmGetWarSaveSlotIndexArray?: (CommonProto.NetMessage.IMsgSpmGetWarSaveSlotIndexArray|null);
+
+            /** MessageContainer MsgSpmGetWarSaveSlotFullData */
+            MsgSpmGetWarSaveSlotFullData?: (CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullData|null);
 
             /** MessageContainer MsgSpmDeleteWarSaveSlot */
             MsgSpmDeleteWarSaveSlot?: (CommonProto.NetMessage.IMsgSpmDeleteWarSaveSlot|null);
@@ -29157,8 +29166,11 @@ declare namespace CommonProto {
             /** MessageContainer MsgSpmCreateSrw. */
             public MsgSpmCreateSrw?: (CommonProto.NetMessage.IMsgSpmCreateSrw|null);
 
-            /** MessageContainer MsgSpmGetWarSaveSlotFullDataArray. */
-            public MsgSpmGetWarSaveSlotFullDataArray?: (CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullDataArray|null);
+            /** MessageContainer MsgSpmGetWarSaveSlotIndexArray. */
+            public MsgSpmGetWarSaveSlotIndexArray?: (CommonProto.NetMessage.IMsgSpmGetWarSaveSlotIndexArray|null);
+
+            /** MessageContainer MsgSpmGetWarSaveSlotFullData. */
+            public MsgSpmGetWarSaveSlotFullData?: (CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullData|null);
 
             /** MessageContainer MsgSpmDeleteWarSaveSlot. */
             public MsgSpmDeleteWarSaveSlot?: (CommonProto.NetMessage.IMsgSpmDeleteWarSaveSlot|null);
@@ -54572,106 +54584,304 @@ declare namespace CommonProto {
             }
         }
 
-        /** Properties of a MsgSpmGetWarSaveSlotFullDataArray. */
-        interface IMsgSpmGetWarSaveSlotFullDataArray {
+        /** Properties of a MsgSpmGetWarSaveSlotIndexArray. */
+        interface IMsgSpmGetWarSaveSlotIndexArray {
 
-            /** MsgSpmGetWarSaveSlotFullDataArray c */
-            c?: (CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IC|null);
+            /** MsgSpmGetWarSaveSlotIndexArray c */
+            c?: (CommonProto.NetMessage.MsgCommonHeartbeat.IC|null);
 
-            /** MsgSpmGetWarSaveSlotFullDataArray s */
-            s?: (CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS|null);
+            /** MsgSpmGetWarSaveSlotIndexArray s */
+            s?: (CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.IS|null);
         }
 
-        /** Represents a MsgSpmGetWarSaveSlotFullDataArray. */
-        class MsgSpmGetWarSaveSlotFullDataArray implements IMsgSpmGetWarSaveSlotFullDataArray {
+        /** Represents a MsgSpmGetWarSaveSlotIndexArray. */
+        class MsgSpmGetWarSaveSlotIndexArray implements IMsgSpmGetWarSaveSlotIndexArray {
 
             /**
-             * Constructs a new MsgSpmGetWarSaveSlotFullDataArray.
+             * Constructs a new MsgSpmGetWarSaveSlotIndexArray.
              * @param [properties] Properties to set
              */
-            constructor(properties?: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullDataArray);
+            constructor(properties?: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotIndexArray);
 
-            /** MsgSpmGetWarSaveSlotFullDataArray c. */
-            public c?: (CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IC|null);
+            /** MsgSpmGetWarSaveSlotIndexArray c. */
+            public c?: (CommonProto.NetMessage.MsgCommonHeartbeat.IC|null);
 
-            /** MsgSpmGetWarSaveSlotFullDataArray s. */
-            public s?: (CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS|null);
+            /** MsgSpmGetWarSaveSlotIndexArray s. */
+            public s?: (CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.IS|null);
 
             /**
-             * Creates a new MsgSpmGetWarSaveSlotFullDataArray instance using the specified properties.
+             * Creates a new MsgSpmGetWarSaveSlotIndexArray instance using the specified properties.
              * @param [properties] Properties to set
-             * @returns MsgSpmGetWarSaveSlotFullDataArray instance
+             * @returns MsgSpmGetWarSaveSlotIndexArray instance
              */
-            public static create(properties?: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullDataArray): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray;
+            public static create(properties?: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotIndexArray): CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray;
 
             /**
-             * Encodes the specified MsgSpmGetWarSaveSlotFullDataArray message. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.verify|verify} messages.
-             * @param message MsgSpmGetWarSaveSlotFullDataArray message or plain object to encode
+             * Encodes the specified MsgSpmGetWarSaveSlotIndexArray message. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.verify|verify} messages.
+             * @param message MsgSpmGetWarSaveSlotIndexArray message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullDataArray, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotIndexArray, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified MsgSpmGetWarSaveSlotFullDataArray message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.verify|verify} messages.
-             * @param message MsgSpmGetWarSaveSlotFullDataArray message or plain object to encode
+             * Encodes the specified MsgSpmGetWarSaveSlotIndexArray message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.verify|verify} messages.
+             * @param message MsgSpmGetWarSaveSlotIndexArray message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullDataArray, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotIndexArray, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Decodes a MsgSpmGetWarSaveSlotFullDataArray message from the specified reader or buffer.
+             * Decodes a MsgSpmGetWarSaveSlotIndexArray message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
-             * @returns MsgSpmGetWarSaveSlotFullDataArray
+             * @returns MsgSpmGetWarSaveSlotIndexArray
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray;
 
             /**
-             * Decodes a MsgSpmGetWarSaveSlotFullDataArray message from the specified reader or buffer, length delimited.
+             * Decodes a MsgSpmGetWarSaveSlotIndexArray message from the specified reader or buffer, length delimited.
              * @param reader Reader or buffer to decode from
-             * @returns MsgSpmGetWarSaveSlotFullDataArray
+             * @returns MsgSpmGetWarSaveSlotIndexArray
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray;
 
             /**
-             * Verifies a MsgSpmGetWarSaveSlotFullDataArray message.
+             * Verifies a MsgSpmGetWarSaveSlotIndexArray message.
              * @param message Plain object to verify
              * @returns `null` if valid, otherwise the reason why it is not
              */
             public static verify(message: { [k: string]: any }): (string|null);
 
             /**
-             * Creates a MsgSpmGetWarSaveSlotFullDataArray message from a plain object. Also converts values to their respective internal types.
+             * Creates a MsgSpmGetWarSaveSlotIndexArray message from a plain object. Also converts values to their respective internal types.
              * @param object Plain object
-             * @returns MsgSpmGetWarSaveSlotFullDataArray
+             * @returns MsgSpmGetWarSaveSlotIndexArray
              */
-            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray;
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray;
 
             /**
-             * Creates a plain object from a MsgSpmGetWarSaveSlotFullDataArray message. Also converts values to other types if specified.
-             * @param message MsgSpmGetWarSaveSlotFullDataArray
+             * Creates a plain object from a MsgSpmGetWarSaveSlotIndexArray message. Also converts values to other types if specified.
+             * @param message MsgSpmGetWarSaveSlotIndexArray
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
-             * Converts this MsgSpmGetWarSaveSlotFullDataArray to JSON.
+             * Converts this MsgSpmGetWarSaveSlotIndexArray to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
         }
 
-        namespace MsgSpmGetWarSaveSlotFullDataArray {
+        namespace MsgSpmGetWarSaveSlotIndexArray {
+
+            /** Properties of a S. */
+            interface IS {
+
+                /** S errorCode */
+                errorCode?: (number|null);
+
+                /** S slotIndexArray */
+                slotIndexArray?: (number[]|null);
+            }
+
+            /** Represents a S. */
+            class S implements IS {
+
+                /**
+                 * Constructs a new S.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.IS);
+
+                /** S errorCode. */
+                public errorCode: number;
+
+                /** S slotIndexArray. */
+                public slotIndexArray: number[];
+
+                /**
+                 * Creates a new S instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns S instance
+                 */
+                public static create(properties?: CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.IS): CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.S;
+
+                /**
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.S.verify|verify} messages.
+                 * @param message S message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.S;
+
+                /**
+                 * Decodes a S message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns S
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.S;
+
+                /**
+                 * Verifies a S message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a S message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns S
+                 */
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.S;
+
+                /**
+                 * Creates a plain object from a S message. Also converts values to other types if specified.
+                 * @param message S
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotIndexArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this S to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
+        /** Properties of a MsgSpmGetWarSaveSlotFullData. */
+        interface IMsgSpmGetWarSaveSlotFullData {
+
+            /** MsgSpmGetWarSaveSlotFullData c */
+            c?: (CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IC|null);
+
+            /** MsgSpmGetWarSaveSlotFullData s */
+            s?: (CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IS|null);
+        }
+
+        /** Represents a MsgSpmGetWarSaveSlotFullData. */
+        class MsgSpmGetWarSaveSlotFullData implements IMsgSpmGetWarSaveSlotFullData {
+
+            /**
+             * Constructs a new MsgSpmGetWarSaveSlotFullData.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullData);
+
+            /** MsgSpmGetWarSaveSlotFullData c. */
+            public c?: (CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IC|null);
+
+            /** MsgSpmGetWarSaveSlotFullData s. */
+            public s?: (CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IS|null);
+
+            /**
+             * Creates a new MsgSpmGetWarSaveSlotFullData instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns MsgSpmGetWarSaveSlotFullData instance
+             */
+            public static create(properties?: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullData): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData;
+
+            /**
+             * Encodes the specified MsgSpmGetWarSaveSlotFullData message. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.verify|verify} messages.
+             * @param message MsgSpmGetWarSaveSlotFullData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified MsgSpmGetWarSaveSlotFullData message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.verify|verify} messages.
+             * @param message MsgSpmGetWarSaveSlotFullData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: CommonProto.NetMessage.IMsgSpmGetWarSaveSlotFullData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a MsgSpmGetWarSaveSlotFullData message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns MsgSpmGetWarSaveSlotFullData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData;
+
+            /**
+             * Decodes a MsgSpmGetWarSaveSlotFullData message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns MsgSpmGetWarSaveSlotFullData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData;
+
+            /**
+             * Verifies a MsgSpmGetWarSaveSlotFullData message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a MsgSpmGetWarSaveSlotFullData message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns MsgSpmGetWarSaveSlotFullData
+             */
+            public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData;
+
+            /**
+             * Creates a plain object from a MsgSpmGetWarSaveSlotFullData message. Also converts values to other types if specified.
+             * @param message MsgSpmGetWarSaveSlotFullData
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this MsgSpmGetWarSaveSlotFullData to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace MsgSpmGetWarSaveSlotFullData {
 
             /** Properties of a C. */
             interface IC {
+
+                /** C slotIndex */
+                slotIndex?: (number|null);
             }
 
             /** Represents a C. */
@@ -54681,30 +54891,33 @@ declare namespace CommonProto {
                  * Constructs a new C.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IC);
+                constructor(properties?: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IC);
+
+                /** C slotIndex. */
+                public slotIndex: number;
 
                 /**
                  * Creates a new C instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns C instance
                  */
-                public static create(properties?: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IC): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.C;
+                public static create(properties?: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IC): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.C;
 
                 /**
-                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.C.verify|verify} messages.
+                 * Encodes the specified C message. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.C.verify|verify} messages.
                  * @param message C message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IC, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IC, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.C.verify|verify} messages.
+                 * Encodes the specified C message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.C.verify|verify} messages.
                  * @param message C message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IC, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IC, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
                  * Decodes a C message from the specified reader or buffer.
@@ -54714,7 +54927,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.C;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.C;
 
                 /**
                  * Decodes a C message from the specified reader or buffer, length delimited.
@@ -54723,7 +54936,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.C;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.C;
 
                 /**
                  * Verifies a C message.
@@ -54737,7 +54950,7 @@ declare namespace CommonProto {
                  * @param object Plain object
                  * @returns C
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.C;
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.C;
 
                 /**
                  * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -54745,7 +54958,7 @@ declare namespace CommonProto {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this C to JSON.
@@ -54760,8 +54973,11 @@ declare namespace CommonProto {
                 /** S errorCode */
                 errorCode?: (number|null);
 
-                /** S dataArray */
-                dataArray?: (CommonProto.SinglePlayerMode.ISpmWarSaveSlotFullData[]|null);
+                /** S slotIndex */
+                slotIndex?: (number|null);
+
+                /** S slotData */
+                slotData?: (CommonProto.SinglePlayerMode.ISpmWarSaveSlotFullData|null);
             }
 
             /** Represents a S. */
@@ -54771,36 +54987,39 @@ declare namespace CommonProto {
                  * Constructs a new S.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS);
+                constructor(properties?: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IS);
 
                 /** S errorCode. */
                 public errorCode: number;
 
-                /** S dataArray. */
-                public dataArray: CommonProto.SinglePlayerMode.ISpmWarSaveSlotFullData[];
+                /** S slotIndex. */
+                public slotIndex: number;
+
+                /** S slotData. */
+                public slotData?: (CommonProto.SinglePlayerMode.ISpmWarSaveSlotFullData|null);
 
                 /**
                  * Creates a new S instance using the specified properties.
                  * @param [properties] Properties to set
                  * @returns S instance
                  */
-                public static create(properties?: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.S;
+                public static create(properties?: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IS): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.S;
 
                 /**
-                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.S.verify|verify} messages.
+                 * Encodes the specified S message. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.S.verify|verify} messages.
                  * @param message S message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encode(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS, writer?: protobuf.Writer): protobuf.Writer;
+                public static encode(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IS, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
-                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.S.verify|verify} messages.
+                 * Encodes the specified S message, length delimited. Does not implicitly {@link CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.S.verify|verify} messages.
                  * @param message S message or plain object to encode
                  * @param [writer] Writer to encode to
                  * @returns Writer
                  */
-                public static encodeDelimited(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS, writer?: protobuf.Writer): protobuf.Writer;
+                public static encodeDelimited(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.IS, writer?: protobuf.Writer): protobuf.Writer;
 
                 /**
                  * Decodes a S message from the specified reader or buffer.
@@ -54810,7 +55029,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.S;
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.S;
 
                 /**
                  * Decodes a S message from the specified reader or buffer, length delimited.
@@ -54819,7 +55038,7 @@ declare namespace CommonProto {
                  * @throws {Error} If the payload is not a reader or valid buffer
                  * @throws {protobuf.util.ProtocolError} If required fields are missing
                  */
-                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.S;
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.S;
 
                 /**
                  * Verifies a S message.
@@ -54833,7 +55052,7 @@ declare namespace CommonProto {
                  * @param object Plain object
                  * @returns S
                  */
-                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.S;
+                public static fromObject(object: { [k: string]: any }): CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.S;
 
                 /**
                  * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -54841,7 +55060,7 @@ declare namespace CommonProto {
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: CommonProto.NetMessage.MsgSpmGetWarSaveSlotFullData.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
                  * Converts this S to JSON.

@@ -105,7 +105,7 @@ namespace TwnsScrCreateSettingsPanel {
             this.close();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ScrCreateMapListPanel, null);
         }
-        private _onTouchedBtnConfirm(): void {
+        private async _onTouchedBtnConfirm(): Promise<void> {
             const data      = ScrCreateModel.getData();
             const callback  = () => {
                 SpmProxy.reqSpmCreateScw(data);
@@ -113,7 +113,7 @@ namespace TwnsScrCreateSettingsPanel {
                 this._resetTimeoutForBtnConfirm();
             };
 
-            if (SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
+            if (await SpmModel.checkIsEmpty(Helpers.getExisted(data.slotIndex))) {
                 callback();
             } else {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {

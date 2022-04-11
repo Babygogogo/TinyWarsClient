@@ -65,10 +65,10 @@ namespace TwnsSpmCreateSaveSlotsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._srlSaveSlot.bindData(this._createDataForList());
+            this._srlSaveSlot.bindData(await this._createDataForList());
             this._listSaveSlot.selectedIndex = this._getOpenData().currentSlotIndex;
         }
 
@@ -77,14 +77,13 @@ namespace TwnsSpmCreateSaveSlotsPanel {
             this._btnCancel.label       = Lang.getText(LangTextType.B0154);
         }
 
-        private _createDataForList(): DataForSlotRenderer[] {
+        private async _createDataForList(): Promise<DataForSlotRenderer[]> {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotDict  = SpmModel.getSlotDict();
             const callback  = this._getOpenData().callback;
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
-                    slotInfo    : slotDict.get(slotIndex) ?? null,
+                    slotInfo    : await SpmModel.getSlotFullData(slotIndex),
                     callback,
                 });
             }

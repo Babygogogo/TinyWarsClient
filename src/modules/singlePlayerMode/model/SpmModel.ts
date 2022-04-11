@@ -41,36 +41,51 @@ namespace SpmModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for save slots.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _slotDict             = new Map<number, SpmWarSaveSlotData>();
-    let _hasReceivedSlotArray   = false;
+    const _slotIndexSetAccessor = Helpers.createCachedDataAccessor<null, Set<number>>({
+        reqData : () => SpmProxy.reqSpmGetWarSaveSlotIndexArray(),
+    });
+    const _slotFullDataAccessor = Helpers.createCachedDataAccessor<number, SpmWarSaveSlotData>({
+        reqData : (slotIndex) => SpmProxy.reqSpmGetWarSaveSlotFullData(slotIndex),
+    });
     let _previewingSlotIndex    : number;
 
-    export function getSlotDict(): Map<number, SpmWarSaveSlotData> {
-        return _slotDict;
+    export function setSlotIndexSet(slotIndexSet: Set<number>): void {
+        _slotIndexSetAccessor.setData(null, slotIndexSet);
     }
-    function setSlotData({ slotIndex, warData, slotExtraData }: {
-        slotIndex       : number;
-        warData         : CommonProto.WarSerialization.ISerialWar;
-        slotExtraData   : CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-    }): void {
-        getSlotDict().set(slotIndex, {
-            slotIndex,
-            warData,
-            extraData   : slotExtraData,
-        });
+    export function getSlotIndexSet(): Promise<Set<number> | null> {
+        return _slotIndexSetAccessor.getData(null);
+    }
+    async function addSlotIndex(slotIndex: number): Promise<void> {
+        const slotIndexSet = await getSlotIndexSet();
+        if (slotIndexSet == null) {
+            setSlotIndexSet(new Set([slotIndex]));
+        } else {
+            slotIndexSet.add(slotIndex);
+        }
+    }
+    async function deleteSlotIndex(slotIndex: number): Promise<void> {
+        const slotIndexSet = await getSlotIndexSet();
+        if (slotIndexSet == null) {
+            // nothing to do
+        } else {
+            slotIndexSet.delete(slotIndex);
+        }
     }
 
-    export function getHasReceivedSlotArray(): boolean {
-        return _hasReceivedSlotArray;
+    export function setSlotFullData(slotIndex: number, fullData: SpmWarSaveSlotData | null): void {
+        _slotFullDataAccessor.setData(slotIndex, fullData);
+    }
+    export function getSlotFullData(slotIndex: number): Promise<SpmWarSaveSlotData | null> {
+        return _slotFullDataAccessor.getData(slotIndex);
     }
 
-    export function checkIsEmpty(slotIndex: number): boolean {
-        return !getSlotDict().has(slotIndex);
-    }
 
-    export function getAvailableIndex(): number {
+    export async function checkIsEmpty(slotIndex: number): Promise<boolean> {
+        return !(await _slotIndexSetAccessor.getData(null))?.has(slotIndex);
+    }
+    export async function getAvailableIndex(): Promise<number> {
         for (let index = 0; index < CommonConstants.SpwSaveSlotMaxCount; ++index) {
-            if (checkIsEmpty(index)) {
+            if (await checkIsEmpty(index)) {
                 return index;
             }
         }
@@ -87,62 +102,60 @@ namespace SpmModel {
         }
     }
 
-    export function updateOnMsgSpmGetWarSaveSlotFullDataArray(data: NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS): void {
-        _hasReceivedSlotArray = true;
-
-        getSlotDict().clear();
-        for (const fullData of data.dataArray || []) {
-            setSlotData({
-                slotIndex       : Helpers.getExisted(fullData.slotIndex),
-                slotExtraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(Helpers.getExisted(fullData.encodedExtraData)),
-                warData         : ProtoManager.decodeAsSerialWar(Helpers.getExisted(fullData.encodedWarData)),
-            });
-        }
-    }
-    export function updateOnMsgSpmCreateScw(data: NetMessage.MsgSpmCreateScw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
-            slotExtraData   : Helpers.getExisted(data.extraData),
+    export async function updateOnMsgSpmCreateScw(data: NetMessage.MsgSpmCreateScw.IS): Promise<void> {
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.extraData),
             warData         : Helpers.getExisted(data.warData),
         });
+        await addSlotIndex(slotIndex);
     }
-    export function updateOnMsgSpmCreateSfw(data: NetMessage.MsgSpmCreateSfw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
+    export async function updateOnMsgSpmCreateSfw(data: NetMessage.MsgSpmCreateSfw.IS): Promise<void> {
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.extraData),
             warData         : Helpers.getExisted(data.warData),
-            slotExtraData   : Helpers.getExisted(data.extraData),
         });
+        await addSlotIndex(slotIndex);
     }
-    export function updateOnMsgSpmCreateSrw(data: NetMessage.MsgSpmCreateSrw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
+    export async function updateOnMsgSpmCreateSrw(data: NetMessage.MsgSpmCreateSrw.IS): Promise<void> {
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.extraData),
             warData         : Helpers.getExisted(data.warData),
-            slotExtraData   : Helpers.getExisted(data.extraData),
         });
-    }
-    export function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): void {
-        getSlotDict().delete(slotIndex);
+        await addSlotIndex(slotIndex);
     }
     export function updateOnMsgSpmSaveScw(data: NetMessage.MsgSpmSaveScw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.slotExtraData),
             warData         : Helpers.getExisted(data.warData),
-            slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
     }
     export function updateOnMsgSpmSaveSfw(data: NetMessage.MsgSpmSaveSfw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.slotExtraData),
             warData         : Helpers.getExisted(data.warData),
-            slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
     }
     export function updateOnMsgSpmSaveSrw(data: NetMessage.MsgSpmSaveSrw.IS): void {
-        setSlotData({
-            slotIndex       : Helpers.getExisted(data.slotIndex),
+        const slotIndex = Helpers.getExisted(data.slotIndex);
+        setSlotFullData(slotIndex, {
+            slotIndex,
+            extraData       : Helpers.getExisted(data.slotExtraData),
             warData         : Helpers.getExisted(data.warData),
-            slotExtraData   : Helpers.getExisted(data.slotExtraData),
         });
+    }
+    export async function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): Promise<void> {
+        setSlotFullData(slotIndex, null);
+        await deleteSlotIndex(slotIndex);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

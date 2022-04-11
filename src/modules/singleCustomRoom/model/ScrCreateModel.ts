@@ -74,7 +74,7 @@ namespace ScrCreateModel {
         setMapId(mapId);
         setConfigVersion(configVersion);
         setGameConfig(await Twns.Config.ConfigManager.getGameConfig(configVersion));
-        setSaveSlotIndex(SpmModel.getAvailableIndex());
+        setSaveSlotIndex(await SpmModel.getAvailableIndex());
         setSlotComment(null);
         setPlayerInfoList([]);
         await resetDataByWarRuleId(Helpers.getExisted((await getMapRawData()).warRuleArray?.find(v => v.ruleAvailability?.canScw)?.ruleId));

@@ -11227,6 +11227,17 @@ export const enum ServerErrorCode {
     ExeSpmGetReplayData_ExeWithSocket_0008,
     ExeSpmGetReplayData_ExeWithSocket_0009,
 
+    ExeSpmGetWarSaveSlotFullData_ExeWithSocket_0000,
+    ExeSpmGetWarSaveSlotFullData_ExeWithSocket_0001,
+    ExeSpmGetWarSaveSlotFullData_ExeWithSocket_0002,
+    ExeSpmGetWarSaveSlotFullData_ExeWithSocket_0003,
+    ExeSpmGetWarSaveSlotFullData_ExeWithSocket_0004,
+    ExeSpmGetWarSaveSlotFullData_ExeWithSocket_0005,
+    ExeSpmGetWarSaveSlotFullData_ExeWithSocket_0006,
+    ExeSpmGetWarSaveSlotFullData_ExeWithSocket_0007,
+    ExeSpmGetWarSaveSlotFullData_ExeWithSocket_0008,
+    ExeSpmGetWarSaveSlotFullData_ExeWithSocket_0009,
+
     ExeSpmDeleteAllScoreAndReplay_ExeWithSocket_0000,
     ExeSpmDeleteAllScoreAndReplay_ExeWithSocket_0001,
     ExeSpmDeleteAllScoreAndReplay_ExeWithSocket_0002,

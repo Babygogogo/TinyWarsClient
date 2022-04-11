@@ -57,9 +57,9 @@ namespace TwnsSpmWarListPanel {
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
-                { type: NotifyType.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.SpmPreviewingWarSaveSlotChanged,    callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
-                { type: NotifyType.MsgSpmGetWarSaveSlotFullDataArray,  callback: this._onNotifyMsgSpmGetWarSaveSlotFullDataArray },
+                { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.SpmPreviewingWarSaveSlotChanged,     callback: this._onNotifySpmPreviewingWarSaveSlotChanged },
+                { type: NotifyType.MsgSpmGetWarSaveSlotIndexArray,      callback: this._onNotifyMsgSpmGetWarSaveSlotIndexArray },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -90,7 +90,7 @@ namespace TwnsSpmWarListPanel {
             this._updateComponentsForPreviewingWarInfo();
         }
 
-        private _onNotifyMsgSpmGetWarSaveSlotFullDataArray(): void {
+        private _onNotifyMsgSpmGetWarSaveSlotIndexArray(): void {
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
         }
@@ -102,8 +102,8 @@ namespace TwnsSpmWarListPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
 
-        private _onTouchedBtnNextStep(): void {
-            const slotData = SpmModel.getSlotDict().get(SpmModel.getPreviewingSlotIndex());
+        private async _onTouchedBtnNextStep(): Promise<void> {
+            const slotData = await SpmModel.getSlotFullData(SpmModel.getPreviewingSlotIndex());
             if (slotData != null) {
                 FlowManager.gotoSinglePlayerWar({
                     slotIndex       : slotData.slotIndex,
@@ -152,30 +152,27 @@ namespace TwnsSpmWarListPanel {
             this._btnNextStep.label         = Lang.getText(LangTextType.B0024);
         }
 
-        private _updateGroupWarList(): void {
+        private async _updateGroupWarList(): Promise<void> {
             const labelLoading  = this._labelLoading;
             const labelNoWar    = this._labelNoWar;
             const listWar       = this._listWar;
-            if (!SpmModel.getHasReceivedSlotArray()) {
-                labelLoading.visible    = true;
-                labelNoWar.visible     = false;
-                listWar.clear();
+            labelLoading.visible    = true;
+            labelNoWar.visible     = false;
+            listWar.clear();
 
-            } else {
-                const dataArray         = this._createDataForListWar();
-                const slotIndex         = SpmModel.getPreviewingSlotIndex();
-                labelLoading.visible    = false;
-                labelNoWar.visible      = !dataArray.length;
-                listWar.bindData(dataArray);
-                listWar.setSelectedIndex(dataArray.findIndex(v => v.slotIndex === slotIndex));
-            }
+            const dataArray         = await this._createDataForListWar();
+            const slotIndex         = SpmModel.getPreviewingSlotIndex();
+            labelLoading.visible    = false;
+            labelNoWar.visible      = !dataArray.length;
+            listWar.bindData(dataArray);
+            listWar.setSelectedIndex(dataArray.findIndex(v => v.slotIndex === slotIndex));
         }
 
         private _updateComponentsForPreviewingWarInfo(): void {
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
             const slotIndex     = SpmModel.getPreviewingSlotIndex();
-            if ((!SpmModel.getHasReceivedSlotArray()) || (slotIndex == null)) {
+            if (slotIndex == null) {
                 groupTab.visible    = false;
                 btnNextStep.visible = false;
             } else {
@@ -213,9 +210,9 @@ namespace TwnsSpmWarListPanel {
             }
         }
 
-        private _createDataForListWar(): DataForWarRenderer[] {
+        private async _createDataForListWar(): Promise<DataForWarRenderer[]> {
             const dataArray: DataForWarRenderer[] = [];
-            for (const [slotIndex] of SpmModel.getSlotDict()) {
+            for (const slotIndex of await SpmModel.getSlotIndexSet() ?? new Set()) {
                 dataArray.push({
                     slotIndex,
                 });
@@ -226,7 +223,7 @@ namespace TwnsSpmWarListPanel {
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const slotIndex = SpmModel.getPreviewingSlotIndex();
-            const warData   = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex)?.warData;
+            const warData   = slotIndex == null ? null : (await SpmModel.getSlotFullData(slotIndex))?.warData;
             if (warData == null) {
                 return null;
             }
@@ -255,7 +252,7 @@ namespace TwnsSpmWarListPanel {
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
             const slotIndex = SpmModel.getPreviewingSlotIndex();
-            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+            const slotData  = slotIndex == null ? null : await SpmModel.getSlotFullData(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
                 return null;
@@ -292,7 +289,7 @@ namespace TwnsSpmWarListPanel {
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
             const slotIndex = SpmModel.getPreviewingSlotIndex();
-            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+            const slotData  = slotIndex == null ? null : await SpmModel.getSlotFullData(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
                 return { dataArrayForListSettings: [] };
@@ -342,7 +339,7 @@ namespace TwnsSpmWarListPanel {
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
             const slotIndex = SpmModel.getPreviewingSlotIndex();
-            const slotData  = slotIndex == null ? null : SpmModel.getSlotDict().get(slotIndex);
+            const slotData  = slotIndex == null ? null : await SpmModel.getSlotFullData(slotIndex);
             const warData   = slotData?.warData;
             if (warData == null) {
                 return null;
@@ -431,26 +428,32 @@ namespace TwnsSpmWarListPanel {
         slotIndex: number;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
-        private readonly _labelType!    : TwnsUiLabel.UiLabel;
-        private readonly _labelName!    : TwnsUiLabel.UiLabel;
+        private readonly _labelType!        : TwnsUiLabel.UiLabel;
+        private readonly _labelTimestamp!   : TwnsUiLabel.UiLabel;
+        private readonly _labelName!        : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
             this._setShortSfxCode(Types.ShortSfxCode.None);
         }
 
         protected async _onDataChanged(): Promise<void> {
-            const slotIndex = this._getData().slotIndex;
-            const slotData  = SpmModel.getSlotDict().get(slotIndex);
-            const labelType = this._labelType;
-            const labelName = this._labelName;
+            const slotIndex         = this._getData().slotIndex;
+            const slotData          = await SpmModel.getSlotFullData(slotIndex);
+            const labelType         = this._labelType;
+            const labelName         = this._labelName;
+            const labelTimestamp    = this._labelTimestamp;
+
             if (!slotData) {
-                labelType.text  = ``;
-                labelName.text  = ``;
+                labelType.text      = ``;
+                labelName.text      = ``;
+                labelTimestamp.text = ``;
+
             } else {
                 const warData   = slotData.warData;
-                labelType.text  = `${slotIndex}. ${Lang.getWarTypeName(WarCommonHelpers.getWarType(warData))}`;
+                labelType.text  = `#${slotIndex} ${Lang.getWarTypeName(WarCommonHelpers.getWarType(warData))}`;
 
-                const slotComment = slotData.extraData.slotComment;
+                const slotExtraData = slotData.extraData;
+                const slotComment   = slotExtraData.slotComment;
                 if (slotComment) {
                     labelName.text = slotComment;
                 } else {
@@ -459,6 +462,9 @@ namespace TwnsSpmWarListPanel {
                         ? `(${Lang.getText(LangTextType.B0321)})`
                         : (await WarMapModel.getMapNameInCurrentLanguage(mapId) || CommonConstants.ErrorTextForUndefined);
                 }
+
+                const timestamp     = slotExtraData.timestamp;
+                labelTimestamp.text = timestamp == null ? `` : Helpers.getTimestampShortText(timestamp);
             }
         }
 

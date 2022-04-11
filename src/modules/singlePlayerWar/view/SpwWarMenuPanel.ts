@@ -59,8 +59,6 @@ namespace TwnsSpwWarMenuPanel {
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.UnitAndTileTextureVersionChanged,    callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
-                { type: NotifyType.MsgSpmSaveScw,                       callback: this._onMsgSpmSaveScw },
-                { type: NotifyType.MsgSpmSaveSfw,                       callback: this._onMsgSpmSaveSfw },
                 { type: NotifyType.MsgSpmCreateSfw,                     callback: this._onMsgSpmCreateSfw },
                 { type: NotifyType.MsgSpmDeleteWarSaveSlot,             callback: this._onNotifyMsgSpmDeleteWarSaveSlot },
                 { type: NotifyType.MsgUserSetMapRating,                 callback: this._onNotifyMsgUserSetMapRating },
@@ -111,14 +109,6 @@ namespace TwnsSpwWarMenuPanel {
 
         private _onNotifyUserSettingsOpacitySettingsChanged(): void {
             this._updateBtnUnitOpacity();
-        }
-
-        private _onMsgSpmSaveScw(): void {
-            FloatText.show(Lang.getText(LangTextType.A0073));
-        }
-
-        private _onMsgSpmSaveSfw(): void {
-            FloatText.show(Lang.getText(LangTextType.A0073));
         }
 
         private _onMsgSpmCreateSfw(e: egret.Event): void {

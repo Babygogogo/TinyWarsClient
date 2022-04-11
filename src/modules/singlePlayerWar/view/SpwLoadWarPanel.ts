@@ -74,10 +74,10 @@ namespace TwnsSpwLoadWarPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._srlSaveSlot.bindData(this._createDataForList());
+            this._srlSaveSlot.bindData(await this._createDataForList());
             this._listSaveSlot.selectedIndex = Helpers.getExisted(SpwModel.getWar()).getSaveSlotIndex();
         }
 
@@ -87,13 +87,12 @@ namespace TwnsSpwLoadWarPanel {
             this._btnHelp.label         = Lang.getText(LangTextType.B0143);
         }
 
-        private _createDataForList(): DataForSlotRenderer[] {
-            const dataList  : DataForSlotRenderer[] = [];
-            const slotDict  = SpmModel.getSlotDict();
+        private async _createDataForList(): Promise<DataForSlotRenderer[]> {
+            const dataList: DataForSlotRenderer[] = [];
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
-                    slotInfo    : slotDict.get(slotIndex) ?? null,
+                    slotInfo    : await SpmModel.getSlotFullData(slotIndex),
                 });
             }
 

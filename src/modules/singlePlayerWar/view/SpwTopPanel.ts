@@ -26,6 +26,7 @@
 namespace TwnsSpwTopPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
+    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
     // eslint-disable-next-line no-shadow
     enum PanelSkinState {
@@ -39,7 +40,8 @@ namespace TwnsSpwTopPanel {
     export class SpwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
         private readonly _labelWeather!         : TwnsUiLabel.UiLabel;
-        private readonly _labelSinglePlayer!    : TwnsUiLabel.UiLabel;
+        private readonly _btnSave!              : TwnsUiLabel.UiLabel;
+        private readonly _btnLoad!              : TwnsUiLabel.UiLabel;
         private readonly _btnChat!              : TwnsUiButton.UiButton;
         private readonly _btnSettings!          : TwnsUiButton.UiButton;
 
@@ -74,12 +76,17 @@ namespace TwnsSpwTopPanel {
                 { type: NotifyType.MsgChatUpdateReadProgress,       callback: this._onNotifyMsgChatUpdateReadProgress },
                 { type: NotifyType.MsgChatGetAllMessages,           callback: this._onNotifyMsgChatGetAllMessages },
                 { type: NotifyType.MsgChatAddMessage,               callback: this._onNotifyMsgChatAddMessage },
+                { type: NotifyType.MsgSpmSaveScw,                   callback: this._onNotifyMsgSpmSaveScw },
+                { type: NotifyType.MsgSpmSaveSfw,                   callback: this._onNotifyMsgSpmSaveSfw },
+                { type: NotifyType.MsgSpmSaveSrw,                   callback: this._onNotifyMsgSpmSaveSrw },
             ]);
             this._setUiListenerArray([
                 { ui: this._labelWeather,       callback: this._onTouchedLabelWeather },
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._groupInfo,          callback: this._onTouchedGroupInfo },
+                { ui: this._btnSave,            callback: this._onTouchedBtnSave },
+                { ui: this._btnLoad,            callback: this._onTouchedBtnLoad },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnSettings,        callback: this._onTouchedBtnSettings, },
                 { ui: this._btnExpand,          callback: this._onTouchedBtnExpand },
@@ -140,6 +147,16 @@ namespace TwnsSpwTopPanel {
             this._updateBtnChat();
         }
 
+        private _onNotifyMsgSpmSaveScw(): void {
+            FloatText.show(Lang.getText(LangTextType.A0073));
+        }
+        private _onNotifyMsgSpmSaveSfw(): void {
+            FloatText.show(Lang.getText(LangTextType.A0073));
+        }
+        private _onNotifyMsgSpmSaveSrw(): void {
+            FloatText.show(Lang.getText(LangTextType.A0073));
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks for touch.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,6 +192,56 @@ namespace TwnsSpwTopPanel {
             SoundManager.playShortSfx(Types.ShortSfxCode.ButtonNeutral01);
         }
 
+        private _onTouchedBtnSave(): void {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            const war = this._getOpenData().war;
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0260),
+                content : Lang.getText(LangTextType.A0071),
+                callback: () => {
+                    const warType = war.getWarType();
+                    if ((warType === Types.WarType.ScwFog) || (warType === Types.WarType.ScwStd)) {
+                        SpmProxy.reqSpmSaveScw(war);
+                    } else if ((warType === Types.WarType.SfwFog) || (warType === Types.WarType.SfwStd)) {
+                        SpmProxy.reqSpmSaveSfw(war);
+                    } else if ((warType === Types.WarType.SrwFog) || (warType === Types.WarType.SrwStd)) {
+                        SpmProxy.reqSpmSaveSrw(war);
+                    } else {
+                        throw Helpers.newError(`Invalid warType: ${warType}`, ClientErrorCode.SpwWarMenuPanel_OnTOuchedBtnSaveGame_00);
+                    }
+                },
+            });
+        }
+
+        private async _onTouchedBtnLoad(): Promise<void> {
+            if (!this._checkCanDoAction()) {
+                FloatText.show(Lang.getText(LangTextType.A0239));
+                return;
+            }
+
+            const slotInfo = await SpmModel.getSlotFullData(this._getOpenData().war.getSaveSlotIndex());
+            if (slotInfo == null) {
+                FloatText.show(Lang.getText(LangTextType.A0303));
+                return;
+            }
+
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
+                title   : Lang.getText(LangTextType.B0261),
+                content : Lang.getText(LangTextType.A0072),
+                callback: () => {
+                    FlowManager.gotoSinglePlayerWar({
+                        slotIndex       : slotInfo.slotIndex,
+                        warData         : slotInfo.warData,
+                        slotExtraData   : slotInfo.extraData,
+                    });
+                },
+            });
+        }
+
         private _onTouchedBtnChat(): void {
             TwnsPanelManager.close(TwnsPanelConfig.Dict.SpwWarMenuPanel);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.ChatPanel, {});
@@ -208,7 +275,6 @@ namespace TwnsSpwTopPanel {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelSinglePlayer.text = Lang.getText(LangTextType.B0138);
             this._updateLabelWeather();
             this._updateLabelTurnIndex();
         }
@@ -304,6 +370,13 @@ namespace TwnsSpwTopPanel {
                 });
             }
             return dataArray;
+        }
+
+        private _checkCanDoAction(): boolean {
+            const war = this._getOpenData().war;
+            return (war.checkIsHumanInTurn())                                           &&
+                (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.Main)      &&
+                (war.getActionPlanner().getState() === Types.ActionPlannerState.Idle);
         }
     }
 

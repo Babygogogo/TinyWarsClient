@@ -21,8 +21,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsSpmCreateSfwSaveSlotsPanel {
-    import CommonConfirmPanel   = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonHelpPanel      = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ISerialWar           = CommonProto.WarSerialization.ISerialWar;
@@ -78,11 +76,11 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            this._srlSaveSlot.bindData(this._createDataForList());
-            this._listSaveSlot.selectedIndex = SpmModel.getAvailableIndex();
+            this._srlSaveSlot.bindData(await this._createDataForList());
+            this._listSaveSlot.selectedIndex = await SpmModel.getAvailableIndex();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -91,14 +89,13 @@ namespace TwnsSpmCreateSfwSaveSlotsPanel {
             this._btnHelp.label         = Lang.getText(LangTextType.B0143);
         }
 
-        private _createDataForList(): DataForSlotRenderer[] {
+        private async _createDataForList(): Promise<DataForSlotRenderer[]> {
             const dataList  : DataForSlotRenderer[] = [];
             const warData   = this._getOpenData();
-            const slotDict  = SpmModel.getSlotDict();
             for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
                     slotIndex,
-                    slotInfo    : slotDict.get(slotIndex) ?? null,
+                    slotInfo    : await SpmModel.getSlotFullData(slotIndex),
                     warData,
                 });
             }
