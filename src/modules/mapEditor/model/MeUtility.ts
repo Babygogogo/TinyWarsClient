@@ -22,8 +22,8 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MeUtility {
-    import BwTile               = TwnsBwTile.BwTile;
-    import MeWar                = TwnsMeWar.MeWar;
+    import BwTile               = Twns.BaseWar.BwTile;
+    import MeWar                = Twns.MapEditor.MeWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import GridIndex            = Types.GridIndex;
     import TileType             = Types.TileType;
@@ -38,7 +38,7 @@ namespace MeUtility {
     import ISerialUnit          = WarSerialization.ISerialUnit;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
+    import BwUnitMap            = Twns.BaseWar.BwUnitMap;
 
     export type AsymmetricalCounters = {
         UpToDown            : number | null;
@@ -206,7 +206,7 @@ namespace MeUtility {
 
         return {
             settingsForCommon   : {
-                configVersion   : ConfigManager.getLatestConfigVersion(),
+                configVersion   : Twns.Config.ConfigManager.getLatestConfigVersion(),
                 presetWarRuleId : warRule.ruleId,
                 warRule,
             },
@@ -435,7 +435,7 @@ namespace MeUtility {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function reviseAllUnitIds(unitMap: BwUnitMap): void {
-        const allUnits  = new Map<number, { unit: TwnsBwUnit.BwUnit, newUnitId: number }>();
+        const allUnits  = new Map<number, { unit: Twns.BaseWar.BwUnit, newUnitId: number }>();
         let nextUnitId  = 0;
         for (const unit of unitMap.getAllUnits()) {
             allUnits.set(unit.getUnitId(), { unit, newUnitId: nextUnitId } );
@@ -542,21 +542,21 @@ namespace MeUtility {
         const objectType    = tile1.getObjectType();
         const decoratorType = tile1.getDecoratorType();
         return (baseType === tile2.getBaseType())
-            && (ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType) === tile2.getObjectType())
+            && (Twns.Config.ConfigManager.getSymmetricalTileObjectType(objectType, symmetryType) === tile2.getObjectType())
             && (decoratorType == tile2.getDecoratorType())
-            && (ConfigManager.checkIsTileBaseSymmetrical({
+            && (Twns.Config.ConfigManager.checkIsTileBaseSymmetrical({
                 baseType,
                 shapeId1    : tile1.getBaseShapeId(),
                 shapeId2    : tile2.getBaseShapeId(),
                 symmetryType,
             }))
-            && (ConfigManager.checkIsTileObjectSymmetrical({
+            && (Twns.Config.ConfigManager.checkIsTileObjectSymmetrical({
                 objectType,
                 shapeId1    : tile1.getObjectShapeId(),
                 shapeId2    : tile2.getObjectShapeId(),
                 symmetryType,
             }))
-            && (ConfigManager.checkIsTileDecoratorSymmetrical({
+            && (Twns.Config.ConfigManager.checkIsTileDecoratorSymmetrical({
                 decoratorType,
                 shapeId1    : tile1.getDecoratorShapeId(),
                 shapeId2    : tile2.getDecoratorShapeId(),
@@ -565,7 +565,7 @@ namespace MeUtility {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getAutoRoadShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+    export function getAutoRoadShapeId(tileMap: Twns.BaseWar.BwTileMap, gridIndex: GridIndex): number {
         const { x, y }      = gridIndex;
         const isAdjacent4   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x - 1, y }) ? 1 : 0;
         const isAdjacent3   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x + 1, y }) ? 1 : 0;
@@ -573,7 +573,7 @@ namespace MeUtility {
         const isAdjacent1   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x, y: y - 1 }) ? 1 : 0;
         return TileRoadAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    export function getAutoBridgeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+    export function getAutoBridgeShapeId(tileMap: Twns.BaseWar.BwTileMap, gridIndex: GridIndex): number {
         const { x, y }      = gridIndex;
         const isAdjacent4   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x - 1, y }) ? 1 : 0;
         const isAdjacent3   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x: x + 1, y }) ? 1 : 0;
@@ -581,7 +581,7 @@ namespace MeUtility {
         const isAdjacent1   = checkCanRoadOrBridgeLinkToTile(tileMap, gridIndex, { x, y: y - 1 }) ? 1 : 0;
         return TileBridgeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    function checkCanRoadOrBridgeLinkToTile(tileMap: TwnsBwTileMap.BwTileMap, gridIndex1: GridIndex, gridIndex2: GridIndex): boolean {
+    function checkCanRoadOrBridgeLinkToTile(tileMap: Twns.BaseWar.BwTileMap, gridIndex1: GridIndex, gridIndex2: GridIndex): boolean {
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex2, tileMap.getMapSize())) {
             return true;
         }
@@ -602,7 +602,7 @@ namespace MeUtility {
         return false;
     }
 
-    export function getAutoPlasmaShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+    export function getAutoPlasmaShapeId(tileMap: Twns.BaseWar.BwTileMap, gridIndex: GridIndex): number {
         const { x, y }              = gridIndex;
         const isAdjacent4           = checkIsPlasma(tileMap, { x: x - 1, y }) ? 1 : 0;
         const isAdjacent3           = checkIsPlasma(tileMap, { x: x + 1, y }) ? 1 : 0;
@@ -611,7 +611,7 @@ namespace MeUtility {
         const isAdjacentToMeteor    = GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(v => tileMap.getTile(v).getType() === TileType.Meteor);
         return Helpers.getExisted(TilePlasmaAutoShapeIdMap.get(isAdjacentToMeteor))[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    function checkIsPlasma(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
+    function checkIsPlasma(tileMap: Twns.BaseWar.BwTileMap, gridIndex: GridIndex): boolean {
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         }
@@ -620,14 +620,14 @@ namespace MeUtility {
         return (tileType === TileType.Plasma);
     }
 
-    export function getAutoPipeShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): number {
+    export function getAutoPipeShapeId(tileMap: Twns.BaseWar.BwTileMap, gridIndex: GridIndex): number {
         const isAdjacent4   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Left) ? 1 : 0;
         const isAdjacent3   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Right) ? 1 : 0;
         const isAdjacent2   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Down) ? 1 : 0;
         const isAdjacent1   = checkCanLinkToPipe(tileMap, gridIndex, Types.Direction.Up) ? 1 : 0;
         return TilePipeAutoShapeIdArray[isAdjacent1 + isAdjacent2 * 2 + isAdjacent3 * 4 + isAdjacent4 * 8];
     }
-    function checkCanLinkToPipe(tileMap: TwnsBwTileMap.BwTileMap, origin: GridIndex, direction: Types.Direction): boolean {
+    function checkCanLinkToPipe(tileMap: Twns.BaseWar.BwTileMap, origin: GridIndex, direction: Types.Direction): boolean {
         const gridIndex = GridIndexHelpers.getAdjacentGrid(origin, direction);
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
@@ -649,7 +649,7 @@ namespace MeUtility {
         }
     }
 
-    export function getAutoTileDecoratorTypeAndShapeId(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | null, shapeId: number | null } {
+    export function getAutoTileDecoratorTypeAndShapeId(tileMap: Twns.BaseWar.BwTileMap, gridIndex: GridIndex): { decoratorType: TileDecoratorType | null, shapeId: number | null } {
         const tile = tileMap.getTile(gridIndex);
         if (tile == null) {
             return {
@@ -773,7 +773,7 @@ namespace MeUtility {
             shapeId         : null,
         };
     }
-    function checkIsSeaOrEmpty(tileMap: TwnsBwTileMap.BwTileMap, gridIndex: GridIndex): boolean {
+    function checkIsSeaOrEmpty(tileMap: Twns.BaseWar.BwTileMap, gridIndex: GridIndex): boolean {
         if (!GridIndexHelpers.checkIsInsideMap(gridIndex, tileMap.getMapSize())) {
             return true;
         } else {
@@ -783,8 +783,8 @@ namespace MeUtility {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function getErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-        const configVersion = ConfigManager.getLatestConfigVersion();
-        if (configVersion == null) {
+        const gameConfig = await Twns.Config.ConfigManager.getLatestGameConfig();
+        if (gameConfig == null) {
             return ClientErrorCode.MapRawDataValidation00;
         }
 
@@ -812,18 +812,18 @@ namespace MeUtility {
             ruleList                : mapRawData.warRuleArray,
             playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
             allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(mapRawData.warEventFullData),
-            configVersion,
+            gameConfig,
         });
         if (warRuleError) {
             return warRuleError;
         }
 
-        const warEventError = WarEventHelper.getErrorCodeForWarEventFullData(mapRawData);
+        const warEventError = WarEventHelper.getErrorCodeForWarEventFullData(mapRawData, gameConfig);
         if (warEventError) {
             return warEventError;
         }
 
-        return await new Twns.TestWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData);
+        return await new Twns.TestWar.TwWar().getErrorCodeForInitByMapRawData(mapRawData, gameConfig);
     }
     function getErrorCodeForMapDesigner(mapDesigner: Types.Undefinable<string>): ClientErrorCode {
         if ((mapDesigner == null)                                       ||

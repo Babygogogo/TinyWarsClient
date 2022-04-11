@@ -19,8 +19,10 @@
 namespace TwnsCommonChooseCoPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
+    import GameConfig       = Twns.Config.GameConfig;
 
     export type OpenData = {
+        gameConfig          : GameConfig;
         currentCoId         : number | null;
         availableCoIdArray  : number[];
         callbackOnConfirm   : (coId: number) => void;
@@ -129,12 +131,12 @@ namespace TwnsCommonChooseCoPanel {
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const gameConfig    = this._getOpenData().gameConfig;
             const dataArray     : DataForCoRenderer[] = [];
             let index           = 0;
             for (const coId of this._getOpenData().availableCoIdArray) {
                 dataArray.push({
-                    coBasicCfg  : ConfigManager.getCoBasicCfg(configVersion, coId),
+                    coBasicCfg  : Helpers.getExisted(gameConfig.getCoBasicCfg(coId)),
                     index,
                     panel       : this,
                 });
@@ -151,7 +153,7 @@ namespace TwnsCommonChooseCoPanel {
             }
 
             this._uiCoInfo.setCoData({
-                configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+                gameConfig   : this._getOpenData().gameConfig,
                 coId,
             });
         }

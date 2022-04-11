@@ -16,7 +16,7 @@ namespace RwModel {
     import ISerialWar           = CommonProto.WarSerialization.ISerialWar;
     import MsgReplayGetDataIs   = NetMessage.MsgReplayGetData.IS;
     import NotifyType           = TwnsNotifyType.NotifyType;
-    import RwWar                = TwnsRwWar.RwWar;
+    import RwWar                = Twns.ReplayWar.RwWar;
 
     let _replayIdArray          : number[] | null = null;
     let _previewingReplayId     : number | null = null;
@@ -101,7 +101,7 @@ namespace RwModel {
         }
 
         const war = new RwWar();
-        await war.init(warData);
+        war.init(warData, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         war.setReplayId(replayId);
         _war = war;

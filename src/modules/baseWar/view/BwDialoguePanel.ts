@@ -18,7 +18,7 @@ namespace TwnsBwDialoguePanel {
     import LangTextType = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
-        configVersion   : string;
+        gameConfig      : Twns.Config.GameConfig;
         actionData      : CommonProto.WarEvent.IWeaDialogue;
         callbackOnClose : () => void;
     };
@@ -52,7 +52,7 @@ namespace TwnsBwDialoguePanel {
                 oldOpenData.callbackOnClose();
             }
 
-            this._imgBg.source          = ConfigManager.getDialogueBackgroundImage(this._getOpenData().actionData.backgroundId ?? 0);
+            this._imgBg.source          = Twns.Config.ConfigManager.getDialogueBackgroundImage(this._getOpenData().actionData.backgroundId ?? 0);
             this._groupName1.visible    = false;
             this._groupName2.visible    = false;
             this._imgCo1.source         = ``;
@@ -180,8 +180,9 @@ namespace TwnsBwDialoguePanel {
             if (dataForCoDialogue) {
                 const { side, nameArray }   = dataForCoDialogue;
                 const coId                  = Helpers.getExisted(dataForCoDialogue.coId);
-                const coImageSource         = ConfigManager.getCoBustImageSource(openData.configVersion, coId);
-                const coName                = Lang.getLanguageText({ textArray: nameArray }) ?? ConfigManager.getCoNameAndTierText(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), coId);
+                const gameConfig            = openData.gameConfig;
+                const coImageSource         = gameConfig.getCoBustImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
+                const coName                = Lang.getLanguageText({ textArray: nameArray }) ?? gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined;
 
                 if (side === Types.WarEventActionDialogueSide.Left) {
                     groupName1.visible  = true;

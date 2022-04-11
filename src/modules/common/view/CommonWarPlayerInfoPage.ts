@@ -22,6 +22,7 @@
 namespace TwnsCommonWarPlayerInfoPage {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
+    import GameConfig           = Twns.Config.GameConfig;
 
     export type PlayerInfo = {
         playerIndex         : number;
@@ -35,7 +36,7 @@ namespace TwnsCommonWarPlayerInfoPage {
         isDefeat            : boolean | null;
     };
     export type OpenDataForCommonWarPlayerInfoPage = {
-        configVersion           : string;
+        gameConfig              : GameConfig;
         playersCountUnneutral   : number;
         roomOwnerPlayerIndex    : number | null;
         callbackOnExitRoom      : (() => void) | null;
@@ -72,7 +73,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             }
 
             const {
-                configVersion,
+                gameConfig,
                 callbackOnExitRoom,
                 callbackOnDeletePlayer,
                 roomOwnerPlayerIndex,
@@ -88,7 +89,7 @@ namespace TwnsCommonWarPlayerInfoPage {
                 }
 
                 dataArray.push({
-                    configVersion,
+                    gameConfig,
                     isRoomOwnedBySelf,
                     callbackOnExitRoom,
                     callbackOnDeletePlayer,
@@ -101,7 +102,7 @@ namespace TwnsCommonWarPlayerInfoPage {
     }
 
     type DataForPlayerRenderer = {
-        configVersion           : string;
+        gameConfig              : GameConfig;
         isRoomOwnedBySelf       : boolean;
         callbackOnExitRoom      : (() => void) | null;
         callbackOnDeletePlayer  : ((playerIndex: number) => void) | null;
@@ -147,7 +148,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             const coId  = data.playerInfo.coId;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    configVersion   : data.configVersion,
+                    gameConfig  : data.gameConfig,
                     coId,
                 });
             }
@@ -230,10 +231,10 @@ namespace TwnsCommonWarPlayerInfoPage {
                 imgCoHead.source    = ``;
                 imgCoInfo.visible   = false;
             } else {
-                const configVersion = data.configVersion;
-                const coCfg         = ConfigManager.getCoBasicCfg(configVersion, coId);
-                labelCo.text        = coCfg.name;
-                imgCoHead.source    = ConfigManager.getCoHeadImageSource(configVersion, coId);
+                const gameConfig    = data.gameConfig;
+                const coCfg         = gameConfig.getCoBasicCfg(coId);
+                labelCo.text        = coCfg?.name ?? CommonConstants.ErrorTextForUndefined;
+                imgCoHead.source    = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
                 imgCoInfo.visible   = (coId !== CommonConstants.CoEmptyId);
             }
 

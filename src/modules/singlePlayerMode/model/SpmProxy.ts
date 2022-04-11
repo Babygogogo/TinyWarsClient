@@ -16,7 +16,7 @@ namespace SpmProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
     import SpwWar           = TwnsSpwWar.SpwWar;
-    import SrwWar           = TwnsSrwWar.SrwWar;
+    import SrwWar           = Twns.SingleRankWar.SrwWar;
 
     export function init(): void {
         NetManager.addListeners([

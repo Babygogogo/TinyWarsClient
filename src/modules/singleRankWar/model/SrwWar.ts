@@ -8,17 +8,18 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsSrwWar {
+namespace Twns.SingleRankWar {
     import SpwWar           = TwnsSpwWar.SpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForSrw  = CommonProto.WarSettings.ISettingsForSrw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import GameConfig       = Config.GameConfig;
 
     export class SrwWar extends SpwWar {
         private _settingsForSrw?    : ISettingsForSrw;
 
-        public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data);
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
+            this._baseInit(data, gameConfig);
             this._setSettingsForSrw(Helpers.getExisted(data.settingsForSrw, ClientErrorCode.SrwWar_Init_00));
 
             this._initView();

@@ -22,6 +22,7 @@
 namespace TwnsScrCreatePlayerInfoPage {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
+    import GameConfig               = Twns.Config.GameConfig;
 
     export class ScrCreatePlayerInfoPage extends TwnsUiTabPage.UiTabPage<void> {
         private readonly _groupInfo!    : eui.Group;
@@ -67,9 +68,11 @@ namespace TwnsScrCreatePlayerInfoPage {
         }
 
         private _createDataForListPlayer(playersCountUnneutral: number): DataForPlayerRenderer[] {
-            const dataList: DataForPlayerRenderer[] = [];
+            const dataList      : DataForPlayerRenderer[] = [];
+            const gameConfig    = ScrCreateModel.getGameConfig();
             for (let playerIndex = 1; playerIndex <= playersCountUnneutral; ++playerIndex) {
                 dataList.push({
+                    gameConfig,
                     playerIndex,
                 });
             }
@@ -79,6 +82,7 @@ namespace TwnsScrCreatePlayerInfoPage {
     }
 
     type DataForPlayerRenderer = {
+        gameConfig      : GameConfig;
         playerIndex     : number;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
@@ -111,12 +115,12 @@ namespace TwnsScrCreatePlayerInfoPage {
             this._updateComponentsForLanguage();
         }
 
-        private async _onTouchedGroupCo(): Promise<void> {
+        private _onTouchedGroupCo(): void {
             const playerData    = this._getPlayerData();
             const coId          = playerData ? playerData.coId : null;
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    configVersion   : ScrCreateModel.getConfigVersion(),
+                    gameConfig  : ScrCreateModel.getGameConfig(),
                     coId,
                 });
             }
@@ -131,14 +135,21 @@ namespace TwnsScrCreatePlayerInfoPage {
         }
 
         private async _onTouchedBtnChangeCo(): Promise<void> {
-            const playerIndex   = this._getData().playerIndex;
+            const roomInfo  = ScrCreateModel.getData();
+            if (!roomInfo) {
+                return;
+            }
+
+            const data          = this._getData();
+            const playerIndex   = data.playerIndex;
             const currentCoId   = ScrCreateModel.getCoId(playerIndex);
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                gameConfig          : data.gameConfig,
                 currentCoId,
                 availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : ScrCreateModel.getWarRule(),
                     playerIndex,
-                    configVersion   : Helpers.getExisted(ConfigManager.getLatestConfigVersion()),
+                    gameConfig      : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo.settingsForCommon?.configVersion)),
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
@@ -187,10 +198,10 @@ namespace TwnsScrCreatePlayerInfoPage {
                 : Lang.getText(LangTextType.B0031);
 
             const coId                  = Helpers.getExisted(playerData.coId);
-            const configVersion         = Helpers.getExisted(settingsForCommon.configVersion);
-            const coCfg                 = ConfigManager.getCoBasicCfg(Helpers.getExisted(configVersion), coId);
+            const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const coCfg                 = gameConfig.getCoBasicCfg(coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
-            this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(configVersion, coId);
+            this._imgCoHead.source      = gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
         }
 

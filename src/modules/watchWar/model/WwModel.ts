@@ -104,11 +104,16 @@ namespace WwModel {
             return null;
         }
 
-        const mapId = warSettings.settingsForCcw?.mapId ?? warSettings.settingsForMcw?.mapId ?? warSettings.settingsForMrw?.mapId;
+        const mapId         = warSettings.settingsForCcw?.mapId ?? warSettings.settingsForMcw?.mapId ?? warSettings.settingsForMrw?.mapId;
+        const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warSettings.settingsForCommon?.configVersion));
         if (mapId != null) {
-            return { mapInfo: { mapId } };
+            return {
+                gameConfig,
+                mapInfo : { mapId }
+            };
         } else {
             return {
+                gameConfig,
                 warInfo : {
                     warData : Helpers.getExisted(warSettings.settingsForMfw?.initialWarData, ClientErrorCode.WwModel_CreateDataForCommonWarMapInfoPage_01),
                     players : null,
@@ -154,7 +159,7 @@ namespace WwModel {
         }
 
         return {
-            configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
+            gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral,
             roomOwnerPlayerIndex    : null,
             callbackOnExitRoom      : null,
@@ -268,9 +273,9 @@ namespace WwModel {
 
         const settingsForCommon = Helpers.getExisted(warSettings.settingsForCommon, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_01);
         return {
-            configVersion   : Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_02),
-            warRule         : Helpers.getExisted(settingsForCommon.warRule, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_03),
-            warType         : WarCommonHelpers.getWarTypeByMpwWarSettings(warSettings),
+            gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_02)),
+            warRule     : Helpers.getExisted(settingsForCommon.warRule, ClientErrorCode.WwModel_CreateDataForCommonWarAdvancedSettingsPage_03),
+            warType     : WarCommonHelpers.getWarTypeByMpwWarSettings(warSettings),
         };
     }
 }

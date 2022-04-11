@@ -107,7 +107,7 @@ namespace TwnsCcrCreatePlayerInfoPage {
 
             if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonCoInfoPanel, {
-                    configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                    gameConfig   : CcrCreateModel.getGameConfig(),
                     coId,
                 });
             }
@@ -196,11 +196,12 @@ namespace TwnsCcrCreatePlayerInfoPage {
             const playerIndex   = this._getData().playerIndex;
             const warRule       = CcrCreateModel.getWarRule();
             const playerRule    = WarRuleHelpers.getPlayerRule(warRule, playerIndex);
-            const configVersion = Helpers.getExisted(CcrCreateModel.getData().settingsForCommon?.configVersion);
+            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(CcrCreateModel.getData().settingsForCommon?.configVersion));
             if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                    gameConfig,
                     currentCoId         : CcrCreateModel.getSelfCoId(),
-                    availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, configVersion }),
+                    availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, gameConfig }),
                     callbackOnConfirm   : (coId) => {
                         if (coId !== CcrCreateModel.getSelfCoId()) {
                             CcrCreateModel.setSelfCoId(coId);
@@ -213,11 +214,12 @@ namespace TwnsCcrCreatePlayerInfoPage {
                 if (coId != null) {
                     const callback = () => {
                         const coIdArray: number[] = [];
-                        for (const cfg of ConfigManager.getEnabledCoArray(configVersion)) {
+                        for (const cfg of gameConfig.getEnabledCoArray()) {
                             coIdArray.push(cfg.coId);
                         }
 
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                            gameConfig,
                             currentCoId         : coId,
                             availableCoIdArray  : coIdArray,
                             callbackOnConfirm   : (newCoId) => {
@@ -286,10 +288,10 @@ namespace TwnsCcrCreatePlayerInfoPage {
                     : Lang.getText(LangTextType.B0607));
 
             const coId                      = isSelfPlayer ? CcrCreateModel.getSelfCoId() : (playerRule.fixedCoIdInCcw ?? null);
-            const configVersion             = Helpers.getExisted(settingsForCommon.configVersion);
-            const coCfg                     = coId == null ? null : ConfigManager.getCoBasicCfg(configVersion, coId);
+            const gameConfig                = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+            const coCfg                     = coId == null ? null : gameConfig.getCoBasicCfg(coId);
             this._labelCo.text              = coCfg ? coCfg.name : `??`;
-            this._imgCoHead.source          = coId == null ? `` : ConfigManager.getCoHeadImageSource(configVersion, coId);
+            this._imgCoHead.source          = coId == null ? `` : gameConfig.getCoHeadImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
             this._imgCoInfo.visible         = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
             this._btnChangeCo.visible       = (isSelfPlayer) || (!isHumanPlayer);
             this._btnChangeSkinId.visible   = (isSelfPlayer) || (!isHumanPlayer);

@@ -15,8 +15,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeSimBasicSettingsPage {
-    import CommonConfirmPanel       = TwnsCommonConfirmPanel.CommonConfirmPanel;
-    import CommonHelpPanel          = TwnsCommonHelpPanel.CommonHelpPanel;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
 
@@ -64,8 +62,8 @@ namespace TwnsMeSimBasicSettingsPage {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnModifyWarRule(): void {
-            MeSimModel.tickPresetWarRuleId();
+        private async _onTouchedBtnModifyWarRule(): Promise<void> {
+            await MeSimModel.tickPresetWarRuleId();
             this._updateComponentsForWarRule();
         }
 
@@ -98,7 +96,7 @@ namespace TwnsMeSimBasicSettingsPage {
         private async _onTouchedBtnBuildings(): Promise<void> {
             const mapRawData = MeSimModel.getMapRawData();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WarMapBuildingListPanel, {
-                configVersion           : Helpers.getExisted(MeSimModel.getWarData().settingsForCommon?.configVersion),
+                gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(MeSimModel.getWarData().settingsForCommon?.configVersion)),
                 tileDataArray           : Helpers.getExisted(mapRawData.tileDataArray),
                 playersCountUnneutral   : Helpers.getExisted(mapRawData.playersCountUnneutral),
             });

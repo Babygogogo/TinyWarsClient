@@ -24,7 +24,7 @@ namespace NetManager {
     const PROTOCOL      = window.location.protocol.indexOf("http:") === 0 ? "ws" : "wss";
     const HOST_NAME     = window.location.hostname;
     const FULL_URL      = `${PROTOCOL}://${HOST_NAME}:${window.GAME_SERVER_PORT}`;
-    // const FULL_URL  = `wss://www.tinywars.online:${4000}`;
+    // const FULL_URL  = `wss://www.tinywars.online:${4001}`;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Type definitions.

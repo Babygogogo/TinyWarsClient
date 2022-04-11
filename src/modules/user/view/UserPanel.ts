@@ -218,7 +218,7 @@ namespace TwnsUserPanel {
 
         private async _updateImgAvatar(): Promise<void> {
             const info              = await UserModel.getUserPublicInfo(this._getOpenData().userId);
-            this._imgAvatar.source  = ConfigManager.getUserAvatarImageSource(info?.avatarId ?? 1);
+            this._imgAvatar.source  = Twns.Config.ConfigManager.getUserAvatarImageSource(info?.avatarId ?? 1);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -262,7 +262,7 @@ namespace TwnsUserPanel {
             const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rankName                  = `(${ConfigManager.getRankName(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), score)})`;
+            const rankName                  = `(${(await Twns.Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
             this._labelStdRankScore.text    = `${score} ${rankName}`;
 
             const rank                          = data ? data.currentRank : null;
@@ -273,7 +273,7 @@ namespace TwnsUserPanel {
             const data                      = await UserModel.getUserMrwRankScoreInfo(this._getOpenData().userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rankName                  = `(${ConfigManager.getRankName(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), score)})`;
+            const rankName                  = `(${(await Twns.Config.ConfigManager.getLatestGameConfig()).getRankName(score) ?? CommonConstants.ErrorTextForUndefined})`;
             this._labelFogRankScore.text    = `${score} ${rankName}`;
 
             const rank                          = data ? data.currentRank : null;

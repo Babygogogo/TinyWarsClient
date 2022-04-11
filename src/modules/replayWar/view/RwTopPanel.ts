@@ -24,7 +24,7 @@ namespace TwnsRwTopPanel {
     import LangTextType         = TwnsLangTextType.LangTextType;
 
     export type OpenData = {
-        war : TwnsRwWar.RwWar;
+        war : Twns.ReplayWar.RwWar;
     };
     export class RwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupPlayer!          : eui.Group;
@@ -89,7 +89,7 @@ namespace TwnsRwTopPanel {
             // nothing to do
         }
 
-        private _getWar(): TwnsRwWar.RwWar {
+        private _getWar(): Twns.ReplayWar.RwWar {
             return this._getOpenData().war;
         }
 
@@ -289,7 +289,7 @@ namespace TwnsRwTopPanel {
             if ((war) && (war.getIsRunning())) {
                 const player        = war.getPlayerInTurn();
                 const coId          = player.getCoId();
-                this._labelCo.text  = `${coId == null ? "----" : ConfigManager.getCoBasicCfg(war.getConfigVersion(), coId).name}`;
+                this._labelCo.text  = `${coId == null ? "----" : war.getGameConfig().getCoBasicCfg(coId)?.name}`;
 
                 const skillType = player.getCoUsingSkillType();
                 if (skillType === Types.CoSkillType.Power) {

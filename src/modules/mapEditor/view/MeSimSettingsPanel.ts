@@ -72,7 +72,7 @@ namespace TwnsMeSimSettingsPanel {
 
         private async _onTouchedBtnConfirm(): Promise<void> {
             const warData   = MeSimModel.getWarData();
-            const errorCode = await (new Twns.TestWar.TwWar()).getErrorCodeForInit(warData);
+            const errorCode = await (new Twns.TestWar.TwWar()).getErrorCodeForInit(warData, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {

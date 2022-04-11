@@ -8,14 +8,13 @@ namespace NotifyData {
     import GridIndex        = Types.GridIndex;
     import TouchPoints      = Types.TouchPoints;
 
-    export type ConfigLoaded                = number;
     export type McwPlayerIndexInTurnChanged = number;
-    export type BwPlayerFundChanged         = TwnsBwPlayer.BwPlayer;
-    export type McwPlayerEnergyChanged      = TwnsBwPlayer.BwPlayer;
-    export type BwCoIdChanged               = TwnsBwPlayer.BwPlayer;
+    export type BwPlayerFundChanged         = Twns.BaseWar.BwPlayer;
+    export type McwPlayerEnergyChanged      = Twns.BaseWar.BwPlayer;
+    export type BwCoIdChanged               = Twns.BaseWar.BwPlayer;
     export type BwCursorGridIndexChanged    = TwnsBwCursor.BwCursor;
-    export type BwTileLocationFlagSet       = TwnsBwTile.BwTile;
-    export type BwTileIsHighlightChanged    = TwnsBwTile.BwTile;
+    export type BwTileLocationFlagSet       = Twns.BaseWar.BwTile;
+    export type BwTileIsHighlightChanged    = Twns.BaseWar.BwTile;
     export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
     export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
     export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };

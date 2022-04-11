@@ -60,9 +60,9 @@ namespace WarActionExecutor {
     import IWarActionUnitUseCoSkill             = WarAction.IWarActionUnitUseCoSkill;
     import IWarActionUnitWait                   = WarAction.IWarActionUnitWait;
     import ClientErrorCode                      = TwnsClientErrorCode.ClientErrorCode;
-    import BwPlayer                             = TwnsBwPlayer.BwPlayer;
-    import BwUnit                               = TwnsBwUnit.BwUnit;
-    import BwTile                               = TwnsBwTile.BwTile;
+    import BwPlayer                             = Twns.BaseWar.BwPlayer;
+    import BwUnit                               = Twns.BaseWar.BwUnit;
+    import BwTile                               = Twns.BaseWar.BwTile;
     import BwWar                                = Twns.BaseWar.BwWar;
     import NotifyType                           = TwnsNotifyType.NotifyType;
 
@@ -239,11 +239,11 @@ namespace WarActionExecutor {
             const gridIndex     = action.gridIndex as GridIndex;
             const unitType      = Helpers.getExisted(action.unitType);
             const unitHp        = Helpers.getExisted(action.unitHp);
-            const configVersion = war.getConfigVersion();
+            const gameConfig    = war.getGameConfig();
             const playerInTurn  = war.getPlayerInTurn();
             const playerIndex   = playerInTurn.getPlayerIndex();
             const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
-            const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
+            const cfgCost       = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost);
             const cost          = Math.floor(
                 cfgCost
                 * (skillCfg ? skillCfg[5] : 100)
@@ -261,7 +261,7 @@ namespace WarActionExecutor {
                 actionState     : ((skillCfg) && (skillCfg[6] === 1)) ? UnitActionState.Idle : UnitActionState.Acted,
                 currentHp       : unitHp,
                 currentPromotion: getPromotionForPlayerProduceUnit(war, gridIndex, unitType),
-            }, configVersion);
+            }, gameConfig);
             unit.startRunning(war);
             unit.startRunningView();
             unitMap.setUnitOnMap(unit);
@@ -272,13 +272,13 @@ namespace WarActionExecutor {
     function getPromotionForPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: Types.UnitType): number {
         const player                    = war.getPlayerInTurn();
         const coZoneRadius              = player.getCoZoneRadius();
-        const configVersion             = war.getConfigVersion();
+        const gameConfig                = war.getGameConfig();
         const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
         let promotion                   = 0;
         for (const skillId of war.getPlayerInTurn().getCoCurrentSkills()) {
-            const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfPromotionBonusByProduce;
-            if ((cfg)                                                                           &&
-                (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, cfg[1]))      &&
+            const cfg = gameConfig.getCoSkillCfg(skillId)?.selfPromotionBonusByProduce;
+            if ((cfg)                                                       &&
+                (gameConfig.checkIsUnitTypeInCategory(unitType, cfg[1]))    &&
                 (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                     gridIndex,
                     coSkillAreaType         : cfg[0],
@@ -550,7 +550,7 @@ namespace WarActionExecutor {
             const nickname = await playerInTurn.getNickname();
             await new Promise<void>(resolve => {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.BwBeginTurnPanel, {
-                    configVersion       : war.getConfigVersion(),
+                    gameConfig          : war.getGameConfig(),
                     playerIndex,
                     teamIndex           : playerInTurn.getTeamIndex(),
                     nickname,
@@ -2152,7 +2152,7 @@ namespace WarActionExecutor {
                     player.setFund(player.getFund() + joinIncome);
                 }
 
-                if (ConfigManager.getSystemIsUnitHpRoundedUpWhenHealed(focusUnit.getConfigVersion())) {
+                if (war.getGameConfig().getSystemCfg().isUnitHpRoundedUpWhenHealed) {
                     focusUnit.setCurrentHp(Math.min(
                         focusUnit.getMaxHp(),
                         (focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()) * CommonConstants.UnitHpNormalizer,
@@ -2282,7 +2282,7 @@ namespace WarActionExecutor {
                     player.setFund(player.getFund() + joinIncome);
                 }
 
-                if (ConfigManager.getSystemIsUnitHpRoundedUpWhenHealed(focusUnit.getConfigVersion())) {
+                if (war.getGameConfig().getSystemCfg().isUnitHpRoundedUpWhenHealed) {
                     focusUnit.setCurrentHp(Math.min(
                         focusUnit.getMaxHp(),
                         (focusUnit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp()) * CommonConstants.UnitHpNormalizer,
@@ -2743,7 +2743,7 @@ namespace WarActionExecutor {
                     unitId          : producedUnitId,
                     loaderUnitId    : focusUnit.getUnitId(),
                     currentPromotion: getPromotionForUnitProduceUnit(war, focusUnit, unitType),
-                }, war.getConfigVersion());
+                }, war.getGameConfig());
                 producedUnit.startRunning(war);
                 producedUnit.setActionState(UnitActionState.Acted);
 
@@ -2808,7 +2808,7 @@ namespace WarActionExecutor {
                     unitId          : producedUnitId,
                     loaderUnitId    : focusUnit.getUnitId(),
                     currentPromotion: getPromotionForUnitProduceUnit(war, focusUnit, unitType),
-                }, war.getConfigVersion());
+                }, war.getGameConfig());
                 producedUnit.startRunning(war);
                 producedUnit.setActionState(UnitActionState.Acted);
 
@@ -2835,14 +2835,14 @@ namespace WarActionExecutor {
         const player                    = producerUnit.getPlayer();
         const coZoneRadius              = player.getCoZoneRadius();
         const gridIndex                 = producerUnit.getGridIndex();
-        const configVersion             = war.getConfigVersion();
+        const gameConfig                = war.getGameConfig();
         const hasLoadedCo               = producerUnit.getHasLoadedCo();
         const getCoGridIndexArrayOnMap  = Helpers.createLazyFunc(() => player.getCoGridIndexListOnMap());
         let promotion                   = 0;
         for (const skillId of war.getPlayerInTurn().getCoCurrentSkills()) {
-            const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId).selfPromotionBonusByProduce;
-            if ((cfg)                                                                               &&
-                (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[1]))    &&
+            const cfg = gameConfig.getCoSkillCfg(skillId)?.selfPromotionBonusByProduce;
+            if ((cfg)                                                                   &&
+                (gameConfig.checkIsUnitTypeInCategory(targetUnitType, cfg[1]))          &&
                 ((hasLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                     gridIndex,
                     coSkillAreaType         : cfg[0],
@@ -3379,7 +3379,7 @@ namespace WarActionExecutor {
         attackerCoGridIndexListOnMap: GridIndex[],
         isTargetDestroyed           : boolean,
     }): void {
-        const configVersion     = attackerUnit.getConfigVersion();
+        const gameConfig        = attackerUnit.getGameConfig();
         const attackerUnitType  = attackerUnit.getUnitType();
         const attackerGridIndex = attackerUnit.getGridIndex();
         if (isTargetDestroyed) {
@@ -3390,11 +3390,10 @@ namespace WarActionExecutor {
             const attackerCoZoneRadius  = attackerPlayer.getCoZoneRadius();
             const hasAttackerLoadedCo   = attackerUnit.getHasLoadedCo();
             for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
-                const skillCfg  = ConfigManager.getCoSkillCfg(configVersion, skillId);
-                const cfg       = skillCfg.promotionBonusByAttack;
-                if ((cfg)                                                                                                                                                   &&
-                    (targetLostNormalizedHp >= cfg[2])                                                                                                                      &&
-                    (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))                                                                      &&
+                const cfg = gameConfig.getCoSkillCfg(skillId)?.promotionBonusByAttack;
+                if ((cfg)                                                                           &&
+                    (targetLostNormalizedHp >= cfg[2])                                              &&
+                    (gameConfig.checkIsUnitTypeInCategory(attackerUnitType, cfg[1]))                &&
                     ((hasAttackerLoadedCo) || (WarCommonHelpers.checkIsGridIndexInsideCoSkillArea({
                         gridIndex               : attackerGridIndex,
                         coSkillAreaType         : cfg[0],
@@ -3419,17 +3418,17 @@ namespace WarActionExecutor {
         }
 
         const currentFund       = attackerPlayer.getFund();
-        const configVersion     = attackerUnit.getConfigVersion();
+        const gameConfig        = attackerUnit.getGameConfig();
         const attackerUnitType  = attackerUnit.getUnitType();
         const targetUnitType    = targetUnit.getUnitType();
         const targetUnitCost    = targetUnit.getProductionFinalCost();
         let addFund             = 0;
         for (const skillId of attackerPlayer.getCoCurrentSkills() || []) {
-            const cfg = ConfigManager.getCoSkillCfg(configVersion, skillId)?.selfGetFundByAttackUnit;
-            if ((cfg)                                                                               &&
-                ((isAttackerInAttackerCoZone) || (cfg[0] === Types.CoSkillAreaType.Halo))           &&
-                (ConfigManager.checkIsUnitTypeInCategory(configVersion, attackerUnitType, cfg[1]))  &&
-                (ConfigManager.checkIsUnitTypeInCategory(configVersion, targetUnitType, cfg[2]))
+            const cfg = gameConfig.getCoSkillCfg(skillId)?.selfGetFundByAttackUnit;
+            if ((cfg)                                                                       &&
+                ((isAttackerInAttackerCoZone) || (cfg[0] === Types.CoSkillAreaType.Halo))   &&
+                (gameConfig.checkIsUnitTypeInCategory(attackerUnitType, cfg[1]))            &&
+                (gameConfig.checkIsUnitTypeInCategory(targetUnitType, cfg[2]))
             ) {
                 addFund += targetUnitCost / 10 * targetLostNormalizedHp * cfg[3] / 100;
             }
@@ -3451,7 +3450,7 @@ namespace WarActionExecutor {
         }
 
         const commonSettingManager  = war.getCommonSettingManager();
-        const configVersion         = war.getConfigVersion();
+        const gameConfig            = war.getGameConfig();
         if (attackerPlayer.checkCanGetEnergyWithBattle()) {
             const coEnergyType1 = attackerPlayer.getCoEnergyType();
             if (coEnergyType1 === Types.CoEnergyType.Trilogy) {
@@ -3472,7 +3471,7 @@ namespace WarActionExecutor {
                     const energy1       = attackerPlayer.getCoCurrentEnergy();
                     attackerPlayer.setCoCurrentEnergy(Math.min(
                         attackerPlayer.getCoMaxEnergy(),
-                        energy1 + Math.floor(targetLostNormalizedHp * multiplier1 * ConfigManager.getSystemEnergyGrowthMultiplierForAttacker(configVersion) / 100),
+                        energy1 + Math.floor(targetLostNormalizedHp * multiplier1 * gameConfig.getSystemEnergyGrowthMultiplierForAttacker() / 100),
                     ));
                 }
 
@@ -3501,7 +3500,7 @@ namespace WarActionExecutor {
                     const energy2       = targetPlayer.getCoCurrentEnergy();
                     targetPlayer.setCoCurrentEnergy(Math.min(
                         targetPlayer.getCoMaxEnergy(),
-                        energy2 + Math.floor(targetLostNormalizedHp * multiplier2 * ConfigManager.getSystemEnergyGrowthMultiplierForDefender(configVersion) / 100),
+                        energy2 + Math.floor(targetLostNormalizedHp * multiplier2 * gameConfig.getSystemEnergyGrowthMultiplierForDefender() / 100),
                     ));
                 }
 

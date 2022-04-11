@@ -231,13 +231,15 @@ namespace TwnsCcwMyWarListPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const warId = MpwModel.getCcwPreviewingWarId();
-            const mapId = warId == null
-                ? null
-                : (await MpwModel.getWarSettings(warId))?.settingsForCcw?.mapId;
+            const warId         = MpwModel.getCcwPreviewingWarId();
+            const warSettings   = warId == null ? null : await MpwModel.getWarSettings(warId);
+            const mapId         = warSettings?.settingsForCcw?.mapId;
             return mapId == null
                 ? null
-                : { mapInfo: { mapId }, };
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warSettings?.settingsForCommon?.configVersion)),
+                    mapInfo     : { mapId },
+                };
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {

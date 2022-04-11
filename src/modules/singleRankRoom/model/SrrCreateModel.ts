@@ -19,6 +19,7 @@ namespace SrrCreateModel {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import IDataForPlayerRule       = CommonProto.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom     = CommonProto.Structure.IDataForPlayerInRoom;
+    import GameConfig               = Twns.Config.GameConfig;
 
     export type DataForCreateWar    = CommonProto.NetMessage.MsgSpmCreateSrw.IC;
 
@@ -43,6 +44,7 @@ namespace SrrCreateModel {
 
         playerInfoList      : [],
     };
+    let _gameConfig: GameConfig | null = null;
 
     export function getMapId(): number {
         return Helpers.getExisted(getData().mapId);
@@ -67,7 +69,8 @@ namespace SrrCreateModel {
 
     export async function resetDataByMapId(mapId: number): Promise<void> {
         setMapId(mapId);
-        setConfigVersion(Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+        setConfigVersion(Helpers.getExisted(Twns.Config.ConfigManager.getLatestConfigVersion()));
+        setGameConfig(await Twns.Config.ConfigManager.getLatestGameConfig());
         setSaveSlotIndex(SpmModel.getAvailableIndex());
         setSlotComment(null);
         setPlayerInfoList([]);
@@ -86,8 +89,11 @@ namespace SrrCreateModel {
     function setConfigVersion(version: string): void {
         getSettingsForCommon().configVersion = version;
     }
-    export function getConfigVersion(): string {
-        return Helpers.getExisted(getSettingsForCommon().configVersion);
+    function setGameConfig(config: GameConfig): void {
+        _gameConfig = config;
+    }
+    export function getGameConfig(): GameConfig {
+        return Helpers.getExisted(_gameConfig);
     }
 
     export async function resetDataByWarRuleId(ruleId: number): Promise<void> {
@@ -133,7 +139,7 @@ namespace SrrCreateModel {
         const oldPlayerInfoList     = getPlayerInfoList();
         const settingsForCommon     = Helpers.getExisted(data.settingsForCommon);
         const warRule               = Helpers.getExisted(settingsForCommon.warRule);
-        const configVersion         = Helpers.getExisted(settingsForCommon.configVersion);
+        const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         const playersCount          = Helpers.getExisted((await getMapRawData()).playersCountUnneutral);
         const playerRuleDataArray   = Helpers.getExisted(warRule.ruleForPlayers?.playerRuleDataArray);
         const selfUserId            = UserModel.getSelfUserId();
@@ -142,7 +148,7 @@ namespace SrrCreateModel {
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             const coIdForAi             = playerRuleDataArray.find(v => v.playerIndex === playerIndex)?.fixedCoIdInSrw;
             const oldInfo               = oldPlayerInfoList.find(v => v.playerIndex === playerIndex);
-            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, configVersion });
+            const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({ warRule, playerIndex, gameConfig });
             const newCoId               = WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray);
             if (oldInfo) {
                 const coId = Helpers.getExisted(oldInfo.coId);

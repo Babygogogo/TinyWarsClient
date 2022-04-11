@@ -29,10 +29,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MpwModel {
     import MpwWar                                   = TwnsMpwWar.MpwWar;
-    import CcwWar                                   = TwnsCcwWar.CcwWar;
-    import McwWar                                   = TwnsMcwWar.McwWar;
-    import MfwWar                                   = TwnsMfwWar.MfwWar;
-    import MrwWar                                   = TwnsMrwWar.MrwWar;
+    import CcwWar                                   = Twns.CoopCustomWar.CcwWar;
+    import McwWar                                   = Twns.MultiCustomWar.McwWar;
+    import MfwWar                                   = Twns.MultiFreeWar.MfwWar;
+    import MrwWar                                   = Twns.MultiRankWar.MrwWar;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
@@ -573,30 +573,30 @@ namespace MpwModel {
 
         const settingsForCommon                                                     = Helpers.getExisted(warInfo.settingsForCommon);
         const warRule                                                               = Helpers.getExisted(settingsForCommon.warRule);
-        const configVersion                                                         = Helpers.getExisted(settingsForCommon.configVersion);
+        const gameConfig                                                            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         const hasFog                                                                = warRule.ruleForGlobalParams?.hasFogByDefault;
         const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
         if (settingsForCcw) {
             return {
-                configVersion,
+                gameConfig,
                 warRule,
                 warType     : hasFog ? Types.WarType.CcwFog : Types.WarType.CcwStd,
             };
         } else if (settingsForMcw) {
             return {
-                configVersion,
+                gameConfig,
                 warRule,
                 warType     : hasFog ? Types.WarType.McwFog : Types.WarType.McwStd,
             };
         } else if (settingsForMfw) {
             return {
-                configVersion,
+                gameConfig,
                 warRule,
                 warType     : hasFog ? Types.WarType.MfwFog : Types.WarType.MfwStd,
             };
         } else if (settingsForMrw) {
             return {
-                configVersion,
+                gameConfig,
                 warRule,
                 warType     : hasFog ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };
@@ -636,7 +636,7 @@ namespace MpwModel {
         }
 
         return {
-            configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
+            gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
             roomOwnerPlayerIndex    : null,
             callbackOnDeletePlayer  : null,
@@ -655,7 +655,7 @@ namespace MpwModel {
         }
 
         const war = createWarByWarData(data);
-        await war.init(data);
+        war.init(data, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         _setWar(war);
 

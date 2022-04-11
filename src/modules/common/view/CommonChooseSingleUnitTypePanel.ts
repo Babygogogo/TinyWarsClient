@@ -19,8 +19,10 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import UnitType             = Types.UnitType;
+    import GameConfig           = Twns.Config.GameConfig;
 
     export type OpenData = {
+        gameConfig      : GameConfig;
         currentUnitType : UnitType;
         unitTypeArray   : UnitType[];
         playerIndex     : number;
@@ -69,9 +71,11 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
         private _updateListType(): void {
             const openData      = this._getOpenData();
             const playerIndex   = openData.playerIndex;
+            const gameConfig    = openData.gameConfig;
             const dataArray     : DataForTypeRenderer[] = [];
             for (const newUnitType of openData.unitTypeArray) {
                 dataArray.push({
+                    gameConfig,
                     currentUnitType: openData.currentUnitType,
                     newUnitType,
                     playerIndex,
@@ -112,6 +116,7 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
     }
 
     type DataForTypeRenderer = {
+        gameConfig      : GameConfig;
         currentUnitType : UnitType;
         newUnitType     : UnitType;
         playerIndex     : number;
@@ -121,7 +126,7 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
         private readonly _conUnitView!  : eui.Group;
         private readonly _labelType!    : TwnsUiLabel.UiLabel;
 
-        private readonly _unitView      = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView      = new Twns.WarMap.WarMapUnitView();
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -169,6 +174,7 @@ namespace TwnsCommonChooseSingleUnitTypePanel {
         private _updateUnitView(): void {
             const data = this._getData();
             this._unitView.update({
+                gameConfig  : data.gameConfig,
                 gridIndex   : { x: 0, y: 0 },
                 playerIndex : data.playerIndex,
                 unitType    : data.newUnitType,

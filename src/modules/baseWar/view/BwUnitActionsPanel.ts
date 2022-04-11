@@ -80,13 +80,13 @@ namespace TwnsBwUnitActionsPanel {
                         costForProduceUnit  : data.costForProduceUnit ?? null,
                     });
                 } else {
-                    const unitForProduce = new TwnsBwUnit.BwUnit();
+                    const unitForProduce = new Twns.BaseWar.BwUnit();
                     unitForProduce.init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
                         unitType    : produceUnitType,
                         playerIndex : war.getPlayerIndexInTurn(),
-                    }, war.getConfigVersion());
+                    }, war.getGameConfig());
                     unitForProduce.startRunning(war);
 
                     dataArray.push({
@@ -151,7 +151,7 @@ namespace TwnsBwUnitActionsPanel {
         war                 : BwWar;
         actionType          : UnitActionType;
         callback            : () => void;
-        unit?               : TwnsBwUnit.BwUnit;
+        unit?               : Twns.BaseWar.BwUnit;
         costForProduceUnit  : number | null;
         isLastAction?       : boolean;
     };

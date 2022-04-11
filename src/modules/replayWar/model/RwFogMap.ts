@@ -5,7 +5,7 @@
 
 namespace TwnsRwFogMap {
     export class RwFogMap extends TwnsBwFogMap.BwFogMap {
-        public startRunning(war: TwnsRwWar.RwWar): void {
+        public startRunning(war: Twns.ReplayWar.RwWar): void {
             this._setWar(war);
 
             const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());

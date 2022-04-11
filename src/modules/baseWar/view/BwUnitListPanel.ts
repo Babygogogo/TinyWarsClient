@@ -152,7 +152,7 @@ namespace TwnsBwUnitListPanel {
     const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
 
     type DataForUnitRenderer = {
-        unit    : TwnsBwUnit.BwUnit;
+        unit    : Twns.BaseWar.BwUnit;
         cursor  : BwCursor;
     };
     class UnitRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForUnitRenderer> {

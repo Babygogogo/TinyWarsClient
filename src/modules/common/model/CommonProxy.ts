@@ -38,21 +38,14 @@ namespace CommonProxy {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function _onMsgCommonError(e: egret.Event): void {
-        const data = e.data as CommonProto.NetMessage.MsgCommonError.IS;
+        // const data = e.data as CommonProto.NetMessage.MsgCommonError.IS;
     }
 
     function _onMsgCommonLatestConfigVersion(e: egret.Event): void {
-        const data      = e.data as CommonProto.NetMessage.MsgCommonLatestConfigVersion.IS;
-        const version   = Helpers.getExisted(data.version);
-        ConfigManager.setLatestFormalVersion(version);
-        ConfigManager.loadConfig(version);
-
-        // HACK: 处理多version导致游戏内报错的问题。当前的临时做法是事先加载所有配置，正确做法是在游戏内用到的时候才加载
-        const versionPrefix = version[0];
-        for (let versionNum = Number(version.substring(1)) - 1; versionNum >= 0; --versionNum) {
-            ConfigManager.loadConfig(`${versionPrefix}${Helpers.getNumText(versionNum, 7)}`);
-        }
+        const data = e.data as CommonProto.NetMessage.MsgCommonLatestConfigVersion.IS;
+        Twns.Config.ConfigManager.setLatestConfigVersion(Helpers.getExisted(data.version));
 
         Notify.dispatch(NotifyType.MsgCommonLatestConfigVersion, data);
     }

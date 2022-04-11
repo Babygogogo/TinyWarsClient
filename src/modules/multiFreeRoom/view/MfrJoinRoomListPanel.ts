@@ -294,7 +294,10 @@ namespace TwnsMfrJoinRoomListPanel {
                 : (await MfrModel.getRoomStaticInfo(roomId))?.settingsForMfw?.initialWarData;
             return warData == null
                 ? null
-                : { warInfo: { warData, players: null } };
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
+                    warInfo     : { warData, players: null
+                } };
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {

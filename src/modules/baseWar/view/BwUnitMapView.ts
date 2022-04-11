@@ -29,7 +29,7 @@ namespace TwnsBwUnitMapView {
             { type: NotifyType.UserSettingsOpacitySettingsChanged,  callback: this._onNotifyUserSettingsOpacitySettingsChanged },
         ];
 
-        private _unitMap    : TwnsBwUnitMap.BwUnitMap | null = null;
+        private _unitMap    : Twns.BaseWar.BwUnitMap | null = null;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers.
@@ -43,7 +43,7 @@ namespace TwnsBwUnitMapView {
             this._updateOpacityForAllLayers();
         }
 
-        public init(unitMap: TwnsBwUnitMap.BwUnitMap): void {
+        public init(unitMap: Twns.BaseWar.BwUnitMap): void {
             this._setUnitMap(unitMap);
 
             this._clearAllUnits();
@@ -62,10 +62,10 @@ namespace TwnsBwUnitMapView {
             Notify.removeEventListeners(this._notifyListeners, this);
         }
 
-        private _getUnitMap(): TwnsBwUnitMap.BwUnitMap {
+        private _getUnitMap(): Twns.BaseWar.BwUnitMap {
             return Helpers.getExisted(this._unitMap);
         }
-        private _setUnitMap(unitMap: TwnsBwUnitMap.BwUnitMap): void {
+        private _setUnitMap(unitMap: Twns.BaseWar.BwUnitMap): void {
             this._unitMap = unitMap;
         }
 
@@ -225,12 +225,12 @@ namespace TwnsBwUnitMapView {
         }
 
         private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer {
-            const version = this._getUnitMap().getWar().getConfigVersion();
-            if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
+            const gameConfig = this._getUnitMap().getWar().getGameConfig();
+            if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Air)) {
                 return this._layerForAir;
-            } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Ground)) {
+            } else if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Ground)) {
                 return this._layerForGround;
-            } else if (ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Naval)) {
+            } else if (gameConfig.checkIsUnitTypeInCategory(unitType, UnitCategory.Naval)) {
                 return this._layerForNaval;
             } else {
                 throw Helpers.newError(`Invalid unitType: ${unitType}`);

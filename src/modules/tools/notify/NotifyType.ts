@@ -21,7 +21,6 @@ namespace TwnsNotifyType {
         GlobalTouchMove,
         ZoomableContentsMoved,
 
-        ConfigLoaded,
         TileModelUpdated,
         LanguageChanged,
 

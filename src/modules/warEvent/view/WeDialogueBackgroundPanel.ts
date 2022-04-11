@@ -25,13 +25,15 @@
 // import TwnsBwUnitView           from "./BwUnitView";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeDialogueBackgroundPanel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.WarEvent {
+    import NotifyType   = TwnsNotifyType.NotifyType;
+    import GameConfig   = Config.GameConfig;
 
-    export type OpenData = {
-        action  : CommonProto.WarEvent.IWeaDialogue;
+    export type OpenDataForWeDialogueBackgroundPanel = {
+        gameConfig  : GameConfig;
+        action      : CommonProto.WarEvent.IWeaDialogue;
     };
-    export class WeDialogueBackgroundPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeDialogueBackgroundPanel extends TwnsUiPanel.UiPanel<OpenDataForWeDialogueBackgroundPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _listBackground!   : TwnsUiScrollList.UiScrollList<DataForBackgroundRenderer>;
@@ -82,9 +84,10 @@ namespace TwnsWeDialogueBackgroundPanel {
         }
 
         private _createDataForList(): DataForBackgroundRenderer[] {
-            const maxId     = ConfigManager.getSystemDialogueBackgroundMaxId(Helpers.getExisted(ConfigManager.getLatestConfigVersion()));
+            const openData  = this._getOpenData();
+            const maxId     = openData.gameConfig.getSystemCfg().dialogueBackgroundMaxId;
             const dataArray : DataForBackgroundRenderer[] = [];
-            const action    = this._getOpenData().action;
+            const action    = openData.action;
             for (let backgroundId = 0; backgroundId <= maxId; ++backgroundId) {
                 dataArray.push({
                     backgroundId,
@@ -176,7 +179,7 @@ namespace TwnsWeDialogueBackgroundPanel {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._imgTarget.source = ConfigManager.getDialogueBackgroundImage(this._getData().backgroundId);
+            this._imgTarget.source = Twns.Config.ConfigManager.getDialogueBackgroundImage(this._getData().backgroundId);
         }
     }
 }

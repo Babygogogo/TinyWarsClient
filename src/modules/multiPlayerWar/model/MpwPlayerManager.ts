@@ -5,13 +5,13 @@
 // import UserModel            from "../../user/model/UserModel";
 
 namespace TwnsMpwPlayerManager {
-    import BwPlayerManager = TwnsBwPlayerManager.BwPlayerManager;
+    import BwPlayerManager = Twns.BaseWar.BwPlayerManager;
 
     export class MpwPlayerManager extends BwPlayerManager {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getPlayerLoggedIn(): TwnsBwPlayer.BwPlayer | null {
+        public getPlayerLoggedIn(): Twns.BaseWar.BwPlayer | null {
             const userId = Helpers.getExisted(UserModel.getSelfUserId());
             for (const [, player] of this.getAllPlayersDict()) {
                 if (player.getUserId() === userId) {

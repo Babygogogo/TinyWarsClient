@@ -6,7 +6,7 @@
 // import MeUtility            from "./MeUtility";
 
 namespace TwnsMePlayerManager {
-    import BwPlayerManager      = TwnsBwPlayerManager.BwPlayerManager;
+    import BwPlayerManager      = Twns.BaseWar.BwPlayerManager;
     import MeField              = TwnsMeField.MeField;
     import WarSerialization     = CommonProto.WarSerialization;
     import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;

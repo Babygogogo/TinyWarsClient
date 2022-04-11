@@ -7,19 +7,19 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsHrwField {
-    import BwField          = TwnsBwField.BwField;
-    import BwUnitMap        = TwnsBwUnitMap.BwUnitMap;
+    import BwField          = Twns.BaseWar.BwField;
+    import BwUnitMap        = Twns.BaseWar.BwUnitMap;
 
     export class HrwField extends BwField {
         private readonly _fogMap        = new TwnsHrwFogMap.HrwFogMap();
-        private readonly _tileMap       = new TwnsBwTileMap.BwTileMap();
+        private readonly _tileMap       = new Twns.BaseWar.BwTileMap();
         private readonly _unitMap       = new BwUnitMap();
         private readonly _actionPlanner = new TwnsHrwActionPlanner.HrwActionPlanner();
 
         public getFogMap(): TwnsHrwFogMap.HrwFogMap {
             return this._fogMap;
         }
-        public getTileMap(): TwnsBwTileMap.BwTileMap {
+        public getTileMap(): Twns.BaseWar.BwTileMap {
             return this._tileMap;
         }
         public getUnitMap(): BwUnitMap {

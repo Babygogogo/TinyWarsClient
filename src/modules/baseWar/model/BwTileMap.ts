@@ -11,24 +11,25 @@
 // import TwnsBwWar            from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwTileMap {
+namespace Twns.BaseWar {
     import MapSize          = Types.MapSize;
     import WarSerialization = CommonProto.WarSerialization;
     import ISerialTileMap   = WarSerialization.ISerialTileMap;
     import ISerialTile      = WarSerialization.ISerialTile;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import GameConfig       = Config.GameConfig;
 
     export class BwTileMap {
-        private _map?                   : TwnsBwTile.BwTile[][];
+        private _map?                   : Twns.BaseWar.BwTile[][];
         private _mapSize?               : MapSize;
         private _locationVisibleFlags   = 0;
         private _war?                   : Twns.BaseWar.BwWar;
 
         private readonly _view  = new TwnsBwTileMapView.BwTileMapView();
 
-        public init({ data, configVersion, mapSize, playersCountUnneutral }: {
+        public init({ data, gameConfig, mapSize, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialTileMap>;
-            configVersion           : string;
+            gameConfig              : GameConfig;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
         }): void {
@@ -45,7 +46,7 @@ namespace TwnsBwTileMap {
                 throw Helpers.newError(`Invalid mapSize.`, ClientErrorCode.BwTileMap_Init_02);
             }
 
-            const map = Helpers.createEmptyMap<TwnsBwTile.BwTile>(mapWidth, mapHeight);
+            const map = Helpers.createEmptyMap<Twns.BaseWar.BwTile>(mapWidth, mapHeight);
             for (const tileData of tiles) {
                 const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex), ClientErrorCode.BwTileMap_Init_03);
                 if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
@@ -58,8 +59,8 @@ namespace TwnsBwTileMap {
                     throw Helpers.newError(`Duplicated gridIndex: ${gridX}, ${gridY}`, ClientErrorCode.BwTileMap_Init_05);
                 }
 
-                const tile = new TwnsBwTile.BwTile();
-                tile.init(tileData, configVersion);
+                const tile = new Twns.BaseWar.BwTile();
+                tile.init(tileData, gameConfig);
 
                 const playerIndex = tile.getPlayerIndex();
                 if ((playerIndex == null)                                   ||
@@ -78,16 +79,16 @@ namespace TwnsBwTileMap {
             this.getView().init(this);
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        public fastInit({ data, configVersion, mapSize, playersCountUnneutral }: {
+        public fastInit({ data, gameConfig, mapSize, playersCountUnneutral }: {
             data                    : Types.Undefinable<ISerialTileMap>;
-            configVersion           : string;
+            gameConfig              : GameConfig;
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
         }): void {
             const map = this._getMap();
             for (const tileData of data ? data.tiles || [] : []) {
                 const gridIndex = Helpers.getExisted(GridIndexHelpers.convertGridIndex(tileData.gridIndex));
-                map[gridIndex.x][gridIndex.y].fastInit(tileData, configVersion);
+                map[gridIndex.x][gridIndex.y].fastInit(tileData, gameConfig);
             }
 
             this.getView().fastInit(this);
@@ -146,10 +147,10 @@ namespace TwnsBwTileMap {
             return Helpers.getExisted(this._war);
         }
 
-        private _setMap(map: TwnsBwTile.BwTile[][]): void {
+        private _setMap(map: Twns.BaseWar.BwTile[][]): void {
             this._map = map;
         }
-        protected _getMap(): TwnsBwTile.BwTile[][] {
+        protected _getMap(): Twns.BaseWar.BwTile[][] {
             return Helpers.getExisted(this._map);
         }
 
@@ -160,18 +161,18 @@ namespace TwnsBwTileMap {
             return this._view;
         }
 
-        private _forEachTile(func: (t: TwnsBwTile.BwTile) => any): void {
+        private _forEachTile(func: (t: Twns.BaseWar.BwTile) => any): void {
             for (const column of this._getMap()) {
                 for (const tile of column) {
                     func(tile);
                 }
             }
         }
-        public getTile(gridIndex: Types.GridIndex): TwnsBwTile.BwTile {
+        public getTile(gridIndex: Types.GridIndex): Twns.BaseWar.BwTile {
             return this._getMap()[gridIndex.x][gridIndex.y];
         }
-        public getAllTiles(): TwnsBwTile.BwTile[] {
-            const tileArray: TwnsBwTile.BwTile[] = [];
+        public getAllTiles(): Twns.BaseWar.BwTile[] {
+            const tileArray: Twns.BaseWar.BwTile[] = [];
             this._forEachTile(tile => tileArray.push(tile));
             return tileArray;
         }

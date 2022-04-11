@@ -7,21 +7,22 @@
 // import TwnsBwPlayer         from "./BwPlayer";
 // import TwnsBwWar            from "./BwWar";
 
-namespace TwnsBwPlayerManager {
+namespace Twns.BaseWar {
     import WarSerialization         = CommonProto.WarSerialization;
     import ISerialPlayerManager     = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer            = WarSerialization.ISerialPlayer;
     import PlayerAliveState         = Types.PlayerAliveState;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                    = Twns.BaseWar.BwWar;
+    import GameConfig               = Config.GameConfig;
 
     export abstract class BwPlayerManager {
-        private _players        = new Map<number, TwnsBwPlayer.BwPlayer>();
+        private _players        = new Map<number, Twns.BaseWar.BwPlayer>();
         private _war?           : BwWar;
 
         public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
 
-        public init(data: Types.Undefinable<ISerialPlayerManager>, configVersion: string): void {
+        public init(data: Types.Undefinable<ISerialPlayerManager>, gameConfig: GameConfig): void {
             if (data == null) {
                 throw Helpers.newError(`Empty data.`, ClientErrorCode.BwPlayerManager_Init_00);
             }
@@ -34,7 +35,7 @@ namespace TwnsBwPlayerManager {
                 throw Helpers.newError(`Invalid playerArray.`, ClientErrorCode.BwPlayerManager_Init_01);
             }
 
-            const newPlayerMap  = new Map<number, TwnsBwPlayer.BwPlayer>();
+            const newPlayerMap  = new Map<number, Twns.BaseWar.BwPlayer>();
             const skinIdSet     = new Set<number>();
             for (const playerData of playerArray) {
                 const playerIndex = playerData.playerIndex;
@@ -48,8 +49,8 @@ namespace TwnsBwPlayerManager {
                 }
                 skinIdSet.add(skinId);
 
-                const player = new TwnsBwPlayer.BwPlayer();
-                player.init(playerData, configVersion);
+                const player = new Twns.BaseWar.BwPlayer();
+                player.init(playerData, gameConfig);
 
                 newPlayerMap.set(playerIndex, player);
             }
@@ -74,11 +75,11 @@ namespace TwnsBwPlayerManager {
                 playerMap.set(playerIndex, player);
             }
         }
-        public fastInit(data: ISerialPlayerManager, configVersion: string): void {
+        public fastInit(data: ISerialPlayerManager, gameConfig: GameConfig): void {
             for (const playerData of data ? data.players || [] : []) {
                 const playerIndex   = Helpers.getExisted(playerData.playerIndex, ClientErrorCode.BwPlayerManager_FastInit_00);
                 const player        = Helpers.getExisted(this.getPlayer(playerIndex), ClientErrorCode.BwPlayerManager_FastInit_01);
-                player.init(playerData, configVersion);
+                player.init(playerData, gameConfig);
             }
         }
 
@@ -124,21 +125,21 @@ namespace TwnsBwPlayerManager {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getPlayer(playerIndex: number): TwnsBwPlayer.BwPlayer {
+        public getPlayer(playerIndex: number): Twns.BaseWar.BwPlayer {
             return Helpers.getExisted(this._players.get(playerIndex));
         }
-        public getAllPlayersDict(): Map<number, TwnsBwPlayer.BwPlayer> {
+        public getAllPlayersDict(): Map<number, Twns.BaseWar.BwPlayer> {
             return this._players;
         }
-        public getAllPlayers(): TwnsBwPlayer.BwPlayer[] {
-            const players: TwnsBwPlayer.BwPlayer[] = [];
+        public getAllPlayers(): Twns.BaseWar.BwPlayer[] {
+            const players: Twns.BaseWar.BwPlayer[] = [];
             for (const [, player] of this.getAllPlayersDict()) {
                 players.push(player);
             }
             return players;
         }
 
-        public getPlayerByUserId(userId: number): TwnsBwPlayer.BwPlayer | null {
+        public getPlayerByUserId(userId: number): Twns.BaseWar.BwPlayer | null {
             for (const [, player] of this._players) {
                 if (player.getUserId() === userId) {
                     return player;
@@ -147,7 +148,7 @@ namespace TwnsBwPlayerManager {
             return null;
         }
 
-        public getPlayerInTurn(): TwnsBwPlayer.BwPlayer {
+        public getPlayerInTurn(): Twns.BaseWar.BwPlayer {
             return this.getPlayer(this._getWar().getPlayerIndexInTurn());
         }
 
@@ -227,7 +228,7 @@ namespace TwnsBwPlayerManager {
             return (p1 != null) && (p2 != null) && (p1.getTeamIndex() === p2.getTeamIndex());
         }
 
-        public forEachPlayer(includeNeutral: boolean, func: (p: TwnsBwPlayer.BwPlayer) => void): void {
+        public forEachPlayer(includeNeutral: boolean, func: (p: Twns.BaseWar.BwPlayer) => void): void {
             for (const [playerIndex, player] of this._players) {
                 ((includeNeutral) || (playerIndex !== 0)) && (func(player));
             }

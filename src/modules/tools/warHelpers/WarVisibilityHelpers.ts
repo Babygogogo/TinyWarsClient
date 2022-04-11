@@ -98,14 +98,14 @@ namespace WarVisibilityHelpers {
         return false;
     }
 
-    export function getAllUnitsOnMapVisibleToTeams(war: Twns.BaseWar.BwWar, teamIndexes: Set<number>): Set<TwnsBwUnit.BwUnit> {
+    export function getAllUnitsOnMapVisibleToTeams(war: Twns.BaseWar.BwWar, teamIndexes: Set<number>): Set<Twns.BaseWar.BwUnit> {
         const fogMap                = war.getFogMap();
         const visibilityFromPaths   = fogMap.getVisibilityMapFromPathsForTeams(teamIndexes);
         const visibilityFromTiles   = fogMap.getVisibilityMapFromTilesForTeams(teamIndexes);
         const visibilityFromUnits   = fogMap.getVisibilityMapFromUnitsForTeams(teamIndexes);
         const unitMap               = war.getUnitMap();
         const tileMap               = war.getTileMap();
-        const units                 = new Set<TwnsBwUnit.BwUnit>();
+        const units                 = new Set<Twns.BaseWar.BwUnit>();
         for (const unit of unitMap.getAllUnitsOnMap()) {
             const gridIndex     = unit.getGridIndex();
             const tile          = tileMap.getTile(gridIndex);
@@ -234,17 +234,17 @@ namespace WarVisibilityHelpers {
         return false;
     }
 
-    export function getAllTilesVisibleToTeam(war: Twns.BaseWar.BwWar, teamIndex: number): Set<TwnsBwTile.BwTile> {
+    export function getAllTilesVisibleToTeam(war: Twns.BaseWar.BwWar, teamIndex: number): Set<Twns.BaseWar.BwTile> {
         return getAllTilesVisibleToTeams(war, new Set([teamIndex]));
     }
-    export function getAllTilesVisibleToTeams(war: Twns.BaseWar.BwWar, teamIndexes: Set<number>): Set<TwnsBwTile.BwTile> {
+    export function getAllTilesVisibleToTeams(war: Twns.BaseWar.BwWar, teamIndexes: Set<number>): Set<Twns.BaseWar.BwTile> {
         const fogMap                = war.getFogMap();
         const visibilityFromPaths   = fogMap.getVisibilityMapFromPathsForTeams(teamIndexes);
         const visibilityFromTiles   = fogMap.getVisibilityMapFromTilesForTeams(teamIndexes);
         const visibilityFromUnits   = fogMap.getVisibilityMapFromUnitsForTeams(teamIndexes);
         const unitMap               = war.getUnitMap();
         const tileMap               = war.getTileMap();
-        const tiles                 = new Set<TwnsBwTile.BwTile>();
+        const tiles                 = new Set<Twns.BaseWar.BwTile>();
         const hasFog                = fogMap.checkHasFogCurrently();
 
         for (const tile of tileMap.getAllTiles()) {
@@ -311,16 +311,16 @@ namespace WarVisibilityHelpers {
     export function getDiscoveredUnitsByPath({ war, path, movingUnit, isUnitDestroyed, visibleUnits }: {
         war             : Twns.BaseWar.BwWar;
         path            : GridIndex[];
-        movingUnit      : TwnsBwUnit.BwUnit;
+        movingUnit      : Twns.BaseWar.BwUnit;
         isUnitDestroyed : boolean;
-        visibleUnits    : Set<TwnsBwUnit.BwUnit>;
-    }): Set<TwnsBwUnit.BwUnit> {
+        visibleUnits    : Set<Twns.BaseWar.BwUnit>;
+    }): Set<Twns.BaseWar.BwUnit> {
         const observerTeamIndex                         = movingUnit.getTeamIndex();
         const tileMap                                   = war.getTileMap();
         const mapSize                                   = tileMap.getMapSize();
         const visibilityMap                             = _createVisibilityMapFromPath(war, path, movingUnit);
         const unitMap                                   = war.getUnitMap();
-        const discoveredUnits                           = new Set<TwnsBwUnit.BwUnit>();
+        const discoveredUnits                           = new Set<Twns.BaseWar.BwUnit>();
         const destination                               = path[path.length - 1];
         const { width: mapWidth, height: mapHeight }    = mapSize;
         for (let x = 0; x < mapWidth; ++x) {
@@ -352,7 +352,7 @@ namespace WarVisibilityHelpers {
         return discoveredUnits;
     }
 
-    function _checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap: TwnsBwUnitMap.BwUnitMap, origin: GridIndex, teamIndexes: Set<number>): boolean {
+    function _checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap: Twns.BaseWar.BwUnitMap, origin: GridIndex, teamIndexes: Set<number>): boolean {
         for (const adjacentGrid of GridIndexHelpers.getAdjacentGrids(origin, unitMap.getMapSize())) {
             const unit = unitMap.getUnitOnMap(adjacentGrid);
             if ((unit) && (teamIndexes.has(unit.getTeamIndex()))) {
@@ -362,12 +362,12 @@ namespace WarVisibilityHelpers {
         return false;
     }
 
-    function _checkHasUnitWithTeamIndexesOnGrid(unitMap: TwnsBwUnitMap.BwUnitMap, gridIndex: GridIndex, teamIndexes: Set<number>): boolean {
+    function _checkHasUnitWithTeamIndexesOnGrid(unitMap: Twns.BaseWar.BwUnitMap, gridIndex: GridIndex, teamIndexes: Set<number>): boolean {
         const unit = unitMap.getUnitOnMap(gridIndex);
         return (unit != null) && (teamIndexes.has(unit.getTeamIndex()));
     }
 
-    function _checkIsUnitHiddenByTileToTeam(war: Twns.BaseWar.BwWar, unit: TwnsBwUnit.BwUnit, teamIndex: number): boolean {
+    function _checkIsUnitHiddenByTileToTeam(war: Twns.BaseWar.BwWar, unit: Twns.BaseWar.BwUnit, teamIndex: number): boolean {
         const gridIndex = unit.getGridIndex();
         const tileMap   = war.getTileMap();
         const tile      = tileMap.getTile(gridIndex);
@@ -375,7 +375,7 @@ namespace WarVisibilityHelpers {
         return (tile.getTeamIndex() !== teamIndex) && (tile.checkCanHideUnit(unitType));
     }
 
-    function _createVisibilityMapFromPath(war: Twns.BaseWar.BwWar, path: GridIndex[], unit: TwnsBwUnit.BwUnit): Visibility[][] {
+    function _createVisibilityMapFromPath(war: Twns.BaseWar.BwWar, path: GridIndex[], unit: Twns.BaseWar.BwUnit): Visibility[][] {
         const tileMap       = war.getTileMap();
         const mapSize       = tileMap.getMapSize();
         const visibilityMap = Helpers.createEmptyMap(mapSize.width, mapSize.height, Visibility.OutsideVision);

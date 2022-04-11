@@ -6,30 +6,12 @@
 // import ProtoTypes                   from "../../tools/proto/ProtoTypes";
 // import TwnsMeWar                    from "./MeWar";
 
-namespace TwnsMeCommonSettingManager {
-    import MeWar                = TwnsMeWar.MeWar;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.MapEditor {
+    import MeWar                = MapEditor.MeWar;
     import ISettingsForCommon   = CommonProto.WarSettings.ISettingsForCommon;
-    import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
 
-    export class MeCommonSettingManager extends TwnsBwCommonSettingManager.BwCommonSettingManager {
-        public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
-            settings                : ISettingsForCommon;
-            allWarEventIdArray      : number[];
-            playersCountUnneutral   : number;
-        }): Promise<void> {
-            const configVersion = settings.configVersion;
-            if ((configVersion == null) || (configVersion !== ConfigManager.getLatestConfigVersion())) {
-                throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
-            }
-
-            const warRule = settings.warRule;
-            if (warRule == null) {
-                throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.MeCommonSettingManager_Init_00);
-            }
-
-            this._setSettingsForCommon(settings);
-        }
-
+    export class MeCommonSettingManager extends BaseWar.BwCommonSettingManager {
         public serializeForCreateSfw(): ISettingsForCommon {
             const war       = this._getWar() as MeWar;
             const warRule   = war.getRevisedWarRuleArray(war.getField().getMaxPlayerIndex())[0];

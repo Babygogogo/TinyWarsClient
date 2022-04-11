@@ -15,18 +15,19 @@
 // import TwnsMeWarEventManager        from "./MeWarEventManager";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMeWar {
+namespace Twns.MapEditor {
     import WarAction                = CommonProto.WarAction;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import IWarRule                 = CommonProto.WarRule.IWarRule;
     import IMapRawData              = CommonProto.Map.IMapRawData;
     import IDataForMapTag           = CommonProto.Map.IDataForMapTag;
     import ILanguageText            = CommonProto.Structure.ILanguageText;
+    import GameConfig               = Config.GameConfig;
 
     export class MeWar extends Twns.BaseWar.BwWar {
         private readonly _playerManager         = new TwnsMePlayerManager.MePlayerManager();
         private readonly _field                 = new TwnsMeField.MeField();
-        private readonly _commonSettingManager  = new TwnsMeCommonSettingManager.MeCommonSettingManager();
+        private readonly _commonSettingManager  = new Twns.MapEditor.MeCommonSettingManager();
         private readonly _drawer                = new TwnsMeDrawer.MeDrawer();
         private readonly _warEventManager       = new TwnsMeWarEventManager.MeWarEventManager();
 
@@ -40,15 +41,15 @@ namespace TwnsMeWar {
         private _isMapModified      = false;
         private _mapTag?            : IDataForMapTag;
 
-        public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data);
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
+            this._baseInit(data, gameConfig);
             this.getDrawer().init();
 
             this._initView();
         }
-        public async initWithMapEditorData(data: CommonProto.Map.IMapEditorData): Promise<void> {
+        public initWithMapEditorData(data: CommonProto.Map.IMapEditorData, gameConfig: GameConfig): void {
             const warData = MeUtility.createISerialWar(data);
-            await this.init(warData);
+            this.init(warData, gameConfig);
 
             const mapRawData = Helpers.getExisted(data.mapRawData);
             this.setMapSlotIndex(Helpers.getExisted(data.slotIndex));
@@ -126,7 +127,7 @@ namespace TwnsMeWar {
         public getField(): TwnsMeField.MeField {
             return this._field;
         }
-        public getCommonSettingManager(): TwnsMeCommonSettingManager.MeCommonSettingManager {
+        public getCommonSettingManager(): Twns.MapEditor.MeCommonSettingManager {
             return this._commonSettingManager;
         }
         public getWarEventManager(): TwnsMeWarEventManager.MeWarEventManager {

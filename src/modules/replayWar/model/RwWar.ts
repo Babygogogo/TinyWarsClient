@@ -19,7 +19,7 @@
 // import TwnsRwPlayerManager          from "./RwPlayerManager";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsRwWar {
+namespace Twns.ReplayWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import WarType                  = Types.WarType;
@@ -27,16 +27,17 @@ namespace TwnsRwWar {
     import IWarActionContainer      = WarAction.IWarActionContainer;
     import ISerialWar               = CommonProto.WarSerialization.ISerialWar;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
+    import GameConfig               = Config.GameConfig;
 
     type CheckpointData = {
         warData     : ISerialWar;
         nextActionId: number;
     };
 
-    export class RwWar extends Twns.BaseWar.BwWar {
+    export class RwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new TwnsRwPlayerManager.RwPlayerManager();
         private readonly _field                 = new TwnsRwField.RwField();
-        private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
+        private readonly _commonSettingManager  = new Twns.BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
 
         private _settingsForMcw?                    : CommonProto.WarSettings.ISettingsForMcw | null;
@@ -52,8 +53,8 @@ namespace TwnsRwWar {
         private _checkpointIdsForNextActionId       = new Map<number, number>();
         private _checkpointDataListForCheckpointId  = new Map<number, CheckpointData>();
 
-        public async init(warData: ISerialWar): Promise<void> {
-            await this._baseInit(warData);
+        public init(warData: ISerialWar, gameConfig: GameConfig): void {
+            this._baseInit(warData, gameConfig);
             this._setSettingsForMcw(warData.settingsForMcw ?? null);
             this._setSettingsForScw(warData.settingsForScw ?? null);
             this._setSettingsForMrw(warData.settingsForMrw ?? null);
@@ -81,7 +82,7 @@ namespace TwnsRwWar {
         public getPlayerManager(): TwnsRwPlayerManager.RwPlayerManager {
             return this._playerManager;
         }
-        public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
+        public getCommonSettingManager(): Twns.BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
         public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
@@ -451,16 +452,16 @@ namespace TwnsRwWar {
 
             const checkpointData        = Helpers.getExisted(this._getCheckpointData(checkpointId));
             const warData               = checkpointData.warData;
-            const configVersion         = this.getConfigVersion();
+            const gameConfig            = this.getGameConfig();
             const playersCountUnneutral = this.getPlayerManager().getTotalPlayersCount(false);
             this.setNextActionId(checkpointData.nextActionId);
             this.getWeatherManager().fastInit(warData.weatherManager);
-            this.getPlayerManager().fastInit(Helpers.getExisted(warData.playerManager), configVersion);
+            this.getPlayerManager().fastInit(Helpers.getExisted(warData.playerManager), gameConfig);
             this.getTurnManager().fastInit(Helpers.getExisted(warData.turnManager), playersCountUnneutral);
             this.getWarEventManager().fastInit(Helpers.getExisted(warData.warEventManager));
             this.getField().fastInit({
                 data                    : Helpers.getExisted(warData.field),
-                configVersion,
+                gameConfig,
                 playersCountUnneutral,
             });
             this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw ?? null);

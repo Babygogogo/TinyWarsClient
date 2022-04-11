@@ -17,7 +17,7 @@ namespace TwnsSpwWar {
     import LangTextType             = TwnsLangTextType.LangTextType;
     import WarAction                = CommonProto.WarAction;
     import ISpmWarSaveSlotExtraData = CommonProto.SinglePlayerMode.ISpmWarSaveSlotExtraData;
-    import BwCommonSettingManager   = TwnsBwCommonSettingManager.BwCommonSettingManager;
+    import BwCommonSettingManager   = Twns.BaseWar.BwCommonSettingManager;
 
     export abstract class SpwWar extends Twns.BaseWar.BwWar {
         private readonly _playerManager         = new TwnsSpwPlayerManager.SpwPlayerManager();
@@ -191,7 +191,7 @@ namespace TwnsSpwWar {
         public getHumanPlayerIndexes(): number[] {
             return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayerIndexes();
         }
-        public getHumanPlayers(): TwnsBwPlayer.BwPlayer[] {
+        public getHumanPlayers(): Twns.BaseWar.BwPlayer[] {
             return (this.getPlayerManager() as TwnsSpwPlayerManager.SpwPlayerManager).getHumanPlayers();
         }
     }

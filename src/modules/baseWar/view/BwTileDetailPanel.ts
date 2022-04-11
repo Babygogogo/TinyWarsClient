@@ -25,10 +25,11 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsBwTileDetailPanel {
-    import BwTile           = TwnsBwTile.BwTile;
+    import BwTile           = Twns.BaseWar.BwTile;
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
     import UnitType         = Types.UnitType;
+    import GameConfig       = Twns.Config.GameConfig;
 
     // eslint-disable-next-line no-shadow
     enum TileInfoType {
@@ -243,18 +244,18 @@ namespace TwnsBwTileDetailPanel {
         }
 
         private _createDataForListMoveCost(): DataForMoveRangeRenderer[] {
-            const openData          = this._getOpenData();
-            const tile              = openData.tile;
-            const configVersion     = tile.getConfigVersion();
-            const tileCfg           = ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
-            const playerIndex       = tile.getPlayerIndex() || 1;
+            const openData      = this._getOpenData();
+            const tile          = openData.tile;
+            const gameConfig    = tile.getGameConfig();
+            const tileCfg       = Helpers.getExisted(gameConfig.getTileTemplateCfgByType(tile.getType()));
+            const playerIndex   = tile.getPlayerIndex() || 1;
 
             const dataArray : DataForMoveRangeRenderer[] = [];
             let index       = 0;
-            for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
+            for (const unitType of gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
                 dataArray.push({
                     index,
-                    configVersion,
+                    gameConfig,
                     unitType,
                     tileCfg,
                     playerIndex,
@@ -1558,7 +1559,7 @@ namespace TwnsBwTileDetailPanel {
 
     type DataForMoveRangeRenderer = {
         index           : number;
-        configVersion   : string;
+        gameConfig      : GameConfig;
         unitType        : UnitType;
         tileCfg         : CommonProto.Config.ITileTemplateCfg;
         playerIndex     : number;
@@ -1567,7 +1568,7 @@ namespace TwnsBwTileDetailPanel {
         private readonly _group!            : eui.Group;
         private readonly _imgBg!            : TwnsUiImage.UiImage;
         private readonly _conView!          : eui.Group;
-        private readonly _unitView          = new TwnsWarMapUnitView.WarMapUnitView();
+        private readonly _unitView          = new Twns.WarMap.WarMapUnitView();
         private readonly _labelMoveCost!    : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
@@ -1601,13 +1602,14 @@ namespace TwnsBwTileDetailPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const data                  = this._getData();
-            const configVersion         = data.configVersion;
+            const gameConfig            = data.gameConfig;
             const unitType              = data.unitType;
-            const moveCostCfg           = ConfigManager.getMoveCostCfgByTileType(configVersion, Helpers.getExisted(data.tileCfg.type));
-            const moveCost              = moveCostCfg[ConfigManager.getUnitTemplateCfg(configVersion, unitType).moveType].cost;
+            const moveCostCfg           = Helpers.getExisted(gameConfig.getMoveCostCfg(Helpers.getExisted(data.tileCfg.type)));
+            const moveCost              = moveCostCfg[Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.moveType)].cost;
             this._imgBg.visible         = data.index % 8 < 4;
             this._labelMoveCost.text    = moveCost != null ? `${moveCost}` : `--`;
             this._unitView.update({
+                gameConfig,
                 gridIndex       : { x: 0, y: 0 },
                 playerIndex     : data.playerIndex,
                 unitType        : data.unitType,

@@ -291,11 +291,12 @@ namespace TwnsWeActionModifyPanel40 {
         private _updateLabelDescAndLabelError(): void {
             const openData          = this._getOpenData();
             const action            = openData.action;
-            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, openData.war);
+            const war               = openData.war;
+            const errorTip          = WarEventHelper.getErrorTipForAction(openData.fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
-            this._labelDesc.text    = WarEventHelper.getDescForAction(action) || CommonConstants.ErrorTextForUndefined;
+            this._labelDesc.text    = WarEventHelper.getDescForAction(action, war) || CommonConstants.ErrorTextForUndefined;
         }
         private _updateLabelLocation(): void {
             const locationIdArray       = this._getAction().conLocationIdArray;

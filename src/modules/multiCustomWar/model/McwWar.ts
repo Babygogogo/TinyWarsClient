@@ -5,17 +5,19 @@
 // import Types                from "../../tools/helpers/Types";
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
-namespace TwnsMcwWar {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace Twns.MultiCustomWar {
     import MpwWar           = TwnsMpwWar.MpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForMcw  = CommonProto.WarSettings.ISettingsForMcw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
+    import GameConfig       = Config.GameConfig;
 
     export class McwWar extends MpwWar {
         private _settingsForMcw?: ISettingsForMcw;
 
-        public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data);
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
+            this._baseInit(data, gameConfig);
             this._setSettingsForMcw(Helpers.getExisted(data.settingsForMcw, ClientErrorCode.McwWar_Init_00));
 
             this._initView();

@@ -5,7 +5,7 @@
 namespace TwnsHrwPlayerManager {
     import ClientErrorCode = TwnsClientErrorCode.ClientErrorCode;
 
-    export class HrwPlayerManager extends TwnsBwPlayerManager.BwPlayerManager {
+    export class HrwPlayerManager extends Twns.BaseWar.BwPlayerManager {
         private _watcherTeamIndexes?    : Set<number>;
 
         public initWatcherTeamIndexes(warData: CommonProto.WarSerialization.ISerialWar): void {

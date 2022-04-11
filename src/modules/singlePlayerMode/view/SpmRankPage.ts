@@ -123,7 +123,7 @@ namespace TwnsSpmRankPage {
             const data          = this._getData();
             const ruleId        = data.ruleId;
             const mapId         = data.mapId;
-            const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+            const configVersion = Helpers.getExisted(Twns.Config.ConfigManager.getLatestConfigVersion());
             const selfInfo      = UserModel.getSelfInfo()?.userComplexInfo;
             const selfScore     = selfInfo?.userWarStatistics?.spwArray?.find(v => (v.mapId === mapId) && (v.configVersion === configVersion) && (v.ruleId === ruleId))?.highScore ?? Number.MIN_SAFE_INTEGER;
             const selfPrivilege = selfInfo?.userPrivilege;

@@ -297,8 +297,11 @@ namespace TwnsCcrCreateSettingsPanel {
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
             const mapId = CcrCreateModel.getMapId();
             return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+                ? null
+                : {
+                    gameConfig  : CcrCreateModel.getGameConfig(),
+                    mapInfo     : { mapId },
+                };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -104,7 +104,7 @@ namespace TwnsMfrCreateSettingsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
                     pageClass   : TwnsCommonWarMapInfoPage.CommonWarMapInfoPage,
-                    pageData    : this._createDataForCommonMapInfoPage(),
+                    pageData    : await this._createDataForCommonMapInfoPage(),
                 },
             ]);
             this._isTabInitialized = true;
@@ -135,14 +135,16 @@ namespace TwnsMfrCreateSettingsPanel {
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
         }
-        private _onTouchedBtnChooseCo(): void {
+        private async _onTouchedBtnChooseCo(): Promise<void> {
             const currentCoId = MfrCreateModel.getSelfCoId();
+            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion());
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                gameConfig,
                 currentCoId,
                 availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : MfrCreateModel.getWarRule(),
                     playerIndex     : MfrCreateModel.getSelfPlayerIndex(),
-                    configVersion   : MfrCreateModel.getConfigVersion(),
+                    gameConfig,
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
@@ -193,9 +195,9 @@ namespace TwnsMfrCreateSettingsPanel {
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
         }
 
-        private _updateBtnChooseCo(): void {
-            const cfg               = ConfigManager.getCoBasicCfg(MfrCreateModel.getConfigVersion(), MfrCreateModel.getSelfCoId());
-            this._btnChooseCo.label = cfg.name;
+        private async _updateBtnChooseCo(): Promise<void> {
+            const cfg               = (await Twns.Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion())).getCoBasicCfg(MfrCreateModel.getSelfCoId());
+            this._btnChooseCo.label = cfg?.name ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
@@ -219,11 +221,14 @@ namespace TwnsMfrCreateSettingsPanel {
             this._sclSkinId.bindData(dataArray);
         }
 
-        private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
+        private async _createDataForCommonMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
             const warData = MfrCreateModel.getInitialWarData();
             return warData == null
-                ? {}
-                : { warInfo: { warData, players: null } };
+                ? null
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
+                    warInfo     : { warData, players: null }
+                };
         }
 
         private _updateCommonWarBasicSettingsPage(): void {
@@ -452,7 +457,7 @@ namespace TwnsMfrCreateSettingsPanel {
             this._updateState();
         }
 
-        public onItemTapEvent(): void {
+        public async onItemTapEvent(): Promise<void> {
             const data = this.data;
             if (data) {
                 const creator       = MfrCreateModel;
@@ -469,7 +474,7 @@ namespace TwnsMfrCreateSettingsPanel {
                     const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                         warRule         : creator.getWarRule(),
                         playerIndex,
-                        configVersion   : MfrCreateModel.getConfigVersion(),
+                        gameConfig      : await Twns.Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion()),
                     });
                     if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
                         creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));

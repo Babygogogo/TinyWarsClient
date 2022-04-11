@@ -24,11 +24,12 @@ namespace Twns.TestWar {
     import IMapRawData          = CommonProto.Map.IMapRawData;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
     import BwWar                = BaseWar.BwWar;
+    import GameConfig           = Config.GameConfig;
 
     export class TwWar extends BwWar {
         private readonly _playerManager         = new TwPlayerManager();
         private readonly _field                 = new TwField();
-        private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
+        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BwWarEventManager();
 
         public getCanCheat(): boolean {
@@ -40,7 +41,7 @@ namespace Twns.TestWar {
         public getField(): TwField {
             return this._field;
         }
-        public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
+        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
         public getWarEventManager(): BwWarEventManager {
@@ -136,21 +137,25 @@ namespace Twns.TestWar {
             return null;
         }
 
-        public async init(data: ISerialWar): Promise<void> {
-            await this._baseInit(data);
+        public init(data: ISerialWar, gameConfig: GameConfig): void {
+            this._baseInit(data, gameConfig);
         }
-        public async initByMapRawData(mapRawData: IMapRawData): Promise<void> {
-            await this.init(await _createDataForCreateTwWar(mapRawData));
+        public async initByMapRawData(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<void> {
+            this.init(await _createDataForCreateTwWar(mapRawData, gameConfig), gameConfig);
         }
 
-        public async getErrorCodeForInit(data: ISerialWar): Promise<ClientErrorCode> {
-            return await this.init(data).catch(e => {
+        public async getErrorCodeForInit(data: ISerialWar, gameConfig: GameConfig): Promise<ClientErrorCode> {
+            try {
+                this.init(data, gameConfig);
+            } catch(e) {
                 const error = e as Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInit_00;
-            }) || ClientErrorCode.NoError;
+            }
+
+            return ClientErrorCode.NoError;
         }
-        public async getErrorCodeForInitByMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
-            return await this.initByMapRawData(mapRawData).catch(e => {
+        public async getErrorCodeForInitByMapRawData(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<ClientErrorCode> {
+            return await this.initByMapRawData(mapRawData, gameConfig).catch(e => {
                 const error = e as Types.CustomError;
                 return error?.errorCode ?? ClientErrorCode.TwWar_GetErrorCodeForInitByMapRawData_00;
             }) || ClientErrorCode.NoError;
@@ -179,14 +184,14 @@ namespace Twns.TestWar {
         }
     }
 
-    async function _createDataForCreateTwWar(mapRawData: IMapRawData): Promise<ISerialWar> {
-        const dataForPlayerManager  = await _createInitialPlayerManagerDataForTw(mapRawData);
+    async function _createDataForCreateTwWar(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<ISerialWar> {
+        const dataForPlayerManager  = await _createInitialPlayerManagerDataForTw(mapRawData, gameConfig);
         const fieldData             = await _createInitialFieldData(mapRawData);
         const warRule               = (mapRawData.warRuleArray || [])[0];
         const seedRandomState       = new Math.seedrandom("" + Math.random(), { state: true }).state();
         return {
             settingsForCommon       : {
-                configVersion       : ConfigManager.getLatestConfigVersion(),
+                configVersion       : Config.ConfigManager.getLatestConfigVersion(),
                 warRule,
                 presetWarRuleId     : warRule.ruleId,
             },
@@ -220,8 +225,7 @@ namespace Twns.TestWar {
         };
     }
 
-    async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData): Promise<WarSerialization.ISerialPlayerManager> {
-        const configVersion         = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+    async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData, gameConfig: GameConfig): Promise<WarSerialization.ISerialPlayerManager> {
         const playersCountUnneutral = mapRawData.playersCountUnneutral;
         if ((playersCountUnneutral == null) || (playersCountUnneutral < 2)) {
             throw Helpers.newError(`Invalid playersCountUnneutral: ${playersCountUnneutral}`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_00);
@@ -241,7 +245,7 @@ namespace Twns.TestWar {
         const warRule           = (mapRawData.warRuleArray || [])[0];
         const ruleForPlayers    = Helpers.getExisted(warRule.ruleForPlayers);
         const ruleAvailability  = Helpers.getExisted(warRule.ruleAvailability);
-        if ((WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability })) ||
+        if ((WarRuleHelpers.getErrorCodeForRuleForPlayers({ ruleForPlayers, gameConfig, playersCountUnneutral, ruleAvailability })) ||
             ((ruleForPlayers.playerRuleDataArray || []).length !== playersCountUnneutral)
         ) {
             throw Helpers.newError(`Invalid ruleForPlayers.`, ClientErrorCode.TwWar_CreateInitialPlayerManagerDataForTw_01);

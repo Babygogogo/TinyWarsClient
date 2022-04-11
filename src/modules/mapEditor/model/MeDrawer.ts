@@ -51,12 +51,12 @@ namespace TwnsMeDrawer {
     };
 
     export class MeDrawer {
-        private _war?                           : TwnsMeWar.MeWar;
+        private _war?                           : Twns.MapEditor.MeWar;
         private _mode                           = DrawerMode.Preview;
         private _drawTargetTileObjectData       : DataForDrawTileObject | null = null;
         private _drawTargetTileBaseData         : DataForDrawTileBase | null = null;
         private _drawTargetTileDecoratorData    : DataForDrawTileDecorator | null = null;
-        private _drawTargetUnit                 : TwnsBwUnit.BwUnit | null = null;
+        private _drawTargetUnit                 : Twns.BaseWar.BwUnit | null = null;
         private _dataForAddTileToLocation       : DataForAddTileToLocation | null = null;
         private _dataForDeleteTileFromLocation  : DataForDeleteTileFromLocation | null = null;
         private _symmetricalDrawType            = SymmetryType.None;
@@ -70,7 +70,7 @@ namespace TwnsMeDrawer {
             return this;
         }
 
-        public startRunning(war: TwnsMeWar.MeWar): void {
+        public startRunning(war: Twns.MapEditor.MeWar): void {
             this._setWar(war);
             Notify.addEventListeners(this._notifyListeners, this);
         }
@@ -90,10 +90,10 @@ namespace TwnsMeDrawer {
             this._handleAction(data.draggedTo);
         }
 
-        private _setWar(war: TwnsMeWar.MeWar): void {
+        private _setWar(war: Twns.MapEditor.MeWar): void {
             this._war = war;
         }
-        private _getWar(): TwnsMeWar.MeWar {
+        private _getWar(): Twns.MapEditor.MeWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -156,22 +156,22 @@ namespace TwnsMeDrawer {
 
         public setModeDrawUnit(data: DataForDrawUnit): void {
             const war   = this._getWar();
-            const unit  = new TwnsBwUnit.BwUnit();
+            const unit  = new Twns.BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : data.unitType,
                 playerIndex : data.playerIndex,
-            }, war.getConfigVersion());
+            }, war.getGameConfig());
             unit.startRunning(war);
 
             this._setDrawTargetUnit(unit);
             this._setMode(DrawerMode.DrawUnit);
         }
-        private _setDrawTargetUnit(unit: TwnsBwUnit.BwUnit): void {
+        private _setDrawTargetUnit(unit: Twns.BaseWar.BwUnit): void {
             this._drawTargetUnit = unit;
         }
-        public getDrawTargetUnit(): TwnsBwUnit.BwUnit | null {
+        public getDrawTargetUnit(): Twns.BaseWar.BwUnit | null {
             return this._drawTargetUnit;
         }
 
@@ -207,7 +207,7 @@ namespace TwnsMeDrawer {
         public autoAdjustRoads(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
-            const configVersion = war.getConfigVersion();
+            const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 if (tile.getType() !== Types.TileType.Road) {
                     continue;
@@ -225,7 +225,7 @@ namespace TwnsMeDrawer {
                         baseShapeId     : tile.getBaseShapeId(),
                         locationFlags   : tile.getLocationFlags(),
                         isHighlighted   : tile.getIsHighlighted(),
-                    }, configVersion);
+                    }, gameConfig);
                     tile.startRunning(war);
                     tile.flushDataToView();
 
@@ -236,7 +236,7 @@ namespace TwnsMeDrawer {
         public autoAdjustBridges(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
-            const configVersion = war.getConfigVersion();
+            const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 const tileType = tile.getType();
                 if ((tileType !== Types.TileType.BridgeOnBeach) &&
@@ -259,7 +259,7 @@ namespace TwnsMeDrawer {
                         baseShapeId     : tile.getBaseShapeId(),
                         locationFlags   : tile.getLocationFlags(),
                         isHighlighted   : tile.getIsHighlighted(),
-                    }, configVersion);
+                    }, gameConfig);
                     tile.startRunning(war);
                     tile.flushDataToView();
 
@@ -270,7 +270,7 @@ namespace TwnsMeDrawer {
         public autoAdjustPlasmas(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
-            const configVersion = war.getConfigVersion();
+            const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 if (tile.getType() !== Types.TileType.Plasma) {
                     continue;
@@ -288,7 +288,7 @@ namespace TwnsMeDrawer {
                         baseShapeId     : tile.getBaseShapeId(),
                         locationFlags   : tile.getLocationFlags(),
                         isHighlighted   : tile.getIsHighlighted(),
-                    }, configVersion);
+                    }, gameConfig);
                     tile.startRunning(war);
                     tile.flushDataToView();
 
@@ -299,7 +299,7 @@ namespace TwnsMeDrawer {
         public autoAdjustPipes(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
-            const configVersion = war.getConfigVersion();
+            const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 if (tile.getType() !== Types.TileType.Pipe) {
                     continue;
@@ -317,7 +317,7 @@ namespace TwnsMeDrawer {
                         baseShapeId     : tile.getBaseShapeId(),
                         locationFlags   : tile.getLocationFlags(),
                         isHighlighted   : tile.getIsHighlighted(),
-                    }, configVersion);
+                    }, gameConfig);
                     tile.startRunning(war);
                     tile.flushDataToView();
 
@@ -328,7 +328,7 @@ namespace TwnsMeDrawer {
         public autoFillTileDecorators(): void {
             const war           = this._getWar();
             const tileMap       = war.getTileMap();
-            const configVersion = war.getConfigVersion();
+            const gameConfig    = war.getGameConfig();
             for (const tile of tileMap.getAllTiles()) {
                 const gridIndex         = tile.getGridIndex();
                 const targetBaseData    = MeUtility.getAutoTileDecoratorTypeAndShapeId(tileMap, gridIndex);
@@ -345,7 +345,7 @@ namespace TwnsMeDrawer {
                     decoratorShapeId,
                     locationFlags   : tile.getLocationFlags(),
                     isHighlighted   : tile.getIsHighlighted(),
-                }, configVersion);
+                }, gameConfig);
                 tile.startRunning(war);
                 tile.flushDataToView();
 
@@ -398,7 +398,7 @@ namespace TwnsMeDrawer {
             const targetBaseData    = Helpers.getExisted(this.getDrawTargetTileBaseData());
             const baseType          = targetBaseData.baseType;
             const baseShapeId       = targetBaseData.shapeId;
-            const configVersion     = war.getConfigVersion();
+            const gameConfig        = war.getGameConfig();
             tile.init({
                 gridIndex       : tile.getGridIndex(),
                 playerIndex     : tile.getPlayerIndex(),
@@ -410,7 +410,7 @@ namespace TwnsMeDrawer {
                 baseShapeId,
                 locationFlags   : tile.getLocationFlags(),
                 isHighlighted   : tile.getIsHighlighted(),
-            }, configVersion);
+            }, gameConfig);
             tile.startRunning(war);
             tile.flushDataToView();
 
@@ -428,10 +428,10 @@ namespace TwnsMeDrawer {
                     decoratorType   : t2.getDecoratorType(),
                     decoratorShapeId: t2.getDecoratorShapeId(),
                     baseType        : baseType,
-                    baseShapeId     : ConfigManager.getSymmetricalTileBaseShapeId(baseType, baseShapeId, symmetryType),
+                    baseShapeId     : Twns.Config.ConfigManager.getSymmetricalTileBaseShapeId(baseType, baseShapeId, symmetryType),
                     locationFlags   : t2.getLocationFlags(),
                     isHighlighted   : t2.getIsHighlighted(),
-                }, configVersion);
+                }, gameConfig);
                 t2.startRunning(war);
                 t2.flushDataToView();
 
@@ -441,7 +441,7 @@ namespace TwnsMeDrawer {
         private _handleDrawTileDecorator(gridIndex: GridIndex): void {
             const war               = this._getWar();
             const tileMap           = war.getTileMap();
-            const configVersion     = war.getConfigVersion();
+            const gameConfig        = war.getGameConfig();
             const tile              = tileMap.getTile(gridIndex);
             const targetBaseData    = Helpers.getExisted(this.getDrawTargetTileDecoratorData());
             const decoratorType     = targetBaseData.decoratorType;
@@ -457,7 +457,7 @@ namespace TwnsMeDrawer {
                 decoratorShapeId,
                 locationFlags   : tile.getLocationFlags(),
                 isHighlighted   : tile.getIsHighlighted(),
-            }, configVersion);
+            }, gameConfig);
             tile.startRunning(war);
             tile.flushDataToView();
 
@@ -475,10 +475,10 @@ namespace TwnsMeDrawer {
                     baseType        : t2.getBaseType(),
                     baseShapeId     : t2.getBaseShapeId(),
                     decoratorType,
-                    decoratorShapeId: ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType),
+                    decoratorShapeId: Twns.Config.ConfigManager.getSymmetricalTileDecoratorShapeId(decoratorType, decoratorShapeId, symmetryType),
                     locationFlags   : t2.getLocationFlags(),
                     isHighlighted   : t2.getIsHighlighted(),
-                }, configVersion);
+                }, gameConfig);
                 t2.startRunning(war);
                 t2.flushDataToView();
 
@@ -487,14 +487,14 @@ namespace TwnsMeDrawer {
         }
         private _handleDrawTileObject(gridIndex: GridIndex): void {
             const war               = this._getWar();
-            const configVersion     = war.getConfigVersion();
+            const gameConfig        = war.getGameConfig();
             const tileMap           = war.getTileMap();
             const unitMap           = war.getUnitMap();
             const tile              = tileMap.getTile(gridIndex);
             const targetObjectData  = Helpers.getExisted(this.getDrawTargetTileObjectData());
             const baseType          = tile.getBaseType();
             const objectType        = targetObjectData.objectType;
-            const isAttackableTile  = !!ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType).maxHp;
+            const isAttackableTile  = !!gameConfig.getTileTemplateCfgByType(Twns.Config.ConfigManager.getTileType(baseType, objectType))?.maxHp;
             if ((isAttackableTile) && (unitMap.getUnitOnMap(gridIndex))) {
                 FloatText.show(Lang.getText(LangTextType.A0269));
                 return;
@@ -513,7 +513,7 @@ namespace TwnsMeDrawer {
                 objectShapeId,
                 locationFlags   : tile.getLocationFlags(),
                 isHighlighted   : tile.getIsHighlighted(),
-            }, configVersion);
+            }, gameConfig);
             tile.startRunning(war);
             tile.flushDataToView();
 
@@ -535,10 +535,10 @@ namespace TwnsMeDrawer {
                     decoratorShapeId: t2.getDecoratorShapeId(),
                     playerIndex,
                     objectType,
-                    objectShapeId   : ConfigManager.getSymmetricalTileObjectShapeId(objectType, objectShapeId, symmetryType),
+                    objectShapeId   : Twns.Config.ConfigManager.getSymmetricalTileObjectShapeId(objectType, objectShapeId, symmetryType),
                     locationFlags   : t2.getLocationFlags(),
                     isHighlighted   : t2.getIsHighlighted(),
-                }, configVersion);
+                }, gameConfig);
                 t2.startRunning(war);
                 t2.flushDataToView();
 
@@ -558,13 +558,13 @@ namespace TwnsMeDrawer {
             const unitMap       = war.getUnitMap();
             const unitId        = unitMap.getNextUnitId();
             const targetUnit    = Helpers.getExisted(this.getDrawTargetUnit());
-            const unit          = new TwnsBwUnit.BwUnit();
+            const unit          = new Twns.BaseWar.BwUnit();
             unit.init({
                 gridIndex,
                 playerIndex : targetUnit.getPlayerIndex(),
                 unitType    : targetUnit.getUnitType(),
                 unitId,
-            }, war.getConfigVersion());
+            }, war.getGameConfig());
             unit.startRunning(this._getWar());
             unit.startRunningView();
 

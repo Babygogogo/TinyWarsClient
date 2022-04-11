@@ -29,7 +29,7 @@ namespace TwnsBwUnitView {
         private _imgState   = new TwnsUiImage.UiImage();
         private _imgUnit    = new TwnsUiImage.UiImage();
 
-        private _unit                       : TwnsBwUnit.BwUnit | null = null;
+        private _unit                       : Twns.BaseWar.BwUnit | null = null;
         private _animationType              = UnitAnimationType.Stand;
         private _isDark                     = false;
         private _framesForStateAnimation    = [] as string[];
@@ -58,7 +58,7 @@ namespace TwnsBwUnitView {
             this.addChild(imgHp);
         }
 
-        public init(unit: TwnsBwUnit.BwUnit): BwUnitView {
+        public init(unit: Twns.BaseWar.BwUnit): BwUnitView {
             this._setUnit(unit);
 
             return this;
@@ -70,10 +70,10 @@ namespace TwnsBwUnitView {
             return this;
         }
 
-        private _setUnit(unit: TwnsBwUnit.BwUnit): void {
+        private _setUnit(unit: Twns.BaseWar.BwUnit): void {
             this._unit = unit;
         }
-        public getUnit(): TwnsBwUnit.BwUnit | null {
+        public getUnit(): Twns.BaseWar.BwUnit | null {
             return this._unit;
         }
 

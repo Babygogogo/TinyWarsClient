@@ -131,12 +131,14 @@ namespace TwnsMcrCreateSettingsPanel {
         }
         private _onTouchedBtnChooseCo(): void {
             const currentCoId = McrCreateModel.getSelfCoId();
+            const gameConfig    = McrCreateModel.getGameConfig();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                gameConfig,
                 currentCoId,
                 availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : McrCreateModel.getWarRule(),
                     playerIndex     : McrCreateModel.getSelfPlayerIndex(),
-                    configVersion   : McrCreateModel.getConfigVersion(),
+                    gameConfig,
                 }),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
@@ -190,9 +192,9 @@ namespace TwnsMcrCreateSettingsPanel {
             this._btnConfirm.label              = Lang.getText(LangTextType.B0026);
         }
 
-        private _updateBtnChooseCo(): void {
-            const cfg               = ConfigManager.getCoBasicCfg(McrCreateModel.getConfigVersion(), McrCreateModel.getSelfCoId());
-            this._btnChooseCo.label = cfg.name;
+        private async _updateBtnChooseCo(): Promise<void> {
+            const gameConfig        = McrCreateModel.getGameConfig();
+            this._btnChooseCo.label = gameConfig.getCoBasicCfg(McrCreateModel.getSelfCoId())?.name ?? CommonConstants.ErrorTextForUndefined;
         }
 
         private async _initSclPlayerIndex(): Promise<void> {
@@ -369,8 +371,11 @@ namespace TwnsMcrCreateSettingsPanel {
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
             const mapId = McrCreateModel.getMapId();
             return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+                ? null
+                : {
+                    gameConfig  : McrCreateModel.getGameConfig(),
+                    mapInfo     : { mapId },
+                };
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -476,7 +481,7 @@ namespace TwnsMcrCreateSettingsPanel {
                 const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : creator.getWarRule(),
                     playerIndex,
-                    configVersion   : McrCreateModel.getConfigVersion(),
+                    gameConfig      : McrCreateModel.getGameConfig(),
                 });
                 if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
                     creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));

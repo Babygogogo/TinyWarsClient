@@ -204,7 +204,7 @@ namespace MrrModel {
         }
 
         return {
-            configVersion           : Helpers.getExisted(settingsForCommon.configVersion),
+            gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
             roomOwnerPlayerIndex    : null,
             callbackOnExitRoom      : null,
@@ -302,9 +302,9 @@ namespace MrrModel {
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
         const warRule           = Helpers.getExisted(settingsForCommon.warRule);
         return {
-            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+            gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             warRule,
-            warType         : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
+            warType     : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
         };
     }
 }

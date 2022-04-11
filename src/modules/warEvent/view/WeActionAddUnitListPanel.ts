@@ -15,16 +15,16 @@
 // import TwnsUiScrollList         from "../../tools/ui/UiScrollList";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionAddUnitListPanel {
+namespace Twns.WarEvent {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import IDataForAddUnit  = CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit;
     import LangTextType     = TwnsLangTextType.LangTextType;
 
-    export type OpenData = {
-        configVersion   : string;
+    export type OpenDataForWeActionAddUnitListPanel = {
+        gameConfig      : Config.GameConfig;
         dataForAddUnit  : IDataForAddUnit;
     };
-    export class WeActionAddUnitListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionAddUnitListPanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionAddUnitListPanel> {
         private readonly _labelTitle!   : TwnsUiLabel.UiLabel;
         private readonly _btnClose!     : TwnsUiButton.UiButton;
         private readonly _listType!     : TwnsUiScrollList.UiScrollList<DataForTypeRenderer>;
@@ -67,7 +67,7 @@ namespace TwnsWeActionAddUnitListPanel {
             const dataForAddUnit    = openData.dataForAddUnit;
 
             const dataArray: DataForTypeRenderer[] = [];
-            for (const newUnitType of ConfigManager.getUnitTypesByCategory(openData.configVersion, Types.UnitCategory.All)) {
+            for (const newUnitType of openData.gameConfig.getUnitTypesByCategory(Types.UnitCategory.All) ?? []) {
                 dataArray.push({
                     newUnitType,
                     dataForAddUnit,

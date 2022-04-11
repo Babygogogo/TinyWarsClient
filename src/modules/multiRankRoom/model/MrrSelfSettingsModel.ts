@@ -34,7 +34,7 @@ namespace MrrSelfSettingsModel {
         }
 
         const selfPlayerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
-        const availableCoIdArray    = generateAvailableCoIdArray(roomInfo, selfPlayerIndex);
+        const availableCoIdArray    = await generateAvailableCoIdArray(roomInfo, selfPlayerIndex);
         if (!availableCoIdArray.length) {
             throw Helpers.newError(`Empty availableCoIdArray`, ClientErrorCode.MrrSelfSettingsModel_ResetData_00);
         }
@@ -96,9 +96,9 @@ namespace MrrSelfSettingsModel {
         _availableCoIdArray = null;
     }
 
-    function generateAvailableCoIdArray(roomInfo: IMrrRoomInfo, playerIndex: number): number[] {
+    async function generateAvailableCoIdArray(roomInfo: IMrrRoomInfo, playerIndex: number): Promise<number[]> {
         const settingsForCommon = Helpers.getExisted(roomInfo.settingsForCommon);
-        const configVersion     = Helpers.getExisted(settingsForCommon.configVersion);
+        const gameConfig        = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         const settingsForMrw    = Helpers.getExisted(roomInfo.settingsForMrw);
         const dataArrayForBanCo = Helpers.getExisted(settingsForMrw.dataArrayForBanCo);
         const playerRule        = WarRuleHelpers.getPlayerRule(Helpers.getExisted(settingsForCommon.warRule), playerIndex);
@@ -109,7 +109,7 @@ namespace MrrSelfSettingsModel {
             }
         }
 
-        return WarRuleHelpers.getAvailableCoIdArray(configVersion, bannedCoIdSet);
+        return WarRuleHelpers.getAvailableCoIdArray(gameConfig, bannedCoIdSet);
     }
 
     function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] {

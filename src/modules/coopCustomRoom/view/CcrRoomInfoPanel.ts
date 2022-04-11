@@ -162,12 +162,14 @@ namespace TwnsCcrRoomInfoPanel {
                     const playerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
                     const currentCoId       = selfPlayerData.coId ?? null;
                     const settingsForCommon = Helpers.getExisted(roomStaticInfo.settingsForCommon);
+                    const gameConfig        = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                        gameConfig,
                         currentCoId,
                         availableCoIdArray  : WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                             warRule         : Helpers.getExisted(settingsForCommon.warRule),
                             playerIndex,
-                            configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                            gameConfig,
                         }),
                         callbackOnConfirm   : (newCoId) => {
                             if (newCoId !== currentCoId) {
@@ -332,7 +334,8 @@ namespace TwnsCcrRoomInfoPanel {
             const userId            = UserModel.getSelfUserId();
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === userId);
             if (selfPlayerData) {
-                this._btnChooseCo.label = ConfigManager.getCoBasicCfg(Helpers.getExisted(roomStaticInfo.settingsForCommon?.configVersion),  Helpers.getExisted(selfPlayerData.coId)).name;
+                const gameConfig        = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomStaticInfo.settingsForCommon?.configVersion));
+                this._btnChooseCo.label = gameConfig.getCoBasicCfg(Helpers.getExisted(selfPlayerData.coId))?.name ?? CommonConstants.ErrorTextForUndefined;
             }
         }
 
@@ -376,10 +379,14 @@ namespace TwnsCcrRoomInfoPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const mapId = (await CcrModel.getRoomStaticInfo(this._getOpenData().roomId))?.settingsForCcw?.mapId;
+            const roomInfo  = await CcrModel.getRoomStaticInfo(this._getOpenData().roomId);
+            const mapId     = roomInfo?.settingsForCcw?.mapId;
             return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+                ? null
+                : {
+                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomInfo?.settingsForCommon?.configVersion)),
+                    mapInfo     : { mapId },
+                };
         }
 
         private _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
@@ -523,7 +530,7 @@ namespace TwnsCcrRoomInfoPanel {
                 const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : Helpers.getExisted(settingsForCommon.warRule),
                     playerIndex     : newPlayerIndex,
-                    configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                    gameConfig      : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 });
                 CcrProxy.reqCcrSetSelfSettings({
                     roomId,

@@ -7,30 +7,30 @@
 // import TwnsBwWar            from "./BwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsBwCommonSettingManager {
+namespace Twns.BaseWar {
     import ISettingsForCommon   = CommonProto.WarSettings.ISettingsForCommon;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
+    import GameConfig           = Config.GameConfig;
 
     export class BwCommonSettingManager {
-        private _war?               : Twns.BaseWar.BwWar;
+        private _war?               : BwWar;
         private _settingsForCommon? : ISettingsForCommon;
 
-        public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
+        public init({ settings, allWarEventIdArray, playersCountUnneutral, gameConfig }: {
             settings                : ISettingsForCommon;
             allWarEventIdArray      : number[];
             playersCountUnneutral   : number;
-        }): Promise<void> {
+            gameConfig              : GameConfig;
+        }): void {
             const configVersion = settings.configVersion;
-            if ((configVersion == null)                                                                                                     ||
-                (!await ConfigManager.checkIsVersionValid(configVersion))
-            ) {
+            if (configVersion !== gameConfig.getVersion()) {
                 throw Helpers.newError(`Invalid configVersion: ${configVersion}`, ClientErrorCode.BwCommonSettingManager_Init_00);
             }
 
             const errorCodeForWarRule = WarRuleHelpers.getErrorCodeForWarRule({
                 rule                : Helpers.getExisted(settings.warRule, ClientErrorCode.BwCommonSettingManager_Init_01),
                 allWarEventIdArray,
-                configVersion,
+                gameConfig,
                 playersCountUnneutral,
             });
             if (errorCodeForWarRule) {
@@ -47,14 +47,14 @@ namespace TwnsBwCommonSettingManager {
             return this.serializeForCreateSfw();
         }
 
-        public startRunning(war: Twns.BaseWar.BwWar): void {
+        public startRunning(war: BwWar): void {
             this._setWar(war);
         }
 
-        private _setWar(war: Twns.BaseWar.BwWar): void {
+        private _setWar(war: BwWar): void {
             this._war = war;
         }
-        protected _getWar(): Twns.BaseWar.BwWar {
+        protected _getWar(): BwWar {
             return Helpers.getExisted(this._war);
         }
 
@@ -69,9 +69,6 @@ namespace TwnsBwCommonSettingManager {
         }
         public getWarRule(): CommonProto.WarRule.IWarRule {
             return Helpers.getExisted(this.getSettingsForCommon().warRule);
-        }
-        public getConfigVersion(): string {
-            return Helpers.getExisted(this.getSettingsForCommon().configVersion);
         }
 
         public getSettingsHasFogByDefault(): boolean {

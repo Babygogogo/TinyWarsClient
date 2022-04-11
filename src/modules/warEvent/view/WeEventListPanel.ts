@@ -18,7 +18,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeEventListPanel {
-    import MeWar                = TwnsMeWar.MeWar;
+    import MeWar                = Twns.MapEditor.MeWar;
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import ColorValue           = Types.ColorValue;
@@ -372,16 +372,17 @@ namespace TwnsWeEventListPanel {
             this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
         }
         private _updateForAction(data: DataForWarEventDescRenderer): void {                     // DONE
-            const fullData                  = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
+            const war                       = data.war;
+            const fullData                  = Helpers.getExisted(war.getWarEventManager().getWarEventFullData());
             const actionId                  = data.actionId;
             const action                    = Helpers.getExisted(fullData.actionArray?.find(v => v.WeaCommonData?.actionId === actionId));
             const prefixArray               = data.prefixArray;
-            const errorTip                  = WarEventHelper.getErrorTipForAction(fullData, action, data.war);
+            const errorTip                  = WarEventHelper.getErrorTipForAction(fullData, action, war);
             const labelError                = this._labelError;
             labelError.text                 = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor            = errorTip ? ColorValue.Red : ColorValue.Green;
             this._btnModify.label           = prefixArray[prefixArray.length - 1];
-            this._labelDesc.text            = `${WarEventHelper.getDescForAction(action)}`;
+            this._labelDesc.text            = `${WarEventHelper.getDescForAction(action, war)}`;
             this._updatePositionForBtnModifyAndGroupDesc(prefixArray.length);
         }
         private _updatePositionForBtnModifyAndGroupDesc(prefixArrayLength: number): void {

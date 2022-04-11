@@ -25,7 +25,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeTopPanel {
     import MeDrawer                 = TwnsMeDrawer.MeDrawer;
-    import MeWar                    = TwnsMeWar.MeWar;
+    import MeWar                    = Twns.MapEditor.MeWar;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import DrawerMode               = Types.MapEditorDrawerMode;
     import LangTextType             = TwnsLangTextType.LangTextType;
@@ -274,10 +274,13 @@ namespace TwnsMeTopPanel {
                     const slotIndex = war.getMapSlotIndex();
                     const data      = MeModel.getData(slotIndex);
                     war.stopRunning();
-                    await war.initWithMapEditorData({
-                        mapRawData: (data ? data.mapRawData : null) || await MeUtility.createDefaultMapRawData(slotIndex),
-                        slotIndex,
-                    });
+                    await war.initWithMapEditorData(
+                        {
+                            mapRawData: (data ? data.mapRawData : null) || await MeUtility.createDefaultMapRawData(slotIndex),
+                            slotIndex,
+                        },
+                        war.getGameConfig()
+                    );
                     war.setIsMapModified(false);
                     war.startRunning()
                         .startRunningView();
@@ -566,13 +569,13 @@ namespace TwnsMeTopPanel {
         }
         private _initUnitView(): void {
             const war   = this._getWar();
-            const unit  = new TwnsBwUnit.BwUnit();
+            const unit  = new Twns.BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : Types.UnitType.Infantry,
                 playerIndex : CommonConstants.WarFirstPlayerIndex,
-            }, this._getWar().getConfigVersion());
+            }, this._getWar().getGameConfig());
             unit.startRunning(war);
 
             this._unitView.init(unit);

@@ -20,7 +20,7 @@ namespace WarActionReviser {
     import IWarActionContainer  = CommonProto.WarAction.IWarActionContainer;
     import WarAction            = CommonProto.WarAction;
     import ClientErrorCode      = TwnsClientErrorCode.ClientErrorCode;
-    import BwUnitMap            = TwnsBwUnitMap.BwUnitMap;
+    import BwUnitMap            = Twns.BaseWar.BwUnitMap;
     import BwWar                = Twns.BaseWar.BwWar;
 
     export function revise(war: BwWar, rawAction: IWarActionContainer): IWarActionContainer {
@@ -155,14 +155,14 @@ namespace WarActionReviser {
 
         const tile                  = war.getTileMap().getTile(gridIndex);
         const unitType              = Helpers.getExisted(rawAction.unitType, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_05);
-        const configVersion         = war.getConfigVersion();
+        const gameConfig            = war.getGameConfig();
         const fund                  = playerInTurn.getFund();
         const skillCfg              = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndexInTurn);
         const produceUnitCategory   = skillCfg
             ? skillCfg[1]
             : (playerIndexInTurn === tile.getPlayerIndex() ? tile.getCfgProduceUnitCategory() : null);
-        if ((produceUnitCategory == null)                                                           ||
-            (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, produceUnitCategory))
+        if ((produceUnitCategory == null)                                           ||
+            (!gameConfig.checkIsUnitTypeInCategory(unitType, produceUnitCategory))
         ) {
             throw Helpers.newError(`Invalid produceUnitCategory: ${produceUnitCategory}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_06);
         }
@@ -176,7 +176,7 @@ namespace WarActionReviser {
             throw Helpers.newError(`Invalid unitHp: ${unitHp}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_08);
         }
 
-        const cfgCost   = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
+        const cfgCost   = Helpers.getExisted(gameConfig.getUnitTemplateCfg(unitType)?.productionCost, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_09);
         const modifier  = playerInTurn.getUnitCostModifier(gridIndex, false, unitType);
         const cost      = Math.floor(
             cfgCost
@@ -187,7 +187,7 @@ namespace WarActionReviser {
             / CommonConstants.UnitHpNormalizer
         );
         if (cost > fund) {
-            throw Helpers.newError(`Invalid cost: ${cost}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_09);
+            throw Helpers.newError(`Invalid cost: ${cost}`, ClientErrorCode.WarActionReviser_RevisePlayerProduceUnit_10);
         }
 
         return {
@@ -1080,7 +1080,7 @@ namespace WarActionReviser {
         return destinations;
     }
 
-    function checkCanDoSupply(unitMap: BwUnitMap, focusUnit: TwnsBwUnit.BwUnit, destination: GridIndex): boolean {
+    function checkCanDoSupply(unitMap: BwUnitMap, focusUnit: Twns.BaseWar.BwUnit, destination: GridIndex): boolean {
         if (focusUnit.checkIsAdjacentUnitSupplier()) {
             const mapSize = unitMap.getMapSize();
             if (mapSize == null) {

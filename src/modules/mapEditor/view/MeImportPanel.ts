@@ -113,10 +113,13 @@ namespace TwnsMeImportPanel {
                 callback: async () => {
                     const war = Helpers.getExisted(MeModel.getWar());
                     war.stopRunning();
-                    await war.initWithMapEditorData({
-                        mapRawData  : await WarMapModel.getRawData(mapId),
-                        slotIndex   : war.getMapSlotIndex(),
-                    });
+                    await war.initWithMapEditorData(
+                        {
+                            mapRawData  : await WarMapModel.getRawData(mapId),
+                            slotIndex   : war.getMapSlotIndex(),
+                        },
+                        await Twns.Config.ConfigManager.getLatestGameConfig()
+                    );
                     war.setIsMapModified(true);
                     war.startRunning()
                         .startRunningView();

@@ -83,11 +83,11 @@ namespace FlowManager {
         { msgCode: NetMessageCodes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
     ];
     const _NOTIFY_EVENTS = [
-        { type: NotifyType.ConfigLoaded,               callback: _onNotifyConfigLoaded },
-        { type: NotifyType.NetworkConnected,           callback: _onNotifyNetworkConnected, },
-        { type: NotifyType.MsgUserLogin,               callback: _onMsgUserLogin },
-        { type: NotifyType.MsgUserLogout,              callback: _onMsgUserLogout },
-        { type: NotifyType.MsgMpwCommonContinueWar,    callback: _onMsgMpwCommonContinueWar },
+        { type: NotifyType.NetworkConnected,                callback: _onNotifyNetworkConnected, },
+        { type: NotifyType.MsgUserLogin,                    callback: _onMsgUserLogin },
+        { type: NotifyType.MsgUserLogout,                   callback: _onMsgUserLogout },
+        { type: NotifyType.MsgMpwCommonContinueWar,         callback: _onMsgMpwCommonContinueWar },
+        { type: NotifyType.MsgCommonLatestConfigVersion,    callback: _onMsgCommonLatestConfigVersion },
     ];
 
     let _hasOnceWentToLobby = false;
@@ -106,7 +106,7 @@ namespace FlowManager {
 
         Lang.init();
         NoSleepManager.init();
-        ConfigManager.init();
+        Twns.Config.ConfigManager.init();
         NetManager.init();
         MpwProxy.init();
         MpwModel.init();
@@ -346,12 +346,6 @@ namespace FlowManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function _onNotifyConfigLoaded(): void {
-        if (_checkCanFirstGoToLobby()) {
-            gotoLobby();
-        }
-    }
-
     function _onNotifyNetworkConnected(): void {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
@@ -398,16 +392,20 @@ namespace FlowManager {
         gotoMultiPlayerWar(warData);
     }
 
+    function _onMsgCommonLatestConfigVersion(): void {
+        if (_checkCanFirstGoToLobby()) {
+            gotoLobby();
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Other private functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _checkCanFirstGoToLobby(): boolean {
-        const configVersion = ConfigManager.getLatestConfigVersion();
         return (!_hasOnceWentToLobby)
             && (UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (configVersion != null)
-            && (!!ConfigManager.getCachedConfig(configVersion));
+            && (Twns.Config.ConfigManager.getLatestConfigVersion() != null);
     }
 
     function _removeLoadingDom(): void {

@@ -11,7 +11,7 @@
 // import UserModel        from "../../user/model/UserModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWarMapUnitView {
+namespace Twns.WarMap {
     const { width: GRID_WIDTH, height: GRID_HEIGHT }    = CommonConstants.GridSize;
     const IMG_UNIT_STATE_WIDTH                          = 10;
     const IMG_UNIT_STATE_HEIGHT                         = 12;
@@ -76,7 +76,7 @@ namespace TwnsWarMapUnitView {
 
             this._imgUnit.source = CommonModel.getCachedUnitImageSource({
                 version     : UserModel.getSelfSettingsTextureVersion(),
-                skinId      : data.skinId || ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex)),
+                skinId      : data.skinId || Twns.Config.ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data.playerIndex)),
                 unitType    : Helpers.getExisted(data.unitType),
                 isMoving    : false,
                 isDark      : this._isDark,
@@ -231,11 +231,12 @@ namespace TwnsWarMapUnitView {
         }
 
         private _getUnitTemplateCfg(): Types.UnitTemplateCfg {
-            return ConfigManager.getUnitTemplateCfg(Helpers.getExisted(ConfigManager.getLatestConfigVersion()), Helpers.getExisted(this.getUnitData()?.unitType));
+            const data = Helpers.getExisted(this.getUnitData());
+            return Helpers.getExisted(data.gameConfig.getUnitTemplateCfg(Helpers.getExisted(data.unitType)));
         }
         private _getSkinId(): number {
             const data = this.getUnitData();
-            return data?.skinId ?? ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data?.playerIndex));
+            return data?.skinId ?? Twns.Config.ConfigManager.getUnitAndTileDefaultSkinId(Helpers.getExisted(data?.playerIndex));
         }
     }
 

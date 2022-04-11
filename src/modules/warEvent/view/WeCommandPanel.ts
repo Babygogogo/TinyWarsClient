@@ -21,7 +21,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsWeCommandPanel {
-    import MeWar                    = TwnsMeWar.MeWar;
+    import MeWar                    = Twns.MapEditor.MeWar;
     import LangTextType             = TwnsLangTextType.LangTextType;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ClientErrorCode          = TwnsClientErrorCode.ClientErrorCode;
@@ -384,8 +384,10 @@ namespace TwnsWeCommandPanel {
         }
         private _onTouchedBtnReplaceAction(): void {
             const openData = this._getOpenData();
+            const war       = openData.war;
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionReplacePanel, {
-                fullData    : Helpers.getExisted(openData.war.getWarEventManager().getWarEventFullData()),
+                war,
+                fullData    : Helpers.getExisted(war.getWarEventManager().getWarEventFullData()),
                 eventId     : openData.eventId,
                 actionId    : Helpers.getExisted(openData.actionId),
             });
@@ -593,14 +595,15 @@ namespace TwnsWeCommandPanel {
             group.addChild(this._btnDeleteCondition);
         }
         private _updateForAction(data: OpenData): void {                     // DONE
-            const fullData          = Helpers.getExisted(data.war.getWarEventManager().getWarEventFullData());
+            const war               = data.war;
+            const fullData          = Helpers.getExisted(war.getWarEventManager().getWarEventFullData());
             const actionId          = data.actionId;
             const action            = Helpers.getExisted(fullData.actionArray?.find(v => v.WeaCommonData?.actionId === actionId));
-            const errorTip          = WarEventHelper.getErrorTipForAction(fullData, action, data.war);
+            const errorTip          = WarEventHelper.getErrorTipForAction(fullData, action, war);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(LangTextType.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-            this._labelDesc.text    = `A${actionId} ${WarEventHelper.getDescForAction(action)}`;
+            this._labelDesc.text    = `A${actionId} ${WarEventHelper.getDescForAction(action, war)}`;
 
             const group = this._groupBtn;
             group.removeChildren();

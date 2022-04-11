@@ -21,7 +21,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeMfwSettingsPanel {
-    import CommonConfirmPanel           = TwnsCommonConfirmPanel.CommonConfirmPanel;
     import MeMfwAdvancedSettingsPage    = TwnsMeMfwAdvancedSettingsPage.MeMfwAdvancedSettingsPage;
     import MeMfwBasicSettingsPage       = TwnsMeMfwBasicSettingsPage.MeMfwBasicSettingsPage;
     import NotifyType                   = TwnsNotifyType.NotifyType;
@@ -73,7 +72,7 @@ namespace TwnsMeMfwSettingsPanel {
         private async _onTouchedBtnConfirm(): Promise<void> {
             MeMfwModel.reviseWarRuleForAi();
             const warData   = MeMfwModel.getWarData();
-            const errorCode = await (new Twns.TestWar.TwWar().getErrorCodeForInit(warData));
+            const errorCode = await (new Twns.TestWar.TwWar().getErrorCodeForInit(warData, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion))));
             if (errorCode) {
                 FloatText.show(Lang.getErrorText(errorCode));
             } else {

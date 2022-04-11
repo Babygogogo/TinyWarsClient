@@ -134,7 +134,7 @@ namespace TwnsMmReviewListPanel {
             if (!mapData) {
                 this._zoomMap.clearMap();
             } else {
-                this._zoomMap.showMapByMapData(mapData);
+                this._zoomMap.showMapByMapData(mapData, await Twns.Config.ConfigManager.getLatestGameConfig());
             }
         }
     }

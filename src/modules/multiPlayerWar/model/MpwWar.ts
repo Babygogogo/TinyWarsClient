@@ -24,7 +24,7 @@ namespace TwnsMpwWar {
     export abstract class MpwWar extends Twns.BaseWar.BwWar {
         private readonly _playerManager         = new TwnsMpwPlayerManager.MpwPlayerManager();
         private readonly _field                 = new TwnsMpwField.MpwField();
-        private readonly _commonSettingManager  = new TwnsBwCommonSettingManager.BwCommonSettingManager();
+        private readonly _commonSettingManager  = new Twns.BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new TwnsBwWarEventManager.BwWarEventManager();
 
         public getField(): TwnsMpwField.MpwField {
@@ -33,7 +33,7 @@ namespace TwnsMpwWar {
         public getPlayerManager(): TwnsMpwPlayerManager.MpwPlayerManager {
             return this._playerManager;
         }
-        public getCommonSettingManager(): TwnsBwCommonSettingManager.BwCommonSettingManager {
+        public getCommonSettingManager(): Twns.BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
         public getWarEventManager(): TwnsBwWarEventManager.BwWarEventManager {
@@ -197,7 +197,7 @@ namespace TwnsMpwWar {
         public getPlayerIndexLoggedIn(): number | null {
             return this.getPlayerManager().getPlayerIndexLoggedIn();
         }
-        public getPlayerLoggedIn(): TwnsBwPlayer.BwPlayer | null {
+        public getPlayerLoggedIn(): Twns.BaseWar.BwPlayer | null {
             return this.getPlayerManager().getPlayerLoggedIn();
         }
     }

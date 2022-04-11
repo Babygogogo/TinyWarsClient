@@ -204,7 +204,7 @@ namespace TwnsCcrCreateMapListPanel {
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)));
+            this._zoomMap.showMapByMapData(Helpers.getExisted(await WarMapModel.getRawData(mapId)), await Twns.Config.ConfigManager.getLatestGameConfig());
             this._uiMapInfo.setData({
                 mapInfo: {
                     mapId,

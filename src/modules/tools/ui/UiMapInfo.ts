@@ -234,7 +234,7 @@ namespace TwnsUiMapInfo {
     function generateDataForListTile(tileDataArray: CommonProto.WarSerialization.ISerialTile[]): DataForTileRenderer[] {
         const tileCountDict = new Map<TileType, number>();
         for (const tile of tileDataArray || []) {
-            const tileType = ConfigManager.getTileType(Helpers.getExisted(tile.baseType), Helpers.getExisted(tile.objectType));
+            const tileType = Twns.Config.ConfigManager.getTileType(Helpers.getExisted(tile.baseType), Helpers.getExisted(tile.objectType));
             if (tileType != null) {
                 tileCountDict.set(tileType, (tileCountDict.get(tileType) || 0) + 1);
             }
@@ -293,7 +293,7 @@ namespace TwnsUiMapInfo {
             const data          = this._getData();
             this._labelNum.text = `x${data.num}`;
 
-            const tileObjectType = ConfigManager.getTileObjectTypeByTileType(data.tileType);
+            const tileObjectType = Twns.Config.ConfigManager.getTileObjectTypeByTileType(data.tileType);
             this._tileView.init({
                 tileBaseType        : null,
                 tileBaseShapeId     : null,

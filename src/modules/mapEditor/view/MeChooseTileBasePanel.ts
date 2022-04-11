@@ -175,7 +175,7 @@ namespace TwnsMeChooseTileBasePanel {
         protected _onDataChanged(): void {
             const data                      = this._getData();
             const dataListForDrawTileBase   = data.dataListForDrawTileBase;
-            this._labelCategory.text        = Lang.getTileName(ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty)) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelCategory.text        = Lang.getTileName(Twns.Config.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty)) ?? CommonConstants.ErrorTextForUndefined;
 
             const dataListForTileBase   : DataForTileBaseRenderer[] = [];
             const panel                 = data.panel;
@@ -244,7 +244,7 @@ namespace TwnsMeChooseTileBasePanel {
                     content : Lang.getText(LangTextType.A0089),
                     callback: () => {
                         const war           = Helpers.getExisted(MeModel.getWar());
-                        const configVersion = war.getConfigVersion();
+                        const gameConfig    = war.getGameConfig();
                         for (const tile of war.getTileMap().getAllTiles()) {
                             tile.init({
                                 gridIndex       : tile.getGridIndex(),
@@ -255,7 +255,7 @@ namespace TwnsMeChooseTileBasePanel {
                                 baseType        : dataForDrawTileBase.baseType,
                                 locationFlags   : tile.getLocationFlags(),
                                 isHighlighted   : tile.getIsHighlighted(),
-                            }, configVersion);
+                            }, gameConfig);
                             tile.startRunning(war);
                             tile.flushDataToView();
                         }

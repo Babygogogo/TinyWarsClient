@@ -76,7 +76,7 @@ namespace TwnsSrrCreateSettingsPanel {
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0003) },
                     pageClass   : TwnsCommonWarAdvancedSettingsPage.CommonWarAdvancedSettingsPage,
-                    pageData    : this._createDataForCommonWarAdvancedSettingsPage(),
+                    pageData    : await this._createDataForCommonWarAdvancedSettingsPage(),
                 },
                 {
                     tabItemData : { name: Lang.getText(LangTextType.B0298) },
@@ -178,15 +178,21 @@ namespace TwnsSrrCreateSettingsPanel {
 
         private async _updateCommonWarAdvancedSettingsPage(): Promise<void> {
             if (this._isTabInitialized) {
-                this._tabSettings.updatePageData(1, this._createDataForCommonWarAdvancedSettingsPage());
+                this._tabSettings.updatePageData(1, await this._createDataForCommonWarAdvancedSettingsPage());
             }
         }
 
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
-            const mapId = SrrCreateModel.getMapId();
+            const mapId         = SrrCreateModel.getMapId();
+            const gameConfig    = SrrCreateModel.getGameConfig();
             return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+                ? {
+                    gameConfig
+                }
+                : {
+                    gameConfig,
+                    mapInfo: { mapId },
+                };
         }
 
         private _createDataForSpmRankPage(): OpenDataForSpmRankPage {
@@ -258,11 +264,11 @@ namespace TwnsSrrCreateSettingsPanel {
             return openData;
         }
 
-        private _createDataForCommonWarAdvancedSettingsPage(): OpenDataForCommonWarAdvancedSettingsPage {
+        private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
             const settingsForCommon = Helpers.getExisted(SrrCreateModel.getSettingsForCommon());
             const warRule           = Helpers.getExisted(settingsForCommon.warRule);
             return {
-                configVersion   : Helpers.getExisted(settingsForCommon.configVersion),
+                gameConfig      : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 warRule,
                 warType         : warRule.ruleForGlobalParams?.hasFogByDefault ? Types.WarType.MrwFog : Types.WarType.MrwStd,
             };

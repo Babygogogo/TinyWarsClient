@@ -15,17 +15,18 @@
 // import WarEventHelper           from "../model/WarEventHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionReplacePanel {
+namespace Twns.WarEvent {
     import LangTextType         = TwnsLangTextType.LangTextType;
     import NotifyType           = TwnsNotifyType.NotifyType;
     import IWarEventFullData    = CommonProto.Map.IWarEventFullData;
 
-    export type OpenData = {
+    export type OpenDataForWeActionReplacePanel = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
         eventId     : number;
         actionId    : number;
     };
-    export class WeActionReplacePanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionReplacePanel extends TwnsUiPanel.UiPanel<OpenDataForWeActionReplacePanel> {
         private readonly _listAction!       : TwnsUiScrollList.UiScrollList<DataForActionRenderer>;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
         private readonly _labelNoAction!    : TwnsUiLabel.UiLabel;
@@ -71,10 +72,12 @@ namespace TwnsWeActionReplacePanel {
             const eventId       = openData.eventId;
             const srcActionId   = openData.actionId;
             const fullData      = openData.fullData;
+            const war           = openData.war;
 
             const dataArray: DataForActionRenderer[] = [];
             for (const action of openData.fullData.actionArray || []) {
                 dataArray.push({
+                    war,
                     eventId,
                     srcActionId,
                     candidateActionId: Helpers.getExisted(action.WeaCommonData?.actionId),
@@ -88,6 +91,7 @@ namespace TwnsWeActionReplacePanel {
     }
 
     type DataForActionRenderer = {
+        war                 : BaseWar.BwWar;
         eventId             : number;
         srcActionId         : number;
         candidateActionId   : number;
@@ -173,7 +177,7 @@ namespace TwnsWeActionReplacePanel {
             if (action == null) {
                 label.text = Lang.getText(LangTextType.A0168);
             } else {
-                label.text = WarEventHelper.getDescForAction(action) || CommonConstants.ErrorTextForUndefined;
+                label.text = WarEventHelper.getDescForAction(action, data.war) || CommonConstants.ErrorTextForUndefined;
             }
         }
         private _updateBtnSelect(): void {

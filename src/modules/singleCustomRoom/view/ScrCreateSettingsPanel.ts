@@ -174,8 +174,11 @@ namespace TwnsScrCreateSettingsPanel {
         private _createDataForCommonMapInfoPage(): OpenDataForCommonWarMapInfoPage {
             const mapId = ScrCreateModel.getMapId();
             return mapId == null
-                ? {}
-                : { mapInfo: { mapId } };
+                ? null
+                : {
+                    gameConfig  : ScrCreateModel.getGameConfig(),
+                    mapInfo     : { mapId },
+                };
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {

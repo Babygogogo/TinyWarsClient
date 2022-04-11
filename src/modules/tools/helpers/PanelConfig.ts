@@ -23,7 +23,7 @@ namespace TwnsPanelConfig {
         BwTileDetailPanel                   : PanelConfig<TwnsBwTileDetailPanel.OpenData>;
         BwUnitActionsPanel                  : PanelConfig<TwnsBwUnitActionsPanel.OpenData>;
         BwUnitBriefPanel                    : PanelConfig<TwnsBwUnitBriefPanel.OpenData>;
-        BwUnitDetailPanel                   : PanelConfig<TwnsBwUnitDetailPanel.OpenData>;
+        BwUnitDetailPanel                   : PanelConfig<Twns.BaseWar.OpenDataForBwUnitDetailPanel>;
         BwUnitListPanel                     : PanelConfig<TwnsBwUnitListPanel.OpenData>;
         BwWarInfoPanel                      : PanelConfig<TwnsBwWarInfoPanel.OpenData>;
         BwWarPanel                          : PanelConfig<TwnsBwWarPanel.OpenData>;
@@ -199,7 +199,7 @@ namespace TwnsPanelConfig {
         UserOnlineUsersPanel                : PanelConfig<TwnsUserOnlineUsersPanel.OpenData>;
         UserPanel                           : PanelConfig<TwnsUserPanel.OpenData>;
         UserRegisterPanel                   : PanelConfig<TwnsUserRegisterPanel.OpenData>;
-        UserSetAvatarPanel                  : PanelConfig<TwnsUserSetAvatarPanel.OpenData>;
+        UserSetAvatarPanel                  : PanelConfig<Twns.User.OpenDataForUserSetAvatarPanel>;
         UserSetOpacityPanel                 : PanelConfig<TwnsUserSetOpacityPanel.OpenData>;
         UserSetPasswordPanel                : PanelConfig<TwnsUserSetPasswordPanel.OpenData>;
         UserSetPrivilegePanel               : PanelConfig<TwnsUserSetPrivilegePanel.OpenData>;
@@ -207,13 +207,13 @@ namespace TwnsPanelConfig {
         UserSetStageScalePanel              : PanelConfig<TwnsUserSetStageScalePanel.OpenData>;
         UserSettingsPanel                   : PanelConfig<TwnsUserSettingsPanel.OpenData>;
 
-        WeActionAddUnitListPanel            : PanelConfig<TwnsWeActionAddUnitListPanel.OpenData>;
-        WeActionModifyPanel1                : PanelConfig<TwnsWeActionModifyPanel1.OpenData>;
+        WeActionAddUnitListPanel            : PanelConfig<Twns.WarEvent.OpenDataForWeActionAddUnitListPanel>;
+        WeActionModifyPanel1                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel1>;
         WeActionModifyPanel2                : PanelConfig<TwnsWeActionModifyPanel2.OpenData>;
-        WeActionModifyPanel3                : PanelConfig<TwnsWeActionModifyPanel3.OpenData>;
+        WeActionModifyPanel3                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel3>;
         WeActionModifyPanel4                : PanelConfig<TwnsWeActionModifyPanel4.OpenData>;
         WeActionModifyPanel5                : PanelConfig<TwnsWeActionModifyPanel5.OpenData>;
-        WeActionModifyPanel6                : PanelConfig<TwnsWeActionModifyPanel6.OpenData>;
+        WeActionModifyPanel6                : PanelConfig<Twns.WarEvent.OpenDataForWeActionModifyPanel6>;
         WeActionModifyPanel7                : PanelConfig<TwnsWeActionModifyPanel7.OpenData>;
         WeActionModifyPanel10               : PanelConfig<TwnsWeActionModifyPanel10.OpenData>;
         WeActionModifyPanel20               : PanelConfig<TwnsWeActionModifyPanel20.OpenData>;
@@ -225,7 +225,7 @@ namespace TwnsPanelConfig {
         WeActionModifyPanel30               : PanelConfig<TwnsWeActionModifyPanel30.OpenData>;
         WeActionModifyPanel40               : PanelConfig<TwnsWeActionModifyPanel40.OpenData>;
         WeActionModifyPanel41               : PanelConfig<TwnsWeActionModifyPanel41.OpenData>;
-        WeActionReplacePanel                : PanelConfig<TwnsWeActionReplacePanel.OpenData>;
+        WeActionReplacePanel                : PanelConfig<Twns.WarEvent.OpenDataForWeActionReplacePanel>;
         WeActionTypeListPanel               : PanelConfig<TwnsWeActionTypeListPanel.OpenData>;
         WeCommandPanel                      : PanelConfig<TwnsWeCommandPanel.OpenData>;
         WeConditionModifyPanel1             : PanelConfig<TwnsWeConditionModifyPanel1.OpenData>;
@@ -244,19 +244,19 @@ namespace TwnsPanelConfig {
         WeConditionModifyPanel22            : PanelConfig<TwnsWeConditionModifyPanel22.OpenData>;
         WeConditionModifyPanel23            : PanelConfig<TwnsWeConditionModifyPanel23.OpenData>;
         WeConditionModifyPanel30            : PanelConfig<TwnsWeConditionModifyPanel30.OpenData>;
-        WeConditionModifyPanel31            : PanelConfig<TwnsWeConditionModifyPanel31.OpenData>;
+        WeConditionModifyPanel31            : PanelConfig<Twns.WarEvent.OpenDataForWeConditionModifyPanel31>;
         WeConditionModifyPanel32            : PanelConfig<TwnsWeConditionModifyPanel32.OpenData>;
         WeConditionModifyPanel40            : PanelConfig<TwnsWeConditionModifyPanel40.OpenData>;
         WeConditionModifyPanel50            : PanelConfig<TwnsWeConditionModifyPanel50.OpenData>;
         WeConditionModifyPanel60            : PanelConfig<TwnsWeConditionModifyPanel60.OpenData>;
         WeConditionReplacePanel             : PanelConfig<TwnsWeConditionReplacePanel.OpenData>;
         WeConditionTypeListPanel            : PanelConfig<TwnsWeConditionTypeListPanel.OpenData>;
-        WeDialogueBackgroundPanel           : PanelConfig<TwnsWeDialogueBackgroundPanel.OpenData>;
+        WeDialogueBackgroundPanel           : PanelConfig<Twns.WarEvent.OpenDataForWeDialogueBackgroundPanel>;
         WeEventListPanel                    : PanelConfig<TwnsWeEventListPanel.OpenData>;
         WeEventRenamePanel                  : PanelConfig<TwnsWeEventRenamePanel.OpenData>;
         WeNodeReplacePanel                  : PanelConfig<TwnsWeNodeReplacePanel.OpenData>;
 
-        WarMapBuildingListPanel             : PanelConfig<TwnsWarMapBuildingListPanel.OpenData>;
+        WarMapBuildingListPanel             : PanelConfig<Twns.WarMap.OpenDataForWarMapBuildingListPanel>;
 
         WwDeleteWatcherDetailPanel          : PanelConfig<TwnsWwDeleteWatcherDetailPanel.OpenData>;
         WwDeleteWatcherWarsPanel            : PanelConfig<TwnsWwDeleteWatcherWarsPanel.OpenData>;
@@ -348,7 +348,7 @@ namespace TwnsPanelConfig {
             },
 
             BwUnitDetailPanel: {
-                cls         : TwnsBwUnitDetailPanel?.BwUnitDetailPanel,
+                cls         : Twns.BaseWar?.BwUnitDetailPanel,
                 skinName    : `resource/skins/baseWar/BwUnitDetailPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
@@ -1348,7 +1348,7 @@ namespace TwnsPanelConfig {
             },
 
             UserSetAvatarPanel: {
-                cls         : TwnsUserSetAvatarPanel?.UserSetAvatarPanel,
+                cls         : Twns.User?.UserSetAvatarPanel,
                 skinName    : `resource/skins/user/UserSetAvatarPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1392,13 +1392,13 @@ namespace TwnsPanelConfig {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             WeActionAddUnitListPanel: {
-                cls         : TwnsWeActionAddUnitListPanel?.WeActionAddUnitListPanel,
+                cls         : Twns.WarEvent?.WeActionAddUnitListPanel,
                 skinName    : `resource/skins/warEvent/WeActionAddUnitListPanel.exml`,
                 layer       : LayerType.Hud0,
             },
 
             WeActionModifyPanel1: {
-                cls         : TwnsWeActionModifyPanel1?.WeActionModifyPanel1,
+                cls         : Twns.WarEvent?.WeActionModifyPanel1,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel1.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1410,7 +1410,7 @@ namespace TwnsPanelConfig {
             },
 
             WeActionModifyPanel3: {
-                cls         : TwnsWeActionModifyPanel3?.WeActionModifyPanel3,
+                cls         : Twns.WarEvent?.WeActionModifyPanel3,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel3.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1428,7 +1428,7 @@ namespace TwnsPanelConfig {
             },
 
             WeActionModifyPanel6: {
-                cls         : TwnsWeActionModifyPanel6?.WeActionModifyPanel6,
+                cls         : Twns.WarEvent?.WeActionModifyPanel6,
                 skinName    : `resource/skins/warEvent/WeActionModifyPanel6.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1500,7 +1500,7 @@ namespace TwnsPanelConfig {
             },
 
             WeActionReplacePanel: {
-                cls         : TwnsWeActionReplacePanel?.WeActionReplacePanel,
+                cls         : Twns.WarEvent?.WeActionReplacePanel,
                 skinName    : `resource/skins/warEvent/WeActionReplacePanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1614,7 +1614,7 @@ namespace TwnsPanelConfig {
             },
 
             WeConditionModifyPanel31: {
-                cls         : TwnsWeConditionModifyPanel31?.WeConditionModifyPanel31,
+                cls         : Twns.WarEvent?.WeConditionModifyPanel31,
                 skinName    : `resource/skins/warEvent/WeConditionModifyPanel31.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1656,7 +1656,7 @@ namespace TwnsPanelConfig {
             },
 
             WeDialogueBackgroundPanel: {
-                cls         : TwnsWeDialogueBackgroundPanel?.WeDialogueBackgroundPanel,
+                cls         : Twns.WarEvent?.WeDialogueBackgroundPanel,
                 skinName    : `resource/skins/warEvent/WeDialogueBackgroundPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1681,7 +1681,7 @@ namespace TwnsPanelConfig {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             WarMapBuildingListPanel: {
-                cls         : TwnsWarMapBuildingListPanel?.WarMapBuildingListPanel,
+                cls         : Twns.WarMap?.WarMapBuildingListPanel,
                 skinName    : `resource/skins/warMap/WarMapBuildingListPanel.exml`,
                 layer       : LayerType.Hud0,
             },

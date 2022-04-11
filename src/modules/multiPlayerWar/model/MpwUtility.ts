@@ -5,7 +5,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MpwUtility {
-    import BwTile = TwnsBwTile.BwTile;
+    import BwTile = Twns.BaseWar.BwTile;
 
     export function resetTileDataAsHasFog(tile: BwTile): void {
         tile.setHasFog(true);
@@ -22,7 +22,7 @@ namespace MpwUtility {
             currentHp       : tile.getCurrentHp(),
             locationFlags   : tile.getLocationFlags(),
             isHighlighted   : tile.getIsHighlighted(),
-        }, tile.getConfigVersion());
+        }, tile.getGameConfig());
     }
 }
 

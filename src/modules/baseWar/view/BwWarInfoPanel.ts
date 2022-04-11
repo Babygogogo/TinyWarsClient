@@ -277,7 +277,7 @@ namespace TwnsBwWarInfoPanel {
             const war                   = data.war;
             const player                = war.getPlayer(playerIndex);
             this._imgSkin.source        = WarCommonHelpers.getImageSourceForCoEyeFrame(player.getUnitAndTileSkinId());
-            this._imgCo.source          = ConfigManager.getCoEyeImageSource(war.getConfigVersion(), player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead);
+            this._imgCo.source          = war.getGameConfig().getCoEyeImageSource(player.getCoId(), player.getAliveState() !== Types.PlayerAliveState.Dead) ?? CommonConstants.ErrorTextForUndefined;
             this._labelPlayerName.text  = `P${playerIndex}`;
         }
 
@@ -397,10 +397,12 @@ namespace TwnsBwWarInfoPanel {
         private _modifyAsCo(): void {
             const { playerIndex, war, playerRenderer }  = this._getData();
             const player                                = war.getPlayer(playerIndex);
+            const gameConfig                            = war.getGameConfig();
             const currentCoId                           = player.getCoId();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                gameConfig,
                 currentCoId,
-                availableCoIdArray  : ConfigManager.getEnabledCoArray(war.getConfigVersion()).map(v => v.coId),
+                availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId),
                 callbackOnConfirm   : (newCoId) => {
                     if (newCoId !== currentCoId) {
                         player.setCoId(newCoId);
@@ -689,7 +691,7 @@ namespace TwnsBwWarInfoPanel {
             const data              = this._getData();
             const war               = data.war;
             const labelValue        = this._labelValue;
-            labelValue.text         = ConfigManager.getCoNameAndTierText(war.getConfigVersion(), war.getPlayer(data.playerIndex).getCoId());
+            labelValue.text         = war.getGameConfig().getCoNameAndTierText(war.getPlayer(data.playerIndex).getCoId()) ?? CommonConstants.ErrorTextForUndefined;
             labelValue.textColor    = 0xFFFFFF;
 
             const canModify         = checkCanModifyPlayerInfo(war);

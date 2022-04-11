@@ -10,7 +10,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace MeModel {
-    import MeWar            = TwnsMeWar.MeWar;
+    import MeWar            = Twns.MapEditor.MeWar;
     import MapReviewStatus  = Types.MapReviewStatus;
     import IMapRawData      = CommonProto.Map.IMapRawData;
     import IMapEditorData   = CommonProto.Map.IMapEditorData;
@@ -77,10 +77,13 @@ namespace MeModel {
 
         mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex);
         _war = new MeWar();
-        await _war.initWithMapEditorData({
-            mapRawData,
-            slotIndex
-        });
+        await _war.initWithMapEditorData(
+            {
+                mapRawData,
+                slotIndex
+            },
+            await Twns.Config.ConfigManager.getLatestGameConfig()
+        );
         _war.setIsMapModified(false);
         _war.setIsReviewingMap(isReview);
         _war.startRunning()

@@ -24,7 +24,7 @@
 // import TwnsWeActionTypeListPanel    from "./WeActionTypeListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWeActionModifyPanel1 {
+namespace Twns.WarEvent {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import ColorValue               = Types.ColorValue;
     import IWarEventFullData        = CommonProto.Map.IWarEventFullData;
@@ -32,12 +32,12 @@ namespace TwnsWeActionModifyPanel1 {
     import FocusEvent               = egret.FocusEvent;
     import LangTextType             = TwnsLangTextType.LangTextType;
 
-    export type OpenData = {
-        war         : TwnsMeWar.MeWar;
+    export type OpenDataForWeActionModifyPanel1 = {
+        war         : Twns.MapEditor.MeWar;
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     };
-    export class WeActionModifyPanel1 extends TwnsUiPanel.UiPanel<OpenData> {
+    export class WeActionModifyPanel1 extends TwnsUiPanel.UiPanel<OpenDataForWeActionModifyPanel1> {
         private readonly _btnBack!          : TwnsUiButton.UiButton;
         private readonly _btnType!          : TwnsUiButton.UiButton;
         private readonly _btnAddUnit!       : TwnsUiButton.UiButton;
@@ -150,7 +150,7 @@ namespace TwnsWeActionModifyPanel1 {
     }
 
     type DataForUnitRenderer = {
-        war             : TwnsMeWar.MeWar;
+        war             : Twns.MapEditor.MeWar;
         action          : IWarEventAction;
         dataForAddUnit  : CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit;
     };
@@ -299,7 +299,7 @@ namespace TwnsWeActionModifyPanel1 {
         private _onTouchedBtnUnitType(): void {
             const data = this._getData();
             TwnsPanelManager.open(TwnsPanelConfig.Dict.WeActionAddUnitListPanel, {
-                configVersion   : data.war.getConfigVersion(),
+                gameConfig      : data.war.getGameConfig(),
                 dataForAddUnit  : data.dataForAddUnit,
             });
         }
@@ -336,7 +336,7 @@ namespace TwnsWeActionModifyPanel1 {
         private _onFocusOutInputHp(): void {
             const data      = this._getData();
             const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxHp     = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxHp;
+            const maxHp     = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxHp);
             const currentHp = unitData.currentHp == null ? maxHp : unitData.currentHp;
             const newHp     = Math.max(0, Math.min(parseInt(this._inputHp.text) || 0, maxHp));
             if (newHp !== currentHp) {
@@ -347,7 +347,7 @@ namespace TwnsWeActionModifyPanel1 {
         private _onFocusOutInputFuel(): void {
             const data          = this._getData();
             const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxFuel       = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxFuel;
+            const maxFuel       = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxFuel);
             const currentFuel   = unitData.currentFuel == null ? maxFuel : unitData.currentFuel;
             const newFuel       = Math.max(0, Math.min(parseInt(this._inputFuel.text) || 0, maxFuel));
             if (newFuel !== currentFuel) {
@@ -358,7 +358,7 @@ namespace TwnsWeActionModifyPanel1 {
         private _onFocusOutInputPromotion(): void {
             const data              = this._getData();
             const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxPromotion      = ConfigManager.getUnitMaxPromotion(data.war.getConfigVersion());
+            const maxPromotion      = data.war.getGameConfig().getUnitMaxPromotion();
             const currentPromotion  = unitData.currentPromotion || 0;
             const newPromotion      = Math.max(0, Math.min(parseInt(this._inputPromotion.text) || 0, maxPromotion));
             if (newPromotion !== currentPromotion) {
@@ -369,7 +369,7 @@ namespace TwnsWeActionModifyPanel1 {
         private _onFocusOutInputPrimaryAmmo(): void {
             const data          = this._getData();
             const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxAmmo       = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).primaryWeaponMaxAmmo);
+            const maxAmmo       = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.primaryWeaponMaxAmmo);
             const currentAmmo   = unitData.primaryWeaponCurrentAmmo == null ? maxAmmo : unitData.primaryWeaponCurrentAmmo;
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputPrimaryAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
@@ -380,7 +380,7 @@ namespace TwnsWeActionModifyPanel1 {
         private _onFocusOutInputFlareAmmo(): void {
             const data          = this._getData();
             const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxAmmo       = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).flareMaxAmmo);
+            const maxAmmo       = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.flareMaxAmmo);
             const currentAmmo   = unitData.flareCurrentAmmo == null ? maxAmmo : unitData.flareCurrentAmmo;
             const newAmmo       = Math.max(0, Math.min(parseInt(this._inputFlareAmmo.text) || 0, maxAmmo));
             if (newAmmo !== currentAmmo) {
@@ -391,7 +391,7 @@ namespace TwnsWeActionModifyPanel1 {
         private _onFocusOutInputBuildMaterial(): void {
             const data              = this._getData();
             const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxMaterial       = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxBuildMaterial);
+            const maxMaterial       = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxBuildMaterial);
             const currentMaterial   = unitData.currentBuildMaterial == null ? maxMaterial : unitData.currentBuildMaterial;
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputBuildMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
@@ -402,7 +402,7 @@ namespace TwnsWeActionModifyPanel1 {
         private _onFocusOutInputProduceMaterial(): void {
             const data              = this._getData();
             const unitData          = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxMaterial       = Helpers.getExisted(ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxProduceMaterial);
+            const maxMaterial       = Helpers.getExisted(data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxProduceMaterial);
             const currentMaterial   = unitData.currentProduceMaterial == null ? maxMaterial : unitData.currentProduceMaterial;
             const newMaterial       = Math.max(0, Math.min(parseInt(this._inputProduceMaterial.text) || 0, maxMaterial));
             if (newMaterial !== currentMaterial) {
@@ -486,7 +486,7 @@ namespace TwnsWeActionModifyPanel1 {
             const data      = this._getData();
             const group     = this._groupIsDiving;
             const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const unitCfg   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType));
+            const unitCfg   = data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType));
             if ((!unitCfg) || (!unitCfg.diveCfgs)) {
                 group.visible = false;
             } else {
@@ -528,7 +528,7 @@ namespace TwnsWeActionModifyPanel1 {
             const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
             const currentHp = unitData.currentHp;
             input.text      = currentHp == null
-                ? `${ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxHp}`
+                ? `${data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxHp}`
                 : `${currentHp}`;
         }
         private _updateComponentsForFuel(): void {
@@ -537,7 +537,7 @@ namespace TwnsWeActionModifyPanel1 {
             const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
             const currentFuel   = unitData.currentFuel;
             input.text          = currentFuel == null
-                ? `${ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxFuel}`
+                ? `${data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxFuel}`
                 : `${currentFuel}`;
         }
         private _updateComponentsForPromotion(): void {
@@ -549,7 +549,7 @@ namespace TwnsWeActionModifyPanel1 {
             const data      = this._getData();
             const group     = this._groupPrimaryAmmo;
             const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxAmmo   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).primaryWeaponMaxAmmo;
+            const maxAmmo   = data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.primaryWeaponMaxAmmo;
             if (!maxAmmo) {
                 group.visible = false;
             } else {
@@ -563,7 +563,7 @@ namespace TwnsWeActionModifyPanel1 {
             const data      = this._getData();
             const group     = this._groupFlareAmmo;
             const unitData  = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxAmmo   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).flareMaxAmmo;
+            const maxAmmo   = data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.flareMaxAmmo;
             if (!maxAmmo) {
                 group.visible = false;
             } else {
@@ -577,7 +577,7 @@ namespace TwnsWeActionModifyPanel1 {
             const data          = this._getData();
             const group         = this._groupBuildMaterial;
             const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxMaterial   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxBuildMaterial;
+            const maxMaterial   = data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxBuildMaterial;
             if (!maxMaterial) {
                 group.visible = false;
             } else {
@@ -591,7 +591,7 @@ namespace TwnsWeActionModifyPanel1 {
             const data          = this._getData();
             const group         = this._groupProduceMaterial;
             const unitData      = Helpers.getExisted(data.dataForAddUnit.unitData);
-            const maxMaterial   = ConfigManager.getUnitTemplateCfg(data.war.getConfigVersion(), Helpers.getExisted(unitData.unitType)).maxProduceMaterial;
+            const maxMaterial   = data.war.getGameConfig().getUnitTemplateCfg(Helpers.getExisted(unitData.unitType))?.maxProduceMaterial;
             if (!maxMaterial) {
                 group.visible = false;
             } else {
@@ -605,7 +605,7 @@ namespace TwnsWeActionModifyPanel1 {
 
     function getErrorTipsForAddUnit({ dataForAddUnit, war }: {
         dataForAddUnit  : CommonProto.WarEvent.WeaAddUnit.IDataForAddUnit;
-        war             : TwnsMeWar.MeWar;
+        war             : Twns.MapEditor.MeWar;
     }): string | null {
         if (dataForAddUnit.canBeBlockedByUnit == null) {
             return Lang.getText(LangTextType.A0192);
@@ -615,9 +615,9 @@ namespace TwnsWeActionModifyPanel1 {
             return Lang.getText(LangTextType.A0193);
         }
 
-        const configVersion = war.getConfigVersion();
         const unitData      = Helpers.getExisted(dataForAddUnit.unitData);
-        const unitCfg       = ConfigManager.getUnitTemplateCfg(configVersion, Helpers.getExisted(unitData.unitType));
+        const gameConfig    = war.getGameConfig();
+        const unitCfg       = gameConfig.getUnitTemplateCfg(Helpers.getExisted(unitData.unitType));
         if (unitCfg == null) {
             return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0525));
         }
@@ -698,8 +698,8 @@ namespace TwnsWeActionModifyPanel1 {
 
         {
             const currentPromotion = unitData.currentPromotion;
-            if ((currentPromotion != null) &&
-                ((currentPromotion < 0) || (currentPromotion > ConfigManager.getUnitMaxPromotion(configVersion)))
+            if ((currentPromotion != null)                                                      &&
+                ((currentPromotion < 0) || (currentPromotion > gameConfig.getUnitMaxPromotion()))
             ) {
                 return Lang.getFormattedText(LangTextType.F0064, Lang.getText(LangTextType.B0370));
             }

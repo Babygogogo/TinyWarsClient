@@ -20,7 +20,7 @@ namespace TwnsUiCoInfo {
     import LangTextType     = TwnsLangTextType.LangTextType;
 
     type CoData = {
-        configVersion   : string;
+        gameConfig      : Twns.Config.GameConfig;
         coId            : number;
     };
     export class UiCoInfo extends TwnsUiComponent.UiComponent {
@@ -127,22 +127,22 @@ namespace TwnsUiCoInfo {
             }
 
             const coId                      = coData.coId;
-            const configVersion             = coData.configVersion;
-            const cfg                       = ConfigManager.getCoBasicCfg(configVersion, coId);
-            this._imgCoPortrait.source      = ConfigManager.getCoBustImageSource(configVersion, coId);
-            this._labelCoName.text          = cfg.name;
-            this._labelArtDesigner.text     = cfg.artDesigner ?? ``;
-            this._labelDataDesigner.text    = cfg.dataDesigner ?? ``;
+            const gameConfig                = coData.gameConfig;
+            const cfg                       = gameConfig.getCoBasicCfg(coId);
+            this._imgCoPortrait.source      = gameConfig.getCoBustImageSource(coId) ?? CommonConstants.ErrorTextForUndefined;
+            this._labelCoName.text          = cfg?.name ?? CommonConstants.ErrorTextForUndefined;
+            this._labelArtDesigner.text     = cfg?.artDesigner ?? ``;
+            this._labelDataDesigner.text    = cfg?.dataDesigner ?? ``;
 
-            const coType        = ConfigManager.getCoType(configVersion, coId);
+            const coType        = gameConfig.getCoType(coId);
             const groupZoneInfo = this._groupZoneInfo;
             (groupZoneInfo.parent) && (groupZoneInfo.parent.removeChild(groupZoneInfo));
             if (coType === Types.CoType.Zoned) {
                 this._groupInfo.addChildAt(groupZoneInfo, 0);
 
-                this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
-                this._labelZoneRadius.text          = `${cfg.zoneRadius}`;
-                this._labelEnergyBar.text           = (cfg.zoneExpansionEnergyList || []).join(` / `) || `--`;
+                this._labelBoardCostPercentage.text = `${cfg?.boardCostPercentage}%`;
+                this._labelZoneRadius.text          = `${cfg?.zoneRadius}`;
+                this._labelEnergyBar.text           = (cfg?.zoneExpansionEnergyList || []).join(` / `) || `--`;
 
             } else if (coType === Types.CoType.Global) {
                 // nothing to do
@@ -170,8 +170,9 @@ namespace TwnsUiCoInfo {
 
             this._listSkillType.refresh();
 
-            const { coId, configVersion }   = coData;
-            const skillIdArray              = ConfigManager.getCoSkillArray(configVersion, coId, skillType) || [];
+            const coId                      = coData.coId;
+            const gameConfig                = coData.gameConfig;
+            const skillIdArray              = gameConfig.getCoSkillArray(coId, skillType) || [];
             const hasSkill                  = !!skillIdArray.length;
             this._labelSkillType.text       = `${Lang.getCoSkillTypeName(skillType)}:`;
             this._labelSkillName.text       = hasSkill ? `` : Lang.getText(LangTextType.B0001);
@@ -181,7 +182,7 @@ namespace TwnsUiCoInfo {
                 groupEnergyCost.visible = false;
             } else {
                 const labelEnergyCost = this._labelEnergyCost;
-                const powerEnergyList = ConfigManager.getCoBasicCfg(configVersion, coId).powerEnergyList || [];
+                const powerEnergyList = gameConfig.getCoBasicCfg(coId)?.powerEnergyList || [];
                 if (skillType === CoSkillType.Passive) {
                     groupEnergyCost.visible = false;
                 } else if (skillType === CoSkillType.Power) {
@@ -194,7 +195,7 @@ namespace TwnsUiCoInfo {
             }
 
             const dataArrayForListSkillDesc : DataForSkillDescRenderer[] = [];
-            const rawDesc                   = (ConfigManager.getCoSkillDescArray(configVersion, coId, skillType) || [])[Lang.getCurrentLanguageType()];
+            const rawDesc                   = (gameConfig.getCoSkillDescArray(coId, skillType) || [])[Lang.getCurrentLanguageType()];
             if (!rawDesc) {
                 dataArrayForListSkillDesc.push({ desc: CommonConstants.ErrorTextForUndefined });
             } else {

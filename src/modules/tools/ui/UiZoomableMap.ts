@@ -5,10 +5,11 @@
 // import TwnsUiComponent          from "./UiComponent";
 // import TwnsUiZoomableComponent  from "./UiZoomableComponent";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsUiZoomableMap {
     export class UiZoomableMap extends TwnsUiComponent.UiComponent {
         private _zoomableComponent  = new TwnsUiZoomableComponent.UiZoomableComponent();
-        private _mapView            = new TwnsWarMapView.WarMapView();
+        private _mapView            = new Twns.WarMap.WarMapView();
 
         public constructor() {
             super();
@@ -37,18 +38,18 @@ namespace TwnsUiZoomableMap {
             this.clearMap();
         }
 
-        public showMapByMapData(map: CommonProto.Map.IMapRawData): void {
+        public showMapByMapData(map: CommonProto.Map.IMapRawData, config: Twns.Config.GameConfig): void {
             const mapView = this._mapView;
-            mapView.showMapByMapData(map);
+            mapView.showMapByMapData(map, config);
 
             const zoom = this._zoomableComponent;
             zoom.setContentWidth(mapView.width);
             zoom.setContentHeight(mapView.height);
             zoom.setContentScale(0, true);
         }
-        public showMapByWarData(data: CommonProto.WarSerialization.ISerialWar, players: Types.Undefinable<CommonProto.WarSerialization.ISerialPlayer[]>): void {
+        public showMapByWarData(data: CommonProto.WarSerialization.ISerialWar, players: Types.Undefinable<CommonProto.WarSerialization.ISerialPlayer[]>, config: Twns.Config.GameConfig): void {
             const mapView = this._mapView;
-            mapView.showMapByWarData(data, players);
+            mapView.showMapByWarData(data, config, players);
 
             const zoom = this._zoomableComponent;
             zoom.setContentWidth(mapView.width);

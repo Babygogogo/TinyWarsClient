@@ -188,7 +188,7 @@ namespace TwnsLangErrorText {
             `此战局未有回放步骤数据（或数据已丢失），无法即时回放`,
             `Failed to replay this war because there is no data or some of the data has been lost.`,
         ],
-        [ServerErrorCode.MsgSpmCreateSrw0020]: [
+        [ServerErrorCode.ExeSpmCreateSrw_ExeWithSocket_0018]: [
             `各个玩家使用的势力颜色必须互不相同`,
             `Players can't use the same color.`,
         ],

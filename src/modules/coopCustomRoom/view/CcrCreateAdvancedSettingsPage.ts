@@ -330,13 +330,13 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
             this._callbackForTouchLabelValue    = () => {
-                const configVersion = Helpers.getExisted(ConfigManager.getLatestConfigVersion());
+                const gameConfig    = CcrCreateModel.getGameConfig();
                 const selfCoId      = playerIndex === CcrCreateModel.getSelfPlayerIndex() ? CcrCreateModel.getSelfCoId() : null;
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBanCoPanel, {
                     playerIndex,
-                    configVersion,
+                    gameConfig,
                     maxBanCount         : null,
-                    fullCoIdArray       : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                    fullCoIdArray       : gameConfig.getEnabledCoArray().map(v => v.coId),
                     bannedCoIdArray     : CcrCreateModel.getBannedCoIdArray(playerIndex) || [],
                     selfCoId,
                     callbackOnConfirm   : (bannedCoIdSet) => {
@@ -601,23 +601,24 @@ namespace TwnsCcrCreateAdvancedSettingsPage {
                 }
             };
         }
-        private _updateComponentsForValueAsAiCoIdInCcw(playerIndex: number): void {
+        private async _updateComponentsForValueAsAiCoIdInCcw(playerIndex: number): Promise<void> {
             this._inputValue.visible            = false;
             this._callbackForFocusOutInputValue = null;
 
             const labelValue    = this._labelValue;
             const coId          = CcrCreateModel.getAiCoId(playerIndex);
-            const configVersion = Helpers.getExisted(CcrCreateModel.getData().settingsForCommon?.configVersion);
+            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(CcrCreateModel.getData().settingsForCommon?.configVersion));
             labelValue.visible  = true;
-            labelValue.text     = coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId);
+            labelValue.text     = coId == null ? `--` : gameConfig.getCoNameAndTierText(coId) ?? CommonConstants.ErrorTextForUndefined;
 
             this._callbackForTouchLabelValue = () => {
                 if (playerIndex === CcrCreateModel.getSelfPlayerIndex()) {
                     FloatText.show(Lang.getText(LangTextType.A0220));
                 } else {
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
+                        gameConfig,
                         currentCoId         : coId,
-                        availableCoIdArray  : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                        availableCoIdArray  : gameConfig.getEnabledCoArray().map(v => v.coId),
                         callbackOnConfirm   : (newCoId) => {
                             if (newCoId !== coId) {
                                 CcrCreateModel.setAiCoId(playerIndex, newCoId);

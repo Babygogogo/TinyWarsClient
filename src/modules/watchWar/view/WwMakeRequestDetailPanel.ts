@@ -20,6 +20,7 @@
 namespace TwnsWwMakeRequestDetailPanel {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
+    import GameConfig       = Twns.Config.GameConfig;
 
     export type OpenData = {
         warId   : number;
@@ -127,6 +128,7 @@ namespace TwnsWwMakeRequestDetailPanel {
                 return [];
             }
 
+            const gameConfig            = await Twns.Config.ConfigManager.getGameConfig(configVersion);
             const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
             const ongoingDstUserIdArray = outgoingInfo.ongoingDstUserIdArray || [];
             const requestDstUserIdArray = outgoingInfo.requestDstUserIdArray || [];
@@ -148,7 +150,7 @@ namespace TwnsWwMakeRequestDetailPanel {
                 const isWatching    = ongoingDstUserIdArray.indexOf(userId) >= 0;
                 dataList.push({
                     panel           : this,
-                    configVersion,
+                    gameConfig,
                     playerInfo,
                     isRequested,
                     isWatching,
@@ -162,7 +164,7 @@ namespace TwnsWwMakeRequestDetailPanel {
 
     type DataForPlayerRenderer = {
         panel           : WwMakeRequestDetailPanel;
-        configVersion   : string;
+        gameConfig      : GameConfig;
         playerInfo      : CommonProto.Structure.IWarPlayerInfo;
         isRequested     : boolean;
         isWatching      : boolean;
@@ -218,7 +220,7 @@ namespace TwnsWwMakeRequestDetailPanel {
 
             const userId    = playerInfo.userId;
             const labelName = this._labelName;
-            const coName    = ConfigManager.getCoNameAndTierText(data.configVersion, Helpers.getExisted(playerInfo.coId));
+            const coName    = data.gameConfig.getCoNameAndTierText(Helpers.getExisted(playerInfo.coId));
             if (userId == null) {
                 labelName.text = `${Lang.getText(LangTextType.B0607)} ${coName}`;
             } else {

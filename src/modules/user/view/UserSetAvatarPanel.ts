@@ -17,13 +17,12 @@
 // import UserProxy                from "../../user/model/UserProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsUserSetAvatarPanel {
+namespace Twns.User {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
-    import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
 
-    export type OpenData = void;
-    export class UserSetAvatarPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForUserSetAvatarPanel = void;
+    export class UserSetAvatarPanel extends TwnsUiPanel.UiPanel<OpenDataForUserSetAvatarPanel> {
         private readonly _imgMask!          : TwnsUiImage.UiImage;
         private readonly _group!            : eui.Group;
         private readonly _labelTitle!       : TwnsUiLabel.UiLabel;
@@ -33,6 +32,8 @@ namespace TwnsUserSetAvatarPanel {
         private readonly _imgAvatar!        : TwnsUiImage.UiImage;
         private readonly _btnConfirm!       : TwnsUiButton.UiButton;
         private readonly _btnCancel!        : TwnsUiButton.UiButton;
+
+        private _gameConfig : Config.GameConfig | null = null;
 
         protected _onOpening(): void {
             this._setNotifyListenerArray([
@@ -47,11 +48,10 @@ namespace TwnsUserSetAvatarPanel {
             this._setIsCloseOnTouchedMask();
 
             this._sclAvatar.setItemRenderer(AvatarRenderer);
-
-            this._updateView();
         }
         protected async _updateOnOpenDataChanged(): Promise<void> {
-            // nothing to do
+            this._gameConfig = await Twns.Config.ConfigManager.getLatestGameConfig();
+            this._updateView();
         }
         protected _onClosing(): void {
             // nothing to do
@@ -114,11 +114,11 @@ namespace TwnsUserSetAvatarPanel {
         }
 
         private _updateImgAvatar(): void {
-            this._imgAvatar.source = ConfigManager.getUserAvatarImageSource(this._sclAvatar.getSelectedData()?.avatarId ?? UserModel.getSelfAvatarId() ?? 1);
+            this._imgAvatar.source = Twns.Config.ConfigManager.getUserAvatarImageSource(this._sclAvatar.getSelectedData()?.avatarId ?? UserModel.getSelfAvatarId() ?? 1);
         }
         private _updateSclAvatar(): void {
             const dataArray: DataForAvatarRenderer[] = [];
-            for (const avatarId of ConfigManager.getAvailableUserAvatarIdArray(Helpers.getExisted(ConfigManager.getLatestConfigVersion(), ClientErrorCode.UserSetAvatarPanel_UpdateSclAvatar_00))) {
+            for (const avatarId of this._gameConfig?.getAvailableUserAvatarIdArray() ?? []) {
                 dataArray.push({
                     avatarId,
                     panel   : this,
@@ -141,7 +141,7 @@ namespace TwnsUserSetAvatarPanel {
 
         protected async _onDataChanged(): Promise<void> {
             const data             = this._getData();
-            this._imgAvatar.source = ConfigManager.getUserAvatarImageSource(data.avatarId);
+            this._imgAvatar.source = Twns.Config.ConfigManager.getUserAvatarImageSource(data.avatarId);
         }
 
         public onItemTapEvent(): void {

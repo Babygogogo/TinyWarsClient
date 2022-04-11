@@ -45,7 +45,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TwnsMeWarMenuPanel {
     import DataForDrawUnit          = TwnsMeDrawer.DataForDrawUnit;
-    import MeWar                    = TwnsMeWar.MeWar;
+    import MeWar                    = Twns.MapEditor.MeWar;
     import NotifyType               = TwnsNotifyType.NotifyType;
     import UnitType                 = Types.UnitType;
     import TileBaseType             = Types.TileBaseType;
@@ -573,7 +573,8 @@ namespace TwnsMeWarMenuPanel {
             }
         }
         private _createCommandImportFromClipboard(): DataForCommandRenderer | null {
-            if (this._getWar().getIsReviewingMap()) {
+            const war = this._getWar();
+            if (war.getIsReviewingMap()) {
                 return null;
             } else {
                 return {
@@ -587,12 +588,14 @@ namespace TwnsMeWarMenuPanel {
                         TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                             content : Lang.getText(LangTextType.A0237),
                             callback: async () => {
-                                const war = this._getWar();
                                 war.stopRunning();
-                                await war.initWithMapEditorData({
-                                    mapRawData  : JSON.parse(await navigator.clipboard.readText()),
-                                    slotIndex   : war.getMapSlotIndex(),
-                                });
+                                await war.initWithMapEditorData(
+                                    {
+                                        mapRawData  : JSON.parse(await navigator.clipboard.readText()),
+                                        slotIndex   : war.getMapSlotIndex(),
+                                    },
+                                    war.getGameConfig()
+                                );
                                 war.setIsMapModified(true);
                                 war.startRunning()
                                     .startRunningView();
@@ -740,13 +743,13 @@ namespace TwnsMeWarMenuPanel {
             this._labelNum.text    = "" + data.count;
 
             const war   = Helpers.getExisted(MeModel.getWar());
-            const unit  = new TwnsBwUnit.BwUnit();
+            const unit  = new Twns.BaseWar.BwUnit();
             unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : dataForDrawUnit.unitType,
                 playerIndex : dataForDrawUnit.playerIndex,
-            }, war.getConfigVersion());
+            }, war.getGameConfig());
             unit.startRunning(war);
 
             const unitView = this._unitView;
