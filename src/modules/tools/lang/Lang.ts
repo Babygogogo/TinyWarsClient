@@ -346,11 +346,11 @@ namespace Lang {
         }
     }
 
-    export function getChatChannelName(channel: Types.ChatChannel): string | null {
+    export function getChatChannelName(channel: Types.ChatChannel, languageType: LanguageType = getCurrentLanguageType()): string | null {
         switch (channel) {
-            case Types.ChatChannel.System   : return getText(LangTextType.B0374);
-            case Types.ChatChannel.PublicEn : return getText(LangTextType.B0373);
-            case Types.ChatChannel.PublicCn : return getText(LangTextType.B0384);
+            case Types.ChatChannel.System   : return getText(LangTextType.B0374, languageType);
+            case Types.ChatChannel.PublicEn : return getText(LangTextType.B0373, languageType);
+            case Types.ChatChannel.PublicCn : return getText(LangTextType.B0384, languageType);
             default                         : return null;
         }
     }

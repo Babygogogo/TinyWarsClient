@@ -212,10 +212,12 @@ namespace TwnsSpmWarListPanel {
 
         private async _createDataForListWar(): Promise<DataForWarRenderer[]> {
             const dataArray: DataForWarRenderer[] = [];
-            for (const slotIndex of await SpmModel.getSlotIndexSet() ?? new Set()) {
-                dataArray.push({
-                    slotIndex,
-                });
+            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+                if (!await SpmModel.checkIsEmpty(slotIndex)) {
+                    dataArray.push({
+                        slotIndex,
+                    });
+                }
             }
 
             return dataArray;

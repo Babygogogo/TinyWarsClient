@@ -41,36 +41,10 @@ namespace SpmModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for save slots.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _slotIndexSetAccessor = Helpers.createCachedDataAccessor<null, Set<number>>({
-        reqData : () => SpmProxy.reqSpmGetWarSaveSlotIndexArray(),
-    });
     const _slotFullDataAccessor = Helpers.createCachedDataAccessor<number, SpmWarSaveSlotData>({
         reqData : (slotIndex) => SpmProxy.reqSpmGetWarSaveSlotFullData(slotIndex),
     });
     let _previewingSlotIndex    : number;
-
-    export function setSlotIndexSet(slotIndexSet: Set<number>): void {
-        _slotIndexSetAccessor.setData(null, slotIndexSet);
-    }
-    export function getSlotIndexSet(): Promise<Set<number> | null> {
-        return _slotIndexSetAccessor.getData(null);
-    }
-    async function addSlotIndex(slotIndex: number): Promise<void> {
-        const slotIndexSet = await getSlotIndexSet();
-        if (slotIndexSet == null) {
-            setSlotIndexSet(new Set([slotIndex]));
-        } else {
-            slotIndexSet.add(slotIndex);
-        }
-    }
-    async function deleteSlotIndex(slotIndex: number): Promise<void> {
-        const slotIndexSet = await getSlotIndexSet();
-        if (slotIndexSet == null) {
-            // nothing to do
-        } else {
-            slotIndexSet.delete(slotIndex);
-        }
-    }
 
     export function setSlotFullData(slotIndex: number, fullData: SpmWarSaveSlotData | null): void {
         _slotFullDataAccessor.setData(slotIndex, fullData);
@@ -81,7 +55,7 @@ namespace SpmModel {
 
 
     export async function checkIsEmpty(slotIndex: number): Promise<boolean> {
-        return !(await _slotIndexSetAccessor.getData(null))?.has(slotIndex);
+        return await _slotFullDataAccessor.getData(slotIndex) == null;
     }
     export async function getAvailableIndex(): Promise<number> {
         for (let index = 0; index < CommonConstants.SpwSaveSlotMaxCount; ++index) {
@@ -102,32 +76,29 @@ namespace SpmModel {
         }
     }
 
-    export async function updateOnMsgSpmCreateScw(data: NetMessage.MsgSpmCreateScw.IS): Promise<void> {
+    export function updateOnMsgSpmCreateScw(data: NetMessage.MsgSpmCreateScw.IS): void {
         const slotIndex = Helpers.getExisted(data.slotIndex);
         setSlotFullData(slotIndex, {
             slotIndex,
             extraData       : Helpers.getExisted(data.extraData),
             warData         : Helpers.getExisted(data.warData),
         });
-        await addSlotIndex(slotIndex);
     }
-    export async function updateOnMsgSpmCreateSfw(data: NetMessage.MsgSpmCreateSfw.IS): Promise<void> {
+    export function updateOnMsgSpmCreateSfw(data: NetMessage.MsgSpmCreateSfw.IS): void {
         const slotIndex = Helpers.getExisted(data.slotIndex);
         setSlotFullData(slotIndex, {
             slotIndex,
             extraData       : Helpers.getExisted(data.extraData),
             warData         : Helpers.getExisted(data.warData),
         });
-        await addSlotIndex(slotIndex);
     }
-    export async function updateOnMsgSpmCreateSrw(data: NetMessage.MsgSpmCreateSrw.IS): Promise<void> {
+    export function updateOnMsgSpmCreateSrw(data: NetMessage.MsgSpmCreateSrw.IS): void {
         const slotIndex = Helpers.getExisted(data.slotIndex);
         setSlotFullData(slotIndex, {
             slotIndex,
             extraData       : Helpers.getExisted(data.extraData),
             warData         : Helpers.getExisted(data.warData),
         });
-        await addSlotIndex(slotIndex);
     }
     export function updateOnMsgSpmSaveScw(data: NetMessage.MsgSpmSaveScw.IS): void {
         const slotIndex = Helpers.getExisted(data.slotIndex);
@@ -153,9 +124,8 @@ namespace SpmModel {
             warData         : Helpers.getExisted(data.warData),
         });
     }
-    export async function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): Promise<void> {
+    export function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): void {
         setSlotFullData(slotIndex, null);
-        await deleteSlotIndex(slotIndex);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

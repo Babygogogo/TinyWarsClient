@@ -590,8 +590,14 @@ namespace TwnsChatPanel {
             const labelName     = this._labelName;
 
             if (toCategory === ChatCategory.PublicChannel) {
-                labelType.text  = Lang.getText(LangTextType.B0376);
-                labelName.text  = Lang.getChatChannelName(toTarget) ?? CommonConstants.ErrorTextForUndefined;
+                const languageType  = toTarget === ChatChannel.PublicCn
+                    ? Types.LanguageType.Chinese
+                    : (toTarget === ChatChannel.PublicEn
+                        ? Types.LanguageType.English
+                        : Lang.getCurrentLanguageType()
+                    );
+                labelType.text      = Lang.getText(LangTextType.B0376, languageType);
+                labelName.text      = Lang.getChatChannelName(toTarget, languageType) ?? CommonConstants.ErrorTextForUndefined;
 
             } else if (toCategory === ChatCategory.WarAndTeam) {
                 const divider       = CommonConstants.ChatTeamDivider;
