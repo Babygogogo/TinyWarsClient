@@ -40,7 +40,7 @@ namespace TwnsMpwTopPanel {
     }
 
     export type OpenData = {
-        war     : TwnsMpwWar.MpwWar;
+        war     : Twns.MultiPlayerWar.MpwWar;
     };
     export class MpwTopPanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _listPlayer!           : TwnsUiScrollList.UiScrollList<DataForListPlayer>;
@@ -118,7 +118,7 @@ namespace TwnsMpwTopPanel {
 
             const war = this._getOpenData().war;
             if ((!war.getIsExecutingAction()) && (war.checkIsBoot())) {
-                MpwProxy.reqMpwCommonHandleBoot(Helpers.getExisted(war.getWarId()));
+                Twns.MultiPlayerWar.MpwProxy.reqMpwCommonHandleBoot(Helpers.getExisted(war.getWarId()));
             }
 
             const userId = war.getPlayerInTurn().getUserId();
@@ -388,7 +388,7 @@ namespace TwnsMpwTopPanel {
     }
 
     type DataForListPlayer = {
-        war         : TwnsMpwWar.MpwWar
+        war         : Twns.MultiPlayerWar.MpwWar
         playerIndex : number;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForListPlayer> {

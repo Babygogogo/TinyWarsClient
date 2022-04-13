@@ -347,7 +347,7 @@ namespace TwnsWwHandleRequestWarsPanel {
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const warSettings = await MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
+            const warSettings = await Twns.MultiPlayerWar.MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
             if (warSettings != null) {
                 const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warSettings;
                 if (settingsForMfw) {

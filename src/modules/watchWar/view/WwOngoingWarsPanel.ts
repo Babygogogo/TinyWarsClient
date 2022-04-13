@@ -343,7 +343,7 @@ namespace TwnsWwOngoingWarsPanel {
             const labelName = this._labelName;
             labelName.text  = ``;
 
-            const warInfo = await MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
+            const warInfo = await Twns.MultiPlayerWar.MpwModel.getWarSettings(Helpers.getExisted(this._getData().warId));
             if (warInfo != null) {
                 const { settingsForMfw, settingsForCcw, settingsForMcw, settingsForMrw } = warInfo;
                 if (settingsForMfw) {

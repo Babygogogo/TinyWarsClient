@@ -278,7 +278,7 @@ namespace TwnsMcrMainMenuPanel {
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (await MpwModel.checkIsRedForMyMrwWars()) ||
+                (await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
                 (await MrrModel.checkIsRed())
             );
         }
@@ -288,7 +288,7 @@ namespace TwnsMcrMainMenuPanel {
         }
 
         private async _updateBtnContinueWar(): Promise<void> {
-            this._btnContinueWar.setRedVisible(await MpwModel.checkIsRedForMyMcwWars());
+            this._btnContinueWar.setRedVisible(await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars());
         }
 
         private async _updateBtnCoopMode(): Promise<void> {

@@ -276,6 +276,7 @@ namespace TwnsSpmWarListPanel {
                     isReady             : null,
                     isInTurn            : null,
                     isDefeat            : playerInfo.aliveState === Types.PlayerAliveState.Dead,
+                    restTimeToBoot      : playerInfo.restTimeToBoot ?? null,
                 });
             }
 
@@ -286,6 +287,7 @@ namespace TwnsSpmWarListPanel {
                 callbackOnDeletePlayer  : null,
                 callbackOnExitRoom      : null,
                 playerInfoArray,
+                enterTurnTime           : null,
             };
         }
 

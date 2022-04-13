@@ -34,10 +34,12 @@ namespace TwnsCommonWarPlayerInfoPage {
         isReady             : boolean | null;
         isInTurn            : boolean | null;
         isDefeat            : boolean | null;
+        restTimeToBoot      : number | null;
     };
     export type OpenDataForCommonWarPlayerInfoPage = {
         gameConfig              : GameConfig;
         playersCountUnneutral   : number;
+        enterTurnTime           : number | null;
         roomOwnerPlayerIndex    : number | null;
         callbackOnExitRoom      : (() => void) | null;
         callbackOnDeletePlayer  : ((playerIndex: number) => void) | null;
@@ -79,6 +81,7 @@ namespace TwnsCommonWarPlayerInfoPage {
                 roomOwnerPlayerIndex,
                 playersCountUnneutral,
                 playerInfoArray,
+                enterTurnTime,
             } = openData;
             const isRoomOwnedBySelf = playerInfoArray.find(v => v.playerIndex === roomOwnerPlayerIndex)?.userId === UserModel.getSelfUserId();
             const dataArray         : DataForPlayerRenderer[] = [];
@@ -94,6 +97,7 @@ namespace TwnsCommonWarPlayerInfoPage {
                     callbackOnExitRoom,
                     callbackOnDeletePlayer,
                     playerInfo,
+                    enterTurnTime,
                 });
             }
 
@@ -104,30 +108,35 @@ namespace TwnsCommonWarPlayerInfoPage {
     type DataForPlayerRenderer = {
         gameConfig              : GameConfig;
         isRoomOwnedBySelf       : boolean;
+        enterTurnTime           : number | null;
         callbackOnExitRoom      : (() => void) | null;
         callbackOnDeletePlayer  : ((playerIndex: number) => void) | null;
         playerInfo              : PlayerInfo;
     };
     class PlayerRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForPlayerRenderer> {
-        private readonly _groupCo!              : eui.Group;
-        private readonly _imgSkin!              : TwnsUiImage.UiImage;
-        private readonly _imgCoHead!            : TwnsUiImage.UiImage;
-        private readonly _imgCoInfo!            : TwnsUiImage.UiImage;
-        private readonly _labelNickname!        : TwnsUiLabel.UiLabel;
-        private readonly _labelCo!              : TwnsUiLabel.UiLabel;
-        private readonly _labelStatus!          : TwnsUiLabel.UiLabel;
+        private readonly _groupCo!                  : eui.Group;
+        private readonly _imgSkin!                  : TwnsUiImage.UiImage;
+        private readonly _imgCoHead!                : TwnsUiImage.UiImage;
+        private readonly _imgCoInfo!                : TwnsUiImage.UiImage;
+        private readonly _labelNickname!            : TwnsUiLabel.UiLabel;
+        private readonly _labelCo!                  : TwnsUiLabel.UiLabel;
+        private readonly _labelStatus!              : TwnsUiLabel.UiLabel;
 
-        private readonly _labelPlayerIndex!     : TwnsUiLabel.UiLabel;
-        private readonly _labelTeamIndex!       : TwnsUiLabel.UiLabel;
-        private readonly _labelRankStdTitle!    : TwnsUiLabel.UiLabel;
-        private readonly _labelRankStd!         : TwnsUiLabel.UiLabel;
-        private readonly _labelRankFogTitle!    : TwnsUiLabel.UiLabel;
-        private readonly _labelRankFog!         : TwnsUiLabel.UiLabel;
+        private readonly _labelPlayerIndex!         : TwnsUiLabel.UiLabel;
+        private readonly _labelTeamIndex!           : TwnsUiLabel.UiLabel;
+        private readonly _labelRankStdTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelRankStd!             : TwnsUiLabel.UiLabel;
+        private readonly _labelRankFogTitle!        : TwnsUiLabel.UiLabel;
+        private readonly _labelRankFog!             : TwnsUiLabel.UiLabel;
 
-        private readonly _groupButton!          : eui.Group;
-        private readonly _btnChat!              : TwnsUiButton.UiButton;
-        private readonly _btnInfo!              : TwnsUiButton.UiButton;
-        private readonly _btnDelete!            : TwnsUiButton.UiButton;
+        private readonly _groupRestTimeToBoot!      : eui.Group;
+        private readonly _labelRestTimeToBootTitle! : TwnsUiLabel.UiLabel;
+        private readonly _labelRestTimeToBoot!      : TwnsUiLabel.UiLabel;
+
+        private readonly _groupButton!              : eui.Group;
+        private readonly _btnChat!                  : TwnsUiButton.UiButton;
+        private readonly _btnInfo!                  : TwnsUiButton.UiButton;
+        private readonly _btnDelete!                : TwnsUiButton.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -138,6 +147,7 @@ namespace TwnsCommonWarPlayerInfoPage {
             ]);
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.TimeTick,        callback: this._onNotifyTimeTick },
             ]);
 
             this._updateComponentsForLanguage();
@@ -201,19 +211,24 @@ namespace TwnsCommonWarPlayerInfoPage {
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
+        private _onNotifyTimeTick(): void {
+            this._updateGroupRestTimeToBoot();
+        }
 
         protected _onDataChanged(): void {
             this._updateComponentsForInfo();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelRankStdTitle.text    = Lang.getText(LangTextType.B0546);
-            this._labelRankFogTitle.text    = Lang.getText(LangTextType.B0547);
+            this._labelRankStdTitle.text        = Lang.getText(LangTextType.B0546);
+            this._labelRankFogTitle.text        = Lang.getText(LangTextType.B0547);
+            this._labelRestTimeToBootTitle.text = Lang.getText(LangTextType.B0188);
         }
 
         private async _updateComponentsForInfo(): Promise<void> {
             this._updateLabelStatus();
             this._updateComponentsForRankInfo();
+            this._updateGroupRestTimeToBoot();
 
             const data                  = this._getData();
             const playerInfo            = data.playerInfo;
@@ -296,6 +311,29 @@ namespace TwnsCommonWarPlayerInfoPage {
             this._labelRankFog.text     = fogRankInfo
                 ? `${fogScore == null ? CommonConstants.RankInitialScore : fogScore} (${fogRank == null ? `--` : `${fogRank}${Helpers.getSuffixForRank(fogRank)}`})`
                 : `??`;
+        }
+
+        private _updateGroupRestTimeToBoot(): void {
+            const data              = this._getData();
+            const playerInfo        = data.playerInfo;
+            const restTimeToBoot    = playerInfo.restTimeToBoot;
+            const enterTurnTime     = data.enterTurnTime;
+            const restTime          = (restTimeToBoot == null) || (enterTurnTime == null)
+                ? null
+                : (playerInfo.isInTurn
+                    ? Math.max(0, restTimeToBoot + enterTurnTime - Timer.getServerTimestamp())
+                    : restTimeToBoot
+                );
+            const label             = this._labelRestTimeToBoot;
+            if (restTime == null) {
+                label.text      = `--`;
+                label.textColor = 0xFFFFFF;
+            } else {
+                label.text      = Helpers.getTimeDurationText2(restTime);
+                label.textColor = restTime >= 30 * 60
+                    ? 0xFFFFFF
+                    : (restTime >= 5 * 60 ? 0xFFFF00 : 0xFF4400);
+            }
         }
     }
 }

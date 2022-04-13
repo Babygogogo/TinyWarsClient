@@ -261,7 +261,6 @@ namespace TwnsNotifyType {
         MsgReplaySetSelfRating,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        MsgMpwCommonGetMyWarIdArray,
         MsgMpwCommonContinueWarFailed,
         MsgMpwCommonContinueWar,
         MsgMpwCommonSyncWar,
@@ -269,7 +268,6 @@ namespace TwnsNotifyType {
         MsgMpwCommonGetWarSettings,
         MsgMpwCommonGetWarSettingsFailed,
         MsgMpwCommonGetWarProgressInfo,
-        MsgMpwCommonGetWarProgressInfoFailed,
         MsgMpwWatchGetIncomingInfo,
         MsgMpwWatchGetIncomingInfoFailed,
         MsgMpwWatchGetOutgoingInfo,

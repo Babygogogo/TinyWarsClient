@@ -153,6 +153,7 @@ namespace McrModel {
                 isReady             : playerData?.isReady ?? null,
                 isInTurn            : null,
                 isDefeat            : null,
+                restTimeToBoot      : null,
             });
         }
 
@@ -169,6 +170,7 @@ namespace McrModel {
             },
             callbackOnDeletePlayer  : (playerIndex) => McrProxy.reqMcrDeletePlayer(roomId, playerIndex),
             playerInfoArray,
+            enterTurnTime           : null,
         };
     }
 

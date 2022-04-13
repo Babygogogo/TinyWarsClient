@@ -28,7 +28,7 @@ namespace TwnsMpwActionPlanner {
     export class MpwActionPlanner extends TwnsBwActionPlanner.BwActionPlanner {
         private _getPlayerIndexLoggedIn(): number | null {
             const war = this._getWar();
-            if (!(war instanceof TwnsMpwWar.MpwWar)) {
+            if (!(war instanceof Twns.MultiPlayerWar.MpwWar)) {
                 throw Helpers.newError(`Invalid war.`);
             }
             return war.getPlayerIndexLoggedIn();
@@ -43,7 +43,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerProduceUnit() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerProduceUnit  : {
                     gridIndex,
@@ -62,7 +62,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerVoteForDraw() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerVoteForDraw  : {
                     isAgree,
@@ -79,7 +79,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitProduceUnit() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitProduceUnit: {
                     path: {
@@ -99,7 +99,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitBeLoaded   : {
                     path: {
@@ -119,7 +119,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBeLoaded() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitJoinUnit   : {
                     path: {
@@ -139,7 +139,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitUseCoSuperPower() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitUseCoSkill : {
                     path: {
@@ -160,7 +160,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitUseCoPower() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitUseCoSkill : {
                     path: {
@@ -181,7 +181,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLoadCo() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitLoadCo : {
                     path: {
@@ -201,7 +201,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitWait() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitWait   : {
                     path: {
@@ -221,7 +221,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitAttackUnit() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitAttackUnit : {
                     path: {
@@ -243,7 +243,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitAttackTile() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitAttackTile : {
                     path: {
@@ -265,7 +265,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitBuildTile() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitBuildTile  : {
                     path: {
@@ -285,7 +285,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitCaptureTile() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitCaptureTile: {
                     path: {
@@ -305,7 +305,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDive() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitDive   : {
                     path: {
@@ -325,7 +325,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitSurface() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitSurface    : {
                     path: {
@@ -360,7 +360,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnTap() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitDropUnit   : {
                     path: {
@@ -385,7 +385,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitDropOnChooseAction() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitDropUnit   : {
                     path: {
@@ -406,7 +406,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLaunchFlare() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitLaunchFlare: {
                     path: {
@@ -427,7 +427,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitLaunchSilo() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitLaunchSilo : {
                     path: {
@@ -448,7 +448,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner._setStateRequestingUnitSupply() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionUnitSupplyUnit : {
                     path: {
@@ -468,7 +468,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerEndTurn() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerEndTurn  : {
                 },
@@ -484,7 +484,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerSurrender() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerSurrender: {
                 },
@@ -505,7 +505,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerDeleteUnit() empty gridIndex.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerDeleteUnit   : {
                     gridIndex,
@@ -522,7 +522,7 @@ namespace TwnsMpwActionPlanner {
                 throw Helpers.newError(`MpwActionPlanner.setStateRequestingPlayerUseCoSkill() empty war.`);
             }
 
-            MpwProxy.reqMpwExecuteWarAction(war, {
+            Twns.MultiPlayerWar.MpwProxy.reqMpwExecuteWarAction(war, {
                 actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
                 WarActionPlayerUseCoSkill   : {
                     skillType,
@@ -963,7 +963,7 @@ namespace TwnsMpwActionPlanner {
                             costForProduceUnit,
                             produceUnitType,
                         }];
-                    } else if (Helpers.getExisted((this._getWar() as TwnsMpwWar.MpwWar).getPlayerLoggedIn()?.getFund()) < costForProduceUnit) {
+                    } else if (Helpers.getExisted((this._getWar() as Twns.MultiPlayerWar.MpwWar).getPlayerLoggedIn()?.getFund()) < costForProduceUnit) {
                         return [{
                             actionType          : UnitActionType.ProduceUnit,
                             callback            : () => FloatText.show(Lang.getText(LangTextType.B0053)),

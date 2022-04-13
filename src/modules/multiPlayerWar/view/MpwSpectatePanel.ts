@@ -66,8 +66,8 @@ namespace TwnsMpwSpectatePanel {
             // nothing to do
         }
 
-        private _getWar(): TwnsMpwWar.MpwWar {
-            return Helpers.getExisted(MpwModel.getWar());
+        private _getWar(): Twns.MultiPlayerWar.MpwWar {
+            return Helpers.getExisted(Twns.MultiPlayerWar.MpwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

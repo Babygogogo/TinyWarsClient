@@ -6,7 +6,7 @@
 
 namespace TwnsMpwFogMap {
     export class MpwFogMap extends TwnsBwFogMap.BwFogMap {
-        public startRunning(war: TwnsMpwWar.MpwWar): void {
+        public startRunning(war: Twns.MultiPlayerWar.MpwWar): void {
             this._setWar(war);
 
             const visibleTiles = WarVisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());

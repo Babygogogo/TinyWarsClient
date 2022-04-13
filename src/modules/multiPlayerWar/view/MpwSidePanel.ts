@@ -20,7 +20,7 @@ namespace TwnsMpwSidePanel {
     import NotifyType           = TwnsNotifyType.NotifyType;
 
     export type OpenData = {
-        war     : TwnsMpwWar.MpwWar;
+        war     : Twns.MultiPlayerWar.MpwWar;
     };
     export class MpwSidePanel extends TwnsUiPanel.UiPanel<OpenData> {
         private readonly _groupLeft!    : eui.Group;

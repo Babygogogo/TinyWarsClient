@@ -3,9 +3,9 @@
 namespace TwnsLobbyModel {
     export async function checkIsRedForMultiPlayer(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
-            MpwModel.checkIsRedForMyMcwWars(),
-            MpwModel.checkIsRedForMyMfwWars(),
-            MpwModel.checkIsRedForMyCcwWars(),
+            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars(),
+            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars(),
+            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyCcwWars(),
             McrModel.checkIsRed(),
             MfrModel.checkIsRed(),
             CcrModel.checkIsRed(),
@@ -15,28 +15,28 @@ namespace TwnsLobbyModel {
 
     export async function checkIsRedForRanking(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
-            MpwModel.checkIsRedForMyMrwWars(),
+            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars(),
             MrrModel.checkIsRed(),
         ]);
     }
 
     export async function checkIsRedForMultiCustomMode(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
-            MpwModel.checkIsRedForMyMcwWars(),
+            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars(),
             McrModel.checkIsRed(),
         ]);
     }
 
     export async function checkIsRedForMultiFreeMode(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
-            MpwModel.checkIsRedForMyMfwWars(),
+            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars(),
             MfrModel.checkIsRed(),
         ]);
     }
 
     export async function checkIsRedForMultiCoopMode(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
-            MpwModel.checkIsRedForMyCcwWars(),
+            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyCcwWars(),
             CcrModel.checkIsRed(),
         ]);
     }

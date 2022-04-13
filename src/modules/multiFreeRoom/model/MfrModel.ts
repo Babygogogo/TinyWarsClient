@@ -146,6 +146,7 @@ namespace MfrModel {
                 isReady,
                 isInTurn            : null,
                 isDefeat            : null,
+                restTimeToBoot      : null,
             });
         }
 
@@ -156,6 +157,7 @@ namespace MfrModel {
             callbackOnExitRoom      : () => MfrProxy.reqMfrExitRoom(roomId),
             callbackOnDeletePlayer  : (playerIndex) => MfrProxy.reqMfrDeletePlayer(roomId, playerIndex),
             playerInfoArray,
+            enterTurnTime           : null,
         };
     }
 

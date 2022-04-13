@@ -200,6 +200,7 @@ namespace MrrModel {
                 isReady             : Helpers.getExisted(playerInfo.isReady),
                 isInTurn            : null,
                 isDefeat            : null,
+                restTimeToBoot      : null,
             });
         }
 
@@ -210,6 +211,7 @@ namespace MrrModel {
             callbackOnExitRoom      : null,
             callbackOnDeletePlayer  : null,
             playerInfoArray,
+            enterTurnTime           : null,
         };
     }
 

@@ -99,7 +99,7 @@ namespace WwModel {
             return null;
         }
 
-        const warSettings = await MpwModel.getWarSettings(warId);
+        const warSettings = await Twns.MultiPlayerWar.MpwModel.getWarSettings(warId);
         if (warSettings == null) {
             return null;
         }
@@ -127,12 +127,12 @@ namespace WwModel {
             return null;
         }
 
-        const warSettings = await MpwModel.getWarSettings(warId);
+        const warSettings = await Twns.MultiPlayerWar.MpwModel.getWarSettings(warId);
         if (warSettings == null) {
             return null;
         }
 
-        const warProgressInfo = await MpwModel.getWarProgressInfo(warId);
+        const warProgressInfo = await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId);
         if (warProgressInfo == null) {
             return null;
         }
@@ -155,6 +155,7 @@ namespace WwModel {
                 isReady             : null,
                 isInTurn            : warProgressInfo.playerIndexInTurn === playerIndex,
                 isDefeat            : !playerData.isAlive,
+                restTimeToBoot      : playerData.restTimeToBoot ?? null,
             });
         }
 
@@ -165,6 +166,7 @@ namespace WwModel {
             callbackOnExitRoom      : null,
             callbackOnDeletePlayer  : null,
             playerInfoArray,
+            enterTurnTime           : warProgressInfo.enterTurnTime ?? null,
         };
     }
 
@@ -173,7 +175,7 @@ namespace WwModel {
             return null;
         }
 
-        const warSettings = await MpwModel.getWarSettings(warId);
+        const warSettings = await Twns.MultiPlayerWar.MpwModel.getWarSettings(warId);
         if (warSettings == null) {
             return null;
         }
@@ -266,7 +268,7 @@ namespace WwModel {
     }
 
     export async function createDataForCommonWarAdvancedSettingsPage(warId: number | null): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-        const warSettings = warId == null ? null : await MpwModel.getWarSettings(warId);
+        const warSettings = warId == null ? null : await Twns.MultiPlayerWar.MpwModel.getWarSettings(warId);
         if (warSettings == null) {
             return null;
         }

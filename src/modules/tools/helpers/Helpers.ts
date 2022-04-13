@@ -556,8 +556,9 @@ namespace Helpers {
         dataExpireTime?     : number;
         reqData             : (key: KeyType) => void;
     }): {
-        getData     : (key: KeyType) => Promise<DataType | null>;
-        setData     : (key: KeyType, data: DataType | null) => void;
+        getData                 : (key: KeyType) => Promise<DataType | null>;
+        getRequestedKeyArray    : () => KeyType[];
+        setData                 : (key: KeyType, data: DataType | null) => void;
     } {
         const dataDict              = new Map<KeyType, DataType | null>();
         const dataTimestampDict     = new Map<KeyType, number>();
@@ -598,6 +599,19 @@ namespace Helpers {
                     reqData(key);
                 });
             },
+
+            getRequestedKeyArray: (): KeyType[] => {
+                const keyArray: KeyType[] = [];
+                for (const [key] of dataDict) {
+                    keyArray.push(key);
+                }
+                for (const [key] of requestDict) {
+                    keyArray.push(key);
+                }
+
+                return keyArray;
+            },
+
             setData : (key: KeyType, data: DataType | null): void => {
                 dataTimestampDict.set(key, Timer.getServerTimestamp());
                 dataDict.set(key, data);

@@ -116,7 +116,7 @@ namespace TwnsWwHandleRequestDetailPanel {
 
         private async _generateDataForListPlayer(): Promise<DataForRequesterRenderer[]> {
             const warId             = this._getOpenData().warId;
-            const playerInfoList    = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList;
+            const playerInfoList    = (await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId))?.playerInfoList;
             const watchInfo         = await WwModel.getWatchIncomingInfo(warId);
             const dataList          : DataForRequesterRenderer[] = [];
             for (const userId of watchInfo?.requestSrcUserIdArray || []) {

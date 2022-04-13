@@ -108,8 +108,8 @@ namespace FlowManager {
         NoSleepManager.init();
         Twns.Config.ConfigManager.init();
         NetManager.init();
-        MpwProxy.init();
-        MpwModel.init();
+        Twns.MultiPlayerWar.MpwProxy.init();
+        Twns.MultiPlayerWar.MpwModel.init();
         Timer.init();
         UserProxy.init();
         UserModel.init();
@@ -145,7 +145,7 @@ namespace FlowManager {
     }
 
     export function gotoLogin(): void {
-        MpwModel.unloadWar();
+        Twns.MultiPlayerWar.MpwModel.unloadWar();
         RwModel.unloadWar();
         HrwModel.unloadWar();
         SpwModel.unloadWar();
@@ -165,7 +165,7 @@ namespace FlowManager {
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
 
-        MpwModel.unloadWar();
+        Twns.MultiPlayerWar.MpwModel.unloadWar();
         RwModel.unloadWar();
         HrwModel.unloadWar();
         SpwModel.unloadWar();
@@ -189,7 +189,7 @@ namespace FlowManager {
     }
 
     export async function gotoMultiPlayerWar(data: CommonProto.WarSerialization.ISerialWar): Promise<void> {
-        const war = await MpwModel.loadWar(data);
+        const war = await Twns.MultiPlayerWar.MpwModel.loadWar(data);
         RwModel.unloadWar();
         HrwModel.unloadWar();
         SpwModel.unloadWar();
@@ -212,7 +212,7 @@ namespace FlowManager {
     export async function gotoReplayWar(warData: CommonProto.WarSerialization.ISerialWar, replayId: number): Promise<void> {
         const war = await RwModel.loadWar(warData, replayId);
         HrwModel.unloadWar();
-        MpwModel.unloadWar();
+        Twns.MultiPlayerWar.MpwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
 
@@ -232,7 +232,7 @@ namespace FlowManager {
     export async function gotoHalfwayReplayWar(warData: CommonProto.WarSerialization.ISerialWar): Promise<void> {
         const war = await HrwModel.loadWar(warData);
         RwModel.unloadWar();
-        MpwModel.unloadWar();
+        Twns.MultiPlayerWar.MpwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
 
@@ -255,7 +255,7 @@ namespace FlowManager {
         warData         : CommonProto.WarSerialization.ISerialWar;
     }): Promise<void> {
         const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData });
-        MpwModel.unloadWar();
+        Twns.MultiPlayerWar.MpwModel.unloadWar();
         RwModel.unloadWar();
         HrwModel.unloadWar();
         MeModel.unloadWar();
@@ -278,7 +278,7 @@ namespace FlowManager {
     }
     export async function gotoMapEditorWar(mapRawData: Types.Undefinable<CommonProto.Map.IMapRawData>, slotIndex: number, isReview: boolean): Promise<void> {
         const war = await MeModel.loadWar(mapRawData, slotIndex, isReview);
-        MpwModel.unloadWar();
+        Twns.MultiPlayerWar.MpwModel.unloadWar();
         SpwModel.unloadWar();
         RwModel.unloadWar();
         HrwModel.unloadWar();
@@ -324,7 +324,7 @@ namespace FlowManager {
     }
 
     export function gotoMfrCreateSettingsPanel(warData: CommonProto.WarSerialization.ISerialWar): void {
-        MpwModel.unloadWar();
+        Twns.MultiPlayerWar.MpwModel.unloadWar();
         RwModel.unloadWar();
         HrwModel.unloadWar();
         SpwModel.unloadWar();
@@ -373,9 +373,9 @@ namespace FlowManager {
         if (_checkCanFirstGoToLobby()) {
             gotoLobby();
         } else {
-            const mcwWar = MpwModel.getWar();
+            const mcwWar = Twns.MultiPlayerWar.MpwModel.getWar();
             if (mcwWar) {
-                MpwProxy.reqMpwCommonSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
+                Twns.MultiPlayerWar.MpwProxy.reqMpwCommonSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
             }
         }
     }
@@ -417,7 +417,7 @@ namespace FlowManager {
     }
 
     function _unloadAllWarsAndOpenCommonPanels(): void {
-        MpwModel.unloadWar();
+        Twns.MultiPlayerWar.MpwModel.unloadWar();
         RwModel.unloadWar();
         HrwModel.unloadWar();
         SpwModel.unloadWar();

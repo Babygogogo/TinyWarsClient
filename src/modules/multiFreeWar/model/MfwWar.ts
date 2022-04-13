@@ -7,7 +7,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Twns.MultiFreeWar {
-    import MpwWar           = TwnsMpwWar.MpwWar;
+    import MpwWar           = Twns.MultiPlayerWar.MpwWar;
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForMfw  = CommonProto.WarSettings.ISettingsForMfw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;

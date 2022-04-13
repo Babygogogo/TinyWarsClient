@@ -244,7 +244,7 @@ namespace TwnsHrwWarMenuPanel {
                         title   : Lang.getText(LangTextType.B0711),
                         content : Lang.getText(LangTextType.A0225),
                         callback: () => {
-                            MpwProxy.reqMpwCommonContinueWar(Helpers.getExisted(this._getWar().getWarId()));
+                            Twns.MultiPlayerWar.MpwProxy.reqMpwCommonContinueWar(Helpers.getExisted(this._getWar().getWarId()));
                             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
                                 title   : Lang.getText(LangTextType.B0088),
                                 content : Lang.getText(LangTextType.A0040),

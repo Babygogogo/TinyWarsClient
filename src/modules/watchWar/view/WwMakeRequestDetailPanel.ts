@@ -123,7 +123,7 @@ namespace TwnsWwMakeRequestDetailPanel {
                 return [];
             }
 
-            const configVersion = (await MpwModel.getWarSettings(warId))?.settingsForCommon?.configVersion;
+            const configVersion = (await Twns.MultiPlayerWar.MpwModel.getWarSettings(warId))?.settingsForCommon?.configVersion;
             if (configVersion == null) {
                 return [];
             }
@@ -132,7 +132,7 @@ namespace TwnsWwMakeRequestDetailPanel {
             const selfUserId            = Helpers.getExisted(UserModel.getSelfUserId());
             const ongoingDstUserIdArray = outgoingInfo.ongoingDstUserIdArray || [];
             const requestDstUserIdArray = outgoingInfo.requestDstUserIdArray || [];
-            const playerInfoList        = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
+            const playerInfoList        = (await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId))?.playerInfoList || [];
 
             const dataList: DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playerInfoList.length; ++playerIndex) {

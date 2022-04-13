@@ -230,7 +230,7 @@ namespace TwnsMfrMainMenuPanel {
             this._btnMyRoom.setRedVisible(await MfrModel.checkIsRed());
         }
         private async _updateBtnContinueWar(): Promise<void> {
-            this._btnContinueWar.setRedVisible(await MpwModel.checkIsRedForMyMfwWars());
+            this._btnContinueWar.setRedVisible(await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars());
         }
         private async _updateBtnNormalMode(): Promise<void> {
             this._btnNormalMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiCustomMode());
@@ -239,7 +239,7 @@ namespace TwnsMfrMainMenuPanel {
             this._btnCoopMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiCoopMode());
         }
         private async _updateBtnRanking(): Promise<void> {
-            this._btnRanking.setRedVisible((await MpwModel.checkIsRedForMyMrwWars()) || (await MrrModel.checkIsRed()));
+            this._btnRanking.setRedVisible((await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) || (await MrrModel.checkIsRed()));
         }
         private async _updateBtnMultiPlayer(): Promise<void> {
             this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());

@@ -27,12 +27,12 @@
 // import TwnsMpwWar                           from "./MpwWar";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace MpwModel {
-    import MpwWar                                   = TwnsMpwWar.MpwWar;
-    import CcwWar                                   = Twns.CoopCustomWar.CcwWar;
-    import McwWar                                   = Twns.MultiCustomWar.McwWar;
-    import MfwWar                                   = Twns.MultiFreeWar.MfwWar;
-    import MrwWar                                   = Twns.MultiRankWar.MrwWar;
+namespace Twns.MultiPlayerWar.MpwModel {
+    import MpwWar                                   = MultiPlayerWar.MpwWar;
+    import CcwWar                                   = CoopCustomWar.CcwWar;
+    import McwWar                                   = MultiCustomWar.McwWar;
+    import MfwWar                                   = MultiFreeWar.MfwWar;
+    import MrwWar                                   = MultiRankWar.MrwWar;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import WarBasicSettingsType                     = Types.WarBasicSettingsType;
@@ -56,7 +56,6 @@ namespace MpwModel {
         { type: NotifyType.MsgMpwWatchGetIncomingInfo,      callback: _onNotifyMsgMpwWatchGetIncomingInfo },
         { type: NotifyType.MsgMpwWatchGetOutgoingInfo,      callback: _onNotifyMsgMpwWatchGetOutgoingInfo },
     ];
-    let _allMyWarIdArray        : number[] = [];
     let _mcwPreviewingWarId     : number | null = null;
     let _mrwPreviewingWarId     : number | null = null;
     let _mfwPreviewingWarId     : number | null = null;
@@ -69,41 +68,42 @@ namespace MpwModel {
         Notify.addEventListeners(_NOTIFY_LISTENERS);
     }
 
-    export function setAllMyWarIdArray(idArray: number[]): void {
-        _allMyWarIdArray = idArray || [];
-    }
     export async function getMyMcwWarIdArray(): Promise<number[]> {
-        const warIdArray: number[] = [];
-        for (const warId of _allMyWarIdArray) {
-            if ((await getWarSettings(warId))?.settingsForMcw) {
-                warIdArray.push(warId);
-            }
-        }
-        return warIdArray;
+        return getMyMpwWarIdArray(warSettings => warSettings?.settingsForMcw != null);
     }
     export async function getMyMrwWarIdArray(): Promise<number[]> {
-        const warIdArray: number[] = [];
-        for (const warId of _allMyWarIdArray) {
-            if ((await getWarSettings(warId))?.settingsForMrw) {
-                warIdArray.push(warId);
-            }
-        }
-        return warIdArray;
+        return getMyMpwWarIdArray(warSettings => warSettings?.settingsForMrw != null);
     }
     export async function getMyMfwWarIdArray(): Promise<number[]> {
-        const warIdArray: number[] = [];
-        for (const warId of _allMyWarIdArray) {
-            if ((await getWarSettings(warId))?.settingsForMfw) {
-                warIdArray.push(warId);
-            }
-        }
-        return warIdArray;
+        return getMyMpwWarIdArray(warSettings => warSettings?.settingsForMfw != null);
     }
     export async function getMyCcwWarIdArray(): Promise<number[]> {
+        return getMyMpwWarIdArray(warSettings => warSettings?.settingsForCcw != null);
+    }
+    async function getMyMpwWarIdArray(predicate: (warSettings: IMpwWarSettings | null) => boolean): Promise<number[]> {
+        const userId = UserModel.getSelfUserId();
+        if (userId == null) {
+            return [];
+        }
+
+        const allWarIdArray = _warProgressInfoAccessor.getRequestedKeyArray();
+        const [
+            warProgressInfoArray,
+            warSettingsArray,
+        ] = await Promise.all([
+            Promise.all(allWarIdArray.map(v => getWarProgressInfo(v))),
+            Promise.all(allWarIdArray.map(v => getWarSettings(v))),
+        ]);
+
         const warIdArray: number[] = [];
-        for (const warId of _allMyWarIdArray) {
-            if ((await getWarSettings(warId))?.settingsForCcw) {
-                warIdArray.push(warId);
+        for (let i = 0; i < allWarIdArray.length; ++i) {
+            const warProgressInfo = warProgressInfoArray[i];
+            if ((warProgressInfo != null)                                           &&
+                (!warProgressInfo.isEnded)                                          &&
+                (warProgressInfo.playerInfoList?.some(v => v.userId === userId))    &&
+                (predicate(warSettingsArray[i]))
+            ) {
+                warIdArray.push(allWarIdArray[i]);
             }
         }
         return warIdArray;
@@ -198,16 +198,16 @@ namespace MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for war progress info.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    const _warProgressInfoGetter = Helpers.createCachedDataAccessor<number, IMpwWarProgressInfo>({
+    const _warProgressInfoAccessor = Helpers.createCachedDataAccessor<number, IMpwWarProgressInfo>({
         reqData : (warId: number) => MpwProxy.reqMpwCommonGetWarProgressInfo(warId),
     });
 
     export function getWarProgressInfo(warId: number): Promise<IMpwWarProgressInfo | null> {
-        return _warProgressInfoGetter.getData(warId);
+        return _warProgressInfoAccessor.getData(warId);
     }
 
     export async function updateOnMsgMpwCommonGetWarProgressInfo(data: MsgMpwCommonGetWarProgressInfoIs): Promise<void> {
-        _warProgressInfoGetter.setData(Helpers.getExisted(data.warId), data.warProgressInfo ?? null);
+        _warProgressInfoAccessor.setData(Helpers.getExisted(data.warId), data.warProgressInfo ?? null);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -573,7 +573,7 @@ namespace MpwModel {
 
         const settingsForCommon                                                     = Helpers.getExisted(warInfo.settingsForCommon);
         const warRule                                                               = Helpers.getExisted(settingsForCommon.warRule);
-        const gameConfig                                                            = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+        const gameConfig                                                            = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
         const hasFog                                                                = warRule.ruleForGlobalParams?.hasFogByDefault;
         const { settingsForCcw, settingsForMcw, settingsForMfw, settingsForMrw }    = warInfo;
         if (settingsForCcw) {
@@ -632,16 +632,18 @@ namespace MpwModel {
                 isReady             : null,
                 isInTurn            : playerIndex === warProgressInfo.playerIndexInTurn,
                 isDefeat            : !playerInfo.isAlive,
+                restTimeToBoot      : playerInfo.restTimeToBoot ?? null,
             });
         }
 
         return {
-            gameConfig              : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+            gameConfig              : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
             playersCountUnneutral   : WarRuleHelpers.getPlayersCountUnneutral(warRule),
             roomOwnerPlayerIndex    : null,
             callbackOnDeletePlayer  : null,
             callbackOnExitRoom      : null,
             playerInfoArray,
+            enterTurnTime           : warProgressInfo.enterTurnTime ?? null,
         };
     }
 
@@ -655,7 +657,7 @@ namespace MpwModel {
         }
 
         const war = createWarByWarData(data);
-        war.init(data, await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
+        war.init(data, await Config.ConfigManager.getGameConfig(Helpers.getExisted(data.settingsForCommon?.configVersion)));
         war.startRunning().startRunningView();
         _setWar(war);
 

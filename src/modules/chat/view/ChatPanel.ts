@@ -349,7 +349,7 @@ namespace TwnsChatPanel {
                 ++indexForSort;
             }
 
-            const war = MpwModel.getWar();
+            const war = Twns.MultiPlayerWar.MpwModel.getWar();
             if (war) {
                 const player = war.getPlayerManager().getPlayerByUserId(Helpers.getExisted(UserModel.getSelfUserId()));
                 if ((player) && (player.getAliveState() === Types.PlayerAliveState.Alive)) {

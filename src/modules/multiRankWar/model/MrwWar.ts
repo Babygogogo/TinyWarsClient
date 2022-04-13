@@ -11,7 +11,7 @@ namespace Twns.MultiRankWar {
     import ISerialWar       = CommonProto.WarSerialization.ISerialWar;
     import ISettingsForMrw  = CommonProto.WarSettings.ISettingsForMrw;
     import ClientErrorCode  = TwnsClientErrorCode.ClientErrorCode;
-    import MpwWar           = TwnsMpwWar.MpwWar;
+    import MpwWar           = Twns.MultiPlayerWar.MpwWar;
     import GameConfig       = Config.GameConfig;
 
     export class MrwWar extends MpwWar {

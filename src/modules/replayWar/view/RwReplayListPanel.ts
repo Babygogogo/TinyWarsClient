@@ -286,6 +286,7 @@ namespace TwnsRwReplayListPanel {
                     isReady             : null,
                     isInTurn            : null,
                     isDefeat            : !playerInfo.isAlive,
+                    restTimeToBoot      : playerInfo.restTimeToBoot ?? null,
                 });
             }
 
@@ -296,6 +297,7 @@ namespace TwnsRwReplayListPanel {
                 callbackOnExitRoom      : null,
                 callbackOnDeletePlayer  : null,
                 playerInfoArray,
+                enterTurnTime           : null,
             };
         }
 

@@ -151,6 +151,7 @@ namespace CcrModel {
                 isReady,
                 isInTurn            : null,
                 isDefeat            : null,
+                restTimeToBoot      : null,
             });
         }
 
@@ -161,6 +162,7 @@ namespace CcrModel {
             callbackOnExitRoom      : () => CcrProxy.reqCcrExitRoom(roomId),
             callbackOnDeletePlayer  : (playerIndex) => CcrProxy.reqCcrDeletePlayer(roomId, playerIndex),
             playerInfoArray,
+            enterTurnTime           : null,
         };
     }
 

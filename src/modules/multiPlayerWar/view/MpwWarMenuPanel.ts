@@ -87,8 +87,8 @@ namespace TwnsMpwWarMenuPanel {
             // nothing to do
         }
 
-        private _getWar(): TwnsMpwWar.MpwWar {
-            return Helpers.getExisted(MpwModel.getWar());
+        private _getWar(): Twns.MultiPlayerWar.MpwWar {
+            return Helpers.getExisted(Twns.MultiPlayerWar.MpwModel.getWar());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ namespace TwnsMpwWarMenuPanel {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnSync(): void {
             const war = this._getWar();
-            MpwProxy.reqMpwCommonSyncWar(
+            Twns.MultiPlayerWar.MpwProxy.reqMpwCommonSyncWar(
                 war,
                 war.getActionPlanner().checkIsStateRequesting()
                     ? Types.SyncWarRequestType.PlayerForce
@@ -248,7 +248,7 @@ namespace TwnsMpwWarMenuPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonConfirmPanel, {
                 content : Lang.getText(LangTextType.A0249),
                 callback: () => {
-                    MpwProxy.reqMpwGetHalfwayReplayData(Helpers.getExisted(this._getWar().getWarId()));
+                    Twns.MultiPlayerWar.MpwProxy.reqMpwGetHalfwayReplayData(Helpers.getExisted(this._getWar().getWarId()));
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
                         title   : Lang.getText(LangTextType.B0088),
                         content : Lang.getText(LangTextType.A0040),

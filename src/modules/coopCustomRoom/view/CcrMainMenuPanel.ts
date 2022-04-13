@@ -234,7 +234,7 @@ namespace TwnsCcrMainMenuPanel {
             this._btnMyRoom.setRedVisible(await CcrModel.checkIsRed());
         }
         private async _updateBtnContinueWar(): Promise<void> {
-            this._btnContinueWar.setRedVisible(await MpwModel.checkIsRedForMyCcwWars());
+            this._btnContinueWar.setRedVisible(await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyCcwWars());
         }
         private async _updateBtnNormalMode(): Promise<void> {
             this._btnNormalMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiCustomMode());

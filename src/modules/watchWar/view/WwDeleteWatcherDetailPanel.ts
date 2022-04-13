@@ -114,7 +114,7 @@ namespace TwnsWwDeleteWatcherDetailPanel {
 
         private async _generateDataForListPlayer(): Promise<DataForRequesterRenderer[]> {
             const warId             = this._getOpenData().warId;
-            const playerInfoList    = (await MpwModel.getWarProgressInfo(warId))?.playerInfoList;
+            const playerInfoList    = (await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId))?.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
             for (const info of (await WwModel.getWatchIncomingInfo(warId))?.srcUserInfoArray || []) {
                 const userId = info.userId;
