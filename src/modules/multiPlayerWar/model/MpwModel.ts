@@ -56,10 +56,6 @@ namespace Twns.MultiPlayerWar.MpwModel {
         { type: NotifyType.MsgMpwWatchGetIncomingInfo,      callback: _onNotifyMsgMpwWatchGetIncomingInfo },
         { type: NotifyType.MsgMpwWatchGetOutgoingInfo,      callback: _onNotifyMsgMpwWatchGetOutgoingInfo },
     ];
-    let _mcwPreviewingWarId     : number | null = null;
-    let _mrwPreviewingWarId     : number | null = null;
-    let _mfwPreviewingWarId     : number | null = null;
-    let _ccwPreviewingWarId     : number | null = null;
     let _war                    : MpwWar | null = null;
     let _cachedSyncWarData      : CommonProto.NetMessage.MsgMpwCommonSyncWar.IS | null = null;
     const _cachedActions        : IWarActionContainer[] = [];
@@ -107,46 +103,6 @@ namespace Twns.MultiPlayerWar.MpwModel {
             }
         }
         return warIdArray;
-    }
-
-    export function getMcwPreviewingWarId(): number | null {
-        return _mcwPreviewingWarId;
-    }
-    export function setMcwPreviewingWarId(warId: number | null): void {
-        if (getMcwPreviewingWarId() != warId) {
-            _mcwPreviewingWarId = warId;
-            Notify.dispatch(NotifyType.McwPreviewingWarIdChanged);
-        }
-    }
-
-    export function getMrwPreviewingWarId(): number | null {
-        return _mrwPreviewingWarId;
-    }
-    export function setMrwPreviewingWarId(warId: number | null): void {
-        if (getMrwPreviewingWarId() != warId) {
-            _mrwPreviewingWarId = warId;
-            Notify.dispatch(NotifyType.MrwPreviewingWarIdChanged);
-        }
-    }
-
-    export function getMfwPreviewingWarId(): number | null {
-        return _mfwPreviewingWarId;
-    }
-    export function setMfwPreviewingWarId(warId: number | null): void {
-        if (getMfwPreviewingWarId() != warId) {
-            _mfwPreviewingWarId = warId;
-            Notify.dispatch(NotifyType.MfwPreviewingWarIdChanged);
-        }
-    }
-
-    export function getCcwPreviewingWarId(): number | null {
-        return _ccwPreviewingWarId;
-    }
-    export function setCcwPreviewingWarId(warId: number | null): void {
-        if (getCcwPreviewingWarId() != warId) {
-            _ccwPreviewingWarId = warId;
-            Notify.dispatch(NotifyType.CcwPreviewingWarIdChanged);
-        }
     }
 
     export async function checkIsRedForMyMcwWars(): Promise<boolean> {

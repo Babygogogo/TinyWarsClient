@@ -45,7 +45,7 @@ namespace TwnsPanelConfig {
         CcrRoomInfoPanel                    : PanelConfig<TwnsCcrRoomInfoPanel.OpenData>;
         CcrSearchRoomPanel                  : PanelConfig<TwnsCcrSearchRoomPanel.OpenData>;
 
-        CcwMyWarListPanel                   : PanelConfig<TwnsCcwMyWarListPanel.OpenData>;
+        CcwMyWarListPanel                   : PanelConfig<Twns.CoopCustomWar.OpenDataForCcwMyWarListPanel>;
 
         ChatCommandPanel                    : PanelConfig<TwnsChatCommandPanel.OpenData>;
         ChatPanel                           : PanelConfig<TwnsChatPanel.OpenData>;
@@ -107,7 +107,7 @@ namespace TwnsPanelConfig {
         McrRoomInfoPanel                    : PanelConfig<TwnsMcrRoomInfoPanel.OpenData>;
         McrSearchRoomPanel                  : PanelConfig<TwnsMcrSearchRoomPanel.OpenData>;
 
-        McwMyWarListPanel                   : PanelConfig<TwnsMcwMyWarListPanel.OpenData>;
+        McwMyWarListPanel                   : PanelConfig<Twns.MultiCustomWar.OpenDataForMcwMyWarListPanel>;
 
         MeAddWarEventToRulePanel            : PanelConfig<TwnsMeAddWarEventToRulePanel.OpenData>;
         MeAvailableCoPanel                  : PanelConfig<TwnsMeAvailableCoPanel.OpenData>;
@@ -138,7 +138,7 @@ namespace TwnsPanelConfig {
         MfrRoomInfoPanel                    : PanelConfig<TwnsMfrRoomInfoPanel.OpenData>;
         MfrSearchRoomPanel                  : PanelConfig<TwnsMfrSearchRoomPanel.OpenData>;
 
-        MfwMyWarListPanel                   : PanelConfig<TwnsMfwMyWarListPanel.OpenData>;
+        MfwMyWarListPanel                   : PanelConfig<Twns.MultiFreeWar.OpenDataForMfwMyWarListPanel>;
 
         MmAcceptMapPanel                    : PanelConfig<TwnsMmAcceptMapPanel.OpenData>;
         MmAvailabilityListPanel             : PanelConfig<TwnsMmAvailabilityListPanel.OpenData>;
@@ -166,7 +166,7 @@ namespace TwnsPanelConfig {
         MrrRoomInfoPanel                    : PanelConfig<TwnsMrrRoomInfoPanel.OpenData>;
         MrrSetMaxConcurrentCountPanel       : PanelConfig<TwnsMrrSetMaxConcurrentCountPanel.OpenData>;
 
-        MrwMyWarListPanel                   : PanelConfig<TwnsMrwMyWarListPanel.OpenData>;
+        MrwMyWarListPanel                   : PanelConfig<Twns.MultiRankWar.OpenDataForMrwMyWarListPanel>;
 
         RwReplayListPanel                   : PanelConfig<TwnsRwReplayListPanel.OpenData>;
         RwReplayProgressPanel               : PanelConfig<TwnsRwReplayProgressPanel.OpenData>;
@@ -472,7 +472,7 @@ namespace TwnsPanelConfig {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             CcwMyWarListPanel: {
-                cls         : TwnsCcwMyWarListPanel?.CcwMyWarListPanel,
+                cls         : Twns.CoopCustomWar?.CcwMyWarListPanel,
                 skinName    : `resource/skins/coopCustomWar/CcwMyWarListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -830,7 +830,7 @@ namespace TwnsPanelConfig {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             McwMyWarListPanel: {
-                cls         : TwnsMcwMyWarListPanel?.McwMyWarListPanel,
+                cls         : Twns.MultiCustomWar?.McwMyWarListPanel,
                 skinName    : `resource/skins/multiCustomWar/McwMyWarListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1012,7 +1012,7 @@ namespace TwnsPanelConfig {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MfwMyWarListPanel: {
-                cls         : TwnsMfwMyWarListPanel?.MfwMyWarListPanel,
+                cls         : Twns.MultiFreeWar?.MfwMyWarListPanel,
                 skinName    : `resource/skins/multiFreeWar/MfwMyWarListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1169,7 +1169,7 @@ namespace TwnsPanelConfig {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MrwMyWarListPanel: {
-                cls         : TwnsMrwMyWarListPanel?.MrwMyWarListPanel,
+                cls         : Twns.MultiRankWar?.MrwMyWarListPanel,
                 skinName    : `resource/skins/multiRankWar/MrwMyWarListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,

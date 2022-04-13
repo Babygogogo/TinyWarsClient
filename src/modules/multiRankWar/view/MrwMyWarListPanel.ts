@@ -25,16 +25,17 @@
 // import WarMapModel                          from "../../warMap/model/WarMapModel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMrwMyWarListPanel {
+namespace Twns.MultiRankWar {
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarAdvancedSettingsPage = TwnsCommonWarAdvancedSettingsPage.OpenDataForCommonWarAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import LangTextType                             = TwnsLangTextType.LangTextType;
     import NotifyType                               = TwnsNotifyType.NotifyType;
+    import MpwModel                                 = MultiPlayerWar.MpwModel;
 
-    export type OpenData = void;
-    export class MrwMyWarListPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMrwMyWarListPanel = void;
+    export class MrwMyWarListPanel extends TwnsUiPanel.UiPanel<OpenDataForMrwMyWarListPanel> {
         private readonly _groupTab!         : eui.Group;
         private readonly _tabSettings!      : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarPlayerInfoPage>;
 
@@ -56,7 +57,6 @@ namespace TwnsMrwMyWarListPanel {
         protected _onOpening(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MrwPreviewingWarIdChanged,   callback: this._onNotifyMrwPreviewingWarIdChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -70,10 +70,20 @@ namespace TwnsMrwMyWarListPanel {
             await this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupWarList();
-            this._updateComponentsForPreviewingWarInfo();
         }
         protected _onClosing(): void {
             // nothing to do
+        }
+
+        public setAndReviseSelectedWarId(newWarId: number, needScroll: boolean): void {
+            const listWar   = this._listWar;
+            const index     = Helpers.getExisted(listWar.getRandomIndex(v => v.warId === newWarId));
+            listWar.setSelectedIndex(index);
+            this._updateComponentsForPreviewingWarInfo();
+
+            if (needScroll) {
+                listWar.scrollVerticalToIndex(index);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -81,10 +91,6 @@ namespace TwnsMrwMyWarListPanel {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
-        }
-
-        private _onNotifyMrwPreviewingWarIdChanged(): void {
-            this._updateComponentsForPreviewingWarInfo();
         }
 
         private _onTouchTapBtnBack(): void {
@@ -95,13 +101,13 @@ namespace TwnsMrwMyWarListPanel {
         }
 
         private _onTouchedBtnNextStep(): void {
-            const warId = Twns.MultiPlayerWar.MpwModel.getMrwPreviewingWarId();
+            const warId = this._listWar.getSelectedData()?.warId;
             if (warId != null) {
                 TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonBlockPanel, {
                     title   : Lang.getText(LangTextType.B0088),
                     content : Lang.getText(LangTextType.A0040),
                 });
-                Twns.MultiPlayerWar.MpwProxy.reqMpwCommonContinueWar(warId);
+                MultiPlayerWar.MpwProxy.reqMpwCommonContinueWar(warId);
             }
         }
 
@@ -153,23 +159,20 @@ namespace TwnsMrwMyWarListPanel {
             labelNoWar.visible      = !dataArray.length;
             listWar.bindData(dataArray);
 
-            const warId = Twns.MultiPlayerWar.MpwModel.getMrwPreviewingWarId();
-            if (dataArray.every(v => v.warId != warId)) {
-                Twns.MultiPlayerWar.MpwModel.setMrwPreviewingWarId(dataArray.length ? dataArray[0].warId : null);
-            }
+            this.setAndReviseSelectedWarId(dataArray[0]?.warId, true);
         }
 
         private async _updateComponentsForPreviewingWarInfo(): Promise<void> {
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
-            const warId         = Twns.MultiPlayerWar.MpwModel.getMrwPreviewingWarId();
+            const warId         = this._listWar.getSelectedData()?.warId;
             if (warId == null) {
                 groupTab.visible    = false;
                 btnNextStep.visible = false;
             } else {
                 groupTab.visible    = true;
                 btnNextStep.visible = true;
-                btnNextStep.setRedVisible(Twns.MultiPlayerWar.MpwModel.checkIsRedForMyWar(await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId)));
+                btnNextStep.setRedVisible(MpwModel.checkIsRedForMyWar(await MpwModel.getWarProgressInfo(warId)));
 
                 this._updateCommonWarMapInfoPage();
                 this._updateCommonWarPlayerInfoPage();
@@ -204,9 +207,10 @@ namespace TwnsMrwMyWarListPanel {
 
         private async _createDataForListWar(): Promise<DataForWarRenderer[]> {
             const dataArray: DataForWarRenderer[] = [];
-            for (const warId of await Twns.MultiPlayerWar.MpwModel.getMyMrwWarIdArray()) {
+            for (const warId of await MpwModel.getMyMrwWarIdArray()) {
                 dataArray.push({
                     warId,
+                    panel   : this,
                 });
             }
 
@@ -214,27 +218,27 @@ namespace TwnsMrwMyWarListPanel {
         }
 
         private async _createDataForCommonWarMapInfoPage(): Promise<OpenDataForCommonWarMapInfoPage> {
-            const warId         = Twns.MultiPlayerWar.MpwModel.getMrwPreviewingWarId();
-            const warSettings   = warId == null ? null : await Twns.MultiPlayerWar.MpwModel.getWarSettings(warId);
+            const warId         = this._listWar.getSelectedData()?.warId;
+            const warSettings   = warId == null ? null : await MpwModel.getWarSettings(warId);
             const mapId         = warSettings?.settingsForMrw?.mapId;
             return mapId == null
                 ? null
                 : {
-                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warSettings?.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(warSettings?.settingsForCommon?.configVersion)),
                     mapInfo     : { mapId },
                 };
         }
 
         private async _createDataForCommonWarPlayerInfoPage(): Promise<OpenDataForCommonWarPlayerInfoPage> {
-            return await Twns.MultiPlayerWar.MpwModel.createDataForCommonWarPlayerInfoPage(Twns.MultiPlayerWar.MpwModel.getMrwPreviewingWarId());
+            return await MpwModel.createDataForCommonWarPlayerInfoPage(this._listWar.getSelectedData()?.warId ?? null);
         }
 
         private async _createDataForCommonWarBasicSettingsPage(): Promise<OpenDataForCommonWarBasicSettingsPage> {
-            return await Twns.MultiPlayerWar.MpwModel.createDataForCommonWarBasicSettingsPage(Twns.MultiPlayerWar.MpwModel.getMrwPreviewingWarId());
+            return await MpwModel.createDataForCommonWarBasicSettingsPage(this._listWar.getSelectedData()?.warId ?? null);
         }
 
         private async _createDataForCommonWarAdvancedSettingsPage(): Promise<OpenDataForCommonWarAdvancedSettingsPage> {
-            return await Twns.MultiPlayerWar.MpwModel.createDataForCommonWarAdvancedSettingsPage(Twns.MultiPlayerWar.MpwModel.getMrwPreviewingWarId());
+            return await MpwModel.createDataForCommonWarAdvancedSettingsPage(this._listWar.getSelectedData()?.warId ?? null);
         }
 
         protected async _showOpenAnimation(): Promise<void> {
@@ -309,49 +313,85 @@ namespace TwnsMrwMyWarListPanel {
     }
 
     type DataForWarRenderer = {
-        warId: number;
+        warId   : number;
+        panel   : MrwMyWarListPanel;
     };
     class WarRenderer extends TwnsUiListItemRenderer.UiListItemRenderer<DataForWarRenderer> {
-        private readonly _btnChoose!    : TwnsUiButton.UiButton;
-        private readonly _labelName!    : TwnsUiLabel.UiLabel;
-        private readonly _imgRed!       : TwnsUiLabel.UiLabel;
+        private readonly _labelWarId!           : TwnsUiLabel.UiLabel;
+        private readonly _labelRestTimeToBoot!  : TwnsUiLabel.UiLabel;
+        private readonly _labelName!            : TwnsUiLabel.UiLabel;
+        private readonly _imgRed!               : TwnsUiLabel.UiLabel;
 
         protected _onOpened(): void {
-            this._setUiListenerArray([
-                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-            ]);
             this._setNotifyListenerArray([
-                { type: NotifyType.MrwPreviewingWarIdChanged,  callback: this._onNotifyMrwPreviewingWarIdChanged },
+                { type: NotifyType.TimeTick,                    callback: this._onNotifyTimeTick },
             ]);
         }
 
         protected async _onDataChanged(): Promise<void> {
-            this._updateState();
+            this._updateImgRed();
+            this._updateLabelRestTimeToBoot();
 
             const warId             = this._getData().warId;
-            const warProgressInfo   = await Twns.MultiPlayerWar.MpwModel.getWarProgressInfo(warId);
-            const warSettings       = await Twns.MultiPlayerWar.MpwModel.getWarSettings(warId);
-            const imgRed            = this._imgRed;
+            this._labelWarId.text   = `#${warId}`;
+
+            const warSettings       = await MpwModel.getWarSettings(warId);
             const labelName         = this._labelName;
-            if ((warProgressInfo == null) || (warSettings == null)) {
-                imgRed.visible  = false;
+            if (warSettings == null) {
                 labelName.text  = ``;
             } else {
-                imgRed.visible  = Twns.MultiPlayerWar.MpwModel.checkIsRedForMyWar(warProgressInfo);
                 labelName.text  = await WarMapModel.getMapNameInCurrentLanguage(Helpers.getExisted(warSettings.settingsForMrw?.mapId)) || CommonConstants.ErrorTextForUndefined;
             }
         }
 
-        private _onNotifyMrwPreviewingWarIdChanged(): void {
-            this._updateState();
+        private _onNotifyTimeTick(): void {
+            this._updateLabelRestTimeToBoot();
+        }
+        public onItemTapEvent(): void {
+            const data = this._getData();
+            data.panel.setAndReviseSelectedWarId(data.warId, false);
         }
 
-        private _onTouchTapBtnChoose(): void {
-            Twns.MultiPlayerWar.MpwModel.setMrwPreviewingWarId(this._getData().warId);
+        private async _updateImgRed(): Promise<void> {
+            const warProgressInfo   = await MpwModel.getWarProgressInfo(this._getData().warId);
+            this._imgRed.visible    = MpwModel.checkIsRedForMyWar(warProgressInfo);
         }
 
-        private _updateState(): void {
-            this.currentState = this._getData().warId === Twns.MultiPlayerWar.MpwModel.getMrwPreviewingWarId() ? Types.UiState.Down : Types.UiState.Up;
+        private async _updateLabelRestTimeToBoot(): Promise<void> {
+            const warId             = this._getData().warId;
+            const warSettings       = await MpwModel.getWarSettings(warId);
+            const warProgressInfo   = await MpwModel.getWarProgressInfo(warId);
+            const userId            = UserModel.getSelfUserId();
+            const label             = this._labelRestTimeToBoot;
+            if ((warSettings == null)       ||
+                (warProgressInfo == null)   ||
+                (userId == null)            ||
+                (warProgressInfo.isEnded)
+            ) {
+                label.text = ``;
+                return;
+            }
+
+            const playerIndexInTurn = Helpers.getExisted(warProgressInfo.playerIndexInTurn);
+            const playerInfo        = warProgressInfo.playerInfoList?.find(v => v.playerIndex === playerIndexInTurn);
+            if (playerInfo?.userId !== userId) {
+                label.text = ``;
+                return;
+            }
+
+            const enterTurnTime     = warProgressInfo.enterTurnTime;
+            const restTimeToBoot    = playerInfo.restTimeToBoot;
+            const restTime          = (restTimeToBoot == null) || (enterTurnTime == null)
+                ? null
+                : Math.max(0, restTimeToBoot + enterTurnTime - Timer.getServerTimestamp());
+            if (restTime == null) {
+                label.text      = ``;
+            } else {
+                label.text      = Helpers.getTimeDurationText2(restTime);
+                label.textColor = restTime >= 30 * 60
+                    ? 0xFFFFFF
+                    : (restTime >= 5 * 60 ? 0xFFFF00 : 0xFF4400);
+            }
         }
     }
 }

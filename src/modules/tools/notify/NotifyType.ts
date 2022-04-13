@@ -72,10 +72,6 @@ namespace TwnsNotifyType {
         SrrCreateWarSaveSlotChanged,
         SrrCreatePlayerInfoChanged,
 
-        McwPreviewingWarIdChanged,
-        MrwPreviewingWarIdChanged,
-        MfwPreviewingWarIdChanged,
-        CcwPreviewingWarIdChanged,
         RwPreviewingReplayIdChanged,
         SpmPreviewingWarSaveSlotChanged,
 
