@@ -19,12 +19,12 @@
 // import TwnsUiPanel              from "../../tools/ui/UiPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLobbyPanel {
+namespace Twns.Lobby {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    export type OpenData = void;
-    export class LobbyPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForLobbyPanel = void;
+    export class LobbyPanel extends TwnsUiPanel.UiPanel<OpenDataForLobbyPanel> {
         private readonly _groupTips!            : eui.Group;
         private readonly _groupWelcome!         : eui.Group;
         private readonly _labelTips0!           : TwnsUiLabel.UiLabel;
@@ -60,8 +60,8 @@ namespace TwnsLobbyPanel {
                 { type: NotifyType.LanguageChanged,                     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogout,                       callback: this._onMsgUserLogout },
                 { type: NotifyType.MsgMcrGetRoomPlayerInfo,             callback: this._onNotifyMsgMcrGetRoomPlayerInfo },
-                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomIdArray },
-                { type: NotifyType.MsgCcrGetJoinedRoomIdArray,          callback: this._onMsgCcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMfrGetRoomPlayerInfo,             callback: this._onNotifyMsgMfrGetRoomPlayerInfo },
+                { type: NotifyType.MsgCcrGetRoomPlayerInfo,             callback: this._onNotifyMsgCcrGetRoomPlayerInfo },
                 { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetJoinedRoomIdArray },
                 { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
                 { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
@@ -138,11 +138,11 @@ namespace TwnsLobbyPanel {
             this._updateBtnMultiPlayer();
         }
 
-        private _onMsgMfrGetJoinedRoomIdArray(): void {
+        private _onNotifyMsgMfrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
 
-        private _onMsgCcrGetJoinedRoomIdArray(): void {
+        private _onNotifyMsgCcrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
 
@@ -284,12 +284,12 @@ namespace TwnsLobbyPanel {
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {
-            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
+            this._btnMultiPlayer.setRedVisible(await LobbyModel.checkIsRedForMultiPlayer());
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
                 (await MrrModel.checkIsRed())
             );
         }

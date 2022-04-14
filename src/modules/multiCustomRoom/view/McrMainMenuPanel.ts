@@ -23,12 +23,12 @@
 // import TwnsMcrMyRoomListPanel       from "./McrMyRoomListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMcrMainMenuPanel {
+namespace Twns.MultiCustomRoom {
     import NotifyType               = TwnsNotifyType.NotifyType;
     import Tween                    = egret.Tween;
 
-    export type OpenData = void;
-    export class McrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMcrMainMenuPanel = void;
+    export class McrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForMcrMainMenuPanel> {
         private readonly _group!            : eui.Group;
         private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
         private readonly _btnRanking!       : TwnsUiButton.UiButton;
@@ -60,9 +60,8 @@ namespace TwnsMcrMainMenuPanel {
             this._setNotifyListenerArray([
                 { type: NotifyType.MsgUserLogout,                       callback: this._onNotifyMsgUserLogout },
                 { type: NotifyType.MsgMcrGetRoomPlayerInfo,             callback: this._onNotifyMsgMcrGetRoomPlayerInfo },
-                { type: NotifyType.MsgMcrGetRoomStaticInfo,             callback: this._onNotifyMsgMcrGetRoomStaticInfo },
-                { type: NotifyType.MsgMfrGetJoinedRoomIdArray,          callback: this._onMsgMfrGetJoinedRoomIdArray },
-                { type: NotifyType.MsgCcrGetJoinedRoomIdArray,          callback: this._onMsgCcrGetJoinedRoomIdArray },
+                { type: NotifyType.MsgMfrGetRoomPlayerInfo,             callback: this._onNotifyMsgMfrGetRoomPlayerInfo },
+                { type: NotifyType.MsgCcrGetRoomPlayerInfo,             callback: this._onNotifyMsgCcrGetRoomPlayerInfo },
                 { type: NotifyType.MsgMrrGetJoinedRoomIdArray,          callback: this._onMsgMrrGetJoinedRoomIdArray },
                 { type: NotifyType.MsgMpwCommonGetWarProgressInfo,      callback: this._onMsgMpwCommonGetWarProgressInfo },
                 { type: NotifyType.MsgMpwWatchGetRequestedWarIdArray,   callback: this._onMsgMpwWatchGetRequestedWarIdArray },
@@ -136,14 +135,10 @@ namespace TwnsMcrMainMenuPanel {
             this._updateBtnMultiPlayer();
             this._updateBtnMyRoom();
         }
-        private _onNotifyMsgMcrGetRoomStaticInfo(): void {
-            this._updateBtnMultiPlayer();
-            this._updateBtnMyRoom();
-        }
-        private _onMsgMfrGetJoinedRoomIdArray(): void {
+        private _onNotifyMsgMfrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
-        private _onMsgCcrGetJoinedRoomIdArray(): void {
+        private _onNotifyMsgCcrGetRoomPlayerInfo(): void {
             this._updateBtnMultiPlayer();
         }
         private _onMsgMrrGetJoinedRoomIdArray(): void {
@@ -269,30 +264,30 @@ namespace TwnsMcrMainMenuPanel {
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {
-            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
+            this._btnMultiPlayer.setRedVisible(await Lobby.LobbyModel.checkIsRedForMultiPlayer());
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
                 (await MrrModel.checkIsRed())
             );
         }
 
         private async _updateBtnMyRoom(): Promise<void> {
-            this._btnMyRoom.setRedVisible(await Twns.MultiCustomRoom.McrModel.checkIsRed());
+            this._btnMyRoom.setRedVisible(await McrModel.checkIsRed());
         }
 
         private async _updateBtnContinueWar(): Promise<void> {
-            this._btnContinueWar.setRedVisible(await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars());
+            this._btnContinueWar.setRedVisible(await MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars());
         }
 
         private async _updateBtnCoopMode(): Promise<void> {
-            this._btnCoopMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiCoopMode());
+            this._btnCoopMode.setRedVisible(await Lobby.LobbyModel.checkIsRedForMultiCoopMode());
         }
 
         private async _updateBtnFreeMode(): Promise<void> {
-            this._btnFreeMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiFreeMode());
+            this._btnFreeMode.setRedVisible(await Lobby.LobbyModel.checkIsRedForMultiFreeMode());
         }
 
         private _updateBtnWatchWar(): void {

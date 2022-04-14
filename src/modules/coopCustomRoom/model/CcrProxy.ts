@@ -7,7 +7,7 @@
 // import ProtoTypes           from "../../tools/proto/ProtoTypes";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace CcrProxy {
+namespace Twns.CoopCustomRoom.CcrProxy {
     import NotifyType       = TwnsNotifyType.NotifyType;
     import NetMessage       = CommonProto.NetMessage;
     import NetMessageCodes  = TwnsNetMessageCodes.NetMessageCodes;
@@ -23,8 +23,6 @@ namespace CcrProxy {
             { msgCode: NetMessageCodes.MsgCcrSetSelfSettings,           callback: _onMsgCcrSetSelfSettings },
             { msgCode: NetMessageCodes.MsgCcrGetRoomStaticInfo,         callback: _onMsgCcrGetRoomStaticInfo },
             { msgCode: NetMessageCodes.MsgCcrGetRoomPlayerInfo,         callback: _onMsgCcrGetRoomPlayerInfo },
-            { msgCode: NetMessageCodes.MsgCcrGetJoinableRoomIdArray,    callback: _onMsgCcrGetJoinableRoomIdArray },
-            { msgCode: NetMessageCodes.MsgCcrGetJoinedRoomIdArray,      callback: _onMsgCcrGetJoinedRoomIdArray },
             { msgCode: NetMessageCodes.MsgCcrStartWar,                  callback: _onMsgCcrStartWar },
         ], null);
     }
@@ -150,35 +148,6 @@ namespace CcrProxy {
         if (!data.errorCode) {
             CcrModel.setRoomPlayerInfo(Helpers.getExisted(data.roomId), data.roomPlayerInfo ?? null);
             Notify.dispatch(NotifyType.MsgCcrGetRoomPlayerInfo, data);
-        }
-    }
-
-    export function reqCcrGetJoinableRoomIdArray(roomFilter: Types.Undefinable<CommonProto.CoopCustomRoom.ICcrRoomFilter>): void {
-        NetManager.send({
-            MsgCcrGetJoinableRoomIdArray: { c: {
-                roomFilter,
-            }, },
-        });
-    }
-    function _onMsgCcrGetJoinableRoomIdArray(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgCcrGetJoinableRoomIdArray.IS;
-        if (!data.errorCode) {
-            CcrModel.setJoinableRoomIdArray(data.roomIdArray || []);
-            Notify.dispatch(NotifyType.MsgCcrGetJoinableRoomIdArray, data);
-        }
-    }
-
-    export function reqCcrGetJoinedRoomIdArray(): void {
-        NetManager.send({
-            MsgCcrGetJoinedRoomIdArray: { c: {
-            }, }
-        });
-    }
-    function _onMsgCcrGetJoinedRoomIdArray(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgCcrGetJoinedRoomIdArray.IS;
-        if (!data.errorCode) {
-            CcrModel.setJoinedRoomIdArray(data.roomIdArray || []);
-            Notify.dispatch(NotifyType.MsgCcrGetJoinedRoomIdArray, data);
         }
     }
 

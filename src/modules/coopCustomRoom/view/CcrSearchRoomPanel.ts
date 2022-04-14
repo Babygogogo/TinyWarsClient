@@ -13,12 +13,12 @@
 // import RwProxy              from "../model/RwProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCcrSearchRoomPanel {
+namespace Twns.CoopCustomRoom {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    export type OpenData = void;
-    export class CcrSearchRoomPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForCcrSearchRoomPanel = void;
+    export class CcrSearchRoomPanel extends TwnsUiPanel.UiPanel<OpenDataForCcrSearchRoomPanel> {
         private readonly _imgMask!                      : TwnsUiImage.UiImage;
 
         private readonly _group!                        : eui.Group;
@@ -66,18 +66,18 @@ namespace TwnsCcrSearchRoomPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            CcrProxy.reqCcrGetJoinableRoomIdArray(null);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrJoinRoomListPanel, { filter: null });
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            CcrProxy.reqCcrGetJoinableRoomIdArray({
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.CcrJoinRoomListPanel, { filter: {
                 roomId          : getNumber(this._inputReplayId.text),
                 mapName         : this._inputMapName.text || null,
                 userNickname    : this._inputUserNickname.text || null,
                 coName          : this._inputCoName.text || null,
                 hasFog          : this._hasFog,
-            });
+            } });
             this.close();
         }
 

@@ -38,17 +38,17 @@ namespace TwnsPanelConfig {
 
         CcrCreateMapListPanel               : PanelConfig<TwnsCcrCreateMapListPanel.OpenData>;
         CcrCreateSearchMapPanel             : PanelConfig<TwnsCcrCreateSearchMapPanel.OpenData>;
-        CcrCreateSettingsPanel              : PanelConfig<TwnsCcrCreateSettingsPanel.OpenData>;
-        CcrJoinRoomListPanel                : PanelConfig<TwnsCcrJoinRoomListPanel.OpenData>;
-        CcrMainMenuPanel                    : PanelConfig<TwnsCcrMainMenuPanel.OpenData>;
-        CcrMyRoomListPanel                  : PanelConfig<TwnsCcrMyRoomListPanel.OpenData>;
-        CcrRoomInfoPanel                    : PanelConfig<TwnsCcrRoomInfoPanel.OpenData>;
-        CcrSearchRoomPanel                  : PanelConfig<TwnsCcrSearchRoomPanel.OpenData>;
+        CcrCreateSettingsPanel              : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrCreateSettingsPanel>;
+        CcrJoinRoomListPanel                : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrJoinRoomListPanel>;
+        CcrMainMenuPanel                    : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrMainMenuPanel>;
+        CcrMyRoomListPanel                  : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrMyRoomListPanel>;
+        CcrRoomInfoPanel                    : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrRoomInfoPanel>;
+        CcrSearchRoomPanel                  : PanelConfig<Twns.CoopCustomRoom.OpenDataForCcrSearchRoomPanel>;
 
         CcwMyWarListPanel                   : PanelConfig<Twns.CoopCustomWar.OpenDataForCcwMyWarListPanel>;
 
         ChatCommandPanel                    : PanelConfig<TwnsChatCommandPanel.OpenData>;
-        ChatPanel                           : PanelConfig<TwnsChatPanel.OpenData>;
+        ChatPanel                           : PanelConfig<Twns.Chat.OpenDataForChatPanel>;
 
         CommonAddLoadedUnitPanel            : PanelConfig<TwnsCommonAddLoadedUnitPanel.OpenData>;
         CommonAlertPanel                    : PanelConfig<TwnsCommonAlertPanel.OpenData>;
@@ -94,7 +94,7 @@ namespace TwnsPanelConfig {
 
         LobbyBackgroundPanel                : PanelConfig<TwnsLobbyBackgroundPanel.OpenData>;
         LobbyBottomPanel                    : PanelConfig<TwnsLobbyBottomPanel.OpenData>;
-        LobbyPanel                          : PanelConfig<TwnsLobbyPanel.OpenData>;
+        LobbyPanel                          : PanelConfig<Twns.Lobby.OpenDataForLobbyPanel>;
         LobbyTopPanel                       : PanelConfig<TwnsLobbyTopPanel.OpenData>;
         LobbyTopRightPanel                  : PanelConfig<TwnsLobbyTopRightPanel.OpenData>;
 
@@ -102,7 +102,7 @@ namespace TwnsPanelConfig {
         McrCreateSearchMapPanel             : PanelConfig<TwnsMcrCreateSearchMapPanel.OpenData>;
         McrCreateSettingsPanel              : PanelConfig<TwnsMcrCreateSettingsPanel.OpenData>;
         McrJoinRoomListPanel                : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrJoinRoomListPanel>;
-        McrMainMenuPanel                    : PanelConfig<TwnsMcrMainMenuPanel.OpenData>;
+        McrMainMenuPanel                    : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrMainMenuPanel>;
         McrMyRoomListPanel                  : PanelConfig<Twns.MultiCustomRoom.OpenDataForMcrMyRoomListPanel>;
         McrRoomInfoPanel                    : PanelConfig<TwnsMcrRoomInfoPanel.OpenData>;
         McrSearchRoomPanel                  : PanelConfig<TwnsMcrSearchRoomPanel.OpenData>;
@@ -131,12 +131,12 @@ namespace TwnsPanelConfig {
         MeWarRulePanel                      : PanelConfig<TwnsMeWarRulePanel.OpenData>;
         MeChooseLocationPanel               : PanelConfig<TwnsMeChooseLocationPanel.OpenData>;
 
-        MfrCreateSettingsPanel              : PanelConfig<TwnsMfrCreateSettingsPanel.OpenData>;
-        MfrJoinRoomListPanel                : PanelConfig<TwnsMfrJoinRoomListPanel.OpenData>;
-        MfrMainMenuPanel                    : PanelConfig<TwnsMfrMainMenuPanel.OpenData>;
-        MfrMyRoomListPanel                  : PanelConfig<TwnsMfrMyRoomListPanel.OpenData>;
-        MfrRoomInfoPanel                    : PanelConfig<TwnsMfrRoomInfoPanel.OpenData>;
-        MfrSearchRoomPanel                  : PanelConfig<TwnsMfrSearchRoomPanel.OpenData>;
+        MfrCreateSettingsPanel              : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrCreateSettingsPanel>;
+        MfrJoinRoomListPanel                : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrJoinRoomListPanel>;
+        MfrMainMenuPanel                    : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrMainMenuPanel>;
+        MfrMyRoomListPanel                  : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrMyRoomListPanel>;
+        MfrRoomInfoPanel                    : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrRoomInfoPanel>;
+        MfrSearchRoomPanel                  : PanelConfig<Twns.MultiFreeRoom.OpenDataForMfrSearchRoomPanel>;
 
         MfwMyWarListPanel                   : PanelConfig<Twns.MultiFreeWar.OpenDataForMfwMyWarListPanel>;
 
@@ -160,7 +160,7 @@ namespace TwnsPanelConfig {
         MpwTopPanel                         : PanelConfig<TwnsMpwTopPanel.OpenData>;
         MpwWarMenuPanel                     : PanelConfig<TwnsMpwWarMenuPanel.OpenData>;
 
-        MrrMainMenuPanel                    : PanelConfig<TwnsMrrMainMenuPanel.OpenData>;
+        MrrMainMenuPanel                    : PanelConfig<Twns.MultiRankRoom.OpenDataForMrrMainMenuPanel>;
         MrrMyRoomListPanel                  : PanelConfig<TwnsMrrMyRoomListPanel.OpenData>;
         MrrPreviewMapListPanel              : PanelConfig<TwnsMrrPreviewMapListPanel.OpenData>;
         MrrRoomInfoPanel                    : PanelConfig<TwnsMrrRoomInfoPanel.OpenData>;
@@ -180,7 +180,7 @@ namespace TwnsPanelConfig {
 
         SpmCreateSaveSlotsPanel             : PanelConfig<TwnsSpmCreateSaveSlotsPanel.OpenData>;
         SpmCreateSfwSaveSlotsPanel          : PanelConfig<TwnsSpmCreateSfwSaveSlotsPanel.OpenData>;
-        SpmMainMenuPanel                    : PanelConfig<TwnsSpmMainMenuPanel.OpenData>;
+        SpmMainMenuPanel                    : PanelConfig<Twns.SinglePlayerMode.OpenDataForSpmMainMenuPanel>;
         SpmWarListPanel                     : PanelConfig<TwnsSpmWarListPanel.OpenData>;
 
         SpwLoadWarPanel                     : PanelConfig<TwnsSpwLoadWarPanel.OpenData>;
@@ -262,7 +262,7 @@ namespace TwnsPanelConfig {
         WwDeleteWatcherWarsPanel            : PanelConfig<TwnsWwDeleteWatcherWarsPanel.OpenData>;
         WwHandleRequestDetailPanel          : PanelConfig<TwnsWwHandleRequestDetailPanel.OpenData>;
         WwHandleRequestWarsPanel            : PanelConfig<TwnsWwHandleRequestWarsPanel.OpenData>;
-        WwMainMenuPanel                     : PanelConfig<TwnsWwMainMenuPanel.OpenData>;
+        WwMainMenuPanel                     : PanelConfig<Twns.WatchWar.OpenDataForWatchWarMainMenuPanel>;
         WwMakeRequestDetailPanel            : PanelConfig<TwnsWwMakeRequestDetailPanel.OpenData>;
         WwMakeRequestWarsPanel              : PanelConfig<TwnsWwMakeRequestWarsPanel.OpenData>;
         WwOngoingWarsPanel                  : PanelConfig<TwnsWwOngoingWarsPanel.OpenData>;
@@ -430,42 +430,42 @@ namespace TwnsPanelConfig {
             },
 
             CcrCreateSettingsPanel: {
-                cls         : TwnsCcrCreateSettingsPanel?.CcrCreateSettingsPanel,
+                cls         : Twns.CoopCustomRoom?.CcrCreateSettingsPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrCreateSettingsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrJoinRoomListPanel: {
-                cls         : TwnsCcrJoinRoomListPanel?.CcrJoinRoomListPanel,
+                cls         : Twns.CoopCustomRoom?.CcrJoinRoomListPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrJoinRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrMainMenuPanel: {
-                cls         : TwnsCcrMainMenuPanel?.CcrMainMenuPanel,
+                cls         : Twns.CoopCustomRoom?.CcrMainMenuPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrMyRoomListPanel: {
-                cls         : TwnsCcrMyRoomListPanel?.CcrMyRoomListPanel,
+                cls         : Twns.CoopCustomRoom?.CcrMyRoomListPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrMyRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrRoomInfoPanel: {
-                cls         : TwnsCcrRoomInfoPanel?.CcrRoomInfoPanel,
+                cls         : Twns.CoopCustomRoom?.CcrRoomInfoPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrRoomInfoPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             CcrSearchRoomPanel: {
-                cls         : TwnsCcrSearchRoomPanel?.CcrSearchRoomPanel,
+                cls         : Twns.CoopCustomRoom?.CcrSearchRoomPanel,
                 skinName    : `resource/skins/coopCustomRoom/CcrSearchRoomPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -486,7 +486,7 @@ namespace TwnsPanelConfig {
                 needCache   : false,
             },
             ChatPanel: {
-                cls         : TwnsChatPanel?.ChatPanel,
+                cls         : Twns.Chat?.ChatPanel,
                 skinName    : `resource/skins/chat/ChatPanel.exml`,
                 layer       : LayerType.Hud0,
                 needCache   : true,
@@ -752,7 +752,7 @@ namespace TwnsPanelConfig {
             },
 
             LobbyPanel: {
-                cls         : TwnsLobbyPanel?.LobbyPanel,
+                cls         : Twns.Lobby?.LobbyPanel,
                 skinName    : `resource/skins/lobby/LobbyPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -802,7 +802,7 @@ namespace TwnsPanelConfig {
             },
 
             McrMainMenuPanel: {
-                cls         : TwnsMcrMainMenuPanel?.McrMainMenuPanel,
+                cls         : Twns.MultiCustomRoom?.McrMainMenuPanel,
                 skinName    : `resource/skins/multiCustomRoom/McrMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -970,42 +970,42 @@ namespace TwnsPanelConfig {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MfrCreateSettingsPanel: {
-                cls         : TwnsMfrCreateSettingsPanel?.MfrCreateSettingsPanel,
+                cls         : Twns.MultiFreeRoom?.MfrCreateSettingsPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrCreateSettingsPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MfrJoinRoomListPanel: {
-                cls         : TwnsMfrJoinRoomListPanel?.MfrJoinRoomListPanel,
+                cls         : Twns.MultiFreeRoom?.MfrJoinRoomListPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrJoinRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MfrMainMenuPanel: {
-                cls         : TwnsMfrMainMenuPanel?.MfrMainMenuPanel,
+                cls         : Twns.MultiFreeRoom?.MfrMainMenuPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MfrMyRoomListPanel: {
-                cls         : TwnsMfrMyRoomListPanel?.MfrMyRoomListPanel,
+                cls         : Twns.MultiFreeRoom?.MfrMyRoomListPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrMyRoomListPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MfrRoomInfoPanel: {
-                cls         : TwnsMfrRoomInfoPanel?.MfrRoomInfoPanel,
+                cls         : Twns.MultiFreeRoom?.MfrRoomInfoPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrRoomInfoPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
             },
 
             MfrSearchRoomPanel: {
-                cls         : TwnsMfrSearchRoomPanel?.MfrSearchRoomPanel,
+                cls         : Twns.MultiFreeRoom?.MfrSearchRoomPanel,
                 skinName    : `resource/skins/multiFreeRoom/MfrSearchRoomPanel.exml`,
                 layer       : LayerType.Hud0,
             },
@@ -1134,7 +1134,7 @@ namespace TwnsPanelConfig {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             MrrMainMenuPanel: {
-                cls         : TwnsMrrMainMenuPanel?.MrrMainMenuPanel,
+                cls         : Twns.MultiRankRoom?.MrrMainMenuPanel,
                 skinName    : `resource/skins/multiRankRoom/MrrMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1242,7 +1242,7 @@ namespace TwnsPanelConfig {
             },
 
             SpmMainMenuPanel: {
-                cls         : TwnsSpmMainMenuPanel?.SpmMainMenuPanel,
+                cls         : Twns.SinglePlayerMode?.SpmMainMenuPanel,
                 skinName    : `resource/skins/singlePlayerMode/SpmMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,
@@ -1714,7 +1714,7 @@ namespace TwnsPanelConfig {
             },
 
             WwMainMenuPanel: {
-                cls         : TwnsWwMainMenuPanel?.WwMainMenuPanel,
+                cls         : Twns.WatchWar?.WwMainMenuPanel,
                 skinName    : `resource/skins/watchWar/WwMainMenuPanel.exml`,
                 layer       : LayerType.Scene,
                 isExclusive : true,

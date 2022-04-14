@@ -229,6 +229,23 @@ namespace Types {
         userIdInRoom?       : number | null;
         userIdNotInRoom?    : number | null;
     };
+    export type MfrRoomFilter = {
+        roomId?             : number | null;
+        userNickname?       : string | null;
+        coName?             : string | null;
+        hasFog?             : boolean | null;
+        userIdInRoom?       : number | null;
+        userIdNotInRoom?    : number | null;
+    };
+    export type CcrRoomFilter = {
+        roomId?             : number | null;
+        mapName?            : string | null;
+        userNickname?       : string | null;
+        coName?             : string | null;
+        hasFog?             : boolean | null;
+        userIdInRoom?       : number | null;
+        userIdNotInRoom?    : number | null;
+    };
 
     export type Undefinable<T> = T | null | undefined;
 

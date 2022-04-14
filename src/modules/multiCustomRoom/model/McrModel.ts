@@ -49,7 +49,7 @@ namespace Twns.MultiCustomRoom.McrModel {
         _roomPlayerInfoAccessor.setData(roomId, info);
     }
 
-    export async function getUnjoinedRoomIdSet(roomFilter: McrRoomFilter | null): Promise<Set<number>> {
+    export async function getUnjoinedRoomIdSet(filter: McrRoomFilter | null): Promise<Set<number>> {
         const unjoinedRoomIdArray   : number[] = [];
         const selfUserId            = UserModel.getSelfUserId();
         if (selfUserId == null) {
@@ -67,11 +67,11 @@ namespace Twns.MultiCustomRoom.McrModel {
             }
         }
 
-        return (roomFilter == null)
+        return (filter == null)
             ? new Set(unjoinedRoomIdArray)
-            : getFilteredRoomIdSet(unjoinedRoomIdArray, roomFilter);
+            : getFilteredRoomIdSet(unjoinedRoomIdArray, filter);
     }
-    export async function getJoinedRoomIdSet(roomFilter: McrRoomFilter | null): Promise<Set<number>> {
+    export async function getJoinedRoomIdSet(filter: McrRoomFilter | null): Promise<Set<number>> {
         const joinedRoomIdArray : number[] = [];
         const selfUserId        = UserModel.getSelfUserId();
         if (selfUserId == null) {
@@ -86,9 +86,9 @@ namespace Twns.MultiCustomRoom.McrModel {
             }
         }
 
-        return (roomFilter == null)
+        return (filter == null)
             ? new Set(joinedRoomIdArray)
-            : getFilteredRoomIdSet(joinedRoomIdArray, roomFilter);
+            : getFilteredRoomIdSet(joinedRoomIdArray, filter);
     }
     async function getFilteredRoomIdSet(roomIdArray: number[], filter: McrRoomFilter): Promise<Set<number>> {
         const [roomStaticInfoArray, roomPlayerInfoArray] = await Promise.all([
@@ -341,7 +341,7 @@ namespace Twns.MultiCustomRoom.McrModel {
         roomId          : number;
         roomPlayerInfo  : IMcrRoomPlayerInfo | null;
         roomStaticInfo  : IMcrRoomStaticInfo | null;
-        filter          : Types.Undefinable<McrRoomFilter>;
+        filter          : McrRoomFilter | null;
     }): Promise<boolean> {
         if (roomPlayerInfo == null) {
             return false;

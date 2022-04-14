@@ -28,7 +28,7 @@
 // import TwnsMfrMainMenuPanel                 from "./MfrMainMenuPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMfrCreateSettingsPanel {
+namespace Twns.MultiFreeRoom {
     import MfrCreateAdvancedSettingsPage            = TwnsMfrCreateAdvancedSettingsPage.MfrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
@@ -38,8 +38,8 @@ namespace TwnsMfrCreateSettingsPanel {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export type OpenData = void;
-    export class MfrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMfrCreateSettingsPanel = void;
+    export class MfrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForMfrCreateSettingsPanel> {
         private readonly _groupNavigator!           : eui.Group;
         private readonly _labelMultiPlayer!         : TwnsUiLabel.UiLabel;
         private readonly _labelFreeMode!            : TwnsUiLabel.UiLabel;
@@ -130,14 +130,14 @@ namespace TwnsMfrCreateSettingsPanel {
             TwnsPanelManager.open(TwnsPanelConfig.Dict.LobbyBottomPanel, void 0);
         }
         private _onTouchedBtnConfirm(): void {
-            MfrProxy.reqCreateRoom(MfrCreateModel.getData());
+            MultiFreeRoom.MfrProxy.reqCreateRoom(MfrCreateModel.getData());
 
             this._btnConfirm.enabled = false;
             this._resetTimeoutForBtnConfirm();
         }
         private async _onTouchedBtnChooseCo(): Promise<void> {
             const currentCoId = MfrCreateModel.getSelfCoId();
-            const gameConfig    = await Twns.Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion());
+            const gameConfig    = await Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion());
             TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                 gameConfig,
                 currentCoId,
@@ -196,7 +196,7 @@ namespace TwnsMfrCreateSettingsPanel {
         }
 
         private async _updateBtnChooseCo(): Promise<void> {
-            const cfg               = (await Twns.Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion())).getCoBasicCfg(MfrCreateModel.getSelfCoId());
+            const cfg               = (await Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion())).getCoBasicCfg(MfrCreateModel.getSelfCoId());
             this._btnChooseCo.label = cfg?.name ?? CommonConstants.ErrorTextForUndefined;
         }
 
@@ -226,7 +226,7 @@ namespace TwnsMfrCreateSettingsPanel {
             return warData == null
                 ? null
                 : {
-                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
                     warInfo     : { warData, players: null }
                 };
         }
@@ -474,7 +474,7 @@ namespace TwnsMfrCreateSettingsPanel {
                     const availableCoIdArray = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                         warRule         : creator.getWarRule(),
                         playerIndex,
-                        gameConfig      : await Twns.Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion()),
+                        gameConfig      : await Config.ConfigManager.getGameConfig(MfrCreateModel.getConfigVersion()),
                     });
                     if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
                         creator.setSelfCoId(WarRuleHelpers.getRandomCoIdWithCoIdList(availableCoIdArray));

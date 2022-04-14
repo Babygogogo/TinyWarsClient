@@ -39,9 +39,6 @@ namespace TwnsNotifyType {
         MfrCreateSelfPlayerIndexChanged,
         MfrCreateSelfSkinIdChanged,
 
-        MfrJoinTargetRoomIdChanged,
-        MfrJoinedPreviewingRoomIdChanged,
-
         CcrCreateBannedCoIdArrayChanged,
         CcrCreateTeamIndexChanged,
         CcrCreateAiCoIdChanged,
@@ -49,9 +46,6 @@ namespace TwnsNotifyType {
         CcrCreateSelfSkinIdChanged,
         CcrCreateSelfPlayerIndexChanged,
         CcrCreatePresetWarRuleIdChanged,
-
-        CcrJoinTargetRoomIdChanged,
-        CcrJoinedPreviewingRoomIdChanged,
 
         MrrMyRoomAdded,
         MrrMyRoomDeleted,
@@ -212,8 +206,6 @@ namespace TwnsNotifyType {
         MsgMfrCreateRoom,
         MsgMfrGetRoomStaticInfo,
         MsgMfrGetRoomPlayerInfo,
-        MsgMfrGetJoinedRoomIdArray,
-        MsgMfrGetJoinableRoomIdArray,
         MsgMfrExitRoom,
         MsgMfrJoinRoom,
         MsgMfrDeleteRoom,
@@ -225,8 +217,6 @@ namespace TwnsNotifyType {
         MsgCcrCreateRoom,
         MsgCcrGetRoomStaticInfo,
         MsgCcrGetRoomPlayerInfo,
-        MsgCcrGetJoinedRoomIdArray,
-        MsgCcrGetJoinableRoomIdArray,
         MsgCcrExitRoom,
         MsgCcrJoinRoom,
         MsgCcrDeleteRoom,

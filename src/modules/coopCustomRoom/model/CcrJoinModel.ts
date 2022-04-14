@@ -7,15 +7,11 @@
 // import WarRuleHelpers   from "../../tools/warHelpers/WarRuleHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace CcrJoinModel {
-    import NotifyType           = TwnsNotifyType.NotifyType;
+namespace Twns.CoopCustomRoom.CcrJoinModel {
     import ICcrRoomStaticInfo   = CommonProto.CoopCustomRoom.ICcrRoomStaticInfo;
     import ICcrRoomPlayerInfo   = CommonProto.CoopCustomRoom.ICcrRoomPlayerInfo;
 
     export type DataForJoinRoom     = CommonProto.NetMessage.MsgCcrJoinRoom.IC;
-
-    let _targetRoomId           : number | null = null;
-    let _joinedPreviewingRoomId : number | null = null;
 
     export async function getFastJoinData(roomStaticInfo: ICcrRoomStaticInfo, roomPlayerInfo: ICcrRoomPlayerInfo): Promise<DataForJoinRoom | null> {
         const playerIndex       = generateAvailablePlayerIndexList(roomStaticInfo, roomPlayerInfo)[0];
@@ -30,31 +26,11 @@ namespace CcrJoinModel {
                 coId            : WarRuleHelpers.getRandomCoIdWithSettingsForCommon(
                     Helpers.getExisted(settingsForCommon.warRule),
                     playerIndex,
-                    await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion))
+                    await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion))
                 ),
                 playerIndex,
                 unitAndTileSkinId,
             };
-        }
-    }
-
-    export function getTargetRoomId(): number | null {
-        return _targetRoomId;
-    }
-    export function setTargetRoomId(roomId: number | null): void {
-        if (getTargetRoomId() !== roomId) {
-            _targetRoomId = roomId;
-            Notify.dispatch(NotifyType.CcrJoinTargetRoomIdChanged);
-        }
-    }
-
-    export function getJoinedPreviewingRoomId(): number | null {
-        return _joinedPreviewingRoomId;
-    }
-    export function setJoinedPreviewingRoomId(roomId: number | null): void {
-        if (getJoinedPreviewingRoomId() != roomId) {
-            _joinedPreviewingRoomId = roomId;
-            Notify.dispatch(NotifyType.CcrJoinedPreviewingRoomIdChanged);
         }
     }
 

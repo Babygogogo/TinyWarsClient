@@ -16,12 +16,12 @@
 // import TwnsWwOngoingWarsPanel       from "./WwOngoingWarsPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsWwMainMenuPanel {
+namespace Twns.WatchWar {
     import NotifyType                       = TwnsNotifyType.NotifyType;
     import Tween                            = egret.Tween;
 
-    export type OpenData = void;
-    export class WwMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForWatchWarMainMenuPanel = void;
+    export class WwMainMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForWatchWarMainMenuPanel> {
         private readonly _group!            : eui.Group;
         private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
         private readonly _btnRanking!       : TwnsUiButton.UiButton;
@@ -124,12 +124,12 @@ namespace TwnsWwMainMenuPanel {
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {
-            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
+            this._btnMultiPlayer.setRedVisible(await Lobby.LobbyModel.checkIsRedForMultiPlayer());
         }
 
         private async _updateBtnRanking(): Promise<void> {
             this._btnRanking.setRedVisible(
-                (await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
                 (await MrrModel.checkIsRed())
             );
         }

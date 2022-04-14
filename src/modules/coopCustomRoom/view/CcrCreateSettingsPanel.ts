@@ -21,7 +21,7 @@
 // import TwnsCcrCreatePlayerInfoPage          from "./CcrCreatePlayerInfoPage";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsCcrCreateSettingsPanel {
+namespace Twns.CoopCustomRoom {
     import CcrCreateAdvancedSettingsPage            = TwnsCcrCreateAdvancedSettingsPage.CcrCreateAdvancedSettingsPage;
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -32,8 +32,8 @@ namespace TwnsCcrCreateSettingsPanel {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export type OpenData = void;
-    export class CcrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForCcrCreateSettingsPanel = void;
+    export class CcrCreateSettingsPanel extends TwnsUiPanel.UiPanel<OpenDataForCcrCreateSettingsPanel> {
         private readonly _groupNavigator!       : eui.Group;
         private readonly _labelMultiPlayer!     : TwnsUiLabel.UiLabel;
         private readonly _labelCreateRoom!      : TwnsUiLabel.UiLabel;

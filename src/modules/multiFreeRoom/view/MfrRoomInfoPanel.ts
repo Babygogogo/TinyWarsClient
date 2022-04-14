@@ -30,7 +30,7 @@
 // import TwnsMfrMyRoomListPanel               from "./MfrMyRoomListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMfrRoomInfoPanel {
+namespace Twns.MultiFreeRoom {
     import OpenDataForCommonWarMapInfoPage          = TwnsCommonWarMapInfoPage.OpenDataForCommonMapInfoPage;
     import OpenDataForCommonWarPlayerInfoPage       = TwnsCommonWarPlayerInfoPage.OpenDataForCommonWarPlayerInfoPage;
     import OpenDataForCommonWarBasicSettingsPage    = TwnsCommonWarBasicSettingsPage.OpenDataForCommonWarBasicSettingsPage;
@@ -39,10 +39,10 @@ namespace TwnsMfrRoomInfoPanel {
     import NotifyType                               = TwnsNotifyType.NotifyType;
     import NetMessage                               = CommonProto.NetMessage;
 
-    export type OpenData = {
+    export type OpenDataForMfrRoomInfoPanel = {
         roomId  : number;
     };
-    export class MfrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export class MfrRoomInfoPanel extends TwnsUiPanel.UiPanel<OpenDataForMfrRoomInfoPanel> {
         private readonly _groupTab!                 : eui.Group;
         private readonly _tabSettings!              : TwnsUiTab.UiTab<DataForTabItemRenderer, OpenDataForCommonWarMapInfoPage | OpenDataForCommonWarAdvancedSettingsPage | OpenDataForCommonWarBasicSettingsPage | OpenDataForCommonWarPlayerInfoPage>;
 
@@ -159,7 +159,7 @@ namespace TwnsMfrRoomInfoPanel {
                 } else {
                     const settingsForCommon = Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon);
                     const playerIndex       = Helpers.getExisted(selfPlayerData.playerIndex);
-                    const gameConfig        = await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
+                    const gameConfig        = await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion));
                     TwnsPanelManager.open(TwnsPanelConfig.Dict.CommonChooseCoPanel, {
                         gameConfig,
                         currentCoId         : selfPlayerData.coId ?? null,
@@ -339,7 +339,7 @@ namespace TwnsMfrRoomInfoPanel {
             const userId            = UserModel.getSelfUserId();
             const selfPlayerData    = roomPlayerInfo.playerDataList?.find(v => v.userId === userId);
             if (selfPlayerData) {
-                const gameConfig        = (await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon?.configVersion)));
+                const gameConfig        = (await Config.ConfigManager.getGameConfig(Helpers.getExisted(roomStaticInfo.settingsForMfw?.initialWarData?.settingsForCommon?.configVersion)));
                 this._btnChooseCo.label = gameConfig.getCoBasicCfg(Helpers.getExisted(selfPlayerData.coId))?.name ?? CommonConstants.ErrorTextForUndefined;
             }
         }
@@ -389,7 +389,7 @@ namespace TwnsMfrRoomInfoPanel {
             return warData == null
                 ? null
                 : {
-                    gameConfig  : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
+                    gameConfig  : await Config.ConfigManager.getGameConfig(Helpers.getExisted(warData.settingsForCommon?.configVersion)),
                     warInfo     : { warData, players: null },
                 };
         }
@@ -535,7 +535,7 @@ namespace TwnsMfrRoomInfoPanel {
                 const availableCoIdArray    = WarRuleHelpers.getAvailableCoIdArrayForPlayer({
                     warRule         : Helpers.getExisted(settingsForCommon.warRule),
                     playerIndex     : newPlayerIndex,
-                    gameConfig      : await Twns.Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
+                    gameConfig      : await Config.ConfigManager.getGameConfig(Helpers.getExisted(settingsForCommon.configVersion)),
                 });
                 MfrProxy.reqMfrSetSelfSettings({
                     roomId,

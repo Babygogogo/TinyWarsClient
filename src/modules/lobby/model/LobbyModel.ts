@@ -1,43 +1,43 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsLobbyModel {
+namespace Twns.Lobby.LobbyModel {
     export async function checkIsRedForMultiPlayer(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
-            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars(),
-            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars(),
-            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyCcwWars(),
-            Twns.MultiCustomRoom.McrModel.checkIsRed(),
-            MfrModel.checkIsRed(),
-            CcrModel.checkIsRed(),
+            MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars(),
+            MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars(),
+            MultiPlayerWar.MpwModel.checkIsRedForMyCcwWars(),
+            MultiCustomRoom.McrModel.checkIsRed(),
+            MultiFreeRoom.MfrModel.checkIsRed(),
+            CoopCustomRoom.CcrModel.checkIsRed(),
             WwModel.checkIsRed(),
         ]);
     }
 
     export async function checkIsRedForRanking(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
-            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars(),
+            MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars(),
             MrrModel.checkIsRed(),
         ]);
     }
 
     export async function checkIsRedForMultiCustomMode(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
-            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars(),
-            Twns.MultiCustomRoom.McrModel.checkIsRed(),
+            MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars(),
+            MultiCustomRoom.McrModel.checkIsRed(),
         ]);
     }
 
     export async function checkIsRedForMultiFreeMode(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
-            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars(),
-            MfrModel.checkIsRed(),
+            MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars(),
+            MultiFreeRoom.MfrModel.checkIsRed(),
         ]);
     }
 
     export async function checkIsRedForMultiCoopMode(): Promise<boolean> {
         return Helpers.checkIsAnyPromiseTrue([
-            Twns.MultiPlayerWar.MpwModel.checkIsRedForMyCcwWars(),
-            CcrModel.checkIsRed(),
+            MultiPlayerWar.MpwModel.checkIsRedForMyCcwWars(),
+            CoopCustomRoom.CcrModel.checkIsRed(),
         ]);
     }
 }

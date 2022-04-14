@@ -117,8 +117,8 @@ namespace FlowManager {
         WarMapModel.init();
         Twns.MultiCustomRoom.McrProxy.init();
         MrrProxy.init();
-        MfrProxy.init();
-        CcrProxy.init();
+        Twns.MultiFreeRoom.MfrProxy.init();
+        Twns.CoopCustomRoom.CcrProxy.init();
         WwProxy.init();
         RwProxy.init();
         RwModel.init();

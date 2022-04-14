@@ -23,13 +23,13 @@
 // import TwnsMfrMyRoomListPanel   from "./MfrMyRoomListPanel";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMfrMainMenuPanel {
+namespace Twns.MultiFreeRoom {
     import NotifyType           = TwnsNotifyType.NotifyType;
     import Tween                = egret.Tween;
     import LangTextType         = TwnsLangTextType.LangTextType;
 
-    export type OpenData = void;
-    export class MfrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMfrMainMenuPanel = void;
+    export class MfrMainMenuPanel extends TwnsUiPanel.UiPanel<OpenDataForMfrMainMenuPanel> {
         private readonly _group!            : eui.Group;
         private readonly _btnMultiPlayer!   : TwnsUiButton.UiButton;
         private readonly _btnRanking!       : TwnsUiButton.UiButton;
@@ -87,7 +87,7 @@ namespace TwnsMfrMainMenuPanel {
             this.close();
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyTopPanel);
             TwnsPanelManager.close(TwnsPanelConfig.Dict.LobbyBottomPanel);
-            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrJoinRoomListPanel, void 0);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrJoinRoomListPanel, { filter: null });
         }
         private _onTouchedBtnMyRoom(): void {
             this.close();
@@ -230,19 +230,19 @@ namespace TwnsMfrMainMenuPanel {
             this._btnMyRoom.setRedVisible(await MfrModel.checkIsRed());
         }
         private async _updateBtnContinueWar(): Promise<void> {
-            this._btnContinueWar.setRedVisible(await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars());
+            this._btnContinueWar.setRedVisible(await MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars());
         }
         private async _updateBtnNormalMode(): Promise<void> {
-            this._btnNormalMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiCustomMode());
+            this._btnNormalMode.setRedVisible(await Lobby.LobbyModel.checkIsRedForMultiCustomMode());
         }
         private async _updateBtnCoopMode(): Promise<void> {
-            this._btnCoopMode.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiCoopMode());
+            this._btnCoopMode.setRedVisible(await Lobby.LobbyModel.checkIsRedForMultiCoopMode());
         }
         private async _updateBtnRanking(): Promise<void> {
-            this._btnRanking.setRedVisible((await Twns.MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) || (await MrrModel.checkIsRed()));
+            this._btnRanking.setRedVisible((await MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) || (await MrrModel.checkIsRed()));
         }
         private async _updateBtnMultiPlayer(): Promise<void> {
-            this._btnMultiPlayer.setRedVisible(await TwnsLobbyModel.checkIsRedForMultiPlayer());
+            this._btnMultiPlayer.setRedVisible(await Lobby.LobbyModel.checkIsRedForMultiPlayer());
         }
     }
 }

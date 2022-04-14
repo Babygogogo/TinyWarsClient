@@ -13,12 +13,12 @@
 // import RwProxy              from "../model/RwProxy";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TwnsMfrSearchRoomPanel {
+namespace Twns.MultiFreeRoom {
     import LangTextType     = TwnsLangTextType.LangTextType;
     import NotifyType       = TwnsNotifyType.NotifyType;
 
-    export type OpenData = void;
-    export class MfrSearchRoomPanel extends TwnsUiPanel.UiPanel<OpenData> {
+    export type OpenDataForMfrSearchRoomPanel = void;
+    export class MfrSearchRoomPanel extends TwnsUiPanel.UiPanel<OpenDataForMfrSearchRoomPanel> {
         private readonly _imgMask!                      : TwnsUiImage.UiImage;
 
         private readonly _group!                        : eui.Group;
@@ -63,16 +63,18 @@ namespace TwnsMfrSearchRoomPanel {
         }
 
         private _onTouchedBtnReset(): void {
-            MfrProxy.reqMfrGetJoinableRoomIdArray(null);
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrJoinRoomListPanel, { filter: null });
             this.close();
         }
 
         private _onTouchedBtnSearch(): void {
-            MfrProxy.reqMfrGetJoinableRoomIdArray({
-                roomId          : getNumber(this._inputReplayId.text),
-                userNickname    : this._inputUserNickname.text || null,
-                coName          : this._inputCoName.text || null,
-                hasFog          : this._hasFog,
+            TwnsPanelManager.open(TwnsPanelConfig.Dict.MfrJoinRoomListPanel, {
+                filter  : {
+                    roomId          : getNumber(this._inputReplayId.text),
+                    userNickname    : this._inputUserNickname.text || null,
+                    coName          : this._inputCoName.text || null,
+                    hasFog          : this._hasFog,
+                },
             });
             this.close();
         }

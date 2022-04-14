@@ -87,13 +87,13 @@ namespace Twns.MultiCustomRoom {
         }
 
         public setAndReviseSelectedRoomId(newRoomId: number, needScroll: boolean): void {
-            const listWar   = this._listRoom;
-            const index     = Helpers.getExisted(listWar.getRandomIndex(v => v.roomId === newRoomId));
-            listWar.setSelectedIndex(index);
+            const listRoom  = this._listRoom;
+            const index     = Helpers.getExisted(listRoom.getRandomIndex(v => v.roomId === newRoomId));
+            listRoom.setSelectedIndex(index);
             this._updateComponentsForTargetRoomInfo();
 
             if (needScroll) {
-                listWar.scrollVerticalToIndex(index);
+                listRoom.scrollVerticalToIndex(index);
             }
         }
 
